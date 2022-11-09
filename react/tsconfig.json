@@ -6,17 +6,19 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "target": "es2021",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": ["es2021", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "strict": true,
     "sourceMap": true,
     "inlineSources": true,
     "importsNotUsedAsValues": "error",
     "noImplicitOverride": true,
     "useDefineForClassFields": true,
-    "useUnknownInCatchVariables": true,
+    "useUnknownInCatchVariables": true
   },
-  "include": ["src", "scripts", "test", "types/node-vm.d.ts"],
+  "include": ["src", "scripts", "test", "types"],
   "exclude": ["node_modules", "dist"]
 }

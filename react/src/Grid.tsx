@@ -18,8 +18,7 @@ function Grid<TItem = GridModule.GridDefaultItem>(
     <_Grid<TItem>
       {...props}
       ref={ref}
-      // TODO: remove cast after the nullability issue is fixed
-      rowDetailsRenderer={rowDetailsRenderer as GridModule.GridRowDetailsRenderer<TItem>}
+      rowDetailsRenderer={rowDetailsRenderer}
     >
       {props.children}
       {portals}

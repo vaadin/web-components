@@ -16,8 +16,7 @@ function Dialog(props: DialogProps, ref: ForwardedRef<DialogModule.Dialog>): Rea
     <_Dialog
       {...props}
       ref={ref}
-      // TODO: remove cast after the nullability issue is fixed
-      renderer={renderer as DialogModule.DialogRenderer}
+      renderer={renderer}
     >
       {props.children}
       {portals}

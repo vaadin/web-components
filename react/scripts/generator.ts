@@ -22,12 +22,14 @@ import {
   camelCase,
   createImportPath,
   createSourceFile,
+  NamedGenericJsContribution,
+  pickNamedEvents,
   search,
   stripPrefix,
   template,
   transform,
 } from './utils/misc.js';
-import { elementsWithEventIssues, GenericElementInfo, genericElements, NonGenericInterface } from './utils/settings.js';
+import { eventSettings, genericElements, NonGenericInterface } from './utils/settings.js';
 
 // Placeholders
 const CALL_EXPRESSION = '$CALL_EXPRESSION$';
@@ -41,10 +43,6 @@ const EVENTS_DECLARATION = '$EVENTS_DECLARATION$';
 const LIT_REACT_PATH = '@lit-labs/react';
 const MODULE = '$MODULE$';
 const MODULE_PATH = '$MODULE_PATH$';
-
-type EventNameMissingErrorConstructor = {
-  new (): Error;
-};
 
 type ElementData = Readonly<{
   packageName: string;
@@ -108,10 +106,9 @@ function isComponentDeclaration(node: Node): node is VariableDeclaration {
 function createEventMapDeclaration(
   originalNode: TypeAliasDeclaration,
   elementName: string,
-  events: GenericJsContribution[] | undefined,
-  EventNameMissingError: EventNameMissingErrorConstructor,
+  events: readonly NamedGenericJsContribution[] | undefined,
 ): Node {
-  const eventIssues = elementsWithEventIssues.get(elementName);
+  const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
   const eventNameTypeId = ts.factory.createIdentifier('EventName');
   const elementModuleId = ts.factory.createIdentifier(MODULE);
   const eventMapId = ts.factory.createIdentifier(EVENT_MAP);
@@ -122,54 +119,50 @@ function createEventMapDeclaration(
     undefined,
     ts.factory.createTypeReferenceNode(ts.factory.createIdentifier('Readonly'), [
       ts.factory.createTypeLiteralNode(
-        events?.map(({ name: eventName }) => {
-          if (!eventName) {
-            throw new EventNameMissingError();
-          }
-
-          return ts.factory.createPropertySignature(
-            undefined,
-            ts.factory.createIdentifier(`on${camelCase(eventName)}`),
-            undefined,
-            ts.factory.createTypeReferenceNode(
-              eventNameTypeId,
-              eventIssues?.all || eventIssues?.some?.includes(eventName)
-                ? [
-                    ts.factory.createTypeReferenceNode(ts.factory.createIdentifier('CustomEvent'), [
-                      ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
-                    ]),
-                  ]
-                : [
-                    ts.factory.createIndexedAccessTypeNode(
-                      ts.factory.createTypeReferenceNode(
-                        ts.factory.createQualifiedName(elementModuleId, `${elementName}EventMap`),
+        events
+          ?.filter(({ name: eventName }) => (eventsToRemove ? !eventsToRemove.includes(eventName) : true))
+          .map(({ name: eventName }) =>
+            ts.factory.createPropertySignature(
+              undefined,
+              ts.factory.createIdentifier(`on${camelCase(eventName!)}`),
+              undefined,
+              ts.factory.createTypeReferenceNode(
+                eventNameTypeId,
+                eventsToBeUnknown?.includes(eventName!)
+                  ? [
+                      ts.factory.createTypeReferenceNode(ts.factory.createIdentifier('CustomEvent'), [
+                        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+                      ]),
+                    ]
+                  : [
+                      ts.factory.createIndexedAccessTypeNode(
+                        ts.factory.createTypeReferenceNode(
+                          ts.factory.createQualifiedName(elementModuleId, `${elementName}EventMap`),
+                        ),
+                        ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(eventName!)),
                       ),
-                      ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(eventName)),
-                    ),
-                  ],
+                    ],
+              ),
             ),
-          );
-        }),
+          ),
       ),
     ]),
   );
 }
 
-function createEventList(
-  elementName: string,
-  events: GenericJsContribution[] | undefined,
-  EventNameMissingError: EventNameMissingErrorConstructor,
-): Node {
+function createEventList(elementName: string, events: readonly NamedGenericJsContribution[] | undefined): Node {
+  const { remove: eventsToRemove } = eventSettings.get(elementName) ?? {};
+
   return ts.factory.createObjectLiteralExpression(
-    events?.map(({ name: eventName }) => {
-      if (!eventName) {
-        throw new EventNameMissingError();
-      }
-
-      const eventString = ts.factory.createStringLiteral(eventName);
-
-      return ts.factory.createPropertyAssignment(ts.factory.createIdentifier(`on${camelCase(eventName)}`), eventString);
-    }),
+    events
+      ?.filter(({ name: eventName }) => (eventsToRemove ? !eventsToRemove.includes(eventName) : true))
+      .map(({ name: eventName }) => {
+        const eventString = ts.factory.createStringLiteral(eventName);
+        return ts.factory.createPropertyAssignment(
+          ts.factory.createIdentifier(`on${camelCase(eventName)}`),
+          eventString,
+        );
+      }),
   );
 }
 
@@ -178,11 +171,7 @@ function removeAllEventRelated(node: Node, hasEvents: boolean): Node | undefined
     return node;
   }
 
-  if (
-    ts.isImportDeclaration(node) &&
-    ts.isStringLiteral(node.moduleSpecifier) &&
-    node.moduleSpecifier.text === LIT_REACT_PATH
-  ) {
+  if (ts.isImportSpecifier(node) && node.name.text === 'EventName') {
     return undefined;
   }
 
@@ -323,12 +312,14 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
     }
   }
 
+  const eventNameMissingLogger = () => console.error(`[${packageName}]: event name is missing`);
+
   const ast = template(
     `
-import type { EventName } from "${LIT_REACT_PATH}";
+import type { EventName, WebComponentProps } from "${LIT_REACT_PATH}";
 import * as ${MODULE} from "${MODULE_PATH}";
 import * as React from "react";
-import { createComponent, type WebComponentProps } from "${CREATE_COMPONENT_PATH}";
+import { createComponent } from "${CREATE_COMPONENT_PATH}";
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
 export type ${COMPONENT_PROPS} = WebComponentProps<${MODULE}.${COMPONENT_NAME}, ${EVENT_MAP}>;
@@ -340,11 +331,13 @@ export { ${MODULE} };
       transform((node) => removeAllEventRelated(node, hasEvents)),
       transform((node) =>
         isEventMapDeclaration(node)
-          ? createEventMapDeclaration(node, elementName, events, EventNameMissingError)
+          ? createEventMapDeclaration(node, elementName, pickNamedEvents(events, eventNameMissingLogger))
           : node,
       ),
       transform((node) =>
-        isEventListDeclaration(node) ? createEventList(elementName, events, EventNameMissingError) : node,
+        isEventListDeclaration(node)
+          ? createEventList(elementName, pickNamedEvents(events, eventNameMissingLogger))
+          : node,
       ),
       transform((node) =>
         ts.isStringLiteral(node) && node.text === CREATE_COMPONENT_PATH

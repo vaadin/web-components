@@ -1,38 +1,32 @@
-import * as vm from 'node:vm';
-
-import path from 'node:path';
+import { dirname, posix, relative, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
-import fsPromises from 'node:fs/promises';
+import { type Module as VmModule, SourceTextModule, SyntheticModule } from 'node:vm';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createContext } from 'react';
 import { rootDir, stylePackages, nodeModulesDir } from './utils/config.js';
 import * as themableMixinModule from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-// @ts-ignore
-global.window = { __moduleId: '', };
 
 const themeNameRegex = /^@vaadin\/vaadin-(.+)-styles/;
 
 function getJsPath(moduleId: string): string {
-  const jsSpecifier = path.posix.join(
-    ...path.relative(nodeModulesDir, moduleId).split(path.sep)
-  );
+  const jsSpecifier = posix.join(...relative(nodeModulesDir, moduleId).split(sep));
   return jsSpecifier.replace(themeNameRegex, './css/$1/');
 }
 
 function toCamelCase(dashSeparated: string): string {
-  return dashSeparated.split('-')
-    .map(item => item.slice(0, 1).toUpperCase() + item.slice(1))
+  return dashSeparated
+    .split('-')
+    .map((item) => item.slice(0, 1).toUpperCase() + item.slice(1))
     .join('');
 }
 
 function getCssPath(moduleId: string, name?: string): string {
   const jsPath = getJsPath(moduleId);
-  const dirname = path.posix.dirname(jsPath);
-  const cssName = toCamelCase(name || path.posix.basename(jsPath, '.js'));
-  const suffix = (cssName === 'Utility' || dirname.endsWith('/utilities'))
-   ? '.module'
-   : '';
+  const dirname = posix.dirname(jsPath);
+  const cssName = toCamelCase(name || posix.basename(jsPath, '.js'));
+  const suffix = cssName === 'Utility' || dirname.endsWith('/utilities') ? '.module' : '';
 
-  return path.posix.join(dirname, `${cssName}${suffix}.css`);
+  return posix.join(dirname, `${cssName}${suffix}.css`);
 }
 
 function resolveSpecifier(specifier: string, moduleId: string) {
@@ -49,14 +43,16 @@ function storeItem<T>(storage: Map<string, readonly T[]>, moduleId: string, item
 
 const globalContents: Map<string, readonly string[]> = new Map();
 
+const globalWindow = { __moduleId: '' };
+
 const vmGlobal = {
-  window: global.window,
+  window: globalWindow,
   document: {
     createElement(localName: string) {
-      const el = {localName};
+      const el = { localName };
 
       if (localName === 'template') {
-        const templateEl = {
+        return {
           ...el,
           content: '',
           get innerHTML() {
@@ -66,7 +62,6 @@ const vmGlobal = {
             this.content = value;
           },
         };
-        return templateEl;
       }
 
       return el;
@@ -75,19 +70,21 @@ const vmGlobal = {
       childNodes: [],
       appendChild(content: string) {
         // @ts-ignore
-        storeItem(globalContents, window.__moduleId, content);
+        storeItem(globalContents, globalWindow.__moduleId, content);
       },
     },
   },
 };
-const context = vm.createContext(vmGlobal);
 
-const shimModules: Map<string, vm.Module> = new Map();
+const context = createContext(vmGlobal);
+
+const shimModules: Map<string, VmModule> = new Map();
+
 function shimModule(specifier: string, moduleNamespaceObject: object) {
   const moduleId = resolveSpecifier(specifier, import.meta.url);
-  const module = new vm.SyntheticModule(
+  const module = new SyntheticModule(
     Object.keys(moduleNamespaceObject),
-    function() {
+    function () {
       for (const [exportName, exportContent] of Object.entries(moduleNamespaceObject)) {
         this.setExport(exportName, exportContent);
       }
@@ -99,23 +96,26 @@ function shimModule(specifier: string, moduleNamespaceObject: object) {
   );
   shimModules.set(moduleId, module);
   return module;
-};
+}
 
 function unsafeCSS() {
   throw new Error('forbidden');
 }
 
 const cssLiterals: Map<string, readonly CSSResult[]> = new Map();
+
 class CSSResult {
   public readonly index: number = 0;
+  public readonly moduleId: string;
+  public readonly strings: readonly string[];
+  public readonly values: ReadonlyArray<CSSResult | number>;
   public name?: string;
   public hasGlobalReference: boolean = false;
 
-  constructor(
-    public readonly moduleId: string,
-    public readonly strings: readonly string[],
-    public readonly values: ReadonlyArray<CSSResult | number>
-  ) {
+  constructor(moduleId: string, strings: readonly string[], values: ReadonlyArray<CSSResult | number>) {
+    this.moduleId = moduleId;
+    this.strings = strings;
+    this.values = values;
     this.index = storeItem(cssLiterals, this.moduleId, this);
   }
 
@@ -126,6 +126,7 @@ class CSSResult {
 
 const registerStyles = '@vaadin/vaadin-themable-mixin/register-styles.js';
 const registerStylesId = resolveSpecifier(registerStyles, import.meta.url);
+
 function shimRegisterStyles(moduleId: string) {
   return shimModule(registerStyles, {
     css(strings: readonly string[], ...values: ReadonlyArray<CSSResult | number>) {
@@ -138,6 +139,7 @@ function shimRegisterStyles(moduleId: string) {
 
 const themableMixin = '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 const themableMixinId = resolveSpecifier(themableMixin, import.meta.url);
+
 function shimThemableMixin(moduleId: string) {
   return shimModule(themableMixin, {
     ...themableMixinModule,
@@ -146,31 +148,34 @@ function shimThemableMixin(moduleId: string) {
     },
     registerStyles() {},
     unsafeCSS,
-  })
-};
+  });
+}
 
-async function loadModule(moduleId: string): Promise<vm.Module> {
+const escapePattern = /\\/g;
+function escape(str: string) {
+  return str.replaceAll(escapePattern, '\\\\');
+}
+
+async function loadModule(moduleId: string): Promise<VmModule> {
   if (shimModules.has(moduleId)) {
     return shimModules.get(moduleId)!;
   }
 
-  const source = await fsPromises.readFile(moduleId, {encoding: 'utf-8'});
-  return new vm.SourceTextModule(
-    `window.__moduleId = '${moduleId}';\n${source}`,
-    {
-      identifier: moduleId,
-      context,
-      initializeImportMeta(meta) {
-        meta.url = `file://${moduleId}`;
-      },
+  const source = await readFile(moduleId, { encoding: 'utf-8' });
+
+  return new SourceTextModule(`window.__moduleId = '${escape(moduleId)}';\n${escape(source)}`, {
+    identifier: moduleId,
+    context,
+    initializeImportMeta(meta) {
+      meta.url = `file://${moduleId}`;
     },
-  );
+  });
 }
 
-const moduleMap: Map<string, Promise<vm.Module>> = new Map();
+const moduleMap: Map<string, Promise<VmModule>> = new Map();
 const moduleDependencies: Map<string, readonly string[]> = new Map();
 
-async function linker(specifier: string, referencingModule: vm.Module): Promise<vm.Module> {
+async function linker(specifier: string, referencingModule: VmModule): Promise<VmModule> {
   const moduleId = resolveSpecifier(specifier, referencingModule.identifier);
   if (moduleId === registerStylesId) {
     return shimRegisterStyles(referencingModule.identifier);
@@ -186,7 +191,7 @@ async function linker(specifier: string, referencingModule: vm.Module): Promise<
     return moduleMap.get(moduleId)!;
   }
 
-  const modulePromise = loadModule(moduleId)
+  const modulePromise = loadModule(moduleId);
   moduleMap.set(moduleId, modulePromise);
   const module = await modulePromise;
   return module;
@@ -230,12 +235,7 @@ function renderCssResult(cssPath: string, cssResult: CSSResult): string {
       cssContents.push(cssResult.strings[i + 1]);
     }
   } else {
-    cssContents.push(
-      `@import url(./${path.posix.relative(
-        path.posix.dirname(cssPath), 
-        resultPath,
-      )});\n`
-    );
+    cssContents.push(`@import url(./${posix.relative(posix.dirname(cssPath), resultPath)});\n`);
     emitCssFile(resultPath, cssResult);
   }
   return cssContents.join('\n').replace(':host', 'html');
@@ -260,15 +260,13 @@ function emitCssFile(cssPath: string, css: CSSResultGroup) {
     return;
   }
 
-  const cssContents: string[] = [
-    '/* Generated file, do not edit */\n',
-  ];
+  const cssContents: string[] = ['/* Generated file, do not edit */\n'];
   cssContents.push(renderCss(cssPath, css));
   output.set(cssPath, cssContents.join('\n'));
 }
 
 // Assign export names to CSSResult
-for (const [moduleId, modulePromise] of moduleMap) {
+for (const [, modulePromise] of moduleMap) {
   const module = await modulePromise;
   for (const [name, value] of Object.entries(module.namespace)) {
     if (value instanceof CSSResult) {
@@ -281,11 +279,12 @@ for (const [moduleId, modulePromise] of moduleMap) {
 for (const [moduleId, contents] of globalContents) {
   for (const htmlContent of contents) {
     if (typeof htmlContent === 'string') {
-      const styleContent = htmlContent.replaceAll(/<style.*>(.*)<\/style>/gsi, '$1');
+      const styleContent = htmlContent.replaceAll(/<style.*>(.*)<\/style>/gis, '$1');
       const urlMatch = styleContent.match(/^@import url\(css:(.*)\?(.*)\);$/);
       if (urlMatch) {
         // Mark global CSSResult reference
-        const moduleId = urlMatch[1] as string, index = Number(urlMatch[2] as string);
+        const moduleId = urlMatch[1] as string,
+          index = Number(urlMatch[2] as string);
         const result = cssLiterals.get(moduleId)![index];
         result.hasGlobalReference = true;
       } else {
@@ -294,9 +293,11 @@ for (const [moduleId, contents] of globalContents) {
         result.hasGlobalReference = true;
         storeItem(cssLiterals, moduleId, result);
       }
-    } else if (typeof htmlContent === 'object' 
-      && (htmlContent as any).localName === 'link'
-      && (htmlContent as any).rel === 'stylesheet') {
+    } else if (
+      typeof htmlContent === 'object' &&
+      (htmlContent as any).localName === 'link' &&
+      (htmlContent as any).rel === 'stylesheet'
+    ) {
       // Add synthentic CSSResult import from global <link rel="stylesheet">
       const url = (htmlContent as any).href as string;
       const result = new CSSResult(moduleId, [`@import url(${url});`], []);
@@ -314,7 +315,7 @@ for (const [moduleId, cssResults] of cssLiterals) {
 // Emit Theme.css entrypoint files from global references
 for (const stylePackage of stylePackages) {
   const name = stylePackage.replace(themeNameRegex, '$1');
-  const stylePackageDir = path.resolve(nodeModulesDir, stylePackage);
+  const stylePackageDir = resolve(nodeModulesDir, stylePackage);
   const globalCssResults: Set<CSSResult> = new Set();
 
   for (const [moduleId, cssResults] of cssLiterals) {
@@ -322,8 +323,8 @@ for (const stylePackage of stylePackages) {
       continue;
     }
 
-    const referencedCssResults = cssResults.filter(result => result.hasGlobalReference);
-    referencedCssResults.forEach(result => globalCssResults.add(result));
+    const referencedCssResults = cssResults.filter((result) => result.hasGlobalReference);
+    referencedCssResults.forEach((result) => globalCssResults.add(result));
   }
 
   emitCssFile(`./css/${toCamelCase(name)}.css`, Array.from(globalCssResults));
@@ -332,7 +333,7 @@ for (const stylePackage of stylePackages) {
 // Write files
 const cssOutputDir = 'dist';
 for (const [cssPath, contents] of output) {
-  const filePath = path.resolve(rootDir, cssOutputDir, cssPath);
-  await fsPromises.mkdir(path.dirname(filePath), {recursive: true});
-  await fsPromises.writeFile(filePath, contents, {encoding: 'utf-8'});
+  const filePath = resolve(rootDir, cssOutputDir, cssPath);
+  await mkdir(dirname(filePath), { recursive: true });
+  await writeFile(filePath, contents, { encoding: 'utf-8' });
 }

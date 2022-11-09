@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import testUtils from 'react-dom/test-utils';
 import { expect } from '@esm-bundle/chai';
-import App from './App';
+import App from './App.js';
 
 const act = testUtils.act;
 

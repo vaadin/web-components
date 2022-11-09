@@ -20,8 +20,7 @@ function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuModul
     <_ContextMenu
       {...props}
       ref={ref}
-      // TODO: remove cast after the nullability issue is fixed
-      renderer={renderer as ContextMenuModule.ContextMenuRenderer}
+      renderer={renderer}
     >
       {props.children}
       {portals}

@@ -1,6 +1,7 @@
 import { access } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { join } from 'node:path';
+import type { SetRequired } from 'type-fest';
 import ts, {
   type Node,
   type SourceFile,
@@ -8,6 +9,7 @@ import ts, {
   type TransformationContext,
   type TransformerFactory,
 } from 'typescript';
+import type { GenericJsContribution } from '../../types/schema.js';
 import { fswalk, type WalkOptions } from './fswalk.js';
 import { elementsWithMissingEntrypoint } from './settings.js';
 
@@ -94,4 +96,20 @@ export function transform<T extends Node>(transformer: (node: Node) => Node | un
     const visitor = (node: Node): Node | undefined => ts.visitEachChild(transformer(node), visitor, context);
     return ts.visitNode(root, visitor);
   };
+}
+
+export type NamedGenericJsContribution = SetRequired<GenericJsContribution, 'name'>;
+
+export function pickNamedEvents(
+  events: GenericJsContribution[] | undefined,
+  logger: () => void,
+): readonly NamedGenericJsContribution[] | undefined {
+  return events?.filter((e) => {
+    if (!e.name) {
+      logger();
+      return false;
+    }
+
+    return true;
+  }) as readonly NamedGenericJsContribution[] | undefined;
 }

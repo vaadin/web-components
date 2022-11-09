@@ -24,8 +24,7 @@ function Notification(
     <_Notification
       {...props}
       ref={ref}
-      // TODO: remove cast after the nullability issue is fixed
-      renderer={renderer as NotificationRenderer}
+      renderer={renderer}
     >
       {props.children}
       {portals}

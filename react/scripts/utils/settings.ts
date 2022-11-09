@@ -27,38 +27,24 @@ export const genericElements = new Map<string, GenericElementInfo>([
   ['VirtualList', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
 ]);
 
-export const elementsWithEventIssues = new Map<string, MissingEvents>([
-  ['AccordionPanel', { all: true }],
-  ['AppLayout', { some: ['close-overlay-drawer'] }],
-  ['Checkbox', { some: ['value-changed'] }],
-  ['ComboBox', { some: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'] }],
-  ['ComboBoxLight', { some: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'] }],
-  ['Grid', { some: ['size-changed', 'data-provider-changed'] }],
+export type EventSettings = Readonly<{
+  remove?: readonly string[];
+  makeUnknown?: readonly string[];
+}>;
+
+export const eventSettings = new Map<string, EventSettings>([
+  ['AppLayout', { remove: ['close-overlay-drawer'] }],
+  ['Checkbox', { remove: ['value-changed'] }],
+  ['ComboBox', { remove: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'] }],
+  ['ComboBoxLight', { remove: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'] }],
+  ['CrudEdit', { makeUnknown: ['edit'] }],
+  ['Grid', { makeUnknown: ['size-changed', 'data-provider-changed'] }],
   [
     'GridPro',
-    { some: ['size-changed', 'data-provider-changed', 'enter-next-row-changed', 'single-cell-edit-changed'] },
+    { makeUnknown: ['size-changed', 'data-provider-changed', 'enter-next-row-changed', 'single-cell-edit-changed'] },
   ],
-  ['GridProEditColumn', { some: ['editor-type-changed'] }],
-  [
-    'LoginForm',
-    { some: ['action-changed', 'disabled-changed', 'error-changed', 'no-forgot-password-changed', 'i18n-changed'] },
-  ],
-  [
-    'LoginOverlay',
-    {
-      some: [
-        'description-changed',
-        'action-changed',
-        'disabled-changed',
-        'error-changed',
-        'no-forgot-password-changed',
-        'i18n-changed',
-      ],
-    },
-  ],
-  ['RadioButton', { some: ['value-changed'] }],
+  ['GridProEditColumn', { makeUnknown: ['editor-type-changed'] }],
+  ['RadioButton', { remove: ['value-changed'] }],
 ]);
 
-export const elementsWithMissingEntrypoint = new Set([
-  'vaadin-chart-series'
-]);
+export const elementsWithMissingEntrypoint = new Set<string>([]);
