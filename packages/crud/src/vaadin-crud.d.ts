@@ -160,7 +160,8 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  * `save-button`  | To replace the "Save" button.
  * `cancel-button`| To replace the "Cancel" button.
  * `delete-button`| To replace the "Delete" button.
- * `toolbar`      | To replace the toolbar content. Add an element with the attribute `new-button` for the new item action.
+ * `toolbar`      | To provide the toolbar content (by default, it's empty).
+ * `new-button`   | To replace the "New item" button.
  *
  * #### Example:
  *
@@ -181,10 +182,8 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  *     <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
  *   </vaadin-form-layout>
  *
- *   <div slot="toolbar">
- *     Total singers: [[size]]
- *     <button new-button>New singer</button>
- *   </div>
+ *   <div slot="toolbar">Total singers: 2</div>
+ *   <button slot="new-button">New singer</button>
  *
  *   <button slot="save-button">Save changes</button>
  *   <button slot="cancel-button">Discard changes</button>

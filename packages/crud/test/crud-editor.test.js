@@ -17,7 +17,7 @@ describe('crud editor', () => {
     });
 
     it('should have new item title', () => {
-      crud.$.new.click();
+      crud._newButton.click();
       expect(header.textContent).to.be.equal('New item');
     });
 
@@ -29,7 +29,7 @@ describe('crud editor', () => {
     it('should change to new item title', () => {
       crud.editedItem = crud.items[0];
       expect(header.textContent).to.be.equal('Edit item');
-      crud.$.new.click();
+      crud._newButton.click();
       expect(header.textContent).to.be.equal('New item');
     });
   });

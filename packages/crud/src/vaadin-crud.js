@@ -77,7 +77,8 @@ class ButtonSlotController extends SlotController {
  * `save-button`  | To replace the "Save" button.
  * `cancel-button`| To replace the "Cancel" button.
  * `delete-button`| To replace the "Delete" button.
- * `toolbar`      | To replace the toolbar content. Add an element with the attribute `new-button` for the new item action.
+ * `toolbar`      | To provide the toolbar content (by default, it's empty).
+ * `new-button`   | To replace the "New item" button.
  *
  * #### Example:
  *
@@ -98,10 +99,8 @@ class ButtonSlotController extends SlotController {
  *     <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
  *   </vaadin-form-layout>
  *
- *   <div slot="toolbar">
- *     Total singers: [[size]]
- *     <button new-button>New singer</button>
- *   </div>
+ *   <div slot="toolbar">Total singers: 2</div>
+ *   <button slot="new-button">New singer</button>
  *
  *   <button slot="save-button">Save changes</button>
  *   <button slot="cancel-button">Discard changes</button>
@@ -255,10 +254,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         <div id="main">
           <slot name="grid"></slot>
 
-          <div id="toolbar" part="toolbar" on-click="__new">
-            <slot name="toolbar">
-              <vaadin-button new-button="" id="new" theme="primary">[[i18n.newItem]]</vaadin-button>
-            </slot>
+          <div id="toolbar" part="toolbar">
+            <slot name="toolbar"></slot>
+            <slot name="new-button"></slot>
           </div>
         </div>
 
@@ -371,6 +369,14 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
        * @private
        */
       _defaultHeader: {
+        type: Object,
+      },
+
+      /**
+       * A reference to the "New item" button
+       * @private
+       */
+      _newButton: {
         type: Object,
       },
 
@@ -618,6 +624,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
       '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
       '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)',
+      '__newButtonPropsChanged(_newButton, i18n.newItem)',
     ];
   }
 
@@ -637,6 +644,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.__cancel = this.__cancel.bind(this);
     this.__delete = this.__delete.bind(this);
     this.__save = this.__save.bind(this);
+    this.__new = this.__new.bind(this);
     this.__onFormChange = this.__onFormChange.bind(this);
     this.__onGridEdit = this.__onGridEdit.bind(this);
     this.__onGridSizeChanged = this.__onGridSizeChanged.bind(this);
@@ -665,6 +673,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.addController(this._gridController);
 
     this.addController(new SlotController(this, 'form', 'vaadin-crud-form'));
+
+    this.addController(new ButtonSlotController(this, 'new', 'primary'));
 
     // NOTE: order in which buttons are added should match the order of slots in template
     this.addController(new ButtonSlotController(this, 'save', 'primary'));
@@ -999,6 +1009,17 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /**
+   * @param {HTMLElement | undefined} newButton
+   * @param {string} i18nNewItem
+   * @private
+   */
+  __newButtonPropsChanged(newButton, i18nNewItem) {
+    if (newButton) {
+      newButton.textContent = i18nNewItem;
+    }
+  }
+
+  /**
    * @param {string} type
    * @param {HTMLElement} newButton
    * @private
@@ -1178,11 +1199,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __new(event) {
-    // This allows listening to parent element and fire only when clicking on default or custom new-button.
-    if (event.composedPath().some((e) => e.nodeType === 1 && e.hasAttribute('new-button'))) {
-      this.__confirmBeforeChangingEditedItem(null, true);
-    }
+  __new() {
+    this.__confirmBeforeChangingEditedItem(null, true);
   }
 
   /** @private */
