@@ -57,11 +57,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Alternatively you can fully configure the component by using `slot` names.
  *
- * Slot name | Description
- * ----------------|----------------
- * `grid` | To replace the auto-generated grid with a custom one.
- * `form` | To replace the auto-generated form.
- * `toolbar` | To replace the toolbar content. Add an element with the attribute `new-button` for the new item action.
+ * Slot name      | Description
+ * ---------------|----------------
+ * `grid`         | To replace the auto-generated grid with a custom one.
+ * `form`         | To replace the auto-generated form.
+ * `save-button`  | To replace the "Save" button.
+ * `cancel-button`| To replace the "Cancel" button.
+ * `delete-button`| To replace the "Delete" button.
+ * `toolbar`      | To replace the toolbar content. Add an element with the attribute `new-button` for the new item action.
  *
  * #### Example:
  *
@@ -86,6 +89,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *     Total singers: [[size]]
  *     <button new-button>New singer</button>
  *   </div>
+ *
+ *   <button slot="save-button">Save changes</button>
+ *   <button slot="cancel-button">Discard changes</button>
+ *   <button slot="delete-button">Delete singer</button>
  * </vaadin-crud>
  * ```
  * ```js
