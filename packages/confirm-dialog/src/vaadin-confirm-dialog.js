@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-confirm-dialog-overlay.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -59,11 +59,11 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
- * @mixes SlotMixin
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  */
-class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerElement))) {
+class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -226,8 +226,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _cancelButton: {
-        type: HTMLElement,
-        observer: '_cancelButtonChanged',
+        type: Object,
       },
 
       /**
@@ -235,8 +234,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _confirmButton: {
-        type: HTMLElement,
-        observer: '_confirmButtonChanged',
+        type: Object,
       },
 
       /**
@@ -244,7 +242,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _headerNode: {
-        type: HTMLElement,
+        type: Object,
       },
 
       /**
@@ -252,7 +250,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _messageNode: {
-        type: HTMLElement,
+        type: Object,
       },
 
       /**
@@ -260,8 +258,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _rejectButton: {
-        type: HTMLElement,
-        observer: '_rejectButtonChanged',
+        type: Object,
       },
     };
   }
@@ -276,58 +273,21 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
     ];
   }
 
-  /** @protected */
-  get slots() {
-    // NOTE: order in which slots are listed matches the template.
-    return {
-      ...super.slots,
-      header: () => {
-        const h3 = document.createElement('h3');
-        this.__defaultHeader = h3;
-        return h3;
-      },
-      '': () => {
-        const div = document.createElement('div');
-        this.__defaultMessage = div;
-        return div;
-      },
-      'cancel-button': () => {
-        const button = document.createElement('vaadin-button');
-        button.setAttribute('theme', this.cancelTheme);
-        button.textContent = this.cancelText;
-        button._isDefaultButton = true;
-        return button;
-      },
-      'reject-button': () => {
-        const button = document.createElement('vaadin-button');
-        button.setAttribute('theme', this.rejectTheme);
-        button.textContent = this.rejectText;
-        button._isDefaultButton = true;
-        return button;
-      },
-      'confirm-button': () => {
-        const button = document.createElement('vaadin-button');
-        button._isDefaultButton = true;
-        return button;
-      },
-    };
-  }
-
   constructor() {
     super();
-    this.__slottedNodes = [];
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this.__onDomChange(info.addedNodes);
-    });
+
+    this.__cancel = this.__cancel.bind(this);
+    this.__confirm = this.__confirm.bind(this);
+    this.__reject = this.__reject.bind(this);
+  }
+
+  get __slottedNodes() {
+    return [this._headerNode, this._messageNode, this._cancelButton, this._confirmButton, this._rejectButton];
   }
 
   /** @protected */
   ready() {
     super.ready();
-
-    this.__boundCancel = this._cancel.bind(this);
-    this.__boundConfirm = this._confirm.bind(this);
-    this.__boundReject = this._reject.bind(this);
 
     this._overlayElement = this.$.dialog.$.overlay;
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
@@ -339,6 +299,42 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         this._setDimension(name, this._dimensions[name]);
       });
     }
+
+    this._headerController = new SlotController(this, 'header', 'h3', {
+      initializer: (node) => {
+        this._headerNode = node;
+      },
+    });
+    this.addController(this._headerController);
+
+    this._messageController = new SlotController(this, '', 'div', {
+      initializer: (node) => {
+        this._messageNode = node;
+      },
+    });
+    this.addController(this._messageController);
+
+    // NOTE: order in which buttons are added should match the order of slots in template
+    this._cancelController = new SlotController(this, 'cancel-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('cancel', button);
+      },
+    });
+    this.addController(this._cancelController);
+
+    this._rejectController = new SlotController(this, 'reject-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('reject', button);
+      },
+    });
+    this.addController(this._rejectController);
+
+    this._confirmController = new SlotController(this, 'confirm-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('confirm', button);
+      },
+    });
+    this.addController(this._confirmController);
   }
 
   /** @private */
@@ -358,73 +354,29 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
   /** @private */
   __onDialogClosed() {
-    const nodes = this.__slottedNodes;
-
-    // Reset the list of nodes, it will be re-created.
-    this.__slottedNodes = [];
-
     // Move nodes from the overlay back to the host.
-    nodes.forEach((node) => {
+    this.__slottedNodes.forEach((node) => {
       this.appendChild(node);
     });
   }
 
   /** @private */
-  __onDomChange(addedNodes) {
-    // TODO: restore default element when a corresponding slotted element is removed.
-    // Consider creating a controller to reuse custom helper logic from FieldMixin.
-    addedNodes.forEach((node) => {
-      this.__slottedNodes.push(node);
+  __setupSlottedButton(type, button) {
+    const property = `_${type}Button`;
+    const listener = `__${type}`;
 
-      const isElementNode = node.nodeType === Node.ELEMENT_NODE;
-      const slotName = isElementNode ? node.getAttribute('slot') : '';
-
-      // Handle named slots (header and buttons).
-      if (slotName) {
-        if (slotName.indexOf('button') >= 0) {
-          const [button] = slotName.split('-');
-          this[`_${button}Button`] = node;
-        } else if (slotName === 'header') {
-          this._headerNode = node;
-        }
-      } else {
-        const isNotEmptyText = node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '';
-        // Handle default slot (message element).
-        if (isNotEmptyText || (isElementNode && node.slot === '')) {
-          this._messageNode = node;
-        }
-      }
-    });
-  }
-
-  /** @private */
-  _cancelButtonChanged(button, oldButton) {
-    this.__setupSlottedButton(button, oldButton, this.__boundCancel);
-  }
-
-  /** @private */
-  _confirmButtonChanged(button, oldButton) {
-    this.__setupSlottedButton(button, oldButton, this.__boundConfirm);
-  }
-
-  /** @private */
-  _rejectButtonChanged(button, oldButton) {
-    this.__setupSlottedButton(button, oldButton, this.__boundReject);
-  }
-
-  /** @private */
-  __setupSlottedButton(slottedButton, currentButton, clickListener) {
-    if (currentButton && currentButton.parentElement) {
-      currentButton.remove();
+    if (this[property] && this[property] !== button) {
+      this[property].remove();
     }
 
-    slottedButton.addEventListener('click', clickListener);
+    button.addEventListener('click', this[listener]);
+    this[property] = button;
   }
 
   /** @private */
   __updateCancelButton(button, cancelText, cancelTheme, showCancel) {
     if (button) {
-      if (button._isDefaultButton) {
+      if (button === this._cancelController.defaultNode) {
         button.textContent = cancelText;
         button.setAttribute('theme', cancelTheme);
       }
@@ -434,7 +386,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
   /** @private */
   __updateConfirmButton(button, confirmText, confirmTheme) {
-    if (button && button._isDefaultButton) {
+    if (button && button === this._confirmController.defaultNode) {
       button.textContent = confirmText;
       button.setAttribute('theme', confirmTheme);
     }
@@ -443,15 +395,14 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   __updateHeaderNode(headerNode, header) {
     // Only update text content for the default header node.
-    if (headerNode && headerNode === this.__defaultHeader) {
+    if (headerNode && headerNode === this._headerController.defaultNode) {
       headerNode.textContent = header;
     }
   }
 
   /** @private */
   __updateMessageNode(messageNode, message) {
-    // Only update text content for the default message node.
-    if (messageNode && messageNode === this.__defaultMessage) {
+    if (messageNode && messageNode === this._messageController.defaultNode) {
       messageNode.textContent = message;
     }
   }
@@ -459,7 +410,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   __updateRejectButton(button, rejectText, rejectTheme, showReject) {
     if (button) {
-      if (button._isDefaultButton) {
+      if (button === this._rejectController.defaultNode) {
         button.textContent = rejectText;
         button.setAttribute('theme', rejectTheme);
       }
@@ -470,24 +421,24 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   _escPressed(event) {
     if (!event.defaultPrevented) {
-      this._cancel();
+      this.__cancel();
     }
   }
 
   /** @private */
-  _confirm() {
+  __confirm() {
     this.dispatchEvent(new CustomEvent('confirm'));
     this.opened = false;
   }
 
   /** @private */
-  _cancel() {
+  __cancel() {
     this.dispatchEvent(new CustomEvent('cancel'));
     this.opened = false;
   }
 
   /** @private */
-  _reject() {
+  __reject() {
     this.dispatchEvent(new CustomEvent('reject'));
     this.opened = false;
   }
