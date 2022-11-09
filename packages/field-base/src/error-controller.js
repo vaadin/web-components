@@ -52,7 +52,7 @@ export class ErrorController extends SlotController {
   }
 
   /**
-   * Override to initialize the newly added custom label.
+   * Override to initialize the newly added custom error message.
    *
    * @param {Node} errorNode
    * @protected
@@ -70,7 +70,7 @@ export class ErrorController extends SlotController {
   }
 
   /**
-   * Override to cleanup label node when it's removed.
+   * Override to cleanup error message node when it's removed.
    *
    * @param {Node} node
    * @protected
@@ -83,7 +83,7 @@ export class ErrorController extends SlotController {
     if (!errorNode && node !== this.defaultNode) {
       errorNode = this.attachDefaultNode();
 
-      // Run initializer to update default label and ID.
+      // Run initializer to update default error message ID.
       this.initNode(errorNode);
     }
 
