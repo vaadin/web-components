@@ -77,7 +77,7 @@ describe('crud buttons', () => {
         });
 
         it('should save a new item', () => {
-          crud.$.new.click();
+          crud._newButton.click();
           crud._form._fields[0].value = 'baz';
           change(crud._form);
           saveButton.click();
@@ -169,7 +169,7 @@ describe('crud buttons', () => {
 
           it('should not ask for confirmation on cancel when not modified - click out', () => {
             edit(crud.items[0]);
-            crud.$.new.click();
+            crud._newButton.click();
             expect(confirmCancelDialog.opened).not.to.be.ok;
           });
 
@@ -189,7 +189,7 @@ describe('crud buttons', () => {
           it('should ask for confirmation on cancel when modified - click out', () => {
             edit(crud.items[0]);
             change(crud._form);
-            crud.$.new.click();
+            crud._newButton.click();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
@@ -239,13 +239,7 @@ describe('crud buttons', () => {
             crud.addEventListener('cancel', cancelSpyListener);
 
             crud._grid.activeItem = crud.items[0];
-            crud.$.new.dispatchEvent(
-              new CustomEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                composed: true,
-              }),
-            );
+            crud._newButton.click();
 
             await aTimeout(0);
             expect(cancelSpyListener.calledOnce).to.be.ok;
@@ -323,7 +317,7 @@ describe('crud buttons', () => {
         });
 
         it('should configure dirty and new flags on new', () => {
-          crud.$.new.click();
+          crud._newButton.click();
           expect(crud.__isDirty).not.to.be.true;
           expect(crud.__isNew).to.be.true;
         });
@@ -348,7 +342,7 @@ describe('crud buttons', () => {
         });
 
         it('should hide delete button on new', async () => {
-          crud.$.new.click();
+          crud._newButton.click();
           await nextRender(crud.$.dialog.$.overlay);
           expect(deleteButton.hasAttribute('hidden')).to.be.true;
         });
@@ -402,7 +396,7 @@ describe('crud buttons', () => {
             expect(crud.editorOpened).to.be.true;
 
             change(crud._form);
-            crud.$.new.click();
+            crud._newButton.click();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
@@ -411,7 +405,7 @@ describe('crud buttons', () => {
             expect(crud.editorOpened).to.be.true;
 
             change(crud._form);
-            crud.$.new.click();
+            crud._newButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
 
             confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
@@ -440,19 +434,19 @@ describe('crud buttons', () => {
         describe('new', () => {
           it('should fire the new event', (done) => {
             listenOnce(crud, 'new', () => done());
-            crud.$.new.click();
+            crud._newButton.click();
           });
 
           it('on new should set the item and open dialog if not default prevented', () => {
             expect(crud.editedItem).not.to.be.ok;
-            crud.$.new.click();
+            crud._newButton.click();
             expect(crud.editedItem).to.be.ok;
             expect(crud.editorOpened).to.be.true;
           });
 
           it('on new should not set the item but open dialog if default prevented', () => {
             listenOnce(crud, 'new', (e) => e.preventDefault());
-            crud.$.new.click();
+            crud._newButton.click();
             expect(crud.editedItem).not.to.be.ok;
             expect(crud.editorOpened).to.be.true;
           });
@@ -645,7 +639,7 @@ describe('crud buttons', () => {
     });
 
     it('should hide delete button on new', async () => {
-      crud.$.new.click();
+      crud._newButton.click();
       await nextRender(crud.$.dialog.$.overlay);
       expect(deleteButton.hasAttribute('hidden')).to.be.true;
     });

@@ -142,6 +142,14 @@ snapshots["vaadin-crud host default"] =
   <vaadin-crud-form slot="form">
   </vaadin-crud-form>
   <vaadin-button
+    role="button"
+    slot="new-button"
+    tabindex="0"
+    theme="primary"
+  >
+    New item
+  </vaadin-button>
+  <vaadin-button
     aria-disabled="true"
     disabled=""
     role="button"
@@ -182,15 +190,8 @@ snapshots["vaadin-crud shadow default"] =
       part="toolbar"
     >
       <slot name="toolbar">
-        <vaadin-button
-          id="new"
-          new-button=""
-          role="button"
-          tabindex="0"
-          theme="primary"
-        >
-          New item
-        </vaadin-button>
+      </slot>
+      <slot name="new-button">
       </slot>
     </div>
   </div>

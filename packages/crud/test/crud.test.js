@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, change, fire, fixtureSync, isIOS, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
@@ -56,10 +56,10 @@ describe('crud', () => {
     });
 
     it('should be able to internationalize via `i18n` property', async () => {
-      expect(crud.$.new.textContent).to.be.equal('New item');
+      expect(crud._newButton.textContent).to.be.equal('New item');
       crud.i18n = { ...crud.i18n, newItem: 'Nueva entidad', editLabel: 'Editar entidad' };
       await nextRender(crud._grid);
-      expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
+      expect(crud._newButton.textContent).to.be.equal('Nueva entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
     });
@@ -92,7 +92,7 @@ describe('crud', () => {
         done();
       });
 
-      crud.$.new.click();
+      crud._newButton.click();
       crud._form._fields[0].value = 'baz';
       change(crud._form);
       btnSave.click();
@@ -107,14 +107,14 @@ describe('crud', () => {
     it('should have an empty form if no item is present', async () => {
       crud.dataProvider = (_, callback) => callback([], 0);
       await nextRender(crud);
-      crud.$.new.click();
+      crud._newButton.click();
       expect(crud._form._fields).to.be.not.ok;
     });
 
     it('should have an empty form if no item is present', async () => {
       crud.dataProvider = (_, callback) => callback([], 0);
       await nextRender(crud);
-      crud.$.new.click();
+      crud._newButton.click();
       expect(crud._form._fields).to.be.not.ok;
     });
   });
@@ -188,7 +188,7 @@ describe('crud', () => {
           expect(e.detail.item.foo).to.be.equal('baz');
           done();
         });
-        crud.$.new.click();
+        crud._newButton.click();
         crud._form._fields[0].value = 'baz';
         change(crud._form);
         btnSave.click();
@@ -379,9 +379,10 @@ describe('crud', () => {
   describe('editor-position', () => {
     let crud, editorDialog;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       editorDialog = crud.$.dialog;
+      await nextRender();
     });
 
     afterEach(() => {
@@ -404,17 +405,15 @@ describe('crud', () => {
       expect(crud.editorPosition).to.be.equal('aside');
     });
 
-    (isIOS ? it.skip : it)('should hide toolbar when editor position is "bottom" and opened', async () => {
+    it('should hide toolbar when editor position is "bottom" and opened', () => {
       crud.editorPosition = 'bottom';
       crud._fullscreen = false;
-      crud.$.new.click();
-      await oneEvent(crud, 'editor-opened-changed');
+      crud._newButton.click();
       expect(crud.$.toolbar.style.display).to.be.equal('none');
     });
 
     it('should show toolbar with default editor position and opened', () => {
-      crud.$.new.click();
-
+      crud._newButton.click();
       expect(crud.$.toolbar.style.display).to.be.not.equal('none');
     });
 
@@ -435,29 +434,24 @@ describe('crud', () => {
     });
 
     it('should always show the editor in dialog on mobile', () => {
-      if (isIOS) {
-        // Only setting crud._fullscreen = true is not working on iOS test
-        crud._fullscreenMediaQuery = '(max-width: 1000px), (max-height: 1000px)';
-      }
       crud._fullscreen = true;
       crud.editorPosition = 'bottom';
-      crud.$.new.click();
+      crud._newButton.click();
 
       expect(crud._fullscreen).to.be.true;
     });
 
-    (isIOS ? it.skip : it)('should not open dialog on desktop if not in default editor position', () => {
+    it('should not open dialog on desktop if not in default editor position', () => {
       crud.editorPosition = 'bottom';
       crud._fullscreen = false;
-      crud.$.new.click();
+      crud._newButton.click();
       expect(editorDialog.opened).to.be.false;
     });
 
-    (isIOS ? it.skip : it)('should switch from overlay to below grid if resize happens', async () => {
+    it('should switch from overlay to below grid if resize happens', () => {
       crud.editorPosition = 'bottom';
       crud._fullscreen = true;
-      crud.$.new.click();
-      await oneEvent(crud, 'editor-opened-changed');
+      crud._newButton.click();
       expect(editorDialog.opened).to.be.true;
       crud._fullscreen = false;
       expect(editorDialog.opened).to.be.false;
@@ -535,7 +529,7 @@ describe('crud', () => {
 
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
-      crud.$.new.click();
+      crud._newButton.click();
       await aTimeout(0);
       expect(crud.editorOpened).to.be.true;
       await aTimeout(0);
@@ -551,7 +545,7 @@ describe('crud', () => {
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
       crud.__isDirty = true;
-      crud.$.new.click();
+      crud._newButton.click();
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
       confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.true;
