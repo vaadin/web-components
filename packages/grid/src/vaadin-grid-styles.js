@@ -184,10 +184,6 @@ registerStyles(
       overflow: hidden;
     }
 
-    [part~='cell'][first-frozen-to-end] {
-      margin-inline-start: auto;
-    }
-
     /* Reordering styles */
     :host([reordering]) [part~='cell'] ::slotted(vaadin-grid-cell-content),
     :host([reordering]) [part~='resize-handle'],
@@ -250,6 +246,10 @@ registerStyles(
     [first-frozen-to-end] [part~='resize-handle']::before {
       width: 18px;
       transform: none;
+    }
+
+    [first-frozen-to-end] {
+      margin-inline-start: auto;
     }
 
     /* Hide resize handle if scrolled to end */
