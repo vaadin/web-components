@@ -19,6 +19,20 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * @private
+ * A to initialize slotted button.
+ */
+class ButtonSlotController extends SlotController {
+  constructor(host, type, theme) {
+    super(host, `${type}-button`, 'vaadin-button', {
+      initializer: (button) => {
+        button.setAttribute('theme', theme);
+      },
+    });
+  }
+}
+
+/**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
  *
  * ### Quick Start
@@ -646,32 +660,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.addController(new SlotController(this, 'form', 'vaadin-crud-form'));
 
     // NOTE: order in which buttons are added should match the order of slots in template
-    this.addController(
-      new SlotController(this, 'save-button', 'vaadin-button', {
-        initializer: (button) => {
-          button.id = 'save';
-          button.setAttribute('theme', 'primary');
-        },
-      }),
-    );
-
-    this.addController(
-      new SlotController(this, 'cancel-button', 'vaadin-button', {
-        initializer: (button) => {
-          button.id = 'cancel';
-          button.setAttribute('theme', 'tertiary');
-        },
-      }),
-    );
-
-    this.addController(
-      new SlotController(this, 'delete-button', 'vaadin-button', {
-        initializer: (button) => {
-          button.id = 'delete';
-          button.setAttribute('theme', 'tertiary error');
-        },
-      }),
-    );
+    this.addController(new ButtonSlotController(this, 'save', 'primary'));
+    this.addController(new ButtonSlotController(this, 'cancel', 'tertiary'));
+    this.addController(new ButtonSlotController(this, 'delete', 'tertiary error'));
 
     this.addController(
       new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
