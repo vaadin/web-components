@@ -109,6 +109,11 @@ describe('number-field', () => {
         await visualDiff(div, `${dir}-controls`);
       });
 
+      it('step buttons visible', async () => {
+        element.stepButtonsVisible = true;
+        await visualDiff(div, `${dir}-step-buttons-visible`);
+      });
+
       it('align-right', async () => {
         element.value = 10;
         element.setAttribute('theme', 'align-right');

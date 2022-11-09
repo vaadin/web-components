@@ -72,8 +72,16 @@ declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTM
   /**
    * Set to true to display value increase/decrease controls.
    * @attr {boolean} has-controls
+   * @deprecated since 23.3.
+   * Use [`stepButtonsVisible`](#/elements/vaadin-number-field#property-stepButtonsVisible) instead
    */
   hasControls: boolean;
+
+  /**
+   * Set to true to show increase/decrease buttons.
+   * @attr {boolean} step-buttons-visible
+   */
+  stepButtonsVisible: boolean;
 
   /**
    * The minimum value of the field.

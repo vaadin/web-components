@@ -100,7 +100,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
             part="decrease-button"
             on-click="_decreaseValue"
             on-touchend="_decreaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            hidden$="[[!_isStepButtonVisible(hasControls, stepButtonsVisible)]]"
             aria-hidden="true"
             slot="prefix"
           ></div>
@@ -113,7 +113,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
             part="increase-button"
             on-click="_increaseValue"
             on-touchend="_increaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            hidden$="[[!_isStepButtonVisible(hasControls, stepButtonsVisible)]]"
             aria-hidden="true"
             slot="suffix"
           ></div>
@@ -137,8 +137,20 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
       /**
        * Set to true to display value increase/decrease controls.
        * @attr {boolean} has-controls
+       * @deprecated since 23.3.
+       * Use [`stepButtonsVisible`](#/elements/vaadin-number-field#property-stepButtonsVisible) instead
        */
       hasControls: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * Set to true to show increase/decrease buttons.
+       * @attr {boolean} step-buttons-visible
+       */
+      stepButtonsVisible: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
@@ -428,6 +440,16 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     }
 
     super._onKeyDown(event);
+  }
+
+  /**
+   * Determines whether to hide the increase / decrease buttons based on the
+   * deprecated `hasControls` property, and the replacement `stepButtonsVisible`
+   * property
+   * @private
+   */
+  _isStepButtonVisible(hasControls, stepButtonsVisible) {
+    return hasControls || stepButtonsVisible;
   }
 }
 

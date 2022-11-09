@@ -108,6 +108,11 @@ describe('number-field', () => {
         element.hasControls = true;
         await visualDiff(div, `${dir}-controls`);
       });
+
+      it('step buttons visible', async () => {
+        element.stepButtonsVisible = true;
+        await visualDiff(div, `${dir}-step-buttons-visible`);
+      });
     });
   });
 });
