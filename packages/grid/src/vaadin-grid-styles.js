@@ -184,6 +184,10 @@ registerStyles(
       overflow: hidden;
     }
 
+    [part~='cell'][first-frozen-to-end] {
+      margin-inline-start: auto;
+    }
+
     /* Reordering styles */
     :host([reordering]) [part~='cell'] ::slotted(vaadin-grid-cell-content),
     :host([reordering]) [part~='resize-handle'],
