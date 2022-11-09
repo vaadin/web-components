@@ -1,8 +1,7 @@
 import { dirname, posix, relative, resolve, sep } from 'node:path';
 import { createRequire } from 'node:module';
-import { type Module as VmModule, SourceTextModule, SyntheticModule } from 'node:vm';
+import { type Module as VmModule, SourceTextModule, SyntheticModule, createContext } from 'node:vm';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { createContext } from 'react';
 import { rootDir, stylePackages, nodeModulesDir } from './utils/config.js';
 import * as themableMixinModule from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
