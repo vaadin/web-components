@@ -291,6 +291,24 @@ const transformsEqual = (element, transform) => {
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
         });
+
+        it('should stay frozen to end when resize results in total width less than the grid', async () => {
+          grid._columnTree[0][2].flexGrow = 0;
+
+          grid.style.width = '400px';
+          await onceResized(grid);
+
+          const initBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
+
+          grid._columnTree[0][0].width = '10px';
+          grid._columnTree[0][0].flexGrow = 0;
+          grid._columnTree[0][1].width = '10px';
+          grid._columnTree[0][1].flexGrow = 0;
+
+          const finalBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
+          expect(finalBoundingClientRect.x).to.equal(initBoundingClientRect.x);
+          expect(finalBoundingClientRect.width).to.equal(initBoundingClientRect.width);
+        });
       });
     });
   });
