@@ -11,7 +11,7 @@ import { LabelController } from './label-controller.js';
  * A mixin to provide label via corresponding property or named slot.
  *
  * @polymerMixin
- * @mixes SlotMixin
+ * @mixes ControllerMixin
  */
 export const LabelMixin = dedupingMixin(
   (superclass) =>
