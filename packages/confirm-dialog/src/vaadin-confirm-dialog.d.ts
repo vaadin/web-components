@@ -3,8 +3,8 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -72,7 +72,7 @@ export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEve
  * @fires {Event} reject - Fired when Reject button was pressed.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(HTMLElement))) {
+declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(HTMLElement))) {
   /**
    * True if the overlay is currently displayed.
    */
