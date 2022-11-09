@@ -26,16 +26,19 @@ customElements.define(
       return {
         i18n: {
           type: Object,
-          value: () => {
-            return {
-              cancel: 'Peruuta', // For date picker
-
-              // formatTime and parseTime are needed so that time picker doesn't throw errors on init
-              formatTime,
-              parseTime,
-            };
-          },
         },
+      };
+    }
+
+    ready() {
+      super.ready();
+
+      this.i18n = {
+        cancel: 'Peruuta', // For date picker
+
+        // formatTime and parseTime are needed so that time picker doesn't throw errors on init
+        formatTime,
+        parseTime,
       };
     }
   },

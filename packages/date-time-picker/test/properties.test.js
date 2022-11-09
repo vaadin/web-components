@@ -264,8 +264,8 @@ function getTimePicker(dateTimePicker) {
       expect(dateTimePicker.i18n).to.have.property('parseTime').that.is.a('function');
     });
 
-    it('should propagate i18n properties observably to date picker', () => {
-      dateTimePicker.set('i18n.cancel', 'Peruuta');
+    it('should propagate i18n properties to the date picker', () => {
+      dateTimePicker.i18n = { ...dateTimePicker.i18n, cancel: 'Peruuta' };
       expect(datePicker.i18n.cancel).to.equal('Peruuta');
     });
   });

@@ -5,12 +5,11 @@
  */
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { dateEquals, parseDate } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -43,6 +42,22 @@ const datePickerI18nDefaults = getPropertyFromPrototype(datePickerClass, 'i18n')
 const timePickerI18nDefaults = getPropertyFromPrototype(timePickerClass, 'i18n').value();
 const datePickerI18nProps = Object.keys(datePickerI18nDefaults);
 const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
+
+/**
+ * A controller to initialize slotted picker.
+ *
+ * @private
+ */
+class PickerSlotController extends SlotController {
+  constructor(host, type) {
+    super(host, `${type}-picker`, `vaadin-date-time-picker-${type}-picker`, {
+      initializer: (picker, host) => {
+        const prop = `__${type}Picker`;
+        host[prop] = picker;
+      },
+    });
+  }
+}
 
 /**
  * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
@@ -105,12 +120,9 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @mixes ThemableMixin
  * @mixes FocusMixin
  * @mixes DisabledMixin
- * @mixes SlotMixin
  * @mixes FieldMixin
  */
-class DateTimePicker extends FieldMixin(
-  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement))))),
-) {
+class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
@@ -359,37 +371,20 @@ class DateTimePicker extends FieldMixin(
   static get observers() {
     return [
       '__selectedDateTimeChanged(__selectedDateTime)',
-      '__datePlaceholderChanged(datePlaceholder)',
-      '__timePlaceholderChanged(timePlaceholder)',
-      '__stepChanged(step)',
-      '__initialPositionChanged(initialPosition)',
-      '__showWeekNumbersChanged(showWeekNumbers)',
-      '__requiredChanged(required)',
-      '__invalidChanged(invalid)',
-      '__disabledChanged(disabled)',
-      '__readonlyChanged(readonly)',
-      '__i18nChanged(i18n.*)',
-      '__autoOpenDisabledChanged(autoOpenDisabled)',
+      '__datePlaceholderChanged(datePlaceholder, __datePicker)',
+      '__timePlaceholderChanged(timePlaceholder, __timePicker)',
+      '__stepChanged(step, __timePicker)',
+      '__initialPositionChanged(initialPosition, __datePicker)',
+      '__showWeekNumbersChanged(showWeekNumbers, __datePicker)',
+      '__requiredChanged(required, __datePicker, __timePicker)',
+      '__invalidChanged(invalid, __datePicker, __timePicker)',
+      '__disabledChanged(disabled, __datePicker, __timePicker)',
+      '__readonlyChanged(readonly, __datePicker, __timePicker)',
+      '__i18nChanged(i18n, __datePicker, __timePicker)',
+      '__autoOpenDisabledChanged(autoOpenDisabled, __datePicker, __timePicker)',
       '__themeChanged(_theme, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
     ];
-  }
-
-  /** @protected */
-  get slots() {
-    return {
-      ...super.slots,
-      'date-picker': () => {
-        const element = document.createElement('vaadin-date-time-picker-date-picker');
-        element.__defaultPicker = true;
-        return element;
-      },
-      'time-picker': () => {
-        const element = document.createElement('vaadin-date-time-picker-time-picker');
-        element.__defaultPicker = true;
-        return element;
-      },
-    };
   }
 
   constructor() {
@@ -403,18 +398,17 @@ class DateTimePicker extends FieldMixin(
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
-
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this.__onDomChange(info.addedNodes);
-    });
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    this.__datePicker = this._getDirectSlotChild('date-picker');
-    this.__timePicker = this._getDirectSlotChild('time-picker');
+    this._datePickerController = new PickerSlotController(this, 'date');
+    this.addController(this._datePickerController);
+
+    this._timePickerController = new PickerSlotController(this, 'time');
+    this.addController(this._timePickerController);
 
     if (this.autofocus && !this.disabled) {
       window.requestAnimationFrame(() => this.focus());
@@ -508,22 +502,9 @@ class DateTimePicker extends FieldMixin(
   }
 
   /** @private */
-  __onDomChange(addedNodes) {
-    addedNodes
-      .filter((node) => node.nodeType === Node.ELEMENT_NODE)
-      .forEach((node) => {
-        const slotAttributeValue = node.getAttribute('slot');
-
-        if (slotAttributeValue === 'date-picker') {
-          this.__datePicker = node;
-        } else if (slotAttributeValue === 'time-picker') {
-          this.__timePicker = node;
-        }
-      });
-
-    if (this.value && (this.min || this.max)) {
-      this.validate();
-    }
+  __isDefaultPicker(picker, type) {
+    const controller = this[`_${type}PickerController`];
+    return controller && picker === controller.defaultNode;
   }
 
   /** @private */
@@ -539,7 +520,7 @@ class DateTimePicker extends FieldMixin(
 
     this.__addInputListeners(newDatePicker);
 
-    if (newDatePicker.__defaultPicker) {
+    if (this.__isDefaultPicker(newDatePicker, 'date')) {
       // Synchronize properties to default date picker
       newDatePicker.placeholder = this.datePlaceholder;
       newDatePicker.invalid = this.invalid;
@@ -581,7 +562,7 @@ class DateTimePicker extends FieldMixin(
 
     this.__addInputListeners(newTimePicker);
 
-    if (newTimePicker.__defaultPicker) {
+    if (this.__isDefaultPicker(newTimePicker, 'time')) {
       // Synchronize properties to default time picker
       newTimePicker.placeholder = this.timePlaceholder;
       newTimePicker.step = this.step;
@@ -634,88 +615,88 @@ class DateTimePicker extends FieldMixin(
   }
 
   /** @private */
-  __i18nChanged(changeRecord) {
-    if (this.__datePicker) {
-      this.__datePicker.set(changeRecord.path, changeRecord.value);
+  __i18nChanged(i18n, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.i18n = { ...datePicker.i18n, ...i18n };
     }
 
-    if (this.__timePicker) {
-      this.__timePicker.set(changeRecord.path, changeRecord.value);
+    if (timePicker) {
+      timePicker.i18n = { ...timePicker.i18n, ...i18n };
     }
   }
 
   /** @private */
-  __datePlaceholderChanged(datePlaceholder) {
-    if (this.__datePicker) {
-      this.__datePicker.placeholder = datePlaceholder;
+  __datePlaceholderChanged(datePlaceholder, datePicker) {
+    if (datePicker) {
+      datePicker.placeholder = datePlaceholder;
     }
   }
 
   /** @private */
-  __timePlaceholderChanged(timePlaceholder) {
-    if (this.__timePicker) {
-      this.__timePicker.placeholder = timePlaceholder;
+  __timePlaceholderChanged(timePlaceholder, timePicker) {
+    if (timePicker) {
+      timePicker.placeholder = timePlaceholder;
     }
   }
 
   /** @private */
-  __stepChanged(step) {
-    if (this.__timePicker && this.__timePicker.step !== step) {
-      this.__timePicker.step = step;
+  __stepChanged(step, timePicker) {
+    if (timePicker && timePicker.step !== step) {
+      timePicker.step = step;
     }
   }
 
   /** @private */
-  __initialPositionChanged(initialPosition) {
-    if (this.__datePicker) {
-      this.__datePicker.initialPosition = initialPosition;
+  __initialPositionChanged(initialPosition, datePicker) {
+    if (datePicker) {
+      datePicker.initialPosition = initialPosition;
     }
   }
 
   /** @private */
-  __showWeekNumbersChanged(showWeekNumbers) {
-    if (this.__datePicker) {
-      this.__datePicker.showWeekNumbers = showWeekNumbers;
+  __showWeekNumbersChanged(showWeekNumbers, datePicker) {
+    if (datePicker) {
+      datePicker.showWeekNumbers = showWeekNumbers;
     }
   }
 
   /** @private */
-  __invalidChanged(invalid) {
-    if (this.__datePicker) {
-      this.__datePicker.invalid = invalid;
+  __invalidChanged(invalid, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.invalid = invalid;
     }
-    if (this.__timePicker) {
-      this.__timePicker.invalid = invalid;
-    }
-  }
-
-  /** @private */
-  __requiredChanged(required) {
-    if (this.__datePicker) {
-      this.__datePicker.required = required;
-    }
-    if (this.__timePicker) {
-      this.__timePicker.required = required;
+    if (timePicker) {
+      timePicker.invalid = invalid;
     }
   }
 
   /** @private */
-  __disabledChanged(disabled) {
-    if (this.__datePicker) {
-      this.__datePicker.disabled = disabled;
+  __requiredChanged(required, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.required = required;
     }
-    if (this.__timePicker) {
-      this.__timePicker.disabled = disabled;
+    if (timePicker) {
+      timePicker.required = required;
     }
   }
 
   /** @private */
-  __readonlyChanged(readonly) {
-    if (this.__datePicker) {
-      this.__datePicker.readonly = readonly;
+  __disabledChanged(disabled, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.disabled = disabled;
     }
-    if (this.__timePicker) {
-      this.__timePicker.readonly = readonly;
+    if (timePicker) {
+      timePicker.disabled = disabled;
+    }
+  }
+
+  /** @private */
+  __readonlyChanged(readonly, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.readonly = readonly;
+    }
+    if (timePicker) {
+      timePicker.readonly = readonly;
     }
   }
 
@@ -1021,12 +1002,12 @@ class DateTimePicker extends FieldMixin(
   }
 
   /** @private */
-  __autoOpenDisabledChanged(autoOpenDisabled) {
-    if (this.__datePicker) {
-      this.__datePicker.autoOpenDisabled = autoOpenDisabled;
+  __autoOpenDisabledChanged(autoOpenDisabled, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.autoOpenDisabled = autoOpenDisabled;
     }
-    if (this.__timePicker) {
-      this.__timePicker.autoOpenDisabled = autoOpenDisabled;
+    if (timePicker) {
+      timePicker.autoOpenDisabled = autoOpenDisabled;
     }
   }
 
@@ -1053,7 +1034,7 @@ class DateTimePicker extends FieldMixin(
       return;
     }
 
-    if (datePicker.__defaultPicker !== timePicker.__defaultPicker) {
+    if (this.__isDefaultPicker(datePicker, 'date') !== this.__isDefaultPicker(timePicker, 'time')) {
       // Both pickers are not replaced yet
       return;
     }
@@ -1064,6 +1045,10 @@ class DateTimePicker extends FieldMixin(
     } else if (this.value) {
       // The component has a value, update the new pickers values
       this.__selectedDateTimeChanged(this.__selectedDateTime);
+
+      if (this.min || this.max) {
+        this.validate();
+      }
     }
   }
 
