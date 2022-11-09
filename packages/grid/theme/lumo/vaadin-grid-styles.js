@@ -307,6 +307,10 @@ registerStyles(
       border-left-color: var(--_lumo-grid-border-color);
     }
 
+    [part~='cell'][first-frozen-to-end] {
+      margin-inline-start: auto;
+    }
+
     /* Row stripes */
 
     :host([theme~='row-stripes']) [part~='row']:not([odd]) [part~='body-cell'],

@@ -116,6 +116,7 @@ registerStyles(
 
     [part~='cell'][first-frozen-to-end] {
       border-left: 1px solid var(--material-divider-color);
+      margin-inline-start: auto;
     }
 
     /* Column resizing */
