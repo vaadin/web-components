@@ -164,12 +164,9 @@ describe('custom field', () => {
 
   describe('custom parser and formatter', () => {
     it('should use custom parser if that exists', () => {
-      customField.set(
-        'i18n.parseValue',
-        sinon.stub().callsFake((value) => {
-          return value.split(' ').map((value) => parseInt(value) + 1);
-        }),
-      );
+      customField.parseValue = (value) => {
+        return value.split(' ').map((value) => parseInt(value) + 1);
+      };
 
       customField.value = '1 1';
 
@@ -179,12 +176,9 @@ describe('custom field', () => {
     });
 
     it('should use custom formatter if that exists', () => {
-      customField.set(
-        'i18n.formatValue',
-        sinon.stub().callsFake((inputValues) => {
-          return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
-        }),
-      );
+      customField.formatValue = (inputValues) => {
+        return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
+      };
 
       customField.inputs.forEach((el) => {
         el.value = '1';
@@ -204,7 +198,7 @@ describe('custom field', () => {
       });
 
       it('should warn if custom parser has not returned array of values', () => {
-        customField.set('i18n.parseValue', () => '');
+        customField.parseValue = () => '';
 
         customField.value = 'foo';
         expect(console.warn.callCount).to.equal(1);
