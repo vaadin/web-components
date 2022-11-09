@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-confirm-dialog-overlay.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -280,11 +279,10 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this.__cancel = this.__cancel.bind(this);
     this.__confirm = this.__confirm.bind(this);
     this.__reject = this.__reject.bind(this);
+  }
 
-    this.__slottedNodes = [];
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this.__onDomChange(info.addedNodes);
-    });
+  get __slottedNodes() {
+    return [this._headerNode, this._messageNode, this._cancelButton, this._confirmButton, this._rejectButton];
   }
 
   /** @protected */
@@ -317,13 +315,25 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this.addController(this._messageController);
 
     // NOTE: order in which buttons are added should match the order of slots in template
-    this._cancelController = new SlotController(this, 'cancel-button', 'vaadin-button');
+    this._cancelController = new SlotController(this, 'cancel-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('cancel', button);
+      },
+    });
     this.addController(this._cancelController);
 
-    this._rejectController = new SlotController(this, 'reject-button', 'vaadin-button');
+    this._rejectController = new SlotController(this, 'reject-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('reject', button);
+      },
+    });
     this.addController(this._rejectController);
 
-    this._confirmController = new SlotController(this, 'confirm-button', 'vaadin-button');
+    this._confirmController = new SlotController(this, 'confirm-button', 'vaadin-button', {
+      initializer: (button) => {
+        this.__setupSlottedButton('confirm', button);
+      },
+    });
     this.addController(this._confirmController);
   }
 
@@ -344,32 +354,9 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
 
   /** @private */
   __onDialogClosed() {
-    const nodes = this.__slottedNodes;
-
-    // Reset the list of nodes, it will be re-created.
-    this.__slottedNodes = [];
-
     // Move nodes from the overlay back to the host.
-    nodes.forEach((node) => {
+    this.__slottedNodes.forEach((node) => {
       this.appendChild(node);
-    });
-  }
-
-  /** @private */
-  __onDomChange(addedNodes) {
-    // TODO: restore default element when a corresponding slotted element is removed.
-    // Consider creating a controller to reuse custom helper logic from FieldMixin.
-    addedNodes.forEach((node) => {
-      this.__slottedNodes.push(node);
-
-      const isElementNode = node.nodeType === Node.ELEMENT_NODE;
-      const slotName = isElementNode ? node.getAttribute('slot') : '';
-
-      // Handle named slots (header and buttons).
-      if (slotName && slotName.indexOf('button') >= 0) {
-        const [button] = slotName.split('-');
-        this.__setupSlottedButton(button, node);
-      }
     });
   }
 
