@@ -144,7 +144,6 @@ snapshots["vaadin-crud host default"] =
   <vaadin-button
     aria-disabled="true"
     disabled=""
-    id="save"
     role="button"
     slot="save-button"
     tabindex="-1"
@@ -153,7 +152,6 @@ snapshots["vaadin-crud host default"] =
     Save
   </vaadin-button>
   <vaadin-button
-    id="cancel"
     role="button"
     slot="cancel-button"
     tabindex="0"
@@ -163,7 +161,6 @@ snapshots["vaadin-crud host default"] =
   </vaadin-button>
   <vaadin-button
     hidden=""
-    id="delete"
     role="button"
     slot="delete-button"
     tabindex="0"
