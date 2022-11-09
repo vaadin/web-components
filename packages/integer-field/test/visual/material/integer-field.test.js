@@ -21,8 +21,8 @@ describe('integer-field', () => {
     await visualDiff(div, 'value');
   });
 
-  it('controls', async () => {
-    element.hasControls = true;
-    await visualDiff(div, 'controls');
+  it('step buttons visible', async () => {
+    element.stepButtonsVisible = true;
+    await visualDiff(div, 'step-buttons-visible');
   });
 });
