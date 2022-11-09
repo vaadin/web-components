@@ -97,13 +97,6 @@ registerStyles(
       :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
         margin-right: 0.5em;
       }
-
-      vaadin-text-field[theme~='small'] {
-        height: 24px;
-        font-size: var(--material-small-font-size);
-        margin: 0;
-        padding: 0;
-      }
     `,
   ],
   { moduleId: 'material-crud' },

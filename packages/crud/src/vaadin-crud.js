@@ -232,18 +232,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
       <div id="container">
         <div id="main">
-          <slot name="grid">
-            <vaadin-crud-grid
-              theme$="[[_theme]]"
-              id="grid"
-              include="[[include]]"
-              exclude="[[exclude]]"
-              no-sort="[[noSort]]"
-              no-filter="[[noFilter]]"
-              no-head="[[noHead]]"
-              hide-edit-column="[[editOnClick]]"
-            ></vaadin-crud-grid>
-          </slot>
+          <slot name="grid"></slot>
 
           <div id="toolbar" part="toolbar" on-click="__new">
             <slot name="toolbar">
@@ -602,6 +591,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return [
       '__headerPropsChanged(_defaultHeader, __isNew, i18n.newItem, i18n.editItem)',
       '__formPropsChanged(_form, _theme, include, exclude)',
+      '__gridPropsChanged(_grid, _theme, include, exclude, noFilter, noHead, noSort)',
       '__i18nChanged(i18n, _grid)',
       '__editOnClickChanged(editOnClick, _grid)',
       '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
@@ -640,7 +630,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   ready() {
     super.ready();
 
-    this._grid = this.$.grid;
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
 
@@ -650,6 +639,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       },
     });
     this.addController(this._headerController);
+
+    this._gridController = new SlotController(this, 'grid', 'vaadin-crud-grid');
+    this.addController(this._gridController);
 
     this.addController(new SlotController(this, 'form', 'vaadin-crud-form'));
 
@@ -946,6 +938,32 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /**
+   * @param {HTMLElement | undefined} form
+   * @param {string} theme
+   * @param {string | string[] | undefined} include
+   * @param {string | RegExp} exclude
+   * @private
+   */
+  // eslint-disable-next-line max-params
+  __gridPropsChanged(grid, theme, include, exclude, noFilter, noHead, noSort) {
+    if (grid) {
+      if (grid === this._gridController.defaultNode) {
+        grid.include = include;
+        grid.exclude = exclude;
+        grid.noFilter = noFilter;
+        grid.noHead = noHead;
+        grid.noSort = noSort;
+      }
+
+      if (theme) {
+        grid.setAttribute('theme', theme);
+      } else {
+        grid.removeAttribute('theme');
+      }
+    }
+  }
+
+  /**
    * @param {HTMLElement | undefined} saveButton
    * @param {string} i18nLabel
    * @param {boolean} isDirty
@@ -1007,15 +1025,17 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __editOnClickChanged(editOnClick, _grid) {
-    if (!_grid) {
+  __editOnClickChanged(editOnClick, grid) {
+    if (!grid) {
       return;
     }
 
+    grid.hideEditColumn = editOnClick;
+
     if (editOnClick) {
-      _grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
+      grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
     } else {
-      _grid.removeEventListener('active-item-changed', this.__onGridActiveItemChanged);
+      grid.removeEventListener('active-item-changed', this.__onGridActiveItemChanged);
     }
   }
 
@@ -1144,7 +1164,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __setHighlightedItem(item) {
-    if (this._grid === this.$.grid) {
+    if (this._grid === this._gridController.defaultNode) {
       this._grid.selectedItems = item ? [item] : [];
     }
   }

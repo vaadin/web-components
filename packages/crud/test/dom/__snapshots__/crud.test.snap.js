@@ -9,6 +9,136 @@ snapshots["vaadin-crud host default"] =
   <h3 slot="header">
     Edit item
   </h3>
+  <vaadin-crud-grid
+    slot="grid"
+    style="touch-action: none;"
+  >
+    <vaadin-grid-column-group>
+      <vaadin-grid-column>
+      </vaadin-grid-column>
+    </vaadin-grid-column-group>
+    <vaadin-grid-column-group>
+      <vaadin-grid-column>
+      </vaadin-grid-column>
+    </vaadin-grid-column-group>
+    <vaadin-crud-edit-column>
+    </vaadin-crud-edit-column>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-1">
+      <vaadin-grid-filter
+        aria-label="Filter by Name"
+        path="name"
+        style="display: flex;"
+      >
+        <vaadin-text-field
+          focus-target="true"
+          slot="filter"
+          style="width: 100%;"
+          theme="small"
+        >
+          <label
+            for="input-vaadin-text-field-10"
+            id="label-vaadin-text-field-0"
+            slot="label"
+          >
+          </label>
+          <div
+            hidden=""
+            id="error-message-vaadin-text-field-2"
+            slot="error-message"
+          >
+          </div>
+          <input
+            id="input-vaadin-text-field-10"
+            slot="input"
+            type="text"
+          >
+        </vaadin-text-field>
+      </vaadin-grid-filter>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-2">
+      <vaadin-grid-filter
+        aria-label="Filter by Age"
+        path="age"
+        style="display: flex;"
+      >
+        <vaadin-text-field
+          focus-target="true"
+          slot="filter"
+          style="width: 100%;"
+          theme="small"
+        >
+          <label
+            for="input-vaadin-text-field-15"
+            id="label-vaadin-text-field-3"
+            slot="label"
+          >
+          </label>
+          <div
+            hidden=""
+            id="error-message-vaadin-text-field-5"
+            slot="error-message"
+          >
+          </div>
+          <input
+            id="input-vaadin-text-field-15"
+            slot="input"
+            type="text"
+          >
+        </vaadin-text-field>
+      </vaadin-grid-filter>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-4">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-5">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-6">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-7">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-8">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-9">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-10">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-11">
+      John
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-12">
+      30
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-13">
+      <vaadin-crud-edit
+        role="button"
+        tabindex="0"
+      >
+      </vaadin-crud-edit>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-14">
+      <vaadin-grid-sorter
+        aria-label="Sort by Name"
+        path="name"
+      >
+        Name
+      </vaadin-grid-sorter>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-15">
+      <vaadin-grid-sorter
+        aria-label="Sort by Age"
+        path="age"
+      >
+        Age
+      </vaadin-grid-sorter>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-16">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-17">
+    </vaadin-grid-cell-content>
+  </vaadin-crud-grid>
   <vaadin-crud-form slot="form">
   </vaadin-crud-form>
   <vaadin-button
@@ -49,137 +179,6 @@ snapshots["vaadin-crud shadow default"] =
 `<div id="container">
   <div id="main">
     <slot name="grid">
-      <vaadin-crud-grid
-        id="grid"
-        style="touch-action: none;"
-      >
-        <vaadin-grid-column-group>
-          <vaadin-grid-column>
-          </vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <vaadin-grid-column>
-          </vaadin-grid-column>
-        </vaadin-grid-column-group>
-        <vaadin-crud-edit-column>
-        </vaadin-crud-edit-column>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-1">
-          <vaadin-grid-filter
-            aria-label="Filter by Name"
-            path="name"
-            style="display: flex;"
-          >
-            <vaadin-text-field
-              focus-target="true"
-              slot="filter"
-              style="width: 100%;"
-              theme="small"
-            >
-              <label
-                for="input-vaadin-text-field-10"
-                id="label-vaadin-text-field-0"
-                slot="label"
-              >
-              </label>
-              <div
-                hidden=""
-                id="error-message-vaadin-text-field-2"
-                slot="error-message"
-              >
-              </div>
-              <input
-                id="input-vaadin-text-field-10"
-                slot="input"
-                type="text"
-              >
-            </vaadin-text-field>
-          </vaadin-grid-filter>
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-2">
-          <vaadin-grid-filter
-            aria-label="Filter by Age"
-            path="age"
-            style="display: flex;"
-          >
-            <vaadin-text-field
-              focus-target="true"
-              slot="filter"
-              style="width: 100%;"
-              theme="small"
-            >
-              <label
-                for="input-vaadin-text-field-15"
-                id="label-vaadin-text-field-3"
-                slot="label"
-              >
-              </label>
-              <div
-                hidden=""
-                id="error-message-vaadin-text-field-5"
-                slot="error-message"
-              >
-              </div>
-              <input
-                id="input-vaadin-text-field-15"
-                slot="input"
-                type="text"
-              >
-            </vaadin-text-field>
-          </vaadin-grid-filter>
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-4">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-5">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-6">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-7">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-8">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-9">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-10">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-11">
-          John
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-12">
-          30
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-13">
-          <vaadin-crud-edit
-            aria-label="Edit"
-            role="button"
-            tabindex="0"
-          >
-          </vaadin-crud-edit>
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-14">
-          <vaadin-grid-sorter
-            aria-label="Sort by Name"
-            path="name"
-          >
-            Name
-          </vaadin-grid-sorter>
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-15">
-          <vaadin-grid-sorter
-            aria-label="Sort by Age"
-            path="age"
-          >
-            Age
-          </vaadin-grid-sorter>
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-16">
-        </vaadin-grid-cell-content>
-        <vaadin-grid-cell-content slot="vaadin-grid-cell-content-17">
-        </vaadin-grid-cell-content>
-      </vaadin-crud-grid>
     </slot>
     <div
       id="toolbar"
