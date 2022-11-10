@@ -33,12 +33,11 @@ snapshots["vaadin-crud host default"] =
       >
         <vaadin-text-field
           focus-target="true"
-          slot="filter"
           style="width: 100%;"
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-10"
+            for="input-vaadin-text-field-6"
             id="label-vaadin-text-field-0"
             slot="label"
           >
@@ -50,7 +49,7 @@ snapshots["vaadin-crud host default"] =
           >
           </div>
           <input
-            id="input-vaadin-text-field-10"
+            id="input-vaadin-text-field-6"
             slot="input"
             type="text"
           >
@@ -65,12 +64,11 @@ snapshots["vaadin-crud host default"] =
       >
         <vaadin-text-field
           focus-target="true"
-          slot="filter"
           style="width: 100%;"
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-15"
+            for="input-vaadin-text-field-7"
             id="label-vaadin-text-field-3"
             slot="label"
           >
@@ -82,7 +80,7 @@ snapshots["vaadin-crud host default"] =
           >
           </div>
           <input
-            id="input-vaadin-text-field-15"
+            id="input-vaadin-text-field-7"
             slot="input"
             type="text"
           >

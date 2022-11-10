@@ -60,7 +60,6 @@ class GridFilterColumn extends GridColumn {
     if (!filter) {
       filter = document.createElement('vaadin-grid-filter');
       textField = document.createElement('vaadin-text-field');
-      textField.setAttribute('slot', 'filter');
       textField.setAttribute('theme', 'small');
       textField.setAttribute('style', 'max-width: 100%;');
       textField.setAttribute('focus-target', '');

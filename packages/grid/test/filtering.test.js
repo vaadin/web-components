@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -18,7 +18,7 @@ class FilterWrapper extends PolymerElement {
         }
       </style>
       <vaadin-grid-filter path="foo" value="[[_filterValue]]" id="filter">
-        <input slot="filter" value="{{_filterValue::input}}" />
+        <input value="{{_filterValue::input}}" />
       </vaadin-grid-filter>
     `;
   }
@@ -64,6 +64,12 @@ describe('filter', () => {
     input.value = 'foo';
     input.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
   });
+
+  it('should focus the input when calling focus()', () => {
+    const spy = sinon.spy(filter.firstElementChild, 'focus');
+    filter.focus();
+    expect(spy.calledOnce).to.be.true;
+  });
 });
 
 describe('filtering', () => {
@@ -105,7 +111,10 @@ describe('filtering', () => {
   });
 
   it('should have default inputs', () => {
-    grid._filters.forEach((filter) => expect(filter.$.filter.clientHeight).to.be.greaterThan(0));
+    grid._filters.forEach((filter) => {
+      const field = filter.querySelector('vaadin-text-field');
+      expect(field.clientHeight).to.be.greaterThan(0);
+    });
   });
 
   it('should not keep references to filters when column is removed', () => {
@@ -137,10 +146,12 @@ describe('filtering', () => {
     };
   });
 
-  it('should clear cache and fetch data when filters change', (done) => {
+  it('should clear cache and fetch data when filters change', async () => {
     grid.items = ['foo', 'bar'];
-    sinon.stub(grid, 'clearCache').callsFake(done);
+    const spy = sinon.spy(grid, 'clearCache');
     grid._filters[0].value = '';
+    await oneEvent(grid._filters[0], 'filter-changed');
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should display all filtered items', () => {
@@ -165,7 +176,7 @@ describe('filtering', () => {
     flushFilters(grid);
     grid.style.width = '200px';
     const filterWidth = grid._filters[0].parentElement.offsetWidth;
-    const textFieldWidth = grid._filters[0].shadowRoot.querySelector('vaadin-text-field').offsetWidth;
+    const textFieldWidth = grid._filters[0].querySelector('vaadin-text-field').offsetWidth;
     expect(filterWidth).to.be.greaterThan(textFieldWidth);
   });
 
