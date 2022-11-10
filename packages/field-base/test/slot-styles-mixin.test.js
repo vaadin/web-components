@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotStylesMixin } from '../src/slot-styles-mixin.js';
 
 describe('slot-styles-mixin', () => {
@@ -11,19 +12,9 @@ describe('slot-styles-mixin', () => {
   before(() => {
     customElements.define(
       'slot-styles-mixin-element',
-      class extends SlotStylesMixin(SlotMixin(PolymerElement)) {
+      class extends SlotStylesMixin(ControllerMixin(PolymerElement)) {
         static get template() {
           return html`<slot name="button"></slot>`;
-        }
-
-        get slots() {
-          return {
-            button: () => {
-              const button = document.createElement('button');
-              button.textContent = 'Button';
-              return button;
-            },
-          };
         }
 
         get slotStyles() {
@@ -34,6 +25,16 @@ describe('slot-styles-mixin', () => {
               }
             `,
           ];
+        }
+
+        ready() {
+          super.ready();
+
+          this.addController(
+            new SlotController(this, 'button', 'button', (btn) => {
+              btn.textContent = 'Button';
+            }),
+          );
         }
       },
     );

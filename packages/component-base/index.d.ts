@@ -8,5 +8,4 @@ export { FocusTrapController } from './src/focus-trap-controller.js';
 export { KeyboardMixin } from './src/keyboard-mixin.js';
 export { ResizeMixin } from './src/resize-mixin.js';
 export { SlotController } from './src/slot-controller.js';
-export { SlotMixin } from './src/slot-mixin.js';
 export { TabindexMixin } from './src/tabindex-mixin.js';
