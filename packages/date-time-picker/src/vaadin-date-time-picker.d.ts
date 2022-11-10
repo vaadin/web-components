@@ -6,7 +6,6 @@
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import type { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
@@ -104,9 +103,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class DateTimePicker extends FieldMixin(
-  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))),
-) {
+declare class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
   /**
    * The name of the control, which is submitted with the form data.
    */
