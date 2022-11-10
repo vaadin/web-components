@@ -196,7 +196,6 @@ class CrudGrid extends IncludedMixin(Grid) {
 
           const textField = window.document.createElement('vaadin-text-field');
           textField.setAttribute('theme', 'small');
-          textField.setAttribute('slot', 'filter');
           textField.setAttribute('focus-target', true);
           textField.style.width = '100%';
           if (this.noSort) {

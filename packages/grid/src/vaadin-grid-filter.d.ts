@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 
 /**
  * Fired when the `value` property changes.
@@ -40,7 +41,7 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCusto
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class GridFilter extends HTMLElement {
+declare class GridFilter extends ControllerMixin(HTMLElement) {
   /**
    * JS Path of the property in the item used for filtering the data.
    */

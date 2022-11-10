@@ -6,7 +6,9 @@
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -35,7 +37,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  *
  * @extends HTMLElement
  */
-class GridFilter extends class extends PolymerElement {} {
+class GridFilter extends ControllerMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -44,14 +46,12 @@ class GridFilter extends class extends PolymerElement {} {
           max-width: 100%;
         }
 
-        #filter {
+        ::slotted(*) {
           width: 100%;
           box-sizing: border-box;
         }
       </style>
-      <slot name="filter">
-        <vaadin-text-field id="filter" value="{{value}}"></vaadin-text-field>
-      </slot>
+      <slot></slot>
     `;
   }
 
@@ -75,39 +75,42 @@ class GridFilter extends class extends PolymerElement {} {
       },
 
       /** @private */
-      _connected: Boolean,
+      _textField: {
+        type: Object,
+      },
     };
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._connected = true;
-  }
-
   static get observers() {
-    return ['_filterChanged(path, value, _connected)'];
+    return ['_filterChanged(path, value, _textField)'];
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    const child = this.firstElementChild;
-    if (child && child.getAttribute('slot') !== 'filter') {
-      console.warn('Make sure you have assigned slot="filter" to the child elements of <vaadin-grid-filter>');
-      child.setAttribute('slot', 'filter');
-    }
+    this._filterController = new SlotController(this, '', 'vaadin-text-field', {
+      initializer: (field) => {
+        field.addEventListener('value-changed', (e) => {
+          this.value = e.detail.value;
+        });
+
+        this._textField = field;
+      },
+    });
+    this.addController(this._filterController);
   }
 
   /** @private */
-  _filterChanged(path, value, connected) {
-    if (path === undefined || value === undefined || !connected) {
+  _filterChanged(path, value, textField) {
+    if (path === undefined || value === undefined || !textField) {
       return;
     }
     if (this._previousValue === undefined && value === '') {
       return;
     }
+
+    textField.value = value;
     this._previousValue = value;
 
     this._debouncerFilterChanged = Debouncer.debounce(this._debouncerFilterChanged, timeOut.after(200), () => {
@@ -116,7 +119,9 @@ class GridFilter extends class extends PolymerElement {} {
   }
 
   focus() {
-    this.$.filter.focus();
+    if (this._textField) {
+      this._textField.focus();
+    }
   }
 }
 
