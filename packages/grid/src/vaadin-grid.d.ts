@@ -87,6 +87,11 @@ export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: Array<GridCol
 export type GridColumnResizeEvent<TItem> = CustomEvent<{ resizedColumn: GridColumn<TItem> }>;
 
 /**
+ * Fired when the `dataProvider` property changes.
+ */
+export type GridDataProviderChangedEvent<TItem> = CustomEvent<{ value: GridDataProvider<TItem> }>;
+
+/**
  * Fired when the `expandedItems` property changes.
  */
 export type GridExpandedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
@@ -119,6 +124,11 @@ export type GridLoadingChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type GridSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
+/**
+ * Fired when the `size` property changes.
+ */
+export type GridSizeChangedEvent = CustomEvent<{ value: number }>;
+
 export interface GridCustomEventMap<TItem> {
   'active-item-changed': GridActiveItemChangedEvent<TItem>;
 
@@ -129,6 +139,8 @@ export interface GridCustomEventMap<TItem> {
   'column-reorder': GridColumnReorderEvent<TItem>;
 
   'column-resize': GridColumnResizeEvent<TItem>;
+
+  'data-provider-changed': GridDataProviderChangedEvent<TItem>;
 
   'expanded-items-changed': GridExpandedItemsChangedEvent<TItem>;
 
@@ -141,6 +153,8 @@ export interface GridCustomEventMap<TItem> {
   'loading-changed': GridLoadingChangedEvent;
 
   'selected-items-changed': GridSelectedItemsChangedEvent<TItem>;
+
+  'size-changed': GridSizeChangedEvent;
 }
 
 export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEventMap<TItem> {}
@@ -332,12 +346,14 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * @fires {CustomEvent} cell-focus - Fired when a cell is focused with click or keyboard navigation.
  * @fires {CustomEvent} column-reorder - Fired when the columns in the grid are reordered.
  * @fires {CustomEvent} column-resize - Fired when the grid column resize is finished.
+ * @fires {CustomEvent} data-provider-changed - Fired when the `dataProvider` property changes.
  * @fires {CustomEvent} expanded-items-changed - Fired when the `expandedItems` property changes.
  * @fires {CustomEvent} grid-dragstart - Fired when starting to drag grid rows.
  * @fires {CustomEvent} grid-dragend - Fired when the dragging of the rows ends.
  * @fires {CustomEvent} grid-drop - Fired when a drop occurs on top of the grid.
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
+ * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  */
 declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   /**
