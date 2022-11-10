@@ -201,7 +201,7 @@ describe('slot-controller', () => {
     });
   });
 
-  describe('DOM changes', () => {
+  describe('Slot observing', () => {
     let defaultNode;
 
     beforeEach(async () => {
@@ -213,7 +213,7 @@ describe('slot-controller', () => {
       });
       element.addController(controller);
       defaultNode = element.querySelector('[slot="foo"]');
-      // Wait for flattened nodes observer
+      // Wait for initial slotchange event
       await nextFrame();
     });
 
@@ -251,6 +251,58 @@ describe('slot-controller', () => {
       await nextFrame();
       expect(teardownSpy.called).to.be.true;
       expect(teardownSpy.firstCall.args[0]).to.equal(defaultNode);
+    });
+  });
+
+  describe('Slot observing disabled', () => {
+    let defaultNode;
+
+    beforeEach(async () => {
+      element = fixtureSync('<slot-controller-element></slot-controller-element>');
+      controller = new SlotController(element, 'foo', 'div', {
+        observe: false,
+        initializer: (node) => {
+          node.textContent = 'bar';
+        },
+      });
+      element.addController(controller);
+      defaultNode = element.querySelector('[slot="foo"]');
+      // Wait for initial slotchange event
+      await nextFrame();
+    });
+
+    it('should not remove default node when custom slot child is added', async () => {
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(defaultNode.isConnected).to.be.true;
+    });
+
+    it('should not call initCustomNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initCustomNode');
+
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(initSpy.calledOnce).to.be.false;
+    });
+
+    it('should not call teardownNode for default node when adding custom child', async () => {
+      const teardownSpy = sinon.spy(controller, 'teardownNode');
+
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(teardownSpy.called).to.be.false;
     });
   });
 });
