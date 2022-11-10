@@ -273,6 +273,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     this.addController(
       new SlotController(this, 'today-button', 'vaadin-button', {
+        observe: false,
         initializer: (btn) => {
           btn.setAttribute('theme', 'tertiary');
           btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
@@ -284,6 +285,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     this.addController(
       new SlotController(this, 'cancel-button', 'vaadin-button', {
+        observe: false,
         initializer: (btn) => {
           btn.setAttribute('theme', 'tertiary');
           btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
@@ -330,6 +332,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   __initMonthScroller() {
     this.addController(
       new SlotController(this, 'months', 'vaadin-date-picker-month-scroller', {
+        observe: false,
         initializer: (scroller) => {
           scroller.addEventListener('custom-scroll', () => {
             this._onMonthScroll();
@@ -365,6 +368,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   __initYearScroller() {
     this.addController(
       new SlotController(this, 'years', 'vaadin-date-picker-year-scroller', {
+        observe: false,
         initializer: (scroller) => {
           scroller.setAttribute('aria-hidden', 'true');
 
