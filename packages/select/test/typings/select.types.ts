@@ -56,3 +56,10 @@ select.addEventListener('value-changed', (event) => {
   assertType<SelectValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
+
+const renderer: SelectRenderer = (root, owner) => {
+  assertType<HTMLElement>(root);
+  assertType<Select>(owner);
+};
+
+select.renderer = renderer;
