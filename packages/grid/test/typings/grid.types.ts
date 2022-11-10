@@ -40,7 +40,9 @@ import type {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridColumnTextAlign,
+  GridDataProvider,
   GridDataProviderCallback,
+  GridDataProviderChangedEvent,
   GridDragAndDropFilter,
   GridDragStartEvent,
   GridDropEvent,
@@ -53,6 +55,7 @@ import type {
   GridLoadingChangedEvent,
   GridRowDetailsRenderer,
   GridSelectedItemsChangedEvent,
+  GridSizeChangedEvent,
   GridSorterDefinition,
   GridSorterDirection,
 } from '../../vaadin-grid.js';
@@ -111,6 +114,16 @@ narrowedGrid.addEventListener('column-resize', (event) => {
 narrowedGrid.addEventListener('loading-changed', (event) => {
   assertType<GridLoadingChangedEvent>(event);
   assertType<boolean>(event.detail.value);
+});
+
+narrowedGrid.addEventListener('size-changed', (event) => {
+  assertType<GridSizeChangedEvent>(event);
+  assertType<number>(event.detail.value);
+});
+
+narrowedGrid.addEventListener('data-provider-changed', (event) => {
+  assertType<GridDataProviderChangedEvent<TestGridItem>>(event);
+  assertType<GridDataProvider<TestGridItem>>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('expanded-items-changed', (event) => {
