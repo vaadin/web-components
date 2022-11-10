@@ -31,7 +31,7 @@ export type SelectChangeEvent = Event & {
  *   DOM element. Append your content to it.
  * - `select` The reference to the `<vaadin-select>` element.
  */
-export type SelectRenderer = (root: HTMLElement, select?: Select) => void;
+export type SelectRenderer = (root: HTMLElement, select: Select) => void;
 
 /**
  * Fired when the `opened` property changes.
