@@ -62,3 +62,10 @@ select.addEventListener('validated', (event) => {
   assertType<SelectValidatedEvent>(event);
   assertType<boolean>(event.detail.valid);
 });
+
+const renderer: SelectRenderer = (root, owner) => {
+  assertType<HTMLElement>(root);
+  assertType<Select>(owner);
+};
+
+select.renderer = renderer;
