@@ -436,24 +436,6 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
   }
 
   /**
-   * Set custom CSS property values and update the layout.
-   *
-   * @deprecated Since Vaadin 23, `updateStyles()` is deprecated.
-   * Use the native element.style.setProperty API to set custom CSS property values.
-   */
-  updateStyles(properties = {}) {
-    console.warn(
-      `WARNING: Since Vaadin 23, updateStyles() is deprecated. Use the native element.style.setProperty API to set custom CSS property values.`,
-    );
-
-    Object.entries(properties).forEach(([key, value]) => {
-      this.style.setProperty(key, value);
-    });
-
-    this._updateLayout();
-  }
-
-  /**
    * Update the layout.
    * @protected
    */
