@@ -354,6 +354,13 @@ describe('row details', () => {
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
     });
 
+    it('should update part attribute when opening/closing', () => {
+      openRowDetails(1);
+      expect(bodyRows[1].getAttribute('part')).to.contain('details-opened');
+      closeRowDetails(1);
+      expect(bodyRows[1].getAttribute('part')).to.not.contain('details-opened');
+    });
+
     it('should be removed when item is removed', () => {
       openRowDetails(0);
       dataset.shift(); // Remove opened item

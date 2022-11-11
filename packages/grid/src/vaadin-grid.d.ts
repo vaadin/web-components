@@ -299,17 +299,31 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `row` | Row in the internal table
- * `cell` | Cell in the internal table
- * `header-cell` | Header cell in the internal table
- * `body-cell` | Body cell in the internal table
- * `footer-cell` | Footer cell in the internal table
- * `details-cell` | Row details cell in the internal table
- * `focused-cell` | Focused cell in the internal table
- * `resize-handle` | Handle for resizing the columns
- * `reorder-ghost` | Ghost element of the header cell being dragged
+ * Part name          | Description
+ * -------------------|----------------
+ * `row`              | Row in the internal table
+ * `expanded`         | Expanded row
+ * `selected`         | Selected row
+ * `details-opened`   | Row with details open
+ * `header`           | Header row
+ * `footer`           | Footer row
+ * `odd`              | Odd row
+ * `first`            | The first body row
+ * `last`             | The last body row
+ * `dragstart`        | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
+ * `dragover-above`   | Set on the row when the a row is dragged over above
+ * `dragover-below`   | Set on the row when the a row is dragged over below
+ * `dragover-on-top`  | Set on the row when the a row is dragged over on top
+ * `drag-disabled`    | Set to a row that isn't available for dragging
+ * `drop-disabled`    | Set to a row that can't be dropped on top of
+ * `cell`             | Cell in the internal table
+ * `header-cell`      | Header cell in the internal table
+ * `body-cell`        | Body cell in the internal table
+ * `footer-cell`      | Footer cell in the internal table
+ * `details-cell`     | Row details cell in the internal table
+ * `focused-cell`     | Focused cell in the internal table
+ * `resize-handle`    | Handle for resizing the columns
+ * `reorder-ghost`    | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:
  *

@@ -9,6 +9,7 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -172,17 +173,31 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `row` | Row in the internal table
- * `cell` | Cell in the internal table
- * `header-cell` | Header cell in the internal table
- * `body-cell` | Body cell in the internal table
- * `footer-cell` | Footer cell in the internal table
- * `details-cell` | Row details cell in the internal table
- * `focused-cell` | Focused cell in the internal table
- * `resize-handle` | Handle for resizing the columns
- * `reorder-ghost` | Ghost element of the header cell being dragged
+ * Part name          | Description
+ * -------------------|----------------
+ * `row`              | Row in the internal table
+ * `expanded`         | Expanded row
+ * `selected`         | Selected row
+ * `details-opened`   | Row with details open
+ * `header`           | Header row
+ * `footer`           | Footer row
+ * `odd`              | Odd row
+ * `first`            | The first body row
+ * `last`             | The last body row
+ * `dragstart`        | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
+ * `dragover-above`   | Set on the row when the a row is dragged over above
+ * `dragover-below`   | Set on the row when the a row is dragged over below
+ * `dragover-on-top`  | Set on the row when the a row is dragged over on top
+ * `drag-disabled`    | Set to a row that isn't available for dragging
+ * `drop-disabled`    | Set to a row that can't be dropped on top of
+ * `cell`             | Cell in the internal table
+ * `header-cell`      | Header cell in the internal table
+ * `body-cell`        | Body cell in the internal table
+ * `footer-cell`      | Footer cell in the internal table
+ * `details-cell`     | Row details cell in the internal table
+ * `focused-cell`     | Focused cell in the internal table
+ * `resize-handle`    | Handle for resizing the columns
+ * `reorder-ghost`    | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:
  *
@@ -888,9 +903,9 @@ class Grid extends ElementMixin(
       return;
     }
 
-    row.toggleAttribute('first', index === 0);
-    row.toggleAttribute('last', index === this._effectiveSize - 1);
-    row.toggleAttribute('odd', index % 2);
+    this._updateRowState(row, 'first', index === 0);
+    this._updateRowState(row, 'last', index === this._effectiveSize - 1);
+    this._updateRowState(row, 'odd', index % 2);
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
   }
@@ -912,13 +927,13 @@ class Grid extends ElementMixin(
 
     while (this.$.header.children.length < columnTree.length) {
       const headerRow = document.createElement('tr');
-      headerRow.setAttribute('part', 'row');
+      headerRow.setAttribute('part', 'row header');
       headerRow.setAttribute('role', 'row');
       headerRow.setAttribute('tabindex', '-1');
       this.$.header.appendChild(headerRow);
 
       const footerRow = document.createElement('tr');
-      footerRow.setAttribute('part', 'row');
+      footerRow.setAttribute('part', 'row footer');
       footerRow.setAttribute('role', 'row');
       footerRow.setAttribute('tabindex', '-1');
       this.$.footer.appendChild(footerRow);
@@ -975,9 +990,9 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    row.toggleAttribute('expanded', model.expanded);
-    row.toggleAttribute('selected', model.selected);
-    row.toggleAttribute('details-opened', model.detailsOpened);
+    this._updateRowState(row, 'expanded', model.expanded);
+    this._updateRowState(row, 'selected', model.selected);
+    this._updateRowState(row, 'details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -992,6 +1007,35 @@ class Grid extends ElementMixin(
     this._updateDetailsCellHeight(row);
 
     this._a11yUpdateRowExpanded(row, model.expanded);
+  }
+
+  /**
+   * @param {!HTMLElement} row
+   * @param {string} state
+   * @param {boolean | string | null | undefined} value
+   * @param {boolean} partWithValue
+   * @protected
+   */
+  _updateRowState(row, state, value, partWithValue) {
+    switch (typeof value) {
+      case 'boolean':
+        row.toggleAttribute(state, value);
+        break;
+      case 'string':
+        row.setAttribute(state, value);
+        break;
+      default:
+        // Value set to null / undefined
+        row.removeAttribute(state);
+        break;
+    }
+
+    const part = partWithValue ? `${state}-${value}` : state;
+    if (value || value === '') {
+      addValueToAttribute(row, 'part', part);
+    } else {
+      removeValueFromAttribute(row, 'part', part);
+    }
   }
 
   /** @private */
