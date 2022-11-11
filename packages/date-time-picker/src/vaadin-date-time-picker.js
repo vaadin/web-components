@@ -539,10 +539,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // min and max need to be dynamically set depending on currently selected date instead of simple propagation
     newDatePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
     newDatePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
-    newDatePicker.required = this.required;
-    newDatePicker.disabled = this.disabled;
-    newDatePicker.readonly = this.readonly;
-    newDatePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
     newDatePicker.validate = () => {};
@@ -578,10 +574,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // Min and max are always synchronized from parent to slotted because time picker min and max
     // need to be dynamically set depending on currently selected date instead of simple propagation
     this.__updateTimePickerMinMax();
-    newTimePicker.required = this.required;
-    newTimePicker.disabled = this.disabled;
-    newTimePicker.readonly = this.readonly;
-    newTimePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
     newTimePicker.validate = () => {};
