@@ -65,6 +65,11 @@ describe('selection', () => {
       expect(rows[1].hasAttribute('selected')).to.be.false;
     });
 
+    it('should add selected to part attribute', () => {
+      expect(rows[0].getAttribute('part')).to.contain('selected-row');
+      expect(rows[1].getAttribute('part')).to.not.contain('selected-row');
+    });
+
     it('should not update selected attribute for hidden rows', () => {
       grid.size = 0;
       grid.selectedItems = [];
