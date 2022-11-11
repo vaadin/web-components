@@ -430,9 +430,9 @@ describe('data provider', () => {
 
         it('should update part attribute when expanding / collapsing', () => {
           expandIndex(grid, 0);
-          expect(bodyRows[0].getAttribute('part')).to.contain('expanded');
+          expect(bodyRows[0].getAttribute('part')).to.contain('expanded-row');
           collapseIndex(grid, 0);
-          expect(bodyRows[0].getAttribute('part')).to.not.contain('expanded');
+          expect(bodyRows[0].getAttribute('part')).to.not.contain('expanded-row');
         });
       });
 
