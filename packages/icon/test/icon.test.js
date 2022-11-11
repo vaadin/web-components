@@ -216,26 +216,5 @@ describe('vaadin-icon', () => {
         expectIcon(`<g>${ANGLE_UP}</g>`);
       });
     });
-
-    describe('warning', () => {
-      let stub;
-
-      beforeEach(() => {
-        stub = sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        stub.restore();
-      });
-
-      it('should warn about using a deprecated icon', () => {
-        fixtureSync(`
-          <vaadin-icon icon="vaadin:buss"></vaadin-icon>
-        `);
-
-        expect(stub.calledOnce).to.be.true;
-        expect(stub.args[0][0]).to.equal('WARNING: The icon "vaadin:buss" is deprecated. Use "vaadin:bus" instead');
-      });
-    });
   });
 });
