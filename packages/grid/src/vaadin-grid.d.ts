@@ -305,8 +305,6 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `expanded-row`         | Expanded row
  * `selected-row`         | Selected row
  * `details-opened-row`   | Row with details open
- * `header-row`           | Header row
- * `footer-row`           | Footer row
  * `odd-row`              | Odd row
  * `first-row`            | The first body row
  * `last-row`             | The last body row

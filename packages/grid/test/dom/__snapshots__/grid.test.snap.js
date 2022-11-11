@@ -90,7 +90,7 @@ snapshots["vaadin-grid shadow default"] =
     >
       <tr
         aria-rowindex="1"
-        part="row header"
+        part="row"
         role="row"
         tabindex="-1"
       >
@@ -210,7 +210,7 @@ snapshots["vaadin-grid shadow default"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer"
+        part="row"
         role="row"
         tabindex="-1"
       >
@@ -307,7 +307,7 @@ snapshots["vaadin-grid shadow selected"] =
     >
       <tr
         aria-rowindex="1"
-        part="row header"
+        part="row"
         role="row"
         tabindex="-1"
       >
@@ -427,7 +427,7 @@ snapshots["vaadin-grid shadow selected"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer"
+        part="row"
         role="row"
         tabindex="-1"
       >
@@ -524,7 +524,7 @@ snapshots["vaadin-grid shadow details opened"] =
     >
       <tr
         aria-rowindex="1"
-        part="row header"
+        part="row"
         role="row"
         tabindex="-1"
       >
@@ -644,7 +644,7 @@ snapshots["vaadin-grid shadow details opened"] =
       <tr
         aria-rowindex="4"
         hidden=""
-        part="row footer"
+        part="row"
         role="row"
         tabindex="-1"
       >

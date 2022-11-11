@@ -179,8 +179,6 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `expanded-row`         | Expanded row
  * `selected-row`         | Selected row
  * `details-opened-row`   | Row with details open
- * `header-row`           | Header row
- * `footer-row`           | Footer row
  * `odd-row`              | Odd row
  * `first-row`            | The first body row
  * `last-row`             | The last body row
@@ -927,13 +925,13 @@ class Grid extends ElementMixin(
 
     while (this.$.header.children.length < columnTree.length) {
       const headerRow = document.createElement('tr');
-      headerRow.setAttribute('part', 'row header');
+      headerRow.setAttribute('part', 'row');
       headerRow.setAttribute('role', 'row');
       headerRow.setAttribute('tabindex', '-1');
       this.$.header.appendChild(headerRow);
 
       const footerRow = document.createElement('tr');
-      footerRow.setAttribute('part', 'row footer');
+      footerRow.setAttribute('part', 'row');
       footerRow.setAttribute('role', 'row');
       footerRow.setAttribute('tabindex', '-1');
       this.$.footer.appendChild(footerRow);
