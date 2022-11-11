@@ -318,7 +318,6 @@ describe('overlay', () => {
         contextmenu();
         await oneEvent(overlay, 'vaadin-overlay-open');
         overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-        overlay.updateStyles({ '--vaadin-overlay-viewport-bottom': '50px' });
         expect(getComputedStyle(overlay).bottom).to.equal('50px');
       });
     });
