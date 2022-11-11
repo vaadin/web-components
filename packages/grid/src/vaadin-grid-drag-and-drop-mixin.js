@@ -160,7 +160,8 @@ export const DragAndDropMixin = (superClass) =>
 
         requestAnimationFrame(() => {
           row.removeAttribute('dragstart');
-          this.updateStyles({ '--_grid-drag-start-x': '', '--_grid-drag-start-y': '' });
+          this.style.setProperty('--_grid-drag-start-x', '');
+          this.style.setProperty('--_grid-drag-start-y', '');
         });
 
         const event = new CustomEvent('grid-dragstart', {
