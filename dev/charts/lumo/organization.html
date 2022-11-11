@@ -17,109 +17,107 @@
       type="organization"
       style="height: 600px"
       title="Acme organization chart"
-      additional-options='{"chart": {
-        "inverted": true,
-        "styledMode": false
+      additional-options='{
+        "chart": {
+          "inverted": true,
+          "styledMode": false
         },
         "exporting": {
-            "allowHTML": true,
-            "sourceWidth": 800,
-            "sourceHeight": 600
+          "allowHTML": true,
+          "sourceWidth": 800,
+          "sourceHeight": 600
         },
-        "tooltip": { "outside": true}
-    }'
+        "tooltip": { "outside": true }
+      }'
     >
       <vaadin-chart-series
         title="Highsoft"
         values='[
-            ["Acme", "Head Office"],
-            ["Acme", "Labs"],
-            ["Head Office", "Coyote Building"],
-            ["Head Office", "Road Runner Building"],
-            ["Coyote Building", "Sales"],
-            ["Coyote Building", "Marketing"],
-            ["Coyote Building", "Accounting"],
-            ["Road Runner Building", "Administration"],
-            ["Road Runner Building", "MDs Office"],
-      ["Sales", "Joseph Miler"],
-      ["Marketing", "Erik Perez"],
-      ["Accounting", "Emily Fox"],
-      ["Administration", "Ewan Herbert"],
-      ["MDs Office", "Sally Brown"],
-      ["Joseph Miler", "Kate Kirby"],
-      ["Joseph Miler", "Vaughn Whiting"],
-      ["Erik Perez", "Lisa Warner"],
-      ["Ewan Herbert", "Molly Dodd"],
-      ["Ewan Herbert", "Natasha Kelly"]
-      ]'
+          ["Acme", "Head Office"],
+          ["Acme", "Labs"],
+          ["Head Office", "Coyote Building"],
+          ["Head Office", "Road Runner Building"],
+          ["Coyote Building", "Sales"],
+          ["Coyote Building", "Marketing"],
+          ["Coyote Building", "Accounting"],
+          ["Road Runner Building", "Administration"],
+          ["Road Runner Building", "MDs Office"],
+          ["Sales", "Joseph Miler"],
+          ["Marketing", "Erik Perez"],
+          ["Accounting", "Emily Fox"],
+          ["Administration", "Ewan Herbert"],
+          ["MDs Office", "Sally Brown"],
+          ["Joseph Miler", "Kate Kirby"],
+          ["Joseph Miler", "Vaughn Whiting"],
+          ["Erik Perez", "Lisa Warner"],
+          ["Ewan Herbert", "Molly Dodd"],
+          ["Ewan Herbert", "Natasha Kelly"]
+        ]'
         additional-options='{
-      "keys": [
-      "from",
-      "to"
-      ],
-      "levels": [
-      {
-      "level": 0,
-      "color": "var(--vaadin-charts-color-0, #5AC2F7)",
-      "height": 25
-      },
-      {
-      "level": 1,
-      "color": "var(--vaadin-charts-color-1, #1676F3)",
-      "height": 25
-      },
-      {
-      "level": 2,
-      "color": "var(--vaadin-charts-color-2, #FF7D94)"
-      },
-      {
-      "level": 3,
-      "color": "var(--vaadin-charts-color-3, #C5164E)"
-      },
-      {
-      "level": 4,
-      "color": "var(--vaadin-charts-color-4, #15C15D)"
-      },
-      {
-      "level": 5,
-      "color": "var(--vaadin-charts-color-5, #0E8151)"
-      }
-      ],
-      "nodes": [
-      { "id": "Acme" },
-      { "id":"Head Office" },
-      { "id":"Labs" },
-      { "id":"Coyote Building" },
-      { "id":"Road Runner Building" },
-      { "id":"Sales" },
-      { "id":"Marketing" },
-      { "id":"Accounting" },
-      { "id":"Administration" },
-      { "id":"MDs Office" },
-      { "id":"Joseph Miler", "title": "Head of Sales" },
-      { "id":"Erik Perez", "title": "Head of Marketing" },
-      { "id":"Emily Fox", "title": "Head of Accounting" },
-      { "id":"Ewan Herbert", "title": "Head of Admin" },
-      { "id":"Lisa Warner" },
-      { "id":"Kate Kirby" },
-      { "id":"Vaughn Whiting" },
-      { "id":"Molly Dodd" },
-      { "id":"Natasha Kelly" },
-      {
-      "id": "Sally Brown",
-      "title": "Managing Director",
-      "name": "Sally Brown",
-      "color": "#F6DB3A"
-      }
-      ],
-      "colorByPoint": false,
-      "color": "#999999",
-      "dataLabels": {
-      "color": "black"
-      },
-      "borderColor": "var(--vaadin-charts-background, #fff)",
-      "nodeWidth": 65
-      }'
+          "keys": ["from", "to"],
+          "levels": [
+            {
+              "level": 0,
+              "color": "var(--vaadin-charts-color-0, #5AC2F7)",
+              "height": 25
+            },
+            {
+              "level": 1,
+              "color": "var(--vaadin-charts-color-1, #1676F3)",
+              "height": 25
+            },
+            {
+              "level": 2,
+              "color": "var(--vaadin-charts-color-2, #FF7D94)"
+            },
+            {
+              "level": 3,
+              "color": "var(--vaadin-charts-color-3, #C5164E)"
+            },
+            {
+              "level": 4,
+              "color": "var(--vaadin-charts-color-4, #15C15D)"
+            },
+            {
+              "level": 5,
+              "color": "var(--vaadin-charts-color-5, #0E8151)"
+            }
+          ],
+          "nodes": [
+            { "id": "Acme" },
+            { "id": "Head Office" },
+            { "id": "Labs" },
+            { "id": "Coyote Building" },
+            { "id": "Road Runner Building" },
+            { "id": "Sales" },
+            { "id": "Marketing" },
+            { "id": "Accounting" },
+            { "id": "Administration" },
+            { "id": "MDs Office" },
+            { "id": "Joseph Miler", "title": "Head of Sales" },
+            { "id": "Erik Perez", "title": "Head of Marketing" },
+            { "id": "Emily Fox", "title": "Head of Accounting" },
+            { "id": "Ewan Herbert", "title": "Head of Admin" },
+            { "id": "Lisa Warner" },
+            { "id": "Kate Kirby" },
+            { "id": "Vaughn Whiting" },
+            { "id": "Molly Dodd" },
+            { "id": "Natasha Kelly" },
+            {
+              "id": "Sally Brown",
+              "title": "Managing Director",
+              "name": "Sally Brown",
+              "color": "#F6DB3A"
+            }
+          ],
+          "colorByPoint": false,
+          "color": "#999999",
+          "dataLabels": {
+            "color": "black"
+          },
+          "borderColor": "var(--vaadin-charts-background, #fff)",
+          "nodeWidth": 65
+        }'
       ></vaadin-chart-series>
     </vaadin-chart>
   </body>

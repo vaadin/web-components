@@ -16,30 +16,29 @@
     <vaadin-chart
       title="Monthly Rainfall"
       theme="error-bar"
-      categories='["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]'
+      categories='["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]'
       additional-options='{
-    "yAxis": {
-      "labels": {
-        "format": "{value} °C"
-      },
-      "title": {
-        "text": "Temperature"
-      }
-    },
-    "tooltip": {
-      "shared": true
-    }
-  }'
+        "yAxis": {
+          "labels": {
+            "format": "{value} °C"
+          },
+          "title": {
+            "text": "Temperature"
+          }
+        },
+        "tooltip": {
+          "shared": true
+        }
+      }'
     >
       <vaadin-chart-series
         type="column"
         title="Rainfall"
         additional-options='{
-    "tooltip": {
-      "pointFormat": "<span class=\"rainfallSeriesName\">{series.name}</span>: <b>{point.y:.1f} mm</b> "
-    }
-  }'
+          "tooltip": {
+            "pointFormat": "<span class=\"rainfallSeriesName\">{series.name}</span>: <b>{point.y:.1f} mm</b> "
+          }
+        }'
         values="[49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]"
       >
       </vaadin-chart-series>
@@ -47,10 +46,10 @@
         type="errorbar"
         title="Rainfall error"
         additional-options='{
-    "tooltip": {
-      "pointFormat": "(error range: {point.low}-{point.high} mm)<br/>"
-    }
-  }'
+          "tooltip": {
+            "pointFormat": "(error range: {point.low}-{point.high} mm)<br/>"
+          }
+        }'
         values="[[48, 51], [68, 73], [92, 110], [128, 136], [140, 150], [171, 179], [135, 143], [142, 149], [204, 220], [189, 199], [95, 110], [52, 56]]"
       >
       </vaadin-chart-series>

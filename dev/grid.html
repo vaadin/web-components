@@ -23,7 +23,7 @@
 
           return {
             name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
-            children: true
+            children: true,
           };
         });
 
@@ -31,7 +31,7 @@
       };
 
       const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.generator = ({column, item}) => {
+      tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
     </script>

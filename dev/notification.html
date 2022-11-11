@@ -15,7 +15,7 @@
       import '@vaadin/notification';
 
       const notification = document.querySelector('vaadin-notification');
-      notification.renderer = root => root.textContent = 'Financial report generated';
+      notification.renderer = (root) => (root.textContent = 'Financial report generated');
       notification.open();
     </script>
   </body>
