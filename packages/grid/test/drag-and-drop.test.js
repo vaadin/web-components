@@ -234,6 +234,14 @@ describe('drag and drop', () => {
         expect(row.getAttribute('dragstart')).to.equal('');
       });
 
+      it('should add dragstart to row part attribute', async () => {
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        expect(row.getAttribute('part')).to.contain('dragstart-row');
+        await nextFrame();
+        expect(row.getAttribute('part')).to.not.contain('dragstart-row');
+      });
+
       // The test only concerns Safari
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {
@@ -466,6 +474,13 @@ describe('drag and drop', () => {
         expect(row.getAttribute('dragover')).to.equal('on-top');
       });
 
+      it('should add dragover-on-top to row part attribute', () => {
+        grid.dropMode = 'on-top';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(row.getAttribute('part')).to.contain('dragover-on-top-row');
+      });
+
       it('should set dragover=on-top attribute to the row 2', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[0];
@@ -480,11 +495,25 @@ describe('drag and drop', () => {
         expect(row.getAttribute('dragover')).to.equal('above');
       });
 
+      it('should add dragover-above to row part attribute', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        expect(row.getAttribute('part')).to.contain('dragover-above-row');
+      });
+
       it('should set dragover=below attribute to the row', () => {
         grid.dropMode = 'between';
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
         expect(row.getAttribute('dragover')).to.equal('below');
+      });
+
+      it('should add dragover-below to row part attribute', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'below');
+        expect(row.getAttribute('part')).to.contain('dragover-below-row');
       });
 
       it('should set dragover=above attribute to the row 2', () => {
@@ -704,6 +733,10 @@ describe('drag and drop', () => {
         expect(grid.$.items.children[1].hasAttribute('drag-disabled')).to.be.true;
       });
 
+      it('should add drag-disabled to row part attribute', () => {
+        expect(grid.$.items.children[1].getAttribute('part')).to.contain('drag-disabled-row');
+      });
+
       it('should enable row drag once loading has finished', () => {
         finishLoadingItems();
         expect(getDraggable(grid, 1)).to.be.ok;
@@ -748,6 +781,12 @@ describe('drag and drop', () => {
       fireDragOver(row, 'above');
       expect(row.hasAttribute('dragover')).to.be.false;
       expect(row.hasAttribute('drop-disabled')).to.be.true;
+    });
+
+    it('should add drop-disabled to row part attribute', () => {
+      const row = grid.$.items.children[0];
+      fireDragOver(row, 'above');
+      expect(row.getAttribute('part')).to.contain('drop-disabled-row');
     });
 
     it('should re-enable drop on row', () => {

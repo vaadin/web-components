@@ -99,15 +99,6 @@ describe('form layout', () => {
       expect(textField).to.be.ok;
       expect(slot.assignedNodes()).to.contain(textField);
     });
-
-    it('should warn when calling deprecated updateStyles()', () => {
-      const stub = sinon.stub(console, 'warn');
-      layout.updateStyles();
-      stub.restore();
-
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, updateStyles() is deprecated.');
-    });
   });
 
   describe('CSS properties', () => {
@@ -156,24 +147,13 @@ describe('form layout', () => {
       expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
     });
 
-    it('should apply default column-spacing', () => {
+    it('should apply default column-spacing', async () => {
       // Override to not depend on the theme changes
-      layout.updateStyles({ '--lumo-space-l': '2rem' });
-
+      layout.style.setProperty('--lumo-space-l', '2rem');
+      await onceResized(layout);
       expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
       expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
       expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
-    });
-
-    it('should support updating with `updateStyles` call', () => {
-      layout.updateStyles({
-        '--vaadin-form-layout-column-spacing': '2rem',
-        '--vaadin-form-layout-label-width': '4rem',
-        '--vaadin-form-layout-label-spacing': '1rem',
-      });
-      expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width')).to.equal('4rem');
-      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-spacing')).to.equal('1rem');
     });
   });
 

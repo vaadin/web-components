@@ -154,12 +154,12 @@ export const DragAndDropMixin = (superClass) =>
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
-        row.setAttribute('dragstart', rows.length > 1 ? rows.length : '');
+        this._updateRowState(row, 'dragstart', rows.length > 1 ? `${rows.length}` : '');
         this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
         this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
-          row.removeAttribute('dragstart');
+          this._updateRowState(row, 'dragstart', null);
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
         });
@@ -253,7 +253,7 @@ export const DragAndDropMixin = (superClass) =>
         } else if (row) {
           this._dragOverItem = row._item;
           if (row.getAttribute('dragover') !== this._dropLocation) {
-            row.setAttribute('dragover', this._dropLocation);
+            this._updateRowState(row, 'dragover', this._dropLocation, true);
           }
         } else {
           this._clearDragStyles();
@@ -307,7 +307,9 @@ export const DragAndDropMixin = (superClass) =>
     /** @protected */
     _clearDragStyles() {
       this.removeAttribute('dragover');
-      Array.from(this.$.items.children).forEach((row) => row.removeAttribute('dragover'));
+      Array.from(this.$.items.children).forEach((row) => {
+        this._updateRowState(row, 'dragover', null, true);
+      });
     }
 
     /** @private */
@@ -396,8 +398,8 @@ export const DragAndDropMixin = (superClass) =>
         }
       });
 
-      row.toggleAttribute('drag-disabled', !!dragDisabled);
-      row.toggleAttribute('drop-disabled', !!dropDisabled);
+      this._updateRowState(row, 'drag-disabled', !!dragDisabled);
+      this._updateRowState(row, 'drop-disabled', !!dropDisabled);
     }
 
     /**

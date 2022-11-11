@@ -414,11 +414,26 @@ describe('data provider', () => {
         });
       });
 
-      it('should toggle expanded attribute on the row', () => {
-        expandIndex(grid, 0);
-        expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.true;
-        collapseIndex(grid, 0);
-        expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.false;
+      describe('row state', () => {
+        let bodyRows;
+
+        beforeEach(() => {
+          bodyRows = getRows(grid.$.items);
+        });
+
+        it('should toggle expanded attribute on the row', () => {
+          expandIndex(grid, 0);
+          expect(bodyRows[0].hasAttribute('expanded')).to.be.true;
+          collapseIndex(grid, 0);
+          expect(bodyRows[0].hasAttribute('expanded')).to.be.false;
+        });
+
+        it('should update part attribute when expanding / collapsing', () => {
+          expandIndex(grid, 0);
+          expect(bodyRows[0].getAttribute('part')).to.contain('expanded-row');
+          collapseIndex(grid, 0);
+          expect(bodyRows[0].getAttribute('part')).to.not.contain('expanded-row');
+        });
       });
 
       it('should request pages from 0', () => {
