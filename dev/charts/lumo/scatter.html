@@ -36,51 +36,49 @@
       subtitle="Source: Heinz  2003"
       tooltip
       additional-options='{
-      "xAxis": {
-        "title": {
-          "enabled": true,
-          "text": "Height (cm)"
+        "xAxis": {
+          "title": {
+            "enabled": true,
+            "text": "Height (cm)"
+          },
+          "startOnTick": true,
+          "endOnTick": true,
+          "showLastLabel": true
         },
-        "startOnTick":true,
-        "endOnTick":true,
-        "showLastLabel":true
-      },
-      "legend":{
-        "layout": "vertical",
-        "align": "left",
-        "verticalAlign": "top",
-        "x": 100,
-        "y": 70,
-        "floating": true
-      },
-      "plotOptions": {
-        "scatter": {
-          "tooltip": {
-            "headerFormat": "<b>{series.name}</b><br>",
-            "pointFormat":"{point.x} cm, {point.y} kg"
+        "legend": {
+          "layout": "vertical",
+          "align": "left",
+          "verticalAlign": "top",
+          "x": 100,
+          "y": 70,
+          "floating": true
+        },
+        "plotOptions": {
+          "scatter": {
+            "tooltip": {
+              "headerFormat": "<b>{series.name}</b><br>",
+              "pointFormat": "{point.x} cm, {point.y} kg"
+            }
           }
         }
-      }
-    }'
+      }'
     >
       <vaadin-chart-series
         title="Female"
         unit="Weight (kg)"
         values="[[female]]"
         additional-options='{
-      "className": "femaleSeries"
-    }'
-      >
-      </vaadin-chart-series>
+          "className": "femaleSeries"
+        }'
+      ></vaadin-chart-series>
       <vaadin-chart-series
         title="Male"
         unit="Weight (kg)"
         values="[[male]]"
         additional-options='{
-      "className": "maleSeries"
-    }'
-      >
-      </vaadin-chart-series>
+          "className": "maleSeries"
+        }'
+      ></vaadin-chart-series>
     </vaadin-chart>
   </body>
 </html>

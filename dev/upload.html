@@ -10,7 +10,7 @@
     <script type="module">
       import '@vaadin/upload';
       import '@vaadin/radio-group';
-      import { xhrCreator } from '@vaadin/upload/test/common.js'
+      import { xhrCreator } from '@vaadin/upload/test/common.js';
 
       const nextUpload = document.querySelector('#next-upload');
 
@@ -22,32 +22,32 @@
         } else if (nextUpload.value === 'rejected') {
           return new XMLHttpRequest();
         } else if (nextUpload.value === 'error') {
-          return xhrCreator({ serverValidation: () => {
-            return {
-              statusText: 'Error'
-            };
-          }})();
+          return xhrCreator({
+            serverValidation: () => {
+              return {
+                statusText: 'Error',
+              };
+            },
+          })();
         }
-      }
-
+      };
 
       upload.files = [
         { name: 'Annual Report.docx', complete: true },
         {
           name: 'Workflow.pdf',
           progress: 60,
-          status: '19.7 MB: 60% (remaining time: 00:12:34)'
+          status: '19.7 MB: 60% (remaining time: 00:12:34)',
         },
-        { name: 'Financials.xlsx', error: 'An error occurred' }
+        { name: 'Financials.xlsx', error: 'An error occurred' },
       ];
-
     </script>
   </head>
 
   <body>
     <vaadin-upload target="/api/fileupload"></vaadin-upload>
 
-    <br>
+    <br />
 
     <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
       <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>

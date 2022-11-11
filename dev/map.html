@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Map</title>
-  <script type="module" src="./common.js"></script>
-</head>
-<body>
-<script type="module">
-  import "@vaadin/map";
-  import TileLayer from "ol/layer/Tile";
-  import OSM from "ol/source/OSM";
-  import View from "ol/View";
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/map';
+      import TileLayer from 'ol/layer/Tile';
+      import OSM from 'ol/source/OSM';
+      import View from 'ol/View';
 
-  const map = document.querySelector("vaadin-map");
-  customElements.whenDefined("vaadin-map").then(() => {
-    map.configuration.addLayer(new TileLayer({
-      source: new OSM()
-    }));
-    map.configuration.setView(new View({
-      center: [0, 0],
-      zoom: 3
-    }));
-  });
-</script>
+      const map = document.querySelector('vaadin-map');
+      customElements.whenDefined('vaadin-map').then(() => {
+        map.configuration.addLayer(
+          new TileLayer({
+            source: new OSM(),
+          }),
+        );
+        map.configuration.setView(
+          new View({
+            center: [0, 0],
+            zoom: 3,
+          }),
+        );
+      });
+    </script>
 
-<vaadin-map></vaadin-map>
-</body>
+    <vaadin-map></vaadin-map>
+  </body>
 </html>

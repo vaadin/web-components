@@ -38,19 +38,23 @@
           "title": {
             "text": "km/h"
           },
-          "plotBands": [{
+          "plotBands": [
+            {
               "from": 0,
               "to": 120,
               "className": "band-0"
-            }, {
+            },
+            {
               "from": 120,
               "to": 160,
               "className": "band-1"
-            }, {
+            },
+            {
               "from": 160,
               "to": 200,
               "className": "band-2"
-            }]
+            }
+          ]
         }
       }'
     >
@@ -58,10 +62,10 @@
         title="Speed"
         values="[89]"
         additional-options='{
-        "tooltip": {
+          "tooltip": {
             "valueSuffix": " km/h"
-        }
-      }'
+          }
+        }'
       ></vaadin-chart-series>
     </vaadin-chart>
   </body>
