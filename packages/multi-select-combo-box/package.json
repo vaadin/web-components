@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/multi-select-combo-box",
-  "version": "24.0.0-alpha2",
+  "version": "24.0.0-alpha3",
   "publishConfig": {
     "access": "public"
   },
@@ -37,14 +37,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/combo-box": "24.0.0-alpha2",
-    "@vaadin/component-base": "24.0.0-alpha2",
-    "@vaadin/field-base": "24.0.0-alpha2",
-    "@vaadin/input-container": "24.0.0-alpha2",
-    "@vaadin/lit-renderer": "24.0.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha2",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha2"
+    "@vaadin/combo-box": "24.0.0-alpha3",
+    "@vaadin/component-base": "24.0.0-alpha3",
+    "@vaadin/field-base": "24.0.0-alpha3",
+    "@vaadin/input-container": "24.0.0-alpha3",
+    "@vaadin/lit-renderer": "24.0.0-alpha3",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha3",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha3",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
