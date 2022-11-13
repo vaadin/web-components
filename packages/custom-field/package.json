@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/custom-field",
-  "version": "23.3.0-alpha5",
+  "version": "23.3.0-alpha6",
   "publishConfig": {
     "access": "public"
   },
@@ -35,25 +35,25 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.3.0-alpha5",
-    "@vaadin/field-base": "23.3.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha5",
-    "@vaadin/vaadin-material-styles": "23.3.0-alpha5",
-    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha5"
+    "@vaadin/component-base": "23.3.0-alpha6",
+    "@vaadin/field-base": "23.3.0-alpha6",
+    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha6",
+    "@vaadin/vaadin-material-styles": "23.3.0-alpha6",
+    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/combo-box": "23.3.0-alpha5",
-    "@vaadin/date-picker": "23.3.0-alpha5",
-    "@vaadin/email-field": "23.3.0-alpha5",
-    "@vaadin/form-layout": "23.3.0-alpha5",
-    "@vaadin/number-field": "23.3.0-alpha5",
-    "@vaadin/password-field": "23.3.0-alpha5",
-    "@vaadin/select": "23.3.0-alpha5",
+    "@vaadin/combo-box": "23.3.0-alpha6",
+    "@vaadin/date-picker": "23.3.0-alpha6",
+    "@vaadin/email-field": "23.3.0-alpha6",
+    "@vaadin/form-layout": "23.3.0-alpha6",
+    "@vaadin/number-field": "23.3.0-alpha6",
+    "@vaadin/password-field": "23.3.0-alpha6",
+    "@vaadin/select": "23.3.0-alpha6",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-area": "23.3.0-alpha5",
-    "@vaadin/text-field": "23.3.0-alpha5",
-    "@vaadin/time-picker": "23.3.0-alpha5",
+    "@vaadin/text-area": "23.3.0-alpha6",
+    "@vaadin/text-field": "23.3.0-alpha6",
+    "@vaadin/time-picker": "23.3.0-alpha6",
     "sinon": "^13.0.2"
   },
   "web-types": [
