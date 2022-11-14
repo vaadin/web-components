@@ -305,4 +305,37 @@ describe('slot-controller', () => {
       expect(teardownSpy.called).to.be.false;
     });
   });
+
+  describe('multiple nodes', () => {
+    let children;
+
+    beforeEach(async () => {
+      element = fixtureSync('<slot-controller-element><div>foo</div><div>bar</div></slot-controller-element>');
+      initializeSpy = sinon.spy();
+      controller = new SlotController(element, '', 'div', { initializer: initializeSpy, multiple: true });
+      element.addController(controller);
+      children = element.querySelectorAll(':not([slot])');
+      // Wait for initial slotchange event
+      await nextFrame();
+    });
+
+    it('should store a reference to all slotted elements in nodes array', () => {
+      const nodes = controller.nodes;
+      expect(nodes).to.be.instanceOf(Array);
+      expect(nodes[0]).to.equal(children[0]);
+      expect(nodes[1]).to.equal(children[1]);
+    });
+
+    it('should get a reference to list of elements passed to un-named slot', () => {
+      const slotChildren = controller.getSlotChildren();
+      expect(slotChildren[0]).to.equal(children[0]);
+      expect(slotChildren[1]).to.equal(children[1]);
+    });
+
+    it('should run initializer for each element passed to un-named slot', () => {
+      expect(initializeSpy.calledTwice).to.be.true;
+      expect(initializeSpy.firstCall.args[0]).to.equal(children[0]);
+      expect(initializeSpy.secondCall.args[0]).to.equal(children[1]);
+    });
+  });
 });
