@@ -250,16 +250,10 @@ describe('radio-button', () => {
       expect(radio.hasAttribute('has-label')).to.be.false;
     });
 
-    it('should not set has-label attribute when only one empty text node added', async () => {
-      const textNode = document.createTextNode(' ');
-      radio.appendChild(textNode);
-      await nextFrame();
-      expect(radio.hasAttribute('has-label')).to.be.false;
-    });
-
     it('should set has-label attribute when the label is added', async () => {
       const paragraph = document.createElement('p');
       paragraph.textContent = 'Added label';
+      paragraph.setAttribute('slot', 'label');
       radio.appendChild(paragraph);
       await nextFrame();
       expect(radio.hasAttribute('has-label')).to.be.true;
