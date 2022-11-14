@@ -11,6 +11,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 export declare function DirMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<DirMixinClass> & T;
 
 export declare class DirMixinClass {
+  protected readonly __isRTL: boolean;
+
   protected __getNormalizedScrollLeft(element: Element | null): number;
 
   protected __setNormalizedScrollLeft(element: Element | null, scrollLeft: number): void;

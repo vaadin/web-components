@@ -69,6 +69,4 @@ export declare class ItemsMixinClass {
    * ```
    */
   items: ContextMenuItem[] | undefined;
-
-  protected readonly __isRTL: boolean;
 }
