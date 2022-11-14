@@ -228,24 +228,4 @@ describe('checkbox', () => {
       expect(input.indeterminate).to.be.false;
     });
   });
-
-  describe('warnings', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn about using default slot label', async () => {
-      fixtureSync('<vaadin-checkbox>label</vaadin-checkbox>');
-      await nextFrame();
-
-      expect(console.warn.calledOnce).to.be.true;
-      expect(console.warn.args[0][0]).to.include(
-        'WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-checkbox> is deprecated.',
-      );
-    });
-  });
 });
