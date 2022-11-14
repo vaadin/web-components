@@ -250,40 +250,13 @@ describe('radio-button', () => {
       expect(radio.hasAttribute('has-label')).to.be.false;
     });
 
-    it('should not set has-label attribute when only one empty text node added', async () => {
-      const textNode = document.createTextNode(' ');
-      radio.appendChild(textNode);
-      await nextFrame();
-      expect(radio.hasAttribute('has-label')).to.be.false;
-    });
-
     it('should set has-label attribute when the label is added', async () => {
       const paragraph = document.createElement('p');
       paragraph.textContent = 'Added label';
+      paragraph.setAttribute('slot', 'label');
       radio.appendChild(paragraph);
       await nextFrame();
       expect(radio.hasAttribute('has-label')).to.be.true;
-    });
-  });
-
-  describe('warnings', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn about using default slot label', async () => {
-      fixtureSync('<vaadin-radio-button>label</vaadin-radio-button>');
-      // Wait for MutationObserver
-      await nextFrame();
-
-      expect(console.warn.calledOnce).to.be.true;
-      expect(console.warn.args[0][0]).to.include(
-        'WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.',
-      );
     });
   });
 });
