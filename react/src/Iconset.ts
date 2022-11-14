@@ -1,1 +1,1 @@
-export * from "./generated/Iconset.js";
+export * from './generated/Iconset.js';

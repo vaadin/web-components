@@ -1,1 +1,1 @@
-export * from "./generated/DateTimePicker.js";
+export * from './generated/DateTimePicker.js';

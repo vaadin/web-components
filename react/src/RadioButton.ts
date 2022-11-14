@@ -1,1 +1,1 @@
-export * from "./generated/RadioButton.js";
+export * from './generated/RadioButton.js';

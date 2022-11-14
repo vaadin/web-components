@@ -1,1 +1,1 @@
-export * from "./generated/GridColumnGroup.js";
+export * from './generated/GridColumnGroup.js';

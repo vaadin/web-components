@@ -1,1 +1,1 @@
-export * from "./generated/MessageInput.js";
+export * from './generated/MessageInput.js';

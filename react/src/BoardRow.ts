@@ -1,1 +1,1 @@
-export * from "./generated/BoardRow.js";
+export * from './generated/BoardRow.js';

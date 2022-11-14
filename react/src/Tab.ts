@@ -1,1 +1,1 @@
-export * from "./generated/Tab.js";
+export * from './generated/Tab.js';

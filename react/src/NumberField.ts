@@ -1,1 +1,1 @@
-export * from "./generated/NumberField.js";
+export * from './generated/NumberField.js';

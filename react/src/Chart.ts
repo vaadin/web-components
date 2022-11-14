@@ -1,1 +1,1 @@
-export * from "./generated/Chart.js";
+export * from './generated/Chart.js';

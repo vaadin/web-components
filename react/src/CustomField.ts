@@ -1,1 +1,1 @@
-export * from "./generated/CustomField.js";
+export * from './generated/CustomField.js';

@@ -1,8 +1,8 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from "react";
+import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import type { GridModule } from './generated/Grid.js';
 import { GridPro as _GridPro, GridProModule, type GridProProps as _GridProProps } from './generated/GridPro.js';
-import type { GridRowDetailsReactRendererProps } from "./renderers/grid.js";
-import { useModelRenderer } from "./renderers/useModelRenderer.js";
+import type { GridRowDetailsReactRendererProps } from './renderers/grid.js';
+import { useModelRenderer } from './renderers/useModelRenderer.js';
 
 export type GridProProps<TItem> = Omit<_GridProProps<TItem>, 'rowDetailsRenderer'> &
   Readonly<{
@@ -16,11 +16,7 @@ function GridPro<TItem = GridModule.GridDefaultItem>(
   const [portals, rowDetailsRenderer] = useModelRenderer(props.rowDetailsRenderer);
 
   return (
-    <_GridPro<TItem>
-      {...props}
-      ref={ref}
-      rowDetailsRenderer={rowDetailsRenderer}
-    >
+    <_GridPro<TItem> {...props} ref={ref} rowDetailsRenderer={rowDetailsRenderer}>
       {props.children}
       {portals}
     </_GridPro>

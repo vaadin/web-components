@@ -1,1 +1,1 @@
-export * from "./generated/MenuBar.js";
+export * from './generated/MenuBar.js';

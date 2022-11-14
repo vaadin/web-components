@@ -3,8 +3,9 @@
   "version": "1.3.0-alpha5",
   "description": "React wrappers for Vaadin components",
   "type": "module",
-  "module": "dist/index.js",
-  "main": "dist/index.js",
+  "module": "index.js",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build:load-schema": "tsx scripts/schema-loader.ts",
     "build:generate": "tsx scripts/generator.ts",
@@ -12,7 +13,7 @@
     "build:generate-stubs": "tsx scripts/stub-generator.ts",
     "build:update-packagejson": "tsx scripts/package-json-update.ts",
     "build:typescript": "tsc -p tsconfig.build.json",
-    "clean": "rimraf dist build",
+    "clean": "rimraf css generated src/generated renderers utils *.d.ts *.js *.d.ts.map *.js.map",
     "build": "npm run build:load-schema && npm run build:generate && npm run build:typescript && npm run build:generate-css && npm run build:update-packagejson",
     "dev": "vite dev",
     "prepare": "npm run build",
@@ -103,373 +104,380 @@
     "vite": "^3.2.3"
   },
   "files": [
-    "dist/**/*"
+    "css",
+    "generated",
+    "renderers",
+    "utils",
+    "*.d.ts",
+    "*.d.ts.map",
+    "*.js",
+    "*.js.map"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./index.js",
+      "types": "./index.d.ts"
     },
     "./index.js": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./index.js",
+      "types": "./index.d.ts"
     },
     "./Accordion.js": {
-      "types": "./dist/Accordion.d.ts",
-      "default": "./dist/Accordion.js"
+      "default": "./Accordion.js",
+      "types": "./Accordion.d.ts"
     },
     "./AccordionPanel.js": {
-      "types": "./dist/AccordionPanel.d.ts",
-      "default": "./dist/AccordionPanel.js"
+      "default": "./AccordionPanel.js",
+      "types": "./AccordionPanel.d.ts"
     },
     "./AppLayout.js": {
-      "types": "./dist/AppLayout.d.ts",
-      "default": "./dist/AppLayout.js"
+      "default": "./AppLayout.js",
+      "types": "./AppLayout.d.ts"
     },
     "./Avatar.js": {
-      "types": "./dist/Avatar.d.ts",
-      "default": "./dist/Avatar.js"
+      "default": "./Avatar.js",
+      "types": "./Avatar.d.ts"
     },
     "./AvatarGroup.js": {
-      "types": "./dist/AvatarGroup.d.ts",
-      "default": "./dist/AvatarGroup.js"
+      "default": "./AvatarGroup.js",
+      "types": "./AvatarGroup.d.ts"
     },
     "./Board.js": {
-      "types": "./dist/Board.d.ts",
-      "default": "./dist/Board.js"
+      "default": "./Board.js",
+      "types": "./Board.d.ts"
     },
     "./BoardRow.js": {
-      "types": "./dist/BoardRow.d.ts",
-      "default": "./dist/BoardRow.js"
+      "default": "./BoardRow.js",
+      "types": "./BoardRow.d.ts"
     },
     "./Button.js": {
-      "types": "./dist/Button.d.ts",
-      "default": "./dist/Button.js"
+      "default": "./Button.js",
+      "types": "./Button.d.ts"
     },
     "./Chart.js": {
-      "types": "./dist/Chart.d.ts",
-      "default": "./dist/Chart.js"
+      "default": "./Chart.js",
+      "types": "./Chart.d.ts"
     },
     "./ChartSeries.js": {
-      "types": "./dist/ChartSeries.d.ts",
-      "default": "./dist/ChartSeries.js"
+      "default": "./ChartSeries.js",
+      "types": "./ChartSeries.d.ts"
     },
     "./Checkbox.js": {
-      "types": "./dist/Checkbox.d.ts",
-      "default": "./dist/Checkbox.js"
+      "default": "./Checkbox.js",
+      "types": "./Checkbox.d.ts"
     },
     "./CheckboxGroup.js": {
-      "types": "./dist/CheckboxGroup.d.ts",
-      "default": "./dist/CheckboxGroup.js"
+      "default": "./CheckboxGroup.js",
+      "types": "./CheckboxGroup.d.ts"
     },
     "./ComboBox.js": {
-      "types": "./dist/ComboBox.d.ts",
-      "default": "./dist/ComboBox.js"
+      "default": "./ComboBox.js",
+      "types": "./ComboBox.d.ts"
     },
     "./ComboBoxLight.js": {
-      "types": "./dist/ComboBoxLight.d.ts",
-      "default": "./dist/ComboBoxLight.js"
+      "default": "./ComboBoxLight.js",
+      "types": "./ComboBoxLight.d.ts"
     },
     "./ConfirmDialog.js": {
-      "types": "./dist/ConfirmDialog.d.ts",
-      "default": "./dist/ConfirmDialog.js"
+      "default": "./ConfirmDialog.js",
+      "types": "./ConfirmDialog.d.ts"
     },
     "./ContextMenu.js": {
-      "types": "./dist/ContextMenu.d.ts",
-      "default": "./dist/ContextMenu.js"
+      "default": "./ContextMenu.js",
+      "types": "./ContextMenu.d.ts"
     },
     "./CookieConsent.js": {
-      "types": "./dist/CookieConsent.d.ts",
-      "default": "./dist/CookieConsent.js"
+      "default": "./CookieConsent.js",
+      "types": "./CookieConsent.d.ts"
     },
     "./Crud.js": {
-      "types": "./dist/Crud.d.ts",
-      "default": "./dist/Crud.js"
+      "default": "./Crud.js",
+      "types": "./Crud.d.ts"
     },
     "./CustomField.js": {
-      "types": "./dist/CustomField.d.ts",
-      "default": "./dist/CustomField.js"
+      "default": "./CustomField.js",
+      "types": "./CustomField.d.ts"
     },
     "./DatePicker.js": {
-      "types": "./dist/DatePicker.d.ts",
-      "default": "./dist/DatePicker.js"
+      "default": "./DatePicker.js",
+      "types": "./DatePicker.d.ts"
     },
     "./DatePickerLight.js": {
-      "types": "./dist/DatePickerLight.d.ts",
-      "default": "./dist/DatePickerLight.js"
+      "default": "./DatePickerLight.js",
+      "types": "./DatePickerLight.d.ts"
     },
     "./DateTimePicker.js": {
-      "types": "./dist/DateTimePicker.d.ts",
-      "default": "./dist/DateTimePicker.js"
+      "default": "./DateTimePicker.js",
+      "types": "./DateTimePicker.d.ts"
     },
     "./Details.js": {
-      "types": "./dist/Details.d.ts",
-      "default": "./dist/Details.js"
+      "default": "./Details.js",
+      "types": "./Details.d.ts"
     },
     "./Dialog.js": {
-      "types": "./dist/Dialog.d.ts",
-      "default": "./dist/Dialog.js"
+      "default": "./Dialog.js",
+      "types": "./Dialog.d.ts"
     },
     "./DrawerToggle.js": {
-      "types": "./dist/DrawerToggle.d.ts",
-      "default": "./dist/DrawerToggle.js"
+      "default": "./DrawerToggle.js",
+      "types": "./DrawerToggle.d.ts"
     },
     "./EmailField.js": {
-      "types": "./dist/EmailField.d.ts",
-      "default": "./dist/EmailField.js"
+      "default": "./EmailField.js",
+      "types": "./EmailField.d.ts"
     },
     "./FormItem.js": {
-      "types": "./dist/FormItem.d.ts",
-      "default": "./dist/FormItem.js"
+      "default": "./FormItem.js",
+      "types": "./FormItem.d.ts"
     },
     "./FormLayout.js": {
-      "types": "./dist/FormLayout.d.ts",
-      "default": "./dist/FormLayout.js"
+      "default": "./FormLayout.js",
+      "types": "./FormLayout.d.ts"
     },
     "./Grid.js": {
-      "types": "./dist/Grid.d.ts",
-      "default": "./dist/Grid.js"
+      "default": "./Grid.js",
+      "types": "./Grid.d.ts"
     },
     "./GridColumn.js": {
-      "types": "./dist/GridColumn.d.ts",
-      "default": "./dist/GridColumn.js"
+      "default": "./GridColumn.js",
+      "types": "./GridColumn.d.ts"
     },
     "./GridColumnGroup.js": {
-      "types": "./dist/GridColumnGroup.d.ts",
-      "default": "./dist/GridColumnGroup.js"
+      "default": "./GridColumnGroup.js",
+      "types": "./GridColumnGroup.d.ts"
     },
     "./GridFilter.js": {
-      "types": "./dist/GridFilter.d.ts",
-      "default": "./dist/GridFilter.js"
+      "default": "./GridFilter.js",
+      "types": "./GridFilter.d.ts"
     },
     "./GridFilterColumn.js": {
-      "types": "./dist/GridFilterColumn.d.ts",
-      "default": "./dist/GridFilterColumn.js"
+      "default": "./GridFilterColumn.js",
+      "types": "./GridFilterColumn.d.ts"
     },
     "./GridPro.js": {
-      "types": "./dist/GridPro.d.ts",
-      "default": "./dist/GridPro.js"
+      "default": "./GridPro.js",
+      "types": "./GridPro.d.ts"
     },
     "./GridProEditColumn.js": {
-      "types": "./dist/GridProEditColumn.d.ts",
-      "default": "./dist/GridProEditColumn.js"
+      "default": "./GridProEditColumn.js",
+      "types": "./GridProEditColumn.d.ts"
     },
     "./GridSelectionColumn.js": {
-      "types": "./dist/GridSelectionColumn.d.ts",
-      "default": "./dist/GridSelectionColumn.js"
+      "default": "./GridSelectionColumn.js",
+      "types": "./GridSelectionColumn.d.ts"
     },
     "./GridSortColumn.js": {
-      "types": "./dist/GridSortColumn.d.ts",
-      "default": "./dist/GridSortColumn.js"
+      "default": "./GridSortColumn.js",
+      "types": "./GridSortColumn.d.ts"
     },
     "./GridSorter.js": {
-      "types": "./dist/GridSorter.d.ts",
-      "default": "./dist/GridSorter.js"
+      "default": "./GridSorter.js",
+      "types": "./GridSorter.d.ts"
     },
     "./GridTreeColumn.js": {
-      "types": "./dist/GridTreeColumn.d.ts",
-      "default": "./dist/GridTreeColumn.js"
+      "default": "./GridTreeColumn.js",
+      "types": "./GridTreeColumn.d.ts"
     },
     "./GridTreeToggle.js": {
-      "types": "./dist/GridTreeToggle.d.ts",
-      "default": "./dist/GridTreeToggle.js"
+      "default": "./GridTreeToggle.js",
+      "types": "./GridTreeToggle.d.ts"
     },
     "./HorizontalLayout.js": {
-      "types": "./dist/HorizontalLayout.d.ts",
-      "default": "./dist/HorizontalLayout.js"
+      "default": "./HorizontalLayout.js",
+      "types": "./HorizontalLayout.d.ts"
     },
     "./Icon.js": {
-      "types": "./dist/Icon.d.ts",
-      "default": "./dist/Icon.js"
+      "default": "./Icon.js",
+      "types": "./Icon.d.ts"
     },
     "./Iconset.js": {
-      "types": "./dist/Iconset.d.ts",
-      "default": "./dist/Iconset.js"
+      "default": "./Iconset.js",
+      "types": "./Iconset.d.ts"
     },
     "./IntegerField.js": {
-      "types": "./dist/IntegerField.d.ts",
-      "default": "./dist/IntegerField.js"
+      "default": "./IntegerField.js",
+      "types": "./IntegerField.d.ts"
     },
     "./Item.js": {
-      "types": "./dist/Item.d.ts",
-      "default": "./dist/Item.js"
+      "default": "./Item.js",
+      "types": "./Item.d.ts"
     },
     "./ListBox.js": {
-      "types": "./dist/ListBox.d.ts",
-      "default": "./dist/ListBox.js"
+      "default": "./ListBox.js",
+      "types": "./ListBox.d.ts"
     },
     "./LoginForm.js": {
-      "types": "./dist/LoginForm.d.ts",
-      "default": "./dist/LoginForm.js"
+      "default": "./LoginForm.js",
+      "types": "./LoginForm.d.ts"
     },
     "./LoginOverlay.js": {
-      "types": "./dist/LoginOverlay.d.ts",
-      "default": "./dist/LoginOverlay.js"
+      "default": "./LoginOverlay.js",
+      "types": "./LoginOverlay.d.ts"
     },
     "./Map.js": {
-      "types": "./dist/Map.d.ts",
-      "default": "./dist/Map.js"
+      "default": "./Map.js",
+      "types": "./Map.d.ts"
     },
     "./MenuBar.js": {
-      "types": "./dist/MenuBar.d.ts",
-      "default": "./dist/MenuBar.js"
+      "default": "./MenuBar.js",
+      "types": "./MenuBar.d.ts"
     },
     "./Message.js": {
-      "types": "./dist/Message.d.ts",
-      "default": "./dist/Message.js"
+      "default": "./Message.js",
+      "types": "./Message.d.ts"
     },
     "./MessageInput.js": {
-      "types": "./dist/MessageInput.d.ts",
-      "default": "./dist/MessageInput.js"
+      "default": "./MessageInput.js",
+      "types": "./MessageInput.d.ts"
     },
     "./MessageList.js": {
-      "types": "./dist/MessageList.d.ts",
-      "default": "./dist/MessageList.js"
+      "default": "./MessageList.js",
+      "types": "./MessageList.d.ts"
     },
     "./Notification.js": {
-      "types": "./dist/Notification.d.ts",
-      "default": "./dist/Notification.js"
+      "default": "./Notification.js",
+      "types": "./Notification.d.ts"
     },
     "./NumberField.js": {
-      "types": "./dist/NumberField.d.ts",
-      "default": "./dist/NumberField.js"
+      "default": "./NumberField.js",
+      "types": "./NumberField.d.ts"
     },
     "./PasswordField.js": {
-      "types": "./dist/PasswordField.d.ts",
-      "default": "./dist/PasswordField.js"
+      "default": "./PasswordField.js",
+      "types": "./PasswordField.d.ts"
     },
     "./ProgressBar.js": {
-      "types": "./dist/ProgressBar.d.ts",
-      "default": "./dist/ProgressBar.js"
+      "default": "./ProgressBar.js",
+      "types": "./ProgressBar.d.ts"
     },
     "./RadioButton.js": {
-      "types": "./dist/RadioButton.d.ts",
-      "default": "./dist/RadioButton.js"
+      "default": "./RadioButton.js",
+      "types": "./RadioButton.d.ts"
     },
     "./RadioGroup.js": {
-      "types": "./dist/RadioGroup.d.ts",
-      "default": "./dist/RadioGroup.js"
+      "default": "./RadioGroup.js",
+      "types": "./RadioGroup.d.ts"
     },
     "./RichTextEditor.js": {
-      "types": "./dist/RichTextEditor.d.ts",
-      "default": "./dist/RichTextEditor.js"
+      "default": "./RichTextEditor.js",
+      "types": "./RichTextEditor.d.ts"
     },
     "./Scroller.js": {
-      "types": "./dist/Scroller.d.ts",
-      "default": "./dist/Scroller.js"
+      "default": "./Scroller.js",
+      "types": "./Scroller.d.ts"
     },
     "./Select.js": {
-      "types": "./dist/Select.d.ts",
-      "default": "./dist/Select.js"
+      "default": "./Select.js",
+      "types": "./Select.d.ts"
     },
     "./SplitLayout.js": {
-      "types": "./dist/SplitLayout.d.ts",
-      "default": "./dist/SplitLayout.js"
+      "default": "./SplitLayout.js",
+      "types": "./SplitLayout.d.ts"
     },
     "./Tab.js": {
-      "types": "./dist/Tab.d.ts",
-      "default": "./dist/Tab.js"
+      "default": "./Tab.js",
+      "types": "./Tab.d.ts"
     },
     "./Tabs.js": {
-      "types": "./dist/Tabs.d.ts",
-      "default": "./dist/Tabs.js"
+      "default": "./Tabs.js",
+      "types": "./Tabs.d.ts"
     },
     "./TextArea.js": {
-      "types": "./dist/TextArea.d.ts",
-      "default": "./dist/TextArea.js"
+      "default": "./TextArea.js",
+      "types": "./TextArea.d.ts"
     },
     "./TextField.js": {
-      "types": "./dist/TextField.d.ts",
-      "default": "./dist/TextField.js"
+      "default": "./TextField.js",
+      "types": "./TextField.d.ts"
     },
     "./TimePicker.js": {
-      "types": "./dist/TimePicker.d.ts",
-      "default": "./dist/TimePicker.js"
+      "default": "./TimePicker.js",
+      "types": "./TimePicker.d.ts"
     },
     "./Tooltip.js": {
-      "types": "./dist/Tooltip.d.ts",
-      "default": "./dist/Tooltip.js"
+      "default": "./Tooltip.js",
+      "types": "./Tooltip.d.ts"
     },
     "./Upload.js": {
-      "types": "./dist/Upload.d.ts",
-      "default": "./dist/Upload.js"
+      "default": "./Upload.js",
+      "types": "./Upload.d.ts"
     },
     "./VerticalLayout.js": {
-      "types": "./dist/VerticalLayout.d.ts",
-      "default": "./dist/VerticalLayout.js"
+      "default": "./VerticalLayout.js",
+      "types": "./VerticalLayout.d.ts"
     },
     "./VirtualList.js": {
-      "types": "./dist/VirtualList.d.ts",
-      "default": "./dist/VirtualList.js"
-    },
-    "./css/Material.css": {
-      "default": "./dist/css/Material.css"
+      "default": "./VirtualList.js",
+      "types": "./VirtualList.d.ts"
     },
     "./css/Lumo.css": {
-      "default": "./dist/css/Lumo.css"
-    },
-    "./css/lumo/Typography.css": {
-      "default": "./dist/css/lumo/Typography.css"
-    },
-    "./css/lumo/ColorBase.css": {
-      "default": "./dist/css/lumo/ColorBase.css"
-    },
-    "./css/lumo/Utility.module.css": {
-      "default": "./dist/css/lumo/Utility.module.css"
-    },
-    "./css/lumo/UserColors.css": {
-      "default": "./dist/css/lumo/UserColors.css"
-    },
-    "./css/lumo/Spacing.css": {
-      "default": "./dist/css/lumo/Spacing.css"
-    },
-    "./css/lumo/FontIcons.css": {
-      "default": "./dist/css/lumo/FontIcons.css"
+      "default": "./css/Lumo.css"
     },
     "./css/lumo/Badge.css": {
-      "default": "./dist/css/lumo/Badge.css"
-    },
-    "./css/lumo/Style.css": {
-      "default": "./dist/css/lumo/Style.css"
-    },
-    "./css/lumo/Sizing.css": {
-      "default": "./dist/css/lumo/Sizing.css"
-    },
-    "./css/lumo/Font.css": {
-      "default": "./dist/css/lumo/Font.css"
-    },
-    "./css/lumo/ColorLegacy.css": {
-      "default": "./dist/css/lumo/ColorLegacy.css"
+      "default": "./css/lumo/Badge.css"
     },
     "./css/lumo/Color.css": {
-      "default": "./dist/css/lumo/Color.css"
+      "default": "./css/lumo/Color.css"
     },
-    "./css/material/Typography.css": {
-      "default": "./dist/css/material/Typography.css"
+    "./css/lumo/ColorBase.css": {
+      "default": "./css/lumo/ColorBase.css"
     },
-    "./css/material/ColorBase.css": {
-      "default": "./dist/css/material/ColorBase.css"
+    "./css/lumo/ColorLegacy.css": {
+      "default": "./css/lumo/ColorLegacy.css"
     },
-    "./css/material/UserColors.css": {
-      "default": "./dist/css/material/UserColors.css"
+    "./css/lumo/Font.css": {
+      "default": "./css/lumo/Font.css"
     },
-    "./css/material/FontIcons.css": {
-      "default": "./dist/css/material/FontIcons.css"
+    "./css/lumo/FontIcons.css": {
+      "default": "./css/lumo/FontIcons.css"
     },
-    "./css/material/Shadow.css": {
-      "default": "./dist/css/material/Shadow.css"
+    "./css/lumo/Sizing.css": {
+      "default": "./css/lumo/Sizing.css"
     },
-    "./css/material/ColorDark.css": {
-      "default": "./dist/css/material/ColorDark.css"
+    "./css/lumo/Spacing.css": {
+      "default": "./css/lumo/Spacing.css"
     },
-    "./css/material/Font.css": {
-      "default": "./dist/css/material/Font.css"
+    "./css/lumo/Style.css": {
+      "default": "./css/lumo/Style.css"
     },
-    "./css/material/ColorLight.css": {
-      "default": "./dist/css/material/ColorLight.css"
+    "./css/lumo/Typography.css": {
+      "default": "./css/lumo/Typography.css"
+    },
+    "./css/lumo/UserColors.css": {
+      "default": "./css/lumo/UserColors.css"
+    },
+    "./css/lumo/Utility.module.css": {
+      "default": "./css/lumo/Utility.module.css"
+    },
+    "./css/Material.css": {
+      "default": "./css/Material.css"
     },
     "./css/material/Color.css": {
-      "default": "./dist/css/material/Color.css"
+      "default": "./css/material/Color.css"
+    },
+    "./css/material/ColorBase.css": {
+      "default": "./css/material/ColorBase.css"
+    },
+    "./css/material/ColorDark.css": {
+      "default": "./css/material/ColorDark.css"
+    },
+    "./css/material/ColorLight.css": {
+      "default": "./css/material/ColorLight.css"
+    },
+    "./css/material/Font.css": {
+      "default": "./css/material/Font.css"
+    },
+    "./css/material/FontIcons.css": {
+      "default": "./css/material/FontIcons.css"
+    },
+    "./css/material/Shadow.css": {
+      "default": "./css/material/Shadow.css"
+    },
+    "./css/material/Typography.css": {
+      "default": "./css/material/Typography.css"
+    },
+    "./css/material/UserColors.css": {
+      "default": "./css/material/UserColors.css"
     }
   }
 }

@@ -1,1 +1,1 @@
-export * from "./generated/Checkbox.js";
+export * from './generated/Checkbox.js';

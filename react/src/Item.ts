@@ -1,1 +1,1 @@
-export * from "./generated/Item.js";
+export * from './generated/Item.js';

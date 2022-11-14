@@ -1,1 +1,1 @@
-export * from "./generated/DrawerToggle.js";
+export * from './generated/DrawerToggle.js';

@@ -1,1 +1,1 @@
-export * from "./generated/GridFilter.js";
+export * from './generated/GridFilter.js';

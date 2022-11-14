@@ -1,18 +1,14 @@
 import { unlink, writeFile } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
 import ts, {
-  Identifier,
+  type Identifier,
   type Node,
   type SourceFile,
   type TypeAliasDeclaration,
   type VariableDeclaration,
   type VariableStatement,
 } from 'typescript';
-import type {
-  GenericJsContribution,
-  HtmlElement as SchemaHTMLElement,
-  JSONSchemaForWebTypes,
-} from '../types/schema.js';
+import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { extractElementsFromDescriptions, loadDescriptions } from './descriptions.js';
 import { generatedDir, nodeModulesDir, utilsDir } from './utils/config.js';
 import { ElementNameMissingError } from './utils/errors.js';
@@ -22,7 +18,7 @@ import {
   camelCase,
   createImportPath,
   createSourceFile,
-  NamedGenericJsContribution,
+  type NamedGenericJsContribution,
   pickNamedEvents,
   search,
   stripPrefix,
@@ -34,14 +30,12 @@ import { eventSettings, genericElements, NonGenericInterface } from './utils/set
 // Placeholders
 const CALL_EXPRESSION = '$CALL_EXPRESSION$';
 const COMPONENT_NAME = '$COMPONENT_NAME$';
-const COMPONENT_PROPS = '$COMPONENT_PROPS$';
 const COMPONENT_TAG = '$COMPONENT_TAG$';
 const CREATE_COMPONENT_PATH = '$CREATE_COMPONENT_PATH$';
 const EVENT_MAP = '$EVENT_MAP$';
 const EVENT_MAP_REF_IN_EVENTS = '$EVENT_MAP_REF_IN_EVENTS$';
 const EVENTS_DECLARATION = '$EVENTS_DECLARATION$';
 const LIT_REACT_PATH = '@lit-labs/react';
-const MODULE = '$MODULE$';
 const MODULE_PATH = '$MODULE_PATH$';
 
 type ElementData = Readonly<{
@@ -96,7 +90,7 @@ function isEventMapReferenceInEventsDeclaration(node: Node): node is Identifier 
 }
 
 function isComponentPropsDeclaration(node: Node): node is TypeAliasDeclaration {
-  return ts.isTypeAliasDeclaration(node) && node.name.text === COMPONENT_PROPS;
+  return ts.isTypeAliasDeclaration(node) && node.name.text === `${COMPONENT_NAME}Props`;
 }
 
 function isComponentDeclaration(node: Node): node is VariableDeclaration {
@@ -110,7 +104,7 @@ function createEventMapDeclaration(
 ): Node {
   const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
   const eventNameTypeId = ts.factory.createIdentifier('EventName');
-  const elementModuleId = ts.factory.createIdentifier(MODULE);
+  const elementModuleId = ts.factory.createIdentifier(`${COMPONENT_NAME}Module`);
   const eventMapId = ts.factory.createIdentifier(EVENT_MAP);
 
   return ts.factory.createTypeAliasDeclaration(
@@ -260,14 +254,14 @@ function addGenerics(node: Node, elementName: string) {
     const initializer = template(
       `
 const c = ${CALL_EXPRESSION} as (
-  props: ${COMPONENT_PROPS} & { ref?: React.ForwardedRef<${MODULE}.${COMPONENT_NAME}> },
+  props: ${COMPONENT_NAME}Props & { ref?: React.ForwardedRef<${COMPONENT_NAME}Module.${COMPONENT_NAME}> },
 ) => React.ReactElement | null
   `,
       (statements) => (statements[0] as VariableStatement).declarationList.declarations[0].initializer!,
       [
         transform((node) =>
           ts.isTypeReferenceNode(node) &&
-          ((ts.isIdentifier(node.typeName) && node.typeName.text === COMPONENT_PROPS) ||
+          ((ts.isIdentifier(node.typeName) && node.typeName.text === `${COMPONENT_NAME}Props`) ||
             (ts.isQualifiedName(node.typeName) &&
               ts.isIdentifier(node.typeName.right) &&
               node.typeName.right.text === COMPONENT_NAME))
@@ -298,33 +292,24 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
   const events = js?.events;
 
   const elementName = stripPrefix(camelCase(name));
-  const elementId = ts.factory.createIdentifier(elementName);
-  const elementModuleId = ts.factory.createIdentifier(`${elementName}Module`);
   const elementModulePath = createImportPath(relative(nodeModulesDir, path), false);
   const eventMapId = ts.factory.createIdentifier(`${elementName}EventMap`);
-  const componentPropsId = ts.factory.createIdentifier(`${elementName}Props`);
   const componentTagLiteral = ts.factory.createStringLiteral(name);
   const createComponentPath = createImportPath(relative(generatedDir, resolve(utilsDir, './createComponent.js')), true);
-
-  class EventNameMissingError extends Error {
-    constructor() {
-      super(`[${packageName}]: event name is missing`);
-    }
-  }
 
   const eventNameMissingLogger = () => console.error(`[${packageName}]: event name is missing`);
 
   const ast = template(
     `
 import type { EventName, WebComponentProps } from "${LIT_REACT_PATH}";
-import * as ${MODULE} from "${MODULE_PATH}";
+import * as ${COMPONENT_NAME}Module from "${MODULE_PATH}";
 import * as React from "react";
 import { createComponent } from "${CREATE_COMPONENT_PATH}";
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
-export type ${COMPONENT_PROPS} = WebComponentProps<${MODULE}.${COMPONENT_NAME}, ${EVENT_MAP}>;
-export const ${COMPONENT_NAME} = createComponent(React, ${COMPONENT_TAG}, ${MODULE}.${COMPONENT_NAME}, events);
-export { ${MODULE} };
+export type ${COMPONENT_NAME}Props = WebComponentProps<${COMPONENT_NAME}Module.${COMPONENT_NAME}, ${EVENT_MAP}>;
+export const ${COMPONENT_NAME} = createComponent(React, ${COMPONENT_TAG}, ${COMPONENT_NAME}Module.${COMPONENT_NAME}, events);
+export { ${COMPONENT_NAME}Module };
 `,
     (statements) => statements,
     [
@@ -354,10 +339,12 @@ export { ${MODULE} };
           : node,
       ),
       transform((node) => (ts.isIdentifier(node) && node.text === COMPONENT_TAG ? componentTagLiteral : node)),
-      transform((node) => (ts.isIdentifier(node) && node.text === MODULE ? elementModuleId : node)),
       transform((node) => (ts.isIdentifier(node) && node.text === EVENT_MAP ? eventMapId : node)),
-      transform((node) => (ts.isIdentifier(node) && node.text === COMPONENT_PROPS ? componentPropsId : node)),
-      transform((node) => (ts.isIdentifier(node) && node.text === COMPONENT_NAME ? elementId : node)),
+      transform((node) =>
+        ts.isIdentifier(node) && node.text.includes(COMPONENT_NAME)
+          ? ts.factory.createIdentifier(node.text.replaceAll(COMPONENT_NAME, elementName))
+          : node,
+      ),
     ],
   );
 

@@ -1,1 +1,1 @@
-export * from "./generated/AppLayout.js";
+export * from './generated/AppLayout.js';

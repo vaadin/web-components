@@ -1,1 +1,1 @@
-export * from "./generated/IntegerField.js";
+export * from './generated/IntegerField.js';

@@ -1,6 +1,6 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import { Select as _Select, SelectModule, type SelectProps as _SelectProps } from './generated/Select.js';
-import { useSimpleRenderer, type ReactSimpleRendererProps} from './renderers/useSimpleRenderer.js';
+import { useSimpleRenderer, type ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
 export type SelectReactRendererProps = ReactSimpleRendererProps<SelectModule.Select>;
 

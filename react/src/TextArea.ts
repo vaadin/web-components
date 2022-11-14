@@ -1,1 +1,1 @@
-export * from "./generated/TextArea.js";
+export * from './generated/TextArea.js';

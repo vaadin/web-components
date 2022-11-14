@@ -1,1 +1,1 @@
-export * from "./generated/ChartSeries.js";
+export * from './generated/ChartSeries.js';

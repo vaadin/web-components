@@ -1,1 +1,1 @@
-export * from "./generated/CookieConsent.js";
+export * from './generated/CookieConsent.js';

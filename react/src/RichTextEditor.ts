@@ -1,1 +1,1 @@
-export * from "./generated/RichTextEditor.js";
+export * from './generated/RichTextEditor.js';

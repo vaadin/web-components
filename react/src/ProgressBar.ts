@@ -1,1 +1,1 @@
-export * from "./generated/ProgressBar.js";
+export * from './generated/ProgressBar.js';

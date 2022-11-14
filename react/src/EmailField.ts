@@ -1,1 +1,1 @@
-export * from "./generated/EmailField.js";
+export * from './generated/EmailField.js';

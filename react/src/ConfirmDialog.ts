@@ -1,1 +1,1 @@
-export * from "./generated/ConfirmDialog.js";
+export * from './generated/ConfirmDialog.js';

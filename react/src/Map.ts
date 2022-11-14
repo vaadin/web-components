@@ -1,1 +1,1 @@
-export * from "./generated/Map.js";
+export * from './generated/Map.js';

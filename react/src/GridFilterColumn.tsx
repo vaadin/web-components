@@ -1,19 +1,20 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from "react";
-import type { GridModule } from "./generated/Grid.js";
+import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import type { GridModule } from './generated/Grid.js';
 import {
   GridFilterColumn as _GridFilterColumn,
   GridFilterColumnModule,
-  type GridFilterColumnProps as _GridFilterColumnProps
-} from "./generated/GridFilterColumn.js";
-import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from "./renderers/grid.js";
-import { useModelRenderer } from "./renderers/useModelRenderer.js";
-import { useSimpleRenderer } from "./renderers/useSimpleRenderer.js";
+  type GridFilterColumnProps as _GridFilterColumnProps,
+} from './generated/GridFilterColumn.js';
+import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
+import { useModelRenderer } from './renderers/useModelRenderer.js';
+import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export type GridFilterColumnProps<TItem> = Omit<
   _GridFilterColumnProps<TItem>,
-  'footerRenderer' | 'headerRenderer' | 'renderer'
+  'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'
 > &
   Readonly<{
+    children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
@@ -25,7 +26,7 @@ function GridFilterColumn<TItem = GridModule.GridDefaultItem>(
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer);
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
 
   return (
     <_GridFilterColumn<TItem>
@@ -35,7 +36,6 @@ function GridFilterColumn<TItem = GridModule.GridDefaultItem>(
       ref={ref}
       renderer={bodyRenderer}
     >
-      {props.children}
       {headerPortals}
       {footerPortals}
       {bodyPortals}

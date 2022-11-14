@@ -1,1 +1,1 @@
-export * from "./generated/LoginForm.js";
+export * from './generated/LoginForm.js';

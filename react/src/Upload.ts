@@ -1,1 +1,1 @@
-export * from "./generated/Upload.js";
+export * from './generated/Upload.js';

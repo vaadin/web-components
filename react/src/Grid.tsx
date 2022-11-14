@@ -1,7 +1,7 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import { Grid as _Grid, GridModule, type GridProps as _GridProps } from './generated/Grid.js';
 import type { GridRowDetailsReactRendererProps } from './renderers/grid.js';
-import { useModelRenderer } from "./renderers/useModelRenderer.js";
+import { useModelRenderer } from './renderers/useModelRenderer.js';
 
 export type GridProps<TItem> = Omit<_GridProps<TItem>, 'rowDetailsRenderer'> &
   Readonly<{
@@ -15,11 +15,7 @@ function Grid<TItem = GridModule.GridDefaultItem>(
   const [portals, rowDetailsRenderer] = useModelRenderer(props.rowDetailsRenderer);
 
   return (
-    <_Grid<TItem>
-      {...props}
-      ref={ref}
-      rowDetailsRenderer={rowDetailsRenderer}
-    >
+    <_Grid<TItem> {...props} ref={ref} rowDetailsRenderer={rowDetailsRenderer}>
       {props.children}
       {portals}
     </_Grid>

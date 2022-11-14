@@ -1,1 +1,1 @@
-export * from "./generated/HorizontalLayout.js";
+export * from './generated/HorizontalLayout.js';

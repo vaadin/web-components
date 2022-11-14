@@ -1,1 +1,1 @@
-export * from "./generated/PasswordField.js";
+export * from './generated/PasswordField.js';

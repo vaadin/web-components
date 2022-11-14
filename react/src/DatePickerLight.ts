@@ -1,1 +1,1 @@
-export * from "./generated/DatePickerLight.js";
+export * from './generated/DatePickerLight.js';

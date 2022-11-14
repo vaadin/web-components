@@ -1,1 +1,1 @@
-export * from "./generated/AccordionPanel.js";
+export * from './generated/AccordionPanel.js';

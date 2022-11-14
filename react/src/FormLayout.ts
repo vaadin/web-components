@@ -1,1 +1,1 @@
-export * from "./generated/FormLayout.js";
+export * from './generated/FormLayout.js';

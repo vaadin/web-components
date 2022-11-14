@@ -1,1 +1,1 @@
-export * from "./generated/MessageList.js";
+export * from './generated/MessageList.js';

@@ -1,1 +1,1 @@
-export * from "./generated/GridTreeToggle.js";
+export * from './generated/GridTreeToggle.js';

@@ -1,1 +1,1 @@
-export * from "./generated/Scroller.js";
+export * from './generated/Scroller.js';

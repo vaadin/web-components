@@ -1,8 +1,10 @@
 import {
   type ComponentType,
   createElement,
+  isValidElement,
   type PropsWithChildren,
   type ReactElement,
+  ReactNode,
   useCallback,
   useReducer,
 } from 'react';
@@ -23,17 +25,27 @@ function rendererReducer<W extends WebComponentRenderer>(
   return new Map(state).set(root, args as Slice<Parameters<W>, 1>);
 }
 
+export function useRenderer<W extends WebComponentRenderer>(node: ReactNode): UseRendererResult<W>;
 export function useRenderer<P extends {}, W extends WebComponentRenderer>(
   reactRenderer: ComponentType<P> | null | undefined,
   convert: (props: Slice<Parameters<W>, 1>) => PropsWithChildren<P>,
+): UseRendererResult<W>;
+export function useRenderer<P extends {}, W extends WebComponentRenderer>(
+  reactRendererOrNode: ReactNode | ComponentType<P> | null | undefined,
+  convert?: (props: Slice<Parameters<W>, 1>) => PropsWithChildren<P>,
 ): UseRendererResult<W> {
   const [map, update] = useReducer<typeof rendererReducer<W>>(rendererReducer, initialState);
   const renderer = useCallback(((...args: Parameters<W>) => update(args)) as W, []);
 
-  return reactRenderer
+  return reactRendererOrNode
     ? [
         Array.from(map.entries()).map(([root, args]) =>
-          createPortal(createElement<P>(reactRenderer, convert(args)), root),
+          createPortal(
+            convert
+              ? createElement<P>(reactRendererOrNode as ComponentType<P>, convert(args))
+              : (reactRendererOrNode as ReactNode),
+            root,
+          ),
         ),
         renderer,
       ]

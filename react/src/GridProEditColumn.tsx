@@ -1,19 +1,20 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from "react";
+import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import type { GridModule } from './generated/Grid.js';
 import {
   GridProEditColumn as _GridProEditColumn,
   GridProEditColumnModule,
   type GridProEditColumnProps as _GridProEditColumnProps,
 } from './generated/GridProEditColumn.js';
-import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from "./renderers/grid.js";
-import { useModelRenderer } from "./renderers/useModelRenderer.js";
-import { useSimpleRenderer } from "./renderers/useSimpleRenderer.js";
+import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
+import { useModelRenderer } from './renderers/useModelRenderer.js';
+import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export type GridProEditColumnProps<TItem> = Omit<
   _GridProEditColumnProps<TItem>,
-  'editModeRenderer' | 'footerRenderer' | 'headerRenderer' | 'renderer'
+  'children' | 'editModeRenderer' | 'footerRenderer' | 'headerRenderer' | 'renderer'
 > &
   Readonly<{
+    children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     editModeRenderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
@@ -27,7 +28,7 @@ function GridProEditColumn<TItem = GridModule.GridDefaultItem>(
   const [editModePortals, editModeRenderer] = useModelRenderer(props.editModeRenderer);
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer);
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
 
   return (
     <_GridProEditColumn<TItem>
@@ -38,7 +39,6 @@ function GridProEditColumn<TItem = GridModule.GridDefaultItem>(
       ref={ref}
       renderer={bodyRenderer}
     >
-      {props.children}
       {editModePortals}
       {headerPortals}
       {footerPortals}

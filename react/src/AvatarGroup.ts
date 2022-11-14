@@ -1,1 +1,1 @@
-export * from "./generated/AvatarGroup.js";
+export * from './generated/AvatarGroup.js';

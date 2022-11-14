@@ -1,293 +1,57 @@
-import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
-import { Accordion } from '../../src/Accordion.js';
-import { AccordionPanel } from '../../src/AccordionPanel.js';
+import { useState } from 'react';
+import '../../css/lumo/Typography.css';
 import { AppLayout } from '../../src/AppLayout.js';
 import { Avatar } from '../../src/Avatar.js';
-import { AvatarGroup } from '../../src/AvatarGroup.js';
 import { Board } from '../../src/Board.js';
-import { BoardRow } from '../../src/BoardRow.js';
 import { Button } from '../../src/Button.js';
-import { Chart, ChartModule } from '../../src/Chart.js';
-import { Checkbox } from '../../src/Checkbox.js';
-import { CheckboxGroup } from '../../src/CheckboxGroup.js';
-import { ComboBox } from '../../src/ComboBox.js';
-import { ConfirmDialog } from '../../src/ConfirmDialog.js';
-import { ContextMenu } from '../../src/ContextMenu.js';
-import { CookieConsent } from '../../src/CookieConsent.js';
-import { Crud } from '../../src/Crud.js';
-import { CustomField } from '../../src/CustomField.js';
-import { DatePicker } from '../../src/DatePicker.js';
-import { DateTimePicker } from '../../src/DateTimePicker.js';
-import { Details } from '../../src/Details.js';
 import { DrawerToggle } from '../../src/DrawerToggle.js';
-import { FormItem } from '../../src/FormItem.js';
-import { FormLayout } from '../../src/FormLayout.js';
-import { ChartSeries } from '../../src/generated/ChartSeries.js';
-import { Grid, GridModule } from '../../src/Grid.js';
-import { GridColumn } from '../../src/GridColumn.js';
-import { GridColumnGroup } from '../../src/GridColumnGroup.js';
-import { GridFilterColumn } from '../../src/GridFilterColumn.js';
-import { GridPro } from '../../src/GridPro.js';
-import { GridProEditColumn } from '../../src/GridProEditColumn.js';
-import { GridSortColumn } from '../../src/GridSortColumn.js';
-import { GridTreeColumn } from '../../src/GridTreeColumn.js';
-import { HorizontalLayout } from '../../src/HorizontalLayout.js';
-import { Icon } from '../../src/Icon.js';
-import { Iconset } from '../../src/Iconset.js';
-import { IntegerField } from '../../src/IntegerField.js';
-import { Item } from '../../src/Item.js';
-import { ListBox } from '../../src/ListBox.js';
-import { LoginForm } from '../../src/LoginForm.js';
-import { LoginOverlay } from '../../src/LoginOverlay.js';
-import { MenuBar } from '../../src/MenuBar.js';
-import { Message } from '../../src/Message.js';
-import { MessageInput } from '../../src/MessageInput.js';
-import { MessageList } from '../../src/MessageList.js';
-import { NumberField } from '../../src/NumberField.js';
-import { PasswordField } from '../../src/PasswordField.js';
-import { RadioButton } from '../../src/RadioButton.js';
-import { RadioGroup } from '../../src/RadioGroup.js';
-import type { GridBodyReactRendererProps } from '../../src/renderers/grid.js';
-import { RichTextEditor } from '../../src/RichTextEditor.js';
-import { Scroller } from '../../src/Scroller.js';
-import { Select } from '../../src/Select.js';
-import { SplitLayout } from '../../src/SplitLayout.js';
+import { Notification } from '../../src/Notification.js';
 import { Tab } from '../../src/Tab.js';
 import { Tabs } from '../../src/Tabs.js';
-import { TextArea } from '../../src/TextArea.js';
-import { TextField } from '../../src/TextField.js';
-import { TimePicker } from '../../src/TimePicker.js';
-import { Tooltip } from '../../src/Tooltip.js';
-import { Upload } from '../../src/Upload.js';
-import { VerticalLayout } from '../../src/VerticalLayout.js';
-import { VirtualList } from '../../src/VirtualList.js';
-import '../../dist/css/lumo/Typography.css';
-import { Notification } from "../../src/Notification.js";
-
-type TreeGridDataItem = {
-  id: number;
-  size: number;
-  name: string;
-  children?: TreeGridDataItem[];
-};
-
-const treeGridData: TreeGridDataItem[] = [
-  {
-    id: 1,
-    size: 20,
-    name: 'Branch 1',
-    children: [
-      { id: 2, size: 5, name: 'Leaf 1' },
-      { id: 3, size: 10, name: 'Leaf 2' },
-    ],
-  },
-  {
-    id: 4,
-    size: 15,
-    name: 'Branch 2',
-    children: [
-      { id: 5, size: 5, name: 'Leaf 1' },
-      { id: 6, size: 10, name: 'Leaf 2' },
-    ],
-  },
-  ...Array.from(new Array(1000)).map((_, index) => ({
-    id: (index + 10),
-    size: (index + 10),
-    name: `Leaf ${index + 10}`,
-  })),
-];
-
-function NameRenderer({ item: { name } }: GridBodyReactRendererProps<TreeGridDataItem>) {
-  const [typePart, numberPart] = name.split(' ');
-  return <><b>{typePart}</b>: {numberPart}</>;
-}
-
-const TreeGridDataProvider: GridModule.GridDataProvider<TreeGridDataItem> = (params, callback) => {
-  const items = params.parentItem ? (params.parentItem.children || []) : treeGridData;
-  const offset = params.page * params.pageSize;
-  callback(items.slice(offset, offset + params.pageSize), items.length);
-};
-
-enum CrudRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
-
-type CrudDataItem = {
-  name: string;
-  role: CrudRole;
-  active: boolean;
-};
-
-const crudData: CrudDataItem[] = [
-  { name: 'Jane Doe', role: CrudRole.ADMIN, active: true },
-  { name: 'Mary Joe', role: CrudRole.USER, active: false },
-];
-
-const displayColor: CSSProperties = { color: 'blueviolet' };
-
-function Display({ item: { name } }: GridBodyReactRendererProps<CrudDataItem>) {
-  return <div style={displayColor}>{name}</div>;
-}
-
-function SelectListBox() {
-  return <ListBox>
-    <Item value="1">One</Item>
-    <Item value="2">Two</Item>
-  </ListBox>;
-}
+import { DialogComponent } from './DialogComponent.js';
+import Row1 from './Row1.js';
+import Row2 from './Row2.js';
+import Row3 from './Row3.js';
+import Row4 from './Row4.js';
+import Row5 from './Row5.js';
+import Row6 from './Row6.js';
+import Row7 from './Row7.js';
+import Row8 from './Row8.js';
+import Row9 from './Row9.js';
 
 export default function App({}) {
-  let [ notificationOpened, setNotificationOpened ] = useState(false);
+  const [notificationOpened, setNotificationOpened] = useState(false);
+  const [isDialogOpened, setDialogOpened] = useState(true);
 
   return (
     <AppLayout>
+      <Button onClick={() => setDialogOpened(true)}>Open Dialog</Button>
+      <DialogComponent opened={isDialogOpened} close={() => setDialogOpened(false)} />
       <DrawerToggle slot="navbar"></DrawerToggle>
       <h3 slot="navbar" style={{ flex: 'auto' }}>
         Kitchen Sink
       </h3>
       <Avatar slot="navbar" name="User Name" abbr="UN"></Avatar>
-      <Button slot="navbar" onClick={() => setNotificationOpened(true)}>Hello</Button>
-      <Notification
-        opened={notificationOpened}
-        renderer={() => <>Hi!</>}
-        onOpenedChanged={(e) => setNotificationOpened(e.detail.value)}
-      />
+      <Button slot="navbar" onClick={() => setNotificationOpened(true)}>
+        Hello
+      </Button>
+      <Notification opened={notificationOpened} onOpenedChanged={(e) => setNotificationOpened(e.detail.value)}>
+        Hi
+      </Notification>
       <Tabs slot="drawer" orientation="vertical">
         <Tab>Tab 1</Tab>
         <Tab>Tab 2</Tab>
       </Tabs>
       <Board>
-        <BoardRow>
-          <Accordion>
-            <AccordionPanel>
-              <div slot="summary">AccordeonPanel</div>
-              <div>Accordion content 1</div>
-            </AccordionPanel>
-          </Accordion>
-          <AvatarGroup prefix="Users: " items={[{ name: 'Jane Roe', abbr: 'JD' }]}></AvatarGroup>
-          <Chart title='Chart' style={{ height: '300px' }}>
-            <ChartSeries title='Items' type='bar' values={[ 10, 20, 30 ]}></ChartSeries>
-          </Chart>
-        </BoardRow>
-        <BoardRow>
-          <CheckboxGroup label="CheckboxGroup">
-            <Checkbox value="accept_terms" label="Accept Terms"></Checkbox>
-          </CheckboxGroup>
-          <ComboBox label="ComboBox" items={['foo', 'bar']}></ComboBox>
-          <ConfirmDialog></ConfirmDialog>
-        </BoardRow>
-        <BoardRow>
-          <ContextMenu>
-            <ListBox>
-              <Item>ListBox Item</Item>
-            </ListBox>
-          </ContextMenu>
-          <CookieConsent position="bottom-right"></CookieConsent>
-          <Crud items={crudData}></Crud>
-        </BoardRow>
-        <BoardRow>
-          <CustomField label="Custom field">
-            <TextField placeholder="Text"></TextField>
-            <NumberField placeholder="Number"></NumberField>
-            <IntegerField placeholder="Integer"></IntegerField>
-            <PasswordField placeholder="Password"></PasswordField>
-          </CustomField>
-          <Details opened>
-            <label slot="summary">Details</label>
-            <p>Details content</p>
-          </Details>
-          <FormLayout>
-            <FormItem>
-              <label slot="label">Form item</label>
-              <output>value</output>
-            </FormItem>
-            <DatePicker label="DatePicker"></DatePicker>
-            <TimePicker label="TimePicker"></TimePicker>
-            <DateTimePicker label="DateTimePicker"></DateTimePicker>
-          </FormLayout>
-        </BoardRow>
-        <BoardRow>
-          <Grid dataProvider={TreeGridDataProvider} itemHasChildrenPath="children">
-            <GridTreeColumn path="id"></GridTreeColumn>
-            <GridColumnGroup>
-              <GridSortColumn path="size"></GridSortColumn>
-              <GridFilterColumn path="name" renderer={NameRenderer}></GridFilterColumn>
-            </GridColumnGroup>
-          </Grid>
-          <GridPro<CrudDataItem> items={crudData}>
-            <GridColumn<CrudDataItem> renderer={Display}></GridColumn>
-            <GridColumn<CrudDataItem> path="size"></GridColumn>
-            <GridProEditColumn<CrudDataItem> path="name" editorType="text"></GridProEditColumn>
-            <GridProEditColumn<CrudDataItem> path="name" editorType="text"></GridProEditColumn>
-          </GridPro>
-        </BoardRow>
-        <BoardRow>
-          <HorizontalLayout>
-            <VerticalLayout>
-              <Scroller>Scroller</Scroller>
-              <Iconset></Iconset>
-              <Icon></Icon>
-            </VerticalLayout>
-            <VerticalLayout>
-              <LoginForm></LoginForm>
-              <LoginOverlay></LoginOverlay>
-            </VerticalLayout>
-          </HorizontalLayout>
-          <MenuBar
-            items={[
-              {
-                text: 'File',
-                children: [{ text: 'Open' }, { text: 'Auto Save', checked: true }],
-              },
-              { component: 'hr' },
-              {
-                text: 'Edit',
-                children: [{ text: 'Undo', disabled: true }, { text: 'Redo' }],
-              },
-              { text: 'Help' },
-            ]}
-          ></MenuBar>
-        </BoardRow>
-        <BoardRow>
-          <MessageList
-            items={[
-              { text: 'Hello', time: 'today', userName: 'Bot' },
-              { text: 'Message list', time: 'today', userName: 'Bot' },
-            ]}
-          ></MessageList>
-          <Message userName="Test User">Message</Message>
-          <MessageInput></MessageInput>
-        </BoardRow>
-        <BoardRow>
-          <RadioGroup>
-            <RadioButton>
-              <label slot="label">One</label>
-            </RadioButton>
-            <RadioButton>
-              <label slot="label">Two</label>
-            </RadioButton>
-          </RadioGroup>
-          <RichTextEditor></RichTextEditor>
-          <Select 
-            label="Select"
-            value="2"
-            items={[
-              { label: 'One', value: '1' },
-              { label: 'Two', value: '2' },
-            ]}
-            renderer={SelectListBox}>
-          </Select>
-        </BoardRow>
-        <BoardRow>
-          <SplitLayout>
-            <TextArea label="Text Area"></TextArea>
-            <Tooltip text="Tooltip">Tooltip content</Tooltip>
-          </SplitLayout>
-          <Upload></Upload>
-          <VirtualList></VirtualList>
-        </BoardRow>
+        <Row1 />
+        <Row2 />
+        <Row3 />
+        <Row4 />
+        <Row5 />
+        <Row6 />
+        <Row7 />
+        <Row8 />
+        <Row9 />
       </Board>
     </AppLayout>
   );

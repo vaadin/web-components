@@ -1,1 +1,1 @@
-export * from "./generated/LoginOverlay.js";
+export * from './generated/LoginOverlay.js';
