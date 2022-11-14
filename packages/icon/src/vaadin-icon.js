@@ -189,7 +189,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   /** @private */
   __iconChanged(icon) {
     if (icon) {
-      this.__checkDeprecatedIcon(icon);
       const iconsetName = this.__getIconsetName(icon);
       const iconset = Iconset.getIconset(iconsetName);
       const { svg, size, viewBox } = iconset.applyIcon(icon);
@@ -202,20 +201,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
       this.svg = svg;
     } else {
       this.svg = ensureSvgLiteral(null);
-    }
-  }
-
-  /** @private */
-  __checkDeprecatedIcon(icon) {
-    const deprecatedIcons = {
-      'vaadin:buss': 'vaadin:bus',
-      'vaadin:funcion': 'vaadin:function',
-      'vaadin:megafone': 'vaadin:megaphone',
-      'vaadin:palete': 'vaadin:palette',
-      'vaadin:trendind-down': 'vaadin:trending-down',
-    };
-    if (icon in deprecatedIcons) {
-      console.warn(`WARNING: The icon "${icon}" is deprecated. Use "${deprecatedIcons[icon]}" instead`);
     }
   }
 
