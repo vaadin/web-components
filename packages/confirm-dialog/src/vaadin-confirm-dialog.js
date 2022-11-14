@@ -246,11 +246,12 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
 
       /**
-       * A reference to the message which will be placed in the overlay default slot.
+       * A list of message nodes which will be placed in the overlay default slot.
        * @private
        */
-      _messageNode: {
-        type: Object,
+      _messageNodes: {
+        type: Array,
+        value: () => [],
       },
 
       /**
@@ -268,7 +269,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
       '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
       '__updateHeaderNode(_headerNode, header)',
-      '__updateMessageNode(_messageNode, message)',
+      '__updateMessageNode(_messageNodes, message)',
       '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)',
     ];
   }
@@ -282,7 +283,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   get __slottedNodes() {
-    return [this._headerNode, this._messageNode, this._cancelButton, this._confirmButton, this._rejectButton];
+    return [this._headerNode, ...this._messageNodes, this._cancelButton, this._confirmButton, this._rejectButton];
   }
 
   /** @protected */
@@ -308,8 +309,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this.addController(this._headerController);
 
     this._messageController = new SlotController(this, '', 'div', {
+      // Do not remove the default message node
+      multiple: true,
+      observe: false,
       initializer: (node) => {
-        this._messageNode = node;
+        this._messageNodes = [...this._messageNodes, node];
       },
     });
     this.addController(this._messageController);
@@ -401,9 +405,12 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   /** @private */
-  __updateMessageNode(messageNode, message) {
-    if (messageNode && messageNode === this._messageController.defaultNode) {
-      messageNode.textContent = message;
+  __updateMessageNode(nodes, message) {
+    if (nodes && nodes.length) {
+      const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
+      if (defaultNode) {
+        defaultNode.textContent = message;
+      }
     }
   }
 
