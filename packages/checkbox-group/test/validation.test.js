@@ -43,12 +43,12 @@ describe('validation', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox name="language" value="en" label="English">/vaadin-checkbox>
+          <vaadin-checkbox name="language" value="en" label="English"></vaadin-checkbox>
           <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>
-          <vaadin-checkbox name="language" value="de" label="Deutsch">/vaadin-checkbox>
+          <vaadin-checkbox name="language" value="de" label="Deutsch"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
-      await nextFrame();
+      await nextRender();
       validateSpy = sinon.spy(group, 'validate');
     });
 
@@ -116,9 +116,9 @@ describe('validation', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group required>
-          <vaadin-checkbox name="language" value="en" label="English">/vaadin-checkbox>
+          <vaadin-checkbox name="language" value="en" label="English"></vaadin-checkbox>
           <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>
-          <vaadin-checkbox name="language" value="de" label="Deutsch">/vaadin-checkbox>
+          <vaadin-checkbox name="language" value="de" label="Deutsch"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
