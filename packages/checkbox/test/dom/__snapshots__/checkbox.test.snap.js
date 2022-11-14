@@ -53,10 +53,6 @@ snapshots["vaadin-checkbox shadow default"] =
   </div>
   <slot name="label">
   </slot>
-  <div style="display: none !important">
-    <slot id="noop">
-    </slot>
-  </div>
 </div>
 <slot name="tooltip">
 </slot>

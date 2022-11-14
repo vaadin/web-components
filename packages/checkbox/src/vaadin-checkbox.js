@@ -13,7 +13,6 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SlotTargetController } from '@vaadin/field-base/src/slot-target-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -110,10 +109,6 @@ class Checkbox extends LabelMixin(
         </div>
 
         <slot name="label"></slot>
-
-        <div style="display: none !important">
-          <slot id="noop"></slot>
-        </div>
       </div>
       <slot name="tooltip"></slot>
     `;
@@ -182,23 +177,8 @@ class Checkbox extends LabelMixin(
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
-    this.addController(
-      new SlotTargetController(
-        this.$.noop,
-        () => this._labelController.node,
-        () => this.__warnDeprecated(),
-      ),
-    );
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
-  }
-
-  /** @private */
-  __warnDeprecated() {
-    console.warn(
-      `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-checkbox> is deprecated.
-Please use <label slot="label"> wrapper or the label property instead.`,
-    );
   }
 
   /**
