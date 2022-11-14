@@ -169,15 +169,21 @@ describe('vaadin-confirm-dialog', () => {
 
     describe('slot', () => {
       beforeEach(async () => {
-        confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+        confirm = fixtureSync(`
+          <vaadin-confirm-dialog opened>
+            Confirmation message
+            <div>Additional content</dib>
+          </vaadin-confirm-dialog>
+        `);
         overlay = confirm.$.dialog.$.overlay;
         await oneEvent(overlay, 'vaadin-overlay-open');
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
       });
 
-      it('should keep the element text content as a message', () => {
-        const messageNode = messageSlot.assignedNodes()[0];
-        expect(messageNode.textContent.trim()).to.equal('Confirmation message');
+      it('should place all the slotted elements in the message slot', () => {
+        const nodes = messageSlot.assignedNodes();
+        expect(nodes[0].textContent.trim()).to.equal('Confirmation message');
+        expect(nodes[1].textContent.trim()).to.equal('Additional content');
       });
 
       it('should not update custom node when message property changes', () => {
