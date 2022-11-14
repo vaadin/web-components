@@ -26,13 +26,18 @@ export class SlotController extends EventTarget {
   constructor(host, slotName, tagName, config = {}) {
     super();
 
-    const { initializer, observe, useUniqueId } = config;
+    const { initializer, multiple, observe, useUniqueId } = config;
 
     this.host = host;
     this.slotName = slotName;
     this.tagName = tagName;
     this.observe = typeof observe === 'boolean' ? observe : true;
+    this.multiple = typeof multiple === 'boolean' ? multiple : false;
     this.slotInitializer = initializer;
+
+    if (multiple) {
+      this.nodes = [];
+    }
 
     // Only generate the default ID if requested by the controller.
     if (useUniqueId) {
@@ -42,22 +47,46 @@ export class SlotController extends EventTarget {
 
   hostConnected() {
     if (!this.initialized) {
-      let node = this.getSlotChild();
-
-      if (!node) {
-        node = this.attachDefaultNode();
+      if (this.multiple) {
+        this.initMultiple();
       } else {
-        this.node = node;
-        this.initCustomNode(node);
+        this.initSingle();
       }
-
-      this.initNode(node);
 
       if (this.observe) {
         this.observeSlot();
       }
 
       this.initialized = true;
+    }
+  }
+
+  /** @protected */
+  initSingle() {
+    let node = this.getSlotChild();
+
+    if (!node) {
+      node = this.attachDefaultNode();
+      this.initNode(node);
+    } else {
+      this.node = node;
+      this.initAddedNode(node);
+    }
+  }
+
+  /** @protected */
+  initMultiple() {
+    const children = this.getSlotChildren();
+
+    if (children.length === 0) {
+      const defaultNode = this.attachDefaultNode();
+      this.nodes = [defaultNode];
+      this.initNode(defaultNode);
+    } else {
+      this.nodes = children;
+      children.forEach((node) => {
+        this.initAddedNode(node);
+      });
     }
   }
 
@@ -92,18 +121,26 @@ export class SlotController extends EventTarget {
   }
 
   /**
-   * Return a reference to the node managed by the controller.
+   * Return the list of nodes matching the slot managed by the controller.
    * @return {Node}
    */
-  getSlotChild() {
+  getSlotChildren() {
     const { slotName } = this;
-    return Array.from(this.host.childNodes).find((node) => {
+    return Array.from(this.host.childNodes).filter((node) => {
       // Either an element (any slot) or a text node (only un-named slot).
       return (
         (node.nodeType === Node.ELEMENT_NODE && node.slot === slotName) ||
         (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
       );
     });
+  }
+
+  /**
+   * Return a reference to the node managed by the controller.
+   * @return {Node}
+   */
+  getSlotChild() {
+    return this.getSlotChildren()[0];
   }
 
   /**
@@ -135,6 +172,14 @@ export class SlotController extends EventTarget {
    */
   teardownNode(_node) {}
 
+  /** @protected */
+  initAddedNode(node) {
+    if (node !== this.defaultNode) {
+      this.initCustomNode(node);
+      this.initNode(node);
+    }
+  }
+
   /**
    * Setup the observer to manage slot content changes.
    * @protected
@@ -145,9 +190,8 @@ export class SlotController extends EventTarget {
     const slot = this.host.shadowRoot.querySelector(selector);
 
     this.__slotObserver = new FlattenedNodesObserver(slot, (info) => {
-      // TODO: support default slot with multiple nodes (e.g. confirm-dialog)
-      const current = this.node;
-      const newNode = info.addedNodes.find((node) => node !== current);
+      const current = this.multiple ? this.nodes : [this.node];
+      const newNodes = info.addedNodes.filter((node) => !current.includes(node));
 
       if (info.removedNodes.length) {
         info.removedNodes.forEach((node) => {
@@ -155,18 +199,22 @@ export class SlotController extends EventTarget {
         });
       }
 
-      if (newNode) {
+      if (newNodes && newNodes.length > 0) {
         // Custom node is added, remove the current one.
-        if (current && current.isConnected) {
-          this.host.removeChild(current);
-        }
+        current.forEach((node) => {
+          if (node && node.isConnected) {
+            node.parentNode.removeChild(node);
+          }
+        });
 
-        this.node = newNode;
-
-        if (newNode !== this.defaultNode) {
-          this.initCustomNode(newNode);
-
-          this.initNode(newNode);
+        if (this.multiple) {
+          this.nodes = newNodes;
+          newNodes.forEach((node) => {
+            this.initAddedNode(node);
+          });
+        } else {
+          this.node = newNodes[0];
+          this.initAddedNode(this.node);
         }
       }
     });

@@ -16,7 +16,15 @@ export class SlotController extends EventTarget implements ReactiveController {
    */
   node: HTMLElement;
 
+  /**
+   * The list of slotted nodes managed by the controller.
+   * Only used when `multiple` property is set to `true`.
+   */
+  nodes: HTMLElement[];
+
   protected initialized: boolean;
+
+  protected multiple: boolean;
 
   protected defaultNode: Node;
 
@@ -27,6 +35,7 @@ export class SlotController extends EventTarget implements ReactiveController {
     slotName: string,
     tagName?: string,
     config?: {
+      multiple?: boolean;
       observe?: boolean;
       useUniqueId?: boolean;
       initializer?(host: HTMLElement, node: HTMLElement): void;
@@ -36,11 +45,18 @@ export class SlotController extends EventTarget implements ReactiveController {
   hostConnected(): void;
 
   /**
+   * Return the list of nodes matching the slot managed by the controller.
+   */
+  getSlotChildren(): Node[];
+
+  /**
    * Return a reference to the node managed by the controller.
    */
   getSlotChild(): Node;
 
   protected attachDefaultNode(): Node | undefined;
+
+  protected initAddedNode(node: Node): void;
 
   protected initNode(node: Node): void;
 
