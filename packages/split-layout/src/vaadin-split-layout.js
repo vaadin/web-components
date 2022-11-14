@@ -319,7 +319,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     const distance = this.orientation === 'vertical' ? event.detail.dy : event.detail.dx;
-    const isRtl = this.orientation !== 'vertical' && this.getAttribute('dir') === 'rtl';
+    const isRtl = this.orientation !== 'vertical' && this.__isRTL;
     const dirDistance = isRtl ? -distance : distance;
 
     this._setFlexBasis(this._primaryChild, this._startSize.primary + dirDistance, this._startSize.container);

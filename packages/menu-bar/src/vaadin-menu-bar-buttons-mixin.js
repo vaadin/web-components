@@ -155,7 +155,7 @@ export const ButtonsMixin = (superClass) =>
       if (container.offsetWidth < container.scrollWidth) {
         this._hasOverflow = true;
 
-        const isRTL = this.getAttribute('dir') === 'rtl';
+        const isRTL = this.__isRTL;
 
         let i;
         for (i = buttons.length; i > 0; i--) {

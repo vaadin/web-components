@@ -979,7 +979,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
     let newIdx;
 
-    if (this.getAttribute('dir') !== 'rtl') {
+    if (!this.__isRTL) {
       if (idx === -1) {
         // Focus last chip
         newIdx = chips.length - 1;
@@ -1012,7 +1012,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
     let newIdx;
 
-    if (this.getAttribute('dir') === 'rtl') {
+    if (this.__isRTL) {
       if (idx === -1) {
         // Focus last chip
         newIdx = chips.length - 1;

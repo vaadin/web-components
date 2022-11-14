@@ -239,7 +239,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
 
   /** @private */
   get __direction() {
-    return !this._vertical && this.getAttribute('dir') === 'rtl' ? 1 : -1;
+    return !this._vertical && this.__isRTL ? 1 : -1;
   }
 
   /** @private */

@@ -300,6 +300,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       e.preventDefault();
 
       const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
+      const isRTL = this.__isRTL;
 
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
@@ -308,10 +309,10 @@ export const KeyboardNavigationMixin = (superClass) =>
         dy = 0;
       switch (key) {
         case 'ArrowRight':
-          dx = this.__isRTL ? -1 : 1;
+          dx = isRTL ? -1 : 1;
           break;
         case 'ArrowLeft':
-          dx = this.__isRTL ? 1 : -1;
+          dx = isRTL ? 1 : -1;
           break;
         case 'Home':
           if (this.__rowFocusMode) {
@@ -361,8 +362,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const forwardsKey = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
-      const backwardsKey = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
+      const forwardsKey = isRTL ? 'ArrowLeft' : 'ArrowRight';
+      const backwardsKey = isRTL ? 'ArrowRight' : 'ArrowLeft';
       if (key === forwardsKey) {
         // "Right Arrow:"
         if (this.__rowFocusMode) {

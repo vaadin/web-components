@@ -231,10 +231,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     ];
   }
 
-  get __isRTL() {
-    return this.getAttribute('dir') === 'rtl';
-  }
-
   /**
    * Whether to scroll to a sub-month position when scrolling to a date.
    * This is active if the month scroller is not large enough to fit a

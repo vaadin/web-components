@@ -112,6 +112,14 @@ export const DirMixin = (superClass) =>
       this.__unsubscribe();
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get __isRTL() {
+      return this.getAttribute('dir') === 'rtl';
+    }
+
     /** @protected */
     _valueToNodeAttribute(node, value, attribute) {
       // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
