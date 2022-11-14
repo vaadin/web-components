@@ -61,10 +61,6 @@ snapshots["vaadin-radio-button shadow default"] =
   </div>
   <slot name="label">
   </slot>
-  <div style="display: none !important">
-    <slot id="noop">
-    </slot>
-  </div>
 </div>
 `;
 /* end snapshot vaadin-radio-button shadow default */
