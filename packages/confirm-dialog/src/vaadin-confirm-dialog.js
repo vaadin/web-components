@@ -309,7 +309,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this.addController(this._headerController);
 
     this._messageController = new SlotController(this, '', 'div', {
-      // Do not remove the default message node
+      // Allow providing multiple custom nodes in the default slot
       multiple: true,
       observe: false,
       initializer: (node) => {
