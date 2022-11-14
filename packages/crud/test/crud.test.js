@@ -327,6 +327,13 @@ describe('crud', () => {
       crud.editorOpened = false;
       expect(crud._grid.selectedItems).to.eql([crud.items[0]]);
     });
+
+    it('should not propagate theme attribute to a custom grid', async () => {
+      crud.setAttribute('theme', 'foo');
+      crud.appendChild(grid);
+      await nextRender(crud);
+      expect(grid.hasAttribute('theme')).to.be.false;
+    });
   });
 
   describe('validation', () => {

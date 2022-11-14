@@ -954,14 +954,12 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    */
   // eslint-disable-next-line max-params
   __gridPropsChanged(grid, theme, include, exclude, noFilter, noHead, noSort) {
-    if (grid) {
-      if (grid === this._gridController.defaultNode) {
-        grid.include = include;
-        grid.exclude = exclude;
-        grid.noFilter = noFilter;
-        grid.noHead = noHead;
-        grid.noSort = noSort;
-      }
+    if (grid && grid === this._gridController.defaultNode) {
+      grid.include = include;
+      grid.exclude = exclude;
+      grid.noFilter = noFilter;
+      grid.noHead = noHead;
+      grid.noSort = noSort;
 
       if (theme) {
         grid.setAttribute('theme', theme);
