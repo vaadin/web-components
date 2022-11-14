@@ -199,7 +199,7 @@ export class SlotController extends EventTarget {
         });
       }
 
-      if (newNodes && newNodes.length) {
+      if (newNodes && newNodes.length > 0) {
         // Custom node is added, remove the current one.
         current.forEach((node) => {
           if (node && node.isConnected) {
