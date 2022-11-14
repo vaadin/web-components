@@ -269,7 +269,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
       '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
       '__updateHeaderNode(_headerNode, header)',
-      '__updateMessageNode(_messageNodes, message)',
+      '__updateMessageNodes(_messageNodes, message)',
       '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)',
     ];
   }
@@ -405,8 +405,8 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   /** @private */
-  __updateMessageNode(nodes, message) {
-    if (nodes && nodes.length) {
+  __updateMessageNodes(nodes, message) {
+    if (nodes && nodes.length > 0) {
       const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
       if (defaultNode) {
         defaultNode.textContent = message;
