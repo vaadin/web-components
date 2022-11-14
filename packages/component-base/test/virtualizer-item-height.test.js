@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isDesktopSafari } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer - item height', () => {
@@ -55,7 +55,8 @@ describe('virtualizer - item height', () => {
     expect(firstItem.offsetHeight).to.equal(EVEN_ITEM_HEIGHT);
   });
 
-  it('should adjust the placeholder height', async () => {
+  // FIXME: often fails in CI with error "expected 200 to be below 40"
+  (isDesktopSafari ? it.skip : it)('should adjust the placeholder height', async () => {
     // Wait for the content to update
     await aTimeout(100);
     // Scroll down
