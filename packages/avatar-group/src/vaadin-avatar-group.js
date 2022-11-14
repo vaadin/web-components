@@ -656,10 +656,9 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     // Take negative margin into account
     const { marginLeft, marginRight } = getComputedStyle(avatars[1]);
 
-    const offset =
-      this.getAttribute('dir') === 'rtl'
-        ? parseInt(marginRight, 0) - parseInt(marginLeft, 0)
-        : parseInt(marginLeft, 0) - parseInt(marginRight, 0);
+    const offset = this.__isRTL
+      ? parseInt(marginRight, 0) - parseInt(marginLeft, 0)
+      : parseInt(marginLeft, 0) - parseInt(marginRight, 0);
 
     return Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
   }
