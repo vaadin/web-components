@@ -67,7 +67,7 @@ export class SlotController extends EventTarget {
 
     if (!node) {
       node = this.attachDefaultNode();
-      this.initNode(defaultNode);
+      this.initNode(node);
     } else {
       this.node = node;
       this.initAddedNode(node);
