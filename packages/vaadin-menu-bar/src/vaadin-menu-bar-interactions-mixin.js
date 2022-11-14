@@ -47,10 +47,6 @@ export const InteractionsMixin = (superClass) =>
       const container = this._container;
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
-
-      if (this.openOnHover){
-          container.addEventListener('mouseleave', () => this._requestClose());
-      }
     }
 
     /** @private */
@@ -238,7 +234,7 @@ export const InteractionsMixin = (superClass) =>
      */
     _onMouseOver(e) {
       if (this.openOnHover) {
-        this.preventClose = true;
+        this._preventClose = true;
       }
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
@@ -288,10 +284,10 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     _requestClose() {
-      this.preventClose = false;
+      this._preventClose = false;
       // wait if something has to prevent the close event
       setTimeout(() => {
-        if (!this.preventClose) {
+        if (!this._preventClose) {
           this._close(false);
         }
       }, 300);
@@ -301,9 +297,9 @@ export const InteractionsMixin = (superClass) =>
     _addHoverListener(subMenu) {
       let menuOverlay = subMenu.$.overlay.$.overlay;
 
-      menuOverlay.addEventListener('mouseleave', () => this._requestClose());
+      menuOverlay.addEventListener('mouseleave', () => this._requestClose(), {once: true});
       // when hovering between sub menus the subMenu will close if we don't prevent it
-      menuOverlay.addEventListener('mouseenter', () => this.preventClose = true);
+      menuOverlay.addEventListener('mouseenter', () => this._preventClose = true, {once: true});
     }
 
     /**
