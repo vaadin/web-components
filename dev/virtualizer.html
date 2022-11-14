@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualizer</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+    </style>
+
+    <script type="module">
+      import '@vaadin/button';
+      import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/integer-field';
+      import { Notification } from '@vaadin/notification';
+      import '@vaadin/split-layout';
+      import '@vaadin/vertical-layout';
+
+      // Set up the virtualizer
+      const scrollTarget = document.querySelector('#scroll-target');
+      const scrollContainer = document.querySelector('#scroll-container');
+
+      const virtualizer = new Virtualizer({
+        createElements: (count) => [...Array(count)].map(() => document.createElement('div')),
+        updateElement: (el, index) => (el.textContent = `Item ${index}`),
+        scrollTarget,
+        scrollContainer,
+        reorderElements: true,
+      });
+
+      virtualizer.size = 1000;
+
+      // Set up the controls
+      const sizeField = document.querySelector('#size');
+      sizeField.addEventListener('value-changed', (e) => (virtualizer.size = e.detail.value));
+      sizeField.value = virtualizer.size;
+
+      const scrollToIndexField = document.querySelector('#scroll-to-index');
+      const scrollButton = document.querySelector('#scroll');
+      scrollButton.addEventListener('click', () => {
+        virtualizer.scrollToIndex(parseInt(scrollToIndexField.value));
+      });
+
+      const firstVisibleIndexButton = document.querySelector('#first-last-visible-index');
+      firstVisibleIndexButton.addEventListener('click', () => {
+        Notification.show(
+          `First visible index: ${virtualizer.firstVisibleIndex}, last visible index: ${virtualizer.lastVisibleIndex}`,
+        );
+      });
+    </script>
+
+    <vaadin-split-layout orientation="vertical" style="height: 100%">
+      <!-- Virtualizer -->
+      <div style="height: 30%; position: relative" id="scroll-target">
+        <div id="scroll-container"></div>
+      </div>
+
+      <!-- Controls -->
+      <vaadin-vertical-layout style="height: 70%">
+        <vaadin-integer-field id="size" label="Size" min="0"></vaadin-integer-field>
+
+        <vaadin-horizontal-layout style="align-items: flex-end" theme="spacing">
+          <vaadin-integer-field id="scroll-to-index" label="Scroll To Index" value="500" min="0"></vaadin-integer-field>
+
+          <vaadin-button id="scroll">Scroll</vaadin-button>
+        </vaadin-horizontal-layout>
+
+        <vaadin-button id="first-last-visible-index" style="margin-top: 30px">First/last visible index</vaadin-button>
+      </vaadin-vertical-layout>
+    </vaadin-split-layout>
+  </body>
+</html>
