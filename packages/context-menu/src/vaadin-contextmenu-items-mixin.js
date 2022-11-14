@@ -126,14 +126,6 @@ export const ItemsMixin = (superClass) =>
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
     }
 
-    /**
-     * @return {boolean}
-     * @protected
-     */
-    get __isRTL() {
-      return this.getAttribute('dir') === 'rtl';
-    }
-
     /** @protected */
     __forwardFocus() {
       const overlay = this.$.overlay;

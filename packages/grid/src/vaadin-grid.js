@@ -482,19 +482,6 @@ class Grid extends ElementMixin(
     this._tooltipController.setManual(true);
   }
 
-  /**
-   * @param {string} name
-   * @param {?string} oldValue
-   * @param {?string} newValue
-   * @protected
-   */
-  attributeChangedCallback(name, oldValue, newValue) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === 'dir') {
-      this.__isRTL = newValue === 'rtl';
-    }
-  }
-
   /** @private */
   __getBodyCellCoordinates(cell) {
     if (this.$.items.contains(cell) && cell.localName === 'td') {
