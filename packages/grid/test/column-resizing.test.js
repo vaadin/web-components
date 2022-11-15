@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import {
@@ -24,16 +23,15 @@ describe('column resizing', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid size="1" style="width: 300px; height: 400px" column-reordering-allowed>
-        <vaadin-grid-column resizable>
-          <template class="header">0</template>
-          <template>0</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">1</template>
-          <template>1</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column resizable header="0"></vaadin-grid-column>
+        <vaadin-grid-column header="1"></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelectorAll('vaadin-grid-column').forEach((col, idx) => {
+      col.renderer = (root) => {
+        root.textContent = idx;
+      };
+    });
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     headerCells = getRowCells(getRows(grid.$.header)[0]);
@@ -235,22 +233,20 @@ describe('column group resizing', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid size="1" style="width: 300px; height: 400px">
-        <vaadin-grid-column-group resizable>
-          <template class="header">0</template>
-          <vaadin-grid-column flex-grow="0">
-            <template class="header">0</template>
-            <template>0</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column flex-grow="0">
-            <template class="header">1</template>
-            <template>1</template>
-          </vaadin-grid-column>
+        <vaadin-grid-column-group resizable header="0">
+          <vaadin-grid-column flex-grow="0" header="0"></vaadin-grid-column>
+          <vaadin-grid-column flex-grow="0" header="1"></vaadin-grid-column>
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+    grid.querySelectorAll('vaadin-grid-column').forEach((col, idx) => {
+      col.renderer = (root) => {
+        root.textContent = idx;
+      };
+    });
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
-    await nextFrame();
+    await nextRender();
   });
 
   it('should cascade resizable property to child columns', () => {
@@ -322,31 +318,26 @@ describe('group inside group', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid size="1" style="width: 300px; height: 400px">
-        <vaadin-grid-column-group resizable>
-          <template class="header">0</template>
-          <vaadin-grid-column-group resizable>
-            <template class="header">1</template>
-            <vaadin-grid-column resizable>
-              <template class="header">2</template>
-              <template>2</template>
-            </vaadin-grid-column>
+        <vaadin-grid-column-group resizable header="0">
+          <vaadin-grid-column-group resizable header="1">
+            <vaadin-grid-column header="2"></vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid-column-group>
-        <vaadin-grid-column-group>
-          <template class="header">3</template>
-          <vaadin-grid-column-group>
-            <template class="header">4</template>
-            <vaadin-grid-column>
-              <template class="header">5</template>
-              <template>5</template>
-            </vaadin-grid-column>
+        <vaadin-grid-column-group header="3">
+          <vaadin-grid-column-group header="4">
+            <vaadin-grid-column header="5"></vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+    grid.querySelectorAll('vaadin-grid-column').forEach((col, idx) => {
+      col.renderer = (root) => {
+        root.textContent = idx === 0 ? 2 : 5;
+      };
+    });
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
-    await nextFrame();
+    await nextRender();
   });
 
   it('should resize the child groups child column', () => {
