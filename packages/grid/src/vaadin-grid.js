@@ -183,31 +183,33 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `loading` | Set when the grid is loading data from data provider | :host
- * `interacting` | Keyboard navigation in interaction mode | :host
- * `navigating` | Keyboard navigation in navigation mode | :host
- * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `start`, `end` | :host
- * `reordering` | Set when the grid's columns are being reordered | :host
- * `dragover` | Set when the grid (not a specific row) is dragged over | :host
- * `dragging-rows` | Set when grid rows are dragged  | :host
- * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
- * `frozen` | Frozen cell | cell
- * `last-frozen` | Last frozen cell | cell
- * `first-column` | First visible cell on a row | cell
- * `last-column` | Last visible cell on a row | cell
- * `selected` | Selected row | row
- * `expanded` | Expanded row | row
- * `details-opened` | Row with details open | row
- * `loading` | Row that is waiting for data from data provider | row
- * `odd` | Odd row | row
- * `first` | The first body row | row
- * `last` | The last body row | row
- * `dragstart` | Set for one frame when drag of a row is starting. The value is a number when multiple rows are dragged | row
- * `dragover` | Set when the row is dragged over | row
- * `drag-disabled` | Set to a row that isn't available for dragging | row
- * `drop-disabled` | Set to a row that can't be dropped on top of | row
+ * Attribute             | Description                                                                                       | Part name
+ * ----------------------|---------------------------------------------------------------------------------------------------|-----------
+ * `loading`             | Set when the grid is loading data from data provider                                              | :host
+ * `interacting`         | Keyboard navigation in interaction mode                                                           | :host
+ * `navigating`          | Keyboard navigation in navigation mode                                                            | :host
+ * `overflow`            | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `start`, `end` | :host
+ * `reordering`          | Set when the grid's columns are being reordered                                                   | :host
+ * `dragover`            | Set when the grid (not a specific row) is dragged over                                            | :host
+ * `dragging-rows`       | Set when grid rows are dragged                                                                    | :host
+ * `reorder-status`      | Reflects the status of a cell while columns are being reordered                                   | cell
+ * `frozen`              | Frozen cell                                                                                       | cell
+ * `frozen-to-end`       | Cell frozen to end                                                                                | cell
+ * `last-frozen`         | Last frozen cell                                                                                  | cell
+ * `first-frozen-to-end` | First cell frozen to end                                                                          | cell
+ * `first-column`        | First visible cell on a row                                                                       | cell
+ * `last-column`         | Last visible cell on a row                                                                        | cell
+ * `selected`            | Selected row                                                                                      | row
+ * `expanded`            | Expanded row                                                                                      | row
+ * `details-opened`      | Row with details open                                                                             | row
+ * `loading`             | Row that is waiting for data from data provider                                                   | row
+ * `odd`                 | Odd row                                                                                           | row
+ * `first`               | The first body row                                                                                | row
+ * `last`                | The last body row                                                                                 | row
+ * `dragstart`           | Set for one frame when starting to drag a row. The value is a number when dragging multiple rows  | row
+ * `dragover`            | Set when the row is dragged over                                                                  | row
+ * `drag-disabled`       | Set to a row that isn't available for dragging                                                    | row
+ * `drop-disabled`       | Set to a row that can't be dropped on top of                                                      | row
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
