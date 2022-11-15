@@ -12,15 +12,13 @@ registerStyles(
       justify-content: inherit;
     }
 
-    :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon),
-    :host([theme='menu-bar-item']) [part='content'] ::slotted(iron-icon) {
+    :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon) {
       display: inline-block;
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
     }
 
-    :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']),
-    :host([theme='menu-bar-item']) [part='content'] ::slotted(iron-icon[icon^='vaadin:']) {
+    :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
       padding: var(--lumo-space-xs);
       box-sizing: border-box !important;
     }

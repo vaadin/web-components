@@ -76,7 +76,6 @@ registerStyles(
     }
 
     /* Slotted icons */
-    ::slotted(iron-icon),
     ::slotted(vaadin-icon) {
       color: var(--lumo-contrast-60pct);
       width: var(--lumo-icon-size-m);
@@ -84,7 +83,6 @@ registerStyles(
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-    ::slotted(iron-icon[icon^='vaadin:']),
     ::slotted(vaadin-icon[icon^='vaadin:']) {
       padding: 0.25em;
       box-sizing: border-box !important;

@@ -80,8 +80,7 @@ const item = css`
   }
 
   /* Slotted icons */
-  :host ::slotted(vaadin-icon),
-  :host ::slotted(iron-icon) {
+  :host ::slotted(vaadin-icon) {
     width: var(--lumo-icon-size-m);
     height: var(--lumo-icon-size-m);
   }

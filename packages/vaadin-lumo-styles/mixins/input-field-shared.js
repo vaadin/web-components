@@ -130,7 +130,7 @@ const inputField = css`
   }
 
   /* Slotted content */
-  [part='input-field'] ::slotted(:not(iron-icon):not(vaadin-icon):not(input):not(textarea)) {
+  [part='input-field'] ::slotted(:not(vaadin-icon):not(input):not(textarea)) {
     color: var(--lumo-secondary-text-color);
     font-weight: 400;
   }
