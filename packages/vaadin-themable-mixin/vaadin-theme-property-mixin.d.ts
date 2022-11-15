@@ -27,5 +27,5 @@ export declare class ThemePropertyMixinClass {
    *
    * @protected
    */
-  readonly _theme: string | null | undefined;
+  protected readonly _theme: string | null | undefined;
 }
