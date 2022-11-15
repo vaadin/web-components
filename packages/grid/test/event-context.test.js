@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { flushGrid, getContainerCell } from './helpers.js';
@@ -10,22 +9,21 @@ describe('event context', () => {
 
   beforeEach(() => {
     grid = fixtureSync(`
-      <vaadin-grid items='[{"foo": "bar"}]'>
+      <vaadin-grid>
         <vaadin-grid-column-group header="column group header">
-          <template class="footer">
-            column group footer
-          </template>
-          <vaadin-grid-column path="foo" header="column header">
-            <template class="footer">
-              column footer
-            </template>
-          </vaadin-grid-column>
+          <vaadin-grid-column path="foo" header="column header"></vaadin-grid-column>
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
     column = grid.querySelector('vaadin-grid-column');
+    column.footerRenderer = (root) => {
+      root.textContent = 'column footer';
+    };
     columnGroup = grid.querySelector('vaadin-grid-column-group');
-
+    columnGroup.footerRenderer = (root) => {
+      root.textContent = 'column group footer';
+    };
+    grid.items = [{ foo: 'bar' }];
     grid.rowDetailsRenderer = (root) => {
       root.innerHTML = '<div>details</div>';
     };
