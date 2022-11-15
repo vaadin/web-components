@@ -341,7 +341,11 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('frozen', frozen);
       }
 
-      this._allCells.forEach((cell) => cell.toggleAttribute('frozen', frozen));
+      this._allCells.forEach((cell) => {
+        if (this._grid) {
+          this._grid._updateCellState(cell, 'frozen', frozen);
+        }
+      });
 
       if (this._grid && this._grid._frozenCellsChanged) {
         this._grid._frozenCellsChanged();
@@ -359,7 +363,10 @@ export const ColumnBaseMixin = (superClass) =>
         if (this._grid && cell.parentElement === this._grid.$.sizer) {
           return;
         }
-        cell.toggleAttribute('frozen-to-end', frozenToEnd);
+
+        if (this._grid) {
+          this._grid._updateCellState(cell, 'frozen-to-end', frozenToEnd);
+        }
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -369,7 +376,11 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _lastFrozenChanged(lastFrozen) {
-      this._allCells.forEach((cell) => cell.toggleAttribute('last-frozen', lastFrozen));
+      this._allCells.forEach((cell) => {
+        if (this._grid) {
+          this._grid._updateCellState(cell, 'last-frozen', lastFrozen);
+        }
+      });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._lastFrozen = lastFrozen;
@@ -384,7 +395,9 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        cell.toggleAttribute('first-frozen-to-end', firstFrozenToEnd);
+        if (this._grid) {
+          this._grid._updateCellState(cell, 'first-frozen-to-end', firstFrozenToEnd);
+        }
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {

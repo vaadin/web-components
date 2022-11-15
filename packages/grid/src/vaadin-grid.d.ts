@@ -299,29 +299,33 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name              | Description
- * -----------------------|----------------
- * `row`                  | Row in the internal table
- * `expanded-row`         | Expanded row
- * `selected-row`         | Selected row
- * `details-opened-row`   | Row with details open
- * `odd-row`              | Odd row
- * `first-row`            | The first body row
- * `last-row`             | The last body row
- * `dragstart-row`        | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
- * `dragover-above-row`   | Set on the row when the a row is dragged over above
- * `dragover-below-row`   | Set on the row when the a row is dragged over below
- * `dragover-on-top-row`  | Set on the row when the a row is dragged over on top
- * `drag-disabled-row`    | Set to a row that isn't available for dragging
- * `drop-disabled-row`    | Set to a row that can't be dropped on top of
- * `cell`                 | Cell in the internal table
- * `header-cell`          | Header cell in the internal table
- * `body-cell`            | Body cell in the internal table
- * `footer-cell`          | Footer cell in the internal table
- * `details-cell`         | Row details cell in the internal table
- * `focused-cell`         | Focused cell in the internal table
- * `resize-handle`        | Handle for resizing the columns
- * `reorder-ghost`        | Ghost element of the header cell being dragged
+ * Part name                  | Description
+ * ---------------------------|----------------
+ * `row`                      | Row in the internal table
+ * `expanded-row`             | Expanded row
+ * `selected-row`             | Selected row
+ * `details-opened-row`       | Row with details open
+ * `odd-row`                  | Odd row
+ * `first-row`                | The first body row
+ * `last-row`                 | The last body row
+ * `dragstart-row`            | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
+ * `dragover-above-row`       | Set on the row when the a row is dragged over above
+ * `dragover-below-row`       | Set on the row when the a row is dragged over below
+ * `dragover-on-top-row`      | Set on the row when the a row is dragged over on top
+ * `drag-disabled-row`        | Set to a row that isn't available for dragging
+ * `drop-disabled-row`        | Set to a row that can't be dropped on top of
+ * `cell`                     | Cell in the internal table
+ * `header-cell`              | Header cell in the internal table
+ * `body-cell`                | Body cell in the internal table
+ * `footer-cell`              | Footer cell in the internal table
+ * `details-cell`             | Row details cell in the internal table
+ * `focused-cell`             | Focused cell in the internal table
+ * `frozen-cell`              | Frozen cell in the internal table
+ * `frozen-to-end-cell`       | Frozen to end cell in the internal table
+ * `last-frozen-cell`         | Last frozen cell
+ * `first-frozen-to-end-cell` | First cell frozen to end
+ * `resize-handle`            | Handle for resizing the columns
+ * `reorder-ghost`            | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:
  *
