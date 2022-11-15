@@ -1,56 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../all-imports.js';
 import { flushGrid } from './helpers.js';
-
-const fixtures = {
-  default: `
-    <vaadin-grid>
-      <vaadin-grid-column>
-        <template class="header">Index</template>
-        <template>[[index]]</template>
-        <template class="footer">Index</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">header</template>
-        <template>[[item]]</template>
-        <template class="footer">footer</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  `,
-  group: `
-    <vaadin-grid>
-      <vaadin-grid-column-group>
-        <template class="header">Group header</template>
-        <template class="footer">Group footer</template>
-        <vaadin-grid-column>
-          <template class="header">Index</template>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">header</template>
-          <template>[[item]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-  `,
-  details: `
-    <vaadin-grid>
-      <vaadin-grid-column>
-        <template class="header">Index</template>
-        <template>[[index]]</template>
-        <template class="footer">Index</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">header</template>
-        <template>[[item]]</template>
-        <template class="footer">footer</template>
-      </vaadin-grid-column>
-      <template class="row-details">details</template>
-    </vaadin-grid>
-  `,
-};
 
 describe('accessibility', () => {
   let grid;
@@ -91,23 +42,13 @@ describe('accessibility', () => {
     flushGrid(grid);
   }
 
-  function initRendererFixture(fixtureName) {
+  function initFixture(fixtureName) {
     initGridRenderer(fixtureName === 'group');
     if (fixtureName === 'details') {
       grid.rowDetailsRenderer = (root) => {
         root.textContent = 'details';
       };
     }
-  }
-
-  function initTemplateFixture(fixtureName) {
-    grid = fixtureSync(fixtures[fixtureName]);
-    grid.items = ['foo', 'bar'];
-    flushGrid(grid);
-  }
-
-  function initFixture(type, fixtureName) {
-    type === 'template' ? initTemplateFixture(fixtureName) : initRendererFixture(fixtureName);
   }
 
   function uniqueAttrValues(elements, attr) {
@@ -119,9 +60,8 @@ describe('accessibility', () => {
   }
 
   describe('default', () => {
-    // These tests pass in both template and renderer modes. Running one to speed up
     beforeEach(() => {
-      initTemplateFixture('default');
+      initFixture('default');
     });
 
     describe('structural roles', () => {
@@ -264,9 +204,8 @@ describe('accessibility', () => {
   });
 
   describe('details', () => {
-    // These tests pass in both template and renderer modes. Running one to speed up
     beforeEach(() => {
-      initRendererFixture('details');
+      initFixture('details');
     });
 
     describe('column count', () => {
@@ -275,10 +214,10 @@ describe('accessibility', () => {
       });
 
       it('should update aria-colcount when column is added', async () => {
-        const template = document.createElement('template');
-        template.innerHTML = '[[item]]';
         const column = document.createElement('vaadin-grid-column');
-        column.appendChild(template);
+        column.renderer = (root, _, model) => {
+          root.textContent = model.item;
+        };
         grid.appendChild(column);
         await nextFrame();
         expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
@@ -327,64 +266,65 @@ describe('accessibility', () => {
     });
   });
 
-  // Most tests from here need to be run in template and renderer modes
-  ['template', 'renderer'].forEach((type) => {
-    describe(`${type}: size`, () => {
-      beforeEach(() => initFixture(type, 'default'));
+  describe('size', () => {
+    beforeEach(() => {
+      initFixture('default');
+    });
 
-      it('should have aria-rowcount on the table', () => {
-        // 2 item rows + header row + footer row = 4 in total
-        expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('4');
+    it('should have aria-rowcount on the table', () => {
+      // 2 item rows + header row + footer row = 4 in total
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('4');
+    });
+
+    it('should update aria-rowcount on after size change', () => {
+      grid.items = Array(...new Array(10)).map(() => 'foo');
+
+      // 10 item rows + header row + footer row = 12 in total
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
+    });
+  });
+
+  describe('group', () => {
+    beforeEach(() => {
+      initFixture('group');
+    });
+
+    describe('row numbers', () => {
+      function setANumberOfItems(grid, number) {
+        grid.items = Array.from({ length: number }, (_, i) => `item ${i}`);
+        flushGrid(grid);
+      }
+
+      it('should have aria-rowindex on rows', () => {
+        Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
+          expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
+        });
       });
 
-      it('should update aria-rowcount on after size change', () => {
-        grid.items = Array(...new Array(10)).map(() => 'foo');
+      it('should update aria-rowindex on size change', () => {
+        setANumberOfItems(grid, 100);
+        expect(
+          Array.from(grid.$.items.children)
+            .slice(0, 5) // Assuming at least five body rows are visible
+            .map((row) => row.getAttribute('aria-rowindex')),
+        ).to.eql(['3', '4', '5', '6', '7']);
+        expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
+      });
 
-        // 10 item rows + header row + footer row = 12 in total
-        expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
+      it('should update aria-rowindex on scroll', () => {
+        setANumberOfItems(grid, 1000);
+        // Scroll to end
+        grid.scrollToIndex(1000);
+
+        const ariaRowindexValues = Array.from(grid.$.items.children).map((row) => row.getAttribute('aria-rowindex'));
+        expect(ariaRowindexValues).to.include.members(['1000', '1001', '1002']);
+        expect(ariaRowindexValues).to.not.include.members(['3', '4', '1003']);
       });
     });
 
-    describe(`${type}: group`, () => {
-      beforeEach(() => initFixture(type, 'group'));
-
-      describe('row numbers', () => {
-        function setANumberOfItems(grid, number) {
-          grid.items = Array.from({ length: number }, (_, i) => `item ${i}`);
-          flushGrid(grid);
-        }
-
-        it('should have aria-rowindex on rows', () => {
-          Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
-            expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
-          });
-        });
-
-        it('should update aria-rowindex on size change', () => {
-          setANumberOfItems(grid, 100);
-          expect(
-            Array.from(grid.$.items.children)
-              .slice(0, 5) // Assuming at least five body rows are visible
-              .map((row) => row.getAttribute('aria-rowindex')),
-          ).to.eql(['3', '4', '5', '6', '7']);
-          expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
-        });
-
-        it('should update aria-rowindex on scroll', () => {
-          setANumberOfItems(grid, 1000);
-          // Scroll to end
-          grid.scrollToIndex(1000);
-
-          const ariaRowindexValues = Array.from(grid.$.items.children).map((row) => row.getAttribute('aria-rowindex'));
-          expect(ariaRowindexValues).to.include.members(['1000', '1001', '1002']);
-          expect(ariaRowindexValues).to.not.include.members(['3', '4', '1003']);
-        });
-      });
-
-      describe('column groups', () => {
-        it('should have aria-colspan on group header cell', () => {
-          expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
-        });
+    describe('column groups', () => {
+      it('should have aria-colspan on group header cell', () => {
+        expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
       });
     });
   });
