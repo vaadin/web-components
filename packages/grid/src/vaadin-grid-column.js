@@ -421,7 +421,16 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _reorderStatusChanged(reorderStatus) {
-      this._allCells.forEach((cell) => cell.setAttribute('reorder-status', reorderStatus));
+      this._allCells.forEach((cell) => {
+        if (this._grid) {
+          const prevStatus = this.__previousReorderStatus;
+          const oldPart = prevStatus ? `reorder-${prevStatus}-cell` : '';
+          const newPart = `reorder-${reorderStatus}-cell`;
+          this._grid._updateCellState(cell, 'reorder-status', reorderStatus, newPart, oldPart);
+        }
+      });
+
+      this.__previousReorderStatus = reorderStatus;
     }
 
     /** @private */

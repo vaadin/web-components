@@ -200,6 +200,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `first-frozen-to-end-cell` | First cell frozen to end
  * `first-column-cell`        | First visible cell on a row
  * `last-column-cell`         | Last visible cell on a row
+ * `reorder-allowed-cell`     | Cell in a column where another column can be reordered
+ * `reorder-dragging-cell`    | Cell in a column currently being reordered
  * `resize-handle`            | Handle for resizing the columns
  * `reorder-ghost`            | Ghost element of the header cell being dragged
  *
@@ -1007,10 +1009,9 @@ class Grid extends ElementMixin(
    * @param {!HTMLElement} element
    * @param {string} attribute
    * @param {boolean | string | null | undefined} value
-   * @param {string} part
    * @protected
    */
-  _updatePartState(element, attribute, value, part) {
+  _updateState(element, attribute, value) {
     switch (typeof value) {
       case 'boolean':
         element.toggleAttribute(attribute, value);
@@ -1023,6 +1024,16 @@ class Grid extends ElementMixin(
         element.removeAttribute(attribute);
         break;
     }
+  }
+
+  /**
+   * @param {!HTMLElement} element
+   * @param {boolean | string | null | undefined} value
+   * @param {string} part
+   * @param {string} oldPart
+   * @protected
+   */
+  _updatePart(element, value, part) {
     if (value || value === '') {
       addValueToAttribute(element, 'part', part);
     } else {
@@ -1034,21 +1045,32 @@ class Grid extends ElementMixin(
    * @param {!HTMLElement} row
    * @param {string} state
    * @param {boolean | string | null | undefined} value
-   * @param {boolean} partWithValue
+   * @param {boolean} appendValue
    * @protected
    */
-  _updateRowState(row, state, value, partWithValue) {
-    this._updatePartState(row, state, value, partWithValue ? `${state}-${value}-row` : `${state}-row`);
+  _updateRowState(row, state, value, appendValue) {
+    this._updateState(row, state, value);
+
+    const part = appendValue ? `${state}-${value}-row` : `${state}-row`;
+    this._updatePart(row, value, part);
   }
 
   /**
    * @param {!HTMLElement} cell
-   * @param {string} state
+   * @param {string} attribute
    * @param {boolean | string | null | undefined} value
+   * @param {string} part
+   * @param {?string} oldPart
    * @protected
    */
-  _updateCellState(cell, state, value) {
-    this._updatePartState(cell, state, value, `${state}-cell`);
+  _updateCellState(cell, attribute, value, part, oldPart) {
+    this._updateState(cell, attribute, value);
+
+    if (oldPart) {
+      this._updatePart(cell, false, oldPart);
+    }
+
+    this._updatePart(cell, value, part || `${attribute}-cell`);
   }
 
   /** @private */

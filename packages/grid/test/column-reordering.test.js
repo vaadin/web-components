@@ -95,10 +95,17 @@ describe('reordering simple grid', () => {
     expect(cell.getAttribute('reorder-status')).to.equal('dragging');
   });
 
+  it('should add reorder-dragging to cells part attribute', () => {
+    dragStart(headerContent[0]);
+    const cell = getCellByCellContent(headerContent[0]);
+    expect(cell.getAttribute('part')).to.contain('reorder-dragging-cell');
+  });
+
   it('should clear reorder status on dragend', () => {
     dragAndDropOver(headerContent[0], headerContent[1]);
     const cell = getCellByCellContent(headerContent[0]);
     expect(cell.getAttribute('reorder-status')).to.equal('');
+    expect(cell.getAttribute('part')).to.not.contain('reorder-dragging-cell');
     expect(grid.hasAttribute('reordering')).to.be.false;
   });
 
@@ -230,6 +237,13 @@ describe('reordering simple grid', () => {
     it('should reorder the columns while dragging', () => {
       dragOver(headerContent[0], headerContent[1]);
       expectVisualOrder(grid, [2, 1]);
+    });
+
+    it('should update reorder status on the cells while dragging', () => {
+      dragOver(headerContent[0], headerContent[1]);
+      const cell = getCellByCellContent(headerContent[1]);
+      expect(cell.getAttribute('reorder-status')).to.contain('allowed');
+      expect(cell.getAttribute('part')).to.contain('reorder-allowed-cell');
     });
 
     it('should reorder multiple columns while dragging', () => {
