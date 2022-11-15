@@ -585,6 +585,10 @@ export const MenuBarMixin = (superClass) =>
      * @protected
      */
     _onMouseOver(e) {
+	  if (this.openOnHover) {
+        this._preventClose = true;
+      }
+	
       const button = this._getButtonFromEvent(e);
       if (!button) {
         // Hide tooltip on mouseover to disabled button
@@ -640,6 +644,11 @@ export const MenuBarMixin = (superClass) =>
     __openSubMenu(button, keydown, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
+
+      if (this.openOnHover) {
+        this._addHoverListener(subMenu);
+        this._addSubMenuOpenListener(subMenu);
+      }
 
       if (subMenu.opened) {
         this._close();
@@ -749,4 +758,40 @@ export const MenuBarMixin = (superClass) =>
         this._subMenu.close();
       }
     }
+    
+     /** @private */
+    _requestClose() {
+      this._preventClose = false;
+      // wait if something has to prevent the close event
+      setTimeout(() => {
+        if (!this._preventClose) {
+          this._close(false);
+        }
+      }, 300);
+    }
+
+    /** @private */
+    _addHoverListener(subMenu) {
+      let menuOverlay = subMenu.$.overlay.$.overlay;
+
+      menuOverlay.addEventListener('mouseleave', () => this._requestClose(), {once: true});
+      // when hovering between sub menus the subMenu will close if we don't prevent it
+      menuOverlay.addEventListener('mouseenter', () => this._preventClose = true, {once: true});
+    }
+
+    /**
+     * Recursive method, adding an event listener for opening a sub menu.
+     * It adds also hover listeners to the sub menus, whenever they are opened.
+     * Only used in 'openOnHover' mode.
+     * @param subMenu - the menu to listen to open events
+     * @private
+     */
+    _addSubMenuOpenListener(subMenu) {
+      subMenu.addEventListener('sub-menu-opened', e => {
+        let menu = e.detail.subMenuElement;
+        this._addHoverListener(menu);
+        this._addSubMenuOpenListener(menu);
+      });
+    }
+
   };
