@@ -128,8 +128,7 @@ registerStyles(
     }
 
     /* Small space between icon and label */
-    ::slotted(vaadin-icon:not(:only-child)),
-    ::slotted(iron-icon:not(:only-child)) {
+    ::slotted(vaadin-icon:not(:only-child)) {
       margin-bottom: 8px;
     }
 

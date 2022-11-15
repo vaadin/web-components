@@ -116,21 +116,18 @@ const button = css`
 
   /* Icon alignment */
 
-  [part] ::slotted(vaadin-icon),
-  [part] ::slotted(iron-icon) {
+  [part] ::slotted(vaadin-icon) {
     display: block;
     width: 18px;
     height: 18px;
   }
 
-  [part='prefix'] ::slotted(vaadin-icon),
-  [part='prefix'] ::slotted(iron-icon) {
+  [part='prefix'] ::slotted(vaadin-icon) {
     margin-right: 8px;
     margin-left: -4px;
   }
 
-  [part='suffix'] ::slotted(vaadin-icon),
-  [part='suffix'] ::slotted(iron-icon) {
+  [part='suffix'] ::slotted(vaadin-icon) {
     margin-left: 8px;
     margin-right: -4px;
   }
@@ -156,14 +153,12 @@ const button = css`
     transform: translate(50%, -50%) scale(1);
   }
 
-  :host([dir='rtl']) [part='prefix'] ::slotted(vaadin-icon),
-  :host([dir='rtl']) [part='prefix'] ::slotted(iron-icon) {
+  :host([dir='rtl']) [part='prefix'] ::slotted(vaadin-icon) {
     margin-right: -4px;
     margin-left: 8px;
   }
 
-  :host([dir='rtl']) [part='suffix'] ::slotted(vaadin-icon),
-  :host([dir='rtl']) [part='suffix'] ::slotted(iron-icon) {
+  :host([dir='rtl']) [part='suffix'] ::slotted(vaadin-icon) {
     margin-left: -4px;
     margin-right: 8px;
   }

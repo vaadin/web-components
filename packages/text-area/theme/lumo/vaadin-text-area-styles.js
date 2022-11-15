@@ -56,7 +56,6 @@ const textArea = css`
   }
 
   /* Vertically align icon prefix/suffix with the first line of text */
-  [part='input-field'] ::slotted(iron-icon),
   [part='input-field'] ::slotted(vaadin-icon) {
     margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
   }

@@ -86,24 +86,18 @@ const badge = css`
 
   /* Icon */
 
-  [theme~='badge'] vaadin-icon,
-  [theme~='badge'] iron-icon {
+  [theme~='badge'] vaadin-icon {
     margin: -0.25em 0;
-    --iron-icon-width: 1.5em;
-    --iron-icon-height: 1.5em;
   }
 
-  [theme~='badge'] vaadin-icon:first-child,
-  [theme~='badge'] iron-icon:first-child {
+  [theme~='badge'] vaadin-icon:first-child {
     margin-left: -0.375em;
   }
 
-  [theme~='badge'] vaadin-icon:last-child,
-  [theme~='badge'] iron-icon:last-child {
+  [theme~='badge'] vaadin-icon:last-child {
     margin-right: -0.375em;
   }
 
-  iron-icon[theme~='badge'][icon],
   vaadin-icon[theme~='badge'][icon] {
     min-width: 0;
     padding: 0;
@@ -112,7 +106,6 @@ const badge = css`
     height: var(--lumo-icon-size-m);
   }
 
-  iron-icon[theme~='badge'][icon][theme~='small'],
   vaadin-icon[theme~='badge'][icon][theme~='small'] {
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
@@ -154,14 +147,12 @@ const badge = css`
 
   /* RTL specific styles */
 
-  [dir='rtl'][theme~='badge'] vaadin-icon:first-child,
-  [dir='rtl'][theme~='badge'] iron-icon:first-child {
+  [dir='rtl'][theme~='badge'] vaadin-icon:first-child {
     margin-right: -0.375em;
     margin-left: 0;
   }
 
-  [dir='rtl'][theme~='badge'] vaadin-icon:last-child,
-  [dir='rtl'][theme~='badge'] iron-icon:last-child {
+  [dir='rtl'][theme~='badge'] vaadin-icon:last-child {
     margin-left: -0.375em;
     margin-right: 0;
   }
