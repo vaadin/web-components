@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
@@ -25,6 +24,27 @@ const transformsEqual = (element, transform) => {
   return computedTransform === computedTransformDiv;
 };
 
+const frozenGridFixture = (frozen, frozenToEnd) => {
+  const grid = fixtureSync(`
+    <vaadin-grid style="width: 200px; height: 400px;" size="10">
+      <vaadin-grid-column ${frozen ? 'frozen ' : ''} header="foo"></vaadin-grid-column>
+      <vaadin-grid-column header="bar"></vaadin-grid-column>
+      <vaadin-grid-column ${frozenToEnd ? 'frozen-to-end' : ''} header="baz"></vaadin-grid-column>
+    </vaadin-grid>
+  `);
+
+  const values = ['foo', 'bar', 'baz'];
+  const columns = grid.querySelectorAll('vaadin-grid-column');
+  columns.forEach((col, idx) => {
+    col.renderer = (root) => {
+      root.textContent = values[idx];
+    };
+  });
+
+  grid.dataProvider = infiniteDataProvider;
+  return [grid, columns];
+};
+
 ['ltr', 'rtl'].forEach((direction) => {
   describe(`frozen columns ${direction}`, () => {
     let grid;
@@ -32,24 +52,7 @@ const transformsEqual = (element, transform) => {
     const isRTL = direction === 'rtl';
 
     beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid style="width: 200px; height: 400px;" size="10">
-          <vaadin-grid-column frozen>
-            <template>foo</template>
-            <template class="header">foo</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template>bar</template>
-            <template class="header">bar</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template>baz</template>
-            <template class="header">baz</template>
-          </vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.dataProvider = infiniteDataProvider;
-      columns = grid.querySelectorAll('vaadin-grid-column');
+      [grid, columns] = frozenGridFixture(true, false);
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
@@ -170,24 +173,7 @@ const transformsEqual = (element, transform) => {
     const isRTL = direction === 'rtl';
 
     beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid style="width: 200px; height: 400px;" size="10">
-          <vaadin-grid-column>
-            <template>foo</template>
-            <template class="header">foo</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template>bar</template>
-            <template class="header">bar</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column frozen-to-end>
-            <template>baz</template>
-            <template class="header">baz</template>
-          </vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.dataProvider = infiniteDataProvider;
-      columns = grid.querySelectorAll('vaadin-grid-column');
+      [grid, columns] = frozenGridFixture(false, true);
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
