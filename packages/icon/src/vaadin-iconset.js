@@ -51,6 +51,22 @@ class Iconset extends ElementMixin(PolymerElement) {
   }
 
   /**
+   * Register an iconset without adding to the DOM.
+   *
+   * @param {string} name
+   * @param {number} size
+   * @param {HTMLTemplateElement} template
+   */
+  static register(name, size, template) {
+    const iconset = document.createElement('vaadin-iconset');
+    iconset.name = name;
+    iconset.size = size;
+    iconset.appendChild(template.content.cloneNode(true));
+    iconRegistry[name] = iconset;
+    console.log(iconset);
+  }
+
+  /**
    * Create an instance of the iconset.
    *
    * @param {string} name

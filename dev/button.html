@@ -10,13 +10,17 @@
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/tooltip';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
     </script>
   </head>
 
   <body>
-    <vaadin-button>
-      Edit
-      <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
+    <vaadin-button theme="icon">
+      <vaadin-icon icon="vaadin:user"></vaadin-icon>
+    </vaadin-button>
+    <vaadin-button theme="icon">
+      <vaadin-icon icon="lumo:user"></vaadin-icon>
     </vaadin-button>
   </body>
 </html>

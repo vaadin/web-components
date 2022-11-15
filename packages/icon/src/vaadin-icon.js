@@ -187,8 +187,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   /** @private */
-  __iconChanged(icon) {
+  async __iconChanged(icon) {
     if (icon) {
+      // TODO: init observer lazily instead
+      await Promise.resolve();
+
       const iconsetName = this.__getIconsetName(icon);
       const iconset = Iconset.getIconset(iconsetName);
       const { svg, size, viewBox } = iconset.applyIcon(icon);
