@@ -250,7 +250,9 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _cleanupNodes(nodes) {
     nodes.forEach((node) => {
-      node.removeAttribute('slot');
+      if (!(node.parentElement instanceof SplitLayout)) {
+        node.removeAttribute('slot');
+      }
     });
   }
 

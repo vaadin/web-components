@@ -333,3 +333,28 @@ describe('removing nodes', () => {
     expect(first.hasAttribute('slot')).to.be.false;
   });
 });
+
+describe('moving nodes between layouts', () => {
+  beforeEach(async () => {
+    splitLayout = fixtureSync(`
+      <vaadin-split-layout>
+        <div id="first">some content</div>
+        <div id="second">some content</div>
+      </vaadin-split-layout>
+    `);
+    await aTimeout(0);
+    first = splitLayout.$.primary.assignedNodes({ flatten: true })[0];
+    second = splitLayout.$.secondary.assignedNodes({ flatten: true })[0];
+  });
+
+  it('should not clear slot attribute when moving to a different split layout', async () => {
+    const otherLayout = fixtureSync(`
+      <vaadin-split-layout></vaadin-split-layout>
+    `);
+    otherLayout.appendChild(second);
+    otherLayout.appendChild(first);
+    await nextFrame();
+    expect(second.getAttribute('slot')).to.equal('primary');
+    expect(first.getAttribute('slot')).to.equal('secondary');
+  });
+});
