@@ -758,11 +758,23 @@ describe('wrapped grid', () => {
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.true;
     });
 
+    it('should add loading to row part attribute', () => {
+      container.dataProvider = () => {};
+      expect(getRows(grid.$.items)[0].getAttribute('part')).to.contain('loading-row');
+    });
+
     it('should clear loading attribute from rows when data received', () => {
       container.dataProvider = (params, callback) => {
         callback([{}]);
       };
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
+    });
+
+    it('should remove loading from row part attribute when data received', () => {
+      container.dataProvider = (params, callback) => {
+        callback([{}]);
+      };
+      expect(getRows(grid.$.items)[0].getAttribute('part')).to.not.contain('loading-row');
     });
 
     it('should clear loading attribute from rows when scrolled to previously loaded rows', () => {

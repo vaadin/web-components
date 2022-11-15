@@ -179,6 +179,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `expanded-row`         | Expanded row
  * `selected-row`         | Selected row
  * `details-opened-row`   | Row with details open
+ * `loading-row`          | Row that is waiting for data from data provider
  * `odd-row`              | Odd row
  * `first-row`            | The first body row
  * `last-row`             | The last body row
