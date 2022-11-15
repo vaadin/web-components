@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -58,10 +57,7 @@ class PageSizeGrid extends PolymerElement {
   static get template() {
     return html`
       <vaadin-grid data-provider="[[dataProvider]]" size="[[size]]" id="grid">
-        <vaadin-grid-column>
-          <template class="header">#</template>
-          <template>[[item.value]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column header="#" path="value"></vaadin-grid-column>
       </vaadin-grid>
     `;
   }
@@ -127,11 +123,12 @@ describe('data provider', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     flushGrid(grid);
   });
 
@@ -343,75 +340,47 @@ describe('data provider', () => {
         expect(isIndexExpanded(grid, 0)).to.be.true;
       });
 
-      ['renderer', 'template'].forEach((type) => {
-        describe(`${type}`, () => {
-          beforeEach(() => {
-            if (type === 'renderer') {
-              grid = fixtureSync(`
-                <vaadin-grid>
-                  <vaadin-grid-column></vaadin-grid-column>
-                </vaadin-grid>
-              `);
-              grid.firstElementChild.renderer = (root, col, model) => {
-                root.textContent = model.index;
-              };
-              grid.pageSize = 5;
-              grid.dataProvider = sinon.spy(finiteDataProvider);
-              flushGrid(grid);
-            }
-          });
+      it('should assign expanded property', () => {
+        const cell = getContainerCell(grid.$.items, 0, 0);
+        expect(grid.__getRowModel(cell.parentElement).expanded).to.be.false;
+        expandIndex(grid, 0);
+        expect(grid.__getRowModel(cell.parentElement).expanded).to.be.true;
+      });
 
-          it('should assign expanded property', () => {
-            const cell = getContainerCell(grid.$.items, 0, 0);
-            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.expanded).to.be.false;
-            expandIndex(grid, 0);
-            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.expanded).to.be.true;
-          });
+      it('should assign level instance property', () => {
+        expandIndex(grid, 0);
+        expandIndex(grid, 1);
 
-          it('should assign level instance property', () => {
-            expandIndex(grid, 0);
-            expandIndex(grid, 1);
+        let cell = getContainerCell(grid.$.items, 0, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(0);
 
-            let cell = getContainerCell(grid.$.items, 0, 0);
-            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(0);
+        cell = getContainerCell(grid.$.items, 1, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
 
-            cell = getContainerCell(grid.$.items, 1, 0);
-            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(1);
+        cell = getContainerCell(grid.$.items, 2, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(2);
+      });
 
-            cell = getContainerCell(grid.$.items, 2, 0);
-            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(2);
-          });
+      it('should have right subcache length', () => {
+        expandIndex(grid, 0);
+        flushGrid(grid);
 
-          it('should have right subcache length', () => {
-            expandIndex(grid, 0);
-            flushGrid(grid);
+        const cell = getContainerCell(grid.$.items, 10, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
+      });
 
-            const cell = getContainerCell(grid.$.items, 10, 0);
-            const model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(1);
-          });
+      it('should restore tree after cache is cleared', () => {
+        grid.getItemId = (item) => {
+          return item !== undefined ? `${item.level}-${item.value}` : undefined;
+        };
+        expandIndex(grid, 0);
 
-          it('should restore tree after cache is cleared', () => {
-            grid.getItemId = (item) => {
-              return item !== undefined ? `${item.level}-${item.value}` : undefined;
-            };
-            expandIndex(grid, 0);
+        let cell = getContainerCell(grid.$.items, 1, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
 
-            let cell = getContainerCell(grid.$.items, 1, 0);
-            let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(1);
-
-            grid.clearCache();
-            cell = getContainerCell(grid.$.items, 1, 0);
-            model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-            expect(model.level).to.equal(1);
-          });
-        });
+        grid.clearCache();
+        cell = getContainerCell(grid.$.items, 1, 0);
+        expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
       });
 
       describe('row state', () => {
