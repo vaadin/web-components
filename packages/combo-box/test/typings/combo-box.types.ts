@@ -125,7 +125,6 @@ assertType<string>(narrowedComboBox.value);
 assertType<boolean>(narrowedComboBox.required);
 assertType<string>(narrowedComboBox.name);
 assertType<string>(narrowedComboBox.allowedCharPattern);
-assertType<string | null | undefined>(narrowedComboBox.theme);
 
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
@@ -203,7 +202,6 @@ assertType<boolean>(narrowedComboBoxLight.invalid);
 assertType<boolean>(narrowedComboBoxLight.disabled);
 assertType<boolean>(narrowedComboBoxLight.readonly);
 assertType<string>(narrowedComboBoxLight.value);
-assertType<string | null | undefined>(narrowedComboBoxLight.theme);
 
 // ComboBoxLight mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
