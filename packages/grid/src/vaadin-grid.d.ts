@@ -324,6 +324,8 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell
  * `first-frozen-to-end-cell` | First cell frozen to end
+ * `first-column-cell`        | First visible cell on a row
+ * `last-column-cell`         | Last visible cell on a row
  * `resize-handle`            | Handle for resizing the columns
  * `reorder-ghost`            | Ghost element of the header cell being dragged
  *

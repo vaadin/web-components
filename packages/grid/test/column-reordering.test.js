@@ -261,14 +261,21 @@ describe('reordering simple grid', () => {
       expectVisualOrder(grid, [3, 1, 2, 4]);
     });
 
-    it('should update first-column attribute', () => {
+    it('should set first-column attribute on the cell', () => {
       let cell = getCellByCellContent(headerContent[0]);
       expect(cell.hasAttribute('first-column')).to.be.true;
       cell = getContainerCell(grid.$.items, 0, 0);
       expect(cell.hasAttribute('first-column')).to.be.true;
     });
 
-    it('should update first-column attribute', () => {
+    it('should add first-column to cell part attribute', () => {
+      let cell = getCellByCellContent(headerContent[0]);
+      expect(cell.getAttribute('part')).to.contain('first-column-cell');
+      cell = getContainerCell(grid.$.items, 0, 0);
+      expect(cell.getAttribute('part')).to.contain('first-column-cell');
+    });
+
+    it('should update first-column attribute on reordering', () => {
       dragOver(headerContent[2], headerContent[0]);
       const cell = getCellByCellContent(headerContent[2]);
       expect(cell.hasAttribute('first-column')).to.be.true;
@@ -281,14 +288,21 @@ describe('reordering simple grid', () => {
       expect(cell.hasAttribute('first-column')).to.be.true;
     });
 
-    it('should update last-column attribute', () => {
+    it('should set last-column attribute on the cell', () => {
       let cell = getCellByCellContent(headerContent[3]);
       expect(cell.hasAttribute('last-column')).to.be.true;
       cell = getContainerCell(grid.$.items, 0, 3);
       expect(cell.hasAttribute('last-column')).to.be.true;
     });
 
-    it('should update last-column attribute', () => {
+    it('should add first-column to cell part attribute', () => {
+      let cell = getCellByCellContent(headerContent[3]);
+      expect(cell.getAttribute('part')).to.contain('last-column-cell');
+      cell = getContainerCell(grid.$.items, 0, 3);
+      expect(cell.getAttribute('part')).to.contain('last-column-cell');
+    });
+
+    it('should update last-column attribute on reordering', () => {
       dragOver(headerContent[2], headerContent[3]);
       const cell = getCellByCellContent(headerContent[2]);
       expect(cell.hasAttribute('last-column')).to.be.true;

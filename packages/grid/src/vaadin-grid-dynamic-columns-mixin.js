@@ -160,8 +160,8 @@ export const DynamicColumnsMixin = (superClass) =>
           return a._column._order - b._column._order;
         })
         .forEach((cell, cellIndex, children) => {
-          cell.toggleAttribute('first-column', cellIndex === 0);
-          cell.toggleAttribute('last-column', cellIndex === children.length - 1);
+          this._updateCellState(cell, 'first-column', cellIndex === 0);
+          this._updateCellState(cell, 'last-column', cellIndex === children.length - 1);
         });
     }
 
