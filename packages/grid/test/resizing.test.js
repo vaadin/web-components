@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -26,14 +25,23 @@ class TestComponent extends PolymerElement {
       </style>
 
       <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" hidden>
-        <template class="row-details"> [[index]] </template>
-        <vaadin-grid-column>
-          <template class="header">header</template>
-          <template>[[index]]</template>
-          <template class="footer">footer</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column id="column" header="header"></vaadin-grid-column>
       </vaadin-grid>
     `;
+  }
+
+  ready() {
+    super.ready();
+
+    this.$.grid.rowDetailsRenderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
+    this.$.column.renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
+    this.$.column.footerRenderer = (root) => {
+      root.textContent = 'footer';
+    };
   }
 }
 
@@ -157,15 +165,16 @@ describe('resizing', () => {
 describe('all rows visible', () => {
   let grid;
 
-  describe('template', () => {
+  describe('renderer', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid>
-          <vaadin-grid-column>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
+      grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+        root.textContent = model.index;
+      };
     });
 
     it('should align height with number of rows after first render', () => {
