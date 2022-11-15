@@ -88,8 +88,6 @@ const badge = css`
 
   [theme~='badge'] vaadin-icon {
     margin: -0.25em 0;
-    width: 1.5em;
-    height: 1.5em;
   }
 
   [theme~='badge'] vaadin-icon:first-child {
