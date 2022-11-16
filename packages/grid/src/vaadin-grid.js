@@ -903,6 +903,7 @@ class Grid extends ElementMixin(
     this.generateCellClassNames();
   }
 
+  /** @private */
   __updateFooterPositioning() {
     // TODO: fixed in Firefox 99, remove when we can drop Firefox ESR 91 support
     if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/)[1]) < 99) {

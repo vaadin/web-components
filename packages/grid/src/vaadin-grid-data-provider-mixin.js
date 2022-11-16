@@ -500,6 +500,7 @@ export const DataProviderMixin = (superClass) =>
       }
     }
 
+    /** @private */
     __scrollToPendingIndex() {
       if (this.__pendingScrollToIndex && this.$.items.children.length) {
         const index = this.__pendingScrollToIndex;
