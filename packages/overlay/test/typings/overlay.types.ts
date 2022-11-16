@@ -1,7 +1,8 @@
-import '../../vaadin-overlay.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { PositionMixinClass } from '../../src/vaadin-overlay-position-mixin.js';
+import { PositionMixin } from '../../src/vaadin-overlay-position-mixin.js';
 import type {
   OverlayCloseEvent,
   OverlayClosingEvent,
@@ -10,6 +11,7 @@ import type {
   OverlayOpenEvent,
   OverlayOutsideClickEvent,
 } from '../../vaadin-overlay.js';
+import { Overlay } from '../../vaadin-overlay.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -47,3 +49,20 @@ overlay.addEventListener('vaadin-overlay-outside-click', (event) => {
   assertType<OverlayOutsideClickEvent>(event);
   assertType<MouseEvent>(event.detail.sourceEvent);
 });
+
+class CustomOverlay extends PositionMixin(Overlay) {
+  static get is() {
+    return 'custom-overlay';
+  }
+}
+
+customElements.define('custom-overlay', CustomOverlay);
+
+const customOverlay = new CustomOverlay();
+
+assertType<PositionMixinClass>(customOverlay);
+assertType<boolean>(customOverlay.noHorizontalOverlap);
+assertType<boolean>(customOverlay.noVerticalOverlap);
+assertType<'end' | 'start'>(customOverlay.horizontalAlign);
+assertType<'bottom' | 'top'>(customOverlay.verticalAlign);
+assertType<HTMLElement>(customOverlay.positionTarget);
