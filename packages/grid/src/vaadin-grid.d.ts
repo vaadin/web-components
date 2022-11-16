@@ -306,6 +306,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `selected-row`             | Selected row
  * `details-opened-row`       | Row with details open
  * `odd-row`                  | Odd row
+ * `even-row`                 | Even row
  * `first-row`                | The first body row
  * `last-row`                 | The last body row
  * `dragstart-row`            | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
@@ -320,6 +321,8 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `footer-cell`              | Footer cell in the internal table
  * `details-cell`             | Row details cell in the internal table
  * `focused-cell`             | Focused cell in the internal table
+ * `odd-row-cell`             | Cell in an odd row
+ * `even-row-cell`            | Cell in an even row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
  * `expanded-row-cell`        | Cell in an expanded row
