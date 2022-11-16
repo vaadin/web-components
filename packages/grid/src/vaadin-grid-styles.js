@@ -116,6 +116,7 @@ registerStyles(
       width: 100%;
       box-sizing: border-box;
       margin: 0;
+      pointer-events: none;
     }
 
     [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
@@ -167,6 +168,10 @@ registerStyles(
       box-sizing: border-box;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    [part~='cell'] {
+      pointer-events: initial;
     }
 
     [hidden] {
@@ -246,6 +251,10 @@ registerStyles(
     [first-frozen-to-end] [part~='resize-handle']::before {
       width: 18px;
       transform: none;
+    }
+
+    [first-frozen-to-end] {
+      margin-inline-start: auto;
     }
 
     /* Hide resize handle if scrolled to end */
