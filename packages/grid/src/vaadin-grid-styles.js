@@ -141,7 +141,6 @@ registerStyles(
       align-items: center;
       padding: 0;
       white-space: nowrap;
-      pointer-events: all;
     }
 
     [part~='cell'] > [tabindex] {
@@ -161,7 +160,6 @@ registerStyles(
       width: 100%;
       box-sizing: border-box;
       padding: 0;
-      pointer-events: all;
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -170,6 +168,10 @@ registerStyles(
       box-sizing: border-box;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    [part~='cell'] {
+      pointer-events: all;
     }
 
     [hidden] {
