@@ -1034,7 +1034,6 @@ class Grid extends ElementMixin(
    * @param {!HTMLElement} element
    * @param {boolean | string | null | undefined} value
    * @param {string} part
-   * @param {string} oldPart
    * @protected
    */
   _updatePart(element, value, part) {
