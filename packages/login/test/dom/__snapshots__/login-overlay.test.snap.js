@@ -23,6 +23,7 @@ snapshots["vaadin-login-overlay host default"] =
         >
         <vaadin-text-field
           autocapitalize="none"
+          autocomplete="username"
           autocorrect="off"
           focused=""
           has-label=""
@@ -33,6 +34,7 @@ snapshots["vaadin-login-overlay host default"] =
         >
           <input
             aria-labelledby="label-vaadin-text-field-0"
+            autocomplete="username"
             autocorrect="off"
             id="input-vaadin-text-field-6"
             name="username"
@@ -138,6 +140,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         >
         <vaadin-text-field
           autocapitalize="none"
+          autocomplete="username"
           autocorrect="off"
           focused=""
           has-label=""
@@ -148,6 +151,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         >
           <input
             aria-labelledby="label-vaadin-text-field-0"
+            autocomplete="username"
             autocorrect="off"
             id="input-vaadin-text-field-6"
             name="username"

@@ -14,6 +14,7 @@ snapshots["vaadin-login-form host default"] =
       >
       <vaadin-text-field
         autocapitalize="none"
+        autocomplete="username"
         autocorrect="off"
         focused=""
         has-label=""
@@ -24,6 +25,7 @@ snapshots["vaadin-login-form host default"] =
       >
         <input
           aria-labelledby="label-vaadin-text-field-0"
+          autocomplete="username"
           autocorrect="off"
           id="input-vaadin-text-field-6"
           name="username"
@@ -119,6 +121,7 @@ snapshots["vaadin-login-form host i18n"] =
       >
       <vaadin-text-field
         autocapitalize="none"
+        autocomplete="username"
         autocorrect="off"
         focused=""
         has-label=""
@@ -129,6 +132,7 @@ snapshots["vaadin-login-form host i18n"] =
       >
         <input
           aria-labelledby="label-vaadin-text-field-0"
+          autocomplete="username"
           autocorrect="off"
           id="input-vaadin-text-field-6"
           name="username"
@@ -224,6 +228,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
       >
       <vaadin-text-field
         autocapitalize="none"
+        autocomplete="username"
         autocorrect="off"
         focused=""
         has-label=""
@@ -234,6 +239,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
       >
         <input
           aria-labelledby="label-vaadin-text-field-0"
+          autocomplete="username"
           autocorrect="off"
           id="input-vaadin-text-field-6"
           name="username"
