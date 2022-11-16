@@ -37,6 +37,7 @@ export const StylingMixin = (superClass) =>
       return ['__cellClassNameGeneratorChanged(cellClassNameGenerator)'];
     }
 
+    /** @private */
     __cellClassNameGeneratorChanged() {
       this.generateCellClassNames();
     }
