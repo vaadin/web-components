@@ -281,7 +281,7 @@ export const DataProviderMixin = (superClass) =>
       this._updateState(row, 'loading', loading);
 
       // Toggle part on the row body cells
-      this._updateRowBodyCellsPart(row, 'loading-cell', loading);
+      this._updateRowBodyCellsPart(row, 'loading-row-cell', loading);
     }
 
     /**

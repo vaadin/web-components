@@ -410,11 +410,11 @@ describe('data provider', () => {
           const cells = getRowBodyCells(bodyRows[0]);
           expandIndex(grid, 0);
           cells.forEach((cell) => {
-            expect(cell.getAttribute('part')).to.contain('expanded-cell');
+            expect(cell.getAttribute('part')).to.contain('expanded-row-cell');
           });
           collapseIndex(grid, 0);
           cells.forEach((cell) => {
-            expect(cell.getAttribute('part')).to.not.contain('expanded-cell');
+            expect(cell.getAttribute('part')).to.not.contain('expanded-row-cell');
           });
         });
       });
@@ -745,7 +745,7 @@ describe('wrapped grid', () => {
       container.dataProvider = () => {};
       const row = getRows(grid.$.items)[0];
       getRowCells(row).forEach((cell) => {
-        expect(cell.getAttribute('part')).to.contain('loading-cell');
+        expect(cell.getAttribute('part')).to.contain('loading-row-cell');
       });
     });
 
@@ -762,7 +762,7 @@ describe('wrapped grid', () => {
       };
       const row = getRows(grid.$.items)[0];
       getRowCells(row).forEach((cell) => {
-        expect(cell.getAttribute('part')).to.not.contain('loading-cell');
+        expect(cell.getAttribute('part')).to.not.contain('loading-row-cell');
       });
     });
 

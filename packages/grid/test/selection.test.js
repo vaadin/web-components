@@ -74,7 +74,7 @@ describe('selection', () => {
     it('should add selected to cells part attribute', () => {
       const cells = getRowBodyCells(rows[0]);
       cells.forEach((cell) => {
-        expect(cell.getAttribute('part')).to.contain('selected-cell');
+        expect(cell.getAttribute('part')).to.contain('selected-row-cell');
       });
     });
 

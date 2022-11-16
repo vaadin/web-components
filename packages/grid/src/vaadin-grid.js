@@ -193,11 +193,11 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `body-cell`                | Body cell in the internal table
  * `footer-cell`              | Footer cell in the internal table
  * `details-cell`             | Row details cell in the internal table
- * `loading-cell`             | Cell in a row that is waiting for data from data provider
  * `focused-cell`             | Focused cell in the internal table
- * `selected-cell`            | Cell in a selected row
- * `expanded-cell`            | Cell in an expanded row
- * `details-opened-cell`      | Cell in an row with details open
+ * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
+ * `selected-row-cell`        | Cell in a selected row
+ * `expanded-row-cell`        | Cell in an expanded row
+ * `details-opened-row-cell`  | Cell in an row with details open
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell
@@ -1087,7 +1087,7 @@ class Grid extends ElementMixin(
     this._updateRowState(row, state, value);
 
     // Toggle part on the row body cells
-    this._updateRowBodyCellsPart(row, `${state}-cell`, value);
+    this._updateRowBodyCellsPart(row, `${state}-row-cell`, value);
   }
 
   /**

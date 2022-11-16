@@ -366,12 +366,12 @@ describe('row details', () => {
       const cells = getRowBodyCells(bodyRows[1]);
       openRowDetails(1);
       cells.forEach((cell) => {
-        expect(cell.getAttribute('part')).to.contain('details-opened-cell');
+        expect(cell.getAttribute('part')).to.contain('details-opened-row-cell');
       });
 
       closeRowDetails(1);
       cells.forEach((cell) => {
-        expect(cell.getAttribute('part')).to.not.contain('details-opened-cell');
+        expect(cell.getAttribute('part')).to.not.contain('details-opened-row-cell');
       });
     });
 
