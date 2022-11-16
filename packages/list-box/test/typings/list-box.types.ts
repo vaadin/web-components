@@ -1,4 +1,6 @@
 import '../../vaadin-list-box.js';
+import type { ListMixinClass } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
+import type { MultiSelectListMixinClass } from '@vaadin/vaadin-list-mixin/vaadin-multi-select-list-mixin.js';
 import type {
   ListBoxItemsChangedEvent,
   ListBoxSelectedChangedEvent,
@@ -23,3 +25,10 @@ listBox.addEventListener('selected-values-changed', (event) => {
   assertType<ListBoxSelectedValuesChangedEvent>(event);
   assertType<number[]>(event.detail.value);
 });
+
+assertType<ListMixinClass>(listBox);
+assertType<MultiSelectListMixinClass>(listBox);
+
+assertType<number | null | undefined>(listBox.selected);
+assertType<boolean | null | undefined>(listBox.multiple);
+assertType<number[] | null | undefined>(listBox.selectedValues);
