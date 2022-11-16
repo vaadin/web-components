@@ -50,6 +50,8 @@ export const PositionMixin = (superClass) =>
          * RTL is taken into account when interpreting the value.
          * The overlay is automatically flipped to the opposite side when it doesn't fit into
          * the default side defined by this property.
+         *
+         * @attr {start|end} horizontal-align
          */
         horizontalAlign: {
           type: String,
@@ -62,6 +64,8 @@ export const PositionMixin = (superClass) =>
          * Possible values are `top` and `bottom`.
          * The overlay is automatically flipped to the opposite side when it doesn't fit into
          * the default side defined by this property.
+         *
+         * @attr {top|bottom} vertical-align
          */
         verticalAlign: {
           type: String,
@@ -71,6 +75,8 @@ export const PositionMixin = (superClass) =>
         /**
          * When `positionTarget` is set, this property defines whether the overlay should overlap
          * the target element in the x-axis, or be positioned right next to it.
+         *
+         * @attr {boolean} no-horizontal-overlap
          */
         noHorizontalOverlap: {
           type: Boolean,
@@ -80,6 +86,8 @@ export const PositionMixin = (superClass) =>
         /**
          * When `positionTarget` is set, this property defines whether the overlay should overlap
          * the target element in the y-axis, or be positioned right above/below it.
+         *
+         * @attr {boolean} no-vertical-overlap
          */
         noVerticalOverlap: {
           type: Boolean,
