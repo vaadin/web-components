@@ -78,6 +78,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
             autocapitalize="none"
             autocorrect="off"
             spellcheck="false"
+            autocomplete="username"
           >
             <input type="text" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-text-field>
