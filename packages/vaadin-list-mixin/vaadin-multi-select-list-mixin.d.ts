@@ -11,7 +11,7 @@ import { ListMixinClass } from './vaadin-list-mixin.js';
  */
 export declare function MultiSelectListMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ListMixinClass> & Constructor<ListMixinClass> & T;
+): Constructor<ListMixinClass> & Constructor<MultiSelectListMixinClass> & T;
 
 export declare class MultiSelectListMixinClass {
   /**
