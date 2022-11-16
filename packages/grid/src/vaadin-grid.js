@@ -193,7 +193,11 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `body-cell`                | Body cell in the internal table
  * `footer-cell`              | Footer cell in the internal table
  * `details-cell`             | Row details cell in the internal table
+ * `loading-cell`             | Cell in a row that is waiting for data from data provider
  * `focused-cell`             | Focused cell in the internal table
+ * `selected-cell`            | Cell in a selected row
+ * `expanded-cell`            | Cell in an expanded row
+ * `details-opened-cell`      | Cell in an row with details open
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell
@@ -986,9 +990,9 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    this._updateRowState(row, 'expanded', model.expanded);
-    this._updateRowState(row, 'selected', model.selected);
-    this._updateRowState(row, 'details-opened', model.detailsOpened);
+    this._updateRowAndCells(row, 'expanded', model.expanded);
+    this._updateRowAndCells(row, 'selected', model.selected);
+    this._updateRowAndCells(row, 'details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -1071,6 +1075,32 @@ class Grid extends ElementMixin(
     }
 
     this._updatePart(cell, value, part || `${attribute}-cell`);
+  }
+
+  /**
+   * @param {!HTMLElement} row
+   * @param {string} state
+   * @param {boolean | string | null | undefined} value
+   * @protected
+   */
+  _updateRowAndCells(row, state, value) {
+    // Toggle state and part on the row
+    this._updateRowState(row, state, value);
+
+    // Toggle part on the row body cells
+    this._updateRowBodyCellsPart(row, `${state}-cell`, value);
+  }
+
+  /**
+   * @param {!HTMLElement} row
+   * @param {string} part
+   * @param {boolean | string | null | undefined} value
+   * @protected
+   */
+  _updateRowBodyCellsPart(row, part, value) {
+    Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).forEach((cell) => {
+      this._updatePart(cell, value, part);
+    });
   }
 
   /** @private */

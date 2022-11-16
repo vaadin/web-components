@@ -260,15 +260,28 @@ export const DataProviderMixin = (superClass) =>
       const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
       if (item) {
-        el.toggleAttribute('loading', false);
+        this.__updateLoading(el, false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
           cache.ensureSubCacheForScaledIndex(scaledIndex);
         }
       } else {
-        el.toggleAttribute('loading', true);
+        this.__updateLoading(el, true);
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @param {boolean} loading
+     * @private
+     */
+    __updateLoading(row, loading) {
+      // Toggle row state (but not part)
+      this._updateState(row, 'loading', loading);
+
+      // Toggle part on the row body cells
+      this._updateRowBodyCellsPart(row, 'loading-cell', loading);
     }
 
     /**

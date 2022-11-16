@@ -319,7 +319,11 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `body-cell`                | Body cell in the internal table
  * `footer-cell`              | Footer cell in the internal table
  * `details-cell`             | Row details cell in the internal table
+ * `loading-cell`             | Cell in a row that is waiting for data from data provider
  * `focused-cell`             | Focused cell in the internal table
+ * `selected-cell`            | Cell in a selected row
+ * `expanded-cell`            | Cell in an expanded row
+ * `details-opened-cell`      | Cell in an row with details open
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell
@@ -327,7 +331,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `first-column-cell`        | First visible cell on a row
  * `last-column-cell`         | Last visible cell on a row
  * `reorder-allowed-cell`     | Cell in a column where another column can be reordered
- * `reorder-dragging-cell`    | Cell in a column currently being reordered*
+ * `reorder-dragging-cell`    | Cell in a column currently being reordered
  * `resize-handle`            | Handle for resizing the columns
  * `reorder-ghost`            | Ghost element of the header cell being dragged
  *

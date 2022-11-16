@@ -10,6 +10,7 @@ import {
   flushGrid,
   getBodyCellContent,
   getCellContent,
+  getRowBodyCells,
   getRowCells,
   getRows,
   infiniteDataProvider,
@@ -65,9 +66,16 @@ describe('selection', () => {
       expect(rows[1].hasAttribute('selected')).to.be.false;
     });
 
-    it('should add selected to part attribute', () => {
+    it('should add selected to row part attribute', () => {
       expect(rows[0].getAttribute('part')).to.contain('selected-row');
       expect(rows[1].getAttribute('part')).to.not.contain('selected-row');
+    });
+
+    it('should add selected to cells part attribute', () => {
+      const cells = getRowBodyCells(rows[0]);
+      cells.forEach((cell) => {
+        expect(cell.getAttribute('part')).to.contain('selected-cell');
+      });
     });
 
     it('should not update selected attribute for hidden rows', () => {
