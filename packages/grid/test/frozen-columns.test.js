@@ -1,7 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
   flushGrid,
   getRowCells,
@@ -229,6 +231,10 @@ const transformsEqual = (element, transform) => {
           translateValue = isRTL ? offset : -offset;
         });
 
+        afterEach(async () => {
+          await resetMouse();
+        });
+
         it('should have a frozen-to-end cell in a row', () => {
           const cells = getRowCells(containerRows[0]);
           expect(cells[0].hasAttribute('frozen-to-end')).not.to.be.true;
@@ -293,21 +299,53 @@ const transformsEqual = (element, transform) => {
         });
 
         it('should stay frozen to end when resize results in total width less than the grid', async () => {
-          grid._columnTree[0][2].flexGrow = 0;
+          const frozenToEndColumnIndex = isRTL ? 0 : 2;
+          grid._columnTree[0][frozenToEndColumnIndex].flexGrow = 0;
 
           grid.style.width = '400px';
           await onceResized(grid);
 
           const initBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
 
-          grid._columnTree[0][0].width = '10px';
-          grid._columnTree[0][0].flexGrow = 0;
-          grid._columnTree[0][1].width = '10px';
-          grid._columnTree[0][1].flexGrow = 0;
+          for (let i = 0; i < 2; i++) {
+            if (frozenToEndColumnIndex === i) {
+              continue;
+            }
+            grid._columnTree[0][i].width = '10px';
+            grid._columnTree[0][i].flexGrow = 0;
+          }
 
           const finalBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
           expect(finalBoundingClientRect.x).to.equal(initBoundingClientRect.x);
-          expect(finalBoundingClientRect.width).to.equal(initBoundingClientRect.width);
+        });
+
+        it('should select grid on click to empty space between the frozen to end column and the previous column', async () => {
+          const frozenToEndColumnIndex = isRTL ? 0 : 2;
+          grid._columnTree[0][frozenToEndColumnIndex].flexGrow = 0;
+
+          grid.style.width = '400px';
+          await onceResized(grid);
+
+          for (let i = 0; i < 2; i++) {
+            if (frozenToEndColumnIndex === i) {
+              continue;
+            }
+            grid._columnTree[0][i].width = '10px';
+            grid._columnTree[0][i].flexGrow = 0;
+          }
+
+          const boundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
+          let xCoordinate;
+          if (isRTL) {
+            xCoordinate = boundingClientRect.x + boundingClientRect.width + 10;
+          } else {
+            xCoordinate = boundingClientRect.x - 10;
+          }
+          const yCoordinate = boundingClientRect.y + Math.floor(boundingClientRect.height / 2);
+
+          expect(isElementFocused(grid)).to.be.false;
+          await sendMouse({ type: 'click', position: [xCoordinate, yCoordinate] });
+          expect(isElementFocused(grid)).to.be.true;
         });
       });
     });
