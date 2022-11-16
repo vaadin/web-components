@@ -171,7 +171,7 @@ registerStyles(
     }
 
     [part~='cell'] {
-      pointer-events: all;
+      pointer-events: initial;
     }
 
     [hidden] {
