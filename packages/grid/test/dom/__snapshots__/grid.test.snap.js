@@ -95,7 +95,7 @@ snapshots["vaadin-grid shadow default"] =
         <th
           first-column=""
           id="vaadin-grid-cell-0"
-          part="cell header-cell first-column-cell"
+          part="cell header-cell first-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -106,7 +106,7 @@ snapshots["vaadin-grid shadow default"] =
         <th
           id="vaadin-grid-cell-1"
           last-column=""
-          part="cell header-cell last-column-cell"
+          part="cell header-cell last-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -210,7 +210,7 @@ snapshots["vaadin-grid shadow default"] =
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell"
+          part="cell footer-cell first-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="-1"
@@ -221,7 +221,7 @@ snapshots["vaadin-grid shadow default"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell"
+          part="cell footer-cell last-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -303,7 +303,7 @@ snapshots["vaadin-grid shadow selected"] =
         <th
           first-column=""
           id="vaadin-grid-cell-0"
-          part="cell header-cell first-column-cell"
+          part="cell header-cell first-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -314,7 +314,7 @@ snapshots["vaadin-grid shadow selected"] =
         <th
           id="vaadin-grid-cell-1"
           last-column=""
-          part="cell header-cell last-column-cell"
+          part="cell header-cell last-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -418,7 +418,7 @@ snapshots["vaadin-grid shadow selected"] =
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell"
+          part="cell footer-cell first-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="-1"
@@ -429,7 +429,7 @@ snapshots["vaadin-grid shadow selected"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell"
+          part="cell footer-cell last-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -511,7 +511,7 @@ snapshots["vaadin-grid shadow details opened"] =
         <th
           first-column=""
           id="vaadin-grid-cell-0"
-          part="cell header-cell first-column-cell"
+          part="cell header-cell first-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -522,7 +522,7 @@ snapshots["vaadin-grid shadow details opened"] =
         <th
           id="vaadin-grid-cell-1"
           last-column=""
-          part="cell header-cell last-column-cell"
+          part="cell header-cell last-column-cell last-header-row-cell"
           role="columnheader"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -626,7 +626,7 @@ snapshots["vaadin-grid shadow details opened"] =
         <td
           first-column=""
           id="vaadin-grid-cell-2"
-          part="cell footer-cell first-column-cell"
+          part="cell footer-cell first-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="-1"
@@ -637,7 +637,7 @@ snapshots["vaadin-grid shadow details opened"] =
         <td
           id="vaadin-grid-cell-3"
           last-column=""
-          part="cell footer-cell last-column-cell"
+          part="cell footer-cell last-column-cell first-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
