@@ -767,6 +767,13 @@ describe('drag and drop', () => {
         expect(grid.$.items.children[1].getAttribute('part')).to.contain('drag-disabled-row');
       });
 
+      it('should add drag-disabled to cells part attribute', () => {
+        const cells = getRowBodyCells(grid.$.items.children[1]);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('drag-disabled-row-cell');
+        });
+      });
+
       it('should enable row drag once loading has finished', () => {
         finishLoadingItems();
         expect(getDraggable(grid, 1)).to.be.ok;
@@ -817,6 +824,15 @@ describe('drag and drop', () => {
       const row = grid.$.items.children[0];
       fireDragOver(row, 'above');
       expect(row.getAttribute('part')).to.contain('drop-disabled-row');
+    });
+
+    it('should add drop-disabled to cells part attribute', () => {
+      const row = grid.$.items.children[0];
+      fireDragOver(row, 'above');
+      const cells = getRowBodyCells(row);
+      cells.forEach((cell) => {
+        expect(cell.getAttribute('part')).to.contain('drop-disabled-row-cell');
+      });
     });
 
     it('should re-enable drop on row', () => {

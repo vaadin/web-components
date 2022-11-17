@@ -206,6 +206,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
  * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
  * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top
+ * `drag-disabled-row-cell`   | Cell in a row that isn't available for dragging
+ * `drop-disabled-row-cell`   | Cell in a row that can't be dropped on top of
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell

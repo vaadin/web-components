@@ -398,8 +398,8 @@ export const DragAndDropMixin = (superClass) =>
         }
       });
 
-      this._updateRowState(row, 'drag-disabled', !!dragDisabled);
-      this._updateRowState(row, 'drop-disabled', !!dropDisabled);
+      this._updateRowAndCells(row, 'drag-disabled', !!dragDisabled);
+      this._updateRowAndCells(row, 'drop-disabled', !!dropDisabled);
     }
 
     /**
