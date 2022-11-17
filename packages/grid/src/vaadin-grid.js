@@ -197,6 +197,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `focused-cell`             | Focused cell in the internal table
  * `odd-row-cell`             | Cell in an odd row
  * `even-row-cell`            | Cell in an even row
+ * `first-row-cell`           | Cell in the first body row
+ * `last-row-cell`            | Cell in the last body row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
  * `expanded-row-cell`        | Cell in an expanded row
@@ -905,8 +907,8 @@ class Grid extends ElementMixin(
       return;
     }
 
-    this._updateRowState(row, 'first', index === 0);
-    this._updateRowState(row, 'last', index === this._effectiveSize - 1);
+    this._updateRowAndCells(row, 'first', index === 0);
+    this._updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
     this._updateRowAndCells(row, 'odd', index % 2);
     this._updateRowAndCells(row, 'even', index % 2 === 0);
     this._a11yUpdateRowRowindex(row, index);
