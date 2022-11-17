@@ -183,7 +183,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `even-row`                 | Even row
  * `first-row`                | The first body row
  * `last-row`                 | The last body row
- * `dragstart-row`            | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
+ * `dragstart-row`            | Set on the row for one frame when drag is starting.
  * `dragover-above-row`       | Set on the row when the a row is dragged over above
  * `dragover-below-row`       | Set on the row when the a row is dragged over below
  * `dragover-on-top-row`      | Set on the row when the a row is dragged over on top
@@ -203,6 +203,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `selected-row-cell`        | Cell in a selected row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
+ * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)
  * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
  * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
  * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top

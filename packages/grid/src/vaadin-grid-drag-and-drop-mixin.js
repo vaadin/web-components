@@ -154,12 +154,12 @@ export const DragAndDropMixin = (superClass) =>
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
-        this._updateRowState(row, 'dragstart', rows.length > 1 ? `${rows.length}` : '');
+        this._updateRowAndCells(row, 'dragstart', rows.length > 1 ? `${rows.length}` : '');
         this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
         this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
-          this._updateRowState(row, 'dragstart', null);
+          this._updateRowAndCells(row, 'dragstart', null);
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
         });

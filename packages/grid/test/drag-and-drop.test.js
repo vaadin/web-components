@@ -242,6 +242,19 @@ describe('drag and drop', () => {
         expect(row.getAttribute('part')).to.not.contain('dragstart-row');
       });
 
+      it('should add dragstart to cells part attribute', async () => {
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragstart-row-cell');
+        });
+        await nextFrame();
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.not.contain('dragstart-row-cell');
+        });
+      });
+
       // The test only concerns Safari
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {
