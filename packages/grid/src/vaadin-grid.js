@@ -203,6 +203,9 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `selected-row-cell`        | Cell in a selected row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
+ * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
+ * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
+ * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell
@@ -1054,14 +1057,13 @@ class Grid extends ElementMixin(
    * @param {!HTMLElement} row
    * @param {string} state
    * @param {boolean | string | null | undefined} value
-   * @param {boolean} appendValue
+   * @param {string} part
    * @protected
    */
-  _updateRowState(row, state, value, appendValue) {
+  _updateRowState(row, state, value, part) {
     this._updateState(row, state, value);
 
-    const part = appendValue ? `${state}-${value}-row` : `${state}-row`;
-    this._updatePart(row, value, part);
+    this._updatePart(row, value, part || `${state}-row`);
   }
 
   /**
@@ -1086,14 +1088,17 @@ class Grid extends ElementMixin(
    * @param {!HTMLElement} row
    * @param {string} state
    * @param {boolean | string | null | undefined} value
+   * @param {boolean} appendValue
    * @protected
    */
-  _updateRowAndCells(row, state, value) {
+  _updateRowAndCells(row, state, value, appendValue) {
+    const part = appendValue ? `${state}-${value}-row` : `${state}-row`;
+
     // Toggle state and part on the row
-    this._updateRowState(row, state, value);
+    this._updateRowState(row, state, value, part);
 
     // Toggle part on the row body cells
-    this._updateRowBodyCellsPart(row, `${state}-row-cell`, value);
+    this._updateRowBodyCellsPart(row, `${part}-cell`, value);
   }
 
   /**

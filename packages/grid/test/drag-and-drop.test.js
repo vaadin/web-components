@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getBodyCellContent, getFirstCell, getRows } from './helpers.js';
+import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {
   let grid, dragData;
@@ -481,6 +481,16 @@ describe('drag and drop', () => {
         expect(row.getAttribute('part')).to.contain('dragover-on-top-row');
       });
 
+      it('should add dragover-on-top to cells part attribute', () => {
+        grid.dropMode = 'on-top';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragover-on-top-row-cell');
+        });
+      });
+
       it('should set dragover=on-top attribute to the row 2', () => {
         grid.dropMode = 'on-top-or-between';
         const row = grid.$.items.children[0];
@@ -502,6 +512,16 @@ describe('drag and drop', () => {
         expect(row.getAttribute('part')).to.contain('dragover-above-row');
       });
 
+      it('should add dragover-above to cells part attribute', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragover-above-row-cell');
+        });
+      });
+
       it('should set dragover=below attribute to the row', () => {
         grid.dropMode = 'between';
         const row = grid.$.items.children[0];
@@ -514,6 +534,16 @@ describe('drag and drop', () => {
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
         expect(row.getAttribute('part')).to.contain('dragover-below-row');
+      });
+
+      it('should add dragover-below to cells part attribute', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'below');
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragover-below-row-cell');
+        });
       });
 
       it('should set dragover=above attribute to the row 2', () => {

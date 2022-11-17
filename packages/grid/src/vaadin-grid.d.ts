@@ -329,6 +329,9 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `selected-row-cell`        | Cell in a selected row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
+ * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
+ * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
+ * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top
  * `frozen-cell`              | Frozen cell in the internal table
  * `frozen-to-end-cell`       | Frozen to end cell in the internal table
  * `last-frozen-cell`         | Last frozen cell

@@ -253,7 +253,7 @@ export const DragAndDropMixin = (superClass) =>
         } else if (row) {
           this._dragOverItem = row._item;
           if (row.getAttribute('dragover') !== this._dropLocation) {
-            this._updateRowState(row, 'dragover', this._dropLocation, true);
+            this._updateRowAndCells(row, 'dragover', this._dropLocation, true);
           }
         } else {
           this._clearDragStyles();
@@ -308,7 +308,7 @@ export const DragAndDropMixin = (superClass) =>
     _clearDragStyles() {
       this.removeAttribute('dragover');
       Array.from(this.$.items.children).forEach((row) => {
-        this._updateRowState(row, 'dragover', null, true);
+        this._updateRowAndCells(row, 'dragover', null, true);
       });
     }
 
