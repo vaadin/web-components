@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ListMixin } from './vaadin-list-mixin.js';
+import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating multiple selection of childNodes.

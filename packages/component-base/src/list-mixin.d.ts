@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { KeyboardDirectionMixinClass } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
-import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { KeyboardDirectionMixinClass } from './keyboard-direction-mixin.js';
+import type { KeyboardMixinClass } from './keyboard-mixin.js';
 
 /**
- * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+ * A mixin for list elements, facilitating navigation and selection of items.
  */
 export declare function ListMixin<T extends Constructor<HTMLElement>>(
   base: T,
