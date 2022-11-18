@@ -79,7 +79,10 @@ snapshots["vaadin-button host active"] =
 
 snapshots["vaadin-button shadow default"] = 
 `<div class="vaadin-button-container">
-  <span part="prefix">
+  <span
+    aria-hidden="true"
+    part="prefix"
+  >
     <slot name="prefix">
     </slot>
   </span>
@@ -87,7 +90,10 @@ snapshots["vaadin-button shadow default"] =
     <slot>
     </slot>
   </span>
-  <span part="suffix">
+  <span
+    aria-hidden="true"
+    part="suffix"
+  >
     <slot name="suffix">
     </slot>
   </span>
