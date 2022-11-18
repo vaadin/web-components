@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import {
@@ -12,28 +11,21 @@ import {
   infiniteDataProvider,
 } from './helpers.js';
 
+const createGrid = (height, size) => {
+  const grid = fixtureSync(`
+    <vaadin-grid style="width: 200px; height: ${height}px;" size="${size}">
+      <vaadin-grid-column header="foo"></vaadin-grid-column>
+    </vaadin-grid>
+  `);
+  grid.firstElementChild.renderer = (root, _, model) => {
+    root.textContent = model.index;
+  };
+  return grid;
+};
+
 const fixtures = {
-  small: `
-    <vaadin-grid style="width: 200px; height: 200px;" size="100">
-      <vaadin-grid-column>
-        <template class="header">foo</template>
-        <template>[[index]]</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  `,
-  large: `
-    <vaadin-grid style="width: 200px; height: 500px;" size="500000000">
-      <vaadin-grid-column>
-        <template class="header">foo</template>
-        <template>[[index]]</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  `,
-  treeGrid: `
-    <vaadin-grid style="width: 200px; height: 500px;" item-has-children-path="hasChildren">
-      <vaadin-grid-tree-column path="name" header="foo"></vaadin-grid-tree-column>
-    </vaadin-grid>
-  `,
+  small: () => createGrid(200, 200),
+  large: () => createGrid(500, 500000000),
 };
 
 describe('scroll to index', () => {
@@ -42,7 +34,7 @@ describe('scroll to index', () => {
       let grid;
 
       beforeEach(async () => {
-        grid = fixtureSync(fixtures[scale]);
+        grid = fixtures[scale]();
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
         await nextFrame();
@@ -103,7 +95,7 @@ describe('scroll to index', () => {
     let grid;
 
     beforeEach(async () => {
-      grid = fixtureSync(fixtures.large);
+      grid = fixtures.large();
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
       grid.scrollToIndex(10);
@@ -195,7 +187,7 @@ describe('scroll to index', () => {
     let grid, data;
 
     beforeEach(() => {
-      grid = fixtureSync(fixtures.large);
+      grid = fixtures.large();
       data = Array(...new Array(10)).map((_, i) => {
         return { index: i };
       });
@@ -221,7 +213,11 @@ describe('scroll to index', () => {
     let grid;
 
     beforeEach(() => {
-      grid = fixtureSync(fixtures.treeGrid);
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 500px;" item-has-children-path="hasChildren">
+          <vaadin-grid-tree-column path="name" header="foo"></vaadin-grid-tree-column>
+        </vaadin-grid>
+      `);
     });
 
     // Issue https://github.com/vaadin/vaadin-grid/issues/2107
