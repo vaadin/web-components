@@ -44,15 +44,17 @@ export const A11yMixin = (superClass) =>
     _a11yUpdateHeaderRows() {
       Array.from(this.$.header.children).forEach((headerRow, index, array) => {
         headerRow.setAttribute('aria-rowindex', index + 1);
+        this._updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === array.length - 1);
         this._updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === array.length - 1);
       });
     }
 
     /** @protected */
     _a11yUpdateFooterRows() {
-      Array.from(this.$.footer.children).forEach((footerRow, index) => {
+      Array.from(this.$.footer.children).forEach((footerRow, index, array) => {
         footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1);
         this._updateRowBodyCellsPart(footerRow, 'first-footer-row-cell', index === 0);
+        this._updateRowBodyCellsPart(footerRow, 'last-footer-row-cell', index === array.length - 1);
       });
     }
 
