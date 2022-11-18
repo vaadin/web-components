@@ -117,13 +117,13 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
         }
       </style>
       <div class="vaadin-button-container">
-        <span part="prefix">
+        <span part="prefix" aria-hidden="true">
           <slot name="prefix"></slot>
         </span>
         <span part="label">
           <slot></slot>
         </span>
-        <span part="suffix">
+        <span part="suffix" aria-hidden="true">
           <slot name="suffix"></slot>
         </span>
       </div>
