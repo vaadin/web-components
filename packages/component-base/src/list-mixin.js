@@ -4,13 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { DirHelper } from '@vaadin/component-base/src/dir-helper.js';
-import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
+import { timeOut } from './async.js';
+import { Debouncer } from './debounce.js';
+import { DirHelper } from './dir-helper.js';
+import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
- * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+ * A mixin for list elements, facilitating navigation and selection of items.
  *
  * @polymerMixin
  * @mixes KeyboardDirectionMixin

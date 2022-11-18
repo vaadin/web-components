@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export type TabsOrientation = 'horizontal' | 'vertical';

@@ -38,7 +38,6 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "24.0.0-alpha4",
     "@vaadin/item": "24.0.0-alpha4",
-    "@vaadin/vaadin-list-mixin": "24.0.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.0.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.0.0-alpha4",
     "@vaadin/vaadin-themable-mixin": "24.0.0-alpha4"

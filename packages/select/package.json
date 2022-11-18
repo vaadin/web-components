@@ -46,7 +46,6 @@
     "@vaadin/list-box": "24.0.0-alpha4",
     "@vaadin/lit-renderer": "24.0.0-alpha4",
     "@vaadin/overlay": "24.0.0-alpha4",
-    "@vaadin/vaadin-list-mixin": "24.0.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.0.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.0.0-alpha4",
     "@vaadin/vaadin-themable-mixin": "24.0.0-alpha4"
