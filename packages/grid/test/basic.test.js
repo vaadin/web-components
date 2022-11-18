@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import {
   flushGrid,
@@ -23,12 +22,13 @@ describe('basic features', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 300px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     flushGrid(grid);
   });
 
@@ -221,21 +221,22 @@ describe('basic features', () => {
 });
 
 describe('flex child', () => {
-  let layout;
-  let grid;
+  let layout, grid, column;
 
   beforeEach(() => {
     layout = fixtureSync(`
       <div style="display: flex; width: 300px; height: 300px;">
         <div style="width: 100px; height: 100px; flex-shrink: 0;">Layout sibling</div>
         <vaadin-grid size="1000">
-          <vaadin-grid-column>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       </div>
     `);
     grid = layout.querySelector('vaadin-grid');
+    column = grid.querySelector('vaadin-grid-column');
+    column.renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
   });
@@ -267,7 +268,7 @@ describe('flex child', () => {
     });
 
     it('should have a visible header after row reorder', async () => {
-      grid.querySelector('vaadin-grid-column').header = 'header';
+      column.header = 'header';
       grid.scrollToIndex(300);
       await aTimeout(0);
       flushGrid(grid);

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-filter-column.js';
@@ -72,30 +71,38 @@ describe('filter', () => {
   });
 });
 
+function gridFiltersFixture() {
+  const grid = fixtureSync(`
+    <vaadin-grid>
+      <vaadin-grid-column path="first"></vaadin-grid-column>
+      <vaadin-grid-column path="last"></vaadin-grid-column>
+      <vaadin-grid-filter-column></vaadin-grid-filter-column>
+    </vaadin-grid>
+  `);
+
+  const columns = grid.querySelectorAll('vaadin-grid-column');
+  columns[0].headerRenderer = (root) => {
+    if (!root.firstChild) {
+      root.innerHTML = `
+        <vaadin-grid-filter path="first" value="bar"></vaadin-grid-filter>
+        <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
+      `;
+    }
+  };
+  columns[1].headerRenderer = (root) => {
+    if (!root.firstChild) {
+      root.innerHTML = '<vaadin-grid-filter path="last" value="qux"></vaadin-grid-filter>';
+    }
+  };
+
+  return grid;
+}
+
 describe('filtering', () => {
   let grid, filter;
 
   beforeEach(() => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="first" value="bar">
-            </vaadin-grid-filter>
-            <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
-          </template>
-          <template>[[item.first]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="last" value="qux">
-            </vaadin-grid-filter>
-          </template>
-          <template>[[item.last]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-filter-column></vaadin-grid-filter-column>
-      </vaadin-grid>
-    `);
+    grid = gridFiltersFixture();
     flushGrid(grid);
     flushFilters(grid);
     if (grid._observer.flush) {
@@ -225,26 +232,7 @@ describe('array data provider', () => {
   let grid, filterFirst, filterSecond;
 
   beforeEach(() => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="first" value="bar">
-            </vaadin-grid-filter>
-            <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
-          </template>
-          <template>[[item.first]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="last" value="qux">
-            </vaadin-grid-filter>
-          </template>
-          <template>[[item.last]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-filter-column></vaadin-grid-filter-column>
-      </vaadin-grid>
-    `);
+    grid = gridFiltersFixture();
     flushGrid(grid);
 
     flushFilters(grid);
@@ -324,26 +312,7 @@ describe('array data provider', () => {
 
 describe('lazy init', () => {
   it('should not filter if there is no data yet', () => {
-    const grid = fixtureSync(`
-    <vaadin-grid>
-      <vaadin-grid-column>
-        <template class="header">
-          <vaadin-grid-filter path="first" value="bar">
-          </vaadin-grid-filter>
-          <vaadin-grid-sorter path="first"></vaadin-grid-sorter>
-        </template>
-        <template>[[item.first]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">
-          <vaadin-grid-filter path="last" value="qux">
-          </vaadin-grid-filter>
-        </template>
-        <template>[[item.last]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-filter-column></vaadin-grid-filter-column>
-    </vaadin-grid>
-  `);
+    const grid = gridFiltersFixture();
     grid.size = 100;
     grid.dataProvider = () => {
       // Don't provide any data

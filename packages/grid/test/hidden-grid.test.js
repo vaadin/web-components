@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
 
@@ -10,12 +9,12 @@ describe('hidden grid', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid style="height: 200px; width: 200px;" hidden size="1">
-        <vaadin-grid-column>
-          <template class="header">foo</template>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column header="foo"></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
   });

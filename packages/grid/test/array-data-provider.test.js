@@ -1,35 +1,20 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-sorter.js';
-import { flushGrid, getBodyCellContent, getCellContent, getRowCells, getRows } from './helpers.js';
+import { flushGrid, getBodyCellContent, getRows } from './helpers.js';
 
 describe('array data provider', () => {
   let grid, body;
-
-  function getContent(row, column) {
-    return getCellContent(getCell(row, column)).innerText;
-  }
-
-  function getCell(row, column) {
-    return getRowCells(getRows(body)[row])[column];
-  }
 
   describe('with items', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid>
-          <vaadin-grid-column>
-            <template class="header">First</template>
-            <template>[[item.name.first]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">Last</template>
-            <template>[[item.name.last]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last"></vaadin-grid-column>
         </vaadin-grid>
       `);
       grid.items = [
@@ -57,8 +42,8 @@ describe('array data provider', () => {
     });
 
     it('should have the right data', () => {
-      expect(getContent(0, 0)).to.equal('foo');
-      expect(getContent(1, 0)).to.equal('baz');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
+      expect(getBodyCellContent(grid, 1, 0).textContent).to.equal('baz');
     });
 
     it('should be observed for shift', () => {
@@ -69,12 +54,12 @@ describe('array data provider', () => {
         },
       });
       expect(grid.size).to.equal(3);
-      expect(getContent(0, 0)).to.equal('a');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('a');
     });
 
     it('should be observed for mutation', () => {
       grid.set('items.0.name.first', 'new');
-      expect(getContent(0, 0)).to.equal('new');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('new');
     });
 
     it('should handle null', () => {
@@ -112,7 +97,7 @@ describe('array data provider', () => {
           },
         },
       ];
-      expect(getContent(0, 0)).to.equal('a');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('a');
     });
   });
 
@@ -120,14 +105,8 @@ describe('array data provider', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid>
-          <vaadin-grid-column>
-            <template class="header">First</template>
-            <template>[[item.name.first]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">Last</template>
-            <template>[[item.name.last]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last"></vaadin-grid-column>
         </vaadin-grid>
       `);
       flushGrid(grid);
@@ -149,22 +128,8 @@ describe('invalid paths', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-sorter>
-              Sorter with invalid path
-            </vaadin-grid-sorter>
-          </template>
-          <template>[[item.name.first]]</template>
-        </vaadin-grid-column>
-
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter value="foo">
-            </vaadin-grid-filter>
-          </template>
-          <template>[[item.name.last]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column path="name.first"></vaadin-grid-column>
+        <vaadin-grid-column path="name.last"></vaadin-grid-column>
       </vaadin-grid>
     `);
 
@@ -176,6 +141,21 @@ describe('invalid paths', () => {
         },
       },
     ];
+    const columns = grid.querySelectorAll('vaadin-grid-column');
+    columns[0].headerRenderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = `
+          <vaadin-grid-sorter>
+            Sorter with invalid path
+          </vaadin-grid-sorter>
+        `;
+      }
+    };
+    columns[1].headerRenderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = '<vaadin-grid-filter value="foo"></vaadin-grid-filter>';
+      }
+    };
     flushGrid(grid);
   });
 
