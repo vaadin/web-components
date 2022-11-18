@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, keyUpOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';
 import { Grid } from '../vaadin-grid.js';
@@ -11,7 +10,6 @@ import {
   getBodyCellContent,
   getContainerCell,
   getHeaderCellContent,
-  getRowCells,
   getRows,
   shiftClick,
 } from './helpers.js';
@@ -187,26 +185,32 @@ describe('sorting', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;" multi-sort>
-          <vaadin-grid-column>
-            <template class="header">
-              <vaadin-grid-sorter path="first" direction="asc">
-                <span class="title">first</span>
-              </vaadin-grid-sorter>
-            </template>
-            <template>[[item.first]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">
-              <vaadin-grid-sorter path="last" direction="desc">
-                <span class="title">last</span>
-              </vaadin-grid-sorter>
-            </template>
-            <template>[[item.last]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column path="first"></vaadin-grid-column>
+          <vaadin-grid-column path="last"></vaadin-grid-column>
           <vaadin-grid-sort-column></vaadin-grid-sort-column>
         </vaadin-grid>
       `);
+      const columns = document.querySelectorAll('vaadin-grid-column');
+      columns[0].headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = `
+            <vaadin-grid-sorter path="first" direction="asc">
+              <span class="title">first</span>
+            </vaadin-grid-sorter>
+          `;
+        }
+      };
+      columns[1].headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = `
+            <vaadin-grid-sorter path="last" direction="desc">
+              <span class="title">last</span>
+            </vaadin-grid-sorter>
+          `;
+        }
+      };
       await nextFrame();
+
       sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
       sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
 
@@ -334,8 +338,7 @@ describe('sorting', () => {
         sorterLast.direction = null;
         grid.items = buildDataSet(100);
         const bodyRows = getRows(grid.$.items);
-        const cells = getRowCells(bodyRows[0]);
-        expect(cells[0]._content.__templateInstance.item).to.equal(grid.items[0]);
+        expect(grid.__getRowModel(bodyRows[0]).item).to.equal(grid.items[0]);
       });
 
       it('should sort empty values', () => {
@@ -615,24 +618,28 @@ describe('sorting', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;">
-          <vaadin-grid-column>
-            <template class="header">
-              <vaadin-grid-sorter path="first" direction="asc">
-                <span class="title">first</span>
-              </vaadin-grid-sorter>
-            </template>
-            <template>[[item.first]]</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">
-              <span class="title">last</span>
-              <vaadin-grid-sorter path="last">
-              </vaadin-grid-sorter>
-            </template>
-            <template>[[item.last]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column path="first"></vaadin-grid-column>
+          <vaadin-grid-column path="last"></vaadin-grid-column>
         </vaadin-grid>
       `);
+      const columns = document.querySelectorAll('vaadin-grid-column');
+      columns[0].headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = `
+            <vaadin-grid-sorter path="first" direction="asc">
+              <span class="title">first</span>
+            </vaadin-grid-sorter>
+          `;
+        }
+      };
+      columns[1].headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = `
+            <span class="title">last</span>
+            <vaadin-grid-sorter path="last"></vaadin-grid-sorter>
+          `;
+        }
+      };
       flushGrid(grid);
     });
 
