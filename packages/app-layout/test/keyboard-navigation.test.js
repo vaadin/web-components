@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { sendKeys, setViewport } from '@web/test-runner-commands';
 import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
 
 describe('keyboard navigation', () => {
-  let layout, toggle, drawer, drawerLink, contentLink;
+  let layout, toggle, drawer, drawerLink, contentLink, savedViewport;
 
   async function tab() {
     await sendKeys({ press: 'Tab' });
@@ -17,11 +17,9 @@ describe('keyboard navigation', () => {
     await sendKeys({ up: 'Shift' });
   }
 
-  async function fixtureLayout(layoutMode) {
-    const overlayMode = String(layoutMode === 'mobile');
-
+  async function fixtureLayout() {
     layout = fixtureSync(`
-      <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition: none;">
+      <vaadin-app-layout style="--vaadin-app-layout-transition: none;">
         <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
         <section slot="drawer">
           <a href="#">Drawer Link</a>
@@ -38,9 +36,21 @@ describe('keyboard navigation', () => {
     contentLink = layout.querySelector(':scope > :not([slot]) > a');
   }
 
+  before(() => {
+    savedViewport = { width: window.innerWidth, height: window.innerHeight };
+  });
+
+  after(async () => {
+    await setViewport(savedViewport);
+  });
+
   describe('desktop layout', () => {
+    before(async () => {
+      await setViewport({ width: 1000, height: 1000 });
+    });
+
     beforeEach(async () => {
-      await fixtureLayout('desktop');
+      await fixtureLayout();
     });
 
     it('should have focus outside the layout by default', () => {
@@ -86,8 +96,12 @@ describe('keyboard navigation', () => {
   });
 
   describe('mobile layout', () => {
+    before(async () => {
+      await setViewport({ width: 500, height: 500 });
+    });
+
     beforeEach(async () => {
-      await fixtureLayout('mobile');
+      await fixtureLayout();
     });
 
     it('should have focus outside the layout by default', () => {
