@@ -820,7 +820,11 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     __getFocusable(row, cell) {
-      return this.__rowFocusMode ? row : cell._focusButton || cell;
+      if (this.__rowFocusMode) {
+        return row;
+      }
+
+      return cell && cell._focusButton ? cell._focusButton : cell;
     }
 
     /**
