@@ -28,6 +28,7 @@ import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
+import { RowStateMixin } from './vaadin-grid-row-state-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
 import { SortMixin } from './vaadin-grid-sort-mixin.js';
@@ -279,7 +280,9 @@ class Grid extends ElementMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
                               ControllerMixin(
-                                EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement)))),
+                                EventContextMixin(
+                                  DragAndDropMixin(StylingMixin(RowStateMixin(TabindexMixin(PolymerElement)))),
+                                ),
                               ),
                             ),
                           ),
@@ -945,8 +948,8 @@ class Grid extends ElementMixin(
     this._frozenCellsChanged();
     this._updateFirstAndLastColumn();
     this._resetKeyboardNavigation();
-    this._a11yUpdateHeaderRows();
-    this._a11yUpdateFooterRows();
+    this._updateHeaderRows();
+    this._updateFooterRows();
     this.__updateFooterPositioning();
     this.generateCellClassNames();
   }

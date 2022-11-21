@@ -35,23 +35,38 @@ export const A11yMixin = (superClass) =>
         size + this._a11yGetHeaderRowCount(_columnTree) + this._a11yGetFooterRowCount(_columnTree),
       );
       this.$.table.setAttribute('aria-colcount', (bodyColumns && bodyColumns.length) || 0);
-
-      this._a11yUpdateHeaderRows();
-      this._a11yUpdateFooterRows();
     }
 
-    /** @protected */
-    _a11yUpdateHeaderRows() {
-      Array.from(this.$.header.children).forEach((headerRow, index) =>
-        headerRow.setAttribute('aria-rowindex', index + 1),
-      );
+    /**
+     * Override method inherited from `RowStateMixin`
+     * to set `aria-rowindex` on the header row.
+     *
+     * @param {HTMLTableRowElement} headerRow
+     * @param {number} index
+     * @param {HTMLTableRowElement[]} rows
+     * @protected
+     * @override
+     */
+    _updateHeaderRow(headerRow, index, rows) {
+      super._updateHeaderRow(headerRow, index, rows);
+
+      headerRow.setAttribute('aria-rowindex', index + 1);
     }
 
-    /** @protected */
-    _a11yUpdateFooterRows() {
-      Array.from(this.$.footer.children).forEach((footerRow, index) =>
-        footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1),
-      );
+    /**
+     * Override method inherited from `RowStateMixin`
+     * to set `aria-rowindex` on the footer row.
+     *
+     * @param {HTMLTableRowElement} footerRow
+     * @param {number} index
+     * @param {HTMLTableRowElement[]} rows
+     * @protected
+     * @override
+     */
+    _updateFooterRow(footerRow, index, rows) {
+      super._updateFooterRow(footerRow, index, rows);
+
+      footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1);
     }
 
     /**
