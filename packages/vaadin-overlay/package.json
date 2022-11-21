@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-overlay",
-  "version": "23.3.0-alpha7",
+  "version": "23.3.0-alpha8",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +34,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/overlay": "23.3.0-alpha7"
+    "@vaadin/overlay": "23.3.0-alpha8"
   }
 }
