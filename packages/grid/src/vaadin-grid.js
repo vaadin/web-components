@@ -25,7 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { updateRowAndCells } from './vaadin-grid-helpers.js';
+import { updateRowAndCells, updateRowBodyCellsPart } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -959,13 +959,19 @@ class Grid extends ElementMixin(
       this.$.footer.removeChild(this.$.footer.firstElementChild);
     }
 
-    Array.from(this.$.header.children).forEach((headerRow, index) =>
-      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1),
-    );
+    Array.from(this.$.header.children).forEach((headerRow, index, rows) => {
+      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
-    Array.from(this.$.footer.children).forEach((footerRow, index) =>
-      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0),
-    );
+      updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === 0);
+      updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === rows.length - 1);
+    });
+
+    Array.from(this.$.footer.children).forEach((footerRow, index, rows) => {
+      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+
+      updateRowBodyCellsPart(footerRow, 'first-footer-row-cell', index === 0);
+      updateRowBodyCellsPart(footerRow, 'last-footer-row-cell', index === rows.length - 1);
+    });
 
     // Sizer rows
     this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
