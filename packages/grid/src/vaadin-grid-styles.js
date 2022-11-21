@@ -116,7 +116,6 @@ registerStyles(
       width: 100%;
       box-sizing: border-box;
       margin: 0;
-      pointer-events: none;
     }
 
     [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
@@ -157,10 +156,6 @@ registerStyles(
       box-sizing: border-box;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    [part~='cell'] {
-      pointer-events: initial;
     }
 
     [hidden] {
