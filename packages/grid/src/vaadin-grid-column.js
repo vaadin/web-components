@@ -8,6 +8,7 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { updateCellState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -342,7 +343,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this._allCells.forEach((cell) => {
-        this.__updateCellPart(cell, 'frozen', frozen);
+        updateCellState(cell, 'frozen', frozen);
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -362,7 +363,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this.__updateCellPart(cell, 'frozen-to-end', frozenToEnd);
+        updateCellState(cell, 'frozen-to-end', frozenToEnd);
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -373,7 +374,7 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     _lastFrozenChanged(lastFrozen) {
       this._allCells.forEach((cell) => {
-        this.__updateCellPart(cell, 'last-frozen', lastFrozen);
+        updateCellState(cell, 'last-frozen', lastFrozen);
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
@@ -389,7 +390,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this.__updateCellPart(cell, 'first-frozen-to-end', firstFrozenToEnd);
+        updateCellState(cell, 'first-frozen-to-end', firstFrozenToEnd);
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
@@ -418,7 +419,7 @@ export const ColumnBaseMixin = (superClass) =>
       const newPart = `reorder-${reorderStatus}-cell`;
 
       this._allCells.forEach((cell) => {
-        this.__updateCellPart(cell, 'reorder-status', reorderStatus, newPart, oldPart);
+        updateCellState(cell, 'reorder-status', reorderStatus, newPart, oldPart);
       });
 
       this.__previousReorderStatus = reorderStatus;
@@ -736,22 +737,6 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       return this._defaultFooterRenderer;
-    }
-
-    /**
-     * Updates part attribute on the cell depending on the state.
-     *
-     * @param {HTMLElement} cell
-     * @param {string} state
-     * @param {string | boolean | nul} value
-     * @param {?string} newPart
-     * @param {?string} oldPart
-     * @private
-     */
-    __updateCellPart(cell, state, value, newPart, oldPart) {
-      if (this._grid) {
-        this._grid._updateCellState(cell, state, value, newPart, oldPart);
-      }
     }
   };
 

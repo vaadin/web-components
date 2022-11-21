@@ -9,7 +9,6 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -26,6 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { updateRowAndCells } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -917,10 +917,11 @@ class Grid extends ElementMixin(
       return;
     }
 
-    this._updateRowAndCells(row, 'first', index === 0);
-    this._updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
-    this._updateRowAndCells(row, 'odd', index % 2);
-    this._updateRowAndCells(row, 'even', index % 2 === 0);
+    updateRowAndCells(row, 'first', index === 0);
+    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
+    updateRowAndCells(row, 'odd', index % 2);
+    updateRowAndCells(row, 'even', index % 2 === 0);
+
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
   }
@@ -1006,9 +1007,9 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    this._updateRowAndCells(row, 'expanded', model.expanded);
-    this._updateRowAndCells(row, 'selected', model.selected);
-    this._updateRowAndCells(row, 'details-opened', model.detailsOpened);
+    updateRowAndCells(row, 'expanded', model.expanded);
+    updateRowAndCells(row, 'selected', model.selected);
+    updateRowAndCells(row, 'details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -1023,101 +1024,6 @@ class Grid extends ElementMixin(
     this._updateDetailsCellHeight(row);
 
     this._a11yUpdateRowExpanded(row, model.expanded);
-  }
-
-  /**
-   * @param {!HTMLElement} element
-   * @param {string} attribute
-   * @param {boolean | string | null | undefined} value
-   * @protected
-   */
-  _updateState(element, attribute, value) {
-    switch (typeof value) {
-      case 'boolean':
-        element.toggleAttribute(attribute, value);
-        break;
-      case 'string':
-        element.setAttribute(attribute, value);
-        break;
-      default:
-        // Value set to null / undefined
-        element.removeAttribute(attribute);
-        break;
-    }
-  }
-
-  /**
-   * @param {!HTMLElement} element
-   * @param {boolean | string | null | undefined} value
-   * @param {string} part
-   * @protected
-   */
-  _updatePart(element, value, part) {
-    if (value || value === '') {
-      addValueToAttribute(element, 'part', part);
-    } else {
-      removeValueFromAttribute(element, 'part', part);
-    }
-  }
-
-  /**
-   * @param {!HTMLElement} row
-   * @param {string} state
-   * @param {boolean | string | null | undefined} value
-   * @param {string} part
-   * @protected
-   */
-  _updateRowState(row, state, value, part) {
-    this._updateState(row, state, value);
-
-    this._updatePart(row, value, part || `${state}-row`);
-  }
-
-  /**
-   * @param {!HTMLElement} cell
-   * @param {string} attribute
-   * @param {boolean | string | null | undefined} value
-   * @param {string} part
-   * @param {?string} oldPart
-   * @protected
-   */
-  _updateCellState(cell, attribute, value, part, oldPart) {
-    this._updateState(cell, attribute, value);
-
-    if (oldPart) {
-      this._updatePart(cell, false, oldPart);
-    }
-
-    this._updatePart(cell, value, part || `${attribute}-cell`);
-  }
-
-  /**
-   * @param {!HTMLElement} row
-   * @param {string} state
-   * @param {boolean | string | null | undefined} value
-   * @param {boolean} appendValue
-   * @protected
-   */
-  _updateRowAndCells(row, state, value, appendValue) {
-    const part = appendValue ? `${state}-${value}-row` : `${state}-row`;
-
-    // Toggle state and part on the row
-    this._updateRowState(row, state, value, part);
-
-    // Toggle part on the row body cells
-    this._updateRowBodyCellsPart(row, `${part}-cell`, value);
-  }
-
-  /**
-   * @param {!HTMLElement} row
-   * @param {string} part
-   * @param {boolean | string | null | undefined} value
-   * @protected
-   */
-  _updateRowBodyCellsPart(row, part, value) {
-    Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).forEach((cell) => {
-      this._updatePart(cell, value, part);
-    });
   }
 
   /** @private */
