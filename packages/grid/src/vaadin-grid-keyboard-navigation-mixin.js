@@ -724,6 +724,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _onContentFocusIn(e) {
       const { section, cell, row } = this._getGridEventLocation(e);
+
+      if (!cell && !this.__rowFocusMode) {
+        return;
+      }
+
       this._detectInteracting(e);
 
       if (section && (cell || row)) {
