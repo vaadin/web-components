@@ -781,6 +781,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _onContentFocusIn(e) {
       const { section, cell, row } = this._getGridEventLocation(e);
+
+      if (!cell && !this.__rowFocusMode) {
+        return;
+      }
+
       this._detectInteracting(e);
 
       if (section && (cell || row)) {
@@ -820,11 +825,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     __getFocusable(row, cell) {
-      if (this.__rowFocusMode) {
-        return row;
-      }
-
-      return cell && cell._focusButton ? cell._focusButton : cell;
+      return this.__rowFocusMode ? row : cell._focusButton || cell;
     }
 
     /**
