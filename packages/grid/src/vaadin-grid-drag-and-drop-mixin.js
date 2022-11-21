@@ -3,6 +3,8 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { updateRowAndCells } from './vaadin-grid-helpers.js';
+
 const DropMode = {
   BETWEEN: 'between',
   ON_TOP: 'on-top',
@@ -154,12 +156,12 @@ export const DragAndDropMixin = (superClass) =>
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
-        this._updateRowState(row, 'dragstart', rows.length > 1 ? `${rows.length}` : '');
+        updateRowAndCells(row, 'dragstart', rows.length > 1 ? `${rows.length}` : '');
         this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
         this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
-          this._updateRowState(row, 'dragstart', null);
+          updateRowAndCells(row, 'dragstart', null);
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
         });
@@ -253,7 +255,7 @@ export const DragAndDropMixin = (superClass) =>
         } else if (row) {
           this._dragOverItem = row._item;
           if (row.getAttribute('dragover') !== this._dropLocation) {
-            this._updateRowState(row, 'dragover', this._dropLocation, true);
+            updateRowAndCells(row, 'dragover', this._dropLocation, true);
           }
         } else {
           this._clearDragStyles();
@@ -308,7 +310,7 @@ export const DragAndDropMixin = (superClass) =>
     _clearDragStyles() {
       this.removeAttribute('dragover');
       Array.from(this.$.items.children).forEach((row) => {
-        this._updateRowState(row, 'dragover', null, true);
+        updateRowAndCells(row, 'dragover', null, true);
       });
     }
 
@@ -398,8 +400,8 @@ export const DragAndDropMixin = (superClass) =>
         }
       });
 
-      this._updateRowState(row, 'drag-disabled', !!dragDisabled);
-      this._updateRowState(row, 'drop-disabled', !!dropDisabled);
+      updateRowAndCells(row, 'drag-disabled', !!dragDisabled);
+      updateRowAndCells(row, 'drop-disabled', !!dropDisabled);
     }
 
     /**

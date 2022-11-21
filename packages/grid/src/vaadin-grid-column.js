@@ -8,6 +8,7 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { updateCellState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -341,7 +342,9 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('frozen', frozen);
       }
 
-      this._allCells.forEach((cell) => cell.toggleAttribute('frozen', frozen));
+      this._allCells.forEach((cell) => {
+        updateCellState(cell, 'frozen', frozen);
+      });
 
       if (this._grid && this._grid._frozenCellsChanged) {
         this._grid._frozenCellsChanged();
@@ -359,7 +362,8 @@ export const ColumnBaseMixin = (superClass) =>
         if (this._grid && cell.parentElement === this._grid.$.sizer) {
           return;
         }
-        cell.toggleAttribute('frozen-to-end', frozenToEnd);
+
+        updateCellState(cell, 'frozen-to-end', frozenToEnd);
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -369,7 +373,9 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _lastFrozenChanged(lastFrozen) {
-      this._allCells.forEach((cell) => cell.toggleAttribute('last-frozen', lastFrozen));
+      this._allCells.forEach((cell) => {
+        updateCellState(cell, 'last-frozen', lastFrozen);
+      });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._lastFrozen = lastFrozen;
@@ -384,7 +390,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        cell.toggleAttribute('first-frozen-to-end', firstFrozenToEnd);
+        updateCellState(cell, 'first-frozen-to-end', firstFrozenToEnd);
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
@@ -408,7 +414,15 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _reorderStatusChanged(reorderStatus) {
-      this._allCells.forEach((cell) => cell.setAttribute('reorder-status', reorderStatus));
+      const prevStatus = this.__previousReorderStatus;
+      const oldPart = prevStatus ? `reorder-${prevStatus}-cell` : '';
+      const newPart = `reorder-${reorderStatus}-cell`;
+
+      this._allCells.forEach((cell) => {
+        updateCellState(cell, 'reorder-status', reorderStatus, newPart, oldPart);
+      });
+
+      this.__previousReorderStatus = reorderStatus;
     }
 
     /** @private */

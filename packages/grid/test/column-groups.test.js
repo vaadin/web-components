@@ -332,6 +332,11 @@ describe('column groups', () => {
       expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
     });
 
+    it('should add frozen to cell part attribute', () => {
+      expect(getHeaderCell(0, 0).getAttribute('part')).to.contain('frozen-cell');
+      expect(getHeaderCell(1, 0).getAttribute('part')).to.contain('frozen-cell');
+    });
+
     it('should have a column frozen to end', () => {
       const col = grid.querySelector('vaadin-grid-column');
       col.frozen = false;
@@ -347,6 +352,14 @@ describe('column groups', () => {
       expect(getHeaderCell(0, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 2).hasAttribute('frozen-to-end')).to.be.true;
+    });
+
+    it('should add frozen-to-end to cell part attribute', () => {
+      const col = grid.querySelector('vaadin-grid-column');
+      col.frozen = false;
+      col.frozenToEnd = true;
+      expect(getHeaderCell(0, 0).getAttribute('part')).to.contain('frozen-to-end-cell');
+      expect(getHeaderCell(1, 0).getAttribute('part')).to.contain('frozen-to-end-cell');
     });
 
     it('should have no hidden header rows', () => {
@@ -577,7 +590,7 @@ describe('column groups', () => {
                 <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
                 <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
               </vaadin-grid-column-group>
-    
+
               <vaadin-grid-column></vaadin-grid-column>
             </vaadin-grid>
           `);
@@ -593,7 +606,7 @@ describe('column groups', () => {
                 <vaadin-grid-column></vaadin-grid-column>
                 <vaadin-grid-column></vaadin-grid-column>
               </vaadin-grid-column-group>
-    
+
               <vaadin-grid-column></vaadin-grid-column>
             </vaadin-grid>
           `);
@@ -609,7 +622,7 @@ describe('column groups', () => {
                 <vaadin-grid-column></vaadin-grid-column>
                 <vaadin-grid-column></vaadin-grid-column>
               </vaadin-grid-column-group>
-    
+
               <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
             </vaadin-grid>
           `);
@@ -627,7 +640,7 @@ describe('column groups', () => {
                 <vaadin-grid-selection-column ${frozenAttr}></vaadin-grid-selection-column>
                 <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
               </vaadin-grid-column-group>
-    
+
               <vaadin-grid-column></vaadin-grid-column>
             </vaadin-grid>
           `);
@@ -664,7 +677,7 @@ describe('column groups', () => {
                 <vaadin-grid-selection-column></vaadin-grid-selection-column>
                 <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
               </vaadin-grid-column-group>
-    
+
               <vaadin-grid-column></vaadin-grid-column>
             </vaadin-grid>
           `);

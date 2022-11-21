@@ -125,7 +125,11 @@ export const getRows = (container) => {
 };
 
 export const getRowCells = (row) => {
-  return Array.prototype.slice.call(row.querySelectorAll('[part~="cell"]'));
+  return Array.from(row.querySelectorAll('[part~="cell"]'));
+};
+
+export const getRowBodyCells = (row) => {
+  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"]'));
 };
 
 export const getCellContent = (cell) => {

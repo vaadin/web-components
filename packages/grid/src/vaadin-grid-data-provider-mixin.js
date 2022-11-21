@@ -5,6 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { updateRowAndCells } from './vaadin-grid-helpers.js';
 
 /**
  * @private
@@ -260,15 +261,25 @@ export const DataProviderMixin = (superClass) =>
       const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
       if (item) {
-        el.toggleAttribute('loading', false);
+        this.__updateLoading(el, false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
           cache.ensureSubCacheForScaledIndex(scaledIndex);
         }
       } else {
-        el.toggleAttribute('loading', true);
+        this.__updateLoading(el, true);
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @param {boolean} loading
+     * @private
+     */
+    __updateLoading(row, loading) {
+      // Toggle row state (but not part), and set part for all the row body cells.
+      updateRowAndCells(row, 'loading', loading, false, null);
     }
 
     /**

@@ -111,7 +111,10 @@ export const isFocusable = (target) => {
     target.parentNode.querySelectorAll(
       '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]',
     ),
-  ).filter((element) => element.getAttribute('part') !== 'cell body-cell');
+  ).filter((element) => {
+    const part = element.getAttribute('part');
+    return !(part && part.includes('body-cell'));
+  });
 
   const isFocusableElement = focusables.includes(target);
   return !target.disabled && isFocusableElement;

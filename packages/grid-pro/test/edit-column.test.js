@@ -484,7 +484,7 @@ describe('edit column', () => {
       const normalColumnCells = rows.map((row) => getRowCells(row)[2]);
       expect(normalColumnCells).to.have.lengthOf(3);
       normalColumnCells.forEach((cell) => {
-        expect(cell.getAttribute('part')).to.equal('cell body-cell');
+        expect(cell.getAttribute('part')).to.not.contain('editable-cell');
       });
     });
   });

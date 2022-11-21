@@ -102,6 +102,15 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
         });
 
+        it('should add last-frozen to cell part attribute', () => {
+          grid._columnTree[0][1].frozen = true;
+          containerRows = getRows(containerElement);
+          const cells = getRowCells(containerRows[0]);
+          expect(cells[0].getAttribute('part')).to.not.contain('last-frozen-cell');
+          expect(cells[1].getAttribute('part')).to.contain('last-frozen-cell');
+          expect(cells[2].getAttribute('part')).to.not.contain('last-frozen-cell');
+        });
+
         it('should not move while content scrolls horizontally', (done) => {
           const cells = getRowCells(containerRows[0]);
           grid.style.borderWidth = '0px';
@@ -235,6 +244,15 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
+        });
+
+        it('should add first-frozen-to-end to cell part attribute', () => {
+          grid._columnTree[0][1].frozenToEnd = true;
+          containerRows = getRows(containerElement);
+          const cells = getRowCells(containerRows[0]);
+          expect(cells[0].getAttribute('part')).to.not.contain('first-frozen-to-end-cell');
+          expect(cells[1].getAttribute('part')).to.contain('first-frozen-to-end-cell');
+          expect(cells[2].getAttribute('part')).to.not.contain('first-frozen-to-end-cell');
         });
 
         it('should update transforms when frozen columns decrease', () => {

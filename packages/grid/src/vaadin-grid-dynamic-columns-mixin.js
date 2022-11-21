@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { updateCellState } from './vaadin-grid-helpers.js';
 
 function arrayEquals(arr1, arr2) {
   if (!arr1 || !arr2 || arr1.length !== arr2.length) {
@@ -160,8 +161,8 @@ export const DynamicColumnsMixin = (superClass) =>
           return a._column._order - b._column._order;
         })
         .forEach((cell, cellIndex, children) => {
-          cell.toggleAttribute('first-column', cellIndex === 0);
-          cell.toggleAttribute('last-column', cellIndex === children.length - 1);
+          updateCellState(cell, 'first-column', cellIndex === 0);
+          updateCellState(cell, 'last-column', cellIndex === children.length - 1);
         });
     }
 

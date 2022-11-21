@@ -10,6 +10,7 @@ import {
   flushGrid,
   getBodyCellContent,
   getCellContent,
+  getRowBodyCells,
   getRowCells,
   getRows,
   infiniteDataProvider,
@@ -354,11 +355,24 @@ describe('row details', () => {
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
     });
 
-    it('should update part attribute when opening/closing', () => {
+    it('should update row part attribute when opening / closing', () => {
       openRowDetails(1);
-      expect(bodyRows[1].getAttribute('part')).to.contain('details-opened');
+      expect(bodyRows[1].getAttribute('part')).to.contain('details-opened-row');
       closeRowDetails(1);
-      expect(bodyRows[1].getAttribute('part')).to.not.contain('details-opened');
+      expect(bodyRows[1].getAttribute('part')).to.not.contain('details-opened-row');
+    });
+
+    it('should update body cells part attribute when opening / closing', () => {
+      const cells = getRowBodyCells(bodyRows[1]);
+      openRowDetails(1);
+      cells.forEach((cell) => {
+        expect(cell.getAttribute('part')).to.contain('details-opened-row-cell');
+      });
+
+      closeRowDetails(1);
+      cells.forEach((cell) => {
+        expect(cell.getAttribute('part')).to.not.contain('details-opened-row-cell');
+      });
     });
 
     it('should be removed when item is removed', () => {

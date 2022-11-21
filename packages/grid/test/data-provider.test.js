@@ -12,6 +12,8 @@ import {
   getFirstVisibleItem,
   getLastVisibleItem,
   getPhysicalAverage,
+  getRowBodyCells,
+  getRowCells,
   getRows,
   infiniteDataProvider,
   scrollToEnd,
@@ -397,11 +399,23 @@ describe('data provider', () => {
           expect(bodyRows[0].hasAttribute('expanded')).to.be.false;
         });
 
-        it('should update part attribute when expanding / collapsing', () => {
+        it('should update row part attribute when expanding / collapsing', () => {
           expandIndex(grid, 0);
           expect(bodyRows[0].getAttribute('part')).to.contain('expanded-row');
           collapseIndex(grid, 0);
           expect(bodyRows[0].getAttribute('part')).to.not.contain('expanded-row');
+        });
+
+        it('should update body cells part attribute when expanding / collapsing', () => {
+          const cells = getRowBodyCells(bodyRows[0]);
+          expandIndex(grid, 0);
+          cells.forEach((cell) => {
+            expect(cell.getAttribute('part')).to.contain('expanded-row-cell');
+          });
+          collapseIndex(grid, 0);
+          cells.forEach((cell) => {
+            expect(cell.getAttribute('part')).to.not.contain('expanded-row-cell');
+          });
         });
       });
 
@@ -727,11 +741,29 @@ describe('wrapped grid', () => {
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.true;
     });
 
+    it('should add loading to cells part attribute', () => {
+      container.dataProvider = () => {};
+      const row = getRows(grid.$.items)[0];
+      getRowCells(row).forEach((cell) => {
+        expect(cell.getAttribute('part')).to.contain('loading-row-cell');
+      });
+    });
+
     it('should clear loading attribute from rows when data received', () => {
       container.dataProvider = (params, callback) => {
         callback([{}]);
       };
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
+    });
+
+    it('should remove loading from cells part attribute when data received', () => {
+      container.dataProvider = (params, callback) => {
+        callback([{}]);
+      };
+      const row = getRows(grid.$.items)[0];
+      getRowCells(row).forEach((cell) => {
+        expect(cell.getAttribute('part')).to.not.contain('loading-row-cell');
+      });
     });
 
     it('should clear loading attribute from rows when scrolled to previously loaded rows', () => {

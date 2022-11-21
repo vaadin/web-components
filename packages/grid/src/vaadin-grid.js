@@ -9,7 +9,6 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -26,6 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { updateRowAndCells, updateRowBodyCellsPart } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -173,29 +173,56 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name              | Description
- * -----------------------|----------------
- * `row`                  | Row in the internal table
- * `expanded-row`         | Expanded row
- * `selected-row`         | Selected row
- * `details-opened-row`   | Row with details open
- * `odd-row`              | Odd row
- * `first-row`            | The first body row
- * `last-row`             | The last body row
- * `dragstart-row`        | Set on the row for one frame when drag is starting. The value is a number when multiple rows are dragged
- * `dragover-above-row`   | Set on the row when the a row is dragged over above
- * `dragover-below-row`   | Set on the row when the a row is dragged over below
- * `dragover-on-top-row`  | Set on the row when the a row is dragged over on top
- * `drag-disabled-row`    | Set to a row that isn't available for dragging
- * `drop-disabled-row`    | Set to a row that can't be dropped on top of
- * `cell`                 | Cell in the internal table
- * `header-cell`          | Header cell in the internal table
- * `body-cell`            | Body cell in the internal table
- * `footer-cell`          | Footer cell in the internal table
- * `details-cell`         | Row details cell in the internal table
- * `focused-cell`         | Focused cell in the internal table
- * `resize-handle`        | Handle for resizing the columns
- * `reorder-ghost`        | Ghost element of the header cell being dragged
+ * Part name                  | Description
+ * ---------------------------|----------------
+ * `row`                      | Row in the internal table
+ * `expanded-row`             | Expanded row
+ * `selected-row`             | Selected row
+ * `details-opened-row`       | Row with details open
+ * `odd-row`                  | Odd row
+ * `even-row`                 | Even row
+ * `first-row`                | The first body row
+ * `last-row`                 | The last body row
+ * `dragstart-row`            | Set on the row for one frame when drag is starting.
+ * `dragover-above-row`       | Set on the row when the a row is dragged over above
+ * `dragover-below-row`       | Set on the row when the a row is dragged over below
+ * `dragover-on-top-row`      | Set on the row when the a row is dragged over on top
+ * `drag-disabled-row`        | Set to a row that isn't available for dragging
+ * `drop-disabled-row`        | Set to a row that can't be dropped on top of
+ * `cell`                     | Cell in the internal table
+ * `header-cell`              | Header cell in the internal table
+ * `body-cell`                | Body cell in the internal table
+ * `footer-cell`              | Footer cell in the internal table
+ * `details-cell`             | Row details cell in the internal table
+ * `focused-cell`             | Focused cell in the internal table
+ * `odd-row-cell`             | Cell in an odd row
+ * `even-row-cell`            | Cell in an even row
+ * `first-row-cell`           | Cell in the first body row
+ * `last-row-cell`            | Cell in the last body row
+ * `first-header-row-cell`    | Cell in the first header row
+ * `first-footer-row-cell`    | Cell in the first footer row
+ * `last-header-row-cell`     | Cell in the last header row
+ * `last-footer-row-cell`     | Cell in the last footer row
+ * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
+ * `selected-row-cell`        | Cell in a selected row
+ * `expanded-row-cell`        | Cell in an expanded row
+ * `details-opened-row-cell`  | Cell in an row with details open
+ * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)
+ * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
+ * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
+ * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top
+ * `drag-disabled-row-cell`   | Cell in a row that isn't available for dragging
+ * `drop-disabled-row-cell`   | Cell in a row that can't be dropped on top of
+ * `frozen-cell`              | Frozen cell in the internal table
+ * `frozen-to-end-cell`       | Frozen to end cell in the internal table
+ * `last-frozen-cell`         | Last frozen cell
+ * `first-frozen-to-end-cell` | First cell frozen to end
+ * `first-column-cell`        | First visible cell on a row
+ * `last-column-cell`         | Last visible cell on a row
+ * `reorder-allowed-cell`     | Cell in a column where another column can be reordered
+ * `reorder-dragging-cell`    | Cell in a column currently being reordered
+ * `resize-handle`            | Handle for resizing the columns
+ * `reorder-ghost`            | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:
  *
@@ -890,9 +917,11 @@ class Grid extends ElementMixin(
       return;
     }
 
-    this._updateRowState(row, 'first', index === 0);
-    this._updateRowState(row, 'last', index === this._effectiveSize - 1);
-    this._updateRowState(row, 'odd', index % 2);
+    updateRowAndCells(row, 'first', index === 0);
+    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
+    updateRowAndCells(row, 'odd', index % 2);
+    updateRowAndCells(row, 'even', index % 2 === 0);
+
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
   }
@@ -930,13 +959,19 @@ class Grid extends ElementMixin(
       this.$.footer.removeChild(this.$.footer.firstElementChild);
     }
 
-    Array.from(this.$.header.children).forEach((headerRow, index) =>
-      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1),
-    );
+    Array.from(this.$.header.children).forEach((headerRow, index, rows) => {
+      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
-    Array.from(this.$.footer.children).forEach((footerRow, index) =>
-      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0),
-    );
+      updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === 0);
+      updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === rows.length - 1);
+    });
+
+    Array.from(this.$.footer.children).forEach((footerRow, index, rows) => {
+      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+
+      updateRowBodyCellsPart(footerRow, 'first-footer-row-cell', index === 0);
+      updateRowBodyCellsPart(footerRow, 'last-footer-row-cell', index === rows.length - 1);
+    });
 
     // Sizer rows
     this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
@@ -978,9 +1013,9 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    this._updateRowState(row, 'expanded', model.expanded);
-    this._updateRowState(row, 'selected', model.selected);
-    this._updateRowState(row, 'details-opened', model.detailsOpened);
+    updateRowAndCells(row, 'expanded', model.expanded);
+    updateRowAndCells(row, 'selected', model.selected);
+    updateRowAndCells(row, 'details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -995,35 +1030,6 @@ class Grid extends ElementMixin(
     this._updateDetailsCellHeight(row);
 
     this._a11yUpdateRowExpanded(row, model.expanded);
-  }
-
-  /**
-   * @param {!HTMLElement} row
-   * @param {string} state
-   * @param {boolean | string | null | undefined} value
-   * @param {boolean} partWithValue
-   * @protected
-   */
-  _updateRowState(row, state, value, partWithValue) {
-    switch (typeof value) {
-      case 'boolean':
-        row.toggleAttribute(state, value);
-        break;
-      case 'string':
-        row.setAttribute(state, value);
-        break;
-      default:
-        // Value set to null / undefined
-        row.removeAttribute(state);
-        break;
-    }
-
-    const part = partWithValue ? `${state}-${value}-row` : `${state}-row`;
-    if (value || value === '') {
-      addValueToAttribute(row, 'part', part);
-    } else {
-      removeValueFromAttribute(row, 'part', part);
-    }
   }
 
   /** @private */
