@@ -309,7 +309,7 @@ describe('reordering simple grid', () => {
       expect(cell.hasAttribute('last-column')).to.be.true;
     });
 
-    it('should add first-column to cell part attribute', () => {
+    it('should add last-column to cell part attribute', () => {
       let cell = getCellByCellContent(headerContent[3]);
       expect(cell.getAttribute('part')).to.contain('last-column-cell');
       cell = getContainerCell(grid.$.items, 0, 3);
