@@ -44,7 +44,7 @@ export const A11yMixin = (superClass) =>
     _a11yUpdateHeaderRows() {
       Array.from(this.$.header.children).forEach((headerRow, index, array) => {
         headerRow.setAttribute('aria-rowindex', index + 1);
-        this._updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === array.length - 1);
+        this._updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === 0);
         this._updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === array.length - 1);
       });
     }
