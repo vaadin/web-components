@@ -342,9 +342,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this._allCells.forEach((cell) => {
-        if (this._grid) {
-          this._grid._updateCellState(cell, 'frozen', frozen);
-        }
+        this.__updateCellPart(cell, 'frozen', frozen);
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -364,9 +362,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        if (this._grid) {
-          this._grid._updateCellState(cell, 'frozen-to-end', frozenToEnd);
-        }
+        this.__updateCellPart(cell, 'frozen-to-end', frozenToEnd);
       });
 
       if (this._grid && this._grid._frozenCellsChanged) {
@@ -377,9 +373,7 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     _lastFrozenChanged(lastFrozen) {
       this._allCells.forEach((cell) => {
-        if (this._grid) {
-          this._grid._updateCellState(cell, 'last-frozen', lastFrozen);
-        }
+        this.__updateCellPart(cell, 'last-frozen', lastFrozen);
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
@@ -395,9 +389,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        if (this._grid) {
-          this._grid._updateCellState(cell, 'first-frozen-to-end', firstFrozenToEnd);
-        }
+        this.__updateCellPart(cell, 'first-frozen-to-end', firstFrozenToEnd);
       });
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
@@ -421,13 +413,12 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _reorderStatusChanged(reorderStatus) {
+      const prevStatus = this.__previousReorderStatus;
+      const oldPart = prevStatus ? `reorder-${prevStatus}-cell` : '';
+      const newPart = `reorder-${reorderStatus}-cell`;
+
       this._allCells.forEach((cell) => {
-        if (this._grid) {
-          const prevStatus = this.__previousReorderStatus;
-          const oldPart = prevStatus ? `reorder-${prevStatus}-cell` : '';
-          const newPart = `reorder-${reorderStatus}-cell`;
-          this._grid._updateCellState(cell, 'reorder-status', reorderStatus, newPart, oldPart);
-        }
+        this.__updateCellPart(cell, 'reorder-status', reorderStatus, newPart, oldPart);
       });
 
       this.__previousReorderStatus = reorderStatus;
@@ -745,6 +736,22 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       return this._defaultFooterRenderer;
+    }
+
+    /**
+     * Updates part attribute on the cell depending on the state.
+     *
+     * @param {HTMLElement} cell
+     * @param {string} state
+     * @param {string | boolean | nul} value
+     * @param {?string} newPart
+     * @param {?string} oldPart
+     * @private
+     */
+    __updateCellPart(cell, state, value, newPart, oldPart) {
+      if (this._grid) {
+        this._grid._updateCellState(cell, state, value, newPart, oldPart);
+      }
     }
   };
 
