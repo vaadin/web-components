@@ -78,25 +78,35 @@
     "@vaadin/tooltip": "23.3.0-alpha6",
     "@vaadin/upload": "23.3.0-alpha6",
     "@vaadin/vertical-layout": "23.3.0-alpha6",
-    "@vaadin/virtual-list": "23.3.0-alpha6",
-    "@vitejs/plugin-react": "^2.2.0",
-    "react": "^18.2.0"
+    "@vaadin/virtual-list": "23.3.0-alpha6"
   },
   "author": "Vaadin Ltd.",
   "license": "Apache-2.0",
   "overrides": {
     "esbuild": "$esbuild"
   },
-  "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4-fix.0",
-    "@lit-labs/react": "^1.1.0",
-    "@types/mocha": "^10.0.0",
+  "peerDependencies": {
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "@lit-labs/react": "^1.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@types/mocha": "^10.0.0",
+    "@vitejs/plugin-react": "^2.2.0",
     "esbuild": "^0.15.13",
     "json-schema-to-typescript": "^11.0.2",
     "prettier": "^2.7.1",
-    "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
     "tsx": "^3.11.0",
     "type-fest": "^3.2.0",
