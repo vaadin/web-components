@@ -911,16 +911,15 @@ class Grid extends ElementMixin(
 
   /** @private */
   _updateScrollerItem(row, index) {
+    row._index = index;
+
     this._preventScrollerRotatingCellFocus(row, index);
 
     if (!this._columnTree) {
       return;
     }
 
-    updateRowAndCells(row, 'first', index === 0);
-    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
-    updateRowAndCells(row, 'odd', index % 2);
-    updateRowAndCells(row, 'even', index % 2 === 0);
+    this._updateRowOrderParts(row, index);
 
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
@@ -932,6 +931,14 @@ class Grid extends ElementMixin(
     this.recalculateColumnWidths();
   }
 
+  /** @private */
+  _updateRowOrderParts(row, index = row._index) {
+    updateRowAndCells(row, 'first', index === 0);
+    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
+    updateRowAndCells(row, 'odd', index % 2);
+    updateRowAndCells(row, 'even', index % 2 === 0);
+  }
+
   /**
    * @param {!Array<!GridColumn>} columnTree
    * @protected
@@ -939,6 +946,8 @@ class Grid extends ElementMixin(
   _renderColumnTree(columnTree) {
     iterateChildren(this.$.items, (row) => {
       this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+      this._updateRowOrderParts(row);
+      this._filterDragAndDrop(row, this.__getRowModel(row));
     });
 
     while (this.$.header.children.length < columnTree.length) {

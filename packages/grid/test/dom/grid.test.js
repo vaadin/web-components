@@ -37,5 +37,11 @@ describe('vaadin-grid', () => {
       grid.detailsOpenedItems = [grid.items[0]];
       await expect(grid).shadowDom.to.equalSnapshot();
     });
+
+    it('hidden column', async () => {
+      grid.querySelector('vaadin-grid-column').hidden = true;
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
   });
 });
