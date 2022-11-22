@@ -25,7 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { updateRowAndCells, updateRowBodyCellsPart } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateRowAndCells, updateRowBodyCellsPart } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -788,7 +788,7 @@ class Grid extends ElementMixin(
 
     const contentsFragment = document.createDocumentFragment();
 
-    Array.from(row.children).forEach((cell) => {
+    iterateChildren(row, (cell) => {
       cell._vacant = true;
     });
     row.innerHTML = '';
@@ -937,9 +937,9 @@ class Grid extends ElementMixin(
    * @protected
    */
   _renderColumnTree(columnTree) {
-    Array.from(this.$.items.children).forEach((row) =>
-      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true),
-    );
+    iterateChildren(this.$.items, (row) => {
+      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+    });
 
     while (this.$.header.children.length < columnTree.length) {
       const headerRow = document.createElement('tr');
@@ -959,14 +959,14 @@ class Grid extends ElementMixin(
       this.$.footer.removeChild(this.$.footer.firstElementChild);
     }
 
-    Array.from(this.$.header.children).forEach((headerRow, index, rows) => {
+    iterateChildren(this.$.header, (headerRow, index, rows) => {
       this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
       updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === 0);
       updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === rows.length - 1);
     });
 
-    Array.from(this.$.footer.children).forEach((footerRow, index, rows) => {
+    iterateChildren(this.$.footer, (footerRow, index, rows) => {
       this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
 
       updateRowBodyCellsPart(footerRow, 'first-footer-row-cell', index === 0);
@@ -1020,7 +1020,7 @@ class Grid extends ElementMixin(
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
 
-    Array.from(row.children).forEach((cell) => {
+    iterateChildren(row, (cell) => {
       if (cell._renderer) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);

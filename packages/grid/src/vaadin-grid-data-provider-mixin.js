@@ -5,7 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { updateRowAndCells } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateRowAndCells } from './vaadin-grid-helpers.js';
 
 /**
  * @private
@@ -400,14 +400,14 @@ export const DataProviderMixin = (superClass) =>
             this._cache.updateSize();
             this._effectiveSize = this._cache.effectiveSize;
 
-            Array.from(this.$.items.children)
-              .filter((row) => !row.hidden)
-              .forEach((row) => {
+            iterateChildren(this.$.items, (row) => {
+              if (!row.hidden) {
                 const cachedItem = this._cache.getItemForIndex(row.index);
                 if (cachedItem) {
                   this._getItem(row.index, row);
                 }
-              });
+              }
+            });
 
             this.__scrollToPendingIndex();
           });

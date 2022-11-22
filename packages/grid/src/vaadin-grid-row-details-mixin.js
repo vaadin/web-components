@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { iterateChildren } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -78,7 +79,7 @@ export const RowDetailsMixin = (superClass) =>
 
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
-        Array.from(this.$.items.children).forEach((row) => {
+        iterateChildren(this.$.items, (row) => {
           if (!row.querySelector('[part~=details-cell]')) {
             this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
             const isDetailsOpened = this._isDetailsOpened(row._item);
@@ -95,7 +96,7 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
 
-      [...this.$.items.children].forEach((row) => {
+      iterateChildren(this.$.items, (row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {
           this._updateItem(row, row._item);
@@ -162,7 +163,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeights() {
-      [...this.$.items.children].forEach((row) => {
+      iterateChildren(this.$.items, (row) => {
         this._updateDetailsCellHeight(row);
       });
     }

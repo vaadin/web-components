@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { iterateChildren } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -42,16 +43,16 @@ export const A11yMixin = (superClass) =>
 
     /** @protected */
     _a11yUpdateHeaderRows() {
-      Array.from(this.$.header.children).forEach((headerRow, index) =>
-        headerRow.setAttribute('aria-rowindex', index + 1),
-      );
+      iterateChildren(this.$.header, (headerRow, index) => {
+        headerRow.setAttribute('aria-rowindex', index + 1);
+      });
     }
 
     /** @protected */
     _a11yUpdateFooterRows() {
-      Array.from(this.$.footer.children).forEach((footerRow, index) =>
-        footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1),
-      );
+      iterateChildren(this.$.footer, (footerRow, index) => {
+        footerRow.setAttribute('aria-rowindex', this._a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1);
+      });
     }
 
     /**
@@ -71,7 +72,9 @@ export const A11yMixin = (superClass) =>
     _a11yUpdateRowSelected(row, selected) {
       // Jaws reads selection only for rows, NVDA only for cells
       row.setAttribute('aria-selected', Boolean(selected));
-      Array.from(row.children).forEach((cell) => cell.setAttribute('aria-selected', Boolean(selected)));
+      iterateChildren(row, (cell) => {
+        cell.setAttribute('aria-selected', Boolean(selected));
+      });
     }
 
     /**
@@ -108,7 +111,7 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11ySetRowDetailsCell(row, detailsCell) {
-      Array.from(row.children).forEach((cell) => {
+      iterateChildren(row, (cell) => {
         if (cell !== detailsCell) {
           cell.setAttribute('aria-controls', detailsCell.id);
         }

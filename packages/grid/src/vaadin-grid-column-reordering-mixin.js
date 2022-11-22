@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { updateColumnOrders } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -304,11 +304,11 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _setSiblingsReorderStatus(column, status) {
-      Array.from(column.parentNode.children)
-        .filter((child) => /column/.test(child.localName) && this._isSwapAllowed(child, column))
-        .forEach((sibling) => {
+      iterateChildren(column.parentNode, (sibling) => {
+        if (/column/.test(sibling.localName) && this._isSwapAllowed(sibling, column)) {
           sibling._reorderStatus = status;
-        });
+        }
+      });
     }
 
     /** @protected */

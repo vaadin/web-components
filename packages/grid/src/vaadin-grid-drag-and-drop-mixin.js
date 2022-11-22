@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { updateRowAndCells } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateRowAndCells } from './vaadin-grid-helpers.js';
 
 const DropMode = {
   BETWEEN: 'between',
@@ -309,7 +309,7 @@ export const DragAndDropMixin = (superClass) =>
     /** @protected */
     _clearDragStyles() {
       this.removeAttribute('dragover');
-      Array.from(this.$.items.children).forEach((row) => {
+      iterateChildren(this.$.items, (row) => {
         updateRowAndCells(row, 'dragover', null, true);
       });
     }
@@ -373,11 +373,11 @@ export const DragAndDropMixin = (superClass) =>
      * the conditions change.
      */
     filterDragAndDrop() {
-      Array.from(this.$.items.children)
-        .filter((row) => !row.hidden)
-        .forEach((row) => {
+      iterateChildren(this.$.items, (row) => {
+        if (!row.hidden) {
           this._filterDragAndDrop(row, this.__getRowModel(row));
-        });
+        }
+      });
     }
 
     /**
@@ -390,13 +390,11 @@ export const DragAndDropMixin = (superClass) =>
       const dragDisabled = !this.rowsDraggable || loading || (this.dragFilter && !this.dragFilter(model));
       const dropDisabled = !this.dropMode || loading || (this.dropFilter && !this.dropFilter(model));
 
-      const draggableElements = Array.from(row.children).map((cell) => cell._content);
-
-      draggableElements.forEach((e) => {
+      iterateChildren(row, (cell) => {
         if (dragDisabled) {
-          e.removeAttribute('draggable');
+          cell._content.removeAttribute('draggable');
         } else {
-          e.setAttribute('draggable', true);
+          cell._content.setAttribute('draggable', true);
         }
       });
 

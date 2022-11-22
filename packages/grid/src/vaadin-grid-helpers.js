@@ -6,6 +6,14 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
+ * @param {HTMLElement} container the DOM element with children
+ * @param {Function} callback function to call on each child
+ */
+export function iterateChildren(container, callback) {
+  [...container.children].forEach(callback);
+}
+
+/**
  * @param {Array<Object>} columns array of columns to be modified
  * @param {number} scope multiplier added to base order for each column
  * @param {number} baseOrder base number used for order
