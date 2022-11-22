@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren } from './vaadin-grid-helpers.js';
+import { iterateChildren, updatePart } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -31,16 +31,45 @@ export const StylingMixin = (superClass) =>
          * @type {GridCellClassNameGenerator | null | undefined}
          */
         cellClassNameGenerator: Function,
+
+        /**
+         * A function that allows generating CSS `part` names for grid cells in Shadow DOM based
+         * on their row and column, for styling from outside using the `::part()` selector.
+         *
+         * The return value should be the generated part name as a string, or multiple part names
+         * separated by whitespace characters. This
+         *
+         * Receives two arguments:
+         * - `column` The `<vaadin-grid-column>` element (`undefined` for details-cell).
+         * - `model` The object with the properties related with
+         *   the rendered item, contains:
+         *   - `model.index` The index of the item.
+         *   - `model.item` The item.
+         *   - `model.expanded` Sublevel toggle state.
+         *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+         *   - `model.selected` Selected state.
+         *
+         * @type {GridCellPartNameGenerator | null | undefined}
+         */
+        celPartNameGenerator: Function,
       };
     }
 
     static get observers() {
-      return ['__cellClassNameGeneratorChanged(cellClassNameGenerator)'];
+      return [
+        '__cellClassNameGeneratorChanged(cellClassNameGenerator)',
+        '__cellPartNameGeneratorChanged(cellPartNameGenerator)',
+      ];
     }
 
     /** @private */
     __cellClassNameGeneratorChanged() {
       this.generateCellClassNames();
+    }
+
+    /** @private */
+    __cellPartNameGeneratorChanged() {
+      this.generateCellPartNames();
     }
 
     /**
@@ -57,6 +86,18 @@ export const StylingMixin = (superClass) =>
       });
     }
 
+    /**
+     * Runs the `celPartNameGenerator` for the visible cells.
+     * If the generator depends on varying conditions, you need to
+     * call this function manually in order to update the styles when
+     * the conditions change.
+     */
+    generateCellPartNames() {
+      Array.from(this.$.items.children)
+        .filter((row) => !row.hidden && !row.hasAttribute('loading'))
+        .forEach((row) => this._generateCellPartNames(row, this.__getRowModel(row)));
+    }
+
     /** @private */
     _generateCellClassNames(row, model) {
       iterateChildren(row, (cell) => {
@@ -68,6 +109,28 @@ export const StylingMixin = (superClass) =>
           cell.__generatedClasses = result && result.split(' ').filter((className) => className.length > 0);
           if (cell.__generatedClasses) {
             cell.__generatedClasses.forEach((className) => cell.classList.add(className));
+          }
+        }
+      });
+    }
+
+    /** @private */
+    _generateCellPartNames(row, model) {
+      iterateChildren(row, (cell) => {
+        if (cell.__generatedParts) {
+          cell.__generatedParts.forEach((partName) => {
+            // Remove previously generated part names
+            updatePart(cell, null, partName);
+          });
+        }
+        if (this.cellPartNameGenerator) {
+          const result = this.cellPartNameGenerator(cell._column, model);
+          cell.__generatedParts = result && result.split(' ').filter((partName) => partName.length > 0);
+          if (cell.__generatedParts) {
+            cell.__generatedParts.forEach((partName) => {
+              // Add the newly generated names to part
+              updatePart(cell, true, partName);
+            });
           }
         }
       });

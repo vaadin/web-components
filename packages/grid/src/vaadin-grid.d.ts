@@ -30,12 +30,16 @@ import { GridRowDetailsRenderer } from './vaadin-grid-row-details-mixin.js';
 import type { ScrollMixinClass } from './vaadin-grid-scroll-mixin.js';
 import type { SelectionMixinClass } from './vaadin-grid-selection-mixin.js';
 import type { SortMixinClass } from './vaadin-grid-sort-mixin.js';
-import type { StylingMixinClass } from './vaadin-grid-styling-mixin.js';
-import { GridCellClassNameGenerator } from './vaadin-grid-styling-mixin.js';
+import type {
+  GridCellClassNameGenerator,
+  GridCellPartNameGenerator,
+  StylingMixinClass,
+} from './vaadin-grid-styling-mixin.js';
 
 export {
   GridBodyRenderer,
   GridCellClassNameGenerator,
+  GridCellPartNameGenerator,
   GridDataProvider,
   GridDataProviderCallback,
   GridDataProviderParams,
