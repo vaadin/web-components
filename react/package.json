@@ -16,9 +16,11 @@
     "clean": "rimraf css generated src/generated renderers utils *.d.ts *.js *.d.ts.map *.js.map",
     "build": "npm run build:load-schema && npm run build:generate && npm run build:typescript && npm run build:generate-css && npm run build:update-packagejson",
     "dev": "vite dev",
+    "prepack": "npm run clean",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "version": "tsx scripts/package-json-version.ts && npm install --package-lock-only --ignore-scripts"
   },
   "repository": {
     "type": "git",
