@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/accordion",
-  "version": "23.3.0-alpha8",
+  "version": "23.3.0-beta1",
   "publishConfig": {
     "access": "public"
   },
@@ -36,11 +36,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.3.0-alpha8",
-    "@vaadin/details": "23.3.0-alpha8",
-    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha8",
-    "@vaadin/vaadin-material-styles": "23.3.0-alpha8",
-    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha8"
+    "@vaadin/component-base": "23.3.0-beta1",
+    "@vaadin/details": "23.3.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "23.3.0-beta1",
+    "@vaadin/vaadin-material-styles": "23.3.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "23.3.0-beta1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
