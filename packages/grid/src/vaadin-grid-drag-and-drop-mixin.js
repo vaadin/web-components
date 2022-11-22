@@ -309,7 +309,7 @@ export const DragAndDropMixin = (superClass) =>
     /** @protected */
     _clearDragStyles() {
       this.removeAttribute('dragover');
-      Array.from(this.$.items.children).forEach((row) => {
+      iterateChildren(this.$.items, (row) => {
         updateRowAndCells(row, 'dragover', null, true);
       });
     }
