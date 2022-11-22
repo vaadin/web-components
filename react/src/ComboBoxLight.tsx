@@ -2,7 +2,7 @@ import type { ComboBoxDefaultItem } from '@vaadin/combo-box';
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   ComboBoxLight as _ComboBoxLight,
-  ComboBoxLightModule,
+  WebComponentModule,
   type ComboBoxLightProps as _ComboBoxLightProps,
 } from './generated/ComboBoxLight.js';
 import type { ComboBoxReactRendererProps } from './renderers/combobox.js';
@@ -15,7 +15,7 @@ export type ComboBoxLightProps<TItem> = Omit<_ComboBoxLightProps<TItem>, 'render
 
 function ComboBoxLight<TItem = ComboBoxDefaultItem>(
   props: ComboBoxLightProps<TItem>,
-  ref: ForwardedRef<ComboBoxLightModule.ComboBoxLight<TItem>>,
+  ref: ForwardedRef<WebComponentModule.ComboBoxLight<TItem>>,
 ): ReactElement | null {
   const [portals, renderer] = useModelRenderer(props.renderer);
 
@@ -28,7 +28,7 @@ function ComboBoxLight<TItem = ComboBoxDefaultItem>(
 }
 
 const ForwardedComboBoxLight = forwardRef(ComboBoxLight) as <TItem = ComboBoxDefaultItem>(
-  props: ComboBoxLightProps<TItem> & { ref?: ForwardedRef<ComboBoxLightModule.ComboBoxLight<TItem>> },
+  props: ComboBoxLightProps<TItem> & { ref?: ForwardedRef<WebComponentModule.ComboBoxLight<TItem>> },
 ) => ReactElement | null;
 
-export { ForwardedComboBoxLight as ComboBoxLight, ComboBoxLightModule };
+export { ForwardedComboBoxLight as ComboBoxLight, WebComponentModule };

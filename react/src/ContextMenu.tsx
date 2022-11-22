@@ -1,14 +1,14 @@
 import { ComponentType, type ForwardedRef, forwardRef, PropsWithChildren, type ReactElement } from 'react';
 import {
   ContextMenu as _ContextMenu,
-  ContextMenuModule,
+  WebComponentModule,
   type ContextMenuProps as _ContextMenuProps,
 } from './generated/ContextMenu.js';
 import { type ReactContextRendererProps, useContextRenderer } from './renderers/useContextRenderer.js';
 
 export type ContextMenuReactRendererProps = ReactContextRendererProps<
-  ContextMenuModule.ContextMenuRendererContext,
-  ContextMenuModule.ContextMenu
+  WebComponentModule.ContextMenuRendererContext,
+  WebComponentModule.ContextMenu
 >;
 
 export type ContextMenuProps = Omit<_ContextMenuProps, 'renderer'> &
@@ -16,7 +16,7 @@ export type ContextMenuProps = Omit<_ContextMenuProps, 'renderer'> &
     renderer?: ComponentType<ContextMenuReactRendererProps> | null;
   }>;
 
-function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuModule.ContextMenu>): ReactElement | null {
+function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<WebComponentModule.ContextMenu>): ReactElement | null {
   const [portals, renderer] = useContextRenderer(props.renderer);
 
   return (
@@ -29,4 +29,4 @@ function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuModul
 
 const ForwardedContextMenu = forwardRef(ContextMenu);
 
-export { ForwardedContextMenu as ContextMenu, ContextMenuModule };
+export { ForwardedContextMenu as ContextMenu, WebComponentModule };

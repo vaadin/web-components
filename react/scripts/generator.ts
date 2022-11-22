@@ -104,7 +104,7 @@ function createEventMapDeclaration(
 ): Node {
   const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
   const eventNameTypeId = ts.factory.createIdentifier('EventName');
-  const elementModuleId = ts.factory.createIdentifier(`${COMPONENT_NAME}Module`);
+  const elementModuleId = ts.factory.createIdentifier(`WebComponentModule`);
   const eventMapId = ts.factory.createIdentifier(EVENT_MAP);
 
   return ts.factory.createTypeAliasDeclaration(
@@ -254,7 +254,7 @@ function addGenerics(node: Node, elementName: string) {
     const initializer = template(
       `
 const c = ${CALL_EXPRESSION} as (
-  props: ${COMPONENT_NAME}Props & { ref?: React.ForwardedRef<${COMPONENT_NAME}Module.${COMPONENT_NAME}> },
+  props: ${COMPONENT_NAME}Props & { ref?: React.ForwardedRef<WebComponentModule.${COMPONENT_NAME}> },
 ) => React.ReactElement | null
   `,
       (statements) => (statements[0] as VariableStatement).declarationList.declarations[0].initializer!,
@@ -302,14 +302,14 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
   const ast = template(
     `
 import type { EventName, WebComponentProps } from "${LIT_REACT_PATH}";
-import * as ${COMPONENT_NAME}Module from "${MODULE_PATH}";
+import * as WebComponentModule from "${MODULE_PATH}";
 import * as React from "react";
 import { createComponent } from "${CREATE_COMPONENT_PATH}";
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
-export type ${COMPONENT_NAME}Props = WebComponentProps<${COMPONENT_NAME}Module.${COMPONENT_NAME}, ${EVENT_MAP}>;
-export const ${COMPONENT_NAME} = createComponent(React, ${COMPONENT_TAG}, ${COMPONENT_NAME}Module.${COMPONENT_NAME}, events);
-export { ${COMPONENT_NAME}Module };
+export type ${COMPONENT_NAME}Props = WebComponentProps<WebComponentModule.${COMPONENT_NAME}, ${EVENT_MAP}>;
+export const ${COMPONENT_NAME} = createComponent(React, ${COMPONENT_TAG}, WebComponentModule.${COMPONENT_NAME}, events);
+export { WebComponentModule };
 `,
     (statements) => statements,
     [
@@ -351,28 +351,13 @@ export { ${COMPONENT_NAME}Module };
   return createSourceFile(ast, resolve(generatedDir, `${elementName}.ts`));
 }
 
-function generateIndexFile(files: readonly SourceFile[]): SourceFile {
-  const statements = files.map(({ fileName }) =>
-    ts.factory.createExportDeclaration(
-      undefined,
-      false,
-      undefined,
-      ts.factory.createStringLiteral(createImportPath(relative(generatedDir, fileName), true), true),
-    ),
-  );
-
-  return createSourceFile(statements, resolve(generatedDir, 'index.ts'));
-}
-
 const elementFilesMap = await prepareElementFiles(descriptions);
 
 const sourceFiles = Array.from(elementFilesMap.entries(), ([element, data]) => generateReactComponent(element, data));
-
-const indexFile = generateIndexFile(sourceFiles);
 
 async function printAndWrite(file: SourceFile) {
   const contents = printer.printFile(file);
   await writeFile(file.fileName, contents, 'utf8');
 }
 
-await Promise.all([...sourceFiles.map(printAndWrite), printAndWrite(indexFile)]);
+await Promise.all(sourceFiles.map(printAndWrite));

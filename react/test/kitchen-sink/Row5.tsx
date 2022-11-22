@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { Grid, GridModule } from '../../src/Grid.js';
+import { Grid, WebComponentModule as GridModule } from '../../src/Grid.js';
 import { GridTreeColumn } from '../../src/GridTreeColumn.js';
 import { BoardRow } from '../../src/BoardRow.js';
 import { GridColumnGroup } from '../../src/GridColumnGroup.js';

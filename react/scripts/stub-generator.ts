@@ -70,11 +70,3 @@ const statements = stubPaths.map((path) =>
     ts.factory.createStringLiteral(createImportPath(relative(srcDir, path), true)),
   ),
 );
-
-const indexPath = resolve(srcDir, 'index.ts');
-
-if (!(await exists(indexPath)) || shouldOverride) {
-  const sourceFile = createSourceFile(statements, indexPath);
-  const contents = printer.printFile(sourceFile);
-  await writeFile(indexPath, contents, 'utf8');
-}

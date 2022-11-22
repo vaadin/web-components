@@ -1,5 +1,6 @@
 import { BoardRow } from '../../src/BoardRow.js';
-import { Item, ListBox } from '../../src/index.js';
+import { Item } from '../../src/Item.js';
+import { ListBox } from '../../src/ListBox.js';
 import { RadioButton } from '../../src/RadioButton.js';
 import { RadioGroup } from '../../src/RadioGroup.js';
 import { RichTextEditor } from '../../src/RichTextEditor.js';

@@ -1,13 +1,13 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   Notification as _Notification,
-  NotificationModule,
+  WebComponentModule,
   type NotificationProps as _NotificationProps,
 } from './generated/Notification.js';
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
-export type NotificationReactRendererProps = ReactSimpleRendererProps<NotificationModule.Notification>;
+export type NotificationReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Notification>;
 
 export type NotificationProps = Omit<_NotificationProps, 'renderer'> &
   Readonly<{
@@ -16,7 +16,7 @@ export type NotificationProps = Omit<_NotificationProps, 'renderer'> &
 
 function Notification(
   { children, ...props }: NotificationProps,
-  ref: ForwardedRef<NotificationModule.Notification>,
+  ref: ForwardedRef<WebComponentModule.Notification>,
 ): ReactElement | null {
   const [portals, renderer] = useSimpleOrChildrenRenderer(props.renderer, children);
 
@@ -29,4 +29,4 @@ function Notification(
 
 const ForwardedNotification = forwardRef(Notification);
 
-export { ForwardedNotification as Notification, NotificationModule };
+export { ForwardedNotification as Notification, WebComponentModule };

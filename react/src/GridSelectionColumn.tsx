@@ -1,8 +1,8 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import type { GridModule } from './generated/Grid.js';
+import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridSelectionColumn as _GridSelectionColumn,
-  GridSelectionColumnModule,
+  WebComponentModule,
   type GridSelectionColumnProps as _GridSelectionColumnProps,
 } from './generated/GridSelectionColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
@@ -22,7 +22,7 @@ export type GridSelectionColumnProps<TItem> = Omit<
 
 function GridSelectionColumn<TItem = GridModule.GridDefaultItem>(
   props: GridSelectionColumnProps<TItem>,
-  ref: ForwardedRef<GridSelectionColumnModule.GridSelectionColumn<TItem>>,
+  ref: ForwardedRef<WebComponentModule.GridSelectionColumn<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
@@ -44,7 +44,7 @@ function GridSelectionColumn<TItem = GridModule.GridDefaultItem>(
 }
 
 const ForwardedGridSelectionColumn = forwardRef(GridSelectionColumn) as <TItem = GridModule.GridDefaultItem>(
-  props: GridSelectionColumnProps<TItem> & { ref?: ForwardedRef<GridSelectionColumnModule.GridSelectionColumn<TItem>> },
+  props: GridSelectionColumnProps<TItem> & { ref?: ForwardedRef<WebComponentModule.GridSelectionColumn<TItem>> },
 ) => ReactElement | null;
 
-export { ForwardedGridSelectionColumn as GridSelectionColumn, GridSelectionColumnModule };
+export { ForwardedGridSelectionColumn as GridSelectionColumn, WebComponentModule };

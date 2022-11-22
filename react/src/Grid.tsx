@@ -1,5 +1,5 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import { Grid as _Grid, GridModule, type GridProps as _GridProps } from './generated/Grid.js';
+import { Grid as _Grid, WebComponentModule, type GridProps as _GridProps } from './generated/Grid.js';
 import type { GridRowDetailsReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 
@@ -8,9 +8,9 @@ export type GridProps<TItem> = Omit<_GridProps<TItem>, 'rowDetailsRenderer'> &
     rowDetailsRenderer?: ComponentType<GridRowDetailsReactRendererProps<TItem>> | null;
   }>;
 
-function Grid<TItem = GridModule.GridDefaultItem>(
+function Grid<TItem = WebComponentModule.GridDefaultItem>(
   props: GridProps<TItem>,
-  ref: ForwardedRef<GridModule.Grid<TItem>>,
+  ref: ForwardedRef<WebComponentModule.Grid<TItem>>,
 ): ReactElement | null {
   const [portals, rowDetailsRenderer] = useModelRenderer(props.rowDetailsRenderer);
 
@@ -22,8 +22,8 @@ function Grid<TItem = GridModule.GridDefaultItem>(
   );
 }
 
-const ForwardedGrid = forwardRef(Grid) as <TItem = GridModule.GridDefaultItem>(
-  props: GridProps<TItem> & { ref?: ForwardedRef<GridModule.Grid<TItem>> },
+const ForwardedGrid = forwardRef(Grid) as <TItem = WebComponentModule.GridDefaultItem>(
+  props: GridProps<TItem> & { ref?: ForwardedRef<WebComponentModule.Grid<TItem>> },
 ) => ReactElement | null;
 
-export { ForwardedGrid as Grid, GridModule };
+export { ForwardedGrid as Grid, WebComponentModule };

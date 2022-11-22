@@ -1,8 +1,8 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import type { GridModule } from './generated/Grid.js';
+import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridFilterColumn as _GridFilterColumn,
-  GridFilterColumnModule,
+  WebComponentModule,
   type GridFilterColumnProps as _GridFilterColumnProps,
 } from './generated/GridFilterColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
@@ -22,7 +22,7 @@ export type GridFilterColumnProps<TItem> = Omit<
 
 function GridFilterColumn<TItem = GridModule.GridDefaultItem>(
   props: GridFilterColumnProps<TItem>,
-  ref: ForwardedRef<GridFilterColumnModule.GridFilterColumn<TItem>>,
+  ref: ForwardedRef<WebComponentModule.GridFilterColumn<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
@@ -44,7 +44,7 @@ function GridFilterColumn<TItem = GridModule.GridDefaultItem>(
 }
 
 const ForwardedGridFilterColumn = forwardRef(GridFilterColumn) as <TItem = GridModule.GridDefaultItem>(
-  props: GridFilterColumnProps<TItem> & { ref?: ForwardedRef<GridFilterColumnModule.GridFilterColumn<TItem>> },
+  props: GridFilterColumnProps<TItem> & { ref?: ForwardedRef<WebComponentModule.GridFilterColumn<TItem>> },
 ) => ReactElement | null;
 
-export { ForwardedGridFilterColumn as GridFilterColumn, GridFilterColumnModule };
+export { ForwardedGridFilterColumn as GridFilterColumn, WebComponentModule };

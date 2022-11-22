@@ -1,7 +1,6 @@
 import {
   type ComponentType,
   createElement,
-  isValidElement,
   type PropsWithChildren,
   type ReactElement,
   ReactNode,

@@ -114,14 +114,6 @@
     "*.js.map"
   ],
   "exports": {
-    ".": {
-      "default": "./index.js",
-      "types": "./index.d.ts"
-    },
-    "./index.js": {
-      "default": "./index.js",
-      "types": "./index.d.ts"
-    },
     "./Accordion.js": {
       "default": "./Accordion.js",
       "types": "./Accordion.d.ts"

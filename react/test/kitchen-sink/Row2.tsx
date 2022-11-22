@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BoardRow } from '../../src/BoardRow.js';
-import { Checkbox, CheckboxModule } from '../../src/Checkbox.js';
+import { Checkbox } from '../../src/Checkbox.js';
 import { CheckboxGroup } from '../../src/CheckboxGroup.js';
 import { ComboBox } from '../../src/ComboBox.js';
 import { ConfirmDialog } from '../../src/ConfirmDialog.js';

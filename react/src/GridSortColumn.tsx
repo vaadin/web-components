@@ -1,8 +1,8 @@
 import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import type { GridModule } from './generated/Grid.js';
+import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridSortColumn as _GridSortColumn,
-  GridSortColumnModule,
+  WebComponentModule,
   type GridSortColumnProps as _GridSortColumnProps,
 } from './generated/GridSortColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
@@ -22,7 +22,7 @@ export type GridSortColumnProps<TItem> = Omit<
 
 function GridSortColumn<TItem = GridModule.GridDefaultItem>(
   props: GridSortColumnProps<TItem>,
-  ref: ForwardedRef<GridSortColumnModule.GridSortColumn<TItem>>,
+  ref: ForwardedRef<WebComponentModule.GridSortColumn<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
@@ -44,7 +44,7 @@ function GridSortColumn<TItem = GridModule.GridDefaultItem>(
 }
 
 const ForwardedGridSortColumn = forwardRef(GridSortColumn) as <TItem = GridModule.GridDefaultItem>(
-  props: GridSortColumnProps<TItem> & { ref?: ForwardedRef<GridSortColumnModule.GridSortColumn<TItem>> },
+  props: GridSortColumnProps<TItem> & { ref?: ForwardedRef<WebComponentModule.GridSortColumn<TItem>> },
 ) => ReactElement | null;
 
-export { ForwardedGridSortColumn as GridSortColumn, GridSortColumnModule };
+export { ForwardedGridSortColumn as GridSortColumn, WebComponentModule };

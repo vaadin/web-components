@@ -9,14 +9,6 @@ const packageJsonPath = resolve(rootDir, 'package.json');
 const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'));
 
 const exports: Record<string, PackageJson.Exports> = {
-  '.': {
-    default: './index.js',
-    types: './index.d.ts',
-  },
-  './index.js': {
-    default: './index.js',
-    types: './index.d.ts',
-  },
 };
 
 type ExportsRecord = readonly [exportsPath: string, exportsObject: Partial<PackageJson.ExportConditions>];

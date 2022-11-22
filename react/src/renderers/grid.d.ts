@@ -1,5 +1,5 @@
-import type { GridModule } from '../generated/Grid.js';
-import type { GridColumnModule } from '../generated/GridColumn.js';
+import type { WebComponentModule as GridModule } from '../generated/Grid.js';
+import type { WebComponentModule as GridColumnModule } from '../generated/GridColumn.js';
 import type { ReactModelRendererProps } from "./useModelRenderer.js";
 import type { ReactSimpleRendererProps } from "./useSimpleRenderer.js";
 
