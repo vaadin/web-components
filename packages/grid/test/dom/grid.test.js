@@ -29,7 +29,7 @@ describe('vaadin-grid', () => {
     });
 
     it('selected', async () => {
-      grid.selected = [grid.items[0]];
+      grid.selectedItems = [grid.items[0]];
       await expect(grid).shadowDom.to.equalSnapshot();
     });
 
@@ -39,6 +39,13 @@ describe('vaadin-grid', () => {
     });
 
     it('hidden column', async () => {
+      grid.querySelector('vaadin-grid-column').hidden = true;
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('hidden column selected', async () => {
+      grid.selectedItems = [grid.items[0]];
       grid.querySelector('vaadin-grid-column').hidden = true;
       await nextFrame();
       await expect(grid).shadowDom.to.equalSnapshot();

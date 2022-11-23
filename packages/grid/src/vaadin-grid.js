@@ -911,8 +911,6 @@ class Grid extends ElementMixin(
 
   /** @private */
   _updateScrollerItem(row, index) {
-    row._index = index;
-
     this._preventScrollerRotatingCellFocus(row, index);
 
     if (!this._columnTree) {
@@ -932,11 +930,18 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _updateRowOrderParts(row, index = row._index) {
+  _updateRowOrderParts(row, index = row.index) {
     updateRowAndCells(row, 'first', index === 0);
     updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
     updateRowAndCells(row, 'odd', index % 2);
     updateRowAndCells(row, 'even', index % 2 === 0);
+  }
+
+  /** @private */
+  _updateRowStateParts(row, model) {
+    updateRowAndCells(row, 'expanded', model.expanded);
+    updateRowAndCells(row, 'selected', model.selected);
+    updateRowAndCells(row, 'details-opened', model.detailsOpened);
   }
 
   /**
@@ -946,8 +951,11 @@ class Grid extends ElementMixin(
   _renderColumnTree(columnTree) {
     iterateChildren(this.$.items, (row) => {
       this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+
+      const model = this.__getRowModel(row);
       this._updateRowOrderParts(row);
-      this._filterDragAndDrop(row, this.__getRowModel(row));
+      this._updateRowStateParts(row, model);
+      this._filterDragAndDrop(row, model);
     });
 
     while (this.$.header.children.length < columnTree.length) {
@@ -1022,9 +1030,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    updateRowAndCells(row, 'expanded', model.expanded);
-    updateRowAndCells(row, 'selected', model.selected);
-    updateRowAndCells(row, 'details-opened', model.detailsOpened);
+    this._updateRowStateParts(row, model);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
