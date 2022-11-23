@@ -6,6 +6,14 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
+ * @param {HTMLTableRowElement} row the table row
+ * @return {HTMLTableCellElement[]} array of cells
+ */
+export function getBodyRowCells(row) {
+  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+}
+
+/**
  * @param {HTMLElement} container the DOM element with children
  * @param {Function} callback function to call on each child
  */
@@ -36,7 +44,7 @@ export function updateColumnOrders(columns, scope, baseOrder) {
  * @param {string} attribute
  * @param {boolean | string | null | undefined} value
  */
-function updateState(element, attribute, value) {
+export function updateState(element, attribute, value) {
   switch (typeof value) {
     case 'boolean':
       element.toggleAttribute(attribute, value);
@@ -65,36 +73,36 @@ function updatePart(element, value, part) {
 }
 
 /**
- * @param {!HTMLElement} row
+ * @param {HTMLTableCellElement[]} cells
  * @param {string} part
  * @param {boolean | string | null | undefined} value
  */
-export function updateRowBodyCellsPart(row, part, value) {
-  Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).forEach((cell) => {
+export function updateCellsPart(cells, part, value) {
+  cells.forEach((cell) => {
     updatePart(cell, value, part);
   });
 }
 
 /**
  * @param {!HTMLElement} row
- * @param {string} state
- * @param {boolean | string | null | undefined} value
+ * @param {Object} states
  * @param {boolean} appendValue
- * @param {string | null} setRowPart
  */
-export function updateRowAndCells(row, state, value, appendValue, setRowPart = true) {
-  // Toggle state attribute on the row
-  updateState(row, state, value);
+export function updateRowStates(row, states, appendValue) {
+  const cells = getBodyRowCells(row);
 
-  const rowPart = appendValue ? `${state}-${value}-row` : `${state}-row`;
+  Object.entries(states).forEach(([state, value]) => {
+    // Row state attribute
+    updateState(row, state, value);
 
-  // Toggle part on the row if needed
-  if (setRowPart) {
+    const rowPart = appendValue ? `${state}-${value}-row` : `${state}-row`;
+
+    // Row part attribute
     updatePart(row, value, rowPart);
-  }
 
-  // Toggle part on the row body cells
-  updateRowBodyCellsPart(row, `${rowPart}-cell`, value);
+    // Cells part attribute
+    updateCellsPart(cells, `${rowPart}-cell`, value);
+  });
 }
 
 /**

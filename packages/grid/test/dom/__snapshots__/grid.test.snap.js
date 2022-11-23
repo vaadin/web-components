@@ -331,21 +331,22 @@ snapshots["vaadin-grid shadow selected"] =
     >
       <tr
         aria-rowindex="2"
-        aria-selected="false"
+        aria-selected="true"
         drag-disabled=""
         drop-disabled=""
         even=""
         first=""
-        part="row first-row even-row drag-disabled-row drop-disabled-row"
+        part="row first-row even-row drag-disabled-row drop-disabled-row selected-row"
         role="row"
+        selected=""
         style="position: absolute; transform: translateY(0px);"
         tabindex="-1"
       >
         <td
-          aria-selected="false"
+          aria-selected="true"
           first-column=""
           id="vaadin-grid-cell-6"
-          part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell selected-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
           tabindex="0"
@@ -354,10 +355,10 @@ snapshots["vaadin-grid shadow selected"] =
           </slot>
         </td>
         <td
-          aria-selected="false"
+          aria-selected="true"
           id="vaadin-grid-cell-7"
           last-column=""
-          part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell selected-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 20000000;"
           tabindex="-1"
@@ -660,4 +661,319 @@ snapshots["vaadin-grid shadow details opened"] =
 </div>
 `;
 /* end snapshot vaadin-grid shadow details opened */
+
+snapshots["vaadin-grid shadow hidden column"] = 
+`<div
+  id="scroller"
+  scrolling=""
+  style="touch-action: none;"
+>
+  <table
+    aria-colcount="2"
+    aria-multiselectable="true"
+    aria-rowcount="3"
+    id="table"
+    role="treegrid"
+    tabindex="0"
+  >
+    <caption
+      id="sizer"
+      part="row"
+    >
+    </caption>
+    <tbody>
+      <tr>
+        <td
+          first-column=""
+          id="vaadin-grid-cell-5"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-5">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <thead
+      id="header"
+      role="rowgroup"
+      style="transform: translate(0px, 0px);"
+    >
+      <tr
+        aria-rowindex="1"
+        part="row"
+        role="row"
+        tabindex="-1"
+      >
+        <th
+          first-column=""
+          id="vaadin-grid-cell-1"
+          last-column=""
+          part="cell header-cell first-column-cell last-column-cell first-header-row-cell last-header-row-cell"
+          role="columnheader"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="0"
+        >
+          <slot name="vaadin-grid-cell-content-1">
+          </slot>
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      id="items"
+      role="rowgroup"
+      style="transform: translate(0px, 0px); height: 71px;"
+    >
+      <tr
+        aria-rowindex="2"
+        aria-selected="false"
+        drag-disabled=""
+        drop-disabled=""
+        even=""
+        first=""
+        part="row first-row even-row drag-disabled-row drop-disabled-row"
+        role="row"
+        style="position: absolute; transform: translateY(0px);"
+        tabindex="-1"
+      >
+        <td
+          aria-selected="false"
+          first-column=""
+          id="vaadin-grid-cell-7"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="0"
+        >
+          <slot name="vaadin-grid-cell-content-7">
+          </slot>
+        </td>
+      </tr>
+      <tr
+        aria-rowindex="3"
+        aria-selected="false"
+        drag-disabled=""
+        drop-disabled=""
+        last=""
+        part="row last-row odd-row drag-disabled-row drop-disabled-row"
+        role="row"
+        style="position: absolute; transform: translateY(35px);"
+        tabindex="-1"
+      >
+        <td
+          aria-selected="false"
+          first-column=""
+          id="vaadin-grid-cell-9"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-9">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot
+      id="footer"
+      role="rowgroup"
+      style="transform: translate(0px, 0px);"
+    >
+      <tr
+        aria-rowindex="4"
+        hidden=""
+        part="row"
+        role="row"
+        tabindex="-1"
+      >
+        <td
+          first-column=""
+          id="vaadin-grid-cell-3"
+          last-column=""
+          part="cell footer-cell first-column-cell last-column-cell first-footer-row-cell last-footer-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-3">
+          </slot>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <div part="reorder-ghost">
+  </div>
+</div>
+<slot name="tooltip">
+</slot>
+<div
+  id="focusexit"
+  tabindex="0"
+>
+</div>
+`;
+/* end snapshot vaadin-grid shadow hidden column */
+
+snapshots["vaadin-grid shadow hidden column selected"] = 
+`<div
+  id="scroller"
+  scrolling=""
+  style="touch-action: none;"
+>
+  <table
+    aria-colcount="2"
+    aria-multiselectable="true"
+    aria-rowcount="3"
+    id="table"
+    role="treegrid"
+    tabindex="0"
+  >
+    <caption
+      id="sizer"
+      part="row"
+    >
+    </caption>
+    <tbody>
+      <tr>
+        <td
+          first-column=""
+          id="vaadin-grid-cell-5"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-5">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <thead
+      id="header"
+      role="rowgroup"
+      style="transform: translate(0px, 0px);"
+    >
+      <tr
+        aria-rowindex="1"
+        part="row"
+        role="row"
+        tabindex="-1"
+      >
+        <th
+          first-column=""
+          id="vaadin-grid-cell-1"
+          last-column=""
+          part="cell header-cell first-column-cell last-column-cell first-header-row-cell last-header-row-cell"
+          role="columnheader"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="0"
+        >
+          <slot name="vaadin-grid-cell-content-1">
+          </slot>
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      id="items"
+      role="rowgroup"
+      style="transform: translate(0px, 0px); height: 71px;"
+    >
+      <tr
+        aria-rowindex="2"
+        aria-selected="true"
+        drag-disabled=""
+        drop-disabled=""
+        even=""
+        first=""
+        part="row first-row even-row drag-disabled-row drop-disabled-row selected-row"
+        role="row"
+        selected=""
+        style="position: absolute; transform: translateY(0px);"
+        tabindex="-1"
+      >
+        <td
+          aria-selected="true"
+          first-column=""
+          id="vaadin-grid-cell-7"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell first-row-cell even-row-cell selected-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="0"
+        >
+          <slot name="vaadin-grid-cell-content-7">
+          </slot>
+        </td>
+      </tr>
+      <tr
+        aria-rowindex="3"
+        aria-selected="false"
+        drag-disabled=""
+        drop-disabled=""
+        last=""
+        part="row last-row odd-row drag-disabled-row drop-disabled-row"
+        role="row"
+        style="position: absolute; transform: translateY(35px);"
+        tabindex="-1"
+      >
+        <td
+          aria-selected="false"
+          first-column=""
+          id="vaadin-grid-cell-9"
+          last-column=""
+          part="cell body-cell first-column-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-9">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot
+      id="footer"
+      role="rowgroup"
+      style="transform: translate(0px, 0px);"
+    >
+      <tr
+        aria-rowindex="4"
+        hidden=""
+        part="row"
+        role="row"
+        tabindex="-1"
+      >
+        <td
+          first-column=""
+          id="vaadin-grid-cell-3"
+          last-column=""
+          part="cell footer-cell first-column-cell last-column-cell first-footer-row-cell last-footer-row-cell"
+          role="gridcell"
+          style="width: 100px; flex-grow: 1; order: 20000000;"
+          tabindex="-1"
+        >
+          <slot name="vaadin-grid-cell-content-3">
+          </slot>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <div part="reorder-ghost">
+  </div>
+</div>
+<slot name="tooltip">
+</slot>
+<div
+  id="focusexit"
+  tabindex="0"
+>
+</div>
+`;
+/* end snapshot vaadin-grid shadow hidden column selected */
 

@@ -5,7 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { iterateChildren, updateRowAndCells } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
  * @private
@@ -278,8 +278,13 @@ export const DataProviderMixin = (superClass) =>
      * @private
      */
     __updateLoading(row, loading) {
-      // Toggle row state (but not part), and set part for all the row body cells.
-      updateRowAndCells(row, 'loading', loading, false, null);
+      const cells = getBodyRowCells(row);
+
+      // Row state attribute
+      updateState(row, 'loading', loading);
+
+      // Cells part attribute
+      updateCellsPart(cells, 'loading-row-cell', loading);
     }
 
     /**

@@ -25,7 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { iterateChildren, updateRowAndCells, updateRowBodyCellsPart } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, updateCellsPart, updateRowStates } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -917,10 +917,7 @@ class Grid extends ElementMixin(
       return;
     }
 
-    updateRowAndCells(row, 'first', index === 0);
-    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
-    updateRowAndCells(row, 'odd', index % 2);
-    updateRowAndCells(row, 'even', index % 2 === 0);
+    this._updateRowOrderParts(row, index);
 
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
@@ -932,6 +929,25 @@ class Grid extends ElementMixin(
     this.recalculateColumnWidths();
   }
 
+  /** @private */
+  _updateRowOrderParts(row, index = row.index) {
+    updateRowStates(row, {
+      first: index === 0,
+      last: index === this._effectiveSize - 1,
+      odd: index % 2,
+      even: index % 2 === 0,
+    });
+  }
+
+  /** @private */
+  _updateRowStateParts(row, { expanded, selected, detailsOpened }) {
+    updateRowStates(row, {
+      expanded,
+      selected,
+      'details-opened': detailsOpened,
+    });
+  }
+
   /**
    * @param {!Array<!GridColumn>} columnTree
    * @protected
@@ -939,6 +955,11 @@ class Grid extends ElementMixin(
   _renderColumnTree(columnTree) {
     iterateChildren(this.$.items, (row) => {
       this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+
+      const model = this.__getRowModel(row);
+      this._updateRowOrderParts(row);
+      this._updateRowStateParts(row, model);
+      this._filterDragAndDrop(row, model);
     });
 
     while (this.$.header.children.length < columnTree.length) {
@@ -962,15 +983,17 @@ class Grid extends ElementMixin(
     iterateChildren(this.$.header, (headerRow, index, rows) => {
       this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
-      updateRowBodyCellsPart(headerRow, 'first-header-row-cell', index === 0);
-      updateRowBodyCellsPart(headerRow, 'last-header-row-cell', index === rows.length - 1);
+      const cells = getBodyRowCells(headerRow);
+      updateCellsPart(cells, 'first-header-row-cell', index === 0);
+      updateCellsPart(cells, 'last-header-row-cell', index === rows.length - 1);
     });
 
     iterateChildren(this.$.footer, (footerRow, index, rows) => {
       this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
 
-      updateRowBodyCellsPart(footerRow, 'first-footer-row-cell', index === 0);
-      updateRowBodyCellsPart(footerRow, 'last-footer-row-cell', index === rows.length - 1);
+      const cells = getBodyRowCells(footerRow);
+      updateCellsPart(cells, 'first-footer-row-cell', index === 0);
+      updateCellsPart(cells, 'last-footer-row-cell', index === rows.length - 1);
     });
 
     // Sizer rows
@@ -1013,9 +1036,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
 
-    updateRowAndCells(row, 'expanded', model.expanded);
-    updateRowAndCells(row, 'selected', model.selected);
-    updateRowAndCells(row, 'details-opened', model.detailsOpened);
+    this._updateRowStateParts(row, model);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
