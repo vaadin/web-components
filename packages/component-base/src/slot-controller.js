@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { isEmptyTextNode } from './dom-utils.js';
 import { generateUniqueId } from './unique-id-utils.js';
 
 /**
@@ -191,7 +192,10 @@ export class SlotController extends EventTarget {
 
     this.__slotObserver = new FlattenedNodesObserver(slot, (info) => {
       const current = this.multiple ? this.nodes : [this.node];
-      const newNodes = info.addedNodes.filter((node) => !current.includes(node));
+
+      // Calling `slot.assignedNodes()` includes whitespace text nodes in case of default slot:
+      // unlike comment nodes, they are not filtered out. So we need to manually ignore them.
+      const newNodes = info.addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
 
       if (info.removedNodes.length) {
         info.removedNodes.forEach((node) => {
