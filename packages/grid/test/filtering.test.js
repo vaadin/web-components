@@ -1,25 +1,42 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-filter-column.js';
 import '../vaadin-grid-sorter.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';
 
-class FilterWrapper extends PolymerElement {
-  static get template() {
+class FilterWrapper extends LitElement {
+  static get properties() {
+    return {
+      _filterValue: {
+        type: String,
+      },
+    };
+  }
+
+  constructor() {
+    super();
+    this._filterValue = '';
+  }
+
+  render() {
     return html`
       <style>
         :host {
           display: block;
         }
       </style>
-      <vaadin-grid-filter path="foo" value="[[_filterValue]]" id="filter">
-        <input value="{{_filterValue::input}}" />
+      <vaadin-grid-filter path="foo" .value="${this._filterValue}">
+        <input @input="${this._onFilterInput}" />
       </vaadin-grid-filter>
     `;
+  }
+
+  _onFilterInput(e) {
+    this._filterValue = e.target.value;
   }
 }
 
@@ -34,38 +51,55 @@ function flushFilters(grid) {
 describe('filter', () => {
   let filter;
   let filterWrapper;
+  let clock;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     filterWrapper = fixtureSync('<filter-wrapper></filter-wrapper>');
-    filter = filterWrapper.$.filter;
+    await filterWrapper.updateComplete;
+    filter = filterWrapper.shadowRoot.querySelector('vaadin-grid-filter');
+    clock = sinon.useFakeTimers();
   });
 
-  it('should fire `filter-changed` on value change', (done) => {
-    listenOnce(filter, 'filter-changed', () => done());
-    filter.value = 'foo';
+  afterEach(() => {
+    clock.restore();
   });
 
-  it('should fire `filter-changed` on path change', (done) => {
+  it('should fire `filter-changed` on value change', async () => {
+    const spy = sinon.spy();
+    filter.addEventListener('filter-changed', spy);
     filter.value = 'foo';
-    filter._debouncerFilterChanged.flush();
+    await clock.tickAsync(200);
+    expect(spy.calledOnce).to.be.true;
+  });
 
-    listenOnce(filter, 'filter-changed', () => done());
+  it('should fire `filter-changed` on path change', async () => {
+    filter.value = 'foo';
+    await clock.tickAsync(200);
+
+    const spy = sinon.spy();
+    filter.addEventListener('filter-changed', spy);
+
     filter.path = 'bar';
+    await clock.tickAsync(200);
+
+    expect(spy.calledOnce).to.be.true;
   });
 
-  it('should update value', (done) => {
-    listenOnce(filter, 'filter-changed', () => {
-      expect(filter.value).to.equal('foo');
-      done();
-    });
+  it('should update filter value on input event', async () => {
+    const spy = sinon.spy();
+    filter.addEventListener('filter-changed', spy);
 
-    const input = filter.children[0];
+    const input = filter.querySelector('input');
     input.value = 'foo';
     input.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
+
+    await clock.tickAsync(200);
+    expect(filter.value).to.equal('foo');
   });
 
   it('should focus the input when calling focus()', () => {
-    const spy = sinon.spy(filter.firstElementChild, 'focus');
+    const input = filter.querySelector('input');
+    const spy = sinon.spy(input, 'focus');
     filter.focus();
     expect(spy.calledOnce).to.be.true;
   });
