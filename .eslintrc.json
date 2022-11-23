@@ -11,6 +11,7 @@
   "plugins": [
     "prettier",
     "@typescript-eslint",
+    "no-only-tests",
     "simple-import-sort"
   ],
   "extends": [
@@ -19,6 +20,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "no-only-tests/no-only-tests": "error",
     "simple-import-sort/imports": [
       "error",
       {
