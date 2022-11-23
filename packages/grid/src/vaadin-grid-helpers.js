@@ -44,7 +44,7 @@ export function updateColumnOrders(columns, scope, baseOrder) {
  * @param {string} attribute
  * @param {boolean | string | null | undefined} value
  */
-function updateState(element, attribute, value) {
+export function updateState(element, attribute, value) {
   switch (typeof value) {
     case 'boolean':
       element.toggleAttribute(attribute, value);
@@ -85,25 +85,24 @@ export function updateCellsPart(cells, part, value) {
 
 /**
  * @param {!HTMLElement} row
- * @param {string} state
- * @param {boolean | string | null | undefined} value
+ * @param {Object} states
  * @param {boolean} appendValue
- * @param {string | null} setRowPart
  */
-export function updateRowAndCells(row, state, value, appendValue, setRowPart = true) {
-  // Toggle state attribute on the row
-  updateState(row, state, value);
-
-  const rowPart = appendValue ? `${state}-${value}-row` : `${state}-row`;
-
-  // Toggle part on the row if needed
-  if (setRowPart) {
-    updatePart(row, value, rowPart);
-  }
-
-  // Toggle part on the row body cells
+export function updateRowStates(row, states, appendValue) {
   const cells = getBodyRowCells(row);
-  updateCellsPart(cells, `${rowPart}-cell`, value);
+
+  Object.entries(states).forEach(([state, value]) => {
+    // Row state attribute
+    updateState(row, state, value);
+
+    const rowPart = appendValue ? `${state}-${value}-row` : `${state}-row`;
+
+    // Row part attribute
+    updatePart(row, value, rowPart);
+
+    // Cells part attribute
+    updateCellsPart(cells, `${rowPart}-cell`, value);
+  });
 }
 
 /**

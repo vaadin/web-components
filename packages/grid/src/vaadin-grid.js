@@ -25,7 +25,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { getBodyRowCells, iterateChildren, updateCellsPart, updateRowAndCells } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, updateCellsPart, updateRowStates } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -931,17 +931,21 @@ class Grid extends ElementMixin(
 
   /** @private */
   _updateRowOrderParts(row, index = row.index) {
-    updateRowAndCells(row, 'first', index === 0);
-    updateRowAndCells(row, 'last', index === this._effectiveSize - 1);
-    updateRowAndCells(row, 'odd', index % 2);
-    updateRowAndCells(row, 'even', index % 2 === 0);
+    updateRowStates(row, {
+      first: index === 0,
+      last: index === this._effectiveSize - 1,
+      odd: index % 2,
+      even: index % 2 === 0,
+    });
   }
 
   /** @private */
-  _updateRowStateParts(row, model) {
-    updateRowAndCells(row, 'expanded', model.expanded);
-    updateRowAndCells(row, 'selected', model.selected);
-    updateRowAndCells(row, 'details-opened', model.detailsOpened);
+  _updateRowStateParts(row, { expanded, selected, detailsOpened }) {
+    updateRowStates(row, {
+      expanded,
+      selected,
+      'details-opened': detailsOpened,
+    });
   }
 
   /**
