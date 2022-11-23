@@ -207,7 +207,7 @@ describe('basic features', () => {
     expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
   });
 
-  it('should have attribute last on the last body row', () => {
+  it.only('should have attribute last on the last body row', () => {
     grid.scrollToIndex(grid.size - 1);
     const lastRowSlot = grid.shadowRoot.querySelector('[part~="row"][last] slot');
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));

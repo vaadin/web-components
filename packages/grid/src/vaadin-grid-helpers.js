@@ -6,6 +6,14 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
+ * @param {HTMLTableRowElement} row the table row
+ * @return {HTMLTableCellElement[]} array of cells
+ */
+export function getBodyRowCells(row) {
+  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+}
+
+/**
  * @param {HTMLElement} container the DOM element with children
  * @param {Function} callback function to call on each child
  */
@@ -65,12 +73,12 @@ function updatePart(element, value, part) {
 }
 
 /**
- * @param {!HTMLElement} row
+ * @param {HTMLTableCellElement[]} cells
  * @param {string} part
  * @param {boolean | string | null | undefined} value
  */
-export function updateRowBodyCellsPart(row, part, value) {
-  Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).forEach((cell) => {
+export function updateCellsPart(cells, part, value) {
+  cells.forEach((cell) => {
     updatePart(cell, value, part);
   });
 }
@@ -94,7 +102,8 @@ export function updateRowAndCells(row, state, value, appendValue, setRowPart = t
   }
 
   // Toggle part on the row body cells
-  updateRowBodyCellsPart(row, `${rowPart}-cell`, value);
+  const cells = getBodyRowCells(row);
+  updateCellsPart(cells, `${rowPart}-cell`, value);
 }
 
 /**
