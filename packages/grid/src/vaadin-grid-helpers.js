@@ -64,7 +64,7 @@ export function updateState(element, attribute, value) {
  * @param {boolean | string | null | undefined} value
  * @param {string} part
  */
-function updatePart(element, value, part) {
+export function updatePart(element, value, part) {
   if (value || value === '') {
     addValueToAttribute(element, 'part', part);
   } else {

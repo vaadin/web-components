@@ -1007,6 +1007,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateFooterRows();
     this.__updateFooterPositioning();
     this.generateCellClassNames();
+    this.generateCellPartNames();
   }
 
   /** @private */
@@ -1039,6 +1040,7 @@ class Grid extends ElementMixin(
     this._updateRowStateParts(row, model);
 
     this._generateCellClassNames(row, model);
+    this._generateCellPartNames(row, model);
     this._filterDragAndDrop(row, model);
 
     iterateChildren(row, (cell) => {
