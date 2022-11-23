@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
@@ -86,12 +86,9 @@ describe('filter', () => {
   });
 
   it('should update filter value on input event', async () => {
-    const spy = sinon.spy();
-    filter.addEventListener('filter-changed', spy);
-
     const input = filter.querySelector('input');
     input.value = 'foo';
-    input.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
+    fire(input, 'input');
 
     await clock.tickAsync(200);
     expect(filter.value).to.equal('foo');
