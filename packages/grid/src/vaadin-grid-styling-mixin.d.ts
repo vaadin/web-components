@@ -34,6 +34,8 @@ export declare class StylingMixinClass<TItem> {
    *   - `model.expanded` Sublevel toggle state.
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
+   *
+   * @deprecated Use `cellPartNameGenerator` instead.
    */
   cellClassNameGenerator: GridCellClassNameGenerator<TItem> | null | undefined;
 
@@ -42,7 +44,7 @@ export declare class StylingMixinClass<TItem> {
    * on their row and column, for styling from outside using the `::part()` selector.
    *
    * The return value should be the generated part name as a string, or multiple part names
-   * separated by whitespace characters. This
+   * separated by whitespace characters.
    *
    * Receives two arguments:
    * - `column` The `<vaadin-grid-column>` element (`undefined` for details-cell).
@@ -53,7 +55,6 @@ export declare class StylingMixinClass<TItem> {
    *   - `model.expanded` Sublevel toggle state.
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
-   *
    */
   cellPartNameGenerator: GridCellPartNameGenerator<TItem> | null | undefined;
 
@@ -62,6 +63,8 @@ export declare class StylingMixinClass<TItem> {
    * If the generator depends on varying conditions, you need to
    * call this function manually in order to update the styles when
    * the conditions change.
+   *
+   * @deprecated Use `cellPartNameGenerator` and `generateCellPartNames()` instead.
    */
   generateCellClassNames(): void;
 

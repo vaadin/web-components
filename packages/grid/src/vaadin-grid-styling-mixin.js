@@ -29,6 +29,7 @@ export const StylingMixin = (superClass) =>
          *   - `model.selected` Selected state.
          *
          * @type {GridCellClassNameGenerator | null | undefined}
+         * @deprecated Use `cellPartNameGenerator` instead.
          */
         cellClassNameGenerator: Function,
 
@@ -37,7 +38,7 @@ export const StylingMixin = (superClass) =>
          * on their row and column, for styling from outside using the `::part()` selector.
          *
          * The return value should be the generated part name as a string, or multiple part names
-         * separated by whitespace characters. This
+         * separated by whitespace characters.
          *
          * Receives two arguments:
          * - `column` The `<vaadin-grid-column>` element (`undefined` for details-cell).
@@ -51,7 +52,7 @@ export const StylingMixin = (superClass) =>
          *
          * @type {GridCellPartNameGenerator | null | undefined}
          */
-        celPartNameGenerator: Function,
+        cellPartNameGenerator: Function,
       };
     }
 
@@ -77,6 +78,8 @@ export const StylingMixin = (superClass) =>
      * If the generator depends on varying conditions, you need to
      * call this function manually in order to update the styles when
      * the conditions change.
+     *
+     * @deprecated Use `cellPartNameGenerator` and `generateCellPartNames()` instead.
      */
     generateCellClassNames() {
       iterateChildren(this.$.items, (row) => {
@@ -87,15 +90,17 @@ export const StylingMixin = (superClass) =>
     }
 
     /**
-     * Runs the `celPartNameGenerator` for the visible cells.
+     * Runs the `cellPartNameGenerator` for the visible cells.
      * If the generator depends on varying conditions, you need to
      * call this function manually in order to update the styles when
      * the conditions change.
      */
     generateCellPartNames() {
-      Array.from(this.$.items.children)
-        .filter((row) => !row.hidden && !row.hasAttribute('loading'))
-        .forEach((row) => this._generateCellPartNames(row, this.__getRowModel(row)));
+      iterateChildren(this.$.items, (row) => {
+        if (!row.hidden && !row.hasAttribute('loading')) {
+          this._generateCellPartNames(row, this.__getRowModel(row));
+        }
+      });
     }
 
     /** @private */
