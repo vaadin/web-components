@@ -146,7 +146,9 @@ describe('slot-controller', () => {
           render() {
             return html`
               <default-slot-element>
+                <!-- Keep this comment and surrounding whitespace text nodes -->
                 <div>baz</div>
+                <!-- Keep this comment and surrounding whitespace text nodes -->
               </default-slot-element>
             `;
           }
