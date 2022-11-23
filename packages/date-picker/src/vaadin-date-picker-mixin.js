@@ -399,10 +399,7 @@ export const DatePickerMixin = (subclass) =>
 
       if (!this.opened) {
         if (this.autoOpenDisabled) {
-          const parsedDate = this._getParsedDate();
-          if (this._isValidDate(parsedDate)) {
-            this._selectDate(parsedDate);
-          }
+          this._selectParsedOrFocusedDate();
         }
 
         this.validate();
@@ -1023,21 +1020,15 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _onEnter(_event) {
-      const parsedDate = this._getParsedDate();
-      const isValidDate = this._isValidDate(parsedDate);
+      const oldValue = this.value;
       if (this.opened) {
-        if (this._overlayContent && this._overlayContent.focusedDate && isValidDate) {
-          this._selectDate(this._overlayContent.focusedDate);
-        }
+        // Closing will implicitly select parsed or focused date
         this.close();
-      } else if (!isValidDate && this.inputElement.value !== '') {
-        this.validate();
       } else {
-        const oldValue = this.value;
         this._selectParsedOrFocusedDate();
-        if (oldValue === this.value) {
-          this.validate();
-        }
+      }
+      if (oldValue === this.value) {
+        this.validate();
       }
     }
 
