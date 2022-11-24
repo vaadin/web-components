@@ -29,7 +29,7 @@ const font = css`
 `;
 
 const typography = css`
-  html,
+  body,
   :host {
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size, var(--lumo-font-size-m));
