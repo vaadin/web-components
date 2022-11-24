@@ -29,10 +29,10 @@ const font = css`
 `;
 
 const typography = css`
-  html,
+  body,
   :host {
     font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size, var(--lumo-font-size-m));
+    font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
