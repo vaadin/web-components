@@ -1,8 +1,8 @@
-import { ComponentType, type ForwardedRef, forwardRef, PropsWithChildren, type ReactElement } from 'react';
+import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   ContextMenu as _ContextMenu,
-  WebComponentModule,
   type ContextMenuProps as _ContextMenuProps,
+  WebComponentModule,
 } from './generated/ContextMenu.js';
 import { type ReactContextRendererProps, useContextRenderer } from './renderers/useContextRenderer.js';
 
@@ -11,7 +11,10 @@ export type ContextMenuReactRendererProps = ReactContextRendererProps<
   WebComponentModule.ContextMenu
 >;
 
-export type ContextMenuProps = Omit<_ContextMenuProps, 'renderer'> &
+// The 'opened' property is omitted because it is readonly in the web component.
+// So you cannot set it up manually, only read from the component.
+// For changing the property, use specific methods of the component.
+export type ContextMenuProps = Omit<_ContextMenuProps, 'opened' | 'renderer'> &
   Readonly<{
     renderer?: ComponentType<ContextMenuReactRendererProps> | null;
   }>;

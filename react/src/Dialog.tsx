@@ -5,8 +5,9 @@ import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js'
 
 export type DialogReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Dialog>;
 
-export type DialogProps = Omit<_DialogProps, 'footerRenderer' | 'headerRenderer' | 'renderer'> &
+export type DialogProps = Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'> &
   Readonly<{
+    children?: ReactNode | ComponentType<DialogReactRendererProps>;
     footer?: ReactNode;
     footerRenderer?: ComponentType<DialogReactRendererProps> | null;
     header?: ReactNode;

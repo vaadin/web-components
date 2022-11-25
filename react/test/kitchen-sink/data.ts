@@ -1,6 +1,6 @@
 enum CrudRole {
-  ADMIN = "admin",
-  USER = "user",
+  ADMIN = 'admin',
+  USER = 'user',
 }
 
 export type CrudDataItem = {
@@ -9,6 +9,6 @@ export type CrudDataItem = {
   active: boolean;
 };
 export const crudData: CrudDataItem[] = [
-  { name: "Jane Doe", role: CrudRole.ADMIN, active: true },
-  { name: "Mary Joe", role: CrudRole.USER, active: false }
+  { name: 'Jane Doe', role: CrudRole.ADMIN, active: true },
+  { name: 'Mary Joe', role: CrudRole.USER, active: false },
 ];

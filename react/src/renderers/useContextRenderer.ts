@@ -16,7 +16,7 @@ export type WebComponentContextRenderer<C, O extends HTMLElement> = (
 export function convertContextRendererArgs<C, O extends HTMLElement>([original, context]: Slice<
   Parameters<WebComponentContextRenderer<C, O>>,
   1
-  >): ReactContextRendererProps<C, O> {
+>): ReactContextRendererProps<C, O> {
   return { context, original };
 }
 

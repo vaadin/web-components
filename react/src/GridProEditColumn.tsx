@@ -34,8 +34,8 @@ function GridProEditColumn<TItem = GridModule.GridDefaultItem>(
     <_GridProEditColumn<TItem>
       {...props}
       editModeRenderer={editModeRenderer}
-      footerRenderer={headerRenderer}
-      headerRenderer={footerRenderer}
+      footerRenderer={footerRenderer}
+      headerRenderer={headerRenderer}
       ref={ref}
       renderer={bodyRenderer}
     >

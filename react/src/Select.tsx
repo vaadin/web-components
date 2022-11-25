@@ -1,25 +1,21 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import { Select as _Select, WebComponentModule, type SelectProps as _SelectProps } from './generated/Select.js';
-import { useSimpleRenderer, type ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
+import { ComponentType, type ForwardedRef, forwardRef, type ReactElement, ReactNode } from 'react';
+import { Select as _Select, type SelectProps as _SelectProps, WebComponentModule } from './generated/Select.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
+import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
 export type SelectReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Select>;
 
-export type SelectProps = Omit<_SelectProps, 'renderer'> &
+export type SelectProps = Omit<_SelectProps, 'children' | 'renderer'> &
   Readonly<{
+    children?: ReactNode | ComponentType<SelectReactRendererProps>;
     renderer?: ComponentType<SelectReactRendererProps> | null;
   }>;
 
 function Select(props: SelectProps, ref: ForwardedRef<WebComponentModule.Select>): ReactElement | null {
-  const [portals, renderer] = useSimpleRenderer(props.renderer);
+  const [portals, renderer] = useSimpleOrChildrenRenderer(props.renderer, props.children);
 
   return (
-    <_Select
-      {...props}
-      ref={ref}
-      // TODO: remove cast after the nullability issue is fixed
-      renderer={renderer as WebComponentModule.SelectRenderer}
-    >
-      {props.children}
+    <_Select {...props} ref={ref} renderer={renderer}>
       {portals}
     </_Select>
   );

@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { nodeModulesDir } from './utils/config.js';
-import { filterEmptyItems } from './utils/misc.js';
+import filterEmptyItems from './utils/filterEmptyItems.js';
 
 export type SchemaElementWithPackage = readonly [packageName: string, element: SchemaHTMLElement];
 

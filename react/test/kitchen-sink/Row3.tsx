@@ -6,10 +6,12 @@ import { Item } from '../../src/Item.js';
 import { ListBox } from '../../src/ListBox.js';
 import { crudData } from './data.js';
 
+const menuItems = [{ text: 'Edit' }, { text: 'Delete' }];
+
 export default function Row3() {
   return (
     <BoardRow>
-      <ContextMenu>
+      <ContextMenu items={menuItems}>
         <ListBox>
           <Item>ListBox Item</Item>
         </ListBox>

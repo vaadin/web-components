@@ -19,6 +19,8 @@
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true
   },
-  "include": ["src", "scripts", "test", "types"],
+  "include": ["src", "scripts", "test", "types",
+    "karma.config.cjs"
+  ],
   "exclude": ["node_modules", "dist"]
 }

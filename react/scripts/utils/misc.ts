@@ -1,5 +1,5 @@
-import { access } from 'node:fs/promises';
 import { constants } from 'node:fs';
+import { access } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { SetRequired } from 'type-fest';
 import ts, {
@@ -68,12 +68,6 @@ export function createImportPath(link: string, local: boolean) {
   }
 
   return updatedLink.replace('.ts', '.js').replaceAll('\\', '/');
-}
-
-export function filterEmptyItems<I>(arr: Array<I | undefined>): I[];
-export function filterEmptyItems<I>(arr: ReadonlyArray<I | undefined>): readonly I[];
-export function filterEmptyItems(arr: ReadonlyArray<unknown | undefined>): readonly unknown[] {
-  return arr.filter(Boolean);
 }
 
 export function template<T>(

@@ -12,7 +12,4 @@ export const typesDir = resolve(rootDir, 'types');
 
 await Promise.all([mkdir(generatedDir, { recursive: true }), mkdir(typesDir, { recursive: true })]);
 
-export const stylePackages = [
-  '@vaadin/vaadin-lumo-styles',
-  '@vaadin/vaadin-material-styles',
-];
+export const stylePackages = ['@vaadin/vaadin-lumo-styles', '@vaadin/vaadin-material-styles'];

@@ -1,15 +1,15 @@
 import type { CSSProperties } from 'react';
-import { Grid, WebComponentModule as GridModule } from '../../src/Grid.js';
-import { GridTreeColumn } from '../../src/GridTreeColumn.js';
 import { BoardRow } from '../../src/BoardRow.js';
+import { Grid, WebComponentModule as GridModule } from '../../src/Grid.js';
+import { GridColumn } from '../../src/GridColumn.js';
 import { GridColumnGroup } from '../../src/GridColumnGroup.js';
-import type { GridBodyReactRendererProps } from '../../src/renderers/grid.js';
-import { crudData, CrudDataItem } from './data.js';
 import { GridFilterColumn } from '../../src/GridFilterColumn.js';
 import { GridPro } from '../../src/GridPro.js';
-import { GridColumn } from '../../src/GridColumn.js';
 import { GridProEditColumn } from '../../src/GridProEditColumn.js';
 import { GridSortColumn } from '../../src/GridSortColumn.js';
+import { GridTreeColumn } from '../../src/GridTreeColumn.js';
+import type { GridBodyReactRendererProps } from '../../src/renderers/grid.js';
+import { crudData, CrudDataItem } from './data.js';
 
 type TreeGridDataItem = {
   id: number;
