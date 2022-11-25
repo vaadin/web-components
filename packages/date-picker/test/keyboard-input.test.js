@@ -913,7 +913,7 @@ describe('keyboard', () => {
           input.select();
           await sendKeys({ press: 'Backspace' });
           await sendKeys({ press: 'Tab' });
-          expect(validateSpy.calledOnce).to.be.true;
+          expect(validateSpy.called).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;
         });
