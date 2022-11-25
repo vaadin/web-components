@@ -1,19 +1,18 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
+import { inflateFunctions } from '../src/helpers.js';
 
 describe('vaadin-chart private API', () => {
   describe('__inflateFunctions', () => {
-    let chart;
-
     beforeEach(() => {
-      chart = fixtureSync('<vaadin-chart></vaadin-chart>');
+      fixtureSync('<vaadin-chart></vaadin-chart>');
     });
 
     it('should inflate whole function strings', () => {
       // eslint-disable-next-line camelcase
       const config = { tooltip: { _fn_formatter: 'function() {return "awesome chart"}' } };
-      chart.__inflateFunctions(config);
+      inflateFunctions(config);
       expect(config.tooltip.formatter).to.be.a('function');
       expect(config.tooltip).to.not.have.property('_fn_formatter');
     });
@@ -21,7 +20,7 @@ describe('vaadin-chart private API', () => {
     it('should inflate function body strings', () => {
       // eslint-disable-next-line camelcase
       const config = { tooltip: { _fn_formatter: 'return "awesome chart"' } };
-      chart.__inflateFunctions(config);
+      inflateFunctions(config);
       expect(config.tooltip.formatter).to.be.a('function');
       expect(config.tooltip).to.not.have.property('_fn_formatter');
     });
@@ -29,9 +28,15 @@ describe('vaadin-chart private API', () => {
     it('should inflate empty function strings', () => {
       // eslint-disable-next-line camelcase
       const config = { tooltip: { _fn_formatter: '' } };
-      chart.__inflateFunctions(config);
+      inflateFunctions(config);
       expect(config.tooltip.formatter).to.be.a('function');
       expect(config.tooltip).to.not.have.property('_fn_formatter');
+    });
+
+    it('should not try to inflate if a non-object value is passed', () => {
+      inflateFunctions(1);
+      inflateFunctions(null);
+      inflateFunctions([1]);
     });
   });
 
@@ -52,6 +57,14 @@ describe('vaadin-chart private API', () => {
       expect(series).to.have.lengthOf(1);
       chart.__callChartFunction('addSeries', { data: [30, 1, 3, 5, 2] });
       expect(series).to.have.lengthOf(2);
+    });
+
+    it('should inflate functions passed in config', () => {
+      // eslint-disable-next-line camelcase
+      const seriesConfig = { data: [30, 1, 3, 5, 2], dataLabels: { enabled: true, _fn_formatter: 'return `val`;' } };
+      chart.__callChartFunction('addSeries', seriesConfig);
+      const { dataLabels } = chart.configuration.series[1].userOptions;
+      expect(dataLabels.formatter).to.be.a('function');
     });
   });
 
@@ -74,6 +87,13 @@ describe('vaadin-chart private API', () => {
       expect(data).to.have.lengthOf(6);
       expect(data[5].y).to.equal(30);
     });
+
+    it('should inflate functions passed as string', () => {
+      // eslint-disable-next-line camelcase
+      chart.__callSeriesFunction('update', 0, { dataLabels: { _fn_formatter: 'return `foo`;' } });
+      const { dataLabels } = chart.configuration.series[0].userOptions;
+      expect(dataLabels.formatter).to.be.a('function');
+    });
   });
 
   describe('__callAxisFunction', () => {
@@ -94,6 +114,13 @@ describe('vaadin-chart private API', () => {
       expect(yAxis[0].min).not.to.equal(5);
       chart.__callAxisFunction('setExtremes', 1, 0, 5);
       expect(yAxis[0].min).to.equal(5);
+    });
+
+    it('should inflate functions passed as string', () => {
+      // eslint-disable-next-line camelcase
+      chart.__callAxisFunction('update', 1, 0, { dataLabels: { _fn_formatter: 'return `foo`;' } });
+      const { dataLabels } = chart.configuration.yAxis[0].userOptions;
+      expect(dataLabels.formatter).to.be.a('function');
     });
   });
 
@@ -127,6 +154,12 @@ describe('vaadin-chart private API', () => {
     }
 
     beforeEach(async () => {
+      customElements.get('vaadin-chart').__callHighchartsFunction('setOptions', false, {
+        legend: {
+          // eslint-disable-next-line camelcase
+          _fn_labelFormatter: 'return `value`',
+        },
+      });
       chart = fixtureSync(`
         <vaadin-chart additional-options='{ "xAxis": { "type": "datetime", "labels": { "format": "{value:%a}" } } }'>
           <vaadin-chart-series values="[5, 6, 4, 7, 6, 2, 1]" additional-options='{ "pointIntervalUnit": "day" }'>
@@ -146,6 +179,11 @@ describe('vaadin-chart private API', () => {
         },
       });
       expect(getLabels()).to.be.deep.equal(['to', 'pe', 'la', 'su', 'ma', 'ti', 'ke']);
+    });
+
+    it('should inflate functions passed as string', () => {
+      const legend = chart.$.chart.querySelector('.highcharts-legend-item > text').textContent;
+      expect(legend).to.be.equal('value');
     });
   });
 });
