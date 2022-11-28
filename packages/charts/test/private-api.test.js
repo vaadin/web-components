@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../vaadin-chart.js';
 import { inflateFunctions } from '../src/helpers.js';
 
@@ -35,16 +34,9 @@ describe('vaadin-chart private API', () => {
     });
 
     it('should not try to inflate if a non-object value is passed', () => {
-      const spy = sinon.spy(Object, 'entries');
       inflateFunctions(1);
-      expect(spy.callCount).to.be.equal(0);
       inflateFunctions(null);
-      expect(spy.callCount).to.be.equal(0);
-      const arr = [1, 'a'];
-      inflateFunctions(arr);
-      expect(spy.callCount).to.be.equal(0);
-      inflateFunctions({});
-      expect(spy.callCount).to.be.equal(1);
+      inflateFunctions([1]);
     });
   });
 
