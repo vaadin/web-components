@@ -1,30 +1,31 @@
-import { createComponent as _createComponent, EventName, ReactWebComponent } from '@lit-labs/react';
+import { createComponent as _createComponent, EventName } from '@lit-labs/react';
 
 // TODO: Remove when types from @lit-labs/react are exported
 export type EventNames = Record<string, EventName | string>;
+type Constructor<T> = { new (): T; name: string; };
+type PolymerConstructor<T> = Constructor<T> & { _properties: Record<string, unknown> };
+type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
+  displayName?: string;
+  elementClass: Constructor<I> | PolymerConstructor<I>;
+  events?: E;
+  react: typeof window.React;
+  tagName: string;
+}>;
 
-type Constructor<T> = { new (): T };
+export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>) {
+  const { elementClass } = options;
 
-export function createComponent<I extends HTMLElement, E extends EventNames = {}>(
-  React: typeof window.React,
-  tagName: string,
-  elementClass: Constructor<I>,
-  events?: E,
-  displayName?: string,
-): ReactWebComponent<I, E>;
-export function createComponent(...args: any[]): any {
-  const elementClass = args[2];
-  if ('_properties' in elementClass) {
+  return _createComponent('_properties' in elementClass ? {
+    ...options,
     // TODO: improve or remove the Polymer workaround
     // 'createComponent' relies on key presence on the custom element class,
     // but Polymer defines properties on the prototype when the first element
     // is created. Workaround: pass a mock object with properties in
     // the prototype.
-    args[2] = {
+    elementClass: {
+      // @ts-expect-error: it is a specific workaround for Polymer classes.
       name: elementClass.name,
       prototype: elementClass._properties,
-    };
-  }
-
-  return (_createComponent as Function)(...args);
+    }
+  } : options);
 }

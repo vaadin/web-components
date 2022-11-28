@@ -308,7 +308,13 @@ import { createComponent } from "${CREATE_COMPONENT_PATH}";
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
 export type ${COMPONENT_NAME}Props = WebComponentProps<WebComponentModule.${COMPONENT_NAME}, ${EVENT_MAP}>;
-export const ${COMPONENT_NAME} = createComponent(React, ${COMPONENT_TAG}, WebComponentModule.${COMPONENT_NAME}, events);
+export const ${COMPONENT_NAME} = createComponent({
+  elementClass: WebComponentModule.${COMPONENT_NAME},
+  events,
+  react: React,
+  tagName: ${COMPONENT_TAG}
+});
+
 export { WebComponentModule };
 `,
     (statements) => statements,
