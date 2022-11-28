@@ -5,10 +5,6 @@ import { inflateFunctions } from '../src/helpers.js';
 
 describe('vaadin-chart private API', () => {
   describe('__inflateFunctions', () => {
-    beforeEach(() => {
-      fixtureSync('<vaadin-chart></vaadin-chart>');
-    });
-
     it('should inflate whole function strings', () => {
       // eslint-disable-next-line camelcase
       const config = { tooltip: { _fn_formatter: 'function() {return "awesome chart"}' } };
@@ -34,8 +30,10 @@ describe('vaadin-chart private API', () => {
     });
 
     it('should not try to inflate if a non-object value is passed', () => {
-      inflateFunctions(1);
+      // Check for no errors being thrown
       inflateFunctions(null);
+      inflateFunctions(undefined);
+      inflateFunctions(1);
       inflateFunctions([1]);
     });
   });
