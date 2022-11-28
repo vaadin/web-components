@@ -20,7 +20,9 @@ import {
 const shouldOverride = hasOverrideKey(process.argv.slice(2));
 
 const descriptions = await loadDescriptions();
-const printer = ts.createPrinter({});
+const printer = ts.createPrinter({
+  newLine: ts.NewLineKind.LineFeed,
+});
 
 if (shouldOverride) {
   await fromAsync(fswalk(srcDir), ([path]) => unlink(path));

@@ -8,33 +8,33 @@
 /**
  * Language in which JavaScript objects types are specified.
  */
-export type JsTypesSyntax = "typescript";
+export type JsTypesSyntax = 'typescript';
 /**
  * Markup language in which descriptions are formatted.
  */
-export type DescriptionMarkup = "html" | "markdown" | "none";
+export type DescriptionMarkup = 'html' | 'markdown' | 'none';
 /**
  * A RegEx pattern to match whole content. Syntax should work with at least ECMA, Java and Python implementations.
  */
 export type Pattern =
   | string
   | {
-  regex?: string;
-  "case-sensitive"?: boolean;
-  [k: string]: unknown;
-};
+      regex?: string;
+      'case-sensitive'?: boolean;
+      [k: string]: unknown;
+    };
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^/(html|css|js)/[^/\n\r]+$".
  */
 export type NameConverter =
-  | "as-is"
-  | "PascalCase"
-  | "camelCase"
-  | "lowercase"
-  | "UPPERCASE"
-  | "kebab-case"
-  | "snake_case";
+  | 'as-is'
+  | 'PascalCase'
+  | 'camelCase'
+  | 'lowercase'
+  | 'UPPERCASE'
+  | 'kebab-case'
+  | 'snake_case';
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^/(html|css|js)/[^/\n\r]+$".
@@ -51,8 +51,8 @@ export type Icon = string;
  * Contains contributions to HTML namespace. It's property names represent symbol kinds, its property values contain list of contributions of particular kind. There are 2 predefined kinds, which integrate directly with IDE - HTML elements and HTML attributes. There are also 2 deprecated kinds: tags (which is equivalent to 'elements') and 'events' (which was moved to JS namespace)
  */
 export type Html = Html1 & {
-  "types-syntax"?: DeprecatedTypesSyntax;
-  "description-markup"?: DeprecatedDescriptionMarkup;
+  'types-syntax'?: DeprecatedTypesSyntax;
+  'description-markup'?: DeprecatedDescriptionMarkup;
   /**
    * Deprecated, use `elements` property.
    */
@@ -75,28 +75,28 @@ export type DocUrl = string;
  */
 export type Source =
   | {
-  /**
-   * Path to the file, relative to the web-types JSON.
-   */
-  file: string;
-  /**
-   * Offset in the file under which the source symbol, like class name, is located.
-   */
-  offset: number;
-}
+      /**
+       * Path to the file, relative to the web-types JSON.
+       */
+      file: string;
+      /**
+       * Offset in the file under which the source symbol, like class name, is located.
+       */
+      offset: number;
+    }
   | {
-  /**
-   * Name of module, which exports the symbol. May be omitted, in which case it's assumed to be the name of the library.
-   */
-  module?: string;
-  /**
-   * Name of the exported symbol.
-   */
-  symbol: string;
-};
+      /**
+       * Name of module, which exports the symbol. May be omitted, in which case it's assumed to be the name of the library.
+       */
+      module?: string;
+      /**
+       * Name of the exported symbol.
+       */
+      symbol: string;
+    };
 export type Deprecated = boolean;
 export type Experimental = boolean;
-export type Priority = "lowest" | "low" | "normal" | "high" | "highest";
+export type Priority = 'lowest' | 'low' | 'normal' | 'high' | 'highest';
 export type Proximity = number;
 /**
  * Mark contribution as virtual. Virtual contributions can be filtered out if needed in references. A virtual contribution meaning may differ by framework or kind contexts, but usually means something synthetic or something, which gets erased in the runtime by the framework. E.g. Vue or Angular attribute bindings are virtual.
@@ -117,28 +117,28 @@ export type Reference = ReferenceWithProps | string;
 export type NamePatternRoot = NamePattern | string;
 export type NamePattern =
   | {
-  required?: Required;
-  unique?: boolean;
-  repeat?: boolean;
-  template?: NamePatternTemplate;
-  or?: NamePatternTemplate;
-  delegate?: Reference;
-  deprecated?: Deprecated;
-  priority?: Priority;
-  proximity?: Proximity;
-  items?: ListReference;
-}
+      required?: Required;
+      unique?: boolean;
+      repeat?: boolean;
+      template?: NamePatternTemplate;
+      or?: NamePatternTemplate;
+      delegate?: Reference;
+      deprecated?: Deprecated;
+      priority?: Priority;
+      proximity?: Proximity;
+      items?: ListReference;
+    }
   | {
-  regex: string;
-  "case-sensitive"?: boolean;
-};
+      regex: string;
+      'case-sensitive'?: boolean;
+    };
 export type Required = boolean;
 /**
  * @minItems 1
  */
 export type NamePatternTemplate = [
-    string | NamePatternTemplate | NamePattern,
-  ...(string | NamePatternTemplate | NamePattern)[]
+  string | NamePatternTemplate | NamePattern,
+  ...(string | NamePatternTemplate | NamePattern)[],
 ];
 /**
  * A reference to an element in Web-Types model.
@@ -183,7 +183,7 @@ export type GenericCssContribution = GenericContribution & CssContributionsHost;
 export type GenericContribution = GenericContribution1 & {
   default?: Default;
   required?: Required;
-  "attribute-value"?: HtmlAttributeValue;
+  'attribute-value'?: HtmlAttributeValue;
   [k: string]: unknown;
 };
 export type GenericContribution1 = TypedContribution;
@@ -222,11 +222,11 @@ export type HtmlAttribute = HtmlAttribute1 & {
   value?: HtmlAttributeValue;
   default?: string;
   required?: Required;
-  "vue-argument"?: DeprecatedHtmlAttributeVueArgument;
+  'vue-argument'?: DeprecatedHtmlAttributeVueArgument;
   /**
    * Deprecated vue-specific property - contribute Vue directives to /contributions/html/vue-directives
    */
-  "vue-modifiers"?: DeprecatedHtmlAttributeVueModifier[];
+  'vue-modifiers'?: DeprecatedHtmlAttributeVueModifier[];
   [k: string]: unknown;
 };
 export type HtmlAttribute1 = BaseContribution & HtmlContributionsHost;
@@ -260,10 +260,10 @@ export interface JSONSchemaForWebTypes {
    * Version of the library, for which Web-Types are provided.
    */
   version: string;
-  "js-types-syntax"?: JsTypesSyntax;
-  "description-markup"?: DescriptionMarkup;
-  "framework-config"?: FrameworkConfig;
-  "default-icon"?: Icon;
+  'js-types-syntax'?: JsTypesSyntax;
+  'description-markup'?: DescriptionMarkup;
+  'framework-config'?: FrameworkConfig;
+  'default-icon'?: Icon;
   /**
    * Symbol can be contributed to one of the 3 namespaces - HTML, CSS and JS. Within a particular namespace there can be different kinds of symbols. In each of the namespaces, there are several predefined kinds, which integrate directly with IDE, but providers are free to define their own.
    */
@@ -277,24 +277,24 @@ export interface JSONSchemaForWebTypes {
  * Provide configuration for the specified web framework. This is an advanced feature, which is used to provide support for templating frameworks like Angular, Vue, Svelte, etc.
  */
 export interface FrameworkConfig {
-  "enable-when"?: EnablementRules;
-  "disable-when"?: DisablementRules;
+  'enable-when'?: EnablementRules;
+  'disable-when'?: DisablementRules;
   /**
    * In many frameworks symbols can have multiple versions of a name. Specify canonical name conversion rule for names of particular symbol kinds against which comparisons will be made. Format of the 'canonical-names' property names is '{namespace}/{symbol kind}'. By default symbol names in HTML namespace are converted to lower-case, and in CSS and JS namespaces are left as-is. In case of name patterns, rules are applied to each part of the pattern separately, so even if the symbol with pattern is in HTML namespace, references to JS events will be case-sensitive.
    */
-  "canonical-names"?: {
+  'canonical-names'?: {
     [k: string]: NameConverter;
   };
   /**
    * Provide an array of name conversions, in which particular symbol kinds should be matched against canonical names of symbols. By default symbol names are converted using canonical-names rule.
    */
-  "match-names"?: {
+  'match-names'?: {
     [k: string]: NameConverters;
   };
   /**
    * Provide an array of name conversions, in which particular symbol kinds should be proposed in auto completion. Format of the 'name-variants' property names is '{namespace}/{symbol kind}'. All symbol kinds are by default provided as-is.
    */
-  "name-variants"?: {
+  'name-variants'?: {
     [k: string]: NameConverters;
   };
 }
@@ -305,23 +305,23 @@ export interface EnablementRules {
   /**
    * Node.js package names, which enable framework support within the folder containing the package.json.
    */
-  "node-packages"?: string[];
+  'node-packages'?: string[];
   /**
    * RegExps to match script URLs, which enable framework support within a particular HTML.
    */
-  "script-url-patterns"?: Pattern[];
+  'script-url-patterns'?: Pattern[];
   /**
    * Extensions of files, which should have the framework support enabled. Use this to support custom file extensions like '.vue' or '.svelte'. Never specify generic extensions like '.html', '.js' or '.ts'. If you need your contributions to be present in every file don't specify the framework at all
    */
-  "file-extensions"?: string[];
+  'file-extensions'?: string[];
   /**
    * RegExp patterns to match file names, which should have the framework support enabled. Use carefully as broken pattern may even freeze IDE.
    */
-  "file-name-patterns"?: Pattern[];
+  'file-name-patterns'?: Pattern[];
   /**
    * Global JavaScript libraries names enabled within the IDE, which enable framework support in the whole project
    */
-  "ide-libraries"?: string[];
+  'ide-libraries'?: string[];
 }
 /**
  * Specify rules for disabling web framework support. These rules take precedence over enable-when rules. They allow to turn off framework support in case of some conflicts between frameworks priority.
@@ -330,11 +330,11 @@ export interface DisablementRules {
   /**
    * Extensions of files, which should have the framework support disabled
    */
-  "file-extensions"?: string[];
+  'file-extensions'?: string[];
   /**
    * RegExp patterns to match file names, which should have the framework support disabled
    */
-  "file-name-patterns"?: Pattern[];
+  'file-name-patterns'?: Pattern[];
 }
 export interface HtmlContributionsHost {
   /**
@@ -356,8 +356,8 @@ export interface HtmlContributionsHost {
 export interface BaseContribution {
   name?: Name;
   description?: Description;
-  "description-sections"?: DescriptionSections;
-  "doc-url"?: DocUrl;
+  'description-sections'?: DescriptionSections;
+  'doc-url'?: DocUrl;
   icon?: Icon;
   source?: Source;
   deprecated?: Deprecated;
@@ -372,7 +372,7 @@ export interface BaseContribution {
   html?: Html1;
   css?: Css;
   js?: Js;
-  "exclusive-contributions"?: ExclusiveContributions;
+  'exclusive-contributions'?: ExclusiveContributions;
   [k: string]: unknown;
 }
 /**
@@ -396,11 +396,11 @@ export interface CssContributionsHost {
   /**
    * CSS pseudo-elements
    */
-  "pseudo-elements"?: CssPseudoElement[];
+  'pseudo-elements'?: CssPseudoElement[];
   /**
    * CSS pseudo-classes
    */
-  "pseudo-classes"?: CssPseudoClass[];
+  'pseudo-classes'?: CssPseudoClass[];
   /**
    * CSS functions
    */
@@ -421,7 +421,7 @@ export interface TypeReference {
   name: string;
 }
 export interface HtmlAttributeValue {
-  kind?: "no-value" | "plain" | "expression";
+  kind?: 'no-value' | 'plain' | 'expression';
   type?: HtmlValueType;
   required?: boolean;
   default?: string;
@@ -442,7 +442,7 @@ export interface JsContributionsHost {
 export interface DeprecatedHtmlAttributeVueArgument {
   pattern?: NamePatternRoot;
   description?: Description;
-  "doc-url"?: DocUrl;
+  'doc-url'?: DocUrl;
   /**
    * Whether directive requires an argument
    */
@@ -452,5 +452,5 @@ export interface DeprecatedHtmlAttributeVueModifier {
   name: Name;
   pattern?: NamePatternRoot;
   description?: Description;
-  "doc-url"?: DocUrl;
+  'doc-url'?: DocUrl;
 }

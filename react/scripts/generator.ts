@@ -43,6 +43,7 @@ type ElementData = Readonly<{
   path: string;
 }>;
 
+// Remove all existing files
 await fromAsync(fswalk(generatedDir), ([path]) => unlink(path));
 
 async function prepareElementFiles(
@@ -71,7 +72,9 @@ async function prepareElementFiles(
 }
 
 const descriptions = await loadDescriptions();
-const printer = ts.createPrinter({});
+const printer = ts.createPrinter({
+  newLine: ts.NewLineKind.LineFeed,
+});
 
 function createGenericTypeNames(numberOfGenerics: number) {
   return Array.from({ length: numberOfGenerics }, (_, i) => ts.factory.createIdentifier(`T${i + 1}`));

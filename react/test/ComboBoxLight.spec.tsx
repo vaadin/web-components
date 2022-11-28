@@ -41,6 +41,6 @@ describe('ComboBoxLight', () => {
     const bar = comboBoxOverlay!.querySelector('vaadin-combo-box-item:nth-child(2)');
     expect(bar).not.to.be.undefined;
 
-    bar!.dispatchEvent(new MouseEvent('click'));
+    bar!.dispatchEvent(new PointerEvent('click', { bubbles: true }));
   });
 });
