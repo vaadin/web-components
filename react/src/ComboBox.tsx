@@ -1,5 +1,5 @@
 import type { ComboBoxDefaultItem } from '@vaadin/combo-box';
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   ComboBox as _ComboBox,
   WebComponentModule,

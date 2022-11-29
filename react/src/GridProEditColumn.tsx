@@ -1,4 +1,4 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridProEditColumn as _GridProEditColumn,

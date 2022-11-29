@@ -1,4 +1,13 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement, ReactNode } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type ForwardRefExoticComponent,
+  type PropsWithoutRef,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
 import {
   Notification as _Notification,
   type NotificationProps as _NotificationProps,
@@ -28,6 +37,13 @@ function Notification(
   );
 }
 
-const ForwardedNotification = forwardRef(Notification);
+export type NotificationFunction = ForwardRefExoticComponent<
+  PropsWithoutRef<NotificationProps> & RefAttributes<WebComponentModule.Notification>
+> & {
+  show(contents: string, options?: WebComponentModule.ShowOptions): WebComponentModule.Notification;
+};
+
+const ForwardedNotification = forwardRef(Notification) as NotificationFunction;
+ForwardedNotification.show = WebComponentModule.Notification.show;
 
 export { ForwardedNotification as Notification, WebComponentModule };

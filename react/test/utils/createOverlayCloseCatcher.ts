@@ -1,7 +1,7 @@
-import { createRef } from 'react';
+import { createRef, MutableRefObject } from 'react';
 
 export default function createOverlayCloseCatcher<T extends HTMLElement>(name: string, close: (ref: T) => void) {
-  const ref = createRef<T>();
+  const ref = createRef<T>() as MutableRefObject<T>;
 
   const catcher = async () => {
     await new Promise<void>((resolve) => {

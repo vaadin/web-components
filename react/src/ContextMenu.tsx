@@ -1,4 +1,4 @@
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   ContextMenu as _ContextMenu,
   type ContextMenuProps as _ContextMenuProps,

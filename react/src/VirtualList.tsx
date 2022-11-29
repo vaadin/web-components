@@ -1,5 +1,5 @@
 import type { VirtualListDefaultItem } from '@vaadin/virtual-list/src/vaadin-virtual-list.js';
-import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   VirtualList as _VirtualList,
   WebComponentModule,
