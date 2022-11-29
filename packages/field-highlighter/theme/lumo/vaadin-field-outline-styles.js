@@ -24,7 +24,7 @@ registerStyles(
       right: 0;
       bottom: 0;
       box-shadow: 0 0 0 2px var(--_active-user-color);
-      border-radius: var(--lumo-border-radius);
+      border-radius: var(--lumo-border-radius-s);
       transition: box-shadow 0.3s;
     }
 
