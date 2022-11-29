@@ -1,11 +1,14 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
+import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
 import { ListBox } from '../src/ListBox.js';
 import { Item } from '../src/Item.js';
 import { Select, type WebComponentModule } from '../src/Select.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+
+useChaiPlugin(chaiDom);
 
 describe('Select', () => {
   const overlayTag = 'vaadin-select-overlay';
@@ -34,19 +37,19 @@ describe('Select', () => {
 
   async function assert(container: HTMLElement) {
     const select = container.querySelector('vaadin-select');
-    expect(select).not.to.be.undefined;
+    expect(select).to.exist;
 
     const valueButton = select!.querySelector('vaadin-select-value-button');
-    expect(valueButton).not.to.be.undefined;
+    expect(valueButton).to.exist;
 
     valueButton!.dispatchEvent(new PointerEvent('click', { bubbles: true }));
 
     const overlay = document.querySelector('vaadin-select-overlay');
-    expect(overlay).not.to.be.undefined;
+    expect(overlay).to.exist;
 
     await catchRender(overlay!, isListBoxRendered);
 
-    expect(overlay!.textContent).to.equal('FooBar');
+    expect(overlay).to.have.text('FooBar');
   }
 
   afterEach(catcher);

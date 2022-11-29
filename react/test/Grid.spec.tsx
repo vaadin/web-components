@@ -1,6 +1,6 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
+import chaiDom from 'chai-dom';
 import { render } from '@testing-library/react';
-import filterEmptyItems from '../scripts/utils/filterEmptyItems.js';
 import { Grid } from '../src/Grid.js';
 import { GridColumn } from '../src/GridColumn.js';
 import { GridFilterColumn } from '../src/GridFilterColumn.js';
@@ -9,6 +9,8 @@ import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
 import { GridSortColumn } from '../src/GridSortColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
 import catchRender from './utils/catchRender.js';
+
+useChaiPlugin(chaiDom);
 
 describe('Grid', () => {
   type Item = Readonly<{ name: string; surname: string; role: string }>;
@@ -40,7 +42,7 @@ describe('Grid', () => {
 
   async function getGridMeaningfulParts(columnElementName: string) {
     const grid = document.querySelector('vaadin-grid')!;
-    expect(grid).not.to.be.undefined;
+    expect(grid).to.exist;
 
     await catchRender(grid, isGridCellContentNodeRendered);
 
@@ -48,8 +50,8 @@ describe('Grid', () => {
 
     // Filter cells that don't have any textContent. Grid creates empty cells for some calculations,
     // but we don't need them.
-    const cells = filterEmptyItems(
-      Array.from(grid!.querySelectorAll('vaadin-grid-cell-content'), ({ textContent }) => textContent),
+    const cells = Array.from(grid!.querySelectorAll('vaadin-grid-cell-content')).filter(
+      ({ textContent }) => textContent,
     );
 
     return [columns, cells] as const;
@@ -73,29 +75,29 @@ describe('Grid', () => {
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column');
 
-      expect(columns.length).to.equal(3);
-      expect(cells.length).to.equal(12);
+      expect(columns).to.have.length(3);
+      expect(cells).to.have.length(12);
 
-      const [nameHeaderCellContent, surnameHeaderCellContent, roleHeaderCellContent] = cells.slice(0, 3);
-      const [nameFooterCellContent, surnameFooterCellContent, roleFooterCellContent] = cells.slice(3, 6);
-      const [nameBodyCellContent1, surnameBodyCellContent1, roleBodyCellContent1] = cells.slice(6, 9);
-      const [nameBodyCellContent2, surnameBodyCellContent2, roleBodyCellContent2] = cells.slice(9, 12);
+      const [nameHeaderCell, surnameHeaderCell, roleHeaderCell] = cells.slice(0, 3);
+      const [nameFooterCell, surnameFooterCell, roleFooterCell] = cells.slice(3, 6);
+      const [nameBodyCell1, surnameBodyCell1, roleBodyCell1] = cells.slice(6, 9);
+      const [nameBodyCell2, surnameBodyCell2, roleBodyCell2] = cells.slice(9, 12);
 
-      expect(nameHeaderCellContent).to.equal('Name');
-      expect(surnameHeaderCellContent).to.equal('Surname');
-      expect(roleHeaderCellContent).to.equal('Role');
+      expect(nameHeaderCell).to.have.text('Name');
+      expect(surnameHeaderCell).to.have.text('Surname');
+      expect(roleHeaderCell).to.have.text('Role');
 
-      expect(nameFooterCellContent).to.equal('Name Footer');
-      expect(surnameFooterCellContent).to.equal('Surname Footer');
-      expect(roleFooterCellContent).to.equal('Role Footer');
+      expect(nameFooterCell).to.have.text('Name Footer');
+      expect(surnameFooterCell).to.have.text('Surname Footer');
+      expect(roleFooterCell).to.have.text('Role Footer');
 
-      expect(nameBodyCellContent1).to.equal('John');
-      expect(surnameBodyCellContent1).to.equal('Lennon');
-      expect(roleBodyCellContent1).to.equal('singer');
+      expect(nameBodyCell1).to.have.text('John');
+      expect(surnameBodyCell1).to.have.text('Lennon');
+      expect(roleBodyCell1).to.have.text('singer');
 
-      expect(nameBodyCellContent2).to.equal('Ringo');
-      expect(surnameBodyCellContent2).to.equal('Starr');
-      expect(roleBodyCellContent2).to.equal('drums');
+      expect(nameBodyCell2).to.have.text('Ringo');
+      expect(surnameBodyCell2).to.have.text('Starr');
+      expect(roleBodyCell2).to.have.text('drums');
     });
   });
 
@@ -108,14 +110,14 @@ describe('Grid', () => {
       );
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column');
-      expect(columns.length).to.equal(1);
-      expect(cells.length).to.equal(3);
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(3);
 
-      const [footerCellContent, bodyCellContent1, bodyCellContent2] = cells;
+      const [footerCell, bodyCell1, bodyCell2] = cells;
 
-      expect(footerCellContent).to.equal('Name Footer');
-      expect(bodyCellContent1).to.equal('John');
-      expect(bodyCellContent2).to.equal('Ringo');
+      expect(footerCell).to.have.text('Name Footer');
+      expect(bodyCell1).to.have.text('John');
+      expect(bodyCell2).to.have.text('Ringo');
     });
   });
 
@@ -130,15 +132,15 @@ describe('Grid', () => {
       );
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column');
-      expect(columns.length).to.equal(1);
-      expect(cells.length).to.equal(4);
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(4);
 
-      const [headerCellContent, footerCellContent, bodyCellContent1, bodyCellContent2] = cells;
+      const [headerCell, footerCell, bodyCell1, bodyCell2] = cells;
 
-      expect(headerCellContent).to.equal('Name');
-      expect(footerCellContent).to.equal('Name Footer');
-      expect(bodyCellContent1).to.equal('John');
-      expect(bodyCellContent2).to.equal('Ringo');
+      expect(headerCell).to.have.text('Name');
+      expect(footerCell).to.have.text('Name Footer');
+      expect(bodyCell1).to.have.text('John');
+      expect(bodyCell2).to.have.text('Ringo');
     });
   });
 
@@ -153,14 +155,14 @@ describe('Grid', () => {
       );
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column');
-      expect(columns.length).to.equal(1);
-      expect(cells.length).to.equal(3);
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(3);
 
-      const [footerCellContent, bodyCellContent1, bodyCellContent2] = cells;
+      const [footerCell, bodyCell1, bodyCell2] = cells;
 
-      expect(footerCellContent).to.equal('Name Footer');
-      expect(bodyCellContent1).to.equal('John');
-      expect(bodyCellContent2).to.equal('Ringo');
+      expect(footerCell).to.have.text('Name Footer');
+      expect(bodyCell1).to.have.text('John');
+      expect(bodyCell2).to.have.text('Ringo');
     });
   });
 
@@ -175,15 +177,15 @@ describe('Grid', () => {
       );
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column');
-      expect(columns.length).to.equal(1);
-      expect(cells.length).to.equal(4);
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(4);
 
-      const [headerCellContent, footerCellContent, bodyCellContent1, bodyCellContent2] = cells;
+      const [headerCell, footerCell, bodyCell1, bodyCell2] = cells;
 
-      expect(headerCellContent).to.equal('Name');
-      expect(footerCellContent).to.equal('Name Footer');
-      expect(bodyCellContent1).to.equal('John');
-      expect(bodyCellContent2).to.equal('Ringo');
+      expect(headerCell).to.have.text('Name');
+      expect(footerCell).to.have.text('Name Footer');
+      expect(bodyCell1).to.have.text('John');
+      expect(bodyCell2).to.have.text('Ringo');
     });
   });
 });

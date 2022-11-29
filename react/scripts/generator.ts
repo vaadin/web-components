@@ -304,10 +304,10 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
 
   const ast = template(
     `
-import type { EventName, WebComponentProps } from "${LIT_REACT_PATH}";
+import type { EventName } from "${LIT_REACT_PATH}";
 import * as WebComponentModule from "${MODULE_PATH}";
 import * as React from "react";
-import { createComponent } from "${CREATE_COMPONENT_PATH}";
+import { createComponent, WebComponentProps } from "${CREATE_COMPONENT_PATH}";
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
 export type ${COMPONENT_NAME}Props = WebComponentProps<WebComponentModule.${COMPONENT_NAME}, ${EVENT_MAP}>;

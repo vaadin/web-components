@@ -1,7 +1,10 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
+import chaiDom from 'chai-dom';
 import { Notification, type WebComponentModule } from '../src/Notification.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+
+useChaiPlugin(chaiDom);
 
 describe('Notification', () => {
   const overlayTag = 'vaadin-notification-container';
@@ -14,8 +17,8 @@ describe('Notification', () => {
 
   function assert() {
     const card = document.querySelector('vaadin-notification-card');
-    expect(card).not.to.be.undefined;
-    expect(card!.textContent).to.equal('FooBar');
+    expect(card).to.exist;
+    expect(card).to.have.text('FooBar');
   }
 
   afterEach(catcher);

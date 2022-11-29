@@ -1,7 +1,10 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
+import chaiDom from 'chai-dom';
 import { ComboBoxLight, type WebComponentModule } from '../src/ComboBoxLight.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+
+useChaiPlugin(chaiDom);
 
 describe('ComboBoxLight', () => {
   const overlayTag = 'vaadin-combo-box-overlay';
@@ -33,13 +36,14 @@ describe('ComboBoxLight', () => {
     );
 
     const comboBox = container.querySelector('vaadin-combo-box-light');
-    expect(comboBox).not.to.be.undefined;
+    expect(comboBox).to.exist;
 
     const comboBoxOverlay = document.body.querySelector(overlayTag);
-    expect(comboBoxOverlay).not.to.be.undefined;
+    expect(comboBoxOverlay).to.exist;
 
     const bar = comboBoxOverlay!.querySelector('vaadin-combo-box-item:nth-child(2)');
-    expect(bar).not.to.be.undefined;
+    expect(bar).to.exist;
+    expect(bar).to.have.text('bar');
 
     bar!.dispatchEvent(new PointerEvent('click', { bubbles: true }));
   });

@@ -1,10 +1,13 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
+import chaiDom from 'chai-dom';
 import { ContextMenu, type ContextMenuReactRendererProps, type WebComponentModule } from '../src/ContextMenu.js';
 import { Item } from '../src/Item.js';
 import { ListBox } from '../src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+
+useChaiPlugin(chaiDom);
 
 describe('ContextMenu', () => {
   const overlayTag = 'vaadin-context-menu-overlay';
@@ -30,11 +33,11 @@ describe('ContextMenu', () => {
     container.dispatchEvent(new PointerEvent('contextmenu', { bubbles: true }));
 
     const menu = document.querySelector(overlayTag);
-    expect(menu).not.to.be.undefined;
+    expect(menu).to.exist;
 
     await catchRender(menu!, isListBoxRendered);
 
-    expect(menu!.textContent).to.equal('Bar');
+    expect(menu).to.have.text('Bar');
   }
 
   afterEach(catcher);

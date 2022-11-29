@@ -1,7 +1,10 @@
-import { expect } from '@esm-bundle/chai';
+import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
+import chaiDom from 'chai-dom';
 import { Dialog, type WebComponentModule } from '../src/Dialog.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+
+useChaiPlugin(chaiDom);
 
 describe('Dialog', () => {
   const overlayTag = 'vaadin-dialog-overlay';
@@ -12,18 +15,18 @@ describe('Dialog', () => {
 
   function assert() {
     const dialog = document.querySelector(overlayTag);
-    expect(dialog).not.to.be.undefined;
+    expect(dialog).to.exist;
 
     const [header, footer, body] = Array.from(dialog!.childNodes);
 
-    expect(header).not.to.be.undefined;
-    expect(header!.textContent).to.equal('Title');
+    expect(header).to.exist;
+    expect(header).to.have.text('Title');
 
-    expect(footer).not.to.be.undefined;
-    expect(footer!.textContent).to.equal('Footer');
+    expect(footer).to.exist;
+    expect(footer).to.have.text('Footer');
 
-    expect(body).not.to.be.undefined;
-    expect(body!.textContent).to.equal('FooBar');
+    expect(body).to.exist;
+    expect(body).to.have.text('FooBar');
   }
 
   afterEach(catcher);

@@ -1,4 +1,11 @@
-import { createComponent as _createComponent, EventName } from '@lit-labs/react';
+import {
+  createComponent as _createComponent,
+  EventName,
+  WebComponentProps as _WebComponentProps,
+  ReactWebComponent,
+} from '@lit-labs/react';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from 'react';
 
 // TODO: Remove when types from @lit-labs/react are exported
 export type EventNames = Record<string, EventName | string>;
@@ -12,7 +19,36 @@ type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
   tagName: string;
 }>;
 
-export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>) {
+export type ThemedWebComponentProps<I extends ThemePropertyMixinClass & HTMLElement, E extends EventNames = {}> = Omit<
+  _WebComponentProps<I, E>,
+  'theme'
+> & {
+  /**
+   * Remove the deprecation warning for React components. In our case, the
+   * property is deprecated in favor of an attribute. However, for React, it
+   * does not matter if an attribute or a property is set; the same algorithm
+   * will be used.
+   *
+   * @see ThemePropertyMixinClass#theme
+   */
+  theme?: string;
+};
+
+export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I extends ThemePropertyMixinClass
+  ? ThemedWebComponentProps<I, E>
+  : _WebComponentProps<I, E>;
+
+export type ThemedReactWebComponent<
+  I extends ThemePropertyMixinClass & HTMLElement,
+  E extends EventNames = {},
+> = ForwardRefExoticComponent<PropsWithoutRef<ThemedWebComponentProps<I, E>> & RefAttributes<I>>;
+
+// We need a separate declaration here; otherwise, the TypeScript fails into the
+// endless loop trying to resolve the typings.
+export function createComponent<I extends HTMLElement, E extends EventNames = {}>(
+  options: Options<I, E>,
+): I extends ThemePropertyMixinClass ? ThemedReactWebComponent<I, E> : ReactWebComponent<I, E>;
+export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>): any {
   const { elementClass } = options;
 
   return _createComponent(

@@ -8,7 +8,7 @@ import { ChartSeries } from '../../src/ChartSeries.js';
 export default function Row1() {
   return (
     <BoardRow>
-      <Accordion>
+      <Accordion theme="primary">
         <AccordionPanel>
           <div slot="summary">AccordeonPanel</div>
           <div>Accordion content 1</div>
