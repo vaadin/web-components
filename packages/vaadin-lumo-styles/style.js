@@ -12,7 +12,6 @@ const style = css`
     --lumo-border-radius-s: 0.25em; /* Checkbox, badge, date-picker year indicator, etc */
     --lumo-border-radius-m: var(--lumo-border-radius, 0.25em); /* Button, text field, menu overlay, etc */
     --lumo-border-radius-l: 0.5em; /* Dialog, notification, etc */
-    --lumo-border-radius: 0.25em; /* Deprecated */
 
     /* Shadow */
     --lumo-box-shadow-xs: 0 1px 4px -1px var(--lumo-shade-50pct);
