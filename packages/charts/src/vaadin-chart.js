@@ -27,6 +27,7 @@ import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { inflateFunctions } from './helpers.js';
 import { ChartSeries } from './vaadin-chart-series.js';
 
 /** @private */
@@ -272,6 +273,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static __callHighchartsFunction(functionName, redrawCharts, ...args) {
     const functionToCall = Highcharts[functionName];
     if (functionToCall && typeof functionToCall === 'function') {
+      args.forEach((arg) => inflateFunctions(arg));
       functionToCall.apply(this.configuration, args);
       if (redrawCharts) {
         Highcharts.charts.forEach((c) => c.redraw());
@@ -1148,7 +1150,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     const configCopy = deepMerge({}, jsonConfiguration);
-    this.__inflateFunctions(configCopy);
+    inflateFunctions(configCopy);
     this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
     beforeNextRender(this, () => {
@@ -1212,24 +1214,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       target[entry][i] = Highcharts.merge(target[entry][i], configuration[entry][i]);
     }
     delete configuration[entry];
-  }
-
-  /** @private */
-  __inflateFunctions(jsonConfiguration) {
-    Object.entries(jsonConfiguration).forEach(([attr, targetProperty]) => {
-      if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
-        try {
-          // eslint-disable-next-line no-eval
-          jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
-        } catch (e) {
-          // eslint-disable-next-line no-eval
-          jsonConfiguration[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
-        }
-        delete jsonConfiguration[attr];
-      } else if (targetProperty instanceof Object) {
-        this.__inflateFunctions(targetProperty);
-      }
-    });
   }
 
   /** @private */
@@ -1684,6 +1668,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     if (this.configuration) {
       const functionToCall = this.configuration[functionName];
       if (functionToCall && typeof functionToCall === 'function') {
+        args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(this.configuration, args);
       }
     }
@@ -1695,6 +1680,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       const series = this.configuration.series[seriesIndex];
       const functionToCall = series[functionName];
       if (functionToCall && typeof functionToCall === 'function') {
+        args.forEach((arg) => inflateFunctions(arg));
         functionToCall.apply(series, args);
       }
     }
@@ -1731,6 +1717,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         const axis = axes[axisIndex];
         const functionToCall = axis[functionName];
         if (functionToCall && typeof functionToCall === 'function') {
+          args.forEach((arg) => inflateFunctions(arg));
           functionToCall.apply(axis, args);
         }
       }
