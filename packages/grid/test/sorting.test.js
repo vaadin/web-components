@@ -9,7 +9,7 @@ import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getR
 
 describe('sorting', () => {
   describe('sorter', () => {
-    let sorter, button, orderIndicator;
+    let sorter, title, button, orderIndicator;
 
     beforeEach(() => {
       sorter = fixtureSync(`
@@ -18,6 +18,7 @@ describe('sorting', () => {
         </vaadin-grid-sorter>
       `);
       button = sorter.querySelector('button');
+      title = sorter.querySelector('.title');
       orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
     });
 
@@ -37,6 +38,12 @@ describe('sorting', () => {
     it('should not toggle on focusable click', () => {
       button.focus();
       click(button);
+      expect(sorter.direction).to.equal(null);
+    });
+
+    it('should not toggle if click event is already consumed', () => {
+      title.addEventListener('click', (e) => e.preventDefault());
+      click(title);
       expect(sorter.direction).to.equal(null);
     });
 

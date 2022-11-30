@@ -212,6 +212,11 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /** @private */
   _onClick(e) {
+    if (e.defaultPrevented) {
+      // Something else has already handled the click event, do nothing.
+      return;
+    }
+
     const activeElement = this.getRootNode().activeElement;
     if (this !== activeElement && this.contains(activeElement)) {
       // Some focusable content inside the sorter was clicked, do nothing.
