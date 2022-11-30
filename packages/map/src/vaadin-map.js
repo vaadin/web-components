@@ -1,7 +1,12 @@
 /**
  * @license
- * Copyright (c) 2022 - 2022 Vaadin Ltd.
- * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
+ * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defaults as defaultControls } from 'ol/control';
