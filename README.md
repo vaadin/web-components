@@ -127,7 +127,7 @@ The components below are licensed under the Apache License 2.0.
 
 ### Pro Components
 
-The components below are licensed under [CVDL 4.0 license](https://vaadin.com/license/cvdl-4.0) and available as part of the [Vaadin Pro Subscription](https://vaadin.com/pricing).
+The components below are licensed under [Vaadin Commercial License and Service Terms](https://vaadin.com/commercial-license-and-service-terms) and available as part of the [Vaadin Pro Subscription](https://vaadin.com/pricing).
 
 | Component                                                                                                     | npm version (latest)                                                                                                        | npm version (next)                                                                                                                      | Issues                                                                            |
 | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
