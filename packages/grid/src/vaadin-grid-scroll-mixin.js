@@ -141,7 +141,41 @@ export const ScrollMixin = (superClass) =>
         this._hideTooltip(true);
       }
 
+      // TODO: _updateOverflow on each scroll event is really expensive. Consider throttling it.
       this._updateOverflow();
+
+      // TODO: Add flag to enable + to set row height
+      this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
+        if (this.__cachedScrollLeft !== this._scrollLeft) {
+          this.__cachedScrollLeft = this._scrollLeft;
+          this.__foobar(this.__cachedScrollLeft);
+        }
+      });
+    }
+
+    __foobar(scrollLeft) {
+      // Iterate all columns
+      this._columnTree.at(-1).forEach((column) => {
+        let columnVisible = column.frozen || column.frozenToEnd ? true : undefined;
+
+        column._cells.forEach((cell) => {
+          // Check if the column is inside the viewport
+          if (columnVisible === undefined && cell.isConnected) {
+            columnVisible =
+              cell.offsetLeft + cell.offsetWidth > scrollLeft && cell.offsetLeft < scrollLeft + this.clientWidth;
+          }
+
+          if (columnVisible && cell.__hiddenSlot) {
+            // Column entered the viewport, unhide the slot
+            cell.appendChild(cell.__hiddenSlot);
+            cell.__hiddenSlot = undefined;
+          } else if (!columnVisible && !cell.__hiddenSlot) {
+            // Column left the viewport, hide the slot
+            cell.__hiddenSlot = cell.firstElementChild;
+            cell.removeChild(cell.__hiddenSlot);
+          }
+        });
+      });
     }
 
     /** @private */

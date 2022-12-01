@@ -30,20 +30,18 @@
         cb(pageItems, levelSize);
       };
 
-      const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.generator = ({ column, item }) => {
-        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
-      };
+      for (let i = 0; i < 100; i++) {
+        const column = document.createElement('vaadin-grid-column');
+        column.header = `Column ${i}`;
+        column.renderer = (root, column, model) => {
+          root.textContent = model.item.name;
+        };
+        grid.appendChild(column);
+      }
+
+      grid.firstElementChild.frozen = true;
     </script>
 
-    <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
-    </vaadin-grid>
+    <vaadin-grid item-id-path="name"> </vaadin-grid>
   </body>
 </html>

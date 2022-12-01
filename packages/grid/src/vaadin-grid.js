@@ -693,6 +693,7 @@ class Grid extends ElementMixin(
 
   /** @private */
   _createCell(tagName, column) {
+    // TODO: Could make cells of invisible columns initially hidden
     const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
     const slotName = `vaadin-grid-cell-content-${contentId}`;
 
