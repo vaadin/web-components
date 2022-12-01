@@ -9,6 +9,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
   SCROLLING: 500,
+  UPDATE_CONTENT_VISIBILITY: 100,
 };
 
 /**
@@ -146,9 +147,13 @@ export const ScrollMixin = (superClass) =>
 
       if (this.rowHeight && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
-        this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
-          this.__updateColumnContentVisibility(this.__cachedScrollLeft);
-        });
+        this._debounceColumnContentVisibility = Debouncer.debounce(
+          this._debounceColumnContentVisibility,
+          timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
+          () => {
+            this.__updateColumnContentVisibility(this.__cachedScrollLeft);
+          },
+        );
       }
     }
 
