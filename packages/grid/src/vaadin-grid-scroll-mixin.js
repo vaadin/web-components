@@ -154,6 +154,8 @@ export const ScrollMixin = (superClass) =>
     }
 
     __foobar(scrollLeft) {
+      let visibleColumnsChanged = false;
+
       // Iterate all columns
       this._columnTree.at(-1).forEach((column) => {
         // Consider frozen columns to always be inside the viewport
@@ -170,13 +172,19 @@ export const ScrollMixin = (superClass) =>
             // Column entered the viewport, unhide the slot
             cell.appendChild(cell.__hiddenSlot);
             cell.__hiddenSlot = undefined;
+            visibleColumnsChanged = true;
           } else if (!columnInViewport && !cell.__hiddenSlot) {
             // Column left the viewport, hide the slot
             cell.__hiddenSlot = cell.firstElementChild;
             cell.removeChild(cell.__hiddenSlot);
+            visibleColumnsChanged = true;
           }
         });
       });
+
+      if (visibleColumnsChanged) {
+        this.__updateVisibleRows();
+      }
     }
 
     /** @private */
