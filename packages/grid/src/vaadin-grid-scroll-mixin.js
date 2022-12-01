@@ -144,8 +144,7 @@ export const ScrollMixin = (superClass) =>
       // TODO: _updateOverflow on each scroll event is really expensive. Consider throttling it.
       this._updateOverflow();
 
-      // TODO: Add flag to enable + to set row height
-      if (this.__cachedScrollLeft !== this._scrollLeft) {
+      if (this.rowHeight && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
           this.__foobar(this.__cachedScrollLeft);

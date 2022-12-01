@@ -14,7 +14,15 @@ const MAX_VIRTUAL_COUNT = 100000;
 const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
 
 export class IronListAdapter {
-  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
+  constructor({
+    createElements,
+    updateElement,
+    scrollTarget,
+    scrollContainer,
+    elementsContainer,
+    reorderElements,
+    itemHeight,
+  }) {
     this.isAttached = true;
     this._vidxOffset = 0;
     this.createElements = createElements;
@@ -23,6 +31,7 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
+    this.itemHeight = itemHeight;
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
@@ -148,7 +157,7 @@ export class IronListAdapter {
       el.__lastUpdatedIndex = index;
     }
 
-    const elementHeight = el.offsetHeight;
+    const elementHeight = this.itemHeight || el.offsetHeight;
     if (elementHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
       // it results in iron-list requesting to create an unlimited count of elements.
@@ -442,7 +451,7 @@ export class IronListAdapter {
 
   _canScroll(el, deltaX, deltaY) {
     return (
-      (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
+      (deltaY > 0 && el.scrollTop < el.scrollHeight - (this.itemHeight || el.offsetHeight)) ||
       (deltaY < 0 && el.scrollTop > 0) ||
       (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
       (deltaX < 0 && el.scrollLeft > 0)

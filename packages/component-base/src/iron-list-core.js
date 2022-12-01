@@ -568,7 +568,7 @@ export const ironList = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
-      this._physicalSizes[pidx] = this._physicalItems[pidx].offsetHeight;
+      this._physicalSizes[pidx] = this.itemHeight || this._physicalItems[pidx].offsetHeight;
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);

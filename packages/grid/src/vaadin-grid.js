@@ -426,6 +426,18 @@ class Grid extends ElementMixin(
         type: Boolean,
         value: true,
       },
+
+      /**
+       * Sets a static height for all the body rows.
+       * If specified, the grid will be able to optimize cell rendering
+       * significantly, especially when there are multiple columns in the grid.
+       *
+       * @attr {number} size
+       * @type {number}
+       */
+      rowHeight: {
+        type: Number,
+      },
     };
   }
 
@@ -500,6 +512,7 @@ class Grid extends ElementMixin(
       scrollContainer: this.$.items,
       scrollTarget: this.$.table,
       reorderElements: true,
+      itemHeight: this.rowHeight,
     });
 
     new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
@@ -867,7 +880,7 @@ class Grid extends ElementMixin(
     this._frozenCellsChanged();
     this._updateFirstAndLastColumnForRow(row);
 
-    if (section === 'header' && isColumnRow) {
+    if (section === 'header' && isColumnRow && this.rowHeight) {
       [...row.childNodes].forEach((cell) => {
         cell._column.__outOfViewport = !this.__isColumnInViewport(cell._column);
       });
