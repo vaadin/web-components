@@ -147,12 +147,12 @@ export const ScrollMixin = (superClass) =>
       if (this.rowHeight && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
-          this.__foobar(this.__cachedScrollLeft);
+          this.__updateColumnContentVisibility(this.__cachedScrollLeft);
         });
       }
     }
 
-    __foobar() {
+    __updateColumnContentVisibility() {
       let visibleColumnsChanged = false;
 
       // Iterate all columns
