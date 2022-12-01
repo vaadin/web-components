@@ -167,6 +167,7 @@ export const ScrollMixin = (superClass) =>
             columnInViewport =
               cell.offsetLeft + cell.offsetWidth > scrollLeft && cell.offsetLeft < scrollLeft + this.clientWidth;
           }
+          column.__outOfViewport = !columnInViewport;
 
           if (columnInViewport && cell.__hiddenSlot) {
             // Column entered the viewport, unhide the slot

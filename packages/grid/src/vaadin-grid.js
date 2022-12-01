@@ -772,6 +772,11 @@ class Grid extends ElementMixin(
       }
     });
 
+    if (column && column.__outOfViewport) {
+      cell.__hiddenSlot = cell.firstElementChild;
+      cell.removeChild(cell.__hiddenSlot);
+    }
+
     return cell;
   }
 
@@ -862,6 +867,19 @@ class Grid extends ElementMixin(
 
     this._frozenCellsChanged();
     this._updateFirstAndLastColumnForRow(row);
+
+    if (section === 'header' && isColumnRow) {
+      [...row.childNodes].forEach((cell) => {
+        const column = cell._column;
+        let columnInViewport = column.frozen || column.frozenToEnd ? true : undefined;
+        if (columnInViewport === undefined) {
+          columnInViewport =
+            cell.offsetLeft + cell.offsetWidth > this._scrollLeft &&
+            cell.offsetLeft < this._scrollLeft + this.clientWidth;
+        }
+        column.__outOfViewport = !columnInViewport;
+      });
+    }
   }
 
   /**
@@ -1045,7 +1063,7 @@ class Grid extends ElementMixin(
     this._filterDragAndDrop(row, model);
 
     iterateChildren(row, (cell) => {
-      if (cell._renderer && !cell.__hiddenSlot) {
+      if (cell._renderer && !cell._column.__outOfViewport) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
       }
