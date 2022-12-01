@@ -289,8 +289,14 @@ export class IronListAdapter {
     const fragment = document.createDocumentFragment();
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
+      if (this.itemHeight) {
+        // Each item has a fixed height
+        el.style.height = `${this.itemHeight}px`;
+      } else {
+        // Items need to be observed for height changes
+        this.__resizeObserver.observe(el);
+      }
       fragment.appendChild(el);
-      this.__resizeObserver.observe(el);
     });
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
