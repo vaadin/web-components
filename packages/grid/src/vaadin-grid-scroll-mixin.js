@@ -156,20 +156,21 @@ export const ScrollMixin = (superClass) =>
     __foobar(scrollLeft) {
       // Iterate all columns
       this._columnTree.at(-1).forEach((column) => {
-        let columnVisible = column.frozen || column.frozenToEnd ? true : undefined;
+        // Consider frozen columns to always be inside the viewport
+        let columnInViewport = column.frozen || column.frozenToEnd ? true : undefined;
 
         column._cells.forEach((cell) => {
           // Check if the column is inside the viewport
-          if (columnVisible === undefined && cell.isConnected) {
-            columnVisible =
+          if (columnInViewport === undefined && cell.isConnected) {
+            columnInViewport =
               cell.offsetLeft + cell.offsetWidth > scrollLeft && cell.offsetLeft < scrollLeft + this.clientWidth;
           }
 
-          if (columnVisible && cell.__hiddenSlot) {
+          if (columnInViewport && cell.__hiddenSlot) {
             // Column entered the viewport, unhide the slot
             cell.appendChild(cell.__hiddenSlot);
             cell.__hiddenSlot = undefined;
-          } else if (!columnVisible && !cell.__hiddenSlot) {
+          } else if (!columnInViewport && !cell.__hiddenSlot) {
             // Column left the viewport, hide the slot
             cell.__hiddenSlot = cell.firstElementChild;
             cell.removeChild(cell.__hiddenSlot);

@@ -11,6 +11,7 @@
     <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/tooltip';
+      import '@vaadin/text-field';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -32,9 +33,12 @@
 
       for (let i = 0; i < 100; i++) {
         const column = document.createElement('vaadin-grid-column');
-        column.header = `Column ${i}`;
+        column.header = `Col ${i}`;
         column.renderer = (root, column, model) => {
-          root.textContent = model.item.name;
+          if (!root.firstElementChild) {
+            root.innerHTML = `<vaadin-text-field style="width: 60px"></vaadin-text-field>`;
+          }
+          root.firstElementChild.value = model.item.name;
         };
         grid.appendChild(column);
       }
