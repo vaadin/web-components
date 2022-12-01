@@ -515,7 +515,14 @@ class Grid extends ElementMixin(
       itemHeight: this.rowHeight,
     });
 
-    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
+    new ResizeObserver(() =>
+      setTimeout(() => {
+        this.__updateFooterPositioning();
+        if (this.rowHeight) {
+          this.__updateColumnContentVisibility();
+        }
+      }),
+    ).observe(this.$.table);
 
     processTemplates(this);
 
