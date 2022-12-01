@@ -145,12 +145,12 @@ export const ScrollMixin = (superClass) =>
       this._updateOverflow();
 
       // TODO: Add flag to enable + to set row height
-      this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
-        if (this.__cachedScrollLeft !== this._scrollLeft) {
-          this.__cachedScrollLeft = this._scrollLeft;
+      if (this.__cachedScrollLeft !== this._scrollLeft) {
+        this.__cachedScrollLeft = this._scrollLeft;
+        this._debounceFoobar = Debouncer.debounce(this._debounceFoobar, timeOut.after(100), () => {
           this.__foobar(this.__cachedScrollLeft);
-        }
-      });
+        });
+      }
     }
 
     __foobar(scrollLeft) {
