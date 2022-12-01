@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/accordion';
@@ -14,12 +14,14 @@ describe('accordion in dialog', () => {
       root.innerHTML = `
         <vaadin-accordion>
           <vaadin-accordion-panel>
-            <div slot="summary">Panel 1</div>
-            <button>Button 1</button>
+            <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+            <div>
+              <input type="text" placeholder="Input 1" />
+            </div>
           </vaadin-accordion-panel>
           <vaadin-accordion-panel>
-            <div slot="summary">Panel 2</div>
-            <button>Button 2</button>
+            <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+            <div>Content 2</div>
           </vaadin-accordion-panel>
         </vaadin-accordion>
       `;
@@ -27,7 +29,7 @@ describe('accordion in dialog', () => {
     dialog.opened = true;
     overlay = dialog.$.overlay;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextFrame();
+    await nextRender();
     accordion = overlay.querySelector('vaadin-accordion');
     panels = accordion.items;
   });
@@ -35,23 +37,23 @@ describe('accordion in dialog', () => {
   it('should move focus from panel heading to content on Tab', async () => {
     // Focus first panel (opened)
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(panels[0]);
+    expect(document.activeElement).to.equal(panels[0].focusElement);
 
     // Move focus to the content
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(panels[0].querySelector('button'));
+    expect(document.activeElement).to.equal(panels[0].querySelector('input'));
   });
 
   it('should move focus from panel content to heading on Shift + Tab', async () => {
     // Focus the first panel content
-    panels[0].querySelector('button').focus();
+    panels[0].querySelector('input').focus();
 
     // Move focus back to heading
     await sendKeys({ down: 'Shift' });
     await sendKeys({ press: 'Tab' });
     await sendKeys({ up: 'Shift' });
 
-    expect(document.activeElement).to.equal(panels[0]);
+    expect(document.activeElement).to.equal(panels[0].focusElement);
   });
 
   it('should skip focusable element in closed panel on Tab', async () => {
@@ -59,11 +61,11 @@ describe('accordion in dialog', () => {
 
     // Focus first panel (closed)
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(panels[0]);
+    expect(document.activeElement).to.equal(panels[0].focusElement);
 
     // Focus second panel (opened)
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(panels[1]);
+    expect(document.activeElement).to.equal(panels[1].focusElement);
   });
 
   it('should skip focusable element in closed panel on Shift + Tab', async () => {
@@ -77,6 +79,6 @@ describe('accordion in dialog', () => {
     await sendKeys({ press: 'Tab' });
     await sendKeys({ up: 'Shift' });
 
-    expect(document.activeElement).to.equal(panels[0]);
+    expect(document.activeElement).to.equal(panels[0].focusElement);
   });
 });

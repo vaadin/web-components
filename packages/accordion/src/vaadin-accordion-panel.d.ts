@@ -3,7 +3,10 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Details } from '@vaadin/details/src/vaadin-details.js';
+import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -25,9 +28,6 @@ export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementE
  *
  * Part name        | Description
  * -----------------|----------------
- * `summary`        | The element used to open and close collapsible content.
- * `toggle`         | The element used as indicator, can represent an icon.
- * `summary-content`| The wrapper for the slotted summary content.
  * `content`        | The wrapper for the collapsible panel content.
  *
  * The following attributes are exposed for styling:
@@ -43,7 +43,7 @@ export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementE
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class AccordionPanel extends Details {
+declare class AccordionPanel extends DetailsMixin(DelegateFocusMixin(DelegateStateMixin(ThemableMixin(HTMLElement)))) {
   addEventListener<K extends keyof AccordionPanelEventMap>(
     type: K,
     listener: (this: AccordionPanel, ev: AccordionPanelEventMap[K]) => void,

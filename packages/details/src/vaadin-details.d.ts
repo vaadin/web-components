@@ -5,8 +5,10 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DetailsMixin } from './vaadin-details-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -54,12 +56,9 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
-  /**
-   * If true, the details content is visible.
-   */
-  opened: boolean;
-
+declare class Details extends DetailsMixin(
+  DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))),
+) {
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,

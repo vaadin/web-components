@@ -5,9 +5,8 @@ import {
   endKeyDown,
   fixtureSync,
   homeKeyDown,
-  isIOS,
   keyboardEventFor,
-  nextFrame,
+  nextRender,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-accordion.js';
@@ -16,27 +15,29 @@ describe('vaadin-accordion', () => {
   let accordion, heading;
 
   function getHeading(idx) {
-    return accordion.items[idx].focusElement;
+    return accordion.items[idx]._toggleElement;
   }
 
   beforeEach(async () => {
     accordion = fixtureSync(`
       <vaadin-accordion>
         <vaadin-accordion-panel>
-          <div slot="summary">Panel 1</div>
-          <input />
+          <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+          <div>
+            <input />
+          </div>
         </vaadin-accordion-panel>
         <vaadin-accordion-panel>
-          <div slot="summary">Panel 2</div>
-          Content 2
+          <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+          <div>Content 2</div>
         </vaadin-accordion-panel>
         <vaadin-accordion-panel>
-          <div slot="summary">Panel 3</div>
-          Content 3
+          <vaadin-accordion-heading slot="summary">Panel 3</vaadin-accordion-heading>
+          <div>Content 3</div>
         </vaadin-accordion-panel>
       </vaadin-accordion>
     `);
-    await nextFrame();
+    await nextRender();
   });
 
   describe('custom element definition', () => {
@@ -132,7 +133,7 @@ describe('vaadin-accordion', () => {
     });
   });
 
-  (isIOS ? describe.skip : describe)('focus', () => {
+  describe('focus', () => {
     it('should focus the first panel heading by default', () => {
       accordion.focus();
       expect(accordion.items[0].hasAttribute('focused')).to.be.true;
@@ -162,7 +163,7 @@ describe('vaadin-accordion', () => {
     });
   });
 
-  (isIOS ? describe.skip : describe)('keyboard navigation', () => {
+  describe('keyboard navigation', () => {
     beforeEach(() => {
       accordion.focus();
     });

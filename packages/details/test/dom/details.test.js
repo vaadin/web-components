@@ -8,8 +8,10 @@ describe('vaadin-crud', () => {
   beforeEach(() => {
     details = fixtureSync(`
       <vaadin-details>
-        <div slot="summary">Summary</div>
-        <input>
+        <vaadin-details-heading slot="summary">Summary</vaadin-details-heading>
+        <div>
+          <input>
+        </div>
       </vaadin-details>
     `);
   });

@@ -9,21 +9,22 @@
 
     <script type="module">
       import '@vaadin/accordion';
+      // import '@vaadin/accordion/theme/material/vaadin-accordion.js';
     </script>
   </head>
 
   <body>
     <vaadin-accordion>
       <vaadin-accordion-panel>
-        <div slot="summary">Panel 1</div>
+        <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
         Panel 1 content
       </vaadin-accordion-panel>
       <vaadin-accordion-panel>
-        <div slot="summary">Panel 2</div>
+        <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
         Panel 2 content
       </vaadin-accordion-panel>
       <vaadin-accordion-panel>
-        <div slot="summary">Panel 3</div>
+        <vaadin-accordion-heading slot="summary">Panel 3</vaadin-accordion-heading>
         Panel 3 content
       </vaadin-accordion-panel>
     </vaadin-accordion>

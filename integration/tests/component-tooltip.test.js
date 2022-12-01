@@ -49,7 +49,12 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
     position: 'top',
     applyShouldNotShowCondition: (element) => element.querySelector('input').click(),
   },
-  { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
+  {
+    tagName: Details.is,
+    children: '<vaadin-details-summary slot="summary"></vaadin-details-summary>',
+    targetSelector: '[slot="summary"]',
+    position: 'bottom-start',
+  },
   { tagName: EmailField.is, position: 'top' },
   { tagName: Icon.is },
   { tagName: IntegerField.is, position: 'top' },
@@ -88,7 +93,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
     });
 
     it('should set tooltip target', () => {
-      const target = targetSelector ? element.shadowRoot.querySelector(targetSelector) : element;
+      const target = targetSelector ? element.querySelector(targetSelector) : element;
       expect(tooltip.target).to.equal(target);
     });
 

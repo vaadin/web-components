@@ -13,15 +13,15 @@ describe('accordion', () => {
       `
         <vaadin-accordion>
           <vaadin-accordion-panel>
-            <div slot="summary">Panel 1</div>
+            <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
             <div>Content 1</div>
           </vaadin-accordion-panel>
           <vaadin-accordion-panel>
-            <div slot="summary">Panel 2</div>
+            <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
             <div>Content 2</div>
           </vaadin-accordion-panel>
           <vaadin-accordion-panel>
-            <div slot="summary">Panel 3</div>
+            <vaadin-accordion-heading slot="summary">Panel 3</vaadin-accordion-heading>
             <div>Content 3</div>
           </vaadin-accordion-panel>
         </vaadin-accordion>
