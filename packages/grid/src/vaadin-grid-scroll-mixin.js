@@ -153,22 +153,14 @@ export const ScrollMixin = (superClass) =>
       }
     }
 
-    __foobar(scrollLeft) {
+    __foobar() {
       let visibleColumnsChanged = false;
 
       // Iterate all columns
       this._columnTree.at(-1).forEach((column) => {
-        // Consider frozen columns to always be inside the viewport
-        let columnInViewport = column.frozen || column.frozenToEnd ? true : undefined;
+        const columnInViewport = this.__isColumnInViewport(column);
 
         column._cells.forEach((cell) => {
-          // Check if the column is inside the viewport
-          if (columnInViewport === undefined && cell.isConnected) {
-            columnInViewport =
-              cell.offsetLeft + cell.offsetWidth > scrollLeft && cell.offsetLeft < scrollLeft + this.clientWidth;
-          }
-          column.__outOfViewport = !columnInViewport;
-
           if (columnInViewport && cell.__hiddenSlot) {
             // Column entered the viewport, unhide the slot
             cell.appendChild(cell.__hiddenSlot);
@@ -181,10 +173,28 @@ export const ScrollMixin = (superClass) =>
             visibleColumnsChanged = true;
           }
         });
+
+        column.__outOfViewport = !columnInViewport;
       });
 
       if (visibleColumnsChanged) {
         this.__updateVisibleRows();
+      }
+    }
+
+    __isColumnInViewport(column) {
+      if (column.frozen || column.frozenToEnd) {
+        // Consider frozen columns to always be inside the viewport
+        return true;
+      }
+
+      for (const cell of column._allCells) {
+        if (cell.isConnected) {
+          return (
+            cell.offsetLeft + cell.offsetWidth > this._scrollLeft &&
+            cell.offsetLeft < this._scrollLeft + this.clientWidth
+          );
+        }
       }
     }
 

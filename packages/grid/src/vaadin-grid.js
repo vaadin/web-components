@@ -693,7 +693,6 @@ class Grid extends ElementMixin(
 
   /** @private */
   _createCell(tagName, column) {
-    // TODO: Could make cells of invisible columns initially hidden
     const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
     const slotName = `vaadin-grid-cell-content-${contentId}`;
 
@@ -870,14 +869,7 @@ class Grid extends ElementMixin(
 
     if (section === 'header' && isColumnRow) {
       [...row.childNodes].forEach((cell) => {
-        const column = cell._column;
-        let columnInViewport = column.frozen || column.frozenToEnd ? true : undefined;
-        if (columnInViewport === undefined) {
-          columnInViewport =
-            cell.offsetLeft + cell.offsetWidth > this._scrollLeft &&
-            cell.offsetLeft < this._scrollLeft + this.clientWidth;
-        }
-        column.__outOfViewport = !columnInViewport;
+        cell._column.__outOfViewport = !this.__isColumnInViewport(cell._column);
       });
     }
   }
