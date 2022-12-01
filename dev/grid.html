@@ -35,6 +35,8 @@
         const column = document.createElement('vaadin-grid-column');
         column.header = `Col ${i}`;
         column.renderer = (root, column, model) => {
+          console.log('rendering cell', model.item.name, column.header);
+
           if (!root.firstElementChild) {
             root.innerHTML = `<vaadin-text-field style="width: 60px"></vaadin-text-field>`;
           }
