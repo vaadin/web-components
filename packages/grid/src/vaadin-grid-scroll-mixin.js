@@ -186,11 +186,12 @@ export const ScrollMixin = (superClass) =>
       if (!columnTree || !virtualizer) {
         return;
       }
-      virtualizer.itemHeight = rowHeight;
 
       columnTree[columnTree.length - 1].forEach((column) => {
         column._bodyContentHidden = !!rowHeight && !this.__isColumnInViewport(column);
       });
+
+      virtualizer.itemHeight = rowHeight;
     }
 
     /**
