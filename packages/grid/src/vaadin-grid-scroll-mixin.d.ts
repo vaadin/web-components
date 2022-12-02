@@ -9,6 +9,13 @@ export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class ScrollMixinClass {
   /**
+   * Static height for all the body rows.
+   * If specified, the grid will be able to optimize cell rendering
+   * significantly when there are multiple columns in the grid.
+   */
+  rowHeight: number | null | undefined;
+
+  /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
    * not always the same for any particular item. For example, sorting/filtering/expanding
    * or collapsing hierarchical items can affect the row index related to an item.

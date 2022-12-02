@@ -20,11 +20,11 @@ export const ScrollMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Sets a static height for all the body rows.
+         * Static height for all the body rows.
          * If specified, the grid will be able to optimize cell rendering
-         * significantly, especially when there are multiple columns in the grid.
+         * significantly when there are multiple columns in the grid.
          *
-         * @attr {number} size
+         * @attr {number} row-height
          * @type {number}
          */
         rowHeight: {
