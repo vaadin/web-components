@@ -143,6 +143,21 @@ export class IronListAdapter {
       el.style.paddingTop = '';
     }
 
+    if (this.__itemHeight) {
+      if (!el.__hasFixedItemHeight) {
+        // Cache the possible original inline height
+        el.__originalInlineHeight = el.style.height;
+      }
+      // Set the fixed item height
+      el.style.height = `${this.__itemHeight}px`;
+      el.__hasFixedItemHeight = true;
+    } else if (el.__hasFixedItemHeight) {
+      // The element had fixed item height before, restore the original inline height
+      el.style.height = el.__originalInlineHeight || '';
+      el.__originalInlineHeight = null;
+      el.__hasFixedItemHeight = false;
+    }
+
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
       this.updateElement(el, index);
       el.__lastUpdatedIndex = index;
@@ -182,11 +197,7 @@ export class IronListAdapter {
 
   set itemHeight(itemHeight) {
     this.__itemHeight = itemHeight;
-    if (itemHeight) {
-      this.elementsContainer.style.setProperty('--_virtualizer-item-height', `${itemHeight}px`);
-    } else {
-      this.elementsContainer.style.removeProperty('--_virtualizer-item-height');
-    }
+    this.update();
     this._resizeHandler();
   }
 
@@ -294,7 +305,6 @@ export class IronListAdapter {
     const fragment = document.createDocumentFragment();
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
-      el.style.height = `var(--_virtualizer-item-height)`;
       fragment.appendChild(el);
       this.__resizeObserver.observe(el);
     });
