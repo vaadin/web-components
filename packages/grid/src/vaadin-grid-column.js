@@ -99,7 +99,7 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {boolean}
          * @protected
          */
-        _outOfViewport: {
+        _bodyContentHidden: {
           type: Boolean,
         },
 
@@ -207,7 +207,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_updateContentVisibility(_outOfViewport, _cells)',
+        '_updateContentVisibility(_bodyContentHidden, _cells)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
@@ -216,7 +216,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _outOfViewport, _cells.*, path)',
+        '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
@@ -225,18 +225,19 @@ export const ColumnBaseMixin = (superClass) =>
       ];
     }
 
-    _updateContentVisibility(outOfViewport, bodyCells) {
+    /** @protected */
+    _updateContentVisibility(bodyContentHidden, bodyCells) {
       if (!bodyCells) {
         return;
       }
 
       bodyCells.forEach((cell) => {
-        if (!outOfViewport && cell.__hiddenSlot) {
-          // Column entered the viewport, unhide the slot
+        if (!bodyContentHidden && cell.__hiddenSlot) {
+          // Unhide the slot
           cell.appendChild(cell.__hiddenSlot);
           cell.__hiddenSlot = undefined;
-        } else if (outOfViewport && !cell.__hiddenSlot) {
-          // Column left the viewport, hide the slot
+        } else if (bodyContentHidden && !cell.__hiddenSlot) {
+          // Hide the slot
           cell.__hiddenSlot = cell.firstElementChild;
           cell.removeChild(cell.__hiddenSlot);
         }
@@ -581,7 +582,7 @@ export const ColumnBaseMixin = (superClass) =>
         cell._renderer = renderer;
 
         if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
-          if (this._grid.rowHeight && this._outOfViewport) {
+          if (this._grid.rowHeight && this._bodyContentHidden) {
             return;
           }
           this._runRenderer(renderer, cell, model);
@@ -639,8 +640,8 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    _onRendererOrBindingChanged(renderer, cells, outOfViewport, ..._bindings) {
-      if (outOfViewport) {
+    _onRendererOrBindingChanged(renderer, cells, bodyContentHidden, ..._bindings) {
+      if (bodyContentHidden) {
         return;
       }
       this._renderBodyCellsContent(renderer, cells);

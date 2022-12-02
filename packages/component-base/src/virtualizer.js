@@ -31,10 +31,18 @@ export class Virtualizer {
     this.__adapter.size = size;
   }
 
+  /**
+   * The static height used for each item
+   * @return {number | undefined} The static item height
+   */
   get itemHeight() {
     return this.__adapter.itemHeight;
   }
 
+  /**
+   * The static height used for each item
+   * @param {number} itemHeight The static item height
+   */
   set itemHeight(itemHeight) {
     this.__adapter.itemHeight = itemHeight;
   }

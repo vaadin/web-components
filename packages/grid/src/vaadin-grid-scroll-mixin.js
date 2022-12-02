@@ -55,7 +55,7 @@ export const ScrollMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateColumnsOutOfViewport(_columnTree, rowHeight, __virtualizer)'];
+      return ['__updateColumnsBodyContentHidden(_columnTree, rowHeight, __virtualizer)'];
     }
 
     /** @private */
@@ -167,29 +167,43 @@ export const ScrollMixin = (superClass) =>
           this._debounceColumnContentVisibility,
           timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
           () => {
-            this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
+            this.__updateColumnsBodyContentHidden();
           },
         );
       }
     }
 
-    __updateColumnsOutOfViewport(columnTree, rowHeight, virtualizer) {
+    /**
+     * Iterates all the columns and marks their _bodyContentHidden true
+     * in case they are outside the viewport.
+     * @private
+     */
+    __updateColumnsBodyContentHidden(
+      columnTree = this._columnTree,
+      rowHeight = this.rowHeight,
+      virtualizer = this.__virtualizer,
+    ) {
       if (!columnTree || !virtualizer) {
         return;
       }
       virtualizer.itemHeight = rowHeight;
 
-      columnTree.at(-1).forEach((column) => {
-        column._outOfViewport = !!rowHeight && !this.__isColumnInViewport(column);
+      columnTree[columnTree.length - 1].forEach((column) => {
+        column._bodyContentHidden = !!rowHeight && !this.__isColumnInViewport(column);
       });
     }
 
+    /**
+     * Returns true if the given column is horizontally inside the viewport.
+     * @private
+     */
     __isColumnInViewport(column) {
       if (column.frozen || column.frozenToEnd) {
         // Consider frozen columns to always be inside the viewport
         return true;
       }
 
+      // Find any cell of the column and check if it’s inside the viewport
       for (const cell of column._allCells) {
         if (cell.isConnected) {
           return (
@@ -198,6 +212,8 @@ export const ScrollMixin = (superClass) =>
           );
         }
       }
+
+      return true;
     }
 
     /** @private */
@@ -259,7 +275,7 @@ export const ScrollMixin = (superClass) =>
       });
       this._updateFrozenColumn();
 
-      this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
+      this.__updateColumnsBodyContentHidden();
     }
 
     /** @protected */

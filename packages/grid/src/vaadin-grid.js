@@ -500,13 +500,12 @@ class Grid extends ElementMixin(
       scrollContainer: this.$.items,
       scrollTarget: this.$.table,
       reorderElements: true,
-      itemHeight: this.rowHeight,
     });
 
     new ResizeObserver(() =>
       setTimeout(() => {
         this.__updateFooterPositioning();
-        this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
+        this.__updateColumnsBodyContentHidden();
       }),
     ).observe(this.$.table);
 
@@ -777,7 +776,7 @@ class Grid extends ElementMixin(
       }
     });
 
-    if (column && column._outOfViewport) {
+    if (column && column._bodyContentHidden) {
       cell.__hiddenSlot = cell.firstElementChild;
       cell.removeChild(cell.__hiddenSlot);
     }
@@ -1055,7 +1054,7 @@ class Grid extends ElementMixin(
     this._filterDragAndDrop(row, model);
 
     iterateChildren(row, (cell) => {
-      if (cell._renderer && (!cell._column || !cell._column._outOfViewport)) {
+      if (cell._renderer && (!cell._column || !cell._column._bodyContentHidden)) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
       }
