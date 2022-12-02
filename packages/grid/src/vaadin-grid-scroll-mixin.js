@@ -20,6 +20,18 @@ export const ScrollMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * Sets a static height for all the body rows.
+         * If specified, the grid will be able to optimize cell rendering
+         * significantly, especially when there are multiple columns in the grid.
+         *
+         * @attr {number} size
+         * @type {number}
+         */
+        rowHeight: {
+          type: Number,
+        },
+
+        /**
          * Cached array of frozen cells
          * @private
          */
@@ -40,6 +52,10 @@ export const ScrollMixin = (superClass) =>
         /** @private */
         _rowWithFocusedElement: Element,
       };
+    }
+
+    static get observers() {
+      return ['__updateColumnsOutOfViewport(_columnTree, rowHeight)'];
     }
 
     /** @private */
@@ -151,44 +167,20 @@ export const ScrollMixin = (superClass) =>
           this._debounceColumnContentVisibility,
           timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
           () => {
-            this.__updateColumnContentVisibility(this.__cachedScrollLeft);
+            this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
           },
         );
       }
     }
 
-    __updateColumnContentVisibility() {
-      if (!this._columnTree) {
-        // TODO: With right timing, it's possible that the resize observer calls this before the column tree is initialized.
+    __updateColumnsOutOfViewport(columnTree, rowHeight) {
+      if (!columnTree) {
         return;
       }
 
-      let visibleColumnsChanged = false;
-
-      // Iterate all columns
-      this._columnTree.at(-1).forEach((column) => {
-        const columnInViewport = this.__isColumnInViewport(column);
-
-        (column._cells || []).forEach((cell) => {
-          if (columnInViewport && cell.__hiddenSlot) {
-            // Column entered the viewport, unhide the slot
-            cell.appendChild(cell.__hiddenSlot);
-            cell.__hiddenSlot = undefined;
-            visibleColumnsChanged = true;
-          } else if (!columnInViewport && !cell.__hiddenSlot) {
-            // Column left the viewport, hide the slot
-            cell.__hiddenSlot = cell.firstElementChild;
-            cell.removeChild(cell.__hiddenSlot);
-            visibleColumnsChanged = true;
-          }
-        });
-
-        column.__outOfViewport = !columnInViewport;
+      columnTree.at(-1).forEach((column) => {
+        column._outOfViewport = !!rowHeight && !this.__isColumnInViewport(column);
       });
-
-      if (visibleColumnsChanged) {
-        this.__updateVisibleRows();
-      }
     }
 
     __isColumnInViewport(column) {
@@ -265,6 +257,8 @@ export const ScrollMixin = (superClass) =>
         this.__updateHorizontalScrollPosition();
       });
       this._updateFrozenColumn();
+
+      this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
     }
 
     /** @protected */
@@ -303,10 +297,6 @@ export const ScrollMixin = (superClass) =>
 
       if (firstFrozenToEnd !== undefined) {
         columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
-      }
-
-      if (this.rowHeight) {
-        this.__updateColumnContentVisibility();
       }
     }
 

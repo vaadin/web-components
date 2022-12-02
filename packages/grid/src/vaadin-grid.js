@@ -426,18 +426,6 @@ class Grid extends ElementMixin(
         type: Boolean,
         value: true,
       },
-
-      /**
-       * Sets a static height for all the body rows.
-       * If specified, the grid will be able to optimize cell rendering
-       * significantly, especially when there are multiple columns in the grid.
-       *
-       * @attr {number} size
-       * @type {number}
-       */
-      rowHeight: {
-        type: Number,
-      },
     };
   }
 
@@ -518,9 +506,7 @@ class Grid extends ElementMixin(
     new ResizeObserver(() =>
       setTimeout(() => {
         this.__updateFooterPositioning();
-        if (this.rowHeight) {
-          this.__updateColumnContentVisibility();
-        }
+        this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
       }),
     ).observe(this.$.table);
 
@@ -791,10 +777,9 @@ class Grid extends ElementMixin(
       }
     });
 
-    if (column && column.__outOfViewport) {
-      // TODO: Remove if not necessary
-      // cell.__hiddenSlot = cell.firstElementChild;
-      // cell.removeChild(cell.__hiddenSlot);
+    if (column && column._outOfViewport) {
+      cell.__hiddenSlot = cell.firstElementChild;
+      cell.removeChild(cell.__hiddenSlot);
     }
 
     return cell;
@@ -887,12 +872,6 @@ class Grid extends ElementMixin(
 
     this._frozenCellsChanged();
     this._updateFirstAndLastColumnForRow(row);
-
-    if (section === 'header' && isColumnRow && this.rowHeight) {
-      [...row.childNodes].forEach((cell) => {
-        cell._column.__outOfViewport = !this.__isColumnInViewport(cell._column);
-      });
-    }
   }
 
   /**
@@ -1076,7 +1055,7 @@ class Grid extends ElementMixin(
     this._filterDragAndDrop(row, model);
 
     iterateChildren(row, (cell) => {
-      if (cell._renderer && (!cell._column || !cell._column.__outOfViewport)) {
+      if (cell._renderer && (!cell._column || !cell._column._outOfViewport)) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
       }
