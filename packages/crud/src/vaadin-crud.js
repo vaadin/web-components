@@ -27,23 +27,34 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * A grid and an editor will be automatically generated and configured based on the data structure provided.
  *
- * #### Example:
  * ```html
- * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
- *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'></vaadin-crud>
+ * <vaadin-crud></vaadin-crud>
+ * ```
+ *
+ * ```js
+ * const crud = document.querySelector('vaadin-crud');
+ *
+ * crud.items = [
+ *   { name: 'John', surname: 'Lennon', role: 'singer' },
+ *   { name: 'Ringo', surname: 'Starr', role: 'drums' },
+ *   // ... more items
+ * ];
  * ```
  *
  * ### Data Provider Function
  *
  * Otherwise, you can provide a [`dataProvider`](#/elements/vaadin-crud#property-dataProvider) function.
- * #### Example:
- * ```html
- * <vaadin-crud></vaadin-crud>
- * ```
+ *
  * ```js
  * const crud = document.querySelector('vaadin-crud');
- * const users = [{'name': 'John', 'surname': 'Lennon', 'role': 'singer'}, ...];
- * crud.dataProvider = function(params, callback) {
+ *
+ * const users = [
+ *   { name: 'John', surname: 'Lennon', role: 'singer' },
+ *   { name: 'Ringo', surname: 'Starr', role: 'drums' },
+ *   // ... more items
+ * ];
+ *
+ * crud.dataProvider = (params, callback) => {
  *   const chunk = users.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
  *   callback(chunk, people.length);
  * };
@@ -68,11 +79,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * #### Example:
  *
  * ```html
- * <vaadin-crud
- *   id="crud"
- *   items='[{"name": "John", "surname": "Lennon", "role": "singer"},
- *           {"name": "Ringo", "surname": "Starr", "role": "drums"}]'
- * >
+ * <vaadin-crud id="crud">
  *   <vaadin-grid slot="grid">
  *     <vaadin-crud-edit-column></vaadin-crud-edit-column>
  *     <vaadin-grid-column id="column1"></vaadin-grid-column>
@@ -112,6 +119,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * column2.renderer = (root, column, model) => {
  *   root.textContent = model.item.surname;
  * };
+ *
+ * crud.items = [
+ *   { name: 'John', surname: 'Lennon', role: 'singer' },
+ *   { name: 'Ringo', surname: 'Starr', role: 'drums' },
+ *   // ... more items
+ * ];
  * ```
  *
  * ### Helpers
