@@ -175,7 +175,7 @@ export const ScrollMixin = (superClass) =>
 
     /**
      * Iterates all the columns and marks their _bodyContentHidden true
-     * in case they are outside the viewport.
+     * in case they are outside the viewport and rowHeight is set.
      * @private
      */
     __updateColumnsBodyContentHidden(
