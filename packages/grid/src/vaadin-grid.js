@@ -792,8 +792,9 @@ class Grid extends ElementMixin(
     });
 
     if (column && column.__outOfViewport) {
-      cell.__hiddenSlot = cell.firstElementChild;
-      cell.removeChild(cell.__hiddenSlot);
+      // TODO: Remove if not necessary
+      // cell.__hiddenSlot = cell.firstElementChild;
+      // cell.removeChild(cell.__hiddenSlot);
     }
 
     return cell;

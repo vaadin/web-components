@@ -554,6 +554,9 @@ export const ColumnBaseMixin = (superClass) =>
         cell._renderer = renderer;
 
         if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
+          if (this._grid.rowHeight && this.__outOfViewport) {
+            return;
+          }
           this._runRenderer(renderer, cell, model);
         }
       });

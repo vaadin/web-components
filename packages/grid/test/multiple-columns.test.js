@@ -78,6 +78,20 @@ describe('multiple columns', () => {
       expectBodyCellNotRendered(columns.length - 1);
     });
 
+    it('new rows - should render columns inside the viewport', () => {
+      resetRenderers();
+      grid.items = [{ name: `Item 1` }, { name: `Item 2` }];
+      expectBodyCellUpdated(0);
+      expectBodyCellUpdated(1);
+    });
+
+    it('new rows - should not render columns outside the viewport', () => {
+      resetRenderers();
+      grid.items = [{ name: `Item 1` }, { name: `Item 2` }];
+      expectBodyCellNotRendered(2);
+      expectBodyCellNotRendered(columns.length - 1);
+    });
+
     it('should render columns revealed columns on resize', async () => {
       grid.style.width = `${grid.$.table.scrollWidth}px`;
       await onceResized(grid);
@@ -87,6 +101,11 @@ describe('multiple columns', () => {
 
     it('should always render header cells', () => {
       expect(getHeaderCellContent(grid, 0, columns.length - 1).textContent).to.equal(`Col ${columns.length - 1}`);
+    });
+
+    it('should render frozen to end columns', () => {
+      columns.at(-1).frozenToEnd = true;
+      expectBodyCellUpdated(columns.length - 1);
     });
 
     describe('scroll horizontally', () => {
@@ -117,6 +136,11 @@ describe('multiple columns', () => {
         await onceResized(grid);
         expectBodyCellUpdated(0);
         expectBodyCellUpdated(1);
+      });
+
+      it('should render frozen columns', () => {
+        columns[0].frozen = true;
+        expectBodyCellUpdated(0);
       });
 
       it('should debounce scrolling', async () => {

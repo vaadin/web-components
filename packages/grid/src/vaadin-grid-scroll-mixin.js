@@ -169,7 +169,7 @@ export const ScrollMixin = (superClass) =>
       this._columnTree.at(-1).forEach((column) => {
         const columnInViewport = this.__isColumnInViewport(column);
 
-        column._cells.forEach((cell) => {
+        (column._cells || []).forEach((cell) => {
           if (columnInViewport && cell.__hiddenSlot) {
             // Column entered the viewport, unhide the slot
             cell.appendChild(cell.__hiddenSlot);
@@ -303,6 +303,10 @@ export const ScrollMixin = (superClass) =>
 
       if (firstFrozenToEnd !== undefined) {
         columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
+      }
+
+      if (this.rowHeight) {
+        this.__updateColumnContentVisibility();
       }
     }
 
