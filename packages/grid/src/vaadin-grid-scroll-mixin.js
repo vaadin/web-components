@@ -55,7 +55,7 @@ export const ScrollMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateColumnsOutOfViewport(_columnTree, rowHeight)'];
+      return ['__updateColumnsOutOfViewport(_columnTree, rowHeight, __virtualizer)'];
     }
 
     /** @private */
@@ -167,16 +167,17 @@ export const ScrollMixin = (superClass) =>
           this._debounceColumnContentVisibility,
           timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
           () => {
-            this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
+            this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
           },
         );
       }
     }
 
-    __updateColumnsOutOfViewport(columnTree, rowHeight) {
-      if (!columnTree) {
+    __updateColumnsOutOfViewport(columnTree, rowHeight, virtualizer) {
+      if (!columnTree || !virtualizer) {
         return;
       }
+      virtualizer.itemHeight = rowHeight;
 
       columnTree.at(-1).forEach((column) => {
         column._outOfViewport = !!rowHeight && !this.__isColumnInViewport(column);
@@ -258,7 +259,7 @@ export const ScrollMixin = (superClass) =>
       });
       this._updateFrozenColumn();
 
-      this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
+      this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
     }
 
     /** @protected */

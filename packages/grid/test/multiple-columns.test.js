@@ -108,6 +108,32 @@ describe('multiple columns', () => {
       expectBodyCellUpdated(columns.length - 1);
     });
 
+    it('should have fixed row height', () => {
+      const bodyRow = grid.$.items.firstElementChild;
+      expect(bodyRow.offsetHeight).to.equal(grid.rowHeight);
+    });
+
+    it('should switch back to dynamic row height', () => {
+      grid.rowHeight = null;
+
+      expectBodyCellUpdated(0);
+      expectBodyCellUpdated(1);
+      expectBodyCellUpdated(2);
+      expectBodyCellUpdated(columns.length - 1);
+    });
+
+    it('should switch back to fixed row height', () => {
+      grid.rowHeight = null;
+      resetRenderers();
+      grid.rowHeight = 100;
+
+      const bodyRow = grid.$.items.firstElementChild;
+      expect(bodyRow.offsetHeight).to.equal(grid.rowHeight);
+
+      expectBodyCellNotRendered(2);
+      expectBodyCellNotRendered(columns.length - 1);
+    });
+
     describe('scroll horizontally', () => {
       async function scrollHorizontallyTo(scrollLeft) {
         grid.$.table.scrollLeft = scrollLeft;

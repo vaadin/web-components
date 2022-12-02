@@ -506,7 +506,7 @@ class Grid extends ElementMixin(
     new ResizeObserver(() =>
       setTimeout(() => {
         this.__updateFooterPositioning();
-        this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight);
+        this.__updateColumnsOutOfViewport(this._columnTree, this.rowHeight, this.__virtualizer);
       }),
     ).observe(this.$.table);
 

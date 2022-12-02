@@ -14,15 +14,7 @@ const MAX_VIRTUAL_COUNT = 100000;
 const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
 
 export class IronListAdapter {
-  constructor({
-    createElements,
-    updateElement,
-    scrollTarget,
-    scrollContainer,
-    elementsContainer,
-    reorderElements,
-    itemHeight,
-  }) {
+  constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.isAttached = true;
     this._vidxOffset = 0;
     this.createElements = createElements;
@@ -31,7 +23,6 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
-    this.itemHeight = itemHeight;
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
@@ -157,7 +148,7 @@ export class IronListAdapter {
       el.__lastUpdatedIndex = index;
     }
 
-    const elementHeight = this.itemHeight || el.offsetHeight;
+    const elementHeight = el.offsetHeight;
     if (elementHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
       // it results in iron-list requesting to create an unlimited count of elements.
@@ -183,6 +174,20 @@ export class IronListAdapter {
   __getIndexScrollOffset(index) {
     const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
     return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
+  }
+
+  get itemHeight() {
+    return this.__itemHeight;
+  }
+
+  set itemHeight(itemHeight) {
+    this.__itemHeight = itemHeight;
+    if (itemHeight) {
+      this.elementsContainer.style.setProperty('--_virtualizer-item-height', `${itemHeight}px`);
+    } else {
+      this.elementsContainer.style.removeProperty('--_virtualizer-item-height');
+    }
+    this._resizeHandler();
   }
 
   get size() {
@@ -289,14 +294,9 @@ export class IronListAdapter {
     const fragment = document.createDocumentFragment();
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
-      if (this.itemHeight) {
-        // Each item has a fixed height
-        el.style.height = `${this.itemHeight}px`;
-      } else {
-        // Items need to be observed for height changes
-        this.__resizeObserver.observe(el);
-      }
+      el.style.height = `var(--_virtualizer-item-height)`;
       fragment.appendChild(el);
+      this.__resizeObserver.observe(el);
     });
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
@@ -457,7 +457,7 @@ export class IronListAdapter {
 
   _canScroll(el, deltaX, deltaY) {
     return (
-      (deltaY > 0 && el.scrollTop < el.scrollHeight - (this.itemHeight || el.offsetHeight)) ||
+      (deltaY > 0 && el.scrollTop < el.scrollHeight - el.offsetHeight) ||
       (deltaY < 0 && el.scrollTop > 0) ||
       (deltaX > 0 && el.scrollLeft < el.scrollWidth - el.offsetWidth) ||
       (deltaX < 0 && el.scrollLeft > 0)

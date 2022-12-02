@@ -31,6 +31,14 @@ export class Virtualizer {
     this.__adapter.size = size;
   }
 
+  get itemHeight() {
+    return this.__adapter.itemHeight;
+  }
+
+  set itemHeight(itemHeight) {
+    this.__adapter.itemHeight = itemHeight;
+  }
+
   /**
    * Scroll to a specific index in the virtual list
    *
