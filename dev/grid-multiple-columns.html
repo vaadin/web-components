@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/text-field';
+
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = ({ page, pageSize }, cb) => {
+        const levelSize = 100;
+        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          return {
+            name: page * pageSize + i,
+          };
+        });
+
+        cb(pageItems, levelSize);
+      };
+
+      for (let i = 0; i < 100; i++) {
+        const column = document.createElement('vaadin-grid-column');
+        column.header = `Col ${i}`;
+        column.renderer = (root, column, model) => {
+          if (!root.firstElementChild) {
+            root.innerHTML = `<vaadin-text-field style="width: 60px"></vaadin-text-field>`;
+          }
+          root.firstElementChild.value = `${i} - ${model.item.name}`;
+        };
+        grid.appendChild(column);
+      }
+
+      grid.firstElementChild.frozen = true;
+    </script>
+
+    <vaadin-grid item-id-path="name" row-height="80"> </vaadin-grid>
+  </body>
+</html>

@@ -11,7 +11,6 @@
     <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/tooltip';
-      import '@vaadin/text-field';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -31,23 +30,20 @@
         cb(pageItems, levelSize);
       };
 
-      for (let i = 0; i < 100; i++) {
-        const column = document.createElement('vaadin-grid-column');
-        column.header = `Col ${i}`;
-        column.renderer = (root, column, model) => {
-          console.log('rendering cell', model.item.name, column.header);
-
-          if (!root.firstElementChild) {
-            root.innerHTML = `<vaadin-text-field style="width: 60px"></vaadin-text-field>`;
-          }
-          root.firstElementChild.value = model.item.name;
-        };
-        grid.appendChild(column);
-      }
-
-      grid.firstElementChild.frozen = true;
+      const tooltip = document.querySelector('[slot="tooltip"]');
+      tooltip.generator = ({ column, item }) => {
+        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
+      };
     </script>
 
-    <vaadin-grid item-id-path="name" row-height="80"> </vaadin-grid>
+    <vaadin-grid item-id-path="name">
+      <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+      <vaadin-grid-tree-column frozen path="name" width="200px"></vaadin-grid-tree-column>
+      <vaadin-grid-column path="name" width="200px"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px"></vaadin-grid-column>
+
+      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+    </vaadin-grid>
   </body>
 </html>
