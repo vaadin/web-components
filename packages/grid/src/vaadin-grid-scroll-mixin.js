@@ -24,6 +24,9 @@ export const ScrollMixin = (superClass) =>
          * If specified, the grid will be able to optimize cell rendering
          * significantly when there are multiple columns in the grid.
          *
+         * NOTE: columns with auto-width will only take the header content into account
+         * when calculating the width for columns that are initially outside the viewport.
+         *
          * @attr {number} row-height
          * @type {number}
          */
