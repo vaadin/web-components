@@ -1,8 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getCell } from './helpers.js';
+import { flushGrid, getCell, getHeaderCellContent, onceResized } from './helpers.js';
+
+const timeouts = {
+  UPDATE_CONTENT_VISIBILITY: 100,
+};
 
 describe('multiple columns', () => {
   let grid, cellContent, columns;
@@ -59,8 +63,9 @@ describe('multiple columns', () => {
   describe('static row height', () => {
     beforeEach(async () => {
       grid.rowHeight = 80;
+      // Wait for the initial resize observer callback
+      await onceResized(grid);
       flushGrid(grid);
-      await nextFrame();
     });
 
     it('should render columns inside the viewport', () => {
@@ -73,11 +78,28 @@ describe('multiple columns', () => {
       expectBodyCellNotRendered(columns.length - 1);
     });
 
-    describe('scroll to last column', () => {
+    it('should render columns revealed columns on resize', async () => {
+      grid.style.width = `${grid.$.table.scrollWidth}px`;
+      await onceResized(grid);
+      expectBodyCellUpdated(2);
+      expectBodyCellUpdated(columns.length - 1);
+    });
+
+    it('should always render header cells', () => {
+      expect(getHeaderCellContent(grid, 0, columns.length - 1).textContent).to.equal(`Col ${columns.length - 1}`);
+    });
+
+    describe('scroll horizontally', () => {
+      async function scrollHorizontallyTo(scrollLeft) {
+        grid.$.table.scrollLeft = scrollLeft;
+        await oneEvent(grid.$.table, 'scroll');
+      }
+
       beforeEach(async () => {
         resetRenderers();
-        grid.$.table.scrollLeft = grid.$.table.scrollWidth;
-        await oneEvent(grid.$.table, 'scroll');
+        await scrollHorizontallyTo(grid.$.table.scrollWidth);
+        // Wait for the debouncer to flush
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
       });
 
       it('should render columns inside the viewport', () => {
@@ -88,6 +110,38 @@ describe('multiple columns', () => {
       it('should not render columns outside the viewport', () => {
         expectBodyCellNotRendered(0);
         expectBodyCellNotRendered(1);
+      });
+
+      it('should render columns revealed columns on resize', async () => {
+        grid.style.width = `${grid.$.table.scrollWidth}px`;
+        await onceResized(grid);
+        expectBodyCellUpdated(0);
+        expectBodyCellUpdated(1);
+      });
+
+      it('should debounce scrolling', async () => {
+        resetRenderers();
+
+        // Scroll back to the beginning
+        await scrollHorizontallyTo(0);
+        // Half of the debounce timeout so the debouncer is not yet executed
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        expectBodyCellNotRendered(0);
+
+        // Scroll back to the end
+        await scrollHorizontallyTo(grid.$.table.scrollWidth);
+        // Half of the debounce timeout so the debouncer is not yet executed
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+
+        // Scroll back to the beginning
+        await scrollHorizontallyTo(0);
+        // Half of the debounce timeout so the debouncer is not yet executed
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        expectBodyCellNotRendered(0);
+
+        // Seconf half of the debounce timeout so the debouncer is executed
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        expectBodyCellUpdated(0);
       });
     });
   });
