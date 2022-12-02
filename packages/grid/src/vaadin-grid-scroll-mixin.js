@@ -158,6 +158,11 @@ export const ScrollMixin = (superClass) =>
     }
 
     __updateColumnContentVisibility() {
+      if (!this._columnTree) {
+        // TODO: With right timing, it's possible that the resize observer calls this before the column tree is initialized.
+        return;
+      }
+
       let visibleColumnsChanged = false;
 
       // Iterate all columns
