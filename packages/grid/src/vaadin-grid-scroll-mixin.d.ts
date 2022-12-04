@@ -16,7 +16,7 @@ export declare class ScrollMixinClass {
    * NOTE: columns with auto-width will only take the header content into account
    * when calculating the width for columns that are initially outside the viewport.
    */
-  rowHeight: number | null | undefined;
+  rowHeight: string | null | undefined;
 
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is

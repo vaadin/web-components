@@ -104,11 +104,11 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * @type {number}
+         * @type {string}
          * @protected
          */
         _bodyCellHeight: {
-          type: Number,
+          type: String,
         },
 
         /**
@@ -238,7 +238,7 @@ export const ColumnBaseMixin = (superClass) =>
     _bodyCellHeightChanged(height, cells) {
       if (cells) {
         cells.forEach((cell) => {
-          cell.style.height = height ? `${height}px` : '';
+          cell.style.height = height || '';
         });
       }
     }

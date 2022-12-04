@@ -62,7 +62,7 @@ describe('multiple columns', () => {
 
   describe('static row height', () => {
     beforeEach(async () => {
-      grid.rowHeight = 80;
+      grid.rowHeight = '80px';
       // Wait for the initial resize observer callback
       await onceResized(grid);
       flushGrid(grid);
@@ -110,7 +110,7 @@ describe('multiple columns', () => {
 
     it('should have fixed row height', () => {
       const bodyRow = grid.$.items.firstElementChild;
-      expect(bodyRow.offsetHeight).to.equal(grid.rowHeight);
+      expect(bodyRow.offsetHeight).to.equal(parseInt(grid.rowHeight));
     });
 
     it('should switch back to dynamic row height', () => {
@@ -125,10 +125,10 @@ describe('multiple columns', () => {
     it('should switch back to fixed row height', () => {
       grid.rowHeight = null;
       resetRenderers();
-      grid.rowHeight = 100;
+      grid.rowHeight = '100px';
 
       const bodyRow = grid.$.items.firstElementChild;
-      expect(bodyRow.offsetHeight).to.equal(grid.rowHeight);
+      expect(bodyRow.offsetHeight).to.equal(parseInt(grid.rowHeight));
 
       expectBodyCellNotRendered(2);
       expectBodyCellNotRendered(columns.length - 1);

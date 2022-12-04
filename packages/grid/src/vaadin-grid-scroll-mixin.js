@@ -19,6 +19,9 @@ export const ScrollMixin = (superClass) =>
   class ScrollMixin extends ResizeMixin(superClass) {
     static get properties() {
       return {
+        // TODO: Consider API staticRowHeight: boolean instead. It would
+        // work the same but the responsibility of making sure each row
+        // has the same height would be on the user.
         /**
          * Static height for all the body rows.
          * If specified, the grid will be able to optimize cell rendering
@@ -27,11 +30,11 @@ export const ScrollMixin = (superClass) =>
          * NOTE: columns with auto-width will only take the header content into account
          * when calculating the width for columns that are initially outside the viewport.
          *
-         * @attr {number} row-height
-         * @type {number}
+         * @attr {string} row-height
+         * @type {string}
          */
         rowHeight: {
-          type: Number,
+          type: String,
         },
 
         /**
