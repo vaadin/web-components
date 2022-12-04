@@ -776,11 +776,6 @@ class Grid extends ElementMixin(
       }
     });
 
-    if (column && column._bodyContentHidden) {
-      cell.__hiddenSlot = cell.firstElementChild;
-      cell.removeChild(cell.__hiddenSlot);
-    }
-
     return cell;
   }
 
