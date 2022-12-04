@@ -104,6 +104,14 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * @type {number}
+         * @protected
+         */
+        _bodyCellHeight: {
+          type: Number,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -207,7 +215,8 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_updateContentVisibility(_bodyContentHidden, _cells)',
+        '_bodyCellHeightChanged(_bodyCellHeight, _cells, _cells.*)',
+        '_updateContentVisibility(_bodyContentHidden, _cells, _cells.*)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
@@ -223,6 +232,15 @@ export const ColumnBaseMixin = (superClass) =>
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
       ];
+    }
+
+    /** @protected */
+    _bodyCellHeightChanged(height, cells) {
+      if (cells) {
+        cells.forEach((cell) => {
+          cell.style.height = height ? `${height}px` : '';
+        });
+      }
     }
 
     /** @protected */

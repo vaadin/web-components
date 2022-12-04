@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getCell, getHeaderCellContent, onceResized } from './helpers.js';
+import { flushGrid, getCell, getContainerCell, getHeaderCellContent, onceResized } from './helpers.js';
 
 const timeouts = {
   UPDATE_CONTENT_VISIBILITY: 100,
@@ -132,6 +132,31 @@ describe('multiple columns', () => {
 
       expectBodyCellNotRendered(2);
       expectBodyCellNotRendered(columns.length - 1);
+    });
+
+    it('should have a larger row height when details opened', () => {
+      // Disable cell padding for this test
+      fixtureSync(`
+        <style>
+          vaadin-grid-cell-content {
+            padding: 0;
+          }
+        </style>
+      `);
+
+      grid.items = [{ name: `Item 1` }, { name: `Item 2` }];
+
+      // Opend details for the first row
+      const detailsHeight = 100;
+      grid.rowDetailsRenderer = (root) => {
+        root.innerHTML = `<div style="height: ${detailsHeight}px;">Details</div>`;
+      };
+      grid.detailsOpenedItems = [grid.items[0]];
+
+      flushGrid(grid);
+      const firstRect = getContainerCell(grid.$.items, 0, 0).getBoundingClientRect();
+      const secondRect = getContainerCell(grid.$.items, 1, 0).getBoundingClientRect();
+      expect(secondRect.top).to.equal(firstRect.bottom + detailsHeight);
     });
 
     describe('scroll horizontally', () => {

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
-describe('virtualizer - variable item height', () => {
+describe('virtualizer - item height', () => {
   let elementsContainer;
   let virtualizer;
   const EVEN_ITEM_HEIGHT = 20;
@@ -89,63 +89,5 @@ describe('virtualizer - variable item height', () => {
 
     // The padding should have been be cleared and the item should have its original height.
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
-  });
-});
-
-describe('virtualizer - fixed item height', () => {
-  let elementsContainer;
-  let virtualizer;
-
-  beforeEach(() => {
-    const scrollTarget = fixtureSync(`
-      <div style="height: 300px;">
-        <div class="container"></div>
-      </div>
-
-      <style>
-        .item {
-          height: 40px;
-        }
-      </style>
-      
-    `);
-    const scrollContainer = scrollTarget.firstElementChild;
-    elementsContainer = scrollContainer;
-
-    virtualizer = new Virtualizer({
-      createElements: (count) =>
-        Array.from({ length: count }, () => {
-          const element = document.createElement('div');
-          element.classList.add('item');
-          element.style.width = '100%';
-          return element;
-        }),
-      updateElement: (el, index) => {
-        el.textContent = `Item ${index}`;
-      },
-      scrollTarget,
-      scrollContainer,
-    });
-
-    virtualizer.size = 100;
-    virtualizer.itemHeight = 100;
-  });
-
-  it('should have a fixed item height', () => {
-    const firstItem = elementsContainer.firstElementChild;
-    expect(firstItem.offsetHeight).to.equal(100);
-  });
-
-  it('should have a dynamic item height', () => {
-    virtualizer.itemHeight = undefined;
-    const firstItem = elementsContainer.firstElementChild;
-    expect(firstItem.offsetHeight).to.equal(40);
-  });
-
-  it('should restore the original item height', () => {
-    virtualizer.itemHeight = 200;
-    virtualizer.itemHeight = undefined;
-    const firstItem = elementsContainer.firstElementChild;
-    expect(firstItem.offsetHeight).to.equal(40);
   });
 });

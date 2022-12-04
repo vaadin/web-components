@@ -32,22 +32,6 @@ export class Virtualizer {
   }
 
   /**
-   * The static height used for each item
-   * @return {number | undefined} The static item height
-   */
-  get itemHeight() {
-    return this.__adapter.itemHeight;
-  }
-
-  /**
-   * The static height used for each item
-   * @param {number} itemHeight The static item height
-   */
-  set itemHeight(itemHeight) {
-    this.__adapter.itemHeight = itemHeight;
-  }
-
-  /**
    * Scroll to a specific index in the virtual list
    *
    * @method scrollToIndex

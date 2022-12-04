@@ -58,7 +58,7 @@ export const ScrollMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateColumnsBodyContentHidden(_columnTree, rowHeight, __virtualizer)'];
+      return ['__rowHeightChanged(_columnTree, rowHeight)'];
     }
 
     /** @private */
@@ -181,20 +181,27 @@ export const ScrollMixin = (superClass) =>
      * in case they are outside the viewport and rowHeight is set.
      * @private
      */
-    __updateColumnsBodyContentHidden(
-      columnTree = this._columnTree,
-      rowHeight = this.rowHeight,
-      virtualizer = this.__virtualizer,
-    ) {
-      if (!columnTree || !virtualizer) {
+    __updateColumnsBodyContentHidden(columnTree = this._columnTree, rowHeight = this.rowHeight) {
+      if (!columnTree) {
         return;
       }
 
       columnTree[columnTree.length - 1].forEach((column) => {
         column._bodyContentHidden = !!rowHeight && !this.__isColumnInViewport(column);
       });
+    }
 
-      virtualizer.itemHeight = rowHeight;
+    /** @private */
+    __rowHeightChanged(columnTree, rowHeight) {
+      if (!columnTree) {
+        return;
+      }
+
+      this.__updateColumnsBodyContentHidden(columnTree, rowHeight);
+
+      columnTree[columnTree.length - 1].forEach((column) => {
+        column._bodyCellHeight = rowHeight;
+      });
     }
 
     /**
