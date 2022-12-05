@@ -184,13 +184,13 @@ export const ScrollMixin = (superClass) =>
      * in case they are outside the viewport and rowHeight is set.
      * @private
      */
-    __updateColumnsBodyContentHidden(columnTree = this._columnTree, rowHeight = this.rowHeight) {
-      if (!columnTree) {
+    __updateColumnsBodyContentHidden() {
+      if (!this._columnTree) {
         return;
       }
 
-      columnTree[columnTree.length - 1].forEach((column) => {
-        column._bodyContentHidden = !!rowHeight && !this.__isColumnInViewport(column);
+      this._columnTree[this._columnTree.length - 1].forEach((column) => {
+        column._bodyContentHidden = !!this.rowHeight && !this.__isColumnInViewport(column);
       });
     }
 
@@ -223,7 +223,7 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      this.__updateColumnsBodyContentHidden(columnTree, rowHeight);
+      this.__updateColumnsBodyContentHidden();
 
       columnTree[columnTree.length - 1].forEach((column) => {
         column._bodyCellHeight = rowHeight;
