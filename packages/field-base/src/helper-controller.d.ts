@@ -14,8 +14,6 @@ export class HelperController extends SlotController {
    */
   helperText: string | null | undefined;
 
-  helperId: string;
-
   /**
    * Set helper text based on corresponding host property.
    */

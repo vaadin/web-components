@@ -16,10 +16,6 @@ export class HelperController extends SlotController {
     });
   }
 
-  get helperId() {
-    return this.node && this.node.id;
-  }
-
   /**
    * Override to initialize the newly added custom helper.
    *

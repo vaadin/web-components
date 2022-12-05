@@ -31,7 +31,8 @@ export const LabelMixin = dedupingMixin(
 
       /** @protected */
       get _labelId() {
-        return this._labelController.labelId;
+        const node = this._labelNode;
+        return node && node.id;
       }
 
       /** @protected */

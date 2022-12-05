@@ -10,11 +10,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class ErrorController extends SlotController {
   /**
-   * ID attribute value set on the error message element.
-   */
-  readonly errorId: string;
-
-  /**
    * String used for the error message text content.
    */
   protected errorMessage: string | null | undefined;

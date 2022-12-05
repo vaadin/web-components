@@ -21,15 +21,6 @@ export class ErrorController extends SlotController {
   }
 
   /**
-   * ID attribute value set on the error message element.
-   *
-   * @return {string}
-   */
-  get errorId() {
-    return this.node && this.node.id;
-  }
-
-  /**
    * Set the error message element text content.
    *
    * @param {string} errorMessage
