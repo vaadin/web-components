@@ -161,9 +161,6 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       __onInput(event) {
-        // In the case a custom web component is passed as `inputElement`,
-        // the actual native input element, on which the event occurred,
-        // can be inside shadow trees.
         this._setHasInputValue(event);
         this._onInput(event);
       }
@@ -243,6 +240,9 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _setHasInputValue(event) {
+        // In the case a custom web component is passed as `inputElement`,
+        // the actual native input element, on which the event occurred,
+        // can be inside shadow trees.
         const target = event.composedPath()[0];
         this._hasInputValue = target.value.length > 0;
       }
