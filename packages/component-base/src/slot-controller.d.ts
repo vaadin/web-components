@@ -65,7 +65,7 @@ export class SlotController extends EventTarget implements ReactiveController {
   protected initAddedNode(node: Node): void;
 
   /**
-   * Call `slotInitializer` on the node managed by the controller.
+   * Run `slotInitializer` for the node managed by the controller.
    */
   protected initNode(node: Node): void;
 

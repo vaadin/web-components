@@ -145,7 +145,7 @@ export class SlotController extends EventTarget {
   }
 
   /**
-   * Call `slotInitializer` on the node managed by the controller.
+   * Run `slotInitializer` for the node managed by the controller.
    *
    * @param {Node} node
    * @protected
