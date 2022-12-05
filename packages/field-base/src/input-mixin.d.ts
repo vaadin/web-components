@@ -56,4 +56,6 @@ export declare class InputMixinClass {
   protected _toggleHasValue(hasValue: boolean): void;
 
   protected _valueChanged(value?: string, oldValue?: string): void;
+
+  protected _setHasInputValue(event: InputEvent): void;
 }
