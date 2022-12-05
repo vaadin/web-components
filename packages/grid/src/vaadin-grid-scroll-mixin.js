@@ -194,19 +194,6 @@ export const ScrollMixin = (superClass) =>
       });
     }
 
-    /** @private */
-    __rowHeightChanged(columnTree, rowHeight) {
-      if (!columnTree) {
-        return;
-      }
-
-      this.__updateColumnsBodyContentHidden(columnTree, rowHeight);
-
-      columnTree[columnTree.length - 1].forEach((column) => {
-        column._bodyCellHeight = rowHeight;
-      });
-    }
-
     /**
      * Returns true if the given column is horizontally inside the viewport.
      * @private
@@ -228,6 +215,19 @@ export const ScrollMixin = (superClass) =>
       }
 
       return true;
+    }
+
+    /** @private */
+    __rowHeightChanged(columnTree, rowHeight) {
+      if (!columnTree) {
+        return;
+      }
+
+      this.__updateColumnsBodyContentHidden(columnTree, rowHeight);
+
+      columnTree[columnTree.length - 1].forEach((column) => {
+        column._bodyCellHeight = rowHeight;
+      });
     }
 
     /** @private */

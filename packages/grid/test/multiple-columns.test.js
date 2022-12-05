@@ -182,6 +182,12 @@ describe('multiple columns', () => {
         expectBodyCellNotRendered(1);
       });
 
+      it('should not render columns outside the viewport on update', () => {
+        grid.requestContentUpdate();
+        expectBodyCellNotRendered(0);
+        expectBodyCellNotRendered(1);
+      });
+
       it('should render columns revealed columns on resize', async () => {
         grid.style.width = `${grid.$.table.scrollWidth}px`;
         await onceResized(grid);

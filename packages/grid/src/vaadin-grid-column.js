@@ -216,7 +216,7 @@ export const ColumnBaseMixin = (superClass) =>
     static get observers() {
       return [
         '_bodyCellHeightChanged(_bodyCellHeight, _cells, _cells.*)',
-        '_updateContentVisibility(_bodyContentHidden, _cells, _cells.*)',
+        '_bodyContentHiddenChanged(_bodyContentHidden, _cells, _cells.*)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
@@ -244,7 +244,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    _updateContentVisibility(bodyContentHidden, bodyCells) {
+    _bodyContentHiddenChanged(bodyContentHidden, bodyCells) {
       if (!bodyCells) {
         return;
       }
@@ -600,9 +600,6 @@ export const ColumnBaseMixin = (superClass) =>
         cell._renderer = renderer;
 
         if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
-          if (this._grid.rowHeight && this._bodyContentHidden) {
-            return;
-          }
           this._runRenderer(renderer, cell, model);
         }
       });
