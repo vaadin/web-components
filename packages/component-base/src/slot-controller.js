@@ -92,7 +92,7 @@ export class SlotController extends EventTarget {
   }
 
   /**
-   * Create and attach default node using the slot factory.
+   * Create and attach default node using the provided tag name, if any.
    * @return {Node | undefined}
    * @protected
    */
@@ -102,7 +102,7 @@ export class SlotController extends EventTarget {
     // Check if the node was created previously and if so, reuse it.
     let node = this.defaultNode;
 
-    // Slot factory is optional, some slots don't have default content.
+    // Tag name is optional, sometimes we don't init default content.
     if (!node && tagName) {
       node = document.createElement(tagName);
       if (node instanceof Element) {
@@ -145,6 +145,8 @@ export class SlotController extends EventTarget {
   }
 
   /**
+   * Run `slotInitializer` for the node managed by the controller.
+   *
    * @param {Node} node
    * @protected
    */
@@ -173,7 +175,12 @@ export class SlotController extends EventTarget {
    */
   teardownNode(_node) {}
 
-  /** @protected */
+  /**
+   * Run both `initCustomNode` and `initNode` for a custom slotted node.
+   *
+   * @param {Node} node
+   * @protected
+   */
   initAddedNode(node) {
     if (node !== this.defaultNode) {
       this.initCustomNode(node);
