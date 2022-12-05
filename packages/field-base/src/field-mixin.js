@@ -84,9 +84,10 @@ export const FieldMixin = (superclass) =>
         this.__labelChanged(hasLabel, node);
       });
 
-      this._helperController.addEventListener('helper-changed', (event) => {
-        const { hasHelper, node } = event.detail;
-        this.__helperChanged(hasHelper, node);
+      this._helperController.addEventListener('node-changed', (event) => {
+        const { hasNode, node } = event.detail;
+        this.toggleAttribute('has-helper', hasNode);
+        this.__helperChanged(hasNode, node);
       });
     }
 

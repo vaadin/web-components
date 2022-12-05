@@ -3,62 +3,20 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 
 /**
  * A controller that manages the helper node content.
  */
-export class HelperController extends SlotController {
+export class HelperController extends SlotObserveController {
   constructor(host) {
     // Do not provide tag name, as we create helper lazily.
-    super(host, 'helper', null, {
-      useUniqueId: true,
-    });
-  }
-
-  /**
-   * Override to initialize the newly added custom helper.
-   *
-   * @param {Node} helperNode
-   * @protected
-   * @override
-   */
-  initCustomNode(helperNode) {
-    this.__updateHelperId(helperNode);
-
-    this.__observeHelper(helperNode);
-
-    const hasHelper = this.__hasHelper(helperNode);
-    this.__toggleHasHelper(hasHelper);
-  }
-
-  /**
-   * Override to cleanup helper node when it's removed.
-   *
-   * @param {Node} _node
-   * @protected
-   * @override
-   */
-  teardownNode(_node) {
-    // The observer does not exist when the default helper is removed.
-    if (this.__helperIdObserver) {
-      this.__helperIdObserver.disconnect();
-    }
-
-    const helperNode = this.getSlotChild();
-
-    // Custom node is added to helper slot
-    if (helperNode && helperNode !== this.defaultNode) {
-      const hasHelper = this.__hasHelper(helperNode);
-      this.__toggleHasHelper(hasHelper);
-    } else {
-      // Restore default helper if needed
-      this.__applyDefaultHelper(this.helperText, helperNode);
-    }
+    super(host, 'helper', null);
   }
 
   /**
    * Set helper text based on corresponding host property.
+   *
    * @param {string} helperText
    */
   setHelperText(helperText) {
@@ -66,122 +24,37 @@ export class HelperController extends SlotController {
 
     const helperNode = this.getSlotChild();
     if (!helperNode || helperNode === this.defaultNode) {
-      this.__applyDefaultHelper(helperText, helperNode);
+      this.applyDefaultNode(helperNode);
     }
   }
 
   /**
-   * @param {HTMLElement} helperNode
-   * @return {boolean}
-   * @private
+   * Override method inherited from `SlotMutationController`
+   * to create the default helper element lazily as needed.
+   *
+   * @param {Node | undefined} node
+   * @protected
+   * @override
    */
-  __hasHelper(helperNode) {
-    if (!helperNode) {
-      return false;
-    }
+  applyDefaultNode(node) {
+    const { helperText } = this;
+    const hasHelperText = helperText && helperText.trim() !== '';
+    let helperNode = node;
 
-    return (
-      helperNode.children.length > 0 ||
-      (helperNode.nodeType === Node.ELEMENT_NODE && customElements.get(helperNode.localName)) ||
-      this.__isNotEmpty(helperNode.textContent)
-    );
-  }
-
-  /**
-   * @param {string} helperText
-   * @private
-   */
-  __isNotEmpty(helperText) {
-    return helperText && helperText.trim() !== '';
-  }
-
-  /**
-   * @param {string} helperText
-   * @param {Node} helperNode
-   * @private
-   */
-  __applyDefaultHelper(helperText, helperNode) {
-    const hasHelperText = this.__isNotEmpty(helperText);
-
-    if (hasHelperText && !helperNode) {
-      // Set tag name lazily to only create helper node when needed.
+    // No helper yet, create one.
+    if (hasHelperText && !node) {
       this.tagName = 'div';
 
       helperNode = this.attachDefaultNode();
 
-      this.__updateHelperId(helperNode);
-      this.__observeHelper(helperNode);
+      this.observeNode(helperNode);
     }
 
     if (helperNode) {
       helperNode.textContent = helperText;
     }
 
-    this.__toggleHasHelper(hasHelperText);
-  }
-
-  /**
-   * @param {HTMLElement} helperNode
-   * @private
-   */
-  __observeHelper(helperNode) {
-    this.__helperObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const target = mutation.target;
-
-        // Ensure the mutation target is the currently connected helper
-        // to ignore async mutations dispatched for removed element.
-        const isHelperMutation = target === this.node;
-
-        if (mutation.type === 'attributes') {
-          // We use attributeFilter to only observe ID mutation,
-          // no need to check for attribute name separately.
-          if (isHelperMutation && target.id !== this.defaultId) {
-            this.__updateHelperId(target);
-          }
-        } else if (isHelperMutation || target.parentElement === this.node) {
-          // Update has-helper when textContent changes
-          const hasHelper = this.__hasHelper(this.node);
-          this.__toggleHasHelper(hasHelper);
-        }
-      });
-    });
-
-    // Observe changes to helper ID attribute, text content and children.
-    this.__helperObserver.observe(helperNode, {
-      attributes: true,
-      attributeFilter: ['id'],
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
-  }
-
-  /**
-   * @param {boolean} hasHelper
-   * @private
-   */
-  __toggleHasHelper(hasHelper) {
-    this.host.toggleAttribute('has-helper', hasHelper);
-
-    // Make it possible for other mixins to observe change
-    this.dispatchEvent(
-      new CustomEvent('helper-changed', {
-        detail: {
-          hasHelper,
-          node: this.node,
-        },
-      }),
-    );
-  }
-
-  /**
-   * @param {HTMLElement} helperNode
-   * @private
-   */
-  __updateHelperId(helperNode) {
-    if (!helperNode.id) {
-      helperNode.id = this.defaultId;
-    }
+    // Call super to notify the controller host.
+    super.applyDefaultNode(helperNode);
   }
 }
