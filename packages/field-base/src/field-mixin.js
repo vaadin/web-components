@@ -56,22 +56,12 @@ export const FieldMixin = (superclass) =>
       return ['_invalidChanged(invalid)', '_requiredChanged(required)'];
     }
 
-    /** @protected */
-    get _errorId() {
-      return this._errorController.errorId;
-    }
-
     /**
      * @protected
      * @return {HTMLElement}
      */
     get _errorNode() {
       return this._errorController.node;
-    }
-
-    /** @protected */
-    get _helperId() {
-      return this._helperController.helperId;
     }
 
     /**
@@ -178,7 +168,8 @@ export const FieldMixin = (superclass) =>
         // Error message ID needs to be dynamically added / removed based on the validity
         // Otherwise assistive technologies would announce the error, even if we hide it.
         if (invalid) {
-          this._fieldAriaController.setErrorId(this._errorController.errorId);
+          const node = this._errorNode;
+          this._fieldAriaController.setErrorId(node && node.id);
         } else {
           this._fieldAriaController.setErrorId(null);
         }
