@@ -47,6 +47,7 @@ export class HelperController extends SlotObserveController {
 
       helperNode = this.attachDefaultNode();
 
+      // Observe the default node.
       this.observeNode(helperNode);
     }
 
@@ -54,7 +55,21 @@ export class HelperController extends SlotObserveController {
       helperNode.textContent = helperText;
     }
 
-    // Call super to notify the controller host.
+    // Notify the host after node is created.
     super.applyDefaultNode(helperNode);
+  }
+
+  /**
+   * Override to observe the newly added custom node.
+   *
+   * @param {Node} node
+   * @protected
+   * @override
+   */
+  initCustomNode(node) {
+    // Notify the host about a custom slotted helper.
+    super.initCustomNode(node);
+
+    this.observeNode(node);
   }
 }

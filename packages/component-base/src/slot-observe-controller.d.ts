@@ -16,7 +16,8 @@ export class SlotObserveController extends SlotController {
   protected applyDefaultNode(node: Node): void;
 
   /**
-   * Setup the mutation observer on the node and update its ID.
+   * Setup the mutation observer on the node to update ID and notify host.
+   * Node doesn't get observed automatically until this method is called.
    */
-  protected observeNodeId(node: Node): void;
+  protected observeNode(node: Node): void;
 }

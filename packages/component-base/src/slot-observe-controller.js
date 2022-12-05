@@ -22,8 +22,7 @@ export class SlotObserveController extends SlotController {
    * @override
    */
   initCustomNode(node) {
-    this.observeNode(node);
-
+    this.__updateNodeId(node);
     this.__toggleHasNode(node);
   }
 
@@ -49,32 +48,25 @@ export class SlotObserveController extends SlotController {
   /**
    * Override to update default node, e.g. when restoring it.
    *
-   * @param {Node} node
+   * @param {Node | undefined} node
    * @protected
    */
   applyDefaultNode(node) {
+    if (node) {
+      this.__updateNodeId(node);
+    }
+
     this.__toggleHasNode(node);
   }
 
   /**
-   * Setup the mutation observer on the node and update its ID.
+   * Setup the mutation observer on the node to update ID and notify host.
+   * Node doesn't get observed automatically until this method is called.
    *
    * @param {Node} node
    * @protected
    */
   observeNode(node) {
-    this.__updateNodeId(node);
-
-    this.__observeNode(node);
-  }
-
-  /**
-   * Setup the mutation observer on the node to update ID and notify host.
-   *
-   * @param {HTMLElement} node
-   * @protected
-   */
-  __observeNode(node) {
     // Stop observing the previous node, if any.
     if (this.__nodeObserver) {
       this.__nodeObserver.disconnect();
