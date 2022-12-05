@@ -54,10 +54,19 @@ export class SlotController extends EventTarget implements ReactiveController {
    */
   getSlotChild(): Node;
 
+  /**
+   * Create and attach default node using the provided tag name, if any.
+   */
   protected attachDefaultNode(): Node | undefined;
 
+  /**
+   * Run both `initCustomNode` and `initNode` for a custom slotted node.
+   */
   protected initAddedNode(node: Node): void;
 
+  /**
+   * Call `slotInitializer` on the node managed by the controller.
+   */
   protected initNode(node: Node): void;
 
   /**
