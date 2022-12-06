@@ -288,8 +288,6 @@ export const ScrollMixin = (superClass) =>
         this.__updateHorizontalScrollPosition();
       });
       this._updateFrozenColumn();
-
-      this.__updateColumnsBodyContentHidden();
     }
 
     /** @protected */
@@ -319,6 +317,10 @@ export const ScrollMixin = (superClass) =>
 
         if (col.frozen && !col.hidden) {
           lastFrozen = i;
+        }
+
+        if ((col.frozen || col.frozenToEnd) && col._bodyContentHidden) {
+          this.__updateColumnsBodyContentHidden();
         }
       }
 

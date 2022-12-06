@@ -932,6 +932,7 @@ class Grid extends ElementMixin(
   _columnTreeChanged(columnTree) {
     this._renderColumnTree(columnTree);
     this.recalculateColumnWidths();
+    this.__updateColumnsBodyContentHidden();
   }
 
   /** @private */
