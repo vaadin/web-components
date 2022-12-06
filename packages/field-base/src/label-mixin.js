@@ -44,6 +44,11 @@ export const LabelMixin = dedupingMixin(
         super();
 
         this._labelController = new LabelController(this);
+
+        this._labelController.addEventListener('node-changed', (event) => {
+          const { hasNode } = event.detail;
+          this.toggleAttribute('has-label', hasNode);
+        });
       }
 
       /** @protected */
