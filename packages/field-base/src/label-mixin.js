@@ -44,6 +44,10 @@ export const LabelMixin = dedupingMixin(
         super();
 
         this._labelController = new LabelController(this);
+
+        this._labelController.addEventListener('slot-content-changed', (event) => {
+          this.toggleAttribute('has-label', event.detail.hasContent);
+        });
       }
 
       /** @protected */

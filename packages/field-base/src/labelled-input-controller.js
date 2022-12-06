@@ -12,7 +12,7 @@ export class LabelledInputController {
     this.input = input;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
 
-    labelController.addEventListener('label-changed', (event) => {
+    labelController.addEventListener('slot-content-changed', (event) => {
       this.__initLabel(event.detail.node);
     });
 
