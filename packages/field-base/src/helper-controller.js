@@ -22,41 +22,55 @@ export class HelperController extends SlotObserveController {
   setHelperText(helperText) {
     this.helperText = helperText;
 
+    // Restore the default helper, if needed.
     const helperNode = this.getSlotChild();
-    if (!helperNode || helperNode === this.defaultNode) {
-      this.applyDefaultNode(helperNode);
+    if (!helperNode) {
+      this.restoreDefaultNode();
+    }
+
+    // When default helper is used, update it.
+    if (this.node === this.defaultNode) {
+      this.updateDefaultNode(this.node);
     }
   }
 
   /**
-   * Override method inherited from `SlotMutationController`
+   * Override method inherited from `SlotObserveController`
    * to create the default helper element lazily as needed.
    *
    * @param {Node | undefined} node
    * @protected
    * @override
    */
-  applyDefaultNode(node) {
+  restoreDefaultNode() {
     const { helperText } = this;
-    const hasHelperText = helperText && helperText.trim() !== '';
-    let helperNode = node;
 
     // No helper yet, create one.
-    if (hasHelperText && !node) {
+    if (helperText && helperText.trim() !== '') {
       this.tagName = 'div';
 
-      helperNode = this.attachDefaultNode();
+      const helperNode = this.attachDefaultNode();
 
       // Observe the default node.
       this.observeNode(helperNode);
     }
+  }
 
-    if (helperNode) {
-      helperNode.textContent = helperText;
+  /**
+   * Override method inherited from `SlotObserveController`
+   * to update the default helper element text content.
+   *
+   * @param {Node | undefined} node
+   * @protected
+   * @override
+   */
+  updateDefaultNode(node) {
+    if (node) {
+      node.textContent = this.helperText;
     }
 
-    // Notify the host after node is created.
-    super.applyDefaultNode(helperNode);
+    // Notify the host after update.
+    super.updateDefaultNode(node);
   }
 
   /**

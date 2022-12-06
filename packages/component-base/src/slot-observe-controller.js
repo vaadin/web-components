@@ -41,21 +41,45 @@ export class SlotObserveController extends SlotController {
     if (node && node !== this.defaultNode) {
       this.__notifyChange(node);
     } else {
-      this.applyDefaultNode(node);
+      this.restoreDefaultNode();
+      this.updateDefaultNode(this.node);
     }
   }
 
   /**
-   * Override to update default node, e.g. when restoring it.
+   * Override method inherited from `SlotMixin`
+   * to set ID attribute on the default node.
    *
-   * @param {Node | undefined} node
+   * @return {Node}
    * @protected
+   * @override
    */
-  applyDefaultNode(node) {
+  attachDefaultNode() {
+    const node = super.attachDefaultNode();
+
     if (node) {
       this.__updateNodeId(node);
     }
 
+    return node;
+  }
+
+  /**
+   * Override to restore default node when a custom one is removed.
+   *
+   * @protected
+   */
+  restoreDefaultNode() {
+    // To be implemented
+  }
+
+  /**
+   * Override to update default node text on property change.
+   *
+   * @param {Node} node
+   * @protected
+   */
+  updateDefaultNode(node) {
     this.__notifyChange(node);
   }
 

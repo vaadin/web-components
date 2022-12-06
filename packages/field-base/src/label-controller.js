@@ -21,40 +21,52 @@ export class LabelController extends SlotObserveController {
   setLabel(label) {
     this.label = label;
 
+    // Restore the default label, if needed.
     const labelNode = this.getSlotChild();
-    if (!labelNode || labelNode === this.defaultNode) {
-      this.applyDefaultNode(labelNode);
+    if (!labelNode) {
+      this.restoreDefaultNode();
+    }
+
+    // When default label is used, update it.
+    if (this.node === this.defaultNode) {
+      this.updateDefaultNode(this.node);
     }
   }
 
   /**
-   * Override method inherited from `SlotMutationController`
-   * to update the default label text based on the `label`.
+   * Override method inherited from `SlotObserveController`
+   * to restore and observe the default label element.
+   *
+   * @protected
+   * @override
+   */
+  restoreDefaultNode() {
+    const { label } = this;
+
+    // Restore the default label.
+    if (label && label.trim() !== '') {
+      const labelNode = this.attachDefaultNode();
+
+      // Observe the default label.
+      this.observeNode(labelNode);
+    }
+  }
+
+  /**
+   * Override method inherited from `SlotObserveController`
+   * to update the default label element text content.
    *
    * @param {Node | undefined} node
    * @protected
    * @override
    */
-  applyDefaultNode(node) {
-    const { label } = this;
-
-    const hasLabel = label && label.trim() !== '';
-    let labelNode = node;
-
-    // Restore the default label.
-    if (hasLabel && !node) {
-      labelNode = this.attachDefaultNode();
-
-      // Observe the default label.
-      this.observeNode(labelNode);
+  updateDefaultNode(node) {
+    if (node) {
+      node.textContent = this.label;
     }
 
-    if (labelNode) {
-      labelNode.textContent = label;
-    }
-
-    // Notify the host after node is updated.
-    super.applyDefaultNode(labelNode);
+    // Notify the host after update.
+    super.updateDefaultNode(node);
   }
 
   /**
@@ -67,7 +79,7 @@ export class LabelController extends SlotObserveController {
    */
   initNode(node) {
     if (node === this.defaultNode) {
-      this.applyDefaultNode(node);
+      this.updateDefaultNode(node);
       this.observeNode(node);
     }
   }
