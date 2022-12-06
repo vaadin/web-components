@@ -79,15 +79,15 @@ export const FieldMixin = (superclass) =>
       this._helperController = new HelperController(this);
       this._errorController = new ErrorController(this);
 
-      this._labelController.addEventListener('node-changed', (event) => {
-        const { hasNode, node } = event.detail;
-        this.__labelChanged(hasNode, node);
+      this._labelController.addEventListener('slot-content-changed', (event) => {
+        const { hasContent, node } = event.detail;
+        this.__labelChanged(hasContent, node);
       });
 
-      this._helperController.addEventListener('node-changed', (event) => {
-        const { hasNode, node } = event.detail;
-        this.toggleAttribute('has-helper', hasNode);
-        this.__helperChanged(hasNode, node);
+      this._helperController.addEventListener('slot-content-changed', (event) => {
+        const { hasContent, node } = event.detail;
+        this.toggleAttribute('has-helper', hasContent);
+        this.__helperChanged(hasContent, node);
       });
     }
 
