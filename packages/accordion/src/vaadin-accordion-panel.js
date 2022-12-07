@@ -102,8 +102,8 @@ class AccordionPanel extends DetailsMixin(
     };
   }
 
-  static get observers() {
-    return ['_openedOrCollapsibleChanged(opened, _collapsible)'];
+  static get delegateAttrs() {
+    return ['theme'];
   }
 
   static get delegateProps() {
@@ -123,13 +123,24 @@ class AccordionPanel extends DetailsMixin(
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
 
-    this._tooltipController.setTarget(this._toggleElement);
+    this._tooltipController.setTarget(this.focusElement);
     this._tooltipController.setPosition('bottom-start');
 
     // Wait for heading element render to complete
     afterNextRender(this, () => {
       this._toggleElement = this.focusElement.$.button;
     });
+  }
+
+  /**
+   * Override method inherited from `DisabledMixin`
+   * to not set `aria-disabled` on the host element.
+   *
+   * @protected
+   * @override
+   */
+  _setAriaDisabled() {
+    // The `aria-disabled` is set on the details summary.
   }
 }
 
