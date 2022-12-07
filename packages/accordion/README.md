@@ -10,11 +10,11 @@ A web component for displaying a vertically stacked set of expandable panels.
 ```html
 <vaadin-accordion>
   <vaadin-accordion-panel theme="filled">
-    <div slot="summary">Accordion Panel 1</div>
+    <vaadin-accordion-heading slot="summary">Accordion Panel 1</vaadin-accordion-heading>
     <div>Accordion is a set of expandable sections.</div>
   </vaadin-accordion-panel>
   <vaadin-accordion-panel theme="filled">
-    <div slot="summary">Accordion Panel 2</div>
+    <vaadin-accordion-heading slot="summary">Accordion Panel 2</vaadin-accordion-heading>
     <div>Only one accordion panel can be opened.</div>
   </vaadin-accordion-panel>
 </vaadin-accordion>

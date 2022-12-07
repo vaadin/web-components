@@ -2,20 +2,35 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-details.js';
 
-describe('vaadin-crud', () => {
+describe('vaadin-details', () => {
   let details;
 
   beforeEach(() => {
     details = fixtureSync(`
       <vaadin-details>
-        <div slot="summary">Summary</div>
-        <input>
+        <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
+        <div>Content</div>
       </vaadin-details>
     `);
   });
 
   describe('host', () => {
     it('default', async () => {
+      await expect(details).dom.to.equalSnapshot();
+    });
+
+    it('opened', async () => {
+      details.opened = true;
+      await expect(details).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      details.disabled = true;
+      await expect(details).dom.to.equalSnapshot();
+    });
+
+    it('theme', async () => {
+      details.setAttribute('theme', 'filled');
       await expect(details).dom.to.equalSnapshot();
     });
   });

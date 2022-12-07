@@ -41,12 +41,12 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  * ```
  * <vaadin-accordion>
  *   <vaadin-accordion-panel>
- *     <div slot="summary">Panel 1</div>
- *     This panel is opened, so the text is visible by default.
+ *     <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+ *     <div>This panel is opened, so the text is visible by default.</div>
  *   </vaadin-accordion-panel>
  *   <vaadin-accordion-panel>
- *     <div slot="summary">Panel 2</div>
- *     After opening this panel, the first one becomes closed.
+ *     <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+ *     <div>After opening this panel, the first one becomes closed.</div>
  *   </vaadin-accordion-panel>
  * </vaadin-accordion>
  * ```

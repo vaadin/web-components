@@ -6,6 +6,7 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
@@ -25,12 +26,12 @@ import { AccordionPanel } from './vaadin-accordion-panel.js';
  * ```
  * <vaadin-accordion>
  *   <vaadin-accordion-panel>
- *     <div slot="summary">Panel 1</div>
- *     This panel is opened, so the text is visible by default.
+ *     <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+ *     <div>This panel is opened, so the text is visible by default.</div>
  *   </vaadin-accordion-panel>
  *   <vaadin-accordion-panel>
- *     <div slot="summary">Panel 2</div>
- *     After opening this panel, the first one becomes closed.
+ *     <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+ *     <div>After opening this panel, the first one becomes closed.</div>
  *   </vaadin-accordion-panel>
  * </vaadin-accordion>
  * ```
@@ -142,6 +143,18 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   }
 
   /**
+   * Override getter from `KeyboardDirectionMixin`
+   * to check if the heading element has focus.
+   *
+   * @return {Element | null}
+   * @protected
+   * @override
+   */
+  get focused() {
+    return (this._getItems() || []).find((item) => isElementFocused(item._toggleElement));
+  }
+
+  /**
    * Override method inherited from `KeyboardDirectionMixin`
    * to use the stored list of accordion panels as items.
    *
@@ -182,8 +195,9 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
    */
   _onKeyDown(event) {
     // Only check keyboard events on details toggle buttons
-    const item = event.composedPath()[0];
-    if (!this.items.some((el) => el.focusElement === item)) {
+    const target = event.composedPath()[0];
+
+    if (!this.items.some((item) => item._toggleElement === target)) {
       return;
     }
 

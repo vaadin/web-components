@@ -9,8 +9,8 @@ A web component that provides an expandable panel for showing and hiding content
 
 ```html
 <vaadin-details opened>
-  <div slot="summary">Expandable Details</div>
-  Toggle using mouse, Enter and Space keys.
+  <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
+  <div>Toggle using mouse, Enter and Space keys.</div>
 </vaadin-details>
 ```
 

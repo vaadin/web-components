@@ -10,13 +10,15 @@
     <script type="module">
       import '@vaadin/details';
       import '@vaadin/tooltip';
+      // import '@vaadin/details/theme/material/vaadin-details.js';
+      // import '@vaadin/tooltip/theme/material/vaadin-tooltip.js';
     </script>
   </head>
 
   <body>
     <vaadin-details>
-      <div slot="summary">Expandable Details</div>
-      Toggle using mouse, Enter and Space keys.
+      <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
+      <div>Toggle using mouse, Enter and Space keys.</div>
       <vaadin-tooltip slot="tooltip" text="Click to toggle"></vaadin-tooltip>
     </vaadin-details>
   </body>

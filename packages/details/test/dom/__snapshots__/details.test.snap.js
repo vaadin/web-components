@@ -1,81 +1,105 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-crud host default"] = 
-`<vaadin-details tabindex="0">
-  <div slot="summary">
+snapshots["vaadin-details host default"] = 
+`<vaadin-details>
+  <vaadin-details-summary
+    aria-expanded="false"
+    role="button"
+    slot="summary"
+    tabindex="0"
+  >
     Summary
+  </vaadin-details-summary>
+  <div>
+    Content
   </div>
-  <input>
 </vaadin-details>
 `;
-/* end snapshot vaadin-crud host default */
+/* end snapshot vaadin-details host default */
 
-snapshots["vaadin-crud shadow default"] = 
-`<div role="heading">
-  <div
-    aria-controls="vaadin-details-content-1"
-    aria-expanded="false"
-    part="summary"
-    role="button"
-    tabindex="0"
-  >
-    <span
-      aria-hidden="true"
-      part="toggle"
-    >
-    </span>
-    <span part="summary-content">
-      <slot name="summary">
-      </slot>
-    </span>
-  </div>
-  <slot name="tooltip">
-  </slot>
-</div>
-<section
-  aria-hidden="true"
-  id="vaadin-details-content-1"
-  part="content"
-  style="max-height: 0px;"
->
-  <slot>
-  </slot>
-</section>
-`;
-/* end snapshot vaadin-crud shadow default */
-
-snapshots["vaadin-crud shadow opened"] = 
-`<div role="heading">
-  <div
-    aria-controls="vaadin-details-content-2"
+snapshots["vaadin-details host opened"] = 
+`<vaadin-details opened="">
+  <vaadin-details-summary
     aria-expanded="true"
-    part="summary"
+    opened=""
     role="button"
+    slot="summary"
     tabindex="0"
   >
-    <span
-      aria-hidden="true"
-      part="toggle"
-    >
-    </span>
-    <span part="summary-content">
-      <slot name="summary">
-      </slot>
-    </span>
+    Summary
+  </vaadin-details-summary>
+  <div>
+    Content
   </div>
-  <slot name="tooltip">
-  </slot>
-</div>
-<section
-  aria-hidden="false"
-  id="vaadin-details-content-2"
+</vaadin-details>
+`;
+/* end snapshot vaadin-details host opened */
+
+snapshots["vaadin-details host disabled"] = 
+`<vaadin-details disabled="">
+  <vaadin-details-summary
+    aria-disabled="true"
+    aria-expanded="false"
+    disabled=""
+    role="button"
+    slot="summary"
+    tabindex="-1"
+  >
+    Summary
+  </vaadin-details-summary>
+  <div>
+    Content
+  </div>
+</vaadin-details>
+`;
+/* end snapshot vaadin-details host disabled */
+
+snapshots["vaadin-details host theme"] = 
+`<vaadin-details theme="filled">
+  <vaadin-details-summary
+    aria-expanded="false"
+    role="button"
+    slot="summary"
+    tabindex="0"
+    theme="filled"
+  >
+    Summary
+  </vaadin-details-summary>
+  <div>
+    Content
+  </div>
+</vaadin-details>
+`;
+/* end snapshot vaadin-details host theme */
+
+snapshots["vaadin-details shadow default"] = 
+`<slot name="summary">
+</slot>
+<div
+  aria-hidden="true"
   part="content"
-  style=""
 >
   <slot>
   </slot>
-</section>
+</div>
+<slot name="tooltip">
+</slot>
 `;
-/* end snapshot vaadin-crud shadow opened */
+/* end snapshot vaadin-details shadow default */
+
+snapshots["vaadin-details shadow opened"] = 
+`<slot name="summary">
+</slot>
+<div
+  aria-hidden="false"
+  part="content"
+>
+  <slot>
+  </slot>
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-details shadow opened */
 

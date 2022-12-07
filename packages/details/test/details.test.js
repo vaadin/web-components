@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-details.js';
 
@@ -9,11 +9,13 @@ describe('vaadin-details', () => {
   beforeEach(() => {
     details = fixtureSync(`
       <vaadin-details>
-        <div slot="summary">Summary</div>
-        <input>
+        <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
+        <div>
+          <input type="text" />
+        </div>
       </vaadin-details>
     `);
-    toggle = details.focusElement;
+    toggle = details._toggleElement;
     content = details._collapsible;
   });
 
@@ -33,9 +35,9 @@ describe('vaadin-details', () => {
     });
   });
 
-  describe('toggle button', () => {
-    it('should have summary slot inside toggle button', () => {
-      const slot = toggle.querySelector('slot[name="summary"]');
+  describe('summary', () => {
+    it('should have unnamed slot inside the summary element', () => {
+      const slot = toggle.shadowRoot.querySelector('slot');
       expect(slot).to.be.ok;
       expect(slot.assignedNodes()[0].textContent).to.equal('Summary');
     });
@@ -86,18 +88,12 @@ describe('vaadin-details', () => {
     });
 
     it('should hide the content when opened is false', () => {
-      const style = getComputedStyle(content);
-      expect(style.display).to.equal('none');
-      expect(style.overflow).to.equal('hidden');
-      expect(style.maxHeight).to.equal('0px');
+      expect(getComputedStyle(content).display).to.equal('none');
     });
 
     it('should show the content when `opened` is true', () => {
       details.opened = true;
-      const style = getComputedStyle(content);
-      expect(style.display).to.equal('block');
-      expect(style.overflow).to.equal('visible');
-      expect(style.maxHeight).to.equal('none');
+      expect(getComputedStyle(content).display).to.equal('block');
     });
 
     it('should dispatch opened-changed event when opened changes', () => {
@@ -111,10 +107,6 @@ describe('vaadin-details', () => {
   describe('ARIA roles', () => {
     it('should set role="button" on the toggle button', () => {
       expect(toggle.getAttribute('role')).to.equal('button');
-    });
-
-    it('should set role="heading" on the toggle button wrapper', () => {
-      expect(toggle.parentElement.getAttribute('role')).to.equal('heading');
     });
 
     it('should set aria-expanded on toggle button to false by default', () => {
@@ -135,13 +127,15 @@ describe('vaadin-details', () => {
       expect(content.getAttribute('aria-hidden')).to.equal('false');
     });
 
-    it('should set aria-controls on toggle button', () => {
+    // TODO: implement new mechanism for setting ID
+    it.skip('should set aria-controls on toggle button', () => {
       const idRegex = /^vaadin-details-content-\d+$/;
       expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
     });
   });
 
-  describe('unique IDs', () => {
+  // TODO: implement new mechanism for setting ID
+  describe.skip('unique IDs', () => {
     const idRegex = /^vaadin-details-content-\d+$/;
     let container, details;
 
@@ -149,12 +143,12 @@ describe('vaadin-details', () => {
       container = fixtureSync(`
         <div>
           <vaadin-details>
-            <div slot="summary">Summary</div>
-            <input>
+            <vaadin-details-summary slot="summary">Summary 1</vaadin-details-summary>
+            <div>Content 1</div>
           </vaadin-details>
           <vaadin-details>
-            <div slot="summary">Summary</div>
-            <input>
+          <vaadin-details-summary slot="summary">Summary 2</vaadin-details-summary>
+            <div>Content 2</div>
           </vaadin-details>
         </div>
       `);
@@ -167,28 +161,6 @@ describe('vaadin-details', () => {
       expect(idRegex.test(detailsId1)).to.be.true;
       expect(idRegex.test(detailsId2)).to.be.true;
       expect(detailsId1).to.not.equal(detailsId2);
-    });
-  });
-
-  describe('keyboard events', () => {
-    let input;
-
-    beforeEach(() => {
-      input = details.querySelector('input');
-    });
-
-    it('should stop Shift + Tab on the content from propagating to the host', () => {
-      const event = keyboardEventFor('keydown', 9, 'shift', 'Tab');
-      const spy = sinon.spy(event, 'stopPropagation');
-      input.dispatchEvent(event);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should not stop Tab on the content from propagating to the host', () => {
-      const event = keyboardEventFor('keydown', 9, [], 'Tab');
-      const spy = sinon.spy(event, 'stopPropagation');
-      input.dispatchEvent(event);
-      expect(spy.called).to.be.false;
     });
   });
 });

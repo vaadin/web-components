@@ -12,7 +12,7 @@ describe('details', () => {
     element = fixtureSync(
       `
       <vaadin-details>
-        <div slot="summary">Summary</div>
+        <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
         <span>Content</span>
       </vaadin-details>
       `,
