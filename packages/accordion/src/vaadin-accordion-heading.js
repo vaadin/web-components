@@ -80,7 +80,7 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
           text-align: inherit;
         }
       </style>
-      <button id="button" part="content">
+      <button id="button" part="content" disabled$="[[disabled]]">
         <span part="toggle" aria-hidden="true"></span>
         <slot></slot>
       </button>

@@ -100,6 +100,13 @@ describe('vaadin-accordion', () => {
       expect(accordion.opened).to.equal(1);
     });
 
+    it('should not update opened to new index when clicking disabled panel', () => {
+      accordion.items[1].disabled = true;
+      getHeading(1).click();
+      expect(accordion.items[1].opened).to.be.false;
+      expect(accordion.opened).to.equal(0);
+    });
+
     it('should close currently opened panel when another one is opened', () => {
       getHeading(1).click();
       expect(accordion.items[1].opened).to.be.true;
