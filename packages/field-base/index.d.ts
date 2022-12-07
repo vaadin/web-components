@@ -10,7 +10,6 @@ export { InputMixin } from './src/input-mixin.js';
 export { LabelledInputController } from './src/labelled-input-controller.js';
 export { LabelMixin } from './src/label-mixin.js';
 export { PatternMixin } from './src/pattern-mixin.js';
-export { ShadowFocusMixin } from './src/shadow-focus-mixin.js';
 export { SlotStylesMixin } from './src/slot-styles-mixin.js';
 export { TextAreaController } from './src/text-area-controller.js';
 export { ValidateMixin } from './src/validate-mixin.js';
