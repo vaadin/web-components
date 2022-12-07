@@ -79,7 +79,6 @@ snapshots["vaadin-details shadow default"] =
 <div
   aria-hidden="true"
   part="content"
-  style="max-height: 0px;"
 >
   <slot>
   </slot>
@@ -95,7 +94,6 @@ snapshots["vaadin-details shadow opened"] =
 <div
   aria-hidden="false"
   part="content"
-  style=""
 >
   <slot>
   </slot>
