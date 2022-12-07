@@ -37,10 +37,7 @@ snapshots["vaadin-details host opened"] =
 /* end snapshot vaadin-details host opened */
 
 snapshots["vaadin-details host disabled"] = 
-`<vaadin-details
-  aria-disabled="true"
-  disabled=""
->
+`<vaadin-details disabled="">
   <vaadin-details-summary
     aria-disabled="true"
     aria-expanded="false"

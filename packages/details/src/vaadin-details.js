@@ -135,6 +135,17 @@ class Details extends DetailsMixin(
     this._tooltipController.setTarget(this._toggleElement);
     this._tooltipController.setPosition('bottom-start');
   }
+
+  /**
+   * Override method inherited from `DisabledMixin`
+   * to not set `aria-disabled` on the host element.
+   *
+   * @protected
+   * @override
+   */
+  _setAriaDisabled() {
+    // The `aria-disabled` is set on the details summary.
+  }
 }
 
 customElements.define(Details.is, Details);
