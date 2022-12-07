@@ -143,12 +143,12 @@ describe('vaadin-details', () => {
       container = fixtureSync(`
         <div>
           <vaadin-details>
-            <div slot="summary">Summary</div>
-            <input>
+            <vaadin-details-summary slot="summary">Summary 1</vaadin-details-summary>
+            <div>Content 1</div>
           </vaadin-details>
           <vaadin-details>
-            <div slot="summary">Summary</div>
-            <input>
+          <vaadin-details-summary slot="summary">Summary 2</vaadin-details-summary>
+            <div>Content 2</div>
           </vaadin-details>
         </div>
       `);
