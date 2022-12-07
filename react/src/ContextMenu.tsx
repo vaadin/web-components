@@ -6,6 +6,8 @@ import {
 } from './generated/ContextMenu.js';
 import { type ReactContextRendererProps, useContextRenderer } from './renderers/useContextRenderer.js';
 
+export * from './generated/ContextMenu.js';
+
 export type ContextMenuReactRendererProps = ReactContextRendererProps<
   WebComponentModule.ContextMenuRendererContext,
   WebComponentModule.ContextMenu

@@ -1,5 +1,5 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
 import { Notification, type WebComponentModule } from '../src/Notification.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
@@ -21,6 +21,7 @@ describe('Notification', () => {
     expect(card).to.have.text('FooBar');
   }
 
+  afterEach(cleanup);
   afterEach(catcher);
 
   it('should use children if no renderer property set', () => {

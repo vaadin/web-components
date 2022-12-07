@@ -2,12 +2,14 @@ import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } 
 import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridProEditColumn as _GridProEditColumn,
-  WebComponentModule,
   type GridProEditColumnProps as _GridProEditColumnProps,
+  WebComponentModule,
 } from './generated/GridProEditColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+
+export * from './generated/GridProEditColumn.js';
 
 export type GridProEditColumnProps<TItem> = Omit<
   _GridProEditColumnProps<TItem>,

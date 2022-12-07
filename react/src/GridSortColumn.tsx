@@ -2,12 +2,14 @@ import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } 
 import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridSortColumn as _GridSortColumn,
-  WebComponentModule,
   type GridSortColumnProps as _GridSortColumnProps,
+  WebComponentModule,
 } from './generated/GridSortColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+
+export * from './generated/GridSortColumn.js';
 
 export type GridSortColumnProps<TItem> = Omit<
   _GridSortColumnProps<TItem>,

@@ -1,6 +1,6 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import chaiDom from 'chai-dom';
-import { render } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react/pure.js';
 import { Grid } from '../src/Grid.js';
 import { GridColumn } from '../src/GridColumn.js';
 import { GridFilterColumn } from '../src/GridFilterColumn.js';
@@ -56,6 +56,8 @@ describe('Grid', () => {
 
     return [columns, cells] as const;
   }
+
+  afterEach(cleanup);
 
   describe('GridColumn', () => {
     it('should render correctly', async () => {

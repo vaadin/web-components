@@ -2,12 +2,14 @@ import { ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 
 import type { WebComponentModule as GridModule } from './generated/Grid.js';
 import {
   GridFilterColumn as _GridFilterColumn,
-  WebComponentModule,
   type GridFilterColumnProps as _GridFilterColumnProps,
+  WebComponentModule,
 } from './generated/GridFilterColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+
+export * from './generated/GridFilterColumn.js';
 
 /*
  * According to https://github.com/vaadin/web-components/issues/1485, the

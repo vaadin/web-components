@@ -2,11 +2,13 @@ import type { ComboBoxDefaultItem } from '@vaadin/combo-box';
 import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
 import {
   ComboBox as _ComboBox,
-  WebComponentModule,
   type ComboBoxProps as _ComboBoxProps,
+  WebComponentModule,
 } from './generated/ComboBox.js';
 import type { ComboBoxReactRendererProps } from './renderers/combobox.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
+
+export * from './generated/ComboBox.js';
 
 export type ComboBoxProps<TItem> = Omit<_ComboBoxProps<TItem>, 'renderer'> &
   Readonly<{

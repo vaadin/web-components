@@ -3,6 +3,8 @@ import { Select as _Select, type SelectProps as _SelectProps, WebComponentModule
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
+export * from './generated/Select.js';
+
 export type SelectReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Select>;
 
 export type SelectProps = Omit<_SelectProps, 'children' | 'renderer'> &

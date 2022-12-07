@@ -1,5 +1,5 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
 import { ListBox } from '../src/ListBox.js';
@@ -52,6 +52,7 @@ describe('Select', () => {
     expect(overlay).to.have.text('FooBar');
   }
 
+  afterEach(cleanup);
   afterEach(catcher);
 
   it('should use children if no renderer property set', async () => {

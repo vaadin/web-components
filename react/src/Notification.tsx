@@ -16,6 +16,8 @@ import {
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
+export * from './generated/Notification.js';
+
 export type NotificationReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Notification>;
 
 export type NotificationProps = Omit<_NotificationProps, 'children' | 'renderer'> &
