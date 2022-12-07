@@ -2,16 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-details.js';
 
-describe('vaadin-crud', () => {
+describe('vaadin-details', () => {
   let details;
 
   beforeEach(() => {
     details = fixtureSync(`
       <vaadin-details>
-        <vaadin-details-heading slot="summary">Summary</vaadin-details-heading>
-        <div>
-          <input>
-        </div>
+        <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
+        <div>Content</div>
       </vaadin-details>
     `);
   });

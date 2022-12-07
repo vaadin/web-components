@@ -1,22 +1,24 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-crud host default"] = 
+snapshots["vaadin-details host default"] = 
 `<vaadin-details>
-  <vaadin-details-heading
+  <vaadin-details-summary
     aria-expanded="false"
+    role="button"
     slot="summary"
+    tabindex="0"
   >
     Summary
-  </vaadin-details-heading>
+  </vaadin-details-summary>
   <div>
-    <input>
+    Content
   </div>
 </vaadin-details>
 `;
-/* end snapshot vaadin-crud host default */
+/* end snapshot vaadin-details host default */
 
-snapshots["vaadin-crud shadow default"] = 
+snapshots["vaadin-details shadow default"] = 
 `<slot name="summary">
 </slot>
 <div
@@ -30,9 +32,9 @@ snapshots["vaadin-crud shadow default"] =
 <slot name="tooltip">
 </slot>
 `;
-/* end snapshot vaadin-crud shadow default */
+/* end snapshot vaadin-details shadow default */
 
-snapshots["vaadin-crud shadow opened"] = 
+snapshots["vaadin-details shadow opened"] = 
 `<slot name="summary">
 </slot>
 <div
@@ -46,5 +48,5 @@ snapshots["vaadin-crud shadow opened"] =
 <slot name="tooltip">
 </slot>
 `;
-/* end snapshot vaadin-crud shadow opened */
+/* end snapshot vaadin-details shadow opened */
 
