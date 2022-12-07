@@ -1,4 +1,14 @@
 import { detailsSummary } from '@vaadin/details/theme/lumo/vaadin-details-summary-styles.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles('vaadin-accordion-heading', detailsSummary, { moduleId: 'lumo-accordion-heading' });
+const accordionHeading = css`
+  :host {
+    padding: 0;
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-s) 0;
+  }
+`;
+
+registerStyles('vaadin-accordion-heading', [detailsSummary, accordionHeading], { moduleId: 'lumo-accordion-heading' });

@@ -2,7 +2,7 @@ import '@vaadin/vaadin-material-styles/color.js';
 import { detailsSummary } from '@vaadin/details/theme/material/vaadin-details-summary-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const accordionPanel = css`
+const accordionHeading = css`
   :host(:not([opened]))::after {
     content: '';
     position: absolute;
@@ -39,6 +39,6 @@ const accordionPanel = css`
   }
 `;
 
-registerStyles('vaadin-accordion-heading', [detailsSummary, accordionPanel], {
+registerStyles('vaadin-accordion-heading', [detailsSummary, accordionHeading], {
   moduleId: 'material-accordion-heading',
 });
