@@ -18,6 +18,21 @@ describe('vaadin-details', () => {
     it('default', async () => {
       await expect(details).dom.to.equalSnapshot();
     });
+
+    it('opened', async () => {
+      details.opened = true;
+      await expect(details).dom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      details.disabled = true;
+      await expect(details).dom.to.equalSnapshot();
+    });
+
+    it('theme', async () => {
+      details.setAttribute('theme', 'filled');
+      await expect(details).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
