@@ -54,7 +54,6 @@ export const DetailsMixin = (superClass) =>
     _openedOrCollapsibleChanged(opened, collapsible) {
       if (collapsible) {
         collapsible.setAttribute('aria-hidden', opened ? 'false' : 'true');
-        collapsible.style.maxHeight = opened ? '' : '0px';
       }
     }
 

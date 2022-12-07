@@ -88,18 +88,12 @@ describe('vaadin-details', () => {
     });
 
     it('should hide the content when opened is false', () => {
-      const style = getComputedStyle(content);
-      expect(style.display).to.equal('none');
-      expect(style.overflow).to.equal('hidden');
-      expect(style.maxHeight).to.equal('0px');
+      expect(getComputedStyle(content).display).to.equal('none');
     });
 
     it('should show the content when `opened` is true', () => {
       details.opened = true;
-      const style = getComputedStyle(content);
-      expect(style.display).to.equal('block');
-      expect(style.overflow).to.equal('visible');
-      expect(style.maxHeight).to.equal('none');
+      expect(getComputedStyle(content).display).to.equal('block');
     });
 
     it('should dispatch opened-changed event when opened changes', () => {

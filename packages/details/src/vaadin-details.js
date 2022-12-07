@@ -87,12 +87,10 @@ class Details extends DetailsMixin(
 
         [part='content'] {
           display: none;
-          overflow: hidden;
         }
 
         :host([opened]) [part='content'] {
           display: block;
-          overflow: visible;
         }
       </style>
 
