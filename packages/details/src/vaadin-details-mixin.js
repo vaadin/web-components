@@ -25,12 +25,12 @@ export const DetailsMixin = (superClass) =>
         },
 
         /**
-         * A content area controlled by the toggle element.
+         * List of elements passed to the details default slot.
          *
          * @protected
          */
-        _collapsible: {
-          type: Object,
+        _contentElements: {
+          type: Array,
         },
 
         /**
@@ -47,13 +47,15 @@ export const DetailsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_openedOrToggleChanged(opened, _toggleElement)', '_openedOrCollapsibleChanged(opened, _collapsible)'];
+      return ['_openedOrToggleChanged(opened, _toggleElement)', '_openedOrContentChanged(opened, _contentElements)'];
     }
 
     /** @private */
-    _openedOrCollapsibleChanged(opened, collapsible) {
-      if (collapsible) {
-        collapsible.setAttribute('aria-hidden', opened ? 'false' : 'true');
+    _openedOrContentChanged(opened, elements) {
+      if (elements) {
+        elements.forEach((el) => {
+          el.setAttribute('aria-hidden', opened ? 'false' : 'true');
+        });
       }
     }
 

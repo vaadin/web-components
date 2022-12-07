@@ -17,9 +17,9 @@ export declare class DetailsMixinClass {
   opened: boolean;
 
   /**
-   * A content area controlled by the toggle element.
+   * List of elements passed to the details default slot.
    */
-  protected _collapsible: HTMLElement;
+  protected _contentElements: HTMLElement[];
 
   /**
    * An element used to toggle the content visibility.

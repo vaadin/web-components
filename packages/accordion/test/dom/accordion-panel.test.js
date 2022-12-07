@@ -41,15 +41,5 @@ describe('vaadin-accordion-panel', () => {
     it('default', async () => {
       await expect(panel).shadowDom.to.equalSnapshot();
     });
-
-    it('opened', async () => {
-      panel.opened = true;
-      await expect(panel).shadowDom.to.equalSnapshot();
-    });
-
-    it('disabled', async () => {
-      panel.disabled = true;
-      await expect(panel).shadowDom.to.equalSnapshot();
-    });
   });
 });

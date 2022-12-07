@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
@@ -24,6 +25,25 @@ class SummaryController extends SlotController {
         host.stateTarget = node;
       },
     });
+  }
+}
+
+class ContentController extends SlotObserveController {
+  /**
+   * Override method from `SlotController` to change
+   * the ID prefix for the default slot content.
+   *
+   * @param {HTMLElement} host
+   * @return {string}
+   * @protected
+   * @override
+   */
+  static generateId(host) {
+    return super.generateId(host, 'content');
+  }
+
+  constructor(host) {
+    super(host, '', null, { multiple: true });
   }
 }
 
@@ -120,18 +140,9 @@ class Details extends DetailsMixin(
   ready() {
     super.ready();
 
-    // TODO: Generate unique IDs for a summary and a content panel when added to the slot,
-    // and use them to set `aria-controls` and `aria-labelledby` attributes, respectively.
-
-    this._collapsible = this.shadowRoot.querySelector('[part="content"]');
-
-    this.addController(new SummaryController(this));
-
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-
-    this._tooltipController.setTarget(this._toggleElement);
-    this._tooltipController.setPosition('bottom-start');
+    this._initSummary();
+    this._initContent();
+    this._initTooltip();
   }
 
   /**
@@ -143,6 +154,38 @@ class Details extends DetailsMixin(
    */
   _setAriaDisabled() {
     // The `aria-disabled` is set on the details summary.
+  }
+
+  /** @private */
+  _initSummary() {
+    this._summaryController = new SummaryController(this);
+    this.addController(this._summaryController);
+  }
+
+  /** @private */
+  _initContent() {
+    this._contentController = new ContentController(this);
+    this._contentController.addEventListener('slot-content-changed', (event) => {
+      // Store nodes to toggle `aria-hidden` attribute
+      const { nodes } = event.target;
+      this._contentElements = nodes;
+
+      if (nodes[0] && nodes[0].id) {
+        this._toggleElement.setAttribute('aria-controls', nodes[0].id);
+      } else {
+        this._toggleElement.removeAttribute('aria-controls');
+      }
+    });
+    this.addController(this._contentController);
+  }
+
+  /** @private */
+  _initTooltip() {
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+
+    this._tooltipController.setTarget(this._toggleElement);
+    this._tooltipController.setPosition('bottom-start');
   }
 }
 
