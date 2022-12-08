@@ -203,7 +203,6 @@ export const ItemsMixin = (superClass) =>
 
         if (component instanceof Item) {
           component.setAttribute('role', 'menuitem');
-          component.classList.add('vaadin-menu-item');
         } else if (component.localName === 'hr') {
           component.setAttribute('role', 'separator');
         }
@@ -220,9 +219,7 @@ export const ItemsMixin = (superClass) =>
         this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
 
         component.setAttribute('aria-haspopup', 'false');
-        component.classList.remove('vaadin-context-menu-parent-item');
         if (item.children && item.children.length) {
-          component.classList.add('vaadin-context-menu-parent-item');
           component.setAttribute('aria-haspopup', 'true');
           component.setAttribute('aria-expanded', 'false');
           component.removeAttribute('expanded');
@@ -270,7 +267,6 @@ export const ItemsMixin = (superClass) =>
         if (this._theme) {
           listBox.setAttribute('theme', this._theme);
         }
-        listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
         const subMenu = document.createElement(this.constructor.is);
