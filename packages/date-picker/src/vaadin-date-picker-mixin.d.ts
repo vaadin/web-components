@@ -18,17 +18,78 @@ export interface DatePickerDate {
 }
 
 export interface DatePickerI18n {
+  /**
+   * An array with the full names of months starting
+   * with January.
+   */
   monthNames: string[];
+  /**
+   * An array of weekday names starting with Sunday. Used
+   * in screen reader announcements.
+   */
   weekdays: string[];
+  /**
+   * An array of short weekday names starting with Sunday.
+   * Displayed in the calendar.
+   */
   weekdaysShort: string[];
+  /**
+   * An integer indicating the first day of the week
+   * (0 = Sunday, 1 = Monday, etc.).
+   */
   firstDayOfWeek: number;
+  /**
+   * Used in screen reader announcements along with week
+   * numbers, if they are displayed.
+   */
   week: string;
+  /**
+   * Translation of the Calendar icon button title.
+   */
   calendar: string;
+  /**
+   * Translation of the Today shortcut button text.
+   */
   today: string;
+  /**
+   * Translation of the Cancel button text.
+   */
   cancel: string;
+  /**
+   * Used for adjusting the year value when parsing dates with short years.
+   * The year values between 0 and 99 are evaluated and adjusted.
+   * Example: for a referenceDate of 1970-10-30;
+   *   dateToBeParsed: 40-10-30, result: 1940-10-30
+   *   dateToBeParsed: 80-10-30, result: 1980-10-30
+   *   dateToBeParsed: 10-10-30, result: 2010-10-30
+   * Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
+   * The default value is the current date.
+   */
   referenceDate: string;
+
+  /**
+   * A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
+   * Must properly parse (at least) text formatted by `formatDate`.
+   * Setting the property to null will disable keyboard input feature.
+   * Note: The argument month is 0-based. This means that January = 0 and December = 11.
+   * @param date
+   */
   parseDate(date: string): DatePickerDate | undefined;
+
+  /**
+   * A function to format given `Object` as
+   * date string. Object is in the format `{ day: ..., month: ..., year: ... }`
+   * Note: The argument month is 0-based. This means that January = 0 and December = 11.
+   * @param date
+   */
   formatDate(date: DatePickerDate): string;
+
+  /**
+   * A function to format given `monthName` and
+   * `fullYear` integer as calendar title string.
+   * @param monthName
+   * @param fullYear
+   */
   formatTitle(monthName: string, fullYear: number): string;
 }
 
