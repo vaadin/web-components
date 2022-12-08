@@ -134,9 +134,9 @@ export const ButtonsMixin = (superClass) =>
 
         // Teleport item component back from "overflow" sub-menu
         const item = btn.item && btn.item.component;
-        if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
+        if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
           btn.appendChild(item);
-          item.classList.remove('vaadin-menu-item');
+          item.removeAttribute('role');
         }
       }
       this.__updateOverflow([]);

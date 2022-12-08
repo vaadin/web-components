@@ -719,7 +719,7 @@ describe('item components', () => {
     await onceResized(menu);
     const item = buttons[2].firstChild;
     expect(item).to.equal(buttons[2].item.component);
-    expect(item.classList.contains('vaadin-menu-item')).to.be.false;
+    expect(item.getAttribute('role')).to.not.equal('menuitem');
   });
 
   it('should close the overflow sub-menu on resize', async () => {
