@@ -5,6 +5,7 @@ snapshots["vaadin-accordion-panel host default"] =
 `<vaadin-accordion-panel>
   <vaadin-accordion-heading
     aria-controls="content-vaadin-accordion-panel-1"
+    id="summary-vaadin-accordion-panel-0"
     role="heading"
     slot="summary"
   >
@@ -12,7 +13,9 @@ snapshots["vaadin-accordion-panel host default"] =
   </vaadin-accordion-heading>
   <div
     aria-hidden="true"
+    aria-labelledby="summary-vaadin-accordion-panel-0"
     id="content-vaadin-accordion-panel-1"
+    role="region"
   >
     Content
   </div>
@@ -24,6 +27,7 @@ snapshots["vaadin-accordion-panel host opened"] =
 `<vaadin-accordion-panel opened="">
   <vaadin-accordion-heading
     aria-controls="content-vaadin-accordion-panel-1"
+    id="summary-vaadin-accordion-panel-0"
     opened=""
     role="heading"
     slot="summary"
@@ -32,7 +36,9 @@ snapshots["vaadin-accordion-panel host opened"] =
   </vaadin-accordion-heading>
   <div
     aria-hidden="false"
+    aria-labelledby="summary-vaadin-accordion-panel-0"
     id="content-vaadin-accordion-panel-1"
+    role="region"
   >
     Content
   </div>
@@ -46,6 +52,7 @@ snapshots["vaadin-accordion-panel host disabled"] =
     aria-controls="content-vaadin-accordion-panel-1"
     aria-disabled="true"
     disabled=""
+    id="summary-vaadin-accordion-panel-0"
     role="heading"
     slot="summary"
     tabindex="-1"
@@ -54,7 +61,9 @@ snapshots["vaadin-accordion-panel host disabled"] =
   </vaadin-accordion-heading>
   <div
     aria-hidden="true"
+    aria-labelledby="summary-vaadin-accordion-panel-0"
     id="content-vaadin-accordion-panel-1"
+    role="region"
   >
     Content
   </div>
@@ -66,6 +75,7 @@ snapshots["vaadin-accordion-panel host theme"] =
 `<vaadin-accordion-panel theme="filled">
   <vaadin-accordion-heading
     aria-controls="content-vaadin-accordion-panel-1"
+    id="summary-vaadin-accordion-panel-0"
     role="heading"
     slot="summary"
     theme="filled"
@@ -74,7 +84,9 @@ snapshots["vaadin-accordion-panel host theme"] =
   </vaadin-accordion-heading>
   <div
     aria-hidden="true"
+    aria-labelledby="summary-vaadin-accordion-panel-0"
     id="content-vaadin-accordion-panel-1"
+    role="region"
   >
     Content
   </div>

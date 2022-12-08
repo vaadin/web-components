@@ -7,7 +7,6 @@ import './vaadin-accordion-heading.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
@@ -15,10 +14,9 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class SummaryController extends SlotController {
+class SummaryController extends SlotObserveController {
   constructor(host) {
     super(host, 'summary', 'vaadin-accordion-heading', {
-      useUniqueId: true,
       initializer: (node, host) => {
         host._setFocusElement(node);
         host.stateTarget = node;
@@ -166,11 +164,18 @@ class AccordionPanel extends DetailsMixin(
     this._contentController = new ContentController(this);
     this._contentController.addEventListener('slot-content-changed', (event) => {
       // Store nodes to toggle `aria-hidden` attribute
-      const { nodes } = event.target;
-      this._contentElements = nodes;
+      const content = event.target.nodes || [];
+      this._contentElements = content;
 
-      if (nodes[0] && nodes[0].id) {
-        this.focusElement.setAttribute('aria-controls', nodes[0].id);
+      // See https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
+      const node = content[0];
+      if (node) {
+        node.setAttribute('role', 'region');
+        node.setAttribute('aria-labelledby', this.focusElement.id);
+      }
+
+      if (node && node.id) {
+        this.focusElement.setAttribute('aria-controls', node.id);
       } else {
         this.focusElement.removeAttribute('aria-controls');
       }
