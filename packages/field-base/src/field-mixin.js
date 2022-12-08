@@ -79,6 +79,10 @@ export const FieldMixin = (superclass) =>
       this._helperController = new HelperController(this);
       this._errorController = new ErrorController(this);
 
+      this._errorController.addEventListener('slot-content-changed', (event) => {
+        this.toggleAttribute('has-error-message', event.detail.hasContent);
+      });
+
       this._labelController.addEventListener('slot-content-changed', (event) => {
         const { hasContent, node } = event.detail;
         this.__labelChanged(hasContent, node);
