@@ -18,28 +18,28 @@ registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay],
 registerStyles(
   'vaadin-context-menu-list-box',
   css`
-    [part='items'] ::slotted(.vaadin-menu-item:not(hr)) {
+    [part='items'] ::slotted([role='menuitem']) {
       min-height: 36px;
       padding: 8px 32px 8px 10px;
       font-size: var(--material-small-font-size);
       line-height: 24px;
     }
 
-    :host([dir='rtl']) [part='items'] ::slotted(.vaadin-menu-item:not(hr)) {
+    :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {
       padding: 8px 10px 8px 32px;
     }
 
-    [part='items'] ::slotted(.vaadin-menu-item:hover:not([disabled])) {
+    [part='items'] ::slotted([role='menuitem']:hover:not([disabled])) {
       background-color: var(--material-secondary-background-color);
     }
 
-    [part='items'] ::slotted(.vaadin-menu-item[focused]:not([disabled])) {
+    [part='items'] ::slotted([role='menuitem'][focused]:not([disabled])) {
       background-color: var(--material-divider-color);
     }
 
     @media (pointer: coarse) {
-      [part='items'] ::slotted(.vaadin-menu-item:hover:not([disabled])),
-      [part='items'] ::slotted(.vaadin-menu-item[focused]:not([disabled])) {
+      [part='items'] ::slotted([role='menuitem']:hover:not([disabled])),
+      [part='items'] ::slotted([role='menuitem'][focused]:not([disabled])) {
         background-color: transparent;
       }
     }
@@ -50,28 +50,24 @@ registerStyles(
 registerStyles(
   'vaadin-context-menu-item',
   css`
-    :host(.vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+    :host([aria-haspopup='true'])::after {
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
     }
 
-    :host(:not([dir='rtl']).vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+    :host(:not([dir='rtl'])[aria-haspopup='true'])::after {
       content: var(--material-icons-chevron-right);
       padding-left: 9px;
       margin-right: -9px;
     }
 
-    :host([dir='rtl'].vaadin-menu-item.vaadin-context-menu-parent-item)::after {
+    :host([dir='rtl'][aria-haspopup='true'])::after {
       content: var(--material-icons-chevron-left);
       padding-right: 9px;
       margin-left: -9px;
     }
 
-    :host(.vaadin-menu-item)::before {
-      display: block;
-    }
-
-    :host(.vaadin-menu-item[menu-item-checked]) [part='checkmark']::before {
+    :host([menu-item-checked]) [part='checkmark']::before {
       content: var(--material-icons-check);
     }
 

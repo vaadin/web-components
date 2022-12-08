@@ -98,8 +98,8 @@ describe('items', () => {
       expect(menuComponents()[0].textContent).to.equal('foo-0');
     });
 
-    it('should have menu item classname', () => {
-      expect(menuComponents()[0].classList.contains('vaadin-menu-item')).to.be.true;
+    it('should have menuitem role attribute', () => {
+      expect(menuComponents()[0].getAttribute('role')).to.equal('menuitem');
     });
 
     it('should render sub-menu items', () => {
@@ -309,7 +309,7 @@ describe('items', () => {
     });
 
     it('should have be a parent item', () => {
-      expect(menuComponents()[0].classList.contains('vaadin-context-menu-parent-item')).to.be.true;
+      expect(menuComponents()[0].getAttribute('aria-haspopup')).to.equal('true');
     });
 
     it('should not have be a parent item', () => {
@@ -320,7 +320,7 @@ describe('items', () => {
       rootMenu.close();
       rootMenu.items[0].children = [];
       open();
-      expect(menuComponents()[0].classList.contains('vaadin-context-menu-parent-item')).to.be.false;
+      expect(menuComponents()[0].getAttribute('aria-haspopup')).to.equal('false');
     });
 
     it('should open item on right arrow', () => {
