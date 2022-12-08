@@ -59,7 +59,7 @@ registerStyles(
     }
 
     /* RTL styles */
-    :host([dir='rtl'])[part='items'] ::slotted([role='menuitem']) {
+    :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {
       padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
       padding-right: calc(var(--lumo-border-radius-m) / 4);
     }
