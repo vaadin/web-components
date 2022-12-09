@@ -174,7 +174,7 @@ class AccordionPanel extends DetailsMixin(
         node.setAttribute('aria-labelledby', this.focusElement.id);
       }
 
-      if (node && node.id) {
+      if (node && node.parentNode === this && node.id) {
         this.focusElement.setAttribute('aria-controls', node.id);
       } else {
         this.focusElement.removeAttribute('aria-controls');

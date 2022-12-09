@@ -288,4 +288,23 @@ describe('vaadin-accordion', () => {
       });
     });
   });
+
+  describe('ARIA', () => {
+    let heading, content;
+
+    beforeEach(() => {
+      heading = accordion.items[0].querySelector('vaadin-accordion-heading');
+      content = accordion.items[0].querySelector('div');
+    });
+
+    it('should set aria-controls attribute on the heading linking to content', () => {
+      expect(heading.getAttribute('aria-controls')).to.equal(content.id);
+    });
+
+    it('should remove aria-controls attribute from the heading when content is removed', async () => {
+      content.remove();
+      await nextRender();
+      expect(heading.hasAttribute('aria-controls')).to.be.false;
+    });
+  });
 });
