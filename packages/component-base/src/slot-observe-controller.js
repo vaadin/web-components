@@ -107,7 +107,7 @@ export class SlotObserveController extends SlotController {
         if (mutation.type === 'attributes') {
           // We use attributeFilter to only observe ID mutation,
           // no need to check for attribute name separately.
-          if (isCurrentNodeMutation && target.id !== this.defaultId) {
+          if (isCurrentNodeMutation) {
             this.__updateNodeId(target);
           }
         } else if (isCurrentNodeMutation || target.parentElement === this.node) {
@@ -141,8 +141,7 @@ export class SlotObserveController extends SlotController {
     }
 
     return (
-      node.children.length > 0 ||
-      (node.nodeType === Node.ELEMENT_NODE && customElements.get(node.localName)) ||
+      (node.nodeType === Node.ELEMENT_NODE && (customElements.get(node.localName) || node.children.length > 0)) ||
       (node.textContent && node.textContent.trim() !== '')
     );
   }
@@ -168,7 +167,9 @@ export class SlotObserveController extends SlotController {
    * @private
    */
   __updateNodeId(node) {
-    if (node.nodeType === Node.ELEMENT_NODE && !node.id) {
+    // When in multiple mode, only set ID attribute on the element in default slot.
+    const isFirstNode = !this.nodes || node === this.nodes[0];
+    if (node.nodeType === Node.ELEMENT_NODE && isFirstNode && !node.id) {
       node.id = this.defaultId;
     }
   }

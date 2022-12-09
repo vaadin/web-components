@@ -7,22 +7,40 @@ import './vaadin-accordion-heading.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class SummaryController extends SlotController {
+class SummaryController extends SlotObserveController {
   constructor(host) {
     super(host, 'summary', 'vaadin-accordion-heading', {
-      useUniqueId: true,
       initializer: (node, host) => {
         host._setFocusElement(node);
         host.stateTarget = node;
       },
     });
+  }
+}
+
+class ContentController extends SlotObserveController {
+  /**
+   * Override method from `SlotController` to change
+   * the ID prefix for the default slot content.
+   *
+   * @param {HTMLElement} host
+   * @return {string}
+   * @protected
+   * @override
+   */
+  static generateId(host) {
+    return super.generateId(host, 'content');
+  }
+
+  constructor(host) {
+    super(host, '', null, { multiple: true });
   }
 }
 
@@ -114,22 +132,9 @@ class AccordionPanel extends DetailsMixin(
   ready() {
     super.ready();
 
-    // TODO: Generate unique IDs for a heading and a content panel when added to the slot,
-    // and use them to set `aria-controls` and `aria-labelledby` attributes, respectively.
-
-    this._collapsible = this.shadowRoot.querySelector('[part="content"]');
-    this.addController(new SummaryController(this));
-
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-
-    this._tooltipController.setTarget(this.focusElement);
-    this._tooltipController.setPosition('bottom-start');
-
-    // Wait for heading element render to complete
-    afterNextRender(this, () => {
-      this._toggleElement = this.focusElement.$.button;
-    });
+    this._initSummary();
+    this._initContent();
+    this._initTooltip();
   }
 
   /**
@@ -141,6 +146,50 @@ class AccordionPanel extends DetailsMixin(
    */
   _setAriaDisabled() {
     // The `aria-disabled` is set on the details summary.
+  }
+
+  /** @private */
+  _initSummary() {
+    this._summaryController = new SummaryController(this);
+    this.addController(this._summaryController);
+
+    // Wait for heading element render to complete
+    afterNextRender(this, () => {
+      this._toggleElement = this.focusElement.$.button;
+    });
+  }
+
+  /** @private */
+  _initContent() {
+    this._contentController = new ContentController(this);
+    this._contentController.addEventListener('slot-content-changed', (event) => {
+      // Store nodes to toggle `aria-hidden` attribute
+      const content = event.target.nodes || [];
+      this._contentElements = content;
+
+      // See https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
+      const node = content[0];
+      if (node) {
+        node.setAttribute('role', 'region');
+        node.setAttribute('aria-labelledby', this.focusElement.id);
+      }
+
+      if (node && node.parentNode === this && node.id) {
+        this.focusElement.setAttribute('aria-controls', node.id);
+      } else {
+        this.focusElement.removeAttribute('aria-controls');
+      }
+    });
+    this.addController(this._contentController);
+  }
+
+  /** @private */
+  _initTooltip() {
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+
+    this._tooltipController.setTarget(this.focusElement);
+    this._tooltipController.setPosition('bottom-start');
   }
 }
 

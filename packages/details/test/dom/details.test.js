@@ -1,11 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-details.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-details', () => {
   let details;
 
   beforeEach(() => {
+    resetUniqueId();
     details = fixtureSync(`
       <vaadin-details>
         <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>

@@ -16,7 +16,7 @@ describe('vaadin-details', () => {
       </vaadin-details>
     `);
     toggle = details._toggleElement;
-    content = details._collapsible;
+    content = details.shadowRoot.querySelector('[part="content"]');
   });
 
   describe('custom element definition', () => {
@@ -118,25 +118,23 @@ describe('vaadin-details', () => {
       expect(toggle.getAttribute('aria-expanded')).to.equal('true');
     });
 
-    it('should set aria-hidden on the content to true by default', () => {
-      expect(content.getAttribute('aria-hidden')).to.equal('true');
+    it('should set aria-hidden on the slotted element to true by default', () => {
+      expect(details.querySelector('div').getAttribute('aria-hidden')).to.equal('true');
     });
 
-    it('should set aria-hidden on the content to false when opened', () => {
+    it('should set aria-hidden on the slotted element to false when opened', () => {
       details.opened = true;
-      expect(content.getAttribute('aria-hidden')).to.equal('false');
+      expect(details.querySelector('div').getAttribute('aria-hidden')).to.equal('false');
     });
 
-    // TODO: implement new mechanism for setting ID
-    it.skip('should set aria-controls on toggle button', () => {
-      const idRegex = /^vaadin-details-content-\d+$/;
+    it('should set aria-controls on toggle button', () => {
+      const idRegex = /^content-vaadin-details-\d+$/;
       expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
     });
   });
 
-  // TODO: implement new mechanism for setting ID
-  describe.skip('unique IDs', () => {
-    const idRegex = /^vaadin-details-content-\d+$/;
+  describe('unique IDs', () => {
+    const idRegex = /^content-vaadin-details-\d+$/;
     let container, details;
 
     beforeEach(() => {
@@ -156,8 +154,8 @@ describe('vaadin-details', () => {
     });
 
     it('should set unique id on the content', () => {
-      const detailsId1 = details[0]._collapsible.id;
-      const detailsId2 = details[1]._collapsible.id;
+      const detailsId1 = details[0].querySelector('div').id;
+      const detailsId2 = details[1].querySelector('div').id;
       expect(idRegex.test(detailsId1)).to.be.true;
       expect(idRegex.test(detailsId2)).to.be.true;
       expect(detailsId1).to.not.equal(detailsId2);

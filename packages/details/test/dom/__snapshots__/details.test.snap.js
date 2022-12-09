@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-details host default"] = 
 `<vaadin-details>
   <vaadin-details-summary
+    aria-controls="content-vaadin-details-1"
     aria-expanded="false"
     role="button"
     slot="summary"
@@ -11,7 +12,10 @@ snapshots["vaadin-details host default"] =
   >
     Summary
   </vaadin-details-summary>
-  <div>
+  <div
+    aria-hidden="true"
+    id="content-vaadin-details-1"
+  >
     Content
   </div>
 </vaadin-details>
@@ -21,6 +25,7 @@ snapshots["vaadin-details host default"] =
 snapshots["vaadin-details host opened"] = 
 `<vaadin-details opened="">
   <vaadin-details-summary
+    aria-controls="content-vaadin-details-1"
     aria-expanded="true"
     opened=""
     role="button"
@@ -29,7 +34,10 @@ snapshots["vaadin-details host opened"] =
   >
     Summary
   </vaadin-details-summary>
-  <div>
+  <div
+    aria-hidden="false"
+    id="content-vaadin-details-1"
+  >
     Content
   </div>
 </vaadin-details>
@@ -39,6 +47,7 @@ snapshots["vaadin-details host opened"] =
 snapshots["vaadin-details host disabled"] = 
 `<vaadin-details disabled="">
   <vaadin-details-summary
+    aria-controls="content-vaadin-details-1"
     aria-disabled="true"
     aria-expanded="false"
     disabled=""
@@ -48,7 +57,10 @@ snapshots["vaadin-details host disabled"] =
   >
     Summary
   </vaadin-details-summary>
-  <div>
+  <div
+    aria-hidden="true"
+    id="content-vaadin-details-1"
+  >
     Content
   </div>
 </vaadin-details>
@@ -58,6 +70,7 @@ snapshots["vaadin-details host disabled"] =
 snapshots["vaadin-details host theme"] = 
 `<vaadin-details theme="filled">
   <vaadin-details-summary
+    aria-controls="content-vaadin-details-1"
     aria-expanded="false"
     role="button"
     slot="summary"
@@ -66,7 +79,10 @@ snapshots["vaadin-details host theme"] =
   >
     Summary
   </vaadin-details-summary>
-  <div>
+  <div
+    aria-hidden="true"
+    id="content-vaadin-details-1"
+  >
     Content
   </div>
 </vaadin-details>
@@ -76,10 +92,7 @@ snapshots["vaadin-details host theme"] =
 snapshots["vaadin-details shadow default"] = 
 `<slot name="summary">
 </slot>
-<div
-  aria-hidden="true"
-  part="content"
->
+<div part="content">
   <slot>
   </slot>
 </div>
@@ -91,10 +104,7 @@ snapshots["vaadin-details shadow default"] =
 snapshots["vaadin-details shadow opened"] = 
 `<slot name="summary">
 </slot>
-<div
-  aria-hidden="false"
-  part="content"
->
+<div part="content">
   <slot>
   </slot>
 </div>
