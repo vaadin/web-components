@@ -214,9 +214,10 @@ export const ScrollMixin = (superClass) =>
       // Find any cell of the column and check if it’s inside the viewport
       for (const cell of column._allCells) {
         if (cell.isConnected) {
+          // TODO: Test 1px offset (keyboard navigation)
           return (
-            cell.offsetLeft + cell.offsetWidth > this._scrollLeft &&
-            cell.offsetLeft < this._scrollLeft + this.clientWidth
+            cell.offsetLeft + cell.offsetWidth > this._scrollLeft - 1 &&
+            cell.offsetLeft < this._scrollLeft + this.clientWidth + 1
           );
         }
       }
