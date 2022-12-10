@@ -44,7 +44,7 @@ describe('multiple columns', () => {
 
   function expectBodyCellNotRendered(columnIndex) {
     expect(isBodyCellRendered(columnIndex)).to.be.false;
-    expect(getBodyCellSlot(columnIndex)).to.be.null;
+    expect(getBodyCellSlot(columnIndex).hidden).to.be.true;
   }
 
   beforeEach(() => {

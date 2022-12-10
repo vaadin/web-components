@@ -176,6 +176,8 @@ export const ScrollMixin = (superClass) =>
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
           this._debounceColumnContentVisibility,
+          // TODO: Condsider using animationFrame. Scrolling a multi-column grid horizontally
+          // on a mobile device could be a bit laggy.
           timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
           () => {
             this.__updateColumnsBodyContentHidden();

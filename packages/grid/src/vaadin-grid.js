@@ -747,6 +747,7 @@ class Grid extends ElementMixin(
     }
 
     cell._content = cellContent;
+    cell._slot = slot;
 
     // With native Shadow DOM, mousedown on slotted element does not focus
     // focusable slot wrapper, that is why cells are not focused with
