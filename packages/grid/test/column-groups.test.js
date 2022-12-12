@@ -88,7 +88,7 @@ const fixtures = {
         <vaadin-grid-column-group frozen>
           <template class="header">group-3</template>
           <template class="footer">group-3</template>
-          <vaadin-grid-column>
+          <vaadin-grid-column id="col-4">
             <template>body-4</template>
             <template class="header">header-4</template>
             <template class="footer">footer-4</template>
@@ -105,6 +105,19 @@ const fixtures = {
         <template class="header">header-6</template>
         <template class="footer">footer-6</template>
       </vaadin-grid-column>
+      <vaadin-grid-column-group>
+        <template class="header">group-4</template>
+        <template class="footer">group-4</template>
+        <vaadin-grid-column-group>
+          <template class="header">group-5</template>
+          <template class="footer">group-5</template>
+          <vaadin-grid-column id="col-7">
+            <template>body-7</template>
+            <template class="header">header-7</template>
+            <template class="footer">footer-7</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid-column-group>
     </vaadin-grid>
   `,
   'hidden-group': `
@@ -389,13 +402,13 @@ describe('column groups', () => {
 
   describe('Nested groups', () => {
     beforeEach(async () => {
-      //  | group-0             | group-1                                  |          |
-      //  |           |         | group-2            | group-3             |          |
-      //  |           |         |          |         | header-4 | header-5 | header-6 |
-      //  -----------------------------------------------------------------------------
-      //  |           |         |          |         | footer-4 | footer-5 | footer-6 |
-      //  |           |         | group-2            | group-3             |          |
-      //  | group-0             | group-1                                  |          |
+      //  | group-0             | group-1                                  |          | group-4  |
+      //  |           |         | group-2            | group-3             |          | group-5  |
+      //  |           |         |          |         | header-4 | header-5 | header-6 | header-7 |
+      //  ----------------------------------------------------------------------------------------
+      //  |           |         |          |         | footer-4 | footer-5 | footer-6 | footer-7 |
+      //  |           |         | group-2            | group-3             |          | group-5  |
+      //  | group-0             | group-1                                  |          | group-4  |
       init('nested');
       await nextResize(grid);
     });
@@ -465,6 +478,74 @@ describe('column groups', () => {
       const lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
       const footerTop = footer.getBoundingClientRect().top;
       expect(lastRowBottom).to.be.closeTo(footerTop, 2);
+    });
+
+    describe('text-align', () => {
+      describe('should propagate text-align to parent groups', () => {
+        let column, header, footer;
+        beforeEach(() => {
+          column = grid.querySelector('#col-7');
+          header = grid.$.header;
+          footer = grid.$.footer;
+        });
+
+        it('start', () => {
+          column.textAlign = 'start';
+          // GROUP-4
+          expect(getComputedStyle(getContainerCellContent(header, 0, 3)).textAlign).to.be.oneOf(['start', 'left']);
+          expect(getComputedStyle(getContainerCellContent(footer, 2, 3)).textAlign).to.be.oneOf(['start', 'left']);
+          // GROUP-5
+          expect(getComputedStyle(getContainerCellContent(header, 1, 5)).textAlign).to.be.oneOf(['start', 'left']);
+          expect(getComputedStyle(getContainerCellContent(footer, 1, 5)).textAlign).to.be.oneOf(['start', 'left']);
+        });
+
+        it('center', () => {
+          column.textAlign = 'center';
+          // GROUP-4
+          expect(getComputedStyle(getContainerCellContent(header, 0, 3)).textAlign).to.be.equal('center');
+          expect(getComputedStyle(getContainerCellContent(footer, 2, 3)).textAlign).to.be.equal('center');
+          // GROUP-5
+          expect(getComputedStyle(getContainerCellContent(header, 1, 5)).textAlign).to.be.equal('center');
+          expect(getComputedStyle(getContainerCellContent(footer, 1, 5)).textAlign).to.be.equal('center');
+        });
+
+        it('end', () => {
+          column.textAlign = 'end';
+          // GROUP-4
+          expect(getComputedStyle(getContainerCellContent(header, 0, 3)).textAlign).to.be.oneOf(['end', 'right']);
+          expect(getComputedStyle(getContainerCellContent(footer, 2, 3)).textAlign).to.be.oneOf(['end', 'right']);
+          // GROUP-5
+          expect(getComputedStyle(getContainerCellContent(header, 1, 5)).textAlign).to.be.oneOf(['end', 'right']);
+          expect(getComputedStyle(getContainerCellContent(footer, 1, 5)).textAlign).to.be.oneOf(['end', 'right']);
+        });
+
+        it('newly added group should receive text-align from child column', async () => {
+          column.textAlign = 'end';
+
+          const newGroup = document.createElement('vaadin-grid-column-group');
+          newGroup.headerRenderer = (root) => {
+            root.textContent = 'group-8';
+          };
+          newGroup.footerRenderer = (root) => {
+            root.textContent = 'group-8';
+          };
+
+          const columParent = column.parentElement;
+          newGroup.appendChild(column);
+          columParent.appendChild(newGroup);
+
+          await nextRender();
+          expect(getComputedStyle(getContainerCellContent(header, 2, 7)).textAlign).to.be.oneOf(['end', 'right']);
+          expect(getComputedStyle(getContainerCellContent(footer, 1, 7)).textAlign).to.be.oneOf(['end', 'right']);
+        });
+      });
+
+      it('should not propagate text-align to a parent group with colspan > 1', () => {
+        const column = grid.querySelector('#col-4');
+        column.textAlign = 'end';
+        expect(getComputedStyle(getContainerCellContent(header, 1, 3)).textAlign).to.not.be.oneOf(['end', 'right']);
+        expect(getComputedStyle(getContainerCellContent(footer, 1, 3)).textAlign).to.not.be.oneOf(['end', 'right']);
+      });
     });
   });
 
