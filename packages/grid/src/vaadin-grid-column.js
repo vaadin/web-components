@@ -473,11 +473,29 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this._allCells.forEach((cell) => {
-        cell._content.style.textAlign = textAlign;
-        if (getComputedStyle(cell._content).textAlign !== textAlign) {
-          cell._content.style.textAlign = textAlignFallback;
-        }
+        this.__setCellTextAlign(cell, textAlign, textAlignFallback);
       });
+
+      let parentGroup = this.parentElement;
+      while (parentGroup.tagName === 'VAADIN-GRID-COLUMN-GROUP') {
+        if (parentGroup._colSpan === 1) {
+          if (parentGroup._headerCell) {
+            this.__setCellTextAlign(parentGroup._headerCell, textAlign, textAlignFallback);
+          }
+          if (parentGroup._footerCell) {
+            this.__setCellTextAlign(parentGroup._footerCell, textAlign, textAlignFallback);
+          }
+        }
+        parentGroup = parentGroup.parentElement;
+      }
+    }
+
+    /** @private */
+    __setCellTextAlign(cell, textAlign, textAlignFallback) {
+      cell._content.style.textAlign = textAlign;
+      if (getComputedStyle(cell).textAlign !== textAlign) {
+        cell._content.style.textAlign = textAlignFallback;
+      }
     }
 
     /** @private */
