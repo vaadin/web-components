@@ -443,7 +443,8 @@ export default overrideVaadinConfig(customConfig);
 
 </details>
 
-**NOTE:** Make sure that the path you provide is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
+> **Note**
+> Make sure that the path you provide is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
 
 Then run the following command in the web components monorepo:
 
