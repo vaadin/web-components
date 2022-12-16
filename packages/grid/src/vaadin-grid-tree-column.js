@@ -34,7 +34,7 @@ class GridTreeColumn extends GridColumn {
   }
 
   static get observers() {
-    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)'];
+    return ['_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path)'];
   }
 
   constructor() {
