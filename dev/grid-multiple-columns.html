@@ -9,11 +9,70 @@
   </head>
   <body>
     <script type="module">
+      import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+      registerStyles(
+        'vaadin-grid',
+        css`
+          @keyframes content-ready {
+            to {
+              opacity: 1;
+            }
+          }
+
+          [part~='body-cell'] {
+            height: 50px;
+          }
+          [part~='cell'] {
+            animation: content-ready 1s;
+          }
+          :host {
+            transition: opacity 1s;
+          }
+          :host([benchmark][loading]) {
+            opacity: 0.9;
+          }
+        `,
+      );
+    </script>
+    <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/text-field';
       import '@vaadin/checkbox';
 
+      async function whenRendered(grid) {
+        return new Promise((resolve) => {
+          let readyTimer;
+          const listener = (e) => {
+            if (e.animationName === 'content-ready' || e.propertyName === 'opacity') {
+              const endTime = performance.now();
+              readyTimer && clearTimeout(readyTimer);
+              if (!grid.loading) {
+                readyTimer = setTimeout(() => {
+                  grid.$.scroller.removeEventListener('animationstart', listener);
+                  grid.removeEventListener('animationstart', listener);
+                  grid.removeEventListener('transitionstart', listener);
+                  resolve(endTime);
+                  // The timeout needs to be large enough so everything gets rendered
+                  // but small enough so the tests won't take forever. This resolves with
+                  // the timestamp of the listener's last invocation.
+                }, 1000);
+              }
+            }
+          };
+
+          grid.$.scroller.addEventListener('animationstart', listener);
+          grid.addEventListener('animationstart', listener);
+          grid.addEventListener('transitionstart', listener);
+        });
+      }
+
       const grid = document.querySelector('vaadin-grid');
+
+      whenRendered(grid).then((time) => {
+        // Remove decimals from time
+        document.querySelector('#render-time').textContent = `Rendered in ${Math.round(time)} ms`;
+      });
 
       grid.dataProvider = ({ page, pageSize }, cb) => {
         const levelSize = 100;
@@ -52,5 +111,7 @@
     <vaadin-grid item-id-path="name" lazy-columns></vaadin-grid>
 
     <vaadin-checkbox label="Lazy Columns" style="margin-top: 30px"></vaadin-checkbox>
+
+    <div id="render-time"></div>
   </body>
 </html>
