@@ -160,7 +160,7 @@ assertType<boolean>(narrowedGrid.disabled);
 
 assertType<number>(narrowedGrid.pageSize);
 assertType<number>(narrowedGrid.size);
-assertType<string | null | undefined>(narrowedGrid.rowHeight);
+assertType<boolean | null | undefined>(narrowedGrid.lazyColumns);
 assertType<boolean | null | undefined>(narrowedGrid.loading);
 assertType<string | null | undefined>(narrowedGrid.itemIdPath);
 assertType<string>(narrowedGrid.itemHasChildrenPath);

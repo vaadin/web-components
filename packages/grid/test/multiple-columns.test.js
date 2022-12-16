@@ -67,9 +67,9 @@ describe('multiple columns', () => {
     grid.items = [{ name: `Item 1` }];
   });
 
-  describe('static row height', () => {
+  describe('virtual columns enabled', () => {
     beforeEach(async () => {
-      grid.rowHeight = '80px';
+      grid.lazyColumns = true;
       // Wait for the initial resize observer callback
       await onceResized(grid);
       flushGrid(grid);
@@ -115,13 +115,8 @@ describe('multiple columns', () => {
       expectBodyCellUpdated(columns.length - 1);
     });
 
-    it('should have fixed row height', () => {
-      const bodyRow = grid.$.items.firstElementChild;
-      expect(bodyRow.offsetHeight).to.equal(parseInt(grid.rowHeight));
-    });
-
-    it('should switch back to dynamic row height', () => {
-      grid.rowHeight = null;
+    it('should switch back to eager columns', () => {
+      grid.lazyColumns = false;
 
       expectBodyCellUpdated(0);
       expectBodyCellUpdated(1);
@@ -129,13 +124,10 @@ describe('multiple columns', () => {
       expectBodyCellUpdated(columns.length - 1);
     });
 
-    it('should switch back to fixed row height', () => {
-      grid.rowHeight = null;
+    it('should switch back to lazy columns', () => {
+      grid.lazyColumns = false;
       resetRenderers();
-      grid.rowHeight = '100px';
-
-      const bodyRow = grid.$.items.firstElementChild;
-      expect(bodyRow.offsetHeight).to.equal(parseInt(grid.rowHeight));
+      grid.lazyColumns = true;
 
       expectBodyCellNotRendered(2);
       expectBodyCellNotRendered(columns.length - 1);

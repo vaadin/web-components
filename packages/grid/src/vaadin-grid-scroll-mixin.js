@@ -19,22 +19,27 @@ export const ScrollMixin = (superClass) =>
   class ScrollMixin extends ResizeMixin(superClass) {
     static get properties() {
       return {
-        // TODO: Consider API staticRowHeight: boolean instead. It would
-        // work the same but the responsibility of making sure each row
-        // has the same height would be on the user.
         /**
-         * Static height for all the body rows.
-         * If specified, the grid will be able to optimize cell rendering
+         * Makes the content on the grid columns render lazily when
+         * the column cells are scrolled into view.
+         *
+         * If true, the grid will be able to optimize cell rendering
          * significantly when there are multiple columns in the grid.
+         *
+         * NOTE: make sure that each cell on a single row has the same
+         * intrinsic height as all other cells on that row.
+         * Otherwise, you may experience jumpiness when scrolling the grid
+         * horizontally when lazily rendered cells with different
+         * heights are scrolled into view.
          *
          * NOTE: columns with auto-width will only take the header content into account
          * when calculating the width for columns that are initially outside the viewport.
          *
-         * @attr {string} row-height
-         * @type {string}
+         * @attr {boolean} lazy-columns
+         * @type {boolean}
          */
-        rowHeight: {
-          type: String,
+        lazyColumns: {
+          type: Boolean,
         },
 
         /**
@@ -61,7 +66,7 @@ export const ScrollMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__rowHeightChanged(_columnTree, rowHeight)'];
+      return ['__lazyColumnsChanged(_columnTree, lazyColumns)'];
     }
 
     /** @private */
@@ -167,7 +172,7 @@ export const ScrollMixin = (superClass) =>
       // TODO: _updateOverflow on each scroll event is really expensive. Consider throttling it.
       this._updateOverflow();
 
-      if (this.rowHeight && this.__cachedScrollLeft !== this._scrollLeft) {
+      if (this.lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
           this._debounceColumnContentVisibility,
@@ -181,7 +186,7 @@ export const ScrollMixin = (superClass) =>
 
     /**
      * Iterates all the columns and marks their _bodyContentHidden true
-     * in case they are outside the viewport and rowHeight is set.
+     * in case they are outside the viewport and lazyColumns is set.
      * @private
      */
     __updateColumnsBodyContentHidden() {
@@ -190,7 +195,7 @@ export const ScrollMixin = (superClass) =>
       }
 
       this._columnTree[this._columnTree.length - 1].forEach((column) => {
-        column._bodyContentHidden = !!this.rowHeight && !this.__isColumnInViewport(column);
+        column._bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
       });
     }
 
@@ -218,16 +223,12 @@ export const ScrollMixin = (superClass) =>
     }
 
     /** @private */
-    __rowHeightChanged(columnTree, rowHeight) {
+    __lazyColumnsChanged(columnTree) {
       if (!columnTree) {
         return;
       }
 
       this.__updateColumnsBodyContentHidden();
-
-      columnTree[columnTree.length - 1].forEach((column) => {
-        column._bodyCellHeight = rowHeight;
-      });
     }
 
     /** @private */

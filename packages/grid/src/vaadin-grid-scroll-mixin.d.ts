@@ -9,14 +9,22 @@ export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class ScrollMixinClass {
   /**
-   * Static height for all the body rows.
-   * If specified, the grid will be able to optimize cell rendering
+   * Makes the content on the grid columns render lazily when
+   * the column cells are scrolled into view.
+   *
+   * If true, the grid will be able to optimize cell rendering
    * significantly when there are multiple columns in the grid.
+   *
+   * NOTE: make sure that each cell on a single row has the same
+   * intrinsic height as all other cells on that row.
+   * Otherwise, you may experience jumpiness when scrolling the grid
+   * horizontally when lazily rendered cells with different
+   * heights are scrolled into view.
    *
    * NOTE: columns with auto-width will only take the header content into account
    * when calculating the width for columns that are initially outside the viewport.
    */
-  rowHeight: string | null | undefined;
+  lazyColumns: boolean | null | undefined;
 
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
