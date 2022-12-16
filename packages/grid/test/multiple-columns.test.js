@@ -2,7 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getCell, getContainerCell, getHeaderCellContent, onceResized } from './helpers.js';
+import {
+  flushGrid,
+  getBodyCellContent,
+  getCell,
+  getContainerCell,
+  getHeaderCellContent,
+  onceResized,
+} from './helpers.js';
 
 const timeouts = {
   UPDATE_CONTENT_VISIBILITY: 100,
@@ -223,6 +230,21 @@ describe('multiple columns', () => {
         // Seconf half of the debounce timeout so the debouncer is executed
         await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
         expectBodyCellUpdated(0);
+      });
+
+      it('should update content of previously rendererd cells on revisit', async () => {
+        expect(getBodyCellContent(grid, 0, columns.length - 1).textContent).to.equal('cell');
+
+        cellContent = 'updated';
+        grid.requestContentUpdate();
+        expect(getBodyCellContent(grid, 0, columns.length - 1).textContent).to.equal('updated');
+
+        // Scroll back to the beginning
+        await scrollHorizontallyTo(0);
+        // Wait for the debouncer to flush
+        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
+
+        expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('updated');
       });
     });
   });
