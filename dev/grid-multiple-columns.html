@@ -11,6 +11,7 @@
     <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/text-field';
+      import '@vaadin/checkbox';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -28,10 +29,11 @@
       for (let i = 0; i < 100; i++) {
         const column = document.createElement('vaadin-grid-column');
         column.header = `Col ${i}`;
+        column.width = '140px';
+        column.flexShrink = 0;
         column.renderer = (root, column, model) => {
-          console.log('Rendering', column.header, 'item', model.item.name);
           if (!root.firstElementChild) {
-            root.innerHTML = `<vaadin-text-field style="width: 60px"></vaadin-text-field>`;
+            root.innerHTML = `<vaadin-text-field style="width: 100px"></vaadin-text-field>`;
           }
           root.firstElementChild.value = `${i} - ${model.item.name}`;
         };
@@ -40,9 +42,15 @@
 
       grid.firstElementChild.frozen = true;
 
-      grid.lazyColumns = true;
+      const lazyColumns = document.querySelector('vaadin-checkbox');
+      lazyColumns.addEventListener('checked-changed', (e) => {
+        grid.lazyColumns = e.detail.value;
+      });
+      lazyColumns.checked = grid.lazyColumns;
     </script>
 
-    <vaadin-grid item-id-path="name"></vaadin-grid>
+    <vaadin-grid item-id-path="name" lazy-columns></vaadin-grid>
+
+    <vaadin-checkbox label="Lazy Columns" style="margin-top: 30px"></vaadin-checkbox>
   </body>
 </html>
