@@ -32,6 +32,10 @@ describe('multiple columns', () => {
     return columns[columnIndex].renderer.called;
   }
 
+  function isBodyCellContentHidden(columnIndex) {
+    return getBodyCellContent(grid, 0, columnIndex).offsetHeight === 0;
+  }
+
   function isBodyCellContentUpToDate(columnIndex) {
     const slot = getBodyCellSlot(columnIndex);
     return !!slot && slot.assignedNodes()[0].textContent === cellContent;
@@ -44,7 +48,7 @@ describe('multiple columns', () => {
 
   function expectBodyCellNotRendered(columnIndex) {
     expect(isBodyCellRendered(columnIndex)).to.be.false;
-    expect(getBodyCellSlot(columnIndex).hidden).to.be.true;
+    expect(isBodyCellContentHidden(columnIndex)).to.be.true;
   }
 
   beforeEach(() => {

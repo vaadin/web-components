@@ -169,6 +169,10 @@ registerStyles(
       text-overflow: ellipsis;
     }
 
+    [part~='cell'][content-hidden] ::slotted(vaadin-grid-cell-content) {
+      display: none;
+    }
+
     [hidden] {
       display: none !important;
     }

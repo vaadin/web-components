@@ -232,14 +232,12 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       bodyCells.forEach((cell) => {
-        if (!bodyContentHidden && cell._slot.hidden) {
-          // Unhide the slot
-          cell._slot.hidden = false;
-        } else if (bodyContentHidden && !cell._slot.hidden) {
-          // Hide the slot
-          // TODO: Consider hiding the cell._content instead of the slot. Seems to work fine.
-          // It needs a new style rule though and the DOM change ([hidden]) would occur in the light DOM.
-          cell._slot.hidden = true;
+        if (!bodyContentHidden && cell.hasAttribute('content-hidden')) {
+          // Unhide the cell content
+          cell.removeAttribute('content-hidden');
+        } else if (bodyContentHidden && !cell.hasAttribute('content-hidden')) {
+          // Hide the cell content
+          cell.setAttribute('content-hidden', '');
         }
       });
     }
