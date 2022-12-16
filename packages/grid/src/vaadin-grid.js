@@ -543,6 +543,18 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getIntrinsicWidth(col) {
+    if (this.__intrinsicWidthCache.has(col)) {
+      return this.__intrinsicWidthCache.get(col);
+    }
+
+    const width = this.__calculateIntrinsicWidth(col);
+    this.__intrinsicWidthCache.set(col, width);
+
+    return width;
+  }
+
+  /** @private */
+  __calculateIntrinsicWidth(col) {
     const initialWidth = col.width;
     const initialFlexGrow = col.flexGrow;
 
@@ -614,6 +626,8 @@ class Grid extends ElementMixin(
     if (this._debouncerHiddenChanged) {
       this._debouncerHiddenChanged.flush();
     }
+
+    this.__intrinsicWidthCache = new Map();
 
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
