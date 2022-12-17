@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -586,7 +586,12 @@ export const ColumnBaseMixin = (superClass) =>
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
       if (this._grid) {
-        this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
+        const row = headerCell.parentElement;
+        row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
+          row.__debounceUpdateHeaderFooterRowVisibility,
+          microTask,
+          () => this._grid.__updateHeaderFooterRowVisibility(row),
+        );
       }
     }
 
@@ -627,7 +632,12 @@ export const ColumnBaseMixin = (superClass) =>
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
       if (this._grid) {
-        this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
+        const row = footerCell.parentElement;
+        row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
+          row.__debounceUpdateHeaderFooterRowVisibility,
+          microTask,
+          () => this._grid.__updateHeaderFooterRowVisibility(row),
+        );
       }
     }
 
