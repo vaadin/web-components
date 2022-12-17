@@ -148,6 +148,18 @@ describe('column auto-width', () => {
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns);
   });
+
+  it('should update column width when recalculating widths', async () => {
+    grid.items = testItems;
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns, [74]);
+
+    // Update item text in first column
+    grid.items = [{ a: 'foo bar baz' }];
+    await nextFrame();
+    grid.recalculateColumnWidths();
+    expectColumnWidthsToBeOk(columns, [114]);
+  });
 });
 
 describe('tree column', () => {
