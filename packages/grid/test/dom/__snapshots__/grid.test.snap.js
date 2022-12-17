@@ -213,7 +213,7 @@ snapshots["vaadin-grid shadow default"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>
@@ -422,7 +422,7 @@ snapshots["vaadin-grid shadow selected"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>
@@ -630,7 +630,7 @@ snapshots["vaadin-grid shadow details opened"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>

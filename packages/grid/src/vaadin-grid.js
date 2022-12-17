@@ -7,8 +7,10 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -648,6 +650,11 @@ class Grid extends ElementMixin(
   _recalculateColumnWidths(cols) {
     // Flush to make sure DOM is up-to-date when measuring the column widths
     this.__virtualizer.flush();
+    [...this.$.header.children, ...this.$.footer.children].forEach((row) => {
+      if (row.__debounceUpdateHeaderFooterRowVisibility) {
+        row.__debounceUpdateHeaderFooterRowVisibility.flush();
+      }
+    });
 
     // Flush to account for any changes to the visibility of the columns
     if (this._debouncerHiddenChanged) {
@@ -860,7 +867,6 @@ class Grid extends ElementMixin(
             }
           }
           cell.setAttribute('part', `cell ${section}-cell`);
-          this.__updateHeaderFooterRowVisibility(row);
         }
 
         if (!cell._content.parentElement) {
@@ -869,6 +875,14 @@ class Grid extends ElementMixin(
         cell._vacant = false;
         cell._column = column;
       });
+
+    if (section !== 'body') {
+      row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
+        row.__debounceUpdateHeaderFooterRowVisibility,
+        microTask,
+        () => this.__updateHeaderFooterRowVisibility(row),
+      );
+    }
 
     // Might be empty if only cache was used
     this.appendChild(contentsFragment);
