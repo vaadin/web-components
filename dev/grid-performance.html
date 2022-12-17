@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid performance</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <style>
+      @keyframes content-ready {
+        to {
+          opacity: 1;
+        }
+      }
+
+      vaadin-grid-cell-content > * {
+        animation: content-ready 1s;
+      }
+    </style>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/text-field';
+      import '@vaadin/checkbox';
+
+      // Set up the grid
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = ({ page, pageSize }, cb) => {
+        const levelSize = 100;
+        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          return {
+            name: page * pageSize + i,
+          };
+        });
+
+        cb(pageItems, levelSize);
+      };
+
+      for (let i = 0; i < 200; i++) {
+        const column = document.createElement('vaadin-grid-column');
+        column.header = `Col ${i}`;
+        column.width = '140px';
+        column.flexShrink = 0;
+        column.renderer = (root, column, model) => {
+          if (!root.firstElementChild) {
+            root.innerHTML = `<vaadin-text-field style="width: 100px"></vaadin-text-field>`;
+          }
+          root.firstElementChild.value = `${i} - ${model.item.name}`;
+        };
+        grid.appendChild(column);
+      }
+
+      grid.firstElementChild.frozen = true;
+
+      // Render time counter
+      function whenRendered(grid) {
+        return new Promise((resolve) => {
+          let readyTimer;
+          const listener = (e) => {
+            if (e.animationName === 'content-ready' || e.propertyName === 'opacity') {
+              const endTime = performance.now();
+              readyTimer && clearTimeout(readyTimer);
+
+              if (!grid.loading) {
+                readyTimer = setTimeout(() => {
+                  grid.$.scroller.removeEventListener('animationstart', listener);
+                  grid.removeEventListener('animationstart', listener);
+                  // This resolves with the timestamp of the listener's last invocation.
+                  resolve(endTime);
+                  // The timeout needs to be large enough so it waits for everything to get rendered.
+                }, 1000);
+              }
+            }
+          };
+
+          grid.$.scroller.addEventListener('animationstart', listener);
+          grid.addEventListener('animationstart', listener);
+        });
+      }
+
+      whenRendered(grid).then((time) => {
+        document.querySelector('#render-time').textContent = `Rendered in ${Math.round(time)} ms`;
+      });
+
+      // FPS counter
+      const fpsElement = document.querySelector('#fps');
+
+      const times = [];
+      function refreshLoop() {
+        window.requestAnimationFrame(() => {
+          const now = performance.now();
+          while (times.length > 0 && times[0] <= now - 1000) {
+            times.shift();
+          }
+          times.push(now);
+          fpsElement.textContent = `FPS: ${times.length}`;
+          refreshLoop();
+        });
+      }
+      refreshLoop();
+    </script>
+
+    <vaadin-grid item-id-path="name"></vaadin-grid>
+
+    <div id="render-time"></div>
+
+    <div id="fps"></div>
+  </body>
+</html>
