@@ -166,6 +166,7 @@ describe('column groups', () => {
 
   function init(fixture) {
     grid = fixtureSync(fixtures[fixture]);
+    sinon.spy(grid, '__updateHeaderFooterRowVisibility');
     header = grid.$.header;
     body = grid.$.items;
     footer = grid.$.footer;
@@ -385,6 +386,11 @@ describe('column groups', () => {
       //  | group-0             | group-1                                  |          |
       init('nested');
       await nextResize(grid);
+    });
+
+    it('should update header and footer rows visibility once', () => {
+      // 6 header and footer rows are created
+      expect(grid.__updateHeaderFooterRowVisibility.callCount).to.equal(6);
     });
 
     it('should have right content in header', () => {
