@@ -101,9 +101,18 @@
         });
       }
       refreshLoop();
+
+      // Controls
+      const lazyColumns = document.querySelector('vaadin-checkbox');
+      lazyColumns.addEventListener('checked-changed', (e) => {
+        grid.lazyColumns = e.detail.value;
+      });
+      lazyColumns.checked = grid.lazyColumns;
     </script>
 
-    <vaadin-grid item-id-path="name"></vaadin-grid>
+    <vaadin-grid item-id-path="name" lazy-columns></vaadin-grid>
+
+    <vaadin-checkbox label="Lazy Columns" style="margin-top: 30px"></vaadin-checkbox>
 
     <div id="render-time"></div>
 
