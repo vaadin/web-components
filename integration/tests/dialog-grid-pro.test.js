@@ -83,7 +83,7 @@ const fixtures = {
       datePicker.click();
 
       await clickOverlay(datePicker);
-      grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+      grid._debouncerStopEdit?.flush();
 
       await nextFrame();
       expect(getCellEditor(dateCell)).to.be.ok;
@@ -99,7 +99,7 @@ const fixtures = {
 
       outsideClick();
 
-      grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+      grid._debouncerStopEdit?.flush();
 
       expect(getCellEditor(dateCell)).not.to.be.ok;
     });
@@ -111,7 +111,7 @@ const fixtures = {
       // Mimic clicking the dialog overlay
       focusout(datePicker);
       focusin(dialog.$.overlay);
-      grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+      grid._debouncerStopEdit?.flush();
 
       expect(getCellEditor(dateCell)).to.be.not.ok;
     });

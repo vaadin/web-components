@@ -184,7 +184,7 @@ describe('basic features', () => {
   // The following could not be tested if window is not focused.
   if (!window.document.hasFocus()) {
     // Try to get window focus.
-    window.top && window.top.focus();
+    window.top?.focus();
     window.focus();
   }
   (window.document.hasFocus() ? it : it.skip)('reorder should keep focused row', () => {

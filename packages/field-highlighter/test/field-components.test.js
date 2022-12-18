@@ -410,7 +410,9 @@ describe('field components', () => {
     });
 
     afterEach(() => {
-      date.opened && date.close();
+      if (date.opened) {
+        date.close();
+      }
     });
 
     it('should dispatch vaadin-highlight-show event on date picker focus', () => {

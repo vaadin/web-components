@@ -34,7 +34,7 @@ describe('items', () => {
     if (menu) {
       menu.__openListenerActive = true;
       const overlay = menu.$.overlay;
-      overlay.__openingHandler && overlay.__openingHandler();
+      overlay.__openingHandler?.();
     }
     const { right, bottom } = openTarget.getBoundingClientRect();
     fire(openTarget, menuOpenEvent, { x: right, y: bottom });

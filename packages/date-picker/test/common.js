@@ -68,7 +68,11 @@ export function close(datepicker) {
 
 export function idleCallback() {
   return new Promise((resolve) => {
-    window.requestIdleCallback ? window.requestIdleCallback(resolve) : setTimeout(resolve, 16);
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(resolve);
+    } else {
+      setTimeout(resolve, 16);
+    }
   });
 }
 
