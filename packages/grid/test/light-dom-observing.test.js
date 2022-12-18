@@ -330,12 +330,12 @@ describe('light dom observing', () => {
   }
 
   function expectFirstColumnHeader(columnName, level) {
-    level = level || 0;
+    level ||= 0;
     expect(getCellContent(getRows(header)[level].cells[0]).textContent).to.contain(`${columnName} header`);
   }
 
   function expectFirstColumnFooter(columnName, level) {
-    level = level || 0;
+    level ||= 0;
     const lastLevel = getRows(header).length - 1;
     expect(getCellContent(getRows(footer)[lastLevel - level].cells[0]).textContent).to.contain(`${columnName} footer`);
   }

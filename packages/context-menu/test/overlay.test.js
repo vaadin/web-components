@@ -29,7 +29,7 @@ describe('overlay', () => {
   });
 
   function contextmenu(x, y, shiftKey, target) {
-    shiftKey = shiftKey || false;
+    shiftKey ||= false;
     const e = new MouseEvent('contextmenu', {
       bubbles: true,
       cancelable: true,

@@ -29,7 +29,7 @@ describe('process templates', () => {
 
   describe('with template renderer', () => {
     beforeEach(() => {
-      window.Vaadin = window.Vaadin || {};
+      window.Vaadin ||= {};
       window.Vaadin.templateRendererCallback = sinon.spy();
     });
 

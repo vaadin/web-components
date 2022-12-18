@@ -805,7 +805,7 @@ export const DatePickerMixin = (subclass) =>
       this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
       // Have a default focused date
       this._ignoreFocusedDateChange = true;
-      this._overlayContent.focusedDate = this._overlayContent.focusedDate || this._overlayContent.initialPosition;
+      this._overlayContent.focusedDate ||= this._overlayContent.initialPosition;
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);

@@ -140,7 +140,7 @@ function getFirstHeaderCell() {
 }
 
 function focusWithMouse(element, mouseTarget) {
-  mouseTarget = mouseTarget || element;
+  mouseTarget ||= element;
   mouseDown(mouseTarget);
   element.focus();
   mouseUp(mouseTarget);

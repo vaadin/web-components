@@ -50,7 +50,7 @@ export function createFiles(arraySize, fileSize, contentType) {
  *     serverValidation: a function run once the file has been sent.
  */
 export function xhrCreator(c) {
-  c = c || {};
+  c ||= {};
   const cfg = {
     size: c.size || 100,
     connectTime: c.connectTime || 10,

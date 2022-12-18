@@ -238,7 +238,7 @@ export const makeSoloTouchEvent = (type, xy, node) => {
 };
 
 export const fire = (type, detail, options) => {
-  options = options || {};
+  options ||= {};
   detail = detail === null || detail === undefined ? {} : detail;
   const event = new Event(type, {
     bubbles: options.bubbles === undefined ? true : options.bubbles,

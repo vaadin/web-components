@@ -81,7 +81,7 @@ class Iconset extends ElementMixin(PolymerElement) {
   applyIcon(name) {
     // Create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
-    this._icons = this._icons || this.__createIconMap();
+    this._icons ||= this.__createIconMap();
     const icon = this._icons[this.__getIconId(name)];
     return {
       svg: cloneSvgNode(icon),

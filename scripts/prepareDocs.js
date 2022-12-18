@@ -42,7 +42,7 @@ function addMissingChangeEventDeclarations(analysis) {
         description: `Fired when the \`${property.name}\` property changes.`,
         metadata: {},
       };
-      element.events = element.events || [];
+      element.events ||= [];
       element.events.push(eventDeclaration);
     });
   });

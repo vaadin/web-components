@@ -97,7 +97,7 @@ export class SlotTargetController {
    * @private
    */
   __copyNodesToSlotTarget(nodes, slotTarget) {
-    this.__slotTargetClones = this.__slotTargetClones || [];
+    this.__slotTargetClones ||= [];
 
     nodes.forEach((node) => {
       // Clone the nodes and append the clones to the target

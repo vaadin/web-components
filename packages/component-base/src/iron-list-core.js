@@ -491,9 +491,9 @@ export const ironList = {
       this._physicalIndexForKey = {};
       this._firstVisibleIndexVal = null;
       this._lastVisibleIndexVal = null;
-      this._physicalCount = this._physicalCount || 0;
-      this._physicalItems = this._physicalItems || [];
-      this._physicalSizes = this._physicalSizes || [];
+      this._physicalCount ||= 0;
+      this._physicalItems ||= [];
+      this._physicalSizes ||= [];
       this._physicalStart = 0;
       if (this._scrollTop > this._scrollOffset) {
         this._resetScrollPosition(0);
@@ -639,8 +639,8 @@ export const ironList = {
       this._physicalBottom +
       Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage;
 
-    forceUpdate = forceUpdate || this._scrollHeight === 0;
-    forceUpdate = forceUpdate || this._scrollPosition >= this._estScrollHeight - this._physicalSize;
+    forceUpdate ||= this._scrollHeight === 0;
+    forceUpdate ||= this._scrollPosition >= this._estScrollHeight - this._physicalSize;
     // Amortize height adjustment, so it won't trigger large repaints too often.
     if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._viewportHeight) {
       this.$.items.style.height = `${this._estScrollHeight}px`;
@@ -740,7 +740,7 @@ export const ironList = {
   },
 
   _debounce(name, cb, asyncModule) {
-    this._debouncers = this._debouncers || {};
+    this._debouncers ||= {};
     this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
     enqueueDebouncer(this._debouncers[name]);
   },
