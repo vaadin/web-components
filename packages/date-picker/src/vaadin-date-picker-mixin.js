@@ -222,7 +222,7 @@ export const DatePickerMixin = (subclass) =>
               cancel: 'Cancel',
               referenceDate: '',
               formatDate(d) {
-                const yearStr = String(d.year).replace(/\d+/, (y) => '0000'.substr(y.length) + y);
+                const yearStr = String(d.year).replace(/\d+/u, (y) => '0000'.substr(y.length) + y);
                 return [d.month + 1, d.day, yearStr].join('/');
               },
               parseDate(text) {

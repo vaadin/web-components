@@ -906,17 +906,17 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     let content = editor.innerHTML;
 
     // Remove Quill classes, e.g. ql-syntax, except for align
-    content = content.replace(/\s*ql-(?!align)[\w-]*\s*/g, '');
+    content = content.replace(/\s*ql-(?!align)[\w-]*\s*/gu, '');
 
     // Replace Quill align classes with inline styles
     [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
       content = content.replace(
-        new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'),
+        new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'gu'),
         ` style="text-align: ${align}"`,
       );
     });
 
-    content = content.replace(/ class=""/g, '');
+    content = content.replace(/ class=""/gu, '');
 
     this._setHtmlValue(content);
   }

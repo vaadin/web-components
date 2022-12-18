@@ -33,7 +33,7 @@ describe('grid editor template', () => {
     column.editModeRenderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(column)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid-pro-edit-column \/>\.$/,
+      /^Cannot use both a template and a renderer for <vaadin-grid-pro-edit-column \/>\.$/u,
     );
   });
 });

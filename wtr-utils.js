@@ -10,8 +10,8 @@ const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/p
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
-  /^WARNING: Since Vaadin .* is deprecated.*/,
-  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/,
+  /^WARNING: Since Vaadin .* is deprecated.*/u,
+  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/u,
 ];
 
 const filterBrowserLogs = (log) => {
@@ -200,13 +200,13 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder;
   if (testFile.includes('-styles')) {
-    const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
+    const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/u);
     folder = `${match[1]}screenshots`;
   } else if (testFile.includes('icons')) {
     folder = 'icons/test/visual/screenshots';
   } else {
-    const match = testFile.match(/\/packages\/(.+)\.test\.js/);
-    folder = match[1].replace(/(lumo|material)/, '$1/screenshots');
+    const match = testFile.match(/\/packages\/(.+)\.test\.js/u);
+    folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };

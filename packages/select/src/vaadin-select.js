@@ -515,7 +515,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    */
   _onKeyDown(e) {
     if (!this.readonly && !this.opened) {
-      if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
+      if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
         e.preventDefault();
         this.opened = true;
       } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
@@ -538,7 +538,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    * @protected
    */
   _onKeyDownInside(e) {
-    if (/^(Tab)$/.test(e.key)) {
+    if (/^(Tab)$/u.test(e.key)) {
       this.opened = false;
     }
   }

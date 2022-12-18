@@ -128,13 +128,13 @@ describe('vaadin-details', () => {
     });
 
     it('should set aria-controls on toggle button', () => {
-      const idRegex = /^content-vaadin-details-\d+$/;
+      const idRegex = /^content-vaadin-details-\d+$/u;
       expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
     });
   });
 
   describe('unique IDs', () => {
-    const idRegex = /^content-vaadin-details-\d+$/;
+    const idRegex = /^content-vaadin-details-\d+$/u;
     let container, details;
 
     beforeEach(() => {

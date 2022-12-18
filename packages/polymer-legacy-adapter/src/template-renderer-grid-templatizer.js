@@ -36,7 +36,7 @@ export class GridTemplatizer extends Templatizer {
 
     const index = this.__grid.items.indexOf(instance.item);
 
-    path = path.replace(/^item\./, '');
+    path = path.replace(/^item\./u, '');
     path = `items.${index}.${path}`;
 
     this.__grid.notifyPath(path, value);

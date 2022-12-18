@@ -1321,7 +1321,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
               }
 
               // Strip off host selectors that target individual instances
-              effectiveCss = effectiveCss.replace(/:host\(.+?\)/g, (match) => {
+              effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
                 const selector = match.substr(6, match.length - 7);
                 return this.matches(selector) ? '' : match;
               });

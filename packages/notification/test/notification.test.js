@@ -96,7 +96,7 @@ describe('vaadin-notification', () => {
       document.body.click();
     });
 
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const iOS = /iPad|iPhone|iPod/u.test(navigator.userAgent);
     (iOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
       let container;
 

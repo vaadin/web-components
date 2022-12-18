@@ -70,7 +70,7 @@ const runTests = (baseClass) => {
   let element, label, error, helper, input;
 
   describe('error message', () => {
-    const ID_REGEX = new RegExp(`^error-message-${tag}-\\d+$`);
+    const ID_REGEX = new RegExp(`^error-message-${tag}-\\d+$`, 'u');
 
     describe('default', () => {
       beforeEach(async () => {
@@ -242,7 +242,7 @@ const runTests = (baseClass) => {
   describe('helper', () => {
     let element, helper;
 
-    const ID_REGEX = new RegExp(`^helper-${tag}-\\d+$`);
+    const ID_REGEX = new RegExp(`^helper-${tag}-\\d+$`, 'u');
 
     describe('default', () => {
       beforeEach(async () => {

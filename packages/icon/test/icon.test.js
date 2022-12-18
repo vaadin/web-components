@@ -13,7 +13,7 @@ describe('vaadin-icon', () => {
   let icon, svgElement;
 
   function expectIcon(content) {
-    expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/g, '')).to.equal(content);
+    expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/gu, '')).to.equal(content);
   }
 
   describe('custom element definition', () => {
@@ -144,7 +144,7 @@ describe('vaadin-icon', () => {
       it('should render icon from the iconset', () => {
         icons.forEach((svgIcon) => {
           icon.icon = svgIcon.getAttribute('id');
-          expectIcon(svgIcon.outerHTML.replace(/ id="[^\s]+"/, ''));
+          expectIcon(svgIcon.outerHTML.replace(/ id="[^\s]+"/u, ''));
         });
       });
 

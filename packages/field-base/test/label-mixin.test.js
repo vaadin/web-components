@@ -12,7 +12,7 @@ const runTests = (baseClass) => {
 
   let element, label;
 
-  const ID_REGEX = new RegExp(`^label-${tag}-\\d+$`);
+  const ID_REGEX = new RegExp(`^label-${tag}-\\d+$`, 'u');
 
   describe('default', () => {
     beforeEach(async () => {

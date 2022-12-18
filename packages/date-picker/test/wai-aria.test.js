@@ -81,7 +81,7 @@ describe('WAI-ARIA', () => {
       monthCalendar.month = new Date();
       await nextFrame();
       const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
-      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
+      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/u);
     });
   });
 });

@@ -11,7 +11,7 @@ function getCustomProperties() {
 
   styleModules.forEach((module) => {
     const content = fs.readFileSync(path.join(PACKAGE_BASE, `${module}.js`), 'utf8');
-    const customPropertyDeclarationRegex = /--[\w\d-]+:.*;/g;
+    const customPropertyDeclarationRegex = /--[\w\d-]+:.*;/gu;
     const propertyDeclarations = content.match(customPropertyDeclarationRegex);
     propertyDeclarations.forEach((propertyDeclaration) => {
       // Avoid duplicate property declarations from dark theme
@@ -34,15 +34,15 @@ function getUtilityClasses() {
     .filter((module) => module.endsWith('.js'))
     .forEach((module) => {
       const content = fs.readFileSync(path.join(PACKAGE_BASE, 'utilities', module), 'utf8');
-      const cssSectionRegex = /css`((.|\s)*?)`/gm;
+      const cssSectionRegex = /css`((.|\s)*?)`/gmu;
       let match;
 
       while ((match = cssSectionRegex.exec(content))) {
         let section = match[1];
         // Remove escape backslash
-        section = section.replace(/\\\\/g, '\\');
+        section = section.replace(/\\\\/gu, '\\');
         // Unindent
-        section = section.replace(/\n\s{2}/g, '\n');
+        section = section.replace(/\n\s{2}/gu, '\n');
         result.push(section);
       }
     });
@@ -53,14 +53,14 @@ function getUtilityClasses() {
 const customProperties = getCustomProperties();
 const utilityClasses = getUtilityClasses();
 
-let result = `/* This file contains declarations for CSS custom properties and utility 
- * classes of the Lumo theme in order to provide auto-complete support 
+let result = `/* This file contains declarations for CSS custom properties and utility
+ * classes of the Lumo theme in order to provide auto-complete support
  * for IDEs.
- * 
+ *
  * NOTE: This file is only intended to provide auto-complete support,
  * do not include it into an HTML page!
  */
- 
+
  `;
 result += '/* Custom CSS properties */\n';
 result += ':host {\n';

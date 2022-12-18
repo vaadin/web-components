@@ -128,7 +128,7 @@ export const DragAndDropMixin = (superClass) =>
           // Safari doesn't position drag images from transformed
           // elements properly so we need to switch to use top temporarily
           const transform = row.style.transform;
-          row.style.top = /translateY\((.*)\)/.exec(transform)[1];
+          row.style.top = /translateY\((.*)\)/u.exec(transform)[1];
           row.style.transform = 'none';
           requestAnimationFrame(() => {
             row.style.top = '';

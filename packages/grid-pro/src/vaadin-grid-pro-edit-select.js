@@ -53,7 +53,7 @@ class GridProEditSelect extends Select {
   _onKeyDown(e) {
     super._onKeyDown(e);
 
-    if (this.options.length === 0 && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
+    if (this.options.length === 0 && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/u.test(e.key)) {
       console.warn('Missing "editorOptions" for <vaadin-grid-pro-edit-column> select editor!');
     }
     // Event handled in select, stop here

@@ -167,7 +167,7 @@ export const ScrollMixin = (superClass) =>
       }
 
       if (this.__isRTL) {
-        overflow = overflow.replace(/start|end/gi, (matched) => {
+        overflow = overflow.replace(/start|end/giu, (matched) => {
           return matched === 'start' ? 'end' : 'start';
         });
       }

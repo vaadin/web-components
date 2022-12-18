@@ -92,9 +92,9 @@ class CrudForm extends IncludedMixin(FormLayout) {
   __capitalize(path) {
     return path
       .toLowerCase()
-      .replace(/([^\w]+)/g, ' ')
+      .replace(/([^\w]+)/gu, ' ')
       .trim()
-      .replace(/^./, (c) => c.toUpperCase());
+      .replace(/^./u, (c) => c.toUpperCase());
   }
 
   /** @private */

@@ -394,7 +394,7 @@ MockHttpRequest.prototype = {
   // See http://blog.stevenlevithan.com/archives/parseuri
   parseUri(str) {
     const pattern =
-      /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
+      /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/u;
     const key = [
       'source',
       'protocol',
@@ -411,7 +411,7 @@ MockHttpRequest.prototype = {
       'query',
       'anchor',
     ];
-    const querypattern = /(?:^|&)([^&=]*)=?([^&]*)/g;
+    const querypattern = /(?:^|&)([^&=]*)=?([^&]*)/gu;
 
     const match = pattern.exec(str);
     const uri = {};

@@ -148,10 +148,10 @@ class CrudGrid extends IncludedMixin(Grid) {
   _generateHeader(path) {
     return path
       .substr(path.lastIndexOf('.') + 1)
-      .replace(/([A-Z])/g, '-$1')
+      .replace(/([A-Z])/gu, '-$1')
       .toLowerCase()
-      .replace(/-/g, ' ')
-      .replace(/^./, (match) => match.toUpperCase());
+      .replace(/-/gu, ' ')
+      .replace(/^./u, (match) => match.toUpperCase());
   }
 
   /** @private */
@@ -277,9 +277,9 @@ class CrudGrid extends IncludedMixin(Grid) {
   __capitalize(path) {
     return path
       .toLowerCase()
-      .replace(/([^\w]+)/g, ' ')
+      .replace(/([^\w]+)/gu, ' ')
       .trim()
-      .replace(/^./, (c) => c.toUpperCase());
+      .replace(/^./u, (c) => c.toUpperCase());
   }
 
   /** @private */
