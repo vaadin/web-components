@@ -850,11 +850,7 @@ class Grid extends ElementMixin(
       });
 
     if (section !== 'body') {
-      row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
-        row.__debounceUpdateHeaderFooterRowVisibility,
-        microTask,
-        () => this.__updateHeaderFooterRowVisibility(row),
-      );
+      this.__debounceUpdateHeaderFooterRowVisibility(row);
     }
 
     // Might be empty if only cache was used
@@ -862,6 +858,18 @@ class Grid extends ElementMixin(
 
     this._frozenCellsChanged();
     this._updateFirstAndLastColumnForRow(row);
+  }
+
+  /**
+   * @param {HTMLTableRowElement} row
+   * @protected
+   */
+  __debounceUpdateHeaderFooterRowVisibility(row) {
+    row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
+      row.__debounceUpdateHeaderFooterRowVisibility,
+      microTask,
+      () => this.__updateHeaderFooterRowVisibility(row),
+    );
   }
 
   /**

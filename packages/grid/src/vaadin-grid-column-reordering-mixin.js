@@ -374,7 +374,7 @@ export const ColumnReorderingMixin = (superClass) =>
      */
     _swapColumnOrders(column1, column2) {
       [column1._order, column2._order] = [column2._order, column1._order];
-      this._updateFrozenColumn();
+      this._debounceUpdateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
 

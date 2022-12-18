@@ -346,6 +346,7 @@ describe('reordering simple grid', () => {
       const cell = getCellByCellContent(headerContent[0]);
       expect(cell.hasAttribute('last-frozen')).to.be.false;
       dragOver(headerContent[0], headerContent[1]);
+      flushGrid(grid);
       expect(cell.hasAttribute('last-frozen')).to.be.true;
     });
 
@@ -383,6 +384,7 @@ describe('reordering simple grid', () => {
       const cell = getCellByCellContent(headerContent[3]);
       expect(cell.hasAttribute('first-frozen-to-end')).to.be.false;
       dragOver(headerContent[3], headerContent[2]);
+      flushGrid(grid);
       expect(cell.hasAttribute('first-frozen-to-end')).to.be.true;
     });
 
