@@ -201,10 +201,17 @@ export const ScrollMixin = (superClass) =>
         this._frozenToEndCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen-to-end]'));
         this.__updateHorizontalScrollPosition();
       });
-      this._updateFrozenColumn();
+      this._debounceUpdateFrozenColumn();
     }
 
     /** @protected */
+    _debounceUpdateFrozenColumn() {
+      this.__debounceUpdateFrozenColumn = Debouncer.debounce(this.__debounceUpdateFrozenColumn, microTask, () =>
+        this._updateFrozenColumn(),
+      );
+    }
+
+    /** @private */
     _updateFrozenColumn() {
       if (!this._columnTree) {
         return;

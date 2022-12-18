@@ -15,6 +15,9 @@ export const flushGrid = (grid) => {
   if (grid._debouncerApplyCachedData) {
     grid._debouncerApplyCachedData.flush();
   }
+  if (grid.__debounceUpdateFrozenColumn) {
+    grid.__debounceUpdateFrozenColumn.flush();
+  }
 
   grid.__virtualizer.flush();
 };
