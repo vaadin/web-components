@@ -62,6 +62,7 @@ const transformsEqual = (element, transform) => {
       expect(columns[0]._lastFrozen).to.be.true;
 
       columns[0].frozen = false;
+      flushGrid(grid);
 
       expect(columns[0]._lastFrozen).to.be.false;
     });
@@ -94,6 +95,7 @@ const transformsEqual = (element, transform) => {
           grid._columnTree[0][1].frozen = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
@@ -150,12 +152,14 @@ const transformsEqual = (element, transform) => {
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).to.be.true;
 
           grid._columnTree[0][2].hidden = true;
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
@@ -198,6 +202,7 @@ const transformsEqual = (element, transform) => {
       expect(columns[2]._firstFrozenToEnd).to.be.true;
 
       columns[2].frozenToEnd = false;
+      flushGrid(grid);
 
       expect(columns[2]._firstFrozenToEnd).to.be.false;
     });
@@ -246,6 +251,7 @@ const transformsEqual = (element, transform) => {
           grid._columnTree[0][1].frozenToEnd = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
@@ -287,12 +293,14 @@ const transformsEqual = (element, transform) => {
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
 
           grid._columnTree[0][0].hidden = true;
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
