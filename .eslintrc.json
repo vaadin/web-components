@@ -130,6 +130,7 @@
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "grouped-accessor-pairs": ["error", "getBeforeSet"],
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "logical-assignment-operators": "error",
     "max-classes-per-file": ["error", 3],
     "max-params": ["error", 5],
     "no-bitwise": "off",
