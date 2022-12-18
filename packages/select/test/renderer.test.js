@@ -14,10 +14,9 @@ describe('renderer', () => {
   function generateRendererWithItems(items) {
     return function (root, select) {
       if (root.firstChild) {
-        root.firstChild.items &&
-          root.firstChild.items.forEach((item, index) => {
-            item.textContent = items[index] + (select.__testVar || '');
-          });
+        root.firstChild.items?.forEach((item, index) => {
+          item.textContent = items[index] + (select.__testVar || '');
+        });
         return;
       }
 

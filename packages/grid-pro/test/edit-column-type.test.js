@@ -258,7 +258,7 @@ describe('edit column editor type', () => {
 
       it('should not throw when moving focus out of the select', () => {
         focusout(editor);
-        grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+        grid._debouncerStopEdit?.flush();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
       });
 

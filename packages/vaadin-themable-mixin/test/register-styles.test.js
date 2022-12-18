@@ -109,13 +109,14 @@ describe('registerStyles', () => {
   });
 
   it('should throw if strings are interpolated in the literal', () => {
-    expect(() => {
-      css`
-        :host {
-          color: rgb(${'255'}, 0, 0);
-        }
-      `;
-    }).to.throw(Error);
+    expect(
+      () =>
+        css`
+          :host {
+            color: rgb(${'255'}, 0, 0);
+          }
+        `,
+    ).to.throw(Error);
   });
 
   describe('style module support', () => {
