@@ -76,6 +76,7 @@ describe('column resizing', () => {
       const column = grid._columnTree[0][1];
       column.resizable = true;
       column.frozenToEnd = true;
+      flushGrid(grid);
       handle = headerCells[1].querySelector('[part~="resize-handle"]');
 
       const options = { node: handle };
