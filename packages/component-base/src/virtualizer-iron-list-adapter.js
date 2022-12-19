@@ -376,7 +376,7 @@ export class IronListAdapter {
       deltaY *= this._scrollPageHeight;
     }
 
-    this._deltaYAcc = this._deltaYAcc || 0;
+    this._deltaYAcc ||= 0;
 
     if (this._wheelAnimationFrame) {
       // Accumulate wheel delta while a frame is being processed

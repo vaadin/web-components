@@ -470,7 +470,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     if (this._overlayElement) {
       this._setDimension(name, value);
     } else {
-      this._dimensions = this._dimensions || {};
+      this._dimensions ||= {};
       this._dimensions[name] = value;
     }
   }

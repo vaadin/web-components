@@ -644,7 +644,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     const initialPosition = this._monthScroller.position;
 
     const smoothScroll = (timestamp) => {
-      start = start || timestamp;
+      start ||= timestamp;
       const currentTime = timestamp - start;
 
       if (currentTime < this.scrollDuration) {
@@ -1004,7 +1004,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     const targetMonth = dateToFocus.getMonth();
 
-    dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
+    dateToFocus.setDate((this._focusedMonthDate ||= focus.getDate()));
     if (dateToFocus.getMonth() !== targetMonth) {
       dateToFocus.setDate(0);
     }

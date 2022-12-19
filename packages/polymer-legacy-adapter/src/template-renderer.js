@@ -123,7 +123,7 @@ function observeTemplates(component) {
 /**
  * Public API
  */
-window.Vaadin = window.Vaadin || {};
+window.Vaadin ||= {};
 window.Vaadin.templateRendererCallback = (component) => {
   processTemplates(component);
   observeTemplates(component);

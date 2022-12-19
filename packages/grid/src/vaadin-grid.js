@@ -805,7 +805,7 @@ class Grid extends ElementMixin(
    */
   // eslint-disable-next-line max-params
   _updateRow(row, columns, section, isColumnRow, noNotify) {
-    section = section || 'body';
+    section ||= 'body';
 
     const contentsFragment = document.createDocumentFragment();
 
@@ -821,7 +821,7 @@ class Grid extends ElementMixin(
 
         if (section === 'body') {
           // Body
-          column._cells = column._cells || [];
+          column._cells ||= [];
           cell = column._cells.find((cell) => cell._vacant);
           if (!cell) {
             cell = this._createCell('td', column);
@@ -832,7 +832,7 @@ class Grid extends ElementMixin(
 
           if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
-            this._detailsCells = this._detailsCells || [];
+            this._detailsCells ||= [];
             const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
             if (this._detailsCells.indexOf(detailsCell) === -1) {
               this._detailsCells.push(detailsCell);
@@ -858,7 +858,7 @@ class Grid extends ElementMixin(
             row.appendChild(cell);
             column[`_${section}Cell`] = cell;
           } else {
-            column._emptyCells = column._emptyCells || [];
+            column._emptyCells ||= [];
             cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(tagName);
             cell._column = column;
             row.appendChild(cell);

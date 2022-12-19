@@ -1264,7 +1264,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           this.items.push(item);
         }
       } else {
-        this.editedItem = this.editedItem || {};
+        this.editedItem ||= {};
         Object.assign(this.editedItem, item);
       }
       this._grid.clearCache();
@@ -1316,7 +1316,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         .split('.')
         .slice(0, -1)
         .reduce((o, p) => {
-          o[p] = o[p] || {};
+          o[p] ||= {};
           return o[p];
         }, obj);
       this.set(path, val, obj);

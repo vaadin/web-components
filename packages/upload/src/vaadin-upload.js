@@ -641,7 +641,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files = files || this.files;
+    files ||= this.files;
     files = files.filter((file) => !file.complete);
     Array.prototype.forEach.call(files, this._uploadFile.bind(this));
   }

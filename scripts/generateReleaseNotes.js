@@ -106,10 +106,10 @@ function parseLog(log) {
             commit.bfp = true;
           }
           if (/(fixes|fix|related-to|connected-to|warranty)/i.test(k)) {
-            commit.footers.fixes = commit.footers.fixes || [];
+            commit.footers.fixes ||= [];
             commit.footers.fixes.push(...result[2].split(/[, ]+/).filter((s) => /\d+/.test(s)));
           } else {
-            commit.footers[k] = commit.footers[k] || [];
+            commit.footers[k] ||= [];
             commit.footers[k].push(result[2]);
           }
           break;

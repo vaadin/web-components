@@ -108,7 +108,7 @@ export function monthsEqual(date1, date2) {
 
 export function getFirstVisibleItem(scroller, bufferOffset) {
   const children = [];
-  bufferOffset = bufferOffset || 0;
+  bufferOffset ||= 0;
 
   scroller._buffers.forEach((buffer) => {
     [...buffer.children].forEach((slot) => {

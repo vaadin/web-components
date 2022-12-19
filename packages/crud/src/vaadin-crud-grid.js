@@ -289,7 +289,7 @@ class CrudGrid extends IncludedMixin(Grid) {
         .split('.')
         .slice(0, -1)
         .reduce((o, p) => {
-          o[p] = o[p] || {};
+          o[p] ||= {};
           return o[p];
         }, obj);
       this.set(path, val, obj);
