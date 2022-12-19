@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer - variable row height', () => {
@@ -41,5 +42,130 @@ describe('virtualizer - variable row height', () => {
     }
 
     expect(virtualizer.firstVisibleIndex).to.equal(0);
+  });
+});
+
+describe('virtualizer - variable row height - large variance', () => {
+  let virtualizer;
+  let scrollTarget;
+  let expandedItems;
+  let updateElement;
+
+  beforeEach(() => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 300px; width: 200px;">
+        <div></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+    expandedItems = [];
+
+    updateElement = sinon.spy((el, index) => {
+      if (expandedItems.includes(index)) {
+        el.style.height = '600px';
+      } else {
+        el.style.height = '30px';
+      }
+      el.__index = index;
+      el.textContent = `Item ${index}`;
+    });
+
+    virtualizer = new Virtualizer({
+      createElements: (count) =>
+        Array.from(Array(count)).map(() => {
+          const el = document.createElement('div');
+          el.classList.add('item');
+          el.style.backgroundColor = 'red';
+          el.style.width = '100%';
+          return el;
+        }),
+      updateElement,
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 200;
+
+    // Expand the first and the last item
+    expandedItems = [0, virtualizer.size - 1];
+    virtualizer.update();
+    virtualizer.scrollToIndex(0);
+  });
+
+  it('should reveal new items when scrolling downwards', async () => {
+    // Scroll downwards in small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop += 100;
+      await nextFrame();
+    }
+
+    // Get the item at the botton of the viewport
+    const scrollTargetRect = scrollTarget.getBoundingClientRect();
+    const itemAtBottom = document.elementFromPoint(scrollTargetRect.left + 1, scrollTargetRect.bottom - 1);
+
+    // Expect the item to be an actual item element
+    expect(itemAtBottom.classList.contains('item')).to.be.true;
+  });
+
+  it('should reveal new items when scrolling upwards', async () => {
+    // Scroll to end
+    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+
+    // Scroll upwards in small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop -= 100;
+      await nextFrame();
+    }
+
+    // Get the item at the top of the viewport
+    const scrollTargetRect = scrollTarget.getBoundingClientRect();
+    const itemAtTop = document.elementFromPoint(scrollTargetRect.left + 1, scrollTargetRect.top + 1);
+
+    // Expect the item to be an actual item element
+    expect(itemAtTop.classList.contains('item')).to.be.true;
+  });
+
+  it('should not update the item at last index', async () => {
+    updateElement.resetHistory();
+
+    // Scroll downwards in two small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop += 100;
+      await nextFrame();
+    }
+
+    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+    expect(updatedIndexes).not.to.include(virtualizer.size - 1);
+  });
+
+  it('should not update the item at first index', async () => {
+    // Scroll to end
+    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    updateElement.resetHistory();
+
+    // Scroll upwards in two small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop -= 100;
+      await nextFrame();
+    }
+
+    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+    expect(updatedIndexes).not.to.include(0);
+  });
+
+  it('should allow scrolling to end of a padded scroll target', async () => {
+    scrollTarget.style.padding = '60px 0 ';
+
+    // Scroll to last item
+    virtualizer.scrollToIndex(virtualizer.size - 1);
+    await nextFrame();
+    await nextFrame();
+    // Manually scroll to end
+    const targetScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
+    scrollTarget.scrollTop = targetScrollTop;
+    await nextFrame();
+    await nextFrame();
+
+    expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
   });
 });

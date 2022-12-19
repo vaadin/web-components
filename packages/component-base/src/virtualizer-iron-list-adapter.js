@@ -341,6 +341,28 @@ export class IronListAdapter {
           this._physicalStart += reusables.indexes.length;
         }
         this._resizeHandler();
+      } else if (!this.__ignoreEmptyReusables) {
+        this.__ignoreEmptyReusables = true;
+        // After running super._scrollHandler, work around an iron-list issue with invalid item positioning.
+        // See https://github.com/vaadin/flow-components/issues/4306
+        const physicalTopBelowTop = this._physicalTop > this._scrollTop;
+        const physicalBottomAboveBottom = this._physicalBottom < this._scrollBottom;
+
+        const firstIndexVisible = this.firstVisibleIndex === 0;
+        const lastIndexVisible = this.lastVisibleIndex === this.size - 1;
+
+        if ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible)) {
+          // Record the current first visible index
+          const fvi = this.firstVisibleIndex;
+          // Temporarily scroll away to the other end of the list
+          this.__preventElementUpdates = true;
+          this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
+          this.__preventElementUpdates = false;
+          // Scroll back to the original first visible index
+          // TODO: With the correct setup, can this go to an infinite loop?
+          this.scrollToIndex(fvi);
+        }
+        this.__ignoreEmptyReusables = false;
       }
     }
 
