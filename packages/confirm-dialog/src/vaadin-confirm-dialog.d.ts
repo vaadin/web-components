@@ -109,9 +109,10 @@ declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMi
   noCloseOnEsc: boolean;
 
   /**
-   * Whether to show cancel button or not.
+   * Whether to show reject button or not.
+   * @attr {boolean} reject-button-visible
    */
-  reject: boolean;
+  rejectButtonVisible: boolean;
 
   /**
    * Text displayed on reject-button.
@@ -129,8 +130,9 @@ declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMi
 
   /**
    * Whether to show cancel button or not.
+   * @attr {boolean} cancel-button-visible
    */
-  cancel: boolean;
+  cancelButtonVisible: boolean;
 
   /**
    * Text displayed on cancel-button.

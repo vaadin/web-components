@@ -250,17 +250,17 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should show reject button when reject is true', () => {
-        confirm.reject = true;
+        confirm.rejectButtonVisible = true;
         expect(rejectButton.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should reflect reject property to attribute', () => {
-        confirm.reject = true;
-        expect(confirm.hasAttribute('reject')).to.be.true;
+      it('should reflect rejectButtonVisible property to attribute', () => {
+        confirm.rejectButtonVisible = true;
+        expect(confirm.hasAttribute('reject-button-visible')).to.be.true;
       });
 
       it('should close dialog on reject button click', () => {
-        confirm.reject = true;
+        confirm.rejectButtonVisible = true;
         rejectButton.click();
         expect(confirm.opened).to.be.false;
       });
@@ -296,17 +296,17 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should show cancel button when cancel is true', () => {
-        confirm.cancel = true;
+        confirm.cancelButtonVisible = true;
         expect(cancelButton.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should reflect cancel property to attribute', () => {
-        confirm.cancel = true;
-        expect(confirm.hasAttribute('cancel')).to.be.true;
+      it('should reflect cancelButtonVisible property to attribute', () => {
+        confirm.cancelButtonVisible = true;
+        expect(confirm.hasAttribute('cancel-button-visible')).to.be.true;
       });
 
       it('should close dialog on cancel button click', () => {
-        confirm.cancel = true;
+        confirm.cancelButtonVisible = true;
         cancelButton.click();
         expect(confirm.opened).to.be.false;
       });
@@ -408,7 +408,7 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should dispatch cancel event on cancel button click', () => {
-      confirm.cancel = true;
+      confirm.cancelButtonVisible = true;
       const spy = sinon.spy();
       confirm.addEventListener('cancel', spy);
       overlay.querySelector('[slot="cancel-button"]').click();
@@ -416,7 +416,7 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should dispatch reject event on reject button click', () => {
-      confirm.reject = true;
+      confirm.rejectButtonVisible = true;
       const spy = sinon.spy();
       confirm.addEventListener('reject', spy);
       overlay.querySelector('[slot="reject-button"]').click();
