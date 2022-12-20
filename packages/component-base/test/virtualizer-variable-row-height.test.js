@@ -194,4 +194,17 @@ describe('virtualizer - variable row height - large variance', () => {
 
     expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
   });
+
+  it('should allow scrolling to start', async () => {
+    // Expand every 10th item
+    expandedItems = Array.from(Array(virtualizer.size).keys()).filter((index) => index % 10 === 0);
+
+    // Make a minimal scroll sequence that caused an issue before the fix
+    for (const scrollTop of [0, 2000, 0, 0]) {
+      scrollTarget.scrollTop = scrollTop;
+      await nextFrame();
+    }
+
+    expect(virtualizer.firstVisibleIndex).to.equal(0);
+  });
 });
