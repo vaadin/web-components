@@ -34,6 +34,7 @@ export class IronListAdapter {
     this.timeouts = {
       SCROLL_REORDER: 500,
       IGNORE_WHEEL: 500,
+      FIX_INVALID_ITEM_POSITIONING: 100,
     };
 
     this.__resizeObserver = new ResizeObserver(() => this._resizeHandler());
@@ -345,39 +346,14 @@ export class IronListAdapter {
           this._physicalStart += reusables.indexes.length;
         }
         this._resizeHandler();
-      } else {
-        // After running super._scrollHandler, work around an iron-list issue with invalid item positioning.
-        // See https://github.com/vaadin/flow-components/issues/4306
-
-        // Check if the first physical item element is below the top of the viewport
-        const physicalTopBelowTop = this._physicalTop > this._scrollTop;
-        // Check if the last physical item element is above the bottom of the viewport
-        const physicalBottomAboveBottom = this._physicalBottom < this._scrollBottom;
-
-        // Check if the first index is visible
-        const firstIndexVisible = this.adjustedFirstVisibleIndex === 0;
-        // Check if the last index is visible
-        const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
-
-        if (
-          !this.__ignoreInvalidItemPositionState &&
-          ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible))
-        ) {
-          // Invalid state! Try to recover.
-          this.__ignoreInvalidItemPositionState = true;
-
-          // Record the current first visible index
-          const fvi = this.adjustedFirstVisibleIndex;
-          // Temporarily scroll to the other end of the list
-          this.__preventElementUpdates = true;
-          this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
-          this.__preventElementUpdates = false;
-          // Scroll back to the original first visible index
-          this.scrollToIndex(fvi);
-          this.__ignoreInvalidItemPositionState = false;
-        }
       }
     }
+
+    this.__fixInvalidItemPositioningDebouncer = Debouncer.debounce(
+      this.__fixInvalidItemPositioningDebouncer,
+      timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
+      () => this.__fixInvalidItemPositioning(),
+    );
 
     if (this.reorderElements) {
       this.__scrollReorderDebouncer = Debouncer.debounce(
@@ -393,6 +369,45 @@ export class IronListAdapter {
     // add some scroll offset to enable the user to continue scrolling.
     if (this._scrollTop === 0 && this.firstVisibleIndex !== 0) {
       this._scrollTop = 1;
+    }
+  }
+
+  /**
+   * Work around an iron-list issue with invalid item positioning.
+   * See https://github.com/vaadin/flow-components/issues/4306
+   * @private
+   */
+  __fixInvalidItemPositioning() {
+    // Check if the first physical item element is below the top of the viewport
+    const physicalTopBelowTop = this._physicalTop > this._scrollTop;
+    // Check if the last physical item element is above the bottom of the viewport
+    const physicalBottomAboveBottom = this._physicalBottom < this._scrollBottom;
+
+    // Check if the first index is visible
+    const firstIndexVisible = this.adjustedFirstVisibleIndex === 0;
+    // Check if the last index is visible
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+
+    if (
+      !this.__ignoreInvalidItemPositionState &&
+      ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible))
+    ) {
+      // Invalid state! Try to recover.
+      this.__ignoreInvalidItemPositionState = true;
+
+      // Record the current first visible index
+      let fvi = this.adjustedFirstVisibleIndex;
+      if (fvi === 0) {
+        // If the first visible index is 0, record the last visible index instead
+        fvi = this.adjustedLastVisibleIndex;
+      }
+      // Temporarily scroll to the other end of the list
+      this.__preventElementUpdates = true;
+      this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
+      this.__preventElementUpdates = false;
+      // Scroll back to the original first visible index
+      this.scrollToIndex(fvi);
+      this.__ignoreInvalidItemPositionState = false;
     }
   }
 

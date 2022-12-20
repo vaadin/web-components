@@ -51,6 +51,12 @@ describe('virtualizer - variable row height - large variance', () => {
   let expandedItems;
   let updateElement;
 
+  function fixItemPositioningTimeout() {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
+  }
+
   /**
    * Scrolls to the very end of the scroll target.
    */
@@ -75,6 +81,7 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollTarget.scrollTop += 100;
       await nextFrame();
     }
+    await fixItemPositioningTimeout();
   }
 
   /**
@@ -87,6 +94,7 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollTarget.scrollTop -= 100;
       await nextFrame();
     }
+    await fixItemPositioningTimeout();
   }
 
   beforeEach(() => {
@@ -181,6 +189,7 @@ describe('virtualizer - variable row height - large variance', () => {
     scrollTarget.style.boxSizing = 'border-box';
 
     await scrollToEnd();
+    await fixItemPositioningTimeout();
     const targetScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
 
     expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
