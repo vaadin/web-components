@@ -14,7 +14,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
  *
  * ```
- * <vaadin-confirm-dialog cancel>
+ * <vaadin-confirm-dialog cancel-button-visible>
  *   There are unsaved changes. Do you really want to leave?
  * </vaadin-confirm-dialog>
  * ```
@@ -158,10 +158,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
 
       /**
-       * Whether to show cancel button or not.
+       * Whether to show reject button or not.
+       * @attr {boolean} reject-button-visible
        * @type {boolean}
        */
-      reject: {
+      rejectButtonVisible: {
         type: Boolean,
         reflectToAttribute: true,
         value: false,
@@ -191,9 +192,10 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
 
       /**
        * Whether to show cancel button or not.
+       * @attr {boolean} cancel-button-visible
        * @type {boolean}
        */
-      cancel: {
+      cancelButtonVisible: {
         type: Boolean,
         reflectToAttribute: true,
         value: false,
@@ -267,10 +269,10 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   static get observers() {
     return [
       '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
-      '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
+      '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancelButtonVisible)',
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNodes(_messageNodes, message)',
-      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)',
+      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
     ];
   }
 

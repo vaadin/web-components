@@ -308,7 +308,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         theme$="[[_theme]]"
         id="confirmCancel"
         on-confirm="__confirmCancel"
-        cancel
+        cancel-button-visible
         confirm-text="[[i18n.confirm.cancel.button.confirm]]"
         cancel-text="[[i18n.confirm.cancel.button.dismiss]]"
         header="[[i18n.confirm.cancel.title]]"
@@ -320,7 +320,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         theme$="[[_theme]]"
         id="confirmDelete"
         on-confirm="__confirmDelete"
-        cancel
+        cancel-button-visible
         confirm-text="[[i18n.confirm.delete.button.confirm]]"
         cancel-text="[[i18n.confirm.delete.button.dismiss]]"
         header="[[i18n.confirm.delete.title]]"

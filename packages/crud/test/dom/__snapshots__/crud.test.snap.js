@@ -230,7 +230,7 @@ snapshots["vaadin-crud shadow default"] =
 <vaadin-crud-dialog id="dialog">
 </vaadin-crud-dialog>
 <vaadin-confirm-dialog
-  cancel=""
+  cancel-button-visible=""
   confirm-theme="primary"
   id="confirmCancel"
 >
@@ -267,7 +267,7 @@ snapshots["vaadin-crud shadow default"] =
   </vaadin-button>
 </vaadin-confirm-dialog>
 <vaadin-confirm-dialog
-  cancel=""
+  cancel-button-visible=""
   confirm-theme="primary error"
   id="confirmDelete"
 >
