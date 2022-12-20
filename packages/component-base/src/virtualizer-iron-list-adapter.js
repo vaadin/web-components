@@ -341,28 +341,40 @@ export class IronListAdapter {
           this._physicalStart += reusables.indexes.length;
         }
         this._resizeHandler();
-      } else if (!this.__ignoreEmptyReusables) {
-        this.__ignoreEmptyReusables = true;
+      } else {
         // After running super._scrollHandler, work around an iron-list issue with invalid item positioning.
         // See https://github.com/vaadin/flow-components/issues/4306
+
+        // Check if the first physical item element is below the top of the viewport
         const physicalTopBelowTop = this._physicalTop > this._scrollTop;
+        // Check if the last physical item element is above the bottom of the viewport
         const physicalBottomAboveBottom = this._physicalBottom < this._scrollBottom;
 
-        const firstIndexVisible = this.firstVisibleIndex === 0;
-        const lastIndexVisible = this.lastVisibleIndex === this.size - 1;
+        // Check if the first index is visible
+        const firstIndexVisible = this.adjustedFirstVisibleIndex === 0;
+        // Check if the last index is visible
+        const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
 
-        if ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible)) {
+        if (
+          !this.__ignoreInvalidItemPositionState &&
+          ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible))
+        ) {
+          // Invalid state! Try to recover.
+          this.__ignoreInvalidItemPositionState = true;
+
+          // TODO: This approach doesn't allow you to scroll large lists by
+          // dragging the scrollbar handle :/ Add a test and fix (maybe debounce).
+
           // Record the current first visible index
           const fvi = this.firstVisibleIndex;
-          // Temporarily scroll away to the other end of the list
+          // Temporarily scroll to the other end of the list
           this.__preventElementUpdates = true;
           this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
           this.__preventElementUpdates = false;
           // Scroll back to the original first visible index
-          // TODO: With the correct setup, can this go to an infinite loop?
           this.scrollToIndex(fvi);
+          this.__ignoreInvalidItemPositionState = false;
         }
-        this.__ignoreEmptyReusables = false;
       }
     }
 
