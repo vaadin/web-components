@@ -129,11 +129,6 @@ describe('virtualizer - variable row height - large variance', () => {
     virtualizer.scrollToIndex(0);
   });
 
-  afterEach(async () => {
-    // TODO: Why is this needed?
-    await nextFrame();
-  });
-
   it('should reveal new items when scrolling downwards', async () => {
     await scrollDownwardsFromTop();
 

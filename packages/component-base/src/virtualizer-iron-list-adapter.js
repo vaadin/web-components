@@ -319,6 +319,10 @@ export class IronListAdapter {
   toggleScrollListener() {}
 
   _scrollHandler() {
+    if (!this.scrollTarget.isConnected) {
+      return;
+    }
+
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
     const delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
