@@ -66,7 +66,6 @@ describe('virtualizer - variable row height - large variance', () => {
       } else {
         el.style.height = '30px';
       }
-      el.__index = index;
       el.textContent = `Item ${index}`;
     });
 
@@ -105,6 +104,7 @@ describe('virtualizer - variable row height - large variance', () => {
 
     // Expect the item to be an actual item element
     expect(itemAtBottom.classList.contains('item')).to.be.true;
+    expect(itemAtBottom.textContent).to.equal(`Item ${itemAtBottom.__virtualIndex}`);
   });
 
   it('should reveal new items when scrolling upwards', async () => {
@@ -123,6 +123,7 @@ describe('virtualizer - variable row height - large variance', () => {
 
     // Expect the item to be an actual item element
     expect(itemAtTop.classList.contains('item')).to.be.true;
+    expect(itemAtTop.textContent).to.equal(`Item ${itemAtTop.__virtualIndex}`);
   });
 
   it('should not update the item at last index', async () => {
@@ -136,6 +137,9 @@ describe('virtualizer - variable row height - large variance', () => {
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(virtualizer.size - 1);
+    // Should not be scrolled to end
+    const endScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
+    expect(scrollTarget.scrollTop).to.be.lessThan(endScrollTop);
   });
 
   it('should not update the item at first index', async () => {
@@ -151,6 +155,8 @@ describe('virtualizer - variable row height - large variance', () => {
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(0);
+    // Should not be scrolled to start
+    expect(scrollTarget.scrollTop).to.be.greaterThan(0);
   });
 
   it('should allow scrolling to end of a padded scroll target', async () => {
