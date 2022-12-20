@@ -51,6 +51,44 @@ describe('virtualizer - variable row height - large variance', () => {
   let expandedItems;
   let updateElement;
 
+  /**
+   * Scrolls to the very end of the scroll target.
+   */
+  async function scrollToEnd() {
+    // Scroll to last item
+    virtualizer.scrollToIndex(virtualizer.size - 1);
+    await nextFrame();
+    await nextFrame();
+    // Manually scroll to end
+    scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
+    await nextFrame();
+    await nextFrame();
+  }
+
+  /**
+   * Scrolls downwards from the top of the scroll target in small enough steps
+   * so that the issue described in https://github.com/vaadin/flow-components/issues/4306 would occur.
+   */
+  async function scrollDownwardsFromTop() {
+    // Scroll downwards in small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop += 100;
+      await nextFrame();
+    }
+  }
+
+  /**
+   * Scrolls upwards from the bottom of the scroll target in small enough steps
+   * so that the issue described in https://github.com/vaadin/flow-components/issues/4306 would occur.
+   */
+  async function scrollUpwardsFromBottom() {
+    // Scroll upwards in small enough steps
+    for (let step = 0; step < 9; step++) {
+      scrollTarget.scrollTop -= 100;
+      await nextFrame();
+    }
+  }
+
   beforeEach(() => {
     scrollTarget = fixtureSync(`
       <div style="height: 300px; width: 200px;">
@@ -83,7 +121,7 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollContainer,
     });
 
-    virtualizer.size = 200;
+    virtualizer.size = 200000;
 
     // Expand the first and the last item
     expandedItems = [0, virtualizer.size - 1];
@@ -91,12 +129,13 @@ describe('virtualizer - variable row height - large variance', () => {
     virtualizer.scrollToIndex(0);
   });
 
+  afterEach(async () => {
+    // TODO: Why is this needed?
+    await nextFrame();
+  });
+
   it('should reveal new items when scrolling downwards', async () => {
-    // Scroll downwards in small enough steps
-    for (let step = 0; step < 9; step++) {
-      scrollTarget.scrollTop += 100;
-      await nextFrame();
-    }
+    await scrollDownwardsFromTop();
 
     // Get the item at the botton of the viewport
     const scrollTargetRect = scrollTarget.getBoundingClientRect();
@@ -108,14 +147,8 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should reveal new items when scrolling upwards', async () => {
-    // Scroll to end
-    scrollTarget.scrollTop = scrollTarget.scrollHeight;
-
-    // Scroll upwards in small enough steps
-    for (let step = 0; step < 9; step++) {
-      scrollTarget.scrollTop -= 100;
-      await nextFrame();
-    }
+    await scrollToEnd();
+    await scrollUpwardsFromBottom();
 
     // Get the item at the top of the viewport
     const scrollTargetRect = scrollTarget.getBoundingClientRect();
@@ -128,12 +161,7 @@ describe('virtualizer - variable row height - large variance', () => {
 
   it('should not update the item at last index', async () => {
     updateElement.resetHistory();
-
-    // Scroll downwards in two small enough steps
-    for (let step = 0; step < 9; step++) {
-      scrollTarget.scrollTop += 100;
-      await nextFrame();
-    }
+    await scrollDownwardsFromTop();
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(virtualizer.size - 1);
@@ -143,15 +171,9 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not update the item at first index', async () => {
-    // Scroll to end
-    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    await scrollToEnd();
     updateElement.resetHistory();
-
-    // Scroll upwards in two small enough steps
-    for (let step = 0; step < 9; step++) {
-      scrollTarget.scrollTop -= 100;
-      await nextFrame();
-    }
+    await scrollUpwardsFromBottom();
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(0);
@@ -161,16 +183,10 @@ describe('virtualizer - variable row height - large variance', () => {
 
   it('should allow scrolling to end of a padded scroll target', async () => {
     scrollTarget.style.padding = '60px 0 ';
+    scrollTarget.style.boxSizing = 'border-box';
 
-    // Scroll to last item
-    virtualizer.scrollToIndex(virtualizer.size - 1);
-    await nextFrame();
-    await nextFrame();
-    // Manually scroll to end
+    await scrollToEnd();
     const targetScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
-    scrollTarget.scrollTop = targetScrollTop;
-    await nextFrame();
-    await nextFrame();
 
     expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
   });

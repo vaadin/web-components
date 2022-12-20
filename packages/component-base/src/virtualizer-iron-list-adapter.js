@@ -362,11 +362,8 @@ export class IronListAdapter {
           // Invalid state! Try to recover.
           this.__ignoreInvalidItemPositionState = true;
 
-          // TODO: This approach doesn't allow you to scroll large lists by
-          // dragging the scrollbar handle :/ Add a test and fix (maybe debounce).
-
           // Record the current first visible index
-          const fvi = this.firstVisibleIndex;
+          const fvi = this.adjustedFirstVisibleIndex;
           // Temporarily scroll to the other end of the list
           this.__preventElementUpdates = true;
           this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
