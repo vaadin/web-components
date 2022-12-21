@@ -28,6 +28,13 @@ describe('integer-field', () => {
 
   it('step buttons visible', async () => {
     element.stepButtonsVisible = true;
+    element.value = 5;
     await visualDiff(div, 'step-buttons-visible');
+  });
+
+  it('has controls', async () => {
+    element.hasControls = true;
+    element.value = 5;
+    await visualDiff(div, 'has-controls');
   });
 });

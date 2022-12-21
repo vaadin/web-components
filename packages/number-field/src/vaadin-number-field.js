@@ -217,7 +217,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
           direction: rtl;
         }
 
-        ${tag}[dir='rtl']:not([has-controls]) input[type="number"]::placeholder {
+        ${tag}[dir='rtl']:not([step-buttons-visible]):not([has-controls]) input[type="number"]::placeholder {
           text-align: left;
         }
       `,

@@ -12,6 +12,7 @@ const numberField = css`
     width: 8em;
   }
 
+  :host([step-buttons-visible]) ::slotted(input),
   :host([has-controls]) ::slotted(input) {
     text-align: center;
   }
