@@ -18,6 +18,7 @@ const scroller = css`
     display: none;
     position: sticky;
     top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 9999;
@@ -27,8 +28,6 @@ const scroller = css`
   }
 
   :host([theme~='overflow-indicators'])::after {
-    top: auto;
-    bottom: 0;
     margin-bottom: 0;
     margin-top: -1px;
   }
