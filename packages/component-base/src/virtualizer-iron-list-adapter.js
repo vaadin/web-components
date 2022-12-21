@@ -401,18 +401,14 @@ export class IronListAdapter {
       // Invalid state! Try to recover.
       this.__ignoreInvalidItemPositionState = true;
 
-      // Record the current first visible index
-      let fvi = this.adjustedFirstVisibleIndex;
-      if (fvi === 0) {
-        // If the first visible index is 0, record the last visible index instead
-        fvi = this.adjustedLastVisibleIndex;
-      }
+      // Record the current first visible index (or last one if first isn't available)
+      const index = this.adjustedFirstVisibleIndex || this.adjustedLastVisibleIndex;
       // Temporarily scroll to the other end of the list
       this.__preventElementUpdates = true;
       this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
       this.__preventElementUpdates = false;
-      // Scroll back to the original first visible index
-      this.scrollToIndex(fvi);
+      // Scroll back to the original position
+      this.scrollToIndex(index);
       this.__ignoreInvalidItemPositionState = false;
     }
   }
