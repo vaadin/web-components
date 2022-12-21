@@ -122,6 +122,9 @@ export class IronListAdapter {
     this._resizeHandler();
     flush();
     this._scrollHandler();
+    if (this.__fixInvalidItemPositioningDebouncer) {
+      this.__fixInvalidItemPositioningDebouncer.flush();
+    }
     if (this.__scrollReorderDebouncer) {
       this.__scrollReorderDebouncer.flush();
     }
