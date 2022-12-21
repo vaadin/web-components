@@ -352,11 +352,14 @@ export class IronListAdapter {
       }
     }
 
-    this.__fixInvalidItemPositioningDebouncer = Debouncer.debounce(
-      this.__fixInvalidItemPositioningDebouncer,
-      timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
-      () => this.__fixInvalidItemPositioning(),
-    );
+    if (delta) {
+      // There was a change in scroll top. Chedule a check for invalid item positions.
+      this.__fixInvalidItemPositioningDebouncer = Debouncer.debounce(
+        this.__fixInvalidItemPositioningDebouncer,
+        timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
+        () => this.__fixInvalidItemPositioning(),
+      );
+    }
 
     if (this.reorderElements) {
       this.__scrollReorderDebouncer = Debouncer.debounce(
