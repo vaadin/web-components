@@ -80,11 +80,12 @@ describe('vaadin-scroller', () => {
     describe('horizontal', () => {
       beforeEach(async () => {
         scroller.scrollDirection = 'horizontal';
-        scroller.style.maxWidth = '100px';
+        scroller.style.fontSize = '15px';
+        scroller.style.maxWidth = '6.75em';
 
         const div = document.createElement('div');
         div.textContent = 'Long text that does not fit';
-        div.style.width = '200px';
+        div.style.fontSize = '1.25em';
         div.style.whiteSpace = 'nowrap';
         scroller.appendChild(div);
 
@@ -112,10 +113,11 @@ describe('vaadin-scroller', () => {
   describe('vertical', () => {
     beforeEach(async () => {
       scroller.scrollDirection = 'vertical';
-      scroller.style.maxHeight = '50px';
+      scroller.style.fontSize = '15px';
+      scroller.style.maxHeight = '3.75em';
 
       const div = document.createElement('div');
-      div.innerHTML = 'Long<br>text<br>that<br>has<br>many<br>lines';
+      div.innerHTML = '<div style="font-size: 1.25em;">Long<br>text<br>that<br>has<br>many<br>lines</div>';
       scroller.appendChild(div);
 
       await nextRender();

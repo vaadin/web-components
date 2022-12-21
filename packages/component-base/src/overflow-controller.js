@@ -92,7 +92,7 @@ export class OverflowController {
       overflow += ' top';
     }
 
-    if (target.scrollTop < target.scrollHeight - target.clientHeight) {
+    if (Math.ceil(target.scrollTop) < Math.ceil(target.scrollHeight - target.clientHeight)) {
       overflow += ' bottom';
     }
 
@@ -101,7 +101,7 @@ export class OverflowController {
       overflow += ' start';
     }
 
-    if (scrollLeft < target.scrollWidth - target.clientWidth) {
+    if (Math.ceil(scrollLeft) < Math.ceil(target.scrollWidth - target.clientWidth)) {
       overflow += ' end';
     }
 
