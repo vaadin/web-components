@@ -222,13 +222,13 @@ yarn test --all
 Run tests for single package:
 
 ```sh
-yarn test --group vaadin-upload
+yarn test --group upload
 ```
 
 Debug tests for single package:
 
 ```sh
-yarn debug --group vaadin-upload
+yarn debug --group upload
 ```
 
 Run tests with code coverage:
