@@ -13,7 +13,7 @@ const numberField = css`
     width: 8em;
   }
 
-  :host([has-controls]:not([theme~='align-right'])) ::slotted(input) {
+  :host([step-buttons-visible]:not([theme~='align-right'])) ::slotted(input) {
     text-align: center;
   }
 
@@ -21,7 +21,7 @@ const numberField = css`
     opacity: 0.2;
   }
 
-  :host([has-controls]) [part='input-field'] {
+  :host([step-buttons-visible]) [part='input-field'] {
     padding: 0;
   }
 
