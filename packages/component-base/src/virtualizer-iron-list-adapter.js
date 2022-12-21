@@ -394,12 +394,8 @@ export class IronListAdapter {
     // Check if the last index is visible
     const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
 
-    if (
-      !this.__ignoreInvalidItemPositionState &&
-      ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible))
-    ) {
+    if ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible)) {
       // Invalid state! Try to recover.
-      this.__ignoreInvalidItemPositionState = true;
 
       // Record the current first visible index (or last one if first isn't available)
       const index = this.adjustedFirstVisibleIndex || this.adjustedLastVisibleIndex;
@@ -409,7 +405,6 @@ export class IronListAdapter {
       this.__preventElementUpdates = false;
       // Scroll back to the original position
       this.scrollToIndex(index);
-      this.__ignoreInvalidItemPositionState = false;
     }
   }
 
