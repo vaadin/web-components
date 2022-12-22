@@ -197,13 +197,4 @@ const color = css`
 
 registerStyles('', color, { moduleId: 'lumo-color' });
 
-const colorLegacy = css`
-  :host {
-    color: var(--lumo-body-text-color) !important;
-    background-color: var(--lumo-base-color) !important;
-  }
-`;
-
-registerStyles('', [color, colorLegacy], { moduleId: 'lumo-color-legacy' });
-
-export { colorBase, color, colorLegacy };
+export { colorBase, color };
