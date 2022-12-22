@@ -3,9 +3,16 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-tooltip.js';
 import { colorDark } from '@vaadin/vaadin-material-styles/color.js';
+import { Tooltip } from '../../../src/vaadin-tooltip.js';
 
 describe('tooltip', () => {
   let div, target, element;
+
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
+  });
 
   beforeEach(() => {
     element = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
