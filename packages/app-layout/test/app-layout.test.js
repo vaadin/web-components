@@ -272,14 +272,6 @@ describe('vaadin-app-layout', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should reflect scrollHeight to a custom CSS property when the drawer has overflow', () => {
-        const drawer = layout.shadowRoot.querySelector('[part=drawer]');
-        drawer.style.height = '50px';
-        layout.drawerOpened = true;
-        const height = getComputedStyle(layout).getPropertyValue('--_vaadin-app-layout-drawer-scroll-size');
-        expect(height).to.equal(`${drawer.scrollHeight}px`);
-      });
-
       it('should keep drawer state when it resizes to overlay mode and back', () => {
         // Force it to desktop layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');

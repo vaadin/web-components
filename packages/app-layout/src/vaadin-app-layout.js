@@ -518,7 +518,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   __drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
     if (this.overlay) {
       if (drawerOpened) {
-        this._updateDrawerHeight();
         this.__trapFocusInDrawer();
       } else if (oldDrawerOpened) {
         this.__releaseFocusFromDrawer();
@@ -605,13 +604,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   }
 
   /** @protected */
-  _updateDrawerHeight() {
-    const { scrollHeight, offsetHeight } = this.$.drawer;
-    const height = scrollHeight > offsetHeight ? `${scrollHeight}px` : '100%';
-    this.style.setProperty('--_vaadin-app-layout-drawer-scroll-size', height);
-  }
-
-  /** @protected */
   _updateOverlayMode() {
     const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
 
@@ -628,7 +620,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       this._drawerStateSaved = null;
     }
 
-    this._updateDrawerHeight();
     this.__updateDrawerAriaAttributes();
   }
 
