@@ -54,6 +54,9 @@ class TooltipOverlay extends PositionMixin(Overlay) {
     if (!memoizedTemplate) {
       memoizedTemplate = super.template.cloneNode(true);
       memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
+
+      // Remove whitespace text nodes around the content slot to allow "white-space: pre"
+      memoizedTemplate.content.querySelector('[part~="content"]').innerHTML = '<slot></slot>';
     }
 
     return memoizedTemplate;
