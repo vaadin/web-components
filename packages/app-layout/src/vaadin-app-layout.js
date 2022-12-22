@@ -164,8 +164,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           }
         }
 
-        [part='navbar'],
-        [part='navbar']::before {
+        [part='navbar'] {
           position: fixed;
           display: flex;
           align-items: center;
@@ -265,8 +264,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           transform: translateX(100%);
         }
 
-        :host([dir='rtl']) [part='navbar'],
-        :host([dir='rtl']) [part='navbar']::before {
+        :host([dir='rtl']) [part='navbar'] {
           transition: right var(--vaadin-app-layout-transition);
         }
 
