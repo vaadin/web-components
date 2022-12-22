@@ -11,7 +11,7 @@ import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
-const DEFAULT_DELAY = 0;
+const DEFAULT_DELAY = 500;
 
 let defaultFocusDelay = DEFAULT_DELAY;
 let defaultHoverDelay = DEFAULT_DELAY;
