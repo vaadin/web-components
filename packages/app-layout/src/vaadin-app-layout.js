@@ -213,6 +213,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           outline: none;
           /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
           visibility: hidden;
+          display: flex;
+          flex-direction: column;
         }
 
         :host([drawer-opened]) [part='drawer'] {
@@ -288,6 +290,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           [part='drawer'] {
             width: 20em;
           }
+        }
+
+        /* If a vaadin-scroller is used in the drawer, allow it to take all remaining space and contain scrolling */
+        [part='drawer'] ::slotted(vaadin-scroller) {
+          flex: 1;
+          overscroll-behavior: contain;
         }
       </style>
       <div part="navbar" id="navbarTop">
