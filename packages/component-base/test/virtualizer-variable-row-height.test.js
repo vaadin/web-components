@@ -81,7 +81,6 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollTarget.scrollTop += 100;
       await nextFrame();
     }
-    await fixItemPositioningTimeout();
   }
 
   /**
@@ -94,7 +93,6 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollTarget.scrollTop -= 100;
       await nextFrame();
     }
-    await fixItemPositioningTimeout();
   }
 
   beforeEach(() => {
@@ -129,6 +127,8 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollContainer,
     });
 
+    sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
+
     virtualizer.size = 200000;
 
     // Expand the first and the last item
@@ -139,6 +139,7 @@ describe('virtualizer - variable row height - large variance', () => {
 
   it('should reveal new items when scrolling downwards', async () => {
     await scrollDownwardsFromStart();
+    await fixItemPositioningTimeout();
 
     // Get the item at the botton of the viewport
     const scrollTargetRect = scrollTarget.getBoundingClientRect();
@@ -152,6 +153,7 @@ describe('virtualizer - variable row height - large variance', () => {
   it('should reveal new items when scrolling upwards', async () => {
     await scrollToEnd();
     await scrollUpwardsFromEnd();
+    await fixItemPositioningTimeout();
 
     // Get the item at the top of the viewport
     const scrollTargetRect = scrollTarget.getBoundingClientRect();
@@ -165,6 +167,7 @@ describe('virtualizer - variable row height - large variance', () => {
   it('should not update the item at last index', async () => {
     updateElement.resetHistory();
     await scrollDownwardsFromStart();
+    await fixItemPositioningTimeout();
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(virtualizer.size - 1);
@@ -177,6 +180,7 @@ describe('virtualizer - variable row height - large variance', () => {
     await scrollToEnd();
     updateElement.resetHistory();
     await scrollUpwardsFromEnd();
+    await fixItemPositioningTimeout();
 
     const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
     expect(updatedIndexes).not.to.include(0);
@@ -206,5 +210,19 @@ describe('virtualizer - variable row height - large variance', () => {
     }
 
     expect(virtualizer.firstVisibleIndex).to.equal(0);
+  });
+
+  // TODO: Fix this problem
+  it.skip('should not jam when when size is changed after fix', async () => {
+    await scrollDownwardsFromStart();
+    await fixItemPositioningTimeout();
+    virtualizer.size = 1;
+  });
+
+  it('should not invoke when size is changed after scrolling', async () => {
+    await scrollDownwardsFromStart();
+    virtualizer.size = 0;
+    await fixItemPositioningTimeout();
+    expect(virtualizer.__adapter.__fixInvalidItemPositioning.callCount).to.equal(0);
   });
 });

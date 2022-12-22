@@ -188,6 +188,9 @@ export class IronListAdapter {
     if (size === this.size) {
       return;
     }
+    if (this.__fixInvalidItemPositioningDebouncer) {
+      this.__fixInvalidItemPositioningDebouncer.cancel();
+    }
 
     // Prevent element update while the scroll position is being restored
     this.__preventElementUpdates = true;
