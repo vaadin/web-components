@@ -190,6 +190,12 @@ describe('column', () => {
         expect(() => grid.requestContentUpdate()).not.to.throw(Error);
       });
 
+      it('should not throw on requestContentUpdate', () => {
+        column.hidden = true;
+        flushGrid(grid);
+        expect(() => grid.requestContentUpdate()).not.to.throw();
+      });
+
       it('should not remove details row when a column is hidden', () => {
         grid.rowDetailsRenderer = (root) => {
           root.textContent = 'row-details';

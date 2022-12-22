@@ -571,7 +571,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
-      if (this._grid) {
+      if (this._grid && headerCell.parentElement) {
         this._grid.__debounceUpdateHeaderFooterRowVisibility(headerCell.parentElement);
       }
     }
@@ -612,7 +612,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
-      if (this._grid) {
+      if (this._grid && footerCell.parentElement) {
         this._grid.__debounceUpdateHeaderFooterRowVisibility(footerCell.parentElement);
       }
     }
