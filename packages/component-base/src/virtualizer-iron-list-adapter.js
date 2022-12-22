@@ -384,6 +384,10 @@ export class IronListAdapter {
    * @private
    */
   __fixInvalidItemPositioning() {
+    if (!this.scrollTarget.isConnected) {
+      return;
+    }
+
     // Check if the first physical item element is below the top of the viewport
     const physicalTopBelowTop = this._physicalTop > this._scrollTop;
     // Check if the last physical item element is above the bottom of the viewport
