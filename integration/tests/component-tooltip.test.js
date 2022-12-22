@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
-import '@vaadin/tooltip';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
 import { CheckboxGroup } from '@vaadin/checkbox-group';
@@ -23,6 +22,7 @@ import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 import { TextArea } from '@vaadin/text-area';
 import { TextField } from '@vaadin/text-field';
 import { TimePicker } from '@vaadin/time-picker';
+import { Tooltip } from '@vaadin/tooltip';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 [
@@ -75,6 +75,12 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 ].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, children = '' }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
+
+    before(() => {
+      Tooltip.setDefaultFocusDelay(0);
+      Tooltip.setDefaultHoverDelay(0);
+      Tooltip.setDefaultHideDelay(0);
+    });
 
     beforeEach(() => {
       element = fixtureSync(`
