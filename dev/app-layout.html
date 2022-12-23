@@ -8,31 +8,58 @@
     <script type="module" src="./common.js"></script>
 
     <style>
-      h1[slot='navbar'] {
+      body {
+        margin: 0;
+      }
+
+      header h1,
+      h2[slot="navbar"] {
         font-size: var(--lumo-font-size-l);
         margin: 0;
+      }
+
+      :is(header, footer) {
+        display: flex;
+        align-items: center;
+        gap: var(--lumo-space-s);
+        padding: var(--lumo-space-s) var(--lumo-space-m);
+        min-height: var(--lumo-size-xl);
+        box-sizing: border-box;
+      }
+
+      dummy-content {
+        display: block;
+        background-image: linear-gradient(var(--lumo-primary-color), var(--lumo-primary-color-10pct));
+        border-radius: var(--lumo-border-radius-l);
+        margin: var(--lumo-space-m);
+        height: 150vh;
       }
     </style>
 
     <script type="module">
       import '@vaadin/app-layout';
       import '@vaadin/app-layout/vaadin-drawer-toggle';
-      import '@vaadin/tabs';
+      import '@vaadin/scroller';
     </script>
   </head>
 
   <body>
-    <vaadin-app-layout>
+    <vaadin-app-layout primary-section="drawer">
+      <header slot="drawer">
+        <h1>My App</h1>
+      </header>
+      <vaadin-scroller slot="drawer" theme="overflow-indicators">
+        <dummy-content></dummy-content>
+      </vaadin-scroller>
+      <footer slot="drawer">
+        <a href="">Sign in</a>
+      </footer>
+
       <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-      <h1 slot="navbar">MyApp</h1>
-      <vaadin-tabs slot="drawer" orientation="vertical">
-        <vaadin-tab>
-          <a>Dashboard</a>
-        </vaadin-tab>
-        <vaadin-tab>
-          <a>Orders</a>
-        </vaadin-tab>
-      </vaadin-tabs>
+      <h2 slot="navbar">View name</h2>
+
+      <dummy-content></dummy-content>
+
     </vaadin-app-layout>
   </body>
 </html>

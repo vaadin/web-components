@@ -6,34 +6,33 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-app-layout',
   css`
-    [part='navbar']::before {
-      background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+    [part='navbar'],
+    [part='drawer'] {
+      background-color: var(--lumo-base-color);
+      background-clip: padding-box;
     }
 
-    :host(:not([dir='rtl']):not([overlay])) [part='drawer'] {
-      border-right: 1px solid var(--lumo-contrast-10pct);
+    [part='navbar'] {
+      min-height: var(--lumo-size-xl);
+      border-bottom: 1px solid var(--lumo-contrast-10pct);
     }
 
-    :host([dir='rtl']:not([overlay])) [part='drawer'] {
-      border-left: 1px solid var(--lumo-contrast-10pct);
+    [part='drawer'] {
+      border-inline-end: 1px solid var(--lumo-contrast-10pct);
     }
 
-    :host([overlay]) [part='drawer']::before {
-      background: var(--lumo-base-color);
+    :host([overlay]) [part='drawer'] {
+      border-inline-end: none;
+      box-shadow: var(--lumo-box-shadow-s);
     }
 
-    [part='navbar']::before,
-    :host([overlay]) [part='drawer']::before {
-      position: absolute;
-      content: '';
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+    :host([primary-section='navbar']) [part='navbar'] {
+      border-bottom: none;
+      background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
     }
 
-    :host([overlay]) [part='drawer']::before {
-      background: var(--lumo-base-color);
-      height: var(--_vaadin-app-layout-drawer-scroll-size, 100%);
+    :host([primary-section='drawer']:not([overlay])) [part='drawer'] {
+      background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
     }
 
     [part='backdrop'] {
@@ -46,26 +45,6 @@ registerStyles(
     [part] ::slotted(h4) {
       margin-top: var(--lumo-space-xs) !important;
       margin-bottom: var(--lumo-space-xs) !important;
-    }
-
-    @supports (-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px)) {
-      [part='navbar']::before {
-        opacity: 0.8;
-      }
-
-      [part='navbar'] {
-        -webkit-backdrop-filter: blur(24px);
-        backdrop-filter: blur(24px);
-      }
-
-      :host([overlay]) [part='drawer']::before {
-        opacity: 0.9;
-      }
-
-      :host([overlay]) [part='drawer'] {
-        -webkit-backdrop-filter: blur(24px);
-        backdrop-filter: blur(24px);
-      }
     }
   `,
   { moduleId: 'lumo-app-layout' },
