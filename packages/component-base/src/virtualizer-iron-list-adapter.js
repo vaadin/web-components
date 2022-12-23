@@ -188,8 +188,13 @@ export class IronListAdapter {
     if (size === this.size) {
       return;
     }
+    // Cancel active debouncers
     if (this.__fixInvalidItemPositioningDebouncer) {
       this.__fixInvalidItemPositioningDebouncer.cancel();
+    }
+    if (this._debouncers && this._debouncers._increasePoolIfNeeded) {
+      // Avoid creating unnecessary elements on the following flush()
+      this._debouncers._increasePoolIfNeeded.cancel();
     }
 
     // Prevent element update while the scroll position is being restored
@@ -205,11 +210,6 @@ export class IronListAdapter {
 
     // Change the size
     this.__size = size;
-
-    // Avoid creating unnecessary elements on the following flush()
-    if (this._debouncers && this._debouncers._increasePoolIfNeeded) {
-      this._debouncers._increasePoolIfNeeded.cancel();
-    }
 
     this._itemsChanged({
       path: 'items',
@@ -327,10 +327,6 @@ export class IronListAdapter {
   toggleScrollListener() {}
 
   _scrollHandler() {
-    if (!this.scrollTarget.isConnected) {
-      return;
-    }
-
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
     const delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
@@ -357,7 +353,7 @@ export class IronListAdapter {
     }
 
     if (delta) {
-      // There was a change in scroll top. Chedule a check for invalid item positions.
+      // There was a change in scroll top. Schedule a check for invalid item positioning.
       this.__fixInvalidItemPositioningDebouncer = Debouncer.debounce(
         this.__fixInvalidItemPositioningDebouncer,
         timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
