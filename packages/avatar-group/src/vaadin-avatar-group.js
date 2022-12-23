@@ -393,7 +393,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
 
   /** @private */
   _onListKeyDown(event) {
-    if (event.key === 'Escape' || event.key === 'Esc' || /^(Tab)$/u.test(event.key)) {
+    if (event.key === 'Escape' || event.key === 'Tab') {
       this._opened = false;
     }
   }
