@@ -3,6 +3,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/tooltip/test/not-animated-styles.js';
 import '../../../theme/lumo/vaadin-avatar.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('avatar', () => {
   let div, element;
@@ -12,6 +13,12 @@ describe('avatar', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-avatar></vaadin-avatar>', div);
+  });
+
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
   });
 
   it('basic', async () => {
