@@ -174,6 +174,13 @@ describe('renderers', () => {
         expect(e.detail.model.item).to.be.ok;
       });
 
+      it('should fire a `cell-activate` event on focused cell click', () => {
+        const cell = getCell(grid, 0);
+        cell.focus();
+        cell.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
       (isIOS ? it.skip : it)('should fire a `cell-activate` event with correct model on space', () => {
         keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
         expect(spy.calledOnce).to.be.true;
