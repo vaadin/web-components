@@ -45,6 +45,7 @@ class TabsSlotController extends SlotController {
     tabs.addEventListener('selected-changed', this.__tabsSelectedChangedListener);
     this.host.__tabs = tabs;
     this.host.stateTarget = tabs;
+    this.__tabsItemsChangedListener();
   }
 
   teardownNode(tabs) {
