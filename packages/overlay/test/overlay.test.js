@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
+import {
+  click,
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  isIOS,
+  mousedown,
+  mouseup,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-field/vaadin-text-field.js';
@@ -498,8 +507,7 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  const iOS = /iPad|iPhone|iPod/u.test(navigator.userAgent);
-  (iOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
+  (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
     let overlay;
 
     beforeEach(async () => {
