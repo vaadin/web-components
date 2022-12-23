@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-avatar.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('avatar', () => {
   let div, element;
@@ -10,6 +11,12 @@ describe('avatar', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-avatar></vaadin-avatar>', div);
+  });
+
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
   });
 
   it('basic', async () => {
