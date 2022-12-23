@@ -87,17 +87,17 @@ describe('vaadin-app-layout', () => {
       it('should update content offset when navbar height changes', async () => {
         // Add content to navbar and measure original offset
         const navbarContent = document.createElement('div');
-        navbarContent.style.height = '50px';
+        navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar');
         layout.appendChild(navbarContent);
         await nextFrame();
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
-        navbarContent.style.height = '100px';
+        navbarContent.style.height = '200px';
         await nextFrame();
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
-        expect(updatedOffset).to.equal(initialOffset + 50);
+        expect(updatedOffset).to.equal(initialOffset + 100);
       });
     });
 
@@ -131,17 +131,17 @@ describe('vaadin-app-layout', () => {
       it('should update content offset when navbar height changes', async () => {
         // Add content to navbar and measure original offset
         const navbarContent = document.createElement('div');
-        navbarContent.style.height = '50px';
+        navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(navbarContent);
         await nextFrame();
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
-        navbarContent.style.height = '100px';
+        navbarContent.style.height = '200px';
         await nextFrame();
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
-        expect(updatedOffset).to.equal(initialOffset + 50);
+        expect(updatedOffset).to.equal(initialOffset + 100);
       });
     });
   });
