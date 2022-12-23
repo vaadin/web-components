@@ -206,9 +206,10 @@ export class IronListAdapter {
     // Change the size
     this.__size = size;
 
-    // Flush before invoking items change to avoid
-    // creating excess elements on the following flush()
-    flush();
+    // Avoid creating unnecessary elements on the following flush()
+    if (this._debouncers && this._debouncers._increasePoolIfNeeded) {
+      this._debouncers._increasePoolIfNeeded.cancel();
+    }
 
     this._itemsChanged({
       path: 'items',
@@ -404,14 +405,17 @@ export class IronListAdapter {
     if ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible)) {
       // Invalid state! Try to recover.
 
-      // Record the current first visible index (or last one if first isn't available)
-      const index = this.adjustedFirstVisibleIndex || this.adjustedLastVisibleIndex;
-      // Temporarily scroll to the other end of the list
-      this.__preventElementUpdates = true;
-      this.scrollToIndex(physicalTopBelowTop ? 0 : this.size - 1);
-      this.__preventElementUpdates = false;
-      // Scroll back to the original position
-      this.scrollToIndex(index);
+      const isScrollingDown = physicalBottomAboveBottom;
+      // Set the "_ratio" property temporarily to 0 to make iron-list's _getReusables
+      // place all the free physical items on one side of the viewport.
+      const originalRatio = this._ratio;
+      this._ratio = 0;
+      // Fake a scroll change to make _scrollHandler place the physical items
+      // on the desired side.
+      this._scrollPosition = this._scrollTop + (isScrollingDown ? -1 : 1);
+      this._scrollHandler();
+      // Restore the original "_ratio" value.
+      this._ratio = originalRatio;
     }
   }
 

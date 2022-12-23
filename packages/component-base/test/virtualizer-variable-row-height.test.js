@@ -138,30 +138,38 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should reveal new items when scrolling downwards', async () => {
+    const rect = scrollTarget.getBoundingClientRect();
+
     await scrollDownwardsFromStart();
+    const itemAtTopText = document.elementFromPoint(rect.left + 1, rect.top + 1).textContent;
     await fixItemPositioningTimeout();
 
-    // Get the item at the botton of the viewport
-    const scrollTargetRect = scrollTarget.getBoundingClientRect();
-    const itemAtBottom = document.elementFromPoint(scrollTargetRect.left + 1, scrollTargetRect.bottom - 1);
-
-    // Expect the item to be an actual item element
+    // Expect the item at the botton of the viewport to be an actual item element
+    const itemAtBottom = document.elementFromPoint(rect.left + 1, rect.bottom - 1);
     expect(itemAtBottom.classList.contains('item')).to.be.true;
     expect(itemAtBottom.textContent).to.equal(`Item ${itemAtBottom.__virtualIndex}`);
+
+    // Expect the item at the top to be the same as before
+    const itemAtTop = document.elementFromPoint(rect.left + 1, rect.top + 1);
+    expect(itemAtTopText).to.equal(itemAtTop.textContent);
   });
 
   it('should reveal new items when scrolling upwards', async () => {
+    const rect = scrollTarget.getBoundingClientRect();
+
     await scrollToEnd();
     await scrollUpwardsFromEnd();
+    const itemAtBottomText = document.elementFromPoint(rect.left + 1, rect.bottom - 1).textContent;
     await fixItemPositioningTimeout();
 
-    // Get the item at the top of the viewport
-    const scrollTargetRect = scrollTarget.getBoundingClientRect();
-    const itemAtTop = document.elementFromPoint(scrollTargetRect.left + 1, scrollTargetRect.top + 1);
-
-    // Expect the item to be an actual item element
+    // Expect the item at the top of the viewport to be an actual item element
+    const itemAtTop = document.elementFromPoint(rect.left + 1, rect.top + 1);
     expect(itemAtTop.classList.contains('item')).to.be.true;
     expect(itemAtTop.textContent).to.equal(`Item ${itemAtTop.__virtualIndex}`);
+
+    // Expect the item at the bottom to be the same as before
+    const itemAtBottom = document.elementFromPoint(rect.left + 1, rect.bottom - 1);
+    expect(itemAtBottomText).to.equal(itemAtBottom.textContent);
   });
 
   it('should not update the item at last index', async () => {
@@ -212,8 +220,7 @@ describe('virtualizer - variable row height - large variance', () => {
     expect(virtualizer.firstVisibleIndex).to.equal(0);
   });
 
-  // TODO: Fix this problem
-  it.skip('should not jam when when size is changed after fix', async () => {
+  it('should not jam when when size is changed after fix', async () => {
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
     virtualizer.size = 1;
