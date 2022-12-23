@@ -306,3 +306,50 @@ describe('tabsheet', () => {
     });
   });
 });
+
+describe('tabsheet - lazy tabs', () => {
+  let tabsheet, tabs;
+
+  function getPanels() {
+    return [...tabsheet.querySelectorAll(`[tab]`)];
+  }
+
+  beforeEach(async () => {
+    tabsheet = fixtureSync(`
+      <vaadin-tabsheet theme="foo">
+        <div tab="tab-1">Panel 1</div>
+        <div tab="tab-2">Panel 2</div>
+        <div tab="tab-3">Panel 3</div>
+      </vaadin-tabsheet>
+    `);
+
+    await nextFrame();
+
+    // This setup lazily appends a pre-initialized tabs inside the tabsheet
+    tabs = fixtureSync(`
+      <vaadin-tabs slot="tabs">
+        <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+        <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+        <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+      </vaadin-tabs>
+    `);
+    tabsheet.appendChild(tabs);
+
+    await nextFrame();
+  });
+
+  it('should set items to the array of child tabs', () => {
+    expect(tabsheet.items).to.be.an('array');
+    expect(tabsheet.items.length).to.be.equal(3);
+  });
+
+  it('should set the theme attribute to the slotted tabs', () => {
+    expect(tabs.getAttribute('theme')).to.equal('foo');
+  });
+
+  it('should only show the first panel', () => {
+    expect(getPanels()[0].hidden).to.be.false;
+    expect(getPanels()[1].hidden).to.be.true;
+    expect(getPanels()[2].hidden).to.be.true;
+  });
+});
