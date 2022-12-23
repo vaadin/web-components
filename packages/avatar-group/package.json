@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/avatar-group",
-  "version": "24.0.0-alpha6",
+  "version": "24.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -37,14 +37,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/avatar": "24.0.0-alpha6",
-    "@vaadin/component-base": "24.0.0-alpha6",
-    "@vaadin/item": "24.0.0-alpha6",
-    "@vaadin/list-box": "24.0.0-alpha6",
-    "@vaadin/overlay": "24.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha6",
+    "@vaadin/avatar": "24.0.0-alpha7",
+    "@vaadin/component-base": "24.0.0-alpha7",
+    "@vaadin/item": "24.0.0-alpha7",
+    "@vaadin/list-box": "24.0.0-alpha7",
+    "@vaadin/overlay": "24.0.0-alpha7",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha7",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha7",
     "lit": "^2.0.0"
   },
   "devDependencies": {
