@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-avatar.js';
-import { Tooltip } from '../../../src/vaadin-tooltip.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('avatar', () => {
   let div, element;

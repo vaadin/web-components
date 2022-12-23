@@ -3,7 +3,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/tooltip/test/not-animated-styles.js';
 import '../../../theme/lumo/vaadin-avatar.js';
-import { Tooltip } from '../../../src/vaadin-tooltip.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('avatar', () => {
   let div, element;
