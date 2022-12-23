@@ -153,7 +153,7 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
  */
 export function parseDate(str) {
   // Parsing with RegExp to ensure correct format
-  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
+  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
   if (!parts) {
     return undefined;
   }

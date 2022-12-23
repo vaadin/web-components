@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
@@ -96,8 +96,7 @@ describe('vaadin-notification', () => {
       document.body.click();
     });
 
-    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    (iOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
+    (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
       let container;
 
       beforeEach(() => {

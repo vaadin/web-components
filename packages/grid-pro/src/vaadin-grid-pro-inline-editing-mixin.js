@@ -312,7 +312,7 @@ export const InlineEditingMixin = (superClass) =>
       if (edited) {
         // Detect focus moving to e.g. vaadin-select-overlay
         const overlay = Array.from(e.composedPath()).filter(
-          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/i.test(node.localName),
+          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/iu.test(node.localName),
         )[0];
 
         if (overlay) {

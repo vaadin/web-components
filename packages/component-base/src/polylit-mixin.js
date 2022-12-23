@@ -7,7 +7,7 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 const caseMap = {};
 
-const CAMEL_TO_DASH = /([A-Z])/g;
+const CAMEL_TO_DASH = /([A-Z])/gu;
 
 function camelToDash(camel) {
   caseMap[camel] ||= camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();

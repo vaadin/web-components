@@ -90,7 +90,7 @@ function PASSIVE_TOUCH(eventName) {
 }
 
 // Check for touch-only devices
-const IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/);
+const IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/u);
 
 // Defined at https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#enabling-and-disabling-form-controls:-the-disabled-attribute
 /** @type {!Object<boolean>} */

@@ -586,7 +586,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const localTarget = e.composedPath()[0];
       const localTargetIsTextInput =
         localTarget.localName === 'input' &&
-        !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/i.test(localTarget.type);
+        !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/iu.test(localTarget.type);
 
       let wantInteracting;
       switch (key) {
@@ -724,7 +724,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onKeyUp(e) {
-      if (!/^( |SpaceBar)$/.test(e.key) || this.interacting) {
+      if (!/^( |SpaceBar)$/u.test(e.key) || this.interacting) {
         return;
       }
 

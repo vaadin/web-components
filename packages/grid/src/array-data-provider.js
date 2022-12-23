@@ -28,7 +28,7 @@ function checkPaths(arrayToCheck, action, items) {
       return;
     }
 
-    const parentProperty = path.replace(/\.[^.]*$/, ''); // A.b.c -> a.b
+    const parentProperty = path.replace(/\.[^.]*$/u, ''); // A.b.c -> a.b
     if (get(parentProperty, items[0]) === undefined) {
       console.warn(`Path "${path}" used for ${action} does not exist in all of the items, ${action} is disabled.`);
       result = false;

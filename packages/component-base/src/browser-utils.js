@@ -10,20 +10,20 @@ const testPlatform = (regexp) => regexp.test(navigator.platform);
 
 const testVendor = (regexp) => regexp.test(navigator.vendor);
 
-export const isAndroid = testUserAgent(/Android/);
+export const isAndroid = testUserAgent(/Android/u);
 
-export const isChrome = testUserAgent(/Chrome/) && testVendor(/Google Inc/);
+export const isChrome = testUserAgent(/Chrome/u) && testVendor(/Google Inc/u);
 
-export const isFirefox = testUserAgent(/Firefox/);
+export const isFirefox = testUserAgent(/Firefox/u);
 
 // IPadOS 13 lies and says it's a Mac, but we can distinguish by detecting touch support.
-export const isIPad = testPlatform(/^iPad/) || (testPlatform(/^Mac/) && navigator.maxTouchPoints > 1);
+export const isIPad = testPlatform(/^iPad/u) || (testPlatform(/^Mac/u) && navigator.maxTouchPoints > 1);
 
-export const isIPhone = testPlatform(/^iPhone/);
+export const isIPhone = testPlatform(/^iPhone/u);
 
 export const isIOS = isIPhone || isIPad;
 
-export const isSafari = testUserAgent(/^((?!chrome|android).)*safari/i);
+export const isSafari = testUserAgent(/^((?!chrome|android).)*safari/iu);
 
 export const isTouch = (() => {
   try {

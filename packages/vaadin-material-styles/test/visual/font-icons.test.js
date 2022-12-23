@@ -7,7 +7,7 @@ describe('font-icons', () => {
 
   before(async () => {
     const { origin, pathname } = new URL(import.meta.url);
-    const file = pathname.replace(/visual\/.+/, 'glyphs.json');
+    const file = pathname.replace(/visual\/.+/u, 'glyphs.json');
     const data = await fetch(`${origin}${file}`);
     const icons = await data.json();
     wrapper = fixtureSync(`

@@ -75,7 +75,7 @@ function parseLog(log) {
           pos = 'title';
           break;
         }
-        result = /^(\w+): +(.+)$/.exec(line);
+        result = /^(\w+): +(.+)$/u.exec(line);
         if (result) {
           commit.head[result[1]] = result[2];
           break;
@@ -86,12 +86,12 @@ function parseLog(log) {
           pos = 'body';
           break;
         }
-        result = /^ +(\w+)(!?): +(.*)$/.exec(line);
+        result = /^ +(\w+)(!?): +(.*)$/u.exec(line);
         if (result) {
           commit.type = result[1].toLowerCase();
           commit.breaking = !!result[2];
           commit.isBreaking = commit.breaking;
-          commit.skip = !commit.breaking && !/(feat|fix|perf)/.test(commit.type);
+          commit.skip = !commit.breaking && !/(feat|fix|perf)/u.test(commit.type);
           commit.isIncluded = !commit.skip;
           commit.title += result[3];
         } else {
@@ -99,15 +99,15 @@ function parseLog(log) {
         }
         break;
       case 'body':
-        result = /^ +([A-Z][\w-]+): +(.*)$/.exec(line);
+        result = /^ +([A-Z][\w-]+): +(.*)$/u.exec(line);
         if (result) {
           const k = result[1].toLowerCase();
           if (k === 'warranty') {
             commit.bfp = true;
           }
-          if (/(fixes|fix|related-to|connected-to|warranty)/i.test(k)) {
+          if (/(fixes|fix|related-to|connected-to|warranty)/iu.test(k)) {
             commit.footers.fixes ||= [];
-            commit.footers.fixes.push(...result[2].split(/[, ]+/).filter((s) => /\d+/.test(s)));
+            commit.footers.fixes.push(...result[2].split(/[, ]+/u).filter((s) => /\d+/u.test(s)));
           } else {
             commit.footers[k] ||= [];
             commit.footers[k].push(result[2]);
@@ -116,7 +116,7 @@ function parseLog(log) {
         }
       // eslint-disable-next-line no-fallthrough
       default:
-        result = /^commit (.+)$/.exec(line);
+        result = /^commit (.+)$/u.exec(line);
         if (result) {
           if (commit) {
             commit.body = commit.body.trim();
@@ -136,7 +136,7 @@ function parseLog(log) {
           pos = 'head';
         } else if (line.startsWith(' ')) {
           commit.body = String(commit.body);
-        } else if (/^packages\/.*/.test(line)) {
+        } else if (/^packages\/.*/u.test(line)) {
           const wc = line.split('/')[1];
           if (!commit.components.includes(wc)) {
             commit.components.push(wc);
@@ -160,8 +160,8 @@ function createLink(type, id, char) {
 // Convert GH internal links to absolute links
 function parseLinks(message) {
   message = message.trim();
-  message = message.replace(/^([\da-f]+) /, `${createLink('commit', '$1', '⧉')} `);
-  message = message.replace(/ *\(#(\d+)\)$/g, ` (${createLink('pull', '$1', '#$1')})`);
+  message = message.replace(/^([\da-f]+) /u, `${createLink('commit', '$1', '⧉')} `);
+  message = message.replace(/ *\(#(\d+)\)$/gu, ` (${createLink('pull', '$1', '#$1')})`);
   return message;
 }
 
@@ -178,12 +178,12 @@ function getTickets(c) {
     const ticket = `Ticket${c.footers.fixes.length > 1 ? 's' : ''}`;
     const links = c.footers.fixes.reduce((prev, f) => {
       let link = f;
-      if (/^#?\d/.test(f)) {
-        f = f.replace(/^#/, '');
+      if (/^#?\d/u.test(f)) {
+        f = f.replace(/^#/u, '');
         link = `${createLink('issues', f)}`;
-      } else if (/^(vaadin\/|https:\/\/github.com\/vaadin\/).*\d+$/.test(f)) {
-        const n = f.replace(/^.*?(\d+)$/, '$1');
-        f = f.replace(/^(https:\/\/github.com\/vaadin|vaadin)\//, '').replace('#', '/issues/');
+      } else if (/^(vaadin\/|https:\/\/github.com\/vaadin\/).*\d+$/u.test(f)) {
+        const n = f.replace(/^.*?(\d+)$/u, '$1');
+        f = f.replace(/^(https:\/\/github.com\/vaadin|vaadin)\//u, '').replace('#', '/issues/');
         link = `[${n}](${createGHLink(f)})`;
       }
       return (prev ? `${prev}, ` : '') + link;
@@ -274,7 +274,7 @@ function logCommitsByComponent(commits) {
           log += `. ${tickets}`;
         }
       });
-      console.log(log.replace(/^\s*[\r\n]/gm, ''));
+      console.log(log.replace(/^\s*[\r\n]/gmu, ''));
     });
 }
 

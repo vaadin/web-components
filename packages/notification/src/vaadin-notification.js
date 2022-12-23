@@ -491,7 +491,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     }
 
     this._card.slot = this.position;
-    if (this._container.firstElementChild && /top/.test(this.position)) {
+    if (this._container.firstElementChild && /top/u.test(this.position)) {
       this._container.insertBefore(this._card, this._container.firstElementChild);
     } else {
       this._container.appendChild(this._card);

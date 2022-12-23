@@ -128,7 +128,7 @@ describe('tabs', () => {
           });
 
           // TODO: passes locally but fails in GitHub Actions due to 1px difference.
-          const chrome = /HeadlessChrome/.test(navigator.userAgent);
+          const chrome = /HeadlessChrome/u.test(navigator.userAgent);
           (horizontalRtl && chrome ? it.skip : it)(
             `when orientation=${orientation} should have overflow="start" if scroll is at the end`,
             (done) => {

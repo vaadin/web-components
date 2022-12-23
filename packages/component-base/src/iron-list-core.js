@@ -10,7 +10,7 @@
 import { animationFrame, idlePeriod, microTask } from './async.js';
 import { Debouncer, enqueueDebouncer, flush } from './debounce.js';
 
-const IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
+const IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/u);
 const IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
 const DEFAULT_PHYSICAL_COUNT = 3;
 

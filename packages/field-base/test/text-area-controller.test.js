@@ -75,7 +75,7 @@ describe('text-area-controller', () => {
   describe('unique id', () => {
     let wrapper, elements;
 
-    const ID_REGEX = /^textarea-textarea-controller-element-\d+$/;
+    const ID_REGEX = /^textarea-textarea-controller-element-\d+$/u;
 
     beforeEach(() => {
       wrapper = fixtureSync(`

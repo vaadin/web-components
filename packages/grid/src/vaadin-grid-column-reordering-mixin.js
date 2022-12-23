@@ -305,7 +305,7 @@ export const ColumnReorderingMixin = (superClass) =>
      */
     _setSiblingsReorderStatus(column, status) {
       iterateChildren(column.parentNode, (sibling) => {
-        if (/column/.test(sibling.localName) && this._isSwapAllowed(sibling, column)) {
+        if (/column/u.test(sibling.localName) && this._isSwapAllowed(sibling, column)) {
           sibling._reorderStatus = status;
         }
       });

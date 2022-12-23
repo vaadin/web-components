@@ -77,7 +77,7 @@ function getAllThemes() {
  */
 function matchesThemeFor(themeFor, tagName) {
   return (themeFor || '').split(' ').some((themeForToken) => {
-    return new RegExp(`^${themeForToken.split('*').join('.*')}$`).test(tagName);
+    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
   });
 }
 

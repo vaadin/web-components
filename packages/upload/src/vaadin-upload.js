@@ -880,11 +880,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-    const fileExt = file.name.match(/\.[^.]*$|$/)[0];
+    const fileExt = file.name.match(/\.[^.]*$|$/u)[0];
     // Escape regex operators common to mime types
-    const escapedAccept = this.accept.replace(/[+.]/g, '\\$&');
+    const escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
     // Create accept regex that can match comma separated patterns, star (*) wildcards
-    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
+    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/gu, '|').replace(/\/\*/gu, '/.*')})$`, 'iu');
     if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {

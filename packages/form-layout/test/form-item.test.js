@@ -92,7 +92,7 @@ describe('form-item', () => {
     });
 
     it('should set a unique id on the label element', () => {
-      const ID_REGEX = /^label-vaadin-form-item-\d+$/;
+      const ID_REGEX = /^label-vaadin-form-item-\d+$/u;
       expect(label1.id).to.not.equal(label2.id);
       expect(label1.id).to.match(ID_REGEX);
       expect(label2.id).to.match(ID_REGEX);

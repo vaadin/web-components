@@ -46,14 +46,14 @@ export const IncludedMixin = (superClass) =>
     /** @private */
     __onExcludeChange(exclude) {
       if (typeof exclude === 'string') {
-        this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
+        this.exclude = exclude ? RegExp(exclude.replace(/, */gu, '|'), 'iu') : undefined;
       }
     }
 
     /** @private */
     __onIncludeChange(include) {
       if (typeof include === 'string') {
-        this.include = include ? include.split(/, */) : undefined;
+        this.include = include ? include.split(/, */u) : undefined;
       } else if (!this._fields && Array.isArray(include)) {
         const item = {};
         this.include.forEach((path) => this.__set(path, null, item));

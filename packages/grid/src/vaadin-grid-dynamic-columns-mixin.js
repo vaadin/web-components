@@ -172,6 +172,6 @@ export const DynamicColumnsMixin = (superClass) =>
      * @protected
      */
     _isColumnElement(node) {
-      return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/.test(node.localName);
+      return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/u.test(node.localName);
     }
   };

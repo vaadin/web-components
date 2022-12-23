@@ -48,7 +48,7 @@ describe('ElementMixin', () => {
     });
 
     it('should have a valid version number', () => {
-      expect(XElement.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/);
+      expect(XElement.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/u);
     });
   });
 

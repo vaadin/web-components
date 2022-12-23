@@ -256,7 +256,7 @@ describe('drag and drop', () => {
       });
 
       // The test only concerns Safari
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/iu.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {
         const row = getRows(grid.$.items)[0];
         const originalTransform = row.style.transform;

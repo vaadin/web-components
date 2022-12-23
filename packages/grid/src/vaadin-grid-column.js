@@ -271,7 +271,7 @@ export const ColumnBaseMixin = (superClass) =>
       // eslint-disable-next-line @typescript-eslint/no-this-alias, consistent-this
       let el = this;
       // Custom elements extending grid must have a specific localName
-      while (el && !/^vaadin.*grid(-pro)?$/.test(el.localName)) {
+      while (el && !/^vaadin.*grid(-pro)?$/u.test(el.localName)) {
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
@@ -406,10 +406,10 @@ export const ColumnBaseMixin = (superClass) =>
     _generateHeader(path) {
       return path
         .substr(path.lastIndexOf('.') + 1)
-        .replace(/([A-Z])/g, '-$1')
+        .replace(/([A-Z])/gu, '-$1')
         .toLowerCase()
-        .replace(/-/g, ' ')
-        .replace(/^./, (match) => match.toUpperCase());
+        .replace(/-/gu, ' ')
+        .replace(/^./u, (match) => match.toUpperCase());
     }
 
     /** @private */

@@ -213,7 +213,7 @@ export const ListMixin = (superClass) =>
       const key = event.key;
 
       const currentIdx = this.items.indexOf(this.focused);
-      if (/[a-zA-Z0-9]/.test(key) && key.length === 1) {
+      if (/[a-zA-Z0-9]/u.test(key) && key.length === 1) {
         const idx = this._searchKey(currentIdx, key);
         if (idx >= 0) {
           this._focus(idx);

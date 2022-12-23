@@ -297,6 +297,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
               const MATCH_MILLISECONDS = '(\\d{1,3})';
               const re = new RegExp(
                 `^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`,
+                'u',
               );
               const parts = re.exec(text);
               if (parts) {

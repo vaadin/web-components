@@ -178,6 +178,7 @@
     "prefer-spread": "error",
     "prefer-template": "error",
     "require-await": "error",
+    "require-unicode-regexp": "error",
     "space-in-parens": ["error", "never"],
     "spaced-comment": ["error", "always"]
   },

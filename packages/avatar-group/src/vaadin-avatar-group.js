@@ -384,7 +384,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   /** @private */
   _onOverflowKeyDown(e) {
     if (!this._opened) {
-      if (/^(Enter|SpaceBar|\s)$/.test(e.key)) {
+      if (/^(Enter|SpaceBar|\s)$/u.test(e.key)) {
         e.preventDefault();
         this._opened = true;
       }
@@ -393,7 +393,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
 
   /** @private */
   _onListKeyDown(event) {
-    if (event.key === 'Escape' || event.key === 'Esc' || /^(Tab)$/.test(event.key)) {
+    if (event.key === 'Escape' || event.key === 'Tab') {
       this._opened = false;
     }
   }

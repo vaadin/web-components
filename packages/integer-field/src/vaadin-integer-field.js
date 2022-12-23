@@ -84,12 +84,12 @@ export class IntegerField extends NumberField {
 
   /** @private */
   __isInteger(value) {
-    return /^(-\d)?\d*$/.test(String(value));
+    return /^(-\d)?\d*$/u.test(String(value));
   }
 
   /** @private */
   __hasOnlyDigits(value) {
-    return /^\d+$/.test(String(value));
+    return /^\d+$/u.test(String(value));
   }
 }
 

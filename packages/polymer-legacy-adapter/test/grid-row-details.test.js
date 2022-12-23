@@ -30,7 +30,7 @@ describe('row details template', () => {
     grid.rowDetailsRenderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(grid)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid \/>\.$/,
+      /^Cannot use both a template and a renderer for <vaadin-grid \/>\.$/u,
     );
   });
 });
