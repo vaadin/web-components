@@ -41,8 +41,15 @@ const stubPaths: readonly string[] = filterEmptyItems(
 
       const moduleName = stripPrefix(camelCase(element.name));
       const modulePath = resolve(srcDir, `${moduleName}.ts`);
+      const moduleTsxPath = resolve(srcDir, `${moduleName}.tsx`);
 
-      if (!(await exists(modulePath)) || shouldOverride) {
+      const existingModulePath = (await exists(moduleTsxPath))
+        ? moduleTsxPath
+        : (await exists(modulePath))
+        ? modulePath
+        : undefined;
+
+      if (!existingModulePath || shouldOverride) {
         const exportExpression = ts.factory.createExportDeclaration(
           undefined,
           false,
@@ -56,7 +63,7 @@ const stubPaths: readonly string[] = filterEmptyItems(
         const contents = printer.printFile(sourceFile);
         await writeFile(modulePath, contents, 'utf8');
       } else {
-        warnAboutExistingFile(modulePath);
+        warnAboutExistingFile(existingModulePath);
       }
 
       return modulePath;

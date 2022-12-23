@@ -1,5 +1,5 @@
 import { unlink, writeFile } from 'node:fs/promises';
-import { relative, resolve } from 'node:path';
+import { relative, resolve, basename } from 'node:path';
 import ts, {
   type Identifier,
   type Node,
@@ -10,7 +10,7 @@ import ts, {
 } from 'typescript';
 import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { extractElementsFromDescriptions, loadDescriptions } from './descriptions.js';
-import { generatedDir, nodeModulesDir, utilsDir } from './utils/config.js';
+import { generatedDir, nodeModulesDir, rootDir, utilsDir } from './utils/config.js';
 import { ElementNameMissingError } from './utils/errors.js';
 import fromAsync from './utils/fromAsync.js';
 import { fswalk } from './utils/fswalk.js';
@@ -364,9 +364,34 @@ const elementFilesMap = await prepareElementFiles(descriptions);
 
 const sourceFiles = Array.from(elementFilesMap.entries(), ([element, data]) => generateReactComponent(element, data));
 
+function generateIndexDtsFile(elementNames: readonly string[]): SourceFile {
+  const sourceLines = [
+    `// Workaround for VSCode, enables TypeScript auto-imports form package.json`,
+    ...elementNames.map((elementName) => `import './${elementName}.js';`),
+  ];
+
+  return ts.createSourceFile(
+    resolve(rootDir, 'index.d.ts'),
+    sourceLines.join('\n'),
+    ts.ScriptTarget.ES2019,
+    undefined,
+    ts.ScriptKind.TS,
+  );
+}
+
+const indexDtsFile = generateIndexDtsFile(sourceFiles.map(({ fileName }) => basename(fileName, '.ts')));
+
+const indexJsFile = ts.createSourceFile(
+  resolve(rootDir, 'index.js'),
+  '// Intentionally empty, please import from individual contained .js files',
+  ts.ScriptTarget.ES2019,
+  undefined,
+  ts.ScriptKind.JS,
+);
+
 async function printAndWrite(file: SourceFile) {
   const contents = printer.printFile(file);
   await writeFile(file.fileName, contents, 'utf8');
 }
 
-await Promise.all(sourceFiles.map(printAndWrite));
+await Promise.all([...sourceFiles.map(printAndWrite), printAndWrite(indexDtsFile), printAndWrite(indexJsFile)]);

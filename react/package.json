@@ -13,7 +13,7 @@
     "build:generate-stubs": "tsx scripts/stub-generator.ts",
     "build:update-packagejson": "tsx scripts/package-json-update.ts",
     "build:typescript": "tsc -p tsconfig.build.json",
-    "clean": "rimraf css generated src/generated renderers utils *.d.ts *.js *.d.ts.map *.js.map",
+    "clean": "rimraf css generated src/generated renderers utils *.d.ts !\\(*.config\\).js *.d.ts.map *.js.map",
     "clean:dev": "rimraf generated renderers utils *.d.ts *.js *.d.ts.map *.js.map",
     "build": "npm run build:dev && npm run build:typescript && npm run build:update-packagejson",
     "build:dev": "npm run build:load-schema && npm run build:generate && npm run build:generate-css",
@@ -148,6 +148,7 @@
     "*.js.map"
   ],
   "exports": {
+    "./package.json": "./package.json",
     "./Accordion.js": {
       "default": "./Accordion.js",
       "types": "./Accordion.d.ts"
@@ -219,6 +220,14 @@
     "./Crud.js": {
       "default": "./Crud.js",
       "types": "./Crud.d.ts"
+    },
+    "./CrudEdit.js": {
+      "default": "./CrudEdit.js",
+      "types": "./CrudEdit.d.ts"
+    },
+    "./CrudEditColumn.js": {
+      "default": "./CrudEditColumn.js",
+      "types": "./CrudEditColumn.d.ts"
     },
     "./CustomField.js": {
       "default": "./CustomField.js",
