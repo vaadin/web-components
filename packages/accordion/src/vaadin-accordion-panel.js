@@ -8,14 +8,14 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { SummarySlotController } from '@vaadin/details/src/summary-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class SummaryController extends SlotChildObserveController {
+class SummaryController extends SummarySlotController {
   constructor(host) {
-    super(host, 'summary', 'vaadin-accordion-heading', {
+    super(host, 'vaadin-accordion-heading', {
       initializer: (node, host) => {
         host._setFocusElement(node);
         host.stateTarget = node;
@@ -94,6 +94,23 @@ class AccordionPanel extends DetailsMixin(
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The text to be used as a text for the default summary,
+       * if there is no element assigned to the "summary" slot.
+       */
+      summary: {
+        type: String,
+        observer: '_summaryChanged',
+      },
+    };
+  }
+
+  static get observers() {
+    return ['__updateAriaAttributes(focusElement, _contentElements)'];
+  }
+
   static get delegateAttrs() {
     return ['theme'];
   }
@@ -118,8 +135,6 @@ class AccordionPanel extends DetailsMixin(
     this.addController(this._tooltipController);
     this._tooltipController.setTarget(this.focusElement);
     this._tooltipController.setPosition('bottom-start');
-
-    this._initContent();
   }
 
   /**
@@ -134,26 +149,26 @@ class AccordionPanel extends DetailsMixin(
   }
 
   /** @private */
-  _initContent() {
-    this._contentController.addEventListener('slot-content-changed', (event) => {
-      // Store nodes to toggle `aria-hidden` attribute
-      const content = event.target.nodes || [];
-      this._contentElements = content;
+  _summaryChanged(summary) {
+    this._summaryController.setSummary(summary);
+  }
 
-      // See https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
-      const node = content[0];
+  /** @private */
+  __updateAriaAttributes(focusElement, contentElements) {
+    if (focusElement && contentElements) {
+      const node = contentElements[0];
+
       if (node) {
         node.setAttribute('role', 'region');
-        node.setAttribute('aria-labelledby', this.focusElement.id);
+        node.setAttribute('aria-labelledby', focusElement.id);
       }
 
-      if (node && node.parentNode === this && node.id) {
-        this.focusElement.setAttribute('aria-controls', node.id);
+      if (node && node.id) {
+        focusElement.setAttribute('aria-controls', node.id);
       } else {
-        this.focusElement.removeAttribute('aria-controls');
+        focusElement.removeAttribute('aria-controls');
       }
-    });
-    this.addController(this._contentController);
+    }
   }
 }
 

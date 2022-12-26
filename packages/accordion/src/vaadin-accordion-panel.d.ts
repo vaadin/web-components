@@ -44,6 +44,12 @@ export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementE
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class AccordionPanel extends DetailsMixin(DelegateFocusMixin(DelegateStateMixin(ThemableMixin(HTMLElement)))) {
+  /**
+   * The text to be used as a text for the default summary,
+   * if there is no element assigned to the "summary" slot.
+   */
+  summary: string | null | undefined;
+
   addEventListener<K extends keyof AccordionPanelEventMap>(
     type: K,
     listener: (this: AccordionPanel, ev: AccordionPanelEventMap[K]) => void,
