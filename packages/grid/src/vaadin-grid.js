@@ -539,9 +539,15 @@ class Grid extends ElementMixin(
       const cell = this.shadowRoot.activeElement;
       const cellCoordinates = this.__getBodyCellCoordinates(cell);
 
+      const previousSize = virtualizer.size || 0;
       virtualizer.size = effectiveSize;
-      virtualizer.update();
-      virtualizer.flush();
+
+      // Request an update for the previous last row to have the "last" state removed
+      virtualizer.update(previousSize - 1, previousSize - 1);
+      if (effectiveSize < previousSize) {
+        // Size was decreased, so the new last row requires an explicit update
+        virtualizer.update(effectiveSize - 1, effectiveSize - 1);
+      }
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
       if (cellCoordinates && cell.parentElement.hidden) {
