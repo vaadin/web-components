@@ -17,7 +17,7 @@ import {
 } from './helpers.js';
 
 describe('basic features', () => {
-  let grid;
+  let grid, column;
 
   beforeEach(() => {
     grid = fixtureSync(`
@@ -26,9 +26,10 @@ describe('basic features', () => {
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
-    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+    column = grid.firstElementChild;
+    column.renderer = sinon.spy((root, _, model) => {
       root.textContent = model.index;
-    };
+    });
     flushGrid(grid);
   });
 
@@ -217,6 +218,60 @@ describe('basic features', () => {
     grid.size = 2;
     const lastRowSlot = grid.shadowRoot.querySelector('[part~="row"][last] slot');
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
+  });
+
+  it('should not have attribute last on the previous last body row after resize', () => {
+    grid.size = 2;
+    grid.size = 3;
+    expect(grid.shadowRoot.querySelectorAll('[part~="row"][last]').length).to.equal(1);
+  });
+
+  it('should not have attribute last on a row when size incresed beyond viewport ', () => {
+    grid.size = 2;
+    grid.size = 1000;
+    expect(grid.shadowRoot.querySelectorAll('[part~="row"][last]').length).to.equal(0);
+  });
+
+  function getFirstCellRenderCount() {
+    return column.renderer.getCalls().filter((call) => call.args[2].index === 0).length;
+  }
+
+  it('should have rendered the first cell once', () => {
+    expect(getFirstCellRenderCount()).to.equal(1);
+  });
+
+  it('should re-render the cell when last row enters the viewport on resize', () => {
+    column.renderer.resetHistory();
+    grid.size = 1;
+    expect(getFirstCellRenderCount()).to.equal(1);
+  });
+
+  it('should re-render the cell when last row leaves the viewport on resize', () => {
+    grid.size = 1;
+    column.renderer.resetHistory();
+    grid.size = 1000;
+    expect(getFirstCellRenderCount()).to.equal(1);
+  });
+
+  it('should not re-render the cell when last row change happens outside the viewport', () => {
+    column.renderer.resetHistory();
+    grid.size = 100;
+    grid.size = 200;
+    expect(getFirstCellRenderCount()).to.equal(0);
+  });
+
+  it('should not re-render the cell when last row change happens on other visible rows', () => {
+    column.renderer.resetHistory();
+    grid.size = 2;
+    grid.size = 3;
+    expect(getFirstCellRenderCount()).to.equal(0);
+  });
+
+  it('should have rendered the first cell once on resize from 0', () => {
+    column.renderer.resetHistory();
+    grid.size = 0;
+    grid.size = 1;
+    expect(getFirstCellRenderCount()).to.equal(1);
   });
 });
 
