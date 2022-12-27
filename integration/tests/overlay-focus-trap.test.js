@@ -42,11 +42,11 @@ describe('focus-trap', () => {
     it('should properly detect focusable elements inside the content', () => {
       expect(focusableElements.length).to.equal(6);
       expect(focusableElements[0]).to.equal(overlay.$.overlay);
-      expect(focusableElements[1]).to.eql(overlay.querySelector('vaadin-text-field').focusElement);
-      expect(focusableElements[2]).to.eql(overlay.querySelector('#radioButton1').focusElement);
-      expect(focusableElements[3]).to.eql(overlay.querySelector('#radioButton2').focusElement);
-      expect(focusableElements[4]).to.eql(overlay.querySelector('#radioButton3').focusElement);
-      expect(focusableElements[5]).to.eql(overlay.querySelector('vaadin-button'));
+      expect(focusableElements[1]).to.equal(overlay.querySelector('vaadin-text-field').focusElement);
+      expect(focusableElements[2]).to.equal(overlay.querySelector('#radioButton1').focusElement);
+      expect(focusableElements[3]).to.equal(overlay.querySelector('#radioButton2').focusElement);
+      expect(focusableElements[4]).to.equal(overlay.querySelector('#radioButton3').focusElement);
+      expect(focusableElements[5]).to.equal(overlay.querySelector('vaadin-button'));
     });
 
     it('should focus focusable elements inside the content when focusTrap = true', async () => {
@@ -59,16 +59,16 @@ describe('focus-trap', () => {
         expect(focusedIndex).to.equal(i);
         tabKeyDown(focusableElements[focusedIndex]);
       }
-      expect(getFocusedElementIndex()).to.eql(0);
+      expect(getFocusedElementIndex()).to.equal(0);
 
       // Shift + Tab
       tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         const focusedIndex = getFocusedElementIndex();
-        expect(focusedIndex).to.eql(i);
+        expect(focusedIndex).to.equal(i);
         tabKeyDown(focusableElements[focusedIndex], ['shift']);
       }
-      expect(getFocusedElementIndex()).to.eql(focusableElements.length - 1);
+      expect(getFocusedElementIndex()).to.equal(focusableElements.length - 1);
     });
   });
 
@@ -92,10 +92,10 @@ describe('focus-trap', () => {
     });
 
     it('should properly detect multiple focusable elements inside shadow DOM', () => {
-      expect(focusableElements.length).to.eql(4);
+      expect(focusableElements.length).to.equal(4);
       const div = overlay.querySelector('div');
       expect(focusableElements[1]).to.equal(div.shadowRoot.querySelector('input'));
-      expect(focusableElements[2]).to.eql(div.shadowRoot.querySelector('button'));
+      expect(focusableElements[2]).to.equal(div.shadowRoot.querySelector('button'));
     });
 
     it('should not focus the overlay part if the content is already focused', async () => {
@@ -103,7 +103,7 @@ describe('focus-trap', () => {
       // Needs to happen after opened and before focus-trap loop is executed
       focusableElements[1].focus();
       await oneEvent(overlay, 'vaadin-overlay-open');
-      expect(getFocusedElementIndex()).not.to.eql(0);
+      expect(getFocusedElementIndex()).not.to.equal(0);
     });
 
     it('should focus first element with tabIndex=1', async () => {
@@ -112,7 +112,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       const idx = getFocusedElementIndex();
-      expect(focusableElements[idx].tabIndex).to.eql(1);
+      expect(focusableElements[idx].tabIndex).to.equal(1);
     });
 
     it('should focus focusable elements in shadow DOM on Tab and Shift Tab', async () => {
@@ -125,16 +125,16 @@ describe('focus-trap', () => {
         expect(focusedIndex).to.equal(i);
         tabKeyDown(focusableElements[focusedIndex]);
       }
-      expect(getFocusedElementIndex()).to.eql(0);
+      expect(getFocusedElementIndex()).to.equal(0);
 
       // Shift + Tab
       tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         const focusedIndex = getFocusedElementIndex();
-        expect(focusedIndex).to.eql(i);
+        expect(focusedIndex).to.equal(i);
         tabKeyDown(focusableElements[focusedIndex], ['shift']);
       }
-      expect(getFocusedElementIndex()).to.eql(focusableElements.length - 1);
+      expect(getFocusedElementIndex()).to.equal(focusableElements.length - 1);
     });
   });
 });
