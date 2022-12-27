@@ -100,7 +100,7 @@ describe('focus-trap', () => {
       overlay.focusTrap = false;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      expect(getFocusedElementIndex()).to.be.eql(-1);
+      expect(getFocusedElementIndex()).to.equal(-1);
     });
   });
 
