@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/text-field/vaadin-text-field.js';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { close, open } from './helpers.js';
@@ -13,7 +12,7 @@ customElements.define(
       return html`
         <vaadin-overlay id="overlay">
           <template>
-            <vaadin-text-field id="focusable"></vaadin-text-field>
+            <input id="focusable" />
           </template>
         </vaadin-overlay>
         <input id="focusable" />

@@ -11,7 +11,6 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
