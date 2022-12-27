@@ -6,6 +6,7 @@
 import './vaadin-tab.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -246,7 +247,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
   _updateOverflow() {
     const scrollPosition = this._vertical
       ? this._scrollerElement.scrollTop
-      : this.__getNormalizedScrollLeft(this._scrollerElement);
+      : getNormalizedScrollLeft(this._scrollerElement, this.getAttribute('dir'));
     const scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
 
     let overflow = scrollPosition > 0 ? 'start' : '';

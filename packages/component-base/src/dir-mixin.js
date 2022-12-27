@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DirHelper } from './dir-helper.js';
 
 /**
  * Array of Vaadin custom element classes that have been subscribed to the dir changes.
@@ -16,8 +15,6 @@ function directionUpdater() {
     alignDirs(element, documentDir);
   });
 }
-
-let scrollType;
 
 const directionObserver = new MutationObserver(directionUpdater);
 directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
@@ -60,15 +57,6 @@ export const DirMixin = (superClass) =>
           },
         },
       };
-    }
-
-    /** @protected */
-    static finalize() {
-      super.finalize();
-
-      if (!scrollType) {
-        scrollType = DirHelper.detectScrollType();
-      }
     }
 
     /** @protected */
@@ -153,23 +141,5 @@ export const DirMixin = (superClass) =>
       if (directionSubscribers.includes(this)) {
         directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
       }
-    }
-
-    /**
-     * @param {Element} element
-     * @return {number}
-     * @protected
-     */
-    __getNormalizedScrollLeft(element) {
-      return DirHelper.getNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element);
-    }
-
-    /**
-     * @param {Element} element
-     * @param {number} scrollLeft
-     * @protected
-     */
-    __setNormalizedScrollLeft(element, scrollLeft) {
-      return DirHelper.setNormalizedScrollLeft(scrollType, this.getAttribute('dir') || 'ltr', element, scrollLeft);
     }
   };

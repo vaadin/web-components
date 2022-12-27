@@ -6,7 +6,7 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { timeOut } from './async.js';
 import { Debouncer } from './debounce.js';
-import { DirHelper } from './dir-helper.js';
+import { getNormalizedScrollLeft, setNormalizedScrollLeft } from './dir-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -327,9 +327,8 @@ export const ListMixin = (superClass) =>
         this._scrollerElement.scrollTop += pixels;
       } else {
         const dir = this.getAttribute('dir') || 'ltr';
-        const scrollType = DirHelper.detectScrollType();
-        const scrollLeft = DirHelper.getNormalizedScrollLeft(scrollType, dir, this._scrollerElement) + pixels;
-        DirHelper.setNormalizedScrollLeft(scrollType, dir, this._scrollerElement, scrollLeft);
+        const scrollLeft = getNormalizedScrollLeft(this._scrollerElement, dir) + pixels;
+        setNormalizedScrollLeft(this._scrollerElement, dir, scrollLeft);
       }
     }
 

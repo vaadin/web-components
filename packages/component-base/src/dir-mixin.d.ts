@@ -12,8 +12,4 @@ export declare function DirMixin<T extends Constructor<HTMLElement>>(base: T): C
 
 export declare class DirMixinClass {
   protected readonly __isRTL: boolean;
-
-  protected __getNormalizedScrollLeft(element: Element | null): number;
-
-  protected __setNormalizedScrollLeft(element: Element | null, scrollLeft: number): void;
 }
