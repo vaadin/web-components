@@ -5,6 +5,7 @@
  */
 import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
@@ -157,7 +158,7 @@ export const ScrollMixin = (superClass) =>
         overflow += ' top';
       }
 
-      const scrollLeft = this.__getNormalizedScrollLeft(table);
+      const scrollLeft = getNormalizedScrollLeft(table, this.getAttribute('dir'));
       if (scrollLeft > 0) {
         overflow += ' start';
       }
@@ -255,7 +256,7 @@ export const ScrollMixin = (superClass) =>
       const scrollWidth = this.$.table.scrollWidth;
       const clientWidth = this.$.table.clientWidth;
       const scrollLeft = Math.max(0, this.$.table.scrollLeft);
-      const normalizedScrollLeft = this.__getNormalizedScrollLeft(this.$.table);
+      const normalizedScrollLeft = getNormalizedScrollLeft(this.$.table, this.getAttribute('dir'));
 
       // Position header, footer and items container
       const transform = `translate(${-scrollLeft}px, 0)`;

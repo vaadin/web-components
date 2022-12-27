@@ -3,6 +3,7 @@ import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
+import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
   flushGrid,
@@ -132,7 +133,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             done();
           });
 
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should update transforms when frozen columns decrease', (done) => {
@@ -148,7 +149,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             expect(transformsEqual(cells[0], '')).to.be.true;
             done();
           });
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should update transforms when frozen columns increase', (done) => {
@@ -164,7 +165,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             expect(transformsEqual(cells[1], `translate(${translateValue}px, 0px)`)).to.be.true;
             done();
           });
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should have the correct last-frozen cell in a row with hidden columns', () => {
