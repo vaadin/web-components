@@ -976,7 +976,7 @@ class Grid extends ElementMixin(
     updateRowStates(row, {
       first: index === 0,
       last: index === this._effectiveSize - 1,
-      odd: index % 2,
+      odd: index % 2 !== 0,
       even: index % 2 === 0,
     });
   }
