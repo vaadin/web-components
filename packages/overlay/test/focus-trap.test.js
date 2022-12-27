@@ -38,7 +38,7 @@ describe('focus-trap', () => {
 
     it('should properly detect focusable elements inside the content', () => {
       expect(focusableElements.length).to.equal(5);
-      expect(focusableElements[0]).to.eql(overlay.querySelector('textarea'));
+      expect(focusableElements[0]).to.equal(overlay.querySelector('textarea'));
       expect(focusableElements[1]).to.eql(overlay.querySelector('select'));
       expect(focusableElements[2]).to.eql(overlayPart);
       expect(focusableElements[3]).to.eql(overlay.querySelector('button'));
@@ -62,7 +62,7 @@ describe('focus-trap', () => {
 
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         const focusedIndex = getFocusedElementIndex();
-        expect(focusedIndex).to.eql(i);
+        expect(focusedIndex).to.equal(i);
         tabKeyDown(focusableElements[focusedIndex], ['shift']);
       }
       expect(getFocusedElementIndex()).to.eql(focusableElements.length - 1);

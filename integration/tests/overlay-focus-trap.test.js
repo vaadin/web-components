@@ -41,7 +41,7 @@ describe('focus-trap', () => {
 
     it('should properly detect focusable elements inside the content', () => {
       expect(focusableElements.length).to.equal(6);
-      expect(focusableElements[0]).to.eql(overlay.$.overlay);
+      expect(focusableElements[0]).to.equal(overlay.$.overlay);
       expect(focusableElements[1]).to.eql(overlay.querySelector('vaadin-text-field').focusElement);
       expect(focusableElements[2]).to.eql(overlay.querySelector('#radioButton1').focusElement);
       expect(focusableElements[3]).to.eql(overlay.querySelector('#radioButton2').focusElement);
@@ -94,7 +94,7 @@ describe('focus-trap', () => {
     it('should properly detect multiple focusable elements inside shadow DOM', () => {
       expect(focusableElements.length).to.eql(4);
       const div = overlay.querySelector('div');
-      expect(focusableElements[1]).to.eql(div.shadowRoot.querySelector('input'));
+      expect(focusableElements[1]).to.equal(div.shadowRoot.querySelector('input'));
       expect(focusableElements[2]).to.eql(div.shadowRoot.querySelector('button'));
     });
 
