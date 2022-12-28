@@ -46,6 +46,7 @@ export const InputFieldMixin = (superclass) =>
          */
         autocapitalize: {
           type: String,
+          reflectToAttribute: true,
         },
       };
     }
