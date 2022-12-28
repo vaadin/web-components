@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { Overlay } from '../src/vaadin-overlay.js';
@@ -55,24 +54,30 @@ describe('position mixin', () => {
     );
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const parent = fixtureSync(`
       <div id="parent">
         <div id="target" style="position: fixed; top: 100px; left: 100px; width: 20px; height: 20px; border: 1px solid">
           target
         </div>
-        <vaadin-positioned-overlay id="overlay">
-          <template>
-            <div id="overlay-child" style="width: 50px; height: 50px;"></div>
-          </template>
-        </vaadin-positioned-overlay>
+        <vaadin-positioned-overlay id="overlay"></vaadin-positioned-overlay>
       </div>
     `);
     target = parent.querySelector('#target');
     overlay = parent.querySelector('#overlay');
+    overlay.renderer = (root) => {
+      if (!root.firstChild) {
+        const div = document.createElement('div');
+        div.id = 'overlay-child';
+        div.style.width = '50px';
+        div.style.height = '50px';
+        root.appendChild(div);
+      }
+    };
     overlayContent = overlay.$.overlay;
     overlay.positionTarget = target;
     overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
   });
 
   afterEach(() => {
