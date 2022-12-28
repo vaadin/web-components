@@ -26,6 +26,7 @@ snapshots["vaadin-login-form host default"] =
       >
         <input
           aria-labelledby="label-vaadin-text-field-0"
+          autocapitalize="none"
           autocomplete="username"
           autocorrect="off"
           id="input-vaadin-text-field-6"
@@ -127,6 +128,7 @@ snapshots["vaadin-login-form host i18n"] =
       >
         <input
           aria-labelledby="label-vaadin-text-field-0"
+          autocapitalize="none"
           autocomplete="username"
           autocorrect="off"
           id="input-vaadin-text-field-6"
