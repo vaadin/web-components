@@ -89,6 +89,7 @@ class ContentController extends SlotObserveController {
  * @mixes DetailsMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
+ * @mixes ElementMixin
  * @mixes ThemableMixin
  */
 class Details extends DetailsMixin(
