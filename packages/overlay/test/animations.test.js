@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-overlay.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { createOverlay } from './helpers.js';
 
 registerStyles(
   'vaadin-overlay',
@@ -27,17 +27,8 @@ customElements.define(
   class extends PolymerElement {
     static get template() {
       return html`
-        <vaadin-overlay opened="{{showOverlay1}}">
-          <template>
-            <div>Overlay 1</div>
-            <button on-click="_switchOverlays">Go to overlay 2</button>
-          </template>
-        </vaadin-overlay>
-        <vaadin-overlay opened="{{showOverlay2}}">
-          <template>
-            <div>Overlay 2</div>
-          </template>
-        </vaadin-overlay>
+        <vaadin-overlay opened="{{showOverlay1}}" renderer="[[renderer1]]"></vaadin-overlay>
+        <vaadin-overlay opened="{{showOverlay2}}" renderer="[[renderer2]]"></vaadin-overlay>
       `;
     }
 
@@ -45,12 +36,41 @@ customElements.define(
       return {
         showOverlay1: Boolean,
         showOverlay2: Boolean,
-      };
-    }
+        renderer1: {
+          type: Object,
+          value: () => {
+            return (root) => {
+              if (!root.firstChild) {
+                const div = document.createElement('div');
+                div.textContent = 'Overlay 1';
 
-    _switchOverlays() {
-      this.showOverlay1 = false;
-      this.showOverlay2 = true;
+                const button = document.createElement('button');
+                button.textContent = 'Go to overlay 2';
+
+                button.addEventListener('click', () => {
+                  const host = root.__dataHost;
+                  host.showOverlay1 = false;
+                  host.showOverlay2 = true;
+                });
+
+                root.append(div, button);
+              }
+            };
+          },
+        },
+        renderer2: {
+          type: Object,
+          value: () => {
+            return (root) => {
+              if (!root.firstChild) {
+                const div = document.createElement('div');
+                div.textContent = 'Overlay 2';
+                root.appendChild(div);
+              }
+            };
+          },
+        },
+      };
     }
   },
 );
@@ -120,13 +140,7 @@ function afterOverlayClosingFinished(overlay, callback) {
     let overlay;
 
     beforeEach(() => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       if (withAnimation) {
         overlay.setAttribute('animate', '');
       }
@@ -280,19 +294,25 @@ function afterOverlayClosingFinished(overlay, callback) {
     beforeEach(() => {
       wrapper = fixtureSync(`
         <div>
-          <vaadin-overlay>
-            <template>
-              <div>Plain old content</div>
-            </template>
-          </vaadin-overlay>
-          <vaadin-overlay>
-            <template>
-              <animated-div>Fancy content</animated-div>
-            </template>
-          </vaadin-overlay>
+          <vaadin-overlay></vaadin-overlay>
+          <vaadin-overlay></vaadin-overlay>
         </div>
       `);
       overlays = Array.from(wrapper.querySelectorAll('vaadin-overlay'));
+      overlays[0].renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'Plain old content';
+          root.appendChild(div);
+        }
+      };
+      overlays[1].renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('animated-div');
+          div.textContent = 'Fancy content';
+          root.appendChild(div);
+        }
+      };
       if (withAnimation) {
         overlays.forEach((overlay) => {
           overlay.setAttribute('animate', '');
