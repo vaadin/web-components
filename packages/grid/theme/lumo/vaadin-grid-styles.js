@@ -309,8 +309,8 @@ registerStyles(
 
     /* Row stripes */
 
-    :host([theme~='row-stripes']) [part~='row'][part~='even-row'] [part~='body-cell'],
-    :host([theme~='row-stripes']) [part~='row'][part~='even-row'] [part~='details-cell'] {
+    :host([theme~='row-stripes']) [part~='even-row'] [part~='body-cell'],
+    :host([theme~='row-stripes']) [part~='even-row'] [part~='details-cell'] {
       background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
       background-repeat: repeat-x;
     }
