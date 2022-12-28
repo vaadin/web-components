@@ -67,6 +67,13 @@ class ContentController extends SlotObserveController {
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes ControllerMixin
+ * @mixes DetailsMixin
+ * @mixes DelegateFocusMixin
+ * @mixes DelegateStateMixin
+ * @mixes ThemableMixin
  */
 class AccordionPanel extends DetailsMixin(
   DelegateFocusMixin(DelegateStateMixin(ThemableMixin(ControllerMixin(PolymerElement)))),

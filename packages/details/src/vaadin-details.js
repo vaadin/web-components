@@ -86,6 +86,7 @@ class ContentController extends SlotObserveController {
  *
  * @extends HTMLElement
  * @mixes ControllerMixin
+ * @mixes DetailsMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
  * @mixes ElementMixin
