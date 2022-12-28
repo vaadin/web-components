@@ -34,6 +34,7 @@ snapshots["vaadin-login-overlay host default"] =
         >
           <input
             aria-labelledby="label-vaadin-text-field-0"
+            autocapitalize="none"
             autocomplete="username"
             autocorrect="off"
             id="input-vaadin-text-field-6"
@@ -151,6 +152,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         >
           <input
             aria-labelledby="label-vaadin-text-field-0"
+            autocapitalize="none"
             autocomplete="username"
             autocorrect="off"
             id="input-vaadin-text-field-6"
