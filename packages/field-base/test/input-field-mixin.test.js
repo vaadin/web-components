@@ -71,6 +71,53 @@ describe('input-field-mixin', () => {
     });
   });
 
+  describe('attributes', () => {
+    describe('autocomplete', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<input-field-mixin-element autocomplete="on"></input-field-mixin-element>`);
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should set autocomplete property on the host element', () => {
+        expect(element.autocomplete).to.equal('on');
+      });
+
+      it('should propagate autocomplete attribute to the input', () => {
+        expect(input.autocomplete).to.equal('on');
+      });
+    });
+
+    describe('autocorrect', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<input-field-mixin-element autocorrect="on"></input-field-mixin-element>`);
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should set autocorrect property on the host element', () => {
+        expect(element.autocorrect).to.equal('on');
+      });
+
+      it('should propagate autocorrect attribute to the input', () => {
+        expect(input.getAttribute('autocorrect')).to.equal('on');
+      });
+    });
+
+    describe('autocapitalize', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<input-field-mixin-element autocapitalize="characters"></input-field-mixin-element>`);
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should set autocapitalize property on the host element', () => {
+        expect(element.autocapitalize).to.equal('characters');
+      });
+
+      it('should propagate autocapitalize attribute to the input', () => {
+        expect(input.getAttribute('autocapitalize')).to.equal('characters');
+      });
+    });
+  });
+
   describe('validation', () => {
     beforeEach(() => {
       element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
