@@ -5,9 +5,9 @@
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {

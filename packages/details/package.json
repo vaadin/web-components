@@ -39,7 +39,6 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "24.0.0-alpha7",
     "@vaadin/component-base": "24.0.0-alpha7",
-    "@vaadin/field-base": "24.0.0-alpha7",
     "@vaadin/vaadin-lumo-styles": "24.0.0-alpha7",
     "@vaadin/vaadin-material-styles": "24.0.0-alpha7",
     "@vaadin/vaadin-themable-mixin": "24.0.0-alpha7"

@@ -2,25 +2,21 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
-import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(ControllerMixin(PolymerElement)) {
+  class extends DelegateFocusMixin(PolymerElement) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
 
-    constructor() {
-      super();
+    /** @protected */
+    ready() {
+      super.ready();
 
-      this.addController(
-        new InputController(this, (input) => {
-          this._setFocusElement(input);
-        }),
-      );
+      const input = this.querySelector('input');
+      this._setFocusElement(input);
     }
   },
 );
@@ -30,7 +26,11 @@ describe('delegate-focus-mixin', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+      element = fixtureSync(`
+        <delegate-focus-mixin-element>
+          <input slot="input" />
+        </delegate-focus-mixin-element>
+      `);
       input = element.querySelector('input');
     });
 
@@ -119,7 +119,11 @@ describe('delegate-focus-mixin', () => {
     let spy;
 
     beforeEach(() => {
-      element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+      element = fixtureSync(`
+        <delegate-focus-mixin-element>
+          <input slot="input" />
+        </delegate-focus-mixin-element>
+      `);
       input = element.querySelector('input');
       spy = sinon.spy();
     });
@@ -163,6 +167,10 @@ describe('delegate-focus-mixin', () => {
     beforeEach(() => {
       element = document.createElement('delegate-focus-mixin-element');
       element.autofocus = true;
+
+      const input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      element.appendChild(input);
     });
 
     afterEach(() => {
@@ -214,7 +222,11 @@ describe('delegate-focus-mixin', () => {
   describe('tabindex', () => {
     describe('default', () => {
       beforeEach(() => {
-        element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+        element = fixtureSync(`
+          <delegate-focus-mixin-element>
+            <input slot="input" />
+          </delegate-focus-mixin-element>
+        `);
         input = element.querySelector('input');
       });
 
@@ -249,7 +261,11 @@ describe('delegate-focus-mixin', () => {
 
     describe('attribute', () => {
       beforeEach(() => {
-        element = fixtureSync(`<delegate-focus-mixin-element tabindex="-1"></delegate-focus-mixin-element>`);
+        element = fixtureSync(`
+          <delegate-focus-mixin-element tabindex="-1">
+            <input slot="input" />
+          </delegate-focus-mixin-element>
+        `);
         input = element.querySelector('input');
       });
 
