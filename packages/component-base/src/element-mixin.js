@@ -15,14 +15,20 @@ import { DirMixin } from './dir-mixin.js';
 // for buttons that are based on `[role=button]` e.g vaadin-button.
 setCancelSyntheticClickEvents(false);
 
-window.Vaadin ||= {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
 
 /**
  * Array of Vaadin custom element classes that have been finalized.
  */
-window.Vaadin.registrations ||= [];
+if (!window.Vaadin.registrations) {
+  window.Vaadin.registrations = [];
+}
 
-window.Vaadin.developmentModeCallback ||= {};
+if (!window.Vaadin.developmentModeCallback) {
+  window.Vaadin.developmentModeCallback = {};
+}
 
 window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function () {
   usageStatistics();

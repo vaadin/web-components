@@ -491,9 +491,12 @@ export const ironList = {
       this._physicalIndexForKey = {};
       this._firstVisibleIndexVal = null;
       this._lastVisibleIndexVal = null;
-      this._physicalCount ||= 0;
-      this._physicalItems ||= [];
-      this._physicalSizes ||= [];
+      if (!this._physicalItems) {
+        this._physicalItems = [];
+      }
+      if (!this._physicalSizes) {
+        this._physicalSizes = [];
+      }
       this._physicalStart = 0;
       if (this._scrollTop > this._scrollOffset) {
         this._resetScrollPosition(0);
@@ -740,7 +743,9 @@ export const ironList = {
   },
 
   _debounce(name, cb, asyncModule) {
-    this._debouncers ||= {};
+    if (!this._debouncers) {
+      this._debouncers = {};
+    }
     this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
     enqueueDebouncer(this._debouncers[name]);
   },

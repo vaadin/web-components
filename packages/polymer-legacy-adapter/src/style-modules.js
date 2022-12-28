@@ -107,7 +107,10 @@ function getAllThemes() {
   });
 }
 
-window.Vaadin ||= {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
+
 window.Vaadin.styleModules = {
   getAllThemes,
   registerStyles,
