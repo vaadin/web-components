@@ -7,11 +7,11 @@ import './vaadin-accordion-heading.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 class SummaryController extends SlotObserveController {
