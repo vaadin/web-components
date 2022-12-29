@@ -469,6 +469,13 @@ describe('vaadin-confirm-dialog', () => {
   describe('set width and height', () => {
     let confirm, overlay;
 
+    function getStyleValue(element) {
+      return element
+        .getAttribute('style')
+        .split(':')
+        .map((str) => str.trim().replace(';', ''));
+    }
+
     describe('default', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
@@ -484,6 +491,26 @@ describe('vaadin-confirm-dialog', () => {
       it('should update height after opening the dialog', () => {
         confirm._contentHeight = '500px';
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+      });
+
+      it('should reset style after setting width to null', () => {
+        const prop = '--_vaadin-confirm-dialog-content-width';
+
+        confirm._contentWidth = '500px';
+        expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+        confirm._contentWidth = null;
+        expect(overlay.getAttribute('style')).to.be.not.ok;
+      });
+
+      it('should reset style after setting height to null', () => {
+        const prop = '--_vaadin-confirm-dialog-content-height';
+
+        confirm._contentHeight = '500px';
+        expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+        confirm._contentHeight = null;
+        expect(overlay.getAttribute('style')).to.be.not.ok;
       });
     });
 

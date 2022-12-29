@@ -181,16 +181,27 @@ class ConfirmDialogDialog extends Dialog {
   }
 
   /** @private */
+  __updateDimension(overlay, dimension, value) {
+    const prop = `--_vaadin-confirm-dialog-content-${dimension}`;
+
+    if (value) {
+      overlay.style.setProperty(prop, value);
+    } else {
+      overlay.style.removeProperty(prop);
+    }
+  }
+
+  /** @private */
   __updateContentHeight(height, overlay) {
     if (overlay) {
-      overlay.style.setProperty('--_vaadin-confirm-dialog-content-height', height);
+      this.__updateDimension(overlay, 'height', height);
     }
   }
 
   /** @private */
   __updateContentWidth(width, overlay) {
     if (overlay) {
-      overlay.style.setProperty('--_vaadin-confirm-dialog-content-width', width);
+      this.__updateDimension(overlay, 'width', width);
     }
   }
 }
