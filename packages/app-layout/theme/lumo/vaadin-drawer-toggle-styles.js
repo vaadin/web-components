@@ -28,7 +28,7 @@ const drawerToggle = css`
     content: var(--lumo-icons-menu);
   }
 
-  :host([slot*='navbar']) {
+  :host([slot~='navbar']) {
     color: var(--lumo-secondary-text-color);
   }
 `;
