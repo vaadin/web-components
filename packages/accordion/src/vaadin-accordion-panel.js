@@ -114,19 +114,6 @@ class AccordionPanel extends DetailsMixin(
     `;
   }
 
-  static get properties() {
-    return {
-      /**
-       * A content element.
-       *
-       * @protected
-       */
-      _collapsible: {
-        type: Object,
-      },
-    };
-  }
-
   static get delegateAttrs() {
     return ['theme'];
   }
