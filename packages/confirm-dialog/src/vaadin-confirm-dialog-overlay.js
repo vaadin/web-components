@@ -142,6 +142,57 @@ class ConfirmDialogDialog extends Dialog {
       ></vaadin-confirm-dialog-overlay>
     `;
   }
+
+  static get properties() {
+    return {
+      /**
+       * Height to be set on the overlay content.
+       */
+      contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       */
+      contentWidth: {
+        type: String,
+      },
+
+      /** @private */
+      _overlayElement: {
+        type: Object,
+      },
+    };
+  }
+
+  static get observers() {
+    return [
+      '__updateContentHeight(contentHeight, _overlayElement)',
+      '__updateContentWidth(contentWidth, _overlayElement)',
+    ];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._overlayElement = this.$.overlay;
+  }
+
+  /** @private */
+  __updateContentHeight(height, overlay) {
+    if (overlay) {
+      overlay.style.setProperty('--_vaadin-confirm-dialog-content-height', height);
+    }
+  }
+
+  /** @private */
+  __updateContentWidth(width, overlay) {
+    if (overlay) {
+      overlay.style.setProperty('--_vaadin-confirm-dialog-content-width', width);
+    }
+  }
 }
 
 customElements.define(ConfirmDialogDialog.is, ConfirmDialogDialog);

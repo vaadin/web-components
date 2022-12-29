@@ -467,26 +467,22 @@ describe('vaadin-confirm-dialog', () => {
   });
 
   describe('set width and height', () => {
-    let confirm, overlay, spy;
+    let confirm, overlay;
 
     describe('default', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
         overlay = confirm.$.dialog.$.overlay;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        spy = sinon.spy(confirm, '_setDimension');
       });
 
       it('should update width after opening the dialog', () => {
-        confirm._setWidth('300px');
-        expect(spy.calledWith('width', '300px')).to.be.true;
+        confirm._contentWidth = '300px';
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
       });
 
       it('should update height after opening the dialog', () => {
-        confirm._setHeight('500px');
-        expect(spy.calledWith('height', '500px')).to.be.true;
-        expect(spy.calledWith('height', '500px')).to.be.true;
+        confirm._contentHeight = '500px';
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
     });
@@ -495,7 +491,6 @@ describe('vaadin-confirm-dialog', () => {
       beforeEach(() => {
         confirm = document.createElement('vaadin-confirm-dialog');
         confirm.message = 'Message';
-        spy = sinon.spy(confirm, '_setDimension');
       });
 
       afterEach(() => {
@@ -503,22 +498,20 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should update width after opening the dialog', async () => {
-        confirm._setWidth('200px');
+        confirm._contentWidth = '200px';
         document.body.appendChild(confirm);
         overlay = confirm.$.dialog.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledWith('width', '200px')).to.be.true;
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('200px');
       });
 
       it('should update height after opening the dialog', async () => {
-        confirm._setHeight('500px');
+        confirm._contentHeight = '500px';
         document.body.appendChild(confirm);
         overlay = confirm.$.dialog.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledWith('height', '500px')).to.be.true;
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
     });
