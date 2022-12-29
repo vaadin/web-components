@@ -6,4 +6,7 @@
 
 import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 
+/**
+ * A controller to manage the default content slot.
+ */
 export class ContentController extends SlotObserveController {}
