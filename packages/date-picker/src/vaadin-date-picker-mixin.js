@@ -791,21 +791,17 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      const parsedInitialPosition = parseDate(this.initialPosition);
+      // Detect which date to show
+      const initialPosition = this._getInitialPosition();
+      this._overlayContent.initialPosition = initialPosition;
 
-      const initialPosition =
-        this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
+      // Scroll the date into view
+      const scrollFocusDate = this._overlayContent.focusedDate || initialPosition;
+      this._overlayContent.scrollToDate(scrollFocusDate);
 
-      if (parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate)) {
-        this._overlayContent.initialPosition = initialPosition;
-      } else {
-        this._overlayContent.initialPosition = getClosestDate(initialPosition, [this._minDate, this._maxDate]);
-      }
-
-      this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
-      // Have a default focused date
+      // Ensure the date is focused
       this._ignoreFocusedDateChange = true;
-      this._overlayContent.focusedDate ||= this._overlayContent.initialPosition;
+      this._overlayContent.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
@@ -821,6 +817,18 @@ export const DatePickerMixin = (subclass) =>
         this.focusElement.blur();
         this._overlayContent.focusDateElement();
       }
+    }
+
+    /** @private */
+    _getInitialPosition() {
+      const parsedInitialPosition = parseDate(this.initialPosition);
+
+      const initialPosition =
+        this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
+
+      return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate)
+        ? initialPosition
+        : getClosestDate(initialPosition, [this._minDate, this._maxDate]);
     }
 
     /** @private */
