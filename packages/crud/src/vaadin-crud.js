@@ -22,6 +22,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { getProperty, setProperty } from './vaadin-crud-helpers.js';
 
 /**
  * @private
@@ -1171,7 +1172,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this._fields.forEach((e) => {
         const path = e.path || e.getAttribute('path');
         if (path) {
-          e.value = this.get(path, item);
+          e.value = getProperty(path, item);
         }
       });
 
@@ -1252,7 +1253,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._fields.forEach((e) => {
       const path = e.path || e.getAttribute('path');
       if (path) {
-        this.__set(path, e.value, item);
+        setProperty(path, e.value, item);
       }
     });
     const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item }, cancelable: true }));
@@ -1264,7 +1265,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           this.items.push(item);
         }
       } else {
-        this.editedItem ||= {};
+        if (!this.editedItem) {
+          this.editedItem = {};
+        }
         Object.assign(this.editedItem, item);
       }
       this._grid.clearCache();
@@ -1303,23 +1306,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       }
       this._grid.clearCache();
       this.__closeEditor();
-    }
-  }
-
-  /**
-   * Utility method for setting nested values in JSON objects but initializing empty keys unless `Polymer.Base.set`
-   * @private
-   */
-  __set(path, val, obj) {
-    if (obj && path) {
-      path
-        .split('.')
-        .slice(0, -1)
-        .reduce((o, p) => {
-          o[p] ||= {};
-          return o[p];
-        }, obj);
-      this.set(path, val, obj);
     }
   }
 

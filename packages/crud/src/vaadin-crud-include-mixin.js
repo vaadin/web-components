@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { setProperty } from './vaadin-crud-helpers.js';
 
 /**
  * @polymerMixin
@@ -56,7 +57,9 @@ export const IncludedMixin = (superClass) =>
         this.include = include ? include.split(/, */u) : undefined;
       } else if (!this._fields && Array.isArray(include)) {
         const item = {};
-        this.include.forEach((path) => this.__set(path, null, item));
+        this.include.forEach((path) => {
+          setProperty(path, null, item);
+        });
         this._configure(item);
       }
     }

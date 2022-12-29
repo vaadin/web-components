@@ -113,9 +113,5 @@ describe('crud form', () => {
       expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('Name last');
       expect(crudForm.querySelectorAll('vaadin-text-field')[2].label).to.be.equal('Role');
     });
-
-    it('should capitalize correctly', () => {
-      expect(crudForm.__capitalize('-aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
-    });
   });
 });

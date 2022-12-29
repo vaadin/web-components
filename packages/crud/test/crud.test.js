@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
+import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
 describe('crud', () => {
@@ -209,20 +210,20 @@ describe('crud', () => {
     });
   });
 
-  describe('objects', () => {
-    beforeEach(() => {
-      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-    });
-
+  describe('utils', () => {
     it('should be possible to set nested properties to an object', () => {
       const o = {};
-      crud.__set('a.b.c', 'd', o);
+      setProperty('a.b.c', 'd', o);
       expect(o.a.b.c).to.be.equal('d');
     });
 
-    it('should be possible to get nested properties to an object', () => {
+    it('should be possible to get nested properties from an object', () => {
       const o = { a: { b: { c: 'd' } } };
-      expect(crud.get('a.b.c', o)).to.be.equal('d');
+      expect(getProperty('a.b.c', o)).to.be.equal('d');
+    });
+
+    it('should capitalize string and remove non-letter characters', () => {
+      expect(capitalize('-aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
     });
   });
 
