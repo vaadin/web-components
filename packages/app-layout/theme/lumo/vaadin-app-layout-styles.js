@@ -17,6 +17,11 @@ registerStyles(
       border-bottom: 1px solid var(--lumo-contrast-10pct);
     }
 
+    [part='navbar'][bottom] {
+      border-bottom: none;
+      border-top: 1px solid var(--lumo-contrast-10pct);
+    }
+
     [part='drawer'] {
       border-inline-end: 1px solid var(--lumo-contrast-10pct);
     }
@@ -27,7 +32,7 @@ registerStyles(
     }
 
     :host([primary-section='navbar']) [part='navbar'] {
-      border-bottom: none;
+      border: none;
       background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
     }
 
