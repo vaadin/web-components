@@ -14,6 +14,7 @@ import '@vaadin/grid/src/vaadin-grid-sorter.js';
 import '@vaadin/grid/src/vaadin-grid-filter.js';
 import './vaadin-crud-edit-column.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
+import { capitalize, getProperty } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
@@ -169,7 +170,7 @@ class CrudGrid extends IncludedMixin(Grid) {
       col = document.createElement('vaadin-grid-column');
       parent.appendChild(col);
       col.renderer = (root, _column, model) => {
-        root.textContent = path ? this.get(path, model.item) : model.item;
+        root.textContent = path ? getProperty(path, model.item) : model.item;
       };
     }
 
@@ -267,33 +268,10 @@ class CrudGrid extends IncludedMixin(Grid) {
   __createGroup(parent, header) {
     const grp = document.createElement('vaadin-grid-column-group');
     if (header) {
-      grp.header = this.__capitalize(header);
+      grp.header = capitalize(header);
     }
     parent.appendChild(grp);
     return grp;
-  }
-
-  /** @private */
-  __capitalize(path) {
-    return path
-      .toLowerCase()
-      .replace(/([^\w]+)/gu, ' ')
-      .trim()
-      .replace(/^./u, (c) => c.toUpperCase());
-  }
-
-  /** @private */
-  __set(path, val, obj) {
-    if (obj && path) {
-      path
-        .split('.')
-        .slice(0, -1)
-        .reduce((o, p) => {
-          o[p] ||= {};
-          return o[p];
-        }, obj);
-      this.set(path, val, obj);
-    }
   }
 }
 
