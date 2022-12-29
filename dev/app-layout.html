@@ -13,7 +13,7 @@
       }
 
       header h1,
-      h2[slot="navbar"] {
+      h2[slot*="navbar"] {
         font-size: var(--lumo-font-size-l);
         margin: 0;
       }
@@ -55,8 +55,8 @@
         <a href="">Sign in</a>
       </footer>
 
-      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-      <h2 slot="navbar">View name</h2>
+      <vaadin-drawer-toggle slot="navbar touch-optimized"></vaadin-drawer-toggle>
+      <h2 slot="navbar touch-optimized">View name</h2>
 
       <dummy-content></dummy-content>
 
