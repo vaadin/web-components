@@ -9,13 +9,13 @@ import type {
   ComboBoxItemModel,
 } from '@vaadin/combo-box/src/vaadin-combo-box.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
-import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';

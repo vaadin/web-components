@@ -6,9 +6,9 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';

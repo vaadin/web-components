@@ -3,8 +3,8 @@ import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
-import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
 customElements.define(

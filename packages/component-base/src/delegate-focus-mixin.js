@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
+import { FocusMixin } from './focus-mixin.js';
+import { TabindexMixin } from './tabindex-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the light DOM.

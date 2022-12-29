@@ -5,8 +5,8 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldMixin } from './field-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { SlotStylesMixin } from './slot-styles-mixin.js';
