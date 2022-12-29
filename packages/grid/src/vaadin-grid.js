@@ -809,10 +809,7 @@ class Grid extends ElementMixin(
    * @param {boolean} noNotify
    * @protected
    */
-  // eslint-disable-next-line max-params
-  _updateRow(row, columns, section, isColumnRow, noNotify) {
-    section ||= 'body';
-
+  _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
     const contentsFragment = document.createDocumentFragment();
 
     iterateChildren(row, (cell) => {
@@ -996,7 +993,7 @@ class Grid extends ElementMixin(
    */
   _renderColumnTree(columnTree) {
     iterateChildren(this.$.items, (row) => {
-      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+      this._updateRow(row, columnTree[columnTree.length - 1], 'body', false, true);
 
       const model = this.__getRowModel(row);
       this._updateRowOrderParts(row);
