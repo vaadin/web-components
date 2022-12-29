@@ -468,8 +468,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  __syncI18n(target, source, props) {
-    props ||= Object.keys(source.i18n);
+  __syncI18n(target, source, props = Object.keys(source.i18n)) {
     props.forEach((prop) => {
       // eslint-disable-next-line no-prototype-builtins
       if (source.i18n && source.i18n.hasOwnProperty(prop)) {
