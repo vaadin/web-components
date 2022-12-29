@@ -3,6 +3,7 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ContentController } from './content-controller.js';
 
 /**
  * A mixin providing common details functionality.
@@ -48,6 +49,12 @@ export const DetailsMixin = (superClass) =>
 
     static get observers() {
       return ['_openedOrToggleChanged(opened, _toggleElement)', '_openedOrContentChanged(opened, _contentElements)'];
+    }
+
+    constructor() {
+      super();
+
+      this._contentController = new ContentController(this);
     }
 
     /** @private */

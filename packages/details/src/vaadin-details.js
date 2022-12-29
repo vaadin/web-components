@@ -12,7 +12,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ContentController } from './content-controller.js';
 import { DetailsMixin } from './vaadin-details-mixin.js';
 
 class SummaryController extends SlotController {
@@ -122,7 +121,6 @@ class Details extends DetailsMixin(
     super();
 
     this._summaryController = new SummaryController(this);
-    this._contentController = new ContentController(this);
     this._tooltipController = new TooltipController(this);
   }
 

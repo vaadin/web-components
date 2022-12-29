@@ -11,7 +11,6 @@ import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mi
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ContentController } from '@vaadin/details/src/content-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -108,7 +107,6 @@ class AccordionPanel extends DetailsMixin(
     super();
 
     this._summaryController = new SummaryController(this);
-    this._contentController = new ContentController(this);
     this._tooltipController = new TooltipController(this);
   }
 
