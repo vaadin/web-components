@@ -10,9 +10,9 @@ import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mi
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ContentController } from './content-controller.js';
 import { DetailsMixin } from './vaadin-details-mixin.js';
 
 class SummaryController extends SlotController {
@@ -25,25 +25,6 @@ class SummaryController extends SlotController {
         host.stateTarget = node;
       },
     });
-  }
-}
-
-class ContentController extends SlotObserveController {
-  /**
-   * Override method from `SlotController` to change
-   * the ID prefix for the default slot content.
-   *
-   * @param {HTMLElement} host
-   * @return {string}
-   * @protected
-   * @override
-   */
-  static generateId(host) {
-    return super.generateId(host, 'content');
-  }
-
-  constructor(host) {
-    super(host, '', null, { multiple: true });
   }
 }
 
