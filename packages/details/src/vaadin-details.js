@@ -137,13 +137,25 @@ class Details extends DetailsMixin(
     return ['disabled', 'opened'];
   }
 
+  constructor() {
+    super();
+
+    this._summaryController = new SummaryController(this);
+    this._contentController = new ContentController(this);
+    this._tooltipController = new TooltipController(this);
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this._initSummary();
+    this.addController(this._summaryController);
+
+    this.addController(this._tooltipController);
+    this._tooltipController.setTarget(this._toggleElement);
+    this._tooltipController.setPosition('bottom-start');
+
     this._initContent();
-    this._initTooltip();
   }
 
   /**
@@ -158,14 +170,7 @@ class Details extends DetailsMixin(
   }
 
   /** @private */
-  _initSummary() {
-    this._summaryController = new SummaryController(this);
-    this.addController(this._summaryController);
-  }
-
-  /** @private */
   _initContent() {
-    this._contentController = new ContentController(this);
     this._contentController.addEventListener('slot-content-changed', (event) => {
       // Store nodes to toggle `aria-hidden` attribute
       const { nodes } = event.target;
@@ -178,15 +183,6 @@ class Details extends DetailsMixin(
       }
     });
     this.addController(this._contentController);
-  }
-
-  /** @private */
-  _initTooltip() {
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-
-    this._tooltipController.setTarget(this._toggleElement);
-    this._tooltipController.setPosition('bottom-start');
   }
 }
 

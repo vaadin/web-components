@@ -135,13 +135,30 @@ class AccordionPanel extends DetailsMixin(
     return ['disabled', 'opened'];
   }
 
+  constructor() {
+    super();
+
+    this._summaryController = new SummaryController(this);
+    this._contentController = new ContentController(this);
+    this._tooltipController = new TooltipController(this);
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this._initSummary();
+    this.addController(this._summaryController);
+
+    this.addController(this._tooltipController);
+    this._tooltipController.setTarget(this.focusElement);
+    this._tooltipController.setPosition('bottom-start');
+
     this._initContent();
-    this._initTooltip();
+
+    // Wait for heading element render to complete
+    afterNextRender(this, () => {
+      this._toggleElement = this.focusElement.$.button;
+    });
   }
 
   /**
@@ -156,19 +173,7 @@ class AccordionPanel extends DetailsMixin(
   }
 
   /** @private */
-  _initSummary() {
-    this._summaryController = new SummaryController(this);
-    this.addController(this._summaryController);
-
-    // Wait for heading element render to complete
-    afterNextRender(this, () => {
-      this._toggleElement = this.focusElement.$.button;
-    });
-  }
-
-  /** @private */
   _initContent() {
-    this._contentController = new ContentController(this);
     this._contentController.addEventListener('slot-content-changed', (event) => {
       // Store nodes to toggle `aria-hidden` attribute
       const content = event.target.nodes || [];
@@ -188,15 +193,6 @@ class AccordionPanel extends DetailsMixin(
       }
     });
     this.addController(this._contentController);
-  }
-
-  /** @private */
-  _initTooltip() {
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-
-    this._tooltipController.setTarget(this.focusElement);
-    this._tooltipController.setPosition('bottom-start');
   }
 }
 
