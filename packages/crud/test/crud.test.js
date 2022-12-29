@@ -210,14 +210,14 @@ describe('crud', () => {
     });
   });
 
-  describe('utils', () => {
-    it('should be possible to set nested properties to an object', () => {
+  describe('helpers', () => {
+    it('should set nested properties to an object with setProperty', () => {
       const o = {};
       setProperty('a.b.c', 'd', o);
       expect(o.a.b.c).to.be.equal('d');
     });
 
-    it('should be possible to get nested properties from an object', () => {
+    it('should get nested properties from an object with getProperty', () => {
       const o = { a: { b: { c: 'd' } } };
       expect(getProperty('a.b.c', o)).to.be.equal('d');
     });
