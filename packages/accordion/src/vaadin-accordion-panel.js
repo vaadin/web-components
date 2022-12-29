@@ -25,25 +25,6 @@ class SummaryController extends SlotObserveController {
   }
 }
 
-class ContentController extends SlotObserveController {
-  /**
-   * Override method from `SlotController` to change
-   * the ID prefix for the default slot content.
-   *
-   * @param {HTMLElement} host
-   * @return {string}
-   * @protected
-   * @override
-   */
-  static generateId(host) {
-    return super.generateId(host, 'content');
-  }
-
-  constructor(host) {
-    super(host, '', null, { multiple: true });
-  }
-}
-
 /**
  * The accordion panel element.
  *
@@ -126,7 +107,6 @@ class AccordionPanel extends DetailsMixin(
     super();
 
     this._summaryController = new SummaryController(this);
-    this._contentController = new ContentController(this);
     this._tooltipController = new TooltipController(this);
   }
 
