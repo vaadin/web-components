@@ -19,7 +19,6 @@ class SummaryController extends SlotController {
     super(host, 'summary', 'vaadin-details-summary', {
       useUniqueId: true,
       initializer: (node, host) => {
-        host._toggleElement = node;
         host._setFocusElement(node);
         host.stateTarget = node;
       },
@@ -109,6 +108,10 @@ class Details extends DetailsMixin(
     return 'vaadin-details';
   }
 
+  static get observers() {
+    return ['__updateAriaExpanded(focusElement, opened)'];
+  }
+
   static get delegateAttrs() {
     return ['theme'];
   }
@@ -131,7 +134,7 @@ class Details extends DetailsMixin(
     this.addController(this._summaryController);
 
     this.addController(this._tooltipController);
-    this._tooltipController.setTarget(this._toggleElement);
+    this._tooltipController.setTarget(this.focusElement);
     this._tooltipController.setPosition('bottom-start');
 
     this._initContent();
@@ -156,12 +159,19 @@ class Details extends DetailsMixin(
       this._contentElements = nodes;
 
       if (nodes[0] && nodes[0].id) {
-        this._toggleElement.setAttribute('aria-controls', nodes[0].id);
+        this.focusElement.setAttribute('aria-controls', nodes[0].id);
       } else {
-        this._toggleElement.removeAttribute('aria-controls');
+        this.focusElement.removeAttribute('aria-controls');
       }
     });
     this.addController(this._contentController);
+  }
+
+  /** @private */
+  __updateAriaExpanded(focusElement, opened) {
+    if (focusElement) {
+      focusElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    }
   }
 }
 

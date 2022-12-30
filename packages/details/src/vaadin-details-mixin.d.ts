@@ -20,9 +20,4 @@ export declare class DetailsMixinClass {
    * List of elements passed to the details default slot.
    */
   protected _contentElements: HTMLElement[];
-
-  /**
-   * An element used to toggle the content visibility.
-   */
-  protected _toggleElement: HTMLElement;
 }
