@@ -15,7 +15,7 @@ describe('vaadin-accordion', () => {
   let accordion, heading;
 
   function getHeading(idx) {
-    return accordion.items[idx]._toggleElement;
+    return accordion.items[idx].focusElement;
   }
 
   beforeEach(async () => {

@@ -151,7 +151,7 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
    * @override
    */
   get focused() {
-    return (this._getItems() || []).find((item) => isElementFocused(item._toggleElement));
+    return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
   }
 
   /**
@@ -195,9 +195,7 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
    */
   _onKeyDown(event) {
     // Only check keyboard events on details toggle buttons
-    const target = event.composedPath()[0];
-
-    if (!this.items.some((item) => item._toggleElement === target)) {
+    if (!this.items.some((item) => item.focusElement === event.target)) {
       return;
     }
 

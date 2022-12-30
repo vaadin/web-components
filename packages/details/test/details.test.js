@@ -15,7 +15,7 @@ describe('vaadin-details', () => {
         </div>
       </vaadin-details>
     `);
-    toggle = details._toggleElement;
+    toggle = details.focusElement;
     content = details.shadowRoot.querySelector('[part="content"]');
   });
 

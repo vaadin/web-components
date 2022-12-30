@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-accordion-heading.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
@@ -121,11 +120,6 @@ class AccordionPanel extends DetailsMixin(
     this._tooltipController.setPosition('bottom-start');
 
     this._initContent();
-
-    // Wait for heading element render to complete
-    afterNextRender(this, () => {
-      this._toggleElement = this.focusElement.$.button;
-    });
   }
 
   /**

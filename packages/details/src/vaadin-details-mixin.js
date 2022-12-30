@@ -33,28 +33,30 @@ export const DetailsMixin = (superClass) =>
         _contentElements: {
           type: Array,
         },
-
-        /**
-         * An element used to toggle the content visibility.
-         *
-         * @type {!HTMLElement | undefined}
-         * @protected
-         */
-        _toggleElement: {
-          type: Object,
-          observer: '_toggleElementChanged',
-        },
       };
     }
 
     static get observers() {
-      return ['_openedOrToggleChanged(opened, _toggleElement)', '_openedOrContentChanged(opened, _contentElements)'];
+      return ['_openedOrContentChanged(opened, _contentElements)'];
     }
 
     constructor() {
       super();
 
       this._contentController = new ContentController(this);
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
+      // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.
+      this.addEventListener('click', (event) => {
+        if (event.target === this.focusElement) {
+          this.opened = !this.opened;
+        }
+      });
     }
 
     /** @private */
@@ -64,28 +66,5 @@ export const DetailsMixin = (superClass) =>
           el.setAttribute('aria-hidden', opened ? 'false' : 'true');
         });
       }
-    }
-
-    /** @private */
-    _openedOrToggleChanged(opened, toggleElement) {
-      if (toggleElement) {
-        toggleElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
-      }
-    }
-
-    /** @private */
-    _toggleElementChanged(toggleElement) {
-      if (toggleElement) {
-        // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
-        // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.
-        toggleElement.addEventListener('click', () => {
-          this._toggle();
-        });
-      }
-    }
-
-    /** @private */
-    _toggle() {
-      this.opened = !this.opened;
     }
   };
