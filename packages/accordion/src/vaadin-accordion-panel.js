@@ -97,7 +97,7 @@ class AccordionPanel extends DetailsMixin(
   static get properties() {
     return {
       /**
-       * A text that is displayed in a heading, if no
+       * A text that is displayed in the heading, if no
        * element is assigned to the `summary` slot.
        */
       summary: {

@@ -45,7 +45,7 @@ export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementE
  */
 declare class AccordionPanel extends DetailsMixin(DelegateFocusMixin(DelegateStateMixin(ThemableMixin(HTMLElement)))) {
   /**
-   * A text that is displayed in a heading, if no
+   * A text that is displayed in the heading, if no
    * element is assigned to the `summary` slot.
    */
   summary: string | null | undefined;
