@@ -62,8 +62,8 @@ declare class Details extends DetailsMixin(
   DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))),
 ) {
   /**
-   * The text to be used as a text for the default summary,
-   * if there is no element assigned to the "summary" slot.
+   * A text that is displayed in a summary, if no
+   * element is assigned to the `summary` slot.
    */
   summary: string | null | undefined;
 

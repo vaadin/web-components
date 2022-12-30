@@ -97,8 +97,8 @@ class AccordionPanel extends DetailsMixin(
   static get properties() {
     return {
       /**
-       * The text to be used as a text for the default summary,
-       * if there is no element assigned to the "summary" slot.
+       * A text that is displayed in a heading, if no
+       * element is assigned to the `summary` slot.
        */
       summary: {
         type: String,
