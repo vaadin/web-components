@@ -8,63 +8,57 @@ describe('range data provider', () => {
 
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
-    dataRangeProvider = new DataRangeProvider(comboBox, () => {}, { maxRangeSize: 50 });
+    dataRangeProvider = new DataRangeProvider(comboBox, () => {}, { maxRangeSize: 5 });
   });
 
-  describe('adjustRangeToInclude', () => {
-    it('should set an initial range on first page request', () => {
-      dataRangeProvider.adjustRangeToInclude(0);
+  describe('adjustRangeToIncludePage', () => {
+    it('should init a range on first page request', () => {
+      dataRangeProvider.adjustRangeToIncludePage(0);
       expect(dataRangeProvider.range).to.eql([0, 0]);
     });
 
-    it('should extend the range up while requesting more pages up', () => {
-      dataRangeProvider.adjustRangeToInclude(0);
+    it('should extend the range up while sequentially requesting pages up', () => {
+      for (let i = 0; i <= 5; i++) {
+        dataRangeProvider.adjustRangeToIncludePage(i);
+        expect(dataRangeProvider.range).to.eql([0, i]);
+      }
+    });
+
+    it('should extend the range down while sequentially requesting pages down', () => {
+      for (let i = 10; i >= 5; i--) {
+        dataRangeProvider.adjustRangeToIncludePage(i);
+        expect(dataRangeProvider.range).to.eql([i, 10]);
+      }
+    });
+
+    it('should keep the range within limits while sequentially requesting pages up', () => {
+      for (let i = 0; i <= 5; i++) {
+        dataRangeProvider.adjustRangeToIncludePage(i);
+      }
+
+      dataRangeProvider.adjustRangeToIncludePage(6);
+      expect(dataRangeProvider.range).to.eql([1, 6]);
+    });
+
+    it('should keep the range within limits while sequentially requesting pages down', () => {
+      for (let i = 10; i >= 5; i--) {
+        dataRangeProvider.adjustRangeToIncludePage(i);
+      }
+
+      dataRangeProvider.adjustRangeToIncludePage(4);
+      expect(dataRangeProvider.range).to.eql([4, 9]);
+    });
+
+    it('should reset the range when skipping over pages up', () => {
+      dataRangeProvider.adjustRangeToIncludePage(0);
+      dataRangeProvider.adjustRangeToIncludePage(10);
+      expect(dataRangeProvider.range).to.eql([10, 10]);
+    });
+
+    it('should reset the range when skipping over pages down', () => {
+      dataRangeProvider.adjustRangeToIncludePage(10);
+      dataRangeProvider.adjustRangeToIncludePage(0);
       expect(dataRangeProvider.range).to.eql([0, 0]);
-
-      dataRangeProvider.adjustRangeToInclude(1);
-      expect(dataRangeProvider.range).to.eql([0, 1]);
-
-      dataRangeProvider.adjustRangeToInclude(10);
-      expect(dataRangeProvider.range).to.eql([0, 10]);
-    });
-
-    it('should keep the range within limits while requesting more pages up', () => {
-      dataRangeProvider.adjustRangeToInclude(0);
-      expect(dataRangeProvider.range).to.eql([0, 0]);
-
-      dataRangeProvider.adjustRangeToInclude(50);
-      expect(dataRangeProvider.range).to.eql([0, 50]);
-
-      dataRangeProvider.adjustRangeToInclude(51);
-      expect(dataRangeProvider.range).to.eql([1, 51]);
-
-      dataRangeProvider.adjustRangeToInclude(100);
-      expect(dataRangeProvider.range).to.eql([50, 100]);
-    });
-
-    it('should extend the range down while requesting more pages down', () => {
-      dataRangeProvider.adjustRangeToInclude(100);
-      expect(dataRangeProvider.range).to.eql([100, 100]);
-
-      dataRangeProvider.adjustRangeToInclude(99);
-      expect(dataRangeProvider.range).to.eql([99, 100]);
-
-      dataRangeProvider.adjustRangeToInclude(80);
-      expect(dataRangeProvider.range).to.eql([80, 100]);
-    });
-
-    it('should keep the range within limits while requesting more pages down', () => {
-      dataRangeProvider.adjustRangeToInclude(100);
-      expect(dataRangeProvider.range).to.eql([100, 100]);
-
-      dataRangeProvider.adjustRangeToInclude(50);
-      expect(dataRangeProvider.range).to.eql([50, 100]);
-
-      dataRangeProvider.adjustRangeToInclude(49);
-      expect(dataRangeProvider.range).to.eql([49, 99]);
-
-      dataRangeProvider.adjustRangeToInclude(0);
-      expect(dataRangeProvider.range).to.eql([0, 50]);
     });
   });
 });
