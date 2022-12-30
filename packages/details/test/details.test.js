@@ -88,7 +88,7 @@ describe('vaadin-details', () => {
         summary = details.querySelector('[slot="summary"]');
       });
 
-      it(`should update opened on ${type} summary click`, () => {
+      it(`should toggle opened on ${type} summary click`, () => {
         summary.click();
         expect(details.opened).to.be.true;
 
@@ -96,7 +96,7 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary Enter`, async () => {
+      it(`should toggle opened on ${type} summary Enter`, async () => {
         summary.focus();
 
         await sendKeys({ press: 'Enter' });
@@ -106,7 +106,7 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary Space`, async () => {
+      it(`should toggle opened on ${type} summary Space`, async () => {
         summary.focus();
 
         await sendKeys({ press: 'Space' });
