@@ -34,7 +34,7 @@ describe('vaadin-accordion-panel', () => {
       expect(getComputedStyle(contentPart).display).to.equal('none');
     });
 
-    it('should show the content when `opened` is true', () => {
+    it('should show the content when opened is true', () => {
       panel.opened = true;
       expect(getComputedStyle(contentPart).display).to.equal('block');
     });

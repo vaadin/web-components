@@ -116,7 +116,7 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary Arrow Down`, async () => {
+      it(`should not update opened on ${type} summary Arrow Down`, async () => {
         summary.focus();
         await sendKeys({ press: 'ArrowDown' });
         expect(details.opened).to.be.false;
@@ -129,7 +129,7 @@ describe('vaadin-details', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it(`should update aria-expanded on ${type} summary click`, () => {
+      it(`should toggle aria-expanded on ${type} summary click`, () => {
         summary.click();
         expect(summary.getAttribute('aria-expanded')).to.equal('true');
 
