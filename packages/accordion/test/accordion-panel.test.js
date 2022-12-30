@@ -64,7 +64,7 @@ describe('vaadin-accordion-panel', () => {
       `,
     };
 
-    let summary;
+    let heading;
 
     describe(`${type} summary`, () => {
       let toggle;
@@ -72,11 +72,11 @@ describe('vaadin-accordion-panel', () => {
       beforeEach(async () => {
         panel = fixtureSync(fixtures[type]);
         await nextRender();
-        summary = panel.querySelector('[slot="summary"]');
-        toggle = summary.shadowRoot.querySelector('button');
+        heading = panel.querySelector('[slot="summary"]');
+        toggle = heading.shadowRoot.querySelector('button');
       });
 
-      it(`should update opened on ${type} summary toggle click`, () => {
+      it(`should toggle opened on ${type} heading button click`, () => {
         toggle.click();
         expect(panel.opened).to.be.true;
 
@@ -84,7 +84,7 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary toggle Enter`, async () => {
+      it(`should toggle opened on ${type} heading button Enter`, async () => {
         toggle.focus();
 
         await sendKeys({ press: 'Enter' });
@@ -94,7 +94,7 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary toggle Space`, async () => {
+      it(`should toggle opened on ${type} heading button Space`, async () => {
         toggle.focus();
 
         await sendKeys({ press: 'Space' });
@@ -104,20 +104,20 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.false;
       });
 
-      it(`should update opened on ${type} summary toggle Arrow Down`, async () => {
+      it(`should not update opened on ${type} heading button Arrow Down`, async () => {
         toggle.focus();
         await sendKeys({ press: 'ArrowDown' });
         expect(panel.opened).to.be.false;
       });
 
-      it(`should fire opened-changed event on ${type} summary toggle click`, () => {
+      it(`should fire opened-changed event on ${type} heading button click`, () => {
         const spy = sinon.spy();
         panel.addEventListener('opened-changed', spy);
         toggle.click();
         expect(spy.calledOnce).to.be.true;
       });
 
-      it(`should update aria-expanded on ${type} summary toggle click`, () => {
+      it(`should update aria-expanded on ${type} heading button click`, () => {
         toggle.click();
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
 
@@ -125,17 +125,12 @@ describe('vaadin-accordion-panel', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('false');
       });
 
-      it(`should set aria-controls attribute on ${type} summary`, () => {
-        const idRegex = /^content-vaadin-accordion-panel-\d+$/u;
-        expect(idRegex.test(summary.getAttribute('aria-controls'))).to.be.true;
-      });
-
-      it(`should propagate disabled attribute to ${type} summary`, () => {
+      it(`should propagate disabled attribute to ${type} heading`, () => {
         panel.disabled = true;
-        expect(summary.hasAttribute('disabled')).to.be.true;
+        expect(heading.hasAttribute('disabled')).to.be.true;
 
         panel.disabled = false;
-        expect(summary.hasAttribute('disabled')).to.be.false;
+        expect(heading.hasAttribute('disabled')).to.be.false;
       });
     });
   });

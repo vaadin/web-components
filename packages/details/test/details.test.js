@@ -137,11 +137,6 @@ describe('vaadin-details', () => {
         expect(summary.getAttribute('aria-expanded')).to.equal('false');
       });
 
-      it(`should set aria-controls attribute on ${type} summary`, () => {
-        const idRegex = /^content-vaadin-details-\d+$/u;
-        expect(idRegex.test(summary.getAttribute('aria-controls'))).to.be.true;
-      });
-
       it(`should propagate disabled attribute to ${type} summary`, () => {
         details.disabled = true;
         expect(summary.hasAttribute('disabled')).to.be.true;
