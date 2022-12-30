@@ -9,13 +9,31 @@
     <script type="module">
       import '@vaadin/scroller';
 
-      const content = document.querySelector('#content');
-      content.textContent = new Array(1000).fill('content').join(' ');
+      document.querySelectorAll('.content').forEach(content => {
+        content.textContent = new Array(1000).fill('content').join(' ');
+      });
     </script>
+    <style>
+      vaadin-scroller {
+        width: 200px;
+        height: 200px;
+      }
+
+      .content {
+        width: 400px;
+        background-color: white;
+      }
+    </style>
   </head>
   <body>
-    <vaadin-scroller style="width: 200px; height: 200px">
-      <div id="content" style="width: 400px"></div>
+    <h2>Standard variant</h2>
+    <vaadin-scroller>
+      <div class="content"></div>
+    </vaadin-scroller>
+
+    <h2>Overflow indicators variant</h2>
+    <vaadin-scroller theme="overflow-indicators">
+      <div class="content"></div>
     </vaadin-scroller>
   </body>
 </html>
