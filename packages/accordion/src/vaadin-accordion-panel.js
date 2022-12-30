@@ -9,12 +9,12 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
+import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class SummaryController extends SlotObserveController {
+class SummaryController extends SlotChildObserveController {
   constructor(host) {
     super(host, 'summary', 'vaadin-accordion-heading', {
       initializer: (node, host) => {
