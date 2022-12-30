@@ -9,7 +9,7 @@ import { SlotController } from './slot-controller.js';
  * A controller that observes slotted element mutations, especially ID attribute
  * and the text content, and fires an event to notify host element about those.
  */
-export class SlotObserveController extends SlotController {
+export class SlotChildObserveController extends SlotController {
   /**
    * Setup the mutation observer on the node to update ID and notify host.
    * Node doesn't get observed automatically until this method is called.

@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
+import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
  * A controller to manage the label element.
  */
-export class LabelController extends SlotObserveController {
+export class LabelController extends SlotChildObserveController {
   constructor(host) {
     super(host, 'label', 'label');
   }
@@ -34,7 +34,7 @@ export class LabelController extends SlotObserveController {
   }
 
   /**
-   * Override method inherited from `SlotObserveController`
+   * Override method inherited from `SlotChildObserveController`
    * to restore and observe the default label element.
    *
    * @protected
@@ -53,7 +53,7 @@ export class LabelController extends SlotObserveController {
   }
 
   /**
-   * Override method inherited from `SlotObserveController`
+   * Override method inherited from `SlotChildObserveController`
    * to update the default label element text content.
    *
    * @param {Node | undefined} node
