@@ -16,12 +16,7 @@ import { DetailsMixin } from './vaadin-details-mixin.js';
 
 class SummaryController extends SummarySlotController {
   constructor(host) {
-    super(host, 'vaadin-details-summary', {
-      initializer: (node, host) => {
-        host._setFocusElement(node);
-        host.stateTarget = node;
-      },
-    });
+    super(host, 'vaadin-details-summary');
   }
 }
 
@@ -136,7 +131,17 @@ class Details extends DetailsMixin(
     super();
 
     this._summaryController = new SummaryController(this);
+    this._summaryController.addEventListener('slot-content-changed', (event) => {
+      const { node } = event.target;
+
+      this._setFocusElement(node);
+      this.stateTarget = node;
+
+      this._tooltipController.setTarget(node);
+    });
+
     this._tooltipController = new TooltipController(this);
+    this._tooltipController.setPosition('bottom-start');
   }
 
   /** @protected */
@@ -144,10 +149,7 @@ class Details extends DetailsMixin(
     super.ready();
 
     this.addController(this._summaryController);
-
     this.addController(this._tooltipController);
-    this._tooltipController.setTarget(this.focusElement);
-    this._tooltipController.setPosition('bottom-start');
   }
 
   /**

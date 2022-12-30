@@ -9,8 +9,8 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  * A controller to manage the summary element.
  */
 export class SummarySlotController extends SlotChildObserveController {
-  constructor(host, tagName, config) {
-    super(host, 'summary', tagName, config);
+  constructor(host, tagName) {
+    super(host, 'summary', tagName);
   }
 
   /**
@@ -45,8 +45,7 @@ export class SummarySlotController extends SlotChildObserveController {
 
     // Restore the default summary.
     if (summary && summary.trim() !== '') {
-      const node = this.attachDefaultNode();
-      this.initNode(node);
+      this.attachDefaultNode();
     }
   }
 
