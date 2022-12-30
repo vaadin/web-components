@@ -11,14 +11,8 @@ import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mi
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { SummarySlotController } from './summary-controller.js';
+import { SummaryController } from './summary-controller.js';
 import { DetailsMixin } from './vaadin-details-mixin.js';
-
-class SummaryController extends SummarySlotController {
-  constructor(host) {
-    super(host, 'vaadin-details-summary');
-  }
-}
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -130,7 +124,7 @@ class Details extends DetailsMixin(
   constructor() {
     super();
 
-    this._summaryController = new SummaryController(this);
+    this._summaryController = new SummaryController(this, 'vaadin-details-summary');
     this._summaryController.addEventListener('slot-content-changed', (event) => {
       const { node } = event.target;
 

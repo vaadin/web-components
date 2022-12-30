@@ -9,15 +9,9 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { SummarySlotController } from '@vaadin/details/src/summary-controller.js';
+import { SummaryController } from '@vaadin/details/src/summary-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-class SummaryController extends SummarySlotController {
-  constructor(host) {
-    super(host, 'vaadin-accordion-heading');
-  }
-}
 
 /**
  * The accordion panel element.
@@ -117,7 +111,7 @@ class AccordionPanel extends DetailsMixin(
   constructor() {
     super();
 
-    this._summaryController = new SummaryController(this);
+    this._summaryController = new SummaryController(this, 'vaadin-accordion-heading');
     this._summaryController.addEventListener('slot-content-changed', (event) => {
       const { node } = event.target;
 

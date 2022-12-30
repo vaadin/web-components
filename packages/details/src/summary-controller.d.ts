@@ -8,7 +8,7 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
 /**
  * A controller to manage the summary element.
  */
-export class SummarySlotController extends SlotChildObserveController {
+export class SummarController extends SlotChildObserveController {
   /**
    * String used for the summary.
    */
