@@ -70,21 +70,6 @@ export class LabelController extends SlotObserveController {
   }
 
   /**
-   * Override method inherited from `SlotMixin` to observe
-   * the default label node, but not the custom one.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initNode(node) {
-    if (node === this.defaultNode) {
-      this.updateDefaultNode(node);
-      this.observeNode(node);
-    }
-  }
-
-  /**
    * Override to observe the newly added custom node.
    *
    * @param {Node} node
