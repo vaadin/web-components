@@ -105,6 +105,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _dataProviderFilterChanged(filter) {
+      if (!this.dataProvider) {
+        return;
+      }
+
       if (this.__previousDataProviderFilter === undefined && filter === '') {
         this.__previousDataProviderFilter = filter;
         return;
@@ -207,7 +211,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       // as a result of `__loadingChanged` in the scroller which requests
       // a virtualizer update which in turn may trigger a data provider page request.
       this.loading = true;
-      this.dataProvider(params, callback);
+      this.dataProvider(params, callback, this);
     }
 
     /** @private */
@@ -218,24 +222,53 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /**
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
-    clearCache() {
+    clearCache(pages = [], forceLoad = true) {
       if (!this.dataProvider) {
         return;
       }
 
+      if (pages && pages.length > 0) {
+        this.__removePagesFromCache(pages);
+      } else {
+        this.__removeAllPagesFromCache();
+      }
+
+      if (forceLoad) {
+        if (this._shouldFetchData()) {
+          this._forceNextRequest = false;
+          this._loadPage(0);
+        } else {
+          this._forceNextRequest = true;
+        }
+      }
+    }
+
+    /** @private */
+    __removeAllPagesFromCache() {
       this._pendingRequests = {};
+
       const filteredItems = [];
       for (let i = 0; i < (this.size || 0); i++) {
         filteredItems.push(this.__placeHolder);
       }
       this.filteredItems = filteredItems;
+    }
 
-      if (this._shouldFetchData()) {
-        this._forceNextRequest = false;
-        this._loadPage(0);
-      } else {
-        this._forceNextRequest = true;
-      }
+    /** @private */
+    __removePagesFromCache(pages) {
+      const filteredItems = [...this.filteredItems];
+
+      pages.forEach((page) => {
+        delete this._pendingRequests[page];
+
+        const startPageIndex = this.pageSize * page;
+        const endPageIndex = this.pageSize * (page + 1);
+        for (let i = startPageIndex; i < endPageIndex; i++) {
+          filteredItems[i] = this.__placeHolder;
+        }
+      });
+
+      this.filteredItems = filteredItems;
     }
 
     /** @private */
