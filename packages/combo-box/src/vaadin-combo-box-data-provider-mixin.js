@@ -303,24 +303,4 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         }
       }
     }
-
-    /** @protected */
-    _cancelPendingRequests(pages) {
-      pages
-        .filter((page) => {
-          return page in this._pendingRequests;
-        })
-        .forEach((page) => {
-          delete this._pendingRequests[page];
-        });
-
-      if (Object.keys(this._pendingRequests).length === 0) {
-        this.loading = false;
-      }
-    }
-
-    /** @protected */
-    _getPendingRequests() {
-      return Object.entries(this._pendingRequests);
-    }
   };

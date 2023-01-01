@@ -28,7 +28,7 @@ export class RangeDataProvider {
 
     this.adjustRangeToIncludePage(page);
 
-    this.cancelRequestsOutOfRange();
+    this.cancelPageRequestsOutOfRange();
 
     this.requestRangeCallback({
       filter,
@@ -75,13 +75,22 @@ export class RangeDataProvider {
     this.range = [page, page];
   }
 
-  cancelRequestsOutOfRange() {
-    const pages = this.comboBox
-      ._getPendingRequests()
-      .filter(([page]) => !isPageInRange(this.range, page))
-      .map(([page]) => page);
+  cancelPageRequestsOutOfRange() {
+    const pages = Object.keys(this.comboBox._pendingRequests).filter((page) => {
+      return !isPageInRange(this.range, page);
+    });
 
-    this.comboBox._cancelPendingRequests(pages);
+    this.cancelPageRequests(pages);
+  }
+
+  cancelPageRequests(pages) {
+    pages.forEach((page) => {
+      delete this.comboBox._pendingRequests[page];
+    });
+
+    if (Object.keys(this.comboBox._pendingRequests).length === 0) {
+      this.comboBox.loading = false;
+    }
   }
 
   /**
