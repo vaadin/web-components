@@ -2,30 +2,29 @@ function getRangeSize(range) {
   return Math.abs(range[1] - range[0]);
 }
 
-function doesRangeIncludePage(range, page) {
+function isPageInRange(range, page) {
   return page >= range[0] && page <= range[1];
 }
 
-export class DataRangeProvider {
+export class RangeDataProvider {
   constructor(comboBox, requestRangeCallback, options = {}) {
     this.range = null;
+    this.lastFilter = '';
     this.maxRangeSize = options.maxRangeSize ?? Infinity;
     this.requestRangeCallback = requestRangeCallback;
-
     this.loadedPages = {};
-    this.totalCount = null;
-
     this.comboBox = comboBox;
     this.comboBox.dataProvider = this.dataProvider.bind(this);
   }
 
   dataProvider({ page, pageSize, filter }, callback) {
     // The page is already loaded, return it.
-    if (this.loadedPages[page]) {
-      const items = this.loadedPages[page];
-      callback(items, this.totalCount);
+    if (this.lastFilter === filter && this.loadedPages[page]) {
+      callback(this.loadedPages[page], this.comboBox.size);
       return;
     }
+
+    this.lastFilter = filter;
 
     this.adjustRangeToIncludePage(page);
 
@@ -51,7 +50,7 @@ export class DataRangeProvider {
       this.range[0] -= 1;
 
       // The range exceeds the limit, adjust the range end.
-      if (getRangeSize(this.range) > this.maxRangeSize) {
+      if (getRangeSize(this.range) >= this.maxRangeSize) {
         this.range[1] -= 1;
       }
 
@@ -64,7 +63,7 @@ export class DataRangeProvider {
       this.range[1] += 1;
 
       // The range exceeds the limit, adjust the range start.
-      if (getRangeSize(this.range) > this.maxRangeSize) {
+      if (getRangeSize(this.range) >= this.maxRangeSize) {
         this.range[0] += 1;
       }
 
@@ -77,21 +76,35 @@ export class DataRangeProvider {
   }
 
   cancelRequestsOutOfRange() {
-    const pages = this.getPendingRequests()
-      .filter(([page]) => !doesRangeIncludePage(this.range, page))
+    const pages = this.comboBox
+      ._getPendingRequests()
+      .filter(([page]) => !isPageInRange(this.range, page))
       .map(([page]) => page);
 
-    this.comboBox.cancelPendingRequests(pages);
+    this.comboBox._cancelPendingRequests(pages);
   }
 
-  setLoadedPages(pages, totalCount) {
-    this.loadedPages = pages;
-    this.totalCount = totalCount;
-    this.comboBox.clearCache();
+  /**
+   * @param {Record<number, unknown[]>} pages
+   */
+  addLoadedPages(pages) {
+    this.loadedPages = { ...this.loadedPages, ...pages };
+  }
+
+  /**
+   * @param {number[]} pages
+   */
+  removeLoadedPages(pages) {
+    pages.forEach((page) => {
+      delete this.loadedPages[page];
+    });
   }
 
   clearLoadedPages() {
     this.loadedPages = {};
+  }
+
+  flushLoadedPages() {
     this.comboBox.clearCache();
   }
 }
