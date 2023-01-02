@@ -6,6 +6,7 @@ snapshots["vaadin-details host default"] =
   <vaadin-details-summary
     aria-controls="content-vaadin-details-0"
     aria-expanded="false"
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="0"
@@ -27,6 +28,7 @@ snapshots["vaadin-details host opened"] =
   <vaadin-details-summary
     aria-controls="content-vaadin-details-0"
     aria-expanded="true"
+    id="summary-vaadin-details-1"
     opened=""
     role="button"
     slot="summary"
@@ -51,6 +53,7 @@ snapshots["vaadin-details host disabled"] =
     aria-disabled="true"
     aria-expanded="false"
     disabled=""
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="-1"
@@ -72,6 +75,7 @@ snapshots["vaadin-details host theme"] =
   <vaadin-details-summary
     aria-controls="content-vaadin-details-0"
     aria-expanded="false"
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="0"

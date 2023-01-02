@@ -44,11 +44,20 @@ export const DetailsMixin = (superClass) =>
       super();
 
       this._contentController = new ContentController(this);
+
+      this._contentController.addEventListener('slot-content-changed', (event) => {
+        const content = event.target.nodes || [];
+
+        // Exclude nodes that are no longer connected
+        this._contentElements = content.filter((node) => node.parentNode === this);
+      });
     }
 
     /** @protected */
     ready() {
       super.ready();
+
+      this.addController(this._contentController);
 
       // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
       // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.

@@ -9,22 +9,10 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SummaryController } from './summary-controller.js';
 import { DetailsMixin } from './vaadin-details-mixin.js';
-
-class SummaryController extends SlotController {
-  constructor(host) {
-    super(host, 'summary', 'vaadin-details-summary', {
-      useUniqueId: true,
-      initializer: (node, host) => {
-        host._setFocusElement(node);
-        host.stateTarget = node;
-      },
-    });
-  }
-}
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -108,8 +96,21 @@ class Details extends DetailsMixin(
     return 'vaadin-details';
   }
 
+  static get properties() {
+    return {
+      /**
+       * A text that is displayed in the summary, if no
+       * element is assigned to the `summary` slot.
+       */
+      summary: {
+        type: String,
+        observer: '_summaryChanged',
+      },
+    };
+  }
+
   static get observers() {
-    return ['__updateAriaExpanded(focusElement, opened)'];
+    return ['__updateAriaControls(focusElement, _contentElements)', '__updateAriaExpanded(focusElement, opened)'];
   }
 
   static get delegateAttrs() {
@@ -123,8 +124,18 @@ class Details extends DetailsMixin(
   constructor() {
     super();
 
-    this._summaryController = new SummaryController(this);
+    this._summaryController = new SummaryController(this, 'vaadin-details-summary');
+    this._summaryController.addEventListener('slot-content-changed', (event) => {
+      const { node } = event.target;
+
+      this._setFocusElement(node);
+      this.stateTarget = node;
+
+      this._tooltipController.setTarget(node);
+    });
+
     this._tooltipController = new TooltipController(this);
+    this._tooltipController.setPosition('bottom-start');
   }
 
   /** @protected */
@@ -132,12 +143,7 @@ class Details extends DetailsMixin(
     super.ready();
 
     this.addController(this._summaryController);
-
     this.addController(this._tooltipController);
-    this._tooltipController.setTarget(this.focusElement);
-    this._tooltipController.setPosition('bottom-start');
-
-    this._initContent();
   }
 
   /**
@@ -152,19 +158,21 @@ class Details extends DetailsMixin(
   }
 
   /** @private */
-  _initContent() {
-    this._contentController.addEventListener('slot-content-changed', (event) => {
-      // Store nodes to toggle `aria-hidden` attribute
-      const { nodes } = event.target;
-      this._contentElements = nodes;
+  _summaryChanged(summary) {
+    this._summaryController.setSummary(summary);
+  }
 
-      if (nodes[0] && nodes[0].id) {
-        this.focusElement.setAttribute('aria-controls', nodes[0].id);
+  /** @private */
+  __updateAriaControls(summary, contentElements) {
+    if (summary && contentElements) {
+      const node = contentElements[0];
+
+      if (node && node.id) {
+        summary.setAttribute('aria-controls', node.id);
       } else {
-        this.focusElement.removeAttribute('aria-controls');
+        summary.removeAttribute('aria-controls');
       }
-    });
-    this.addController(this._contentController);
+    }
   }
 
   /** @private */

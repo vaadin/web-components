@@ -61,6 +61,12 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
 declare class Details extends DetailsMixin(
   DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))),
 ) {
+  /**
+   * A text that is displayed in the summary, if no
+   * element is assigned to the `summary` slot.
+   */
+  summary: string | null | undefined;
+
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,
