@@ -247,11 +247,11 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    * @override
    */
   checkValidity() {
-    if (this.inputElement && this.inputElement.validity.badInput) {
-      return false;
+    if (this.inputElement) {
+      return this.inputElement.checkValidity();
     }
 
-    return super.checkValidity();
+    return !this.invalid;
   }
 
   /** @private */
