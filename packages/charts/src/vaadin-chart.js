@@ -549,12 +549,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     deepMerge(options, this.additionalOptions);
 
     if (this.type) {
-      options.chart ||= {};
       options.chart.type = this.type;
     }
 
     if (this.polar) {
-      options.chart ||= {};
       options.chart.polar = true;
     }
 
@@ -579,7 +577,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.categories) {
-      options.xAxis ||= {};
       if (Array.isArray(options.xAxis)) {
         // Set categories on first X axis
         options.xAxis[0].categories = this.categories;
@@ -589,7 +586,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (isFinite(this.categoryMin)) {
-      options.xAxis ||= {};
       if (Array.isArray(options.xAxis)) {
         // Set category-min on first X axis
         options.xAxis[0].min = this.categoryMin;
@@ -599,7 +595,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (isFinite(this.categoryMax)) {
-      options.xAxis ||= {};
       if (Array.isArray(options.xAxis)) {
         // Set category-max on first x axis
         options.xAxis[0].max = this.categoryMax;
@@ -615,13 +610,13 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.emptyText) {
-      options.lang ||= {};
+      if (!options.lang) {
+        options.lang = {};
+      }
       options.lang.noData = this.emptyText;
     }
 
     if (this.categoryPosition) {
-      options.chart ||= {};
-
       options.chart.inverted = this.__shouldInvert();
 
       if (Array.isArray(options.xAxis)) {
@@ -634,14 +629,16 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.stacking) {
-      options.plotOptions ||= {};
-      options.plotOptions.series ||= {};
+      if (!options.plotOptions) {
+        options.plotOptions = {};
+      }
+      if (!options.plotOptions.series) {
+        options.plotOptions.series = {};
+      }
       options.plotOptions.series.stacking = this.stacking;
     }
 
     if (this.chart3d) {
-      options.chart ||= {};
-
       options.chart.options3d = { ...this._baseChart3d, ...options.chart.options3d };
     }
 
@@ -1372,7 +1369,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
     path = path.split('.');
     return path.reduce((obj, key) => {
-      obj[key] ||= {};
+      if (!obj[key]) {
+        obj[key] = {};
+      }
       return obj[key];
     }, object);
   }

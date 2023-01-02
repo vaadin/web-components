@@ -10,7 +10,9 @@ const caseMap = {};
 const CAMEL_TO_DASH = /([A-Z])/gu;
 
 function camelToDash(camel) {
-  caseMap[camel] ||= camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
+  if (!caseMap[camel]) {
+    caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
+  }
   return caseMap[camel];
 }
 
@@ -169,7 +171,10 @@ const PolylitMixinImplementation = (superclass) => {
     firstUpdated() {
       super.firstUpdated();
 
-      this.$ ||= {};
+      if (!this.$) {
+        this.$ = {};
+      }
+
       this.shadowRoot.querySelectorAll('[id]').forEach((node) => {
         this.$[node.id] = node;
       });

@@ -106,9 +106,8 @@ export function monthsEqual(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
 
-export function getFirstVisibleItem(scroller, bufferOffset) {
+export function getFirstVisibleItem(scroller, bufferOffset = 0) {
   const children = [];
-  bufferOffset ||= 0;
 
   scroller._buffers.forEach((buffer) => {
     [...buffer.children].forEach((slot) => {

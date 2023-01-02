@@ -97,7 +97,9 @@ function getAllThemes() {
     /** @type {DomModuleWithCachedStyles} */
     const module = modules[moduleId];
     const themeFor = module.getAttribute('theme-for');
-    module.__allStyles ||= getModuleStyles(module).concat(module.__partialStyles || []);
+    if (!module.__allStyles) {
+      module.__allStyles = getModuleStyles(module).concat(module.__partialStyles || []);
+    }
 
     return {
       themeFor,
@@ -107,7 +109,10 @@ function getAllThemes() {
   });
 }
 
-window.Vaadin ||= {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
+
 window.Vaadin.styleModules = {
   getAllThemes,
   registerStyles,

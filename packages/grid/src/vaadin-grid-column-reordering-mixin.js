@@ -224,9 +224,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @return {HTMLElement | undefined}
      * @protected
      */
-    _cellFromPoint(x, y) {
-      x ||= 0;
-      y ||= 0;
+    _cellFromPoint(x = 0, y = 0) {
       if (!this._draggedColumn) {
         this.$.scroller.toggleAttribute('no-content-pointer-events', true);
       }

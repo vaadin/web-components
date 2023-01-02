@@ -560,7 +560,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const generatedList = [];
 
     // Default step in overlay items is 1 hour
-    step ||= 3600;
+    if (!step) {
+      step = 3600;
+    }
 
     let time = -step + minSec;
     while (time + step >= minSec && time + step <= maxSec) {

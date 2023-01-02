@@ -243,7 +243,9 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       const panel = panels.find((panel) => panel.getAttribute('tab') === tabItem.id);
       if (panel) {
         panel.role = 'tabpanel';
-        panel.id ||= `tabsheet-panel-${generateUniqueId()}`;
+        if (!panel.id) {
+          panel.id = `tabsheet-panel-${generateUniqueId()}`;
+        }
         panel.setAttribute('aria-labelledby', tabItem.id);
 
         tabItem.setAttribute('aria-controls', panel.id);
