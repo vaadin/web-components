@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/map",
-  "version": "24.0.0-alpha7",
+  "version": "24.0.0-alpha8",
   "publishConfig": {
     "access": "public"
   },
@@ -36,10 +36,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.0.0-alpha7",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha7",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha7",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha7",
+    "@vaadin/component-base": "24.0.0-alpha8",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha8",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha8",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha8",
     "ol": "6.13.0"
   },
   "devDependencies": {
