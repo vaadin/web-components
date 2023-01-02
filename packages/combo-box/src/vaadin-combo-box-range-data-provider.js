@@ -12,15 +12,15 @@ export class RangeDataProvider {
     this.lastFilter = '';
     this.maxRangeSize = options.maxRangeSize ?? Infinity;
     this.requestRangeCallback = requestRangeCallback;
-    this.loadedPages = {};
+    this.pages = {};
     this.comboBox = comboBox;
     this.comboBox.dataProvider = this.dataProvider.bind(this);
   }
 
   dataProvider({ page, pageSize, filter }, callback) {
     // The page is already loaded, return it.
-    if (this.lastFilter === filter && this.loadedPages[page]) {
-      callback(this.loadedPages[page], this.comboBox.size);
+    if (this.lastFilter === filter && this.pages[page]) {
+      callback(this.pages[page], this.comboBox.size);
       return;
     }
 
@@ -96,24 +96,24 @@ export class RangeDataProvider {
   /**
    * @param {Record<number, unknown[]>} pages
    */
-  addLoadedPages(pages) {
-    this.loadedPages = { ...this.loadedPages, ...pages };
+  addPages(pages) {
+    this.pages = { ...this.pages, ...pages };
   }
 
   /**
    * @param {number[]} pages
    */
-  removeLoadedPages(pages) {
+  removePages(pages) {
     pages.forEach((page) => {
-      delete this.loadedPages[page];
+      delete this.pages[page];
     });
   }
 
-  clearLoadedPages() {
-    this.loadedPages = {};
+  clearPages() {
+    this.pages = {};
   }
 
-  flushLoadedPages() {
+  flushPages() {
     this.comboBox.clearCache();
   }
 }
