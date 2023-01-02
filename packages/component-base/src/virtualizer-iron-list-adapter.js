@@ -34,6 +34,7 @@ export class IronListAdapter {
     this.timeouts = {
       SCROLL_REORDER: 500,
       IGNORE_WHEEL: 500,
+      FIX_INVALID_ITEM_POSITIONING: 100,
     };
 
     this.__resizeObserver = new ResizeObserver(() => this._resizeHandler());
@@ -121,6 +122,9 @@ export class IronListAdapter {
     this._resizeHandler();
     flush();
     this._scrollHandler();
+    if (this.__fixInvalidItemPositioningDebouncer) {
+      this.__fixInvalidItemPositioningDebouncer.flush();
+    }
     if (this.__scrollReorderDebouncer) {
       this.__scrollReorderDebouncer.flush();
     }
@@ -184,6 +188,14 @@ export class IronListAdapter {
     if (size === this.size) {
       return;
     }
+    // Cancel active debouncers
+    if (this.__fixInvalidItemPositioningDebouncer) {
+      this.__fixInvalidItemPositioningDebouncer.cancel();
+    }
+    if (this._debouncers && this._debouncers._increasePoolIfNeeded) {
+      // Avoid creating unnecessary elements on the following flush()
+      this._debouncers._increasePoolIfNeeded.cancel();
+    }
 
     // Prevent element update while the scroll position is being restored
     this.__preventElementUpdates = true;
@@ -198,10 +210,6 @@ export class IronListAdapter {
 
     // Change the size
     this.__size = size;
-
-    // Flush before invoking items change to avoid
-    // creating excess elements on the following flush()
-    flush();
 
     this._itemsChanged({
       path: 'items',
@@ -344,6 +352,15 @@ export class IronListAdapter {
       }
     }
 
+    if (delta) {
+      // There was a change in scroll top. Schedule a check for invalid item positioning.
+      this.__fixInvalidItemPositioningDebouncer = Debouncer.debounce(
+        this.__fixInvalidItemPositioningDebouncer,
+        timeOut.after(this.timeouts.FIX_INVALID_ITEM_POSITIONING),
+        () => this.__fixInvalidItemPositioning(),
+      );
+    }
+
     if (this.reorderElements) {
       this.__scrollReorderDebouncer = Debouncer.debounce(
         this.__scrollReorderDebouncer,
@@ -355,9 +372,46 @@ export class IronListAdapter {
     this.__previousScrollTop = this._scrollTop;
 
     // If the first visible index is not 0 when scrolled to the top,
-    // add some scroll offset to enable the user to continue scrolling.
-    if (this._scrollTop === 0 && this.firstVisibleIndex !== 0) {
-      this._scrollTop = 1;
+    // scroll to index 0 to fix the issue.
+    if (this._scrollTop === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
+      this.scrollToIndex(0);
+    }
+  }
+
+  /**
+   * Work around an iron-list issue with invalid item positioning.
+   * See https://github.com/vaadin/flow-components/issues/4306
+   * @private
+   */
+  __fixInvalidItemPositioning() {
+    if (!this.scrollTarget.isConnected) {
+      return;
+    }
+
+    // Check if the first physical item element is below the top of the viewport
+    const physicalTopBelowTop = this._physicalTop > this._scrollTop;
+    // Check if the last physical item element is above the bottom of the viewport
+    const physicalBottomAboveBottom = this._physicalBottom < this._scrollBottom;
+
+    // Check if the first index is visible
+    const firstIndexVisible = this.adjustedFirstVisibleIndex === 0;
+    // Check if the last index is visible
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+
+    if ((physicalTopBelowTop && !firstIndexVisible) || (physicalBottomAboveBottom && !lastIndexVisible)) {
+      // Invalid state! Try to recover.
+
+      const isScrollingDown = physicalBottomAboveBottom;
+      // Set the "_ratio" property temporarily to 0 to make iron-list's _getReusables
+      // place all the free physical items on one side of the viewport.
+      const originalRatio = this._ratio;
+      this._ratio = 0;
+      // Fake a scroll change to make _scrollHandler place the physical items
+      // on the desired side.
+      this._scrollPosition = this._scrollTop + (isScrollingDown ? -1 : 1);
+      this._scrollHandler();
+      // Restore the original "_ratio" value.
+      this._ratio = originalRatio;
     }
   }
 
