@@ -130,24 +130,24 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       this._updateFlexAndWidth();
     }
 
-    if (path === 'frozen') {
-      // Don’t unfreeze the frozen group because of a non-frozen child
-      this.frozen ||= value;
+    // Don’t unfreeze the frozen group because of a non-frozen child
+    if (path === 'frozen' && !this.frozen) {
+      this.frozen = value;
     }
 
-    if (path === 'lastFrozen') {
-      // Don’t unfreeze the frozen group because of a non-frozen child
-      this._lastFrozen ||= value;
+    // Don’t unfreeze the frozen group because of a non-frozen child
+    if (path === 'lastFrozen' && !this._lastFrozen) {
+      this._lastFrozen = value;
     }
 
-    if (path === 'frozenToEnd') {
-      // Don’t unfreeze the frozen group because of a non-frozen child
-      this.frozenToEnd ||= value;
+    // Don’t unfreeze the frozen group because of a non-frozen child
+    if (path === 'frozenToEnd' && !this.frozenToEnd) {
+      this.frozenToEnd = value;
     }
 
-    if (path === 'firstFrozenToEnd') {
-      // Don’t unfreeze the frozen group because of a non-frozen child
-      this._firstFrozenToEnd ||= value;
+    // Don’t unfreeze the frozen group because of a non-frozen child
+    if (path === 'firstFrozenToEnd' && !this._firstFrozenToEnd) {
+      this._firstFrozenToEnd = value;
     }
   }
 
