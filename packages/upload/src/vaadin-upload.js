@@ -679,11 +679,10 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
    *
    * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
    */
-  uploadFiles(files) {
+  uploadFiles(files = this.files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files ||= this.files;
     files = files.filter((file) => !file.complete);
     Array.prototype.forEach.call(files, this._uploadFile.bind(this));
   }

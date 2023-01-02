@@ -644,7 +644,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     const initialPosition = this._monthScroller.position;
 
     const smoothScroll = (timestamp) => {
-      start ||= timestamp;
+      if (!start) {
+        start = timestamp;
+      }
+
       const currentTime = timestamp - start;
 
       if (currentTime < this.scrollDuration) {
