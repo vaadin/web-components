@@ -54,22 +54,24 @@ export const OverlayClassMixin = (superclass) =>
         return;
       }
 
+      const { classList } = overlayElement;
+
       if (!this.__initialClasses) {
-        this.__initialClasses = [...overlayElement.classList];
+        this.__initialClasses = new Set(classList);
       }
 
-      if (this.__previousClasses !== undefined) {
+      if (Array.isArray(this.__previousClasses)) {
         // Remove old classes that no longer apply
-        const classesToRemove = [...this.__previousClasses].filter((name) => !this.__initialClasses.includes(name));
+        const classesToRemove = this.__previousClasses.filter((name) => !this.__initialClasses.has(name));
         if (classesToRemove.length > 0) {
-          overlayElement.classList.remove(...classesToRemove);
+          classList.remove(...classesToRemove);
         }
       }
 
       // Add new classes based on the overlayClass
       const classesToAdd = typeof overlayClass === 'string' ? overlayClass.split(' ') : [];
       if (classesToAdd.length > 0) {
-        overlayElement.classList.add(...classesToAdd);
+        classList.add(...classesToAdd);
       }
 
       this.__previousClasses = classesToAdd;
