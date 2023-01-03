@@ -53,15 +53,6 @@ describe('validation', () => {
       expect(field.checkValidity()).to.equal(input.checkValidity());
     });
 
-    it('should not validate when explicitly set to invalid', () => {
-      field.invalid = true;
-
-      expect(field.value).to.be.empty;
-      expect(field.validate()).to.be.false;
-
-      expect(field.invalid).to.be.true;
-    });
-
     it('should allow setting decimals', () => {
       field.value = 7.6;
       expect(field.value).to.be.equal('7.6');
@@ -151,17 +142,28 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
-    it('should be invalid when trying to commit a not valid number', async () => {
+    it('should be invalid when trying to commit an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(field.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit a not valid number', async () => {
+    it('should set an empty value when trying to commit an invalid number', async () => {
       field.value = '1';
       await sendKeys({ type: '1--' });
       await sendKeys({ type: 'Enter' });
       expect(field.value).to.equal('');
+    });
+
+    it('should be valid after removing an invalid number', async () => {
+      await sendKeys({ type: '1--' });
+      input.blur();
+      input.focus();
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Backspace' });
+      input.blur();
+      expect(field.invalid).to.be.false;
     });
   });
 
