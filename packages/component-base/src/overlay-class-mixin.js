@@ -18,6 +18,10 @@ export const OverlayClassMixin = (superclass) =>
          * A space-delimited list of CSS class names to set on the overlay element.
          * This property does not affect other CSS class names set manually via JS.
          *
+         * Note, if the CSS class name was set with this property, clearing it will
+         * remove it from the overlay, even if the same class name was also added
+         * manually, e.g. by using `classList.add()` in the `renderer` function.
+         *
          * @attr {string} overlay-class
          */
         overlayClass: {
