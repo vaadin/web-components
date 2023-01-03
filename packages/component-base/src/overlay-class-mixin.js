@@ -15,8 +15,8 @@ export const OverlayClassMixin = (superclass) =>
     static get properties() {
       return {
         /**
-         * Space-separated list of CSS class names to be set on the overlay element.
-         * This property does not affect other CSS class names set manually with JS.
+         * A space-delimited list of CSS class names to set on the overlay element.
+         * This property does not affect other CSS class names set manually via JS.
          *
          * @attr {string} overlay-class
          */
