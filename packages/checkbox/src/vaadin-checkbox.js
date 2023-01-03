@@ -86,7 +86,7 @@ class Checkbox extends LabelMixin(
 
         .vaadin-checkbox-wrapper {
           position: relative;
-          height: 100%;
+          align-self: stretch;
         }
 
         /* visually hidden */
