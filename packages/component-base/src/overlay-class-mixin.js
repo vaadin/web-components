@@ -39,74 +39,36 @@ export const OverlayClassMixin = (superclass) =>
       return ['__updateOverlayClassNames(overlayClass, _overlayElement)'];
     }
 
-    /**
-     * @param {HTMLElement} overlay
-     * @param {string[]} classInfo
-     * @private
-     */
-    __applyClassNames(overlay, classInfo) {
-      classInfo.forEach((name) => {
-        if (!this._customClasses.has(name)) {
-          overlay.classList.add(name);
-        }
-      });
-    }
+    /** @private */
+    __updateOverlayClassNames(overlayClass, overlayElement) {
+      if (!overlayElement) {
+        return;
+      }
 
-    /**
-     * @param {HTMLElement} overlay
-     * @param {string[]} classInfo
-     * @private
-     */
-    __clearClassNames(overlay, classInfo) {
-      if (this._previousClasses) {
+      // Overlay is set but overlayClass is not set
+      if (overlayClass === undefined) {
+        return;
+      }
+
+      if (!this.__initialClasses) {
+        this.__initialClasses = [...overlayElement.classList];
+      }
+
+      if (this._previousClasses !== undefined) {
+        // Remove old classes that no longer apply
         this._previousClasses.forEach((name) => {
-          if (!classInfo.includes(name)) {
-            overlay.classList.remove(name);
-            this._previousClasses.delete(name);
+          if (!this.__initialClasses.includes(name)) {
+            overlayElement.classList.remove(name);
           }
         });
       }
-    }
 
-    /**
-     * @param {HTMLElement} overlay
-     * @param {string[]} classInfo
-     * @private
-     */
-    __storeClassNames(overlay, classInfo) {
-      this._previousClasses = new Set();
-
-      this._customClasses = new Set(overlay.className.split(' ').filter((s) => s !== ''));
-
+      // Add new classes based on the overlayClass
+      const classInfo = typeof overlayClass === 'string' ? overlayClass.split(' ') : [];
       classInfo.forEach((name) => {
-        if (!this._customClasses.has(name)) {
-          this._previousClasses.add(name);
-        }
+        overlayElement.classList.add(name);
       });
-    }
 
-    /** @private */
-    __updateOverlayClassNames(overlayClass, overlayElement) {
-      if (overlayElement) {
-        // Overlay is set but overlayClass is not set
-        if (overlayClass === undefined && this.__oldOverlayClass === undefined) {
-          return;
-        }
-
-        const classInfo = typeof overlayClass === 'string' ? overlayClass.split(' ') : [];
-
-        if (this._previousClasses === undefined) {
-          // Remember custom classes on the first run
-          this.__storeClassNames(overlayElement, classInfo);
-        } else {
-          // Remove old classes that no longer apply
-          this.__clearClassNames(overlayElement, classInfo);
-        }
-
-        // Add new classes based on the overlayClass
-        this.__applyClassNames(overlayElement, classInfo);
-
-        this.__oldOverlayClass = overlayClass;
-      }
+      this._previousClasses = classInfo;
     }
   };
