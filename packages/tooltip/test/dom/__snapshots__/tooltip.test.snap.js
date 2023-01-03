@@ -170,3 +170,34 @@ snapshots["vaadin-tooltip end-bottom"] =
 `;
 /* end snapshot vaadin-tooltip end-bottom */
 
+snapshots["vaadin-tooltip opened overlay"] = 
+`<vaadin-tooltip-overlay
+  dir="ltr"
+  hidden=""
+  id="vaadin-tooltip-0"
+  modeless=""
+  no-vertical-overlap=""
+  opened=""
+  position="bottom"
+  role="tooltip"
+>
+</vaadin-tooltip-overlay>
+`;
+/* end snapshot vaadin-tooltip opened overlay */
+
+snapshots["vaadin-tooltip opened overlay class"] = 
+`<vaadin-tooltip-overlay
+  class="custom tooltip-overlay"
+  dir="ltr"
+  hidden=""
+  id="vaadin-tooltip-0"
+  modeless=""
+  no-vertical-overlap=""
+  opened=""
+  position="bottom"
+  role="tooltip"
+>
+</vaadin-tooltip-overlay>
+`;
+/* end snapshot vaadin-tooltip opened overlay class */
+
