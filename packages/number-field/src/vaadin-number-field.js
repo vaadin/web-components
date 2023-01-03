@@ -241,17 +241,19 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   }
 
   /**
-   * Override a method from `InputConstraintsMixin`
-   * to additionally check for bad user input.
+   * Override the method from `InputConstraintsMixin`
+   * to enforce HTML constraint validation even if
+   * the user didn't add any constraints explicitly:
+   * the field has to be regardless checked for bad input.
    *
    * @override
    */
   checkValidity() {
-    if (this.inputElement && this.inputElement.validity.badInput) {
-      return false;
+    if (this.inputElement) {
+      return this.inputElement.checkValidity();
     }
 
-    return super.checkValidity();
+    return !this.invalid;
   }
 
   /** @private */
