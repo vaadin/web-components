@@ -108,17 +108,28 @@ describe('validation', () => {
       expect(integerField.invalid).to.be.false;
     });
 
-    it('should be invalid when trying to commit a not valid number', async () => {
+    it('should be invalid when trying to commit an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(integerField.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit a not valid number', async () => {
+    it('should set an empty value when trying to commit an invalid number', async () => {
       integerField.value = '1';
       await sendKeys({ type: '1--' });
       await sendKeys({ type: 'Enter' });
       expect(integerField.value).to.equal('');
+    });
+
+    it('should be valid after removing an invalid number', async () => {
+      await sendKeys({ type: '1--' });
+      input.blur();
+      input.focus();
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Backspace' });
+      input.blur();
+      expect(integerField.invalid).to.be.false;
     });
   });
 });
