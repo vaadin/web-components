@@ -269,6 +269,39 @@ snapshots["vaadin-select host opened overlay"] =
 `;
 /* end snapshot vaadin-select host opened overlay */
 
+snapshots["vaadin-select host opened overlay class"] = 
+`<vaadin-select-overlay
+  class="custom select-overlay"
+  dir="ltr"
+  opened=""
+  start-aligned=""
+  top-aligned=""
+>
+  <vaadin-select-list-box
+    aria-orientation="vertical"
+    role="listbox"
+  >
+    <vaadin-select-item
+      aria-selected="false"
+      focus-ring=""
+      focused=""
+      role="option"
+      tabindex="0"
+    >
+      Option 1
+    </vaadin-select-item>
+    <vaadin-select-item
+      aria-selected="false"
+      role="option"
+      tabindex="-1"
+    >
+      Option 2
+    </vaadin-select-item>
+  </vaadin-select-list-box>
+</vaadin-select-overlay>
+`;
+/* end snapshot vaadin-select host opened overlay class */
+
 snapshots["vaadin-select shadow default"] = 
 `<div class="vaadin-select-container">
   <div part="label">
