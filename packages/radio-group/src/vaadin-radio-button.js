@@ -87,7 +87,7 @@ class RadioButton extends LabelMixin(
 
         .vaadin-radio-button-wrapper {
           position: relative;
-          height: 100%;
+          align-self: stretch;
         }
 
         /* visually hidden */
