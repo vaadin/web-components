@@ -76,7 +76,7 @@ export const OverlayClassMixin = (superclass) =>
     __storeClassNames(overlay, classInfo) {
       this._previousClasses = new Set();
 
-      this._customClasses = new Set(overlay.className.split(/\s/u).filter((s) => s !== ''));
+      this._customClasses = new Set(overlay.className.split(' ').filter((s) => s !== ''));
 
       classInfo.forEach((name) => {
         if (!this._customClasses.has(name)) {
