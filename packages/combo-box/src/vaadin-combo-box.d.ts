@@ -10,6 +10,7 @@ import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mix
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -235,6 +236,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     PatternMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
+    OverlayClassMixinClass,
     InputMixinClass,
     InputControlMixinClass,
     InputConstraintsMixinClass,

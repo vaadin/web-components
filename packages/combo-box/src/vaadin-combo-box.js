@@ -278,7 +278,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
    */
   _shouldRemoveFocus(event) {
     // Do not blur when focus moves to the overlay
-    if (event.relatedTarget === this.$.overlay) {
+    if (event.relatedTarget === this._overlayElement) {
       event.composedPath()[0].focus();
       return false;
     }
