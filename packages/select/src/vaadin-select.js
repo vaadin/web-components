@@ -326,7 +326,7 @@ class Select extends OverlayClassMixin(
   constructor() {
     super();
 
-    this._fieldId = `${this.localName}-${generateUniqueId()}`;
+    this._itemId = `${this.localName}-${generateUniqueId()}`;
   }
 
   /** @protected */
@@ -626,7 +626,7 @@ class Select extends OverlayClassMixin(
   __initValueItemElement(itemElement) {
     itemElement.removeAttribute('tabindex');
     itemElement.removeAttribute('role');
-    itemElement.setAttribute('id', this._fieldId);
+    itemElement.setAttribute('id', this._itemId);
   }
 
   /** @private */
@@ -657,7 +657,7 @@ class Select extends OverlayClassMixin(
       this.__attachSelectedItem(selected);
 
       // Use both label and selected item ID
-      valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+      valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._itemId}`);
 
       if (!this._valueChanging) {
         this._selectedChanging = true;
