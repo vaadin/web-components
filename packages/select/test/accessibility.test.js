@@ -15,7 +15,7 @@ describe('accessibility', () => {
       { label: 'Option 1', value: 'Option 1' },
       { label: 'Option 2', value: 'Option 2' },
     ];
-    valueButton = select._valueButton;
+    valueButton = select.querySelector('vaadin-select-value-button');
     await nextFrame();
   });
 

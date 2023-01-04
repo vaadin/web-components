@@ -96,7 +96,7 @@ describe('vaadin-select', () => {
           root,
         );
       };
-      valueButton = select._valueButton;
+      valueButton = select.querySelector('vaadin-select-value-button');
       await nextFrame();
     });
 
@@ -245,12 +245,12 @@ describe('vaadin-select', () => {
         it('should select items when non-latin keys are pressed', () => {
           keyDownChar(valueButton, SMALL.charAt(0));
           expect(menu.selected).to.be.equal(1);
-          expect(select._valueButton.textContent.trim()).to.be.equal(SMALL);
+          expect(valueButton.textContent.trim()).to.be.equal(SMALL);
           expect(select.value).to.be.equal('small');
 
           keyDownChar(valueButton, LARGE.charAt(0));
           expect(menu.selected).to.be.equal(0);
-          expect(select._valueButton.textContent.trim()).to.be.equal(LARGE);
+          expect(valueButton.textContent.trim()).to.be.equal(LARGE);
           expect(select.value).to.be.equal('large');
         });
       });
@@ -599,7 +599,7 @@ describe('vaadin-select', () => {
   });
 
   describe('with value', () => {
-    let menu;
+    let menu, valueButton;
 
     beforeEach(async () => {
       select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
@@ -615,12 +615,13 @@ describe('vaadin-select', () => {
         );
       };
       menu = select._menuElement;
+      valueButton = select.querySelector('vaadin-select-value-button');
       await nextFrame();
     });
 
     it('should be possible to set value declaratively', () => {
       expect(menu.selected).to.be.equal(1);
-      expect(select._valueButton.textContent.trim()).to.be.equal('o2');
+      expect(valueButton.textContent.trim()).to.be.equal('o2');
     });
   });
 
