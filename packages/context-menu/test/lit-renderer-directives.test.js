@@ -3,14 +3,16 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { contextMenuRenderer } from '../lit.js';
 
 async function renderContextMenu(container, { content }) {
   render(
-    html`<vaadin-context-menu open-on="click" ${content ? contextMenuRenderer(() => html`${content}`, content) : null}>
-      <button>Target</button>
-    </vaadin-context-menu>`,
+    html`
+      <vaadin-context-menu open-on="click" ${content ? contextMenuRenderer(() => html`${content}`, content) : nothing}>
+        <button>Target</button>
+      </vaadin-context-menu>
+    `,
     container,
   );
   await nextFrame();
@@ -59,9 +61,11 @@ describe('lit renderer directives', () => {
       beforeEach(async () => {
         rendererSpy = sinon.spy();
         render(
-          html`<vaadin-context-menu open-on="click" ${contextMenuRenderer(rendererSpy)}>
-            <button></button>
-          </vaadin-context-menu>`,
+          html`
+            <vaadin-context-menu open-on="click" ${contextMenuRenderer(rendererSpy)}>
+              <button></button>
+            </vaadin-context-menu>
+          `,
           container,
         );
         await nextFrame();
