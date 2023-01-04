@@ -26,6 +26,11 @@ describe('vaadin-select', () => {
       await expect(select).dom.to.equalSnapshot();
     });
 
+    it('placeholder', async () => {
+      select.placeholder = 'Placeholder';
+      await expect(select).dom.to.equalSnapshot();
+    });
+
     it('disabled', async () => {
       select.disabled = true;
       await expect(select).dom.to.equalSnapshot();

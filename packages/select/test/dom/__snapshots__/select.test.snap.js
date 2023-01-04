@@ -54,6 +54,39 @@ snapshots["vaadin-select host label"] =
 `;
 /* end snapshot vaadin-select host label */
 
+snapshots["vaadin-select host placeholder"] = 
+`<vaadin-select>
+  <label
+    id="label-vaadin-select-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-select-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-select-value-button
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    placeholder=""
+    role="button"
+    slot="value"
+    tabindex="0"
+  >
+    <vaadin-select-item
+      aria-selected="false"
+      id="vaadin-select-3"
+    >
+      Placeholder
+    </vaadin-select-item>
+  </vaadin-select-value-button>
+</vaadin-select>
+`;
+/* end snapshot vaadin-select host placeholder */
+
 snapshots["vaadin-select host disabled"] = 
 `<vaadin-select
   aria-disabled="true"

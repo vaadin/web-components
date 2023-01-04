@@ -650,14 +650,8 @@ class Select extends OverlayClassMixin(
         valueButton.appendChild(item);
         valueButton.setAttribute('placeholder', '');
       }
-
-      // No item selected, only use label ID
-      valueButton.setAttribute('aria-labelledby', this._labelId);
     } else {
       this.__attachSelectedItem(selected);
-
-      // Use both label and selected item ID
-      valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._itemId}`);
 
       if (!this._valueChanging) {
         this._selectedChanging = true;
@@ -670,6 +664,12 @@ class Select extends OverlayClassMixin(
         delete this._selectedChanging;
       }
     }
+
+    // Use item ID if there is a selected item or placeholder text
+    valueButton.setAttribute(
+      'aria-labelledby',
+      selected || this.placeholder ? `${this._labelId} ${this._itemId}` : this._labelId,
+    );
   }
 
   /** @private */
