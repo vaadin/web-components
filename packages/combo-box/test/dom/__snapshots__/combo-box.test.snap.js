@@ -357,6 +357,44 @@ snapshots["vaadin-combo-box host opened overlay"] =
 `;
 /* end snapshot vaadin-combo-box host opened overlay */
 
+snapshots["vaadin-combo-box host opened overlay class"] = 
+`<vaadin-combo-box-overlay
+  class="combo-box-overlay custom"
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened overlay class */
+
 snapshots["vaadin-combo-box host opened theme overlay"] = 
 `<vaadin-combo-box-overlay
   dir="ltr"
