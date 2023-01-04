@@ -10,6 +10,7 @@
  */
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
+import 'highcharts/es-modules/masters/modules/annotations.src.js';
 import 'highcharts/es-modules/masters/highcharts-more.src.js';
 import 'highcharts/es-modules/masters/highcharts-3d.src.js';
 import 'highcharts/es-modules/masters/modules/data.src.js';
@@ -487,6 +488,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     super();
 
     this._baseConfig = {
+      annotations: [],
       chart: {
         styledMode: true,
       },
