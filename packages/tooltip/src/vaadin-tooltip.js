@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -231,9 +232,10 @@ class TooltipStateController {
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
-class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
+class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-tooltip';
   }
@@ -409,9 +411,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: String,
         computed: '__computePosition(position, _position)',
       },
-
-      /** @protected */
-      _overlayElement: Object,
 
       /** @private */
       __isTargetHidden: {
