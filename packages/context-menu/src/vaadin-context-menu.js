@@ -374,6 +374,8 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
   ready() {
     super.ready();
 
+    this._overlayElement = this.$.overlay;
+
     this.addController(
       new MediaQueryController(this._wideMediaQuery, (matches) => {
         this._wide = matches;
@@ -488,7 +490,11 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    this.$.overlay.requestContentUpdate();
+    if (!this._overlayElement || !this.renderer) {
+      return;
+    }
+
+    this._overlayElement.requestContentUpdate();
   }
 
   /** @private */

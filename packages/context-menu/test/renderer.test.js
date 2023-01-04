@@ -108,4 +108,9 @@ describe('renderer', () => {
 
     expect(menu.$.overlay.content.textContent.trim()).to.equal('');
   });
+
+  it('should not throw if requestContentUpdate() called before adding to DOM', () => {
+    const contextMenu = document.createElement('vaadin-context-menu');
+    expect(() => contextMenu.requestContentUpdate()).not.to.throw(Error);
+  });
 });
