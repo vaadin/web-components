@@ -326,7 +326,7 @@ class Select extends OverlayClassMixin(
   constructor() {
     super();
 
-    this._itemId = `${this.localName}-${generateUniqueId()}`;
+    this._itemId = `value-${this.localName}-${generateUniqueId()}`;
   }
 
   /** @protected */

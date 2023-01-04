@@ -70,7 +70,7 @@ snapshots["vaadin-select host placeholder"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 value-vaadin-select-3"
     placeholder=""
     role="button"
     slot="value"
@@ -78,7 +78,7 @@ snapshots["vaadin-select host placeholder"] =
   >
     <vaadin-select-item
       aria-selected="false"
-      id="vaadin-select-3"
+      id="value-vaadin-select-3"
     >
       Placeholder
     </vaadin-select-item>
@@ -161,14 +161,14 @@ snapshots["vaadin-select host value"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 value-vaadin-select-3"
     role="button"
     slot="value"
     tabindex="0"
   >
     <vaadin-select-item
       aria-selected="true"
-      id="vaadin-select-3"
+      id="value-vaadin-select-3"
       selected=""
     >
       Option 1
