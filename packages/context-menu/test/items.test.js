@@ -414,6 +414,12 @@ describe('items', () => {
       }).to.throw(Error);
     });
 
+    it('should not call requestContentUpdate', () => {
+      const spy = sinon.spy(rootMenu.$.overlay, 'requestContentUpdate');
+      rootMenu.requestContentUpdate();
+      expect(spy.called).to.be.false;
+    });
+
     it('should not remove the component attributes', () => {
       rootMenu.close();
       const button = document.createElement('button');
