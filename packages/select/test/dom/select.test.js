@@ -75,6 +75,11 @@ describe('vaadin-select', () => {
       it('overlay', async () => {
         await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('overlay class', async () => {
+        select.overlayClass = 'custom select-overlay';
+        await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 

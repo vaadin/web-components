@@ -13,6 +13,7 @@ import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mi
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -135,8 +136,11 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @mixes FieldMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
+ * @mixes OverlayClassMixin
  */
-class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Select extends OverlayClassMixin(
+  DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))),
+) {
   static get is() {
     return 'vaadin-select';
   }
@@ -296,9 +300,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
       _phoneMediaQuery: {
         value: '(max-width: 420px), (max-height: 420px)',
       },
-
-      /** @private */
-      _overlayElement: Object,
 
       /** @private */
       _inputContainer: Object,
