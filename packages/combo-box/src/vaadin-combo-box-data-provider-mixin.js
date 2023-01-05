@@ -143,6 +143,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _shouldLoadPage(page) {
+      if (!this.filteredItems) {
+        return true;
+      }
+
       const loadedItem = this.filteredItems[page * this.pageSize];
       if (loadedItem !== undefined) {
         return loadedItem instanceof ComboBoxPlaceholder;
