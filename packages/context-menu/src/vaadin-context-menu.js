@@ -11,6 +11,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -199,10 +200,13 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ControllerMixin
+ * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
  */
-class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement)))) {
+class ContextMenu extends OverlayClassMixin(
+  ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>

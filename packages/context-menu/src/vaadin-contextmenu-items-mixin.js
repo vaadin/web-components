@@ -144,9 +144,10 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __openSubMenu(subMenu, itemElement) {
+    __openSubMenu(subMenu, itemElement, overlayClass) {
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
+      subMenu.overlayClass = overlayClass;
 
       const parent = this.$.overlay;
 
@@ -346,7 +347,10 @@ export const ItemsMixin = (superClass) =>
             if (itemElement._item.children && itemElement._item.children.length) {
               itemElement.setAttribute('aria-expanded', 'true');
               itemElement.setAttribute('expanded', '');
-              this.__openSubMenu(subMenu, itemElement);
+
+              // Forward parent overlay class
+              const { overlayClass } = menu;
+              this.__openSubMenu(subMenu, itemElement, overlayClass);
             } else {
               subMenu.listenOn.focus();
             }
