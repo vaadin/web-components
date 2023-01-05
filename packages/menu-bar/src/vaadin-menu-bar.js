@@ -195,7 +195,7 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
   }
 
   static get observers() {
-    return ['_themeChanged(_theme, _overflow)'];
+    return ['_themeChanged(_theme, _overflow, _container)'];
   }
 
   /** @protected */
@@ -231,8 +231,8 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
    * @param {string | null} theme
    * @protected
    */
-  _themeChanged(theme, overflow) {
-    if (overflow) {
+  _themeChanged(theme, overflow, container) {
+    if (overflow && container) {
       this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
       this.__detectOverflow();
     }

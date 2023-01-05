@@ -42,6 +42,11 @@ export const MenuBarMixin = (superClass) =>
         _overflow: {
           type: Object,
         },
+
+        /** @protected */
+        _container: {
+          type: Object,
+        },
       };
     }
 
@@ -55,7 +60,7 @@ export const MenuBarMixin = (superClass) =>
         '_itemsChanged(items, items.splices)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(i18n, _overflow)',
-        '_menuItemsChanged(items, _overflow, items.splices)',
+        '_menuItemsChanged(items, _overflow, _container, items.splices)',
       ];
     }
 
@@ -89,9 +94,11 @@ export const MenuBarMixin = (superClass) =>
       const overlay = this._subMenu.$.overlay;
       overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
-      const container = this._container;
+      const container = this.shadowRoot.querySelector('[part="container"]');
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
+
+      this._container = container;
     }
 
     /**
@@ -155,14 +162,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * @return {!HTMLElement}
-     * @protected
-     */
-    get _container() {
-      return this.shadowRoot.querySelector('[part="container"]');
-    }
-
-    /**
      * Implement callback from `ResizeMixin` to update buttons
      * and detect whether to show or hide the overflow button.
      *
@@ -181,8 +180,8 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    _menuItemsChanged(items, overflow) {
-      if (!overflow) {
+    _menuItemsChanged(items, overflow, container) {
+      if (!overflow || !container) {
         return;
       }
 
