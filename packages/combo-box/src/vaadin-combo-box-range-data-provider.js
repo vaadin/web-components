@@ -3,9 +3,9 @@ import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-rang
 export class RangeDataProvider {
   constructor(requestRangeCallback, options = {}) {
     this.range = null;
-    this.lastFilter = '';
     this.maxRangeSize = options.maxRangeSize ?? Infinity;
     this.requestRangeCallback = requestRangeCallback;
+    this.dataProvider = this.dataProvider.bind(this);
   }
 
   dataProvider({ page, ...params }, _callback, comboBox) {
@@ -15,7 +15,7 @@ export class RangeDataProvider {
 
     this.cancelPageRequestsOutOfRange();
 
-    // This.disposeOfRenderedItemsOutOfRange();
+    this.disposeOfRenderedItemsOutOfRange();
 
     this.requestRangeCallback(
       {
@@ -52,12 +52,11 @@ export class RangeDataProvider {
    */
   onRangeLoaded(pages, size) {
     Object.entries(pages).forEach(([page, items]) => {
-      this._pendingRequests[page]?.(items, size);
+      this.comboBox._pendingRequests[page]?.(items, size);
     });
   }
 }
 
-export function createRangeDataProvider(...options) {
-  const instance = new RangeDataProvider(...options);
-  return instance.dataProvider.bind(instance);
+export function createRangeDataProvider(...args) {
+  return new RangeDataProvider(...args).dataProvider;
 }
