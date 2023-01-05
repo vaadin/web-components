@@ -24,8 +24,12 @@ registerStyles(
       outline: none;
     }
 
+    ::slotted(label) {
+      padding-block: var(--lumo-space-xs);
+    }
+
     :host([has-label]) ::slotted(label) {
-      padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
+      padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     [part='checkbox'] {

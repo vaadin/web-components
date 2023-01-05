@@ -101,6 +101,10 @@ class Checkbox extends LabelMixin(
           cursor: inherit;
           margin: 0;
         }
+
+        ::slotted(label:empty)::before {
+          content: '\\202F';
+        }
       </style>
       <div class="vaadin-checkbox-container">
         <div class="vaadin-checkbox-wrapper">

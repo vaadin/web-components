@@ -102,6 +102,10 @@ class RadioButton extends LabelMixin(
           cursor: inherit;
           margin: 0;
         }
+
+        ::slotted(label:empty)::before {
+          content: '\\202F';
+        }
       </style>
       <div class="vaadin-radio-button-container">
         <div class="vaadin-radio-button-wrapper">
