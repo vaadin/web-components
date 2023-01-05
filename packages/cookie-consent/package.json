@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/cookie-consent",
-  "version": "24.0.0-alpha8",
+  "version": "24.0.0-alpha9",
   "publishConfig": {
     "access": "public"
   },
@@ -36,9 +36,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.0.0-alpha8",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha8",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha8",
+    "@vaadin/component-base": "24.0.0-alpha9",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha9",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha9",
     "cookieconsent": "^3.0.6"
   },
   "devDependencies": {
