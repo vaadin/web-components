@@ -238,6 +238,11 @@ export declare class DatePickerMixinClass {
   max: string | undefined;
 
   /**
+   * Function to override the default function for determining if a date is available.
+   */
+  isDateAvailable: (date: Date) => boolean;
+
+  /**
    * Opens the dropdown.
    */
   open(): void;

@@ -17,7 +17,7 @@ declare function dateEquals(date1: Date | null, date2: Date | null): boolean;
  *
  * @returns True if the date is in the range
  */
-declare function dateAllowed(date: Date, min: Date | null, max: Date | null): boolean;
+declare function dateAllowed(date: Date, min: Date | null, max: Date | null, isDateAvailable: Function | null): boolean;
 
 /**
  * Get closest date from array of dates.

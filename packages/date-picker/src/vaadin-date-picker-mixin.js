@@ -18,7 +18,7 @@ import {
   extractDateParts,
   getAdjustedYear,
   getClosestDate,
-  parseDate,
+  parseDate
 } from './vaadin-date-picker-helper.js';
 
 /**
@@ -303,6 +303,15 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * A function that is used to determine if a date should be disabled.
+         * 
+         * @type {function(Date): boolean | undefined}
+         */
+        isDateAvailable: {
+          type: Function,
+        },
+
+        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          * @type {Date | undefined}
          * @protected
@@ -365,7 +374,7 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, i18n)',
         '_focusedDateChanged(_focusedDate, i18n)',
-        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers)',
+        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateAvailable)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -591,6 +600,7 @@ export const DatePickerMixin = (subclass) =>
       const inputValue = this._inputElementValue;
       const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+      const isDateAvailableValid = this.isDateAvailable ? this.isDateAvailable(this._selectedDate) : true;
 
       let inputValidity = true;
       if (this.inputElement) {
@@ -602,7 +612,7 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      return inputValid && minMaxValid && inputValidity;
+      return inputValid && minMaxValid && inputValidity && isDateAvailableValid;
     }
 
     /**
@@ -812,7 +822,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     // eslint-disable-next-line max-params
-    __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers) {
+    __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers, isDateAvailable) {
       if (overlayContent) {
         overlayContent.i18n = i18n;
         overlayContent.label = label;
@@ -821,6 +831,7 @@ export const DatePickerMixin = (subclass) =>
         overlayContent.focusedDate = focusedDate;
         overlayContent.selectedDate = selectedDate;
         overlayContent.showWeekNumbers = showWeekNumbers;
+        overlayContent.isDateAvailable = isDateAvailable;
       }
     }
 
