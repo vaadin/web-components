@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
  * @extends HTMLElement
@@ -329,8 +330,7 @@ export class InfiniteScroller extends PolymerElement {
         itemWrapper.style.height = `${this.itemHeight}px`;
         itemWrapper.instance = {};
 
-        const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
-        const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
+        const slotName = `vaadin-infinite-scroller-item-content-${generateUniqueId()}`;
 
         const slot = document.createElement('slot');
         slot.setAttribute('name', slotName);

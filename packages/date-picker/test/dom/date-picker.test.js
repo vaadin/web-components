@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { open } from '../common.js';
 
 describe('vaadin-date-picker', () => {
   let datePicker;
@@ -61,6 +62,27 @@ describe('vaadin-date-picker', () => {
     it('value', async () => {
       datePicker.value = '2000-02-01';
       await expect(datePicker).dom.to.equalSnapshot();
+    });
+
+    describe('opened', () => {
+      const SNAPSHOT_CONFIG = {
+        // Some inline CSS styles related to the overlay's position
+        // may slightly change depending on the environment, so ignore them.
+        ignoreAttributes: ['style'],
+      };
+
+      beforeEach(async () => {
+        await open(datePicker);
+      });
+
+      it('overlay', async () => {
+        await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
+      it('overlay theme', async () => {
+        datePicker.setAttribute('theme', 'custom');
+        await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 
