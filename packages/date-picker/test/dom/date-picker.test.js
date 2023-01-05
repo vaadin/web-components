@@ -79,6 +79,11 @@ describe('vaadin-date-picker', () => {
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
+      it('overlay class', async () => {
+        datePicker.overlayClass = 'custom date-picker-overlay';
+        await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
       it('overlay theme', async () => {
         datePicker.setAttribute('theme', 'custom');
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);

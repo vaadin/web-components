@@ -8,6 +8,7 @@ import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegat
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 
@@ -93,6 +94,7 @@ export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
+  Constructor<OverlayClassMixinClass> &
   T;
 
 export declare class DatePickerMixinClass {

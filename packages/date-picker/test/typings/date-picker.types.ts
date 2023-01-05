@@ -5,6 +5,7 @@ import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mix
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
@@ -84,6 +85,7 @@ assertType<boolean>(datePicker.required);
 assertType<string>(datePicker.name);
 assertType<string>(datePicker.allowedCharPattern);
 assertType<string | null | undefined>(datePicker.initialPosition);
+assertType<string>(datePicker.overlayClass);
 
 // DatePicker mixins
 assertType<ControllerMixinClass>(datePicker);
@@ -99,6 +101,7 @@ assertType<InputMixinClass>(datePicker);
 assertType<ValidateMixinClass>(datePicker);
 assertType<ThemableMixinClass>(datePicker);
 assertType<DatePickerMixinClass>(datePicker);
+assertType<OverlayClassMixinClass>(datePicker);
 
 /* DatePickerLight */
 const datePickerLight = document.createElement('vaadin-date-picker-light');
