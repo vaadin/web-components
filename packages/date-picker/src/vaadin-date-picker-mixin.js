@@ -8,6 +8,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {
@@ -21,11 +22,16 @@ import {
 
 /**
  * @polymerMixin
+ * @mixes ControllerMixin
+ * @mixes DelegateFocusMixin
+ * @mixes InputConstraintsMixin
+ * @mixes KeyboardMixin
+ * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends ControllerMixin(
-    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
+  class DatePickerMixinClass extends OverlayClassMixin(
+    ControllerMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),
   ) {
     static get properties() {
       return {
@@ -424,7 +430,10 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
-      this.$.overlay.renderer = this._boundOverlayRenderer;
+      const overlay = this.$.overlay;
+      this._overlayElement = overlay;
+
+      overlay.renderer = this._boundOverlayRenderer;
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
