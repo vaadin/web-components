@@ -105,6 +105,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _dataProviderFilterChanged(filter) {
+      if (!this.dataProvider) {
+        return;
+      }
+
       if (this.__previousDataProviderFilter === undefined && filter === '') {
         this.__previousDataProviderFilter = filter;
         return;
