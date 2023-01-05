@@ -3,33 +3,23 @@ import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-rang
 export class RangeDataProvider {
   constructor(requestRangeCallback, options = {}) {
     this.range = null;
-    this.pages = {};
     this.lastFilter = '';
     this.maxRangeSize = options.maxRangeSize ?? Infinity;
     this.requestRangeCallback = requestRangeCallback;
   }
 
-  dataProvider({ page, pageSize, filter }, callback, comboBox) {
+  dataProvider({ page, ...params }, _callback, comboBox) {
     this.comboBox = comboBox;
-
-    // The page is already loaded, return it.
-    if (this.lastFilter === filter && this.pages[page]) {
-      callback(this.pages[page], this.comboBox.size);
-      return;
-    }
-
-    this.lastFilter = filter;
 
     this.range = adjustRangeToIncludePage(this.range, page, this.maxRangeSize);
 
     this.cancelPageRequestsOutOfRange();
 
-    // this.disposeOfRenderedItemsOutOfRange();
+    // This.disposeOfRenderedItemsOutOfRange();
 
     this.requestRangeCallback(
       {
-        filter,
-        pageSize,
+        ...params,
         pageRange: this.range,
       },
       this.onRangeLoaded.bind(this),
@@ -58,15 +48,12 @@ export class RangeDataProvider {
 
   /**
    * @param {Record<number, object[]>} pages
+   * @param {number} size
    */
-  onRangeLoaded(pages) {
-    this.pages = pages;
-    this.comboBox.clearCache();
-  }
-
-  clearCache() {
-    this.pages = {};
-    this.comboBox.clearCache();
+  onRangeLoaded(pages, size) {
+    Object.entries(pages).forEach(([page, items]) => {
+      this._pendingRequests[page]?.(items, size);
+    });
   }
 }
 

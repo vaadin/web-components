@@ -121,12 +121,21 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         // Immediately mark as loading if this refresh leads to re-fetching pages
         // This prevents some issues with the properties below triggering
         // observers that also rely on the loading state
-        this.loading = this.opened || (this.filter && this.filter.length);
+        this.loading = this._shouldFetchData();
         // Reset size and internal loading state
         this.size = undefined;
 
         this.clearCache();
       }
+    }
+
+    /** @private */
+    _shouldFetchData() {
+      if (!this.dataProvider) {
+        return false;
+      }
+
+      return this.opened || (this.filter && this.filter.length);
     }
 
     /** @private */
@@ -147,7 +156,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _shouldLoadPage(page) {
-      if (!this.filteredItems) {
+      if (!this.filteredItems || this._forceNextRequest) {
+        this._forceNextRequest = false;
         return true;
       }
 
@@ -224,8 +234,11 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
       this.filteredItems = filteredItems;
 
-      if (this.opened && this.size === undefined) {
+      if (this._shouldFetchData()) {
+        this._forceNextRequest = false;
         this._loadPage(0);
+      } else {
+        this._forceNextRequest = true;
       }
     }
 
