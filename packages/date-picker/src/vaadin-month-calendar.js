@@ -50,12 +50,12 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
               <template is="dom-repeat" items="[[week]]">
                 <td
                   role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate)]]"
+                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate, isDateAvailable)]]"
                   date="[[item]]"
                   tabindex$="[[__getDayTabindex(item, focusedDate)]]"
-                  disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
+                  disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateAvailable)]]"
                   aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
-                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
+                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate, isDateAvailable)]]"
                   aria-label$="[[__getDayAriaLabel(item)]]"
                   >[[_getDate(item)]]</td
                 >
@@ -76,7 +76,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       /** @protected */
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n, minDate, maxDate)',
+        computed: '_getDays(month, i18n, minDate, maxDate, isDateAvailable)',
       },
 
       /** @protected */
@@ -88,7 +88,18 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate)',
+        computed: '_isDisabled(month, minDate, maxDate, isDateAvailable)',
+      },
+
+      /**
+       * A function to be used to determine whether the user can select a given date.
+       * Receives the `Date` object of the date to be selected and should return a
+       * boolean.
+       * @type {Function | undefined}
+       */
+      isDateAvailable: {
+        type: Function,
+        value: () => true,
       },
     };
   }
@@ -107,10 +118,10 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate) {
+  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateAvailable) {
     const result = ['date'];
 
-    if (this.__isDayDisabled(date, minDate, maxDate)) {
+    if (this.__isDayDisabled(date, minDate, maxDate, isDateAvailable)) {
       result.push('disabled');
     }
 
@@ -148,16 +159,16 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __isDayDisabled(date, minDate, maxDate) {
-    return !dateAllowed(date, minDate, maxDate);
+    return !dateAllowed(date, minDate, maxDate, isDateAvailable);
   }
 
   /** @private */
-  __getDayAriaDisabled(date, min, max) {
+  __getDayAriaDisabled(date, min, max, isDateAvailable) {
     if (date === undefined || min === undefined || max === undefined) {
       return;
     }
 
-    if (this.__isDayDisabled(date, min, max)) {
+    if (this.__isDayDisabled(date, min, max, isDateAvailable)) {
       return 'true';
     }
   }
