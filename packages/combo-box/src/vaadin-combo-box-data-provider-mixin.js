@@ -193,7 +193,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       // as a result of `__loadingChanged` in the scroller which requests
       // a virtualizer update which in turn may trigger a data provider page request.
       this.loading = true;
-      this.dataProvider(params, callback);
+      this.dataProvider(params, callback, this);
     }
 
     /** @private */
@@ -298,9 +298,17 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         for (let reqIdx = 0; reqIdx < pendingRequestsKeys.length; reqIdx++) {
           const page = parseInt(pendingRequestsKeys[reqIdx]);
           if (page >= lastPage) {
-            this._pendingRequests[page]([], size);
+            this._cancelPendingRequest(page);
           }
         }
+      }
+    }
+
+    _cancelPendingRequest(page) {
+      delete this._pendingRequests[page];
+
+      if (Object.keys(this._pendingRequests).length === 0) {
+        this.loading = false;
       }
     }
   };
