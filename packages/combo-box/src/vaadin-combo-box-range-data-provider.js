@@ -36,7 +36,7 @@ export class RangeDataProvider {
 
   disposeOfRenderedItemsOutOfRange() {
     this.comboBox.filteredItems = this.comboBox.filteredItems.map((item, i) => {
-      const page = Math.ceil(i / this.comboBox.pageSize);
+      const page = Math.floor(i / this.comboBox.pageSize);
 
       if (!isPageInRange(this.range, page)) {
         return this.comboBox.__placeHolder;

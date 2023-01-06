@@ -3,7 +3,7 @@ export function getRangeSize(range) {
 }
 
 export function isPageInRange(range, page) {
-  return page >= range[0] && page <= range[1];
+  return range[0] <= page && page <= range[1];
 }
 
 export function adjustRangeToIncludePage(range, page, maxRangeSize) {
