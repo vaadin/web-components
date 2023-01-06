@@ -61,6 +61,7 @@ describe('range data provider', () => {
     for (let page = 0; page < 5; page++) {
       scrollToFirstIndexOfPage(page);
       await nextFrame();
+      expect(comboBox.loading).to.be.false;
       expectFilteredItemsToBeWithinRange([0, page]);
     }
   });
@@ -71,6 +72,7 @@ describe('range data provider', () => {
       await nextFrame();
     }
 
+    expect(comboBox.loading).to.be.false;
     expectFilteredItemsToBeWithinRange([1, 5]);
   });
 
@@ -78,6 +80,7 @@ describe('range data provider', () => {
     for (let page = 9; page > 4; page--) {
       scrollToLastIndexOfPage(page);
       await nextFrame();
+      expect(comboBox.loading).to.be.false;
       expectFilteredItemsToBeWithinRange([page, 9]);
     }
   });
@@ -88,6 +91,7 @@ describe('range data provider', () => {
       await nextFrame();
     }
 
+    expect(comboBox.loading).to.be.false;
     expectFilteredItemsToBeWithinRange([4, 8]);
   });
 });
