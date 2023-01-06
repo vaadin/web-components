@@ -179,6 +179,13 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
   autoOpenDisabled: boolean | null | undefined;
 
   /**
+   * A space-delimited list of CSS class names to set on the overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
+
+  /**
    * The object used to localize this component.
    * To change the default localization, replace the entire
    * _i18n_ object or just the property you want to modify.

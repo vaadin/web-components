@@ -26,6 +26,15 @@ assertType<PatternMixinClass>(timePicker);
 assertType<ValidateMixinClass>(timePicker);
 assertType<ThemableMixinClass>(timePicker);
 
+// Properties
+assertType<boolean | null | undefined>(timePicker.autoOpenDisabled);
+assertType<string>(timePicker.min);
+assertType<string>(timePicker.max);
+assertType<number | null | undefined>(timePicker.step);
+assertType<boolean>(timePicker.opened);
+assertType<string>(timePicker.overlayClass);
+assertType<string>(timePicker.value);
+
 // Events
 timePicker.addEventListener('change', (event) => {
   assertType<TimePickerChangeEvent>(event);

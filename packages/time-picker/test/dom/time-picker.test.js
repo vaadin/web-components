@@ -83,6 +83,11 @@ describe('vaadin-time-picker', () => {
       it('overlay', async () => {
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('overlay class', async () => {
+        timePicker.overlayClass = 'custom time-picker-overlay';
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 
