@@ -61,8 +61,8 @@ export function dateEquals(date1, date2) {
  * @param {Date} max Range end
  * @return {boolean} True if the date is in the range
  */
-export function dateAllowed(date, min, max) {
-  return (!min || date >= min) && (!max || date <= max);
+export function dateAllowed(date, min, max, isDateAvailable) {
+  return (!min || date >= min) && (!max || date <= max) && (!isDateAvailable || isDateAvailable(date));
 }
 
 /**
