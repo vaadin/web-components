@@ -14,6 +14,7 @@ import { html, render } from 'lit';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -61,10 +62,11 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  * @mixes ThemableMixin
  * @mixes ResizeMixin
  */
-class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))) {
   static get template() {
     return legacyHtml`
       <style>
@@ -297,7 +299,9 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     });
     this.addController(this._overflowController);
 
-    this.$.overlay.renderer = this.__overlayRenderer.bind(this);
+    const overlay = this.$.overlay;
+    overlay.renderer = this.__overlayRenderer.bind(this);
+    this._overlayElement = overlay;
 
     afterNextRender(this, () => {
       this.__setItemsInView();
