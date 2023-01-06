@@ -192,6 +192,9 @@
     },
     {
       "files": ["packages/**/test/**", "integration/tests/**"],
+      "env": {
+        "mocha": true
+      },
       "rules": {
         "no-await-in-loop": "off",
         // TODO: Use chai-friendly plugin
