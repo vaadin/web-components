@@ -34,19 +34,19 @@ describe('vaadin-avatar-group', () => {
     };
 
     beforeEach(async () => {
-      group.maxItemsVisible = 3;
+      group.maxItemsVisible = 2;
       group.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
       await nextRender();
-      group._overflow.click();
+      group.$.overflow.click();
       await nextRender();
     });
 
     it('default', async () => {
-      await expect(group).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(group).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('overlay', async () => {
-      await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(group.$.overlay.$.content).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 });
