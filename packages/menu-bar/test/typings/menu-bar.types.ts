@@ -9,6 +9,10 @@ const menu = document.createElement('vaadin-menu-bar');
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
+assertType<boolean | null | undefined>(menu.openOnHover);
+assertType<MenuBarItem[]>(menu.items);
+assertType<string>(menu.overlayClass);
+
 assertType<ResizeMixinClass>(menu);
 assertType<ControllerMixinClass>(menu);
 assertType<FocusMixinClass>(menu);

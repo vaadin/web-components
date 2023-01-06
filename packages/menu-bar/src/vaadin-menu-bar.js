@@ -89,7 +89,7 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root=""></vaadin-menu-bar-submenu>
+      <vaadin-menu-bar-submenu is-root overlay-class="[[overlayClass]]"></vaadin-menu-bar-submenu>
 
       <slot name="tooltip"></slot>
     `;
@@ -190,6 +190,16 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
             moreOptions: 'More options',
           };
         },
+      },
+
+      /**
+       * A space-delimited list of CSS class names
+       * to set on each sub-menu overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
       },
     };
   }
