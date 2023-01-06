@@ -1,9 +1,16 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["menu-bar basic"] = 
+snapshots["menu-bar host"] = 
 `<vaadin-menu-bar role="menubar">
+</vaadin-menu-bar>
+`;
+/* end snapshot menu-bar host */
+
+snapshots["menu-bar shadow"] = 
+`<div part="container">
   <vaadin-menu-bar-button
+    part="menu-bar-button"
     role="menuitem"
     tabindex="0"
   >
@@ -12,6 +19,7 @@ snapshots["menu-bar basic"] =
   <vaadin-menu-bar-button
     aria-expanded="false"
     aria-haspopup="true"
+    part="menu-bar-button"
     role="menuitem"
     tabindex="0"
   >
@@ -20,12 +28,14 @@ snapshots["menu-bar basic"] =
   <vaadin-menu-bar-button
     aria-disabled="true"
     disabled=""
+    part="menu-bar-button"
     role="menuitem"
     tabindex="-1"
   >
     Dashboard
   </vaadin-menu-bar-button>
   <vaadin-menu-bar-button
+    part="menu-bar-button"
     role="menuitem"
     tabindex="0"
   >
@@ -43,17 +53,18 @@ snapshots["menu-bar basic"] =
     aria-haspopup="true"
     aria-label="More options"
     hidden=""
+    part="overflow-button"
     role="menuitem"
-    slot="overflow"
     tabindex="0"
   >
-    <div aria-hidden="true">
-      ···
+    <div class="dots">
     </div>
   </vaadin-menu-bar-button>
-</vaadin-menu-bar>
+</div>
+<vaadin-menu-bar-submenu is-root="">
+</vaadin-menu-bar-submenu>
 `;
-/* end snapshot menu-bar basic */
+/* end snapshot menu-bar shadow */
 
 snapshots["menu-bar overlay"] = 
 `<vaadin-context-menu-overlay
@@ -66,11 +77,13 @@ snapshots["menu-bar overlay"] =
 >
   <vaadin-context-menu-list-box
     aria-orientation="vertical"
+    class="vaadin-menu-list-box"
     role="list"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="vaadin-menu-item"
       role="menuitem"
       tabindex="0"
     >
@@ -79,6 +92,7 @@ snapshots["menu-bar overlay"] =
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="vaadin-menu-item"
       role="menuitem"
       tabindex="-1"
     >
