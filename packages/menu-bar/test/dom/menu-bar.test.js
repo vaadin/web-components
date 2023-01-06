@@ -34,8 +34,12 @@ describe('menu-bar', () => {
     await nextRender();
   });
 
-  it('basic', async () => {
+  it('host', async () => {
     await expect(menu).dom.to.equalSnapshot();
+  });
+
+  it('shadow', async () => {
+    await expect(menu).shadowDom.to.equalSnapshot();
   });
 
   it('overlay', async () => {
