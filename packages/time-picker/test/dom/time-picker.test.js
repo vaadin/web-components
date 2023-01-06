@@ -77,7 +77,7 @@ describe('vaadin-time-picker', () => {
       });
 
       it('default', async () => {
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+        await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('overlay', async () => {
