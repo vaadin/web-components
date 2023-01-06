@@ -11,7 +11,7 @@ const ITEMS = makeItems(300);
 describe('range data provider', () => {
   let comboBox;
 
-  function expectFilteredItemsToBeWithinRange(range) {
+  function expectLoadedPagesToBeWithinRange(range) {
     comboBox.filteredItems.forEach((item, i) => {
       const page = Math.floor(i / comboBox.pageSize);
       if (isPageInRange(range, page)) {
@@ -54,7 +54,7 @@ describe('range data provider', () => {
   });
 
   it('should have first page loaded', () => {
-    expectFilteredItemsToBeWithinRange([0, 0]);
+    expectLoadedPagesToBeWithinRange([0, 0]);
   });
 
   it('should load more pages as the user scrolls up', async () => {
@@ -62,7 +62,7 @@ describe('range data provider', () => {
       scrollToFirstIndexOfPage(page);
       await nextFrame();
       expect(comboBox.loading).to.be.false;
-      expectFilteredItemsToBeWithinRange([0, page]);
+      expectLoadedPagesToBeWithinRange([0, page]);
     }
   });
 
@@ -73,7 +73,7 @@ describe('range data provider', () => {
     }
 
     expect(comboBox.loading).to.be.false;
-    expectFilteredItemsToBeWithinRange([1, 5]);
+    expectLoadedPagesToBeWithinRange([1, 5]);
   });
 
   it('should load more pages as the user scrolls down', async () => {
@@ -81,7 +81,7 @@ describe('range data provider', () => {
       scrollToLastIndexOfPage(page);
       await nextFrame();
       expect(comboBox.loading).to.be.false;
-      expectFilteredItemsToBeWithinRange([page, 9]);
+      expectLoadedPagesToBeWithinRange([page, 9]);
     }
   });
 
@@ -92,6 +92,6 @@ describe('range data provider', () => {
     }
 
     expect(comboBox.loading).to.be.false;
-    expectFilteredItemsToBeWithinRange([4, 8]);
+    expectLoadedPagesToBeWithinRange([4, 8]);
   });
 });
