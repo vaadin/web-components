@@ -294,9 +294,8 @@ const createVisualTestsConfig = (theme) => {
         getBaselineName: getBaselineScreenshotName,
         getDiffName: getDiffScreenshotName,
         getFailedName: getFailedScreenshotName,
-        diffOptions: {
-          threshold: 0.2,
-        },
+        failureThreshold: 0.05,
+        failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
     ],
