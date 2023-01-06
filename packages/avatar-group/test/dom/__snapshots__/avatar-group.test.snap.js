@@ -145,3 +145,104 @@ Tomi Virkki"
 `;
 /* end snapshot vaadin-avatar-group theme */
 
+snapshots["vaadin-avatar-group opened default"] = 
+`<div
+  id="container"
+  part="container"
+>
+  <vaadin-avatar
+    abbr="AD"
+    name="Abc Def"
+    part="avatar"
+    role="button"
+    tabindex="0"
+    title="Abc Def"
+  >
+  </vaadin-avatar>
+  <dom-repeat id="items">
+    <template is="dom-repeat">
+    </template>
+  </dom-repeat>
+  <vaadin-avatar
+    abbr="+3"
+    aria-expanded="true"
+    aria-haspopup="listbox"
+    id="overflow"
+    part="avatar"
+    role="button"
+    tabindex="0"
+    title="Ghi Jkl
+Mno Pqr
+Stu Vwx"
+  >
+  </vaadin-avatar>
+</div>
+`;
+/* end snapshot vaadin-avatar-group opened default */
+
+snapshots["vaadin-avatar-group opened overlay"] = 
+`<vaadin-avatar-group-list-box
+  aria-orientation="vertical"
+  role="listbox"
+>
+  <vaadin-item
+    aria-selected="false"
+    focus-ring=""
+    focused=""
+    role="option"
+    tabindex="0"
+    theme="avatar-group-item"
+  >
+    <vaadin-avatar
+      abbr="GJ"
+      aria-hidden="true"
+      name="Ghi Jkl"
+      part="avatar"
+      role="button"
+      tabindex="-1"
+    >
+    </vaadin-avatar>
+    Ghi Jkl
+  </vaadin-item>
+  <vaadin-item
+    aria-selected="false"
+    role="option"
+    tabindex="-1"
+    theme="avatar-group-item"
+  >
+    <vaadin-avatar
+      abbr="MP"
+      aria-hidden="true"
+      name="Mno Pqr"
+      part="avatar"
+      role="button"
+      tabindex="-1"
+    >
+    </vaadin-avatar>
+    Mno Pqr
+  </vaadin-item>
+  <vaadin-item
+    aria-selected="false"
+    role="option"
+    tabindex="-1"
+    theme="avatar-group-item"
+  >
+    <vaadin-avatar
+      abbr="SV"
+      aria-hidden="true"
+      name="Stu Vwx"
+      part="avatar"
+      role="button"
+      tabindex="-1"
+    >
+    </vaadin-avatar>
+    Stu Vwx
+  </vaadin-item>
+  <dom-repeat>
+    <template is="dom-repeat">
+    </template>
+  </dom-repeat>
+</vaadin-avatar-group-list-box>
+`;
+/* end snapshot vaadin-avatar-group opened overlay */
+
