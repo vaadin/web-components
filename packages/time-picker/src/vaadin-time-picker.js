@@ -121,6 +121,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           readonly="[[readonly]]"
           clear-button-visible="[[clearButtonVisible]]"
           auto-open-disabled="[[autoOpenDisabled]]"
+          overlay-class="[[overlayClass]]"
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
@@ -231,6 +232,15 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
+
+      /**
+       * A space-delimited list of CSS class names to set on the overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
 
       /** @private */
       __dropdownItems: {
