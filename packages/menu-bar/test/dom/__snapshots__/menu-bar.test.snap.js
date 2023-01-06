@@ -91,3 +91,40 @@ snapshots["menu-bar overlay"] =
 `;
 /* end snapshot menu-bar overlay */
 
+snapshots["menu-bar overlay class"] = 
+`<vaadin-context-menu-overlay
+  class="custom menu-bar-overlay"
+  dir="ltr"
+  id="overlay"
+  opened=""
+  right-aligned=""
+  start-aligned=""
+  top-aligned=""
+>
+  <vaadin-context-menu-list-box
+    aria-orientation="vertical"
+    role="list"
+  >
+    <vaadin-context-menu-item
+      aria-haspopup="false"
+      aria-selected="false"
+      role="menuitem"
+      tabindex="0"
+    >
+      View Reports
+    </vaadin-context-menu-item>
+    <vaadin-context-menu-item
+      aria-haspopup="false"
+      aria-selected="false"
+      role="menuitem"
+      tabindex="-1"
+    >
+      Generate Report
+    </vaadin-context-menu-item>
+  </vaadin-context-menu-list-box>
+  <vaadin-menu-bar-submenu hidden="">
+  </vaadin-menu-bar-submenu>
+</vaadin-context-menu-overlay>
+`;
+/* end snapshot menu-bar overlay class */
+

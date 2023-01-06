@@ -160,6 +160,14 @@ declare class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMi
    */
   i18n: MenuBarI18n;
 
+  /**
+   * A space-delimited list of CSS class names
+   * to set on each sub-menu overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
+
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,
     listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
