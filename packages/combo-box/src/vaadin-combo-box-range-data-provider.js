@@ -1,4 +1,7 @@
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-range-data-provider-helpers.js';
+
+const ITEM_PLACEHOLDER = new ComboBoxPlaceholder();
 
 export class RangeDataProvider {
   #range;
@@ -56,7 +59,7 @@ export class RangeDataProvider {
       const page = Math.floor(i / this.#comboBox.pageSize);
 
       if (!isPageInRange(this.#range, page)) {
-        return this.#comboBox.__placeHolder;
+        return ITEM_PLACEHOLDER;
       }
 
       return item;
