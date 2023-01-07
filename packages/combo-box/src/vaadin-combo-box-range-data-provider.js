@@ -36,7 +36,7 @@ export class RangeDataProvider {
 
   /**
    * Cancels active requests to pages that are out of the current range
-   * so that those pages can be requested again.
+   * so that those pages can be requested again once they are back in the viewport.
    *
    * @private
    */
@@ -49,8 +49,8 @@ export class RangeDataProvider {
   }
 
   /**
-   * Unloads filtered items associated with pages that are out of
-   * the current range by replacing those items with placeholders.
+   * Unloads items of pages that are out of the current range
+   * from memory by replacing them with placeholders.
    *
    * @private
    */
