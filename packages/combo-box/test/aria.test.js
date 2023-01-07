@@ -70,10 +70,6 @@ describe('ARIA', () => {
       expect(scroller.getAttribute('role')).to.equal('listbox');
     });
 
-    it('should set aria-setsize attribute on the scroller', () => {
-      expect(scroller.getAttribute('aria-setsize')).to.equal(comboBox.items.length.toString());
-    });
-
     it('should set aria-controls on the native input', () => {
       expect(input.getAttribute('aria-controls')).to.equal(scroller.id);
     });
@@ -109,6 +105,12 @@ describe('ARIA', () => {
     it('should set aria-posinset attribute on the dropdown items', () => {
       items.forEach((item, idx) => {
         expect(item.getAttribute('aria-posinset')).to.equal((idx + 1).toString());
+      });
+    });
+
+    it('should set aria-setsize attribute on the dropdown items', () => {
+      items.forEach((item) => {
+        expect(item.getAttribute('aria-setsize')).to.equal(comboBox.items.length.toString());
       });
     });
 
