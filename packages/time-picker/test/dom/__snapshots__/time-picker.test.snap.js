@@ -357,13 +357,13 @@ snapshots["vaadin-time-picker host opened overlay"] =
   top-aligned=""
 >
   <vaadin-time-picker-scroller
-    aria-setsize="24"
     id="vaadin-time-picker-scroller-3"
     role="listbox"
   >
     <vaadin-time-picker-item
       aria-posinset="1"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-0"
       role="option"
@@ -374,6 +374,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="2"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-1"
       role="option"
@@ -384,6 +385,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="3"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-2"
       role="option"
@@ -394,6 +396,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="4"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-3"
       role="option"
@@ -404,6 +407,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="5"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-4"
       role="option"
@@ -414,6 +418,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="6"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-5"
       role="option"
@@ -424,6 +429,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="7"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-6"
       role="option"
@@ -434,6 +440,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="8"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-7"
       role="option"
@@ -444,6 +451,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="9"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-8"
       role="option"
@@ -454,6 +462,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="10"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-9"
       role="option"
@@ -464,6 +473,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="11"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-10"
       role="option"
@@ -474,6 +484,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="12"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-11"
       role="option"
@@ -484,6 +495,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="13"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-12"
       role="option"
@@ -494,6 +506,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="14"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-13"
       role="option"
@@ -504,6 +517,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="15"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-14"
       role="option"
@@ -514,6 +528,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="16"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-15"
       role="option"
@@ -524,6 +539,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="17"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-16"
       role="option"
@@ -534,6 +550,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="18"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-17"
       role="option"
@@ -544,6 +561,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="19"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-18"
       role="option"
@@ -554,6 +572,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="20"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-19"
       role="option"
@@ -564,6 +583,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="21"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-20"
       role="option"
@@ -574,6 +594,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="22"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-21"
       role="option"
@@ -584,6 +605,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="23"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-22"
       role="option"
@@ -594,6 +616,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
     <vaadin-time-picker-item
       aria-posinset="24"
       aria-selected="false"
+      aria-setsize="24"
       dir="ltr"
       id="vaadin-time-picker-item-23"
       role="option"
