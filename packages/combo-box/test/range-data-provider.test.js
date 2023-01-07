@@ -66,7 +66,7 @@ describe('range data provider', () => {
     }
   });
 
-  it('should remove pages out of range as the user scrolls up', async () => {
+  it('should unload pages out of range as the user scrolls up', async () => {
     for (let page = 0; page <= 5; page++) {
       scrollToFirstIndexOfPage(page);
       await nextFrame();
@@ -85,7 +85,7 @@ describe('range data provider', () => {
     }
   });
 
-  it('should remove pages out of range as the user scrolls down', async () => {
+  it('should unload pages out of range as the user scrolls down', async () => {
     for (let page = 9; page >= 4; page--) {
       scrollToLastIndexOfPage(page);
       await nextFrame();
