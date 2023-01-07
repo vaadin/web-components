@@ -1,45 +1,62 @@
 import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-range-data-provider-helpers.js';
 
 export class RangeDataProvider {
+  #range;
+  #options;
+  #comboBox;
+  #requestRangeCallback;
+
   constructor(requestRangeCallback, options = {}) {
-    this.range = null;
-    this.maxRangeSize = options.maxRangeSize ?? Infinity;
-    this.requestRangeCallback = requestRangeCallback;
+    this.#range = null;
+    this.#options = { maxRangeSize: Infinity, ...options };
+    this.#requestRangeCallback = requestRangeCallback;
     this.dataProvider = this.dataProvider.bind(this);
   }
 
   dataProvider({ page, ...params }, _callback, comboBox) {
-    this.comboBox = comboBox;
+    this.#comboBox = comboBox;
 
-    this.range = adjustRangeToIncludePage(this.range, page, this.maxRangeSize);
+    this.#range = adjustRangeToIncludePage(this.#range, page, this.#options.maxRangeSize);
 
-    this.cancelPageRequestsOutOfRange();
+    this.#cancelPageRequestsOutOfRange();
 
-    this.disposeOfRenderedItemsOutOfRange();
+    this.#unloadPagesOutOfRange();
 
-    this.requestRangeCallback(
+    this.#requestRangeCallback(
       {
         ...params,
-        pageRange: this.range,
+        pageRange: this.#range,
       },
-      this.onRangeLoaded.bind(this),
+      this.#onRangeLoaded.bind(this),
     );
   }
 
-  cancelPageRequestsOutOfRange() {
-    Object.keys(this.comboBox._pendingRequests).forEach((page) => {
-      if (!isPageInRange(this.range, page)) {
-        this.comboBox._cancelPendingRequest(page);
+  /**
+   * Cancels active requests to pages that are out of the current range
+   * so that those pages can be requested again.
+   *
+   * @private
+   */
+  #cancelPageRequestsOutOfRange() {
+    Object.keys(this.#comboBox._pendingRequests).forEach((page) => {
+      if (!isPageInRange(this.#range, page)) {
+        this.#comboBox._cancelPendingRequest(page);
       }
     });
   }
 
-  disposeOfRenderedItemsOutOfRange() {
-    this.comboBox.filteredItems = this.comboBox.filteredItems.map((item, i) => {
-      const page = Math.floor(i / this.comboBox.pageSize);
+  /**
+   * Unloads filtered items associated with pages that are out of
+   * the current range by replacing those items with placeholders.
+   *
+   * @private
+   */
+  #unloadPagesOutOfRange() {
+    this.#comboBox.filteredItems = this.#comboBox.filteredItems.map((item, i) => {
+      const page = Math.floor(i / this.#comboBox.pageSize);
 
-      if (!isPageInRange(this.range, page)) {
-        return this.comboBox.__placeHolder;
+      if (!isPageInRange(this.#range, page)) {
+        return this.#comboBox.__placeHolder;
       }
 
       return item;
@@ -49,10 +66,11 @@ export class RangeDataProvider {
   /**
    * @param {Record<number, object[]>} pages
    * @param {number} size
+   * @private
    */
-  onRangeLoaded(pages, size) {
+  #onRangeLoaded(pages, size) {
     Object.entries(pages).forEach(([page, items]) => {
-      this.comboBox._pendingRequests[page]?.(items, size);
+      this.#comboBox._pendingRequests[page]?.(items, size);
     });
   }
 }
