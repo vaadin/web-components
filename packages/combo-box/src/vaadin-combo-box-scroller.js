@@ -239,8 +239,6 @@ export class ComboBoxScroller extends PolymerElement {
     if (this.__virtualizer && items) {
       this.__virtualizer.size = items.length;
       this.__virtualizer.flush();
-      // Ensure the total count of items is properly announced.
-      this.setAttribute('aria-setsize', items.length);
       this.requestContentUpdate();
     }
   }
@@ -305,6 +303,7 @@ export class ComboBoxScroller extends PolymerElement {
     el.setAttribute('role', this.__getAriaRole(index));
     el.setAttribute('aria-selected', this.__getAriaSelected(focusedIndex, index));
     el.setAttribute('aria-posinset', index + 1);
+    el.setAttribute('aria-setsize', this.items.length);
 
     if (this.theme) {
       el.setAttribute('theme', this.theme);

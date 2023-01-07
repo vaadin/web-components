@@ -330,13 +330,13 @@ snapshots["vaadin-combo-box host opened overlay"] =
   top-aligned=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="2"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
     <vaadin-combo-box-item
       aria-posinset="1"
       aria-selected="false"
+      aria-setsize="2"
       id="vaadin-combo-box-item-0"
       role="option"
       tabindex="-1"
@@ -346,6 +346,7 @@ snapshots["vaadin-combo-box host opened overlay"] =
     <vaadin-combo-box-item
       aria-posinset="2"
       aria-selected="false"
+      aria-setsize="2"
       id="vaadin-combo-box-item-1"
       role="option"
       tabindex="-1"
@@ -368,13 +369,13 @@ snapshots["vaadin-combo-box host opened theme overlay"] =
   top-aligned=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="2"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
     <vaadin-combo-box-item
       aria-posinset="1"
       aria-selected="false"
+      aria-setsize="2"
       id="vaadin-combo-box-item-0"
       role="option"
       tabindex="-1"
@@ -384,6 +385,7 @@ snapshots["vaadin-combo-box host opened theme overlay"] =
     <vaadin-combo-box-item
       aria-posinset="2"
       aria-selected="false"
+      aria-setsize="2"
       id="vaadin-combo-box-item-1"
       role="option"
       tabindex="-1"
@@ -443,7 +445,6 @@ snapshots["vaadin-combo-box shadow default"] =
   no-vertical-overlap=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="0"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
@@ -505,7 +506,6 @@ snapshots["vaadin-combo-box shadow disabled"] =
   no-vertical-overlap=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="0"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
@@ -567,7 +567,6 @@ snapshots["vaadin-combo-box shadow readonly"] =
   no-vertical-overlap=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="0"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
@@ -629,7 +628,6 @@ snapshots["vaadin-combo-box shadow invalid"] =
   no-vertical-overlap=""
 >
   <vaadin-combo-box-scroller
-    aria-setsize="0"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
@@ -692,7 +690,6 @@ snapshots["vaadin-combo-box shadow theme"] =
   theme="align-right"
 >
   <vaadin-combo-box-scroller
-    aria-setsize="0"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
   >
