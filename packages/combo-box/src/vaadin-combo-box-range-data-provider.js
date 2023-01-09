@@ -36,7 +36,7 @@ export class RangeDataProvider {
 
   /**
    * Cancels active requests to pages that are out of the current range
-   * so that those pages can be requested again once they are back in the viewport.
+   * so that those pages can be requested again once they are back into the viewport.
    *
    * @private
    */
