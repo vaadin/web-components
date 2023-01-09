@@ -143,6 +143,12 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
     }
     this.shadowRoot.querySelector('vaadin-message-input-text-area').focus();
   }
+
+  /**
+   * Fired when a new message is submitted with `<vaadin-message-input>`, either
+   * by clicking the "send" button, or pressing the Enter key.
+   * @event submit
+   */
 }
 
 customElements.define(MessageInput.is, MessageInput);
