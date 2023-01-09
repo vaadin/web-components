@@ -20,6 +20,7 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
   flushGrid,
   getCell,
@@ -1604,6 +1605,27 @@ describe('keyboard navigation', () => {
 
       expect(spy.callCount).to.equal(1);
       spy.restore();
+    });
+
+    it('should focus the first actually focusable element when entering interaction mode', () => {
+      const content = getCellContent(getRowCell(0, 1));
+      const contentElements = fixtureSync(`
+        <div>
+          <label for="disabled-input">Label</label>
+          <input id="disabled-input" disabled style="width: 20px">
+          <input style="visibility: hidden; width: 20px;">
+          <input id="focusable" style="width: 20px">
+        </div>
+      `);
+      content.textContent = '';
+      content.append(...contentElements.childNodes);
+      const focusable = content.querySelector('#focusable');
+
+      right(); // Focus the cell with input.
+
+      enter();
+
+      expect(isElementFocused(focusable)).to.be.true;
     });
 
     it('should exit interaction mode from focused single-line input with enter', () => {

@@ -109,7 +109,7 @@ export const isFocusable = (target) => {
   }
   const focusables = Array.from(
     target.parentNode.querySelectorAll(
-      '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]',
+      '[tabindex], button, input, select, textarea, object, iframe, a[href], area[href]',
     ),
   ).filter((element) => {
     const part = element.getAttribute('part');
@@ -117,5 +117,5 @@ export const isFocusable = (target) => {
   });
 
   const isFocusableElement = focusables.includes(target);
-  return !target.disabled && isFocusableElement;
+  return !target.disabled && isFocusableElement && getComputedStyle(target).visibility !== 'hidden';
 };
