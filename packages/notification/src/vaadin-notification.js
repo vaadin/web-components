@@ -376,6 +376,15 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return notification;
   }
 
+  /** @private */
+  get _container() {
+    if (!Notification._container) {
+      Notification._container = document.createElement('vaadin-notification-container');
+      document.body.appendChild(Notification._container);
+    }
+    return Notification._container;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -442,15 +451,6 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    */
   close() {
     this.opened = false;
-  }
-
-  /** @private */
-  get _container() {
-    if (!Notification._container) {
-      Notification._container = document.createElement('vaadin-notification-container');
-      document.body.appendChild(Notification._container);
-    }
-    return Notification._container;
   }
 
   /** @private */

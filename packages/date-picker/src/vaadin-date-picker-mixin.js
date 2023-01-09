@@ -344,6 +344,14 @@ export const DatePickerMixin = (subclass) =>
       return [...super.constraints, 'min', 'max'];
     }
 
+    constructor() {
+      super();
+
+      this._boundOnClick = this._onClick.bind(this);
+      this._boundOnScroll = this._onScroll.bind(this);
+      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
+    }
+
     /**
      * Override a getter from `InputControlMixin` to make it optional
      * and to prevent warning when a clear button is missing,
@@ -352,6 +360,15 @@ export const DatePickerMixin = (subclass) =>
      * @return {Element | null | undefined}
      */
     get clearElement() {
+      return null;
+    }
+
+    /** @private */
+    get _nativeInput() {
+      if (this.inputElement) {
+        // TODO: support focusElement for backwards compatibility
+        return this.inputElement.focusElement || this.inputElement;
+      }
       return null;
     }
 
@@ -365,23 +382,6 @@ export const DatePickerMixin = (subclass) =>
       if (this.inputElement) {
         this.inputElement.value = value;
       }
-    }
-
-    /** @private */
-    get _nativeInput() {
-      if (this.inputElement) {
-        // TODO: support focusElement for backwards compatibility
-        return this.inputElement.focusElement || this.inputElement;
-      }
-      return null;
-    }
-
-    constructor() {
-      super();
-
-      this._boundOnClick = this._onClick.bind(this);
-      this._boundOnScroll = this._onScroll.bind(this);
-      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
     /**

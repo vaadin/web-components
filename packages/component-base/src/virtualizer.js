@@ -16,6 +16,24 @@ export class Virtualizer {
   }
 
   /**
+   * Gets the index of the first visible item in the viewport.
+   *
+   * @return {number}
+   */
+  get firstVisibleIndex() {
+    return this.__adapter.adjustedFirstVisibleIndex;
+  }
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   *
+   * @return {number}
+   */
+  get lastVisibleIndex() {
+    return this.__adapter.adjustedLastVisibleIndex;
+  }
+
+  /**
    * The size of the virtualizer
    * @return {number | undefined} The size of the virtualizer
    */
@@ -61,23 +79,5 @@ export class Virtualizer {
    */
   flush() {
     this.__adapter.flush();
-  }
-
-  /**
-   * Gets the index of the first visible item in the viewport.
-   *
-   * @return {number}
-   */
-  get firstVisibleIndex() {
-    return this.__adapter.adjustedFirstVisibleIndex;
-  }
-
-  /**
-   * Gets the index of the last visible item in the viewport.
-   *
-   * @return {number}
-   */
-  get lastVisibleIndex() {
-    return this.__adapter.adjustedLastVisibleIndex;
   }
 }

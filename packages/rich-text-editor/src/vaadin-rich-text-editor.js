@@ -511,6 +511,13 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
   }
 
+  /** @private */
+  get _toolbarButtons() {
+    return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter((btn) => {
+      return btn.clientHeight > 0;
+    });
+  }
+
   /**
    * @param {string} prop
    * @param {?string} oldVal
@@ -956,13 +963,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         announcer.textContent = formatting;
       },
     );
-  }
-
-  /** @private */
-  get _toolbarButtons() {
-    return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter((btn) => {
-      return btn.clientHeight > 0;
-    });
   }
 
   /** @private */

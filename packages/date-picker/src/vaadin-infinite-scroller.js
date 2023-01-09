@@ -118,6 +118,71 @@ export class InfiniteScroller extends PolymerElement {
     };
   }
 
+  /**
+   * @return {number}
+   */
+  get bufferOffset() {
+    return this._buffers[0].offsetTop;
+  }
+
+  /**
+   * @return {number}
+   */
+  get itemHeight() {
+    if (!this._itemHeightVal) {
+      const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
+      // Use background-position temp inline style for unit conversion
+      const tmpStyleProp = 'background-position';
+      this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
+      const itemHeightPx = getComputedStyle(this.$.fullHeight).getPropertyValue(tmpStyleProp);
+      this.$.fullHeight.style.removeProperty(tmpStyleProp);
+      this._itemHeightVal = parseFloat(itemHeightPx);
+    }
+
+    return this._itemHeightVal;
+  }
+
+  /** @private */
+  get _bufferHeight() {
+    return this.itemHeight * this.bufferSize;
+  }
+
+  /**
+   * @return {number}
+   */
+  get position() {
+    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
+  }
+
+  /**
+   * Current scroller position as index. Can be a fractional number.
+   *
+   * @type {number}
+   */
+  set position(index) {
+    this._preventScrollEvent = true;
+    if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
+      this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
+    } else {
+      this._initialIndex = ~~index;
+      this._reset();
+      this._scrollDisabled = true;
+      this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
+      this._scrollDisabled = false;
+    }
+
+    if (this._mayHaveMomentum) {
+      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
+      this.$.scroller.classList.add('notouchscroll');
+      this._mayHaveMomentum = false;
+
+      setTimeout(() => {
+        // Restore -webkit-overflow-scrolling: touch; after a small delay.
+        this.$.scroller.classList.remove('notouchscroll');
+      }, 10);
+    }
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -234,71 +299,6 @@ export class InfiniteScroller extends PolymerElement {
         this.position = this.position; // eslint-disable-line no-self-assign
       }
     });
-  }
-
-  /**
-   * @return {number}
-   */
-  get bufferOffset() {
-    return this._buffers[0].offsetTop;
-  }
-
-  /**
-   * @return {number}
-   */
-  get position() {
-    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
-  }
-
-  /**
-   * Current scroller position as index. Can be a fractional number.
-   *
-   * @type {number}
-   */
-  set position(index) {
-    this._preventScrollEvent = true;
-    if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
-      this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
-    } else {
-      this._initialIndex = ~~index;
-      this._reset();
-      this._scrollDisabled = true;
-      this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
-      this._scrollDisabled = false;
-    }
-
-    if (this._mayHaveMomentum) {
-      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
-      this.$.scroller.classList.add('notouchscroll');
-      this._mayHaveMomentum = false;
-
-      setTimeout(() => {
-        // Restore -webkit-overflow-scrolling: touch; after a small delay.
-        this.$.scroller.classList.remove('notouchscroll');
-      }, 10);
-    }
-  }
-
-  /**
-   * @return {number}
-   */
-  get itemHeight() {
-    if (!this._itemHeightVal) {
-      const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
-      // Use background-position temp inline style for unit conversion
-      const tmpStyleProp = 'background-position';
-      this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
-      const itemHeightPx = getComputedStyle(this.$.fullHeight).getPropertyValue(tmpStyleProp);
-      this.$.fullHeight.style.removeProperty(tmpStyleProp);
-      this._itemHeightVal = parseFloat(itemHeightPx);
-    }
-
-    return this._itemHeightVal;
-  }
-
-  /** @private */
-  get _bufferHeight() {
-    return this.itemHeight * this.bufferSize;
   }
 
   /** @private */

@@ -216,6 +216,30 @@ export const ColumnBaseMixin = (superClass) =>
       ];
     }
 
+    /**
+     * @return {!Grid | undefined}
+     * @protected
+     */
+    get _grid() {
+      if (!this._gridValue) {
+        this._gridValue = this._findHostGrid();
+      }
+      return this._gridValue;
+    }
+
+    /**
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
+    get _allCells() {
+      return []
+        .concat(this._cells || [])
+        .concat(this._emptyCells || [])
+        .concat(this._headerCell)
+        .concat(this._footerCell)
+        .filter((cell) => cell);
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -275,30 +299,6 @@ export const ColumnBaseMixin = (superClass) =>
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
-    }
-
-    /**
-     * @return {!Grid | undefined}
-     * @protected
-     */
-    get _grid() {
-      if (!this._gridValue) {
-        this._gridValue = this._findHostGrid();
-      }
-      return this._gridValue;
-    }
-
-    /**
-     * @return {!Array<!HTMLElement>}
-     * @protected
-     */
-    get _allCells() {
-      return []
-        .concat(this._cells || [])
-        .concat(this._emptyCells || [])
-        .concat(this._headerCell)
-        .concat(this._footerCell)
-        .filter((cell) => cell);
     }
 
     /** @protected */

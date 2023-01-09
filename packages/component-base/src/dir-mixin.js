@@ -59,6 +59,14 @@ export const DirMixin = (superClass) =>
       };
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get __isRTL() {
+      return this.getAttribute('dir') === 'rtl';
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -98,14 +106,6 @@ export const DirMixin = (superClass) =>
       super.disconnectedCallback();
       this.__restoreSubscription = directionSubscribers.includes(this);
       this.__unsubscribe();
-    }
-
-    /**
-     * @return {boolean}
-     * @protected
-     */
-    get __isRTL() {
-      return this.getAttribute('dir') === 'rtl';
     }
 
     /** @protected */

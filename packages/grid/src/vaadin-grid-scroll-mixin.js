@@ -43,6 +43,11 @@ export const ScrollMixin = (superClass) =>
     }
 
     /** @private */
+    get _scrollLeft() {
+      return this.$.table.scrollLeft;
+    }
+
+    /** @private */
     get _scrollTop() {
       return this.$.table.scrollTop;
     }
@@ -53,11 +58,6 @@ export const ScrollMixin = (superClass) =>
      */
     set _scrollTop(top) {
       this.$.table.scrollTop = top;
-    }
-
-    /** @private */
-    get _scrollLeft() {
-      return this.$.table.scrollLeft;
     }
 
     /** @protected */

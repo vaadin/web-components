@@ -77,6 +77,33 @@ export const KeyboardNavigationMixin = (superClass) =>
       };
     }
 
+    /** @private */
+    get __rowFocusMode() {
+      return (
+        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
+      );
+    }
+
+    set __rowFocusMode(value) {
+      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
+        const focusable = this[prop];
+        if (value) {
+          const parent = focusable && focusable.parentElement;
+          if (this.__isCell(focusable)) {
+            // Cell itself focusable (default)
+            this[prop] = parent;
+          } else if (this.__isCell(parent)) {
+            // Focus button mode is enabled for the column,
+            // button element inside the cell is focusable.
+            this[prop] = parent.parentElement;
+          }
+        } else if (!value && this.__isRow(focusable)) {
+          const cell = focusable.firstElementChild;
+          this[prop] = cell._focusButton || cell;
+        }
+      });
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -105,33 +132,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       });
       this.addEventListener('mouseup', () => {
         this._isMousedown = false;
-      });
-    }
-
-    /** @private */
-    get __rowFocusMode() {
-      return (
-        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
-      );
-    }
-
-    set __rowFocusMode(value) {
-      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
-        const focusable = this[prop];
-        if (value) {
-          const parent = focusable && focusable.parentElement;
-          if (this.__isCell(focusable)) {
-            // Cell itself focusable (default)
-            this[prop] = parent;
-          } else if (this.__isCell(parent)) {
-            // Focus button mode is enabled for the column,
-            // button element inside the cell is focusable.
-            this[prop] = parent.parentElement;
-          }
-        } else if (!value && this.__isRow(focusable)) {
-          const cell = focusable.firstElementChild;
-          this[prop] = cell._focusButton || cell;
-        }
       });
     }
 

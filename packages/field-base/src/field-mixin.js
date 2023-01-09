@@ -56,22 +56,6 @@ export const FieldMixin = (superclass) =>
       return ['_invalidChanged(invalid)', '_requiredChanged(required)'];
     }
 
-    /**
-     * @protected
-     * @return {HTMLElement}
-     */
-    get _errorNode() {
-      return this._errorController.node;
-    }
-
-    /**
-     * @protected
-     * @return {HTMLElement}
-     */
-    get _helperNode() {
-      return this._helperController.node;
-    }
-
     constructor() {
       super();
 
@@ -93,6 +77,22 @@ export const FieldMixin = (superclass) =>
         this.toggleAttribute('has-helper', hasContent);
         this.__helperChanged(hasContent, node);
       });
+    }
+
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
+    get _errorNode() {
+      return this._errorController.node;
+    }
+
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
+    get _helperNode() {
+      return this._helperController.node;
     }
 
     /** @protected */

@@ -129,6 +129,11 @@ export class UserTags extends PolymerElement {
   }
 
   /** @protected */
+  get wrapper() {
+    return this.$.overlay.querySelector('[part="tags"]');
+  }
+
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
@@ -206,10 +211,6 @@ export class UserTags extends PolymerElement {
     if (hasFocus && this.flashing) {
       this.stopFlash();
     }
-  }
-
-  get wrapper() {
-    return this.$.overlay.querySelector('[part="tags"]');
   }
 
   createUserTag(user) {

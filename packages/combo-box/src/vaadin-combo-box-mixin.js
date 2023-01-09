@@ -271,6 +271,24 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Get a reference to the native `<input>` element.
+     * Override to provide a custom input.
+     * @protected
+     * @return {HTMLInputElement | undefined}
+     */
+    get _nativeInput() {
+      return this.inputElement;
+    }
+
+    /**
+     * @return {string}
+     * @protected
+     */
+    get _propertyForValue() {
+      return 'value';
+    }
+
+    /**
      * @return {string | undefined}
      * @protected
      */
@@ -286,16 +304,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.inputElement) {
         this.inputElement[this._propertyForValue] = value;
       }
-    }
-
-    /**
-     * Get a reference to the native `<input>` element.
-     * Override to provide a custom input.
-     * @protected
-     * @return {HTMLInputElement | undefined}
-     */
-    get _nativeInput() {
-      return this.inputElement;
     }
 
     /**
@@ -952,14 +960,6 @@ export const ComboBoxMixin = (subclass) =>
       this._clearSelectionRange();
 
       this.filter = '';
-    }
-
-    /**
-     * @return {string}
-     * @protected
-     */
-    get _propertyForValue() {
-      return 'value';
     }
 
     /**

@@ -119,6 +119,18 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   }
 
   /**
+   * Override getter from `KeyboardDirectionMixin`
+   * to check if the heading element has focus.
+   *
+   * @return {Element | null}
+   * @protected
+   * @override
+   */
+  get focused() {
+    return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
+  }
+
+  /**
    * @protected
    * @override
    */
@@ -140,18 +152,6 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
         el.addEventListener('opened-changed', this._boundUpdateOpened);
       });
     });
-  }
-
-  /**
-   * Override getter from `KeyboardDirectionMixin`
-   * to check if the heading element has focus.
-   *
-   * @return {Element | null}
-   * @protected
-   * @override
-   */
-  get focused() {
-    return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
   }
 
   /**

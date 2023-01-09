@@ -7,15 +7,15 @@ import { PolymerElement } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 
 export class Templatizer extends PolymerElement {
+  static get is() {
+    return 'vaadin-template-renderer-templatizer';
+  }
+
   static create(component, template) {
     const templatizer = new this();
     templatizer.__template = template;
     templatizer.__component = component;
     return templatizer;
-  }
-
-  static get is() {
-    return 'vaadin-template-renderer-templatizer';
   }
 
   constructor() {

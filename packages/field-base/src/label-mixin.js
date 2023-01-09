@@ -29,6 +29,16 @@ export const LabelMixin = dedupingMixin(
         };
       }
 
+      constructor() {
+        super();
+
+        this._labelController = new LabelController(this);
+
+        this._labelController.addEventListener('slot-content-changed', (event) => {
+          this.toggleAttribute('has-label', event.detail.hasContent);
+        });
+      }
+
       /** @protected */
       get _labelId() {
         const node = this._labelNode;
@@ -38,16 +48,6 @@ export const LabelMixin = dedupingMixin(
       /** @protected */
       get _labelNode() {
         return this._labelController.node;
-      }
-
-      constructor() {
-        super();
-
-        this._labelController = new LabelController(this);
-
-        this._labelController.addEventListener('slot-content-changed', (event) => {
-          this.toggleAttribute('has-label', event.detail.hasContent);
-        });
       }
 
       /** @protected */

@@ -32,6 +32,29 @@ class TooltipStateController {
     this.host = host;
   }
 
+  /** @private */
+  get openedProp() {
+    return this.host.manual ? 'opened' : '_autoOpened';
+  }
+
+  /** @private */
+  get focusDelay() {
+    const tooltip = this.host;
+    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
+  }
+
+  /** @private */
+  get hoverDelay() {
+    const tooltip = this.host;
+    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
+  }
+
+  /** @private */
+  get hideDelay() {
+    const tooltip = this.host;
+    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
+  }
+
   /**
    * Schedule opening the tooltip.
    * @param {Object} options
@@ -67,29 +90,6 @@ class TooltipStateController {
       this.__abortCooldown();
       this.__scheduleCooldown();
     }
-  }
-
-  /** @private */
-  get openedProp() {
-    return this.host.manual ? 'opened' : '_autoOpened';
-  }
-
-  /** @private */
-  get focusDelay() {
-    const tooltip = this.host;
-    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
-  }
-
-  /** @private */
-  get hoverDelay() {
-    const tooltip = this.host;
-    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
-  }
-
-  /** @private */
-  get hideDelay() {
-    const tooltip = this.host;
-    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
   }
 
   /** @private */

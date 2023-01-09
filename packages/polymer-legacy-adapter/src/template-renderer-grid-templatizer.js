@@ -14,6 +14,19 @@ export class GridTemplatizer extends Templatizer {
   }
 
   /**
+   * Returns a reference to the grid which the templatizer is connected to.
+   *
+   * @private
+   */
+  get __grid() {
+    if (this.__component.__gridElement) {
+      return this.__component;
+    }
+
+    return this.__component._grid;
+  }
+
+  /**
    * Updates the grid items once an item's nested property is changed.
    *
    * Note: The templatizer doesn't support 2-way binding for items provided by custom data provider.
@@ -97,19 +110,6 @@ export class GridTemplatizer extends Templatizer {
     } else {
       this.__grid.closeItemDetails(instance.item);
     }
-  }
-
-  /**
-   * Returns a reference to the grid which the templatizer is connected to.
-   *
-   * @private
-   */
-  get __grid() {
-    if (this.__component.__gridElement) {
-      return this.__component;
-    }
-
-    return this.__component._grid;
   }
 }
 

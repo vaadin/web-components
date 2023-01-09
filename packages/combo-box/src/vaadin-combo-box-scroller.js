@@ -137,6 +137,21 @@ export class ComboBoxScroller extends PolymerElement {
     this.__boundOnItemClick = this.__onItemClick.bind(this);
   }
 
+  get _viewportTotalPaddingBottom() {
+    if (this._cachedViewportTotalPaddingBottom === undefined) {
+      const itemsStyle = window.getComputedStyle(this.$.selector);
+      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
+        .map((v) => {
+          return parseInt(v, 10);
+        })
+        .reduce((sum, v) => {
+          return sum + v;
+        });
+    }
+
+    return this._cachedViewportTotalPaddingBottom;
+  }
+
   __openedChanged(opened) {
     if (opened) {
       this.requestContentUpdate();
@@ -336,21 +351,6 @@ export class ComboBoxScroller extends PolymerElement {
         e.preventDefault();
       }
     });
-  }
-
-  get _viewportTotalPaddingBottom() {
-    if (this._cachedViewportTotalPaddingBottom === undefined) {
-      const itemsStyle = window.getComputedStyle(this.$.selector);
-      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
-        .map((v) => {
-          return parseInt(v, 10);
-        })
-        .reduce((sum, v) => {
-          return sum + v;
-        });
-    }
-
-    return this._cachedViewportTotalPaddingBottom;
   }
 
   /**

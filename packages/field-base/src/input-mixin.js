@@ -73,6 +73,16 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * Indicates whether the value is different from the default one.
+       * Override if the `value` property has a type other than `string`.
+       *
+       * @protected
+       */
+      get _hasValue() {
+        return this.value != null && this.value !== '';
+      }
+
+      /**
        * Clear the value of the field.
        */
       clear() {
@@ -221,16 +231,6 @@ export const InputMixin = dedupingMixin(
 
         // Setting a value programmatically, sync it to input element.
         this._forwardInputValue(newVal);
-      }
-
-      /**
-       * Indicates whether the value is different from the default one.
-       * Override if the `value` property has a type other than `string`.
-       *
-       * @protected
-       */
-      get _hasValue() {
-        return this.value != null && this.value !== '';
       }
 
       /**

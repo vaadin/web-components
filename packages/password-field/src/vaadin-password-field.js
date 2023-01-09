@@ -121,6 +121,13 @@ export class PasswordField extends TextField {
     return ['__i18nChanged(i18n.*)'];
   }
 
+  constructor() {
+    super();
+    this._setType('password');
+    this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
+    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
+  }
+
   /** @protected */
   get slotStyles() {
     const tag = this.localName;
@@ -137,13 +144,6 @@ export class PasswordField extends TextField {
   /** @protected */
   get _revealNode() {
     return this._revealButtonController && this._revealButtonController.node;
-  }
-
-  constructor() {
-    super();
-    this._setType('password');
-    this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
-    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
   }
 
   /** @protected */
