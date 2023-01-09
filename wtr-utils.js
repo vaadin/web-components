@@ -255,7 +255,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme) => {
+const createVisualTestsConfig = (theme, browserVersion) => {
   const visualPackages = getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
@@ -285,7 +285,7 @@ const createVisualTestsConfig = (theme) => {
       sauceLabsLauncher({
         browserName: 'chrome',
         platformName: 'Windows 10',
-        browserVersion: '108',
+        browserVersion,
       }),
     ],
     plugins: [
