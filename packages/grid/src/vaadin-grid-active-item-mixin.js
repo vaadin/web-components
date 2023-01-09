@@ -117,5 +117,7 @@ export const isFocusable = (target) => {
   });
 
   const isFocusableElement = focusables.includes(target);
-  return !target.disabled && isFocusableElement && getComputedStyle(target).visibility !== 'hidden';
+  return (
+    !target.disabled && isFocusableElement && target.offsetParent && getComputedStyle(target).visibility !== 'hidden'
+  );
 };

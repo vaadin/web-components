@@ -1614,6 +1614,9 @@ describe('keyboard navigation', () => {
           <label for="disabled-input">Label</label>
           <input id="disabled-input" disabled style="width: 20px">
           <input style="visibility: hidden; width: 20px;">
+          <div hidden>
+            <input>
+          </div>
           <input id="focusable" style="width: 20px">
         </div>
       `);
