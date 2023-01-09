@@ -8,7 +8,6 @@ registerStyles(
   'vaadin-input-container',
   css`
     :host {
-      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
       padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
       font-weight: 500;
@@ -16,6 +15,7 @@ registerStyles(
       position: relative;
       cursor: text;
       box-sizing: border-box;
+      --vaadin-input-container-border-radius: var(--lumo-border-radius-m);
     }
 
     /* Used for hover and activation effects */

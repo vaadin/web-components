@@ -19,6 +19,14 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
           display: flex;
           align-items: center;
           flex: 0 1 auto;
+          border-radius:
+            /* top left, top right, bottom right, bottom left: https://developer.mozilla.org/docs/Web/CSS/border-radius */
+            var(--vaadin-input-container-border-start-start-radius, var(--vaadin-input-container-border-radius))
+            var(--vaadin-input-container-border-start-end-radius, var(--vaadin-input-container-border-radius))
+            var(--vaadin-input-container-border-end-end-radius, var(--vaadin-input-container-border-radius))
+            var(--vaadin-input-container-border-end-start-radius, var(--vaadin-input-container-border-radius));
+          /* Fallback */
+          --vaadin-input-container-border-radius: 0px;
         }
 
         :host([hidden]) {
