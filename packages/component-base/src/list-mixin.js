@@ -82,6 +82,41 @@ export const ListMixin = (superClass) =>
       return ['_enhanceItems(items, orientation, selected, disabled)'];
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get _isRTL() {
+      return !this._vertical && this.getAttribute('dir') === 'rtl';
+    }
+
+    /**
+     * @return {!HTMLElement}
+     * @protected
+     */
+    get _scrollerElement() {
+      // Returning scroller element of the component
+      console.warn(`Please implement the '_scrollerElement' property in <${this.localName}>`);
+      return this;
+    }
+
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get _vertical() {
+      return this.orientation !== 'horizontal';
+    }
+
+    focus() {
+      // In initialization (e.g vaadin-select) observer might not been run yet.
+      if (this._observer) {
+        this._observer.flush();
+      }
+      const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
+      this._focusItem(firstItem);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -190,14 +225,6 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @protected
-     */
-    get _isRTL() {
-      return !this._vertical && this.getAttribute('dir') === 'rtl';
-    }
-
-    /**
      * Override an event listener from `KeyboardMixin`
      * to search items by key.
      *
@@ -258,25 +285,6 @@ export const ListMixin = (superClass) =>
       super._focus(idx);
     }
 
-    focus() {
-      // In initialization (e.g vaadin-select) observer might not been run yet.
-      if (this._observer) {
-        this._observer.flush();
-      }
-      const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
-      this._focusItem(firstItem);
-    }
-
-    /**
-     * @return {!HTMLElement}
-     * @protected
-     */
-    get _scrollerElement() {
-      // Returning scroller element of the component
-      console.warn(`Please implement the '_scrollerElement' property in <${this.localName}>`);
-      return this;
-    }
-
     /**
      * Scroll the container to have the next item by the edge of the viewport.
      * @param {number} idx
@@ -308,14 +316,6 @@ export const ListMixin = (superClass) =>
       }
 
       this._scroll(scrollDistance);
-    }
-
-    /**
-     * @return {boolean}
-     * @protected
-     */
-    get _vertical() {
-      return this.orientation !== 'horizontal';
     }
 
     /**

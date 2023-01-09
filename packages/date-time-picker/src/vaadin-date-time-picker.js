@@ -400,6 +400,20 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
   }
 
+  /** @private */
+  get __inputs() {
+    return [this.__datePicker, this.__timePicker];
+  }
+
+  /** @private */
+  get __formattedValue() {
+    const [dateValue, timeValue] = this.__inputs.map((picker) => picker.value);
+    if (dateValue && timeValue) {
+      return [dateValue, timeValue].join('T');
+    }
+    return '';
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -807,15 +821,11 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   __validateTime(timeObject) {
     if (timeObject) {
-      timeObject.seconds = this.__stepSegment < 3 ? undefined : timeObject.seconds;
-      timeObject.milliseconds = this.__stepSegment < 4 ? undefined : timeObject.milliseconds;
+      const stepSegment = this.__getStepSegment();
+      timeObject.seconds = stepSegment < 3 ? undefined : timeObject.seconds;
+      timeObject.milliseconds = stepSegment < 4 ? undefined : timeObject.milliseconds;
     }
     return timeObject;
-  }
-
-  /** @private */
-  get __inputs() {
-    return [this.__datePicker, this.__timePicker];
   }
 
   /**
@@ -836,8 +846,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
   // Copied from vaadin-time-picker
   /** @private */
-  // eslint-disable-next-line getter-return
-  get __stepSegment() {
+  __getStepSegment() {
     const step = this.step == null ? 60 : parseFloat(this.step);
     if (step % 3600 === 0) {
       // Accept hours
@@ -956,16 +965,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       this.__timePicker.value = timeValue || '';
       this.__ignoreInputValueChange = false;
     }
-  }
-
-  /** @private */
-  get __formattedValue() {
-    const dateValue = this.__datePicker.value;
-    const timeValue = this.__timePicker.value;
-    if (dateValue && timeValue) {
-      return [dateValue, timeValue].join('T');
-    }
-    return '';
   }
 
   /** @private */

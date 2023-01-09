@@ -117,30 +117,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
     return this.querySelector('.clear-button');
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._toggleElement = this.querySelector('.toggle-button');
-
-    // Wait until the slotted input DOM is ready
-    afterNextRender(this, () => {
-      this._setInputElement(this.querySelector('vaadin-text-field,.input'));
-      this._revertInputValue();
-    });
-  }
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   * @return {boolean}
-   */
-  checkValidity() {
-    if (this.inputElement.validate) {
-      return this.inputElement.validate();
-    }
-    return super.checkValidity();
-  }
-
   /**
    * @return {string}
    * @protected
@@ -179,6 +155,30 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
     }
 
     return undefined;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._toggleElement = this.querySelector('.toggle-button');
+
+    // Wait until the slotted input DOM is ready
+    afterNextRender(this, () => {
+      this._setInputElement(this.querySelector('vaadin-text-field,.input'));
+      this._revertInputValue();
+    });
+  }
+
+  /**
+   * Returns true if the current input value satisfies all constraints (if any).
+   * @return {boolean}
+   */
+  checkValidity() {
+    if (this.inputElement.validate) {
+      return this.inputElement.validate();
+    }
+    return super.checkValidity();
   }
 
   /** @protected */

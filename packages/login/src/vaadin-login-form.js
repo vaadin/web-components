@@ -109,6 +109,10 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return 'vaadin-login-form';
   }
 
+  static get observers() {
+    return ['_errorChanged(error)'];
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -125,10 +129,6 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    */
   _attachDom(dom) {
     this.appendChild(dom);
-  }
-
-  static get observers() {
-    return ['_errorChanged(error)'];
   }
 
   /** @private */

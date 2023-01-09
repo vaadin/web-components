@@ -279,6 +279,16 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     return ['_rendererOrDataChanged(renderer, owner, model, opened)'];
   }
 
+  /**
+   * Returns all attached overlays in visual stacking order.
+   * @private
+   */
+  static get __attachedInstances() {
+    return Array.from(document.body.children)
+      .filter((el) => el instanceof Overlay && !el.hasAttribute('closing'))
+      .sort((a, b) => a.__zIndex - b.__zIndex || 0);
+  }
+
   constructor() {
     super();
     this._boundMouseDownListener = this._mouseDownListener.bind(this);
@@ -292,6 +302,15 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
 
     this.__focusTrapController = new FocusTrapController(this);
+  }
+
+  /**
+   * Returns true if this is the last one in the opened overlays stack
+   * @return {boolean}
+   * @protected
+   */
+  get _last() {
+    return this === Overlay.__attachedInstances.pop();
   }
 
   /** @protected */
@@ -631,25 +650,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   _detachOverlay() {
     this._placeholder.parentNode.insertBefore(this, this._placeholder);
     this._placeholder.parentNode.removeChild(this._placeholder);
-  }
-
-  /**
-   * Returns all attached overlays in visual stacking order.
-   * @private
-   */
-  static get __attachedInstances() {
-    return Array.from(document.body.children)
-      .filter((el) => el instanceof Overlay && !el.hasAttribute('closing'))
-      .sort((a, b) => a.__zIndex - b.__zIndex || 0);
-  }
-
-  /**
-   * Returns true if this is the last one in the opened overlays stack
-   * @return {boolean}
-   * @protected
-   */
-  get _last() {
-    return this === Overlay.__attachedInstances.pop();
   }
 
   /** @private */

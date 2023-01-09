@@ -16,6 +16,16 @@ export class FieldAriaController {
   }
 
   /**
+   * `true` if the target element is the host component itself, `false` otherwise.
+   *
+   * @return {boolean}
+   * @private
+   */
+  get __isGroupField() {
+    return this.__target === this.host;
+  }
+
+  /**
    * Sets a target element to which ARIA attributes are added.
    *
    * @param {HTMLElement} target
@@ -79,16 +89,6 @@ export class FieldAriaController {
   setHelperId(helperId) {
     this.__setHelperIdToAriaAttribute(helperId, this.__helperId);
     this.__helperId = helperId;
-  }
-
-  /**
-   * `true` if the target element is the host component itself, `false` otherwise.
-   *
-   * @return {boolean}
-   * @private
-   */
-  get __isGroupField() {
-    return this.__target === this.host;
   }
 
   /**

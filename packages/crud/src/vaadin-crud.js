@@ -652,11 +652,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return ['bottom', 'aside'].includes(editorPosition);
   }
 
-  /** @protected */
-  get _headerNode() {
-    return this._headerController && this._headerController.node;
-  }
-
   constructor() {
     super();
 
@@ -672,6 +667,23 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
+  }
+
+  /** @protected */
+  get _headerNode() {
+    return this._headerController && this._headerController.node;
+  }
+
+  /**
+   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
+   * @return {!Array<!HTMLElement>}
+   * @protected
+   */
+  get _fields() {
+    if (!this.__fields || !this.__fields.length) {
+      this.__fields = Array.from(this._form.querySelectorAll('*')).filter((e) => e.validate || e.checkValidity);
+    }
+    return this.__fields;
   }
 
   /** @protected */
@@ -1179,18 +1191,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.__isNew = !!(this.__isNew || (this.items && this.items.indexOf(item) < 0));
       this.editorOpened = true;
     }
-  }
-
-  /**
-   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
-   * @return {!Array<!HTMLElement>}
-   * @protected
-   */
-  get _fields() {
-    if (!this.__fields || !this.__fields.length) {
-      this.__fields = Array.from(this._form.querySelectorAll('*')).filter((e) => e.validate || e.checkValidity);
-    }
-    return this.__fields;
   }
 
   /** @private */

@@ -274,18 +274,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     return 'vaadin-chart';
   }
 
-  /** @private */
-  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
-    const functionToCall = Highcharts[functionName];
-    if (functionToCall && typeof functionToCall === 'function') {
-      args.forEach((arg) => inflateFunctions(arg));
-      functionToCall.apply(this.configuration, args);
-      if (redrawCharts) {
-        Highcharts.charts.forEach((c) => c.redraw());
-      }
-    }
-  }
-
   static get properties() {
     return {
       /**
@@ -483,6 +471,18 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     ];
   }
 
+  /** @private */
+  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
+    const functionToCall = Highcharts[functionName];
+    if (functionToCall && typeof functionToCall === 'function') {
+      args.forEach((arg) => inflateFunctions(arg));
+      functionToCall.apply(this.configuration, args);
+      if (redrawCharts) {
+        Highcharts.charts.forEach((c) => c.redraw());
+      }
+    }
+  }
+
   constructor() {
     super();
 
@@ -512,33 +512,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       beta: 15,
       depth: 50,
     };
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this.__updateStyles();
-    beforeNextRender(this, () => {
-      // Detect if the chart had already been initialized. This might happen in
-      // environments where the chart is lazily attached (e.g Grid).
-      if (this.configuration) {
-        this.__reflow();
-        return;
-      }
-
-      const options = { ...this.options, ...this._jsonConfigurationBuffer };
-      this._jsonConfigurationBuffer = null;
-      this.__initChart(options);
-      this.__addChildObserver();
-      this.__checkTurboMode();
-    });
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
   }
 
   /**
@@ -918,6 +891,33 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       afterSetExtremes: 'yaxes-extremes-set',
     };
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    this.__updateStyles();
+    beforeNextRender(this, () => {
+      // Detect if the chart had already been initialized. This might happen in
+      // environments where the chart is lazily attached (e.g Grid).
+      if (this.configuration) {
+        this.__reflow();
+        return;
+      }
+
+      const options = { ...this.options, ...this._jsonConfigurationBuffer };
+      this._jsonConfigurationBuffer = null;
+      this.__initChart(options);
+      this.__addChildObserver();
+      this.__checkTurboMode();
+    });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
   }
 
   /**

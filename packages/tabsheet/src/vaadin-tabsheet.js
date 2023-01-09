@@ -196,6 +196,10 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     };
   }
 
+  static get observers() {
+    return ['__itemsOrPanelsChanged(items, __panels)', '__selectedTabItemChanged(selected, items, __panels)'];
+  }
+
   /** @override */
   static get delegateProps() {
     return ['selected'];
@@ -223,10 +227,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
         (node) => node.nodeType === Node.ELEMENT_NODE,
       );
     });
-  }
-
-  static get observers() {
-    return ['__itemsOrPanelsChanged(items, __panels)', '__selectedTabItemChanged(selected, items, __panels)'];
   }
 
   /**

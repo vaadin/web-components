@@ -96,14 +96,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
     };
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    const cssSelector = 'vaadin-text-field,.input';
-    this._setInputElement(this.querySelector(cssSelector));
-    this._setFocusElement(this.inputElement);
-  }
-
   /** @return {string | undefined} */
   get _inputValue() {
     return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
@@ -113,6 +105,14 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
     if (this.inputElement) {
       this.inputElement[dashToCamelCase(this.attrForValue)] = value;
     }
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    const cssSelector = 'vaadin-text-field,.input';
+    this._setInputElement(this.querySelector(cssSelector));
+    this._setFocusElement(this.inputElement);
   }
 
   // Workaround https://github.com/vaadin/web-components/issues/2855

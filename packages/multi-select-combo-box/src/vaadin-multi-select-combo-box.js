@@ -488,6 +488,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return [...this.querySelectorAll('[slot="chip"]')];
   }
 
+  /**
+   * Override a getter from `InputMixin` to compute
+   * the presence of value based on `selectedItems`.
+   *
+   * @protected
+   * @override
+   */
+  get _hasValue() {
+    return this.selectedItems && this.selectedItems.length > 0;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -1117,17 +1128,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
     return !items && readonly ? selectedItems : filteredItems;
-  }
-
-  /**
-   * Override a method from `InputMixin` to
-   * compute the presence of value based on `selectedItems`.
-   *
-   * @protected
-   * @override
-   */
-  get _hasValue() {
-    return this.selectedItems && this.selectedItems.length > 0;
   }
 }
 

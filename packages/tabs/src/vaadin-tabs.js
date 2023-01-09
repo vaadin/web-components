@@ -179,6 +179,28 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     });
   }
 
+  /**
+   * @return {number}
+   * @protected
+   */
+  get _scrollOffset() {
+    return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
+  }
+
+  /**
+   * @return {!HTMLElement}
+   * @protected
+   * @override
+   */
+  get _scrollerElement() {
+    return this.$.scroll;
+  }
+
+  /** @private */
+  get __direction() {
+    return !this._vertical && this.__isRTL ? 1 : -1;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -220,27 +242,6 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
   /** @private */
   _scrollBack() {
     this._scroll(this.__direction * this._scrollOffset);
-  }
-
-  /**
-   * @return {number}
-   * @protected
-   */
-  get _scrollOffset() {
-    return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
-  }
-
-  /**
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get _scrollerElement() {
-    return this.$.scroll;
-  }
-
-  /** @private */
-  get __direction() {
-    return !this._vertical && this.__isRTL ? 1 : -1;
   }
 
   /** @private */

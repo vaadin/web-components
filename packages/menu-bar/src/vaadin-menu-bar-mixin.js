@@ -50,11 +50,6 @@ export const MenuBarMixin = (superClass) =>
       };
     }
 
-    constructor() {
-      super();
-      this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
-    }
-
     static get observers() {
       return [
         '_itemsChanged(items, items.splices)',
@@ -62,6 +57,58 @@ export const MenuBarMixin = (superClass) =>
         '__i18nChanged(i18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container, items.splices)',
       ];
+    }
+
+    constructor() {
+      super();
+      this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`
+     * to use expanded button for arrow navigation
+     * when the sub-menu is opened and has focus.
+     *
+     * @return {Element | null}
+     * @protected
+     * @override
+     */
+    get focused() {
+      return (this._getItems() || []).find(isElementFocused) || this._expandedButton;
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    get _vertical() {
+      return false;
+    }
+
+    /**
+     * Override getter from `ResizeMixin` to observe parent.
+     *
+     * @protected
+     * @override
+     */
+    get _observeParent() {
+      return true;
+    }
+
+    /**
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
+    get _buttons() {
+      return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
+    }
+
+    /** @private */
+    get _subMenu() {
+      return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
     }
 
     /** @protected */
@@ -102,40 +149,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Override getter from `KeyboardDirectionMixin`
-     * to use expanded button for arrow navigation
-     * when the sub-menu is opened and has focus.
-     *
-     * @return {Element | null}
-     * @protected
-     * @override
-     */
-    get focused() {
-      return (this._getItems() || []).find(isElementFocused) || this._expandedButton;
-    }
-
-    /**
-     * Override getter from `KeyboardDirectionMixin`.
-     *
-     * @return {boolean}
-     * @protected
-     * @override
-     */
-    get _vertical() {
-      return false;
-    }
-
-    /**
-     * Override getter from `ResizeMixin` to observe parent.
-     *
-     * @protected
-     * @override
-     */
-    get _observeParent() {
-      return true;
-    }
-
-    /**
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the list of menu-bar buttons as items.
      *
@@ -151,14 +164,6 @@ export const MenuBarMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       this._hideTooltip(true);
-    }
-
-    /**
-     * @return {!Array<!HTMLElement>}
-     * @protected
-     */
-    get _buttons() {
-      return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
     }
 
     /**
@@ -565,11 +570,6 @@ export const MenuBarMixin = (superClass) =>
           super._onKeyDown(event);
           break;
       }
-    }
-
-    /** @private */
-    get _subMenu() {
-      return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
     }
 
     /** @private */

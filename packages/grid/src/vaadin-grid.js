@@ -436,6 +436,18 @@ class Grid extends ElementMixin(
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 
+  /** @private */
+  get _firstVisibleIndex() {
+    const firstVisibleItem = this.__getFirstVisibleItem();
+    return firstVisibleItem ? firstVisibleItem.index : undefined;
+  }
+
+  /** @private */
+  get _lastVisibleIndex() {
+    const lastVisibleItem = this.__getLastVisibleItem();
+    return lastVisibleItem ? lastVisibleItem.index : undefined;
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -456,22 +468,10 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  get _firstVisibleIndex() {
-    const firstVisibleItem = this.__getFirstVisibleItem();
-    return firstVisibleItem ? firstVisibleItem.index : undefined;
-  }
-
-  /** @private */
   __getLastVisibleItem() {
     return this._getVisibleRows()
       .reverse()
       .find((row) => this._isInViewport(row));
-  }
-
-  /** @private */
-  get _lastVisibleIndex() {
-    const lastVisibleItem = this.__getLastVisibleItem();
-    return lastVisibleItem ? lastVisibleItem.index : undefined;
   }
 
   /** @private */

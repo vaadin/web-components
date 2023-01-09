@@ -101,6 +101,24 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
     return ['__itemsOrRendererChanged(items, renderer, __virtualizer)'];
   }
 
+  /**
+   * Gets the index of the first visible item in the viewport.
+   *
+   * @return {number}
+   */
+  get firstVisibleIndex() {
+    return this.__virtualizer.firstVisibleIndex;
+  }
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   *
+   * @return {number}
+   */
+  get lastVisibleIndex() {
+    return this.__virtualizer.lastVisibleIndex;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -168,24 +186,6 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
       virtualizer.size = (items || []).length;
       virtualizer.update();
     }
-  }
-
-  /**
-   * Gets the index of the first visible item in the viewport.
-   *
-   * @return {number}
-   */
-  get firstVisibleIndex() {
-    return this.__virtualizer.firstVisibleIndex;
-  }
-
-  /**
-   * Gets the index of the last visible item in the viewport.
-   *
-   * @return {number}
-   */
-  get lastVisibleIndex() {
-    return this.__virtualizer.lastVisibleIndex;
   }
 
   /**

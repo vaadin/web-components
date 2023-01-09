@@ -19,8 +19,6 @@ export abstract class LitRendererDirective<E extends Element, R extends LitRende
 
   update(_part: ElementPart, props: [R, unknown]): typeof nothing;
 
-  protected renderRenderer(container: Element, ...args: Parameters<R>): void;
-
   /**
    * Adds the renderer callback to the element.
    */
@@ -35,4 +33,6 @@ export abstract class LitRendererDirective<E extends Element, R extends LitRende
    * Removes the renderer callback from the element.
    */
   abstract removeRenderer(): void;
+
+  protected renderRenderer(container: Element, ...args: Parameters<R>): void;
 }

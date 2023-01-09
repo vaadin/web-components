@@ -676,16 +676,17 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __validateTime(timeObject) {
     if (timeObject) {
+      const stepSegment = this.__getStepSegment();
       timeObject.hours = parseInt(timeObject.hours);
       timeObject.minutes = parseInt(timeObject.minutes || 0);
-      timeObject.seconds = this.__stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
-      timeObject.milliseconds = this.__stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+      timeObject.seconds = stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
+      timeObject.milliseconds = stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
     }
     return timeObject;
   }
 
   /** @private */
-  get __stepSegment() {
+  __getStepSegment() {
     if (this.step % 3600 === 0) {
       // Accept hours
       return 1;

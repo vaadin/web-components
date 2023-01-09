@@ -53,20 +53,6 @@ const initFieldObserver = (field) => {
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  */
 export class FieldHighlighterController {
-  get user() {
-    return this._user;
-  }
-
-  set user(user) {
-    this._user = user;
-
-    if (user) {
-      const msg = `${user.name} started editing`;
-      const { label } = this.host;
-      announce(label ? `${msg} ${label}` : msg);
-    }
-  }
-
   constructor(host) {
     this.host = host;
 
@@ -92,6 +78,20 @@ export class FieldHighlighterController {
      * @type {FieldHighlighterUsers}
      */
     this.users = [];
+  }
+
+  get user() {
+    return this._user;
+  }
+
+  set user(user) {
+    this._user = user;
+
+    if (user) {
+      const msg = `${user.name} started editing`;
+      const { label } = this.host;
+      announce(label ? `${msg} ${label}` : msg);
+    }
   }
 
   hostConnected() {
