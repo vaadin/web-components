@@ -62,7 +62,8 @@ export function dateEquals(date1, date2) {
  * @return {boolean} True if the date is in the range
  */
 export function dateAllowed(date, min, max, isDateAvailable) {
-  return (!min || date >= min) && (!max || date <= max) && (!isDateAvailable || isDateAvailable(date));
+  const dateIsAvailable = isDateAvailable && typeof isDateAvailable === 'function' ? isDateAvailable(date) : true;
+  return (!min || date >= min) && (!max || date <= max) && dateIsAvailable;
 }
 
 /**
