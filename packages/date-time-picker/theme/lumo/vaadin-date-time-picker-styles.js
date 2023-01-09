@@ -14,24 +14,14 @@ registerStyles(
   css`
     :host {
       margin-right: 2px;
+      --vaadin-input-container-top-end-radius: 0;
+      --vaadin-input-container-bottom-end-radius: 0;
     }
 
     /* RTL specific styles */
     :host([dir='rtl']) {
       margin-right: auto;
       margin-left: 2px;
-    }
-
-    [part~='input-field'] {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    /* RTL specific styles */
-    :host([dir='rtl']) [part~='input-field'] {
-      border-radius: var(--lumo-border-radius-m);
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
     }
   `,
   { moduleId: 'lumo-date-time-picker-date-picker' },
@@ -40,16 +30,9 @@ registerStyles(
 registerStyles(
   'vaadin-date-time-picker-time-picker',
   css`
-    [part~='input-field'] {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
-    /* RTL specific styles */
-    :host([dir='rtl']) [part~='input-field'] {
-      border-radius: var(--lumo-border-radius-m);
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+    :host {
+      --vaadin-input-container-top-start-radius: 0;
+      --vaadin-input-container-bottom-start-radius: 0;
     }
   `,
   { moduleId: 'lumo-date-time-picker-time-picker' },
