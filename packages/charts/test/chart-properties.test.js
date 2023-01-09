@@ -568,4 +568,39 @@ describe('vaadin-chart properties', () => {
       });
     });
   });
+
+  describe('annotations', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should have annotations when annotation label is set using update', async () => {
+      expect(chart.configuration.options.annotations).to.be.empty;
+      chart.updateConfiguration(
+        {
+          annotations: [
+            {
+              labels: [
+                {
+                  text: 'Sample text',
+                  point: {
+                    x: 50,
+                    y: 50,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        true,
+      );
+      await aTimeout(50);
+      expect(chart.configuration.options.annotations.length).to.be.equal(1);
+      expect(chart.configuration.options.annotations[0].labels.length).to.be.equal(1);
+      expect(chart.configuration.options.annotations[0].labels[0].text).to.be.equal('Sample text');
+    });
+  });
 });
