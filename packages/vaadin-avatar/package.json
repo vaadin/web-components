@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-avatar",
-  "version": "23.2.11",
+  "version": "23.2.12",
   "publishConfig": {
     "access": "public"
   },
@@ -33,8 +33,8 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/avatar": "~23.2.11",
-    "@vaadin/avatar-group": "~23.2.11"
+    "@vaadin/avatar": "~23.2.12",
+    "@vaadin/avatar-group": "~23.2.12"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
