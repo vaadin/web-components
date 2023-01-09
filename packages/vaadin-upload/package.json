@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-upload",
-  "version": "22.0.21",
+  "version": "22.0.22",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/upload": "^22.0.21"
+    "@vaadin/upload": "^22.0.22"
   }
 }
