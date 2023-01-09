@@ -32,6 +32,7 @@ const globals = css`
   html {
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
+    --vaadin-input-container-border-radius: var(--lumo-border-radius-m);
   }
 `;
 
