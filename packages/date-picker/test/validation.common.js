@@ -181,6 +181,24 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.true;
     });
 
+    it('should reflect correct invalid value on value-changed eventListener when using isDateAvailable', (done) => {
+      datePicker.isDateAvailable = (date) => {
+        if (!date) {
+          return true;
+        }
+        return date.toISOString().split('T')[0] === '2017-01-02';
+      };
+      datePicker.value = '2016-01-01'; // Valid
+
+      datePicker.addEventListener('value-changed', () => {
+        expect(datePicker.invalid).to.be.equal(true);
+        done();
+      });
+
+      datePicker.open();
+      datePicker._overlayContent._selectDate(new Date('2017-01-02')); // Invalid
+    });
+
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       datePicker.addEventListener('validated', validatedSpy);
