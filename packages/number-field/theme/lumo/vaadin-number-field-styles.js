@@ -9,10 +9,6 @@ import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const numberField = css`
-  :host {
-    width: 8em;
-  }
-
   :host([step-buttons-visible]:not([theme~='align-right'])) ::slotted(input) {
     text-align: center;
   }
