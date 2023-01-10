@@ -3,17 +3,17 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-date-time-picker-date-picker.js';
-import './vaadin-date-time-picker-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { DatePicker } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { dateEquals, parseDate } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
@@ -36,10 +36,8 @@ function getPropertyFromPrototype(clazz, prop) {
   }
 }
 
-const datePickerClass = customElements.get('vaadin-date-time-picker-date-picker');
-const timePickerClass = customElements.get('vaadin-date-time-picker-time-picker');
-const datePickerI18nDefaults = getPropertyFromPrototype(datePickerClass, 'i18n').value();
-const timePickerI18nDefaults = getPropertyFromPrototype(timePickerClass, 'i18n').value();
+const datePickerI18nDefaults = getPropertyFromPrototype(DatePicker, 'i18n').value();
+const timePickerI18nDefaults = getPropertyFromPrototype(TimePicker, 'i18n').value();
 const datePickerI18nProps = Object.keys(datePickerI18nDefaults);
 const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
 
@@ -50,7 +48,7 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  */
 class PickerSlotController extends SlotController {
   constructor(host, type) {
-    super(host, `${type}-picker`, `vaadin-date-time-picker-${type}-picker`, {
+    super(host, `${type}-picker`, `vaadin-${type}-picker`, {
       initializer: (picker, host) => {
         const prop = `__${type}Picker`;
         host[prop] = picker;
@@ -99,14 +97,13 @@ class PickerSlotController extends SlotController {
  *
  * ### Internal components
  *
- * In addition to `<vaadin-date-time-picker>` itself, the following internal
- * components are themable:
+ * The following components are created by `<vaadin-date-time-picker>` and placed in light DOM:
  *
- * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
- * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
+ * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
+ * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
- * propagated to the internal components listed above.
+ * propagated to these components.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
@@ -740,7 +737,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (!date) {
       return defaultValue;
     }
-    return datePickerClass.prototype._formatISO(date);
+    return DatePicker.prototype._formatISO(date);
   }
 
   /**
