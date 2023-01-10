@@ -577,8 +577,11 @@ describe('vaadin-chart properties', () => {
       await oneEvent(chart, 'chart-load');
     });
 
-    it('should have annotations when annotation label is set using update', async () => {
+    it('should not have annotations by default', () => {
       expect(chart.configuration.options.annotations).to.be.empty;
+    });
+
+    it('should have annotations when annotation label is set using update', async () => {
       chart.updateConfiguration(
         {
           annotations: [
