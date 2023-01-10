@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/message-list",
-  "version": "24.0.0-alpha9",
+  "version": "24.0.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -38,11 +38,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/avatar": "24.0.0-alpha9",
-    "@vaadin/component-base": "24.0.0-alpha9",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha9",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha9",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha9",
+    "@vaadin/avatar": "24.0.0-alpha10",
+    "@vaadin/component-base": "24.0.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha10",
     "lit": "^2.0.0"
   },
   "devDependencies": {
