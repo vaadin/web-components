@@ -92,13 +92,21 @@ describe('tree toggle', () => {
     beforeEach(() => {
       toggle = fixtureSync(`
         <vaadin-grid-tree-toggle>
-          <input><div>foo</div>
+          <label for="foo-input">foo label</label>
+          <input id="foo-input">
+          <div>foo</div>
         </vaadin-grid-tree-toggle>
       `);
     });
 
     it('should not toggle on internal focusable click', () => {
       const clickEvent = click(toggle.querySelector('input'));
+      expect(toggle.expanded).to.be.false;
+      expect(clickEvent.defaultPrevented).to.be.false;
+    });
+
+    it('should not toggle on internal label click', () => {
+      const clickEvent = click(toggle.querySelector('label'));
       expect(toggle.expanded).to.be.false;
       expect(clickEvent.defaultPrevented).to.be.false;
     });
