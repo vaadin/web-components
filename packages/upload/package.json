@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/form-layout": "24.0.0-alpha10",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
   },
