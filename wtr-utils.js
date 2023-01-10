@@ -255,7 +255,7 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme) => {
+const createVisualTestsConfig = (theme, browserVersion) => {
   const visualPackages = getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
@@ -285,7 +285,7 @@ const createVisualTestsConfig = (theme) => {
       sauceLabsLauncher({
         browserName: 'chrome',
         platformName: 'Windows 10',
-        browserVersion: '88',
+        browserVersion,
       }),
     ],
     plugins: [
@@ -294,9 +294,8 @@ const createVisualTestsConfig = (theme) => {
         getBaselineName: getBaselineScreenshotName,
         getDiffName: getDiffScreenshotName,
         getFailedName: getFailedScreenshotName,
-        diffOptions: {
-          threshold: 0.2,
-        },
+        failureThreshold: 0.05,
+        failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
     ],

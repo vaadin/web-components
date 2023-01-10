@@ -10,7 +10,7 @@ describe('input-container', () => {
 
   beforeEach(() => {
     div = document.createElement('div');
-    div.style.display = 'inline-block';
+    div.style.width = 'fit-content';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
     input = element.querySelector('input');
