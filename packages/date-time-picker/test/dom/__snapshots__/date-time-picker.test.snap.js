@@ -1,7 +1,527 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-date-time-picker default"] = 
+snapshots["vaadin-date-time-picker host default"] = 
+`<vaadin-date-time-picker role="group">
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker slot="date-picker">
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker slot="time-picker">
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host default */
+
+snapshots["vaadin-date-time-picker host disabled"] = 
+`<vaadin-date-time-picker
+  aria-disabled="true"
+  disabled=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker
+    aria-disabled="true"
+    disabled=""
+    slot="date-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      disabled=""
+      id="input-vaadin-date-time-picker-date-picker-6"
+      role="combobox"
+      slot="input"
+      tabindex="-1"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker
+    aria-disabled="true"
+    disabled=""
+    slot="time-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      disabled=""
+      id="input-vaadin-date-time-picker-time-picker-11"
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+      tabindex="-1"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host disabled */
+
+snapshots["vaadin-date-time-picker host readonly"] = 
+`<vaadin-date-time-picker
+  readonly=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker
+    readonly=""
+    slot="date-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      readonly=""
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker
+    readonly=""
+    slot="time-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      readonly=""
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host readonly */
+
+snapshots["vaadin-date-time-picker host required"] = 
+`<vaadin-date-time-picker
+  aria-required="true"
+  required=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker
+    required=""
+    slot="date-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      required=""
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker
+    required=""
+    slot="time-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      required=""
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host required */
+
+snapshots["vaadin-date-time-picker host label"] = 
+`<vaadin-date-time-picker
+  aria-labelledby="label-vaadin-date-time-picker-0"
+  has-label=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+    Label
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker slot="date-picker">
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker slot="time-picker">
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host label */
+
+snapshots["vaadin-date-time-picker host helper"] = 
+`<vaadin-date-time-picker
+  aria-labelledby="helper-vaadin-date-time-picker-1"
+  has-helper=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-time-picker-date-picker slot="date-picker">
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker slot="time-picker">
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+  <div
+    id="helper-vaadin-date-time-picker-1"
+    slot="helper"
+  >
+    Helper
+  </div>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host helper */
+
+snapshots["vaadin-date-time-picker host error"] = 
+`<vaadin-date-time-picker
+  aria-labelledby="error-message-vaadin-date-time-picker-2"
+  has-error-message=""
+  invalid=""
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-date-time-picker-2"
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <vaadin-date-time-picker-date-picker
+    invalid=""
+    slot="date-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-date-picker-6"
+      id="label-vaadin-date-time-picker-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-describedby="error-message-vaadin-date-time-picker-date-picker-5"
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      aria-invalid="true"
+      autocomplete="off"
+      id="input-vaadin-date-time-picker-date-picker-6"
+      invalid=""
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-time-picker-date-picker>
+  <vaadin-date-time-picker-time-picker
+    invalid=""
+    slot="time-picker"
+  >
+    <label
+      for="input-vaadin-date-time-picker-time-picker-11"
+      id="label-vaadin-date-time-picker-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-time-picker-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-describedby="error-message-vaadin-date-time-picker-time-picker-9"
+      aria-expanded="false"
+      aria-invalid="true"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="input-vaadin-date-time-picker-time-picker-11"
+      invalid=""
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-date-time-picker-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host error */
+
+snapshots["vaadin-date-time-picker shadow default"] = 
 `<div class="vaadin-date-time-picker-container">
   <div part="label">
     <slot name="label">
@@ -36,5 +556,5 @@ snapshots["vaadin-date-time-picker default"] =
 <slot name="tooltip">
 </slot>
 `;
-/* end snapshot vaadin-date-time-picker default */
+/* end snapshot vaadin-date-time-picker shadow default */
 
