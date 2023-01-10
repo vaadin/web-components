@@ -588,7 +588,7 @@ export const MenuBarMixin = (superClass) =>
       if (this.openOnHover) {
         this._preventClose = true;
       }
-	
+
       const button = this._getButtonFromEvent(e);
       if (!button) {
         // Hide tooltip on mouseover to disabled button
@@ -758,11 +758,11 @@ export const MenuBarMixin = (superClass) =>
         this._subMenu.close();
       }
     }
-    
-     /** @private */
+
+    /** @private */
     _requestClose() {
       this._preventClose = false;
-      // wait if something has to prevent the close event
+      // Wait if something has to prevent the close event
       setTimeout(() => {
         if (!this._preventClose) {
           this._close(false);
@@ -772,11 +772,23 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _addHoverListener(subMenu) {
-      let menuOverlay = subMenu.$.overlay.$.overlay;
+      const menuOverlay = subMenu.$.overlay.$.overlay;
 
-      menuOverlay.addEventListener('mouseleave', () => this._requestClose(), {once: true});
-      // when hovering between sub menus the subMenu will close if we don't prevent it
-      menuOverlay.addEventListener('mouseenter', () => this._preventClose = true, {once: true});
+      menuOverlay.addEventListener(
+        'mouseleave',
+        () => {
+          this._requestClose();
+        },
+        { once: true },
+      );
+      // When hovering between sub menus the subMenu will close if we don't prevent it
+      menuOverlay.addEventListener(
+        'mouseenter',
+        () => {
+          this._preventClose = true;
+        },
+        { once: true },
+      );
     }
 
     /**
@@ -787,11 +799,10 @@ export const MenuBarMixin = (superClass) =>
      * @private
      */
     _addSubMenuOpenListener(subMenu) {
-      subMenu.addEventListener('sub-menu-opened', e => {
-        let menu = e.detail.subMenuElement;
+      subMenu.addEventListener('sub-menu-opened', (e) => {
+        const menu = e.detail.subMenuElement;
         this._addHoverListener(menu);
         this._addSubMenuOpenListener(menu);
       });
     }
-
   };
