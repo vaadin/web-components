@@ -192,7 +192,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
     if (this.leaf) {
       return;
     }
-    if (isFocusable(e.target)) {
+    if (isFocusable(e.target) || e.target instanceof HTMLLabelElement) {
       return;
     }
 
