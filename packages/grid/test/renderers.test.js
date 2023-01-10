@@ -182,6 +182,22 @@ describe('renderers', () => {
         expect(e.detail.model.index).to.eql(0);
         expect(e.detail.model.item).to.be.ok;
       });
+
+      it('should not fire a `cell-activate` event on focusable element click', () => {
+        column.renderer = (root) => {
+          root.innerHTML = '<input>';
+        };
+        getCell(grid, 0)._content.firstElementChild.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not fire a `cell-activate` event on label click', () => {
+        column.renderer = (root) => {
+          root.innerHTML = '<label for="foo">foo label</label><input id="foo">';
+        };
+        getCell(grid, 0)._content.firstElementChild.click();
+        expect(spy.called).to.be.false;
+      });
     });
   });
 

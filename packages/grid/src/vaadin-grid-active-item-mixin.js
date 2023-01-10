@@ -65,7 +65,7 @@ export const ActiveItemMixin = (superClass) =>
 
       const activeElement = this.getRootNode().activeElement;
       const cellContentHasFocus = cellContent.contains(activeElement);
-      if (!cellContentHasFocus && !this._isFocusable(e.target)) {
+      if (!cellContentHasFocus && !this._isFocusable(e.target) && !(e.target instanceof HTMLLabelElement)) {
         this.dispatchEvent(
           new CustomEvent('cell-activate', {
             detail: {
