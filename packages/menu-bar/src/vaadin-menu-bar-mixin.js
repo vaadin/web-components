@@ -585,7 +585,7 @@ export const MenuBarMixin = (superClass) =>
      * @protected
      */
     _onMouseOver(e) {
-	  if (this.openOnHover) {
+      if (this.openOnHover) {
         this._preventClose = true;
       }
 	

@@ -49,11 +49,11 @@ class MenuBarSubmenu extends ContextMenu {
     super.__openSubMenu(subMenu, itemElement);
 
     this.dispatchEvent(
-        new CustomEvent('sub-menu-opened', {
-          detail: {
-            subMenuElement: subMenu
-          }
-        })
+      new CustomEvent('sub-menu-opened', {
+        detail: {
+          subMenuElement: subMenu
+        }
+      })
     );
   }
 
