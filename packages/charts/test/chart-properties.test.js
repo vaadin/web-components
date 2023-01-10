@@ -604,6 +604,9 @@ describe('vaadin-chart properties', () => {
       expect(chart.configuration.options.annotations.length).to.be.equal(1);
       expect(chart.configuration.options.annotations[0].labels.length).to.be.equal(1);
       expect(chart.configuration.options.annotations[0].labels[0].text).to.be.equal('Sample text');
+      
+      const annotationText = chart.$.chart.querySelector('.highcharts-annotation');
+      expect(annotationText.textContent).to.be.equal('Sample text');
     });
   });
 });
