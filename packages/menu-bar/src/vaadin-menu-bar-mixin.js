@@ -156,6 +156,9 @@ export const MenuBarMixin = (superClass) =>
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
 
+      this._addHoverListener(this._subMenu);
+      this._addSubMenuOpenListener(this._subMenu);
+
       this._container = container;
     }
 
@@ -655,11 +658,6 @@ export const MenuBarMixin = (superClass) =>
     __openSubMenu(button, keydown, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
-
-      if (this.openOnHover) {
-        this._addHoverListener(subMenu);
-        this._addSubMenuOpenListener(subMenu);
-      }
 
       if (subMenu.opened) {
         this._close();
