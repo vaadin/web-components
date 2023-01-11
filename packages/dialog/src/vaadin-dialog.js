@@ -619,7 +619,9 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    this.$.overlay.requestContentUpdate();
+    if (this.$) {
+      this.$.overlay.requestContentUpdate();
+    }
   }
 
   /** @private */

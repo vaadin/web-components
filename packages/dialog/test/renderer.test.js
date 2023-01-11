@@ -35,6 +35,12 @@ describe('vaadin-dialog renderer', () => {
       expect(dialog.renderer.calledTwice).to.be.true;
     });
 
+    it('should not throw when requesting content update for an unupgraded dialog', () => {
+      const dialog = document.createElement('vaadin-dialog');
+
+      expect(() => dialog.requestContentUpdate()).not.to.throw();
+    });
+
     it('should clear the content when removing the renderer', () => {
       dialog.renderer = (root) => {
         root.innerHTML = 'foo';
