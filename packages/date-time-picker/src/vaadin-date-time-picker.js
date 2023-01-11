@@ -349,6 +349,19 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       },
 
       /**
+       * A space-delimited list of CSS class names to set on the overlay elements
+       * of the internal components controlled by the `<vaadin-date-time-picker>`:
+       *
+       * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker#property-overlayClass)
+       * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker#property-overlayClass)
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
+
+      /**
        * The current slotted date picker.
        * @private
        */
@@ -383,6 +396,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       '__i18nChanged(i18n, __datePicker, __timePicker)',
       '__autoOpenDisabledChanged(autoOpenDisabled, __datePicker, __timePicker)',
       '__themeChanged(_theme, __datePicker, __timePicker)',
+      '__overlayClassChanged(overlayClass, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
     ];
   }
@@ -1015,6 +1029,17 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
         picker.removeAttribute('theme');
       }
     });
+  }
+
+  /** @private */
+  __overlayClassChanged(overlayClass, datePicker, timePicker) {
+    if (!datePicker || !timePicker) {
+      // Both pickers are not ready yet
+      return;
+    }
+
+    datePicker.overlayClass = overlayClass;
+    timePicker.overlayClass = overlayClass;
   }
 
   /** @private */
