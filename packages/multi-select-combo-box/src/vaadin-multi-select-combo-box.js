@@ -154,6 +154,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           readonly="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValue]]"
+          overlay-class="[[overlayClass]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
           last-filter="{{_lastFilter}}"
@@ -303,6 +304,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         value: false,
         reflectToAttribute: true,
+      },
+
+      /**
+       * A space-delimited list of CSS class names to set on the overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
       },
 
       /**

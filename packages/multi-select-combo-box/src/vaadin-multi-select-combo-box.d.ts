@@ -255,6 +255,13 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   loading: boolean;
 
   /**
+   * A space-delimited list of CSS class names to set on the overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
+
+  /**
    * True if the dropdown is open, false otherwise.
    */
   opened: boolean;
