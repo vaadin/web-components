@@ -8,10 +8,6 @@ import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-fi
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const numberField = css`
-  :host {
-    width: 8em;
-  }
-
   :host([step-buttons-visible]) ::slotted(input) {
     text-align: center;
   }
