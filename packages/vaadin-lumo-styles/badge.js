@@ -25,6 +25,7 @@ const badge = css`
     text-transform: initial;
     letter-spacing: initial;
     min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+    flex-shrink: 0;
   }
 
   /* Ensure proper vertical alignment */

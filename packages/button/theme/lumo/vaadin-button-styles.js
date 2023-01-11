@@ -25,6 +25,7 @@ const button = css`
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    flex-shrink: 0;
   }
 
   /* Set only for the internal parts so we don’t affect the host vertical alignment */
