@@ -41,6 +41,17 @@ describe('button', () => {
       element.disabled = true;
       await visualDiff(div, 'disabled');
     });
+
+    it('flex-shrink', async () => {
+      const wrapper = fixtureSync(`
+        <div style="display: flex; align-items: baseline; gap: 20px; width: 400px">
+          <vaadin-button>This is a button</vaadin-button>
+  
+          <span style="flex-basis: 100%; background-color: #eee;">Sibling</span>
+        </div>
+      `);
+      await visualDiff(wrapper, 'flex-shrink');
+    });
   });
 
   describe('theme', () => {
