@@ -74,6 +74,11 @@ describe('vaadin-multi-select-combo-box', () => {
       it('overlay', async () => {
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('overlay class', async () => {
+        multiSelectComboBox.overlayClass = 'custom multi-select-combo-box-overlay';
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 

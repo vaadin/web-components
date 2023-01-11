@@ -384,6 +384,22 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
 
+snapshots["vaadin-multi-select-combo-box host opened overlay class"] = 
+`<vaadin-multi-select-combo-box-overlay
+  class="custom multi-select-combo-box-overlay"
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-multi-select-combo-box-scroller>
+</vaadin-multi-select-combo-box-overlay>
+`;
+/* end snapshot vaadin-multi-select-combo-box host opened overlay class */
+
 snapshots["vaadin-multi-select-combo-box shadow default"] = 
 `<div class="vaadin-multi-select-combo-box-container">
   <div part="label">

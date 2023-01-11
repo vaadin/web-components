@@ -90,6 +90,7 @@ assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
+assertType<string>(narrowedComboBox.overlayClass);
 
 // Mixins
 assertType<ControllerMixinClass>(narrowedComboBox);
