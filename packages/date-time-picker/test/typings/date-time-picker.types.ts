@@ -49,5 +49,6 @@ assertType<number | null | undefined>(picker.step);
 assertType<boolean | null | undefined>(picker.showWeekNumbers);
 assertType<boolean | null | undefined>(picker.autoOpenDisabled);
 assertType<boolean | null | undefined>(picker.autofocus);
+assertType<string>(picker.overlayClass);
 assertType<() => boolean>(picker.validate);
 assertType<() => boolean>(picker.checkValidity);
