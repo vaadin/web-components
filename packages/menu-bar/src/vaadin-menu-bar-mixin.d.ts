@@ -27,6 +27,12 @@ export declare class MenuBarMixinClass {
    */
   openOnHover: boolean | null | undefined;
 
+   /**
+    * Delay of closing the sub-menu when openOnHover is true.
+    * @attr {number} hide-delay
+    */
+  hideDelay: number | null | undefined;
+
   protected readonly _buttons: HTMLElement[];
 
   protected readonly _container: HTMLElement;
@@ -34,4 +40,5 @@ export declare class MenuBarMixinClass {
   protected readonly _overflow: HTMLElement;
 
   protected _hasOverflow: boolean;
+
 }

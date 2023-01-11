@@ -10,6 +10,8 @@ import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-dire
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
+const DEFAULT_DELAY = 300;
+
 /**
  * @polymerMixin
  * @mixes ControllerMixin
@@ -27,6 +29,15 @@ export const MenuBarMixin = (superClass) =>
          */
         openOnHover: {
           type: Boolean,
+        },
+
+        /**
+         * Delay value for closing the menu-item after mouseleave
+         * @attr {number} hide-delay 
+         */
+         hideDelay: {
+          type: Number,
+          value: DEFAULT_DELAY,
         },
 
         /**
@@ -767,7 +778,7 @@ export const MenuBarMixin = (superClass) =>
         if (!this._preventClose) {
           this._close(false);
         }
-      }, 300);
+      }, this.hideDelay);
     }
 
     /** @private */
@@ -779,7 +790,6 @@ export const MenuBarMixin = (superClass) =>
         () => {
           this._requestClose();
         },
-        { once: true },
       );
       // When hovering between sub menus the subMenu will close if we don't prevent it
       menuOverlay.addEventListener(
@@ -787,7 +797,6 @@ export const MenuBarMixin = (superClass) =>
         () => {
           this._preventClose = true;
         },
-        { once: true },
       );
     }
 
