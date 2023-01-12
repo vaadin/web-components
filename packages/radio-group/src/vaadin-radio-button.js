@@ -85,30 +85,41 @@ class RadioButton extends LabelMixin(
           align-items: baseline;
         }
 
-        .vaadin-radio-button-wrapper {
-          position: relative;
-          height: 100%;
+        [part='radio'],
+        ::slotted(input),
+        ::slotted(label) {
+          grid-row: 1;
+        }
+
+        [part='radio'],
+        ::slotted(input) {
+          grid-column: 1;
+        }
+
+        [part='radio'] {
+          width: var(--vaadin-radio-button-size, 1em);
+          height: var(--vaadin-radio-button-size, 1em);
+        }
+
+        [part='radio']::before {
+          display: block;
+          content: '\\202F';
+          line-height: var(--vaadin-radio-button-size, 1em);
+          contain: paint;
         }
 
         /* visually hidden */
         ::slotted(input) {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          width: 100%;
-          height: 100%;
           opacity: 0;
           cursor: inherit;
           margin: 0;
+          align-self: stretch;
+          -webkit-appearance: none;
         }
       </style>
       <div class="vaadin-radio-button-container">
-        <div class="vaadin-radio-button-wrapper">
-          <div part="radio"></div>
-          <slot name="input"></slot>
-        </div>
-
+        <div part="radio"></div>
+        <slot name="input"></slot>
         <slot name="label"></slot>
       </div>
     `;
