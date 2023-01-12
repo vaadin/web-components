@@ -780,12 +780,12 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _addHoverListener(subMenu) {
-      const menuOverlay = subMenu.$.overlay;
+      const menuOverlay = subMenu.$.overlay.$.overlay;
 
       menuOverlay.addEventListener(
-        'mouseleave',
+        'mouseleave', 
         () => {
-          if (this.openOnHover && !this.focused) {
+          if (this.openOnHover) {
             this._requestClose();
           }
         },
@@ -796,7 +796,7 @@ export const MenuBarMixin = (superClass) =>
         () => {
           this._preventClose = true;
         },
-      );
+      );    
     }
 
   };

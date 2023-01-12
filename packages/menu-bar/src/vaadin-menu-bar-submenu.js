@@ -40,7 +40,6 @@ class MenuBarSubmenu extends ContextMenu {
       this.getRootNode().host._close();
     }
   }
-
 }
 
 customElements.define(MenuBarSubmenu.is, MenuBarSubmenu);
