@@ -157,7 +157,6 @@ export const MenuBarMixin = (superClass) =>
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
 
       this._addHoverListener(this._subMenu);
-      this._addSubMenuOpenListener(this._subMenu);
 
       this._container = container;
     }
@@ -781,12 +780,14 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _addHoverListener(subMenu) {
-      const menuOverlay = subMenu.$.overlay.$.overlay;
+      const menuOverlay = subMenu.$.overlay;
 
       menuOverlay.addEventListener(
         'mouseleave',
         () => {
-          this._requestClose();
+          if (this.openOnHover && !this.focused) {
+            this._requestClose();
+          }
         },
       );
       // When hovering between sub menus the subMenu will close if we don't prevent it
@@ -798,18 +799,4 @@ export const MenuBarMixin = (superClass) =>
       );
     }
 
-    /**
-     * Recursive method, adding an event listener for opening a sub menu.
-     * It adds also hover listeners to the sub menus, whenever they are opened.
-     * Only used in 'openOnHover' mode.
-     * @param subMenu - the menu to listen to open events
-     * @private
-     */
-    _addSubMenuOpenListener(subMenu) {
-      subMenu.addEventListener('sub-menu-opened', (e) => {
-        const menu = e.detail.subMenuElement;
-        this._addHoverListener(menu);
-        this._addSubMenuOpenListener(menu);
-      });
-    }
   };
