@@ -11,7 +11,7 @@ export type GridSorterDirection = 'asc' | 'desc' | null;
 /**
  * Fired when the `path` or `direction` property changes.
  */
-export type GridSorterChangedEvent = CustomEvent<{ shiftClick: boolean }>;
+export type GridSorterChangedEvent = CustomEvent<{ shiftClick: boolean; fromSorterClick: boolean }>;
 
 /**
  * Fired when the `direction` property changes.
