@@ -320,6 +320,16 @@ describe('sorting', () => {
         click(sorterLast);
         expect(grid._sorters).to.be.empty;
       });
+
+      it('should add to sort if multi-sort is enabled and sorting is done programatically', () => {
+        grid.multiSort = true;
+        sorterFirst.direction = 'desc';
+        sorterLast.direction = 'asc';
+        expect(sorterFirst._order).to.equal(1);
+        expect(sorterFirst.direction).to.equal('desc');
+        expect(sorterLast._order).to.equal(0);
+        expect(sorterLast.direction).to.equal('asc');
+      });
     });
 
     describe('array data provider', () => {
