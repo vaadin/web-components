@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
-import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -242,7 +240,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
       const isElementNode = (node) => {
-        return !(node.nodeType === node.TEXT_NODE || node instanceof DomRepeat || node instanceof DomIf);
+        return !(node.nodeType === node.TEXT_NODE);
       };
       const filteredNodes = nodes.filter(isElementNode);
       this._addStyleNames(width, breakpoints);
