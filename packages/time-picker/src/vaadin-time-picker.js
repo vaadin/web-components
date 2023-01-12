@@ -546,8 +546,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const maxTimeObj = this.__validateTime(this.__parseISO(max || MAX_ALLOWED_TIME));
     const maxSec = this.__getSec(maxTimeObj);
 
-    this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
-
     this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
     if (step !== this.__oldStep) {
@@ -583,22 +581,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     }
 
     return generatedList;
-  }
-
-  /** @private */
-  __adjustValue(minSec, maxSec, minTimeObj, maxTimeObj) {
-    // Do not change the value if it is empty
-    if (!this.__memoValue) {
-      return;
-    }
-
-    const valSec = this.__getSec(this.__memoValue);
-
-    if (valSec < minSec) {
-      this.__updateValue(minTimeObj);
-    } else if (valSec > maxSec) {
-      this.__updateValue(maxTimeObj);
-    }
   }
 
   /**
