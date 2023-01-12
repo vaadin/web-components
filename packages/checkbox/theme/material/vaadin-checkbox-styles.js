@@ -12,6 +12,7 @@ registerStyles(
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
+      --vaadin-checkbox-size: 16px;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -19,23 +20,16 @@ registerStyles(
     }
 
     [part='checkbox'] {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
       margin: 4px;
       position: relative;
       border-radius: 2px;
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
-      line-height: 1.275;
       background-color: transparent;
     }
 
     /* Used for the ripple */
     [part='checkbox']::before {
-      /* Needed to align the checkbox nicely on the baseline */
-      content: '\\2003';
       pointer-events: none;
-      display: inline-block;
       width: 100%;
       height: 100%;
       border-radius: 50%;

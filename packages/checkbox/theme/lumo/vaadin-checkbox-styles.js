@@ -22,37 +22,26 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
-    }
-
-    ::slotted(label) {
-      padding-block: var(--lumo-space-xs);
+      --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     }
 
     :host([has-label]) ::slotted(label) {
+      padding-block: var(--lumo-space-xs);
       padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     [part='checkbox'] {
-      width: calc(var(--lumo-size-m) / 2);
-      height: calc(var(--lumo-size-m) / 2);
       margin: var(--lumo-space-xs);
       position: relative;
       border-radius: var(--lumo-border-radius-s);
       background-color: var(--lumo-contrast-20pct);
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
-      line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
-      flex: none;
     }
 
     :host([indeterminate]) [part='checkbox'],
     :host([checked]) [part='checkbox'] {
       background-color: var(--lumo-primary-color);
-    }
-
-    /* Needed to align the checkbox nicely on the baseline */
-    [part='checkbox']::before {
-      content: '\\2003';
     }
 
     /* Checkmark */
@@ -61,7 +50,7 @@ registerStyles(
       font-family: 'lumo-icons';
       content: var(--lumo-icons-checkmark);
       color: var(--lumo-primary-contrast-color);
-      font-size: calc(var(--lumo-size-m) / 2 + 2px);
+      font-size: calc(var(--vaadin-checkbox-size) + 2px);
       line-height: 1;
       position: absolute;
       top: -1px;
@@ -123,7 +112,6 @@ registerStyles(
     [part='checkbox']::before {
       pointer-events: none;
       color: transparent;
-      display: inline-block;
       width: 100%;
       height: 100%;
       border-radius: inherit;
