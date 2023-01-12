@@ -45,12 +45,10 @@ snapshots["vaadin-checkbox host disabled"] =
 
 snapshots["vaadin-checkbox shadow default"] = 
 `<div class="vaadin-checkbox-container">
-  <div class="vaadin-checkbox-wrapper">
-    <div part="checkbox">
-    </div>
-    <slot name="input">
-    </slot>
+  <div part="checkbox">
   </div>
+  <slot name="input">
+  </slot>
   <slot name="label">
   </slot>
 </div>
