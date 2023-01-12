@@ -239,10 +239,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
       breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-      const isElementNode = (node) => {
-        return node.nodeType !== node.TEXT_NODE;
-      };
-      const filteredNodes = nodes.filter(isElementNode);
+      const filteredNodes = nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
       this._addStyleNames(width, breakpoints);
       const boardCols = this._parseBoardCols(filteredNodes);
       const colsInRow = boardCols.reduce((a, b) => a + b, 0);
