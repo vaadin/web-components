@@ -53,12 +53,10 @@ snapshots["vaadin-radio-button host disabled"] =
 
 snapshots["vaadin-radio-button shadow default"] = 
 `<div class="vaadin-radio-button-container">
-  <div class="vaadin-radio-button-wrapper">
-    <div part="radio">
-    </div>
-    <slot name="input">
-    </slot>
+  <div part="radio">
   </div>
+  <slot name="input">
+  </slot>
   <slot name="label">
   </slot>
   <div style="display: none !important">
