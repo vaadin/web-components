@@ -40,6 +40,26 @@ class MenuBarSubmenu extends ContextMenu {
       this.getRootNode().host._close();
     }
   }
+
+  /**
+   * Overriding the open method to fire an event when a sub menu is opened. Event is fired only when the menu is opened for first time.
+   * @private
+   */
+  __openSubMenu(subMenu, itemElement) {
+    super.__openSubMenu(subMenu, itemElement);
+    
+    if (!this._creationEventSent) {
+      this.dispatchEvent(
+          new CustomEvent('sub-menu-opened', {
+            detail: {
+              subMenuElement: subMenu
+            }
+          })
+      );
+      this._creationEventSent = true;
+    }
+  }
+
 }
 
 customElements.define(MenuBarSubmenu.is, MenuBarSubmenu);

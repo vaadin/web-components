@@ -157,6 +157,7 @@ export const MenuBarMixin = (superClass) =>
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
 
       this._addHoverListener(this._subMenu);
+      this._addSubMenuOpenListener(this._subMenu);
 
       this._container = container;
     }
@@ -797,6 +798,14 @@ export const MenuBarMixin = (superClass) =>
           this._preventClose = true;
         },
       );    
+    }
+
+    /**@private */
+    _addSubMenuOpenListener(subMenu) {
+      subMenu.addEventListener("sub-menu-opened", e => {
+        let menu = e.detail.subMenuElement;
+        this._addHoverListener(menu);
+      });
     }
 
   };
