@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
 import {
@@ -114,8 +114,9 @@ describe('multiple columns', () => {
       expect(getHeaderCellContent(grid, 0, columns.length - 1).textContent).to.equal(`Col ${columns.length - 1}`);
     });
 
-    it('should render frozen to end columns', () => {
+    it('should render frozen to end columns', async () => {
       columns.at(-1).frozenToEnd = true;
+      await nextFrame();
       expectBodyCellUpdated(columns.length - 1);
     });
 
@@ -198,8 +199,9 @@ describe('multiple columns', () => {
         expectBodyCellUpdated(1);
       });
 
-      it('should render frozen columns', () => {
+      it('should render frozen columns', async () => {
         columns[0].frozen = true;
+        await nextFrame();
         expectBodyCellUpdated(0);
       });
 
