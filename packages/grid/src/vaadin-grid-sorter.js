@@ -153,12 +153,6 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         observer: '__isConnectedChanged',
       },
-
-      /** @private */
-      _shiftClick: {
-        type: Boolean,
-        value: false,
-      },
     };
   }
 
@@ -210,7 +204,7 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
     this.dispatchEvent(
       new CustomEvent('sorter-changed', {
-        detail: { shiftClick: this._shiftClick, fromSorterClick: this._fromSorterClick },
+        detail: { shiftClick: this._shiftClick ?? false, fromSorterClick: this._fromSorterClick ?? false },
         bubbles: true,
         composed: true,
       }),
