@@ -21,7 +21,6 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
-      --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
       contain: layout;
     }
 
