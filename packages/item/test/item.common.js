@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-item.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 
 describe('vaadin-item', () => {
   let item, tagName;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     item = fixtureSync('<vaadin-item>label</vaadin-item>');
+    await nextRender();
     tagName = item.tagName.toLowerCase();
   });
 

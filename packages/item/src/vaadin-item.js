@@ -5,8 +5,11 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { styles, template } from './lib/item-base.js';
 import { ItemMixin } from './vaadin-item-mixin.js';
+
+registerStyles('vaadin-item', styles, { moduleId: 'vaadin-item-styles' });
 
 /**
  * `<vaadin-item>` is a Web Component providing layout for items in tabs and menus.
@@ -52,26 +55,12 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @mixes DirMixin
  */
 class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
-      <span part="checkmark" aria-hidden="true"></span>
-      <div part="content">
-        <slot></slot>
-      </div>
-    `;
-  }
-
   static get is() {
     return 'vaadin-item';
+  }
+
+  static get template() {
+    return template(html);
   }
 
   constructor() {
