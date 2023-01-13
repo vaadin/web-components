@@ -5,7 +5,6 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -709,12 +708,12 @@ class Grid extends ElementMixin(
       );
     }
 
-    beforeNextRender(this, () => {
-      this._updateFirstAndLastColumn();
+    this.__debounceAfterCreateRows = Debouncer.debounce(this.__debounceAfterCreateRows, microTask, () => {
       this._resetKeyboardNavigation();
       this._afterScroll();
       this.__itemsReceived();
     });
+
     return rows;
   }
 
