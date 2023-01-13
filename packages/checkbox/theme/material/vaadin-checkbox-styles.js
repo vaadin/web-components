@@ -1,4 +1,5 @@
 import '@vaadin/vaadin-material-styles/color.js';
+import '@vaadin/vaadin-material-styles/style.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -12,7 +13,6 @@ registerStyles(
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
-      --vaadin-checkbox-size: 16px;
     }
 
     :host([has-label]) ::slotted(label) {
