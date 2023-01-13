@@ -4,15 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
-import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { styles, template } from './lib/radio-button-base.js';
+import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
+
+registerStyles('vaadin-radio-button', styles, { moduleId: 'vaadin-radio-button-styles' });
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
@@ -53,120 +51,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
- * @mixes ActiveMixin
- * @mixes CheckedMixin
- * @mixes LabelMixin
+ * @mixes RadioButtonMixin
  */
-class RadioButton extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))))),
-) {
+class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-radio-button';
   }
 
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .vaadin-radio-button-container {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          align-items: baseline;
-        }
-
-        [part='radio'],
-        ::slotted(input),
-        ::slotted(label) {
-          grid-row: 1;
-        }
-
-        [part='radio'],
-        ::slotted(input) {
-          grid-column: 1;
-        }
-
-        [part='radio'] {
-          width: var(--vaadin-radio-button-size, 1em);
-          height: var(--vaadin-radio-button-size, 1em);
-        }
-
-        [part='radio']::before {
-          display: block;
-          content: '\\202F';
-          line-height: var(--vaadin-radio-button-size, 1em);
-          contain: paint;
-        }
-
-        /* visually hidden */
-        ::slotted(input) {
-          opacity: 0;
-          cursor: inherit;
-          margin: 0;
-          align-self: stretch;
-          -webkit-appearance: none;
-        }
-      </style>
-      <div class="vaadin-radio-button-container">
-        <div part="radio" aria-hidden="true"></div>
-        <slot name="input"></slot>
-        <slot name="label"></slot>
-      </div>
-    `;
-  }
-
-  static get properties() {
-    return {
-      /**
-       * The name of the radio button.
-       *
-       * @type {string}
-       */
-      name: {
-        type: String,
-        value: '',
-      },
-    };
-  }
-
-  /** @override */
-  static get delegateAttrs() {
-    return [...super.delegateAttrs, 'name'];
-  }
-
-  constructor() {
-    super();
-
-    this._setType('radio');
-
-    // Set the string "on" as the default value for the radio button following the HTML specification:
-    // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
-    this.value = 'on';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addController(
-      new InputController(this, (input) => {
-        this._setInputElement(input);
-        this._setFocusElement(input);
-        this.stateTarget = input;
-        this.ariaTarget = input;
-      }),
-    );
-    this.addController(new LabelledInputController(this.inputElement, this._labelController));
+    return template(html);
   }
 }
 

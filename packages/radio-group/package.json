@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-radio-button.d.ts",
+    "!src/vaadin-lit-radio-button.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -37,6 +39,7 @@
     "polymer"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "24.0.0-beta1",
     "@vaadin/field-base": "24.0.0-beta1",
