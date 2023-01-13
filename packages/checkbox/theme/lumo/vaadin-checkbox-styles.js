@@ -22,7 +22,6 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
-      --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     }
 
     :host([has-label]) ::slotted(label) {
