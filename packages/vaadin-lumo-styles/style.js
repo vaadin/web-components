@@ -29,14 +29,14 @@ const style = css`
  * Default values for component-specific custom properties.
  */
 const globals = css`
-  html {
+  * {
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
   }
 `;
 
 const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}${globals.toString()}</style>`;
+$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}$</style>`;
 document.head.appendChild($tpl.content);
 
 export { globals, style };

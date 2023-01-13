@@ -10,14 +10,10 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
  * Default values for component-specific custom properties.
  */
 const globals = css`
-  html {
+  * {
     --vaadin-checkbox-size: 16px;
     --vaadin-radio-button-size: 16px;
   }
 `;
-
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${globals.toString()}</style>`;
-document.head.appendChild($tpl.content);
 
 export { globals };
