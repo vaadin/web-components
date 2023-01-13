@@ -1,14 +1,16 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -434,6 +436,18 @@ class Grid extends ElementMixin(
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 
+  /** @private */
+  get _firstVisibleIndex() {
+    const firstVisibleItem = this.__getFirstVisibleItem();
+    return firstVisibleItem ? firstVisibleItem.index : undefined;
+  }
+
+  /** @private */
+  get _lastVisibleIndex() {
+    const lastVisibleItem = this.__getLastVisibleItem();
+    return lastVisibleItem ? lastVisibleItem.index : undefined;
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -454,22 +468,10 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  get _firstVisibleIndex() {
-    const firstVisibleItem = this.__getFirstVisibleItem();
-    return firstVisibleItem ? firstVisibleItem.index : undefined;
-  }
-
-  /** @private */
   __getLastVisibleItem() {
     return this._getVisibleRows()
       .reverse()
       .find((row) => this._isInViewport(row));
-  }
-
-  /** @private */
-  get _lastVisibleIndex() {
-    const lastVisibleItem = this.__getLastVisibleItem();
-    return lastVisibleItem ? lastVisibleItem.index : undefined;
   }
 
   /** @private */
@@ -542,9 +544,15 @@ class Grid extends ElementMixin(
       const cell = this.shadowRoot.activeElement;
       const cellCoordinates = this.__getBodyCellCoordinates(cell);
 
+      const previousSize = virtualizer.size || 0;
       virtualizer.size = effectiveSize;
-      virtualizer.update();
-      virtualizer.flush();
+
+      // Request an update for the previous last row to have the "last" state removed
+      virtualizer.update(previousSize - 1, previousSize - 1);
+      if (effectiveSize < previousSize) {
+        // Size was decreased, so the new last row requires an explicit update
+        virtualizer.update(effectiveSize - 1, effectiveSize - 1);
+      }
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
       if (cellCoordinates && cell.parentElement.hidden) {
@@ -653,6 +661,11 @@ class Grid extends ElementMixin(
   _recalculateColumnWidths(cols) {
     // Flush to make sure DOM is up-to-date when measuring the column widths
     this.__virtualizer.flush();
+    [...this.$.header.children, ...this.$.footer.children].forEach((row) => {
+      if (row.__debounceUpdateHeaderFooterRowVisibility) {
+        row.__debounceUpdateHeaderFooterRowVisibility.flush();
+      }
+    });
 
     // Flush to account for any changes to the visibility of the columns
     if (this._debouncerHiddenChanged) {
@@ -801,10 +814,7 @@ class Grid extends ElementMixin(
    * @param {boolean} noNotify
    * @protected
    */
-  // eslint-disable-next-line max-params
-  _updateRow(row, columns, section, isColumnRow, noNotify) {
-    section = section || 'body';
-
+  _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
     const contentsFragment = document.createDocumentFragment();
 
     iterateChildren(row, (cell) => {
@@ -819,7 +829,9 @@ class Grid extends ElementMixin(
 
         if (section === 'body') {
           // Body
-          column._cells = column._cells || [];
+          if (!column._cells) {
+            column._cells = [];
+          }
           cell = column._cells.find((cell) => cell._vacant);
           if (!cell) {
             cell = this._createCell('td', column);
@@ -830,7 +842,9 @@ class Grid extends ElementMixin(
 
           if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
-            this._detailsCells = this._detailsCells || [];
+            if (!this._detailsCells) {
+              this._detailsCells = [];
+            }
             const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
             if (this._detailsCells.indexOf(detailsCell) === -1) {
               this._detailsCells.push(detailsCell);
@@ -856,7 +870,9 @@ class Grid extends ElementMixin(
             row.appendChild(cell);
             column[`_${section}Cell`] = cell;
           } else {
-            column._emptyCells = column._emptyCells || [];
+            if (!column._emptyCells) {
+              column._emptyCells = [];
+            }
             cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(tagName);
             cell._column = column;
             row.appendChild(cell);
@@ -865,7 +881,6 @@ class Grid extends ElementMixin(
             }
           }
           cell.setAttribute('part', `cell ${section}-cell`);
-          this.__updateHeaderFooterRowVisibility(row);
         }
 
         if (!cell._content.parentElement) {
@@ -875,11 +890,27 @@ class Grid extends ElementMixin(
         cell._column = column;
       });
 
+    if (section !== 'body') {
+      this.__debounceUpdateHeaderFooterRowVisibility(row);
+    }
+
     // Might be empty if only cache was used
     this.appendChild(contentsFragment);
 
     this._frozenCellsChanged();
     this._updateFirstAndLastColumnForRow(row);
+  }
+
+  /**
+   * @param {HTMLTableRowElement} row
+   * @protected
+   */
+  __debounceUpdateHeaderFooterRowVisibility(row) {
+    row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
+      row.__debounceUpdateHeaderFooterRowVisibility,
+      microTask,
+      () => this.__updateHeaderFooterRowVisibility(row),
+    );
   }
 
   /**
@@ -954,7 +985,7 @@ class Grid extends ElementMixin(
     updateRowStates(row, {
       first: index === 0,
       last: index === this._effectiveSize - 1,
-      odd: index % 2,
+      odd: index % 2 !== 0,
       even: index % 2 === 0,
     });
   }
@@ -974,7 +1005,7 @@ class Grid extends ElementMixin(
    */
   _renderColumnTree(columnTree) {
     iterateChildren(this.$.items, (row) => {
-      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true);
+      this._updateRow(row, columnTree[columnTree.length - 1], 'body', false, true);
 
       const model = this.__getRowModel(row);
       this._updateRowOrderParts(row);
@@ -1033,7 +1064,7 @@ class Grid extends ElementMixin(
   /** @private */
   __updateFooterPositioning() {
     // TODO: fixed in Firefox 99, remove when we can drop Firefox ESR 91 support
-    if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/)[1]) < 99) {
+    if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/u)[1]) < 99) {
       // Sticky (or translated) footer in a flexbox host doesn't get included in
       // the scroll height calculation on FF. This is a workaround for the issue.
       this.$.items.style.paddingBottom = 0;

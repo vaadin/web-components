@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
@@ -28,6 +28,16 @@ const observer = new ResizeObserver((entries) => {
 export const ResizeMixin = dedupingMixin(
   (superclass) =>
     class ResizeMixinClass extends superclass {
+      /**
+       * When true, the parent element resize will be also observed.
+       * Override this getter and return `true` to enable this.
+       *
+       * @protected
+       */
+      get _observeParent() {
+        return false;
+      }
+
       /** @protected */
       connectedCallback() {
         super.connectedCallback();
@@ -65,16 +75,6 @@ export const ResizeMixin = dedupingMixin(
 
           this.__parent = null;
         }
-      }
-
-      /**
-       * When true, the parent element resize will be also observed.
-       * Override this getter and return `true` to enable this.
-       *
-       * @protected
-       */
-      get _observeParent() {
-        return false;
       }
 
       /**

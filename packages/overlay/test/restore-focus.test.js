@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/text-field/vaadin-text-field.js';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { close, open } from './helpers.js';
@@ -11,13 +9,24 @@ customElements.define(
   class extends PolymerElement {
     static get template() {
       return html`
-        <vaadin-overlay id="overlay">
-          <template>
-            <vaadin-text-field id="focusable"></vaadin-text-field>
-          </template>
-        </vaadin-overlay>
+        <vaadin-overlay id="overlay" renderer="[[renderer]]"></vaadin-overlay>
         <input id="focusable" />
       `;
+    }
+
+    static get properties() {
+      return {
+        renderer: {
+          type: Object,
+          value: () => {
+            return (root) => {
+              if (!root.firstChild) {
+                root.appendChild(document.createElement('input'));
+              }
+            };
+          },
+        },
+      };
     }
   },
 );
@@ -38,7 +47,6 @@ describe('restore focus', () => {
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
     overlay = wrapper.$.overlay;
     focusable = wrapper.$.focusable;
-    window.focus();
   });
 
   afterEach(() => {

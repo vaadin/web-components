@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -56,22 +56,6 @@ export const FieldMixin = (superclass) =>
       return ['_invalidChanged(invalid)', '_requiredChanged(required)'];
     }
 
-    /**
-     * @protected
-     * @return {HTMLElement}
-     */
-    get _errorNode() {
-      return this._errorController.node;
-    }
-
-    /**
-     * @protected
-     * @return {HTMLElement}
-     */
-    get _helperNode() {
-      return this._helperController.node;
-    }
-
     constructor() {
       super();
 
@@ -93,6 +77,22 @@ export const FieldMixin = (superclass) =>
         this.toggleAttribute('has-helper', hasContent);
         this.__helperChanged(hasContent, node);
       });
+    }
+
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
+    get _errorNode() {
+      return this._errorController.node;
+    }
+
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
+    get _helperNode() {
+      return this._helperController.node;
     }
 
     /** @protected */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-confirm-dialog-overlay.js';
@@ -14,7 +14,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
  *
  * ```
- * <vaadin-confirm-dialog cancel>
+ * <vaadin-confirm-dialog cancel-button-visible>
  *   There are unsaved changes. Do you really want to leave?
  * </vaadin-confirm-dialog>
  * ```
@@ -80,6 +80,8 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
         theme$="[[_theme]]"
         no-close-on-outside-click
         no-close-on-esc="[[noCloseOnEsc]]"
+        content-height="[[_contentHeight]]"
+        content-width="[[_contentWidth]]"
       ></vaadin-confirm-dialog-dialog>
 
       <div hidden>
@@ -158,10 +160,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
 
       /**
-       * Whether to show cancel button or not.
+       * Whether to show reject button or not.
+       * @attr {boolean} reject-button-visible
        * @type {boolean}
        */
-      reject: {
+      rejectButtonVisible: {
         type: Boolean,
         reflectToAttribute: true,
         value: false,
@@ -191,9 +194,10 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
 
       /**
        * Whether to show cancel button or not.
+       * @attr {boolean} cancel-button-visible
        * @type {boolean}
        */
-      cancel: {
+      cancelButtonVisible: {
         type: Boolean,
         reflectToAttribute: true,
         value: false,
@@ -261,16 +265,32 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       _rejectButton: {
         type: Object,
       },
+
+      /**
+       * Height to be set on the overlay content.
+       * @protected
+       */
+      _contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       * @protected
+       */
+      _contentWidth: {
+        type: String,
+      },
     };
   }
 
   static get observers() {
     return [
       '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
-      '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
+      '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancelButtonVisible)',
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNodes(_messageNodes, message)',
-      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)',
+      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
     ];
   }
 
@@ -294,12 +314,6 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
     this._overlayElement.addEventListener('vaadin-confirm-dialog-close', () => this.__onDialogClosed());
-
-    if (this._dimensions) {
-      Object.keys(this._dimensions).forEach((name) => {
-        this._setDimension(name, this._dimensions[name]);
-      });
-    }
 
     this._headerController = new SlotController(this, 'header', 'h3', {
       initializer: (node) => {
@@ -453,31 +467,6 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   /** @private */
   _getAriaLabel(header) {
     return header || 'confirmation';
-  }
-
-  /** @private */
-  _setWidth(width) {
-    this._setDimensionIfAttached('width', width);
-  }
-
-  /** @private */
-  _setHeight(height) {
-    this._setDimensionIfAttached('height', height);
-  }
-
-  /** @private */
-  _setDimensionIfAttached(name, value) {
-    if (this._overlayElement) {
-      this._setDimension(name, value);
-    } else {
-      this._dimensions = this._dimensions || {};
-      this._dimensions[name] = value;
-    }
-  }
-
-  /** @private */
-  _setDimension(name, value) {
-    this._overlayElement.style.setProperty(`--_vaadin-confirm-dialog-content-${name}`, value);
   }
 
   /**

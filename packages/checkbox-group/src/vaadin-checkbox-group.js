@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -144,6 +144,16 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
   }
 
+  /**
+   * A collection of the checkboxes.
+   *
+   * @return {!Array<!Checkbox>}
+   * @private
+   */
+  get __checkboxes() {
+    return this.__filterCheckboxes([...this.children]);
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -185,16 +195,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    */
   __filterCheckboxes(nodes) {
     return nodes.filter((child) => child instanceof Checkbox);
-  }
-
-  /**
-   * A collection of the checkboxes.
-   *
-   * @return {!Array<!Checkbox>}
-   * @private
-   */
-  get __checkboxes() {
-    return this.__filterCheckboxes([...this.children]);
   }
 
   /**

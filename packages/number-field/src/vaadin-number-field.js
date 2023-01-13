@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
@@ -205,7 +205,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
           direction: rtl;
         }
 
-        ${tag}[dir='rtl']:not([has-controls]) input[type="number"]::placeholder {
+        ${tag}[dir='rtl']:not([step-buttons-visible]) input[type="number"]::placeholder {
           text-align: left;
         }
       `,
@@ -241,17 +241,19 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   }
 
   /**
-   * Override a method from `InputConstraintsMixin`
-   * to additionally check for bad user input.
+   * Override the method from `InputConstraintsMixin`
+   * to enforce HTML constraint validation even if
+   * the user didn't add any constraints explicitly:
+   * the field has to be regardless checked for bad input.
    *
    * @override
    */
   checkValidity() {
-    if (this.inputElement && this.inputElement.validity.badInput) {
-      return false;
+    if (this.inputElement) {
+      return this.inputElement.checkValidity();
     }
 
-    return super.checkValidity();
+    return !this.invalid;
   }
 
   /** @private */

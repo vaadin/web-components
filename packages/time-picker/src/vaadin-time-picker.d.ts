@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -177,6 +177,13 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
    * @attr {boolean} auto-open-disabled
    */
   autoOpenDisabled: boolean | null | undefined;
+
+  /**
+   * A space-delimited list of CSS class names to set on the overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
 
   /**
    * The object used to localize this component.

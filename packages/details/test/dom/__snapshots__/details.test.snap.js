@@ -4,8 +4,9 @@ export const snapshots = {};
 snapshots["vaadin-details host default"] = 
 `<vaadin-details>
   <vaadin-details-summary
-    aria-controls="content-vaadin-details-1"
+    aria-controls="content-vaadin-details-0"
     aria-expanded="false"
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="0"
@@ -14,7 +15,7 @@ snapshots["vaadin-details host default"] =
   </vaadin-details-summary>
   <div
     aria-hidden="true"
-    id="content-vaadin-details-1"
+    id="content-vaadin-details-0"
   >
     Content
   </div>
@@ -25,8 +26,9 @@ snapshots["vaadin-details host default"] =
 snapshots["vaadin-details host opened"] = 
 `<vaadin-details opened="">
   <vaadin-details-summary
-    aria-controls="content-vaadin-details-1"
+    aria-controls="content-vaadin-details-0"
     aria-expanded="true"
+    id="summary-vaadin-details-1"
     opened=""
     role="button"
     slot="summary"
@@ -36,7 +38,7 @@ snapshots["vaadin-details host opened"] =
   </vaadin-details-summary>
   <div
     aria-hidden="false"
-    id="content-vaadin-details-1"
+    id="content-vaadin-details-0"
   >
     Content
   </div>
@@ -47,10 +49,11 @@ snapshots["vaadin-details host opened"] =
 snapshots["vaadin-details host disabled"] = 
 `<vaadin-details disabled="">
   <vaadin-details-summary
-    aria-controls="content-vaadin-details-1"
+    aria-controls="content-vaadin-details-0"
     aria-disabled="true"
     aria-expanded="false"
     disabled=""
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="-1"
@@ -59,7 +62,7 @@ snapshots["vaadin-details host disabled"] =
   </vaadin-details-summary>
   <div
     aria-hidden="true"
-    id="content-vaadin-details-1"
+    id="content-vaadin-details-0"
   >
     Content
   </div>
@@ -70,8 +73,9 @@ snapshots["vaadin-details host disabled"] =
 snapshots["vaadin-details host theme"] = 
 `<vaadin-details theme="filled">
   <vaadin-details-summary
-    aria-controls="content-vaadin-details-1"
+    aria-controls="content-vaadin-details-0"
     aria-expanded="false"
+    id="summary-vaadin-details-1"
     role="button"
     slot="summary"
     tabindex="0"
@@ -81,7 +85,7 @@ snapshots["vaadin-details host theme"] =
   </vaadin-details-summary>
   <div
     aria-hidden="true"
-    id="content-vaadin-details-1"
+    id="content-vaadin-details-0"
   >
     Content
   </div>

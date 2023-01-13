@@ -9,7 +9,7 @@ const oldVersion = require('../lerna.json').version;
  * order to be passed in the resolved promise.
  */
 function exe(cmd, quiet) {
-  const args = cmd.split(/ +/);
+  const args = cmd.split(/ +/u);
   const child = spawn(args[0], args.slice(1));
 
   let out = '';
@@ -41,8 +41,8 @@ if (!version) {
 }
 
 async function main() {
-  const fromRegex = new RegExp(`'${oldVersion.split('.').join('\\.')}'`, 'g');
-  const newVersion = `'${version.replace(/^v/, '')}'`;
+  const fromRegex = new RegExp(`'${oldVersion.split('.').join('\\.')}'`, 'gu');
+  const newVersion = `'${version.replace(/^v/u, '')}'`;
   const results = await replace({
     files: ['packages/**/version.{js,ts}', 'packages/component-base/src/*.{js,ts}'],
     from: fromRegex,

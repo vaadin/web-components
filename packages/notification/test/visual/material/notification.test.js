@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-notification.js';
 
 describe('notification', () => {

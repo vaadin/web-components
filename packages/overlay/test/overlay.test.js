@@ -1,25 +1,38 @@
 import { expect } from '@esm-bundle/chai';
-import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
+import {
+  click,
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  isIOS,
+  mousedown,
+  mouseup,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { createOverlay } from './helpers.js';
 
 customElements.define(
   'overlay-wrapper',
   class extends PolymerElement {
     static get template() {
-      return html`
-        <vaadin-overlay id="overlay" opened="[[opened]]">
-          <template> overlay content </template>
-        </vaadin-overlay>
-      `;
+      return html`<vaadin-overlay id="overlay" opened="[[opened]]" renderer="[[renderer]]"></vaadin-overlay>`;
     }
 
     static get properties() {
       return {
         opened: Boolean,
+
+        renderer: {
+          type: Object,
+          value: () => {
+            return (root) => {
+              root.textContent = 'overlay content';
+            };
+          },
+        },
       };
     }
   },
@@ -30,16 +43,11 @@ describe('vaadin-overlay', () => {
     let parent, overlay;
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay>
-            <template>
-              overlay-content
-            </template>
-          </vaadin-overlay>
-        </div>
-      `);
-      overlay = parent.children[0];
+      parent = document.createElement('div');
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+      overlay.renderer = (root) => {
+        root.textContent = 'overlay content';
+      };
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -63,13 +71,7 @@ describe('vaadin-overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -102,13 +104,7 @@ describe('vaadin-overlay', () => {
     let overlay, backdrop;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -143,13 +139,7 @@ describe('vaadin-overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -195,16 +185,11 @@ describe('vaadin-overlay', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay>
-            <template>
-              <div>overlay-content</div>
-            </template>
-          </vaadin-overlay>
-        </div>
-      `);
-      overlay = parent.children[0];
+      parent = document.createElement('div');
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+      overlay.renderer = (root) => {
+        root.textContent = 'overlay content';
+      };
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
       overlay.opened = true;
@@ -402,13 +387,7 @@ describe('vaadin-overlay', () => {
     let overlay, overlayPart;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            <div>overlay-content</div>
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       overlayPart = overlay.$.overlay;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -498,18 +477,11 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  (iOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
+  (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
+      overlay = createOverlay('overlay content');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });

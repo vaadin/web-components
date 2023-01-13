@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
@@ -70,6 +70,16 @@ export const InputMixin = dedupingMixin(
 
         this._boundOnInput = this.__onInput.bind(this);
         this._boundOnChange = this._onChange.bind(this);
+      }
+
+      /**
+       * Indicates whether the value is different from the default one.
+       * Override if the `value` property has a type other than `string`.
+       *
+       * @protected
+       */
+      get _hasValue() {
+        return this.value != null && this.value !== '';
       }
 
       /**
@@ -221,16 +231,6 @@ export const InputMixin = dedupingMixin(
 
         // Setting a value programmatically, sync it to input element.
         this._forwardInputValue(newVal);
-      }
-
-      /**
-       * Indicates whether the value is different from the default one.
-       * Override if the `value` property has a type other than `string`.
-       *
-       * @protected
-       */
-      get _hasValue() {
-        return this.value != null && this.value !== '';
       }
 
       /**

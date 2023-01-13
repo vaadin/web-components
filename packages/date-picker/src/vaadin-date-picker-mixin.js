@@ -1,13 +1,14 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {
@@ -21,11 +22,16 @@ import {
 
 /**
  * @polymerMixin
+ * @mixes ControllerMixin
+ * @mixes DelegateFocusMixin
+ * @mixes InputConstraintsMixin
+ * @mixes KeyboardMixin
+ * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends ControllerMixin(
-    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
+  class DatePickerMixinClass extends OverlayClassMixin(
+    ControllerMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),
   ) {
     static get properties() {
       return {
@@ -222,7 +228,7 @@ export const DatePickerMixin = (subclass) =>
               cancel: 'Cancel',
               referenceDate: '',
               formatDate(d) {
-                const yearStr = String(d.year).replace(/\d+/, (y) => '0000'.substr(y.length) + y);
+                const yearStr = String(d.year).replace(/\d+/u, (y) => '0000'.substr(y.length) + y);
                 return [d.month + 1, d.day, yearStr].join('/');
               },
               parseDate(text) {
@@ -338,6 +344,14 @@ export const DatePickerMixin = (subclass) =>
       return [...super.constraints, 'min', 'max'];
     }
 
+    constructor() {
+      super();
+
+      this._boundOnClick = this._onClick.bind(this);
+      this._boundOnScroll = this._onScroll.bind(this);
+      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
+    }
+
     /**
      * Override a getter from `InputControlMixin` to make it optional
      * and to prevent warning when a clear button is missing,
@@ -346,6 +360,15 @@ export const DatePickerMixin = (subclass) =>
      * @return {Element | null | undefined}
      */
     get clearElement() {
+      return null;
+    }
+
+    /** @private */
+    get _nativeInput() {
+      if (this.inputElement) {
+        // TODO: support focusElement for backwards compatibility
+        return this.inputElement.focusElement || this.inputElement;
+      }
       return null;
     }
 
@@ -359,23 +382,6 @@ export const DatePickerMixin = (subclass) =>
       if (this.inputElement) {
         this.inputElement.value = value;
       }
-    }
-
-    /** @private */
-    get _nativeInput() {
-      if (this.inputElement) {
-        // TODO: support focusElement for backwards compatibility
-        return this.inputElement.focusElement || this.inputElement;
-      }
-      return null;
-    }
-
-    constructor() {
-      super();
-
-      this._boundOnClick = this._onClick.bind(this);
-      this._boundOnScroll = this._onScroll.bind(this);
-      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
     /**
@@ -424,7 +430,10 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
-      this.$.overlay.renderer = this._boundOverlayRenderer;
+      const overlay = this.$.overlay;
+      this._overlayElement = overlay;
+
+      overlay.renderer = this._boundOverlayRenderer;
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
@@ -791,21 +800,17 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      const parsedInitialPosition = parseDate(this.initialPosition);
+      // Detect which date to show
+      const initialPosition = this._getInitialPosition();
+      this._overlayContent.initialPosition = initialPosition;
 
-      const initialPosition =
-        this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
+      // Scroll the date into view
+      const scrollFocusDate = this._overlayContent.focusedDate || initialPosition;
+      this._overlayContent.scrollToDate(scrollFocusDate);
 
-      if (parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate)) {
-        this._overlayContent.initialPosition = initialPosition;
-      } else {
-        this._overlayContent.initialPosition = getClosestDate(initialPosition, [this._minDate, this._maxDate]);
-      }
-
-      this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
-      // Have a default focused date
+      // Ensure the date is focused
       this._ignoreFocusedDateChange = true;
-      this._overlayContent.focusedDate = this._overlayContent.focusedDate || this._overlayContent.initialPosition;
+      this._overlayContent.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
@@ -821,6 +826,18 @@ export const DatePickerMixin = (subclass) =>
         this.focusElement.blur();
         this._overlayContent.focusDateElement();
       }
+    }
+
+    /** @private */
+    _getInitialPosition() {
+      const parsedInitialPosition = parseDate(this.initialPosition);
+
+      const initialPosition =
+        this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
+
+      return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate)
+        ? initialPosition
+        : getClosestDate(initialPosition, [this._minDate, this._maxDate]);
     }
 
     /** @private */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { setProperty } from './vaadin-crud-helpers.js';
 
 /**
  * @polymerMixin
@@ -46,17 +47,19 @@ export const IncludedMixin = (superClass) =>
     /** @private */
     __onExcludeChange(exclude) {
       if (typeof exclude === 'string') {
-        this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
+        this.exclude = exclude ? RegExp(exclude.replace(/, */gu, '|'), 'iu') : undefined;
       }
     }
 
     /** @private */
     __onIncludeChange(include) {
       if (typeof include === 'string') {
-        this.include = include ? include.split(/, */) : undefined;
+        this.include = include ? include.split(/, */u) : undefined;
       } else if (!this._fields && Array.isArray(include)) {
         const item = {};
-        this.include.forEach((path) => this.__set(path, null, item));
+        this.include.forEach((path) => {
+          setProperty(path, null, item);
+        });
         this._configure(item);
       }
     }

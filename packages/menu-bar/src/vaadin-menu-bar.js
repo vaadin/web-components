@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-menu-bar-submenu.js';
@@ -10,8 +10,7 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
-import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
+import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -60,13 +59,12 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
  * @extends HTMLElement
- * @mixes ButtonsMixin
- * @mixes InteractionsMixin
  * @mixes DisabledMixin
  * @mixes ElementMixin
+ * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -91,7 +89,7 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root=""></vaadin-menu-bar-submenu>
+      <vaadin-menu-bar-submenu is-root overlay-class="[[overlayClass]]"></vaadin-menu-bar-submenu>
 
       <slot name="tooltip"></slot>
     `;
@@ -193,11 +191,21 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
           };
         },
       },
+
+      /**
+       * A space-delimited list of CSS class names
+       * to set on each sub-menu overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
     };
   }
 
   static get observers() {
-    return ['_themeChanged(_theme, _overflow)'];
+    return ['_themeChanged(_theme, _overflow, _container)'];
   }
 
   /** @protected */
@@ -233,8 +241,8 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
    * @param {string | null} theme
    * @protected
    */
-  _themeChanged(theme, overflow) {
-    if (overflow) {
+  _themeChanged(theme, overflow, container) {
+    if (overflow && container) {
       this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
       this.__detectOverflow();
     }

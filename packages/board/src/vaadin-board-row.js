@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
-import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -241,10 +239,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
       breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-      const isElementNode = (node) => {
-        return !(node.nodeType === node.TEXT_NODE || node instanceof DomRepeat || node instanceof DomIf);
-      };
-      const filteredNodes = nodes.filter(isElementNode);
+      const filteredNodes = nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
       this._addStyleNames(width, breakpoints);
       const boardCols = this._parseBoardCols(filteredNodes);
       const colsInRow = boardCols.reduce((a, b) => a + b, 0);

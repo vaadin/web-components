@@ -1,8 +1,9 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ContentController } from './content-controller.js';
 
 /**
  * A mixin providing common details functionality.
@@ -32,22 +33,39 @@ export const DetailsMixin = (superClass) =>
         _contentElements: {
           type: Array,
         },
-
-        /**
-         * An element used to toggle the content visibility.
-         *
-         * @type {!HTMLElement | undefined}
-         * @protected
-         */
-        _toggleElement: {
-          type: Object,
-          observer: '_toggleElementChanged',
-        },
       };
     }
 
     static get observers() {
-      return ['_openedOrToggleChanged(opened, _toggleElement)', '_openedOrContentChanged(opened, _contentElements)'];
+      return ['_openedOrContentChanged(opened, _contentElements)'];
+    }
+
+    constructor() {
+      super();
+
+      this._contentController = new ContentController(this);
+
+      this._contentController.addEventListener('slot-content-changed', (event) => {
+        const content = event.target.nodes || [];
+
+        // Exclude nodes that are no longer connected
+        this._contentElements = content.filter((node) => node.parentNode === this);
+      });
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.addController(this._contentController);
+
+      // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
+      // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.
+      this.addEventListener('click', (event) => {
+        if (event.target === this.focusElement) {
+          this.opened = !this.opened;
+        }
+      });
     }
 
     /** @private */
@@ -57,28 +75,5 @@ export const DetailsMixin = (superClass) =>
           el.setAttribute('aria-hidden', opened ? 'false' : 'true');
         });
       }
-    }
-
-    /** @private */
-    _openedOrToggleChanged(opened, toggleElement) {
-      if (toggleElement) {
-        toggleElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
-      }
-    }
-
-    /** @private */
-    _toggleElementChanged(toggleElement) {
-      if (toggleElement) {
-        // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
-        // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.
-        toggleElement.addEventListener('click', () => {
-          this._toggle();
-        });
-      }
-    }
-
-    /** @private */
-    _toggle() {
-      this.opened = !this.opened;
     }
   };

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -555,12 +555,12 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
    *
    * @param {!Options} jsonConfiguration Object chart configuration. Most important properties are:
    *
+   * - annotations `Object[]` custom labels or shapes that can be tied to points, axis coordinates or chart pixel coordinates.
+   *    Detailed API for annotations object is available in [API Site](http://api.highcharts.com/highcharts/annotations)
    * - chart `Object` with options regarding the chart area and plot area as well as general chart options.
    *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
    * - credits `Object` with options regarding the chart area and plot area as well as general chart options.
    *    Detailed API for credits object is available in [API Site](http://api.highcharts.com/highcharts/credits)
-   * - labels `Object[]` with HTML labels that can be positioned anywhere in the chart area
-   *    Detailed API for labels object is available in [API Site](http://api.highcharts.com/highcharts/labels)
    * - plotOptions `Object` wrapper for config objects for each series type.
    *    Detailed API for plotOptions object is available in [API Site](http://api.highcharts.com/highcharts/plotOptions)
    * - series `Object[]` the actual series to append to the chart.

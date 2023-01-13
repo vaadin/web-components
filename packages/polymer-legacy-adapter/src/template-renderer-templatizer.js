@@ -1,21 +1,21 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 
 export class Templatizer extends PolymerElement {
+  static get is() {
+    return 'vaadin-template-renderer-templatizer';
+  }
+
   static create(component, template) {
     const templatizer = new this();
     templatizer.__template = template;
     templatizer.__component = component;
     return templatizer;
-  }
-
-  static get is() {
-    return 'vaadin-template-renderer-templatizer';
   }
 
   constructor() {

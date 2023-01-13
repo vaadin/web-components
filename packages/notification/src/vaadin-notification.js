@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -376,6 +376,15 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return notification;
   }
 
+  /** @private */
+  get _container() {
+    if (!Notification._container) {
+      Notification._container = document.createElement('vaadin-notification-container');
+      document.body.appendChild(Notification._container);
+    }
+    return Notification._container;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -445,15 +454,6 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  get _container() {
-    if (!Notification._container) {
-      Notification._container = document.createElement('vaadin-notification-container');
-      document.body.appendChild(Notification._container);
-    }
-    return Notification._container;
-  }
-
-  /** @private */
   _openedChanged(opened) {
     if (opened) {
       this._container.opened = true;
@@ -491,7 +491,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     }
 
     this._card.slot = this.position;
-    if (this._container.firstElementChild && /top/.test(this.position)) {
+    if (this._container.firstElementChild && /top/u.test(this.position)) {
       this._container.insertBefore(this._card, this._container.firstElementChild);
     } else {
       this._container.appendChild(this._card);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2015 - 2022 Vaadin Ltd.
+ * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -137,6 +137,21 @@ export class ComboBoxScroller extends PolymerElement {
     this.__boundOnItemClick = this.__onItemClick.bind(this);
   }
 
+  get _viewportTotalPaddingBottom() {
+    if (this._cachedViewportTotalPaddingBottom === undefined) {
+      const itemsStyle = window.getComputedStyle(this.$.selector);
+      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
+        .map((v) => {
+          return parseInt(v, 10);
+        })
+        .reduce((sum, v) => {
+          return sum + v;
+        });
+    }
+
+    return this._cachedViewportTotalPaddingBottom;
+  }
+
   __openedChanged(opened) {
     if (opened) {
       this.requestContentUpdate();
@@ -239,8 +254,6 @@ export class ComboBoxScroller extends PolymerElement {
     if (this.__virtualizer && items) {
       this.__virtualizer.size = items.length;
       this.__virtualizer.flush();
-      // Ensure the total count of items is properly announced.
-      this.setAttribute('aria-setsize', items.length);
       this.requestContentUpdate();
     }
   }
@@ -305,6 +318,7 @@ export class ComboBoxScroller extends PolymerElement {
     el.setAttribute('role', this.__getAriaRole(index));
     el.setAttribute('aria-selected', this.__getAriaSelected(focusedIndex, index));
     el.setAttribute('aria-posinset', index + 1);
+    el.setAttribute('aria-setsize', this.items.length);
 
     if (this.theme) {
       el.setAttribute('theme', this.theme);
@@ -337,21 +351,6 @@ export class ComboBoxScroller extends PolymerElement {
         e.preventDefault();
       }
     });
-  }
-
-  get _viewportTotalPaddingBottom() {
-    if (this._cachedViewportTotalPaddingBottom === undefined) {
-      const itemsStyle = window.getComputedStyle(this.$.selector);
-      this._cachedViewportTotalPaddingBottom = [itemsStyle.paddingBottom, itemsStyle.borderBottomWidth]
-        .map((v) => {
-          return parseInt(v, 10);
-        })
-        .reduce((sum, v) => {
-          return sum + v;
-        });
-    }
-
-    return this._cachedViewportTotalPaddingBottom;
   }
 
   /**

@@ -191,10 +191,6 @@ describe('crud grid', () => {
           getBodyCellContent(grid, 0, 3).firstElementChild.click();
         });
 
-        it('should capitalize correctly', () => {
-          expect(grid.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
-        });
-
         it('should only render one control in a cell', async () => {
           grid.requestContentUpdate();
           await nextRender(grid);

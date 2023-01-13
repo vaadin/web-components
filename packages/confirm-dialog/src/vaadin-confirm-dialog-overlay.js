@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -141,6 +141,68 @@ class ConfirmDialogDialog extends Dialog {
         focus-trap
       ></vaadin-confirm-dialog-overlay>
     `;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Height to be set on the overlay content.
+       */
+      contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       */
+      contentWidth: {
+        type: String,
+      },
+
+      /** @private */
+      _overlayElement: {
+        type: Object,
+      },
+    };
+  }
+
+  static get observers() {
+    return [
+      '__updateContentHeight(contentHeight, _overlayElement)',
+      '__updateContentWidth(contentWidth, _overlayElement)',
+    ];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._overlayElement = this.$.overlay;
+  }
+
+  /** @private */
+  __updateDimension(overlay, dimension, value) {
+    const prop = `--_vaadin-confirm-dialog-content-${dimension}`;
+
+    if (value) {
+      overlay.style.setProperty(prop, value);
+    } else {
+      overlay.style.removeProperty(prop);
+    }
+  }
+
+  /** @private */
+  __updateContentHeight(height, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'height', height);
+    }
+  }
+
+  /** @private */
+  __updateContentWidth(width, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'width', width);
+    }
   }
 }
 

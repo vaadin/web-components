@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -379,16 +379,6 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
     return 'vaadin-map';
   }
 
-  /**
-   * The internal OpenLayers map instance used to configure the map.
-   * See the OpenLayers [API](https://openlayers.org/en/latest/apidoc/) and
-   * [examples](https://openlayers.org/en/latest/examples/) for further information.
-   * @returns {*}
-   */
-  get configuration() {
-    return this._configuration;
-  }
-
   constructor() {
     super();
     // Create map container element and initialize OL map instance
@@ -408,6 +398,16 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
       target: this._mapTarget,
     };
     this._configuration = new OpenLayersMap(options);
+  }
+
+  /**
+   * The internal OpenLayers map instance used to configure the map.
+   * See the OpenLayers [API](https://openlayers.org/en/latest/apidoc/) and
+   * [examples](https://openlayers.org/en/latest/examples/) for further information.
+   * @returns {*}
+   */
+  get configuration() {
+    return this._configuration;
   }
 
   /** @protected */

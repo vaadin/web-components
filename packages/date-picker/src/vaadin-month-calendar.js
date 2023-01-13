@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
@@ -205,16 +205,16 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     ];
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-    addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
-  }
-
   get focusableDateElement() {
     return [...this.shadowRoot.querySelectorAll('[part~=date]')].find((datePart) => {
       return dateEquals(datePart.date, this.focusedDate);
     });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+    addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
   }
 
   /* Returns true if all the dates in the month are out of the allowed range */

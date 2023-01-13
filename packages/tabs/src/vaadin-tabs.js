@@ -1,11 +1,12 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tab.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -178,6 +179,28 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     });
   }
 
+  /**
+   * @return {number}
+   * @protected
+   */
+  get _scrollOffset() {
+    return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
+  }
+
+  /**
+   * @return {!HTMLElement}
+   * @protected
+   * @override
+   */
+  get _scrollerElement() {
+    return this.$.scroll;
+  }
+
+  /** @private */
+  get __direction() {
+    return !this._vertical && this.__isRTL ? 1 : -1;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -221,39 +244,18 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     this._scroll(this.__direction * this._scrollOffset);
   }
 
-  /**
-   * @return {number}
-   * @protected
-   */
-  get _scrollOffset() {
-    return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
-  }
-
-  /**
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get _scrollerElement() {
-    return this.$.scroll;
-  }
-
-  /** @private */
-  get __direction() {
-    return !this._vertical && this.__isRTL ? 1 : -1;
-  }
-
   /** @private */
   _updateOverflow() {
     const scrollPosition = this._vertical
       ? this._scrollerElement.scrollTop
-      : this.__getNormalizedScrollLeft(this._scrollerElement);
+      : getNormalizedScrollLeft(this._scrollerElement, this.getAttribute('dir'));
     const scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
 
     let overflow = scrollPosition > 0 ? 'start' : '';
     overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
 
     if (this.__direction === 1) {
-      overflow = overflow.replace(/start|end/gi, (matched) => {
+      overflow = overflow.replace(/start|end/giu, (matched) => {
         return matched === 'start' ? 'end' : 'start';
       });
     }

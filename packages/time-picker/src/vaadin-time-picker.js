@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
@@ -121,6 +121,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           readonly="[[readonly]]"
           clear-button-visible="[[clearButtonVisible]]"
           auto-open-disabled="[[autoOpenDisabled]]"
+          overlay-class="[[overlayClass]]"
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
@@ -232,6 +233,15 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       autoOpenDisabled: Boolean,
 
+      /**
+       * A space-delimited list of CSS class names to set on the overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
+
       /** @private */
       __dropdownItems: {
         type: Array,
@@ -297,6 +307,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
               const MATCH_MILLISECONDS = '(\\d{1,3})';
               const re = new RegExp(
                 `^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`,
+                'u',
               );
               const parts = re.exec(text);
               if (parts) {
@@ -559,7 +570,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const generatedList = [];
 
     // Default step in overlay items is 1 hour
-    step = step || 3600;
+    if (!step) {
+      step = 3600;
+    }
 
     let time = -step + minSec;
     while (time + step >= minSec && time + step <= maxSec) {
@@ -663,16 +676,17 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __validateTime(timeObject) {
     if (timeObject) {
+      const stepSegment = this.__getStepSegment();
       timeObject.hours = parseInt(timeObject.hours);
       timeObject.minutes = parseInt(timeObject.minutes || 0);
-      timeObject.seconds = this.__stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
-      timeObject.milliseconds = this.__stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+      timeObject.seconds = stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
+      timeObject.milliseconds = stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
     }
     return timeObject;
   }
 
   /** @private */
-  get __stepSegment() {
+  __getStepSegment() {
     if (this.step % 3600 === 0) {
       // Accept hours
       return 1;

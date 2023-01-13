@@ -265,7 +265,7 @@ MockHttpRequest.prototype = {
     //  2. If final MIME type is not null, text/xml, application/xml,
     //     and does not end in +xml terminate these steps and return null.
     let mimetype = this.getResponseHeader('Content-Type');
-    mimetype = mimetype && mimetype.split(';', 1)[0];
+    mimetype &&= mimetype.split(';', 1)[0];
     if (
       mimetype == null ||
       mimetype === 'text/xml' ||
@@ -394,7 +394,7 @@ MockHttpRequest.prototype = {
   // See http://blog.stevenlevithan.com/archives/parseuri
   parseUri(str) {
     const pattern =
-      /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
+      /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/u;
     const key = [
       'source',
       'protocol',
@@ -411,7 +411,7 @@ MockHttpRequest.prototype = {
       'query',
       'anchor',
     ];
-    const querypattern = /(?:^|&)([^&=]*)=?([^&]*)/g;
+    const querypattern = /(?:^|&)([^&=]*)=?([^&]*)/gu;
 
     const match = pattern.exec(str);
     const uri = {};

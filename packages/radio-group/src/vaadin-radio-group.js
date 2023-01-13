@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -169,6 +169,34 @@ class RadioGroup extends FieldMixin(
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
   }
 
+  /**
+   * A collection of the group's radio buttons.
+   *
+   * @return {!Array<!RadioButton>}
+   * @private
+   */
+  get __radioButtons() {
+    return this.__filterRadioButtons([...this.children]);
+  }
+
+  /**
+   * A currently selected radio button.
+   *
+   * @return {!RadioButton | undefined}
+   * @private
+   */
+  get __selectedRadioButton() {
+    return this.__radioButtons.find((radioButton) => radioButton.checked);
+  }
+
+  /**
+   * @return {boolean}
+   * @private
+   */
+  get isHorizontalRTL() {
+    return this.__isRTL && this._theme !== 'vertical';
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -200,34 +228,6 @@ class RadioGroup extends FieldMixin(
    */
   __filterRadioButtons(nodes) {
     return nodes.filter((child) => child instanceof RadioButton);
-  }
-
-  /**
-   * A collection of the group's radio buttons.
-   *
-   * @return {!Array<!RadioButton>}
-   * @private
-   */
-  get __radioButtons() {
-    return this.__filterRadioButtons([...this.children]);
-  }
-
-  /**
-   * A currently selected radio button.
-   *
-   * @return {!RadioButton | undefined}
-   * @private
-   */
-  get __selectedRadioButton() {
-    return this.__radioButtons.find((radioButton) => radioButton.checked);
-  }
-
-  /**
-   * @return {boolean}
-   * @private
-   */
-  get isHorizontalRTL() {
-    return this.__isRTL && this._theme !== 'vertical';
   }
 
   /**

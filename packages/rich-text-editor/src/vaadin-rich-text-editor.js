@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -511,6 +511,13 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
   }
 
+  /** @private */
+  get _toolbarButtons() {
+    return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter((btn) => {
+      return btn.clientHeight > 0;
+    });
+  }
+
   /**
    * @param {string} prop
    * @param {?string} oldVal
@@ -906,17 +913,17 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     let content = editor.innerHTML;
 
     // Remove Quill classes, e.g. ql-syntax, except for align
-    content = content.replace(/\s*ql-(?!align)[\w-]*\s*/g, '');
+    content = content.replace(/\s*ql-(?!align)[\w-]*\s*/gu, '');
 
     // Replace Quill align classes with inline styles
     [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
       content = content.replace(
-        new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'),
+        new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'gu'),
         ` style="text-align: ${align}"`,
       );
     });
 
-    content = content.replace(/ class=""/g, '');
+    content = content.replace(/ class=""/gu, '');
 
     this._setHtmlValue(content);
   }
@@ -956,13 +963,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         announcer.textContent = formatting;
       },
     );
-  }
-
-  /** @private */
-  get _toolbarButtons() {
-    return Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] button')).filter((btn) => {
-      return btn.clientHeight > 0;
-    });
   }
 
   /** @private */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
@@ -12,8 +12,4 @@ export declare function DirMixin<T extends Constructor<HTMLElement>>(base: T): C
 
 export declare class DirMixinClass {
   protected readonly __isRTL: boolean;
-
-  protected __getNormalizedScrollLeft(element: Element | null): number;
-
-  protected __setNormalizedScrollLeft(element: Element | null, scrollLeft: number): void;
 }

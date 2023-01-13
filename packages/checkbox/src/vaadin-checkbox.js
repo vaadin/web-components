@@ -1,15 +1,15 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -84,30 +84,41 @@ class Checkbox extends LabelMixin(
           align-items: baseline;
         }
 
-        .vaadin-checkbox-wrapper {
-          position: relative;
-          height: 100%;
+        [part='checkbox'],
+        ::slotted(input),
+        ::slotted(label) {
+          grid-row: 1;
+        }
+
+        [part='checkbox'],
+        ::slotted(input) {
+          grid-column: 1;
+        }
+
+        [part='checkbox'] {
+          width: var(--vaadin-checkbox-size, 1em);
+          height: var(--vaadin-checkbox-size, 1em);
+        }
+
+        [part='checkbox']::before {
+          display: block;
+          content: '\\202F';
+          line-height: var(--vaadin-checkbox-size, 1em);
+          contain: paint;
         }
 
         /* visually hidden */
         ::slotted(input) {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          width: 100%;
-          height: 100%;
           opacity: 0;
           cursor: inherit;
           margin: 0;
+          align-self: stretch;
+          -webkit-appearance: none;
         }
       </style>
       <div class="vaadin-checkbox-container">
-        <div class="vaadin-checkbox-wrapper">
-          <div part="checkbox"></div>
-          <slot name="input"></slot>
-        </div>
-
+        <div part="checkbox"></div>
+        <slot name="input"></slot>
         <slot name="label"></slot>
       </div>
       <slot name="tooltip"></slot>

@@ -1,48 +1,17 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-accordion-heading.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { SummaryController } from '@vaadin/details/src/summary-controller.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-class SummaryController extends SlotObserveController {
-  constructor(host) {
-    super(host, 'summary', 'vaadin-accordion-heading', {
-      initializer: (node, host) => {
-        host._setFocusElement(node);
-        host.stateTarget = node;
-      },
-    });
-  }
-}
-
-class ContentController extends SlotObserveController {
-  /**
-   * Override method from `SlotController` to change
-   * the ID prefix for the default slot content.
-   *
-   * @param {HTMLElement} host
-   * @return {string}
-   * @protected
-   * @override
-   */
-  static generateId(host) {
-    return super.generateId(host, 'content');
-  }
-
-  constructor(host) {
-    super(host, '', null, { multiple: true });
-  }
-}
 
 /**
  * The accordion panel element.
@@ -67,6 +36,13 @@ class ContentController extends SlotObserveController {
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes ControllerMixin
+ * @mixes DetailsMixin
+ * @mixes DelegateFocusMixin
+ * @mixes DelegateStateMixin
+ * @mixes ThemableMixin
  */
 class AccordionPanel extends DetailsMixin(
   DelegateFocusMixin(DelegateStateMixin(ThemableMixin(ControllerMixin(PolymerElement)))),
@@ -110,14 +86,18 @@ class AccordionPanel extends DetailsMixin(
   static get properties() {
     return {
       /**
-       * A content element.
-       *
-       * @protected
+       * A text that is displayed in the heading, if no
+       * element is assigned to the `summary` slot.
        */
-      _collapsible: {
-        type: Object,
+      summary: {
+        type: String,
+        observer: '_summaryChanged',
       },
     };
+  }
+
+  static get observers() {
+    return ['__updateAriaAttributes(focusElement, _contentElements)'];
   }
 
   static get delegateAttrs() {
@@ -128,13 +108,29 @@ class AccordionPanel extends DetailsMixin(
     return ['disabled', 'opened'];
   }
 
+  constructor() {
+    super();
+
+    this._summaryController = new SummaryController(this, 'vaadin-accordion-heading');
+    this._summaryController.addEventListener('slot-content-changed', (event) => {
+      const { node } = event.target;
+
+      this._setFocusElement(node);
+      this.stateTarget = node;
+
+      this._tooltipController.setTarget(node);
+    });
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setPosition('bottom-start');
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this._initSummary();
-    this._initContent();
-    this._initTooltip();
+    this.addController(this._summaryController);
+    this.addController(this._tooltipController);
   }
 
   /**
@@ -149,47 +145,26 @@ class AccordionPanel extends DetailsMixin(
   }
 
   /** @private */
-  _initSummary() {
-    this._summaryController = new SummaryController(this);
-    this.addController(this._summaryController);
-
-    // Wait for heading element render to complete
-    afterNextRender(this, () => {
-      this._toggleElement = this.focusElement.$.button;
-    });
+  _summaryChanged(summary) {
+    this._summaryController.setSummary(summary);
   }
 
   /** @private */
-  _initContent() {
-    this._contentController = new ContentController(this);
-    this._contentController.addEventListener('slot-content-changed', (event) => {
-      // Store nodes to toggle `aria-hidden` attribute
-      const content = event.target.nodes || [];
-      this._contentElements = content;
+  __updateAriaAttributes(focusElement, contentElements) {
+    if (focusElement && contentElements) {
+      const node = contentElements[0];
 
-      // See https://www.w3.org/WAI/ARIA/apg/patterns/accordion/
-      const node = content[0];
       if (node) {
         node.setAttribute('role', 'region');
-        node.setAttribute('aria-labelledby', this.focusElement.id);
+        node.setAttribute('aria-labelledby', focusElement.id);
       }
 
-      if (node && node.parentNode === this && node.id) {
-        this.focusElement.setAttribute('aria-controls', node.id);
+      if (node && node.id) {
+        focusElement.setAttribute('aria-controls', node.id);
       } else {
-        this.focusElement.removeAttribute('aria-controls');
+        focusElement.removeAttribute('aria-controls');
       }
-    });
-    this.addController(this._contentController);
-  }
-
-  /** @private */
-  _initTooltip() {
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-
-    this._tooltipController.setTarget(this.focusElement);
-    this._tooltipController.setPosition('bottom-start');
+    }
   }
 }
 

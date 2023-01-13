@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-multi-select-combo-box-chip.js';
@@ -154,6 +154,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           readonly="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValue]]"
+          overlay-class="[[overlayClass]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
           last-filter="{{_lastFilter}}"
@@ -303,6 +304,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         value: false,
         reflectToAttribute: true,
+      },
+
+      /**
+       * A space-delimited list of CSS class names to set on the overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
       },
 
       /**
@@ -486,6 +496,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @protected */
   get _chips() {
     return [...this.querySelectorAll('[slot="chip"]')];
+  }
+
+  /**
+   * Override a getter from `InputMixin` to compute
+   * the presence of value based on `selectedItems`.
+   *
+   * @protected
+   * @override
+   */
+  get _hasValue() {
+    return this.selectedItems && this.selectedItems.length > 0;
   }
 
   /** @protected */
@@ -1117,17 +1138,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
     return !items && readonly ? selectedItems : filteredItems;
-  }
-
-  /**
-   * Override a method from `InputMixin` to
-   * compute the presence of value based on `selectedItems`.
-   *
-   * @protected
-   * @override
-   */
-  get _hasValue() {
-    return this.selectedItems && this.selectedItems.length > 0;
   }
 }
 

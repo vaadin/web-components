@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
@@ -65,7 +65,7 @@ export const ActiveItemMixin = (superClass) =>
 
       const activeElement = this.getRootNode().activeElement;
       const cellContentHasFocus = cellContent.contains(activeElement);
-      if (!cellContentHasFocus && !this._isFocusable(e.target)) {
+      if (!cellContentHasFocus && !this._isFocusable(e.target) && !(e.target instanceof HTMLLabelElement)) {
         this.dispatchEvent(
           new CustomEvent('cell-activate', {
             detail: {
@@ -109,7 +109,7 @@ export const isFocusable = (target) => {
   }
   const focusables = Array.from(
     target.parentNode.querySelectorAll(
-      '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]',
+      '[tabindex], button, input, select, textarea, object, iframe, a[href], area[href]',
     ),
   ).filter((element) => {
     const part = element.getAttribute('part');
@@ -117,5 +117,7 @@ export const isFocusable = (target) => {
   });
 
   const isFocusableElement = focusables.includes(target);
-  return !target.disabled && isFocusableElement;
+  return (
+    !target.disabled && isFocusableElement && target.offsetParent && getComputedStyle(target).visibility !== 'hidden'
+  );
 };

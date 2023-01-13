@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
@@ -29,6 +29,16 @@ export const LabelMixin = dedupingMixin(
         };
       }
 
+      constructor() {
+        super();
+
+        this._labelController = new LabelController(this);
+
+        this._labelController.addEventListener('slot-content-changed', (event) => {
+          this.toggleAttribute('has-label', event.detail.hasContent);
+        });
+      }
+
       /** @protected */
       get _labelId() {
         const node = this._labelNode;
@@ -38,16 +48,6 @@ export const LabelMixin = dedupingMixin(
       /** @protected */
       get _labelNode() {
         return this._labelController.node;
-      }
-
-      constructor() {
-        super();
-
-        this._labelController = new LabelController(this);
-
-        this._labelController.addEventListener('slot-content-changed', (event) => {
-          this.toggleAttribute('has-label', event.detail.hasContent);
-        });
       }
 
       /** @protected */

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -59,55 +59,6 @@ import { Chart, deepMerge } from './vaadin-chart.js';
 class ChartSeries extends PolymerElement {
   static get is() {
     return 'vaadin-chart-series';
-  }
-
-  get options() {
-    const options = deepMerge({}, this.additionalOptions);
-
-    if (this.type) {
-      options.type = this.type;
-    }
-
-    if (this.title) {
-      options.name = this.title;
-    }
-
-    if (this.values) {
-      options.data = this.values;
-    }
-
-    if (this.markers) {
-      if (!this.__isMarkersValid()) {
-        this.markers = 'auto';
-      }
-      options.marker = this.__markersConfiguration;
-    }
-
-    if (this.unit) {
-      options.yAxis = this.unit;
-    }
-
-    if (this.stack) {
-      options.stack = this.stack;
-    }
-
-    if (isFinite(this.valueMin)) {
-      options.yAxisValueMin = this.valueMin;
-    }
-
-    if (isFinite(this.valueMax)) {
-      options.yAxisValueMax = this.valueMax;
-    }
-
-    if (this.neckWidth) {
-      options.neckWidth = this.neckWidth;
-    }
-
-    if (this.neckPosition) {
-      options.neckHeight = this.neckPosition;
-    }
-
-    return options;
   }
 
   static get properties() {
@@ -274,6 +225,74 @@ class ChartSeries extends PolymerElement {
     ];
   }
 
+  get options() {
+    const options = deepMerge({}, this.additionalOptions);
+
+    if (this.type) {
+      options.type = this.type;
+    }
+
+    if (this.title) {
+      options.name = this.title;
+    }
+
+    if (this.values) {
+      options.data = this.values;
+    }
+
+    if (this.markers) {
+      if (!this.__isMarkersValid()) {
+        this.markers = 'auto';
+      }
+      options.marker = this.__markersConfiguration;
+    }
+
+    if (this.unit) {
+      options.yAxis = this.unit;
+    }
+
+    if (this.stack) {
+      options.stack = this.stack;
+    }
+
+    if (isFinite(this.valueMin)) {
+      options.yAxisValueMin = this.valueMin;
+    }
+
+    if (isFinite(this.valueMax)) {
+      options.yAxisValueMax = this.valueMax;
+    }
+
+    if (this.neckWidth) {
+      options.neckWidth = this.neckWidth;
+    }
+
+    if (this.neckPosition) {
+      options.neckHeight = this.neckPosition;
+    }
+
+    return options;
+  }
+
+  /** @private */
+  get __markersConfiguration() {
+    const config = {};
+    switch (this.markers) {
+      case 'shown':
+        config.enabled = true;
+        break;
+      case 'hidden':
+        config.enabled = false;
+        break;
+      case 'auto':
+      default:
+        config.enabled = null;
+        break;
+    }
+
+    return config;
+  }
+
   /**
    * Method to attach a series object of type `Highcharts.Series`.
    * @param {!Series} series Object of type `Highcharts.Series`
@@ -416,25 +435,6 @@ class ChartSeries extends PolymerElement {
     series.update({
       marker: this.__markersConfiguration,
     });
-  }
-
-  /** @private */
-  get __markersConfiguration() {
-    const config = {};
-    switch (this.markers) {
-      case 'shown':
-        config.enabled = true;
-        break;
-      case 'hidden':
-        config.enabled = false;
-        break;
-      case 'auto':
-      default:
-        config.enabled = null;
-        break;
-    }
-
-    return config;
   }
 
   /** @private */

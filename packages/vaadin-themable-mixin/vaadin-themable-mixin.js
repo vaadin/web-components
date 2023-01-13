@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, CSSResult, unsafeCSS } from 'lit';
@@ -77,7 +77,7 @@ function getAllThemes() {
  */
 function matchesThemeFor(themeFor, tagName) {
   return (themeFor || '').split(' ').some((themeForToken) => {
-    return new RegExp(`^${themeForToken.split('*').join('.*')}$`).test(tagName);
+    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
   });
 }
 

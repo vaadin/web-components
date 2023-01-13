@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2022 Vaadin Ltd.
+ * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementFocused, isElementHidden } from './focus-utils.js';
@@ -14,17 +14,6 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  */
 export const KeyboardDirectionMixin = (superclass) =>
   class KeyboardDirectionMixinClass extends KeyboardMixin(superclass) {
-    /** @protected */
-    focus() {
-      const items = this._getItems();
-      if (Array.isArray(items)) {
-        const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
-        if (idx >= 0) {
-          items[idx].focus();
-        }
-      }
-    }
-
     /**
      * @return {Element | null}
      * @protected
@@ -39,6 +28,17 @@ export const KeyboardDirectionMixin = (superclass) =>
      */
     get _vertical() {
       return true;
+    }
+
+    /** @protected */
+    focus() {
+      const items = this._getItems();
+      if (Array.isArray(items)) {
+        const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
+        if (idx >= 0) {
+          items[idx].focus();
+        }
+      }
     }
 
     /**

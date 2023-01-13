@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './safe-area-inset.js';
@@ -164,8 +164,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           }
         }
 
-        [part='navbar'],
-        [part='navbar']::before {
+        [part='navbar'] {
           position: fixed;
           display: flex;
           align-items: center;
@@ -213,6 +212,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           outline: none;
           /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
           visibility: hidden;
+          display: flex;
+          flex-direction: column;
         }
 
         :host([drawer-opened]) [part='drawer'] {
@@ -263,8 +264,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           transform: translateX(100%);
         }
 
-        :host([dir='rtl']) [part='navbar'],
-        :host([dir='rtl']) [part='navbar']::before {
+        :host([dir='rtl']) [part='navbar'] {
           transition: right var(--vaadin-app-layout-transition);
         }
 
@@ -288,6 +288,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           [part='drawer'] {
             width: 20em;
           }
+        }
+
+        /* If a vaadin-scroller is used in the drawer, allow it to take all remaining space and contain scrolling */
+        [part='drawer'] ::slotted(vaadin-scroller) {
+          flex: 1;
+          overscroll-behavior: contain;
         }
       </style>
       <div part="navbar" id="navbarTop">
@@ -518,7 +524,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   __drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
     if (this.overlay) {
       if (drawerOpened) {
-        this._updateDrawerHeight();
         this.__trapFocusInDrawer();
       } else if (oldDrawerOpened) {
         this.__releaseFocusFromDrawer();
@@ -605,13 +610,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   }
 
   /** @protected */
-  _updateDrawerHeight() {
-    const { scrollHeight, offsetHeight } = this.$.drawer;
-    const height = scrollHeight > offsetHeight ? `${scrollHeight}px` : '100%';
-    this.style.setProperty('--_vaadin-app-layout-drawer-scroll-size', height);
-  }
-
-  /** @protected */
   _updateOverlayMode() {
     const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
 
@@ -628,7 +626,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       this._drawerStateSaved = null;
     }
 
-    this._updateDrawerHeight();
     this.__updateDrawerAriaAttributes();
   }
 

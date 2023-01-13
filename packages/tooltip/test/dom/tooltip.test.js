@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-tooltip.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -32,6 +32,26 @@ describe('vaadin-tooltip', () => {
     it(position, async () => {
       tooltip.position = position;
       await expect(tooltip).shadowDom.to.equalSnapshot();
+    });
+  });
+
+  describe('opened', () => {
+    let overlay;
+
+    beforeEach(async () => {
+      overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      tooltip.manual = true;
+      tooltip.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    it('overlay', async () => {
+      await expect(overlay).dom.to.equalSnapshot();
+    });
+
+    it('overlay class', async () => {
+      tooltip.overlayClass = 'custom tooltip-overlay';
+      await expect(overlay).dom.to.equalSnapshot();
     });
   });
 });

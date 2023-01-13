@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2022 Vaadin Ltd.
+ * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
@@ -54,6 +54,9 @@ class TooltipOverlay extends PositionMixin(Overlay) {
     if (!memoizedTemplate) {
       memoizedTemplate = super.template.cloneNode(true);
       memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
+
+      // Remove whitespace text nodes around the content slot to allow "white-space: pre"
+      memoizedTemplate.content.querySelector('[part~="content"]').innerHTML = '<slot></slot>';
     }
 
     return memoizedTemplate;

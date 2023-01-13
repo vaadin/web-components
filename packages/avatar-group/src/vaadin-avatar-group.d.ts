@@ -1,11 +1,12 @@
 /**
  * @license
- * Copyright (c) 2020 - 2022 Vaadin Ltd.
+ * Copyright (c) 2020 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -65,7 +66,9 @@ export interface AvatarGroupItem {
  *
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  */
-declare class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
+declare class AvatarGroup extends ResizeMixin(
+  OverlayClassMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))),
+) {
   readonly _avatars: HTMLElement[];
 
   /**

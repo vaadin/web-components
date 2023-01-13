@@ -79,6 +79,11 @@ describe('vaadin-combo-box', () => {
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
+      it('overlay class', async () => {
+        comboBox.overlayClass = 'combo-box-overlay custom';
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
       it('theme overlay', async () => {
         comboBox.setAttribute('theme', 'align-right');
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);

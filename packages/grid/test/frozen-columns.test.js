@@ -1,7 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import '../vaadin-grid.js';
+import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
   flushGrid,
@@ -41,6 +43,8 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
     };
   });
 
+  sinon.spy(grid, '_updateFrozenColumn');
+
   grid.dataProvider = infiniteDataProvider;
   return [grid, columns];
 };
@@ -65,8 +69,13 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(columns[0]._lastFrozen).to.be.true;
 
       columns[0].frozen = false;
+      flushGrid(grid);
 
       expect(columns[0]._lastFrozen).to.be.false;
+    });
+
+    it('should update frozen columns once on init', () => {
+      expect(grid._updateFrozenColumn.callCount).to.equal(1);
     });
 
     ['header', 'body'].forEach((container) => {
@@ -88,6 +97,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
 
         it('should have a frozen cell in a row', () => {
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].hasAttribute('frozen')).to.be.true;
           expect(cells[1].hasAttribute('frozen')).not.to.be.true;
           expect(cells[2].hasAttribute('frozen')).not.to.be.true;
@@ -97,6 +107,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][1].frozen = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
@@ -106,6 +117,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][1].frozen = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].getAttribute('part')).to.not.contain('last-frozen-cell');
           expect(cells[1].getAttribute('part')).to.contain('last-frozen-cell');
           expect(cells[2].getAttribute('part')).to.not.contain('last-frozen-cell');
@@ -121,7 +133,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             done();
           });
 
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should update transforms when frozen columns decrease', (done) => {
@@ -137,7 +149,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             expect(transformsEqual(cells[0], '')).to.be.true;
             done();
           });
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should update transforms when frozen columns increase', (done) => {
@@ -153,7 +165,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             expect(transformsEqual(cells[1], `translate(${translateValue}px, 0px)`)).to.be.true;
             done();
           });
-          grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
+          setNormalizedScrollLeft(grid.$.table, direction, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
         it('should have the correct last-frozen cell in a row with hidden columns', () => {
@@ -162,12 +174,14 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).to.be.true;
 
           grid._columnTree[0][2].hidden = true;
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).to.be.true;
           expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
@@ -193,6 +207,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       expect(columns[2]._firstFrozenToEnd).to.be.true;
 
       columns[2].frozenToEnd = false;
+      flushGrid(grid);
 
       expect(columns[2]._firstFrozenToEnd).to.be.false;
     });
@@ -241,6 +256,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][1].frozenToEnd = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
@@ -250,6 +266,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][1].frozenToEnd = true;
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
+          flushGrid(grid);
           expect(cells[0].getAttribute('part')).to.not.contain('first-frozen-to-end-cell');
           expect(cells[1].getAttribute('part')).to.contain('first-frozen-to-end-cell');
           expect(cells[2].getAttribute('part')).to.not.contain('first-frozen-to-end-cell');
@@ -291,12 +308,15 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
 
+          flushGrid(grid);
+
           expect(cells[0].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
 
           grid._columnTree[0][0].hidden = true;
 
+          flushGrid(grid);
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;

@@ -91,7 +91,7 @@ describe('input-controller', () => {
   describe('unique id', () => {
     let wrapper, elements;
 
-    const ID_REGEX = /^input-input-controller-element-\d+$/;
+    const ID_REGEX = /^input-input-controller-element-\d+$/u;
 
     beforeEach(() => {
       wrapper = fixtureSync(`

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './style.js';
@@ -25,6 +25,7 @@ const badge = css`
     text-transform: initial;
     letter-spacing: initial;
     min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+    flex-shrink: 0;
   }
 
   /* Ensure proper vertical alignment */

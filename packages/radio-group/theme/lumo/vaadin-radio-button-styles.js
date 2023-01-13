@@ -21,32 +21,28 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
+      --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
     }
 
     :host([has-label]) ::slotted(label) {
-      padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
+      padding-block: var(--lumo-space-xs);
+      padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     [part='radio'] {
-      width: calc(var(--lumo-size-m) / 2);
-      height: calc(var(--lumo-size-m) / 2);
       margin: var(--lumo-space-xs);
       position: relative;
       border-radius: 50%;
       background-color: var(--lumo-contrast-20pct);
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       will-change: transform;
-      line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
     }
 
     /* Used for activation "halo" */
     [part='radio']::before {
-      /* Needed to align the radio-button nicely on the baseline */
-      content: '\\2003';
       pointer-events: none;
       color: transparent;
-      display: inline-block;
       width: 100%;
       height: 100%;
       border-radius: inherit;

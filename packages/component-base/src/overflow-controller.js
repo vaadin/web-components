@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -92,7 +92,7 @@ export class OverflowController {
       overflow += ' top';
     }
 
-    if (target.scrollTop < target.scrollHeight - target.clientHeight) {
+    if (Math.ceil(target.scrollTop) < Math.ceil(target.scrollHeight - target.clientHeight)) {
       overflow += ' bottom';
     }
 
@@ -101,7 +101,7 @@ export class OverflowController {
       overflow += ' start';
     }
 
-    if (scrollLeft < target.scrollWidth - target.clientWidth) {
+    if (Math.ceil(scrollLeft) < Math.ceil(target.scrollWidth - target.clientWidth)) {
       overflow += ' end';
     }
 

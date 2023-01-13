@@ -106,6 +106,7 @@ describe('number-field', () => {
 
       it('step buttons visible', async () => {
         element.stepButtonsVisible = true;
+        element.value = 5;
         await visualDiff(div, `${dir}-step-buttons-visible`);
       });
 

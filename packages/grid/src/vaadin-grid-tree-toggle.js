@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -192,7 +192,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
     if (this.leaf) {
       return;
     }
-    if (isFocusable(e.target)) {
+    if (isFocusable(e.target) || e.target instanceof HTMLLabelElement) {
       return;
     }
 

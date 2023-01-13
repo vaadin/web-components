@@ -9,14 +9,14 @@ const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
 const API_DOCS_BASE_PATH = 'https://cdn.vaadin.com/vaadin-web-components';
 
 const blacklistedPackages = [
-  /^vaadin-/,
-  /^component-base/,
-  /^field-base/,
-  /^field-highlighter/,
-  /^icons/,
-  /^input-container/,
-  /^lit-renderer/,
-  /^polymer-legacy-adapter/,
+  /^vaadin-/u,
+  /^component-base/u,
+  /^field-base/u,
+  /^field-highlighter/u,
+  /^icons/u,
+  /^input-container/u,
+  /^lit-renderer/u,
+  /^polymer-legacy-adapter/u,
 ];
 
 // Additional attributes that will be added to all components
@@ -56,7 +56,7 @@ function loadAnalysis() {
  * @returns {string[]}
  */
 function mapType(typeString) {
-  const sanitizedTypeString = (typeString || '').replace(/[!()]/g, '');
+  const sanitizedTypeString = (typeString || '').replace(/[!()]/gu, '');
   const types = sanitizedTypeString.split('|');
   return types.map((type) => type.trim());
 }
@@ -71,19 +71,19 @@ function mapType(typeString) {
 function transformDescription(packageJson, description) {
   // Transform relative documentation links to absolute ones
   description = description.replace(
-    /\(#\/elements\/(.*)\)/g, // Matches "(#/elements/$1)"
+    /\(#\/elements\/(.*)\)/gu, // Matches "(#/elements/$1)"
     `(${API_DOCS_BASE_PATH}/${packageJson.version}/#/elements/$1)`,
   );
   // Remove multiple newlines between subsequent code examples,
   // The IntelliJ markdown renderer will otherwise collapse
   // both examples into one
-  description = description.replace(/```(\n)+```/g, '```\n```');
+  description = description.replace(/```(\n)+```/gu, '```\n```');
 
   return description;
 }
 
 function camelize(text) {
-  return text.replace(/-./g, (x) => x[1].toUpperCase());
+  return text.replace(/-./gu, (x) => x[1].toUpperCase());
 }
 
 function isWritablePrimitiveAttribute(elementAnalysis, attribute) {

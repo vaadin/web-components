@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -95,6 +95,15 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
     this.focused;
   }
 
+  /**
+   * @return {!HTMLElement}
+   * @protected
+   * @override
+   */
+  get _scrollerElement() {
+    return this.shadowRoot.querySelector('[part="items"]');
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -104,14 +113,6 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
-  }
-
-  /**
-   * @return {!HTMLElement}
-   * @protected
-   */
-  get _scrollerElement() {
-    return this.shadowRoot.querySelector('[part="items"]');
   }
 
   /** @private */

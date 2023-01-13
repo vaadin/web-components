@@ -1,14 +1,14 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotObserveController } from '@vaadin/component-base/src/slot-observe-controller.js';
+import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
  * A controller that manages the error message node content.
  */
-export class ErrorController extends SlotObserveController {
+export class ErrorController extends SlotChildObserveController {
   constructor(host) {
     super(host, 'error-message', 'div');
   }
@@ -79,8 +79,8 @@ export class ErrorController extends SlotObserveController {
   }
 
   /**
-   * Override method inherited from `SlotObserveController`
-   * to restore and the default error message element.
+   * Override method inherited from `SlotChildObserveController`
+   * to restore the default error message element.
    *
    * @protected
    * @override
@@ -90,7 +90,7 @@ export class ErrorController extends SlotObserveController {
   }
 
   /**
-   * Override method inherited from `SlotObserveController`
+   * Override method inherited from `SlotChildObserveController`
    * to update the error message text and hidden state.
    *
    * Note: unlike with other controllers, this method is

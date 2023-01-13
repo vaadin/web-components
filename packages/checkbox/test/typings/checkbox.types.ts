@@ -1,12 +1,12 @@
 import '../../vaadin-checkbox.js';
 import type { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
-import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { CheckboxCheckedChangedEvent, CheckboxIndeterminateChangedEvent } from '../../vaadin-checkbox.js';

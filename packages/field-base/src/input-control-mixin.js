@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldMixin } from './field-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { SlotStylesMixin } from './slot-styles-mixin.js';
@@ -315,8 +315,8 @@ export const InputControlMixin = (superclass) =>
     _allowedCharPatternChanged(charPattern) {
       if (charPattern) {
         try {
-          this.__allowedCharRegExp = new RegExp(`^${charPattern}$`);
-          this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`);
+          this.__allowedCharRegExp = new RegExp(`^${charPattern}$`, 'u');
+          this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`, 'u');
         } catch (e) {
           console.error(e);
         }

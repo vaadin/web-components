@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
@@ -219,6 +219,12 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
     }
     this._textArea.focus();
   }
+
+  /**
+   * Fired when a new message is submitted with `<vaadin-message-input>`, either
+   * by clicking the "send" button, or pressing the Enter key.
+   * @event submit
+   */
 }
 
 customElements.define(MessageInput.is, MessageInput);

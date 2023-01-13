@@ -250,17 +250,17 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should show reject button when reject is true', () => {
-        confirm.reject = true;
+        confirm.rejectButtonVisible = true;
         expect(rejectButton.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should reflect reject property to attribute', () => {
-        confirm.reject = true;
-        expect(confirm.hasAttribute('reject')).to.be.true;
+      it('should reflect rejectButtonVisible property to attribute', () => {
+        confirm.rejectButtonVisible = true;
+        expect(confirm.hasAttribute('reject-button-visible')).to.be.true;
       });
 
       it('should close dialog on reject button click', () => {
-        confirm.reject = true;
+        confirm.rejectButtonVisible = true;
         rejectButton.click();
         expect(confirm.opened).to.be.false;
       });
@@ -296,17 +296,17 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should show cancel button when cancel is true', () => {
-        confirm.cancel = true;
+        confirm.cancelButtonVisible = true;
         expect(cancelButton.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should reflect cancel property to attribute', () => {
-        confirm.cancel = true;
-        expect(confirm.hasAttribute('cancel')).to.be.true;
+      it('should reflect cancelButtonVisible property to attribute', () => {
+        confirm.cancelButtonVisible = true;
+        expect(confirm.hasAttribute('cancel-button-visible')).to.be.true;
       });
 
       it('should close dialog on cancel button click', () => {
-        confirm.cancel = true;
+        confirm.cancelButtonVisible = true;
         cancelButton.click();
         expect(confirm.opened).to.be.false;
       });
@@ -408,7 +408,7 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should dispatch cancel event on cancel button click', () => {
-      confirm.cancel = true;
+      confirm.cancelButtonVisible = true;
       const spy = sinon.spy();
       confirm.addEventListener('cancel', spy);
       overlay.querySelector('[slot="cancel-button"]').click();
@@ -416,7 +416,7 @@ describe('vaadin-confirm-dialog', () => {
     });
 
     it('should dispatch reject event on reject button click', () => {
-      confirm.reject = true;
+      confirm.rejectButtonVisible = true;
       const spy = sinon.spy();
       confirm.addEventListener('reject', spy);
       overlay.querySelector('[slot="reject-button"]').click();
@@ -467,27 +467,50 @@ describe('vaadin-confirm-dialog', () => {
   });
 
   describe('set width and height', () => {
-    let confirm, overlay, spy;
+    let confirm, overlay;
+
+    function getStyleValue(element) {
+      return element
+        .getAttribute('style')
+        .split(':')
+        .map((str) => str.trim().replace(';', ''));
+    }
 
     describe('default', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
         overlay = confirm.$.dialog.$.overlay;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        spy = sinon.spy(confirm, '_setDimension');
       });
 
       it('should update width after opening the dialog', () => {
-        confirm._setWidth('300px');
-        expect(spy.calledWith('width', '300px')).to.be.true;
+        confirm._contentWidth = '300px';
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
       });
 
       it('should update height after opening the dialog', () => {
-        confirm._setHeight('500px');
-        expect(spy.calledWith('height', '500px')).to.be.true;
-        expect(spy.calledWith('height', '500px')).to.be.true;
+        confirm._contentHeight = '500px';
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+      });
+
+      it('should reset style after setting width to null', () => {
+        const prop = '--_vaadin-confirm-dialog-content-width';
+
+        confirm._contentWidth = '500px';
+        expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+        confirm._contentWidth = null;
+        expect(overlay.getAttribute('style')).to.be.not.ok;
+      });
+
+      it('should reset style after setting height to null', () => {
+        const prop = '--_vaadin-confirm-dialog-content-height';
+
+        confirm._contentHeight = '500px';
+        expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+        confirm._contentHeight = null;
+        expect(overlay.getAttribute('style')).to.be.not.ok;
       });
     });
 
@@ -495,7 +518,6 @@ describe('vaadin-confirm-dialog', () => {
       beforeEach(() => {
         confirm = document.createElement('vaadin-confirm-dialog');
         confirm.message = 'Message';
-        spy = sinon.spy(confirm, '_setDimension');
       });
 
       afterEach(() => {
@@ -503,22 +525,20 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should update width after opening the dialog', async () => {
-        confirm._setWidth('200px');
+        confirm._contentWidth = '200px';
         document.body.appendChild(confirm);
         overlay = confirm.$.dialog.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledWith('width', '200px')).to.be.true;
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('200px');
       });
 
       it('should update height after opening the dialog', async () => {
-        confirm._setHeight('500px');
+        confirm._contentHeight = '500px';
         document.body.appendChild(confirm);
         overlay = confirm.$.dialog.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledWith('height', '500px')).to.be.true;
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
     });

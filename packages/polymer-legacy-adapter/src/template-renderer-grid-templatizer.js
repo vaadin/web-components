@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Templatizer } from './template-renderer-templatizer.js';
@@ -11,6 +11,19 @@ export class GridTemplatizer extends Templatizer {
    */
   static get is() {
     return 'vaadin-template-renderer-grid-templatizer';
+  }
+
+  /**
+   * Returns a reference to the grid which the templatizer is connected to.
+   *
+   * @private
+   */
+  get __grid() {
+    if (this.__component.__gridElement) {
+      return this.__component;
+    }
+
+    return this.__component._grid;
   }
 
   /**
@@ -36,7 +49,7 @@ export class GridTemplatizer extends Templatizer {
 
     const index = this.__grid.items.indexOf(instance.item);
 
-    path = path.replace(/^item\./, '');
+    path = path.replace(/^item\./u, '');
     path = `items.${index}.${path}`;
 
     this.__grid.notifyPath(path, value);
@@ -97,19 +110,6 @@ export class GridTemplatizer extends Templatizer {
     } else {
       this.__grid.closeItemDetails(instance.item);
     }
-  }
-
-  /**
-   * Returns a reference to the grid which the templatizer is connected to.
-   *
-   * @private
-   */
-  get __grid() {
-    if (this.__component.__gridElement) {
-      return this.__component;
-    }
-
-    return this.__component._grid;
   }
 }
 

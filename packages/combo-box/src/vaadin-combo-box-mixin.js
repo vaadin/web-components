@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2015 - 2022 Vaadin Ltd.
+ * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -8,6 +8,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
@@ -43,10 +44,17 @@ function findItemIndex(items, callback) {
 
 /**
  * @polymerMixin
+ * @mixes ControllerMixin
+ * @mixes DisabledMixin
+ * @mixes InputMixin
+ * @mixes KeyboardMixin
+ * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
-  class VaadinComboBoxMixinElement extends ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))) {
+  class ComboBoxMixinClass extends OverlayClassMixin(
+    ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))),
+  ) {
     static get properties() {
       return {
         /**
@@ -263,6 +271,24 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Get a reference to the native `<input>` element.
+     * Override to provide a custom input.
+     * @protected
+     * @return {HTMLInputElement | undefined}
+     */
+    get _nativeInput() {
+      return this.inputElement;
+    }
+
+    /**
+     * @return {string}
+     * @protected
+     */
+    get _propertyForValue() {
+      return 'value';
+    }
+
+    /**
      * @return {string | undefined}
      * @protected
      */
@@ -278,16 +304,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.inputElement) {
         this.inputElement[this._propertyForValue] = value;
       }
-    }
-
-    /**
-     * Get a reference to the native `<input>` element.
-     * Override to provide a custom input.
-     * @protected
-     * @return {HTMLInputElement | undefined}
-     */
-    get _nativeInput() {
-      return this.inputElement;
     }
 
     /**
@@ -339,7 +355,7 @@ export const ComboBoxMixin = (subclass) =>
 
       const bringToFrontListener = () => {
         requestAnimationFrame(() => {
-          this.$.overlay.bringToFront();
+          this._overlayElement.bringToFront();
         });
       };
 
@@ -430,6 +446,8 @@ export const ComboBoxMixin = (subclass) =>
       overlay.addEventListener('opened-changed', (e) => {
         this._overlayOpened = e.detail.value;
       });
+
+      this._overlayElement = overlay;
     }
 
     /**
@@ -441,7 +459,7 @@ export const ComboBoxMixin = (subclass) =>
     _initScroller(host) {
       const scrollerTag = `${this._tagNamePrefix}-scroller`;
 
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
 
       overlay.renderer = (root) => {
         if (!root.firstChild) {
@@ -547,7 +565,7 @@ export const ComboBoxMixin = (subclass) =>
           this.focus();
         }
 
-        this.$.overlay.restoreFocusOnClose = true;
+        this._overlayElement.restoreFocusOnClose = true;
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this._isInputFocused()) {
@@ -646,7 +664,7 @@ export const ComboBoxMixin = (subclass) =>
       super._onKeyDown(e);
 
       if (e.key === 'Tab') {
-        this.$.overlay.restoreFocusOnClose = false;
+        this._overlayElement.restoreFocusOnClose = false;
       } else if (e.key === 'ArrowDown') {
         this._onArrowDown();
 
@@ -942,14 +960,6 @@ export const ComboBoxMixin = (subclass) =>
       this._clearSelectionRange();
 
       this.filter = '';
-    }
-
-    /**
-     * @return {string}
-     * @protected
-     */
-    get _propertyForValue() {
-      return 'value';
     }
 
     /**
@@ -1271,7 +1281,7 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-      if (event.relatedTarget === this.$.overlay) {
+      if (event.relatedTarget === this._overlayElement) {
         event.composedPath()[0].focus();
         return;
       }

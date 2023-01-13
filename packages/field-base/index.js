@@ -1,6 +1,4 @@
 export { CheckedMixin } from './src/checked-mixin.js';
-export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
-export { DelegateStateMixin } from './src/delegate-state-mixin.js';
 export { FieldAriaController } from './src/field-aria-controller.js';
 export { FieldMixin } from './src/field-mixin.js';
 export { InputController } from './src/input-controller.js';

@@ -1,17 +1,17 @@
 /**
  * @license
- * Copyright (c) 2022 Vaadin Ltd.
+ * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tabsheet-scroller.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -45,6 +45,7 @@ class TabsSlotController extends SlotController {
     tabs.addEventListener('selected-changed', this.__tabsSelectedChangedListener);
     this.host.__tabs = tabs;
     this.host.stateTarget = tabs;
+    this.__tabsItemsChangedListener();
   }
 
   teardownNode(tabs) {
@@ -195,6 +196,10 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     };
   }
 
+  static get observers() {
+    return ['__itemsOrPanelsChanged(items, __panels)', '__selectedTabItemChanged(selected, items, __panels)'];
+  }
+
   /** @override */
   static get delegateProps() {
     return ['selected'];
@@ -224,10 +229,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     });
   }
 
-  static get observers() {
-    return ['__itemsOrPanelsChanged(items, __panels)', '__selectedTabItemChanged(selected, items, __panels)'];
-  }
-
   /**
    * An observer which applies the necessary roles and ARIA attributes
    * to associate the tab elements with the panels.
@@ -242,7 +243,9 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       const panel = panels.find((panel) => panel.getAttribute('tab') === tabItem.id);
       if (panel) {
         panel.role = 'tabpanel';
-        panel.id = panel.id || `tabsheet-panel-${generateUniqueId()}`;
+        if (!panel.id) {
+          panel.id = `tabsheet-panel-${generateUniqueId()}`;
+        }
         panel.setAttribute('aria-labelledby', tabItem.id);
 
         tabItem.setAttribute('aria-controls', panel.id);

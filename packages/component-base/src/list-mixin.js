@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { timeOut } from './async.js';
 import { Debouncer } from './debounce.js';
-import { DirHelper } from './dir-helper.js';
+import { getNormalizedScrollLeft, setNormalizedScrollLeft } from './dir-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -80,6 +80,41 @@ export const ListMixin = (superClass) =>
 
     static get observers() {
       return ['_enhanceItems(items, orientation, selected, disabled)'];
+    }
+
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get _isRTL() {
+      return !this._vertical && this.getAttribute('dir') === 'rtl';
+    }
+
+    /**
+     * @return {!HTMLElement}
+     * @protected
+     */
+    get _scrollerElement() {
+      // Returning scroller element of the component
+      console.warn(`Please implement the '_scrollerElement' property in <${this.localName}>`);
+      return this;
+    }
+
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get _vertical() {
+      return this.orientation !== 'horizontal';
+    }
+
+    focus() {
+      // In initialization (e.g vaadin-select) observer might not been run yet.
+      if (this._observer) {
+        this._observer.flush();
+      }
+      const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
+      this._focusItem(firstItem);
     }
 
     /** @protected */
@@ -190,14 +225,6 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @protected
-     */
-    get _isRTL() {
-      return !this._vertical && this.getAttribute('dir') === 'rtl';
-    }
-
-    /**
      * Override an event listener from `KeyboardMixin`
      * to search items by key.
      *
@@ -213,7 +240,7 @@ export const ListMixin = (superClass) =>
       const key = event.key;
 
       const currentIdx = this.items.indexOf(this.focused);
-      if (/[a-zA-Z0-9]/.test(key) && key.length === 1) {
+      if (/[a-zA-Z0-9]/u.test(key) && key.length === 1) {
         const idx = this._searchKey(currentIdx, key);
         if (idx >= 0) {
           this._focus(idx);
@@ -258,25 +285,6 @@ export const ListMixin = (superClass) =>
       super._focus(idx);
     }
 
-    focus() {
-      // In initialization (e.g vaadin-select) observer might not been run yet.
-      if (this._observer) {
-        this._observer.flush();
-      }
-      const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
-      this._focusItem(firstItem);
-    }
-
-    /**
-     * @return {!HTMLElement}
-     * @protected
-     */
-    get _scrollerElement() {
-      // Returning scroller element of the component
-      console.warn(`Please implement the '_scrollerElement' property in <${this.localName}>`);
-      return this;
-    }
-
     /**
      * Scroll the container to have the next item by the edge of the viewport.
      * @param {number} idx
@@ -311,14 +319,6 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @protected
-     */
-    get _vertical() {
-      return this.orientation !== 'horizontal';
-    }
-
-    /**
      * @param {number} pixels
      * @protected
      */
@@ -327,9 +327,8 @@ export const ListMixin = (superClass) =>
         this._scrollerElement.scrollTop += pixels;
       } else {
         const dir = this.getAttribute('dir') || 'ltr';
-        const scrollType = DirHelper.detectScrollType();
-        const scrollLeft = DirHelper.getNormalizedScrollLeft(scrollType, dir, this._scrollerElement) + pixels;
-        DirHelper.setNormalizedScrollLeft(scrollType, dir, this._scrollerElement, scrollLeft);
+        const scrollLeft = getNormalizedScrollLeft(this._scrollerElement, dir) + pixels;
+        setNormalizedScrollLeft(this._scrollerElement, dir, scrollLeft);
       }
     }
 

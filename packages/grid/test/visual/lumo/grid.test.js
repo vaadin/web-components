@@ -399,4 +399,39 @@ describe('grid', () => {
       await visualDiff(element, 'tree-overflow');
     });
   });
+
+  describe('theme', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.items = users;
+      flushGrid(element);
+      await nextRender(element);
+    });
+
+    it('column-borders', async () => {
+      element.setAttribute('theme', 'column-borders');
+      await visualDiff(element, 'theme-column-borders');
+    });
+
+    it('compact', async () => {
+      element.setAttribute('theme', 'compact');
+      await visualDiff(element, 'theme-compact');
+    });
+
+    it('no-row-borders', async () => {
+      element.setAttribute('theme', 'no-row-borders');
+      await visualDiff(element, 'theme-no-row-borders');
+    });
+
+    it('row-stripes', async () => {
+      element.setAttribute('theme', 'row-stripes');
+      await visualDiff(element, 'theme-row-stripes');
+    });
+  });
 });

@@ -1,12 +1,12 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsMixin } from './vaadin-details-mixin.js';
 
@@ -61,6 +61,12 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
 declare class Details extends DetailsMixin(
   DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))),
 ) {
+  /**
+   * A text that is displayed in the summary, if no
+   * element is assigned to the `summary` slot.
+   */
+  summary: string | null | undefined;
+
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,

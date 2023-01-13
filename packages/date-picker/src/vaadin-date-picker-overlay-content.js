@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
@@ -644,7 +644,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     const initialPosition = this._monthScroller.position;
 
     const smoothScroll = (timestamp) => {
-      start = start || timestamp;
+      if (!start) {
+        start = timestamp;
+      }
+
       const currentTime = timestamp - start;
 
       if (currentTime < this.scrollDuration) {
@@ -972,58 +975,55 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     this.focusDate(getClosestDate(focus, [this.minDate, this.maxDate]));
   }
 
-  _moveFocusByDays(days) {
-    const focus = this.focusedDate;
-    const dateToFocus = new Date(0, 0);
-    dateToFocus.setFullYear(focus.getFullYear());
-    dateToFocus.setMonth(focus.getMonth());
-    dateToFocus.setDate(focus.getDate() + days);
-
-    if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this.focusDate(dateToFocus);
-    } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
+  _focusAllowedDate(dateToFocus, diff, keepMonth) {
+    if (this._dateAllowed(dateToFocus)) {
+      this.focusDate(dateToFocus, keepMonth);
+    } else if (this._dateAllowed(this.focusedDate)) {
       // Move to min or max date
-      if (days > 0) {
-        // Down or right
+      if (diff > 0) {
+        // Down, Right or Page Down key
         this.focusDate(this.maxDate);
       } else {
-        // Up or left
+        // Up, Left or Page Up key
         this.focusDate(this.minDate);
       }
     } else {
       // Move to closest allowed date
-      this._focusClosestDate(focus);
+      this._focusClosestDate(this.focusedDate);
     }
   }
 
-  _moveFocusByMonths(months) {
-    const focus = this.focusedDate;
-    const dateToFocus = new Date(0, 0);
-    dateToFocus.setFullYear(focus.getFullYear());
-    dateToFocus.setMonth(focus.getMonth() + months);
+  _getDateDiff(months, days) {
+    const date = new Date(0, 0);
+    date.setFullYear(this.focusedDate.getFullYear());
+    date.setMonth(this.focusedDate.getMonth() + months);
+    if (days) {
+      date.setDate(this.focusedDate.getDate() + days);
+    }
+    return date;
+  }
 
+  _moveFocusByDays(days) {
+    const dateToFocus = this._getDateDiff(0, days);
+
+    this._focusAllowedDate(dateToFocus, days, false);
+  }
+
+  _moveFocusByMonths(months) {
+    const dateToFocus = this._getDateDiff(months);
     const targetMonth = dateToFocus.getMonth();
 
-    dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
+    if (!this._focusedMonthDate) {
+      this._focusedMonthDate = this.focusedDate.getDate();
+    }
+
+    dateToFocus.setDate(this._focusedMonthDate);
+
     if (dateToFocus.getMonth() !== targetMonth) {
       dateToFocus.setDate(0);
     }
 
-    if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this.focusDate(dateToFocus, true);
-    } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
-      // Move to min or max date
-      if (months > 0) {
-        // Pagedown
-        this.focusDate(this.maxDate);
-      } else {
-        // Pageup
-        this.focusDate(this.minDate);
-      }
-    } else {
-      // Move to closest allowed date
-      this._focusClosestDate(focus);
-    }
+    this._focusAllowedDate(dateToFocus, months, true);
   }
 
   _moveFocusInsideMonth(focusedDate, property) {
@@ -1038,9 +1038,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       dateToFocus.setDate(0);
     }
 
-    if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
+    if (this._dateAllowed(dateToFocus)) {
       this.focusDate(dateToFocus);
-    } else if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
+    } else if (this._dateAllowed(focusedDate)) {
       // Move to minDate or maxDate
       this.focusDate(this[property]);
     } else {
@@ -1049,7 +1049,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     }
   }
 
-  _dateAllowed(date, min, max) {
+  _dateAllowed(date, min = this.minDate, max = this.maxDate) {
     return (!min || date >= min) && (!max || date <= max);
   }
 

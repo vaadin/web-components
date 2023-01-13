@@ -1,8 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/form-layout/theme/lumo/vaadin-form-layout.js';
-import '@vaadin/form-layout/theme/lumo/vaadin-form-item.js';
 import '../../../theme/lumo/vaadin-upload.js';
 
 describe('upload', () => {
@@ -118,30 +116,13 @@ describe('upload', () => {
     });
   });
 
-  describe('form-item', () => {
+  describe('width', () => {
     beforeEach(() => {
-      element = fixtureSync(
-        `<vaadin-form-layout>
-          <vaadin-upload></vaadin-upload>
-          <vaadin-form-item>
-            <label slot="label">Description</label>
-            <textarea></textarea>
-          </vaadin-form-item>
-          <vaadin-form-item>
-            <label slot="label">File</label>
-            <vaadin-upload></vaadin-upload>
-          </vaadin-form-item>
-          <vaadin-form-item>
-            <label slot="label">Description</label>
-            <textarea></textarea>
-          </vaadin-form-item>
-        </vaadin-form-layout>`,
-        div,
-      );
+      element = fixtureSync('<vaadin-upload style="width: 400px"></vaadin-upload>', div);
     });
 
-    it('form-item', async () => {
-      await visualDiff(div, 'form-item');
+    it('width', async () => {
+      await visualDiff(div, 'width');
     });
   });
 });

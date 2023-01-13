@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import {
   arrowDown,
   arrowRight,
-  aTimeout,
   escKeyDown,
   fire,
   fixtureSync,
@@ -14,7 +13,7 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/menu-bar';
-import '@vaadin/tooltip';
+import { Tooltip } from '@vaadin/tooltip';
 import { mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 export function mouseover(target) {
@@ -28,6 +27,12 @@ function getTooltipText() {
 
 describe('menu-bar with tooltip', () => {
   let menuBar, tooltip, buttons;
+
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     menuBar = fixtureSync(`
@@ -262,48 +267,73 @@ describe('menu-bar with tooltip', () => {
   });
 
   describe('delay', () => {
-    afterEach(async () => {
-      // Wait for cooldown timeout.
-      await aTimeout(1);
+    const DEFAULT_DELAY = 500;
+
+    let clock;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
     });
 
-    it('should use hover delay on menu button mouseover', async () => {
-      tooltip.hoverDelay = 1;
+    afterEach(() => {
+      // Wait for cooldown
+      clock.tick(DEFAULT_DELAY);
+      clock.restore();
+    });
+
+    it('should use hover delay on menu button mouseover', () => {
+      tooltip.hoverDelay = 100;
+
       mouseover(buttons[0]);
       expect(tooltip.opened).to.be.false;
-      await aTimeout(1);
+
+      clock.tick(100);
       expect(tooltip.opened).to.be.true;
     });
 
-    it('should use hide delay on menu button mouseleave', async () => {
-      tooltip.hideDelay = 1;
+    it('should use hide delay on menu button mouseleave', () => {
+      tooltip.hideDelay = 100;
+
       mouseover(buttons[0]);
+      clock.tick(DEFAULT_DELAY);
+
       mouseleave(menuBar);
       expect(tooltip.opened).to.be.true;
-      await aTimeout(1);
+
+      clock.tick(100);
       expect(tooltip.opened).to.be.false;
     });
 
     it('should not use hide delay on menu button mousedown', () => {
-      tooltip.hideDelay = 1;
+      tooltip.hideDelay = 100;
+
       mouseover(buttons[0]);
+      clock.tick(DEFAULT_DELAY);
+
       mousedown(buttons[0]);
       expect(tooltip.opened).to.be.false;
     });
 
-    it('should use focus delay on menu button keyboard focus', async () => {
-      tooltip.focusDelay = 1;
+    it('should use focus delay on menu button keyboard focus', () => {
+      tooltip.focusDelay = 100;
+
       tabKeyDown(document.body);
       focusin(buttons[0]);
       expect(tooltip.opened).to.be.false;
-      await aTimeout(1);
+
+      clock.tick(100);
       expect(tooltip.opened).to.be.true;
     });
 
     it('should not use hide delay on menu button Esc', () => {
-      tooltip.hideDelay = 1;
+      tooltip.hideDelay = 100;
+
       tabKeyDown(document.body);
       focusin(buttons[0]);
+      clock.tick(DEFAULT_DELAY);
+
       escKeyDown(buttons[0]);
       expect(tooltip.opened).to.be.false;
     });

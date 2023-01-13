@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-password-field-button.js';
@@ -121,6 +121,13 @@ export class PasswordField extends TextField {
     return ['__i18nChanged(i18n.*)'];
   }
 
+  constructor() {
+    super();
+    this._setType('password');
+    this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
+    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
+  }
+
   /** @protected */
   get slotStyles() {
     const tag = this.localName;
@@ -137,13 +144,6 @@ export class PasswordField extends TextField {
   /** @protected */
   get _revealNode() {
     return this._revealButtonController && this._revealButtonController.node;
-  }
-
-  constructor() {
-    super();
-    this._setType('password');
-    this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
-    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
   }
 
   /** @protected */

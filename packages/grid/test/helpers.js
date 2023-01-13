@@ -16,6 +16,9 @@ export const flushGrid = (grid) => {
   if (grid._debouncerApplyCachedData) {
     grid._debouncerApplyCachedData.flush();
   }
+  if (grid.__debounceUpdateFrozenColumn) {
+    grid.__debounceUpdateFrozenColumn.flush();
+  }
 
   grid.__virtualizer.flush();
 };
@@ -236,7 +239,7 @@ export const makeSoloTouchEvent = (type, xy, node) => {
 };
 
 export const fire = (type, detail, options) => {
-  options = options || {};
+  options ||= {};
   detail = detail === null || detail === undefined ? {} : detail;
   const event = new Event(type, {
     bubbles: options.bubbles === undefined ? true : options.bubbles,

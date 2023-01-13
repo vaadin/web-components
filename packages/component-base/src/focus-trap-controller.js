@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getFocusableElements, isElementFocused } from './focus-utils.js';
@@ -31,6 +31,27 @@ export class FocusTrapController {
     this.__trapNode = null;
 
     this.__onKeyDown = this.__onKeyDown.bind(this);
+  }
+
+  /**
+   * An array of tab-ordered focusable elements inside the trap node.
+   *
+   * @return {HTMLElement[]}
+   * @private
+   */
+  get __focusableElements() {
+    return getFocusableElements(this.__trapNode);
+  }
+
+  /**
+   * The index of the element inside the trap node that currently has focus.
+   *
+   * @return {HTMLElement | undefined}
+   * @private
+   */
+  get __focusedElementIndex() {
+    const focusableElements = this.__focusableElements;
+    return focusableElements.indexOf(focusableElements.filter(isElementFocused).pop());
   }
 
   hostConnected() {
@@ -130,26 +151,5 @@ export class FocusTrapController {
     if (element.localName === 'input') {
       element.select();
     }
-  }
-
-  /**
-   * An array of tab-ordered focusable elements inside the trap node.
-   *
-   * @return {HTMLElement[]}
-   * @private
-   */
-  get __focusableElements() {
-    return getFocusableElements(this.__trapNode);
-  }
-
-  /**
-   * The index of the element inside the trap node that currently has focus.
-   *
-   * @return {HTMLElement | undefined}
-   * @private
-   */
-  get __focusedElementIndex() {
-    const focusableElements = this.__focusableElements;
-    return focusableElements.indexOf(focusableElements.filter(isElementFocused).pop());
   }
 }

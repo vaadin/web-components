@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -119,6 +119,18 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   }
 
   /**
+   * Override getter from `KeyboardDirectionMixin`
+   * to check if the heading element has focus.
+   *
+   * @return {Element | null}
+   * @protected
+   * @override
+   */
+  get focused() {
+    return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
+  }
+
+  /**
    * @protected
    * @override
    */
@@ -140,18 +152,6 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
         el.addEventListener('opened-changed', this._boundUpdateOpened);
       });
     });
-  }
-
-  /**
-   * Override getter from `KeyboardDirectionMixin`
-   * to check if the heading element has focus.
-   *
-   * @return {Element | null}
-   * @protected
-   * @override
-   */
-  get focused() {
-    return (this._getItems() || []).find((item) => isElementFocused(item._toggleElement));
   }
 
   /**
@@ -195,9 +195,7 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
    */
   _onKeyDown(event) {
     // Only check keyboard events on details toggle buttons
-    const target = event.composedPath()[0];
-
-    if (!this.items.some((item) => item._toggleElement === target)) {
+    if (!this.items.some((item) => item.focusElement === event.target)) {
       return;
     }
 

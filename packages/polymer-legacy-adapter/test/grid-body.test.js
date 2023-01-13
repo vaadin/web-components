@@ -33,7 +33,7 @@ describe('grid body template', () => {
     column.renderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(column)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/,
+      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/u,
     );
   });
 });

@@ -7,7 +7,7 @@ describe('accessibility', () => {
   'use strict';
 
   const flushFormatAnnouncer = () => {
-    rte.__debounceAnnounceFormatting && rte.__debounceAnnounceFormatting.flush();
+    rte.__debounceAnnounceFormatting?.flush();
   };
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();

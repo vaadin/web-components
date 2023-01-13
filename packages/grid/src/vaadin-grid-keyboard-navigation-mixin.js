@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -77,6 +77,33 @@ export const KeyboardNavigationMixin = (superClass) =>
       };
     }
 
+    /** @private */
+    get __rowFocusMode() {
+      return (
+        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
+      );
+    }
+
+    set __rowFocusMode(value) {
+      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
+        const focusable = this[prop];
+        if (value) {
+          const parent = focusable && focusable.parentElement;
+          if (this.__isCell(focusable)) {
+            // Cell itself focusable (default)
+            this[prop] = parent;
+          } else if (this.__isCell(parent)) {
+            // Focus button mode is enabled for the column,
+            // button element inside the cell is focusable.
+            this[prop] = parent.parentElement;
+          }
+        } else if (!value && this.__isRow(focusable)) {
+          const cell = focusable.firstElementChild;
+          this[prop] = cell._focusButton || cell;
+        }
+      });
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -105,33 +132,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       });
       this.addEventListener('mouseup', () => {
         this._isMousedown = false;
-      });
-    }
-
-    /** @private */
-    get __rowFocusMode() {
-      return (
-        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
-      );
-    }
-
-    set __rowFocusMode(value) {
-      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
-        const focusable = this[prop];
-        if (value) {
-          const parent = focusable && focusable.parentElement;
-          if (this.__isCell(focusable)) {
-            // Cell itself focusable (default)
-            this[prop] = parent;
-          } else if (this.__isCell(parent)) {
-            // Focus button mode is enabled for the column,
-            // button element inside the cell is focusable.
-            this[prop] = parent.parentElement;
-          }
-        } else if (!value && this.__isRow(focusable)) {
-          const cell = focusable.firstElementChild;
-          this[prop] = cell._focusButton || cell;
-        }
       });
     }
 
@@ -586,7 +586,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const localTarget = e.composedPath()[0];
       const localTargetIsTextInput =
         localTarget.localName === 'input' &&
-        !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/i.test(localTarget.type);
+        !/^(button|checkbox|color|file|image|radio|range|reset|submit)$/iu.test(localTarget.type);
 
       let wantInteracting;
       switch (key) {
@@ -724,7 +724,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onKeyUp(e) {
-      if (!/^( |SpaceBar)$/.test(e.key) || this.interacting) {
+      if (!/^( |SpaceBar)$/u.test(e.key) || this.interacting) {
         return;
       }
 

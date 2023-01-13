@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-highlighter",
-  "version": "24.0.0-alpha6",
+  "version": "24.0.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -34,28 +34,28 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.0.0-alpha6",
-    "@vaadin/overlay": "24.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha6",
+    "@vaadin/component-base": "24.0.0-alpha10",
+    "@vaadin/overlay": "24.0.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha10",
     "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/checkbox": "24.0.0-alpha6",
-    "@vaadin/checkbox-group": "24.0.0-alpha6",
-    "@vaadin/combo-box": "24.0.0-alpha6",
-    "@vaadin/date-picker": "24.0.0-alpha6",
-    "@vaadin/date-time-picker": "24.0.0-alpha6",
-    "@vaadin/item": "24.0.0-alpha6",
-    "@vaadin/list-box": "24.0.0-alpha6",
-    "@vaadin/radio-group": "24.0.0-alpha6",
-    "@vaadin/select": "24.0.0-alpha6",
+    "@vaadin/checkbox": "24.0.0-alpha10",
+    "@vaadin/checkbox-group": "24.0.0-alpha10",
+    "@vaadin/combo-box": "24.0.0-alpha10",
+    "@vaadin/date-picker": "24.0.0-alpha10",
+    "@vaadin/date-time-picker": "24.0.0-alpha10",
+    "@vaadin/item": "24.0.0-alpha10",
+    "@vaadin/list-box": "24.0.0-alpha10",
+    "@vaadin/radio-group": "24.0.0-alpha10",
+    "@vaadin/select": "24.0.0-alpha10",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-area": "24.0.0-alpha6",
-    "@vaadin/text-field": "24.0.0-alpha6",
-    "@vaadin/time-picker": "24.0.0-alpha6",
+    "@vaadin/text-area": "24.0.0-alpha10",
+    "@vaadin/text-field": "24.0.0-alpha10",
+    "@vaadin/time-picker": "24.0.0-alpha10",
     "sinon": "^13.0.2"
   }
 }

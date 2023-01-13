@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
@@ -9,18 +9,20 @@ import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ButtonController } from './button-controller.js';
 
 registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 'vaadin-select-styles' });
 
@@ -135,8 +137,12 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @mixes FieldMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
+ * @mixes KeyboardMixin
+ * @mixes OverlayClassMixin
  */
-class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Select extends OverlayClassMixin(
+  DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement)))))),
+) {
   static get is() {
     return 'vaadin-select';
   }
@@ -298,9 +304,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
       },
 
       /** @private */
-      _overlayElement: Object,
-
-      /** @private */
       _inputContainer: Object,
 
       /** @private */
@@ -314,23 +317,16 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
 
   static get observers() {
     return [
-      '_updateAriaExpanded(opened)',
+      '_updateAriaExpanded(opened, focusElement)',
       '_updateSelectedItem(value, _items, placeholder)',
       '_rendererChanged(renderer, _overlayElement)',
     ];
   }
 
-  /** @protected */
-  get _valueButton() {
-    return this._valueButtonController && this._valueButtonController.node;
-  }
-
   constructor() {
     super();
 
-    this._fieldId = `${this.localName}-${generateUniqueId()}`;
-
-    this._boundOnKeyDown = this._onKeyDown.bind(this);
+    this._itemId = `value-${this.localName}-${generateUniqueId()}`;
   }
 
   /** @protected */
@@ -348,20 +344,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
-    this._valueButtonController = new SlotController(this, 'value', 'vaadin-select-value-button', {
-      initializer: (btn) => {
-        this._setFocusElement(btn);
-        this.ariaTarget = btn;
-        this.stateTarget = btn;
-
-        btn.setAttribute('aria-haspopup', 'listbox');
-        btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
-
-        this._updateAriaExpanded(this.opened);
-
-        btn.addEventListener('keydown', this._boundOnKeyDown);
-      },
-    });
+    this._valueButtonController = new ButtonController(this);
     this.addController(this._valueButtonController);
 
     this.addController(
@@ -512,10 +495,11 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
   /**
    * @param {!KeyboardEvent} e
    * @protected
+   * @override
    */
   _onKeyDown(e) {
-    if (!this.readonly && !this.opened) {
-      if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
+    if (e.target === this.focusElement && !this.readonly && !this.opened) {
+      if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
         e.preventDefault();
         this.opened = true;
       } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
@@ -538,7 +522,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    * @protected
    */
   _onKeyDownInside(e) {
-    if (/^(Tab)$/.test(e.key)) {
+    if (/^(Tab)$/u.test(e.key)) {
       this.opened = false;
     }
   }
@@ -579,19 +563,19 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
   }
 
   /** @private */
-  _updateAriaExpanded(opened) {
-    if (this._valueButton) {
-      this._valueButton.setAttribute('aria-expanded', opened ? 'true' : 'false');
+  _updateAriaExpanded(opened, focusElement) {
+    if (focusElement) {
+      focusElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
     }
   }
 
   /** @private */
   _updateAriaLive(ariaLive) {
-    if (this._valueButton) {
+    if (this.focusElement) {
       if (ariaLive) {
-        this._valueButton.setAttribute('aria-live', 'polite');
+        this.focusElement.setAttribute('aria-live', 'polite');
       } else {
-        this._valueButton.removeAttribute('aria-live');
+        this.focusElement.removeAttribute('aria-live');
       }
     }
   }
@@ -610,7 +594,8 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     // Store reference to the original item
     labelItem._sourceItem = selected;
 
-    this.__appendValueItemElement(labelItem);
+    this.__initValueItemElement(labelItem);
+    this.focusElement.appendChild(labelItem);
 
     // Ensure the item gets proper styles
     labelItem.selected = true;
@@ -638,31 +623,32 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    * @param {!HTMLElement} itemElement
    * @private
    */
-  __appendValueItemElement(itemElement) {
+  __initValueItemElement(itemElement) {
     itemElement.removeAttribute('tabindex');
     itemElement.removeAttribute('role');
-    itemElement.setAttribute('id', this._fieldId);
-
-    this._valueButton.appendChild(itemElement);
+    itemElement.setAttribute('id', this._itemId);
   }
 
   /** @private */
   __updateValueButton() {
-    if (!this._valueButton) {
+    const valueButton = this.focusElement;
+
+    if (!valueButton) {
       return;
     }
 
-    this._valueButton.innerHTML = '';
+    valueButton.innerHTML = '';
 
     const selected = this._items[this._menuElement.selected];
 
-    this._valueButton.removeAttribute('placeholder');
+    valueButton.removeAttribute('placeholder');
 
     if (!selected) {
       if (this.placeholder) {
         const item = this.__createItemElement({ label: this.placeholder });
-        this.__appendValueItemElement(item);
-        this._valueButton.setAttribute('placeholder', '');
+        this.__initValueItemElement(item);
+        valueButton.appendChild(item);
+        valueButton.setAttribute('placeholder', '');
       }
     } else {
       this.__attachSelectedItem(selected);
@@ -678,6 +664,12 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         delete this._selectedChanging;
       }
     }
+
+    // Use item ID if there is a selected item or placeholder text
+    valueButton.setAttribute(
+      'aria-labelledby',
+      selected || this.placeholder ? `${this._labelId} ${this._itemId}` : this._labelId,
+    );
   }
 
   /** @private */

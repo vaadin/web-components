@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -13,6 +13,16 @@ export class FieldAriaController {
   constructor(host) {
     this.host = host;
     this.__required = false;
+  }
+
+  /**
+   * `true` if the target element is the host component itself, `false` otherwise.
+   *
+   * @return {boolean}
+   * @private
+   */
+  get __isGroupField() {
+    return this.__target === this.host;
   }
 
   /**
@@ -79,16 +89,6 @@ export class FieldAriaController {
   setHelperId(helperId) {
     this.__setHelperIdToAriaAttribute(helperId, this.__helperId);
     this.__helperId = helperId;
-  }
-
-  /**
-   * `true` if the target element is the host component itself, `false` otherwise.
-   *
-   * @return {boolean}
-   * @private
-   */
-  get __isGroupField() {
-    return this.__target === this.host;
   }
 
   /**

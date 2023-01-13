@@ -34,7 +34,7 @@ describe('items', () => {
     if (menu) {
       menu.__openListenerActive = true;
       const overlay = menu.$.overlay;
-      overlay.__openingHandler && overlay.__openingHandler();
+      overlay.__openingHandler?.();
     }
     const { right, bottom } = openTarget.getBoundingClientRect();
     fire(openTarget, menuOpenEvent, { x: right, y: bottom });
@@ -412,6 +412,12 @@ describe('items', () => {
       expect(() => {
         rootMenu.renderer = () => {};
       }).to.throw(Error);
+    });
+
+    it('should not call requestContentUpdate', () => {
+      const spy = sinon.spy(rootMenu.$.overlay, 'requestContentUpdate');
+      rootMenu.requestContentUpdate();
+      expect(spy.called).to.be.false;
     });
 
     it('should not remove the component attributes', () => {

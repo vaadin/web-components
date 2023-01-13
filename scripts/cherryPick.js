@@ -69,7 +69,7 @@ function filterCommits(commits) {
     }
     if (target === true && picked === false) {
       commit.labels.forEach((label) => {
-        const branch = /target\/(.*)/.exec(label.name);
+        const branch = /target\/(.*)/u.exec(label.name);
         if (branch) {
           console.log(commit.number, commit.user.login, commit.url, commit.merge_commit_sha, branch[1]);
           arrPR.push(commit.number);

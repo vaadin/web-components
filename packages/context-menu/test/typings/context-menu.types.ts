@@ -12,6 +12,14 @@ const menu = document.createElement('vaadin-context-menu');
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
+// Properties
+assertType<boolean>(menu.opened);
+assertType<string>(menu.openOn);
+assertType<string>(menu.closeOn);
+assertType<HTMLElement>(menu.listenOn);
+assertType<string>(menu.overlayClass);
+
+// Events
 menu.addEventListener('opened-changed', (event) => {
   assertType<ContextMenuOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);

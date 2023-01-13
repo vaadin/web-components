@@ -25,6 +25,7 @@ const button = css`
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    flex-shrink: 0;
   }
 
   :host::before,

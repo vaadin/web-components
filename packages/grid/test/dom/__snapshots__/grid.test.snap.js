@@ -164,6 +164,7 @@ snapshots["vaadin-grid shadow default"] =
         drag-disabled=""
         drop-disabled=""
         last=""
+        odd=""
         part="row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
         style="position: absolute; transform: translateY(35px);"
@@ -213,7 +214,7 @@ snapshots["vaadin-grid shadow default"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>
@@ -373,6 +374,7 @@ snapshots["vaadin-grid shadow selected"] =
         drag-disabled=""
         drop-disabled=""
         last=""
+        odd=""
         part="row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
         style="position: absolute; transform: translateY(35px);"
@@ -422,7 +424,7 @@ snapshots["vaadin-grid shadow selected"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>
@@ -581,6 +583,7 @@ snapshots["vaadin-grid shadow details opened"] =
         drag-disabled=""
         drop-disabled=""
         last=""
+        odd=""
         part="row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
         style="position: absolute; transform: translateY(35px);"
@@ -630,7 +633,7 @@ snapshots["vaadin-grid shadow details opened"] =
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
           style="width: 100px; flex-grow: 1; order: 10000000;"
-          tabindex="-1"
+          tabindex="0"
         >
           <slot name="vaadin-grid-cell-content-2">
           </slot>
@@ -759,6 +762,7 @@ snapshots["vaadin-grid shadow hidden column"] =
         drag-disabled=""
         drop-disabled=""
         last=""
+        odd=""
         part="row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
         style="position: absolute; transform: translateY(35px);"
@@ -917,6 +921,7 @@ snapshots["vaadin-grid shadow hidden column selected"] =
         drag-disabled=""
         drop-disabled=""
         last=""
+        odd=""
         part="row last-row odd-row drag-disabled-row drop-disabled-row"
         role="row"
         style="position: absolute; transform: translateY(35px);"

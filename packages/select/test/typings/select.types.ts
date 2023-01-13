@@ -24,6 +24,7 @@ assertType<string | null | undefined>(select.placeholder);
 assertType<boolean>(select.readonly);
 assertType<boolean>(select.invalid);
 assertType<boolean>(select.required);
+assertType<string>(select.overlayClass);
 assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
 

@@ -1,13 +1,12 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
-import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
+import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 export interface MenuBarItem {
   /**
@@ -108,7 +107,7 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
+declare class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below
@@ -160,6 +159,14 @@ declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(Eleme
    * ```
    */
   i18n: MenuBarI18n;
+
+  /**
+   * A space-delimited list of CSS class names
+   * to set on each sub-menu overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
 
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,

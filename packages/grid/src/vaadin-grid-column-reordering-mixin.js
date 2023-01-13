@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
@@ -224,9 +224,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @return {HTMLElement | undefined}
      * @protected
      */
-    _cellFromPoint(x, y) {
-      x = x || 0;
-      y = y || 0;
+    _cellFromPoint(x = 0, y = 0) {
       if (!this._draggedColumn) {
         this.$.scroller.toggleAttribute('no-content-pointer-events', true);
       }
@@ -305,7 +303,7 @@ export const ColumnReorderingMixin = (superClass) =>
      */
     _setSiblingsReorderStatus(column, status) {
       iterateChildren(column.parentNode, (sibling) => {
-        if (/column/.test(sibling.localName) && this._isSwapAllowed(sibling, column)) {
+        if (/column/u.test(sibling.localName) && this._isSwapAllowed(sibling, column)) {
           sibling._reorderStatus = status;
         }
       });
@@ -374,7 +372,7 @@ export const ColumnReorderingMixin = (superClass) =>
      */
     _swapColumnOrders(column1, column2) {
       [column1._order, column2._order] = [column2._order, column1._order];
-      this._updateFrozenColumn();
+      this._debounceUpdateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
 

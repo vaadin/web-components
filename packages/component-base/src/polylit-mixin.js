@@ -1,16 +1,18 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 const caseMap = {};
 
-const CAMEL_TO_DASH = /([A-Z])/g;
+const CAMEL_TO_DASH = /([A-Z])/gu;
 
 function camelToDash(camel) {
-  caseMap[camel] = caseMap[camel] || camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
+  if (!caseMap[camel]) {
+    caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
+  }
   return caseMap[camel];
 }
 
@@ -169,7 +171,10 @@ const PolylitMixinImplementation = (superclass) => {
     firstUpdated() {
       super.firstUpdated();
 
-      this.$ = this.$ || {};
+      if (!this.$) {
+        this.$ = {};
+      }
+
       this.shadowRoot.querySelectorAll('[id]').forEach((node) => {
         this.$[node.id] = node;
       });

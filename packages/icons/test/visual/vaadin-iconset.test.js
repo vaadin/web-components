@@ -7,7 +7,7 @@ describe('vaadin-iconset', () => {
 
   before(async () => {
     const { origin, pathname } = new URL(import.meta.url);
-    const file = pathname.replace(/test\/.+/, 'assets/vaadin-font-icons.json');
+    const file = pathname.replace(/test\/.+/u, 'assets/vaadin-font-icons.json');
     const data = await fetch(`${origin}${file}`);
     const icons = await data.json();
     wrapper = fixtureSync(`

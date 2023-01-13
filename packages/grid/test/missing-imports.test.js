@@ -41,7 +41,7 @@ describe('missing imports', () => {
       });
 
       it('should not warn if not in use', () => {
-        grid._observer && grid._observer.flush && grid._observer.flush();
+        grid._observer?.flush?.();
         grid._debouncerCheckImports.flush();
         expect(console.warn.called).to.be.false;
       });
@@ -49,14 +49,14 @@ describe('missing imports', () => {
       it('should warn once if in use', () => {
         grid.appendChild(document.createElement(elementName));
         grid.appendChild(document.createElement(elementName));
-        grid._observer && grid._observer.flush && grid._observer.flush();
+        grid._observer?.flush?.();
         grid._debouncerCheckImports.flush();
         expect(console.warn.callCount).to.equal(1);
       });
 
       it('should warn and not throw after adding', () => {
         grid.appendChild(document.createElement(elementName));
-        grid._observer && grid._observer.flush && grid._observer.flush();
+        grid._observer?.flush?.();
         grid._debouncerCheckImports.flush();
 
         let error;

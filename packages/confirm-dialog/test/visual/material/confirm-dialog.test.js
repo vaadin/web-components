@@ -27,18 +27,18 @@ describe('confirm-dialog', () => {
   });
 
   it('cancel', async () => {
-    element.cancel = true;
+    element.cancelButtonVisible = true;
     await visualDiff(div, 'cancel');
   });
 
   it('reject', async () => {
-    element.reject = true;
+    element.rejectButtonVisible = true;
     await visualDiff(div, 'reject');
   });
 
   it('cancel reject', async () => {
-    element.cancel = true;
-    element.reject = true;
+    element.cancelButtonVisible = true;
+    element.rejectButtonVisible = true;
     await visualDiff(div, 'cancel-reject');
   });
 });

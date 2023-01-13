@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -172,6 +172,6 @@ export const DynamicColumnsMixin = (superClass) =>
      * @protected
      */
     _isColumnElement(node) {
-      return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/.test(node.localName);
+      return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/u.test(node.localName);
     }
   };

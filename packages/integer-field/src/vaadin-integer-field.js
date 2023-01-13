@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
@@ -84,12 +84,12 @@ export class IntegerField extends NumberField {
 
   /** @private */
   __isInteger(value) {
-    return /^(-\d)?\d*$/.test(String(value));
+    return /^(-\d)?\d*$/u.test(String(value));
   }
 
   /** @private */
   __hasOnlyDigits(value) {
-    return /^\d+$/.test(String(value));
+    return /^\d+$/u.test(String(value));
   }
 }
 

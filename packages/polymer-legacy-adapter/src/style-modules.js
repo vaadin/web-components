@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
@@ -97,7 +97,9 @@ function getAllThemes() {
     /** @type {DomModuleWithCachedStyles} */
     const module = modules[moduleId];
     const themeFor = module.getAttribute('theme-for');
-    module.__allStyles = module.__allStyles || getModuleStyles(module).concat(module.__partialStyles || []);
+    if (!module.__allStyles) {
+      module.__allStyles = getModuleStyles(module).concat(module.__partialStyles || []);
+    }
 
     return {
       themeFor,
@@ -107,7 +109,10 @@ function getAllThemes() {
   });
 }
 
-window.Vaadin = window.Vaadin || {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
+
 window.Vaadin.styleModules = {
   getAllThemes,
   registerStyles,

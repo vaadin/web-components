@@ -104,7 +104,7 @@ describe('edit column', () => {
 
       focusout(inputs[0]);
       focusin(inputs[1]);
-      grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
+      grid._debouncerStopEdit?.flush();
 
       expect(getCellEditor(customCell)).to.be.ok;
     });

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
  * @extends HTMLElement
@@ -115,6 +116,71 @@ export class InfiniteScroller extends PolymerElement {
         observer: '_activated',
       },
     };
+  }
+
+  /**
+   * @return {number}
+   */
+  get bufferOffset() {
+    return this._buffers[0].offsetTop;
+  }
+
+  /**
+   * @return {number}
+   */
+  get itemHeight() {
+    if (!this._itemHeightVal) {
+      const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
+      // Use background-position temp inline style for unit conversion
+      const tmpStyleProp = 'background-position';
+      this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
+      const itemHeightPx = getComputedStyle(this.$.fullHeight).getPropertyValue(tmpStyleProp);
+      this.$.fullHeight.style.removeProperty(tmpStyleProp);
+      this._itemHeightVal = parseFloat(itemHeightPx);
+    }
+
+    return this._itemHeightVal;
+  }
+
+  /** @private */
+  get _bufferHeight() {
+    return this.itemHeight * this.bufferSize;
+  }
+
+  /**
+   * @return {number}
+   */
+  get position() {
+    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
+  }
+
+  /**
+   * Current scroller position as index. Can be a fractional number.
+   *
+   * @type {number}
+   */
+  set position(index) {
+    this._preventScrollEvent = true;
+    if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
+      this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
+    } else {
+      this._initialIndex = ~~index;
+      this._reset();
+      this._scrollDisabled = true;
+      this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
+      this._scrollDisabled = false;
+    }
+
+    if (this._mayHaveMomentum) {
+      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
+      this.$.scroller.classList.add('notouchscroll');
+      this._mayHaveMomentum = false;
+
+      setTimeout(() => {
+        // Restore -webkit-overflow-scrolling: touch; after a small delay.
+        this.$.scroller.classList.remove('notouchscroll');
+      }, 10);
+    }
   }
 
   /** @protected */
@@ -235,71 +301,6 @@ export class InfiniteScroller extends PolymerElement {
     });
   }
 
-  /**
-   * @return {number}
-   */
-  get bufferOffset() {
-    return this._buffers[0].offsetTop;
-  }
-
-  /**
-   * @return {number}
-   */
-  get position() {
-    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
-  }
-
-  /**
-   * Current scroller position as index. Can be a fractional number.
-   *
-   * @type {number}
-   */
-  set position(index) {
-    this._preventScrollEvent = true;
-    if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
-      this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
-    } else {
-      this._initialIndex = ~~index;
-      this._reset();
-      this._scrollDisabled = true;
-      this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
-      this._scrollDisabled = false;
-    }
-
-    if (this._mayHaveMomentum) {
-      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
-      this.$.scroller.classList.add('notouchscroll');
-      this._mayHaveMomentum = false;
-
-      setTimeout(() => {
-        // Restore -webkit-overflow-scrolling: touch; after a small delay.
-        this.$.scroller.classList.remove('notouchscroll');
-      }, 10);
-    }
-  }
-
-  /**
-   * @return {number}
-   */
-  get itemHeight() {
-    if (!this._itemHeightVal) {
-      const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
-      // Use background-position temp inline style for unit conversion
-      const tmpStyleProp = 'background-position';
-      this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
-      const itemHeightPx = getComputedStyle(this.$.fullHeight).getPropertyValue(tmpStyleProp);
-      this.$.fullHeight.style.removeProperty(tmpStyleProp);
-      this._itemHeightVal = parseFloat(itemHeightPx);
-    }
-
-    return this._itemHeightVal;
-  }
-
-  /** @private */
-  get _bufferHeight() {
-    return this.itemHeight * this.bufferSize;
-  }
-
   /** @private */
   _reset() {
     this._scrollDisabled = true;
@@ -329,8 +330,7 @@ export class InfiniteScroller extends PolymerElement {
         itemWrapper.style.height = `${this.itemHeight}px`;
         itemWrapper.instance = {};
 
-        const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
-        const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
+        const slotName = `vaadin-infinite-scroller-item-content-${generateUniqueId()}`;
 
         const slot = document.createElement('slot');
         slot.setAttribute('name', slotName);

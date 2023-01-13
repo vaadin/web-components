@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2022 Vaadin Ltd.
+ * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
@@ -109,6 +109,10 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return 'vaadin-login-form';
   }
 
+  static get observers() {
+    return ['_errorChanged(error)'];
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -125,10 +129,6 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    */
   _attachDom(dom) {
     this.appendChild(dom);
-  }
-
-  static get observers() {
-    return ['_errorChanged(error)'];
   }
 
   /** @private */

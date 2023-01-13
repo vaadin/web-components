@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
@@ -15,14 +15,20 @@ import { DirMixin } from './dir-mixin.js';
 // for buttons that are based on `[role=button]` e.g vaadin-button.
 setCancelSyntheticClickEvents(false);
 
-window.Vaadin = window.Vaadin || {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
 
 /**
  * Array of Vaadin custom element classes that have been finalized.
  */
-window.Vaadin.registrations = window.Vaadin.registrations || [];
+if (!window.Vaadin.registrations) {
+  window.Vaadin.registrations = [];
+}
 
-window.Vaadin.developmentModeCallback = window.Vaadin.developmentModeCallback || {};
+if (!window.Vaadin.developmentModeCallback) {
+  window.Vaadin.developmentModeCallback = {};
+}
 
 window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function () {
   usageStatistics();
@@ -39,7 +45,7 @@ const registered = new Set();
 export const ElementMixin = (superClass) =>
   class VaadinElementMixin extends DirMixin(superClass) {
     static get version() {
-      return '24.0.0-alpha6';
+      return '24.0.0-alpha10';
     }
 
     /** @protected */

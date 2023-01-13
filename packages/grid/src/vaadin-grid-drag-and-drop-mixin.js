@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { iterateChildren, updateRowStates } from './vaadin-grid-helpers.js';
@@ -128,7 +128,7 @@ export const DragAndDropMixin = (superClass) =>
           // Safari doesn't position drag images from transformed
           // elements properly so we need to switch to use top temporarily
           const transform = row.style.transform;
-          row.style.top = /translateY\((.*)\)/.exec(transform)[1];
+          row.style.top = /translateY\((.*)\)/u.exec(transform)[1];
           row.style.transform = 'none';
           requestAnimationFrame(() => {
             row.style.top = '';

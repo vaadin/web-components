@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-contextmenu-event.js';
@@ -11,6 +11,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -199,10 +200,13 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ControllerMixin
+ * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
  */
-class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement)))) {
+class ContextMenu extends OverlayClassMixin(
+  ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>
@@ -309,12 +313,6 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
       _context: Object,
 
       /** @private */
-      _boundClose: Object,
-
-      /** @private */
-      _boundOpen: Object,
-
-      /** @private */
       _phone: {
         type: Boolean,
       },
@@ -351,6 +349,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
     super();
     this._boundOpen = this.open.bind(this);
     this._boundClose = this.close.bind(this);
+    this._boundPreventDefault = this._preventDefault.bind(this);
     this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
   }
 
@@ -373,6 +372,8 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
   /** @protected */
   ready() {
     super.ready();
+
+    this._overlayElement = this.$.overlay;
 
     this.addController(
       new MediaQueryController(this._wideMediaQuery, (matches) => {
@@ -443,22 +444,19 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
 
   /** @private */
   _closeOnChanged(closeOn, oldCloseOn) {
-    // Listen on this.$.overlay.root to workaround issue on
-    //  ShadyDOM polyfill: https://github.com/webcomponents/shadydom/issues/159
-
     // Outside click event from overlay
     const evtOverlay = 'vaadin-overlay-outside-click';
 
+    const overlay = this.$.overlay;
+
     if (oldCloseOn) {
-      this._unlisten(this.$.overlay, oldCloseOn, this._boundClose);
-      this._unlisten(this.$.overlay.root, oldCloseOn, this._boundClose);
+      this._unlisten(overlay, oldCloseOn, this._boundClose);
     }
     if (closeOn) {
-      this._listen(this.$.overlay, closeOn, this._boundClose);
-      this._listen(this.$.overlay.root, closeOn, this._boundClose);
-      this._unlisten(this.$.overlay, evtOverlay, this._preventDefault);
+      this._listen(overlay, closeOn, this._boundClose);
+      overlay.removeEventListener(evtOverlay, this._boundPreventDefault);
     } else {
-      this._listen(this.$.overlay, evtOverlay, this._preventDefault);
+      overlay.addEventListener(evtOverlay, this._boundPreventDefault);
     }
   }
 
@@ -488,7 +486,11 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    this.$.overlay.requestContentUpdate();
+    if (!this._overlayElement || !this.renderer) {
+      return;
+    }
+
+    this._overlayElement.requestContentUpdate();
   }
 
   /** @private */
@@ -539,7 +541,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
       };
 
       if (this._context.target) {
-        this._preventDefault(e);
+        e.preventDefault();
         e.stopPropagation();
 
         // Used in alignment which is delayed until overlay is rendered

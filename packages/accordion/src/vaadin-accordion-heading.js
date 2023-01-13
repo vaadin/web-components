@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -80,7 +80,7 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
           text-align: inherit;
         }
       </style>
-      <button id="button" part="content" disabled$="[[disabled]]">
+      <button id="button" part="content" disabled$="[[disabled]]" aria-expanded$="[[__updateAriaExpanded(opened)]]">
         <span part="toggle" aria-hidden="true"></span>
         <slot></slot>
       </button>
@@ -120,6 +120,11 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'heading');
     }
+  }
+
+  /** @private */
+  __updateAriaExpanded(opened) {
+    return opened ? 'true' : 'false';
   }
 }
 

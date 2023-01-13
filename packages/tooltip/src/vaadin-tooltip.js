@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2022 Vaadin Ltd.
+ * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tooltip-overlay.js';
@@ -8,10 +8,11 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
-const DEFAULT_DELAY = 0;
+const DEFAULT_DELAY = 500;
 
 let defaultFocusDelay = DEFAULT_DELAY;
 let defaultHoverDelay = DEFAULT_DELAY;
@@ -29,6 +30,29 @@ let cooldownTimeout = null;
 class TooltipStateController {
   constructor(host) {
     this.host = host;
+  }
+
+  /** @private */
+  get openedProp() {
+    return this.host.manual ? 'opened' : '_autoOpened';
+  }
+
+  /** @private */
+  get focusDelay() {
+    const tooltip = this.host;
+    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
+  }
+
+  /** @private */
+  get hoverDelay() {
+    const tooltip = this.host;
+    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
+  }
+
+  /** @private */
+  get hideDelay() {
+    const tooltip = this.host;
+    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
   }
 
   /**
@@ -66,29 +90,6 @@ class TooltipStateController {
       this.__abortCooldown();
       this.__scheduleCooldown();
     }
-  }
-
-  /** @private */
-  get openedProp() {
-    return this.host.manual ? 'opened' : '_autoOpened';
-  }
-
-  /** @private */
-  get focusDelay() {
-    const tooltip = this.host;
-    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
-  }
-
-  /** @private */
-  get hoverDelay() {
-    const tooltip = this.host;
-    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
-  }
-
-  /** @private */
-  get hideDelay() {
-    const tooltip = this.host;
-    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
   }
 
   /** @private */
@@ -231,9 +232,10 @@ class TooltipStateController {
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
-class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
+class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-tooltip';
   }
@@ -409,9 +411,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: String,
         computed: '__computePosition(position, _position)',
       },
-
-      /** @protected */
-      _overlayElement: Object,
 
       /** @private */
       __isTargetHidden: {

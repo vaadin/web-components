@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/tabsheet",
-  "version": "24.0.0-alpha6",
+  "version": "24.0.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -36,13 +36,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.0.0-alpha6",
-    "@vaadin/field-base": "24.0.0-alpha6",
-    "@vaadin/scroller": "24.0.0-alpha6",
-    "@vaadin/tabs": "24.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha6"
+    "@vaadin/component-base": "24.0.0-alpha10",
+    "@vaadin/scroller": "24.0.0-alpha10",
+    "@vaadin/tabs": "24.0.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha10"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

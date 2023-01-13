@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { change, click, fixtureSync, makeSoloTouchEvent } from '@vaadin/testing-helpers';
+import { change, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
 
-describe('file list', () => {
-  let upload, file, files;
+describe('adding files', () => {
+  let upload, files;
   const testFileSize = 512;
 
   beforeEach(() => {
@@ -13,7 +13,6 @@ describe('file list', () => {
     upload.target = 'http://foo.com/bar';
     upload._createXhr = xhrCreator({ size: testFileSize, uploadTime: 200, stepTime: 50 });
     files = createFiles(2, testFileSize, 'application/x-octet-stream');
-    file = createFile(testFileSize, 'application/x-octet-stream');
   });
 
   describe('files property', () => {
@@ -31,47 +30,10 @@ describe('file list', () => {
       upload.files = files;
       expect(spy.calledOnce).to.be.true;
     });
-  });
 
-  describe('with add button', () => {
-    let input;
-    let addButton;
-    let inputClickSpy;
+    it('should add files on input change', () => {
+      const input = upload.$.fileInput;
 
-    beforeEach(() => {
-      addButton = upload._addButton;
-      input = upload.$.fileInput;
-      // While the synthetic "Add Files" button click event is not trusted and
-      // it should generate a non-trusted click event on the hidden file input,
-      // at the time of writing Chrome and Firefox still open the file dialog.
-      // Use stub calling `preventDefault` to prevent dialog from opening.
-      inputClickSpy = sinon.stub().callsFake((e) => e.preventDefault());
-      input.addEventListener('click', inputClickSpy);
-    });
-
-    it('should open file dialog by click', () => {
-      click(addButton);
-      expect(inputClickSpy.calledOnce).to.be.true;
-    });
-
-    it('should open file dialog by touchend', () => {
-      const event = makeSoloTouchEvent('touchend', null, addButton);
-      expect(inputClickSpy.calledOnce).to.be.true;
-      expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should reset input.value before dialog', () => {
-      // We can't simply assign `files` property of input[type="file"].
-      // Tweaking __proto__ to make it assignable below.
-      Object.setPrototypeOf(input, HTMLElement.prototype);
-      delete input.value;
-      input.value = 'foo';
-
-      click(addButton);
-      expect(input.value).to.be.empty;
-    });
-
-    it('should add files from dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
       Object.setPrototypeOf(input, HTMLElement.prototype);
@@ -81,33 +43,6 @@ describe('file list', () => {
 
       expect(upload.files[0]).to.equal(files[1]);
       expect(upload.files[1]).to.equal(files[0]);
-    });
-
-    it('should disable add button when max files added', () => {
-      // Enabled with default maxFiles value
-      expect(addButton.disabled).to.be.false;
-
-      upload.maxFiles = 1;
-      expect(addButton.disabled).to.be.false;
-
-      upload._addFile(createFile(100, 'image/jpeg'));
-      expect(addButton.disabled).to.be.true;
-    });
-
-    it('should not open upload dialog when max files added', () => {
-      upload.maxFiles = 0;
-      click(addButton);
-      expect(inputClickSpy.called).to.be.false;
-    });
-
-    it('should set max-files-reached style attribute when max files added', () => {
-      upload.maxFiles = 0;
-
-      expect(upload.hasAttribute('max-files-reached')).to.be.true;
-    });
-
-    it('should not set max-files-reached style attribute when less than max files added', () => {
-      expect(upload.hasAttribute('max-files-reached')).to.be.false;
     });
   });
 
@@ -214,6 +149,12 @@ describe('file list', () => {
   });
 
   describe('validate files', () => {
+    let file;
+
+    beforeEach(() => {
+      file = createFile(testFileSize, 'application/x-octet-stream');
+    });
+
     it('should reject files when maxFiles is reached', (done) => {
       upload.maxFiles = 1;
       upload.addEventListener('file-reject', (e) => {

@@ -25,7 +25,7 @@ describe('validation', () => {
           root,
         );
       };
-      valueButton = select._valueButton;
+      valueButton = select.querySelector('vaadin-select-value-button');
       await nextRender();
     });
 

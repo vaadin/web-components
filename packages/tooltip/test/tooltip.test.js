@@ -12,10 +12,16 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../vaadin-tooltip.js';
+import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
 describe('vaadin-tooltip', () => {
+  before(() => {
+    Tooltip.setDefaultFocusDelay(0);
+    Tooltip.setDefaultHoverDelay(0);
+    Tooltip.setDefaultHideDelay(0);
+  });
+
   let tooltip, overlay;
 
   beforeEach(() => {

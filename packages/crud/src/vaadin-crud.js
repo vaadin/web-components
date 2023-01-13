@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -22,6 +22,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { getProperty, setProperty } from './vaadin-crud-helpers.js';
 
 /**
  * @private
@@ -308,7 +309,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         theme$="[[_theme]]"
         id="confirmCancel"
         on-confirm="__confirmCancel"
-        cancel
+        cancel-button-visible
         confirm-text="[[i18n.confirm.cancel.button.confirm]]"
         cancel-text="[[i18n.confirm.cancel.button.dismiss]]"
         header="[[i18n.confirm.cancel.title]]"
@@ -320,7 +321,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         theme$="[[_theme]]"
         id="confirmDelete"
         on-confirm="__confirmDelete"
-        cancel
+        cancel-button-visible
         confirm-text="[[i18n.confirm.delete.button.confirm]]"
         cancel-text="[[i18n.confirm.delete.button.dismiss]]"
         header="[[i18n.confirm.delete.title]]"
@@ -651,11 +652,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return ['bottom', 'aside'].includes(editorPosition);
   }
 
-  /** @protected */
-  get _headerNode() {
-    return this._headerController && this._headerController.node;
-  }
-
   constructor() {
     super();
 
@@ -671,6 +667,23 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
+  }
+
+  /** @protected */
+  get _headerNode() {
+    return this._headerController && this._headerController.node;
+  }
+
+  /**
+   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
+   * @return {!Array<!HTMLElement>}
+   * @protected
+   */
+  get _fields() {
+    if (!this.__fields || !this.__fields.length) {
+      this.__fields = Array.from(this._form.querySelectorAll('*')).filter((e) => e.validate || e.checkValidity);
+    }
+    return this.__fields;
   }
 
   /** @protected */
@@ -1171,25 +1184,13 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this._fields.forEach((e) => {
         const path = e.path || e.getAttribute('path');
         if (path) {
-          e.value = this.get(path, item);
+          e.value = getProperty(path, item);
         }
       });
 
       this.__isNew = !!(this.__isNew || (this.items && this.items.indexOf(item) < 0));
       this.editorOpened = true;
     }
-  }
-
-  /**
-   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
-   * @return {!Array<!HTMLElement>}
-   * @protected
-   */
-  get _fields() {
-    if (!this.__fields || !this.__fields.length) {
-      this.__fields = Array.from(this._form.querySelectorAll('*')).filter((e) => e.validate || e.checkValidity);
-    }
-    return this.__fields;
   }
 
   /** @private */
@@ -1252,7 +1253,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._fields.forEach((e) => {
       const path = e.path || e.getAttribute('path');
       if (path) {
-        this.__set(path, e.value, item);
+        setProperty(path, e.value, item);
       }
     });
     const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item }, cancelable: true }));
@@ -1264,7 +1265,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           this.items.push(item);
         }
       } else {
-        this.editedItem = this.editedItem || {};
+        if (!this.editedItem) {
+          this.editedItem = {};
+        }
         Object.assign(this.editedItem, item);
       }
       this._grid.clearCache();
@@ -1303,23 +1306,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       }
       this._grid.clearCache();
       this.__closeEditor();
-    }
-  }
-
-  /**
-   * Utility method for setting nested values in JSON objects but initializing empty keys unless `Polymer.Base.set`
-   * @private
-   */
-  __set(path, val, obj) {
-    if (obj && path) {
-      path
-        .split('.')
-        .slice(0, -1)
-        .reduce((o, p) => {
-          o[p] = o[p] || {};
-          return o[p];
-        }, obj);
-      this.set(path, val, obj);
     }
   }
 

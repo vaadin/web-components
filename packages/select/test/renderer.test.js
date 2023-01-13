@@ -14,10 +14,9 @@ describe('renderer', () => {
   function generateRendererWithItems(items) {
     return function (root, select) {
       if (root.firstChild) {
-        root.firstChild.items &&
-          root.firstChild.items.forEach((item, index) => {
-            item.textContent = items[index] + (select.__testVar || '');
-          });
+        root.firstChild.items?.forEach((item, index) => {
+          item.textContent = items[index] + (select.__testVar || '');
+        });
         return;
       }
 
@@ -114,7 +113,8 @@ describe('renderer', () => {
     select.requestContentUpdate();
     await nextFrame();
     expect(select._menuElement.selected).to.be.equal(1);
-    expect(select._valueButton.textContent.trim()).to.be.equal('barbaz');
+    const valueButton = select.querySelector('vaadin-select-value-button');
+    expect(valueButton.textContent.trim()).to.be.equal('barbaz');
   });
 
   it('should update selected value after renderer is reassigned based on the value', async () => {

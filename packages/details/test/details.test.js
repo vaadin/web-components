@@ -1,28 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-details.js';
 
 describe('vaadin-details', () => {
-  let details, toggle, content;
-
-  beforeEach(() => {
-    details = fixtureSync(`
-      <vaadin-details>
-        <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
-        <div>
-          <input type="text" />
-        </div>
-      </vaadin-details>
-    `);
-    toggle = details._toggleElement;
-    content = details.shadowRoot.querySelector('[part="content"]');
-  });
+  let details;
 
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
+      details = fixtureSync('<vaadin-details></vaadin-details>');
       tagName = details.tagName.toLowerCase();
     });
 
@@ -35,20 +24,19 @@ describe('vaadin-details', () => {
     });
   });
 
-  describe('summary', () => {
-    it('should have unnamed slot inside the summary element', () => {
-      const slot = toggle.shadowRoot.querySelector('slot');
-      expect(slot).to.be.ok;
-      expect(slot.assignedNodes()[0].textContent).to.equal('Summary');
-    });
-
-    it('should have disabled attribute when disabled is true', () => {
-      details.disabled = true;
-      expect(toggle.hasAttribute('disabled')).to.equal(true);
-    });
-  });
-
   describe('opened', () => {
+    let contentPart, contentNode;
+
+    beforeEach(() => {
+      details = fixtureSync(`
+        <vaadin-details>
+          <div>Content</div>
+        </vaadin-details>
+      `);
+      contentPart = details.shadowRoot.querySelector('[part="content"]');
+      contentNode = details.querySelector('div');
+    });
+
     it('should set opened to false by default', () => {
       expect(details.opened).to.be.false;
     });
@@ -58,94 +46,118 @@ describe('vaadin-details', () => {
       expect(details.hasAttribute('opened')).to.be.true;
     });
 
-    it('should update opened on toggle button click', () => {
-      toggle.click();
-      expect(details.opened).to.be.true;
-
-      toggle.click();
-      expect(details.opened).to.be.false;
-    });
-
-    it('should update opened on toggle button enter', () => {
-      keyDownOn(toggle, 13, [], 'Enter');
-      expect(details.opened).to.be.true;
-
-      keyDownOn(toggle, 13, [], 'Enter');
-      expect(details.opened).to.be.false;
-    });
-
-    it('should update opened on toggle button space', () => {
-      keyDownOn(toggle, 32, [], ' ');
-      expect(details.opened).to.be.true;
-
-      keyDownOn(toggle, 32, [], ' ');
-      expect(details.opened).to.be.false;
-    });
-
-    it('should not update opened on arrow down key', () => {
-      keyDownOn(toggle, 40, [], 'ArrowDown');
-      expect(details.opened).to.be.false;
-    });
-
     it('should hide the content when opened is false', () => {
-      expect(getComputedStyle(content).display).to.equal('none');
+      expect(getComputedStyle(contentPart).display).to.equal('none');
     });
 
     it('should show the content when `opened` is true', () => {
       details.opened = true;
-      expect(getComputedStyle(content).display).to.equal('block');
-    });
-
-    it('should dispatch opened-changed event when opened changes', () => {
-      const spy = sinon.spy();
-      details.addEventListener('opened-changed', spy);
-      toggle.click();
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
-  describe('ARIA roles', () => {
-    it('should set role="button" on the toggle button', () => {
-      expect(toggle.getAttribute('role')).to.equal('button');
-    });
-
-    it('should set aria-expanded on toggle button to false by default', () => {
-      expect(toggle.getAttribute('aria-expanded')).to.equal('false');
-    });
-
-    it('should set aria-expanded on toggle button to true when opened', () => {
-      details.opened = true;
-      expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+      expect(getComputedStyle(contentPart).display).to.equal('block');
     });
 
     it('should set aria-hidden on the slotted element to true by default', () => {
-      expect(details.querySelector('div').getAttribute('aria-hidden')).to.equal('true');
+      expect(contentNode.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should set aria-hidden on the slotted element to false when opened', () => {
       details.opened = true;
-      expect(details.querySelector('div').getAttribute('aria-hidden')).to.equal('false');
+      expect(contentNode.getAttribute('aria-hidden')).to.equal('false');
     });
+  });
 
-    it('should set aria-controls on toggle button', () => {
-      const idRegex = /^content-vaadin-details-\d+$/;
-      expect(idRegex.test(toggle.getAttribute('aria-controls'))).to.be.true;
+  ['default', 'custom'].forEach((type) => {
+    const fixtures = {
+      default: `
+        <vaadin-details summary="Summary">
+          <div>Content</div>
+        </vaadin-details>
+      `,
+      custom: `
+        <vaadin-details>
+          <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
+          <div>Content</div>
+        </vaadin-details>
+      `,
+    };
+
+    let summary;
+
+    describe(`${type} summary`, () => {
+      beforeEach(() => {
+        details = fixtureSync(fixtures[type]);
+        summary = details.querySelector('[slot="summary"]');
+      });
+
+      it(`should toggle opened on ${type} summary click`, () => {
+        summary.click();
+        expect(details.opened).to.be.true;
+
+        summary.click();
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should toggle opened on ${type} summary Enter`, async () => {
+        summary.focus();
+
+        await sendKeys({ press: 'Enter' });
+        expect(details.opened).to.be.true;
+
+        await sendKeys({ press: 'Enter' });
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should toggle opened on ${type} summary Space`, async () => {
+        summary.focus();
+
+        await sendKeys({ press: 'Space' });
+        expect(details.opened).to.be.true;
+
+        await sendKeys({ press: 'Space' });
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should not update opened on ${type} summary Arrow Down`, async () => {
+        summary.focus();
+        await sendKeys({ press: 'ArrowDown' });
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should fire opened-changed event on ${type} summary click`, () => {
+        const spy = sinon.spy();
+        details.addEventListener('opened-changed', spy);
+        summary.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it(`should toggle aria-expanded on ${type} summary click`, () => {
+        summary.click();
+        expect(summary.getAttribute('aria-expanded')).to.equal('true');
+
+        summary.click();
+        expect(summary.getAttribute('aria-expanded')).to.equal('false');
+      });
+
+      it(`should propagate disabled attribute to ${type} summary`, () => {
+        details.disabled = true;
+        expect(summary.hasAttribute('disabled')).to.be.true;
+
+        details.disabled = false;
+        expect(summary.hasAttribute('disabled')).to.be.false;
+      });
     });
   });
 
   describe('unique IDs', () => {
-    const idRegex = /^content-vaadin-details-\d+$/;
+    const idRegex = /^content-vaadin-details-\d+$/u;
     let container, details;
 
     beforeEach(() => {
       container = fixtureSync(`
         <div>
-          <vaadin-details>
-            <vaadin-details-summary slot="summary">Summary 1</vaadin-details-summary>
+          <vaadin-details summary="Summary 1">
             <div>Content 1</div>
           </vaadin-details>
-          <vaadin-details>
-          <vaadin-details-summary slot="summary">Summary 2</vaadin-details-summary>
+          <vaadin-details summary="Summary 2">
             <div>Content 2</div>
           </vaadin-details>
         </div>

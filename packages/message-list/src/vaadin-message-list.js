@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -98,6 +98,11 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /** @protected */
+  get _messages() {
+    return [...this.querySelectorAll('vaadin-message')];
+  }
+
+  /** @protected */
   ready() {
     super.ready();
 
@@ -116,11 +121,6 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
    */
   _getItems() {
     return this._messages;
-  }
-
-  /** @protected */
-  get _messages() {
-    return [...this.querySelectorAll('vaadin-message')];
   }
 
   /** @private */

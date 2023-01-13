@@ -16,7 +16,9 @@ describe('login form submit', () => {
     loginForm.setAttribute('target', iframe.getAttribute('name'));
 
     const submitSpy = sinon.spy(loginForm, 'submit');
-    preventDefault && login.addEventListener('login', (e) => e.preventDefault());
+    if (preventDefault) {
+      login.addEventListener('login', (e) => e.preventDefault());
+    }
 
     iframe.onload = () => {
       expect(iframe.contentWindow.location.href).to.include('login-action?username=username&password=password');

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
@@ -211,6 +211,17 @@ declare class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(Themabl
    * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
    */
   i18n: DateTimePickerI18n;
+
+  /**
+   * A space-delimited list of CSS class names to set on the overlay elements
+   * of the internal components controlled by the `<vaadin-date-time-picker>`:
+   *
+   * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker#property-overlayClass)
+   * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker#property-overlayClass)
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
 
   addEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,

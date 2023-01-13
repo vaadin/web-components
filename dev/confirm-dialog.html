@@ -14,7 +14,13 @@
   <body>
     <vaadin-button id="open">Open</vaadin-button>
 
-    <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" reject-text="Discard" cancel reject>
+    <vaadin-confirm-dialog
+      header="Unsaved changes"
+      confirm-text="Save"
+      reject-text="Discard"
+      cancel-button-visible
+      reject-button-visible
+    >
       Do you want to save or discard the changes?
     </vaadin-confirm-dialog>
 

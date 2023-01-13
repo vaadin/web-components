@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
+ * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -123,7 +123,10 @@ function observeTemplates(component) {
 /**
  * Public API
  */
-window.Vaadin = window.Vaadin || {};
+if (!window.Vaadin) {
+  window.Vaadin = {};
+}
+
 window.Vaadin.templateRendererCallback = (component) => {
   processTemplates(component);
   observeTemplates(component);

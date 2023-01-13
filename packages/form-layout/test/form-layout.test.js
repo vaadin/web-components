@@ -64,7 +64,7 @@ customElements.define(
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
-  const components = width.replace(/^calc\((.*)\)$/, '$1').split(/ [+-] /);
+  const components = width.replace(/^calc\((.*)\)$/u, '$1').split(/ [+-] /u);
   const [percentage, spacing] = components.sort((a, b) => b.indexOf('%'));
   return { percentage, spacing };
 }
@@ -294,7 +294,7 @@ describe('form layout', () => {
       layout.responsiveSteps = [{ columns: 3 }];
 
       const parsedWidth = getParsedWidth(layout.firstElementChild);
-      expect(parsedWidth.percentage).to.match(/%$/);
+      expect(parsedWidth.percentage).to.match(/%$/u);
       expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, 0.5);
     });
 

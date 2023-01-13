@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -10,6 +10,7 @@
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
+import { capitalize } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
@@ -62,7 +63,7 @@ class CrudForm extends IncludedMixin(FormLayout) {
   /** @private */
   __createField(parent, path) {
     const field = document.createElement('vaadin-text-field');
-    field.label = this.__capitalize(path);
+    field.label = capitalize(path);
     field.path = path;
     field.required = true;
     parent.appendChild(field);
@@ -85,29 +86,6 @@ class CrudForm extends IncludedMixin(FormLayout) {
     });
     if (!this._fields.length) {
       this._fields = undefined;
-    }
-  }
-
-  /** @private */
-  __capitalize(path) {
-    return path
-      .toLowerCase()
-      .replace(/([^\w]+)/g, ' ')
-      .trim()
-      .replace(/^./, (c) => c.toUpperCase());
-  }
-
-  /** @private */
-  __set(path, val, obj) {
-    if (obj && path) {
-      path
-        .split('.')
-        .slice(0, -1)
-        .reduce((o, p) => {
-          o[p] = o[p] || {};
-          return o[p];
-        }, obj);
-      this.set(path, val, obj);
     }
   }
 }

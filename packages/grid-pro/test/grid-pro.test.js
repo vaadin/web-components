@@ -64,8 +64,8 @@ describe('missing imports', () => {
   });
 
   const flushDebouncers = () => {
-    grid._observer && grid._observer.flush && grid._observer.flush();
-    grid._debouncerCheckImports && grid._debouncerCheckImports.flush();
+    grid._observer?.flush?.();
+    grid._debouncerCheckImports?.flush();
   };
 
   const describeMissingImportWarning = (elementName) => {

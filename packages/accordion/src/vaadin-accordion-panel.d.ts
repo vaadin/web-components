@@ -1,11 +1,11 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -44,6 +44,12 @@ export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementE
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class AccordionPanel extends DetailsMixin(DelegateFocusMixin(DelegateStateMixin(ThemableMixin(HTMLElement)))) {
+  /**
+   * A text that is displayed in the heading, if no
+   * element is assigned to the `summary` slot.
+   */
+  summary: string | null | undefined;
+
   addEventListener<K extends keyof AccordionPanelEventMap>(
     type: K,
     listener: (this: AccordionPanel, ev: AccordionPanelEventMap[K]) => void,

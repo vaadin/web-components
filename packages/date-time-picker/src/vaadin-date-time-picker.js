@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2019 - 2022 Vaadin Ltd.
+ * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-date-time-picker-date-picker.js';
@@ -349,6 +349,19 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       },
 
       /**
+       * A space-delimited list of CSS class names to set on the overlay elements
+       * of the internal components controlled by the `<vaadin-date-time-picker>`:
+       *
+       * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker#property-overlayClass)
+       * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker#property-overlayClass)
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
+
+      /**
        * The current slotted date picker.
        * @private
        */
@@ -383,6 +396,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       '__i18nChanged(i18n, __datePicker, __timePicker)',
       '__autoOpenDisabledChanged(autoOpenDisabled, __datePicker, __timePicker)',
       '__themeChanged(_theme, __datePicker, __timePicker)',
+      '__overlayClassChanged(overlayClass, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
     ];
   }
@@ -398,6 +412,20 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
+  }
+
+  /** @private */
+  get __inputs() {
+    return [this.__datePicker, this.__timePicker];
+  }
+
+  /** @private */
+  get __formattedValue() {
+    const [dateValue, timeValue] = this.__inputs.map((picker) => picker.value);
+    if (dateValue && timeValue) {
+      return [dateValue, timeValue].join('T');
+    }
+    return '';
   }
 
   /** @protected */
@@ -468,8 +496,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  __syncI18n(target, source, props) {
-    props = props || Object.keys(source.i18n);
+  __syncI18n(target, source, props = Object.keys(source.i18n)) {
     props.forEach((prop) => {
       // eslint-disable-next-line no-prototype-builtins
       if (source.i18n && source.i18n.hasOwnProperty(prop)) {
@@ -808,15 +835,11 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   __validateTime(timeObject) {
     if (timeObject) {
-      timeObject.seconds = this.__stepSegment < 3 ? undefined : timeObject.seconds;
-      timeObject.milliseconds = this.__stepSegment < 4 ? undefined : timeObject.milliseconds;
+      const stepSegment = this.__getStepSegment();
+      timeObject.seconds = stepSegment < 3 ? undefined : timeObject.seconds;
+      timeObject.milliseconds = stepSegment < 4 ? undefined : timeObject.milliseconds;
     }
     return timeObject;
-  }
-
-  /** @private */
-  get __inputs() {
-    return [this.__datePicker, this.__timePicker];
   }
 
   /**
@@ -837,8 +860,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
   // Copied from vaadin-time-picker
   /** @private */
-  // eslint-disable-next-line getter-return
-  get __stepSegment() {
+  __getStepSegment() {
     const step = this.step == null ? 60 : parseFloat(this.step);
     if (step % 3600 === 0) {
       // Accept hours
@@ -960,16 +982,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  get __formattedValue() {
-    const dateValue = this.__datePicker.value;
-    const timeValue = this.__timePicker.value;
-    if (dateValue && timeValue) {
-      return [dateValue, timeValue].join('T');
-    }
-    return '';
-  }
-
-  /** @private */
   __valueChangedEventHandler() {
     if (this.__ignoreInputValueChange) {
       return;
@@ -1017,6 +1029,17 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
         picker.removeAttribute('theme');
       }
     });
+  }
+
+  /** @private */
+  __overlayClassChanged(overlayClass, datePicker, timePicker) {
+    if (!datePicker || !timePicker) {
+      // Both pickers are not ready yet
+      return;
+    }
+
+    datePicker.overlayClass = overlayClass;
+    timePicker.overlayClass = overlayClass;
   }
 
   /** @private */

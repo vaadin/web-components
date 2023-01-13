@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -225,6 +225,30 @@ export const ColumnBaseMixin = (superClass) =>
       ];
     }
 
+    /**
+     * @return {!Grid | undefined}
+     * @protected
+     */
+    get _grid() {
+      if (!this._gridValue) {
+        this._gridValue = this._findHostGrid();
+      }
+      return this._gridValue;
+    }
+
+    /**
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
+    get _allCells() {
+      return []
+        .concat(this._cells || [])
+        .concat(this._emptyCells || [])
+        .concat(this._headerCell)
+        .concat(this._footerCell)
+        .filter((cell) => cell);
+    }
+
     /** @protected */
     _bodyContentHiddenChanged(bodyContentHidden, bodyCells) {
       if (!bodyCells) {
@@ -297,34 +321,10 @@ export const ColumnBaseMixin = (superClass) =>
       // eslint-disable-next-line @typescript-eslint/no-this-alias, consistent-this
       let el = this;
       // Custom elements extending grid must have a specific localName
-      while (el && !/^vaadin.*grid(-pro)?$/.test(el.localName)) {
+      while (el && !/^vaadin.*grid(-pro)?$/u.test(el.localName)) {
         el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
       }
       return el || undefined;
-    }
-
-    /**
-     * @return {!Grid | undefined}
-     * @protected
-     */
-    get _grid() {
-      if (!this._gridValue) {
-        this._gridValue = this._findHostGrid();
-      }
-      return this._gridValue;
-    }
-
-    /**
-     * @return {!Array<!HTMLElement>}
-     * @protected
-     */
-    get _allCells() {
-      return []
-        .concat(this._cells || [])
-        .concat(this._emptyCells || [])
-        .concat(this._headerCell)
-        .concat(this._footerCell)
-        .filter((cell) => cell);
     }
 
     /** @protected */
@@ -432,10 +432,10 @@ export const ColumnBaseMixin = (superClass) =>
     _generateHeader(path) {
       return path
         .substr(path.lastIndexOf('.') + 1)
-        .replace(/([A-Z])/g, '-$1')
+        .replace(/([A-Z])/gu, '-$1')
         .toLowerCase()
-        .replace(/-/g, ' ')
-        .replace(/^./, (match) => match.toUpperCase());
+        .replace(/-/gu, ' ')
+        .replace(/^./u, (match) => match.toUpperCase());
     }
 
     /** @private */
@@ -530,8 +530,8 @@ export const ColumnBaseMixin = (superClass) =>
           },
         );
 
-        if (this._grid._updateFrozenColumn) {
-          this._grid._updateFrozenColumn();
+        if (this._grid._debounceUpdateFrozenColumn) {
+          this._grid._debounceUpdateFrozenColumn();
         }
 
         if (this._grid._resetKeyboardNavigation) {
@@ -611,8 +611,8 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
-      if (this._grid) {
-        this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
+      if (this._grid && headerCell.parentElement) {
+        this._grid.__debounceUpdateHeaderFooterRowVisibility(headerCell.parentElement);
       }
     }
 
@@ -655,8 +655,8 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
-      if (this._grid) {
-        this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
+      if (this._grid && footerCell.parentElement) {
+        this._grid.__debounceUpdateHeaderFooterRowVisibility(footerCell.parentElement);
       }
     }
 

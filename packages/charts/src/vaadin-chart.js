@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2000 - 2022 Vaadin Ltd.
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
@@ -10,6 +10,7 @@
  */
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
+import 'highcharts/es-modules/masters/modules/annotations.src.js';
 import 'highcharts/es-modules/masters/highcharts-more.src.js';
 import 'highcharts/es-modules/masters/highcharts-3d.src.js';
 import 'highcharts/es-modules/masters/modules/data.src.js';
@@ -274,18 +275,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     return 'vaadin-chart';
   }
 
-  /** @private */
-  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
-    const functionToCall = Highcharts[functionName];
-    if (functionToCall && typeof functionToCall === 'function') {
-      args.forEach((arg) => inflateFunctions(arg));
-      functionToCall.apply(this.configuration, args);
-      if (redrawCharts) {
-        Highcharts.charts.forEach((c) => c.redraw());
-      }
-    }
-  }
-
   static get properties() {
     return {
       /**
@@ -483,10 +472,23 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     ];
   }
 
+  /** @private */
+  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
+    const functionToCall = Highcharts[functionName];
+    if (functionToCall && typeof functionToCall === 'function') {
+      args.forEach((arg) => inflateFunctions(arg));
+      functionToCall.apply(this.configuration, args);
+      if (redrawCharts) {
+        Highcharts.charts.forEach((c) => c.redraw());
+      }
+    }
+  }
+
   constructor() {
     super();
 
     this._baseConfig = {
+      annotations: [],
       chart: {
         styledMode: true,
       },
@@ -514,33 +516,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     };
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this.__updateStyles();
-    beforeNextRender(this, () => {
-      // Detect if the chart had already been initialized. This might happen in
-      // environments where the chart is lazily attached (e.g Grid).
-      if (this.configuration) {
-        this.__reflow();
-        return;
-      }
-
-      const options = { ...this.options, ...this._jsonConfigurationBuffer };
-      this._jsonConfigurationBuffer = null;
-      this.__initChart(options);
-      this.__addChildObserver();
-      this.__checkTurboMode();
-    });
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
-  }
-
   /**
    * @return {!Options}
    */
@@ -549,12 +524,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     deepMerge(options, this.additionalOptions);
 
     if (this.type) {
-      options.chart = options.chart || {};
       options.chart.type = this.type;
     }
 
     if (this.polar) {
-      options.chart = options.chart || {};
       options.chart.polar = true;
     }
 
@@ -579,7 +552,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.categories) {
-      options.xAxis = options.xAxis || {};
       if (Array.isArray(options.xAxis)) {
         // Set categories on first X axis
         options.xAxis[0].categories = this.categories;
@@ -589,7 +561,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (isFinite(this.categoryMin)) {
-      options.xAxis = options.xAxis || {};
       if (Array.isArray(options.xAxis)) {
         // Set category-min on first X axis
         options.xAxis[0].min = this.categoryMin;
@@ -599,7 +570,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (isFinite(this.categoryMax)) {
-      options.xAxis = options.xAxis || {};
       if (Array.isArray(options.xAxis)) {
         // Set category-max on first x axis
         options.xAxis[0].max = this.categoryMax;
@@ -615,13 +585,13 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.emptyText) {
-      options.lang = options.lang || {};
+      if (!options.lang) {
+        options.lang = {};
+      }
       options.lang.noData = this.emptyText;
     }
 
     if (this.categoryPosition) {
-      options.chart = options.chart || {};
-
       options.chart.inverted = this.__shouldInvert();
 
       if (Array.isArray(options.xAxis)) {
@@ -634,14 +604,16 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     }
 
     if (this.stacking) {
-      options.plotOptions = options.plotOptions || {};
-      options.plotOptions.series = options.plotOptions.series || {};
+      if (!options.plotOptions) {
+        options.plotOptions = {};
+      }
+      if (!options.plotOptions.series) {
+        options.plotOptions.series = {};
+      }
       options.plotOptions.series.stacking = this.stacking;
     }
 
     if (this.chart3d) {
-      options.chart = options.chart || {};
-
       options.chart.options3d = { ...this._baseChart3d, ...options.chart.options3d };
     }
 
@@ -923,6 +895,33 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     };
   }
 
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    this.__updateStyles();
+    beforeNextRender(this, () => {
+      // Detect if the chart had already been initialized. This might happen in
+      // environments where the chart is lazily attached (e.g Grid).
+      if (this.configuration) {
+        this.__reflow();
+        return;
+      }
+
+      const options = { ...this.options, ...this._jsonConfigurationBuffer };
+      this._jsonConfigurationBuffer = null;
+      this.__initChart(options);
+      this.__addChildObserver();
+      this.__checkTurboMode();
+    });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
+  }
+
   /**
    * Implements resize callback from `ResizeMixin`
    * to reflow when the chart element is resized.
@@ -1123,12 +1122,12 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    *
    * @param {!Options} jsonConfiguration Object chart configuration. Most important properties are:
    *
+   * - annotations `Object[]` custom labels or shapes that can be tied to points, axis coordinates or chart pixel coordinates.
+   *    Detailed API for annotations object is available in [API Site](http://api.highcharts.com/highcharts/annotations)
    * - chart `Object` with options regarding the chart area and plot area as well as general chart options.
    *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
    * - credits `Object` with options regarding the chart area and plot area as well as general chart options.
    *    Detailed API for credits object is available in [API Site](http://api.highcharts.com/highcharts/credits)
-   * - labels `Object[]` with HTML labels that can be positioned anywhere in the chart area
-   *    Detailed API for labels object is available in [API Site](http://api.highcharts.com/highcharts/labels)
    * - plotOptions `Object` wrapper for config objects for each series type.
    *    Detailed API for plotOptions object is available in [API Site](http://api.highcharts.com/highcharts/plotOptions)
    * - series `Object[]` the actual series to append to the chart.
@@ -1321,7 +1320,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
               }
 
               // Strip off host selectors that target individual instances
-              effectiveCss = effectiveCss.replace(/:host\(.+?\)/g, (match) => {
+              effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
                 const selector = match.substr(6, match.length - 7);
                 return this.matches(selector) ? '' : match;
               });
@@ -1372,7 +1371,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
     path = path.split('.');
     return path.reduce((obj, key) => {
-      obj[key] = obj[key] || {};
+      if (!obj[key]) {
+        obj[key] = {};
+      }
       return obj[key];
     }, object);
   }

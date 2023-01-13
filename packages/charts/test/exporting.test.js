@@ -78,14 +78,12 @@ describe('vaadin-chart exporting', () => {
 
     // Track style movement into the document body
     const observer = new MutationObserver((mutations) => {
-      styleCopiedToBody =
-        styleCopiedToBody ||
-        mutations.some(
-          (mutation) =>
-            Array.from(mutation.addedNodes)
-              .map((node) => node.tagName.toLowerCase())
-              .indexOf('style') >= 0,
-        );
+      styleCopiedToBody ||= mutations.some(
+        (mutation) =>
+          Array.from(mutation.addedNodes)
+            .map((node) => node.tagName.toLowerCase())
+            .indexOf('style') >= 0,
+      );
     });
 
     observer.observe(document.body, { childList: true });
@@ -107,14 +105,12 @@ describe('vaadin-chart exporting', () => {
 
     // Track style removal from the document body
     const observer = new MutationObserver((mutations) => {
-      styleRemovedFromBody =
-        styleRemovedFromBody ||
-        mutations.some(
-          (mutation) =>
-            Array.from(mutation.removedNodes)
-              .map((node) => node.tagName.toLowerCase())
-              .indexOf('style') >= 0,
-        );
+      styleRemovedFromBody ||= mutations.some(
+        (mutation) =>
+          Array.from(mutation.removedNodes)
+            .map((node) => node.tagName.toLowerCase())
+            .indexOf('style') >= 0,
+      );
     });
 
     observer.observe(document.body, { childList: true });
@@ -143,9 +139,9 @@ describe('vaadin-chart exporting', () => {
 
     // Track styled-mode attribute addition and removal from the document body
     const observer = new MutationObserver((mutations) => {
-      styledModeAddedToBody =
-        styledModeAddedToBody ||
-        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue === '');
+      styledModeAddedToBody ||= mutations.some(
+        (mutation) => mutation.attributeName === attributeName && mutation.oldValue === '',
+      );
     });
 
     observer.observe(targetNode, config);
@@ -175,9 +171,9 @@ describe('vaadin-chart exporting', () => {
 
     // Track styled-mode attribute addition and removal from the document body
     const observer = new MutationObserver((mutations) => {
-      styledModeAddedToBody =
-        styledModeAddedToBody ||
-        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue === '');
+      styledModeAddedToBody ||= mutations.some(
+        (mutation) => mutation.attributeName === attributeName && mutation.oldValue === '',
+      );
     });
 
     observer.observe(targetNode, config);

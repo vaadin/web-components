@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2016 - 2022 Vaadin Ltd.
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
@@ -15,6 +15,59 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+class AddButtonController extends SlotController {
+  constructor(host) {
+    super(host, 'add-button', 'vaadin-button');
+  }
+
+  /**
+   * Override method inherited from `SlotController`
+   * to add listeners to default and custom node.
+   *
+   * @param {Node} node
+   * @protected
+   * @override
+   */
+  initNode(node) {
+    // Needed by Flow counterpart to apply i18n to custom button
+    if (node._isDefault) {
+      this.defaultNode = node;
+    }
+
+    node.addEventListener('touchend', (e) => {
+      this.host._onAddFilesTouchEnd(e);
+    });
+
+    node.addEventListener('click', (e) => {
+      this.host._onAddFilesClick(e);
+    });
+
+    this.host._addButton = node;
+  }
+}
+
+class DropLabelController extends SlotController {
+  constructor(host) {
+    super(host, 'drop-label', 'span');
+  }
+
+  /**
+   * Override method inherited from `SlotController`
+   * to add listeners to default and custom node.
+   *
+   * @param {Node} node
+   * @protected
+   * @override
+   */
+  initNode(node) {
+    // Needed by Flow counterpart to apply i18n to custom label
+    if (node._isDefault) {
+      this.defaultNode = node;
+    }
+    this.host._dropLabel = node;
+  }
+}
 
 /**
  * `<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.
@@ -453,27 +506,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
     this.addEventListener('upload-error', this._onUploadError.bind(this));
 
-    this.addController(
-      new SlotController(this, 'add-button', 'vaadin-button', {
-        initializer: (button) => {
-          button.addEventListener('touchend', (e) => {
-            this._onAddFilesTouchEnd(e);
-          });
-          button.addEventListener('click', (e) => {
-            this._onAddFilesClick(e);
-          });
-          this._addButton = button;
-        },
-      }),
-    );
+    this._addButtonController = new AddButtonController(this);
+    this.addController(this._addButtonController);
 
-    this.addController(
-      new SlotController(this, 'drop-label', 'span', {
-        initializer: (label) => {
-          this._dropLabel = label;
-        },
-      }),
-    );
+    this._dropLabelController = new DropLabelController(this);
+    this.addController(this._dropLabelController);
 
     this.addController(
       new SlotController(this, 'file-list', 'vaadin-upload-file-list', {
@@ -551,13 +588,18 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   __updateAddButton(addButton, maxFiles, i18n, maxFilesReached) {
     if (addButton) {
       addButton.disabled = maxFilesReached;
-      addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+
+      // Only update text content for the default button element
+      if (addButton === this._addButtonController.defaultNode) {
+        addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+      }
     }
   }
 
   /** @private */
   __updateDropLabel(dropLabel, maxFiles, i18n) {
-    if (dropLabel) {
+    // Only update text content for the default label element
+    if (dropLabel && dropLabel === this._dropLabelController.defaultNode) {
       dropLabel.textContent = this._i18nPlural(maxFiles, i18n.dropFiles);
     }
   }
@@ -637,11 +679,10 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
    *
    * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
    */
-  uploadFiles(files) {
+  uploadFiles(files = this.files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files = files || this.files;
     files = files.filter((file) => !file.complete);
     Array.prototype.forEach.call(files, this._uploadFile.bind(this));
   }
@@ -838,11 +879,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-    const fileExt = file.name.match(/\.[^.]*$|$/)[0];
+    const fileExt = file.name.match(/\.[^.]*$|$/u)[0];
     // Escape regex operators common to mime types
-    const escapedAccept = this.accept.replace(/[+.]/g, '\\$&');
+    const escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
     // Create accept regex that can match comma separated patterns, star (*) wildcards
-    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
+    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/gu, '|').replace(/\/\*/gu, '/.*')})$`, 'iu');
     if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {

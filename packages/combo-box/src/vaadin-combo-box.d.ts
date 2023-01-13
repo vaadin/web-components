@@ -1,15 +1,16 @@
 /**
  * @license
- * Copyright (c) 2015 - 2022 Vaadin Ltd.
+ * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import type { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -148,21 +149,17 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * needs to be set manually. The total number of items can be returned
  * in the second argument of the data provider callback:__
  *
- * ```javascript
- * comboBox.dataProvider = function(params, callback) {
- *   var url = 'https://api.example/data' +
- *       '?page=' + params.page +        // the requested page index
- *       '&per_page=' + params.pageSize; // number of items on the page
- *   var xhr = new XMLHttpRequest();
- *   xhr.onload = function() {
- *     var response = JSON.parse(xhr.responseText);
- *     callback(
- *       response.employees, // requested page of items
- *       response.totalSize  // total number of items
- *     );
- *   };
- *   xhr.open('GET', url, true);
- *   xhr.send();
+ * ```js
+ * comboBox.dataProvider = async (params, callback) => {
+ *   const API = 'https://demo.vaadin.com/demo-data/1.0/filtered-countries';
+ *   const { filter, page, pageSize } = params;
+ *   const index = page * pageSize;
+ *
+ *   const res = await fetch(`${API}?index=${index}&count=${pageSize}&filter=${filter}`);
+ *   if (res.ok) {
+ *     const { result, size } = await res.json();
+ *     callback(result, size);
+ *   }
  * };
  * ```
  *
@@ -239,6 +236,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     PatternMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
+    OverlayClassMixinClass,
     InputMixinClass,
     InputControlMixinClass,
     InputConstraintsMixinClass,
