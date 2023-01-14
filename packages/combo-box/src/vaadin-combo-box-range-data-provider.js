@@ -6,7 +6,6 @@ export class RangeDataProvider {
   #comboBox;
   #requestRangeCallback;
 
-  // TODO: Provider addPages, removePages, flushPages, setPages API to clean the connector as much as possible.
   constructor(requestRangeCallback, options = {}) {
     this.#range = null;
     this.#options = { maxRangeSize: Infinity, ...options };
@@ -19,27 +18,39 @@ export class RangeDataProvider {
 
     this.#range = adjustRangeToIncludePage(this.#range, page, this.#options.maxRangeSize);
 
-    this.#unloadOutOfRangePages();
+    this.#discardPagesOutOfRange();
 
     this.#requestRangeCallback(
       {
         ...params,
         pageRange: this.#range,
       },
-      this.#onRangeLoaded.bind(this),
+      this.onPagesLoaded.bind(this),
     );
   }
 
   /**
-   * Unloads out-of-range pages from memory.
+   * Resolves pending page requests with the provided items.
    *
-   * Effectively, this replaces items of those pages with placeholders
-   * and cancels any active requests to those pages. Unloaded pages
+   * @param {Record<number, object[]>} pages
+   * @param {number} size
+   */
+  onPagesLoaded(pages, size) {
+    Object.entries(pages).forEach(([page, items]) => {
+      this.#comboBox._resolvePendingRequest(page, items, size);
+    });
+  }
+
+  /**
+   * Discards out-of-range pages from the combo-box cache.
+   *
+   * Effectively, this replaces items of out-of-range pages with placeholders
+   * and cancels any active requests to those pages. Discarded pages
    * can be requested again once they are back into the viewport.
    *
    * @private
    */
-  #unloadOutOfRangePages() {
+  #discardPagesOutOfRange() {
     const pagesCount = Math.ceil((this.#comboBox.size || 0) / this.#comboBox.pageSize);
     const pages = [];
 
@@ -53,19 +64,11 @@ export class RangeDataProvider {
       this.#comboBox.clearCache(pages, false);
     }
   }
-
-  /**
-   * @param {Record<number, object[]>} pages
-   * @param {number} size
-   * @private
-   */
-  #onRangeLoaded(pages, size) {
-    Object.entries(pages).forEach(([page, items]) => {
-      this.#comboBox._pendingRequests[page]?.(items, size);
-    });
-  }
 }
 
 export function createRangeDataProvider(...args) {
-  return new RangeDataProvider(...args).dataProvider;
+  const instance = new RangeDataProvider(...args);
+  const dataProvider = instance.dataProvider.bind(instance);
+  dataProvider.onPagesLoaded = instance.onPagesLoaded.bind(instance);
+  return dataProvider;
 }

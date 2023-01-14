@@ -271,6 +271,14 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       this.filteredItems = filteredItems;
     }
 
+    /** @protected */
+    _resolvePendingRequest(page, items, size) {
+      const callback = this._pendingRequests[page];
+      if (callback) {
+        callback(items, size);
+      }
+    }
+
     /** @private */
     _sizeChanged(size = 0) {
       const filteredItems = (this.filteredItems || []).slice(0, size);
