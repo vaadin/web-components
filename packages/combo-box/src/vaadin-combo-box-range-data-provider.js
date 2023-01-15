@@ -11,6 +11,7 @@ export class RangeDataProvider {
     this.#options = { maxRangeSize: Infinity, ...options };
     this.#requestRangeCallback = requestRangeCallback;
     this.dataProvider = this.dataProvider.bind(this);
+    this.onPagesLoaded = this.onPagesLoaded.bind(this);
   }
 
   dataProvider({ page, ...params }, _callback, comboBox) {
@@ -25,7 +26,7 @@ export class RangeDataProvider {
         ...params,
         pageRange: this.#range,
       },
-      this.onPagesLoaded.bind(this),
+      this.onPagesLoaded,
     );
   }
 
@@ -67,8 +68,7 @@ export class RangeDataProvider {
 }
 
 export function createRangeDataProvider(...args) {
-  const instance = new RangeDataProvider(...args);
-  const dataProvider = instance.dataProvider.bind(instance);
-  dataProvider.onPagesLoaded = instance.onPagesLoaded.bind(instance);
+  const { dataProvider, onPagesLoaded } = new RangeDataProvider(...args);
+  dataProvider.onPagesLoaded = onPagesLoaded;
   return dataProvider;
 }
