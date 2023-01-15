@@ -262,7 +262,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         delete this._pendingRequests[page];
 
         const startPageIndex = this.pageSize * page;
-        const endPageIndex = this.pageSize * (page + 1);
+        const endPageIndex = Math.min(this.pageSize * (page + 1), this.size || 0);
         for (let i = startPageIndex; i < endPageIndex; i++) {
           filteredItems[i] = this.__placeHolder;
         }

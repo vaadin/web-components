@@ -6,7 +6,7 @@ import { createRangeDataProvider } from '../src/vaadin-combo-box-range-data-prov
 import { isPageInRange } from '../src/vaadin-combo-box-range-data-provider-helpers.js';
 import { makeItems, scrollToIndex } from './helpers.js';
 
-const ITEMS = makeItems(300);
+const ITEMS = makeItems(480);
 
 describe('range data provider', () => {
   let comboBox;
@@ -15,9 +15,9 @@ describe('range data provider', () => {
     comboBox.filteredItems.forEach((item, i) => {
       const page = Math.floor(i / comboBox.pageSize);
       if (isPageInRange(range, page)) {
-        expect(item).to.equal(`item ${i}`);
+        expect(item).to.equal(`item ${i}`, `Page ${page}`);
       } else {
-        expect(item).to.be.an.instanceOf(ComboBoxPlaceholder);
+        expect(item).to.be.an.instanceOf(ComboBoxPlaceholder, `Page ${page}`);
       }
     });
   }
@@ -32,7 +32,7 @@ describe('range data provider', () => {
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
-    comboBox.pageSize = 30;
+    comboBox.pageSize = 50;
     comboBox.dataProvider = createRangeDataProvider(
       ({ pageRange, pageSize }, callback) => {
         const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
@@ -57,7 +57,7 @@ describe('range data provider', () => {
     expectLoadedPagesToBeWithinRange([0, 0]);
   });
 
-  it('should load more pages as the user scrolls up', async () => {
+  it('should load more pages as the user scrolls down', async () => {
     for (let page = 0; page < 5; page++) {
       scrollToFirstIndexOfPage(page);
       await nextFrame();
@@ -66,7 +66,7 @@ describe('range data provider', () => {
     }
   });
 
-  it('should unload pages out of range as the user scrolls up', async () => {
+  it('should discard pages out of range as the user scrolls down', async () => {
     for (let page = 0; page <= 5; page++) {
       scrollToFirstIndexOfPage(page);
       await nextFrame();
@@ -76,7 +76,7 @@ describe('range data provider', () => {
     expectLoadedPagesToBeWithinRange([1, 5]);
   });
 
-  it('should load more pages as the user scrolls down', async () => {
+  it('should load more pages as the user scrolls up', async () => {
     for (let page = 9; page > 4; page--) {
       scrollToLastIndexOfPage(page);
       await nextFrame();
@@ -85,7 +85,7 @@ describe('range data provider', () => {
     }
   });
 
-  it('should unload pages out of range as the user scrolls down', async () => {
+  it('should discard pages out of range as the user scrolls up', async () => {
     for (let page = 9; page >= 4; page--) {
       scrollToLastIndexOfPage(page);
       await nextFrame();
