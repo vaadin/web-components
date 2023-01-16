@@ -343,7 +343,7 @@ describe('sorting', () => {
         expect(grid._sorters).to.have.lengthOf(2);
       });
 
-      it('should not multi-sort when programmatically sorting after shif-click', () => {
+      it('should not multi-sort when programmatically sorting after shift-click', () => {
         sorterFirst.direction = null;
         sorterLast.direction = null;
         shiftClick(sorterFirst);
