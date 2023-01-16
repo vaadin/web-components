@@ -16,8 +16,4 @@ const globals = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${globals.toString()}</style>`;
-document.head.appendChild($tpl.content);
-
 export { globals };
