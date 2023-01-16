@@ -12,7 +12,7 @@ registerStyles(
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
-      --_checkbox-size: 16px;
+      --_checkbox-size: var(--vaadin-checkbox-size, 16px);
     }
 
     :host([has-label]) ::slotted(label) {
@@ -20,8 +20,8 @@ registerStyles(
     }
 
     [part='checkbox'] {
-      width: var(--vaadin-checkbox-size, var(--_checkbox-size));
-      height: var(--vaadin-checkbox-size, var(--_checkbox-size));
+      width: var(--_checkbox-size);
+      height: var(--_checkbox-size);
       margin: 4px;
       position: relative;
       border-radius: 2px;
@@ -34,7 +34,7 @@ registerStyles(
       pointer-events: none;
       width: 100%;
       height: 100%;
-      line-height: var(--vaadin-checkbox-size, var(--_checkbox-size));
+      line-height: var(--_checkbox-size);
       border-radius: 50%;
       background-color: var(--material-disabled-text-color);
       transform: scale(0);

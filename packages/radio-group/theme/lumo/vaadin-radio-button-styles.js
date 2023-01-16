@@ -21,7 +21,7 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
-      --_radio-button-size: calc(var(--lumo-size-m) / 2);
+      --_radio-button-size: var(--vaadin-radio-button-size, calc(var(--lumo-size-m) / 2));
     }
 
     :host([has-label]) ::slotted(label) {
@@ -30,8 +30,8 @@ registerStyles(
     }
 
     [part='radio'] {
-      width: var(--vaadin-radio-button-size, var(--_radio-button-size));
-      height: var(--vaadin-radio-button-size, var(--_radio-button-size));
+      width: var(--_radio-button-size);
+      height: var(--_radio-button-size);
       margin: var(--lumo-space-xs);
       position: relative;
       border-radius: 50%;
@@ -47,7 +47,7 @@ registerStyles(
       color: transparent;
       width: 100%;
       height: 100%;
-      line-height: var(--vaadin-radio-button-size, var(--_radio-button-size));
+      line-height: var(--_radio-button-size);
       border-radius: inherit;
       background-color: inherit;
       transform: scale(1.4);

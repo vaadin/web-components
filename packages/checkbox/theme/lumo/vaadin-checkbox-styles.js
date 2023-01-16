@@ -22,7 +22,7 @@ registerStyles(
       user-select: none;
       cursor: default;
       outline: none;
-      --_checkbox-size: calc(var(--lumo-size-m) / 2);
+      --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
     }
 
     :host([has-label]) ::slotted(label) {
@@ -31,8 +31,8 @@ registerStyles(
     }
 
     [part='checkbox'] {
-      width: var(--vaadin-checkbox-size, var(--_checkbox-size));
-      height: var(--vaadin-checkbox-size, var(--_checkbox-size));
+      width: var(--_checkbox-size);
+      height: var(--_checkbox-size);
       margin: var(--lumo-space-xs);
       position: relative;
       border-radius: var(--lumo-border-radius-s);
@@ -52,7 +52,7 @@ registerStyles(
       font-family: 'lumo-icons';
       content: var(--lumo-icons-checkmark);
       color: var(--lumo-primary-contrast-color);
-      font-size: calc(var(--vaadin-checkbox-size, var(--_checkbox-size)) + 2px);
+      font-size: calc(var(--_checkbox-size) + 2px);
       line-height: 1;
       position: absolute;
       top: -1px;
@@ -116,7 +116,7 @@ registerStyles(
       color: transparent;
       width: 100%;
       height: 100%;
-      line-height: var(--vaadin-checkbox-size, var(--_checkbox-size));
+      line-height: var(--_checkbox-size);
       border-radius: inherit;
       background-color: inherit;
       transform: scale(1.4);

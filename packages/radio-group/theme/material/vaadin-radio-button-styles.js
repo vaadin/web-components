@@ -11,7 +11,7 @@ registerStyles(
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
-      --_radio-button-size: 16px;
+      --_radio-button-size: var(--vaadin-radio-button-size, 16px);
     }
 
     :host([has-label]) ::slotted(label) {
@@ -19,8 +19,8 @@ registerStyles(
     }
 
     [part='radio'] {
-      width: var(--vaadin-radio-button-size, var(--_radio-button-size));
-      height: var(--vaadin-radio-button-size, var(--_radio-button-size));
+      width: var(--_radio-button-size);
+      height: var(--_radio-button-size);
       margin: 4px;
       position: relative;
       border: 2px solid;
@@ -36,7 +36,7 @@ registerStyles(
       color: transparent;
       width: 100%;
       height: 100%;
-      line-height: var(--vaadin-radio-button-size, var(--_radio-button-size));
+      line-height: var(--_radio-button-size);
       border-radius: inherit;
       background-color: var(--material-primary-color);
       transform: scale(2.5);
