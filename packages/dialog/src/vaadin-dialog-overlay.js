@@ -321,7 +321,6 @@ export class DialogOverlay extends Overlay {
     if (overlay.style.position !== 'absolute') {
       overlay.style.position = 'absolute';
       this.setAttribute('has-bounds-set', '');
-      this.__forceSafariReflow();
     }
 
     Object.keys(parsedBounds).forEach((arg) => {
@@ -345,22 +344,6 @@ export class DialogOverlay extends Overlay {
     const width = overlayBounds.width;
     const height = overlayBounds.height;
     return { top, left, width, height };
-  }
-
-  /**
-   * Safari 13 renders overflowing elements incorrectly.
-   * This forces it to recalculate height.
-   * @private
-   */
-  __forceSafariReflow() {
-    const scrollPosition = this.$.resizerContainer.scrollTop;
-    const overlay = this.$.overlay;
-    overlay.style.display = 'block';
-
-    requestAnimationFrame(() => {
-      overlay.style.display = '';
-      this.$.resizerContainer.scrollTop = scrollPosition;
-    });
   }
 
   /** @private */
