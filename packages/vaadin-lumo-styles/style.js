@@ -29,7 +29,7 @@ const style = css`
  * Default values for component-specific custom properties.
  */
 const globals = css`
-  * {
+  html {
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
   }
