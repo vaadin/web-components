@@ -1,6 +1,8 @@
 import '../../vaadin-dialog.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { DialogDraggableMixinClass } from '../../src/vaadin-dialog-draggable-mixin.js';
+import type { DialogResizableMixinClass } from '../../src/vaadin-dialog-resizable-mixin.js';
 import type {
   Dialog,
   DialogOpenedChangedEvent,
@@ -16,6 +18,8 @@ const dialog = document.createElement('vaadin-dialog');
 // Mixins
 assertType<ElementMixinClass>(dialog);
 assertType<ThemePropertyMixinClass>(dialog);
+assertType<DialogDraggableMixinClass>(dialog);
+assertType<DialogResizableMixinClass>(dialog);
 
 // Events
 dialog.addEventListener('opened-changed', (event) => {
