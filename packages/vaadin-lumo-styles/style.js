@@ -36,7 +36,7 @@ const globals = css`
 `;
 
 const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}${globals.toString()}</style>`;
+$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}$</style>`;
 document.head.appendChild($tpl.content);
 
 export { globals, style };
