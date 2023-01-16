@@ -94,7 +94,7 @@ export const SortMixin = (superClass) =>
       const sorter = e.target;
       e.stopPropagation();
       sorter._grid = this;
-      this.__updateSorter(sorter, e.detail.shiftClick);
+      this.__updateSorter(sorter, e.detail.shiftClick, e.detail.fromSorterClick);
       this.__applySorters();
     }
 
@@ -139,14 +139,17 @@ export const SortMixin = (superClass) =>
     }
 
     /** @private */
-    __updateSorter(sorter, shiftClick) {
+    __updateSorter(sorter, shiftClick, fromSorterClick) {
       if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
         return;
       }
 
       sorter._order = null;
 
-      if ((this.multiSort && !this.multiSortOnShiftClick) || (this.multiSortOnShiftClick && shiftClick)) {
+      if (
+        (this.multiSort && (!this.multiSortOnShiftClick || !fromSorterClick)) ||
+        (this.multiSortOnShiftClick && shiftClick)
+      ) {
         if (this.multiSortPriority === 'append') {
           this.__appendSorter(sorter);
         } else {

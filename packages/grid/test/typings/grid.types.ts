@@ -316,6 +316,7 @@ assertType<GridSorter>(sorter);
 sorter.addEventListener('sorter-changed', (event) => {
   assertType<GridSorterChangedEvent>(event);
   assertType<boolean>(event.detail.shiftClick);
+  assertType<boolean>(event.detail.fromSorterClick);
 });
 
 sorter.addEventListener('direction-changed', (event) => {

@@ -153,12 +153,6 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         observer: '__isConnectedChanged',
       },
-
-      /** @private */
-      _shiftClick: {
-        type: Boolean,
-        value: false,
-      },
     };
   }
 
@@ -210,11 +204,14 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
     this.dispatchEvent(
       new CustomEvent('sorter-changed', {
-        detail: { shiftClick: this._shiftClick },
+        detail: { shiftClick: Boolean(this._shiftClick), fromSorterClick: Boolean(this._fromSorterClick) },
         bubbles: true,
         composed: true,
       }),
     );
+    // Cleaning up as a programatically sorting can be done after some user interaction
+    this._fromSorterClick = false;
+    this._shiftClick = false;
   }
 
   /** @private */
@@ -237,6 +234,7 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
     e.preventDefault();
     this._shiftClick = e.shiftKey;
+    this._fromSorterClick = true;
     if (this.direction === 'asc') {
       this.direction = 'desc';
     } else if (this.direction === 'desc') {
