@@ -465,6 +465,33 @@ describe('open on hover', () => {
     expect(subMenu.listenOn).to.equal(buttons[0]);
   });
 
+  it('should close sub-menu on mouseover on different item', async () => {
+    fire(buttons[0], openOnHoverEvent);
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.true;
+
+    fire(buttons[1], openOnHoverEvent);
+
+    expect(subMenu.opened).to.be.false;
+  });
+
+  it('should dispatch sub-menu-opened event just once on mouseover', async () => {
+    let subMenuOpenedEventFired = false;
+    document.addEventListener(
+      'sub-menu-opened',
+      () =>
+        function () {
+          subMenuOpenedEventFired = !subMenuOpenedEventFired;
+        },
+    );
+
+    fire(buttons[0], openOnHoverEvent);
+    await nextRender(subMenu);
+    fire(buttons[0], openOnHoverEvent);
+
+    expect(subMenuOpenedEventFired === true);
+  });
+
   it('should close open sub-menu on mouseover on button without nested items', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
