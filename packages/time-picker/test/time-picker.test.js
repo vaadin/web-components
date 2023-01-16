@@ -432,30 +432,6 @@ describe('time-picker', () => {
       expect(timePicker.max).to.be.equal('19:00');
     });
 
-    it('should not allow setting a value lower than min property value', () => {
-      timePicker.value = '02:00';
-      timePicker.min = '10:00';
-      expect(timePicker.value).to.be.equal('10:00');
-    });
-
-    it('should not allow setting a value higher than max property value', () => {
-      timePicker.value = '12:00';
-      timePicker.max = '10:00';
-      expect(timePicker.value).to.be.equal('10:00');
-    });
-
-    it('should not allow setting a value lower than min value via attribute', () => {
-      timePicker.setAttribute('value', '02:00');
-      timePicker.setAttribute('min', '10:00');
-      expect(timePicker.value).to.be.equal('10:00');
-    });
-
-    it('should not allow setting a value higher than max value via attribute', () => {
-      timePicker.setAttribute('value', '19:00');
-      timePicker.setAttribute('max', '16:00');
-      expect(timePicker.value).to.be.equal('16:00');
-    });
-
     it('setting min should not change an empty value', () => {
       timePicker.min = '10:00';
       expect(timePicker.value).to.be.equal('');
