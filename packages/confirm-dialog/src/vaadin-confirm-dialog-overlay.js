@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog, DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(

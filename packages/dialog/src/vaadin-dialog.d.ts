@@ -4,15 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
-/**
- * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
- */
-export class DialogOverlay extends Overlay {}
+export { DialogOverlay, DialogOverlayBounds, DialogOverlayBoundsParam } from './vaadin-dialog-overlay.js';
 
 export type DialogRenderer = (root: HTMLElement, dialog: Dialog) => void;
 
@@ -24,22 +20,6 @@ export type DialogResizeDimensions = {
   contentWidth: string;
   contentHeight: string;
 };
-
-export type DialogOverlayBounds = {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-};
-
-export type DialogOverlayBoundsParam =
-  | DialogOverlayBounds
-  | {
-      top?: number | string;
-      left?: number | string;
-      width?: number | string;
-      height?: number | string;
-    };
 
 /**
  * Fired when the `opened` property changes.
@@ -221,7 +201,6 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
 declare global {
   interface HTMLElementTagNameMap {
     'vaadin-dialog': Dialog;
-    'vaadin-dialog-overlay': DialogOverlay;
   }
 }
 
