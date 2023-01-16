@@ -6,6 +6,7 @@
 import './vaadin-dialog-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -79,8 +80,11 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @mixes ElementMixin
  * @mixes DialogDraggableMixin
  * @mixes DialogResizableMixin
+ * @mixes OverlayClassMixin
  */
-class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))) {
+class Dialog extends OverlayClassMixin(
+  ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>
@@ -222,9 +226,14 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   /** @protected */
   ready() {
     super.ready();
-    this.$.overlay.setAttribute('role', 'dialog');
-    this.$.overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
-    this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
+
+    const overlay = this.$.overlay;
+    overlay.setAttribute('role', 'dialog');
+
+    overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
+    overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
+
+    this._overlayElement = overlay;
 
     processTemplates(this);
   }

@@ -41,3 +41,17 @@ snapshots["vaadin-dialog overlay theme"] =
 `;
 /* end snapshot vaadin-dialog overlay theme */
 
+snapshots["vaadin-dialog overlay class"] = 
+`<vaadin-dialog-overlay
+  class="custom dialog-overlay"
+  focus-trap=""
+  id="overlay"
+  opened=""
+  role="dialog"
+  with-backdrop=""
+>
+  content
+</vaadin-dialog-overlay>
+`;
+/* end snapshot vaadin-dialog overlay class */
+
