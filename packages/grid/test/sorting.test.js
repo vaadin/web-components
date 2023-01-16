@@ -316,6 +316,41 @@ describe('sorting', () => {
         click(sorterLast);
         expect(grid._sorters).to.be.empty;
       });
+
+      it('should add to sorters if multi-sort is enabled and sorting is done programatically', () => {
+        grid.multiSort = true;
+        sorterFirst.direction = 'desc';
+        sorterLast.direction = 'asc';
+        expect(sorterFirst._order).to.equal(1);
+        expect(sorterFirst.direction).to.equal('desc');
+        expect(sorterLast._order).to.equal(0);
+        expect(sorterLast.direction).to.equal('asc');
+        expect(grid._sorters).to.have.lengthOf(2);
+      });
+
+      it('programmatically multi-sorting should be possible after user interacts with the sorters when multi-sort enabled', () => {
+        grid.multiSort = true;
+        click(sorterFirst);
+        click(sorterLast);
+        sorterFirst.direction = 'asc';
+
+        expect(sorterFirst.direction).to.equal('asc');
+        expect(sorterLast.direction).to.equal('asc');
+        expect(grid._sorters).to.have.lengthOf(2);
+      });
+
+      it('should not multi-sort when programmatically sorting after shift-click', () => {
+        sorterFirst.direction = null;
+        sorterLast.direction = null;
+        shiftClick(sorterFirst);
+        shiftClick(sorterLast);
+        expect(grid._sorters).to.have.lengthOf(2);
+        sorterFirst.direction = 'desc';
+
+        expect(sorterFirst.direction).to.equal('desc');
+        expect(sorterLast.direction).to.be.null;
+        expect(grid._sorters).to.have.lengthOf(1);
+      });
     });
 
     describe('array data provider', () => {
