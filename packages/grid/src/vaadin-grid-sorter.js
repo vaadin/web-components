@@ -204,7 +204,7 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
     this.dispatchEvent(
       new CustomEvent('sorter-changed', {
-        detail: { shiftClick: this._shiftClick ?? false, fromSorterClick: this._fromSorterClick ?? false },
+        detail: { shiftClick: Boolean(this._shiftClick), fromSorterClick: Boolean(this._fromSorterClick) },
         bubbles: true,
         composed: true,
       }),
