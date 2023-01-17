@@ -1,11 +1,28 @@
 import '../../vaadin-notification.js';
-import type { NotificationOpenedChangedEvent, NotificationRenderer } from '../../vaadin-notification.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type {
+  NotificationOpenedChangedEvent,
+  NotificationPosition,
+  NotificationRenderer,
+} from '../../vaadin-notification.js';
 import { Notification } from '../../vaadin-notification.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 
 const notification = document.createElement('vaadin-notification');
 
+// Mixins
+assertType<ElementMixinClass>(notification);
+assertType<ThemePropertyMixinClass>(notification);
+
+// Properties
+assertType<number>(notification.duration);
+assertType<boolean>(notification.opened);
+assertType<NotificationPosition>(notification.position);
+assertType<NotificationRenderer | undefined>(notification.renderer);
+
+// Events
 notification.addEventListener('opened-changed', (event) => {
   assertType<NotificationOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
