@@ -134,6 +134,20 @@ describe('vaadin-month-calendar', () => {
     const date10 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 10);
     tap(date10);
     expect(monthCalendar.selectedDate).to.be.undefined;
+
+    monthCalendar.isDateAvailable = (date) => {
+      if (!date) {
+        return false;
+      }
+      return date.toISOString().split('T')[0] !== '2016-02-09';
+    };
+    for (let i = 0; i < dateElements.length; i++) {
+      if (dateElements[i].date.getDate() === 9) {
+        // Ninth of February.
+        tap(dateElements[i]);
+      }
+    }
+    expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
   describe('i18n', () => {

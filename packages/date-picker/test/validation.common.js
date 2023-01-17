@@ -186,7 +186,7 @@ describe('validation', () => {
         if (!date) {
           return true;
         }
-        return date.toISOString().split('T')[0] === '2017-01-02';
+        return date.toISOString().split('T')[0] !== '2017-01-02';
       };
       datePicker.value = '2016-01-01'; // Valid
 
