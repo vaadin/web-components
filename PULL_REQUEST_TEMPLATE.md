@@ -20,6 +20,7 @@ Fixes # (issue)
 - [ ] I have added tests to ensure my change is effective and works as intended.
 - [ ] New and existing tests are passing locally with my change.
 - [ ] I have performed self-review and corrected misspellings.
+- [x] I have not completed some of the steps above and my pull request can be closed immediately.
 
 #### Additional for `Feature` type of change
 
