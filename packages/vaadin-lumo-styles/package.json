@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "24.0.0-alpha10",
+  "version": "24.0.0-alpha11",
   "publishConfig": {
     "access": "public"
   },
@@ -41,8 +41,8 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/icon": "24.0.0-alpha10",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha10"
+    "@vaadin/icon": "24.0.0-alpha11",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha11"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
