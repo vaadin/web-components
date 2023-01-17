@@ -76,6 +76,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       <vaadin-confirm-dialog-dialog
         id="dialog"
         opened="{{opened}}"
+        overlay-class="[[overlayClass]]"
         aria-label="[[_getAriaLabel(header)]]"
         theme$="[[_theme]]"
         no-close-on-outside-click
@@ -223,6 +224,16 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       cancelTheme: {
         type: String,
         value: 'tertiary',
+      },
+
+      /**
+       * A space-delimited list of CSS class names
+       * to set on the underlying overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
       },
 
       /**
