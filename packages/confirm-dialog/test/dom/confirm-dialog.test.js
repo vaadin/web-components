@@ -31,4 +31,9 @@ describe('vaadin-confirm-dialog', () => {
     dialog.setAttribute('theme', 'custom');
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
+
+  it('overlay class', async () => {
+    dialog.overlayClass = 'confirm-dialog-overlay custom';
+    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
 });
