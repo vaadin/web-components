@@ -7,6 +7,7 @@ import './vaadin-login-form.js';
 import './vaadin-login-overlay-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
@@ -47,8 +48,9 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes LoginMixin
+ * @mixes OverlayClassMixin
  */
-class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class LoginOverlay extends LoginMixin(OverlayClassMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <vaadin-login-overlay-wrapper
@@ -117,6 +119,13 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
 
   static get observers() {
     return ['__i18nChanged(i18n.header.*)'];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._overlayElement = this.$.vaadinLoginOverlayWrapper;
   }
 
   /** @protected */

@@ -1,4 +1,6 @@
 import '../../vaadin-login-form.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type {
   LoginFormDisabledChangedEvent,
   LoginFormErrorChangedEvent,
@@ -14,6 +16,9 @@ import type {
 const assertType = <TExpected>(actual: TExpected) => actual;
 
 const overlay = document.createElement('vaadin-login-overlay');
+
+assertType<ElementMixinClass>(overlay);
+assertType<OverlayClassMixinClass>(overlay);
 
 overlay.addEventListener('login', (event) => {
   assertType<LoginOverlayLoginEvent>(event);
