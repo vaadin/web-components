@@ -24,4 +24,9 @@ describe('vaadin-notification', () => {
     notification.setAttribute('theme', 'custom');
     await expect(card).dom.to.equalSnapshot();
   });
+
+  it('card class', async () => {
+    notification.overlayClass = 'custom';
+    await expect(card).dom.to.equalSnapshot();
+  });
 });

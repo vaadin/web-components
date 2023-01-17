@@ -5,6 +5,7 @@
  */
 import type { TemplateResult } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -99,7 +100,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
+declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
   /**
    * Shows a notification with the given content.
    * By default, positions the notification at `bottom-start` and uses a 5 second duration.
