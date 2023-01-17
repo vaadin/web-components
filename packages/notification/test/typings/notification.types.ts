@@ -15,9 +15,7 @@ const notification = document.createElement('vaadin-notification');
 
 // Mixins
 assertType<ElementMixinClass>(notification);
-
 assertType<OverlayClassMixinClass>(notification);
-
 assertType<ThemePropertyMixinClass>(notification);
 
 // Properties
