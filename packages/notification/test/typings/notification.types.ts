@@ -1,5 +1,6 @@
 import '../../vaadin-notification.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type {
   NotificationOpenedChangedEvent,
@@ -14,6 +15,7 @@ const notification = document.createElement('vaadin-notification');
 
 // Mixins
 assertType<ElementMixinClass>(notification);
+assertType<OverlayClassMixinClass>(notification);
 assertType<ThemePropertyMixinClass>(notification);
 
 // Properties
@@ -21,6 +23,7 @@ assertType<number>(notification.duration);
 assertType<boolean>(notification.opened);
 assertType<NotificationPosition>(notification.position);
 assertType<NotificationRenderer | undefined>(notification.renderer);
+assertType<string>(notification.overlayClass);
 
 // Events
 notification.addEventListener('opened-changed', (event) => {
