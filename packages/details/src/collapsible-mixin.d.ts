@@ -6,7 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
- * A mixin providing common functionality to handle collapsible content,
+ * A mixin providing common functionality for making content collapsible,
  * used by `<vaadin-details>` and `<vaadin-accordion-panel>` elements.
  */
 export declare function CollapsibleMixin<T extends Constructor<HTMLElement>>(

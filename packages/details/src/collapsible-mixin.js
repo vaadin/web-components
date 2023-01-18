@@ -6,7 +6,7 @@
 import { ContentController } from './content-controller.js';
 
 /**
- * A mixin providing common functionality to handle collapsible content,
+ * A mixin providing common functionality for making content collapsible,
  * used by `<vaadin-details>` and `<vaadin-accordion-panel>` elements.
  *
  * @polymerMixin
