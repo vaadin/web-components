@@ -24,8 +24,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Attribute    | Description
  * -------------| -----------
  * `active`     | Set when the element is pressed down, either with mouse, touch or the keyboard.
- * `opened`     | Set when the collapsible content is expanded and visible.
+ * `opened`     | Set when the element is expanded and related collapsible content is visible.
  * `disabled`   | Set when the element is disabled.
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
