@@ -8,14 +8,30 @@ registerStyles(
   'vaadin-input-container',
   css`
     :host {
-      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
-      padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
+      padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
       font-weight: 500;
       line-height: 1;
       position: relative;
       cursor: text;
       box-sizing: border-box;
+      border-radius:
+        /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius#syntax */
+        var(--vaadin-input-container-top-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-top-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-bottom-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-bottom-start-radius, var(--_input-container-radius));
+      /* Fallback */
+      --_input-container-radius: var(--vaadin-input-container-border-radius, var(--lumo-border-radius-m));
+    }
+
+    :host([dir='rtl']) {
+      border-radius:
+        /* Don't use logical props, see https://github.com/vaadin/vaadin-time-picker/issues/145 */
+        var(--vaadin-input-container-top-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-top-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-bottom-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-container-bottom-end-radius, var(--_input-container-radius));
     }
 
     /* Used for hover and activation effects */
