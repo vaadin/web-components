@@ -33,9 +33,9 @@ export const MenuBarMixin = (superClass) =>
 
         /**
          * Delay value for closing the menu-item after mouseleave
-         * @attr {number} hide-delay 
+         * @attr {number} hide-delay
          */
-         hideDelay: {
+        hideDelay: {
           type: Number,
           value: DEFAULT_DELAY,
         },
@@ -771,7 +771,6 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     _requestClose() {
       this._preventClose = false;
-      // Wait if something has to prevent the close event
       setTimeout(() => {
         if (!this._preventClose) {
           this._close(false);
@@ -783,29 +782,22 @@ export const MenuBarMixin = (superClass) =>
     _addHoverListener(subMenu) {
       const menuOverlay = subMenu.$.overlay.$.overlay;
 
-      menuOverlay.addEventListener(
-        'mouseleave', 
-        () => {
-          if (this.openOnHover) {
-            this._requestClose();
-          }
-        },
-      );
-      // When hovering between sub menus the subMenu will close if we don't prevent it
-      menuOverlay.addEventListener(
-        'mouseenter',
-        () => {
-          this._preventClose = true;
-        },
-      );    
-    }
+      menuOverlay.addEventListener('mouseleave', () => {
+        if (this.openOnHover) {
+          this._requestClose();
+        }
+      });
 
-    /**@private */
-    _addSubMenuOpenListener(subMenu) {
-      subMenu.addEventListener("sub-menu-opened", e => {
-        let menu = e.detail.subMenuElement;
-        this._addHoverListener(menu);
+      menuOverlay.addEventListener('mouseenter', () => {
+        this._preventClose = true;
       });
     }
 
+    /** @private */
+    _addSubMenuOpenListener(subMenu) {
+      subMenu.addEventListener('sub-menu-opened', (e) => {
+        const menu = e.detail.subMenuElement;
+        this._addHoverListener(menu);
+      });
+    }
   };

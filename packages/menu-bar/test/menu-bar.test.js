@@ -759,3 +759,29 @@ describe('menu-bar in flex', () => {
     expect(menu.offsetWidth).to.be.lessThan(wrapper.offsetWidth);
   });
 });
+
+describe('menu-bar with hide-delay property', () => {
+  let menu;
+  const DEFAULT_HIDE_DELAY = 300;
+
+  beforeEach(() => {
+    menu = fixtureSync('<vaadin-menu-bar open-on-hover></vaadin-menu-bar>');
+  });
+
+  it('hide-delay is set to default if not given', () => {
+    expect(menu.hideDelay).to.be.equal(DEFAULT_HIDE_DELAY);
+  });
+});
+
+describe('menu-bar with changed  hide-delay property', () => {
+  let menu;
+  const CHANGED_HIDE_DELAY = 5000;
+
+  beforeEach(() => {
+    menu = fixtureSync(`<vaadin-menu-bar open-on-hover hide-delay="${CHANGED_HIDE_DELAY}"></vaadin-menu-bar>`);
+  });
+
+  it('hide-delay is not with default value if given', () => {
+    expect(menu.hideDelay).to.be.equal(CHANGED_HIDE_DELAY);
+  });
+});

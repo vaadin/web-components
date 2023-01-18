@@ -419,9 +419,11 @@ describe('sub-menu', () => {
 });
 
 describe('open on hover', () => {
-  let menu, buttons, subMenu;
+  let menu, buttons, subMenu, subMenuOverlay;
 
   const openOnHoverEvent = 'mouseover';
+  const mouseLeaveEvent = 'mouseleave';
+  const mouseEnterEvent = 'mouseenter';
 
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
@@ -437,9 +439,11 @@ describe('open on hover', () => {
       },
     ];
     menu.openOnHover = true;
+    menu.hideDelay = 0;
     await nextRender(menu);
     subMenu = menu._subMenu;
     buttons = menu._buttons;
+    subMenuOverlay = subMenu.$.overlay.$.overlay;
   });
 
   it('should set pointer events to `auto` when opened and remove when closed', async () => {
@@ -468,35 +472,42 @@ describe('open on hover', () => {
   it('should close sub-menu on mouseover on different item', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
+    fire(buttons[1], openOnHoverEvent);
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.false;
+  });
+
+  it('should close opened sub-menu if _requestClose is called', async () => {
+    fire(buttons[0], openOnHoverEvent);
+    await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
 
-    fire(buttons[1], openOnHoverEvent);
+    menu._requestClose();
+    await nextRender(subMenu);
 
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should dispatch sub-menu-opened event just once on mouseover', async () => {
-    let subMenuOpenedEventFired = false;
-    document.addEventListener(
-      'sub-menu-opened',
-      () =>
-        function () {
-          subMenuOpenedEventFired = !subMenuOpenedEventFired;
-        },
-    );
-
+  it('shouldn`t close open sub-menu if mouse goes out and back in the sub menu', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
-    fire(buttons[0], openOnHoverEvent);
+    expect(subMenu.opened).to.be.true;
 
-    expect(subMenuOpenedEventFired === true);
+    fire(subMenuOverlay, mouseLeaveEvent);
+    fire(subMenuOverlay, mouseEnterEvent);
+    await nextRender(subMenu);
+
+    expect(subMenu.opened).to.be.true;
   });
 
-  it('should close open sub-menu on mouseover on button without nested items', async () => {
+  it('should close opened sub-menu when mouse goes out of the sub-menu', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
-    fire(buttons[1], openOnHoverEvent);
+    expect(subMenu.opened).to.be.true;
+
+    fire(subMenuOverlay, mouseLeaveEvent);
     await nextRender(subMenu);
+
     expect(subMenu.opened).to.be.false;
   });
 
