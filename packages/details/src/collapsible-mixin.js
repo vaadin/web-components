@@ -6,12 +6,13 @@
 import { ContentController } from './content-controller.js';
 
 /**
- * A mixin providing common details functionality.
+ * A mixin providing common functionality to handle collapsible content,
+ * used by `<vaadin-details>` and `<vaadin-accordion-panel>` elements.
  *
  * @polymerMixin
  */
-export const DetailsMixin = (superClass) =>
-  class DetailsMixinClass extends superClass {
+export const CollapsibleMixin = (superClass) =>
+  class CollapsibleMixinClass extends superClass {
     static get properties() {
       return {
         /**
@@ -26,7 +27,8 @@ export const DetailsMixin = (superClass) =>
         },
 
         /**
-         * List of elements passed to the details default slot.
+         * List of elements assigned to the default `<slot>`
+         * that represent the collapsible content.
          *
          * @protected
          */

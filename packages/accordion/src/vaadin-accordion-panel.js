@@ -9,8 +9,8 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
-import { DetailsMixin } from '@vaadin/details/src/vaadin-details-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -38,13 +38,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
+ * @mixes CollapsibleMixin
  * @mixes ControllerMixin
- * @mixes DetailsMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
  * @mixes ThemableMixin
  */
-class AccordionPanel extends DetailsMixin(
+class AccordionPanel extends CollapsibleMixin(
   DelegateFocusMixin(DelegateStateMixin(ThemableMixin(ControllerMixin(PolymerElement)))),
 ) {
   static get is() {
