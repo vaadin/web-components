@@ -3,7 +3,6 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -31,53 +30,18 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focused`    | Set when the element is focused.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
- *
- * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) {
-  static get is() {
-    return 'vaadin-details-summary';
-  }
+declare class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(HTMLElement))) {
+  /**
+   * When true, the element is opened.
+   */
+  opened: boolean;
+}
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          pointer-events: none;
-        }
-      </style>
-      <span part="toggle" aria-hidden="true"></span>
-      <div part="content"><slot></slot></div>
-    `;
-  }
-
-  static get properties() {
-    return {
-      /**
-       * When true, the element is opened.
-       */
-      opened: {
-        type: Boolean,
-        reflectToAttribute: true,
-      },
-    };
+declare global {
+  interface HTMLElementTagNameMap {
+    'vaadin-details-summary': DetailsSummary;
   }
 }
 
-customElements.define(DetailsSummary.is, DetailsSummary);
+export { DetailsSummary };
