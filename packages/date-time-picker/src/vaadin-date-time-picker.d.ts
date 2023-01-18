@@ -87,14 +87,13 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  *
  * ### Internal components
  *
- * In addition to `<vaadin-date-time-picker>` itself, the following internal
- * components are themable:
+ * The following components are created by `<vaadin-date-time-picker>` and placed in light DOM:
  *
- * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
- * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
+ * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
+ * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
- * propagated to the internal components listed above.
+ * propagated to these components.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
