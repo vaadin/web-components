@@ -4,11 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { CollapsibleMixin } from './collapsible-mixin.js';
+import { DetailsMixin } from './vaadin-details-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -58,15 +56,7 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Details extends CollapsibleMixin(
-  DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))),
-) {
-  /**
-   * A text that is displayed in the summary, if no
-   * element is assigned to the `summary` slot.
-   */
-  summary: string | null | undefined;
-
+declare class Details extends DetailsMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,

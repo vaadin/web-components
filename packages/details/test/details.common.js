@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-details.js';
 
 describe('vaadin-details', () => {
   let details;
@@ -27,12 +26,13 @@ describe('vaadin-details', () => {
   describe('opened', () => {
     let contentPart, contentNode;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       details = fixtureSync(`
         <vaadin-details>
           <div>Content</div>
         </vaadin-details>
       `);
+      await nextRender();
       contentPart = details.shadowRoot.querySelector('[part="content"]');
       contentNode = details.querySelector('div');
     });
@@ -41,8 +41,9 @@ describe('vaadin-details', () => {
       expect(details.opened).to.be.false;
     });
 
-    it('should reflect opened property to attribute', () => {
+    it('should reflect opened property to attribute', async () => {
       details.opened = true;
+      await nextFrame();
       expect(details.hasAttribute('opened')).to.be.true;
     });
 
@@ -50,8 +51,9 @@ describe('vaadin-details', () => {
       expect(getComputedStyle(contentPart).display).to.equal('none');
     });
 
-    it('should show the content when `opened` is true', () => {
+    it('should show the content when `opened` is true', async () => {
       details.opened = true;
+      await nextFrame();
       expect(getComputedStyle(contentPart).display).to.equal('block');
     });
 
@@ -59,8 +61,9 @@ describe('vaadin-details', () => {
       expect(contentNode.getAttribute('aria-hidden')).to.equal('true');
     });
 
-    it('should set aria-hidden on the slotted element to false when opened', () => {
+    it('should set aria-hidden on the slotted element to false when opened', async () => {
       details.opened = true;
+      await nextFrame();
       expect(contentNode.getAttribute('aria-hidden')).to.equal('false');
     });
   });
@@ -83,16 +86,19 @@ describe('vaadin-details', () => {
     let summary;
 
     describe(`${type} summary`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         details = fixtureSync(fixtures[type]);
+        await nextRender();
         summary = details.querySelector('[slot="summary"]');
       });
 
-      it(`should toggle opened on ${type} summary click`, () => {
+      it(`should toggle opened on ${type} summary click`, async () => {
         summary.click();
+        await nextFrame();
         expect(details.opened).to.be.true;
 
         summary.click();
+        await nextFrame();
         expect(details.opened).to.be.false;
       });
 
@@ -122,26 +128,31 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.false;
       });
 
-      it(`should fire opened-changed event on ${type} summary click`, () => {
+      it(`should fire opened-changed event on ${type} summary click`, async () => {
         const spy = sinon.spy();
         details.addEventListener('opened-changed', spy);
         summary.click();
+        await nextFrame();
         expect(spy.calledOnce).to.be.true;
       });
 
-      it(`should toggle aria-expanded on ${type} summary click`, () => {
+      it(`should toggle aria-expanded on ${type} summary click`, async () => {
         summary.click();
+        await nextFrame();
         expect(summary.getAttribute('aria-expanded')).to.equal('true');
 
         summary.click();
+        await nextFrame();
         expect(summary.getAttribute('aria-expanded')).to.equal('false');
       });
 
-      it(`should propagate disabled attribute to ${type} summary`, () => {
+      it(`should propagate disabled attribute to ${type} summary`, async () => {
         details.disabled = true;
+        await nextFrame();
         expect(summary.hasAttribute('disabled')).to.be.true;
 
         details.disabled = false;
+        await nextFrame();
         expect(summary.hasAttribute('disabled')).to.be.false;
       });
     });
@@ -151,7 +162,7 @@ describe('vaadin-details', () => {
     const idRegex = /^content-vaadin-details-\d+$/u;
     let container, details;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div>
           <vaadin-details summary="Summary 1">
@@ -162,6 +173,7 @@ describe('vaadin-details', () => {
           </vaadin-details>
         </div>
       `);
+      await nextRender();
       details = container.querySelectorAll('vaadin-details');
     });
 

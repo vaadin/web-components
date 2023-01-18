@@ -6,13 +6,12 @@
 import './vaadin-details-summary.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { CollapsibleMixin } from './collapsible-mixin.js';
-import { SummaryController } from './summary-controller.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { styles, template } from './lib/details-base.js';
+import { DetailsMixin } from './vaadin-details-mixin.js';
+
+registerStyles('vaadin-details', styles, { moduleId: 'vaadin-details-styles' });
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -52,134 +51,18 @@ import { SummaryController } from './summary-controller.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
- * @mixes CollapsibleMixin
  * @mixes ControllerMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
+ * @mixes DetailsMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends CollapsibleMixin(
-  DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))),
-) {
+class Details extends DetailsMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='content'] {
-          display: none;
-        }
-
-        :host([opened]) [part='content'] {
-          display: block;
-        }
-      </style>
-
-      <slot name="summary"></slot>
-
-      <div part="content">
-        <slot></slot>
-      </div>
-
-      <slot name="tooltip"></slot>
-    `;
+    return template(html);
   }
 
   static get is() {
     return 'vaadin-details';
-  }
-
-  static get properties() {
-    return {
-      /**
-       * A text that is displayed in the summary, if no
-       * element is assigned to the `summary` slot.
-       */
-      summary: {
-        type: String,
-        observer: '_summaryChanged',
-      },
-    };
-  }
-
-  static get observers() {
-    return ['__updateAriaControls(focusElement, _contentElements)', '__updateAriaExpanded(focusElement, opened)'];
-  }
-
-  static get delegateAttrs() {
-    return ['theme'];
-  }
-
-  static get delegateProps() {
-    return ['disabled', 'opened'];
-  }
-
-  constructor() {
-    super();
-
-    this._summaryController = new SummaryController(this, 'vaadin-details-summary');
-    this._summaryController.addEventListener('slot-content-changed', (event) => {
-      const { node } = event.target;
-
-      this._setFocusElement(node);
-      this.stateTarget = node;
-
-      this._tooltipController.setTarget(node);
-    });
-
-    this._tooltipController = new TooltipController(this);
-    this._tooltipController.setPosition('bottom-start');
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addController(this._summaryController);
-    this.addController(this._tooltipController);
-  }
-
-  /**
-   * Override method inherited from `DisabledMixin`
-   * to not set `aria-disabled` on the host element.
-   *
-   * @protected
-   * @override
-   */
-  _setAriaDisabled() {
-    // The `aria-disabled` is set on the details summary.
-  }
-
-  /** @private */
-  _summaryChanged(summary) {
-    this._summaryController.setSummary(summary);
-  }
-
-  /** @private */
-  __updateAriaControls(summary, contentElements) {
-    if (summary && contentElements) {
-      const node = contentElements[0];
-
-      if (node && node.id) {
-        summary.setAttribute('aria-controls', node.id);
-      } else {
-        summary.removeAttribute('aria-controls');
-      }
-    }
-  }
-
-  /** @private */
-  __updateAriaExpanded(focusElement, opened) {
-    if (focusElement) {
-      focusElement.setAttribute('aria-expanded', opened ? 'true' : 'false');
-    }
   }
 }
 
