@@ -117,7 +117,7 @@ class Checkbox extends LabelMixin(
         }
       </style>
       <div class="vaadin-checkbox-container">
-        <div part="checkbox"></div>
+        <div part="checkbox" aria-hidden="true"></div>
         <slot name="input"></slot>
         <slot name="label"></slot>
       </div>
