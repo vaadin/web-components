@@ -39,8 +39,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `disabled`   | Set when the element is disabled.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
- *
- * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(HTMLElement))) {
   /**
