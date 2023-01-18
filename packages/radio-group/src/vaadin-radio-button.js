@@ -118,7 +118,7 @@ class RadioButton extends LabelMixin(
         }
       </style>
       <div class="vaadin-radio-button-container">
-        <div part="radio"></div>
+        <div part="radio" aria-hidden="true"></div>
         <slot name="input"></slot>
         <slot name="label"></slot>
       </div>
