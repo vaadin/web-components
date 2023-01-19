@@ -6,7 +6,7 @@ const menuBarButton = css`
     width: 100%;
   }
 
-  [part='label'] ::slotted(vaadin-context-menu-item) {
+  [part='label'] ::slotted(vaadin-menu-bar-item) {
     line-height: 20px;
     background-color: transparent;
     margin: -8px;
@@ -19,8 +19,8 @@ const menuBarButton = css`
     border-radius: 0;
   }
 
-  :host([theme~='contained']) ::slotted(vaadin-context-menu-item),
-  :host([theme~='outlined']) ::slotted(vaadin-context-menu-item) {
+  :host([theme~='contained']) ::slotted(vaadin-menu-bar-item),
+  :host([theme~='outlined']) ::slotted(vaadin-menu-bar-item) {
     margin: -8px -16px;
     padding: 8px 16px;
   }

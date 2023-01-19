@@ -360,10 +360,10 @@ export const MenuBarMixin = (superClass) =>
 
       const isElement = itemComponent instanceof HTMLElement;
       // Use existing item component, if any
-      if (isElement && itemComponent.localName === 'vaadin-context-menu-item') {
+      if (isElement && itemComponent.localName === 'vaadin-menu-bar-item') {
         component = itemComponent;
       } else {
-        component = document.createElement('vaadin-context-menu-item');
+        component = document.createElement('vaadin-menu-bar-item');
         component.appendChild(isElement ? itemComponent : document.createElement(itemComponent));
       }
       if (item.text) {

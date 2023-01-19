@@ -17,7 +17,7 @@ registerStyles(
       margin-inline-end: 0;
     }
 
-    [part='label'] ::slotted(vaadin-context-menu-item) {
+    [part='label'] ::slotted(vaadin-menu-bar-item) {
       position: relative;
       z-index: 1;
     }

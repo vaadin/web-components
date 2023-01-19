@@ -29,14 +29,14 @@ snapshots["menu-bar basic"] =
     role="menuitem"
     tabindex="0"
   >
-    <vaadin-context-menu-item
+    <vaadin-menu-bar-item
       aria-selected="false"
       theme="menu-bar-item"
     >
       <strong>
         Help
       </strong>
-    </vaadin-context-menu-item>
+    </vaadin-menu-bar-item>
   </vaadin-menu-bar-button>
   <vaadin-menu-bar-button
     aria-expanded="false"
@@ -68,22 +68,22 @@ snapshots["menu-bar overlay"] =
     aria-orientation="vertical"
     role="menu"
   >
-    <vaadin-context-menu-item
+    <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
       role="menuitem"
       tabindex="0"
     >
       View Reports
-    </vaadin-context-menu-item>
-    <vaadin-context-menu-item
+    </vaadin-menu-bar-item>
+    <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
       role="menuitem"
       tabindex="-1"
     >
       Generate Report
-    </vaadin-context-menu-item>
+    </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>
@@ -105,22 +105,22 @@ snapshots["menu-bar overlay class"] =
     aria-orientation="vertical"
     role="menu"
   >
-    <vaadin-context-menu-item
+    <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
       role="menuitem"
       tabindex="0"
     >
       View Reports
-    </vaadin-context-menu-item>
-    <vaadin-context-menu-item
+    </vaadin-menu-bar-item>
+    <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
       role="menuitem"
       tabindex="-1"
     >
       Generate Report
-    </vaadin-context-menu-item>
+    </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>

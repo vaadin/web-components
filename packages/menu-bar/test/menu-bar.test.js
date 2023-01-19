@@ -667,17 +667,17 @@ describe('item components', () => {
       { text: 'Item 2' },
       { component: makeComponent('3') },
       { text: 'Item 4 text', component: makeComponent('4') },
-      { text: 'Item 5', component: document.createElement('vaadin-context-menu-item') },
+      { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
     ];
     await nextRender(menu);
     buttons = menu._buttons;
     overflow = buttons[buttons.length - 1];
   });
 
-  it('should render the component inside the context-menu item', () => {
+  it('should render the component inside the menu-bar item', () => {
     const item = buttons[2].firstChild;
     expect(item).to.equal(buttons[2].item.component);
-    expect(item.localName).to.equal('vaadin-context-menu-item');
+    expect(item.localName).to.equal('vaadin-menu-bar-item');
     const div = item.firstChild;
     expect(div).to.equal(menu.items[2].component);
     expect(div.localName).to.equal('div');
@@ -688,7 +688,7 @@ describe('item components', () => {
   it('should override the component text when defined on the item', () => {
     const item = buttons[3].firstChild;
     expect(item).to.equal(buttons[3].item.component);
-    expect(item.localName).to.equal('vaadin-context-menu-item');
+    expect(item.localName).to.equal('vaadin-menu-bar-item');
     const div = item.firstChild;
     expect(div).to.equal(menu.items[3].component);
     expect(div.localName).to.equal('div');
@@ -696,7 +696,7 @@ describe('item components', () => {
     expect(getComputedStyle(div).width).to.equal('100px');
   });
 
-  it('should render provided context-menu item as a component', () => {
+  it('should render provided menu-bar item as a component', () => {
     expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
     expect(buttons[4].item.component).to.equal(menu.items[4].component);
     expect(buttons[4].item.component.children.length).to.equal(0);

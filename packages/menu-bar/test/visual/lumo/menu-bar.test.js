@@ -68,7 +68,7 @@ describe('menu-bar', () => {
 
       describe('theme', () => {
         function makeIcon(img) {
-          const item = document.createElement('vaadin-context-menu-item');
+          const item = document.createElement('vaadin-menu-bar-item');
           const icon = document.createElement('vaadin-icon');
           icon.setAttribute('icon', img);
           item.appendChild(icon);
