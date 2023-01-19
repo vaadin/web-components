@@ -859,7 +859,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __updateChips() {
-    if (!this._inputField) {
+    if (!this._inputField || !this.inputElement) {
       return;
     }
 
