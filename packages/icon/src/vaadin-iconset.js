@@ -7,7 +7,32 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { cloneSvgNode } from './vaadin-icon-svg.js';
 
-const iconRegistry = {};
+const iconsetRegistry = {};
+
+const attachedIcons = new Set();
+
+function getIconId(id, name) {
+  return (id || '').replace(`${name}:`, '');
+}
+
+function getIconsetName(icon) {
+  if (!icon) {
+    return;
+  }
+
+  const parts = icon.split(':');
+
+  // Use "vaadin" as a fallback
+  return parts[0] || 'vaadin';
+}
+
+function initIconsMap(iconset, name) {
+  iconset._icons = [...iconset.querySelectorAll('[id]')].reduce((map, svg) => {
+    const key = getIconId(svg.id, name);
+    map[key] = svg;
+    return map;
+  }, {});
+}
 
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
@@ -51,18 +76,72 @@ class Iconset extends ElementMixin(PolymerElement) {
   }
 
   /**
-   * Create an instance of the iconset.
+   * Set of the `vaadin-icon` instances in the DOM.
+   *
+   * @return {Set<Icon>}
+   */
+  static get attachedIcons() {
+    return attachedIcons;
+  }
+
+  /**
+   * Returns an instance of the iconset by its name.
    *
    * @param {string} name
+   * @return {Iconset}
    */
   static getIconset(name) {
-    let iconset = iconRegistry[name];
-    if (!iconset) {
-      iconset = document.createElement('vaadin-iconset');
-      iconset.name = name;
-      iconRegistry[name] = iconset;
+    return iconsetRegistry[name];
+  }
+
+  /**
+   * Returns SVGTemplateResult for the `icon` ID matching `name` of the
+   * iconset, or `nothing` literal if there is no matching icon found.
+   *
+   * @param {string} icon
+   * @param {?string} name
+   */
+  static getIconSvg(icon, name) {
+    const iconsetName = name || getIconsetName(icon);
+    const iconset = this.getIconset(iconsetName);
+
+    if (!icon || !iconset) {
+      // Missing icon, return `nothing` literal.
+      return { svg: cloneSvgNode(null) };
     }
-    return iconset;
+
+    const iconId = getIconId(icon, iconsetName);
+    const iconSvg = iconset._icons[iconId];
+
+    return {
+      svg: cloneSvgNode(iconSvg),
+      size: iconset.size,
+      viewBox: iconSvg ? iconSvg.getAttribute('viewBox') : null,
+    };
+  }
+
+  /**
+   * Register an iconset without adding to the DOM.
+   *
+   * @param {string} name
+   * @param {number} size
+   * @param {?HTMLTemplateElement} template
+   */
+  static register(name, size, template) {
+    if (!iconsetRegistry[name]) {
+      const iconset = document.createElement('vaadin-iconset');
+      iconset.appendChild(template.content.cloneNode(true));
+      iconsetRegistry[name] = iconset;
+
+      initIconsMap(iconset, name);
+
+      iconset.size = size;
+      iconset.name = name;
+
+      // Call this function manually instead of using observer
+      // to make it work without appending element to the DOM.
+      iconset.__nameChanged(name);
+    }
   }
 
   /** @protected */
@@ -70,53 +149,36 @@ class Iconset extends ElementMixin(PolymerElement) {
     super.connectedCallback();
 
     this.style.display = 'none';
+
+    // Store reference and init icons.
+    const { name } = this;
+    iconsetRegistry[name] = this;
+    initIconsMap(this, name);
+    this.__updateIcons(name);
   }
 
   /**
-   * Produce SVGTemplateResult for the element matching `name` in this
-   * iconset, or `undefined` if there is no matching element.
+   * Update all the icons instances in the DOM.
    *
    * @param {string} name
+   * @private
    */
-  applyIcon(name) {
-    // Create the icon map on-demand, since the iconset itself has no discrete
-    // signal to know when it's children are fully parsed
-    if (!this._icons) {
-      this._icons = this.__createIconMap();
-    }
-    const icon = this._icons[this.__getIconId(name)];
-    return {
-      svg: cloneSvgNode(icon),
-      size: this.size,
-      viewBox: icon ? icon.getAttribute('viewBox') : null,
-    };
-  }
-
-  /**
-   * Create a map of child SVG elements by id.
-   */
-  __createIconMap() {
-    const icons = {};
-    this.querySelectorAll('[id]').forEach((icon) => {
-      icons[this.__getIconId(icon.id)] = icon;
+  __updateIcons(name) {
+    attachedIcons.forEach((element) => {
+      if (name === getIconsetName(element.icon)) {
+        element._applyIcon();
+      }
     });
-    return icons;
-  }
-
-  /** @private */
-  __getIconId(id) {
-    return (id || '').replace(`${this.name}:`, '');
   }
 
   /** @private */
   __nameChanged(name, oldName) {
     if (oldName) {
-      iconRegistry[name] = Iconset.getIconset(oldName);
-      delete iconRegistry[oldName];
+      iconsetRegistry[name] = iconsetRegistry[oldName];
+      delete iconsetRegistry[oldName];
     }
     if (name) {
-      iconRegistry[name] = this;
-      document.dispatchEvent(new CustomEvent('vaadin-iconset-registered', { detail: name }));
+      this.__updateIcons(name);
     }
   }
 }

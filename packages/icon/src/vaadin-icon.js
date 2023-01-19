@@ -11,8 +11,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
-const DEFAULT_ICONSET = 'vaadin';
-
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
  *
@@ -143,11 +141,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     return ['__svgChanged(svg, __svgElement)'];
   }
 
-  constructor() {
-    super();
-    this.__onIconsetRegistered = this.__onIconsetRegistered.bind(this);
-  }
-
   /** @protected */
   ready() {
     super.ready();
@@ -157,48 +150,39 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     this.addController(this._tooltipController);
   }
 
-  /** @private */
-  __getIconsetName(icon) {
-    if (!icon) {
-      return;
-    }
-
-    const parts = icon.split(':');
-    return parts[0] || DEFAULT_ICONSET;
-  }
-
-  /** @private */
-  __onIconsetRegistered(e) {
-    if (e.detail === this.__getIconsetName(this.icon)) {
-      this.__iconChanged(this.icon);
-    }
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);
+
+    Iconset.attachedIcons.add(this);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);
+
+    Iconset.attachedIcons.delete(this);
+  }
+
+  /** @protected */
+  _applyIcon() {
+    const { svg, size, viewBox } = Iconset.getIconSvg(this.icon);
+
+    if (viewBox) {
+      this.__viewBox = viewBox;
+    }
+
+    if (size && size !== this.size) {
+      this.size = size;
+    }
+
+    this.svg = svg;
   }
 
   /** @private */
   __iconChanged(icon) {
     if (icon) {
-      const iconsetName = this.__getIconsetName(icon);
-      const iconset = Iconset.getIconset(iconsetName);
-      const { svg, size, viewBox } = iconset.applyIcon(icon);
-      if (viewBox) {
-        this.__viewBox = viewBox;
-      }
-      if (size !== this.size) {
-        this.size = size;
-      }
-      this.svg = svg;
+      this._applyIcon();
     } else {
       this.svg = ensureSvgLiteral(null);
     }

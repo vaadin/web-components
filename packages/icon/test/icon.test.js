@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-icon.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
+import { Iconset } from '../vaadin-iconset.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
@@ -119,7 +120,7 @@ describe('vaadin-icon', () => {
   describe('icon property', () => {
     let iconset, icons;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       iconset = fixtureSync(`
         <vaadin-iconset name="vaadin">
           <svg xmlns="http://www.w3.org/2000/svg">
@@ -133,11 +134,13 @@ describe('vaadin-icon', () => {
         </vaadin-iconset>
       `);
       icons = Array.from(iconset.querySelectorAll('[id]'));
+      await nextRender();
     });
 
     describe('default', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+        await nextRender();
         svgElement = icon.shadowRoot.querySelector('svg');
       });
 
@@ -184,18 +187,36 @@ describe('vaadin-icon', () => {
         expect(svgElement.getAttribute('viewBox')).to.equal('0 0 7 7');
       });
 
-      it('should apply the icon once the set is registered', () => {
-        icon.icon = 'custom:angle-up';
+      it('should apply the icon once the set is added to DOM', () => {
+        icon.icon = 'foo:angle-up';
 
         fixtureSync(`
-          <vaadin-iconset name="custom">
+          <vaadin-iconset name="foo">
             <svg xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <g id="custom:angle-up">${ANGLE_UP}</g>
+                <g id="foo:angle-up">${ANGLE_UP}</g>
               </defs>
             </svg>
           </vaadin-iconset>
         `);
+
+        expectIcon(`<g>${ANGLE_UP}</g>`);
+      });
+
+      it('should apply the icon once the set is registered', () => {
+        icon.icon = 'bar:angle-up';
+
+        const template = document.createElement('template');
+        template.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <g id="bar:angle-up">${ANGLE_UP}</g>
+            </defs>
+          </svg>
+        `;
+
+        Iconset.register('bar', 16, template);
+
         expectIcon(`<g>${ANGLE_UP}</g>`);
       });
     });
