@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-notification",
-  "version": "23.2.13",
+  "version": "23.2.14",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/notification": "~23.2.13"
+    "@vaadin/notification": "~23.2.14"
   }
 }
