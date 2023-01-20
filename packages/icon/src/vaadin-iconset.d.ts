@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import type { Icon } from './vaadin-icon.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
@@ -11,9 +12,25 @@ import type { IconSvgLiteral } from './vaadin-icon-svg.js';
  */
 declare class Iconset extends ElementMixin(HTMLElement) {
   /**
-   * Create an instance of the iconset.
+   * Set of the `vaadin-icon` instances in the DOM.
+   */
+  static attachedIcons(): Set<Icon>;
+
+  /**
+   * Returns an instance of the iconset by its name.
    */
   static getIconset(name: string): Iconset;
+
+  /**
+   * Register an iconset without adding to the DOM.
+   */
+  static register(name: string, size: number, template: HTMLTemplateElement): void;
+
+  /**
+   * Returns SVGTemplateResult for the `icon` ID matching `name` of the
+   * iconset, or `nothing` literal if there is no matching icon found.
+   */
+  static getIconSvg(icon: string, name?: string): { svg: IconSvgLiteral; size?: number; viewBox?: string | null };
 
   /**
    * The name of the iconset. Every iconset is required to have its own unique name.
@@ -30,12 +47,6 @@ declare class Iconset extends ElementMixin(HTMLElement) {
    * over the size defined by the user to ensure correct appearance.
    */
   size: number;
-
-  /**
-   * Produce SVGTemplateResult for the element matching `name` in this
-   * iconset, or `undefined` if there is no matching element.
-   */
-  applyIcon(name: string): { svg: IconSvgLiteral; size: number; viewBox: string | null };
 }
 
 declare global {
