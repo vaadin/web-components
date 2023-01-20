@@ -42,7 +42,6 @@ gulp.task('icons', () => {
           // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
 import '@vaadin/icon/vaadin-iconset.js';
-import '@vaadin/icon/vaadin-icon.js';
 
 const template = document.createElement('template');
 
