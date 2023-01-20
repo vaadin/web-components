@@ -33,9 +33,7 @@ const select = css`
 
   /* placeholder styles */
   [part='input-field'] ::slotted([slot='value'][placeholder]) {
-    color: inherit;
-    transition: opacity 0.175s 0.1s;
-    opacity: 0.5;
+    color: var(--lumo-secondary-text-color);
   }
 
   [part='toggle-button']::before {
