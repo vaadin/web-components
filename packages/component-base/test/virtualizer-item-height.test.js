@@ -90,4 +90,29 @@ describe('virtualizer - item height', () => {
     // The padding should have been be cleared and the item should have its original height.
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
   });
+
+  it('should restore item positions after size change', async () => {
+    fixtureSync(`
+      <style>
+        .container[loading] > div {
+          min-height: 100px;
+        }
+      </style>
+    `);
+
+    // Wait for the content to update (and resize observer to fire)
+    await aTimeout(200);
+
+    elementsContainer.toggleAttribute('loading', true);
+    virtualizer.size += 1;
+    elementsContainer.toggleAttribute('loading', false);
+
+    // Wait for the content to update
+    await aTimeout(200);
+
+    const firstItem = elementsContainer.querySelector(`#item-0`);
+    const secondItem = elementsContainer.querySelector(`#item-1`);
+    // Expect the first item bottom to be the same as the second item top
+    expect(firstItem.getBoundingClientRect().bottom).to.equal(secondItem.getBoundingClientRect().top);
+  });
 });

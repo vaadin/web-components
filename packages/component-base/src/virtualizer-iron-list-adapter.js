@@ -164,6 +164,7 @@ export class IronListAdapter {
 
       // Manually schedule the resize handler to make sure the placeholder padding is
       // cleared in case the resize observer never triggers.
+      // NOTE: _resizeHandler is already debounced in iron-list-core.
       requestAnimationFrame(() => this._resizeHandler());
     } else {
       // Add element height to the queue
@@ -229,9 +230,7 @@ export class IronListAdapter {
       }
     }
 
-    if (!this.elementsContainer.children.length) {
-      requestAnimationFrame(() => this._resizeHandler());
-    }
+    requestAnimationFrame(() => this._resizeHandler());
 
     this.__preventElementUpdates = false;
     // Schedule and flush a resize handler
