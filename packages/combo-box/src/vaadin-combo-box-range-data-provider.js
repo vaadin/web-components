@@ -17,7 +17,7 @@ export class RangeDataProvider {
   dataProvider({ page, ...params }, _callback, comboBox) {
     this.#comboBox = comboBox;
 
-    this.#range = adjustRangeToIncludePage(this.#range, page, this.#options.maxRangeSize);
+    this.#range = adjustRangeToIncludePage(this.#range, page, this.#computeMaxRangeSize(params.pageSize));
 
     this.#discardPagesOutOfRange();
 
@@ -64,6 +64,14 @@ export class RangeDataProvider {
     if (pages.length > 0) {
       this.#comboBox.clearCache(pages, false);
     }
+  }
+
+  #computeMaxRangeSize(pageSize) {
+    let maxRangeSize = this.#options.maxRangeSize;
+    if (typeof maxRangeSize === 'function') {
+      maxRangeSize = maxRangeSize(pageSize);
+    }
+    return maxRangeSize;
   }
 }
 
