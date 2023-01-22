@@ -12,6 +12,7 @@ import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixi
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
+import { ComboBoxController } from './vaadin-combo-box-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
@@ -259,6 +260,8 @@ export const ComboBoxMixin = (subclass) =>
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
+
+      this._comboBoxController = new ComboBoxController(this, this._tagNamePrefix);
     }
 
     /**
@@ -365,6 +368,9 @@ export const ComboBoxMixin = (subclass) =>
       processTemplates(this);
 
       this.addController(new VirtualKeyboardController(this));
+
+      this._comboBoxController.setScroller(this._scroller);
+      this.addController(this._comboBoxController);
     }
 
     /** @protected */
@@ -382,15 +388,7 @@ export const ComboBoxMixin = (subclass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (!this._scroller) {
-        return;
-      }
-
-      this._scroller.requestContentUpdate();
-
-      this._getItemElements().forEach((item) => {
-        item.requestContentUpdate();
-      });
+      this._comboBoxController.requestContentUpdate();
     }
 
     /**
