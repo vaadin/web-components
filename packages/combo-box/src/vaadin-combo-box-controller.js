@@ -14,6 +14,19 @@ export class ComboBoxController {
 
     /** @type {string} */
     this.tagNamePrefix = tagNamePrefix;
+
+    this._boundOnPointerDown = this._onPointerDown.bind(this);
+  }
+
+  hostConnected() {
+    if (!this.initialized) {
+      this.initialized = true;
+
+      const { host } = this;
+
+      host.addEventListener('mousedown', this._boundOnPointerDown);
+      host.addEventListener('touchstart', this._boundOnPointerDown);
+    }
   }
 
   /**
@@ -32,6 +45,14 @@ export class ComboBoxController {
   }
 
   /**
+   * Set and initialize the overlay element.
+   * @param {HTMLElement} overlay
+   */
+  setOverlay(overlay) {
+    this.overlay = overlay;
+  }
+
+  /**
    * Set and initialize the scroller element.
    * @param {HTMLElement} scroller
    */
@@ -42,5 +63,12 @@ export class ComboBoxController {
   /** @private */
   _getItemElements() {
     return [...this.scroller.querySelectorAll(`${this.tagNamePrefix}-item`)];
+  }
+
+  /** @private */
+  _onPointerDown() {
+    requestAnimationFrame(() => {
+      this.overlay.bringToFront();
+    });
   }
 }

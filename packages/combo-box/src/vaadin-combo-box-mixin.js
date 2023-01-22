@@ -356,19 +356,11 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('click', this._boundOnClick);
       this.addEventListener('touchend', this._boundOnTouchend);
 
-      const bringToFrontListener = () => {
-        requestAnimationFrame(() => {
-          this._overlayElement.bringToFront();
-        });
-      };
-
-      this.addEventListener('mousedown', bringToFrontListener);
-      this.addEventListener('touchstart', bringToFrontListener);
-
       processTemplates(this);
 
       this.addController(new VirtualKeyboardController(this));
 
+      this._comboBoxController.setOverlay(this._overlayElement);
       this._comboBoxController.setScroller(this._scroller);
       this.addController(this._comboBoxController);
     }
