@@ -487,10 +487,13 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _overlayOpenedChanged(opened, wasOpened) {
+      this._comboBoxController.setOverlayOpened(opened);
+
       if (opened) {
         this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
 
-        this._onOpened();
+        // _detectAndDispatchChange() should not consider value changes done before opening
+        this._lastCommittedValue = this.value;
       } else if (wasOpened && this.filteredItems && this.filteredItems.length) {
         this.close();
 
@@ -503,27 +506,13 @@ export const ComboBoxMixin = (subclass) =>
       if (oldIndex === undefined) {
         return;
       }
-      this._updateActiveDescendant(index);
+
+      this._comboBoxController.setFocusedIndex(index);
     }
 
     /** @protected */
     _isInputFocused() {
       return this.inputElement && isElementFocused(this.inputElement);
-    }
-
-    /** @private */
-    _updateActiveDescendant(index) {
-      const input = this._nativeInput;
-      if (!input) {
-        return;
-      }
-
-      const item = this._getItemElements().find((el) => el.index === index);
-      if (item) {
-        input.setAttribute('aria-activedescendant', item.id);
-      } else {
-        input.removeAttribute('aria-activedescendant');
-      }
     }
 
     /** @private */
@@ -827,20 +816,6 @@ export const ComboBoxMixin = (subclass) =>
       // In the next _detectAndDispatchChange() call, the change detection should not pass
       this._lastCommittedValue = this.value;
       this._closeOrCommit();
-    }
-
-    /** @private */
-    _onOpened() {
-      // Defer scroll position adjustment to improve performance.
-      requestAnimationFrame(() => {
-        this._scrollIntoView(this._focusedIndex);
-
-        // Set attribute after the items are rendered when overlay is opened for the first time.
-        this._updateActiveDescendant(this._focusedIndex);
-      });
-
-      // _detectAndDispatchChange() should not consider value changes done before opening
-      this._lastCommittedValue = this.value;
     }
 
     /** @private */
@@ -1150,11 +1125,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.selectedItem === null && previouslySelectedItem === null) {
         this._selectedItemChanged(this.selectedItem);
       }
-    }
-
-    /** @private */
-    _getItemElements() {
-      return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
     }
 
     /** @private */

@@ -20,6 +20,12 @@ export class ComboBoxController {
     /** @type {boolean} */
     this.opened = false;
 
+    /** @type {boolean} */
+    this.overlayOpened = false;
+
+    /** @type {number} */
+    this.focusedIndex = -1;
+
     this._boundOnPointerDown = this._onPointerDown.bind(this);
   }
 
@@ -47,6 +53,16 @@ export class ComboBoxController {
     this._getItemElements().forEach((item) => {
       item.requestContentUpdate();
     });
+  }
+
+  /**
+   * Set the index of the item to be marked as focused.
+   * @param {number} index
+   */
+  setFocusedIndex(index) {
+    this.focusedIndex = index;
+
+    this._updateActiveDescendant(index);
   }
 
   /**
@@ -78,6 +94,24 @@ export class ComboBoxController {
    */
   setOverlay(overlay) {
     this.overlay = overlay;
+  }
+
+  /**
+   * Update opened state of the combo-box overlay.
+   * @param {boolean} opened
+   */
+  setOverlayOpened(opened) {
+    this.overlayOpened = opened;
+
+    if (opened) {
+      // Defer scroll position adjustment to improve performance.
+      requestAnimationFrame(() => {
+        this.scroller.scrollIntoView(this.focusedIndex);
+
+        // Set attribute after the items are rendered when overlay is opened for the first time.
+        this._updateActiveDescendant(this.focusedIndex);
+      });
+    }
   }
 
   /**
@@ -157,5 +191,20 @@ export class ComboBoxController {
     requestAnimationFrame(() => {
       this.overlay.bringToFront();
     });
+  }
+
+  /** @private */
+  _updateActiveDescendant(index) {
+    const input = this.inputElement;
+    if (!input) {
+      return;
+    }
+
+    const item = this._getItemElements().find((el) => el.index === index);
+    if (item) {
+      input.setAttribute('aria-activedescendant', item.id);
+    } else {
+      input.removeAttribute('aria-activedescendant');
+    }
   }
 }
