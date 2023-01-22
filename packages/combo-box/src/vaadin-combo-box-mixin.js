@@ -260,7 +260,7 @@ export const ComboBoxMixin = (subclass) =>
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
 
-      this._comboBoxController = new ComboBoxController(this, this._tagNamePrefix);
+      this._comboBoxController = new ComboBoxController(this, this._tagNamePrefix, this._propertyForValue);
     }
 
     /**
@@ -318,7 +318,8 @@ export const ComboBoxMixin = (subclass) =>
       super._inputElementChanged(inputElement);
 
       if (inputElement) {
-        this._comboBoxController.setInputElement(this._nativeInput);
+        this._comboBoxController.setInputElement(inputElement);
+        this._comboBoxController.setNativeInput(this._nativeInput);
 
         this._revertInputValueToValue();
 
@@ -676,34 +677,13 @@ export const ComboBoxMixin = (subclass) =>
       if (this._focusedIndex > -1) {
         const focusedItem = this.filteredItems[this._focusedIndex];
         this._inputElementValue = this._getItemLabel(focusedItem);
-        this._markAllSelectionRange();
-      }
-    }
-
-    /** @private */
-    _setSelectionRange(start, end) {
-      // Setting selection range focuses and/or moves the caret in some browsers,
-      // and there's no need to modify the selection range if the input isn't focused anyway.
-      // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
-      // the next focusable element instead of the combo-box itself.
-      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(start, end);
-      }
-    }
-
-    /** @private */
-    _markAllSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        this._setSelectionRange(0, this._inputElementValue.length);
+        this._comboBoxController.updateSelection(true);
       }
     }
 
     /** @private */
     _clearSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
-        this._setSelectionRange(pos, pos);
-      }
+      this._comboBoxController.updateSelection(false);
     }
 
     /** @private */

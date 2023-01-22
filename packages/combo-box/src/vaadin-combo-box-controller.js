@@ -10,7 +10,7 @@ import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
  * A controller to manage the combo-box DOM elements state.
  */
 export class ComboBoxController {
-  constructor(host, tagNamePrefix) {
+  constructor(host, tagNamePrefix, propertyForValue) {
     /** @type {HTMLElement} */
     this.host = host;
 
@@ -26,7 +26,18 @@ export class ComboBoxController {
     /** @type {number} */
     this.focusedIndex = -1;
 
+    /** @type {string} */
+    this.propertyForValue = propertyForValue;
+
     this._boundOnPointerDown = this._onPointerDown.bind(this);
+  }
+
+  /**
+   * @return {string | undefined}
+   * @protected
+   */
+  get _inputValue() {
+    return this.inputElement ? this.inputElement[this.propertyForValue] : undefined;
   }
 
   hostConnected() {
@@ -66,11 +77,19 @@ export class ComboBoxController {
   }
 
   /**
-   * Set and initialize the native input element.
-   * @param {HTMLElement} input
+   * Set and initialize the input element.
+   * @param {HTMLElement} inputElement
    */
-  setInputElement(input) {
-    this.inputElement = input;
+  setInputElement(inputElement) {
+    this.inputElement = inputElement;
+  }
+
+  /**
+   * Set and initialize the native input element.
+   * @param {HTMLInputElement} input
+   */
+  setNativeInput(input) {
+    this.nativeInput = input;
 
     if (input) {
       input.autocomplete = 'off';
@@ -137,7 +156,7 @@ export class ComboBoxController {
       host.setAttribute('focus-ring', '');
     }
 
-    const input = this.inputElement;
+    const input = this.nativeInput;
     if (input) {
       input.setAttribute('aria-expanded', !!opened);
 
@@ -176,6 +195,22 @@ export class ComboBoxController {
     }
   }
 
+  /**
+   * Selects or unselects a value of the native input element.
+   * @param {boolean} shouldSelect
+   */
+  updateSelection(shouldSelect) {
+    const value = this._inputValue;
+    if (value !== undefined && this._isInputFocused()) {
+      if (shouldSelect) {
+        this.nativeInput.setSelectionRange(0, value.length);
+      } else {
+        const pos = value ? value.length : 0;
+        this.nativeInput.setSelectionRange(pos, pos);
+      }
+    }
+  }
+
   /** @private */
   _getItemElements() {
     return [...this.scroller.querySelectorAll(`${this.tagNamePrefix}-item`)];
@@ -183,7 +218,7 @@ export class ComboBoxController {
 
   /** @private */
   _isInputFocused() {
-    return this.inputElement && isElementFocused(this.inputElement);
+    return this.nativeInput && isElementFocused(this.nativeInput);
   }
 
   /** @private */
