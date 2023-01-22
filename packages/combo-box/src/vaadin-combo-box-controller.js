@@ -123,6 +123,25 @@ export class ComboBoxController {
     this.scroller = scroller;
   }
 
+  /**
+   * Set the element used to toggle the overlay.
+   * @param {HTMLElement} toggleButton
+   */
+  setToggleButton(toggleButton) {
+    this.toggleButton = toggleButton;
+
+    if (toggleButton) {
+      // Don't blur the input on toggle mousedown
+      toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
+      // Unfocus previously focused element if focus is not inside combo box (on touch devices)
+      toggleButton.addEventListener('click', () => {
+        if (isTouch && !this._isInputFocused()) {
+          document.activeElement.blur();
+        }
+      });
+    }
+  }
+
   /** @private */
   _getItemElements() {
     return [...this.scroller.querySelectorAll(`${this.tagNamePrefix}-item`)];

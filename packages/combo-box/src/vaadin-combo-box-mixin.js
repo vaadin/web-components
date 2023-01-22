@@ -3,7 +3,6 @@
  * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
@@ -803,16 +802,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _toggleElementChanged(toggleElement) {
-      if (toggleElement) {
-        // Don't blur the input on toggle mousedown
-        toggleElement.addEventListener('mousedown', (e) => e.preventDefault());
-        // Unfocus previously focused element if focus is not inside combo box (on touch devices)
-        toggleElement.addEventListener('click', () => {
-          if (isTouch && !this._isInputFocused()) {
-            document.activeElement.blur();
-          }
-        });
-      }
+      this._comboBoxController.setToggleButton(toggleElement);
     }
 
     /**
