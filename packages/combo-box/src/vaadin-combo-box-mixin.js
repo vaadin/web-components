@@ -318,21 +318,8 @@ export const ComboBoxMixin = (subclass) =>
     _inputElementChanged(inputElement) {
       super._inputElementChanged(inputElement);
 
-      const input = this._nativeInput;
-
-      if (input) {
-        input.autocomplete = 'off';
-        input.autocapitalize = 'off';
-
-        input.setAttribute('role', 'combobox');
-        input.setAttribute('aria-autocomplete', 'list');
-        input.setAttribute('aria-expanded', !!this.opened);
-
-        // Disable the macOS Safari spell check auto corrections.
-        input.setAttribute('spellcheck', 'false');
-
-        // Disable iOS autocorrect suggestions.
-        input.setAttribute('autocorrect', 'off');
+      if (inputElement) {
+        this._comboBoxController.setInputElement(this._nativeInput);
 
         this._revertInputValueToValue();
 
@@ -547,31 +534,10 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      if (opened) {
-        this._openedWithFocusRing = this.hasAttribute('focus-ring');
-        // For touch devices, we don't want to popup virtual keyboard
-        // unless input element is explicitly focused by the user.
-        if (!this._isInputFocused() && !isTouch) {
-          this.focus();
-        }
+      this._comboBoxController.setOpened(opened);
 
-        this._overlayElement.restoreFocusOnClose = true;
-      } else {
+      if (!opened) {
         this._onClosed();
-        if (this._openedWithFocusRing && this._isInputFocused()) {
-          this.setAttribute('focus-ring', '');
-        }
-      }
-
-      const input = this._nativeInput;
-      if (input) {
-        input.setAttribute('aria-expanded', !!opened);
-
-        if (opened) {
-          input.setAttribute('aria-controls', this._scroller.id);
-        } else {
-          input.removeAttribute('aria-controls');
-        }
       }
     }
 
