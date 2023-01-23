@@ -16,38 +16,6 @@ registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay],
 });
 
 registerStyles(
-  'vaadin-context-menu-list-box',
-  css`
-    [part='items'] ::slotted([role='menuitem']) {
-      min-height: 36px;
-      padding: 8px 32px 8px 10px;
-      font-size: var(--material-small-font-size);
-      line-height: 24px;
-    }
-
-    :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {
-      padding: 8px 10px 8px 32px;
-    }
-
-    [part='items'] ::slotted([role='menuitem']:hover:not([disabled])) {
-      background-color: var(--material-secondary-background-color);
-    }
-
-    [part='items'] ::slotted([role='menuitem'][focused]:not([disabled])) {
-      background-color: var(--material-divider-color);
-    }
-
-    @media (pointer: coarse) {
-      [part='items'] ::slotted([role='menuitem']:hover:not([disabled])),
-      [part='items'] ::slotted([role='menuitem'][focused]:not([disabled])) {
-        background-color: transparent;
-      }
-    }
-  `,
-  { moduleId: 'material-context-menu-list-box' },
-);
-
-registerStyles(
   'vaadin-context-menu-item',
   css`
     :host([aria-haspopup='true'])::after {

@@ -1,3 +1,4 @@
+import './vaadin-context-menu-list-box-styles.js';
 import './vaadin-context-menu-styles.js';
 import '@vaadin/item/theme/lumo/vaadin-item.js';
 import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
