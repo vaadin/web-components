@@ -41,9 +41,11 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
+    // Set role in `connectedCallback()` instead of `ready()`
+    // because the role is removed when teleporting to button.
     this.setAttribute('role', 'menuitem');
   }
 }
