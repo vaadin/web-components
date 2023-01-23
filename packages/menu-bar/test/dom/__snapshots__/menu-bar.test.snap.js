@@ -56,7 +56,7 @@ snapshots["menu-bar basic"] =
 /* end snapshot menu-bar basic */
 
 snapshots["menu-bar overlay"] = 
-`<vaadin-context-menu-overlay
+`<vaadin-menu-bar-overlay
   dir="ltr"
   id="overlay"
   opened=""
@@ -87,12 +87,12 @@ snapshots["menu-bar overlay"] =
   </vaadin-context-menu-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>
-</vaadin-context-menu-overlay>
+</vaadin-menu-bar-overlay>
 `;
 /* end snapshot menu-bar overlay */
 
 snapshots["menu-bar overlay class"] = 
-`<vaadin-context-menu-overlay
+`<vaadin-menu-bar-overlay
   class="custom menu-bar-overlay"
   dir="ltr"
   id="overlay"
@@ -124,7 +124,7 @@ snapshots["menu-bar overlay class"] =
   </vaadin-context-menu-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>
-</vaadin-context-menu-overlay>
+</vaadin-menu-bar-overlay>
 `;
 /* end snapshot menu-bar overlay class */
 

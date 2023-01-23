@@ -71,6 +71,15 @@ export const ItemsMixin = (superClass) =>
       };
     }
 
+    /**
+     * Tag name prefix used by overlay, list-box and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-context-menu';
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -78,7 +87,7 @@ export const ItemsMixin = (superClass) =>
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
       this.__itemsOutsideClickListener = (e) => {
-        if (!e.composedPath().some((el) => el.localName === 'vaadin-context-menu-overlay')) {
+        if (!e.composedPath().some((el) => el.localName === `${this._tagNamePrefix}-overlay`)) {
           this.dispatchEvent(new CustomEvent('items-outside-click'));
         }
       };
