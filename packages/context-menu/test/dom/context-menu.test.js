@@ -4,6 +4,13 @@ import '../../src/vaadin-context-menu.js';
 import '../not-animated-styles.js';
 import { openSubMenus } from '../helpers.js';
 
+function createComponent(textContent, options) {
+  const component = document.createElement('div');
+  component.textContent = textContent;
+  component.setAttribute('class', options.class);
+  return component;
+}
+
 describe('context-menu', () => {
   let menu, overlay;
 
@@ -14,24 +21,27 @@ describe('context-menu', () => {
   };
 
   const ITEMS = [
-    { text: 'Menu Item 1' },
+    { text: 'Menu Item 1', class: 'first' },
     { component: 'hr' },
     {
       text: 'Menu Item 2',
       children: [
-        { text: 'Menu Item 2-1' },
+        { text: 'Menu Item 2-1', class: 'first' },
         {
           text: 'Menu Item 2-2',
+          class: 'last',
           children: [
-            { text: 'Menu Item 2-2-1', checked: true },
+            { text: 'Menu Item 2-2-1', checked: true, class: 'first' },
             { text: 'Menu Item 2-2-2', disabled: true },
             { component: 'hr' },
-            { text: 'Menu Item 2-2-3' },
+            { text: 'Menu Item 2-2-3', class: 'last' },
           ],
         },
       ],
     },
     { text: 'Menu Item 3', disabled: true },
+    { component: createComponent('Menu Item 4', { class: 'custom' }) },
+    { component: createComponent('Menu Item 5', { class: 'custom' }), class: 'last' },
   ];
 
   const contextmenu = (target) => {

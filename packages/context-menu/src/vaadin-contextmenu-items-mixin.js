@@ -21,6 +21,7 @@ export const ItemsMixin = (superClass) =>
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
          * @property {boolean} keepOpen - If true, the menu will not be closed on item selection
+         * @property {string} class - A space-delimited list of CSS class names to be set on the menu item component.
          * @property {union: string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
          * @property {MenuItem[]} children - Array of child menu items
          */
@@ -189,6 +190,10 @@ export const ItemsMixin = (superClass) =>
 
       if (item.text) {
         component.textContent = item.text;
+      }
+
+      if (item.class) {
+        component.setAttribute('class', item.class);
       }
 
       this.__toggleMenuComponentAttribute(component, 'menu-item-checked', item.checked);

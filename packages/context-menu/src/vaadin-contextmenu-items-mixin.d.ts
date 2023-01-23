@@ -14,6 +14,7 @@ export interface ContextMenuItem {
   checked?: boolean;
   keepOpen?: boolean;
   theme?: string[] | string;
+  class?: string;
   children?: ContextMenuItem[];
 }
 
