@@ -64,9 +64,9 @@ snapshots["menu-bar overlay"] =
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-context-menu-list-box
+  <vaadin-menu-bar-list-box
     aria-orientation="vertical"
-    role="list"
+    role="menu"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
@@ -84,7 +84,7 @@ snapshots["menu-bar overlay"] =
     >
       Generate Report
     </vaadin-context-menu-item>
-  </vaadin-context-menu-list-box>
+  </vaadin-menu-bar-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>
@@ -101,9 +101,9 @@ snapshots["menu-bar overlay class"] =
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-context-menu-list-box
+  <vaadin-menu-bar-list-box
     aria-orientation="vertical"
-    role="list"
+    role="menu"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
@@ -121,7 +121,7 @@ snapshots["menu-bar overlay class"] =
     >
       Generate Report
     </vaadin-context-menu-item>
-  </vaadin-context-menu-list-box>
+  </vaadin-menu-bar-list-box>
   <vaadin-menu-bar-submenu hidden="">
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>

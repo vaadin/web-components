@@ -3,6 +3,7 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-menu-bar-list-box.js';
 import './vaadin-menu-bar-overlay.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
