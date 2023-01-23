@@ -4,8 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import { Item } from '@vaadin/item/src/vaadin-item.js';
-import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 export interface ContextMenuItem {
   text?: string;
@@ -15,27 +13,6 @@ export interface ContextMenuItem {
   theme?: string[] | string;
   children?: ContextMenuItem[];
 }
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
- */
-declare class ContextMenuItemElement extends Item {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'vaadin-context-menu-item': ContextMenuItemElement;
-    'vaadin-context-menu-list-box': ContextMenuListBox;
-  }
-}
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
- */
-declare class ContextMenuListBox extends ListBox {}
 
 export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ItemsMixinClass> & T;
 
