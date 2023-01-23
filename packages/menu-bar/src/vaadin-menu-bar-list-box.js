@@ -17,6 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes DirMixin
  * @mixes ListMixin
  * @mixes ThemableMixin
+ * @protected
  */
 class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(PolymerElement)))) {
   static get is() {
