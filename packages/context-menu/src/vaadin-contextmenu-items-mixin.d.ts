@@ -3,6 +3,8 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-context-menu-item.js';
+import './vaadin-context-menu-list-box.js';
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export interface ContextMenuItem {
