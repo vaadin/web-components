@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -13,10 +14,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @extends HTMLElement
  * @mixes ControllerMixin
+ * @mixes DirMixin
  * @mixes ListMixin
  * @mixes ThemableMixin
  */
-class MenuBarListBox extends ListMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
+class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-menu-bar-list-box';
   }
