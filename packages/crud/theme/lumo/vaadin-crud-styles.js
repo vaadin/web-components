@@ -130,7 +130,7 @@ registerStyles(
       [part='header'] ::slotted(h3) {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        margin-inline-start: var(--lumo-space-s);
+        margin-inline-start: var(--lumo-space-s) !important;
       }
     `,
   ],

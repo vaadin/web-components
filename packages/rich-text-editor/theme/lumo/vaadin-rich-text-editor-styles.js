@@ -216,6 +216,32 @@ const richTextEditor = css`
   }
 `;
 
-registerStyles('vaadin-rich-text-editor', [color, typography, richTextEditor], {
+const contentStyles = css`
+  :where(h1, h2, h3, h4, h5, h6) {
+    margin-top: 1.25em;
+  }
+
+  :where(h1) {
+    margin-bottom: 0.75em;
+  }
+
+  :where(h2) {
+    margin-bottom: 0.5em;
+  }
+
+  :where(h3) {
+    margin-bottom: 0.5em;
+  }
+
+  :where(h4) {
+    margin-bottom: 0.5em;
+  }
+
+  :where(h5) {
+    margin-bottom: 0.25em;
+  }
+`;
+
+registerStyles('vaadin-rich-text-editor', [color, typography, richTextEditor, contentStyles], {
   moduleId: 'lumo-rich-text-editor',
 });
