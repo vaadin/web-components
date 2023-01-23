@@ -5,20 +5,20 @@ import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarItem = css`
-  :host([theme='menu-bar-item']) [part='content'] {
+  [part='content'] {
     display: flex;
     /* tweak to inherit centering from menu bar button */
     align-items: inherit;
     justify-content: inherit;
   }
 
-  :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon) {
+  [part='content'] ::slotted(vaadin-icon) {
     display: inline-block;
     width: var(--lumo-icon-size-m);
     height: var(--lumo-icon-size-m);
   }
 
-  :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
+  [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
     padding: var(--lumo-space-xs);
     box-sizing: border-box !important;
   }

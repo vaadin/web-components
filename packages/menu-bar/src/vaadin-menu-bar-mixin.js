@@ -370,7 +370,6 @@ export const MenuBarMixin = (superClass) =>
         const node = component.firstChild || component;
         node.textContent = item.text;
       }
-      component.setAttribute('theme', 'menu-bar-item');
       return component;
     }
 

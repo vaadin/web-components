@@ -4,7 +4,7 @@ import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarItem = css`
-  :host([theme='menu-bar-item']) [part='content'] {
+  [part='content'] {
     display: flex;
     /* tweak to inherit centering from menu bar button */
     align-items: inherit;
@@ -12,7 +12,7 @@ const menuBarItem = css`
     font-size: var(--material-button-font-size);
   }
 
-  :host([theme='menu-bar-item']) [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
+  [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
     display: inline-block;
     width: 18px;
     height: 18px;

@@ -39,6 +39,13 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
       </div>
     `;
   }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.setAttribute('role', 'menuitem');
+  }
 }
 
 customElements.define(MenuBarItem.is, MenuBarItem);

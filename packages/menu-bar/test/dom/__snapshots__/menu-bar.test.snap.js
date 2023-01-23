@@ -29,10 +29,7 @@ snapshots["menu-bar basic"] =
     role="menuitem"
     tabindex="0"
   >
-    <vaadin-menu-bar-item
-      aria-selected="false"
-      theme="menu-bar-item"
-    >
+    <vaadin-menu-bar-item aria-selected="false">
       <strong>
         Help
       </strong>
