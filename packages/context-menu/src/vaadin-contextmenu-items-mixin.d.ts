@@ -48,4 +48,9 @@ export declare class ItemsMixinClass {
    * ```
    */
   items: ContextMenuItem[] | undefined;
+
+  /**
+   * Tag name prefix used by overlay, list-box and items.
+   */
+  protected readonly _tagNamePrefix: string;
 }

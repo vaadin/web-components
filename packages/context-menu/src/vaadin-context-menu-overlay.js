@@ -37,7 +37,7 @@ registerStyles(
  * @extends Overlay
  * @protected
  */
-class ContextMenuOverlay extends PositionMixin(Overlay) {
+export class ContextMenuOverlay extends PositionMixin(Overlay) {
   static get is() {
     return 'vaadin-context-menu-overlay';
   }
