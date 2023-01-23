@@ -710,7 +710,7 @@ describe('item components', () => {
     const subMenu = menu._subMenu;
     overflow.click();
     await nextRender(subMenu);
-    const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
+    const listBox = subMenu.$.overlay.querySelector('vaadin-menu-bar-list-box');
     expect(listBox.items[0]).to.equal(buttons[2].item.component);
     expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
     expect(listBox.items[0].firstChild.localName).to.equal('div');

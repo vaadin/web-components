@@ -170,7 +170,7 @@ export const ItemsMixin = (superClass) =>
       const subMenu = root.querySelector(this.constructor.is);
       subMenu.closeOn = menu.closeOn;
 
-      const listBox = root.querySelector('vaadin-context-menu-list-box');
+      const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
 
       listBox.innerHTML = '';
 
@@ -244,7 +244,7 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
-        const listBox = document.createElement('vaadin-context-menu-list-box');
+        const listBox = document.createElement(`${this._tagNamePrefix}-list-box`);
         root.appendChild(listBox);
 
         if (this._theme) {
@@ -353,7 +353,7 @@ export const ItemsMixin = (superClass) =>
           }
         });
       } else {
-        const listBox = root.querySelector('vaadin-context-menu-list-box');
+        const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
         if (this._theme) {
           listBox.setAttribute('theme', this._theme);
         } else {
