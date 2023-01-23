@@ -246,8 +246,7 @@ class GridProEditColumn extends GridColumn {
       cell._focusButton.setAttribute('role', 'button');
     }
 
-    const row = cell.parentElement;
-    this._grid._updateItem(row, row._item);
+    this.__renderCellsContent(cell._renderer, [cell]);
   }
 
   /** @private */
