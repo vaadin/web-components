@@ -145,13 +145,13 @@ The components below are licensed under [Vaadin Commercial License and Service T
 
 - Chrome (evergreen)
 - Firefox (evergreen)
-- Safari 14.1 or newer
+- Safari 15 or newer
 - Edge (Chromium, evergreen)
 
 **Mobile:**
 
 - Chrome (evergreen) for Android (4.4 or newer)
-- Safari for iOS (14.5 or newer)
+- Safari for iOS (15 or newer)
 
 ## Documentation
 
