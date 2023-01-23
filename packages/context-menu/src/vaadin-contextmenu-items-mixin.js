@@ -3,37 +3,10 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-context-menu-item.js';
+import './vaadin-context-menu-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
-import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @extends Item
- * @protected
- */
-class ContextMenuItemElement extends Item {
-  static get is() {
-    return 'vaadin-context-menu-item';
-  }
-}
-
-customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @extends ListBox
- * @protected
- */
-class ContextMenuListBox extends ListBox {
-  static get is() {
-    return 'vaadin-context-menu-list-box';
-  }
-}
-
-customElements.define(ContextMenuListBox.is, ContextMenuListBox);
 
 /**
  * @polymerMixin
