@@ -1,5 +1,5 @@
 import { isIOS } from '@vaadin/testing-helpers';
-import { flushGrid } from '@vaadin/grid/test/helpers';
+import { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 export { flushGrid };
 
