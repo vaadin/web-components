@@ -1,7 +1,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-context-menu-overlay',
+  'vaadin-menu-bar-overlay',
   css`
     :host([opening]),
     :host([closing]),
