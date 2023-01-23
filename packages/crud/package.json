@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/crud",
-  "version": "24.0.0-alpha11",
+  "version": "24.0.0-alpha12",
   "publishConfig": {
     "access": "public"
   },
@@ -37,16 +37,16 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "24.0.0-alpha11",
-    "@vaadin/component-base": "24.0.0-alpha11",
-    "@vaadin/confirm-dialog": "24.0.0-alpha11",
-    "@vaadin/dialog": "24.0.0-alpha11",
-    "@vaadin/form-layout": "24.0.0-alpha11",
-    "@vaadin/grid": "24.0.0-alpha11",
-    "@vaadin/text-field": "24.0.0-alpha11",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha11",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha11",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha11"
+    "@vaadin/button": "24.0.0-alpha12",
+    "@vaadin/component-base": "24.0.0-alpha12",
+    "@vaadin/confirm-dialog": "24.0.0-alpha12",
+    "@vaadin/dialog": "24.0.0-alpha12",
+    "@vaadin/form-layout": "24.0.0-alpha12",
+    "@vaadin/grid": "24.0.0-alpha12",
+    "@vaadin/text-field": "24.0.0-alpha12",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha12",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha12",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha12"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
