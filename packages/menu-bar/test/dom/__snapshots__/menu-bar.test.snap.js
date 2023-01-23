@@ -66,7 +66,7 @@ snapshots["menu-bar overlay"] =
 >
   <vaadin-menu-bar-list-box
     aria-orientation="vertical"
-    role="list"
+    role="menu"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
@@ -103,7 +103,7 @@ snapshots["menu-bar overlay class"] =
 >
   <vaadin-menu-bar-list-box
     aria-orientation="vertical"
-    role="list"
+    role="menu"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
