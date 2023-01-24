@@ -3,8 +3,9 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
+import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -12,12 +13,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @protected
  */
-declare class SelectItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {}
+declare class SelectListBox extends ListMixin(DirMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-select-item': SelectItem;
+    'vaadin-select-list-box': SelectListBox;
   }
 }
 
-export { SelectItem };
+export { SelectListBox };
