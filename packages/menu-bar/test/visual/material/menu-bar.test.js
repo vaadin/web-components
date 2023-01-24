@@ -73,7 +73,6 @@ describe('menu-bar', () => {
           const icon = document.createElement('vaadin-icon');
           icon.setAttribute('icon', img);
           item.appendChild(icon);
-          item.setAttribute('theme', 'menu-bar-item');
           return item;
         }
 
