@@ -22,7 +22,7 @@ export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') 
 }
 
 export function getMenuItems(menu) {
-  return menu.$.overlay.querySelectorAll('[aria-haspopup]');
+  return [...menu.$.overlay.querySelectorAll('[aria-haspopup]')];
 }
 
 export function getSubMenu(menu) {

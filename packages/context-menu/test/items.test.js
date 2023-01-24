@@ -19,29 +19,17 @@ import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu } from './helpers.js';
+import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
 describe('items', () => {
   let rootMenu, subMenu, target;
 
-  const open = (openTarget = target) => {
-    const menu = openTarget.parentElement.parentElement.__dataHost;
-    if (menu) {
-      menu.__openListenerActive = true;
-      const overlay = menu.$.overlay;
-      overlay.__openingHandler?.();
-    }
-    const { right, bottom } = openTarget.getBoundingClientRect();
-    fire(openTarget, menuOpenEvent, { x: right, y: bottom });
-  };
-
   const updateItemsAndReopen = async () => {
     rootMenu.items = [...rootMenu.items];
     rootMenu.close();
-    open();
-    await nextFrame();
+    await openMenu(target);
   };
 
   afterEach(() => {
@@ -68,11 +56,9 @@ describe('items', () => {
         },
         { text: 'foo-1' },
       ];
-      open();
-      await nextRender(rootMenu);
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(target);
+      await openMenu(getMenuItems(rootMenu)[0]);
       subMenu = getSubMenu(rootMenu);
-      await nextRender(subMenu);
     });
 
     afterEach(() => {
@@ -112,11 +98,11 @@ describe('items', () => {
       expect(subItemRect.left).to.be.above(rootItemRect.right);
     });
 
-    (isTouch ? it.skip : it)('should open the subMenu on the left side', () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the left side', async () => {
       subMenu.close();
       let rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
       rootMenu.$.overlay.style.left = `${window.innerWidth - rootItemRect.width * 1.5}px`;
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(getMenuItems(rootMenu)[0]);
       rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
       const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
       expect(subItemRect.right).to.be.below(rootItemRect.left);
@@ -127,8 +113,7 @@ describe('items', () => {
       rootMenu.$.overlay.style.removeProperty('top');
       rootMenu.$.overlay.style.bottom = '0px';
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
-      open(getMenuItems(rootMenu)[0]);
-      await nextRender(subMenu);
+      await openMenu(getMenuItems(rootMenu)[0]);
       const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
       const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
       expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
@@ -143,8 +128,7 @@ describe('items', () => {
       rootOverlay.style.removeProperty('left');
       rootOverlay.style.right = `${rootItemRect.width}px`;
       rootOverlay.setAttribute('end-aligned', '');
-      open(rootItem);
-      await nextRender(subMenu);
+      await openMenu(rootItem);
       expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
       const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
       const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
@@ -168,8 +152,7 @@ describe('items', () => {
       padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
 
       /* First sub-menu end-aligned */
-      open(rootItem);
-      await nextRender(subMenu);
+      await openMenu(rootItem);
       expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
       const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
       const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
@@ -179,24 +162,22 @@ describe('items', () => {
       const nestedItem = getMenuItems(subMenu)[2];
       const nestedItemRect = nestedItem.getBoundingClientRect();
       padding = parseFloat(getComputedStyle(subMenu.$.overlay.$.content).paddingLeft) * 2;
-      open(nestedItem);
-      await nextRender(subMenu);
+      await openMenu(nestedItem);
       const subMenu2 = getSubMenu(subMenu);
       expect(subMenu2.$.overlay.hasAttribute('end-aligned')).to.be.false;
       const subMenu2Rect = subMenu2.$.overlay.$.content.getBoundingClientRect();
       expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right + padding / 2, 1);
     });
 
-    it('should clean up the old content on reopen', () => {
+    it('should clean up the old content on reopen', async () => {
       rootMenu.close();
-      open();
+      await openMenu(target);
       expect(getMenuItems(rootMenu).length).to.equal(rootMenu.items.length);
     });
 
     it('should clear selections on reopen', async () => {
       getMenuItems(subMenu)[0].click();
-      open(getMenuItems(rootMenu)[0]);
-      await nextFrame();
+      await openMenu(getMenuItems(rootMenu)[0]);
       expect(getMenuItems(subMenu)[0].selected).to.be.false;
     });
 
@@ -204,18 +185,18 @@ describe('items', () => {
       expect(getMenuItems(rootMenu)[0].localName).to.equal('vaadin-context-menu-item');
     });
 
-    it('should accept component items', () => {
+    it('should accept component items', async () => {
       rootMenu.close();
       const component = document.createElement('button');
       rootMenu.items = [{ component }];
-      open();
+      await openMenu(target);
       expect(getMenuItems(rootMenu)[0]).to.equal(component);
     });
 
-    it('should accept custom tags', () => {
+    it('should accept custom tags', async () => {
       rootMenu.close();
       rootMenu.items = [{ component: 'button' }];
-      open();
+      await openMenu(target);
       expect(getMenuItems(rootMenu)[0].localName).to.equal('button');
     });
 
@@ -223,10 +204,10 @@ describe('items', () => {
       expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
     });
 
-    it('should not have a checked item', () => {
+    it('should not have a checked item', async () => {
       rootMenu.items[0].children[0].checked = false;
       subMenu.close();
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(getMenuItems(rootMenu)[0]);
       expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
     });
 
@@ -234,16 +215,16 @@ describe('items', () => {
       expect(getMenuItems(subMenu)[1].disabled).to.be.true;
     });
 
-    it('should close the submenu', () => {
-      open(getMenuItems(rootMenu)[1]);
+    it('should close the submenu', async () => {
+      await openMenu(getMenuItems(rootMenu)[1]);
       expect(subMenu.opened).to.be.false;
     });
 
-    (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', () => {
+    (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', async () => {
       const parent = getMenuItems(rootMenu)[0];
       const nonParent = getMenuItems(rootMenu)[1];
       const focusSpy = sinon.spy(parent, 'focus');
-      open(nonParent);
+      await openMenu(nonParent);
       expect(focusSpy.called).to.be.true;
     });
 
@@ -299,14 +280,14 @@ describe('items', () => {
       expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('true');
     });
 
-    it('should not have be a parent item', () => {
+    it('should not have be a parent item', async () => {
       const button = document.createElement('button');
       rootMenu.close();
       rootMenu.items[0].component = button;
-      open();
+      await openMenu(target);
       rootMenu.close();
       rootMenu.items[0].children = [];
-      open();
+      await openMenu(target);
       expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('false');
     });
 
@@ -340,8 +321,7 @@ describe('items', () => {
     it('should not focus item if parent item is not focused', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(getMenuItems(rootMenu)[0]);
-      await nextRender(subMenu);
+      await openMenu(getMenuItems(rootMenu)[0]);
       expect(subMenu.opened).to.be.true;
       await nextRender(subMenu);
       expect(getMenuItems(subMenu)[0].hasAttribute('focused')).to.be.false;
@@ -350,8 +330,7 @@ describe('items', () => {
     it('should focus first item in submenu on overlay element arrow down', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(getMenuItems(rootMenu)[0]);
-      await nextRender(subMenu);
+      await openMenu(getMenuItems(rootMenu)[0]);
       const item = getMenuItems(subMenu)[0];
       const spy = sinon.spy(item, 'focus');
       arrowDownKeyDown(subMenu.$.overlay.$.overlay);
@@ -361,8 +340,7 @@ describe('items', () => {
     it('should focus last item in submenu on overlay element arrow up', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(getMenuItems(rootMenu)[0]);
-      await nextRender(subMenu);
+      await openMenu(getMenuItems(rootMenu)[0]);
       const items = getMenuItems(subMenu);
       const item = items[items.length - 1];
       const spy = sinon.spy(item, 'focus');
@@ -407,22 +385,22 @@ describe('items', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not remove the component attributes', () => {
+    it('should not remove the component attributes', async () => {
       rootMenu.close();
       const button = document.createElement('button');
       button.setAttribute('disabled', '');
       button.setAttribute('menu-item-checked', '');
       rootMenu.items[0].component = button;
-      open();
+      await openMenu(target);
       expect(button.hasAttribute('disabled')).to.be.true;
       expect(button.hasAttribute('menu-item-checked')).to.be.true;
     });
 
-    it('should propagate closeOn', () => {
+    it('should propagate closeOn', async () => {
       rootMenu.close();
       rootMenu.closeOn = 'keydown';
-      open();
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(target);
+      await openMenu(getMenuItems(rootMenu)[0]);
       fire(getMenuItems(subMenu)[0], 'keydown', {}, { keyCode: 65, key: 'a' });
       expect(subMenu.opened).to.be.false;
     });
@@ -457,9 +435,8 @@ describe('items', () => {
         rootOverlay = rootMenu.$.overlay;
         subOverlay1 = subMenu.$.overlay;
 
-        open(getMenuItems(subMenu)[2]);
+        await openMenu(getMenuItems(subMenu)[2]);
         const subMenu2 = getSubMenu(subMenu);
-        await nextRender(subMenu2);
         subOverlay2 = subMenu2.$.overlay;
         await nextFrame();
       });
@@ -526,14 +503,11 @@ describe('items', () => {
         },
         { text: 'foo-1' },
       ];
-      open();
-      await nextRender();
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(target);
+      await openMenu(getMenuItems(rootMenu)[0]);
       subMenu = getSubMenu(rootMenu);
-      await nextRender();
-      open(getMenuItems(subMenu)[1]);
+      await openMenu(getMenuItems(subMenu)[1]);
       subMenu2 = getSubMenu(rootMenu);
-      await nextRender();
     });
 
     it('should propagate host theme attribute to the nested elements', () => {
@@ -562,10 +536,8 @@ describe('items', () => {
 
       // Should wait until submenus will be opened again.
       await nextFrame();
-      open(getMenuItems(rootMenu)[0]);
-      await nextFrame();
-      open(getMenuItems(subMenu)[1]);
-      await nextFrame();
+      await openMenu(getMenuItems(rootMenu)[0]);
+      await openMenu(getMenuItems(subMenu)[1]);
 
       [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
         const overlay = subMenu.$.overlay;
@@ -585,9 +557,8 @@ describe('items', () => {
       rootMenu.items[0].children[0].theme = 'bar-0-0';
       await updateItemsAndReopen();
 
-      open(getMenuItems(rootMenu)[0]);
+      await openMenu(getMenuItems(rootMenu)[0]);
       subMenu = getSubMenu(rootMenu);
-      await nextFrame();
 
       const rootItems = getMenuItems(rootMenu);
       const subItems = getMenuItems(subMenu);
@@ -646,8 +617,7 @@ describe('items', () => {
       subMenu.close();
       subMenu.items = [...subMenu.items];
 
-      open(getMenuItems(rootMenu)[0]);
-      await nextRender(subMenu);
+      await openMenu(getMenuItems(rootMenu)[0]);
 
       const item = getMenuItems(subMenu2)[2];
 
