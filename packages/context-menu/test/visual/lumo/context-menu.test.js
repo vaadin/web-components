@@ -1,5 +1,7 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/item/theme/lumo/vaadin-item-styles.js';
+import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
 import '../../../theme/lumo/vaadin-context-menu.js';
 import '../../not-animated-styles.js';
 import { openSubMenus } from '../../helpers.js';
