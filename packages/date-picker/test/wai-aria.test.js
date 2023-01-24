@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n, open } from './common.js';
+import { activateScroller, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {

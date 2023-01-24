@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish } from './common.js';
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish } from './helpers.js';
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);

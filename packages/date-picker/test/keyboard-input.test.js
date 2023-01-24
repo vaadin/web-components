@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
 import { getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
-import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './common.js';
+import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('keyboard', () => {
   let datepicker;

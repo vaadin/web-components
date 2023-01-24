@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { open } from '../common.js';
+import { open } from '../helpers.js';
 
 describe('vaadin-date-picker', () => {
   let datePicker;

@@ -11,7 +11,7 @@ import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
 import { html, render } from 'lit';
-import { close, outsideClick, waitForOverlayRender } from '@vaadin/date-picker/test/common.js';
+import { close, outsideClick, waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {

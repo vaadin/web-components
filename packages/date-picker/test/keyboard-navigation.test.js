@@ -11,7 +11,7 @@ import {
   open,
   waitForOverlayRender,
   waitForScrollToFinish,
-} from './common.js';
+} from './helpers.js';
 
 describe('keyboard navigation', () => {
   describe('date-picker', () => {
