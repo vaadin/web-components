@@ -79,6 +79,7 @@ snapshots["vaadin-select host placeholder"] =
     <vaadin-select-item
       aria-selected="false"
       id="value-vaadin-select-3"
+      role="option"
     >
       Placeholder
     </vaadin-select-item>
@@ -169,6 +170,7 @@ snapshots["vaadin-select host value"] =
     <vaadin-select-item
       aria-selected="true"
       id="value-vaadin-select-3"
+      role="option"
       selected=""
     >
       Option 1

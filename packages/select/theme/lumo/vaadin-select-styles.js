@@ -6,9 +6,12 @@
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 import { menuOverlay } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles('vaadin-select-item', item, { moduleId: 'lumo-select-item' });
 
 const select = css`
   :host(:not([theme*='align'])) ::slotted([slot='value']) {
