@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { change, click, fixtureSync, makeSoloTouchEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
-import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
+import { createFile, createFiles, touchDevice, xhrCreator } from './helpers.js';
 
 describe('file list', () => {
   let upload, file, files;

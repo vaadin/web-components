@@ -13,7 +13,7 @@ import {
   open,
   waitForOverlayRender,
   waitForScrollToFinish,
-} from './common.js';
+} from './helpers.js';
 
 describe('keyboard', () => {
   let datepicker;

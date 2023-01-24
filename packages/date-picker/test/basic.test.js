@@ -13,7 +13,7 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';
-import { close, getFocusedCell, getOverlayContent, idleCallback, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, idleCallback, open } from './helpers.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
