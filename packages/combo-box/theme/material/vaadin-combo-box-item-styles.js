@@ -16,3 +16,5 @@ const comboBoxItem = css`
 registerStyles('vaadin-combo-box-item', [item, comboBoxItem], {
   moduleId: 'material-combo-box-item',
 });
+
+export { comboBoxItem };

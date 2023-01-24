@@ -21,3 +21,5 @@ const comboBoxItem = css`
 registerStyles('vaadin-combo-box-item', [item, comboBoxItem], {
   moduleId: 'lumo-combo-box-item',
 });
+
+export { comboBoxItem };
