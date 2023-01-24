@@ -38,7 +38,7 @@ describe('select', () => {
   });
 
   it('readonly', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     element.readonly = true;
     await visualDiff(div, 'readonly');
   });
@@ -60,7 +60,7 @@ describe('select', () => {
   });
 
   it('value', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     await visualDiff(div, 'value');
   });
 
@@ -136,19 +136,19 @@ describe('select', () => {
   });
 
   it('align-center', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     element.setAttribute('theme', 'align-center');
     await visualDiff(div, 'align-center');
   });
 
   it('align-right', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     element.setAttribute('theme', 'align-right');
     await visualDiff(div, 'align-right');
   });
 
   it('small', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     element.setAttribute('theme', 'small');
     await visualDiff(div, 'small');
   });
@@ -160,7 +160,7 @@ describe('select', () => {
 
   it('width with value', async () => {
     element.style.width = '80px';
-    element.value = 'item 1';
+    element.value = 'value-1';
     await visualDiff(div, 'width-value');
   });
 
