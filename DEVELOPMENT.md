@@ -3,6 +3,20 @@
 This document describes the process for running this project on your local computer, and the list
 of steps to perform when creating a new major or minor version branch of the monorepo.
 
+- [Getting started](#getting-started)
+- [Linting](#linting)
+- [Testing](#testing)
+  - [Environment variables](#environment-variables)
+  - [Unit tests](#unit-tests)
+  - [Visual tests](#visual-tests)
+  - [Snapshot tests](#snapshot-tests)
+  - [Integration tests](#integration-tests)
+- [Making a version bump](#making-a-version-bump)
+- [Miscellaneous](#miscellaneous)
+  - [Generating icons](#generating-icons)
+  - [Using a local clone of the repo](#using-a-local-clone-of-the-repo)
+  - [Fixing npm dist-tag](#fixing-npm-dist-tag)
+
 ## Getting started
 
 Setup the repo:
@@ -163,7 +177,7 @@ Run integration tests that are in the separate `integration` folder:
 yarn test:it
 ```
 
-## Making a major version bump
+## Making a version bump
 
 ### Create a branch for the current major
 
@@ -264,7 +278,8 @@ Re-generate SVG icon sets and icon fonts from individual SVG files for the packa
 ```sh
 yarn icons
 ```
-## Using a local clone of the repo in Vaadin app
+
+## Using a local clone of the repo
 
 When using a Vaadin app, you can modify the frontend build tool config to resolve the web components modules from your local clone, instead of the versions downloaded from npm registry.
 
