@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync, mousedown, nextRender, oneEvent, touchstart } fr
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, getOverlayContent, isFullscreen, monthsEqual, open, outsideClick } from './common.js';
+import { getFocusedCell, getOverlayContent, isFullscreen, monthsEqual, open, outsideClick } from './helpers.js';
 
 describe('dropdown', () => {
   let datepicker, input, overlay;

@@ -3,7 +3,7 @@ import { fire, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import { getOverlayContent, open, waitForScrollToFinish } from './helpers.js';
 
 describe('custom input', () => {
   let datepicker, input, overlay;

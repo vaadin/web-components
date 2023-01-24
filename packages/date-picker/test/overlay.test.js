@@ -3,7 +3,7 @@ import { click, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './helpers.js';
 
 function waitUntilScrolledTo(overlay, date, callback) {
   if (overlay.$.monthScroller.position) {
