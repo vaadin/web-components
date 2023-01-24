@@ -1,5 +1,6 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { listBox } from '@vaadin/list-box/theme/material/vaadin-list-box-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const contextMenuListBox = css`
@@ -30,6 +31,8 @@ const contextMenuListBox = css`
   }
 `;
 
-registerStyles('vaadin-context-menu-list-box', contextMenuListBox, { moduleId: 'material-context-menu-list-box' });
+registerStyles('vaadin-context-menu-list-box', [listBox, contextMenuListBox], {
+  moduleId: 'material-context-menu-list-box',
+});
 
 export { contextMenuListBox };

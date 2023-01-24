@@ -1,8 +1,10 @@
 import '../../vaadin-context-menu.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
+import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ContextMenuItem } from '../../src/vaadin-context-menu-item.js';
+import type { ContextMenuListBox } from '../../src/vaadin-context-menu-list-box.js';
 import type {
   ContextMenu,
   ContextMenuItem as MenuItem,
@@ -50,3 +52,11 @@ assertType<ContextMenuItem>(item);
 assertType<ItemMixinClass>(item);
 assertType<DirMixinClass>(item);
 assertType<ThemableMixinClass>(item);
+
+// List-box
+const listBox = document.createElement('vaadin-context-menu-list-box');
+
+assertType<ContextMenuListBox>(listBox);
+assertType<DirMixinClass>(listBox);
+assertType<ListMixinClass>(listBox);
+assertType<ThemableMixinClass>(listBox);
