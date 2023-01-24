@@ -181,6 +181,11 @@ Setup the repo:
 yarn
 ```
 
+Starting the development server:
+```sh
+yarn start
+```
+
 ### Environment variables
 
 Setup the environment variables needed by the scripts below, by copying the `.env.dist` template file to `.env`:
