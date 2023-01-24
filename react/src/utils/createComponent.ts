@@ -2,10 +2,11 @@ import {
   createComponent as _createComponent,
   EventName,
   WebComponentProps as _WebComponentProps,
-  ReactWebComponent,
+  ReactWebComponent as _ReactWebComponent,
 } from '@lit-labs/react';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import type { ForwardRefExoticComponent, PropsWithoutRef, RefAttributes } from 'react';
+import type React from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 
 // TODO: Remove when types from @lit-labs/react are exported
 export type EventNames = Record<string, EventName | string>;
@@ -19,10 +20,10 @@ type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
   tagName: string;
 }>;
 
-export type ThemedWebComponentProps<I extends ThemePropertyMixinClass & HTMLElement, E extends EventNames = {}> = Omit<
-  _WebComponentProps<I, E>,
-  'theme'
-> & {
+export type ThemedWebComponentProps<
+  I extends ThemePropertyMixinClass & HTMLElement,
+  E extends EventNames = {},
+> = Partial<Omit<_WebComponentProps<I, E>, 'theme'>> & {
   /**
    * Remove the deprecation warning for React components. In our case, the
    * property is deprecated in favor of an attribute. However, for React, it
@@ -38,16 +39,17 @@ export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> 
   ? ThemedWebComponentProps<I, E>
   : _WebComponentProps<I, E>;
 
+/** @deprecated */
 export type ThemedReactWebComponent<
   I extends ThemePropertyMixinClass & HTMLElement,
   E extends EventNames = {},
-> = ForwardRefExoticComponent<PropsWithoutRef<ThemedWebComponentProps<I, E>> & RefAttributes<I>>;
+> = ForwardRefExoticComponent<ThemedWebComponentProps<I, E> & RefAttributes<I>>;
 
 // We need a separate declaration here; otherwise, the TypeScript fails into the
 // endless loop trying to resolve the typings.
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(
   options: Options<I, E>,
-): I extends ThemePropertyMixinClass ? ThemedReactWebComponent<I, E> : ReactWebComponent<I, E>;
+): (props: WebComponentProps<I, E> & RefAttributes<I>) => React.ReactElement | null;
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>): any {
   const { elementClass } = options;
 

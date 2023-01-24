@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { BoardRow } from '../../src/BoardRow.js';
-import { Grid, WebComponentModule as GridModule } from '../../src/Grid.js';
+import { Grid, type GridDataProvider } from '../../src/Grid.js';
 import { GridColumn } from '../../src/GridColumn.js';
 import { GridColumnGroup } from '../../src/GridColumnGroup.js';
 import { GridFilterColumn } from '../../src/GridFilterColumn.js';
@@ -53,7 +53,7 @@ function NameRenderer({ item: { name } }: GridBodyReactRendererProps<TreeGridDat
   );
 }
 
-const TreeGridDataProvider: GridModule.GridDataProvider<TreeGridDataItem> = (params, callback) => {
+const TreeGridDataProvider: GridDataProvider<TreeGridDataItem> = (params, callback) => {
   const items = params.parentItem ? params.parentItem.children || [] : treeGridData;
   const offset = params.page * params.pageSize;
   callback(items.slice(offset, offset + params.pageSize), items.length);

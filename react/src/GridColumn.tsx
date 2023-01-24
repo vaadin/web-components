@@ -1,9 +1,9 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import type { WebComponentModule as GridModule } from './generated/Grid.js';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridColumn as _GridColumn,
+  type GridColumnElement,
   type GridColumnProps as _GridColumnProps,
-  WebComponentModule,
 } from './generated/GridColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
@@ -11,9 +11,8 @@ import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export * from './generated/GridColumn.js';
 
-export type GridColumnProps<TItem> = Omit<
-  _GridColumnProps<TItem>,
-  'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'
+export type GridColumnProps<TItem> = Partial<
+  Omit<_GridColumnProps<TItem>, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
@@ -22,9 +21,9 @@ export type GridColumnProps<TItem> = Omit<
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
-function GridColumn<TItem = GridModule.GridDefaultItem>(
+function GridColumn<TItem = GridDefaultItem>(
   props: GridColumnProps<TItem>,
-  ref: ForwardedRef<WebComponentModule.GridColumn<TItem>>,
+  ref: ForwardedRef<GridColumnElement<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
@@ -45,8 +44,8 @@ function GridColumn<TItem = GridModule.GridDefaultItem>(
   );
 }
 
-const ForwardedGridColumn = forwardRef(GridColumn) as <TItem = GridModule.GridDefaultItem>(
-  props: GridColumnProps<TItem> & { ref?: ForwardedRef<WebComponentModule.GridColumn<TItem>> },
+const ForwardedGridColumn = forwardRef(GridColumn) as <TItem = GridDefaultItem>(
+  props: GridColumnProps<TItem> & RefAttributes<GridColumnElement<TItem>>,
 ) => ReactElement | null;
 
-export { ForwardedGridColumn as GridColumn, WebComponentModule };
+export { ForwardedGridColumn as GridColumn };

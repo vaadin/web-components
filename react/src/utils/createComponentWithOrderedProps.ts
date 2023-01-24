@@ -1,7 +1,7 @@
-import { createElement, type ForwardedRef, ForwardRefExoticComponent, RefAttributes } from 'react';
+import { createElement, type ForwardedRef, type RefAttributes, type FC } from 'react';
 
 export default function createComponentWithOrderedProps<P extends {}, E extends HTMLElement>(
-  component: ForwardRefExoticComponent<P>,
+  component: FC<P>,
   ...names: ReadonlyArray<keyof P>
 ) {
   return (props: P, ref: ForwardedRef<E>) => {

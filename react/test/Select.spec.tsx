@@ -4,7 +4,7 @@ import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
 import { ListBox } from '../src/ListBox.js';
 import { Item } from '../src/Item.js';
-import { Select, type WebComponentModule } from '../src/Select.js';
+import { Select, type SelectElement } from '../src/Select.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 
@@ -13,7 +13,7 @@ useChaiPlugin(chaiDom);
 describe('Select', () => {
   const overlayTag = 'vaadin-select-overlay';
 
-  const [ref, catcher] = createOverlayCloseCatcher<WebComponentModule.Select>(overlayTag, (ref) => {
+  const [ref, catcher] = createOverlayCloseCatcher<SelectElement>(overlayTag, (ref) => {
     ref.opened = false;
   });
 

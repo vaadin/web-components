@@ -1,9 +1,10 @@
-import type { VirtualListDefaultItem } from '@vaadin/virtual-list/src/vaadin-virtual-list.js';
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
 import {
   VirtualList as _VirtualList,
+  type VirtualListDefaultItem,
+  type VirtualListElement,
+  type VirtualListItemModel,
   type VirtualListProps as _VirtualListProps,
-  WebComponentModule,
 } from './generated/VirtualList.js';
 import { type ReactModelRendererProps, useModelRenderer } from './renderers/useModelRenderer.js';
 
@@ -11,11 +12,11 @@ export * from './generated/VirtualList.js';
 
 export type VirtualListReactRendererProps<TItem> = ReactModelRendererProps<
   TItem,
-  WebComponentModule.VirtualListItemModel<TItem>,
-  WebComponentModule.VirtualList<TItem>
+  VirtualListItemModel<TItem>,
+  VirtualListElement<TItem>
 >;
 
-export type VirtualListProps<TItem> = Omit<_VirtualListProps<TItem>, 'children' | 'renderer'> &
+export type VirtualListProps<TItem> = Partial<Omit<_VirtualListProps<TItem>, 'children' | 'renderer'>> &
   Readonly<{
     children?: ComponentType<VirtualListReactRendererProps<TItem>> | null;
     renderer?: ComponentType<VirtualListReactRendererProps<TItem>> | null;
@@ -23,7 +24,7 @@ export type VirtualListProps<TItem> = Omit<_VirtualListProps<TItem>, 'children' 
 
 function VirtualList<TItem = VirtualListDefaultItem>(
   props: VirtualListProps<TItem>,
-  ref: ForwardedRef<WebComponentModule.VirtualList<TItem>>,
+  ref: ForwardedRef<VirtualListElement<TItem>>,
 ): ReactElement | null {
   const [portals, renderer] = useModelRenderer(props.renderer ?? props.children);
 
@@ -35,7 +36,7 @@ function VirtualList<TItem = VirtualListDefaultItem>(
 }
 
 const ForwardedVirtualList = forwardRef(VirtualList) as <TItem = VirtualListDefaultItem>(
-  props: VirtualListProps<TItem> & { ref?: ForwardedRef<WebComponentModule.VirtualList<TItem>> },
+  props: VirtualListProps<TItem> & RefAttributes<VirtualListElement<TItem>>,
 ) => ReactElement | null;
 
-export { ForwardedVirtualList as VirtualList, WebComponentModule };
+export { ForwardedVirtualList as VirtualList };

@@ -1,9 +1,9 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
-import type { WebComponentModule as GridModule } from './generated/Grid.js';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridProEditColumn as _GridProEditColumn,
+  type GridProEditColumnElement,
   type GridProEditColumnProps as _GridProEditColumnProps,
-  WebComponentModule,
 } from './generated/GridProEditColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
@@ -11,9 +11,11 @@ import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export * from './generated/GridProEditColumn.js';
 
-export type GridProEditColumnProps<TItem> = Omit<
-  _GridProEditColumnProps<TItem>,
-  'children' | 'editModeRenderer' | 'footerRenderer' | 'headerRenderer' | 'renderer'
+export type GridProEditColumnProps<TItem> = Partial<
+  Omit<
+    _GridProEditColumnProps<TItem>,
+    'children' | 'editModeRenderer' | 'footerRenderer' | 'headerRenderer' | 'renderer'
+  >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
@@ -23,9 +25,9 @@ export type GridProEditColumnProps<TItem> = Omit<
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
-function GridProEditColumn<TItem = GridModule.GridDefaultItem>(
+function GridProEditColumn<TItem = GridDefaultItem>(
   props: GridProEditColumnProps<TItem>,
-  ref: ForwardedRef<WebComponentModule.GridProEditColumn<TItem>>,
+  ref: ForwardedRef<GridProEditColumnElement<TItem>>,
 ): ReactElement | null {
   const [editModePortals, editModeRenderer] = useModelRenderer(props.editModeRenderer);
   const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
@@ -49,8 +51,8 @@ function GridProEditColumn<TItem = GridModule.GridDefaultItem>(
   );
 }
 
-const ForwardedGridProEditColumn = forwardRef(GridProEditColumn) as <TItem = GridModule.GridDefaultItem>(
-  props: GridProEditColumnProps<TItem> & { ref?: ForwardedRef<WebComponentModule.GridProEditColumn<TItem>> },
+const ForwardedGridProEditColumn = forwardRef(GridProEditColumn) as <TItem = GridDefaultItem>(
+  props: GridProEditColumnProps<TItem> & RefAttributes<GridProEditColumnElement<TItem>>,
 ) => ReactElement | null;
 
-export { ForwardedGridProEditColumn as GridProEditColumn, WebComponentModule };
+export { ForwardedGridProEditColumn as GridProEditColumn };

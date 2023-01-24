@@ -1,9 +1,9 @@
-import { ForwardedRef, forwardRef } from 'react';
-import { TimePicker as _TimePicker, TimePickerProps, WebComponentModule } from './generated/TimePicker.js';
-import createComponentWithOrderedProps from './utils/createComponentWIthOrderedProps.js';
+import { forwardRef } from 'react';
+import { TimePicker as _TimePicker, type TimePickerElement, type TimePickerProps } from './generated/TimePicker.js';
+import createComponentWithOrderedProps from './utils/createComponentWithOrderedProps.js';
 
 export * from './generated/TimePicker.js';
 
 export const TimePicker = forwardRef(
-  createComponentWithOrderedProps<TimePickerProps, WebComponentModule.TimePicker>(_TimePicker, 'value'),
+  createComponentWithOrderedProps<TimePickerProps, TimePickerElement>(_TimePicker, 'value'),
 );

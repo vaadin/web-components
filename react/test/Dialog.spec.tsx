@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { Dialog, type WebComponentModule } from '../src/Dialog.js';
+import { Dialog, type DialogElement } from '../src/Dialog.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 
 useChaiPlugin(chaiDom);
@@ -9,7 +9,7 @@ useChaiPlugin(chaiDom);
 describe('Dialog', () => {
   const overlayTag = 'vaadin-dialog-overlay';
 
-  const [ref, catcher] = createOverlayCloseCatcher<WebComponentModule.Dialog>(overlayTag, (ref) => {
+  const [ref, catcher] = createOverlayCloseCatcher<DialogElement>(overlayTag, (ref) => {
     ref.opened = false;
   });
 

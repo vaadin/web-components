@@ -1,12 +1,12 @@
 import { unlink, writeFile } from 'node:fs/promises';
 import { relative, resolve, basename } from 'node:path';
 import ts, {
+  ExpressionStatement,
   type Identifier,
   type Node,
   type SourceFile,
   type TypeAliasDeclaration,
   type VariableDeclaration,
-  type VariableStatement,
 } from 'typescript';
 import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { extractElementsFromDescriptions, loadDescriptions } from './descriptions.js';
@@ -74,6 +74,7 @@ async function prepareElementFiles(
 const descriptions = await loadDescriptions();
 const printer = ts.createPrinter({
   newLine: ts.NewLineKind.LineFeed,
+  removeComments: false,
 });
 
 function createGenericTypeNames(numberOfGenerics: number) {
@@ -225,22 +226,24 @@ function addGenerics(node: Node, elementName: string) {
   }
 
   if (isComponentPropsDeclaration(node)) {
-    // export type GridProps<T1> = WebComponentProps<GridModule.Grid<T1>, GridEventMap<T1>>;
-    //                        ^ adding this type parameter
+    // export type GridProps<T1> = WebComponentProps<GridElement<T1>, GridEventMap<T1>>;
+    //                       ^ adding this type parameter
     const declaration = ts.factory.createTypeAliasDeclaration(node.modifiers, node.name, typeParameters, node.type);
 
     return ts.transform(declaration, [
-      // export type GridProps<T1> = WebComponentProps<GridModule.Grid<T1>, GridEventMap<T1>>;
-      //                                                                ^ adding this type argument
+      // export type GridProps<T1> = WebComponentProps<GridElement<T1>, GridEventMap<T1>>;
+      //                                                           ^ adding this type argument
       transform<Node>((node) =>
-        ts.isTypeReferenceNode(node) && ts.isQualifiedName(node.typeName)
+        ts.isTypeReferenceNode(node) &&
+        ts.isIdentifier(node.typeName) &&
+        node.typeName.text === `${COMPONENT_NAME}Element`
           ? ts.factory.createTypeReferenceNode(node.typeName, typeArguments)
           : node,
       ),
       ...(isEventMapGeneric
         ? [
-            // export type GridProps<T1> = WebComponentProps<GridModule.Grid<T1>, GridEventMap<T1>>;
-            //                                                                                  ^ adding this type argument
+            // export type GridProps<T1> = WebComponentProps<GridElement<T1>, GridEventMap<T1>>;
+            //                                                                             ^ adding this type argument
             transform((node) =>
               ts.isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.text === EVENT_MAP
                 ? ts.factory.createTypeReferenceNode(node.typeName, typeArguments)
@@ -254,20 +257,18 @@ function addGenerics(node: Node, elementName: string) {
   if (isComponentDeclaration(node)) {
     const { initializer: originalInitializer } = node;
 
-    const initializer = template(
+    const asExpression = template(
       `
-const c = ${CALL_EXPRESSION} as (
-  props: ${COMPONENT_NAME}Props & { ref?: React.ForwardedRef<WebComponentModule.${COMPONENT_NAME}> },
+${CALL_EXPRESSION} as (
+  props: ${COMPONENT_NAME}Props & React.RefAttributes<${COMPONENT_NAME}Element>,
 ) => React.ReactElement | null
   `,
-      (statements) => (statements[0] as VariableStatement).declarationList.declarations[0].initializer!,
+      (statements) => (statements[0] as ExpressionStatement).expression,
       [
         transform((node) =>
           ts.isTypeReferenceNode(node) &&
-          ((ts.isIdentifier(node.typeName) && node.typeName.text === `${COMPONENT_NAME}Props`) ||
-            (ts.isQualifiedName(node.typeName) &&
-              ts.isIdentifier(node.typeName.right) &&
-              node.typeName.right.text === COMPONENT_NAME))
+          ts.isIdentifier(node.typeName) &&
+          (node.typeName.text === `${COMPONENT_NAME}Props` || node.typeName.text === `${COMPONENT_NAME}Element`)
             ? ts.factory.createTypeReferenceNode(node.typeName, typeArguments)
             : node,
         ),
@@ -280,7 +281,7 @@ const c = ${CALL_EXPRESSION} as (
       ],
     );
 
-    return ts.factory.createVariableDeclaration(node.name, undefined, undefined, initializer);
+    return ts.factory.createVariableDeclaration(node.name, undefined, undefined, asExpression);
   }
 
   return node;
@@ -297,6 +298,7 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
   const elementName = stripPrefix(camelCase(name));
   const elementModulePath = createImportPath(relative(nodeModulesDir, path), false);
   const eventMapId = ts.factory.createIdentifier(`${elementName}EventMap`);
+  const elementClassNameId = ts.factory.createIdentifier(`${elementName}Element`);
   const componentTagLiteral = ts.factory.createStringLiteral(name);
   const createComponentPath = createImportPath(relative(generatedDir, resolve(utilsDir, './createComponent.js')), true);
 
@@ -306,19 +308,26 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
     `
 import type { EventName } from "${LIT_REACT_PATH}";
 import * as WebComponentModule from "${MODULE_PATH}";
+import { ${COMPONENT_NAME} as ${COMPONENT_NAME}Element } from "${MODULE_PATH}";
 import * as React from "react";
 import { createComponent, WebComponentProps } from "${CREATE_COMPONENT_PATH}";
+
+export * from "${MODULE_PATH}";
+
+export {
+  /** @deprecated */WebComponentModule,
+  ${COMPONENT_NAME}Element,
+};
+
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
-export type ${COMPONENT_NAME}Props = WebComponentProps<WebComponentModule.${COMPONENT_NAME}, ${EVENT_MAP}>;
+export type ${COMPONENT_NAME}Props = WebComponentProps<${COMPONENT_NAME}Element, ${EVENT_MAP}>;
 export const ${COMPONENT_NAME} = createComponent({
-  elementClass: WebComponentModule.${COMPONENT_NAME},
+  elementClass: ${COMPONENT_NAME}Element,
   events,
   react: React,
   tagName: ${COMPONENT_TAG}
 });
-
-export { WebComponentModule };
 `,
     (statements) => statements,
     [
@@ -333,19 +342,28 @@ export { WebComponentModule };
           ? createEventList(elementName, pickNamedEvents(events, eventNameMissingLogger))
           : node,
       ),
-      transform((node) =>
-        ts.isStringLiteral(node) && node.text === CREATE_COMPONENT_PATH
-          ? ts.factory.createStringLiteral(createComponentPath)
-          : node,
-      ),
       transform((node) => addGenerics(node, elementName)),
+      transform((node) => {
+        if (!ts.isStringLiteral(node)) {
+          return node;
+        }
+
+        switch (node.text) {
+          case CREATE_COMPONENT_PATH:
+            return ts.factory.createStringLiteral(createComponentPath);
+          case MODULE_PATH:
+            return ts.factory.createStringLiteral(elementModulePath);
+          default:
+            // When createSourceFile hass setParentNodes flag, original string
+            // literals are not emitted for some reason. Copy as a workaroud.
+            return ts.factory.createStringLiteral(node.text);
+        }
+      }),
       transform((node) =>
         isEventMapReferenceInEventsDeclaration(node) ? ts.factory.createIdentifier(EVENT_MAP) : node,
       ),
       transform((node) =>
-        ts.isStringLiteral(node) && node.text === MODULE_PATH
-          ? ts.factory.createStringLiteral(elementModulePath)
-          : node,
+        ts.isIdentifier(node) && node.text === `${COMPONENT_NAME}Element` ? elementClassNameId : node,
       ),
       transform((node) => (ts.isIdentifier(node) && node.text === COMPONENT_TAG ? componentTagLiteral : node)),
       transform((node) => (ts.isIdentifier(node) && node.text === EVENT_MAP ? eventMapId : node)),
@@ -354,6 +372,23 @@ export { WebComponentModule };
           ? ts.factory.createIdentifier(node.text.replaceAll(COMPONENT_NAME, elementName))
           : node,
       ),
+      // TODO: remove the workaround for printing `@deprecated` JSDoc tags.
+      // TypeScript compiler API does not support .jsDoc attached to nodes,
+      // and on top of it, emitting @deprecated JSDocDeprecatedTag is skipped,
+      // see https://github.com/microsoft/TypeScript/issues/17146.
+      transform((node) => {
+        if (!('jsDoc' in node)) {
+          return node;
+        }
+
+        const tag = (node.jsDoc as readonly ts.JSDoc[])[0]?.tags?.[0];
+        if (!tag || !ts.isJSDocDeprecatedTag(tag)) {
+          return node;
+        }
+
+        ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, '* @deprecated ', false);
+        return node;
+      }),
     ],
   );
 

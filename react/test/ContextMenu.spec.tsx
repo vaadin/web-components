@@ -1,7 +1,12 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { ContextMenu, type ContextMenuReactRendererProps, type WebComponentModule } from '../src/ContextMenu.js';
+import {
+  ContextMenu,
+  type ContextMenuItem,
+  type ContextMenuElement,
+  type ContextMenuReactRendererProps,
+} from '../src/ContextMenu.js';
 import { Item } from '../src/Item.js';
 import { ListBox } from '../src/ListBox.js';
 import catchRender from './utils/catchRender.js';
@@ -12,9 +17,9 @@ useChaiPlugin(chaiDom);
 describe('ContextMenu', () => {
   const overlayTag = 'vaadin-context-menu-overlay';
 
-  const [ref, catcher] = createOverlayCloseCatcher<WebComponentModule.ContextMenu>(overlayTag, (ref) => ref.close());
+  const [ref, catcher] = createOverlayCloseCatcher<ContextMenuElement>(overlayTag, (ref) => ref.close());
 
-  const items: WebComponentModule.ContextMenuItem[] = [{ text: 'Bar' }];
+  const items: ContextMenuItem[] = [{ text: 'Bar' }];
 
   function Renderer({ context }: ContextMenuReactRendererProps) {
     return (

@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { Notification, type WebComponentModule } from '../src/Notification.js';
+import { Notification, type NotificationElement } from '../src/Notification.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 
 useChaiPlugin(chaiDom);
@@ -9,7 +9,7 @@ useChaiPlugin(chaiDom);
 describe('Notification', () => {
   const overlayTag = 'vaadin-notification-container';
 
-  const [ref, catcher] = createOverlayCloseCatcher<WebComponentModule.Notification>(overlayTag, (ref) => ref.close());
+  const [ref, catcher] = createOverlayCloseCatcher<NotificationElement>(overlayTag, (ref) => ref.close());
 
   function Renderer() {
     return <>FooBar</>;

@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { ComboBox, type WebComponentModule } from '../src/ComboBox.js';
+import { ComboBox, type ComboBoxElement } from '../src/ComboBox.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 
 useChaiPlugin(chaiDom);
@@ -9,7 +9,7 @@ useChaiPlugin(chaiDom);
 describe('ComboBox', () => {
   const overlayTag = 'vaadin-combo-box-overlay';
 
-  const [ref, catcher] = createOverlayCloseCatcher<WebComponentModule.ComboBox>(overlayTag, (ref) => ref.close());
+  const [ref, catcher] = createOverlayCloseCatcher<ComboBoxElement>(overlayTag, (ref) => ref.close());
 
   afterEach(cleanup);
   afterEach(catcher);

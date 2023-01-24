@@ -1,13 +1,13 @@
 import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type ReactNode } from 'react';
-import { Dialog as _Dialog, type DialogProps as _DialogProps, WebComponentModule } from './generated/Dialog.js';
+import { Dialog as _Dialog, type DialogElement, type DialogProps as _DialogProps } from './generated/Dialog.js';
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
 
 export * from './generated/Dialog.js';
 
-export type DialogReactRendererProps = ReactSimpleRendererProps<WebComponentModule.Dialog>;
+export type DialogReactRendererProps = ReactSimpleRendererProps<DialogElement>;
 
-export type DialogProps = Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'> &
+export type DialogProps = Partial<Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>> &
   Readonly<{
     children?: ReactNode | ComponentType<DialogReactRendererProps>;
     footer?: ReactNode;
@@ -19,7 +19,7 @@ export type DialogProps = Omit<_DialogProps, 'children' | 'footerRenderer' | 'he
 
 function Dialog(
   { children, footer, header, ...props }: DialogProps,
-  ref: ForwardedRef<WebComponentModule.Dialog>,
+  ref: ForwardedRef<DialogElement>,
 ): ReactElement | null {
   const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
   const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
@@ -36,4 +36,4 @@ function Dialog(
 
 const ForwardedDialog = forwardRef(Dialog);
 
-export { ForwardedDialog as Dialog, WebComponentModule };
+export { ForwardedDialog as Dialog };

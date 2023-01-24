@@ -1,18 +1,18 @@
-import type { WebComponentModule as GridModule } from '../generated/Grid.js';
-import type { WebComponentModule as GridColumnModule } from '../generated/GridColumn.js';
+import type { GridItemModel, GridElement } from '../generated/Grid.js';
+import type { GridColumnElement } from '../generated/GridColumn.js';
 import type { ReactModelRendererProps } from './useModelRenderer.js';
 import type { ReactSimpleRendererProps } from './useSimpleRenderer.js';
 
 export type GridRowDetailsReactRendererProps<TItem> = ReactModelRendererProps<
   TItem,
-  GridModule.GridItemModel<TItem>,
-  GridModule.Grid<TItem>
+  GridItemModel<TItem>,
+  GridElement<TItem>
 >;
 
 export type GridBodyReactRendererProps<TItem> = ReactModelRendererProps<
   TItem,
-  GridModule.GridItemModel<TItem>,
-  GridColumnModule.GridColumn<TItem>
+  GridItemModel<TItem>,
+  GridColumnElement<TItem>
 >;
 
-export type GridEdgeReactRendererProps<TItem> = ReactSimpleRendererProps<GridColumnModule.GridColumn<TItem>>;
+export type GridEdgeReactRendererProps<TItem> = ReactSimpleRendererProps<GridColumnElement<TItem>>;

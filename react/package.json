@@ -466,6 +466,9 @@
     "./css/lumo/FontIcons.css": {
       "default": "./css/lumo/FontIcons.css"
     },
+    "./css/lumo/Globals.css": {
+      "default": "./css/lumo/Globals.css"
+    },
     "./css/lumo/Sizing.css": {
       "default": "./css/lumo/Sizing.css"
     },

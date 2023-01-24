@@ -75,7 +75,12 @@ export function template<T>(
   selector: (statements: readonly Statement[]) => T,
   transformers?: ReadonlyArray<TransformerFactory<SourceFile>>,
 ): T {
-  let sourceFile = ts.createSourceFile(`f.tsx`, code, ts.ScriptTarget.Latest, false);
+  let sourceFile = ts.createSourceFile(
+    `f.tsx`,
+    code,
+    ts.ScriptTarget.Latest,
+    true, // setParentNodes flag is required for manipulating comments
+  );
 
   if (transformers) {
     sourceFile = ts.transform<SourceFile>(sourceFile, transformers as Array<TransformerFactory<SourceFile>>)
