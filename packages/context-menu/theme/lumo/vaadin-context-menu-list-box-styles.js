@@ -1,6 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import { listBox } from '@vaadin/list-box/theme/lumo/vaadin-list-box-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const contextMenuListBox = css`
@@ -39,6 +40,8 @@ const contextMenuListBox = css`
   }
 `;
 
-registerStyles('vaadin-context-menu-list-box', contextMenuListBox, { moduleId: 'lumo-context-menu-list-box' });
+registerStyles('vaadin-context-menu-list-box', [listBox, contextMenuListBox], {
+  moduleId: 'lumo-context-menu-list-box',
+});
 
 export { contextMenuListBox };
