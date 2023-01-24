@@ -197,7 +197,6 @@ async function linker(specifier: string, referencingModule: VmModule): Promise<V
 }
 
 // TODO: support icon sets defined with HTML
-shimModule(`@vaadin/vaadin-lumo-styles/iconset.js`, {});
 shimModule(`@vaadin/vaadin-lumo-styles/vaadin-iconset.js`, {});
 
 async function parseStylePackage(packageName: string) {
