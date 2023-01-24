@@ -1,0 +1,53 @@
+{
+  "name": "@vaadin/badge",
+  "version": "24.0.0-alpha12",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-badge",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-badge"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-badge.js",
+  "module": "vaadin-badge.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-badge",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "24.0.0-alpha12",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha12",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha12",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha12"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^13.0.2"
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
