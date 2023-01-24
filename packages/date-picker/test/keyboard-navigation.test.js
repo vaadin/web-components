@@ -12,7 +12,7 @@ import {
   open,
   waitForOverlayRender,
   waitForScrollToFinish,
-} from './common.js';
+} from './helpers.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   describe('date-picker', () => {
