@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { change, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
-import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
+import { createFile, createFiles, touchDevice, xhrCreator } from './helpers.js';
 
 describe('adding files', () => {
   let upload, files;

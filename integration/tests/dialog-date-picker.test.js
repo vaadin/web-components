@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
-import { open, waitForScrollToFinish } from '@vaadin/date-picker/test/common.js';
+import { open, waitForScrollToFinish } from '@vaadin/date-picker/test/helpers.js';
 
 describe('date-picker in dialog', () => {
   let dialog, datepicker;

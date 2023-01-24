@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
-import { createFile } from './common.js';
+import { createFile } from './helpers.js';
 
 describe('slots', () => {
   let upload;

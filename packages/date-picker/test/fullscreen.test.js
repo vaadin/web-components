@@ -3,7 +3,7 @@ import { fixtureSync, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, open, touchTap, waitForOverlayRender } from './common.js';
+import { getFocusedCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('fullscreen mode', () => {
   let datepicker, input, overlay, width, height;

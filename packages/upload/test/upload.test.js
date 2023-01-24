@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { createFile, createFiles, removeFile, xhrCreator } from './common.js';
+import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
   let upload, file;
