@@ -17,7 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ### Styling
  *
  * No shadow DOM parts are exposed for styling.
- * 
+ *
  * The following `theme` variants are supported: small, success, error, contrast, primary, pill
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
@@ -26,7 +26,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-declare class Badge extends ElementMixin(ThemableMixin(PolymerElement)) {
-}
+declare class Badge extends ElementMixin(ThemableMixin(PolymerElement)) {}
 
 export { Badge };

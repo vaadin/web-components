@@ -3,7 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-badge.js';
 
 describe('badge', () => {
-  let div, element;
+  let div;
 
   beforeEach(() => {
     div = document.createElement('div');
@@ -22,7 +22,7 @@ describe('badge', () => {
 
       describe(`${dir}`, () => {
         beforeEach(() => {
-          element = fixtureSync(
+          fixtureSync(
             `
             <vaadin-badge>Hello</vaadin-badge>
             <vaadin-badge theme="error">Hello</vaadin-badge>
