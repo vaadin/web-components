@@ -1,7 +1,11 @@
 import '../../vaadin-context-menu.js';
+import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
+import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ContextMenuItem } from '../../src/vaadin-context-menu-item.js';
 import type {
   ContextMenu,
-  ContextMenuItem,
+  ContextMenuItem as MenuItem,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,
   ContextMenuRenderer,
@@ -27,7 +31,7 @@ menu.addEventListener('opened-changed', (event) => {
 
 menu.addEventListener('item-selected', (event) => {
   assertType<ContextMenuItemSelectedEvent>(event);
-  assertType<ContextMenuItem>(event.detail.value);
+  assertType<MenuItem>(event.detail.value);
 });
 
 const renderer: ContextMenuRenderer = (root, contextMenu, context) => {
@@ -38,3 +42,11 @@ const renderer: ContextMenuRenderer = (root, contextMenu, context) => {
 };
 
 menu.renderer = renderer;
+
+// Item
+const item = document.createElement('vaadin-context-menu-item');
+
+assertType<ContextMenuItem>(item);
+assertType<ItemMixinClass>(item);
+assertType<DirMixinClass>(item);
+assertType<ThemableMixinClass>(item);

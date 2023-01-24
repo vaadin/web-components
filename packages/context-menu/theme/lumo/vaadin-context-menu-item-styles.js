@@ -2,6 +2,7 @@ import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
+import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const contextMenuItem = css`
@@ -40,6 +41,6 @@ const contextMenuItem = css`
   }
 `;
 
-registerStyles('vaadin-context-menu-item', contextMenuItem, { moduleId: 'lumo-context-menu-item' });
+registerStyles('vaadin-context-menu-item', [item, contextMenuItem], { moduleId: 'lumo-context-menu-item' });
 
 export { contextMenuItem };
