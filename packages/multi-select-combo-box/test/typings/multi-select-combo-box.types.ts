@@ -1,6 +1,11 @@
+import type {
+  ComboBoxItemMixinClass,
+  ComboBoxItemRenderer,
+} from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
@@ -13,6 +18,7 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type { MultiSelectComboBoxItem } from '../../src/vaadin-multi-select-combo-box-item.js';
 import type {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
@@ -108,3 +114,23 @@ assertType<LabelMixinClass>(narrowedComboBox);
 assertType<SlotStylesMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);
+
+// Item
+const genericItem = document.createElement('vaadin-multi-select-combo-box-item');
+assertType<MultiSelectComboBoxItem>(genericItem);
+
+const narrowedItem = genericItem as MultiSelectComboBoxItem<TestComboBoxItem>;
+
+// Item properties
+assertType<TestComboBoxItem>(narrowedItem.item);
+assertType<number>(narrowedItem.index);
+assertType<string>(narrowedItem.label);
+assertType<boolean>(narrowedItem.focused);
+assertType<boolean>(narrowedItem.selected);
+assertType<ComboBoxItemRenderer<TestComboBoxItem, MultiSelectComboBox>>(narrowedItem.renderer);
+assertType<() => void>(narrowedItem.requestContentUpdate);
+
+// Item mixins
+assertType<ComboBoxItemMixinClass<TestComboBoxItem, MultiSelectComboBox>>(narrowedItem);
+assertType<DirMixinClass>(narrowedItem);
+assertType<ThemableMixinClass>(narrowedItem);

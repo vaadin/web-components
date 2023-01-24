@@ -7,23 +7,23 @@ import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
+import { comboBoxItem } from '@vaadin/combo-box/theme/lumo/vaadin-combo-box-item-styles.js';
+import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-multi-select-combo-box-item',
-  css`
-    @media (any-hover: hover) {
-      :host(:hover[readonly]) {
-        background-color: transparent;
-        cursor: default;
-      }
+const multiSelectComboBoxItem = css`
+  @media (any-hover: hover) {
+    :host(:hover[readonly]) {
+      background-color: transparent;
+      cursor: default;
     }
-  `,
-  {
-    moduleId: 'lumo-multi-select-combo-box-item',
-  },
-);
+  }
+`;
+
+registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiSelectComboBoxItem], {
+  moduleId: 'lumo-multi-select-combo-box-item',
+});
 
 const multiSelectComboBox = css`
   :host([has-value]) {
