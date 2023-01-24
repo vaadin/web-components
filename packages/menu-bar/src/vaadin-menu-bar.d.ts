@@ -20,7 +20,7 @@ export interface MenuBarItem {
   tooltip?: string;
   /**
    * The component to represent the button content.
-   * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
+   * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
    */
   component?: HTMLElement | string;
   /**
@@ -101,7 +101,7 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  * components are themable:
  *
  * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *

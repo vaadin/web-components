@@ -13,7 +13,7 @@ const menuBarButton = css`
   }
 
   /* NOTE(web-padawan): avoid using shorthand padding property for IE11 */
-  [part='label'] ::slotted(vaadin-context-menu-item) {
+  [part='label'] ::slotted(vaadin-menu-bar-item) {
     justify-content: center;
     background-color: transparent;
     height: var(--lumo-button-size);
@@ -22,14 +22,14 @@ const menuBarButton = css`
     padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
-  :host([theme~='small']) [part='label'] ::slotted(vaadin-context-menu-item) {
+  :host([theme~='small']) [part='label'] ::slotted(vaadin-menu-bar-item) {
     min-height: var(--lumo-size-s);
     margin: 0 calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2) * -1);
     padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
     padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
-  :host([theme~='tertiary']) [part='label'] ::slotted(vaadin-context-menu-item) {
+  :host([theme~='tertiary']) [part='label'] ::slotted(vaadin-menu-bar-item) {
     margin: 0 calc((var(--lumo-button-size) / 6) * -1);
     padding-left: calc(var(--lumo-button-size) / 6);
     padding-right: calc(var(--lumo-button-size) / 6);
@@ -41,7 +41,7 @@ const menuBarButton = css`
     margin-right: calc(var(--lumo-space-xs) / 2);
   }
 
-  :host([theme~='tertiary-inline']) [part='label'] ::slotted(vaadin-context-menu-item) {
+  :host([theme~='tertiary-inline']) [part='label'] ::slotted(vaadin-menu-bar-item) {
     margin: 0;
     padding: 0;
   }

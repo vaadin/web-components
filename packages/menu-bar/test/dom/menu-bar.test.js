@@ -23,7 +23,7 @@ describe('menu-bar', () => {
       { text: 'Dashboard', disabled: true },
       {
         component: (() => {
-          const item = document.createElement('vaadin-context-menu-item');
+          const item = document.createElement('vaadin-menu-bar-item');
           const bold = document.createElement('strong');
           bold.textContent = 'Help';
           item.appendChild(bold);

@@ -181,7 +181,7 @@ export const ItemsMixin = (superClass) =>
         if (item.component instanceof HTMLElement) {
           component = item.component;
         } else {
-          component = document.createElement(item.component || 'vaadin-context-menu-item');
+          component = document.createElement(item.component || `${this._tagNamePrefix}-item`);
         }
 
         if (component instanceof Item) {
@@ -306,7 +306,7 @@ export const ItemsMixin = (superClass) =>
         });
         const openSubMenu = (
           e,
-          itemElement = e.composedPath().find((e) => e.localName === 'vaadin-context-menu-item'),
+          itemElement = e.composedPath().find((e) => e.localName === `${this._tagNamePrefix}-item`),
         ) => {
           // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
           if (!this.__openListenerActive) {
