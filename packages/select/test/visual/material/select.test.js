@@ -14,15 +14,11 @@ describe('select', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-select></vaadin-select>', div);
-    element.renderer = (root) => {
-      root.innerHTML = `
-        <vaadin-list-box>
-          <vaadin-item>item 1</vaadin-item>
-          <vaadin-item>item 2</vaadin-item>
-          <vaadin-item>item 3</vaadin-item>
-        </vaadin-list-box>
-      `;
-    };
+    element.items = [
+      { label: 'item 1', value: 'value-1' },
+      { label: 'item 2', value: 'value-2' },
+      { label: 'item 3', value: 'value-3' },
+    ];
     await nextFrame();
   });
 
@@ -63,7 +59,7 @@ describe('select', () => {
   });
 
   it('value', async () => {
-    element.value = 'item 1';
+    element.value = 'value-1';
     await visualDiff(div, 'value');
   });
 
@@ -127,7 +123,7 @@ describe('select', () => {
 
   it('width with value', async () => {
     element.style.width = '80px';
-    element.value = 'item 1';
+    element.value = 'value-1';
     await visualDiff(div, 'width-value');
   });
 

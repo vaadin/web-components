@@ -4,9 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/vaadin-material-styles/font-icons.js';
+import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
 import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles('vaadin-select-item', item, { moduleId: 'material-select-item' });
 
 const select = css`
   :host {
