@@ -12,7 +12,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getFocusedCell, getOverlayContent, idleCallback, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, idleCallback, open } from './helpers.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
