@@ -1,22 +1,4 @@
-export const flushGrid = (grid) => {
-  grid._observer.flush();
-  if (grid._debounceScrolling) {
-    grid._debounceScrolling.flush();
-  }
-  if (grid._debounceScrollPeriod) {
-    grid._debounceScrollPeriod.flush();
-  }
-  if (grid._debouncerLoad) {
-    grid._debouncerLoad.flush();
-  }
-  if (grid._debounceOverflow) {
-    grid._debounceOverflow.flush();
-  }
-  while (grid._debounceIncreasePool) {
-    grid._debounceIncreasePool.flush();
-    grid._debounceIncreasePool = null;
-  }
-};
+export { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 export const getRows = (container) => {
   return container.querySelectorAll('tr');

@@ -3,21 +3,14 @@ import sinon from 'sinon';
 export const flushGrid = (grid) => {
   grid._observer.flush();
   grid._afterScroll();
-  if (grid._debounceScrolling) {
-    grid._debounceScrolling.flush();
-  }
-  if (grid._debounceOverflow) {
-    grid._debounceOverflow.flush();
-  }
-  if (grid._debouncerHiddenChanged) {
-    grid._debouncerHiddenChanged.flush();
-  }
-  if (grid._debouncerApplyCachedData) {
-    grid._debouncerApplyCachedData.flush();
-  }
-  if (grid.__debounceUpdateFrozenColumn) {
-    grid.__debounceUpdateFrozenColumn.flush();
-  }
+
+  [
+    grid._debounceScrolling,
+    grid._debounceOverflow,
+    grid._debouncerHiddenChanged,
+    grid._debouncerApplyCachedData,
+    grid.__debounceUpdateFrozenColumn,
+  ].forEach((debouncer) => debouncer?.flush());
 
   grid.__virtualizer.flush();
 };
