@@ -1,9 +1,11 @@
 import '../../vaadin-select.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
+import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { SelectItem } from '../../src/vaadin-select-item.js';
+import type { SelectListBox } from '../../src/vaadin-select-list-box.js';
 import type {
   Select,
   SelectChangeEvent,
@@ -82,3 +84,11 @@ assertType<SelectItem>(option);
 assertType<ItemMixinClass>(option);
 assertType<DirMixinClass>(option);
 assertType<ThemableMixinClass>(option);
+
+// Item
+const listBox = document.createElement('vaadin-select-list-box');
+
+assertType<SelectListBox>(listBox);
+assertType<ListMixinClass>(listBox);
+assertType<DirMixinClass>(listBox);
+assertType<ThemableMixinClass>(listBox);
