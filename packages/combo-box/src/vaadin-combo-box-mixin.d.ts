@@ -9,19 +9,11 @@ import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mix
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';
+import type { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxItemRenderer } from './vaadin-combo-box-item-mixin.js';
 
-export type ComboBoxDefaultItem = any;
+export type { ComboBoxDefaultItem, ComboBoxItemModel };
 
-export interface ComboBoxItemModel<TItem> {
-  index: number;
-  item: TItem;
-}
-
-export type ComboBoxRenderer<TItem> = (
-  root: HTMLElement,
-  comboBox: ComboBox<TItem>,
-  model: ComboBoxItemModel<TItem>,
-) => void;
+export type ComboBoxRenderer<TItem> = ComboBoxItemRenderer<TItem, ComboBox<TItem>>;
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
