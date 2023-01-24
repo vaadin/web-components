@@ -11,30 +11,16 @@
       import '@vaadin/badge';
 
       import '@vaadin/icon';
-      import '@vaadin/icons/vaadin-iconset.js';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
       import '@vaadin/radio-group';
-
-      // Generate content for the panels
-      const lorem = `Odio quis mi`;
-
-      document.querySelectorAll('vaadin-badge').forEach(badge => {
-        badge.innerText = lorem;
-      });
     </script>
   </head>
 
   <body>
-    <vaadin-badge></vaadin-badge>
-    <vaadin-badge theme="error"></vaadin-badge>
-    <vaadin-badge theme="small"></vaadin-badge>
-    <vaadin-badge theme="success"></vaadin-badge>
-    <vaadin-badge theme="contrast"></vaadin-badge>
-    <vaadin-badge theme="primary"></vaadin-badge>
-    <vaadin-badge theme="pill"></vaadin-badge>
-
-      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical">
-        <vaadin-radio-button label="ltr" value="ltr"></vaadin-radio-button>
-        <vaadin-radio-button label="rtl" value="rtl"></vaadin-radio-button>
+    <section dir="ltr">
+      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical" dir="ltr">
+        <vaadin-radio-button label="ltr" value="ltr" dir="ltr"></vaadin-radio-button>
+        <vaadin-radio-button label="rtl" value="rtl" dir="ltr"></vaadin-radio-button>
       </vaadin-radio-group>
 
       <script>
@@ -42,6 +28,324 @@
           document.dir = e.detail.value;
         });
       </script>
+    </section>
+
+    <section>
+      <h2>Empty</h2>
+
+      <p>
+        <vaadin-badge></vaadin-badge>
+        <vaadin-badge theme="error"></vaadin-badge>
+        <vaadin-badge theme="success"></vaadin-badge>
+        <vaadin-badge theme="contrast"></vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="small"></vaadin-badge>
+        <vaadin-badge theme="small error"></vaadin-badge>
+        <vaadin-badge theme="small success"></vaadin-badge>
+        <vaadin-badge theme="small contrast"></vaadin-badge>
+      </p>
+    </section>
+
+    <section>
+      <h2>Number</h2>
+
+      <p>
+        <vaadin-badge>2</vaadin-badge>
+        <vaadin-badge theme="error">2</vaadin-badge>
+        <vaadin-badge theme="success">2</vaadin-badge>
+        <vaadin-badge theme="contrast">2</vaadin-badge>
+
+        <vaadin-badge theme="primary">2</vaadin-badge>
+        <vaadin-badge theme="primary error">2</vaadin-badge>
+        <vaadin-badge theme="primary success">2</vaadin-badge>
+        <vaadin-badge theme="primary contrast">2</vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="pill">2</vaadin-badge>
+        <vaadin-badge theme="pill error">2</vaadin-badge>
+        <vaadin-badge theme="pill success">2</vaadin-badge>
+        <vaadin-badge theme="pill contrast">2</vaadin-badge>
+
+        <vaadin-badge theme="pill primary">2</vaadin-badge>
+        <vaadin-badge theme="pill primary error">2</vaadin-badge>
+        <vaadin-badge theme="pill primary success">2</vaadin-badge>
+        <vaadin-badge theme="pill primary contrast">2</vaadin-badge>
+      </p>
+
+      <p>
+        <vaadin-badge theme="small">2</vaadin-badge>
+        <vaadin-badge theme="small error">2</vaadin-badge>
+        <vaadin-badge theme="small success">2</vaadin-badge>
+        <vaadin-badge theme="small contrast">2</vaadin-badge>
+
+        <vaadin-badge theme="small primary">2</vaadin-badge>
+        <vaadin-badge theme="small primary error">2</vaadin-badge>
+        <vaadin-badge theme="small primary success">2</vaadin-badge>
+        <vaadin-badge theme="small primary contrast">2</vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="small pill">2</vaadin-badge>
+        <vaadin-badge theme="small pill error">2</vaadin-badge>
+        <vaadin-badge theme="small pill success">2</vaadin-badge>
+        <vaadin-badge theme="small pill contrast">2</vaadin-badge>
+
+        <vaadin-badge theme="small pill primary">2</vaadin-badge>
+        <vaadin-badge theme="small pill primary error">2</vaadin-badge>
+        <vaadin-badge theme="small pill primary success">2</vaadin-badge>
+        <vaadin-badge theme="small pill primary contrast">2</vaadin-badge>
+      </p>
+    </section>
+
+    <section>
+      <h2>Icon</h2>
+
+      <p>
+        <vaadin-badge><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <vaadin-badge theme="primary"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="primary error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="primary success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="primary contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="pill"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <vaadin-badge theme="pill primary"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill primary error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill primary success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="pill primary contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+      </p>
+
+      <p>
+        <vaadin-badge theme="small"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <vaadin-badge theme="small primary"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small primary error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small primary success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small primary contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="small pill"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+
+        <vaadin-badge theme="small pill primary"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill primary error"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill primary success"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+        <vaadin-badge theme="small pill primary contrast"><vaadin-icon icon="lumo:checkmark"></vaadin-icon></vaadin-badge>
+      </p>
+    </section>
+
+    <section>
+      <h2>Text</h2>
+
+      <p>
+        <vaadin-badge>Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="contrast">Lorem ipsum</vaadin-badge>
+
+        <vaadin-badge theme="primary">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="primary error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="primary success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="primary contrast">Lorem ipsum</vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="pill">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill contrast">Lorem ipsum</vaadin-badge>
+
+        <vaadin-badge theme="pill primary">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill primary error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill primary success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="pill primary contrast">Lorem ipsum</vaadin-badge>
+      </p>
+
+      <p>
+        <vaadin-badge theme="small">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small contrast">Lorem ipsum</vaadin-badge>
+
+        <vaadin-badge theme="small primary">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small primary error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small primary success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small primary contrast">Lorem ipsum</vaadin-badge>
+
+        <br>
+
+        <vaadin-badge theme="small pill">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill contrast">Lorem ipsum</vaadin-badge>
+
+        <vaadin-badge theme="small pill primary">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill primary error">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill primary success">Lorem ipsum</vaadin-badge>
+        <vaadin-badge theme="small pill primary contrast">Lorem ipsum</vaadin-badge>
+      </p>
+    </section>
+
+    <section>
+      <h2>Icon and text</h2>
+
+      <p>
+        <vaadin-badge>
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+
+        <vaadin-badge theme="primary">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="primary error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="primary success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="primary contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <br>
+        <vaadin-badge theme="pill">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+
+        <vaadin-badge theme="pill primary">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill primary error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill primary success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="pill primary contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+      </p>
+
+      <p>
+        <vaadin-badge theme="small">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+
+        <vaadin-badge theme="small primary">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small primary error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small primary success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small primary contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <br>
+        <vaadin-badge theme="small pill">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+
+        <vaadin-badge theme="small pill primary">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill primary error">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill primary success">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+        <vaadin-badge theme="small pill primary contrast">
+          <vaadin-icon icon="lumo:clock"></vaadin-icon>
+          <span>Lorem ipsum</span>
+        </vaadin-badge>
+      </p>
     </section>
   </body>
 </html>
