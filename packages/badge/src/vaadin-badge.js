@@ -30,45 +30,30 @@ class Badge extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
-        span {
+        :host {
           display: inline-flex;
           align-items: center;
           justify-content: center;
           box-sizing: border-box;
-          line-height: 1;
-          font-weight: 500;
           text-transform: initial;
           letter-spacing: initial;
+          white-space: nowrap;
+          line-height: 1;
         }
 
-        /* Ensure proper vertical alignment */
-        span::before {
+        /* Links */
+        ::slotted([href]:any-link) {
+          text-decoration: none;
+        }
+
+        /* Ensure proper vertical alignment when an icon is used inside a badge */
+        :host::before {
           display: inline-block;
           content: '\\2003';
           width: 0;
         }
-
-        /* Links */
-
-        [href]:hover {
-          text-decoration: none;
-        }
-
-        /* RTL specific styles */
-
-        [dir='rtl'] iron-icon:first-child {
-          margin-right: -0.375em;
-          margin-left: 0;
-        }
-
-        [dir='rtl'] iron-icon:last-child {
-          margin-left: -0.375em;
-          margin-right: 0;
-        }
       </style>
-      <span>
-        <slot></slot>
-      </span>
+      <slot></slot>
     `;
   }
 
