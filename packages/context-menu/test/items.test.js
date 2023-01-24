@@ -19,15 +19,12 @@ import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { getMenuItems, getSubMenu } from './helpers.js';
 
 const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
 describe('items', () => {
   let rootMenu, subMenu, target;
-
-  const menuComponents = (menu = rootMenu) => {
-    return Array.from(menu.$.overlay.firstElementChild.children);
-  };
 
   const open = (openTarget = target) => {
     const menu = openTarget.parentElement.parentElement.__dataHost;
@@ -40,21 +37,11 @@ describe('items', () => {
     fire(openTarget, menuOpenEvent, { x: right, y: bottom });
   };
 
-  const getSubMenu = (menu = rootMenu) => {
-    return menu.$.overlay.querySelector('vaadin-context-menu');
-  };
-
   const updateItemsAndReopen = async () => {
     rootMenu.items = [...rootMenu.items];
     rootMenu.close();
     open();
     await nextFrame();
-  };
-
-  const getMenuItems = (menu = rootMenu) => {
-    const overlay = menu.$.overlay;
-    const listBox = overlay.querySelector('vaadin-context-menu-list-box');
-    return Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
   };
 
   afterEach(() => {
@@ -83,8 +70,8 @@ describe('items', () => {
       ];
       open();
       await nextRender(rootMenu);
-      open(menuComponents()[0]);
-      subMenu = getSubMenu();
+      open(getMenuItems(rootMenu)[0]);
+      subMenu = getSubMenu(rootMenu);
       await nextRender(subMenu);
     });
 
@@ -95,15 +82,15 @@ describe('items', () => {
     });
 
     it('should render root level items', () => {
-      expect(menuComponents()[0].textContent).to.equal('foo-0');
+      expect(getMenuItems(rootMenu)[0].textContent).to.equal('foo-0');
     });
 
     it('should have menuitem role attribute', () => {
-      expect(menuComponents()[0].getAttribute('role')).to.equal('menuitem');
+      expect(getMenuItems(rootMenu)[0].getAttribute('role')).to.equal('menuitem');
     });
 
     it('should render sub-menu items', () => {
-      expect(menuComponents(subMenu)[0].textContent).to.equal('foo-0-0');
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
     });
 
     it('should close all menus', () => {
@@ -120,18 +107,18 @@ describe('items', () => {
     });
 
     (isTouch ? it.skip : it)('should open the subMenu on the right side', () => {
-      const rootItemRect = menuComponents()[0].getBoundingClientRect();
-      const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
+      const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
+      const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
       expect(subItemRect.left).to.be.above(rootItemRect.right);
     });
 
     (isTouch ? it.skip : it)('should open the subMenu on the left side', () => {
       subMenu.close();
-      let rootItemRect = menuComponents()[0].getBoundingClientRect();
+      let rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
       rootMenu.$.overlay.style.left = `${window.innerWidth - rootItemRect.width * 1.5}px`;
-      open(menuComponents()[0]);
-      rootItemRect = menuComponents()[0].getBoundingClientRect();
-      const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
+      open(getMenuItems(rootMenu)[0]);
+      rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
+      const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
       expect(subItemRect.right).to.be.below(rootItemRect.left);
     });
 
@@ -140,7 +127,7 @@ describe('items', () => {
       rootMenu.$.overlay.style.removeProperty('top');
       rootMenu.$.overlay.style.bottom = '0px';
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextRender(subMenu);
       const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
       const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
@@ -150,7 +137,7 @@ describe('items', () => {
     (isTouch ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
       subMenu.close();
       await nextRender(subMenu);
-      const rootItem = menuComponents()[0];
+      const rootItem = getMenuItems(rootMenu)[0];
       const rootItemRect = rootItem.getBoundingClientRect();
       const rootOverlay = rootMenu.$.overlay;
       rootOverlay.style.removeProperty('left');
@@ -172,7 +159,7 @@ describe('items', () => {
       await nextRender(subMenu);
       rootMenu.items[0].children[2].text = 'foo-0-2-longer';
 
-      const rootItem = menuComponents()[0];
+      const rootItem = getMenuItems(rootMenu)[0];
       const rootItemRect = rootItem.getBoundingClientRect();
       const rootOverlay = rootMenu.$.overlay;
       rootOverlay.style.removeProperty('left');
@@ -189,7 +176,7 @@ describe('items', () => {
       expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 1);
 
       /* Second sub-menu left-aligned */
-      const nestedItem = menuComponents(subMenu)[2];
+      const nestedItem = getMenuItems(subMenu)[2];
       const nestedItemRect = nestedItem.getBoundingClientRect();
       padding = parseFloat(getComputedStyle(subMenu.$.overlay.$.content).paddingLeft) * 2;
       open(nestedItem);
@@ -203,18 +190,18 @@ describe('items', () => {
     it('should clean up the old content on reopen', () => {
       rootMenu.close();
       open();
-      expect(menuComponents().length).to.equal(rootMenu.items.length);
+      expect(getMenuItems(rootMenu).length).to.equal(rootMenu.items.length);
     });
 
     it('should clear selections on reopen', async () => {
-      menuComponents(subMenu)[0].click();
-      open(menuComponents()[0]);
+      getMenuItems(subMenu)[0].click();
+      open(getMenuItems(rootMenu)[0]);
       await nextFrame();
-      expect(menuComponents(subMenu)[0].selected).to.be.false;
+      expect(getMenuItems(subMenu)[0].selected).to.be.false;
     });
 
     it('should have default item type', () => {
-      expect(menuComponents()[0].localName).to.equal('vaadin-context-menu-item');
+      expect(getMenuItems(rootMenu)[0].localName).to.equal('vaadin-context-menu-item');
     });
 
     it('should accept component items', () => {
@@ -222,53 +209,53 @@ describe('items', () => {
       const component = document.createElement('button');
       rootMenu.items = [{ component }];
       open();
-      expect(menuComponents()[0]).to.equal(component);
+      expect(getMenuItems(rootMenu)[0]).to.equal(component);
     });
 
     it('should accept custom tags', () => {
       rootMenu.close();
       rootMenu.items = [{ component: 'button' }];
       open();
-      expect(menuComponents()[0].localName).to.equal('button');
+      expect(getMenuItems(rootMenu)[0].localName).to.equal('button');
     });
 
     it('should have a checked item', () => {
-      expect(menuComponents(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
+      expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
     });
 
     it('should not have a checked item', () => {
       rootMenu.items[0].children[0].checked = false;
       subMenu.close();
-      open(menuComponents()[0]);
-      expect(menuComponents(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
+      open(getMenuItems(rootMenu)[0]);
+      expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
     });
 
     it('should have a disabled item', () => {
-      expect(menuComponents(subMenu)[1].disabled).to.be.true;
+      expect(getMenuItems(subMenu)[1].disabled).to.be.true;
     });
 
     it('should close the submenu', () => {
-      open(menuComponents()[1]);
+      open(getMenuItems(rootMenu)[1]);
       expect(subMenu.opened).to.be.false;
     });
 
     (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', () => {
-      const parent = menuComponents()[0];
-      const nonParent = menuComponents()[1];
+      const parent = getMenuItems(rootMenu)[0];
+      const nonParent = getMenuItems(rootMenu)[1];
       const focusSpy = sinon.spy(parent, 'focus');
       open(nonParent);
       expect(focusSpy.called).to.be.true;
     });
 
     it('should close the menu', () => {
-      menuComponents()[1].click();
+      getMenuItems(rootMenu)[1].click();
       expect(rootMenu.opened).to.be.false;
       expect(subMenu.opened).to.be.false;
     });
 
     it('should close the submenu on left arrow', () => {
-      const focusSpy = sinon.spy(menuComponents()[0], 'focus');
-      arrowLeftKeyDown(menuComponents(subMenu)[0]);
+      const focusSpy = sinon.spy(getMenuItems(rootMenu)[0], 'focus');
+      arrowLeftKeyDown(getMenuItems(subMenu)[0]);
       expect(subMenu.opened).to.be.false;
       expect(focusSpy.called).to.be.true;
     });
@@ -276,30 +263,30 @@ describe('items', () => {
     it('should close the submenu on right arrow if RTL', async () => {
       document.documentElement.setAttribute('dir', 'rtl');
       await nextFrame();
-      const focusSpy = sinon.spy(menuComponents()[0], 'focus');
-      arrowRightKeyDown(menuComponents(subMenu)[0]);
+      const focusSpy = sinon.spy(getMenuItems(rootMenu)[0], 'focus');
+      arrowRightKeyDown(getMenuItems(subMenu)[0]);
       expect(subMenu.opened).to.be.false;
       expect(focusSpy.called).to.be.true;
       document.documentElement.setAttribute('dir', 'ltr');
     });
 
     it('should close all menus on esc', () => {
-      escKeyDown(menuComponents(subMenu)[0]);
+      escKeyDown(getMenuItems(subMenu)[0]);
       expect(rootMenu.opened).to.be.false;
     });
 
     it('should close all menus on Tab', () => {
-      tabKeyDown(menuComponents(subMenu)[0]);
+      tabKeyDown(getMenuItems(subMenu)[0]);
       expect(rootMenu.opened).to.be.false;
     });
 
     it('should not close on disabled item click', () => {
-      menuComponents(subMenu)[1].click();
+      getMenuItems(subMenu)[1].click();
       expect(subMenu.opened).to.be.true;
     });
 
     it('should not close on parent item click', () => {
-      menuComponents(rootMenu)[0].click();
+      getMenuItems(rootMenu)[0].click();
       expect(rootMenu.opened).to.be.true;
     });
 
@@ -309,7 +296,7 @@ describe('items', () => {
     });
 
     it('should have be a parent item', () => {
-      expect(menuComponents()[0].getAttribute('aria-haspopup')).to.equal('true');
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('true');
     });
 
     it('should not have be a parent item', () => {
@@ -320,12 +307,12 @@ describe('items', () => {
       rootMenu.close();
       rootMenu.items[0].children = [];
       open();
-      expect(menuComponents()[0].getAttribute('aria-haspopup')).to.equal('false');
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('false');
     });
 
     it('should open item on right arrow', () => {
       subMenu.close();
-      arrowRightKeyDown(menuComponents()[0]);
+      arrowRightKeyDown(getMenuItems(rootMenu)[0]);
       expect(subMenu.opened).to.be.true;
     });
 
@@ -333,39 +320,39 @@ describe('items', () => {
       document.documentElement.setAttribute('dir', 'rtl');
       await nextFrame();
       subMenu.close();
-      arrowLeftKeyDown(menuComponents()[0]);
+      arrowLeftKeyDown(getMenuItems(rootMenu)[0]);
       expect(subMenu.opened).to.be.true;
       document.documentElement.setAttribute('dir', 'ltr');
     });
 
     it('should open item on enter', () => {
       subMenu.close();
-      enterKeyDown(menuComponents()[0]);
+      enterKeyDown(getMenuItems(rootMenu)[0]);
       expect(subMenu.opened).to.be.true;
     });
 
     it('should open item on space', () => {
       subMenu.close();
-      spaceKeyDown(menuComponents()[0]);
+      spaceKeyDown(getMenuItems(rootMenu)[0]);
       expect(subMenu.opened).to.be.true;
     });
 
     it('should not focus item if parent item is not focused', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextRender(subMenu);
       expect(subMenu.opened).to.be.true;
       await nextRender(subMenu);
-      expect(menuComponents(subMenu)[0].hasAttribute('focused')).to.be.false;
+      expect(getMenuItems(subMenu)[0].hasAttribute('focused')).to.be.false;
     });
 
     it('should focus first item in submenu on overlay element arrow down', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextRender(subMenu);
-      const item = menuComponents(subMenu)[0];
+      const item = getMenuItems(subMenu)[0];
       const spy = sinon.spy(item, 'focus');
       arrowDownKeyDown(subMenu.$.overlay.$.overlay);
       expect(spy.calledOnce).to.be.true;
@@ -374,9 +361,9 @@ describe('items', () => {
     it('should focus last item in submenu on overlay element arrow up', async () => {
       subMenu.close();
       rootMenu.$.overlay.focus();
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextRender(subMenu);
-      const items = menuComponents(subMenu);
+      const items = getMenuItems(subMenu);
       const item = items[items.length - 1];
       const spy = sinon.spy(item, 'focus');
       arrowUpKeyDown(subMenu.$.overlay.$.overlay);
@@ -384,7 +371,7 @@ describe('items', () => {
     });
 
     it('should have modeless sub menus', () => {
-      const rootItemRect = menuComponents()[0].getBoundingClientRect();
+      const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
       const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);
       expect(element).not.to.equal(document.documentElement);
     });
@@ -397,14 +384,14 @@ describe('items', () => {
     it('should fire an event for item selection', () => {
       const eventSpy = sinon.spy();
       rootMenu.addEventListener('item-selected', eventSpy);
-      menuComponents(subMenu)[0].click();
+      getMenuItems(subMenu)[0].click();
       expect(eventSpy.getCall(0).args[0].detail.value).to.equal(rootMenu.items[0].children[0]);
     });
 
     it('should not fire an event for parent item selection', () => {
       const eventSpy = sinon.spy();
       rootMenu.addEventListener('item-selected', eventSpy);
-      menuComponents(rootMenu)[0].click();
+      getMenuItems(rootMenu)[0].click();
       expect(eventSpy.called).to.be.false;
     });
 
@@ -435,17 +422,17 @@ describe('items', () => {
       rootMenu.close();
       rootMenu.closeOn = 'keydown';
       open();
-      open(menuComponents()[0]);
-      fire(menuComponents(subMenu)[0], 'keydown', {}, { keyCode: 65, key: 'a' });
+      open(getMenuItems(rootMenu)[0]);
+      fire(getMenuItems(subMenu)[0], 'keydown', {}, { keyCode: 65, key: 'a' });
       expect(subMenu.opened).to.be.false;
     });
 
     it('should have expanded attributes', () => {
-      expect(menuComponents()[0].hasAttribute('expanded')).to.be.true;
-      expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('true');
+      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
       subMenu.close();
-      expect(menuComponents()[0].hasAttribute('expanded')).to.be.false;
-      expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
+      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
     (isTouch ? describe.skip : describe)('scrolling', () => {
@@ -470,7 +457,7 @@ describe('items', () => {
         rootOverlay = rootMenu.$.overlay;
         subOverlay1 = subMenu.$.overlay;
 
-        open(menuComponents(subMenu)[2]);
+        open(getMenuItems(subMenu)[2]);
         const subMenu2 = getSubMenu(subMenu);
         await nextRender(subMenu2);
         subOverlay2 = subMenu2.$.overlay;
@@ -541,11 +528,11 @@ describe('items', () => {
       ];
       open();
       await nextRender();
-      open(menuComponents()[0]);
-      subMenu = getSubMenu();
+      open(getMenuItems(rootMenu)[0]);
+      subMenu = getSubMenu(rootMenu);
       await nextRender();
-      open(menuComponents(subMenu)[1]);
-      subMenu2 = getSubMenu();
+      open(getMenuItems(subMenu)[1]);
+      subMenu2 = getSubMenu(rootMenu);
       await nextRender();
     });
 
@@ -575,9 +562,9 @@ describe('items', () => {
 
       // Should wait until submenus will be opened again.
       await nextFrame();
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextFrame();
-      open(menuComponents(subMenu)[1]);
+      open(getMenuItems(subMenu)[1]);
       await nextFrame();
 
       [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
@@ -598,11 +585,11 @@ describe('items', () => {
       rootMenu.items[0].children[0].theme = 'bar-0-0';
       await updateItemsAndReopen();
 
-      open(menuComponents()[0]);
-      subMenu = getSubMenu();
+      open(getMenuItems(rootMenu)[0]);
+      subMenu = getSubMenu(rootMenu);
       await nextFrame();
 
-      const rootItems = getMenuItems();
+      const rootItems = getMenuItems(rootMenu);
       const subItems = getMenuItems(subMenu);
 
       expect(rootItems[0].getAttribute('theme')).to.equal('foo');
@@ -616,28 +603,28 @@ describe('items', () => {
       rootMenu.items[1].theme = 'bar-1';
       await updateItemsAndReopen();
 
-      let rootItems = getMenuItems();
+      let rootItems = getMenuItems(rootMenu);
       expect(rootItems[1].getAttribute('theme')).to.equal('bar-1');
 
       // An empty array should also override the component theme
       rootMenu.items[1].theme = [];
       await updateItemsAndReopen();
 
-      rootItems = getMenuItems();
+      rootItems = getMenuItems(rootMenu);
       expect(rootItems[1].hasAttribute('theme')).to.be.false;
 
       // An empty string should also override the component theme
       rootMenu.items[1].theme = '';
       await updateItemsAndReopen();
 
-      rootItems = getMenuItems();
+      rootItems = getMenuItems(rootMenu);
       expect(rootItems[1].hasAttribute('theme')).to.be.false;
 
       // If null or undefined, the parent component theme should be used
       delete rootMenu.items[1].theme;
       await updateItemsAndReopen();
 
-      rootItems = getMenuItems();
+      rootItems = getMenuItems(rootMenu);
       expect(rootItems[1].getAttribute('theme')).to.equal('foo');
     });
 
@@ -645,12 +632,12 @@ describe('items', () => {
       rootMenu.items[1].theme = ['bar-1', 'bar-2', 'bar-3'];
       await updateItemsAndReopen();
 
-      const rootItems = getMenuItems();
+      const rootItems = getMenuItems(rootMenu);
       expect(rootItems[1].getAttribute('theme')).to.equal('bar-1 bar-2 bar-3');
     });
 
     it('should not remove theme provided on the item component', () => {
-      const item = menuComponents(subMenu2)[2];
+      const item = getMenuItems(subMenu2)[2];
       expect(item.getAttribute('theme')).to.equal('bar');
     });
 
@@ -659,10 +646,10 @@ describe('items', () => {
       subMenu.close();
       subMenu.items = [...subMenu.items];
 
-      open(menuComponents()[0]);
+      open(getMenuItems(rootMenu)[0]);
       await nextRender(subMenu);
 
-      const item = menuComponents(subMenu2)[2];
+      const item = getMenuItems(subMenu2)[2];
 
       expect(item.getAttribute('theme')).to.equal('bar-1');
     });
