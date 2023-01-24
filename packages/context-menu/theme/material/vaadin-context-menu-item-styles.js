@@ -1,6 +1,7 @@
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const contextMenuItem = css`
@@ -30,6 +31,6 @@ const contextMenuItem = css`
   }
 `;
 
-registerStyles('vaadin-context-menu-item', contextMenuItem, { moduleId: 'material-context-menu-item' });
+registerStyles('vaadin-context-menu-item', [item, contextMenuItem], { moduleId: 'material-context-menu-item' });
 
 export { contextMenuItem };
