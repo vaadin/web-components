@@ -299,6 +299,28 @@ describe('vaadin-overlay', () => {
       });
     });
 
+    describe('vaadin-overlay-closed event', () => {
+      it('should dispatch vaadin-overlay-closed after the overlay has closed', () => {
+        const closingSpy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-closing', closingSpy);
+
+        const closedSpy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-closed', closedSpy);
+
+        click(parent);
+        expect(closedSpy.calledOnce).to.be.true;
+        expect(closedSpy.calledAfter(closingSpy)).to.be.true;
+      });
+
+      it('should not dispatch vaadin-overlay-closed when preventing vaadin-overlay-close', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-closed', spy);
+        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
+        click(parent);
+        expect(spy.called).to.be.false;
+      });
+    });
+
     describe('moving mouse pointer during click', () => {
       it('should close if both mousedown and mouseup outside', () => {
         mousedown(parent);
