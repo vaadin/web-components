@@ -8,8 +8,12 @@ import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import { comboBoxItem } from '@vaadin/combo-box/theme/lumo/vaadin-combo-box-item-styles.js';
+import { comboBoxLoader, comboBoxOverlay } from '@vaadin/combo-box/theme/lumo/vaadin-combo-box-overlay-styles.js';
 import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
+import { loader } from '@vaadin/vaadin-lumo-styles/mixins/loader.js';
+import { menuOverlayCore } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBoxItem = css`
@@ -24,6 +28,14 @@ const multiSelectComboBoxItem = css`
 registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiSelectComboBoxItem], {
   moduleId: 'lumo-multi-select-combo-box-item',
 });
+
+registerStyles(
+  'vaadin-multi-select-combo-box-overlay',
+  [overlay, menuOverlayCore, comboBoxOverlay, loader, comboBoxLoader],
+  {
+    moduleId: 'lumo-multi-select-combo-box-overlay',
+  },
+);
 
 const multiSelectComboBox = css`
   :host([has-value]) {

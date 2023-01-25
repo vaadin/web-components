@@ -18,8 +18,6 @@ const comboBoxOverlay = css`
     --_vaadin-combo-box-items-container-border-color: transparent;
   }
 
-  /* Loading state */
-
   /* When items are empty, the spinner needs some room */
   :host(:not([closing])) [part~='content'] {
     min-height: calc(2 * var(--lumo-space-s) + var(--lumo-icon-size-s));
@@ -36,7 +34,9 @@ const comboBoxOverlay = css`
   :host([bottom-aligned]) [part~='overlay'] {
     margin-bottom: var(--lumo-space-xs);
   }
+`;
 
+const comboBoxLoader = css`
   [part~='loader'] {
     position: absolute;
     z-index: 1;
@@ -48,8 +48,6 @@ const comboBoxOverlay = css`
     margin-inline-end: 0;
   }
 
-  /* RTL specific styles */
-
   :host([dir='rtl']) [part~='loader'] {
     left: auto;
     margin-left: 0;
@@ -59,6 +57,8 @@ const comboBoxOverlay = css`
   }
 `;
 
-registerStyles('vaadin-combo-box-overlay', [overlay, menuOverlayCore, comboBoxOverlay, loader], {
+registerStyles('vaadin-combo-box-overlay', [overlay, menuOverlayCore, comboBoxOverlay, loader, comboBoxLoader], {
   moduleId: 'lumo-combo-box-overlay',
 });
+
+export { comboBoxLoader, comboBoxOverlay };

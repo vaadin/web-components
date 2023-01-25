@@ -21,7 +21,9 @@ const comboBoxOverlay = css`
   [part='content'] {
     padding: 0;
   }
+`;
 
+const comboBoxLoader = css`
   [part~='loader'] {
     position: absolute;
     z-index: 1;
@@ -31,6 +33,8 @@ const comboBoxOverlay = css`
   }
 `;
 
-registerStyles('vaadin-combo-box-overlay', [menuOverlay, comboBoxOverlay, loader], {
+registerStyles('vaadin-combo-box-overlay', [menuOverlay, comboBoxOverlay, loader, comboBoxLoader], {
   moduleId: 'material-combo-box-overlay',
 });
+
+export { comboBoxLoader, comboBoxOverlay };

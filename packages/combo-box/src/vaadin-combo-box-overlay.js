@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 
 registerStyles(
   'vaadin-combo-box-overlay',
@@ -29,9 +29,10 @@ let memoizedTemplate;
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
  * @extends Overlay
+ * @mixes ComboBoxOverlayMixin
  * @private
  */
-export class ComboBoxOverlay extends PositionMixin(Overlay) {
+export class ComboBoxOverlay extends ComboBoxOverlayMixin(Overlay) {
   static get is() {
     return 'vaadin-combo-box-overlay';
   }
@@ -39,63 +40,17 @@ export class ComboBoxOverlay extends PositionMixin(Overlay) {
   static get template() {
     if (!memoizedTemplate) {
       memoizedTemplate = super.template.cloneNode(true);
-      memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
+
+      const overlay = memoizedTemplate.content.querySelector('[part~="overlay"]');
+      overlay.removeAttribute('tabindex');
+
+      const loader = document.createElement('div');
+      loader.setAttribute('part', 'loader');
+
+      overlay.insertBefore(loader, overlay.firstElementChild);
     }
 
     return memoizedTemplate;
-  }
-
-  static get observers() {
-    return ['_setOverlayWidth(positionTarget, opened)'];
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    const comboBox = this._comboBox;
-
-    const hostDir = comboBox && comboBox.getAttribute('dir');
-    if (hostDir) {
-      this.setAttribute('dir', hostDir);
-    }
-  }
-
-  ready() {
-    super.ready();
-    const loader = document.createElement('div');
-    loader.setAttribute('part', 'loader');
-    const content = this.shadowRoot.querySelector('[part~="content"]');
-    content.parentNode.insertBefore(loader, content);
-  }
-
-  /**
-   * Override method inherited from `Overlay`
-   * to not close on position target click.
-   *
-   * @param {Event} _event
-   * @return {boolean}
-   * @protected
-   */
-  _shouldCloseOnOutsideClick(event) {
-    const eventPath = event.composedPath();
-    return !eventPath.includes(this.positionTarget) && !eventPath.includes(this);
-  }
-
-  _setOverlayWidth(positionTarget, opened) {
-    if (positionTarget && opened) {
-      const propPrefix = this.localName;
-      this.style.setProperty(`--_${propPrefix}-default-width`, `${positionTarget.clientWidth}px`);
-
-      const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
-
-      if (customWidth === '') {
-        this.style.removeProperty(`--${propPrefix}-width`);
-      } else {
-        this.style.setProperty(`--${propPrefix}-width`, customWidth);
-      }
-
-      this._updatePosition();
-    }
   }
 }
 
