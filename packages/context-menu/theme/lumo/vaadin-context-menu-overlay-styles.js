@@ -29,3 +29,5 @@ const contextMenuOverlay = css`
 registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay], {
   moduleId: 'lumo-context-menu-overlay',
 });
+
+export { contextMenuOverlay };
