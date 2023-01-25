@@ -65,11 +65,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
- * @fires {CustomEvent} vaadin-overlay-close - Fired before the overlay will be closed. If canceled the closing of the overlay is canceled as well.
- * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay will be closed.
+ * @fires {CustomEvent} vaadin-overlay-close - Fired when the opened overlay is about to be closed. Calling `preventDefault()` on the event cancels the closing.
+ * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay starts to close. Closing the overlay can be asynchronous depending on the animation.
  * @fires {CustomEvent} vaadin-overlay-closed - Fired after the overlay is closed.
- * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
- * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
+ * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
@@ -353,8 +353,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
   /**
    * @param {Event=} sourceEvent
-   * @event vaadin-overlay-close
-   * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
    */
   close(sourceEvent) {
     const evt = new CustomEvent('vaadin-overlay-close', {
@@ -428,9 +426,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
    * propagating the event to the listener on the element that triggered it.
    * Otherwise, calling `open()` would result in closing and re-opening.
    *
-   * @event vaadin-overlay-outside-click
-   * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
-   *
    * @private
    */
   _outsideClickListener(event) {
@@ -457,9 +452,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /**
-   * @event vaadin-overlay-escape-press
-   * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
-   *
+   * Listener used to close whe overlay on Escape press, if it is the last one.
    * @private
    */
   _keydownListener(event) {
@@ -486,12 +479,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /**
-   * @event vaadin-overlay-open
-   * fired after the `vaadin-overlay` is opened.
-   *
-   * @private
-   */
+  /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
       // Store focused node.
@@ -536,18 +524,19 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
   /**
    * @return {boolean}
-   * @protected
+   * @private
    */
   _shouldAnimate() {
-    const name = getComputedStyle(this).getPropertyValue('animation-name');
-    const hidden = getComputedStyle(this).getPropertyValue('display') === 'none';
+    const style = getComputedStyle(this);
+    const name = style.getPropertyValue('animation-name');
+    const hidden = style.getPropertyValue('display') === 'none';
     return !hidden && name && name !== 'none';
   }
 
   /**
    * @param {string} type
    * @param {Function} callback
-   * @protected
+   * @private
    */
   _enqueueAnimation(type, callback) {
     const handler = `__${type}Handler`;
@@ -574,7 +563,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /** @protected */
+  /** @private */
   _animatedOpening() {
     if (this.parentNode === document.body && this.hasAttribute('closing')) {
       this._flushAnimation('closing');
@@ -594,7 +583,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /** @protected */
+  /** @private */
   _attachOverlay() {
     this._placeholder = document.createComment('vaadin-overlay-placeholder');
     this.parentNode.insertBefore(this._placeholder, this);
@@ -602,12 +591,12 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this.bringToFront();
   }
 
-  /** @protected */
+  /** @private */
   _finishOpening() {
     this.removeAttribute('opening');
   }
 
-  /** @protected */
+  /** @private */
   _finishClosing() {
     this._detachOverlay();
     this.$.overlay.style.removeProperty('pointer-events');
@@ -615,12 +604,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
   }
 
-  /**
-   * @event vaadin-overlay-closing
-   * Fired when the overlay will be closed.
-   *
-   * @protected
-   */
+  /** @private */
   _animatedClosing() {
     if (this.hasAttribute('opening')) {
       this._flushAnimation('opening');
@@ -661,7 +645,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /** @protected */
+  /** @private */
   _detachOverlay() {
     this._placeholder.parentNode.insertBefore(this, this._placeholder);
     this._placeholder.parentNode.removeChild(this._placeholder);
@@ -680,7 +664,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /** @protected */
+  /** @private */
   _addGlobalListeners() {
     document.addEventListener('mousedown', this._boundMouseDownListener);
     document.addEventListener('mouseup', this._boundMouseUpListener);
@@ -689,7 +673,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     document.documentElement.addEventListener('click', this._boundOutsideClickListener, true);
   }
 
-  /** @protected */
+  /** @private */
   _enterModalState() {
     if (document.body.style.pointerEvents !== 'none') {
       // Set body pointer-events to 'none' to disable mouse interactions with
@@ -706,14 +690,14 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     });
   }
 
-  /** @protected */
+  /** @private */
   _removeGlobalListeners() {
     document.removeEventListener('mousedown', this._boundMouseDownListener);
     document.removeEventListener('mouseup', this._boundMouseUpListener);
     document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
   }
 
-  /** @protected */
+  /** @private */
   _exitModalState() {
     if (this._previousDocumentPointerEvents !== undefined) {
       // Restore body pointer-events
@@ -765,7 +749,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
   /**
    * @return {!Element}
-   * @protected
+   * @private
    */
   _getActiveElement() {
     // Document.activeElement can be null
@@ -780,7 +764,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   /**
    * @param {!Node} node
    * @return {boolean}
-   * @protected
+   * @private
    */
   _deepContains(node) {
     if (this.contains(node)) {
@@ -810,8 +794,37 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /**
+   * @event vaadin-overlay-open
+   * Fired after the overlay is opened.
+   */
+
+  /**
+   * @event vaadin-overlay-close
+   * Fired when the opened overlay is about to be closed.
+   * Calling `preventDefault()` on the event cancels the closing.
+   */
+
+  /**
+   * @event vaadin-overlay-closing
+   * Fired when the overlay starts to close.
+   * Closing the overlay can be asynchronous depending on the animation.
+   */
+
+  /**
    * @event vaadin-overlay-closed
    * Fired after the overlay is closed.
+   */
+
+  /**
+   * @event vaadin-overlay-escape-press
+   * Fired before the overlay is closed on Escape key press.
+   * Calling `preventDefault()` on the event cancels the closing.
+   */
+
+  /**
+   * @event vaadin-overlay-outside-click
+   * Fired before the overlay is closed on outside click.
+   * Calling `preventDefault()` on the event cancels the closing.
    */
 }
 
