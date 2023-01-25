@@ -39,12 +39,6 @@ export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> 
   ? ThemedWebComponentProps<I, E>
   : _WebComponentProps<I, E>;
 
-/** @deprecated */
-export type ThemedReactWebComponent<
-  I extends ThemePropertyMixinClass & HTMLElement,
-  E extends EventNames = {},
-> = ForwardRefExoticComponent<ThemedWebComponentProps<I, E> & RefAttributes<I>>;
-
 // We need a separate declaration here; otherwise, the TypeScript fails into the
 // endless loop trying to resolve the typings.
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(

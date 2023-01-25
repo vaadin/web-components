@@ -108,7 +108,6 @@ function createEventMapDeclaration(
 ): Node {
   const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
   const eventNameTypeId = ts.factory.createIdentifier('EventName');
-  const elementModuleId = ts.factory.createIdentifier(`WebComponentModule`);
   const eventMapId = ts.factory.createIdentifier(EVENT_MAP);
 
   return ts.factory.createTypeAliasDeclaration(
@@ -134,9 +133,7 @@ function createEventMapDeclaration(
                     ]
                   : [
                       ts.factory.createIndexedAccessTypeNode(
-                        ts.factory.createTypeReferenceNode(
-                          ts.factory.createQualifiedName(elementModuleId, `${elementName}EventMap`),
-                        ),
+                        ts.factory.createTypeReferenceNode(`_${elementName}EventMap`),
                         ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(eventName!)),
                       ),
                     ],
@@ -164,12 +161,16 @@ function createEventList(elementName: string, events: readonly NamedGenericJsCon
   );
 }
 
-function removeAllEventRelated(node: Node, hasEvents: boolean): Node | undefined {
-  if (hasEvents) {
+function removeAllEventRelated(node: Node, hasEvents: boolean, hasKnownEvents: boolean): Node | undefined {
+  if (hasEvents && hasKnownEvents) {
     return node;
   }
 
-  if (ts.isImportSpecifier(node) && node.name.text === 'EventName') {
+  if (!hasEvents && ts.isImportSpecifier(node) && node.name.text === 'EventName') {
+    return undefined;
+  }
+
+  if (!hasKnownEvents && ts.isImportSpecifier(node) && node.name.text === `_${COMPONENT_NAME}EventMap`) {
     return undefined;
   }
 
@@ -192,19 +193,19 @@ function addGenerics(node: Node, elementName: string) {
   if (isEventMapDeclaration(node) && isEventMapGeneric) {
     // export type GridEventMap<T1> = Readonly<{
     //                          ^ adding this type argument
-    //   onActiveItemChanged: EventName<GridModule.GridEventMap<T1>["active-item-changed"]>;
+    //   onActiveItemChanged: EventName<_GridEventMap<T1>["active-item-changed"]>;
     //   ...
     // }>
     const declaration = ts.factory.createTypeAliasDeclaration(node.modifiers, node.name, typeParameters, node.type);
 
     return ts.transform(declaration, [
       // export type GridEventMap<T1> = Readonly<{
-      //   onActiveItemChanged: EventName<GridModule.GridEventMap<T1>["active-item-changed"]>;
-      //                                                          ^ adding these type arguments
+      //   onActiveItemChanged: EventName<_GridEventMap<T1>["active-item-changed"]>;
+      //                                                ^ adding these type arguments
       //   ...
       // }>
       transform((node) =>
-        ts.isTypeReferenceNode(node) && ts.isQualifiedName(node.typeName)
+        ts.isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.text.endsWith('EventMap')
           ? ts.factory.createTypeReferenceNode(node.typeName, typeArguments)
           : node,
       ),
@@ -292,9 +293,6 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
     throw new ElementNameMissingError(packageName);
   }
 
-  const hasEvents = !!js?.events && js.events.length > 0;
-  const events = js?.events;
-
   const elementName = stripPrefix(camelCase(name));
   const elementModulePath = createImportPath(relative(nodeModulesDir, path), false);
   const eventMapId = ts.factory.createIdentifier(`${elementName}EventMap`);
@@ -302,20 +300,27 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
   const componentTagLiteral = ts.factory.createStringLiteral(name);
   const createComponentPath = createImportPath(relative(generatedDir, resolve(utilsDir, './createComponent.js')), true);
 
+  const hasEvents = !!js?.events && js.events.length > 0;
+  const events = js?.events;
   const eventNameMissingLogger = () => console.error(`[${packageName}]: event name is missing`);
+  const namedEvents = pickNamedEvents(events, eventNameMissingLogger);
+  const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
+  const hasKnownEvents =
+    namedEvents?.some(({ name }) => !eventsToRemove?.includes(name) && !eventsToBeUnknown?.includes(name)) || false;
 
   const ast = template(
     `
 import type { EventName } from "${LIT_REACT_PATH}";
-import * as WebComponentModule from "${MODULE_PATH}";
-import { ${COMPONENT_NAME} as ${COMPONENT_NAME}Element } from "${MODULE_PATH}";
+import {
+  ${COMPONENT_NAME} as ${COMPONENT_NAME}Element
+  type ${COMPONENT_NAME}EventMap as _${COMPONENT_NAME}EventMap,
+} from "${MODULE_PATH}";
 import * as React from "react";
 import { createComponent, WebComponentProps } from "${CREATE_COMPONENT_PATH}";
 
 export * from "${MODULE_PATH}";
 
 export {
-  /** @deprecated */WebComponentModule,
   ${COMPONENT_NAME}Element,
 };
 
@@ -331,17 +336,11 @@ export const ${COMPONENT_NAME} = createComponent({
 `,
     (statements) => statements,
     [
-      transform((node) => removeAllEventRelated(node, hasEvents)),
+      transform((node) => removeAllEventRelated(node, hasEvents, hasKnownEvents)),
       transform((node) =>
-        isEventMapDeclaration(node)
-          ? createEventMapDeclaration(node, elementName, pickNamedEvents(events, eventNameMissingLogger))
-          : node,
+        isEventMapDeclaration(node) ? createEventMapDeclaration(node, elementName, namedEvents) : node,
       ),
-      transform((node) =>
-        isEventListDeclaration(node)
-          ? createEventList(elementName, pickNamedEvents(events, eventNameMissingLogger))
-          : node,
-      ),
+      transform((node) => (isEventListDeclaration(node) ? createEventList(elementName, namedEvents) : node)),
       transform((node) => addGenerics(node, elementName)),
       transform((node) => {
         if (!ts.isStringLiteral(node)) {
