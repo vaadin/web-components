@@ -83,18 +83,6 @@ class ConfirmDialogOverlay extends DialogOverlay {
   }
 
   /**
-   * Override method inherited from `Overlay` to notify when overlay is closed.
-   * The `vaadin-overlay-close` event is not suitable, as it fires before closing.
-   * @protected
-   * @override
-   */
-  _finishClosing() {
-    super._finishClosing();
-
-    this.dispatchEvent(new CustomEvent('vaadin-confirm-dialog-close'));
-  }
-
-  /**
    * @protected
    * @override
    */

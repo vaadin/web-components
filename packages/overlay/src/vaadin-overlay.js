@@ -67,6 +67,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
  * @fires {CustomEvent} vaadin-overlay-close - Fired before the overlay will be closed. If canceled the closing of the overlay is canceled as well.
  * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay will be closed.
+ * @fires {CustomEvent} vaadin-overlay-closed - Fired after the overlay is closed.
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  *
@@ -598,6 +599,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this._detachOverlay();
     this.$.overlay.style.removeProperty('pointer-events');
     this.removeAttribute('closing');
+    this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
   }
 
   /**
@@ -793,6 +795,11 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this.style.zIndex = zIndex;
     this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
   }
+
+  /**
+   * @event vaadin-overlay-closed
+   * Fired after the overlay is closed.
+   */
 }
 
 customElements.define(Overlay.is, Overlay);
