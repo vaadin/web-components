@@ -39,7 +39,8 @@ registerStyles(
 
     /* Indicate read-only cells */
 
-    :host([theme~='highlight-read-only-cells']) [part~='body-cell']:not([part~='editable-cell']) {
+    /* prettier-ignore */
+    :host([theme~='highlight-read-only-cells']) [tabindex]:not([part~='editable-cell']):not([part~='header-cell']):not([part~='footer-cell']) {
       background-image: repeating-linear-gradient(
         135deg,
         transparent,
