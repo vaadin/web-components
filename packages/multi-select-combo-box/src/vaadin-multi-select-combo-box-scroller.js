@@ -24,14 +24,11 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
     this.setAttribute('aria-multiselectable', 'true');
   }
 
-  /** @private */
-  __getAriaSelected(_focusedIndex, itemIndex) {
-    const item = this.items[itemIndex];
-    return this.__isItemSelected(item, null, this.itemIdPath).toString();
-  }
-
-  /** @private */
-  __isItemSelected(item, _selectedItem, itemIdPath) {
+  /**
+   * @protected
+   * @override
+   */
+  _isItemSelected(item, _selectedItem, itemIdPath) {
     if (item instanceof ComboBoxPlaceholder) {
       return false;
     }
