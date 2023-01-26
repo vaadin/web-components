@@ -164,4 +164,12 @@ describe('MultiSelectListMixin', () => {
     list.items[3].click();
     expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
   });
+
+  it('should remove aria-multiselectable when multiple is set back to false', () => {
+    list.multiple = true;
+    expect(list.hasAttribute('aria-multiselectable')).to.be.true;
+
+    list.multiple = false;
+    expect(list.hasAttribute('aria-multiselectable')).to.be.false;
+  });
 });
