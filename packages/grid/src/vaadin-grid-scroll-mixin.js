@@ -147,42 +147,42 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     _updateOverflow() {
-      // Set overflow styling attributes
-      let overflow = '';
-      const table = this.$.table;
-      if (table.scrollTop < table.scrollHeight - table.clientHeight) {
-        overflow += ' bottom';
-      }
-
-      if (table.scrollTop > 0) {
-        overflow += ' top';
-      }
-
-      const scrollLeft = getNormalizedScrollLeft(table, this.getAttribute('dir'));
-      if (scrollLeft > 0) {
-        overflow += ' start';
-      }
-
-      if (scrollLeft < table.scrollWidth - table.clientWidth) {
-        overflow += ' end';
-      }
-
-      if (this.__isRTL) {
-        overflow = overflow.replace(/start|end/giu, (matched) => {
-          return matched === 'start' ? 'end' : 'start';
-        });
-      }
-
-      // TODO: Remove "right" and "left" values in the next major.
-      if (table.scrollLeft < table.scrollWidth - table.clientWidth) {
-        overflow += ' right';
-      }
-
-      if (table.scrollLeft > 0) {
-        overflow += ' left';
-      }
-
       this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
+        // Set overflow styling attributes
+        let overflow = '';
+        const table = this.$.table;
+        if (table.scrollTop < table.scrollHeight - table.clientHeight) {
+          overflow += ' bottom';
+        }
+
+        if (table.scrollTop > 0) {
+          overflow += ' top';
+        }
+
+        const scrollLeft = getNormalizedScrollLeft(table, this.getAttribute('dir'));
+        if (scrollLeft > 0) {
+          overflow += ' start';
+        }
+
+        if (scrollLeft < table.scrollWidth - table.clientWidth) {
+          overflow += ' end';
+        }
+
+        if (this.__isRTL) {
+          overflow = overflow.replace(/start|end/giu, (matched) => {
+            return matched === 'start' ? 'end' : 'start';
+          });
+        }
+
+        // TODO: Remove "right" and "left" values in the next major.
+        if (table.scrollLeft < table.scrollWidth - table.clientWidth) {
+          overflow += ' right';
+        }
+
+        if (table.scrollLeft > 0) {
+          overflow += ' left';
+        }
+
         const value = overflow.trim();
         if (value.length > 0 && this.getAttribute('overflow') !== value) {
           this.setAttribute('overflow', value);
