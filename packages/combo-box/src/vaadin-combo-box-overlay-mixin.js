@@ -31,7 +31,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
      * Override method inherited from `Overlay`
      * to not close on position target click.
      *
-     * @param {Event} _event
+     * @param {Event} event
      * @return {boolean}
      * @protected
      */
