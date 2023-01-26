@@ -447,8 +447,6 @@ class Select extends OverlayClassMixin(
         true,
       );
 
-      menuElement.setAttribute('role', 'listbox');
-
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
     }
@@ -458,7 +456,6 @@ class Select extends OverlayClassMixin(
   __initMenuItems(menuElement) {
     if (menuElement.items) {
       this._items = menuElement.items;
-      this._items.forEach((item) => item.setAttribute('role', 'option'));
     }
   }
 
@@ -594,8 +591,7 @@ class Select extends OverlayClassMixin(
     // Store reference to the original item
     labelItem._sourceItem = selected;
 
-    this.__initValueItemElement(labelItem);
-    this.focusElement.appendChild(labelItem);
+    this.__appendValueItemElement(labelItem, this.focusElement);
 
     // Ensure the item gets proper styles
     labelItem.selected = true;
@@ -621,10 +617,13 @@ class Select extends OverlayClassMixin(
 
   /**
    * @param {!HTMLElement} itemElement
+   * @param {!HTMLElement} parent
    * @private
    */
-  __initValueItemElement(itemElement) {
+  __appendValueItemElement(itemElement, parent) {
+    parent.appendChild(itemElement);
     itemElement.removeAttribute('tabindex');
+    itemElement.removeAttribute('aria-selected');
     itemElement.removeAttribute('role');
     itemElement.setAttribute('id', this._itemId);
   }
@@ -646,8 +645,7 @@ class Select extends OverlayClassMixin(
     if (!selected) {
       if (this.placeholder) {
         const item = this.__createItemElement({ label: this.placeholder });
-        this.__initValueItemElement(item);
-        valueButton.appendChild(item);
+        this.__appendValueItemElement(item, valueButton);
         valueButton.setAttribute('placeholder', '');
       }
     } else {
