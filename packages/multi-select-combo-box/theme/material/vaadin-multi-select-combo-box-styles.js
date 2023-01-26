@@ -7,8 +7,11 @@ import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 import { comboBoxItem } from '@vaadin/combo-box/theme/material/vaadin-combo-box-item-styles.js';
+import { comboBoxLoader, comboBoxOverlay } from '@vaadin/combo-box/theme/material/vaadin-combo-box-overlay-styles.js';
 import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
+import { loader } from '@vaadin/vaadin-material-styles/mixins/loader.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBoxItem = css`
@@ -22,6 +25,10 @@ const multiSelectComboBoxItem = css`
 
 registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiSelectComboBoxItem], {
   moduleId: 'material-multi-select-combo-box-item',
+});
+
+registerStyles('vaadin-multi-select-combo-box-overlay', [menuOverlay, comboBoxOverlay, loader, comboBoxLoader], {
+  moduleId: 'material-multi-select-combo-box-overlay',
 });
 
 const multiSelectComboBox = css`

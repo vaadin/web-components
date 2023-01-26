@@ -5,12 +5,18 @@
  */
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import { comboBoxItem } from '@vaadin/combo-box/theme/material/vaadin-combo-box-item-styles.js';
+import { comboBoxOverlay } from '@vaadin/combo-box/theme/material/vaadin-combo-box-overlay-styles.js';
 import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-time-picker-item', [item, comboBoxItem], {
   moduleId: 'material-time-picker-item',
+});
+
+registerStyles('vaadin-time-picker-overlay', [menuOverlay, comboBoxOverlay], {
+  moduleId: 'material-time-picker-overlay',
 });
 
 const timePicker = css`
