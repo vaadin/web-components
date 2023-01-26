@@ -306,19 +306,20 @@ export class ComboBoxScroller extends PolymerElement {
   __updateElement(el, index) {
     const item = this.items[index];
     const focusedIndex = this.focusedIndex;
+    const selected = this.__isItemSelected(item, this.selectedItem, this.itemIdPath);
 
     el.setProperties({
       item,
       index,
       label: this.getItemLabel(item),
-      selected: this.__isItemSelected(item, this.selectedItem, this.itemIdPath),
+      selected,
       renderer: this.renderer,
       focused: this.__isItemFocused(focusedIndex, index),
     });
 
     el.id = `${this.__hostTagName}-item-${index}`;
     el.setAttribute('role', this.__getAriaRole(index));
-    el.setAttribute('aria-selected', this.__getAriaSelected(focusedIndex, index));
+    el.setAttribute('aria-selected', selected.toString());
     el.setAttribute('aria-posinset', index + 1);
     el.setAttribute('aria-setsize', this.items.length);
 
