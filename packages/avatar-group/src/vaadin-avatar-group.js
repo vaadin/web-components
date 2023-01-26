@@ -141,7 +141,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         <template>
           <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
             <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, maxItemsVisible)]]">
-              <vaadin-item theme="avatar-group-item" role="option">
+              <vaadin-item theme="avatar-group-item">
                 <vaadin-avatar
                   name="[[item.name]]"
                   abbr="[[item.abbr]]"

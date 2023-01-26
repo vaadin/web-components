@@ -95,7 +95,8 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
   /** @protected */
   ready() {
     super.ready();
-    this.setAttribute('role', 'list');
+
+    this.setAttribute('role', 'listbox');
 
     setTimeout(this._checkImport.bind(this), 2000);
   }
