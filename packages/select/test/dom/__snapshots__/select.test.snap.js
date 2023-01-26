@@ -134,7 +134,6 @@ snapshots["vaadin-select host value"] =
     tabindex="0"
   >
     <vaadin-select-item
-      aria-selected="true"
       id="vaadin-select-3"
       selected=""
     >
