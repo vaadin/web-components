@@ -472,7 +472,7 @@ export const ComboBoxMixin = (subclass) =>
 
       const scroller = overlay.querySelector(scrollerTag);
 
-      scroller.comboBox = host || this;
+      scroller.owner = host || this;
       scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 

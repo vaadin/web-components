@@ -67,9 +67,9 @@ export const ComboBoxItemMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      this._comboBox = this.parentNode.comboBox;
+      this._owner = this.parentNode.owner;
 
-      const hostDir = this._comboBox.getAttribute('dir');
+      const hostDir = this._owner.getAttribute('dir');
       if (hostDir) {
         this.setAttribute('dir', hostDir);
       }
@@ -93,7 +93,7 @@ export const ComboBoxItemMixin = (superClass) =>
         selected: this.selected,
       };
 
-      this.renderer(this, this._comboBox, model);
+      this.renderer(this, this._owner, model);
     }
 
     /** @private */

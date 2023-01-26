@@ -33,18 +33,18 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
       return false;
     }
 
-    if (this.comboBox.readonly) {
+    if (this.owner.readonly) {
       return false;
     }
 
-    return this.comboBox._findIndex(item, this.comboBox.selectedItems, itemIdPath) > -1;
+    return this.owner._findIndex(item, this.owner.selectedItems, itemIdPath) > -1;
   }
 
   /** @private */
   __updateElement(el, index) {
     super.__updateElement(el, index);
 
-    el.toggleAttribute('readonly', this.comboBox.readonly);
+    el.toggleAttribute('readonly', this.owner.readonly);
   }
 }
 
