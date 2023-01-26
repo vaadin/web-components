@@ -100,6 +100,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
       this.__boundOnItemClick = this.__onItemClick.bind(this);
     }
 
+    /** @private */
     get _viewportTotalPaddingBottom() {
       if (this._cachedViewportTotalPaddingBottom === undefined) {
         const itemsStyle = window.getComputedStyle(this.$.selector);
@@ -119,13 +120,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this.setAttribute('role', 'listbox');
+
       // Ensure every instance has unique ID
       this.id = `${this.localName}-${generateUniqueId()}`;
 
       // Allow extensions to customize tag name for the items
       this.__hostTagName = this.constructor.is.replace('-scroller', '');
-
-      this.setAttribute('role', 'listbox');
 
       this.addEventListener('click', (e) => e.stopPropagation());
 
@@ -140,6 +141,9 @@ export const ComboBoxScrollerMixin = (superClass) =>
       });
     }
 
+    /**
+     * Requests an update for the virtualizer to re-render items.
+     */
     requestContentUpdate() {
       if (this.__virtualizer) {
         this.__virtualizer.update();
@@ -147,6 +151,8 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /**
+     * Scrolls an item at given index into view and adjusts `scrollTop`
+     * so that the element gets fully visible on Arrow Down key press.
      * @param {number} index
      */
     scrollIntoView(index) {
@@ -186,7 +192,12 @@ export const ComboBoxScrollerMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * @param {string | object} item
+     * @param {string | object} selectedItem
+     * @param {string} itemIdPath
+     * @protected
+     */
     _isItemSelected(item, selectedItem, itemIdPath) {
       if (item instanceof ComboBoxPlaceholder) {
         return false;
@@ -254,7 +265,11 @@ export const ComboBoxScrollerMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /**
+     * @param {HTMLElement} el
+     * @param {number} index
+     * @protected
+     */
     _updateElement(el, index) {
       const item = this.items[index];
       const focusedIndex = this.focusedIndex;

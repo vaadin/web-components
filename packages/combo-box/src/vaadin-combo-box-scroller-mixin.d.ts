@@ -20,7 +20,7 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
   /**
    * Path for the id of the item, used to detect whether the item is selected.
    */
-  itemIdPath: string;
+  itemIdPath: string | null | undefined;
 
   /**
    * A full set of items to filter the visible options from.
@@ -64,4 +64,19 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
    * Function used to set a label for every combo-box item.
    */
   getItemLabel: (item: TItem) => string;
+
+  /**
+   * Requests an update for the virtualizer to re-render items.
+   */
+  requestContentUpdate(): void;
+
+  /**
+   * Scrolls an item at given index into view and adjusts `scrollTop`
+   * so that the element gets fully visible on Arrow Down key press.
+   */
+  scrollIntoView(index: number): void;
+
+  protected _isItemSelected(item: TItem, selectedItem: TItem, itemIdPath: string | null | undefined): void;
+
+  protected _updateElement(el: HTMLElement, index: number): void;
 }
