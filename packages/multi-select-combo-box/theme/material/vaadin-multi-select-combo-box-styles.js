@@ -27,9 +27,22 @@ registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiS
   moduleId: 'material-multi-select-combo-box-item',
 });
 
-registerStyles('vaadin-multi-select-combo-box-overlay', [menuOverlay, comboBoxOverlay, loader, comboBoxLoader], {
-  moduleId: 'material-multi-select-combo-box-overlay',
-});
+registerStyles(
+  'vaadin-multi-select-combo-box-overlay',
+  [
+    menuOverlay,
+    comboBoxOverlay,
+    loader,
+    comboBoxLoader,
+    css`
+      :host {
+        --_vaadin-multi-select-combo-box-items-container-border-width: 8px 0;
+        --_vaadin-multi-select-combo-box-items-container-border-style: solid;
+      }
+    `,
+  ],
+  { moduleId: 'material-multi-select-combo-box-overlay' },
+);
 
 const multiSelectComboBox = css`
   :host([has-value]) ::slotted(input:placeholder-shown) {

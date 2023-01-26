@@ -115,12 +115,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
       return this._cachedViewportTotalPaddingBottom;
     }
 
-    __openedChanged(opened) {
-      if (opened) {
-        this.requestContentUpdate();
-      }
-    }
-
     /** @protected */
     ready() {
       super.ready();
@@ -139,7 +133,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
 
       this.__virtualizer = new Virtualizer({
         createElements: this.__createElements.bind(this),
-        updateElement: this.__updateElement.bind(this),
+        updateElement: this._updateElement.bind(this),
         elementsContainer: this,
         scrollTarget: this,
         scrollContainer: this.$.selector,
@@ -152,6 +146,9 @@ export const ComboBoxScrollerMixin = (superClass) =>
       }
     }
 
+    /**
+     * @param {number} index
+     */
     scrollIntoView(index) {
       if (!(this.opened && index >= 0)) {
         return;
@@ -189,16 +186,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __getAriaRole(itemIndex) {
-      return itemIndex !== undefined ? 'option' : false;
-    }
-
-    /** @private */
-    __isItemFocused(focusedIndex, itemIndex) {
-      return !this.loading && focusedIndex === itemIndex;
-    }
-
     /** @protected */
     _isItemSelected(item, selectedItem, itemIdPath) {
       if (item instanceof ComboBoxPlaceholder) {
@@ -221,6 +208,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
     /** @private */
     __loadingChanged() {
       this.requestContentUpdate();
+    }
+
+    /** @private */
+    __openedChanged(opened) {
+      if (opened) {
+        this.requestContentUpdate();
+      }
     }
 
     /** @private */
@@ -261,7 +255,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /** @private */
-    __updateElement(el, index) {
+    _updateElement(el, index) {
       const item = this.items[index];
       const focusedIndex = this.focusedIndex;
       const selected = this._isItemSelected(item, this.selectedItem, this.itemIdPath);
@@ -272,11 +266,11 @@ export const ComboBoxScrollerMixin = (superClass) =>
         label: this.getItemLabel(item),
         selected,
         renderer: this.renderer,
-        focused: this.__isItemFocused(focusedIndex, index),
+        focused: !this.loading && focusedIndex === index,
       });
 
       el.id = `${this.__hostTagName}-item-${index}`;
-      el.setAttribute('role', this.__getAriaRole(index));
+      el.setAttribute('role', index !== undefined ? 'option' : false);
       el.setAttribute('aria-selected', selected.toString());
       el.setAttribute('aria-posinset', index + 1);
       el.setAttribute('aria-setsize', this.items.length);
@@ -301,6 +295,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
      * We want to prevent the kinetic scrolling energy from being transferred from the overlay contents over to the parent.
      * Further improvement ideas: after the contents have been scrolled to the top or bottom and scrolling has stopped, it could allow
      * scrolling the parent similarly to touch scrolling.
+     * @private
      */
     __patchWheelOverScrolling() {
       this.$.selector.addEventListener('wheel', (e) => {
@@ -326,6 +321,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
      * the scroller will synchronously request the page again which may lead to looping in the end.
      * That was the case for the Flow counterpart:
      * https://github.com/vaadin/flow-components/issues/3553#issuecomment-1239344828
+     * @private
      */
     __requestItemByIndex(index) {
       requestAnimationFrame(() => {

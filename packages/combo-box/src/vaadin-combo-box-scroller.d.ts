@@ -8,7 +8,7 @@ import { ComboBoxScrollerMixin } from './vaadin-combo-box-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  */
-declare class ComboBoxScroller extends ComboBoxScrollerMixin(Overlay) {}
+declare class ComboBoxScroller extends ComboBoxScrollerMixin(HTMLElement) {}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -31,10 +31,20 @@ registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiS
 
 registerStyles(
   'vaadin-multi-select-combo-box-overlay',
-  [overlay, menuOverlayCore, comboBoxOverlay, loader, comboBoxLoader],
-  {
-    moduleId: 'lumo-multi-select-combo-box-overlay',
-  },
+  [
+    overlay,
+    menuOverlayCore,
+    comboBoxOverlay,
+    loader,
+    comboBoxLoader,
+    css`
+      :host {
+        --_vaadin-multi-select-combo-box-items-container-border-width: var(--lumo-space-xs);
+        --_vaadin-multi-select-combo-box-items-container-border-style: solid;
+      }
+    `,
+  ],
+  { moduleId: 'lumo-multi-select-combo-box-overlay' },
 );
 
 const multiSelectComboBox = css`

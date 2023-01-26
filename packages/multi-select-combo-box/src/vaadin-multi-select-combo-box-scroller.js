@@ -3,18 +3,50 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
-import { ComboBoxScroller } from '@vaadin/combo-box/src/vaadin-combo-box-scroller.js';
+import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
- * @extends ComboBoxScroller
+ * @extends HTMLElement
+ * @mixes ComboBoxScrollerMixin
  * @private
  */
-class MultiSelectComboBoxScroller extends ComboBoxScroller {
+export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolymerElement) {
   static get is() {
     return 'vaadin-multi-select-combo-box-scroller';
+  }
+
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: block;
+          min-height: 1px;
+          overflow: auto;
+
+          /* Fixes item background from getting on top of scrollbars on Safari */
+          transform: translate3d(0, 0, 0);
+
+          /* Enable momentum scrolling on iOS */
+          -webkit-overflow-scrolling: touch;
+
+          /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
+          box-shadow: 0 0 0 white;
+        }
+
+        #selector {
+          border-width: var(--_vaadin-multi-select-combo-box-items-container-border-width);
+          border-style: var(--_vaadin-multi-select-combo-box-items-container-border-style);
+          border-color: var(--_vaadin-multi-select-combo-box-items-container-border-color, transparent);
+        }
+      </style>
+      <div id="selector">
+        <slot></slot>
+      </div>
+    `;
   }
 
   /** @protected */
@@ -40,9 +72,14 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
     return this.owner._findIndex(item, this.owner.selectedItems, itemIdPath) > -1;
   }
 
-  /** @private */
-  __updateElement(el, index) {
-    super.__updateElement(el, index);
+  /**
+   * @param {HTMLElement} el
+   * @param {number} index
+   * @protected
+   * @override
+   */
+  _updateElement(el, index) {
+    super._updateElement(el, index);
 
     el.toggleAttribute('readonly', this.owner.readonly);
   }
