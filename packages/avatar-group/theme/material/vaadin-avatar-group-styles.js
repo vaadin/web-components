@@ -1,4 +1,6 @@
 import '@vaadin/vaadin-material-styles/color.js';
+import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
+import { listBox } from '@vaadin/list-box/theme/material/vaadin-list-box-styles.js';
 import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -46,30 +48,31 @@ registerStyles('vaadin-avatar-group-overlay', [menuOverlay, avatarGroupOverlay],
   moduleId: 'material-avatar-group-overlay',
 });
 
+registerStyles('vaadin-avatar-group-menu', listBox, { moduleId: 'material-avatar-group-menu' });
+
 registerStyles(
-  'vaadin-item',
-  css`
-    :host([theme='avatar-group-item']) {
-      padding: 8px;
-      padding-inline-end: 24px;
-    }
+  'vaadin-avatar-group-menu-item',
+  [
+    item,
+    css`
+      :host {
+        padding: 8px;
+        padding-inline-end: 24px;
+      }
 
-    :host([theme='avatar-group-item']) [part='content'] {
-      display: flex;
-      align-items: center;
-    }
+      [part='content'] {
+        display: flex;
+        align-items: center;
+      }
 
-    :host([theme='avatar-group-item']) [part='checkmark']::before {
-      display: none;
-    }
+      [part='checkmark']::before {
+        display: none;
+      }
 
-    :host([theme='avatar-group-item']:not([dir='rtl'])) ::slotted(vaadin-avatar) {
-      margin-right: 8px;
-    }
-
-    :host([theme='avatar-group-item'][dir='rtl']) ::slotted(vaadin-avatar) {
-      margin-left: 8px;
-    }
-  `,
-  { moduleId: 'material-avatar-group-item' },
+      [part='content'] ::slotted(vaadin-avatar) {
+        margin-inline-end: 8px;
+      }
+    `,
+  ],
+  { moduleId: 'material-avatar-group-menu-item' },
 );

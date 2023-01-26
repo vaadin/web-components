@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/avatar/src/vaadin-avatar.js';
-import '@vaadin/item/src/vaadin-item.js';
-import '@vaadin/list-box/src/vaadin-list-box.js';
+import './vaadin-avatar-group-menu.js';
+import './vaadin-avatar-group-menu-item.js';
 import './vaadin-avatar-group-overlay.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -58,6 +58,8 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * components are themable:
  *
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
  * @extends HTMLElement
  * @mixes ControllerMixin
@@ -284,7 +286,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
 
     this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
       initializer: (overflow) => {
-        overflow.setAttribute('aria-haspopup', 'listbox');
+        overflow.setAttribute('aria-haspopup', 'menu');
         overflow.setAttribute('aria-expanded', 'false');
         overflow.addEventListener('click', (e) => this._onOverflowClick(e));
         overflow.addEventListener('keydown', (e) => this._onOverflowKeyDown(e));
@@ -327,28 +329,27 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
    * @private
    */
   __overlayRenderer(root) {
-    let listBox = root.firstElementChild;
-    if (!listBox) {
-      listBox = document.createElement('vaadin-list-box');
-      listBox.addEventListener('keydown', (event) => this._onListKeyDown(event));
-      root.appendChild(listBox);
+    let menu = root.firstElementChild;
+    if (!menu) {
+      menu = document.createElement('vaadin-avatar-group-menu');
+      menu.addEventListener('keydown', (event) => this._onListKeyDown(event));
+      root.appendChild(menu);
     }
 
-    listBox.textContent = '';
+    menu.textContent = '';
 
     if (!this._overflowItems) {
       return;
     }
 
     this._overflowItems.forEach((item) => {
-      listBox.appendChild(this.__createItemElement(item));
+      menu.appendChild(this.__createItemElement(item));
     });
   }
 
   /** @private */
   __createItemElement(item) {
-    const itemElement = document.createElement('vaadin-item');
-    itemElement.setAttribute('theme', 'avatar-group-item');
+    const itemElement = document.createElement('vaadin-avatar-group-menu-item');
 
     const avatar = document.createElement('vaadin-avatar');
     itemElement.appendChild(avatar);
@@ -594,8 +595,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   __openedChanged(opened, wasOpened) {
     if (opened) {
       if (!this._menuElement) {
-        this._menuElement = this.$.overlay.querySelector('vaadin-list-box');
-        this._menuElement.setAttribute('role', 'listbox');
+        this._menuElement = this.$.overlay.querySelector('vaadin-avatar-group-menu');
       }
 
       this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
