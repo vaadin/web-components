@@ -84,6 +84,13 @@ class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
     // eslint-disable-next-line no-unused-expressions
     this.value;
   }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.setAttribute('role', 'option');
+  }
 }
 
 customElements.define(Item.is, Item);
