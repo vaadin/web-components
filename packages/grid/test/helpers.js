@@ -2,7 +2,6 @@ import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();
-  grid._afterScroll();
 
   [
     grid._debounceScrolling,
