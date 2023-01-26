@@ -165,7 +165,7 @@ describe('MultiSelectListMixin', () => {
     expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
   });
 
-  it('should remove aria-multiselectable when multiple is set back to false', () => {
+  it('should toggle aria-multiselectable on multiple property change', () => {
     list.multiple = true;
     expect(list.hasAttribute('aria-multiselectable')).to.be.true;
 
