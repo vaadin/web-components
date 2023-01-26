@@ -412,9 +412,21 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /**
-   * We need to listen on 'click' / 'tap' event and capture it and close the overlay before
-   * propagating the event to the listener in the button. Otherwise, if the clicked button would call
-   * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+   * Whether to close the overlay on outside click or not.
+   * Override this method to customize the closing logic.
+   *
+   * @param {Event} _event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldCloseOnOutsideClick(_event) {
+    return this._last;
+  }
+
+  /**
+   * Outside click listener used in capture phase to close the overlay before
+   * propagating the event to the listener on the element that triggered it.
+   * Otherwise, calling `open()` would result in closing and re-opening.
    *
    * @event vaadin-overlay-outside-click
    * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
@@ -427,7 +439,8 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       this._mouseUpInside = false;
       return;
     }
-    if (!this._last) {
+
+    if (!this._shouldCloseOnOutsideClick(event)) {
       return;
     }
 
