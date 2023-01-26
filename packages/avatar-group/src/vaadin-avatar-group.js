@@ -349,7 +349,6 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   __createItemElement(item) {
     const itemElement = document.createElement('vaadin-item');
     itemElement.setAttribute('theme', 'avatar-group-item');
-    itemElement.setAttribute('role', 'option');
 
     const avatar = document.createElement('vaadin-avatar');
     itemElement.appendChild(avatar);
