@@ -232,17 +232,12 @@ export class ComboBoxScroller extends PolymerElement {
   }
 
   /** @private */
-  __getAriaSelected(focusedIndex, itemIndex) {
-    return this.__isItemFocused(focusedIndex, itemIndex).toString();
-  }
-
-  /** @private */
   __isItemFocused(focusedIndex, itemIndex) {
     return !this.loading && focusedIndex === itemIndex;
   }
 
-  /** @private */
-  __isItemSelected(item, selectedItem, itemIdPath) {
+  /** @protected */
+  _isItemSelected(item, selectedItem, itemIdPath) {
     if (item instanceof ComboBoxPlaceholder) {
       return false;
     } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
@@ -306,7 +301,7 @@ export class ComboBoxScroller extends PolymerElement {
   __updateElement(el, index) {
     const item = this.items[index];
     const focusedIndex = this.focusedIndex;
-    const selected = this.__isItemSelected(item, this.selectedItem, this.itemIdPath);
+    const selected = this._isItemSelected(item, this.selectedItem, this.itemIdPath);
 
     el.setProperties({
       item,
