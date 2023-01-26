@@ -460,8 +460,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         true,
       );
 
-      menuElement.setAttribute('role', 'listbox');
-
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
     }
@@ -471,7 +469,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
   __initMenuItems(menuElement) {
     if (menuElement.items) {
       this._items = menuElement.items;
-      this._items.forEach((item) => item.setAttribute('role', 'option'));
     }
   }
 
@@ -632,14 +629,16 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
 
   /**
    * @param {!HTMLElement} itemElement
+   * @param {!HTMLElement} parent
    * @private
    */
   __appendValueItemElement(itemElement) {
+    this._valueButton.appendChild(itemElement);
+
     itemElement.removeAttribute('tabindex');
+    itemElement.removeAttribute('aria-selected');
     itemElement.removeAttribute('role');
     itemElement.setAttribute('id', this._fieldId);
-
-    this._valueButton.appendChild(itemElement);
   }
 
   /** @private */

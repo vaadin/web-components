@@ -101,12 +101,18 @@ export const MultiSelectListMixin = (superClass) =>
         this.items.forEach((item) => {
           item.selected = false;
         });
+
+        this.removeAttribute('aria-multiselectable');
       }
 
       // Changing from single to multiple selection, add selected to selectedValues.
-      if (value && !oldValue && this.selected !== undefined) {
-        this.selectedValues = [...this.selectedValues, this.selected];
-        this.selected = undefined;
+      if (value && !oldValue) {
+        this.setAttribute('aria-multiselectable', 'true');
+
+        if (this.selected !== undefined) {
+          this.selectedValues = [...this.selectedValues, this.selected];
+          this.selected = undefined;
+        }
       }
     }
 

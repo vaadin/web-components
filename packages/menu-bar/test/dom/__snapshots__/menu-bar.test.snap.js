@@ -41,6 +41,7 @@ snapshots["menu-bar shadow"] =
   >
     <vaadin-context-menu-item
       aria-selected="false"
+      role="option"
       theme="menu-bar-item"
     >
       <strong>
@@ -78,13 +79,13 @@ snapshots["menu-bar overlay"] =
   <vaadin-context-menu-list-box
     aria-orientation="vertical"
     class="vaadin-menu-list-box"
-    role="list"
+    role="listbox"
   >
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
       class="vaadin-menu-item"
-      role="menuitem"
+      role="option"
       tabindex="0"
     >
       View Reports
@@ -93,7 +94,7 @@ snapshots["menu-bar overlay"] =
       aria-haspopup="false"
       aria-selected="false"
       class="vaadin-menu-item"
-      role="menuitem"
+      role="option"
       tabindex="-1"
     >
       Generate Report
