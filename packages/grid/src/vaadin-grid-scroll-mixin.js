@@ -147,6 +147,13 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     _updateOverflow() {
+      this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
+        this.__doUpdateOverflow();
+      });
+    }
+
+    /** @private */
+    __doUpdateOverflow() {
       // Set overflow styling attributes
       let overflow = '';
       const table = this.$.table;
@@ -182,14 +189,12 @@ export const ScrollMixin = (superClass) =>
         overflow += ' left';
       }
 
-      this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
-        const value = overflow.trim();
-        if (value.length > 0 && this.getAttribute('overflow') !== value) {
-          this.setAttribute('overflow', value);
-        } else if (value.length === 0 && this.hasAttribute('overflow')) {
-          this.removeAttribute('overflow');
-        }
-      });
+      const value = overflow.trim();
+      if (value.length > 0 && this.getAttribute('overflow') !== value) {
+        this.setAttribute('overflow', value);
+      } else if (value.length === 0 && this.hasAttribute('overflow')) {
+        this.removeAttribute('overflow');
+      }
     }
 
     /** @protected */
