@@ -204,6 +204,12 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
     listener: (this: Overlay, ev: OverlayEventMap[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
+
+  /**
+   * Whether to close the overlay on outside click or not.
+   * Override this method to customize the closing logic.
+   */
+  protected _shouldCloseOnOutsideClick(event: Event): boolean;
 }
 
 declare global {

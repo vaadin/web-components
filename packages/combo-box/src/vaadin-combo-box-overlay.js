@@ -68,11 +68,17 @@ export class ComboBoxOverlay extends PositionMixin(Overlay) {
     content.parentNode.insertBefore(loader, content);
   }
 
-  _outsideClickListener(event) {
+  /**
+   * Override method inherited from `Overlay`
+   * to not close on position target click.
+   *
+   * @param {Event} _event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldCloseOnOutsideClick(event) {
     const eventPath = event.composedPath();
-    if (!eventPath.includes(this.positionTarget) && !eventPath.includes(this)) {
-      this.close();
-    }
+    return !eventPath.includes(this.positionTarget) && !eventPath.includes(this);
   }
 
   _setOverlayWidth(positionTarget, opened) {
