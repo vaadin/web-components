@@ -1,9 +1,9 @@
-import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-range-data-provider-helpers.js';
+import { adjustRangeToIncludePage, isPageInRange } from './range-data-provider-utils.js';
 
 export class RangeDataProvider {
   #range;
   #options;
-  #comboBox;
+  #host;
   #requestRangeCallback;
 
   constructor(requestRangeCallback, options = {}) {
@@ -14,8 +14,8 @@ export class RangeDataProvider {
     this.onPagesLoaded = this.onPagesLoaded.bind(this);
   }
 
-  dataProvider({ page, ...params }, _callback, comboBox) {
-    this.#comboBox = comboBox;
+  dataProvider({ page, ...params }, _callback, host) {
+    this.#host = host;
 
     this.#range = adjustRangeToIncludePage(this.#range, page, this.#computeMaxRangeSize(params.pageSize));
 
@@ -38,12 +38,12 @@ export class RangeDataProvider {
    */
   onPagesLoaded(pages, size) {
     Object.entries(pages).forEach(([page, items]) => {
-      this.#comboBox._resolvePendingRequest(page, items, size);
+      this.#host._resolvePendingRequest(page, items, size);
     });
   }
 
   /**
-   * Discards out-of-range pages from the combo-box cache.
+   * Discards out-of-range pages from the host component's cache.
    *
    * Effectively, this replaces items of out-of-range pages with placeholders
    * and cancels any active requests to those pages. Discarded pages
@@ -52,7 +52,7 @@ export class RangeDataProvider {
    * @private
    */
   #discardPagesOutOfRange() {
-    const pagesCount = Math.ceil((this.#comboBox.size || 0) / this.#comboBox.pageSize);
+    const pagesCount = Math.ceil((this.#host.size || 0) / this.#host.pageSize);
     const pages = [];
 
     for (let page = 0; page < pagesCount; page++) {
@@ -62,7 +62,7 @@ export class RangeDataProvider {
     }
 
     if (pages.length > 0) {
-      this.#comboBox.clearCache(pages, false);
+      this.#host.clearCache(pages, false);
     }
   }
 

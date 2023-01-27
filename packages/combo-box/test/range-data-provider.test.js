@@ -1,14 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
+import { createRangeDataProvider } from '@vaadin/component-base/src/range-data-provider.js';
+import { isPageInRange } from '@vaadin/component-base/src/range-data-provider-utils.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
-import { createRangeDataProvider } from '../src/vaadin-combo-box-range-data-provider.js';
-import { isPageInRange } from '../src/vaadin-combo-box-range-data-provider-helpers.js';
 import { makeItems, scrollToIndex } from './helpers.js';
 
 const ITEMS = makeItems(480);
 
-describe('range data provider', () => {
+describe('range-date-provider', () => {
   let comboBox;
 
   function expectLoadedPagesToBeWithinRange(range) {
@@ -32,7 +32,6 @@ describe('range data provider', () => {
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
-    comboBox.pageSize = 50;
     comboBox.dataProvider = createRangeDataProvider(
       ({ pageRange, pageSize }, callback) => {
         const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
