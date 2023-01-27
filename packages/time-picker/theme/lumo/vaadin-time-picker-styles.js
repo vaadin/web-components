@@ -16,9 +16,23 @@ registerStyles('vaadin-time-picker-item', [item, comboBoxItem], {
   moduleId: 'lumo-time-picker-item',
 });
 
-registerStyles('vaadin-time-picker-overlay', [overlay, menuOverlayCore, comboBoxOverlay], {
-  moduleId: 'lumo-time-picker-overlay',
-});
+registerStyles(
+  'vaadin-time-picker-overlay',
+  [
+    overlay,
+    menuOverlayCore,
+    comboBoxOverlay,
+    css`
+      :host {
+        --_vaadin-time-picker-items-container-border-width: var(--lumo-space-xs);
+        --_vaadin-time-picker-items-container-border-style: solid;
+      }
+    `,
+  ],
+  {
+    moduleId: 'lumo-time-picker-overlay',
+  },
+);
 
 const timePicker = css`
   [part~='toggle-button']::before {

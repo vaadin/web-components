@@ -5,12 +5,6 @@ import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const comboBoxOverlay = css`
-  :host {
-    --_vaadin-combo-box-items-container-border-width: 8px 0;
-    --_vaadin-combo-box-items-container-border-style: solid;
-    --_vaadin-combo-box-items-container-border-color: transparent;
-  }
-
   [part='overlay'] {
     position: relative;
     overflow: visible;
@@ -33,8 +27,21 @@ const comboBoxLoader = css`
   }
 `;
 
-registerStyles('vaadin-combo-box-overlay', [menuOverlay, comboBoxOverlay, loader, comboBoxLoader], {
-  moduleId: 'material-combo-box-overlay',
-});
+registerStyles(
+  'vaadin-combo-box-overlay',
+  [
+    menuOverlay,
+    comboBoxOverlay,
+    loader,
+    comboBoxLoader,
+    css`
+      :host {
+        --_vaadin-combo-box-items-container-border-width: 8px 0;
+        --_vaadin-combo-box-items-container-border-style: solid;
+      }
+    `,
+  ],
+  { moduleId: 'material-combo-box-overlay' },
+);
 
 export { comboBoxLoader, comboBoxOverlay };
