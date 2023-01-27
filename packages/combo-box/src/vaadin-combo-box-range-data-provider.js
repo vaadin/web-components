@@ -1,32 +1,62 @@
 import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-range-data-provider-helpers.js';
 
 export class RangeDataProvider {
+  #options;
+  #requestRangeCallback;
+  #contexts;
+
+  constructor(requestRangeCallback, options = {}) {
+    this.#options = { maxRangeSize: Infinity, ...options };
+    this.#requestRangeCallback = requestRangeCallback;
+    this.dataProvider = this.dataProvider.bind(this);
+    this.#contexts = {};
+  }
+
+  dataProvider({ page, ...params }, _callback) {
+    const contextId = params.parentItem || null;
+    let context = this.#contexts[contextId];
+    if (!context) {
+      context = new DataRequestContext(this.#requestRangeCallback, this.#options);
+      this.#contexts[contextId] = context;
+    }
+    context.dataProvider({ page, ...params }, _callback);
+  }
+}
+
+class DataRequestContext {
   #range;
   #options;
-  #comboBox;
+  #owner;
   #requestRangeCallback;
+  #pendingRequests;
+  #pages;
 
   constructor(requestRangeCallback, options = {}) {
     this.#range = null;
     this.#options = { maxRangeSize: Infinity, ...options };
+    this.#owner = options.owner;
     this.#requestRangeCallback = requestRangeCallback;
     this.dataProvider = this.dataProvider.bind(this);
     this.onPagesLoaded = this.onPagesLoaded.bind(this);
+    this.#pendingRequests = {};
+    this.#pages = {};
   }
 
-  dataProvider({ page, ...params }, _callback, comboBox) {
-    this.#comboBox = comboBox;
-
+  dataProvider({ page, ...params }, callback) {
     this.#range = adjustRangeToIncludePage(this.#range, page, this.#computeMaxRangeSize(params.pageSize));
 
-    this.#discardPagesOutOfRange();
+    this.#pendingRequests[page] = callback;
 
     this.#requestRangeCallback(
       {
         ...params,
         pageRange: this.#range,
       },
-      this.onPagesLoaded,
+      (pages, size) => {
+        this.#discardPagesOutOfRange(size, params.pageSize);
+
+        this.onPagesLoaded(pages, size);
+      },
     );
   }
 
@@ -38,7 +68,11 @@ export class RangeDataProvider {
    */
   onPagesLoaded(pages, size) {
     Object.entries(pages).forEach(([page, items]) => {
-      this.#comboBox._resolvePendingRequest(page, items, size);
+      this.#pages[parseInt(page)] = items;
+      const callback = this.#pendingRequests[parseInt(page)];
+      if (callback) {
+        callback(items, size);
+      }
     });
   }
 
@@ -52,17 +86,14 @@ export class RangeDataProvider {
    * @private
    */
   #discardPagesOutOfRange() {
-    const pagesCount = Math.ceil((this.#comboBox.size || 0) / this.#comboBox.pageSize);
-    const pages = [];
+    const discardedPages = Object.keys(this.#pages).filter((page) => !isPageInRange(this.#range, page));
 
-    for (let page = 0; page < pagesCount; page++) {
-      if (!isPageInRange(this.#range, page)) {
-        pages.push(page);
-      }
-    }
+    if (discardedPages.length > 0) {
+      discardedPages.forEach((page) => {
+        delete this.#pages[page];
+      });
 
-    if (pages.length > 0) {
-      this.#comboBox.clearCache(pages, false);
+      this.#owner.clearCache();
     }
   }
 

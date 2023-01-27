@@ -46,6 +46,7 @@ describe('range data provider', () => {
         callback(itemsByPage, ITEMS.length);
       },
       {
+        owner: comboBox,
         maxRangeSize: 5,
       },
     );

@@ -11,24 +11,36 @@
     <script type="module">
       import '@vaadin/grid/all-imports';
       import '@vaadin/tooltip';
+      import { createRangeDataProvider } from '@vaadin/combo-box/src/vaadin-combo-box-range-data-provider.js';
 
       const grid = document.querySelector('vaadin-grid');
 
-      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-        // Let's have 100 root-level items and 5 items on every child level
-        const levelSize = parentItem ? 5 : 100;
+      grid.dataProvider = createRangeDataProvider(
+        ({ pageRange, pageSize, parentItem }, callback) => {
+          // Let's have 100 root-level items and 5 items on every child level
+          const levelSize = parentItem ? 5 : 100;
 
-        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
-          const indexInLevel = page * pageSize + i;
+          const ITEMS = Array.from({ length: levelSize }, (_, i) => {
+            return {
+              name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+              children: true,
+            };
+          });
+          const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
+          const itemsByPage = items.reduce((pages, item, i) => {
+            const page = pageRange[0] + Math.floor(i / pageSize);
+            pages[page] ||= [];
+            pages[page].push(item);
+            return pages;
+          }, {});
 
-          return {
-            name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
-            children: true,
-          };
-        });
-
-        cb(pageItems, levelSize);
-      };
+          callback(itemsByPage, ITEMS.length);
+        },
+        {
+          owner: grid,
+          maxRangeSize: 2,
+        },
+      );
 
       const tooltip = document.querySelector('[slot="tooltip"]');
       tooltip.generator = ({ column, item }) => {
