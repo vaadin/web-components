@@ -18,6 +18,7 @@
     </vaadin-combo-box>
 
     <script type="module">
+      import { createRangeDataProvider } from '@vaadin/combo-box/src/vaadin-combo-box-range-data-provider.js';
       const comboBox = document.querySelector('vaadin-combo-box');
 
       /*
@@ -26,20 +27,43 @@
       comboBox.items = arr.result;
       */
 
-      comboBox.dataProvider = async (params, callback) => {
-        console.log(JSON.stringify(params));
-        const index = params.page * params.pageSize;
-        const response = await fetch(
-          `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
-        );
-        if (response.ok) {
-          const { result, size } = await response.json();
-          // Emulate network latency for demo purpose
-          setTimeout(() => {
-            callback(result, size);
-          }, 100);
-        }
-      };
+      const ITEMS = Array.from({ length: 200 }, (_, i) => {
+            return { label: `Item ${i}` };
+          });
+
+      comboBox.dataProvider = createRangeDataProvider(
+        ({ pageRange, pageSize }, callback) => {
+          const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
+          const itemsByPage = items.reduce((pages, item, i) => {
+            const page = pageRange[0] + Math.floor(i / comboBox.pageSize);
+            pages[page] ||= [];
+            pages[page].push(item);
+            return pages;
+          }, {});
+
+          callback(itemsByPage, ITEMS.length);
+        },
+        {
+          owner: comboBox,
+          maxRangeSize: 3,
+        },
+      );
+
+
+      // comboBox.dataProvider = async (params, callback) => {
+      //   console.log(JSON.stringify(params));
+      //   const index = params.page * params.pageSize;
+      //   const response = await fetch(
+      //     `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
+      //   );
+      //   if (response.ok) {
+      //     const { result, size } = await response.json();
+      //     // Emulate network latency for demo purpose
+      //     setTimeout(() => {
+      //       callback(result, size);
+      //     }, 100);
+      //   }
+      // };
     </script>
   </body>
 </html>

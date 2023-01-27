@@ -232,7 +232,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
       if (this._shouldFetchData()) {
         this._forceNextRequest = false;
-        this._loadPage(0);
+        // TODO: This isn't right, the scroll position could be somewhere else than at 0
+        // this._loadPage(0);
       } else {
         this._forceNextRequest = true;
       }
