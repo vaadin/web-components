@@ -1,4 +1,4 @@
-import { adjustRangeToIncludePage, isPageInRange } from './vaadin-combo-box-range-data-provider-helpers.js';
+import { adjustRangeToIncludePage, isPageInRange } from './range-data-provider-helpers.js';
 
 export class RangeDataProvider {
   #options;

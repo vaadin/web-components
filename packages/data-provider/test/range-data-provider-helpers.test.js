@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import '../src/vaadin-combo-box.js';
-import { adjustRangeToIncludePage } from '../src/vaadin-combo-box-range-data-provider-helpers.js';
+import '../../combo-box/src/vaadin-combo-box.js';
+import { adjustRangeToIncludePage } from '../src/range-data-provider-helpers.js';
 
 const MAX_RANGE_SIZE = 5;
 

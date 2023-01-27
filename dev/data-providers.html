@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data providers</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/combo-box';
+
+      import { createRangeDataProvider } from '@vaadin/data-provider/src/range-data-provider.js';
+
+      const grid = document.querySelector('vaadin-grid');
+
+      grid.dataProvider = createRangeDataProvider(
+        ({ pageRange, pageSize, parentItem }, callback) => {
+          // Let's have 100 root-level items and 5 items on every child level
+          const levelSize = parentItem ? 5 : 100;
+
+          const ITEMS = Array.from({ length: levelSize }, (_, i) => {
+            return {
+              name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+              children: true,
+            };
+          });
+          const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
+          const itemsByPage = items.reduce((pages, item, i) => {
+            const page = pageRange[0] + Math.floor(i / pageSize);
+            pages[page] ||= [];
+            pages[page].push(item);
+            return pages;
+          }, {});
+
+          callback(itemsByPage, ITEMS.length);
+        },
+        {
+          owner: grid,
+          maxRangeSize: 2,
+        },
+      );
+
+      const comboBox = document.querySelector('vaadin-combo-box');
+
+      const ITEMS = Array.from({ length: 200 }, (_, i) => {
+        return { label: `Item ${i}` };
+      });
+
+      comboBox.dataProvider = createRangeDataProvider(
+        ({ pageRange, pageSize }, callback) => {
+          const items = ITEMS.slice(pageRange[0] * pageSize, (pageRange[1] + 1) * pageSize);
+          const itemsByPage = items.reduce((pages, item, i) => {
+            const page = pageRange[0] + Math.floor(i / comboBox.pageSize);
+            pages[page] ||= [];
+            pages[page].push(item);
+            return pages;
+          }, {});
+
+          callback(itemsByPage, ITEMS.length);
+        },
+        {
+          owner: comboBox,
+          maxRangeSize: 3,
+        },
+      );
+    </script>
+
+    <vaadin-grid item-id-path="name">
+      <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <vaadin-combo-box label="Country">
+      <vaadin-tooltip slot="tooltip" text="Loading might take time"></vaadin-tooltip>
+    </vaadin-combo-box>
+  </body>
+</html>

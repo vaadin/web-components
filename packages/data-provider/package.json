@@ -1,0 +1,42 @@
+{
+  "name": "@vaadin/data-provider",
+  "version": "24.0.0-alpha12",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Data providers for Vaadin components",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/data-provider"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "type": "module",
+  "files": [
+    "src",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^13.0.2"
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
