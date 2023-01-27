@@ -34,7 +34,7 @@
     "@polymer/iron-component-page": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
-    "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/testing-helpers": "^0.4.0",
     "@web/dev-server": "^0.1.35",
     "@web/rollup-plugin-html": "^1.11.0",
     "@web/test-runner": "^0.15.0",

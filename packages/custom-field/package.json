@@ -50,7 +50,7 @@
     "@vaadin/number-field": "24.0.0-alpha12",
     "@vaadin/password-field": "24.0.0-alpha12",
     "@vaadin/select": "24.0.0-alpha12",
-    "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/testing-helpers": "^0.4.0",
     "@vaadin/text-area": "24.0.0-alpha12",
     "@vaadin/text-field": "24.0.0-alpha12",
     "@vaadin/time-picker": "24.0.0-alpha12",

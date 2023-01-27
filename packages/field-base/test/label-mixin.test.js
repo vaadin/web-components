@@ -1,13 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'label-mixin',
     '<slot name="label"></slot>',
-    (Base) => class extends LabelMixin(Base) {},
+    (Base) => class extends LabelMixin(baseMixin(Base)) {},
   );
 
   let element, label;
@@ -333,9 +334,9 @@ const runTests = (baseClass) => {
 };
 
 describe('LabelMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('LabelMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });
