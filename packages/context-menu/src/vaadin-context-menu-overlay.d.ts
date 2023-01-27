@@ -8,8 +8,6 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
  */
 declare class ContextMenuOverlay extends MenuOverlayMixin(Overlay) {}
 

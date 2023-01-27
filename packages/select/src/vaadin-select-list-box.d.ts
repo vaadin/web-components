@@ -10,8 +10,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
- *
- * @protected
  */
 declare class SelectListBox extends ListMixin(DirMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
 
