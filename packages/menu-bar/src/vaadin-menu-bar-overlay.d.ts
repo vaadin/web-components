@@ -8,8 +8,6 @@ import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
- *
- * @protected
  */
 declare class MenuBarOverlay extends MenuOverlayMixin(Overlay) {}
 

@@ -9,8 +9,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
- *
- * @protected
  */
 declare class SelectItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {}
 
