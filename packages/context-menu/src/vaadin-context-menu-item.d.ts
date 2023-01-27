@@ -9,8 +9,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
  */
 declare class ContextMenuItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {}
 
@@ -19,3 +17,5 @@ declare global {
     'vaadin-context-menu-item': ContextMenuItem;
   }
 }
+
+export { ContextMenuItem };
