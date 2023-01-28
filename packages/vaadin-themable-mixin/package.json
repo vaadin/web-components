@@ -37,7 +37,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/testing-helpers": "^0.4.0",
     "sinon": "^13.0.2"
   }
 }

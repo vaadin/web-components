@@ -1,17 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
 import { TextAreaController } from '../src/text-area-controller.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'pattern-mixin',
     '<slot name="input"></slot>',
     (Base) =>
-      class extends PatternMixin(Base) {
+      class extends PatternMixin(baseMixin(Base)) {
         ready() {
           super.ready();
 
@@ -25,11 +26,11 @@ const runTests = (baseClass) => {
       },
   );
 
-  const textareaTag = define[baseClass](
+  const textareaTag = defineHelper(
     'pattern-mixin-textarea',
     '<slot name="textarea"></slot>',
     (Base) =>
-      class extends PatternMixin(Base) {
+      class extends PatternMixin(baseMixin(Base)) {
         ready() {
           super.ready();
 
@@ -188,9 +189,9 @@ const runTests = (baseClass) => {
 };
 
 describe('PatternMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('PatternMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

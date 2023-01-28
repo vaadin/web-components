@@ -1,14 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'input-mixin',
     '<slot name="input"></slot>',
-    (Base) => class extends InputMixin(Base) {},
+    (Base) => class extends InputMixin(baseMixin(Base)) {},
   );
 
   let element, input;
@@ -18,9 +19,12 @@ const runTests = (baseClass) => {
       element = fixtureSync(`<${tag}></${tag}>`);
     });
 
-    it('should have a read-only type property', () => {
+    it('should have a read-only type property', async () => {
       expect(element.type).to.be.undefined;
+
       element.type = 'number';
+      await nextFrame();
+
       expect(element.type).to.be.undefined;
     });
   });
@@ -116,11 +120,11 @@ const runTests = (baseClass) => {
       inputSpy = sinon.spy();
       changeSpy = sinon.spy();
 
-      eventsTag = define[baseClass](
+      eventsTag = defineHelper(
         'input-mixin-events',
         '<slot name="input"></slot>',
         (Base) =>
-          class extends InputMixin(Base) {
+          class extends InputMixin(baseMixin(Base)) {
             _onInput() {
               inputSpy();
             }
@@ -177,10 +181,10 @@ const runTests = (baseClass) => {
     let tag, hasInputValueChangedSpy;
 
     before(() => {
-      tag = define[baseClass](
+      tag = defineHelper(
         'input-mixin-has-input-value-changed-event',
         '<slot name="input"></slot>',
-        (Base) => class extends InputMixin(Base) {},
+        (Base) => class extends InputMixin(baseMixin(Base)) {},
       );
     });
 
@@ -223,9 +227,9 @@ const runTests = (baseClass) => {
 };
 
 describe('InputMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('InputMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });
