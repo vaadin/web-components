@@ -46,7 +46,7 @@ narrowedGrid.addEventListener('item-property-changed', (event) => {
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
   assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
-  assertType<TestGridItem>(event.detail.value);
+  assertType<TestGridItem | null | undefined>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('cell-activate', (event) => {
