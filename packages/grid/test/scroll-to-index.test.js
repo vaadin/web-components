@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import {
@@ -160,6 +160,16 @@ describe('scroll to index', () => {
         });
       });
       parent.appendChild(grid);
+    });
+
+    it('should scroll to index after unhiding', async () => {
+      grid.hidden = true;
+      grid.scrollToIndex(100);
+      grid.hidden = false;
+
+      await aTimeout(100);
+      expect(getFirstVisibleItem(grid).index).to.be.above(75);
+      expect(grid.$.table.scrollTop).to.be.above(0);
     });
 
     it('should scroll to index only once', (done) => {
