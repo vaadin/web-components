@@ -431,11 +431,6 @@ class Grid extends ElementMixin(
     };
   }
 
-  constructor() {
-    super();
-    this.addEventListener('animationend', this._onAnimationEnd);
-  }
-
   /** @private */
   get _firstVisibleIndex() {
     const firstVisibleItem = this.__getFirstVisibleItem();
@@ -453,6 +448,8 @@ class Grid extends ElementMixin(
     super.connectedCallback();
     this.isAttached = true;
     this.recalculateColumnWidths();
+    this.__itemsReceived();
+    this.__scrollToPendingIndex();
   }
 
   /** @protected */
@@ -503,8 +500,6 @@ class Grid extends ElementMixin(
       scrollTarget: this.$.table,
       reorderElements: true,
     });
-
-    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
 
     processTemplates(this);
 
@@ -1105,19 +1100,6 @@ class Grid extends ElementMixin(
     this._updateDetailsCellHeights();
     this.__updateFooterPositioning();
     this.__updateHorizontalScrollPosition();
-  }
-
-  /** @private */
-  _onAnimationEnd(e) {
-    // ShadyCSS applies scoping suffixes to animation names
-    if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
-      e.stopPropagation();
-      this.__itemsReceived();
-
-      requestAnimationFrame(() => {
-        this.__scrollToPendingIndex();
-      });
-    }
   }
 
   /**

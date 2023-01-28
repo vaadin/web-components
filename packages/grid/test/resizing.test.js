@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -56,7 +56,6 @@ describe('resizing', () => {
     grid.dataProvider = infiniteDataProvider;
     await nextFrame();
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
     flushGrid(grid);
   });
 

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -55,10 +55,8 @@ describe('column auto-width', () => {
     `);
     spy = sinon.spy(grid, '_recalculateColumnWidths');
     columns = grid.querySelectorAll('vaadin-grid-column');
-    // Show the grid and wait for animationend event ("vaadin-grid-appear")
-    // to ensure the grid is in a consistent state before starting each test
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
+    await nextFrame();
   });
 
   it('should have correct column widths when items are set', async () => {

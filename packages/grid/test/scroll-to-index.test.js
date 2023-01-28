@@ -148,18 +148,14 @@ describe('scroll to index', () => {
       grid.scrollToIndex(100);
     });
 
-    it('should scroll to index after attaching', (done) => {
+    it('should scroll to index after attaching', async () => {
       const parent = grid.parentElement;
       parent.removeChild(grid);
       grid.scrollToIndex(100);
-      grid.addEventListener('animationend', () => {
-        requestAnimationFrame(() => {
-          expect(getFirstVisibleItem(grid).index).to.be.above(75);
-          expect(grid.$.table.scrollTop).to.be.above(0);
-          done();
-        });
-      });
       parent.appendChild(grid);
+      await nextFrame();
+      expect(getFirstVisibleItem(grid).index).to.be.above(75);
+      expect(grid.$.table.scrollTop).to.be.above(0);
     });
 
     it('should scroll to index only once', (done) => {

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
@@ -114,8 +114,7 @@ describe('drag and drop', () => {
     `);
     await nextFrame();
     grid.hidden = false;
-    await oneEvent(grid, 'animationend');
-    await aTimeout(1);
+    await nextFrame();
 
     dragData = {};
     grid.items = getTestItems();

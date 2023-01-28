@@ -8,15 +8,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-grid',
   css`
-    @keyframes vaadin-grid-appear {
-      to {
-        opacity: 1;
-      }
-    }
-
     :host {
       display: block;
-      animation: 1ms vaadin-grid-appear;
       height: 400px;
       flex: 1 1 auto;
       align-self: stretch;

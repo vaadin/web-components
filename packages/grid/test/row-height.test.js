@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
@@ -70,7 +70,7 @@ describe('rows', () => {
     flushGrid(grid);
     header = grid.$.header;
 
-    await oneEvent(grid, 'animationend');
+    await nextFrame();
     flushGrid(grid);
 
     rows = getRows(grid.$.items);
