@@ -252,7 +252,7 @@ export const nextResize = (target) => {
 /**
  * Resolves once the function is invoked on the given object.
  */
-function onceInvoked(object, functionName) {
+export function onceInvoked(object, functionName) {
   return new Promise((resolve) => {
     const stub = sinon.stub(object, functionName).callsFake((...args) => {
       stub.restore();

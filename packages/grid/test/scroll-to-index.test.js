@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import {
@@ -9,6 +9,7 @@ import {
   getPhysicalAverage,
   getPhysicalItems,
   infiniteDataProvider,
+  onceInvoked,
 } from './helpers.js';
 
 const createGrid = (height, size) => {
@@ -167,7 +168,7 @@ describe('scroll to index', () => {
       grid.scrollToIndex(100);
       grid.hidden = false;
 
-      await aTimeout(100);
+      await onceInvoked(grid, 'scrollToIndex');
       expect(getFirstVisibleItem(grid).index).to.be.above(75);
       expect(grid.$.table.scrollTop).to.be.above(0);
     });
