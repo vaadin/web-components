@@ -14,7 +14,7 @@ export declare class ActiveItemMixinClass<TItem> {
    * The item user has last interacted with. Turns to `null` after user deactivates
    * the item by re-interacting with the currently active item.
    */
-  activeItem: TItem | null;
+  activeItem: TItem | null | undefined;
 }
 
 export declare function isFocusable(target: Element): boolean;

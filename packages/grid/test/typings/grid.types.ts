@@ -88,7 +88,7 @@ assertType<DragAndDropMixinClass<TestGridItem>>(narrowedGrid);
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
   assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
-  assertType<TestGridItem>(event.detail.value);
+  assertType<TestGridItem | null | undefined>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('cell-activate', (event) => {
@@ -165,7 +165,7 @@ assertType<string | null | undefined>(narrowedGrid.itemIdPath);
 assertType<string>(narrowedGrid.itemHasChildrenPath);
 
 assertType<TestGridItem[] | null | undefined>(narrowedGrid.items);
-assertType<TestGridItem | null>(narrowedGrid.activeItem);
+assertType<TestGridItem | null | undefined>(narrowedGrid.activeItem);
 assertType<boolean>(narrowedGrid.columnReorderingAllowed);
 
 assertType<TestGridItem[]>(narrowedGrid.selectedItems);
