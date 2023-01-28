@@ -64,7 +64,7 @@ export interface GridItemModel<TItem> {
 /**
  * Fired when the `activeItem` property changes.
  */
-export type GridActiveItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
+export type GridActiveItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 /**
  * Fired when the cell is activated with click or keyboard.
