@@ -1,62 +1,49 @@
 import { adjustRangeToIncludePage, isPageInRange } from './range-data-provider-helpers.js';
 
-export class RangeDataProvider {
-  #options;
-  #requestRangeCallback;
-  #contexts;
+const ROOT_CONTEXT = {};
 
-  constructor(requestRangeCallback, options = {}) {
-    this.#options = { maxRangeSize: Infinity, ...options };
-    this.#requestRangeCallback = requestRangeCallback;
-    this.dataProvider = this.dataProvider.bind(this);
-    this.#contexts = {};
-  }
-
-  dataProvider({ page, ...params }, _callback) {
-    const contextId = params.parentItem || null;
-    let context = this.#contexts[contextId];
-    if (!context) {
-      context = new DataRequestContext(this.#requestRangeCallback, this.#options);
-      this.#contexts[contextId] = context;
-    }
-    context.dataProvider({ page, ...params }, _callback);
-  }
-}
-
-class DataRequestContext {
+class RangeDataProvider {
   #range;
   #options;
-  #owner;
-  #requestRangeCallback;
   #pendingRequests;
-  #pages;
+  #requestRangeCallback;
 
   constructor(requestRangeCallback, options = {}) {
     this.#range = null;
     this.#options = { maxRangeSize: Infinity, ...options };
-    this.#owner = options.owner;
-    this.#requestRangeCallback = requestRangeCallback;
-    this.dataProvider = this.dataProvider.bind(this);
-    this.onPagesLoaded = this.onPagesLoaded.bind(this);
     this.#pendingRequests = {};
-    this.#pages = {};
+    this.#requestRangeCallback = requestRangeCallback;
+  }
+
+  get #host() {
+    return this.#options.host;
+  }
+
+  get #pagesCount() {
+    return Math.ceil((this.#host.size || 0) / this.#host.pageSize);
+  }
+
+  get #maxRangeSize() {
+    let { maxRangeSize } = this.#options;
+    if (typeof maxRangeSize === 'function') {
+      maxRangeSize = maxRangeSize(this.#host.pageSize);
+    }
+    return maxRangeSize;
   }
 
   dataProvider({ page, ...params }, callback) {
-    this.#range = adjustRangeToIncludePage(this.#range, page, this.#computeMaxRangeSize(params.pageSize));
-
     this.#pendingRequests[page] = callback;
+
+    this.#range = adjustRangeToIncludePage(this.#range, page, this.#maxRangeSize);
+
+    this.#discardPagesOutOfRange();
 
     this.#requestRangeCallback(
       {
         ...params,
         pageRange: this.#range,
       },
-      (pages, size) => {
-        this.#discardPagesOutOfRange(size, params.pageSize);
-
-        this.onPagesLoaded(pages, size);
-      },
+      this.#onPagesLoaded.bind(this),
     );
   }
 
@@ -65,19 +52,17 @@ class DataRequestContext {
    *
    * @param {Record<number, object[]>} pages
    * @param {number} size
+   * @private
    */
-  onPagesLoaded(pages, size) {
+  #onPagesLoaded(pages, size) {
     Object.entries(pages).forEach(([page, items]) => {
-      this.#pages[parseInt(page)] = items;
-      const callback = this.#pendingRequests[parseInt(page)];
-      if (callback) {
-        callback(items, size);
-      }
+      this.#pendingRequests[page]?.(items, size);
+      this.#pendingRequests[page] = null;
     });
   }
 
   /**
-   * Discards out-of-range pages from the combo-box cache.
+   * Discards out-of-range pages from the host component's cache.
    *
    * Effectively, this replaces items of out-of-range pages with placeholders
    * and cancels any active requests to those pages. Discarded pages
@@ -86,28 +71,25 @@ class DataRequestContext {
    * @private
    */
   #discardPagesOutOfRange() {
-    const discardedPages = Object.keys(this.#pages).filter((page) => !isPageInRange(this.#range, page));
-
-    if (discardedPages.length > 0) {
-      discardedPages.forEach((page) => {
-        delete this.#pages[page];
-      });
-
-      this.#owner.clearCache();
+    for (let page = 0; page < this.#pagesCount; page++) {
+      if (!isPageInRange(this.#range, page)) {
+        this.#pendingRequests[page] = null;
+        // TODO: Call an API from the web component to remove the page from the cache as well.
+      }
     }
-  }
-
-  #computeMaxRangeSize(pageSize) {
-    let maxRangeSize = this.#options.maxRangeSize;
-    if (typeof maxRangeSize === 'function') {
-      maxRangeSize = maxRangeSize(pageSize);
-    }
-    return maxRangeSize;
   }
 }
 
-export function createRangeDataProvider(...args) {
-  const { dataProvider, onPagesLoaded } = new RangeDataProvider(...args);
-  dataProvider.onPagesLoaded = onPagesLoaded;
-  return dataProvider;
+export function createRangeDataProvider(...initOptions) {
+  const contexts = new WeakMap();
+
+  return (params, callback) => {
+    const contextId = params.parentItem ?? ROOT_CONTEXT;
+    let context = contexts.get(contextId);
+    if (!context) {
+      context = new RangeDataProvider(...initOptions);
+      contexts.set(contextId, context);
+    }
+    context.dataProvider(params, callback);
+  };
 }
