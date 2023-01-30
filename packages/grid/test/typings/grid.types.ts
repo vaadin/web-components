@@ -196,6 +196,7 @@ narrowedGrid.rowDetailsRenderer = rowDetailsRenderer;
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.openItemDetails);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.closeItemDetails);
 assertType<(arg0: number) => void>(narrowedGrid.scrollToIndex);
+assertType<(...arg0: number[]) => void>(narrowedGrid.scrollToIndex);
 
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.selectItem);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);

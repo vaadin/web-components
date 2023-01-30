@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import {
@@ -286,6 +286,175 @@ describe('scroll to index', () => {
 
       grid.expandedItems = [parents[parents.length - 1]];
       grid.scrollToIndex(14);
+    });
+
+    describe('scrolling to hierachical index', () => {
+      let pendingRequests = [];
+
+      function flushPendingRequests() {
+        const requests = pendingRequests;
+        pendingRequests = [];
+        requests.forEach((request) => request());
+      }
+
+      function getFirstVisibleItemId() {
+        return getFirstVisibleItem(grid)._item.name;
+      }
+
+      beforeEach(async () => {
+        grid.size = 25;
+        grid.itemIdPath = 'name';
+
+        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+          const levelSize = 100;
+
+          const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+            const indexInLevel = page * pageSize + i;
+
+            return {
+              name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
+              hasChildren: true,
+            };
+          });
+
+          pendingRequests.push(() => cb(pageItems, levelSize));
+        };
+
+        flushPendingRequests();
+        flushGrid(grid);
+        await oneEvent(grid, 'animationend');
+        await nextFrame();
+      });
+
+      it('should scroll to root level index', () => {
+        grid.scrollToIndex(30);
+        expect(getFirstVisibleItemId()).to.equal('30');
+      });
+
+      it('should scroll to lazily loaded root level index', () => {
+        grid.scrollToIndex(75);
+        expect(getFirstVisibleItemId()).not.to.equal('75');
+
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('75');
+      });
+
+      it('should scroll to root level index with expanded previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(30);
+        expect(getFirstVisibleItemId()).to.equal('30');
+      });
+
+      it('should scroll to root level index with expanded and collapsed previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.expandedItems = [];
+        flushPendingRequests();
+        grid.scrollToIndex(30);
+        expect(getFirstVisibleItemId()).to.equal('30');
+      });
+
+      it('should scroll to expanded root level index', () => {
+        grid.expandedItems = [{ name: '5' }];
+        flushPendingRequests();
+        grid.scrollToIndex(5);
+        expect(getFirstVisibleItemId()).to.equal('5');
+      });
+
+      it('should scroll to expanded and collapsed root level index', () => {
+        grid.expandedItems = [{ name: '5' }];
+        flushPendingRequests();
+        grid.expandedItems = [];
+        flushPendingRequests();
+        grid.scrollToIndex(5, 0);
+        expect(getFirstVisibleItemId()).to.equal('5');
+      });
+
+      it('should scroll to lazily loaded root level index with expanded previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }];
+        grid.scrollToIndex(75);
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('75');
+      });
+
+      it('should scroll to nested level index', () => {
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to lazily loaded nested level index', () => {
+        grid.expandedItems = [{ name: '0' }];
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).not.to.equal('0-5');
+
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to first nested level index on negative index', () => {
+        grid.expandedItems = [{ name: '0' }];
+        grid.scrollToIndex(0, -1);
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-0');
+      });
+
+      it('should scroll to last nested level index on index larger than nested level size', () => {
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 100);
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-99');
+      });
+
+      it('should scroll to nested level index with expanded previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to nested level index with expanded and collapsed previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-0' }];
+        flushPendingRequests();
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to expanded nested level index', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-5' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to expanded and collapsed nested level index', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-5' }];
+        flushPendingRequests();
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5);
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to lazily loaded nested level index with expanded previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-0' }];
+        grid.scrollToIndex(0, 5);
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-5');
+      });
+
+      it('should scroll to a grandchild item with parents having expanded previous siblings', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-0' }, { name: '0-0-0' }, { name: '0-5' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 5, 5);
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-5-5');
+      });
     });
   });
 });

@@ -96,6 +96,22 @@ export const ItemCache = class ItemCache {
     }
     return { cache: this, scaledIndex: thisLevelIndex };
   }
+
+  /**
+   * Gets the scaled index as flattened index on this cache level.
+   * In practive, this means that the effective size of any expanded
+   * subcaches preceding the index are added to the value.
+   * @param {number} scaledIndex
+   * @returns {number} The flat index on this cache level.
+   */
+  getFlatIndex(scaledIndex) {
+    return Object.entries(this.itemCaches).reduce((prev, [index, subCache]) => {
+      if (scaledIndex > Number(index)) {
+        return prev + subCache.effectiveSize;
+      }
+      return prev;
+    }, Math.max(0, Math.min(this.size - 1, scaledIndex)));
+  }
 };
 
 /**
@@ -517,19 +533,52 @@ export const DataProviderMixin = (superClass) =>
       return result;
     }
 
-    scrollToIndex(index) {
-      super.scrollToIndex(index);
-      if (!isNaN(index) && (this._cache.isLoading() || !this.clientHeight)) {
-        this.__pendingScrollToIndex = index;
+    /**
+     * Scroll to a specific row index in the virtual list. Note that the row index is
+     * not always the same for any particular item. For example, sorting/filtering/expanding
+     * or collapsing hierarchical items can affect the row index related to an item.
+     *
+     * The `indexes` parameter can be either a single number or multiple numbers.
+     * The grid will first try to scroll to the item at the first index on the top level.
+     * In case the item at the first index is expanded, the grid will then try scroll to the
+     * item at the second index within the scope of the expanded first item, and so on.
+     * Each given index points to a sub-item of the previous index.
+     *
+     * @param indexes {number|number[]} the index of the item
+     */
+    scrollToIndex(...indexes) {
+      this._scrollToIndex(this.__getGlobalFlatIndex(indexes));
+
+      if (this._cache.isLoading() || !this.clientHeight) {
+        this.__pendingScrollToIndex = indexes;
       }
+    }
+
+    /**
+     * Recursively returns the globally flat index of the item the given indexes point to.
+     * Each index in the array points to a sub-item of the previous index.
+     *
+     * @param {!Array<number>} indexes
+     * @param {!ItemCache} cache
+     * @param {number} flatIndex
+     * @return {number}
+     * @private
+     **/
+    __getGlobalFlatIndex([levelIndex, ...subIndexes], cache = this._cache, flatIndex = 0) {
+      const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
+      const subCache = cache.itemCaches[levelIndex];
+      if (subCache && subCache.effectiveSize && subIndexes.length) {
+        return this.__getGlobalFlatIndex(subIndexes, subCache, flatIndex + flatIndexOnLevel + 1);
+      }
+      return flatIndex + flatIndexOnLevel;
     }
 
     /** @private */
     __scrollToPendingIndex() {
       if (this.__pendingScrollToIndex && this.$.items.children.length) {
-        const index = this.__pendingScrollToIndex;
+        const indexes = this.__pendingScrollToIndex;
         delete this.__pendingScrollToIndex;
-        this.scrollToIndex(index);
+        this.scrollToIndex(...indexes);
       }
     }
 

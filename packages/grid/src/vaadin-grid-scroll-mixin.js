@@ -87,13 +87,13 @@ export const ScrollMixin = (superClass) =>
     }
 
     /**
-     * Scroll to a specific row index in the virtual list. Note that the row index is
-     * not always the same for any particular item. For example, sorting/filtering/expanding
-     * or collapsing hierarchical items can affect the row index related to an item.
+     * Scroll to a flat index in the grid. The method doesn't take into account
+     * the hierarchy of the items.
      *
      * @param {number} index Row index to scroll to
+     * @protected
      */
-    scrollToIndex(index) {
+    _scrollToIndex(index) {
       index = Math.min(this._effectiveSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
       this.__scrollIntoViewport(index);
