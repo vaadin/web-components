@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-virtual-list",
-  "version": "23.3.5",
+  "version": "23.3.6",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/virtual-list": "~23.3.5"
+    "@vaadin/virtual-list": "~23.3.6"
   }
 }
