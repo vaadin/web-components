@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-item",
-  "version": "23.2.14",
+  "version": "23.2.15",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/item": "~23.2.14"
+    "@vaadin/item": "~23.2.15"
   }
 }

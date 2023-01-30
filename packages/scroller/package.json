@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/scroller",
-  "version": "23.2.14",
+  "version": "23.2.15",
   "publishConfig": {
     "access": "public"
   },
@@ -36,10 +36,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.2.14",
-    "@vaadin/vaadin-lumo-styles": "~23.2.14",
-    "@vaadin/vaadin-material-styles": "~23.2.14",
-    "@vaadin/vaadin-themable-mixin": "~23.2.14"
+    "@vaadin/component-base": "~23.2.15",
+    "@vaadin/vaadin-lumo-styles": "~23.2.15",
+    "@vaadin/vaadin-material-styles": "~23.2.15",
+    "@vaadin/vaadin-themable-mixin": "~23.2.15"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
