@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/rich-text-editor",
-  "version": "24.0.0-alpha12",
+  "version": "24.0.0-alpha13",
   "publishConfig": {
     "access": "public"
   },
@@ -40,14 +40,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "24.0.0-alpha12",
-    "@vaadin/component-base": "24.0.0-alpha12",
-    "@vaadin/confirm-dialog": "24.0.0-alpha12",
-    "@vaadin/text-field": "24.0.0-alpha12",
-    "@vaadin/tooltip": "24.0.0-alpha12",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha12",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha12",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha12"
+    "@vaadin/button": "24.0.0-alpha13",
+    "@vaadin/component-base": "24.0.0-alpha13",
+    "@vaadin/confirm-dialog": "24.0.0-alpha13",
+    "@vaadin/text-field": "24.0.0-alpha13",
+    "@vaadin/tooltip": "24.0.0-alpha13",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha13",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha13",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha13"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
