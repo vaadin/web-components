@@ -466,6 +466,16 @@ describe('scroll to index', () => {
         flushPendingRequests();
         expect(getFirstVisibleItemId()).to.equal('75-99');
       });
+
+      it('should scroll to index following an expanded index', () => {
+        grid.expandedItems = [{ name: '74' }];
+        flushPendingRequests();
+        grid.scrollToIndex(75);
+        flushPendingRequests();
+        flushPendingRequests();
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('75');
+      });
     });
   });
 });
