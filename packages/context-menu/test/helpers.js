@@ -1,5 +1,5 @@
-import { fire, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { fire, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 
 export async function openSubMenus(menu) {
   await oneEvent(menu.$.overlay, 'vaadin-overlay-open');
