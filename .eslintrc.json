@@ -12,7 +12,7 @@
     "simple-import-sort"
   ],
   "extends": [
-    "../eslint-config-vaadin/javascript",
+    "../eslint-config-vaadin/typescript",
     "../eslint-config-vaadin/testing",
     "../eslint-config-vaadin/prettier"
   ],
@@ -60,7 +60,7 @@
     {
       "files": ["scripts/**/*.js", "*.js"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-require-imports": "off",
         "no-console": "off"
       }
     },
