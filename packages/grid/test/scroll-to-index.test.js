@@ -476,6 +476,28 @@ describe('scroll to index', () => {
         flushPendingRequests();
         expect(getFirstVisibleItemId()).to.equal('75');
       });
+
+      describe('with a synchronous data provider', () => {
+        beforeEach(() => {
+          grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+            const pageItems = [...Array(Math.min(200, pageSize))].map((_, i) => {
+              const indexInLevel = page * pageSize + i;
+              return {
+                name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
+                children: true,
+              };
+            });
+
+            cb(pageItems, 200);
+          };
+        });
+
+        it('should scroll to a child of an expanded item on an unloaded page', () => {
+          grid.expandedItems = [{ name: '75' }];
+          grid.scrollToIndex(75, 100);
+          expect(getFirstVisibleItemId()).to.equal('75-100');
+        });
+      });
     });
   });
 });

@@ -547,7 +547,10 @@ export const DataProviderMixin = (superClass) =>
      * @param indexes {number|number[]} the index of the item
      */
     scrollToIndex(...indexes) {
-      this._scrollToIndex(this.__getGlobalFlatIndex(indexes));
+      let targetIndex;
+      while (targetIndex !== (targetIndex = this.__getGlobalFlatIndex(indexes))) {
+        this._scrollToIndex(targetIndex);
+      }
 
       if (this._cache.isLoading() || !this.clientHeight) {
         this.__pendingScrollToIndex = indexes;
