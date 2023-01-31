@@ -455,6 +455,17 @@ describe('scroll to index', () => {
         flushPendingRequests();
         expect(getFirstVisibleItemId()).to.equal('0-5-5');
       });
+
+      it('should scroll to the last child of an expanded item on an unloaded page', () => {
+        grid.expandedItems = [{ name: '75' }];
+        flushPendingRequests();
+        grid.scrollToIndex(75, 100);
+        // Need to flush multiple times because between the flushes, grid may expand and scroll, making more data requests
+        flushPendingRequests();
+        flushPendingRequests();
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('75-99');
+      });
     });
   });
 });
