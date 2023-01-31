@@ -484,7 +484,7 @@ describe('scroll to index', () => {
               const indexInLevel = page * pageSize + i;
               return {
                 name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
-                children: true,
+                hasChildren: true,
               };
             });
 
@@ -496,6 +496,12 @@ describe('scroll to index', () => {
           grid.expandedItems = [{ name: '75' }];
           grid.scrollToIndex(75, 100);
           expect(getFirstVisibleItemId()).to.equal('75-100');
+        });
+
+        it('should scroll to index following an expanded index', () => {
+          grid.expandedItems = [{ name: '74' }];
+          grid.scrollToIndex(75);
+          expect(getFirstVisibleItemId()).to.equal('75');
         });
       });
     });
