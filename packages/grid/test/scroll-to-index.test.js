@@ -448,11 +448,13 @@ describe('scroll to index', () => {
         expect(getFirstVisibleItemId()).to.equal('0-5');
       });
 
-      it('should scroll to a grandchild item with parents having expanded previous siblings', () => {
+      it('should scroll to a grandchild item with parents having expanded previous siblings', async () => {
         grid.expandedItems = [{ name: '0' }, { name: '0-0' }, { name: '0-0-0' }, { name: '0-5' }];
         flushPendingRequests();
+        await nextFrame();
         grid.scrollToIndex(0, 5, 5);
         flushPendingRequests();
+        await nextFrame();
         expect(getFirstVisibleItemId()).to.equal('0-5-5');
       });
 
