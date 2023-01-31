@@ -3,21 +3,18 @@
     "es6": true,
     "browser": true
   },
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2019
   },
   "plugins": [
-    "prettier",
-    "@typescript-eslint",
     "no-only-tests",
     "simple-import-sort"
   ],
   "extends": [
-    "eslint:recommended",
-    "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "../eslint-config-vaadin/javascript",
+    "../eslint-config-vaadin/testing",
+    "../eslint-config-vaadin/prettier"
   ],
   "rules": {
     "no-only-tests/no-only-tests": "error",
@@ -40,205 +37,24 @@
         ]
       }
     ],
-    "no-unused-vars": "off",
-    "@typescript-eslint/array-type": [
-      "error",
-      {
-        "default": "array-simple",
-        "readonly": "array-simple"
-      }
-    ],
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "argsIgnorePattern": "^_"
-    }],
-    "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/method-signature-style": ["error", "method"],
-    "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/prefer-function-type": "error",
-    "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports" }],
-    "@typescript-eslint/member-ordering": [
-      "error",
-      {
-        "default": [
-          "signature",
-          "call-signature",
-
-          "static-field",
-          "public-static-field",
-          "protected-static-field",
-          "private-static-field",
-          "#private-static-field",
-
-          "static-initialization",
-
-          "static-get",
-          "public-static-get",
-          "static-set",
-          "public-static-set",
-          "static-method",
-          "public-static-method",
-
-          "protected-static-get",
-          "protected-static-set",
-          "protected-static-method",
-
-          "private-static-get",
-          "private-static-set",
-          "private-static-method",
-
-          "#private-static-get",
-          "#private-static-set",
-          "#private-static-method",
-
-          "field",
-          "instance-field",
-          "public-field",
-          "public-instance-field",
-          "abstract-field",
-          "public-abstract-field",
-
-          "protected-field",
-          "protected-instance-field",
-          "protected-abstract-field",
-
-          "private-field",
-          "private-instance-field",
-
-          "#private-field",
-          "#private-instance-field",
-
-          "constructor",
-          "public-constructor",
-          "protected-constructor",
-          "private-constructor",
-
-          "get",
-          "instance-get",
-          "public-get",
-          "public-instance-get",
-          "abstract-get",
-          "public-abstract-get",
-
-          "set",
-          "instance-set",
-          "public-set",
-          "public-instance-set",
-          "abstract-set",
-          "public-abstract-set",
-
-          "protected-get",
-          "protected-instance-get",
-          "protected-abstract-get",
-
-          "protected-set",
-          "protected-instance-set",
-          "protected-abstract-set",
-
-          "private-get",
-          "private-instance-get",
-
-          "private-set",
-          "private-instance-set",
-
-          "#private-get",
-          "#private-instance-get",
-
-          "#private-set",
-          "#private-instance-set",
-
-          "method",
-          "instance-method",
-          "public-method",
-          "public-instance-method",
-          "abstract-method",
-          "public-abstract-method",
-
-          "protected-method",
-          "protected-instance-method",
-          "protected-abstract-method",
-
-          "private-method",
-          "private-instance-method",
-
-          "#private-method",
-          "#private-instance-method"
-        ],
-        "interfaces": ["field", "constructor", "method"],
-        "typeLiterals": ["field", "constructor", "method"]
-      }
-    ],
-    "@typescript-eslint/sort-type-union-intersection-members": "error",
-    "accessor-pairs": "error",
-    "array-callback-return": "error",
-    "camelcase": "error",
-    "capitalized-comments": ["error", "always", {
-      "ignoreConsecutiveComments": true,
-      "ignorePattern": "prettier|c8"
-    }],
-    "consistent-this": ["error", "self"],
-    "curly": ["error", "all"],
-    "default-case": ["error", { "commentPattern": "^no\\sdefault" }],
-    "default-param-last": "error",
-    "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
-    "eqeqeq": ["error", "always", { "null": "ignore" }],
-    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-    "grouped-accessor-pairs": ["error", "getBeforeSet"],
-    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
-    "logical-assignment-operators": "error",
-    "max-classes-per-file": ["error", 3],
-    "max-params": ["error", 5],
+    "sort-keys": "off",
+    "arrow-body-style": "off",
+    "consistent-return": "off",
+    "prefer-destructuring": "off",
+    "no-await-in-loop": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off",
+    "one-var": "off",
+    "no-use-before-define": "off",
+    "class-methods-use-this": "off",
+    "no-multi-assign": "off",
     "no-bitwise": "off",
-    "no-console": ["error", { "allow": ["warn", "error"] }],
-    "no-else-return": "error",
-    "no-eval": "error",
-    "no-implicit-coercion": ["error", { "allow": ["!!"] }],
-    "no-invalid-this": "error",
-    "no-lonely-if": "error",
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "no-promise-executor-return": "error",
-    "no-proto": "error",
-    "no-return-assign": ["error", "always"],
-    "no-return-await": "error",
-    "no-restricted-syntax": [
-      "error",
-      {
-        "selector": "ForInStatement",
-        "message": "for..in loops are slower than Object.{keys,values,entries} and have their caveats."
-      },
-      // From eslint-config-airbnb
-      // https://github.com/airbnb/javascript/blob/b4377fb03089dd7f08955242695860d47f9caab4/packages/eslint-config-airbnb-base/rules/style.js#L333
-      {
-        "selector": "LabeledStatement",
-        "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
-      },
-      {
-        "selector": "WithStatement",
-        "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
-      }
-    ],
-    "no-sequences": "error",
-    "no-sync": "off",
-    "no-throw-literal": "error",
-    "no-unused-expressions": "error",
-    "no-useless-return": "error",
-    "no-var": "error",
-    "object-shorthand": ["error", "always"],
-    "operator-assignment": ["error", "always"],
-    "prefer-arrow-callback": ["error", { "allowNamedFunctions": false, "allowUnboundThis": false }],
-    "prefer-const": ["error", { "ignoreReadBeforeAssign": true }],
-    "prefer-exponentiation-operator": "error",
-    "prefer-object-spread": "error",
-    "prefer-rest-params": "error",
-    "prefer-spread": "error",
-    "prefer-template": "error",
-    "require-await": "error",
-    "require-unicode-regexp": "error",
-    "space-in-parens": ["error", "never"],
-    "spaced-comment": ["error", "always"]
+    "func-names": "off",
+    "no-unused-vars": "off",
+    "prefer-promise-reject-errors": "off",
+    "radix": "off",
+    "max-params": "off",
+    "prefer-object-has-own": "off"
   },
   "overrides": [
     {
@@ -249,15 +65,12 @@
       }
     },
     {
-      "files": ["packages/**/test/**", "integration/tests/**"],
+      "files": ["*.test.js", "*.types.ts"],
       "env": {
         "mocha": true
       },
       "rules": {
-        "@typescript-eslint/member-ordering": "off",
         "no-await-in-loop": "off",
-        // TODO: Use chai-friendly plugin
-        "no-unused-expressions": "off",
         "max-classes-per-file": "off",
         "simple-import-sort/imports": [
           "error",
