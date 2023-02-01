@@ -2,20 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../vaadin-combo-box.js';
 import './not-animated-styles.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { makeItems, setInputValue } from './helpers.js';
-
-class XFixed extends PolymerElement {
-  static get template() {
-    return html`
-      <div style="position: fixed;">
-        <slot></slot>
-      </div>
-    `;
-  }
-}
-
-customElements.define('x-fixed', XFixed);
 
 describe('overlay position', () => {
   let comboBox, overlayPart, inputField;
