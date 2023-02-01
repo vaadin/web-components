@@ -23,6 +23,15 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 setCancelSyntheticClickEvents(false);
 
 const menuOpenEvent = isTouch ? 'click' : 'mouseover';
+const open = (openTarget) => {
+  const menu = openTarget.parentElement.parentElement.__dataHost;
+  if (menu) {
+    menu.__openListenerActive = true;
+    const overlay = menu.$.overlay;
+    overlay.__openingHandler?.();
+  }
+  fire(openTarget, menuOpenEvent);
+};
 
 describe('sub-menu', () => {
   let menu, buttons, subMenu, item;
@@ -430,7 +439,13 @@ describe('open on hover', () => {
     menu.items = [
       {
         text: 'Menu Item 1',
-        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
+        children: [
+          {
+            text: 'Menu Item 1 1',
+            children: [{ text: 'Menu Item 2 1' }, { text: 'Menu Item 2 2' }],
+          },
+          { text: 'Menu Item 1 2' },
+        ],
       },
       { text: 'Menu Item 2' },
       {
@@ -445,6 +460,16 @@ describe('open on hover', () => {
     buttons = menu._buttons;
     subMenuOverlay = subMenu.$.overlay.$.overlay;
   });
+
+  async function openFirstInnerSubMenu() {
+    const menuItems = subMenu.$.overlay
+      .querySelector('vaadin-context-menu-list-box')
+      .querySelectorAll('vaadin-context-menu-item');
+    const firstMenuItem = menuItems[0];
+
+    open(firstMenuItem);
+    await nextRender(menuItems);
+  }
 
   it('should set pointer events to `auto` when opened and remove when closed', async () => {
     expect(menu.style.pointerEvents).to.be.empty;
@@ -477,15 +502,27 @@ describe('open on hover', () => {
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should close opened sub-menu if _requestClose is called', async () => {
+  it('should change _creationEventSent state after submenu is opened', async () => {
     fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
-    expect(subMenu.opened).to.be.true;
 
-    menu._requestClose();
+    expect(subMenu._creationEventSent).to.be.undefined;
+
+    openFirstInnerSubMenu();
+
+    expect(subMenu._creationEventSent).to.be.true;
+  });
+
+  it('should dispatch sub-menu-opened event when submenu is opened', async () => {
+    const spy = sinon.spy();
+    subMenu.addEventListener('sub-menu-opened', spy);
+
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
 
-    expect(subMenu.opened).to.be.false;
+    openFirstInnerSubMenu();
+
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('shouldn`t close open sub-menu if mouse goes out and back in the sub menu', async () => {
@@ -650,16 +687,6 @@ describe('theme attribute', () => {
 
 describe('touch', () => {
   let menu, buttons, subMenu, items, item;
-
-  const open = (openTarget) => {
-    const menu = openTarget.parentElement.parentElement.__dataHost;
-    if (menu) {
-      menu.__openListenerActive = true;
-      const overlay = menu.$.overlay;
-      overlay.__openingHandler?.();
-    }
-    fire(openTarget, menuOpenEvent);
-  };
 
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');

@@ -761,27 +761,92 @@ describe('menu-bar in flex', () => {
 });
 
 describe('menu-bar with hide-delay property', () => {
-  let menu;
+  let menu, subMenu, subMenuOverlay, clock;
   const DEFAULT_HIDE_DELAY = 300;
+  const TIMEOUT_RATIO = 2;
+  const mouseLeaveEvent = 'mouseleave';
 
   beforeEach(() => {
     menu = fixtureSync('<vaadin-menu-bar open-on-hover></vaadin-menu-bar>');
+    menu.openOnHover = true;
+    subMenu = menu._subMenu;
+    subMenuOverlay = subMenu.$.overlay.$.overlay;
+    clock = sinon.useFakeTimers();
   });
 
-  it('hide-delay is set to default if not given', () => {
+  afterEach(() => {
+    clock.restore();
+  });
+
+  it('default interval set if not explicitly given', () => {
     expect(menu.hideDelay).to.be.equal(DEFAULT_HIDE_DELAY);
+  });
+
+  it('submenu still opened if not waiting for the default delay', () => {
+    subMenu._openedChanged(true);
+    expect(subMenu.opened).to.be.true;
+
+    subMenuOverlay.dispatchEvent(new CustomEvent(mouseLeaveEvent));
+
+    clock.tick(DEFAULT_HIDE_DELAY / TIMEOUT_RATIO);
+
+    expect(subMenu.opened).to.be.true;
+  });
+
+  it('submenu closed if waiting more than the default delay', () => {
+    subMenu._openedChanged(true);
+    expect(subMenu.opened).to.be.true;
+
+    subMenuOverlay.dispatchEvent(new CustomEvent(mouseLeaveEvent));
+
+    clock.tick(DEFAULT_HIDE_DELAY * TIMEOUT_RATIO);
+
+    expect(subMenu.opened).to.be.false;
   });
 });
 
-describe('menu-bar with changed  hide-delay property', () => {
-  let menu;
-  const CHANGED_HIDE_DELAY = 5000;
+describe('menu-bar with changed hide-delay property', () => {
+  let menu, subMenu, subMenuOverlay, clock;
+  const CHANGED_HIDE_DELAY = 600;
+  const TIMEOUT_RATIO = 2;
+  const mouseLeaveEvent = 'mouseleave';
 
   beforeEach(() => {
+    console;
     menu = fixtureSync(`<vaadin-menu-bar open-on-hover hide-delay="${CHANGED_HIDE_DELAY}"></vaadin-menu-bar>`);
+    menu.openOnHover = true;
+    subMenu = menu._subMenu;
+    subMenuOverlay = subMenu.$.overlay.$.overlay;
+    clock = sinon.useFakeTimers();
+  });
+
+  afterEach(() => {
+    clock.restore();
   });
 
   it('hide-delay is not with default value if given', () => {
     expect(menu.hideDelay).to.be.equal(CHANGED_HIDE_DELAY);
+  });
+
+  it('submenu still opened if not waiting for the changed delay', () => {
+    subMenu._openedChanged(true);
+    expect(subMenu.opened).to.be.true;
+
+    subMenuOverlay.dispatchEvent(new CustomEvent(mouseLeaveEvent));
+
+    clock.tick(CHANGED_HIDE_DELAY / TIMEOUT_RATIO);
+
+    expect(subMenu.opened).to.be.true;
+  });
+
+  it('submenu closed if waiting more than the changed delay', () => {
+    subMenu._openedChanged(true);
+    expect(subMenu.opened).to.be.true;
+
+    subMenuOverlay.dispatchEvent(new CustomEvent(mouseLeaveEvent));
+
+    clock.tick(CHANGED_HIDE_DELAY * TIMEOUT_RATIO);
+
+    expect(subMenu.opened).to.be.false;
   });
 });
