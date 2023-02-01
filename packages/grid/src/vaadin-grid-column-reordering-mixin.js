@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
@@ -51,6 +52,14 @@ export const ColumnReorderingMixin = (superClass) =>
     _onContextMenu(e) {
       if (this.hasAttribute('reordering')) {
         e.preventDefault();
+
+        // A contextmenu event is fired on mobile Chrome on long-press
+        // (which should start reordering). Don't end the reorder on touch devices.
+        if (!isTouch) {
+          // Context menu cancels the track gesture on desktop without firing an end event.
+          // End the reorder manually.
+          this._onTrackEnd();
+        }
       }
     }
 
