@@ -9,6 +9,7 @@ import {
   getPhysicalAverage,
   getPhysicalItems,
   infiniteDataProvider,
+  onceInvoked,
 } from './helpers.js';
 
 const createGrid = (height, size) => {
@@ -160,6 +161,16 @@ describe('scroll to index', () => {
         });
       });
       parent.appendChild(grid);
+    });
+
+    it('should scroll to index after unhiding', async () => {
+      grid.hidden = true;
+      grid.scrollToIndex(100);
+      grid.hidden = false;
+
+      await onceInvoked(grid, 'scrollToIndex');
+      expect(getFirstVisibleItem(grid).index).to.be.above(75);
+      expect(grid.$.table.scrollTop).to.be.above(0);
     });
 
     it('should scroll to index only once', (done) => {
