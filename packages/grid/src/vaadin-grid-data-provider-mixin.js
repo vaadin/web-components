@@ -105,12 +105,13 @@ export const ItemCache = class ItemCache {
    * @returns {number} The flat index on this cache level.
    */
   getFlatIndex(scaledIndex) {
+    const clampedIndex = Math.max(0, Math.min(this.size - 1, scaledIndex));
     return Object.entries(this.itemCaches).reduce((prev, [index, subCache]) => {
-      if (scaledIndex > Number(index)) {
+      if (clampedIndex > Number(index)) {
         return prev + subCache.effectiveSize;
       }
       return prev;
-    }, Math.max(0, Math.min(this.size - 1, scaledIndex)));
+    }, clampedIndex);
   }
 };
 

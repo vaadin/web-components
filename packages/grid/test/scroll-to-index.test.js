@@ -146,7 +146,7 @@ describe('scroll to index', () => {
           }
         });
       };
-      grid.scrollToIndex(100);
+      grid.scrollToIndex(49, 100);
     });
 
     it('should scroll to index after attaching', (done) => {
@@ -258,7 +258,7 @@ describe('scroll to index', () => {
         });
       };
       grid.expandedItems = [PARENT];
-      grid.scrollToIndex(250);
+      grid.scrollToIndex(0, 250);
     });
 
     it('should not reuse rows if subitems are loaded while scrolling to bottom', (done) => {
@@ -302,7 +302,6 @@ describe('scroll to index', () => {
       }
 
       beforeEach(async () => {
-        grid.size = 25;
         grid.itemIdPath = 'name';
 
         grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
@@ -477,6 +476,36 @@ describe('scroll to index', () => {
         flushPendingRequests();
         flushPendingRequests();
         expect(getFirstVisibleItemId()).to.equal('75');
+      });
+
+      it('should not scroll to a child item when parent index oveflows', () => {
+        grid.expandedItems = [{ name: '99' }];
+        flushPendingRequests();
+        grid.scrollToIndex(100, 0);
+        flushPendingRequests();
+        flushPendingRequests();
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('99');
+      });
+
+      it('should not scroll to a grand child item when child index oveflows', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-99' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, 100, 0);
+        flushPendingRequests();
+        flushPendingRequests();
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0-99');
+      });
+
+      it('should not scroll to a child item when parent index is negative', () => {
+        grid.expandedItems = [{ name: '0' }];
+        flushPendingRequests();
+        grid.scrollToIndex(-1, 0);
+        flushPendingRequests();
+        flushPendingRequests();
+        flushPendingRequests();
+        expect(getFirstVisibleItemId()).to.equal('0');
       });
 
       describe('with a synchronous data provider', () => {
