@@ -55,7 +55,7 @@ export declare class ItemCache<TItem> {
 
   getCacheAndIndex(index: number): { cache: ItemCache<TItem>; scaledIndex: number };
 
-  getFlatIndex(index: number): number;
+  getFlatIndex(scaledIndex: number): number;
 }
 
 export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(

@@ -106,11 +106,9 @@ export const ItemCache = class ItemCache {
    */
   getFlatIndex(scaledIndex) {
     const clampedIndex = Math.max(0, Math.min(this.size - 1, scaledIndex));
+
     return Object.entries(this.itemCaches).reduce((prev, [index, subCache]) => {
-      if (clampedIndex > Number(index)) {
-        return prev + subCache.effectiveSize;
-      }
-      return prev;
+      return clampedIndex > Number(index) ? prev + subCache.effectiveSize : prev;
     }, clampedIndex);
   }
 };
@@ -548,6 +546,9 @@ export const DataProviderMixin = (superClass) =>
      * @param indexes {number|number[]} the index of the item
      */
     scrollToIndex(...indexes) {
+      // Synchronous data provider may cause changes to the cache on scroll without
+      // ending up in a loading state. Try scrolling to the index until the target
+      // index stabilizes.
       let targetIndex;
       while (targetIndex !== (targetIndex = this.__getGlobalFlatIndex(indexes))) {
         this._scrollToIndex(targetIndex);
