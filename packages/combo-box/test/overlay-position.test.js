@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, isIOS } from '@vaadin/testing-helpers';
-import '../src/vaadin-combo-box.js';
+import '../vaadin-combo-box.js';
+import './not-animated-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { makeItems, setInputValue } from './helpers.js';
 
@@ -33,6 +34,13 @@ describe('overlay position', () => {
   }
 
   beforeEach(async () => {
+    fixtureSync(`
+      <style>
+        vaadin-combo-box-overlay::part(overlay) {
+          margin: 0 !important;
+        }
+      </style>`);
+
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
     const comboBoxRect = comboBox.getBoundingClientRect();
     comboBox.items = makeItems(20);
@@ -157,6 +165,23 @@ describe('overlay position', () => {
       comboBox.open();
       await aTimeout(1);
       expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
+    });
+
+    it('should be above input when near bottom', async () => {
+      moveComboBox(xCenter, yBottom - 200, 300);
+
+      comboBox.open();
+      await aTimeout(1);
+      expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
+    });
+
+    it('should be below input when far from bottom', async () => {
+      moveComboBox(xCenter, yBottom - 220, 300);
+
+      await aTimeout(1);
+      comboBox.open();
+      await aTimeout(1);
+      expect(overlayPart.getBoundingClientRect().top).to.closeTo(inputField.getBoundingClientRect().bottom, 1);
     });
 
     it('should reposition after filtering', async () => {

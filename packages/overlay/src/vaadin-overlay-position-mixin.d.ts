@@ -54,4 +54,13 @@ export declare class PositionMixinClass {
    * @attr {boolean} no-vertical-overlap
    */
   noVerticalOverlap: boolean;
+
+  /**
+   * If the overlay content has no intrinsic height, this property can be used to set
+   * the minimum vertical space required by the overlay. If there is not enough space
+   * available on the primary side, the overlay will be positioned on the opposite side.
+   *
+   * @attr {number} required-vertical-space
+   **/
+  requiredVerticalSpace: number;
 }
