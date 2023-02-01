@@ -812,7 +812,6 @@ describe('menu-bar with changed hide-delay property', () => {
   const mouseLeaveEvent = 'mouseleave';
 
   beforeEach(() => {
-    console;
     menu = fixtureSync(`<vaadin-menu-bar open-on-hover hide-delay="${CHANGED_HIDE_DELAY}"></vaadin-menu-bar>`);
     menu.openOnHover = true;
     subMenu = menu._subMenu;
