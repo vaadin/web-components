@@ -154,23 +154,6 @@ describe('overlay position', () => {
       expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
     });
 
-    it('should be above input when near bottom', async () => {
-      moveComboBox(xCenter, yBottom - 200, 300);
-
-      comboBox.open();
-      await aTimeout(1);
-      expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
-    });
-
-    it('should be below input when far from bottom', async () => {
-      moveComboBox(xCenter, yBottom - 220, 300);
-
-      await aTimeout(1);
-      comboBox.open();
-      await aTimeout(1);
-      expect(overlayPart.getBoundingClientRect().top).to.closeTo(inputField.getBoundingClientRect().bottom, 1);
-    });
-
     it('should reposition after filtering', async () => {
       moveComboBox(xCenter, yBottom, 300);
 
@@ -179,6 +162,40 @@ describe('overlay position', () => {
       comboBox.open();
       await aTimeout(0);
       expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
+    });
+
+    describe('lazy data provider', () => {
+      beforeEach(() => {
+        comboBox.items = undefined;
+
+        comboBox.dataProvider = (params, callback) => {
+          const index = params.page * params.pageSize;
+          const size = 20;
+          const result = [...Array(size).keys()].map((i) => {
+            return {
+              label: `Item ${index + i}`,
+              value: `item-${index + i}`,
+            };
+          });
+          setTimeout(() => callback(result, size), 100);
+        };
+      });
+
+      it('should be above input when near bottom', async () => {
+        moveComboBox(xCenter, yBottom - 200, 300);
+
+        comboBox.open();
+        await aTimeout(1);
+        expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
+      });
+
+      it('should be below input when far from bottom', async () => {
+        moveComboBox(xCenter, yBottom - 220, 300);
+
+        comboBox.open();
+        await aTimeout(1);
+        expect(overlayPart.getBoundingClientRect().top).to.closeTo(inputField.getBoundingClientRect().bottom, 1);
+      });
     });
   });
 
