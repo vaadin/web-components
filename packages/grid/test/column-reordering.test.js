@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import {
   dragAndDropOver,
   dragOver,
@@ -182,6 +183,16 @@ describe('reordering simple grid', () => {
       getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]'),
     );
     expect(e.defaultPrevented).to.be.false;
+  });
+
+  it('should cancel reorder on contextmenu on desktop', () => {
+    dragStart(headerContent[0]);
+
+    const e = new CustomEvent('contextmenu', { cancelable: true, bubbles: true });
+    headerContent[0].dispatchEvent(e);
+
+    const cell = getCellByCellContent(headerContent[0]);
+    expect(cell.getAttribute('reorder-status')).to.equal(!isTouch ? '' : 'dragging');
   });
 
   describe('touch gesture delay', () => {
