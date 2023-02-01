@@ -164,6 +164,22 @@ describe('overlay position', () => {
       expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
     });
 
+    it('should be above input when near bottom', async () => {
+      moveComboBox(xCenter, yBottom - 200, 300);
+
+      comboBox.open();
+      await aTimeout(1);
+      expect(overlayPart.getBoundingClientRect().bottom).to.closeTo(inputField.getBoundingClientRect().top, 1);
+    });
+
+    it('should be below input when far from bottom', async () => {
+      moveComboBox(xCenter, yBottom - 220, 300);
+
+      comboBox.open();
+      await aTimeout(1);
+      expect(overlayPart.getBoundingClientRect().top).to.closeTo(inputField.getBoundingClientRect().bottom, 1);
+    });
+
     describe('lazy data provider', () => {
       beforeEach(() => {
         comboBox.items = undefined;

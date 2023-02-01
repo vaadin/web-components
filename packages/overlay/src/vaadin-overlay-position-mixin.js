@@ -274,11 +274,8 @@ export const PositionMixin = (superClass) =>
     __shouldAlignStartVertically(targetRect) {
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentHeight = Math.max(
-        this.__oldContentHeight || 0,
-        this.$.overlay.offsetHeight,
-        this.requiredVerticalSpace,
-      );
+      const contentHeight =
+        this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
       this.__oldContentHeight = this.$.overlay.offsetHeight;
 
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
