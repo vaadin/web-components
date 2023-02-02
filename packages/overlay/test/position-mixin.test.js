@@ -165,6 +165,22 @@ describe('position mixin', () => {
       expectEdgesAligned(TOP, TOP);
     });
 
+    it('should flip when out of required vertical space', () => {
+      overlay.requiredVerticalSpace = 200;
+      target.style.top = `${targetPositionToFlipOverlay - 100}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should flip back when enough required vertical space', () => {
+      overlay.requiredVerticalSpace = 200;
+      target.style.top = `${targetPositionToFlipOverlay - 100}px`;
+      updatePosition();
+      target.style.top = `${targetPositionToFlipOverlay - 200}px`;
+      updatePosition();
+      expectEdgesAligned(TOP, TOP);
+    });
+
     it('should choose the bigger side when it fits neither', () => {
       overlayContent.style.height = `${document.documentElement.clientHeight}px`;
 
@@ -252,6 +268,22 @@ describe('position mixin', () => {
       target.style.top = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
       target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should flip when out of required vertical space', () => {
+      overlay.requiredVerticalSpace = 200;
+      target.style.top = `${targetPositionToFlipOverlay + 100}px`;
+      updatePosition();
+      expectEdgesAligned(TOP, TOP);
+    });
+
+    it('should flip back when enough required vertical space', () => {
+      overlay.requiredVerticalSpace = 200;
+      target.style.top = `${targetPositionToFlipOverlay + 100}px`;
+      updatePosition();
+      target.style.top = `${targetPositionToFlipOverlay + 200}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
     });
