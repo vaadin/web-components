@@ -26,7 +26,8 @@ describe('overlay position', () => {
         vaadin-combo-box-overlay::part(overlay) {
           margin: 0 !important;
         }
-      </style>`);
+      </style>
+    `);
 
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
     const comboBoxRect = comboBox.getBoundingClientRect();
