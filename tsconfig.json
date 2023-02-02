@@ -12,7 +12,7 @@
     "skipDefaultLibCheck": true
   },
   "include": [
-    "*.d.ts",
-    "*.types.ts"
+    "packages/**/test/typings",
+    "test/typings"
   ]
 }
