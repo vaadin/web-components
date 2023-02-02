@@ -143,6 +143,38 @@ export class IronListAdapter {
     });
   }
 
+  _updateMetrics(itemSet) {
+    // Make sure we distributed all the physical items
+    // so we can measure them.
+    flush();
+
+    let newPhysicalSize = 0;
+    let oldPhysicalSize = 0;
+    const prevAvgCount = this._physicalAverageCount;
+    const prevPhysicalAvg = this._physicalAverage;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this._iterateItems((pidx, vidx) => {
+      oldPhysicalSize += this._physicalSizes[pidx];
+      const physicalItem = this._physicalItems[pidx];
+      this._physicalSizes[pidx] = Math.max(
+        physicalItem.offsetHeight,
+        Math.ceil(physicalItem.getBoundingClientRect().height),
+      );
+      newPhysicalSize += this._physicalSizes[pidx];
+      this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
+    }, itemSet);
+
+    this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+
+    // Update the average if it measured something.
+    if (this._physicalAverageCount !== prevAvgCount) {
+      this._physicalAverage = Math.round(
+        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
+      );
+    }
+  }
+
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
     if (el.style.paddingTop) {
