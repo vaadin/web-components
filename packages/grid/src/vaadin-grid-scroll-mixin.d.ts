@@ -14,5 +14,5 @@ export declare class ScrollMixinClass {
    *
    * @param index Row index to scroll to
    */
-  protected _scrollToIndex(index: number): void;
+  protected _scrollToFlatIndex(index: number): void;
 }

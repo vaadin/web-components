@@ -93,7 +93,7 @@ export const ScrollMixin = (superClass) =>
      * @param {number} index Row index to scroll to
      * @protected
      */
-    _scrollToIndex(index) {
+    _scrollToFlatIndex(index) {
       index = Math.min(this._effectiveSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
       this.__scrollIntoViewport(index);

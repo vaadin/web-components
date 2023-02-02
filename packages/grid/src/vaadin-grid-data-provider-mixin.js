@@ -99,7 +99,7 @@ export const ItemCache = class ItemCache {
 
   /**
    * Gets the scaled index as flattened index on this cache level.
-   * In practive, this means that the effective size of any expanded
+   * In practice, this means that the effective size of any expanded
    * subcaches preceding the index are added to the value.
    * @param {number} scaledIndex
    * @returns {number} The flat index on this cache level.
@@ -427,7 +427,7 @@ export const DataProviderMixin = (superClass) =>
               }
             });
 
-            this.__scrollToPendingIndex();
+            this.__scrollToPendingIndexes();
           });
 
           if (!this._cache.isLoading()) {
@@ -534,16 +534,16 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * Scroll to a specific row index in the virtual list. Note that the row index is
-     * not always the same for any particular item. For example, sorting/filtering/expanding
-     * or collapsing hierarchical items can affect the row index related to an item.
+     * not always the same for any particular item. For example, sorting or filtering
+     * items can affect the row index related to an item.
      *
      * The `indexes` parameter can be either a single number or multiple numbers.
      * The grid will first try to scroll to the item at the first index on the top level.
      * In case the item at the first index is expanded, the grid will then try scroll to the
-     * item at the second index within the scope of the expanded first item, and so on.
-     * Each given index points to a sub-item of the previous index.
+     * item at the second index within the children of the expanded first item, and so on.
+     * Each given index points to a child of the item at the previous index.
      *
-     * @param indexes {number|number[]} the index of the item
+     * @param indexes {...string} the index of the item
      */
     scrollToIndex(...indexes) {
       // Synchronous data provider may cause changes to the cache on scroll without
@@ -551,11 +551,11 @@ export const DataProviderMixin = (superClass) =>
       // index stabilizes.
       let targetIndex;
       while (targetIndex !== (targetIndex = this.__getGlobalFlatIndex(indexes))) {
-        this._scrollToIndex(targetIndex);
+        this._scrollToFlatIndex(targetIndex);
       }
 
       if (this._cache.isLoading() || !this.clientHeight) {
-        this.__pendingScrollToIndex = indexes;
+        this.__pendingScrollToIndexes = indexes;
       }
     }
 
@@ -579,10 +579,10 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __scrollToPendingIndex() {
-      if (this.__pendingScrollToIndex && this.$.items.children.length) {
-        const indexes = this.__pendingScrollToIndex;
-        delete this.__pendingScrollToIndex;
+    __scrollToPendingIndexes() {
+      if (this.__pendingScrollToIndexes && this.$.items.children.length) {
+        const indexes = this.__pendingScrollToIndexes;
+        delete this.__pendingScrollToIndexes;
         this.scrollToIndex(...indexes);
       }
     }

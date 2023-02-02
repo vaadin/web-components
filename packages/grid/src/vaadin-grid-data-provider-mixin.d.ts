@@ -143,14 +143,14 @@ export declare class DataProviderMixinClass<TItem> {
 
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
-   * not always the same for any particular item. For example, sorting/filtering/expanding
-   * or collapsing hierarchical items can affect the row index related to an item.
+   * not always the same for any particular item. For example, sorting or filtering
+   * items can affect the row index related to an item.
    *
    * The `indexes` parameter can be either a single number or multiple numbers.
    * The grid will first try to scroll to the item at the first index on the top level.
    * In case the item at the first index is expanded, the grid will then try scroll to the
-   * item at the second index within the scope of the expanded first item, and so on.
-   * Each given index points to a sub-item of the previous index.
+   * item at the second index within the children of the expanded first item, and so on.
+   * Each given index points to a child of the item at the previous index.
    *
    * @param indexes Row indexes to scroll to
    */
