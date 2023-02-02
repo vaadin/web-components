@@ -157,10 +157,7 @@ export class IronListAdapter {
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
       const physicalItem = this._physicalItems[pidx];
-      this._physicalSizes[pidx] = Math.max(
-        physicalItem.offsetHeight,
-        Math.ceil(physicalItem.getBoundingClientRect().height),
-      );
+      this._physicalSizes[pidx] = Math.max(physicalItem.offsetHeight, physicalItem.getBoundingClientRect().height);
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
