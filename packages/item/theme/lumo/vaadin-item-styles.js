@@ -10,14 +10,13 @@ const item = css`
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size-m);
-    line-height: var(--lumo-line-height-xs);
-    padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
-      var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
-    min-height: var(--lumo-size-m);
+    font-family: var(--vaadin-item-font-family);
+    font-size: var(--vaadin-item-font-size);
+    line-height: var(--vaadin-item-line-height);
+    padding: var(--vaadin-item-padding);
+    min-height: var(--vaadin-item-min-height);
     outline: none;
-    border-radius: var(--lumo-border-radius-m);
+    border-radius: var(--vaadin-item-min-height);
     cursor: var(--lumo-clickable-cursor);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
