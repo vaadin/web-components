@@ -79,7 +79,7 @@
       }
     },
     {
-      "files": ["*.test.js", "*.types.ts"],
+      "files": ["packages/**/test/**", "integration/tests/**"],
       "env": {
         "mocha": true
       },
