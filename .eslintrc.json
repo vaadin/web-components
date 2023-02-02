@@ -54,6 +54,7 @@
     "prefer-promise-reject-errors": "off",
     "radix": "off",
     "max-params": "off",
+    "max-depth": "off",
     "prefer-object-has-own": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/class-literal-property-style": "off",

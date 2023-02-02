@@ -292,13 +292,11 @@ export class UserTags extends PolymerElement {
     // Check if flash queue contains pending tags for removed users
     if (this.__flashQueue.length > 0) {
       for (let i = 0; i < removedUsers.length; i++) {
-        if (changedTags.removed[i] !== null) {
-          continue;
-        }
-
-        for (let j = 0; j < this.__flashQueue.length; j++) {
-          if (this.__flashQueue[j].some((tag) => tag.uid === removedUsers[i].id)) {
-            this.splice('__flashQueue', i, 1);
+        if (changedTags.removed[i] === null) {
+          for (let j = 0; j < this.__flashQueue.length; j++) {
+            if (this.__flashQueue[j].some((tag) => tag.uid === removedUsers[i].id)) {
+              this.splice('__flashQueue', i, 1);
+            }
           }
         }
       }
