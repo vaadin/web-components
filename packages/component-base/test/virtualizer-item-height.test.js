@@ -115,8 +115,6 @@ describe('virtualizer - item height - sub-pixel', () => {
 
         if (el.id !== index) {
           el.textContent = `item-${index}`;
-
-          // The element initially has a height of 0.
           el.style.height = '30.25px';
         }
       },
