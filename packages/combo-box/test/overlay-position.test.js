@@ -188,12 +188,10 @@ describe('overlay position', () => {
         comboBox.dataProvider = (params, callback) => {
           const index = params.page * params.pageSize;
           const size = 20;
-          const result = [...Array(size).keys()].map((i) => {
-            return {
-              label: `Item ${index + i}`,
-              value: `item-${index + i}`,
-            };
-          });
+          const result = [...Array(size).keys()].map((i) => ({
+            label: `Item ${index + i}`,
+            value: `item-${index + i}`,
+          }));
           setTimeout(() => callback(result, size), 100);
         };
       });
