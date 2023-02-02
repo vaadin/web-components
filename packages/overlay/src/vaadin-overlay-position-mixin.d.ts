@@ -62,6 +62,6 @@ export declare class PositionMixinClass {
    * fixed value for determining the open direction.
    *
    * @attr {number} required-vertical-space
-   **/
+   */
   requiredVerticalSpace: number;
 }
