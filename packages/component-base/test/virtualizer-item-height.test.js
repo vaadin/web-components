@@ -91,3 +91,46 @@ describe('virtualizer - item height', () => {
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
   });
 });
+
+describe('virtualizer - item height - sub-pixel', () => {
+  let elementsContainer;
+  let virtualizer;
+
+  beforeEach(() => {
+    const fixture = fixtureSync(`
+      <div style="height: auto;">
+        <div class="scroller">
+          <div style="min-height: 1px;"></div>
+        </div>
+      </div>
+    `);
+    const scrollTarget = fixture.firstElementChild;
+    const scrollContainer = scrollTarget.firstElementChild;
+    elementsContainer = scrollContainer;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.style.width = '100%';
+
+        if (el.id !== index) {
+          el.textContent = `item-${index}`;
+
+          // The element initially has a height of 0.
+          el.style.height = '30.25px';
+        }
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 1;
+  });
+
+  it('should take sub-pixel value when measuring items height', () => {
+    const containerHeight = elementsContainer.getBoundingClientRect().height;
+    const itemHeight = elementsContainer.firstElementChild.getBoundingClientRect().height;
+
+    expect(containerHeight).to.equal(itemHeight);
+  });
+});
