@@ -543,7 +543,7 @@ export const DataProviderMixin = (superClass) =>
      * item at the second index within the children of the expanded first item, and so on.
      * Each given index points to a child of the item at the previous index.
      *
-     * @param indexes {...number} the index of the item
+     * @param indexes {...number} Row indexes to scroll to
      */
     scrollToIndex(...indexes) {
       // Synchronous data provider may cause changes to the cache on scroll without
