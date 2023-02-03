@@ -143,6 +143,11 @@ export class IronListAdapter {
     });
   }
 
+  /**
+   * Updates the height for a given set of items.
+   *
+   * @param {!Array<number>=} itemSet
+   */
   _updateMetrics(itemSet) {
     // Make sure we distributed all the physical items
     // so we can measure them.
