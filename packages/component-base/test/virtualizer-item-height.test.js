@@ -126,8 +126,17 @@ describe('virtualizer - item height - sub-pixel', () => {
     virtualizer.size = 1;
   });
 
-  it('should take sub-pixel value when measuring items height', () => {
+  it('should take sub-pixel value into account when measuring items height', () => {
     const containerHeight = elementsContainer.getBoundingClientRect().height;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+
+  it('should measure height correctly if some transform is applied to virtualizer', async () => {
+    elementsContainer.style.transform = 'scale(0.5)';
+
+    await aTimeout(100);
+
+    const containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.round(ITEM_HEIGHT));
   });
 });
