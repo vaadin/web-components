@@ -66,6 +66,7 @@ export class ComboBoxOverlay extends PositionMixin(Overlay) {
     loader.setAttribute('part', 'loader');
     const content = this.shadowRoot.querySelector('[part~="content"]');
     content.parentNode.insertBefore(loader, content);
+    this.requiredVerticalSpace = 200;
   }
 
   _outsideClickListener(event) {
