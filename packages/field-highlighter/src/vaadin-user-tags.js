@@ -236,9 +236,9 @@ export class UserTags extends PolymerElement {
     const usersToRemove = [];
 
     splices.forEach((splice) => {
-      for (let i = 0; i < splice.removed.length; i++) {
-        usersToRemove.push(splice.removed[i]);
-      }
+      splice.removed.forEach((user) => {
+        usersToRemove.push(user);
+      });
 
       for (let i = splice.addedCount - 1; i >= 0; i--) {
         usersToAdd.push(users[splice.index + i]);
@@ -291,15 +291,17 @@ export class UserTags extends PolymerElement {
 
     // Check if flash queue contains pending tags for removed users
     if (this.__flashQueue.length > 0) {
-      for (let i = 0; i < removedUsers.length; i++) {
+      removedUsers.forEach((user, i) => {
         if (changedTags.removed[i] === null) {
-          for (let j = 0; j < this.__flashQueue.length; j++) {
-            if (this.__flashQueue[j].some((tag) => tag.uid === removedUsers[i].id)) {
-              this.splice('__flashQueue', i, 1);
-            }
-          }
+          return;
         }
-      }
+
+        this.__flashQueue.forEach((tags) => {
+          if (tags.some((tag) => tag.uid === user.id)) {
+            this.splice('__flashQueue', i, 1);
+          }
+        });
+      });
     }
 
     if (this.opened && this.hasFocus) {

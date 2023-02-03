@@ -88,13 +88,8 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should update value on tap', () => {
-    const dateElements = getDateCells(monthCalendar);
-    for (let i = 0; i < dateElements.length; i++) {
-      if (dateElements[i].date.getDate() === 10) {
-        // Tenth of February.
-        tap(dateElements[i]);
-      }
-    }
+    const date10 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 10);
+    tap(date10);
     expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
     expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
     expect(monthCalendar.selectedDate.getDate()).to.equal(10);
@@ -137,13 +132,8 @@ describe('vaadin-month-calendar', () => {
   it('should not update value on disabled date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
     await nextRender();
-    const dateElements = getDateCells(monthCalendar);
-    for (let i = 0; i < dateElements.length; i++) {
-      if (dateElements[i].date.getDate() === 10) {
-        // Tenth of February.
-        tap(dateElements[i]);
-      }
-    }
+    const date10 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 10);
+    tap(date10);
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 

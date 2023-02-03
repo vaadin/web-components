@@ -50,13 +50,7 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @private */
     _hasColumnGroups(columns) {
-      for (let i = 0; i < columns.length; i++) {
-        if (columns[i].localName === 'vaadin-grid-column-group') {
-          return true;
-        }
-      }
-
-      return false;
+      return columns.some((column) => column.localName === 'vaadin-grid-column-group');
     }
 
     /**

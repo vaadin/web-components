@@ -468,9 +468,9 @@ function _remove(node, evType, handler) {
  */
 export function register(recog) {
   recognizers.push(recog);
-  for (let i = 0; i < recog.emits.length; i++) {
-    gestures[recog.emits[i]] = recog;
-  }
+  recog.emits.forEach((emit) => {
+    gestures[emit] = recog;
+  });
 }
 
 /**
