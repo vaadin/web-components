@@ -144,20 +144,20 @@ afterEach(() => {
 describe('column groups', () => {
   let grid, header, body, footer, headerRows, footerRows, bodyRows;
 
-  function getFooterCellContent(row, col) {
-    return getCellContent(getFooterCell(row, col)).textContent.trim();
-  }
-
-  function getHeaderCellContent(row, col) {
-    return getCellContent(getHeaderCell(row, col)).textContent.trim();
-  }
-
   function getHeaderCell(row, col) {
     return getRowCells(headerRows[row])[col];
   }
 
   function getFooterCell(row, col) {
     return getRowCells(footerRows[row])[col];
+  }
+
+  function getFooterCellContent(row, col) {
+    return getCellContent(getFooterCell(row, col)).textContent.trim();
+  }
+
+  function getHeaderCellContent(row, col) {
+    return getCellContent(getHeaderCell(row, col)).textContent.trim();
   }
 
   function getBodyCellContent(row, col) {

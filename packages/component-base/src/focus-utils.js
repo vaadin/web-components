@@ -62,24 +62,6 @@ function isElementHiddenDirectly(element) {
 }
 
 /**
- * Returns the normalized element tabindex. If not focusable, returns -1.
- * It checks for the attribute "tabindex" instead of the element property
- * `tabIndex` since browsers assign different values to it.
- * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
- *
- * @param {HTMLElement} element
- * @return {number}
- */
-function normalizeTabIndex(element) {
-  if (!isElementFocusable(element)) {
-    return -1;
-  }
-
-  const tabIndex = element.getAttribute('tabindex') || 0;
-  return Number(tabIndex);
-}
-
-/**
  * Returns if element `a` has lower tab order compared to element `b`
  * (both elements are assumed to be focusable and tabbable).
  * Elements with tabindex = 0 have lower tab order compared to elements
@@ -136,42 +118,6 @@ function sortElementsByTabIndex(elements) {
   const right = sortElementsByTabIndex(elements.slice(pivot));
 
   return mergeSortByTabIndex(left, right);
-}
-
-/**
- * Searches for nodes that are tabbable and adds them to the `result` array.
- * Returns if the `result` array needs to be sorted by tabindex.
- *
- * @param {Node} node The starting point for the search; added to `result` if tabbable.
- * @param {HTMLElement[]} result
- * @return {boolean}
- * @private
- */
-function collectFocusableNodes(node, result) {
-  if (node.nodeType !== Node.ELEMENT_NODE || isElementHiddenDirectly(node)) {
-    // Don't traverse children if the node is not an HTML element or not visible.
-    return false;
-  }
-
-  const element = /** @type {HTMLElement} */ (node);
-  const tabIndex = normalizeTabIndex(element);
-  let needsSort = tabIndex > 0;
-  if (tabIndex >= 0) {
-    result.push(element);
-  }
-
-  let children = [];
-  if (element.localName === 'slot') {
-    children = element.assignedNodes({ flatten: true });
-  } else {
-    // Use shadow root if possible, will check for distributed nodes.
-    children = (element.shadowRoot || element).children;
-  }
-  [...children].forEach((child) => {
-    // Ensure method is always invoked to collect focusable children.
-    needsSort = collectFocusableNodes(child, result) || needsSort;
-  });
-  return needsSort;
 }
 
 /**
@@ -237,6 +183,60 @@ export function isElementFocusable(element) {
  */
 export function isElementFocused(element) {
   return element.getRootNode().activeElement === element;
+}
+
+/**
+ * Returns the normalized element tabindex. If not focusable, returns -1.
+ * It checks for the attribute "tabindex" instead of the element property
+ * `tabIndex` since browsers assign different values to it.
+ * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
+ *
+ * @param {HTMLElement} element
+ * @return {number}
+ */
+function normalizeTabIndex(element) {
+  if (!isElementFocusable(element)) {
+    return -1;
+  }
+
+  const tabIndex = element.getAttribute('tabindex') || 0;
+  return Number(tabIndex);
+}
+
+/**
+ * Searches for nodes that are tabbable and adds them to the `result` array.
+ * Returns if the `result` array needs to be sorted by tabindex.
+ *
+ * @param {Node} node The starting point for the search; added to `result` if tabbable.
+ * @param {HTMLElement[]} result
+ * @return {boolean}
+ * @private
+ */
+function collectFocusableNodes(node, result) {
+  if (node.nodeType !== Node.ELEMENT_NODE || isElementHiddenDirectly(node)) {
+    // Don't traverse children if the node is not an HTML element or not visible.
+    return false;
+  }
+
+  const element = /** @type {HTMLElement} */ (node);
+  const tabIndex = normalizeTabIndex(element);
+  let needsSort = tabIndex > 0;
+  if (tabIndex >= 0) {
+    result.push(element);
+  }
+
+  let children = [];
+  if (element.localName === 'slot') {
+    children = element.assignedNodes({ flatten: true });
+  } else {
+    // Use shadow root if possible, will check for distributed nodes.
+    children = (element.shadowRoot || element).children;
+  }
+  [...children].forEach((child) => {
+    // Ensure method is always invoked to collect focusable children.
+    needsSort = collectFocusableNodes(child, result) || needsSort;
+  });
+  return needsSort;
 }
 
 /**

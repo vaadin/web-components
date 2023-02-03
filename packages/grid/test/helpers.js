@@ -131,6 +131,16 @@ export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };
 
+export const getContainerCell = (container, row, col) => {
+  const rows = getRows(container);
+  const cells = getRowCells(rows[row]);
+  return cells[col];
+};
+
+export const getContainerCellContent = (container, row, col) => {
+  return getCellContent(getContainerCell(container, row, col));
+};
+
 export const getHeaderCellContent = (grid, row, col) => {
   const container = grid.$.header;
   return getContainerCellContent(container, row, col);
@@ -141,14 +151,18 @@ export const getBodyCellContent = (grid, row, col) => {
   return getContainerCellContent(container, row, col);
 };
 
-export const getContainerCellContent = (container, row, col) => {
-  return getCellContent(getContainerCell(container, row, col));
-};
-
-export const getContainerCell = (container, row, col) => {
-  const rows = getRows(container);
-  const cells = getRowCells(rows[row]);
-  return cells[col];
+export const fire = (type, detail, options) => {
+  options ||= {};
+  detail = detail === null || detail === undefined ? {} : detail;
+  const event = new Event(type, {
+    bubbles: options.bubbles === undefined ? true : options.bubbles,
+    cancelable: Boolean(options.cancelable),
+    composed: options.composed === undefined ? true : options.composed,
+  });
+  event.detail = detail;
+  const node = options.node || window;
+  node.dispatchEvent(event);
+  return event;
 };
 
 export const dragStart = (source) => {
@@ -225,20 +239,6 @@ export const makeSoloTouchEvent = (type, xy, node) => {
   Object.entries(touchEventInit).forEach(([key, value]) => {
     event[key] = value;
   });
-  node.dispatchEvent(event);
-  return event;
-};
-
-export const fire = (type, detail, options) => {
-  options ||= {};
-  detail = detail === null || detail === undefined ? {} : detail;
-  const event = new Event(type, {
-    bubbles: options.bubbles === undefined ? true : options.bubbles,
-    cancelable: Boolean(options.cancelable),
-    composed: options.composed === undefined ? true : options.composed,
-  });
-  event.detail = detail;
-  const node = options.node || window;
   node.dispatchEvent(event);
   return event;
 };

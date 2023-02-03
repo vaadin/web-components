@@ -27,7 +27,6 @@ const microtaskCallbacks = [];
 let microtaskNodeContent = 0;
 let microtaskScheduled = false;
 const microtaskNode = document.createTextNode('');
-new window.MutationObserver(microtaskFlush).observe(microtaskNode, { characterData: true });
 
 function microtaskFlush() {
   microtaskScheduled = false;
@@ -47,6 +46,8 @@ function microtaskFlush() {
   microtaskCallbacks.splice(0, len);
   microtaskLastHandle += len;
 }
+
+new window.MutationObserver(microtaskFlush).observe(microtaskNode, { characterData: true });
 
 /**
  * Async interface wrapper around `setTimeout`.
