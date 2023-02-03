@@ -62,28 +62,19 @@ function createColumn() {
 
 function createGroup() {
   const group = document.createElement('vaadin-grid-column-group');
+  group.innerHTML = `
+    <vaadin-grid-column header="some foo header" footer="some foo footer" prefix="some foo body"></vaadin-grid-column>
+    <vaadin-grid-column header="some bar header" footer="some bar footer" prefix="some bar body"></vaadin-grid-column>
+  `;
   group.header = 'some group header';
   group.footerRenderer = (root) => {
     root.textContent = 'some group footer';
   };
-  const column1 = document.createElement('vaadin-grid-column');
-  column1.header = 'some foo header';
-  column1.footerRenderer = (root) => {
-    root.textContent = 'some foo footer';
-  };
-  column1.renderer = (root, _column, model) => {
-    root.textContent = `some foo body ${model.item.value}`;
-  };
-  const column2 = document.createElement('vaadin-grid-column');
-  column2.header = 'some bar header';
-  column2.footerRenderer = (root) => {
-    root.textContent = 'some bar footer';
-  };
-  column2.renderer = (root, _column, model) => {
-    root.textContent = `some bar body ${model.item.value}`;
-  };
-  group.appendChild(column1);
-  group.appendChild(column2);
+
+  group.querySelectorAll('vaadin-grid-column').forEach((column) => {
+    column.renderer = attributeRenderer('prefix');
+    column.footerRenderer = attributeRenderer('footer');
+  });
   return group;
 }
 
