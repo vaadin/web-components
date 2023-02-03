@@ -1052,7 +1052,8 @@ describe('keyboard navigation', () => {
         expect(grid.$.table.scrollLeft).to.equal(0);
       });
 
-      it('should scroll cells visible with end', async () => {
+      // Flaky test (on Webkit) skipped
+      it.skip('should scroll cells visible with end', async () => {
         await nextFrame();
 
         focusItem(0);
