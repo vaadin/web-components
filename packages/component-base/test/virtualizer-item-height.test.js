@@ -95,6 +95,7 @@ describe('virtualizer - item height', () => {
 describe('virtualizer - item height - sub-pixel', () => {
   let elementsContainer;
   let virtualizer;
+  const ITEM_HEIGHT = 30.25;
 
   beforeEach(() => {
     const fixture = fixtureSync(`
@@ -115,7 +116,7 @@ describe('virtualizer - item height - sub-pixel', () => {
 
         if (el.id !== index) {
           el.textContent = `item-${index}`;
-          el.style.height = '30.25px';
+          el.style.height = `${ITEM_HEIGHT}px`;
         }
       },
       scrollTarget,
@@ -127,8 +128,6 @@ describe('virtualizer - item height - sub-pixel', () => {
 
   it('should take sub-pixel value when measuring items height', () => {
     const containerHeight = elementsContainer.getBoundingClientRect().height;
-    const itemHeight = elementsContainer.firstElementChild.getBoundingClientRect().height;
-
-    expect(containerHeight).to.equal(itemHeight);
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 });
