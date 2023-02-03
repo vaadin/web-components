@@ -17,10 +17,8 @@
     "vaadin/prettier"
   ],
   "rules": {
-    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/class-literal-property-style": "off",
     "@typescript-eslint/consistent-indexed-object-style": "off",
-    "@typescript-eslint/member-ordering": "off",
     "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-extraneous-class": "off",

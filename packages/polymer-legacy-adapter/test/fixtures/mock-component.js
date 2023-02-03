@@ -5,10 +5,6 @@ export class MockComponent extends HTMLElement {
     this.shadowRoot.innerHTML = `<div id="content"></div>`;
   }
 
-  connectedCallback() {
-    window.Vaadin.templateRendererCallback(this);
-  }
-
   get $() {
     return {
       content: this.shadowRoot.querySelector('#content'),
@@ -22,6 +18,10 @@ export class MockComponent extends HTMLElement {
   set renderer(renderer) {
     this.__renderer = renderer;
     this.render();
+  }
+
+  connectedCallback() {
+    window.Vaadin.templateRendererCallback(this);
   }
 
   render() {
