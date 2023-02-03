@@ -85,14 +85,12 @@ export const ItemCache = class ItemCache {
    */
   getCacheAndIndex(index) {
     let thisLevelIndex = index;
-    const keys = Object.keys(this.itemCaches);
-    for (let i = 0; i < keys.length; i++) {
-      const expandedIndex = Number(keys[i]);
-      const subCache = this.itemCaches[expandedIndex];
-      if (thisLevelIndex <= expandedIndex) {
+    for (const [index, subCache] of Object.entries(this.itemCaches)) {
+      const numberIndex = Number(index);
+      if (thisLevelIndex <= numberIndex) {
         return { cache: this, scaledIndex: thisLevelIndex };
-      } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
-        return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
+      } else if (thisLevelIndex <= numberIndex + subCache.effectiveSize) {
+        return subCache.getCacheAndIndex(thisLevelIndex - numberIndex - 1);
       }
       thisLevelIndex -= subCache.effectiveSize;
     }

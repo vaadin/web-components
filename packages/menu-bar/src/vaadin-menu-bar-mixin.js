@@ -215,19 +215,18 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __restoreButtons(buttons) {
-      for (let i = 0; i < buttons.length; i++) {
-        const btn = buttons[i];
-        btn.disabled = (btn.item && btn.item.disabled) || this.disabled;
-        btn.style.visibility = '';
-        btn.style.position = '';
+      buttons.forEach((button) => {
+        button.disabled = (button.item && button.item.disabled) || this.disabled;
+        button.style.visibility = '';
+        button.style.position = '';
 
         // Teleport item component back from "overflow" sub-menu
-        const item = btn.item && btn.item.component;
+        const item = button.item && button.item.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
-          btn.appendChild(item);
+          button.appendChild(item);
           item.removeAttribute('role');
         }
-      }
+      });
       this.__updateOverflow([]);
     }
 

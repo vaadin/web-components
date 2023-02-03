@@ -1314,10 +1314,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
             if (!this.tempBodyStyle) {
               let effectiveCss = '';
 
-              const shadowStyles = this.shadowRoot.querySelectorAll('style');
-              for (let i = 0; i < shadowStyles.length; i++) {
-                effectiveCss += shadowStyles[i].textContent;
-              }
+              [...this.shadowRoot.querySelectorAll('style')].forEach((style) => {
+                effectiveCss += style.textContent;
+              });
 
               // Strip off host selectors that target individual instances
               effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {

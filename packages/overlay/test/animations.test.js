@@ -99,17 +99,13 @@ customElements.define(
 
 function afterOverlayOpeningFinished(overlay, callback) {
   const observer = new MutationObserver((mutations, observer) => {
-    for (let i = 0; i < mutations.length; i++) {
-      const mutation = mutations[i];
-      if (mutation.attributeName === 'opening') {
-        const target = mutation.target;
-        const hasFinishedOpening = target.hasAttribute('opened') && !target.hasAttribute('opening');
-        if (hasFinishedOpening) {
-          observer.disconnect();
-          afterNextRender(overlay, callback);
-          return;
-        }
-      }
+    const isOverlayOpened = mutations.some(({ target }) => {
+      return target.hasAttribute('opened') && !target.hasAttribute('opening');
+    });
+
+    if (isOverlayOpened) {
+      observer.disconnect();
+      afterNextRender(overlay, callback);
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['opening'] });
@@ -117,17 +113,13 @@ function afterOverlayOpeningFinished(overlay, callback) {
 
 function afterOverlayClosingFinished(overlay, callback) {
   const observer = new MutationObserver((mutations, observer) => {
-    for (let i = 0; i < mutations.length; i++) {
-      const mutation = mutations[i];
-      if (mutation.attributeName === 'closing') {
-        const target = mutation.target;
-        const hasFinishedClosing = !target.hasAttribute('opened') && !target.hasAttribute('closing');
-        if (hasFinishedClosing) {
-          observer.disconnect();
-          afterNextRender(overlay, callback);
-          return;
-        }
-      }
+    const isOverlayClosed = mutations.some(({ target }) => {
+      return !target.hasAttribute('opened') && !target.hasAttribute('closing');
+    });
+
+    if (isOverlayClosed) {
+      observer.disconnect();
+      afterNextRender(overlay, callback);
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['closing'] });
