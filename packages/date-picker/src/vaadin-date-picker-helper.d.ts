@@ -4,7 +4,6 @@
  * @returns Week number
  */
 declare function getISOWeekNumber(Date: Date): number;
-export { getISOWeekNumber };
 
 /**
  * Check if two dates are equal.
@@ -12,7 +11,6 @@ export { getISOWeekNumber };
  * @returns True if the given date objects refer to the same date
  */
 declare function dateEquals(date1: Date | null, date2: Date | null): boolean;
-export { dateEquals };
 
 /**
  * Check if the given date is in the range of allowed dates.
@@ -20,7 +18,6 @@ export { dateEquals };
  * @returns True if the date is in the range
  */
 declare function dateAllowed(date: Date, min: Date | null, max: Date | null): boolean;
-export { dateAllowed };
 
 /**
  * Get closest date from array of dates.
@@ -28,27 +25,23 @@ export { dateAllowed };
  * @returns Closest date
  */
 declare function getClosestDate(date: Date, dates: Date[]): Date;
-export { getClosestDate };
 
 /**
  * Extracts the basic component parts of a date (day, month and year)
  * to the expected format.
  */
 declare function extractDateParts(date: Date): { day: number; month: number; year: number };
-export { extractDateParts };
 
 /**
  * Get difference in months between today and given months value.
  */
 declare function dateAfterXMonths(months: number): number;
-export { dateAfterXMonths };
 
 /**
  * Calculate the year of the date based on the provided reference date
  * Gets a two-digit year and returns a full year.
  */
 declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): Date;
-export { getAdjustedYear };
 
 /**
  * Parse date string of one of the following date formats:
@@ -56,4 +49,14 @@ export { getAdjustedYear };
  * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
  */
 declare function parseDate(str: string): Date;
-export { parseDate };
+
+export {
+  getISOWeekNumber,
+  dateEquals,
+  dateAllowed,
+  getClosestDate,
+  extractDateParts,
+  dateAfterXMonths,
+  getAdjustedYear,
+  parseDate,
+};
