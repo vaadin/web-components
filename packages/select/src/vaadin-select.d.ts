@@ -216,10 +216,8 @@ declare class Select extends OverlayClassMixin(
   renderer: SelectRenderer | undefined;
 
   /**
-   * It stores the the `value` property of the selected item, providing the
-   * value for iron-form.
-   * When there’s an item selected, it's the value of that item, otherwise
-   * it's an empty string.
+   * The `value` property of the selected item, or an empty string
+   * if no item is selected.
    * On change or initialization, the component finds the item which matches the
    * value and displays it.
    * If no value is provided to the component, it selects the first item without

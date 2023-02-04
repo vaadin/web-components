@@ -137,7 +137,7 @@ class ChartSeries extends PolymerElement {
       },
 
       /**
-       * Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.
+       * Used to connect the series to an axis; if multiple series have the same `unit`, they will share axis.
        * Displayed as a title for the axis.
        * If no unit is defined, then series will be connected to the first axis.
        */

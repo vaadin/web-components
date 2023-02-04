@@ -248,7 +248,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
   /** @protected */
   ready() {
     // Here we create and attach a style element that we use for validating
-    // CSS values in `responsiveSteps`. We can’t add this to the `<template>`,
+    // CSS values in `responsiveSteps`. We can't add this to the `<template>`,
     // because Polymer will throw it away. We need to create this before
     // `super.ready()`, because `super.ready()` invokes property observers,
     // and the observer for `responsiveSteps` does CSS value validation.
@@ -329,7 +329,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
   /** @private */
   _isValidCSSLength(value) {
     // Let us choose a CSS property for validating CSS <length> values:
-    // - `border-spacing` accepts `<length> | inherit`, it’s the best! But
+    // - `border-spacing` accepts `<length> | inherit`, it's the best! But
     //   it does not disallow invalid values at all in MSIE :-(
     // - `letter-spacing` and `word-spacing` accept
     //   `<length> | normal | inherit`, and disallows everything else, like
@@ -424,7 +424,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     // Sometimes converting units is not possible, e.g, when element is
     // not connected. Then the `selectedStep` stays `undefined`.
     if (selectedStep) {
-      // Apply the chosen responsive step’s properties
+      // Apply the chosen responsive step's properties
       this._columnCount = selectedStep.columns;
       this._labelsOnTop = selectedStep.labelsPosition === 'top';
     }
@@ -481,7 +481,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
         child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
 
         if (col + colspan > this._columnCount) {
-          // Too big to fit on this row, let’s wrap it
+          // Too big to fit on this row, let's wrap it
           col = 0;
         }
 

@@ -262,9 +262,8 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * The `<vaadin-grid>` calls this function lazily, only when it needs more data
  * to be displayed.
  *
- * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in
- * the API reference below for the detailed data provider arguments description,
- * and the “Assigning Data” page in the demos.
+ * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) property
+ * documentation for the detailed data provider arguments description.
  *
  * __Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__
  *

@@ -251,8 +251,8 @@ function collectFocusableNodes(node, result) {
 export function getFocusableElements(element) {
   const focusableElements = [];
   const needsSortByTabIndex = collectFocusableNodes(element, focusableElements);
-  // If there is at least one element with tabindex > 0, we need to sort
-  // the final array by tabindex.≈
+  // If there is at least one element with tabindex > 0,
+  // we need to sort the final array by tabindex.
   if (needsSortByTabIndex) {
     return sortElementsByTabIndex(focusableElements);
   }

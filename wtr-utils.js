@@ -9,7 +9,7 @@ const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/p
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
-  'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
+  'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
   /^WARNING: Since Vaadin .* is deprecated.*/u,
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/u,
 ];

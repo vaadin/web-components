@@ -130,22 +130,22 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       this._updateFlexAndWidth();
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'frozen' && !this.frozen) {
       this.frozen = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'lastFrozen' && !this._lastFrozen) {
       this._lastFrozen = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'frozenToEnd' && !this.frozenToEnd) {
       this.frozenToEnd = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'firstFrozenToEnd' && !this._firstFrozenToEnd) {
       this._firstFrozenToEnd = value;
     }
@@ -279,7 +279,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    // Don’t propagate the default `false` value.
+    // Don't propagate the default `false` value.
     if (frozen !== false) {
       this.__scheduleAutoFreezeWarning(rootColumns, 'frozen');
 
@@ -295,7 +295,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    // Don’t propagate the default `false` value.
+    // Don't propagate the default `false` value.
     if (frozenToEnd !== false) {
       this.__scheduleAutoFreezeWarning(rootColumns, 'frozenToEnd');
 

@@ -94,7 +94,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### “vaadin-contextmenu” Gesture Event
+ * ### `vaadin-contextmenu` Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
  * which is dispatched after either `contextmenu` or long touch events.

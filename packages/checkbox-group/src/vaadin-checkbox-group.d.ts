@@ -38,10 +38,11 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
  *
  * ```html
- * <vaadin-checkbox-group label="Preferred language of contact:">
- *   <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
- *   <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
- *   <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
+ * <vaadin-checkbox-group label="Export data">
+ *   <vaadin-checkbox value="0" label="Order ID"></vaadin-checkbox>
+ *   <vaadin-checkbox value="1" label="Product name"></vaadin-checkbox>
+ *   <vaadin-checkbox value="2" label="Customer"></vaadin-checkbox>
+ *   <vaadin-checkbox value="3" label="Status"></vaadin-checkbox>
  * </vaadin-checkbox-group>
  * ```
  *
