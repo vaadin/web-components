@@ -47,9 +47,9 @@ export declare class InputMixinClass {
 
   protected _inputElementChanged(input: HTMLElement, oldInput: HTMLElement): void;
 
-  protected _onChange(event: void): void;
+  protected _onChange(event: Event): void;
 
-  protected _onInput(event: void): void;
+  protected _onInput(event: Event): void;
 
   protected _setInputElement(input: HTMLElement): void;
 
