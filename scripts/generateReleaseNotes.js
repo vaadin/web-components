@@ -214,36 +214,6 @@ function logCommit(c) {
   console.log(log);
 }
 
-// Log a set of commits, and group by types
-function logCommitsByType(commits) {
-  if (!commits[0]) {
-    return;
-  }
-  const byType = {};
-  commits.forEach((commit) => {
-    const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;
-    byType[type] = [...(byType[type] || []), commit];
-  });
-
-  Object.keys(keyName).forEach((k) => {
-    if (byType[k]) {
-      console.log(`\n#### ${keyName[k]}`);
-
-      if (compact) {
-        byType[k].forEach((c) => logCommit(c));
-      } else {
-        logCommitsByComponent(byType[k].filter((c) => c.components.length));
-
-        const other = byType[k].filter((c) => !c.components.length);
-        if (other.length) {
-          console.log('- Other');
-          other.forEach((c) => logCommit(c));
-        }
-      }
-    }
-  });
-}
-
 function logCommitsByComponent(commits) {
   const byComponent = {};
   commits.forEach((commit) => {
@@ -276,6 +246,36 @@ function logCommitsByComponent(commits) {
       });
       console.log(log.replace(/^\s*[\r\n]/gmu, ''));
     });
+}
+
+// Log a set of commits, and group by types
+function logCommitsByType(commits) {
+  if (!commits[0]) {
+    return;
+  }
+  const byType = {};
+  commits.forEach((commit) => {
+    const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;
+    byType[type] = [...(byType[type] || []), commit];
+  });
+
+  Object.keys(keyName).forEach((k) => {
+    if (byType[k]) {
+      console.log(`\n#### ${keyName[k]}`);
+
+      if (compact) {
+        byType[k].forEach((c) => logCommit(c));
+      } else {
+        logCommitsByComponent(byType[k].filter((c) => c.components.length));
+
+        const other = byType[k].filter((c) => !c.components.length);
+        if (other.length) {
+          console.log('- Other');
+          other.forEach((c) => logCommit(c));
+        }
+      }
+    }
+  });
 }
 
 // Output the release notes for the set of commits

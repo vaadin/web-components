@@ -43,11 +43,6 @@ export function getDefaultI18n() {
   };
 }
 
-export async function open(datepicker) {
-  datepicker.open();
-  await waitForOverlayRender();
-}
-
 export async function waitForOverlayRender() {
   // First, wait for vaadin-overlay-open event
   await nextRender();
@@ -57,6 +52,11 @@ export async function waitForOverlayRender() {
 
   // Force dom-repeat to render table elements
   flush();
+}
+
+export async function open(datepicker) {
+  datepicker.open();
+  await waitForOverlayRender();
 }
 
 export function close(datepicker) {

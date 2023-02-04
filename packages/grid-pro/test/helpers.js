@@ -95,14 +95,14 @@ export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };
 
-export const getContainerCellContent = (container, row, col) => {
-  return getCellContent(getContainerCell(container, row, col));
-};
-
 export const getContainerCell = (container, row, col) => {
   const rows = getRows(container);
   const cells = getRowCells(rows[row]);
   return cells[col];
+};
+
+export const getContainerCellContent = (container, row, col) => {
+  return getCellContent(getContainerCell(container, row, col));
 };
 
 export const getCellEditor = (cell) => {

@@ -9,16 +9,6 @@
  */
 const directionSubscribers = [];
 
-function directionUpdater() {
-  const documentDir = getDocumentDir();
-  directionSubscribers.forEach((element) => {
-    alignDirs(element, documentDir);
-  });
-}
-
-const directionObserver = new MutationObserver(directionUpdater);
-directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
-
 function alignDirs(element, documentDir, elementDir = element.getAttribute('dir')) {
   if (documentDir) {
     element.setAttribute('dir', documentDir);
@@ -30,6 +20,16 @@ function alignDirs(element, documentDir, elementDir = element.getAttribute('dir'
 function getDocumentDir() {
   return document.documentElement.getAttribute('dir');
 }
+
+function directionUpdater() {
+  const documentDir = getDocumentDir();
+  directionSubscribers.forEach((element) => {
+    alignDirs(element, documentDir);
+  });
+}
+
+const directionObserver = new MutationObserver(directionUpdater);
+directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
 /**
  * A mixin to handle `dir` attribute based on the one set on the `<html>` element.

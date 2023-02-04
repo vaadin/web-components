@@ -13,6 +13,14 @@ import { flushGrid, getCellContent } from './helpers.js';
 
 let grid, header, footer, body;
 
+function getRowCell(rowIndex, cellIndex) {
+  return grid.$.items.children[rowIndex].children[cellIndex];
+}
+
+function getRowFirstCell(rowIndex) {
+  return getRowCell(rowIndex, 0);
+}
+
 function clickItem(rowIndex) {
   return getCellContent(getRowFirstCell(rowIndex)).click();
 }
@@ -27,14 +35,6 @@ function isRowExpanded(rowIndex) {
 
 function openRowDetails(rowIndex) {
   return grid.openItemDetails(grid.$.items.children[rowIndex]._item);
-}
-
-function getRowCell(rowIndex, cellIndex) {
-  return grid.$.items.children[rowIndex].children[cellIndex];
-}
-
-function getRowFirstCell(rowIndex) {
-  return getRowCell(rowIndex, 0);
 }
 
 function tab(target) {

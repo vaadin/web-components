@@ -35,20 +35,20 @@ import {
 
 let grid, focusable, scroller, header, footer, body;
 
-function clickItem(rowIndex) {
-  return getCellContent(getRowFirstCell(rowIndex)).click();
-}
-
-function focusItem(rowIndex) {
-  return getRowFirstCell(rowIndex).focus();
-}
-
 function getRowCell(rowIndex, cellIndex) {
   return grid.$.items.children[rowIndex].children[cellIndex];
 }
 
 function getRowFirstCell(rowIndex) {
   return getRowCell(rowIndex, 0);
+}
+
+function clickItem(rowIndex) {
+  return getCellContent(getRowFirstCell(rowIndex)).click();
+}
+
+function focusItem(rowIndex) {
+  return getRowFirstCell(rowIndex).focus();
 }
 
 function getCellInput(rowIndex, colIndex) {

@@ -48,6 +48,17 @@ class GridWrapper extends PolymerElement {
 
 customElements.define('grid-wrapper', GridWrapper);
 
+function attributeRenderer(attributeName) {
+  return (root, column, model) => {
+    const attributeValue = column.getAttribute(attributeName) || attributeName;
+    if (model) {
+      root.textContent = `${attributeValue} ${model.item.value}`;
+    } else {
+      root.textContent = attributeValue;
+    }
+  };
+}
+
 function createColumn() {
   const column = document.createElement('vaadin-grid-column');
   column.header = 'some header';
@@ -87,17 +98,6 @@ function expectNumberOfColumns(grid, number) {
 
 function getFooterCellContent(grid, row, column) {
   return getContainerCellContent(grid.$.footer, row, column);
-}
-
-function attributeRenderer(attributeName) {
-  return (root, column, model) => {
-    const attributeValue = column.getAttribute(attributeName) || attributeName;
-    if (model) {
-      root.textContent = `${attributeValue} ${model.item.value}`;
-    } else {
-      root.textContent = attributeValue;
-    }
-  };
 }
 
 describe('light dom observing', () => {
