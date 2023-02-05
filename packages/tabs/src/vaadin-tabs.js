@@ -109,11 +109,11 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
         }
 
         [part='back-button']::after {
-          content: '◀';
+          content: '\\25C0';
         }
 
         [part='forward-button']::after {
-          content: '▶';
+          content: '\\25B6';
         }
 
         :host([orientation='vertical']) [part='back-button'],
@@ -124,11 +124,11 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
         /* RTL specific styles */
 
         :host([dir='rtl']) [part='back-button']::after {
-          content: '▶';
+          content: '\\25B6';
         }
 
         :host([dir='rtl']) [part='forward-button']::after {
-          content: '◀';
+          content: '\\25C0';
         }
       </style>
       <div on-click="_scrollBack" part="back-button" aria-hidden="true"></div>
