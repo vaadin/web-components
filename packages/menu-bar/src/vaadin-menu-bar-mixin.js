@@ -123,7 +123,7 @@ export const MenuBarMixin = (superClass) =>
 
           const dots = document.createElement('div');
           dots.setAttribute('aria-hidden', 'true');
-          dots.textContent = '···';
+          dots.innerHTML = '&centerdot;'.repeat(3);
           btn.appendChild(dots);
 
           this._overflow = btn;
