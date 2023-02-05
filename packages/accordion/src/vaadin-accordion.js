@@ -12,7 +12,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
- * `<vaadin-accordion>` is a Web Component implementing accordion widget —
+ * `<vaadin-accordion>` is a Web Component implementing accordion widget:
  * a vertically stacked set of expandable panels. The component should be
  * used as a wrapper for two or more `<vaadin-accordion-panel>` components.
  *

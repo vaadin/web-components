@@ -156,7 +156,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /** @private */
     _onTrack(e) {
       if (!this._draggedColumn) {
-        // Reordering didn’t start. Skip this event.
+        // Reordering didn't start. Skip this event.
         return;
       }
 
@@ -196,7 +196,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /** @private */
     _onTrackEnd() {
       if (!this._draggedColumn) {
-        // Reordering didn’t start. Skip this event.
+        // Reordering didn't start. Skip this event.
         return;
       }
 

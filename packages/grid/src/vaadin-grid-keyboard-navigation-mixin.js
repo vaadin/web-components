@@ -120,7 +120,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.addEventListener('focusout', this._onFocusOut);
 
       // When focus goes from cell to another cell, focusin/focusout events do
-      // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
+      // not escape the grid's shadowRoot, thus listening inside the shadowRoot.
       this.$.table.addEventListener('focusin', this._onContentFocusIn.bind(this));
 
       this.addEventListener('mousedown', () => {
@@ -243,7 +243,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       this._detectInteracting(e);
       if (this.interacting && keyGroup !== 'Interaction') {
-        // When in the interacting mode, only the “Interaction” keys are handled.
+        // When in the interacting mode, only the "Interaction" keys are handled.
         keyGroup = undefined;
       }
 
@@ -526,7 +526,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
-      // _focusedColumnOrder is memoized — this is to ensure predictable
+      // _focusedColumnOrder is memoized - this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
       if (this._focusedColumnOrder === undefined) {
         if (isCurrentCellRowDetails) {
@@ -545,7 +545,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       } else {
         // Focusing a regular cell on the destination row
 
-        // Find orderedColumnIndex — the index of order closest matching the
+        // Find orderedColumnIndex - the index of order closest matching the
         // original _focusedColumnOrder in the sorted array of orders
         // of the visible columns on the destination row.
         const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);

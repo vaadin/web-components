@@ -152,7 +152,7 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
 
   /**
    * When true the overlay won't disable the main content, showing
-   * it doesn’t change the functionality of the user interface.
+   * it doesn't change the functionality of the user interface.
    */
   modeless: boolean;
 

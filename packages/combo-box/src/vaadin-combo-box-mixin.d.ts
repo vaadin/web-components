@@ -79,7 +79,7 @@ export declare class ComboBoxMixinClass<TItem> {
   /**
    * The `String` value for the selected item of the combo box.
    *
-   * When there’s no item selected, the value is an empty string.
+   * When there is no item selected, the value is an empty string.
    *
    * Use `selectedItem` property to get the raw selected item from
    * the `items` array.
