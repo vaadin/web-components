@@ -21,6 +21,12 @@ export declare class ListMixinClass {
   _hasVaadinListMixin: boolean;
 
   /**
+   * If true, the user cannot interact with this element.
+   * Setting this property updates it for all the items.
+   */
+  disabled: boolean;
+
+  /**
    * The index of the item selected in the items array.
    * Note: Not updated when used in `multiple` selection mode.
    */
