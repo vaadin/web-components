@@ -111,7 +111,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
-        <text dy=".35em" text-anchor="middle"></text>
+        <text dy=".35em" text-anchor="middle">&#xea01;</text>
       </svg>
       <svg
         part="abbr"

@@ -28,6 +28,17 @@ export const ListMixin = (superClass) =>
         },
 
         /**
+         * If true, the user cannot interact with this element.
+         * When the element is disabled, the selected item is
+         * not updated when `selected` property is changed.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * The index of the item selected in the items array.
          * Note: Not updated when used in `multiple` selection mode.
          */
@@ -145,7 +156,7 @@ export const ListMixin = (superClass) =>
       if (!disabled) {
         if (items) {
           this.setAttribute('aria-orientation', orientation || 'vertical');
-          this.items.forEach((item) => {
+          items.forEach((item) => {
             if (orientation) {
               item.setAttribute('orientation', orientation);
             } else {

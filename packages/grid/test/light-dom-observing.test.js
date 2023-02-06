@@ -6,6 +6,7 @@ import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
+  attributeRenderer,
   flushGrid,
   getBodyCellContent,
   getContainerCellContent,
@@ -47,17 +48,6 @@ class GridWrapper extends PolymerElement {
 }
 
 customElements.define('grid-wrapper', GridWrapper);
-
-function attributeRenderer(attributeName) {
-  return (root, column, model) => {
-    const attributeValue = column.getAttribute(attributeName) || attributeName;
-    if (model) {
-      root.textContent = `${attributeValue} ${model.item.value}`;
-    } else {
-      root.textContent = attributeValue;
-    }
-  };
-}
 
 function createColumn() {
   const column = document.createElement('vaadin-grid-column');

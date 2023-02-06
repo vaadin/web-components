@@ -164,10 +164,7 @@ describe('lazy loading', () => {
         });
       });
 
-      // eslint-disable-next-line prefer-arrow-callback
-      describe('when open', function () {
-        // eslint-disable-next-line no-invalid-this
-        this.timeout(15000);
+      describe('when open', () => {
         beforeEach(() => {
           comboBox.inputElement.focus();
           comboBox.opened = true;

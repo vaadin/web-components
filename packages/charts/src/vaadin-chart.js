@@ -58,7 +58,7 @@ export function deepMerge(target, source) {
 }
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
-  /* eslint-disable no-invalid-this, prefer-arrow-callback */
+  /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
     Highcharts.fireEvent(this, 'beforeExport');
     const result = proceed.apply(this, args);
@@ -183,22 +183,6 @@ Highcharts.setOptions({ lang: { noData: '' } });
  *  1. Set `reversed` to true for xAxis (https://api.highcharts.com/highcharts/xAxis.reversed).
  *  2. Set `useHTML` to true for text elements, i.e. `tooltip` (https://api.highcharts.com/highcharts/tooltip.useHTML).
  *  3. Set `rtl` to true for `legend` (https://api.highcharts.com/highcharts/legend.rtl).
- *
- * Using as a base the project created with in Quick Start and an `additionalOptions` in order to make RTL adjustments:
- *
- * ```html
- *  <vaadin-chart title="۱- عنوان نمودار" subtitle="۲- عنوان فرعی نمودار"
- *    additional-options='{"title": {"useHTML": true}, "tooltip": {"useHTML": true}, "subtitle": {"useHTML": true},
- *    "legend": {"rtl": true}, "yAxis": [{"id": "۴- مقادیر", "title": {"text": "۴- مقادیر", "useHTML": true}}],
- *    "xAxis": {"reversed": true}}'>
- *    <vaadin-chart-series
- *          type= "column"
- *          title="۳- عنوان ردیف"
- *          unit="۴- مقادیر"
- *          values="[10,20,30]">
- *    </vaadin-chart-series>
- *  </vaadin-chart>
- * ```
  *
  * ### Setting colors
  *
