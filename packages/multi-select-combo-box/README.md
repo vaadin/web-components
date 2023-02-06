@@ -13,7 +13,7 @@ A web component that wraps `<vaadin-combo-box>` and allows selecting multiple it
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/multi-select-combo-box/screenshot.png" width="300" alt="Screenshot of vaadin-multi-select-combo-box">](https://vaadin.com/docs/latest/components/multi-select-combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/multi-select-combo-box/screenshot.png" width="300" alt="Screenshot of vaadin-multi-select-combo-box">](https://vaadin.com/docs/latest/components/multi-select-combo-box)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/multi-select-combo-box';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/multi-select-combo-box/vaadin-multi-select-combo-box.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/multi-select-combo-box/vaadin-multi-select-combo-box.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

@@ -14,12 +14,12 @@ A web component for grouping multiple [`<vaadin-avatar>`](https://www.npmjs.com/
     { name: 'Foo Bar', colorIndex: 1 },
     { colorIndex: 2 },
     { name: 'Foo Bar', colorIndex: 3 },
-    { colorIndex: 4 }
+    { colorIndex: 4 },
   ];
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/avatar-group/screenshot.png" width="108" alt="Screenshot of vaadin-avatar-group">](https://vaadin.com/docs/latest/components/avatar/#avatar-group)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/avatar-group/screenshot.png" width="108" alt="Screenshot of vaadin-avatar-group">](https://vaadin.com/docs/latest/components/avatar/#avatar-group)
 
 ## Installation
 
@@ -38,7 +38,7 @@ import '@vaadin/avatar-group';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/avatar-group/vaadin-avatar-group.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/avatar-group/vaadin-avatar-group.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
