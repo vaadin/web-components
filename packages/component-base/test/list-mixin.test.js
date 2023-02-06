@@ -368,7 +368,7 @@ const runTests = (defineHelper, baseMixin) => {
           expect(list.items[1].focused).to.be.true;
         });
 
-        it('should move focus to the prev element on ArrowRight keydown', () => {
+        it('should move focus to the prev element on ArrowRight', () => {
           arrowLeft(list);
           arrowRight(list);
           expect(list.items[0].focused).to.be.true;
@@ -399,7 +399,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(list.items[1].focused).to.be.true;
       });
 
-      it('should move focus to the prev element on ArrowUp keydown', () => {
+      it('should move focus to the prev element on ArrowUp', () => {
         arrowDown(list);
         arrowUp(list);
         expect(list.items[0].focused).to.be.true;
@@ -421,7 +421,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(list.items[1].focused).to.be.true;
       });
 
-      it('should move focus to the last element on End keydown', () => {
+      it('should move focus to the last element on End', () => {
         end(list);
         expect(list.items[6].focused).to.be.true;
       });
@@ -439,7 +439,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to the last element on first element ArrowUp keydown', () => {
+      it('should move focus to the last element on first element ArrowUp', () => {
         arrowUp(list);
         expect(list.items[list.items.length - 1].focused).to.be.true;
       });
