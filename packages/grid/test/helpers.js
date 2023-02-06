@@ -14,6 +14,17 @@ export const flushGrid = (grid) => {
   grid.__virtualizer.flush();
 };
 
+export function attributeRenderer(attributeName) {
+  return (root, column, model) => {
+    const attributeValue = column.getAttribute(attributeName) || attributeName;
+    if (model) {
+      root.textContent = `${attributeValue} ${model.item.value}`;
+    } else {
+      root.textContent = attributeValue;
+    }
+  };
+}
+
 export const getCell = (grid, index) => {
   return grid.$.items.querySelectorAll('[part~="cell"]')[index];
 };
