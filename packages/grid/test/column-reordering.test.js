@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import {
+  attributeRenderer,
   dragAndDropOver,
   dragOver,
   dragStart,
@@ -63,18 +63,28 @@ describe('reordering simple grid', () => {
       <vaadin-grid style="width: 450px; height: 200px;" size="1" column-reordering-allowed>
         ${[1, 2, 3, 4].map((col) => {
           return `
-            <vaadin-grid-column resizable index="${col}">
-              <template class="header"><span hidden>0</span><span>${col}</span></template>
-              <template>${col}</template>
-              <template class="footer">${col}</template>
-            </vaadin-grid-column>
+            <vaadin-grid-column resizable index="${col}"></vaadin-grid-column>
           `;
         })}
-        <template class="row-details">
-          foo
-        </template>
       </vaadin-grid>
     `);
+
+    grid.rowDetailsRenderer = (root) => {
+      root.textContent = 'foo';
+    };
+
+    grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+      col.headerRenderer = (root, column) => {
+        root.innerHTML = `<span hidden>0</span><span>${column.getAttribute('index')}</span>`;
+      };
+      col.renderer = (root, column) => {
+        root.textContent = column.getAttribute('index');
+      };
+      col.footerRenderer = (root, column) => {
+        root.textContent = column.getAttribute('index');
+      };
+    });
+
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     await aTimeout(0);
@@ -343,7 +353,6 @@ describe('reordering simple grid', () => {
     it('should set order to new column', async () => {
       dragAndDropOver(headerContent[0], headerContent[1]);
       const col = document.createElement('vaadin-grid-column');
-      col.innerHTML = '<template>[[index]]</template>';
       grid.appendChild(col);
       await nextFrame();
       expect(col._order).to.equal(50000000);
@@ -444,16 +453,10 @@ describe('reordering grid with columns groups', () => {
       <vaadin-grid style="width: 800px; height: 200px;" size="1" column-reordering-allowed>
         ${[1, 2, 3].map((colgroup) => {
           return `
-            <vaadin-grid-column-group>
-              <template class="header">${colgroup}</template>
-              <template class="footer">${colgroup}</template>
+            <vaadin-grid-column-group header="${colgroup}" footer="${colgroup}">
               ${[1, 2].map((col) => {
                 return `
-                  <vaadin-grid-column>
-                    <template class="header">${colgroup}${col}</template>
-                    <template>${colgroup}${col}</template>
-                    <template class="footer">${colgroup}${col}</template>
-                  </vaadin-grid-column>
+                  <vaadin-grid-column header="${colgroup}${col}" footer="${colgroup}${col}" prefix="${colgroup}${col}"></vaadin-grid-column>
                 `;
               })}
             </vaadin-grid-column-group>
@@ -461,6 +464,16 @@ describe('reordering grid with columns groups', () => {
         })}
       </vaadin-grid>
     `);
+
+    grid.querySelectorAll('vaadin-grid-column-group').forEach((group) => {
+      group.footerRenderer = attributeRenderer('footer');
+    });
+
+    grid.querySelectorAll('vaadin-grid-column').forEach((column) => {
+      column.footerRenderer = attributeRenderer('footer');
+      column.renderer = attributeRenderer('prefix');
+    });
+
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     await nextFrame();
@@ -558,14 +571,8 @@ describe('reordering grid with different column widths', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        <vaadin-grid-column width="50px" flex-grow="0">
-          <template class="header">1</template>
-          <template>1</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="100px" flex-grow="0">
-          <template class="header">2</template>
-          <template>2</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column width="50px" flex-grow="0" header="1"></vaadin-grid-column>
+        <vaadin-grid-column width="100px" flex-grow="0" header="2"></vaadin-grid-column>
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
@@ -597,21 +604,20 @@ describe('large column group', () => {
         <vaadin-grid-column-group>
           ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((col) => {
             return `
-              <vaadin-grid-column width="10px">
-                <template class="header">${col}</template>
-                <template>${col}</template>
-                <template class="footer">${col}</template>
-              </vaadin-grid-column>
+              <vaadin-grid-column width="10px" header="${col}" footer="${col}" prefix="${col}"></vaadin-grid-column>
             `;
           })}
         </vaadin-grid-column-group>
-        <vaadin-grid-column width="10px">
-          <template class="header">12</template>
-          <template>12</template>
-          <template class="footer">12</template>
-        </vaadin-grid-column>
+
+        <vaadin-grid-column width="10px" header="12" footer="12" prefix="12"></vaadin-grid-column>
       </vaadin-grid>
     `);
+
+    grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+      col.renderer = attributeRenderer('prefix');
+      col.footerRenderer = attributeRenderer('footer');
+    });
+
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     await aTimeout(0);
@@ -630,21 +636,21 @@ describe('reordering with draggable contents', () => {
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         ${[1, 2].map((col) => {
           return `
-            <vaadin-grid-column resizable>
-              <template class="header">
-                <div draggable="true">${col}</div>
-              </template>
-              <template>
-                <div draggable="true">${col}</div>
-              </template>
-              <template class="footer">
-                <div draggable="true">${col}</div>
-              </template>
-            </vaadin-grid-column>
+            <vaadin-grid-column resizable index=${col}></vaadin-grid-column>
           `;
         })}
       </vaadin-grid>
     `);
+
+    grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+      const renderer = (root) => {
+        root.innerHTML = `<div draggable="true">${col.getAttribute('index')}</div>`;
+      };
+      col.headerRenderer = renderer;
+      col.renderer = renderer;
+      col.footerRenderer = renderer;
+    });
+
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     await aTimeout(0);
@@ -683,20 +689,18 @@ describe('group with empty headers', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
         <vaadin-grid-column-group>
-          <vaadin-grid-column>
-            <template class="header">1</template>
-            <template>1</template>
-            <template class="footer">1</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column header="1" footer="1" prefix="1"></vaadin-grid-column>
         </vaadin-grid-column-group>
 
-        <vaadin-grid-column>
-          <template class="header">2</template>
-          <template>2</template>
-          <template class="footer">2</template>
+        <vaadin-grid-column header="2" footer="2" prefix="2"></vaadin-grid-column>
         </vaadin-grid-column>
       </vaadin-grid>
     `);
+
+    grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+      col.renderer = attributeRenderer('prefix');
+      col.footerRenderer = attributeRenderer('footer');
+    });
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     await nextFrame();
