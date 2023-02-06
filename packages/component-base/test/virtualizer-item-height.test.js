@@ -132,23 +132,23 @@ describe('virtualizer - item height - sub-pixel', () => {
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 
-  it('should measure height correctly if some transform is applied to virtualizer', async () => {
+  it('should measure height correctly if some transform is applied to virtualizer', () => {
     elementsContainer.style.transform = 'scale(0.5)';
 
-    await aTimeout(100);
+    virtualizer.scrollToIndex(0);
 
     let containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
 
     elementsContainer.style.transform = 'scale(1.5)';
 
-    await aTimeout(100);
+    virtualizer.scrollToIndex(0);
 
     containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 
-  it('should measure item height when box-sizing content-box is used', async () => {
+  it('should measure item height when box-sizing content-box is used', () => {
     const firstItem = elementsContainer.querySelector('#item-0');
 
     firstItem.style.boxSizing = 'content-box';
@@ -156,13 +156,13 @@ describe('virtualizer - item height - sub-pixel', () => {
     firstItem.style.borderTop = '4px solid red';
     firstItem.style.borderBottom = '5px solid red';
 
-    await aTimeout(100);
+    virtualizer.scrollToIndex(0);
 
     const containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT + 3 + 4 + 5));
   });
 
-  it('should measure item height when box-sizing border-box is used', async () => {
+  it('should measure item height when box-sizing border-box is used', () => {
     const firstItem = elementsContainer.querySelector('#item-0');
 
     firstItem.style.boxSizing = 'border-box';
@@ -170,7 +170,7 @@ describe('virtualizer - item height - sub-pixel', () => {
     firstItem.style.borderTop = '4px solid red';
     firstItem.style.borderBottom = '5px solid red';
 
-    await aTimeout(100);
+    virtualizer.scrollToIndex(0);
 
     const containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
