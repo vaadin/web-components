@@ -194,11 +194,11 @@ const runTests = (defineHelper, baseMixin) => {
       document.body.removeChild(wrapper);
     });
 
-    it('should have a list of valid items', () => {
+    it('should set items based on the children count', () => {
       expect(list.items.length).to.be.equal(3);
     });
 
-    it('should move focus to next element on "arrow-right" keydown', async () => {
+    it('should move focus to the next element on ArrowRight', async () => {
       list.orientation = 'horizontal';
       await nextFrame();
       list.focus();
@@ -331,23 +331,23 @@ const runTests = (defineHelper, baseMixin) => {
       });
 
       describe('LTR mode', () => {
-        it('should move focus to next element on "arrow-right" keydown', () => {
+        it('should move focus to the next element on ArrowRight', () => {
           arrowRight(list);
           expect(list.items[1].focused).to.be.true;
         });
 
-        it('should move focus to prev element on "arrow-right" keydown', () => {
+        it('should move focus to the prev element on ArrowLeft', () => {
           arrowRight(list);
           arrowLeft(list);
           expect(list.items[0].focused).to.be.true;
         });
 
-        it('should move focus to first element on "home" keydown with LTR', () => {
+        it('should move focus to the first element on Home', () => {
           home(list);
           expect(list.items[0].focused).to.be.true;
         });
 
-        it('should move focus to last element on "end" keydown with LTR', async () => {
+        it('should move focus to the last element on End', async () => {
           list._focus(3);
           await nextFrame();
 
@@ -363,23 +363,23 @@ const runTests = (defineHelper, baseMixin) => {
           await nextFrame();
         });
 
-        it('should move focus to next element on "arrow-left" keydown', () => {
+        it('should move focus to the next element on ArrowLeft', () => {
           arrowLeft(list);
           expect(list.items[1].focused).to.be.true;
         });
 
-        it('should move focus to prev element on "arrow-right" keydown', () => {
+        it('should move focus to the prev element on ArrowRight keydown', () => {
           arrowLeft(list);
           arrowRight(list);
           expect(list.items[0].focused).to.be.true;
         });
 
-        it('should move focus to first element on "home" keydown with RTL', () => {
+        it('should move focus to the first element on Home', () => {
           home(list);
           expect(list.items[0].focused).to.be.true;
         });
 
-        it('should move focus to last element on "end" keydown with RTL', async () => {
+        it('should move focus to the last element on End', async () => {
           list._focus(3);
           await nextFrame();
           end(list);
@@ -394,25 +394,25 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
       });
 
-      it('should move focus to next element on "arrow-down" keydown', () => {
+      it('should move focus to the next element on ArrowDown', () => {
         arrowDown(list);
         expect(list.items[1].focused).to.be.true;
       });
 
-      it('should move focus to prev element on "arrow-up" keydown', () => {
+      it('should move focus to the prev element on ArrowUp keydown', () => {
         arrowDown(list);
         arrowUp(list);
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to first element on "home" keydown', async () => {
+      it('should move focus to the first element on Home', async () => {
         list._focus(3);
         await nextFrame();
         home(list);
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to second element if first is disabled on "home" keydown', async () => {
+      it('should skip disabled items when moving focus on Home', async () => {
         list.items[0].disabled = true;
         await nextFrame();
 
@@ -421,25 +421,25 @@ const runTests = (defineHelper, baseMixin) => {
         expect(list.items[1].focused).to.be.true;
       });
 
-      it('should move focus to last element on "end" keydown', () => {
+      it('should move focus to the last element on End keydown', () => {
         end(list);
         expect(list.items[6].focused).to.be.true;
       });
 
-      it('should move focus to the last enabled element on "end" keydown', async () => {
+      it('should skip disabled items when moving focus on End', async () => {
         list.items[6].disabled = true;
         await nextFrame();
         end(list);
         expect(list.items[5].focused).to.be.true;
       });
 
-      it('should move focus to first element on last element "arrow-down" keydown', () => {
+      it('should move focus to the first element on last element ArrowDown', () => {
         list._focus(list.items.length - 1);
         arrowDown(list);
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to last element on first element "arrow-up" keydown', () => {
+      it('should move focus to the last element on first element ArrowUp keydown', () => {
         arrowUp(list);
         expect(list.items[list.items.length - 1].focused).to.be.true;
       });
@@ -759,12 +759,12 @@ const runTests = (defineHelper, baseMixin) => {
       list.focus();
     });
 
-    it('should move focus to next not hidden element on "arrow-down"', () => {
+    it('should ship hidden items when moving focus on ArrowDown', () => {
       arrowDown(list);
       expect(list.items.find((item) => item.textContent === 'Bax').focused).to.be.true;
     });
 
-    it('should move focus to next not hidden element on "arrow-up"', () => {
+    it('should skip hidden items when moving focus on ArrowUp', () => {
       arrowUp(list);
       expect(list.items.find((item) => item.textContent === 'Bin').focused).to.be.true;
     });
