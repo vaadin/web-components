@@ -184,22 +184,6 @@ Highcharts.setOptions({ lang: { noData: '' } });
  *  2. Set `useHTML` to true for text elements, i.e. `tooltip` (https://api.highcharts.com/highcharts/tooltip.useHTML).
  *  3. Set `rtl` to true for `legend` (https://api.highcharts.com/highcharts/legend.rtl).
  *
- * Using as a base the project created with in Quick Start and an `additionalOptions` in order to make RTL adjustments:
- *
- * ```html
- *  <vaadin-chart title="۱- عنوان نمودار" subtitle="۲- عنوان فرعی نمودار"
- *    additional-options='{"title": {"useHTML": true}, "tooltip": {"useHTML": true}, "subtitle": {"useHTML": true},
- *    "legend": {"rtl": true}, "yAxis": [{"id": "۴- مقادیر", "title": {"text": "۴- مقادیر", "useHTML": true}}],
- *    "xAxis": {"reversed": true}}'>
- *    <vaadin-chart-series
- *          type= "column"
- *          title="۳- عنوان ردیف"
- *          unit="۴- مقادیر"
- *          values="[10,20,30]">
- *    </vaadin-chart-series>
- *  </vaadin-chart>
- * ```
- *
  * ### Setting colors
  *
  * Although charts can be styled as described above, there is a simpler way for setting colors.
