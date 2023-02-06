@@ -113,7 +113,7 @@ describe('selection', () => {
     });
   });
 
-  describe(`renderer cells`, () => {
+  describe('renderer cells', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;" size="10">
