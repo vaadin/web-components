@@ -123,19 +123,19 @@ const runTests = (defineHelper, baseMixin) => {
       expect(list.items.length).to.be.equal(5);
     });
 
-    it('should update items list when adding nodes', async () => {
+    it('should update items when an element is added', async () => {
       list.appendChild(document.createElement(itemTag));
       await nextFrame();
       expect(list.items.length).to.be.equal(6);
     });
 
-    it('should update items list when removing nodes', async () => {
+    it('should update items when an element is removed', async () => {
       list.removeChild(list.items[0]);
       await nextFrame();
       expect(list.items.length).to.be.equal(4);
     });
 
-    it('should update items list when moving nodes', async () => {
+    it('should update items when an element is moved', async () => {
       const [e2, e4] = [list.items[2], list.items[4]];
       list.insertBefore(e4, e2);
       await nextFrame();
