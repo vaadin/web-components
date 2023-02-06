@@ -24,7 +24,7 @@ A web component for choosing a value from a filterable list of options presented
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/combo-box/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box">](https://vaadin.com/docs/latest/components/combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/combo-box/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box">](https://vaadin.com/docs/latest/components/combo-box)
 
 ## Installation
 
@@ -43,7 +43,7 @@ import '@vaadin/combo-box';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/combo-box/vaadin-combo-box.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/combo-box/vaadin-combo-box.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

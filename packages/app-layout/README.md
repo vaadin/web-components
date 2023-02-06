@@ -29,9 +29,9 @@ A web component for building common application layouts.
 </vaadin-app-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/app-layout/screenshot.png" width="900" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/docs/latest/components/app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/app-layout/screenshot.png" width="900" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/docs/latest/components/app-layout)
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/app-layout/screenshot-mobile.png" width="350" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/docs/latest/components/app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/app-layout/screenshot-mobile.png" width="350" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/docs/latest/components/app-layout)
 
 ## Installation
 
@@ -51,7 +51,7 @@ import '@vaadin/app-layout/vaadin-drawer-toggle.js';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/app-layout/vaadin-app-layout.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/app-layout/vaadin-app-layout.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the components from the `theme/material` folder:
 
