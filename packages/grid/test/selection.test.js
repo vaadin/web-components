@@ -1,10 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
-import '../vaadin-grid-filter.js';
+import '../vaadin-grid-filter-column.js';
 import '../vaadin-grid-column-group.js';
 import {
   flushGrid,
@@ -15,25 +14,6 @@ import {
   getRows,
   infiniteDataProvider,
 } from './helpers.js';
-
-const fixtures = {
-  renderer: `
-    <vaadin-grid style="width: 200px; height: 200px;" size="10">
-      <vaadin-grid-column></vaadin-grid-column>
-      <vaadin-grid-column></vaadin-grid-column>
-    </vaadin-grid>
-  `,
-  template: `
-    <vaadin-grid style="width: 200px; height: 200px;" size="10">
-      <vaadin-grid-column>
-        <template>foo</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template>bar</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  `,
-};
 
 describe('selection', () => {
   let grid;
@@ -50,7 +30,13 @@ describe('selection', () => {
 
   describe('with renderer', () => {
     beforeEach(() => {
-      grid = fixtureSync(fixtures.renderer);
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 200px;" size="10">
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+
       const cols = grid.children;
       cols[0].renderer = (root) => {
         root.textContent = 'foo';
@@ -127,54 +113,48 @@ describe('selection', () => {
     });
   });
 
-  ['renderer', 'template'].forEach((type) => {
-    describe(`${type} cells`, () => {
-      beforeEach(() => {
-        grid = fixtureSync(fixtures[type]);
-        if (type === 'renderer') {
-          const cols = grid.children;
-          cols[0].renderer = (root) => {
-            root.textContent = 'foo';
-          };
-          cols[1].renderer = (root) => {
-            root.textContent = 'bar';
-          };
-        }
-        configureGrid();
-      });
+  describe(`renderer cells`, () => {
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 200px;" size="10">
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
 
-      (type === 'template' ? it : it.skip)('should reflect cell instance value', () => {
-        if (type === 'template') {
-          const cells = getRowCells(rows[0]);
-          cells[0]._content.__templateInstance.selected = false;
-          expect(cells[0]._content.__templateInstance.selected).to.be.false;
-          expect(grid.selectedItems).to.be.empty;
-        }
-      });
+      const cols = grid.children;
+      cols[0].renderer = (root) => {
+        root.textContent = 'foo';
+      };
+      cols[1].renderer = (root) => {
+        root.textContent = 'bar';
+      };
 
-      it('should bind to cells', () => {
-        const cells = getRowCells(rows[0]);
-        let cell = cells[0];
-        let model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-        expect(model.selected).to.be.true;
+      configureGrid();
+    });
 
-        cell = cells[1];
-        model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-        expect(model.selected).to.be.true;
+    it('should bind to cells', () => {
+      const cells = getRowCells(rows[0]);
+      let cell = cells[0];
+      let model = grid.__getRowModel(cell.parentElement);
+      expect(model.selected).to.be.true;
 
-        cell = getRowCells(rows[1])[0];
-        model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-        expect(model.selected).to.be.false;
-      });
+      cell = cells[1];
+      model = grid.__getRowModel(cell.parentElement);
+      expect(model.selected).to.be.true;
 
-      it('should select an equaling item', () => {
-        grid.itemIdPath = 'value';
-        const cells = getRowCells(rows[0]);
-        grid.selectedItems = [{ value: 'foo0' }];
-        const cell = cells[0];
-        const model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
-        expect(model.selected).to.be.true;
-      });
+      cell = getRowCells(rows[1])[0];
+      model = grid.__getRowModel(cell.parentElement);
+      expect(model.selected).to.be.false;
+    });
+
+    it('should select an equaling item', () => {
+      grid.itemIdPath = 'value';
+      const cells = getRowCells(rows[0]);
+      grid.selectedItems = [{ value: 'foo0' }];
+      const cell = cells[0];
+      const model = grid.__getRowModel(cell.parentElement);
+      expect(model.selected).to.be.true;
     });
   });
 });
@@ -192,23 +172,19 @@ describe('multi selection column', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 200px;">
         <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-        <vaadin-grid-selection-column>
-          <template class="header">header</template>
-          <template>[[item]]</template>
-        </vaadin-grid-selection-column>
+        <vaadin-grid-selection-column header="header"></vaadin-grid-selection-column>
+
         <vaadin-grid-column-group>
           <vaadin-grid-selection-column></vaadin-grid-selection-column>
         </vaadin-grid-column-group>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-filter path="value" value="[[filter]]">
-              <input id="filter" slot="filter" value="{{filter::input}}">
-            </vaadin-grid-filter>
-          </template>
-          <template></template>
-        </vaadin-grid-column>
+
+        <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>          
       </vaadin-grid>
     `);
+
+    grid.querySelector('[header="header"]').renderer = (root, _, { item }) => {
+      root.textContent = item;
+    };
 
     grid.items = ['foo', 'bar', 'baz'];
 
@@ -346,13 +322,13 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.hidden).to.be.false;
   });
 
-  it('should be possible to override the body template', () => {
+  it('should be possible to override the body renderer', () => {
     const secondCell = getCellContent(getRowCells(rows[0])[1]);
 
     expect(secondCell.innerHTML).to.eql(secondCell.textContent);
   });
 
-  it('should be possible to override the header template', () => {
+  it('should be possible to override the header renderer', () => {
     const secondCell = getCellContent(getRowCells(headerRows[1])[1]);
 
     expect(secondCell.innerHTML).to.eql('header');
@@ -471,11 +447,12 @@ describe('multi selection column', () => {
 
     firstBodyCheckbox.checked = true;
 
-    const filter = grid.querySelector('#filter');
+    const filter = grid.querySelector('vaadin-grid-filter');
     filter.value = 'foo';
     filter.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
 
-    filter.parentElement._debouncerFilterChanged.flush();
+    filter._debouncerFilterChanged.flush();
+
     expect(selectionColumn.selectAll).to.be.true;
   });
 
