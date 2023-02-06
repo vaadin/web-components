@@ -161,7 +161,7 @@ export class IronListAdapter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
-      this._physicalSizes[pidx] = Math.ceil(this.__getItemHeight(this._physicalItems[pidx]));
+      this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
@@ -176,17 +176,21 @@ export class IronListAdapter {
     }
   }
 
-  __getItemHeight(item) {
-    const { boxSizing, height, paddingTop, paddingBottom, borderTopWidth, borderBottomWidth } = getComputedStyle(item);
+  __getBorderBoxHeight(el) {
+    const style = getComputedStyle(el);
 
-    let itemHeight = parseFloat(height) || 0;
+    const itemHeight = parseFloat(style.height) || 0;
 
-    if (boxSizing === 'content-box') {
-      itemHeight +=
-        parseFloat(paddingTop) + parseFloat(paddingBottom) + parseFloat(borderTopWidth) + parseFloat(borderBottomWidth);
+    if (style.boxSizing === 'border-box') {
+      return itemHeight;
     }
 
-    return itemHeight;
+    const paddingBottom = parseFloat(style.paddingBottom) || 0;
+    const paddingTop = parseFloat(style.paddingTop) || 0;
+    const borderBottomWidth = parseFloat(style.borderBottomWidth) || 0;
+    const borderTopWidth = parseFloat(style.borderTopWidth) || 0;
+
+    return itemHeight + paddingBottom + paddingTop + borderBottomWidth + borderTopWidth;
   }
 
   __updateElement(el, index, forceSameIndexUpdates) {
