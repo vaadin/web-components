@@ -63,7 +63,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
         }
 
         [part='decrease-button']::before {
-          content: '−';
+          content: '\\2212';
         }
 
         [part='increase-button']::before {
