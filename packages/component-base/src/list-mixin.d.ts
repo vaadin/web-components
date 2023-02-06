@@ -22,7 +22,8 @@ export declare class ListMixinClass {
 
   /**
    * If true, the user cannot interact with this element.
-   * Setting this property updates it for all the items.
+   * When the element is disabled, the selected item is
+   * not updated when `selected` property is changed.
    */
   disabled: boolean;
 
