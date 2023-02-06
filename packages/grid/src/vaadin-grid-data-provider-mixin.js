@@ -543,6 +543,8 @@ export const DataProviderMixin = (superClass) =>
      * item at the second index within the children of the expanded first item, and so on.
      * Each given index points to a child of the item at the previous index.
      *
+     * Using `Infinity` as an index will point to the last item on the level.
+     *
      * @param indexes {...number} Row indexes to scroll to
      */
     scrollToIndex(...indexes) {
@@ -562,6 +564,7 @@ export const DataProviderMixin = (superClass) =>
     /**
      * Recursively returns the globally flat index of the item the given indexes point to.
      * Each index in the array points to a sub-item of the previous index.
+     * Using `Infinity` as an index will point to the last item on the level.
      *
      * @param {!Array<number>} indexes
      * @param {!ItemCache} cache
@@ -570,6 +573,10 @@ export const DataProviderMixin = (superClass) =>
      * @private
      **/
     __getGlobalFlatIndex([levelIndex, ...subIndexes], cache = this._cache, flatIndex = 0) {
+      if (levelIndex === Infinity) {
+        // Treat Infinity as the last index on the level
+        levelIndex = cache.size - 1;
+      }
       const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
       const subCache = cache.itemCaches[levelIndex];
       if (subCache && subCache.effectiveSize && subIndexes.length) {

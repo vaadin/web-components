@@ -152,6 +152,8 @@ export declare class DataProviderMixinClass<TItem> {
    * item at the second index within the children of the expanded first item, and so on.
    * Each given index points to a child of the item at the previous index.
    *
+   * Using `Infinity` as an index will point to the last item on the level.
+   *
    * @param indexes Row indexes to scroll to
    */
   scrollToIndex(...indexes: number[]): void;

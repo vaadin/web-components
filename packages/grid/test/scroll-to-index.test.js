@@ -291,10 +291,12 @@ describe('scroll to index', () => {
     describe('scrolling to hierachical index', () => {
       let pendingRequests = [];
 
-      function flushPendingRequests() {
-        const requests = pendingRequests;
-        pendingRequests = [];
-        requests.forEach((request) => request());
+      function flushPendingRequests(times = 1) {
+        for (let i = 0; i < times; i++) {
+          const requests = pendingRequests;
+          pendingRequests = [];
+          requests.forEach((request) => request());
+        }
       }
 
       function getFirstVisibleItemId() {
@@ -462,9 +464,7 @@ describe('scroll to index', () => {
         flushPendingRequests();
         grid.scrollToIndex(75, 100);
         // Need to flush multiple times because between the flushes, grid may expand and scroll, making more data requests
-        flushPendingRequests();
-        flushPendingRequests();
-        flushPendingRequests();
+        flushPendingRequests(3);
         expect(getFirstVisibleItemId()).to.equal('75-99');
       });
 
@@ -472,9 +472,7 @@ describe('scroll to index', () => {
         grid.expandedItems = [{ name: '74' }];
         flushPendingRequests();
         grid.scrollToIndex(75);
-        flushPendingRequests();
-        flushPendingRequests();
-        flushPendingRequests();
+        flushPendingRequests(3);
         expect(getFirstVisibleItemId()).to.equal('75');
       });
 
@@ -482,9 +480,7 @@ describe('scroll to index', () => {
         grid.expandedItems = [{ name: '99' }];
         flushPendingRequests();
         grid.scrollToIndex(100, 0);
-        flushPendingRequests();
-        flushPendingRequests();
-        flushPendingRequests();
+        flushPendingRequests(3);
         expect(getFirstVisibleItemId()).to.equal('99');
       });
 
@@ -492,9 +488,7 @@ describe('scroll to index', () => {
         grid.expandedItems = [{ name: '0' }, { name: '0-99' }];
         flushPendingRequests();
         grid.scrollToIndex(0, 100, 0);
-        flushPendingRequests();
-        flushPendingRequests();
-        flushPendingRequests();
+        flushPendingRequests(3);
         expect(getFirstVisibleItemId()).to.equal('0-99');
       });
 
@@ -502,10 +496,35 @@ describe('scroll to index', () => {
         grid.expandedItems = [{ name: '0' }];
         flushPendingRequests();
         grid.scrollToIndex(-1, 0);
-        flushPendingRequests();
-        flushPendingRequests();
-        flushPendingRequests();
+        flushPendingRequests(3);
         expect(getFirstVisibleItemId()).to.equal('0');
+      });
+
+      it('should scroll to a child item when parent index is Infinity', () => {
+        grid.expandedItems = [{ name: '99' }];
+        flushPendingRequests();
+        grid.scrollToIndex(Infinity, 0);
+        flushPendingRequests(3);
+        expect(getFirstVisibleItemId()).to.equal('99-0');
+      });
+
+      it('should scroll to a grand child item when child index is Infinity', () => {
+        grid.expandedItems = [{ name: '0' }, { name: '0-99' }];
+        flushPendingRequests();
+        grid.scrollToIndex(0, Infinity, 0);
+        flushPendingRequests(3);
+        expect(getFirstVisibleItemId()).to.equal('0-99-0');
+      });
+
+      it('should scroll to end', () => {
+        grid.expandedItems = [{ name: '99' }, { name: '99-99' }];
+        flushPendingRequests();
+        grid.scrollToIndex(...Array(10).fill(Infinity));
+        flushPendingRequests(5);
+
+        const table = grid.$.table;
+        expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
+        expect(getLastVisibleItem(grid)._item.name).to.equal('99-99-99');
       });
 
       describe('with a synchronous data provider', () => {
