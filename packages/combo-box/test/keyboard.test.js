@@ -213,6 +213,43 @@ describe('keyboard', () => {
         expect(keydownSpy.called).to.be.false;
       });
 
+      it('should propagate keyboard enter event after entering an unknown option when custom values are allowed', () => {
+        comboBox.allowCustomValue = true;
+        setInputValue(comboBox, 'foobar');
+        enterKeyDown(input);
+
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
+
+      it('should propagate keyboard enter event if filtered items are cleared after selecting a valid option', () => {
+        setInputValue(comboBox, 'foo');
+        enterKeyDown(input);
+        // Simulate user or data provider mixin resetting filtered items after closing overlay
+        comboBox.filteredItems = [];
+        expect(comboBox._focusedIndex).to.equal(-1);
+
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
+
+      it('should propagate keyboard enter event after clearing the value', () => {
+        setInputValue(comboBox, 'foo');
+        enterKeyDown(input);
+
+        setInputValue(comboBox, '');
+        enterKeyDown(input);
+
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
+
       it('should not close the overlay with enter when custom values are not allowed', () => {
         setInputValue(comboBox, 'foobar');
 
