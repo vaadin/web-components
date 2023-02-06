@@ -272,16 +272,16 @@ export const ScrollMixin = (superClass) =>
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
       const transformFrozen = `translate(${x}px, 0)`;
-      for (let i = 0; i < this._frozenCells.length; i++) {
-        this._frozenCells[i].style.transform = transformFrozen;
-      }
+      this._frozenCells.forEach((cell) => {
+        cell.style.transform = transformFrozen;
+      });
 
       // Position cells frozen to end
       const remaining = this.__isRTL ? normalizedScrollLeft : scrollLeft + clientWidth - scrollWidth;
       const transformFrozenToEnd = `translate(${remaining}px, 0)`;
-      for (let i = 0; i < this._frozenToEndCells.length; i++) {
-        this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
-      }
+      this._frozenToEndCells.forEach((cell) => {
+        cell.style.transform = transformFrozenToEnd;
+      });
 
       // Only update the --_grid-horizontal-scroll-position custom property when navigating
       // on row focus mode to avoid performance issues.

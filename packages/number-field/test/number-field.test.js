@@ -284,11 +284,10 @@ describe('number-field', () => {
       numberField.value = -1;
       numberField.step = 4;
 
-      const correctSteps = [-4, -8, -12, -16, -20];
-      for (let i = 0; i < correctSteps.length; i++) {
+      [-4, -8, -12, -16, -20].forEach((step) => {
         decreaseButton.click();
-        expect(numberField.value).to.be.equal(String(correctSteps[i]));
-      }
+        expect(numberField.value).to.be.equal(String(step));
+      });
     });
 
     it('should increase value to min value on plus button click when value is under min', () => {
@@ -316,11 +315,10 @@ describe('number-field', () => {
       numberField.value = -1;
       numberField.step = 4;
 
-      const correctSteps = [1, 5, 9, 13, 17];
-      for (let i = 0; i < correctSteps.length; i++) {
+      [1, 5, 9, 13, 17].forEach((step) => {
         increaseButton.click();
-        expect(numberField.value).to.be.equal(String(correctSteps[i]));
-      }
+        expect(numberField.value).to.be.equal(String(step));
+      });
     });
 
     it('should correctly increase value on plus button click when step is a decimal number', () => {
@@ -329,11 +327,10 @@ describe('number-field', () => {
       numberField.value = -0.03;
       numberField.step = 0.01;
 
-      const correctSteps = [-0.02, -0.01, 0, 0.01, 0.02];
-      for (let i = 0; i < correctSteps.length; i++) {
+      [-0.02, -0.01, 0, 0.01, 0.02].forEach((step) => {
         increaseButton.click();
-        expect(numberField.value).to.be.equal(String(correctSteps[i]));
-      }
+        expect(numberField.value).to.be.equal(String(step));
+      });
     });
 
     it('should correctly calculate the precision with decimal value', () => {
@@ -359,12 +356,11 @@ describe('number-field', () => {
         ];
         const reset = { step: 1, min: undefined, max: undefined, value: '' };
 
-        for (let i = 0; i < configs.length; i++) {
-          const { props, expectedValue } = configs[i];
+        configs.forEach(({ props, expectedValue }) => {
           Object.assign(numberField, reset, props);
           increaseButton.click();
           expect(numberField.value).to.be.equal(expectedValue);
-        }
+        });
       });
 
       it('should correctly decrease value', () => {
@@ -377,12 +373,11 @@ describe('number-field', () => {
         ];
         const reset = { step: 1, min: undefined, max: undefined, value: '' };
 
-        for (let i = 0; i < configs.length; i++) {
-          const { props, expectedValue } = configs[i];
+        configs.forEach(({ props, expectedValue }) => {
           Object.assign(numberField, reset, props);
           decreaseButton.click();
           expect(numberField.value).to.be.equal(expectedValue);
-        }
+        });
       });
     });
   });

@@ -16,7 +16,7 @@ export const ThemePropertyMixin = (superClass) =>
          *
          * Enables the component implementation to propagate the `theme`
          * attribute value to the sub-components in Shadow DOM by binding
-         * the sub-component’s "theme" attribute to the `theme` property of
+         * the sub-component's "theme" attribute to the `theme` property of
          * the host.
          *
          * **NOTE:** Extending the mixin only provides the property for binding,

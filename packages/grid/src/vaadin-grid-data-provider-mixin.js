@@ -85,14 +85,12 @@ export const ItemCache = class ItemCache {
    */
   getCacheAndIndex(index) {
     let thisLevelIndex = index;
-    const keys = Object.keys(this.itemCaches);
-    for (let i = 0; i < keys.length; i++) {
-      const expandedIndex = Number(keys[i]);
-      const subCache = this.itemCaches[expandedIndex];
-      if (thisLevelIndex <= expandedIndex) {
+    for (const [index, subCache] of Object.entries(this.itemCaches)) {
+      const numberIndex = Number(index);
+      if (thisLevelIndex <= numberIndex) {
         return { cache: this, scaledIndex: thisLevelIndex };
-      } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
-        return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
+      } else if (thisLevelIndex <= numberIndex + subCache.effectiveSize) {
+        return subCache.getCacheAndIndex(thisLevelIndex - numberIndex - 1);
       }
       thisLevelIndex -= subCache.effectiveSize;
     }
@@ -461,10 +459,10 @@ export const DataProviderMixin = (superClass) =>
     _checkSize() {
       if (this.size === undefined && this._effectiveSize === 0) {
         console.warn(
-          'The <vaadin-grid> needs the total number of items' +
-            ' in order to display rows. Set the total number of items' +
-            ' to the `size` property, or provide the total number of items' +
-            ' in the second argument of the `dataProvider`’s `callback` call.',
+          'The <vaadin-grid> needs the total number of items in' +
+            ' order to display rows, which you can specify either by setting' +
+            ' the `size` property, or by providing it to the second argument' +
+            ' of the `dataProvider` function `callback` call.',
         );
       }
     }

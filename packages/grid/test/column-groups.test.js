@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import {
+  attributeRenderer,
   flushGrid,
   getCellContent,
   getContainerCellContent,
@@ -17,120 +17,10 @@ import {
 
 const createColumn = () => {
   const column = document.createElement('vaadin-grid-column');
-  column.innerHTML = '<template class="footer">Foobar</template></vaadin-grid-column>';
+  column.footerRenderer = (root) => {
+    root.textContent = 'Footer';
+  };
   return column;
-};
-
-const fixtures = {
-  'no-headers': `
-    <vaadin-grid size="10">
-      <vaadin-grid-column>
-        <template>body-0</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column-group>
-        <vaadin-grid-column>
-          <template>body-1</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template>body-2</template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-  `,
-  '1-column-1-group': `
-    <vaadin-grid size="10">
-      <vaadin-grid-column frozen>
-        <template class="header">header-0</template>
-        <template>body-0</template>
-      </vaadin-grid-column>
-
-      <vaadin-grid-column-group frozen>
-        <template class="header">group-0</template>
-
-        <vaadin-grid-column>
-          <template class="header">header-1</template>
-          <template>body-1</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">header-2</template>
-          <template>body-2</template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-  `,
-  nested: `
-    <vaadin-grid size="100">
-      <vaadin-grid-column-group>
-        <template class="header">group-0</template>
-        <template class="footer">group-0</template>
-        <vaadin-grid-column>
-          <template>body-0</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template>body-1</template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-
-      <vaadin-grid-column-group>
-        <template class="header">group-1</template>
-        <template class="footer">group-1</template>
-        <vaadin-grid-column-group>
-          <template class="header">group-2</template>
-          <template class="footer">group-2</template>
-          <vaadin-grid-column>
-            <template>body-2</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template>body-3</template>
-          </vaadin-grid-column>
-        </vaadin-grid-column-group>
-
-        <vaadin-grid-column-group frozen>
-          <template class="header">group-3</template>
-          <template class="footer">group-3</template>
-          <vaadin-grid-column>
-            <template>body-4</template>
-            <template class="header">header-4</template>
-            <template class="footer">footer-4</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template>body-5</template>
-            <template class="header">header-5</template>
-            <template class="footer">footer-5</template>
-          </vaadin-grid-column>
-        </vaadin-grid-column-group>
-      </vaadin-grid-column-group>
-      <vaadin-grid-column>
-        <template>body-6</template>
-        <template class="header">header-6</template>
-        <template class="footer">footer-6</template>
-      </vaadin-grid-column>
-    </vaadin-grid>
-  `,
-  'hidden-group': `
-    <vaadin-grid>
-      <vaadin-grid-column-group hidden>
-        <vaadin-grid-column>
-          <template></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template></template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-  `,
-  'hidden-column': `
-    <vaadin-grid>
-      <vaadin-grid-column-group>
-        <vaadin-grid-column hidden>
-          <template></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template></template>
-        </vaadin-grid-column>
-      </vaadin-grid-column-group>
-    </vaadin-grid>
-  `,
 };
 
 beforeEach(() => {
@@ -142,7 +32,15 @@ afterEach(() => {
 });
 
 describe('column groups', () => {
-  let grid, header, body, footer, headerRows, footerRows, bodyRows;
+  let grid;
+
+  function getHeaderCell(row, col) {
+    return getRowCells(getRows(grid.$.header)[row])[col];
+  }
+
+  function getFooterCell(row, col) {
+    return getRowCells(getRows(grid.$.footer)[row])[col];
+  }
 
   function getFooterCellContent(row, col) {
     return getCellContent(getFooterCell(row, col)).textContent.trim();
@@ -152,53 +50,42 @@ describe('column groups', () => {
     return getCellContent(getHeaderCell(row, col)).textContent.trim();
   }
 
-  function getHeaderCell(row, col) {
-    return getRowCells(headerRows[row])[col];
-  }
-
-  function getFooterCell(row, col) {
-    return getRowCells(footerRows[row])[col];
-  }
-
   function getBodyCellContent(row, col) {
-    return getCellContent(getRowCells(bodyRows[row])[col]).innerHTML.trim();
+    return getCellContent(getRowCells(getRows(grid.$.items)[row])[col]).innerHTML.trim();
   }
 
-  function init(fixture) {
-    grid = fixtureSync(fixtures[fixture]);
-    sinon.spy(grid, '__updateHeaderFooterRowVisibility');
-    header = grid.$.header;
-    body = grid.$.items;
-    footer = grid.$.footer;
-    grid.dataProvider = infiniteDataProvider;
-    flushGrid(grid);
-
-    headerRows = getRows(header);
-    footerRows = getRows(footer);
-    bodyRows = getRows(body);
-
-    flushGrid(grid);
-  }
-
-  describe('No templates', () => {
+  describe('No header/footer renderers', () => {
     beforeEach(() => {
-      init('no-headers');
+      grid = fixtureSync(`
+        <vaadin-grid size="10">
+          <vaadin-grid-column prefix="body-0"></vaadin-grid-column>
+          <vaadin-grid-column-group>
+            <vaadin-grid-column prefix="body-1"></vaadin-grid-column>
+            <vaadin-grid-column prefix="body-2"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.renderer = attributeRenderer('prefix');
+      });
+
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
     });
 
     it('should have empty header', () => {
-      const cells = header.querySelectorAll('[part~="cell"]');
+      const cells = grid.$.header.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
-      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have empty footer', () => {
-      const cells = footer.querySelectorAll('[part~="cell"]');
+      const cells = grid.$.footer.querySelectorAll('[part~="cell"]');
       expect(cells).not.to.be.empty;
-
-      cells.forEach((cell) => expect(cell._content.__templateInstance).to.be.not.ok);
     });
 
     it('should have no visible header rows', () => {
+      const headerRows = getRows(grid.$.header);
       expect(headerRows).not.to.be.empty;
 
       headerRows.forEach((row) => expect(row.hidden).to.be.true);
@@ -207,7 +94,7 @@ describe('column groups', () => {
     describe('header', () => {
       let emptyGroup;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         emptyGroup = grid.querySelector('vaadin-grid-column-group');
         emptyGroup.header = 'Header';
       });
@@ -224,11 +111,10 @@ describe('column groups', () => {
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });
 
-      it('should not override header template content', async () => {
-        const template = document.createElement('template');
-        template.innerHTML = 'foo';
-        template.classList.add('header');
-        emptyGroup.appendChild(template);
+      it('should not override header content', async () => {
+        emptyGroup.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
         await nextRender();
         emptyGroup.header = 'Bar';
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
@@ -270,17 +156,25 @@ describe('column groups', () => {
   });
 
   describe('1 column 1 group', () => {
-    let extraColumn;
-
     beforeEach(() => {
       //  |          | group-0             |
       //  | header-0 | header-1 | header-2 |
-      init('1-column-1-group');
+      grid = fixtureSync(`
+        <vaadin-grid size="10">
+          <vaadin-grid-column frozen header="header-0" prefix="body-0"></vaadin-grid-column>
+          <vaadin-grid-column-group frozen header="group-0">
+            <vaadin-grid-column header="header-1" prefix="body-1"></vaadin-grid-column>
+            <vaadin-grid-column header="header-2" prefix="body-2"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
 
-      extraColumn = createColumn();
-      if (grid._observer.flush) {
-        grid._observer.flush();
-      }
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.renderer = attributeRenderer('prefix');
+      });
+
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
     });
 
     it('the group header cell should adapt to changes of child columns', () => {
@@ -305,10 +199,12 @@ describe('column groups', () => {
     });
 
     it('should have right amount of rows', () => {
+      const headerRows = getRows(grid.$.header);
       expect(headerRows).to.have.length(2);
     });
 
     it('should have right amount of columns', () => {
+      const headerRows = getRows(grid.$.header);
       expect(getRowCells(headerRows[0])).to.have.length(2);
       expect(getRowCells(headerRows[1])).to.have.length(3);
     });
@@ -318,8 +214,8 @@ describe('column groups', () => {
       expect(getHeaderCellContent(0, 1)).to.equal('group-0');
     });
 
-    it('should have the right body template', () => {
-      [0, 1, 2].forEach((index) => expect(getBodyCellContent(0, index)).to.equal(`body-${index}`));
+    it('should have the right body renderer', () => {
+      [0, 1, 2].forEach((index) => expect(getBodyCellContent(0, index)).to.equal(`body-${index} foo0`));
     });
 
     it('should have a frozen column', () => {
@@ -364,27 +260,30 @@ describe('column groups', () => {
     });
 
     it('should have no hidden header rows', () => {
+      const headerRows = getRows(grid.$.header);
       headerRows.forEach((row) => expect(row.hidden).to.be.false);
     });
 
     it('should have no visible footer rows', () => {
+      const footerRows = getRows(grid.$.footer);
       footerRows.forEach((row) => expect(row.hidden).to.be.true);
     });
 
     it('should have visible footer rows after adding extra column', () => {
-      grid.appendChild(extraColumn);
+      grid.appendChild(createColumn());
       flushGrid(grid);
 
-      expect(getRows(footer)[0].hidden).to.be.false;
-      expect(getRows(footer)[1].hidden).to.be.true;
+      expect(getRows(grid.$.footer)[0].hidden).to.be.false;
+      expect(getRows(grid.$.footer)[1].hidden).to.be.true;
     });
 
     it('should not have visible footer rows after removing extra column', async () => {
+      const extraColumn = createColumn();
       grid.appendChild(extraColumn);
       await nextFrame();
       grid.removeChild(extraColumn);
       await nextFrame();
-      expect(getRows(footer)[0].hidden).to.be.true;
+      expect(getRows(grid.$.footer)[0].hidden).to.be.true;
     });
   });
 
@@ -397,7 +296,42 @@ describe('column groups', () => {
       //  |           |         |          |         | footer-4 | footer-5 | footer-6 |
       //  |           |         | group-2            | group-3             |          |
       //  | group-0             | group-1                                  |          |
-      init('nested');
+      grid = fixtureSync(`
+        <vaadin-grid size="100">
+          <vaadin-grid-column-group header="group-0" footer="group-0">
+            <vaadin-grid-column prefix="body-0"></vaadin-grid-column>
+            <vaadin-grid-column prefix="body-1"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+
+          <vaadin-grid-column-group header="group-1" footer="group-1">
+            <vaadin-grid-column-group header="group-2" footer="group-2">
+              <vaadin-grid-column prefix="body-2"></vaadin-grid-column>
+              <vaadin-grid-column prefix="body-3"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+
+            <vaadin-grid-column-group frozen header="group-3" footer="group-3">
+              <vaadin-grid-column prefix="body-4" header="header-4" footer="footer-4"></vaadin-grid-column>
+              <vaadin-grid-column prefix="body-5" header="header-5" footer="footer-5"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </vaadin-grid-column-group>
+
+          <vaadin-grid-column prefix="body-6" header="header-6" footer="footer-6"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+
+      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+        col.renderer = attributeRenderer('prefix');
+        col.footerRenderer = attributeRenderer('footer');
+      });
+
+      grid.querySelectorAll('vaadin-grid-column-group').forEach((group) => {
+        group.footerRenderer = attributeRenderer('footer');
+      });
+
+      sinon.spy(grid, '__updateHeaderFooterRowVisibility');
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
+
       await nextResize(grid);
     });
 
@@ -427,14 +361,14 @@ describe('column groups', () => {
     });
 
     it('should have cell content wrappers in all header cells', () => {
-      header.querySelectorAll('[part~="cell"]').forEach((a) => {
+      grid.$.header.querySelectorAll('[part~="cell"]').forEach((a) => {
         const content = getCellContent(a);
         expect(content.localName).to.equal('vaadin-grid-cell-content');
       });
     });
 
     it('should have cell content wrappers in all footer cells', () => {
-      footer.querySelectorAll('[part~="cell"]').forEach((a) => {
+      grid.$.footer.querySelectorAll('[part~="cell"]').forEach((a) => {
         const content = getCellContent(a);
         expect(content.localName).to.equal('vaadin-grid-cell-content');
       });
@@ -467,58 +401,71 @@ describe('column groups', () => {
     it('should have last row fully visible when scrolled to end', async () => {
       scrollToEnd(grid);
       await nextFrame();
-      bodyRows = getRows(body);
+      const bodyRows = getRows(grid.$.items);
       const lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
-      const footerTop = footer.getBoundingClientRect().top;
+      const footerTop = grid.$.footer.getBoundingClientRect().top;
       expect(lastRowBottom).to.be.closeTo(footerTop, 2);
     });
-  });
 
-  describe('Nested groups with frozen to end', () => {
-    before(() => {
-      fixtures['nested-2'] = fixtures.nested.replace('frozen', 'frozen-to-end');
-    });
+    describe('Nested groups with frozen to end', () => {
+      beforeEach(async () => {
+        const frozenColumn = grid.querySelector('[frozen]');
+        frozenColumn.frozen = false;
+        frozenColumn.frozenToEnd = true;
 
-    beforeEach(async () => {
-      init('nested-2');
-      await nextResize(grid);
-    });
+        await nextResize(grid);
+      });
 
-    it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in headers', () => {
-      [
-        [0, 1],
-        [1, 2],
-        [1, 3],
-        [2, 2],
-        [2, 3],
-        [2, 4],
-        [2, 5],
-      ].forEach((a) => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
-    });
+      it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in headers', () => {
+        [
+          [0, 1],
+          [1, 2],
+          [1, 3],
+          [2, 2],
+          [2, 3],
+          [2, 4],
+          [2, 5],
+        ].forEach((a) => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
+      });
 
-    it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in footers', () => {
-      [
-        [0, 2],
-        [0, 3],
-        [0, 4],
-        [0, 5],
-        [1, 2],
-        [1, 3],
-        [2, 1],
-      ].forEach((a) => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
+      it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in footers', () => {
+        [
+          [0, 2],
+          [0, 3],
+          [0, 4],
+          [0, 5],
+          [1, 2],
+          [1, 3],
+          [2, 1],
+        ].forEach((a) => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
+      });
     });
   });
 
   describe('hidden group', () => {
     it('should hide children', async () => {
-      init('hidden-group');
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column-group hidden>
+            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
       await nextFrame();
       expect(grid.querySelector('vaadin-grid-column').hidden).to.be.true;
       expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.true;
     });
 
     it('should hide self', async () => {
-      init('hidden-column');
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column-group>
+            <vaadin-grid-column hidden></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
       await nextFrame();
       expect(grid.querySelector('vaadin-grid-column-group').hidden).not.to.be.true;
       const columns = grid.querySelectorAll('vaadin-grid-column');

@@ -27,7 +27,7 @@ registerStyles(
       font-family: serif;
       font-size: var(--material-button-font-size);
       color: var(--material-primary-text-color);
-      content: '✎';
+      content: '\\270E';
       width: 2em;
       height: 2em;
       line-height: 2em;

@@ -4,217 +4,220 @@ import {
   arrowLeft,
   arrowRight,
   arrowUp,
+  defineLit,
+  definePolymer,
   end,
   fixtureSync,
   home,
   keyDownChar,
   nextFrame,
+  nextRender,
+  oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '../src/controller-mixin.js';
 import { ListMixin } from '../src/list-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
-customElements.define(
-  'test-list-element',
-  class extends ListMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <style>
-          :host {
-            display: block;
-          }
-
-          #scroll {
-            overflow: auto;
-            display: flex;
-          }
-
-          :host([orientation='vertical']) #scroll {
-            height: 100%;
-            flex-direction: column;
-          }
-        </style>
-        <div id="scroll">
-          <slot></slot>
-        </div>
-      `;
-    }
-
-    get _scrollerElement() {
-      return this.$.scroll;
-    }
-  },
-);
-
-customElements.define(
-  'test-item-element',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <style>
-          :host {
-            display: block;
-          }
-
-          :host([hidden]) {
-            display: none !important;
-          }
-
-          :host(.hidden-attribute) {
-            display: none;
-          }
-        </style>
-        <slot></slot>
-      `;
-    }
-
-    static get properties() {
-      return {
-        _hasVaadinItemMixin: {
-          value: true,
-        },
-        disabled: {
-          type: Boolean,
-          reflectToAttribute: true,
-          observer: '_disabledChanged',
-        },
-        selected: {
-          type: Boolean,
-        },
-      };
-    }
-
-    _disabledChanged(disabled) {
-      if (disabled) {
-        // Simplified version of Vaadin.ItemMixin behavior
-        this.selected = false;
-      }
-    }
-  },
-);
-
-customElements.define(
-  'test-list-wrapper-element',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <style>
-          :host {
-            display: block;
-          }
-        </style>
-
-        <test-list-element>
-          <slot></slot>
-        </test-list-element>
-      `;
-    }
-  },
-);
-
-describe('ListMixin', () => {
+const runTests = (defineHelper, baseMixin) => {
   let list;
 
-  describe('items observer', () => {
-    beforeEach(() => {
+  const listTag = defineHelper(
+    'list',
+    `
+      <style>
+        :host {
+          display: block;
+        }
+
+        #scroll {
+          overflow: auto;
+          display: flex;
+        }
+
+        :host(:not([orientation="horizontal"])) #scroll {
+          height: 100%;
+          flex-direction: column;
+        }
+      </style>
+      <div id="scroll">
+        <slot></slot>
+      </div>
+    `,
+    (Base) =>
+      class extends ListMixin(baseMixin(Base)) {
+        get _scrollerElement() {
+          return this.$.scroll;
+        }
+      },
+  );
+
+  const itemTag = defineHelper(
+    'item',
+    `
+      <style>
+        :host {
+          display: block;
+        }
+
+        :host([hidden]) {
+          display: none !important;
+        }
+
+        :host(.hidden-attribute) {
+          display: none;
+        }
+      </style>
+      <slot></slot>
+    `,
+    (Base) =>
+      class extends baseMixin(Base) {
+        static get properties() {
+          return {
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_disabledChanged',
+            },
+            focused: {
+              type: Boolean,
+            },
+            selected: {
+              type: Boolean,
+            },
+          };
+        }
+
+        constructor() {
+          super();
+
+          this._hasVaadinItemMixin = true;
+        }
+
+        _disabledChanged(disabled) {
+          if (disabled) {
+            // Mimic the ItemMixin logic
+            this.selected = false;
+          }
+        }
+      },
+  );
+
+  describe('items', () => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-          <test-item-element>Item 2</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag}>Item 0</${itemTag}>
+          <${itemTag}>Item 1</${itemTag}>
+          <hr />
+          <${itemTag}>Item 2</${itemTag}>
+          <${itemTag}>Item 3</${itemTag}>
+          <hr />
+          <${itemTag}>Item 4</${itemTag}>
+        </${listTag}>
       `);
+      await nextRender();
     });
 
-    it('should have a list of valid items after the DOM `_observer` has been run', () => {
-      // DOM _observer runs asynchronously, we need to flush to access items
-      list._observer.flush();
-      expect(list.items.length).to.be.equal(3);
+    it('should set items based on the children count', () => {
+      expect(list.items.length).to.be.equal(5);
     });
 
-    it('`focus` should flush the `_observer` if it is called too soon', () => {
-      // Focus flushes the observer in order to be run in 3rd party elements initialization
+    it('should update items when an element is added', async () => {
+      list.appendChild(document.createElement(itemTag));
+      await nextFrame();
+      expect(list.items.length).to.be.equal(6);
+    });
+
+    it('should update items when an element is removed', async () => {
+      list.removeChild(list.items[0]);
+      await nextFrame();
+      expect(list.items.length).to.be.equal(4);
+    });
+
+    it('should update items when an element is moved', async () => {
+      const [e2, e4] = [list.items[2], list.items[4]];
+      list.insertBefore(e4, e2);
+      await nextFrame();
+      expect(list.items[2]).to.be.equal(e4);
+      expect(list.items[3]).to.be.equal(e2);
+    });
+
+    it('should fire an event when adding an item', async () => {
+      const spy = sinon.spy();
+      list.addEventListener('items-changed', spy);
+      list.appendChild(document.createElement(itemTag));
+      await nextFrame();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should fire an event when removing an item', async () => {
+      const spy = sinon.spy();
+      list.addEventListener('items-changed', spy);
+      list.removeChild(list.items[0]);
+      await nextFrame();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should update items synchronously on `focus()`', () => {
+      list.appendChild(document.createElement(itemTag));
       list.focus();
-      expect(list.items.length).to.be.equal(3);
+      expect(list.items.length).to.be.equal(6);
     });
   });
 
   describe('wrapped list with slotted items', () => {
-    beforeEach(() => {
-      const wrapper = fixtureSync(`
-        <test-list-wrapper-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-          <test-item-element>Item 2</test-item-element>
-        </test-list-wrapper-element>
-      `);
-      list = wrapper.shadowRoot.querySelector('test-list-element');
-      // DOM _observer runs asynchronously, we need to flush to access items
-      list._observer.flush();
+    let wrapper;
+
+    beforeEach(async () => {
+      wrapper = document.createElement('div');
+      document.body.appendChild(wrapper);
+
+      const root = wrapper.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <${listTag}>
+          <slot></slot>
+        </${listTag}>
+      `;
+
+      wrapper.innerHTML = `
+        <${itemTag}>Item 0</${itemTag}>
+        <${itemTag}>Item 1</${itemTag}>
+        <${itemTag}>Item 2</${itemTag}>
+      `;
+
+      list = wrapper.shadowRoot.querySelector(listTag);
+      await oneEvent(list, 'items-changed');
     });
 
-    it('should have a list of valid items', () => {
+    afterEach(() => {
+      document.body.removeChild(wrapper);
+    });
+
+    it('should set items based on the children count', () => {
       expect(list.items.length).to.be.equal(3);
     });
 
-    it('should move focus to next element on "arrow-right" keydown', () => {
+    it('should move focus to the next element on ArrowRight', async () => {
       list.orientation = 'horizontal';
-      list._focus(0);
+      await nextFrame();
+      list.focus();
       arrowRight(list);
       expect(list.items[1].focused).to.be.true;
     });
   });
 
-  describe('DOM', () => {
-    beforeEach(() => {
-      list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-          <hr />
-          <test-item-element>Item 2</test-item-element>
-          <test-item-element>Item 3</test-item-element>
-          <hr />
-          <test-item-element>Item 4</test-item-element>
-        </test-list-element>
-      `);
-      list._observer.flush();
-    });
-
-    it('should update items list when removing nodes', () => {
-      expect(list.items.length).to.be.equal(5);
-      list.removeChild(list.items[0]);
-      list._observer.flush();
-      expect(list.items.length).to.be.equal(4);
-    });
-
-    it('should update items list when adding nodes', () => {
-      list.appendChild(document.createElement('test-item-element'));
-      list._observer.flush();
-      expect(list.items.length).to.be.equal(6);
-    });
-
-    it('should update items list when moving nodes', () => {
-      const [e2, e4] = [list.items[2], list.items[4]];
-
-      list.insertBefore(e4, e2);
-      list._observer.flush();
-      expect(list.items[2]).to.be.equal(e4);
-      expect(list.items[3]).to.be.equal(e2);
-    });
-  });
-
   describe('selection', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-          <test-item-element>Item 2</test-item-element>
-          <test-item-element><span>Item 3</span></test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag}>Item 0</${itemTag}>
+          <${itemTag}>Item 1</${itemTag}>
+          <${itemTag}>Item 2</${itemTag}>
+          <${itemTag}><span>Item 3</span></${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
     it('should not select any item by default', () => {
@@ -223,14 +226,18 @@ describe('ListMixin', () => {
       });
     });
 
-    it('should select an item when `selected` property is set', () => {
+    it('should select an item when `selected` property is set', async () => {
       list.selected = 3;
+      await nextFrame();
       expect(list.items[3].selected).to.be.true;
     });
 
-    it('should clear selection when `selected` property is set to not numeric value', () => {
+    it('should clear selection when `selected` property is set to not numeric value', async () => {
       list.selected = 3;
+      await nextFrame();
+
       list.selected = undefined;
+      await nextFrame();
       expect(list.items[3].selected).to.be.false;
     });
 
@@ -246,34 +253,37 @@ describe('ListMixin', () => {
   });
 
   describe('tabIndex', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element disabled>Item 0</test-item-element>
-          <test-item-element disabled>Item 1</test-item-element>
-          <test-item-element>Item 2</test-item-element>
-          <test-item-element>Item 3</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag} disabled>Item 0</${itemTag}>
+          <${itemTag} disabled>Item 1</${itemTag}>
+          <${itemTag}>Item 2</${itemTag}>
+          <${itemTag}>Item 3</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
     it('should have the first not disabled item focusable by default', () => {
       [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
-    it('should set a not disabled item focusable', () => {
+    it('should set a not disabled item focusable', async () => {
       list._setFocusable(3);
+      await nextFrame();
       [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
-    it('should not set a disabled item focusable but the next not disabled item instead', () => {
+    it('should not set a disabled item focusable but the next not disabled item instead', async () => {
       list._setFocusable(1);
+      await nextFrame();
       [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
-    it('should call focus() method on the item when setting it focusable', () => {
+    it('should call focus() method on the item when setting it focusable', async () => {
       list._setFocusable(3);
+      await nextFrame();
       const spy = sinon.spy(list.items[3], 'focus');
       list.focus();
       expect(spy.calledOnce).to.be.true;
@@ -281,14 +291,14 @@ describe('ListMixin', () => {
   });
 
   describe('tabIndex when all the items are disabled', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element disabled>Item 0</test-item-element>
-          <test-item-element disabled>Item 1</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag} disabled>Item 0</${itemTag}>
+          <${itemTag} disabled>Item 1</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
     it('should not have any item focusable', () => {
@@ -298,404 +308,464 @@ describe('ListMixin', () => {
   });
 
   describe('focus', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Foo</test-item-element>
-          <test-item-element>Bar</test-item-element>
-          <test-item-element disabled>Bay</test-item-element>
-          <test-item-element><span>Baz</span></test-item-element>
-          <test-item-element disabled>Qux</test-item-element>
-          <test-item-element><span>Xyzzy</span></test-item-element>
-          <test-item-element>Bax</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag}>Foo</${itemTag}>
+          <${itemTag}>Bar</${itemTag}>
+          <${itemTag} disabled>Bay</${itemTag}>
+          <${itemTag}><span>Baz</span></${itemTag}>
+          <${itemTag} disabled>Qux</${itemTag}>
+          <${itemTag}><span>Xyzzy</span></${itemTag}>
+          <${itemTag}>Bax</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
-      list._focus(0);
+      await nextRender();
+      list.focus();
     });
 
-    describe('RTL mode', () => {
-      beforeEach(() => {
+    describe('horizontal', () => {
+      beforeEach(async () => {
         list.orientation = 'horizontal';
-        list.setAttribute('dir', 'rtl');
+        await nextFrame();
       });
 
-      it('should move focus to next element on "arrow-down" keydown', () => {
+      describe('LTR mode', () => {
+        it('should move focus to the next element on ArrowRight', () => {
+          arrowRight(list);
+          expect(list.items[1].focused).to.be.true;
+        });
+
+        it('should move focus to the prev element on ArrowLeft', () => {
+          arrowRight(list);
+          arrowLeft(list);
+          expect(list.items[0].focused).to.be.true;
+        });
+
+        it('should move focus to the first element on Home', () => {
+          home(list);
+          expect(list.items[0].focused).to.be.true;
+        });
+
+        it('should move focus to the last element on End', async () => {
+          list._focus(3);
+          await nextFrame();
+
+          end(list);
+          expect(list.items[6].focused).to.be.true;
+        });
+      });
+
+      describe('RTL mode', () => {
+        beforeEach(async () => {
+          list.orientation = 'horizontal';
+          list.setAttribute('dir', 'rtl');
+          await nextFrame();
+        });
+
+        it('should move focus to the next element on ArrowLeft', () => {
+          arrowLeft(list);
+          expect(list.items[1].focused).to.be.true;
+        });
+
+        it('should move focus to the prev element on ArrowRight', () => {
+          arrowLeft(list);
+          arrowRight(list);
+          expect(list.items[0].focused).to.be.true;
+        });
+
+        it('should move focus to the first element on Home', () => {
+          home(list);
+          expect(list.items[0].focused).to.be.true;
+        });
+
+        it('should move focus to the last element on End', async () => {
+          list._focus(3);
+          await nextFrame();
+          end(list);
+          expect(list.items[6].focused).to.be.true;
+        });
+      });
+    });
+
+    describe('vertical', () => {
+      beforeEach(async () => {
         list.orientation = 'vertical';
+        await nextFrame();
+      });
+
+      it('should move focus to the next element on ArrowDown', () => {
         arrowDown(list);
         expect(list.items[1].focused).to.be.true;
       });
 
-      it('should move focus to prev element on "arrow-up" keydown', () => {
-        list.orientation = 'vertical';
+      it('should move focus to the prev element on ArrowUp', () => {
         arrowDown(list);
         arrowUp(list);
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to next element on "arrow-left" keydown', () => {
-        arrowLeft(list);
-        expect(list.items[1].focused).to.be.true;
-      });
-
-      it('should move focus to prev element on "arrow-right" keydown', () => {
-        arrowLeft(list);
-        arrowRight(list);
-        expect(list.items[0].focused).to.be.true;
-      });
-
-      it('should move focus to first element on "home" keydown', () => {
+      it('should move focus to the first element on Home', async () => {
+        list._focus(3);
+        await nextFrame();
         home(list);
         expect(list.items[0].focused).to.be.true;
       });
 
-      it('should move focus to last element on "end" keydown', () => {
+      it('should skip disabled items when moving focus on Home', async () => {
+        list.items[0].disabled = true;
+        await nextFrame();
+
         list._focus(3);
+        home(list);
+        expect(list.items[1].focused).to.be.true;
+      });
+
+      it('should move focus to the last element on End', () => {
         end(list);
         expect(list.items[6].focused).to.be.true;
       });
+
+      it('should skip disabled items when moving focus on End', async () => {
+        list.items[6].disabled = true;
+        await nextFrame();
+        end(list);
+        expect(list.items[5].focused).to.be.true;
+      });
+
+      it('should move focus to the first element on last element ArrowDown', () => {
+        list._focus(list.items.length - 1);
+        arrowDown(list);
+        expect(list.items[0].focused).to.be.true;
+      });
+
+      it('should move focus to the last element on first element ArrowUp', () => {
+        arrowUp(list);
+        expect(list.items[list.items.length - 1].focused).to.be.true;
+      });
+
+      it('should skip disabled items when moving focus on arrow key', () => {
+        arrowDown(list);
+        arrowDown(list);
+        expect(list.items[3].focused).to.be.true;
+      });
     });
 
-    it('should move focus to next element on "arrow-down" keydown', () => {
-      arrowDown(list);
-      expect(list.items[1].focused).to.be.true;
+    describe('character navigation', () => {
+      beforeEach(() => {
+        list._focus(0);
+      });
+
+      it('should not focus anything when no matches are found', () => {
+        keyDownChar(list, 'z');
+        expect(list.items[0].focused).to.be.true;
+        list._focus(1);
+        keyDownChar(list, 'z');
+        expect(list.items[1].focused).to.be.true;
+      });
+
+      it('should focus the next item whose first letters match the keys pressed', () => {
+        keyDownChar(list, 'b');
+        keyDownChar(list, 'a');
+        keyDownChar(list, 'x');
+        expect(list.items[6].focused).to.be.true;
+      });
+
+      it('should reset search buffer after 500ms without any key presses', async () => {
+        const clock = sinon.useFakeTimers();
+        keyDownChar(list, 'b');
+        keyDownChar(list, 'a');
+        await clock.tickAsync(500);
+        keyDownChar(list, 'x');
+        expect(list.items[5].focused).to.be.true;
+        clock.restore();
+      });
+
+      it('key search should cycle through items starting with the same letters', () => {
+        keyDownChar(list, 'b');
+        keyDownChar(list, 'a');
+        keyDownChar(list, 'b');
+        keyDownChar(list, 'a');
+        expect(list.items[3].focused).to.be.true;
+      });
+
+      it('key search should be case insensitive', () => {
+        keyDownChar(list, 'B');
+        expect(list.items[1].focused).to.be.true;
+      });
+
+      it('key search should happen if a modifier key is pressed', () => {
+        keyDownChar(list, 'b', 'shift');
+        expect(list.items[1].focused).to.be.true;
+      });
+
+      it('key search should skip disabled items', () => {
+        keyDownChar(list, 'b');
+        keyDownChar(list, 'b');
+        expect(list.items[3].focused).to.be.true;
+      });
+
+      it('key search should accept items having non-text content before text', () => {
+        keyDownChar(list, 'x');
+        expect(list.items[5].focused).to.be.true;
+      });
+
+      it('focus should loop when search by first letter', () => {
+        list._focus(list.items.length - 1);
+        keyDownChar(list, 'b');
+        expect(list.items[1].focused).to.be.true;
+      });
     });
 
-    it('should move focus to prev element on "arrow-up" keydown', () => {
-      arrowDown(list);
-      arrowUp(list);
-      expect(list.items[0].focused).to.be.true;
-    });
+    describe('empty items', () => {
+      it('should not throw on focus after removing all the items', async () => {
+        list.innerHTML = '';
+        await nextRender();
+        expect(() => {
+          list.focus();
+        }).not.to.throw();
+      });
 
-    it('should move focus to next element on "arrow-right" keydown', () => {
-      list.orientation = 'horizontal';
-      arrowRight(list);
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('should move focus to prev element on "arrow-right" keydown', () => {
-      list.orientation = 'horizontal';
-      arrowRight(list);
-      arrowLeft(list);
-      expect(list.items[0].focused).to.be.true;
-    });
-
-    it('should move focus to first element on "home" keydown', () => {
-      list._focus(3);
-      home(list);
-      expect(list.items[0].focused).to.be.true;
-    });
-
-    it('should move focus to second element if first is disabled on "home" keydown', () => {
-      list.items[0].disabled = true;
-      list._focus(3);
-      home(list);
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('should move focus to last element on "end" keydown', () => {
-      end(list);
-      expect(list.items[6].focused).to.be.true;
-    });
-
-    it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
-      list.items[6].disabled = true;
-      end(list);
-      expect(list.items[5].focused).to.be.true;
-    });
-
-    it('if focus is in last element should move focus to first element on arrow-down', () => {
-      list._focus(list.items.length - 1);
-      arrowDown(list);
-      expect(list.items[0].focused).to.be.true;
-    });
-
-    it('if focus is in first element should move focus to last element on arrow-up', () => {
-      arrowUp(list);
-      expect(list.items[list.items.length - 1].focused).to.be.true;
-    });
-
-    it('focus loop should skip disabled items', () => {
-      arrowDown(list);
-      arrowDown(list);
-      expect(list.items[3].focused).to.be.true;
-    });
-
-    it('should not focus anything when no matches are found', () => {
-      keyDownChar(list, 'z');
-      expect(list.items[0].focused).to.be.true;
-      list._focus(1);
-      keyDownChar(list, 'z');
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('should focus the next item whose first letters match the keys pressed', () => {
-      keyDownChar(list, 'b');
-      keyDownChar(list, 'a');
-      keyDownChar(list, 'x');
-      expect(list.items[6].focused).to.be.true;
-    });
-
-    it('should reset search buffer after 500ms without any key presses', async () => {
-      const clock = sinon.useFakeTimers();
-      keyDownChar(list, 'b');
-      keyDownChar(list, 'a');
-      await clock.tickAsync(500);
-      keyDownChar(list, 'x');
-      expect(list.items[5].focused).to.be.true;
-      clock.restore();
-    });
-
-    it('key search should cycle through items starting with the same letters', () => {
-      keyDownChar(list, 'b');
-      keyDownChar(list, 'a');
-      keyDownChar(list, 'b');
-      keyDownChar(list, 'a');
-      expect(list.items[3].focused).to.be.true;
-    });
-
-    it('key search should be case insensitive', () => {
-      keyDownChar(list, 'B');
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('key search should happen if a modifier key is pressed', () => {
-      keyDownChar(list, 'b', 'shift');
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('key search should skip disabled items', () => {
-      keyDownChar(list, 'b');
-      keyDownChar(list, 'b');
-      expect(list.items[3].focused).to.be.true;
-    });
-
-    it('key search should accept items having non-text content before text', () => {
-      keyDownChar(list, 'x');
-      expect(list.items[5].focused).to.be.true;
-    });
-
-    it('focus should loop when search by first letter', () => {
-      list._focus(list.items.length - 1);
-      keyDownChar(list, 'b');
-      expect(list.items[1].focused).to.be.true;
-    });
-
-    it('should not throw when there are no items', () => {
-      list.innerHTML = '';
-      list._setItems([]);
-      expect(() => {
-        list.focus();
-      }).not.to.throw();
-    });
-
-    it('should not throw when items is not defined', () => {
-      const listElement = document.createElement('test-list-element');
-      expect(() => listElement.focus()).not.to.throw(Error);
+      it('should not throw on focus when there are no items', () => {
+        const listElement = document.createElement(listTag);
+        expect(() => listElement.focus()).not.to.throw(Error);
+      });
     });
   });
 
   describe('orientation', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag}>Item 0</${itemTag}>
+          <${itemTag}>Item 1</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
-    it('if not orientation set, aria-orientation attribute should set to vertical', () => {
+    it('should set aria-orientation attribute to vertical by default', () => {
       expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
     });
 
-    it('if horizontally oriented, aria-orientation attribute should be set to horizontal', () => {
+    it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
       list.orientation = 'horizontal';
+      await nextFrame();
       expect(list.getAttribute('aria-orientation')).to.be.equal('horizontal');
     });
 
-    it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
+    it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
       list.orientation = 'vertical';
+      await nextFrame();
       expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
     });
 
     it('should not have orientation attribute on each item if orientation is not set', () => {
-      list.querySelectorAll('test-item-element').forEach((item) => {
+      list.querySelectorAll(itemTag).forEach((item) => {
         expect(item.hasAttribute('orientation')).to.be.false;
       });
     });
 
-    it('should have orientation attribute on each item', () => {
+    it('should have orientation attribute on each item', async () => {
       list.orientation = 'horizontal';
-      list.querySelectorAll('test-item-element').forEach((item) => {
+      await nextFrame();
+      list.querySelectorAll(itemTag).forEach((item) => {
         expect(item.getAttribute('orientation')).to.be.equal('horizontal');
       });
     });
 
-    it('should change orientation attribute on each item', () => {
+    it('should change orientation attribute on each item', async () => {
       list.orientation = 'horizontal';
+      await nextFrame();
+
       list.orientation = 'vertical';
-      list.querySelectorAll('test-item-element').forEach((item) => {
+      await nextFrame();
+
+      list.querySelectorAll(itemTag).forEach((item) => {
         expect(item.getAttribute('orientation')).to.be.equal('vertical');
       });
     });
 
     it('should have vertical attribute on newly added item', async () => {
       list.orientation = 'vertical';
+      await nextFrame();
 
-      const item = document.createElement('test-item-element');
+      const item = document.createElement(itemTag);
       item.textContent = 'foo';
       list.appendChild(item);
       await nextFrame();
       expect(item.hasAttribute('orientation')).to.be.true;
     });
 
-    it('should have a protected boolean property to check vertical orientation', () => {
+    it('should have a protected boolean property to check vertical orientation', async () => {
       expect(list._vertical).to.be.true;
       list.orientation = 'horizontal';
+      await nextFrame();
       expect(list._vertical).to.be.false;
     });
   });
 
-  describe('Scroll', () => {
-    beforeEach(() => {
+  describe('scroll', () => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element style="width: 50px; height: 50px;">
-          <test-item-element>Foo</test-item-element>
-          <test-item-element>Bar</test-item-element>
-          <test-item-element disabled>Bay</test-item-element>
-          <test-item-element>Baz</test-item-element>
-        </test-list-element>
+        <${listTag} style="width: 50px; height: 50px;">
+          <${itemTag}>Foo</${itemTag}>
+          <${itemTag}>Bar</${itemTag}>
+          <${itemTag} disabled>Bay</${itemTag}>
+          <${itemTag}>Baz</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
-    it('when orientation is horizontal should scroll in advance when reaching right most visible item', () => {
-      list.orientation = 'horizontal';
-      list._focus(0);
-      arrowRight(list);
-
-      const itemRectRight = list.items[2].getBoundingClientRect().right;
-      const listRectRight = list.getBoundingClientRect().right;
-
-      expect(listRectRight).to.be.closeTo(itemRectRight, 1);
-    });
-
-    it('when orientation is horizontal should scroll in advance when reaching left most visible item', () => {
-      list.orientation = 'horizontal';
-      list._focus(3);
-      arrowLeft(list);
-
-      const itemRectLeft = list.items[0].getBoundingClientRect().left;
-      const listRectLeft = list.getBoundingClientRect().left;
-
-      expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
-    });
-
-    it('when orientation is horizontal should move scroll horizontally', () => {
-      list.orientation = 'horizontal';
-      expect(list._scrollerElement.scrollLeft).to.be.equal(0);
-      list._scrollToItem(1);
-      expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
-    });
-
-    it('when orientation is vertical should move scroll vertically', () => {
-      list.orientation = 'vertical';
-      expect(list._scrollerElement.scrollTop).to.be.equal(0);
-
-      list._scrollToItem(1);
-
-      expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
-    });
-
-    describe('RTL mode', () => {
-      beforeEach(() => {
+    describe('basic', () => {
+      it('should update scrollLeft when scrolling to item horizontally', async () => {
         list.orientation = 'horizontal';
-        list.setAttribute('dir', 'rtl');
+        await nextFrame();
+
+        expect(list._scrollerElement.scrollLeft).to.be.equal(0);
+
+        list._scrollToItem(1);
+        expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
       });
 
-      it('should scroll in advance when reaching left most visible item', () => {
-        list._focus(0);
-        arrowLeft(list);
+      it('should update scrollTop when scrolling to item vertically', async () => {
+        list.orientation = 'vertical';
+        await nextFrame();
 
-        const itemRectLeft = list.items[2].getBoundingClientRect().left;
-        const listRectLeft = list.getBoundingClientRect().left;
+        expect(list._scrollerElement.scrollTop).to.be.equal(0);
 
-        expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
+        list._scrollToItem(1);
+        expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
+      });
+    });
+
+    describe('scroll in advance', () => {
+      beforeEach(async () => {
+        list.orientation = 'horizontal';
+        await nextFrame();
       });
 
-      it('should scroll in advance when reaching right most visible item', () => {
-        list._focus(3);
-        arrowRight(list);
+      describe('LTR scroll', () => {
+        it('should scroll in advance when reaching right most visible item', () => {
+          list._focus(0);
+          arrowRight(list);
 
-        const itemRectRight = list.items[0].getBoundingClientRect().right;
-        const listRectRight = list.getBoundingClientRect().right;
+          const itemRectRight = list.items[2].getBoundingClientRect().right;
+          const listRectRight = list.getBoundingClientRect().right;
 
-        expect(listRectRight).to.be.closeTo(itemRectRight, 1);
+          expect(listRectRight).to.be.closeTo(itemRectRight, 1);
+        });
+
+        it('should scroll in advance when reaching left most visible item', () => {
+          list._focus(3);
+          arrowLeft(list);
+
+          const itemRectLeft = list.items[0].getBoundingClientRect().left;
+          const listRectLeft = list.getBoundingClientRect().left;
+
+          expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
+        });
+      });
+
+      describe('RTL scroll', () => {
+        beforeEach(async () => {
+          list.setAttribute('dir', 'rtl');
+          await nextFrame();
+        });
+
+        it('should scroll in advance when reaching left most visible item', () => {
+          list._focus(0);
+          arrowLeft(list);
+
+          const itemRectLeft = list.items[2].getBoundingClientRect().left;
+          const listRectLeft = list.getBoundingClientRect().left;
+
+          expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
+        });
+
+        it('should scroll in advance when reaching right most visible item', () => {
+          list._focus(3);
+          arrowRight(list);
+
+          const itemRectRight = list.items[0].getBoundingClientRect().right;
+          const listRectRight = list.getBoundingClientRect().right;
+
+          expect(listRectRight).to.be.closeTo(itemRectRight, 1);
+        });
       });
     });
   });
 
   describe('disabled', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element>
-          <test-item-element>Item 0</test-item-element>
-          <test-item-element>Item 1</test-item-element>
-          <test-item-element>Item 2</test-item-element>
-          <test-item-element>Item 3</test-item-element>
-        </test-list-element>
+        <${listTag}>
+          <${itemTag}>Item 0</${itemTag}>
+          <${itemTag}>Item 1</${itemTag}>
+          <${itemTag}>Item 2</${itemTag}>
+          <${itemTag}>Item 3</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
+      await nextRender();
     });
 
-    it('when list and items are disabled the previously selected item should be selected after enabling the list', () => {
+    it('should reset previously selected item when listbox and items are disabled', async () => {
       list.selected = 3;
+      await nextFrame();
       expect(list.items[3].selected).to.be.true;
 
       list.disabled = true;
-      list.items.forEach((item) => {
+      list.children.forEach((item) => {
         item.disabled = true;
       });
+      await nextFrame();
+
       expect(list.items[3].selected).to.be.false;
+    });
+
+    it('should restore previously selected item when listbox becomes re-enabled', async () => {
+      list.selected = 3;
+      await nextFrame();
+
+      list.disabled = true;
+      list.children.forEach((item) => {
+        item.disabled = true;
+      });
+      await nextFrame();
 
       list.disabled = false;
+      await nextFrame();
+
       expect(list.items[3].selected).to.be.true;
     });
   });
 
   describe('hidden items', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`
-        <test-list-element style="width: 400px; height: 400px;">
-          <test-item-element>Foo</test-item-element>
-          <test-item-element hidden>Bar</test-item-element>
-          <test-item-element>Bax</test-item-element>
-          <test-item-element style="display: none;">Bay</test-item-element>
-          <test-item-element>Fox</test-item-element>
-          <test-item-element class="hidden-attribute">Pub</test-item-element>
-          <test-item-element>Bin</test-item-element>
-          <test-item-element style="display: none;">Bop</test-item-element>
-        </test-list-element>
+        <${listTag} style="width: 400px; height: 400px;">
+          <${itemTag}>Foo</${itemTag}>
+          <${itemTag} hidden>Bar</${itemTag}>
+          <${itemTag}>Bax</${itemTag}>
+          <${itemTag} style="display: none;">Bay</${itemTag}>
+          <${itemTag}>Fox</${itemTag}>
+          <${itemTag} class="hidden-attribute">Pub</${itemTag}>
+          <${itemTag}>Bin</${itemTag}>
+          <${itemTag} style="display: none;">Bop</${itemTag}>
+        </${listTag}>
       `);
-      list._observer.flush();
-      list._focus(0);
+      await nextRender();
+      list.focus();
     });
 
-    it('should move focus to next not hidden element on "arrow-down"', () => {
-      expect(list.items[0].focused).to.be.true;
-      expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+    it('should ship hidden items when moving focus on ArrowDown', () => {
       arrowDown(list);
-      expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
       expect(list.items.find((item) => item.textContent === 'Bax').focused).to.be.true;
     });
 
-    it('should move focus to next not hidden element on "arrow-up"', () => {
-      expect(list.items[0].focused).to.be.true;
-      expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+    it('should skip hidden items when moving focus on ArrowUp', () => {
       arrowUp(list);
-      expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
       expect(list.items.find((item) => item.textContent === 'Bin').focused).to.be.true;
     });
 
@@ -727,11 +797,18 @@ describe('ListMixin', () => {
     });
 
     it('should warn when creating an element without focusElement', () => {
-      class ScrollerElementMissing extends ListMixin(PolymerElement) {}
-      customElements.define('scroller-element-missing', ScrollerElementMissing);
-      const instance = document.createElement('scroller-element-missing');
+      const tag = defineHelper('no-scroller', '<slot></slot>', (Base) => class extends ListMixin(baseMixin(Base)) {});
+      const instance = document.createElement(tag);
       expect(instance._scrollerElement).to.equal(instance);
       expect(console.warn.calledOnce).to.be.true;
     });
   });
+};
+
+describe('ListMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('ListMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

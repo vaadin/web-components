@@ -43,11 +43,6 @@ export function getDefaultI18n() {
   };
 }
 
-export async function open(datepicker) {
-  datepicker.open();
-  await waitForOverlayRender();
-}
-
 export async function waitForOverlayRender() {
   // First, wait for vaadin-overlay-open event
   await nextRender();
@@ -57,6 +52,11 @@ export async function waitForOverlayRender() {
 
   // Force dom-repeat to render table elements
   flush();
+}
+
+export async function open(datepicker) {
+  datepicker.open();
+  await waitForOverlayRender();
 }
 
 export function close(datepicker) {
@@ -123,28 +123,15 @@ export function getFirstVisibleItem(scroller, bufferOffset = 0) {
 }
 
 export function getFocusedMonth(overlayContent) {
-  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
+  const months = [...overlayContent.querySelectorAll('vaadin-month-calendar')];
   return months.find((month) => {
-    const focused = month.shadowRoot.querySelector('[part~="focused"]');
-    return !!focused;
+    return !!month.shadowRoot.querySelector('[part~="focused"]');
   });
 }
 
 export function getFocusedCell(overlayContent) {
-  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
-
-  // Date that is currently focused
-  let focusedCell;
-
-  for (let i = 0; i < months.length; i++) {
-    focusedCell = months[i].shadowRoot.querySelector('[part~="focused"]');
-
-    if (focusedCell) {
-      break;
-    }
-  }
-
-  return focusedCell;
+  const focusedMonth = getFocusedMonth(overlayContent);
+  return focusedMonth.shadowRoot.querySelector('[part~="focused"]');
 }
 
 /**

@@ -15,13 +15,13 @@ import {
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
 import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import {
+  attributeRenderer,
   flushGrid,
   getCell,
   getCellContent,
@@ -35,20 +35,20 @@ import {
 
 let grid, focusable, scroller, header, footer, body;
 
-function clickItem(rowIndex) {
-  return getCellContent(getRowFirstCell(rowIndex)).click();
-}
-
-function focusItem(rowIndex) {
-  return getRowFirstCell(rowIndex).focus();
-}
-
 function getRowCell(rowIndex, cellIndex) {
   return grid.$.items.children[rowIndex].children[cellIndex];
 }
 
 function getRowFirstCell(rowIndex) {
   return getRowCell(rowIndex, 0);
+}
+
+function clickItem(rowIndex) {
+  return getCellContent(getRowFirstCell(rowIndex)).click();
+}
+
+function focusItem(rowIndex) {
+  return getRowFirstCell(rowIndex).focus();
 }
 
 function getCellInput(rowIndex, colIndex) {
@@ -185,43 +185,37 @@ function getTabbableCells(root) {
   return root.querySelectorAll('tr:not([hidden]) *:is(td, th)[tabindex]:not([tabindex="-1"])');
 }
 
+function indexItemRenderer(root, _, { item, index }) {
+  root.textContent = `${index} ${item}`;
+}
+
+function inputRenderer(root) {
+  root.innerHTML = '<input>';
+}
+
 describe('keyboard navigation', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid theme="no-border">
-        <template class="row-details">
-          <input type="text">
-        </template>
-        <vaadin-grid-column>
-          <template class="header"></template>
-          <template>[[index]] [[item]]</template>
-          <template class="footer"></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <input>
-          </template>
-          <template>
-            <input>
-          </template>
-          <template class="footer">
-            <input>
-          </template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <div></div>
-            <div></div>
-          </template>
-          <template>
-            <span>
-              [[index]] [[item]]
-            </span>
-          </template>
-          <template class="footer"></template>
-        </vaadin-grid-column>
+        <vaadin-grid-column id="column-0"></vaadin-grid-column>
+        <vaadin-grid-column id="column-1"></vaadin-grid-column>
+        <vaadin-grid-column id="column-2"></vaadin-grid-column>
       </vaadin-grid>
     `);
+
+    grid.rowDetailsRenderer = inputRenderer;
+    grid.querySelector('#column-0').renderer = indexItemRenderer;
+
+    grid.querySelector('#column-1').headerRenderer = inputRenderer;
+    grid.querySelector('#column-1').renderer = inputRenderer;
+    grid.querySelector('#column-1').footerRenderer = inputRenderer;
+
+    grid.querySelector('#column-2').headerRenderer = (root) => {
+      root.innerHTML = '<div></div><div></div>';
+    };
+    grid.querySelector('#column-2').renderer = (root, _, { item, index }) => {
+      root.innerHTML = `<span>${index} ${item}</span>`;
+    };
 
     scroller = grid.$.scroller;
     header = grid.$.header;
@@ -1512,39 +1506,23 @@ describe('keyboard navigation', () => {
   describe('interaction mode', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
-      <vaadin-grid theme="no-border">
-        <template class="row-details">
-          <input type="text">
-        </template>
-        <vaadin-grid-column>
-          <template class="header"></template>
-          <template>[[index]] [[item]]</template>
-          <template class="footer"></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <input>
-          </template>
-          <template>
-            <input>
-          </template>
-          <template class="footer">
-            <input>
-          </template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <input>
-          </template>
-          <template>
-            <input>
-          </template>
-          <template class="footer">
-            <input>
-          </template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `);
+        <vaadin-grid theme="no-border">
+          <vaadin-grid-column id="column-0"></vaadin-grid-column>
+          <vaadin-grid-column id="column-1"></vaadin-grid-column>
+          <vaadin-grid-column id="column-2"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+
+      grid.rowDetailsRenderer = inputRenderer;
+      grid.querySelector('#column-0').renderer = indexItemRenderer;
+
+      grid.querySelector('#column-1').headerRenderer = inputRenderer;
+      grid.querySelector('#column-1').renderer = inputRenderer;
+      grid.querySelector('#column-1').footerRenderer = inputRenderer;
+
+      grid.querySelector('#column-2').headerRenderer = inputRenderer;
+      grid.querySelector('#column-2').renderer = inputRenderer;
+      grid.querySelector('#column-2').footerRenderer = inputRenderer;
 
       scroller = grid.$.scroller;
       header = grid.$.header;
@@ -2023,22 +2001,20 @@ describe('keyboard navigation on column groups', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column-group>
-          <template class="header">main group header</template>
-          <template class="footer">main group footer</template>
-
-          <vaadin-grid-column-group>
-            <template class="header">sub group header</template>
-
-            <vaadin-grid-column>
-              <template class="header">column header</template>
-              <template class="footer">column footer</template>
-              <template>[[index]] [[item]]</template>
-            </vaadin-grid-column>
+        <vaadin-grid-column-group header="main group header" footer="main group footer">
+          <vaadin-grid-column-group header="sub group header">
+            <vaadin-grid-column header="column header" footer="column footer"></vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+
+    grid.querySelectorAll('[footer]').forEach((col) => {
+      col.footerRenderer = attributeRenderer('footer');
+    });
+
+    grid.querySelector('vaadin-grid-column').renderer = indexItemRenderer;
+
     grid.items = ['foo', 'bar'];
     flushGrid(grid);
     await nextFrame();
@@ -2082,7 +2058,7 @@ describe('keyboard navigation on column groups', () => {
     down();
 
     expect(grid.$.footer.contains(grid.shadowRoot.activeElement)).to.be.true;
-    // Second how is hidden because of missing templates.
+    // Second how is hidden because of missing renderers.
     // Should skip to the third one, index 2.
     expect(getFocusedRowIndex()).to.equal(2);
   });
@@ -2114,7 +2090,7 @@ describe('keyboard navigation on column groups', () => {
         const initialTabbableHeaderCell = getTabbableCells(header)[0];
 
         // Hide the first header row
-        mainGroup.headerRenderer = null;
+        mainGroup.header = null;
         await nextFrame();
 
         const tabbableHeaderCell = getTabbableCells(header)[0];
@@ -2124,9 +2100,9 @@ describe('keyboard navigation on column groups', () => {
 
       it('should have no tabbable header cells when header is hidden', async () => {
         // Hide all header rows
-        mainGroup.headerRenderer = null;
-        subGroup.headerRenderer = null;
-        column.headerRenderer = null;
+        mainGroup.header = null;
+        subGroup.header = null;
+        column.header = null;
         await nextFrame();
 
         const tabbableHeaderCell = getTabbableCells(header)[0];
@@ -2135,9 +2111,9 @@ describe('keyboard navigation on column groups', () => {
 
       it('should update tabbable header cell on header row unhide', async () => {
         // Hide all header rows
-        mainGroup.headerRenderer = null;
-        subGroup.headerRenderer = null;
-        column.headerRenderer = null;
+        mainGroup.header = null;
+        subGroup.header = null;
+        column.header = null;
         await nextFrame();
 
         column.header = 'column';

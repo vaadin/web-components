@@ -84,42 +84,6 @@ function filterCommits(commits) {
   }
 }
 
-async function cherryPickCommits() {
-  for (let i = arrPR.length - 1; i >= 0; i--) {
-    const branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
-
-    await exec('git checkout master');
-    await exec('git pull');
-    await exec(`git checkout ${arrBranch[i]}`);
-    await exec(`git reset --hard origin/${arrBranch[i]}`);
-
-    try {
-      await exec(`git checkout -b ${branchName}`);
-    } catch (err) {
-      console.error(`Cannot Create Branch, error : ${err}`);
-      process.exit(1);
-    }
-
-    try {
-      await exec(`git cherry-pick ${arrSHA[i]}`);
-    } catch (err) {
-      console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
-      await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
-      await postComment(arrURL[i], arrUser[i], arrBranch[i], err);
-      await exec(`git cherry-pick --abort`);
-      await exec(`git checkout master`);
-      await exec(`git branch -D ${branchName}`);
-      continue;
-    }
-    await exec(`git push origin HEAD:${branchName}`);
-
-    await createPR(arrTitle[i], branchName, arrBranch[i]);
-    await exec(`git checkout master`);
-    await exec(`git branch -D ${branchName}`);
-    await labelCommit(arrURL[i], `cherry-picked-${arrBranch[i]}`);
-  }
-}
-
 async function labelCommit(url, label) {
   const issueURL = `${url.replace('pulls', 'issues')}/labels`;
   const options = {
@@ -181,6 +145,42 @@ function createPR(title, head, base) {
     const resp = JSON.parse(body);
     console.log(`Created PR '${title}' ${resp.url}`);
   });
+}
+
+async function cherryPickCommits() {
+  for (let i = arrPR.length - 1; i >= 0; i--) {
+    const branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
+
+    await exec('git checkout master');
+    await exec('git pull');
+    await exec(`git checkout ${arrBranch[i]}`);
+    await exec(`git reset --hard origin/${arrBranch[i]}`);
+
+    try {
+      await exec(`git checkout -b ${branchName}`);
+    } catch (err) {
+      console.error(`Cannot Create Branch, error : ${err}`);
+      process.exit(1);
+    }
+
+    try {
+      await exec(`git cherry-pick ${arrSHA[i]}`);
+    } catch (err) {
+      console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
+      await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
+      await postComment(arrURL[i], arrUser[i], arrBranch[i], err);
+      await exec(`git cherry-pick --abort`);
+      await exec(`git checkout master`);
+      await exec(`git branch -D ${branchName}`);
+      continue;
+    }
+    await exec(`git push origin HEAD:${branchName}`);
+
+    await createPR(arrTitle[i], branchName, arrBranch[i]);
+    await exec(`git checkout master`);
+    await exec(`git branch -D ${branchName}`);
+    await labelCommit(arrURL[i], `cherry-picked-${arrBranch[i]}`);
+  }
 }
 
 async function main() {

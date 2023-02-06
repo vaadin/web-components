@@ -31,7 +31,7 @@ virtualList.renderer = (root, virtualList, model) => {
 
 assertType<VirtualListRenderer<TestVirtualListItem>>(virtualList.renderer);
 
-assertType<void>(virtualList.scrollToIndex(3));
+assertType<(index: number) => void>(virtualList.scrollToIndex);
 
 assertType<number>(virtualList.firstVisibleIndex);
 assertType<number>(virtualList.lastVisibleIndex);

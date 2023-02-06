@@ -52,6 +52,12 @@ export class ComboBoxOverlay extends ComboBoxOverlayMixin(Overlay) {
 
     return memoizedTemplate;
   }
+
+  constructor() {
+    super();
+
+    this.requiredVerticalSpace = 200;
+  }
 }
 
 customElements.define(ComboBoxOverlay.is, ComboBoxOverlay);

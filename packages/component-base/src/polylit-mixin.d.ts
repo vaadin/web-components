@@ -14,10 +14,10 @@ export declare class PolylitMixinClass {
   /**
    * Reads a value from a path.
    */
-  protected _get(root: Object, path: String): any;
+  protected _get(root: object, path: string): any;
 
   /**
    * Sets a value to a path.
    */
-  protected _set(root: Object, path: String, value: any): void;
+  protected _set(root: object, path: string, value: any): void;
 }

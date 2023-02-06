@@ -432,6 +432,38 @@ describe('keyboard', () => {
   describe('default parser', () => {
     const today = new Date();
 
+    async function checkMonthAndDayOffset(monthOffsetToAdd, dayOffsetToAdd, expectedYearOffset) {
+      input.value = '';
+      const referenceDate = new Date(datepicker.i18n.referenceDate);
+      const yearToTest = referenceDate.getFullYear() + 50;
+      await sendKeys({
+        type: `${referenceDate.getMonth() + 1 + monthOffsetToAdd}/${referenceDate.getDate() + dayOffsetToAdd}/${
+          yearToTest % 100
+        }`,
+      });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest + expectedYearOffset);
+    }
+
+    async function checkYearOffset(offsetToAdd, expectedOffset) {
+      input.value = '';
+      const referenceDateYear = datepicker.i18n.referenceDate
+        ? new Date(datepicker.i18n.referenceDate).getFullYear()
+        : today.getFullYear();
+      const yearToTest = referenceDateYear + offsetToAdd;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest + expectedOffset);
+    }
+
+    async function checkYearOffsets() {
+      await checkYearOffset(0, 0);
+      await checkYearOffset(-49, 0);
+      await checkYearOffset(49, 0);
+      await checkYearOffset(-51, 100);
+      await checkYearOffset(51, -100);
+    }
+
     it('should parse a single digit', async () => {
       await sendKeys({ type: '20' });
       const result = focusedDate();
@@ -531,38 +563,6 @@ describe('keyboard', () => {
       await checkMonthAndDayOffset(-1, 0, 0);
       await checkMonthAndDayOffset(1, 0, -100);
     });
-
-    async function checkMonthAndDayOffset(monthOffsetToAdd, dayOffsetToAdd, expectedYearOffset) {
-      input.value = '';
-      const referenceDate = new Date(datepicker.i18n.referenceDate);
-      const yearToTest = referenceDate.getFullYear() + 50;
-      await sendKeys({
-        type: `${referenceDate.getMonth() + 1 + monthOffsetToAdd}/${referenceDate.getDate() + dayOffsetToAdd}/${
-          yearToTest % 100
-        }`,
-      });
-      const result = focusedDate();
-      expect(result.getFullYear()).to.equal(yearToTest + expectedYearOffset);
-    }
-
-    async function checkYearOffsets() {
-      await checkYearOffset(0, 0);
-      await checkYearOffset(-49, 0);
-      await checkYearOffset(49, 0);
-      await checkYearOffset(-51, 100);
-      await checkYearOffset(51, -100);
-    }
-
-    async function checkYearOffset(offsetToAdd, expectedOffset) {
-      input.value = '';
-      const referenceDateYear = datepicker.i18n.referenceDate
-        ? new Date(datepicker.i18n.referenceDate).getFullYear()
-        : today.getFullYear();
-      const yearToTest = referenceDateYear + offsetToAdd;
-      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
-      const result = focusedDate();
-      expect(result.getFullYear()).to.equal(yearToTest + expectedOffset);
-    }
   });
 
   describe('change event', () => {
