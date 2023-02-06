@@ -39,30 +39,6 @@ function checkPaths(arrayToCheck, action, items) {
 }
 
 /**
- * Sorts the given array of items based on the sorting rules and returns the result.
- *
- * @param {Array<any>} items
- * @param {Array<GridSorterDefinition>} items
- * @return {Array<any>}
- */
-function multiSort(items, sortOrders) {
-  return items.sort((a, b) => {
-    return sortOrders
-      .map((sortOrder) => {
-        if (sortOrder.direction === 'asc') {
-          return compare(get(sortOrder.path, a), get(sortOrder.path, b));
-        } else if (sortOrder.direction === 'desc') {
-          return compare(get(sortOrder.path, b), get(sortOrder.path, a));
-        }
-        return 0;
-      })
-      .reduce((p, n) => {
-        return p !== 0 ? p : n;
-      }, 0);
-  });
-}
-
-/**
  * @param {unknown} value
  * @return {string}
  */
@@ -91,6 +67,30 @@ function compare(a, b) {
     return 1;
   }
   return 0;
+}
+
+/**
+ * Sorts the given array of items based on the sorting rules and returns the result.
+ *
+ * @param {Array<any>} items
+ * @param {Array<GridSorterDefinition>} items
+ * @return {Array<any>}
+ */
+function multiSort(items, sortOrders) {
+  return items.sort((a, b) => {
+    return sortOrders
+      .map((sortOrder) => {
+        if (sortOrder.direction === 'asc') {
+          return compare(get(sortOrder.path, a), get(sortOrder.path, b));
+        } else if (sortOrder.direction === 'desc') {
+          return compare(get(sortOrder.path, b), get(sortOrder.path, a));
+        }
+        return 0;
+      })
+      .reduce((p, n) => {
+        return p !== 0 ? p : n;
+      }, 0);
+  });
 }
 
 /**

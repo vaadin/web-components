@@ -459,10 +459,10 @@ export const DataProviderMixin = (superClass) =>
     _checkSize() {
       if (this.size === undefined && this._effectiveSize === 0) {
         console.warn(
-          'The <vaadin-grid> needs the total number of items' +
-            ' in order to display rows. Set the total number of items' +
-            ' to the `size` property, or provide the total number of items' +
-            ' in the second argument of the `dataProvider`’s `callback` call.',
+          'The <vaadin-grid> needs the total number of items in' +
+            ' order to display rows, which you can specify either by setting' +
+            ' the `size` property, or by providing it to the second argument' +
+            ' of the `dataProvider` function `callback` call.',
         );
       }
     }

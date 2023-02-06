@@ -91,7 +91,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @private */
     _detailsOpenedItemsChanged(changeRecord, rowDetailsRenderer) {
-      // Skip to avoid duplicate work of both “.splices” and “.length” updates.
+      // Skip to avoid duplicate work of both `.splices` and `.length` updates.
       if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
         return;
       }

@@ -108,6 +108,15 @@ const runTests = (baseClass) => {
       await nextFrame();
     });
 
+    // Toggle document dir attribute value
+    function setDir(direction) {
+      if (direction) {
+        document.documentElement.setAttribute('dir', direction);
+      } else {
+        document.documentElement.removeAttribute('dir');
+      }
+    }
+
     // Check that for each `documentDirections` value set, `element` dir
     // attribute value equals to the corresponding `elementDirections` value.
     async function expectDirections(documentDirections, elementDirections) {
@@ -115,15 +124,6 @@ const runTests = (baseClass) => {
         setDir(documentDirections[index]);
         await Promise.resolve();
         expect(element.getAttribute('dir')).to.equal(elementDirections[index]);
-      }
-    }
-
-    // Toggle document dir attribute value
-    function setDir(direction) {
-      if (direction) {
-        document.documentElement.setAttribute('dir', direction);
-      } else {
-        document.documentElement.removeAttribute('dir');
       }
     }
 

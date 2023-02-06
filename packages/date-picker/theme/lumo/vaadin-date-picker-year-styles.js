@@ -25,7 +25,7 @@ registerStyles(
 
     [part='year-separator']::after {
       color: var(--lumo-disabled-text-color);
-      content: '•';
+      content: '\\2022';
     }
   `,
   { moduleId: 'lumo-date-picker-year' },

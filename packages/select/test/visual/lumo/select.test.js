@@ -59,6 +59,18 @@ describe('select', () => {
     await visualDiff(div, 'placeholder');
   });
 
+  it('readonly placeholder', async () => {
+    element.placeholder = 'Placeholder';
+    element.readonly = true;
+    await visualDiff(div, 'readonly-placeholder');
+  });
+
+  it('disabled placeholder', async () => {
+    element.placeholder = 'Placeholder';
+    element.disabled = true;
+    await visualDiff(div, 'disabled-placeholder');
+  });
+
   it('value', async () => {
     element.value = 'value-1';
     await visualDiff(div, 'value');

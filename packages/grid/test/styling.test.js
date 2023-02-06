@@ -20,45 +20,6 @@ describe('styling', () => {
     firstCell = getContainerCell(grid.$.items, 0, 0);
   });
 
-  describe('cell class name generator', () => {
-    let initialCellClasses;
-
-    beforeEach(() => {
-      initialCellClasses = Array.from(firstCell.classList);
-    });
-
-    const assertClassList = (expectedClasses, row = 0, col = 0) => {
-      const cell = getContainerCell(grid.$.items, row, col);
-      expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
-    };
-
-    runStylingTest('classes', 'cellClassNameGenerator', 'generateCellClassNames', assertClassList);
-  });
-
-  describe('cell part name generator', () => {
-    let initialCellPart;
-
-    beforeEach(() => {
-      initialCellPart = firstCell.getAttribute('part');
-    });
-
-    const assertPartNames = (expectedParts, row = 0, col = 0) => {
-      const cell = getContainerCell(grid.$.items, row, col);
-      const actualPart = cell.getAttribute('part');
-      const customParts = expectedParts.length ? ` ${expectedParts.join(' ')}` : '';
-
-      if (row === 0 && col === 0) {
-        expect(actualPart).to.equal(`${initialCellPart}${customParts}`);
-      } else {
-        expectedParts.forEach((partName) => {
-          expect(actualPart).to.contain(partName);
-        });
-      }
-    };
-
-    runStylingTest('parts', 'cellPartNameGenerator', 'generateCellPartNames', assertPartNames);
-  });
-
   function runStylingTest(entries, generatorFn, requestFn, assertCallback) {
     it(`should add ${entries} for cells`, () => {
       grid[generatorFn] = () => 'foo';
@@ -198,4 +159,43 @@ describe('styling', () => {
       });
     });
   }
+
+  describe('cell class name generator', () => {
+    let initialCellClasses;
+
+    beforeEach(() => {
+      initialCellClasses = Array.from(firstCell.classList);
+    });
+
+    const assertClassList = (expectedClasses, row = 0, col = 0) => {
+      const cell = getContainerCell(grid.$.items, row, col);
+      expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
+    };
+
+    runStylingTest('classes', 'cellClassNameGenerator', 'generateCellClassNames', assertClassList);
+  });
+
+  describe('cell part name generator', () => {
+    let initialCellPart;
+
+    beforeEach(() => {
+      initialCellPart = firstCell.getAttribute('part');
+    });
+
+    const assertPartNames = (expectedParts, row = 0, col = 0) => {
+      const cell = getContainerCell(grid.$.items, row, col);
+      const actualPart = cell.getAttribute('part');
+      const customParts = expectedParts.length ? ` ${expectedParts.join(' ')}` : '';
+
+      if (row === 0 && col === 0) {
+        expect(actualPart).to.equal(`${initialCellPart}${customParts}`);
+      } else {
+        expectedParts.forEach((partName) => {
+          expect(actualPart).to.contain(partName);
+        });
+      }
+    };
+
+    runStylingTest('parts', 'cellPartNameGenerator', 'generateCellPartNames', assertPartNames);
+  });
 });
