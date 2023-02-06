@@ -20,7 +20,7 @@ A web component with two content areas and a draggable split handle between them
 </vaadin-split-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/split-layout/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/docs/latest/components/split-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/split-layout/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/docs/latest/components/split-layout)
 
 ## Installation
 
@@ -39,7 +39,7 @@ import '@vaadin/split-layout';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/split-layout/vaadin-split-layout.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/split-layout/vaadin-split-layout.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

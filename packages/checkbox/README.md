@@ -13,7 +13,7 @@ An input field representing a binary choice.
 <vaadin-checkbox label="Indeterminate" indeterminate></vaadin-checkbox>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/checkbox/screenshot.png" width="400" alt="Screenshot of vaadin-checkbox">](https://vaadin.com/docs/latest/components/checkbox)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/checkbox/screenshot.png" width="400" alt="Screenshot of vaadin-checkbox">](https://vaadin.com/docs/latest/components/checkbox)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/checkbox';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/checkbox/vaadin-checkbox.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/checkbox/vaadin-checkbox.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
