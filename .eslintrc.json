@@ -81,7 +81,6 @@
         "mocha": true
       },
       "rules": {
-        "@typescript-eslint/no-invalid-void-type": "off",
         "no-await-in-loop": "off",
         "max-classes-per-file": "off",
         "simple-import-sort/imports": [
