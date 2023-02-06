@@ -28,7 +28,7 @@ import '@vaadin/icon';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/icon/vaadin-icon.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/icon/vaadin-icon.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

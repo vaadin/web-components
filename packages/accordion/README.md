@@ -20,7 +20,7 @@ A web component for displaying a vertically stacked set of expandable panels.
 </vaadin-accordion>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/accordion/screenshot.png" alt="Screenshot of vaadin-accordion" width="900">](https://vaadin.com/docs/latest/components/accordion)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/accordion/screenshot.png" alt="Screenshot of vaadin-accordion" width="900">](https://vaadin.com/docs/latest/components/accordion)
 
 ## Installation
 
@@ -39,7 +39,7 @@ import '@vaadin/accordion';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/accordion/vaadin-accordion.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/accordion/vaadin-accordion.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

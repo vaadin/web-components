@@ -11,7 +11,7 @@ A web component for displaying a login form, either inline, or as an overlay.
 <vaadin-login-overlay opened></vaadin-login-overlay>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/login/screenshot.png" width="456" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/docs/latest/components/login)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/login/screenshot.png" width="456" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/docs/latest/components/login)
 
 ## Installation
 
@@ -30,7 +30,7 @@ import '@vaadin/login';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
 
 To use the Material theme, import the components from the `theme/material` folder:
 

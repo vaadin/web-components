@@ -16,14 +16,14 @@ A web component for creating a horizontal button bar with hierarchical drop-down
     { text: 'Edit' },
     {
       text: 'Move',
-      children: [{ text: 'To folder' }, { text: 'To trash' }]
+      children: [{ text: 'To folder' }, { text: 'To trash' }],
     },
-    { text: 'Duplicate' }
+    { text: 'Duplicate' },
   ];
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/menu-bar/screenshot.png" width="345" alt="Screenshot of vaadin-menu-bar">](https://vaadin.com/docs/latest/components/menu-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/menu-bar/screenshot.png" width="345" alt="Screenshot of vaadin-menu-bar">](https://vaadin.com/docs/latest/components/menu-bar)
 
 ## Installation
 
@@ -42,7 +42,7 @@ import '@vaadin/menu-bar';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/menu-bar/vaadin-menu-bar.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/menu-bar/vaadin-menu-bar.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

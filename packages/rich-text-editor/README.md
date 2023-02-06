@@ -13,7 +13,7 @@ An input field web component for entering rich text.
 <vaadin-rich-text-editor></vaadin-rich-text-editor>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/screenshot.png" width="656" alt="Screenshot of vaadin-rich-text-editor">](https://vaadin.com/docs/latest/components/rich-text-editor)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/rich-text-editor/screenshot.png" width="656" alt="Screenshot of vaadin-rich-text-editor">](https://vaadin.com/docs/latest/components/rich-text-editor)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/rich-text-editor';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/rich-text-editor/vaadin-rich-text-editor.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/rich-text-editor/vaadin-rich-text-editor.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

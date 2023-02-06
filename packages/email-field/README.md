@@ -28,7 +28,7 @@ import '@vaadin/email-field';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/email-field/vaadin-email-field.js) of the package uses Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/email-field/vaadin-email-field.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

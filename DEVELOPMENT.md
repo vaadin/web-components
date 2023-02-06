@@ -181,13 +181,13 @@ yarn test:it
 
 ### Create a branch for the current major
 
-Checkout master and pull latest changes:
+Checkout main and pull latest changes:
 
 ```sh
-git checkout master && git pull
+git checkout main && git pull
 ```
 
-Create a new branch from master:
+Create a new branch from main:
 
 ```sh
 git checkout -b 24.0
@@ -208,11 +208,11 @@ Create another branch:
 git checkout -b update-v24.0
 ```
 
-Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
+Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/main/wtr-utils.js) as follows:
 
 ```diff
 const isLockfileChanged = () => {
--  const log = execSync('git diff --name-only origin/master HEAD').toString();
+-  const log = execSync('git diff --name-only origin/main HEAD').toString();
 +  const log = execSync('git diff --name-only origin/24.0 HEAD').toString();
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
@@ -220,7 +220,7 @@ const isLockfileChanged = () => {
 
 ```diff
 const getChangedPackages = () => {
--  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
+-  const output = execSync('./node_modules/.bin/lerna ls --since origin/main --json --loglevel silent');
 +  const output = execSync('./node_modules/.bin/lerna ls --since origin/24.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
@@ -228,12 +228,12 @@ const getChangedPackages = () => {
 
 Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/4432)).
 
-### Update the version in `master`
+### Update the version in `main`
 
-Create a new branch from master:
+Create a new branch from main:
 
 ```sh
-git checkout master && git checkout -b bump-v24.1
+git checkout main && git checkout -b bump-v24.1
 ```
 
 Prepare a new version for the `updateVersion` script by running the following command:
@@ -257,10 +257,10 @@ lerna version 24.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exa
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update master branch to Vaadin 24.1"
+git commit -a -m "chore: update main branch to Vaadin 24.1"
 ```
 
-Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
+Create a PR to the `main` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
 
 ### CI build updates
 
@@ -362,7 +362,7 @@ After that you can start / restart your application and it should use the source
 When maintaining two stable majors (e.g. 22.0.x and 23.0.x), it is important to maintain `latest` npm tag.
 For example, we release 22.0.7 after 23.0.1 but we still want to keep `latest` pointing to 23.0.1.
 
-Use the following script on `master` branch to run `npm dist-tag` for all packages:
+Use the following script on `main` branch to run `npm dist-tag` for all packages:
 
 ```sh
 ./scripts/fixDistTag.sh
