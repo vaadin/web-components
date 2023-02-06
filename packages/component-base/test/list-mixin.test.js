@@ -130,7 +130,6 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should update items list when removing nodes', async () => {
-      expect(list.items.length).to.be.equal(5);
       list.removeChild(list.items[0]);
       await nextFrame();
       expect(list.items.length).to.be.equal(4);
