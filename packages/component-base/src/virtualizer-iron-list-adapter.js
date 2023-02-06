@@ -161,11 +161,7 @@ export class IronListAdapter {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
-      const physicalItem = this._physicalItems[pidx];
-      this._physicalSizes[pidx] = Math.max(
-        physicalItem.offsetHeight,
-        Math.ceil(physicalItem.getBoundingClientRect().height),
-      );
+      this._physicalSizes[pidx] = Math.ceil(this.__getItemHeight(this._physicalItems[pidx]));
       newPhysicalSize += this._physicalSizes[pidx];
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
@@ -178,6 +174,19 @@ export class IronListAdapter {
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
+  }
+
+  __getItemHeight(item) {
+    const { boxSizing, height, paddingTop, paddingBottom, borderTopWidth, borderBottomWidth } = getComputedStyle(item);
+
+    let itemHeight = parseFloat(height) || 0;
+
+    if (boxSizing === 'content-box') {
+      itemHeight +=
+        parseFloat(paddingTop) + parseFloat(paddingBottom) + parseFloat(borderTopWidth) + parseFloat(borderBottomWidth);
+    }
+
+    return itemHeight;
   }
 
   __updateElement(el, index, forceSameIndexUpdates) {

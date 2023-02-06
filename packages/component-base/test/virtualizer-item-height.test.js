@@ -113,6 +113,7 @@ describe('virtualizer - item height - sub-pixel', () => {
       createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
       updateElement: (el, index) => {
         el.style.width = '100%';
+        el.id = `item-${index}`;
 
         if (el.id !== index) {
           el.textContent = `item-${index}`;
@@ -136,7 +137,42 @@ describe('virtualizer - item height - sub-pixel', () => {
 
     await aTimeout(100);
 
+    let containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+
+    elementsContainer.style.transform = 'scale(1.5)';
+
+    await aTimeout(100);
+
+    containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+
+  it('should measure item height when box-sizing content-box is used', async () => {
+    const firstItem = elementsContainer.querySelector('#item-0');
+
+    firstItem.style.boxSizing = 'content-box';
+    firstItem.style.paddingBottom = '3px';
+    firstItem.style.borderTop = '4px solid red';
+    firstItem.style.borderBottom = '5px solid red';
+
+    await aTimeout(100);
+
     const containerHeight = elementsContainer.offsetHeight;
-    expect(containerHeight).to.equal(Math.round(ITEM_HEIGHT));
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT + 3 + 4 + 5));
+  });
+
+  it('should measure item height when box-sizing border-box is used', async () => {
+    const firstItem = elementsContainer.querySelector('#item-0');
+
+    firstItem.style.boxSizing = 'border-box';
+    firstItem.style.paddingBottom = '3px';
+    firstItem.style.borderTop = '4px solid red';
+    firstItem.style.borderBottom = '5px solid red';
+
+    await aTimeout(100);
+
+    const containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 });
