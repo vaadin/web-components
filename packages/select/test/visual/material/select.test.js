@@ -58,6 +58,19 @@ describe('select', () => {
     await visualDiff(div, 'placeholder');
   });
 
+  it('label and placeholder', async () => {
+    element.label = 'Label';
+    element.placeholder = 'Placeholder';
+    await visualDiff(div, 'label-and-placeholder');
+  });
+
+  it('label and placeholder - always float label', async () => {
+    element.setAttribute('theme', 'always-float-label');
+    element.label = 'Label';
+    element.placeholder = 'Placeholder';
+    await visualDiff(div, 'label-and-placeholder-always-float-label');
+  });
+
   it('value', async () => {
     element.value = 'value-1';
     await visualDiff(div, 'value');
