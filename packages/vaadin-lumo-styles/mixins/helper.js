@@ -46,7 +46,7 @@ export const helper = css`
 
   :host([has-helper][theme~='helper-above-field']) [part='label'] {
     order: 0;
-    padding-bottom: 0.4em;
+    padding-bottom: 0.25em;
   }
 
   :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {

@@ -17,9 +17,9 @@ const requiredField = css`
     font-size: var(--lumo-font-size-s);
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
-    line-height: 1;
+    line-height: 1.15;
     padding-right: 1em;
-    padding-bottom: 0.5em;
+    padding-bottom: 0.351em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

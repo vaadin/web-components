@@ -35,7 +35,7 @@ const customField = css`
 
   /* align with text-field label */
   :host([has-label]) [part='label'] {
-    padding-bottom: calc(0.5em - var(--lumo-space-xs));
+    padding-bottom: calc(0.351em - var(--lumo-space-xs));
   }
 
   :host(:not([has-label])) [part='label'],
@@ -86,7 +86,7 @@ const customField = css`
 
   /* When custom-field is used with components without outer margin */
   :host([theme~='whitespace'][has-label]) [part='label'] {
-    padding-bottom: 0.5em;
+    padding-bottom: 0.351em;
   }
 `;
 
