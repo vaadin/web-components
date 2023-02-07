@@ -141,6 +141,56 @@ export class IronListAdapter {
     });
   }
 
+  /**
+   * Updates the height for a given set of items.
+   *
+   * @param {!Array<number>=} itemSet
+   */
+  _updateMetrics(itemSet) {
+    // Make sure we distributed all the physical items
+    // so we can measure them.
+    flush();
+
+    let newPhysicalSize = 0;
+    let oldPhysicalSize = 0;
+    const prevAvgCount = this._physicalAverageCount;
+    const prevPhysicalAvg = this._physicalAverage;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this._iterateItems((pidx, vidx) => {
+      oldPhysicalSize += this._physicalSizes[pidx];
+      this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+      newPhysicalSize += this._physicalSizes[pidx];
+      this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
+    }, itemSet);
+
+    this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+
+    // Update the average if it measured something.
+    if (this._physicalAverageCount !== prevAvgCount) {
+      this._physicalAverage = Math.round(
+        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
+      );
+    }
+  }
+
+  __getBorderBoxHeight(el) {
+    const style = getComputedStyle(el);
+
+    const itemHeight = parseFloat(style.height) || 0;
+
+    if (style.boxSizing === 'border-box') {
+      return itemHeight;
+    }
+
+    const paddingBottom = parseFloat(style.paddingBottom) || 0;
+    const paddingTop = parseFloat(style.paddingTop) || 0;
+    const borderBottomWidth = parseFloat(style.borderBottomWidth) || 0;
+    const borderTopWidth = parseFloat(style.borderTopWidth) || 0;
+
+    return itemHeight + paddingBottom + paddingTop + borderBottomWidth + borderTopWidth;
+  }
+
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
     if (el.style.paddingTop) {
