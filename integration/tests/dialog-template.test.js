@@ -8,10 +8,10 @@ describe('vaadin-dialog template', () => {
 
   beforeEach(() => {
     dialog = fixtureSync(`
-        <vaadin-dialog>
-          <template>foo</template>
-        </vaadin-dialog>
-      `);
+      <vaadin-dialog>
+        <template>foo</template>
+      </vaadin-dialog>
+    `);
     overlay = dialog.$.overlay;
   });
 
