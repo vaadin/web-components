@@ -96,3 +96,88 @@ describe('virtualizer - item height', () => {
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
   });
 });
+
+describe('virtualizer - item height - sub-pixel', () => {
+  let elementsContainer;
+  let virtualizer;
+  const ITEM_HEIGHT = 30.25;
+
+  beforeEach(() => {
+    const fixture = fixtureSync(`
+      <div style="height: auto;">
+        <div class="scroller">
+          <div style="min-height: 1px;"></div>
+        </div>
+      </div>
+    `);
+    const scrollTarget = fixture.firstElementChild;
+    const scrollContainer = scrollTarget.firstElementChild;
+    elementsContainer = scrollContainer;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.style.width = '100%';
+        el.id = `item-${index}`;
+
+        if (el.id !== index) {
+          el.textContent = `item-${index}`;
+          el.style.height = `${ITEM_HEIGHT}px`;
+        }
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 1;
+  });
+
+  it('should take sub-pixel value into account when measuring items height', () => {
+    const containerHeight = elementsContainer.getBoundingClientRect().height;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+
+  it('should measure height correctly if some transform is applied to virtualizer', () => {
+    elementsContainer.style.transform = 'scale(0.5)';
+
+    virtualizer.scrollToIndex(0);
+
+    let containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+
+    elementsContainer.style.transform = 'scale(1.5)';
+
+    virtualizer.scrollToIndex(0);
+
+    containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+
+  it('should measure item height when box-sizing content-box is used', () => {
+    const firstItem = elementsContainer.querySelector('#item-0');
+
+    firstItem.style.boxSizing = 'content-box';
+    firstItem.style.paddingBottom = '3px';
+    firstItem.style.borderTop = '4px solid red';
+    firstItem.style.borderBottom = '5px solid red';
+
+    virtualizer.scrollToIndex(0);
+
+    const containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT + 3 + 4 + 5));
+  });
+
+  it('should measure item height when box-sizing border-box is used', () => {
+    const firstItem = elementsContainer.querySelector('#item-0');
+
+    firstItem.style.boxSizing = 'border-box';
+    firstItem.style.paddingBottom = '3px';
+    firstItem.style.borderTop = '4px solid red';
+    firstItem.style.borderBottom = '5px solid red';
+
+    virtualizer.scrollToIndex(0);
+
+    const containerHeight = elementsContainer.offsetHeight;
+    expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+});
