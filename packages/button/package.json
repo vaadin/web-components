@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/button",
-  "version": "23.3.6",
+  "version": "23.3.7",
   "publishConfig": {
     "access": "public"
   },
@@ -36,14 +36,14 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.3.6",
-    "@vaadin/vaadin-lumo-styles": "~23.3.6",
-    "@vaadin/vaadin-material-styles": "~23.3.6",
-    "@vaadin/vaadin-themable-mixin": "~23.3.6"
+    "@vaadin/component-base": "~23.3.7",
+    "@vaadin/vaadin-lumo-styles": "~23.3.7",
+    "@vaadin/vaadin-material-styles": "~23.3.7",
+    "@vaadin/vaadin-themable-mixin": "~23.3.7"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/icon": "~23.3.6",
+    "@vaadin/icon": "~23.3.7",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
   },
