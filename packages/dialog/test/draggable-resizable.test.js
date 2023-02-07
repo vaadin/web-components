@@ -11,9 +11,11 @@ customElements.define(
     constructor() {
       super();
       const root = this.attachShadow({ mode: 'open' });
-      root.innerHTML = `<div class="draggable">
-        <span>draggable</span>
-      </div>`;
+      root.innerHTML = `
+        <div class="draggable">
+          <span>draggable</span>
+        </div>
+      `;
     }
   },
 );
