@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-field/vaadin-text-field.js';
-import '../vaadin-grid.js';
+import '@vaadin/grid';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
@@ -14,7 +14,7 @@ import {
   getContainerCellContent,
   getFirstCell,
   infiniteDataProvider,
-} from './helpers.js';
+} from '@vaadin/grid/test/helpers.js';
 
 class GridWithSlots extends PolymerElement {
   static get template() {

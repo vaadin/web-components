@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-virtual-list.js';
+import '@vaadin/virtual-list';
 
 describe('template', () => {
   let list;

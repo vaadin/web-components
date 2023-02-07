@@ -2,9 +2,9 @@ import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
-import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
+import '@vaadin/grid-pro/vaadin-grid-pro.js';
+import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 describe('edit column template', () => {
   describe('default', () => {
