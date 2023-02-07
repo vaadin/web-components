@@ -1,14 +1,20 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
 describe('text-area', () => {
   let textArea;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     textArea = fixtureSync('<vaadin-text-area></vaadin-text-area>');
+    await nextRender();
   });
+
+  function setInputValue(textArea, value) {
+    textArea.inputElement.value = value;
+    fire(textArea.inputElement, 'input');
+  }
 
   describe('properties', () => {
     let native;
@@ -84,8 +90,7 @@ describe('text-area', () => {
       });
 
       it('should update value on native textarea input', () => {
-        native.value = 'foo';
-        native.dispatchEvent(new Event('input', { bubbles: true, cancelable: true, composed: true }));
+        setInputValue(textArea, 'foo');
         expect(textArea.value).to.be.equal('foo');
       });
 
@@ -120,10 +125,10 @@ describe('text-area', () => {
   describe('vaadin-text-area-appear', () => {
     it('should update height on show after hidden', async () => {
       const savedHeight = textArea.clientHeight;
-      textArea.hidden = true;
+      textArea.style.display = 'none';
       // Three new lines will expand initial height
-      textArea.value = '\n\n\n';
-      textArea.hidden = false;
+      setInputValue(textArea, '\n\n\n');
+      textArea.style.display = 'block';
       await oneEvent(textArea, 'animationend');
       expect(textArea.clientHeight).to.be.above(savedHeight);
     });
@@ -238,12 +243,16 @@ describe('text-area', () => {
       expect(textArea.clientHeight).to.be.below(height);
     });
 
-    it('should not change height', () => {
+    it('should not change height', async () => {
       textArea.style.maxHeight = '100px';
-      textArea.value = Array(400).join('400');
+
+      const value = Array(400).join('400');
+      setInputValue(textArea, value);
+      await nextFrame();
       const height = textArea.clientHeight;
 
-      textArea.value = textArea.value.slice(0, -1);
+      setInputValue(textArea, value.slice(0, -1));
+      await nextFrame();
       expect(textArea.clientHeight).to.equal(height);
     });
 
