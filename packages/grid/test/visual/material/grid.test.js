@@ -1,4 +1,3 @@
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../../../theme/material/vaadin-grid.js';
 import '../../../theme/material/vaadin-grid-column-group.js';
 import '../../../theme/material/vaadin-grid-sorter.js';

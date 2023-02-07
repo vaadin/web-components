@@ -53,7 +53,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/polymer-legacy-adapter": "24.0.0-beta1",
     "@vaadin/testing-helpers": "^0.4.0",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
