@@ -764,7 +764,11 @@ export const ComboBoxMixin = (subclass) =>
       // Do not commit value when custom values are disallowed and input value is not a valid option
       // also stop propagation of the event, otherwise the user could submit a form while the input
       // still contains an invalid value
-      if (!this.allowCustomValue && this._inputElementValue !== '' && this._focusedIndex < 0) {
+      const hasInvalidOption =
+        this._focusedIndex < 0 &&
+        this._inputElementValue !== '' &&
+        this._getItemLabel(this.selectedItem) !== this._inputElementValue;
+      if (!this.allowCustomValue && hasInvalidOption) {
         // Do not submit the surrounding form.
         e.preventDefault();
         // Do not trigger global listeners
