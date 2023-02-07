@@ -21,6 +21,13 @@ const select = css`
     opacity: 1;
   }
 
+  :host([has-label]:not([focused]):not([invalid]):not([theme='always-float-label']))
+    ::slotted([slot='value'][placeholder]) {
+    opacity: 0;
+    /* Avoid a flash of the placeholder text on init */
+    transition: none;
+  }
+
   :host [part='input-field'] ::slotted([slot='value']) {
     color: var(--material-body-text-color);
   }
