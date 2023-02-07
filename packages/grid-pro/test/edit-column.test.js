@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import {
@@ -18,6 +17,10 @@ import {
 } from './helpers.js';
 
 const isMac = navigator.platform.includes('Mac');
+
+function indexNameRenderer(root, _, { index, item }) {
+  root.textContent = `${index} ${item.name}`;
+}
 
 describe('edit column', () => {
   (isIOS ? describe.skip : describe)('select column', () => {
@@ -78,18 +81,19 @@ describe('edit column', () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-pro-edit-column path="custom">
-            <template class="editor">
-              <div>
-                <input type="text">
-                <input type="text">
-              </div>
-            </template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="custom"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="custom"]').editModeRenderer = (root) => {
+        root.innerHTML = `
+          <div>
+            <input type="text">
+            <input type="text">
+          </div>
+        `;
+      };
       grid.items = createItems();
       flushGrid(grid);
     });
@@ -116,15 +120,13 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
+
       grid.items = createItems();
       grid.style.width = '100px'; // Column default min width is 100px
       flushGrid(grid);
@@ -159,15 +161,12 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       column = grid.firstElementChild;
       grid.items = createItems();
 
@@ -221,15 +220,12 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.items = createItems();
       flushGrid(grid);
     });
@@ -265,27 +261,15 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.size = 1000;
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
-    });
-
-    it('should cancel edit for editable cell using template when scrolled out', () => {
-      firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
-
-      grid.scrollToIndex(100);
-      input = getCellEditor(firstCell);
-      expect(input).to.be.not.ok;
     });
 
     it('should cancel edit for editable cell using renderer when scrolled out', () => {
@@ -304,15 +288,12 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.items = createItems();
       flushGrid(grid);
     });
@@ -394,16 +375,13 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.items = createItems();
       flushGrid(grid);
     });
@@ -457,15 +435,12 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.items = createItems();
       flushGrid(grid);
       rows = Array.from(getRows(grid.$.items));
@@ -495,15 +470,12 @@ describe('edit column', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name">
-            <template class="header">Name</template>
-            <template>[[index]] [[item.name]]</template>
-            <template class="footer"></template>
-          </vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('[path="name"]').renderer = indexNameRenderer;
       grid.items = createItems();
       grid.rowDetailsRenderer = (root) => {
         root.textContent = 'foo';

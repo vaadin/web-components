@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
@@ -30,12 +29,13 @@ describe('basic features', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid-pro style="width: 200px; height: 300px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid-pro>
     `);
     column = grid.querySelector('vaadin-grid-column');
+    column.renderer = (root, _, { index }) => {
+      root.textContent = index;
+    };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
   });
