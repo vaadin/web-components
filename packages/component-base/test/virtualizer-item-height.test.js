@@ -43,6 +43,11 @@ describe('virtualizer - item height', () => {
     virtualizer.size = 10000;
   });
 
+  afterEach(() => {
+    // Flush the virtualizer to avoid test flakiness
+    virtualizer.flush();
+  });
+
   it('should have the initial placeholder height', () => {
     const firstItem = elementsContainer.querySelector(`#item-0`);
     expect(firstItem.offsetHeight).to.equal(200);
