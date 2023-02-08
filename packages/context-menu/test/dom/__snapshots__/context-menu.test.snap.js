@@ -21,10 +21,7 @@ snapshots["context-menu items"] =
     >
       Menu Item 1
     </vaadin-context-menu-item>
-    <hr
-      aria-haspopup="false"
-      role="separator"
-    >
+    <hr role="separator">
     <vaadin-context-menu-item
       aria-expanded="false"
       aria-haspopup="true"
@@ -111,10 +108,7 @@ snapshots["context-menu items overlay class"] =
     >
       Menu Item 1
     </vaadin-context-menu-item>
-    <hr
-      aria-haspopup="false"
-      role="separator"
-    >
+    <hr role="separator">
     <vaadin-context-menu-item
       aria-expanded="false"
       aria-haspopup="true"

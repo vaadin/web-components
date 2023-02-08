@@ -6,7 +6,6 @@
 import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { Item } from '@vaadin/item/src/vaadin-item.js';
 
 /**
  * @polymerMixin
@@ -159,6 +158,52 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
+     * @param {!ContextMenuItem} item
+     * @return {HTMLElement}
+     * @private
+     */
+    __createComponent(item) {
+      let component;
+
+      if (item.component instanceof HTMLElement) {
+        component = item.component;
+      } else {
+        component = document.createElement(item.component || `${this._tagNamePrefix}-item`);
+      }
+
+      // Support menu-bar / context-menu item
+      if (component._hasVaadinItemMixin) {
+        component.setAttribute('role', 'menuitem');
+      }
+
+      if (component.localName === 'hr') {
+        component.setAttribute('role', 'separator');
+      } else {
+        // Accept not `menuitem` elements e.g. `<button>`
+        component.setAttribute('aria-haspopup', 'false');
+      }
+
+      this._setMenuItemTheme(component, item, this._theme);
+
+      component._item = item;
+
+      if (item.text) {
+        component.textContent = item.text;
+      }
+
+      this.__toggleMenuComponentAttribute(component, 'menu-item-checked', item.checked);
+      this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
+
+      if (item.children && item.children.length) {
+        component.setAttribute('aria-haspopup', 'true');
+        component.setAttribute('aria-expanded', 'false');
+        component.removeAttribute('expanded');
+      }
+
+      return component;
+    }
+
+    /**
      * @param {!HTMLElement} root
      * @param {!ContextMenu} menu
      * @param {!ContextMenuRendererContext} context
@@ -177,37 +222,7 @@ export const ItemsMixin = (superClass) =>
       const items = Array.from(context.detail.children || menu.items);
 
       items.forEach((item) => {
-        let component;
-        if (item.component instanceof HTMLElement) {
-          component = item.component;
-        } else {
-          component = document.createElement(item.component || `${this._tagNamePrefix}-item`);
-        }
-
-        if (component instanceof Item) {
-          component.setAttribute('role', 'menuitem');
-        } else if (component.localName === 'hr') {
-          component.setAttribute('role', 'separator');
-        }
-
-        this._setMenuItemTheme(component, item, this._theme);
-
-        component._item = item;
-
-        if (item.text) {
-          component.textContent = item.text;
-        }
-
-        this.__toggleMenuComponentAttribute(component, 'menu-item-checked', item.checked);
-        this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
-
-        component.setAttribute('aria-haspopup', 'false');
-        if (item.children && item.children.length) {
-          component.setAttribute('aria-haspopup', 'true');
-          component.setAttribute('aria-expanded', 'false');
-          component.removeAttribute('expanded');
-        }
-
+        const component = this.__createComponent(item);
         listBox.appendChild(component);
       });
     }
