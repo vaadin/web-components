@@ -327,16 +327,14 @@ describe('Properties', () => {
 
     it('should be null after clearing the value', () => {
       comboBox.value = 'foo';
-
-      comboBox._clear();
+      comboBox.$.clearButton.click();
 
       expect(comboBox.selectedItem).to.be.null;
     });
 
     it('should not open the overlay after clearing the value', () => {
       comboBox.value = 'foo';
-
-      comboBox._clear();
+      comboBox.$.clearButton.click();
 
       expect(overlay.opened).not.to.be.true;
     });

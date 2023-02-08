@@ -198,7 +198,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
     super._onChange(event);
 
     if (this._isClearButton(event)) {
-      this._clear();
+      this._onClearAction();
     }
   }
 }
