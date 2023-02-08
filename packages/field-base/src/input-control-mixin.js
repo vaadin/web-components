@@ -149,7 +149,7 @@ export const InputControlMixin = (superclass) =>
     _onClearButtonClick(event) {
       event.preventDefault();
       this.inputElement.focus();
-      this.__clear();
+      this.__onClearOriginatedFromUser();
     }
 
     /**
@@ -179,7 +179,7 @@ export const InputControlMixin = (superclass) =>
 
       if (this.clearButtonVisible && !!this.value) {
         event.stopPropagation();
-        this.__clear();
+        this.__onClearOriginatedFromUser();
       }
     }
 
@@ -208,7 +208,7 @@ export const InputControlMixin = (superclass) =>
     }
 
     /** @private */
-    __clear() {
+    __onClearOriginatedFromUser() {
       this.clear();
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
