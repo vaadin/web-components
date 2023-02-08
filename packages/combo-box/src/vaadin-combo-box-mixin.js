@@ -599,7 +599,16 @@ export const ComboBoxMixin = (subclass) =>
       return event.composedPath()[0] === this.clearElement;
     }
 
-    /** @protected */
+    /** @private */
+    __onClearButtonMouseDown(event) {
+      event.preventDefault(); // Prevent native focusout event
+      this.inputElement.focus();
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     */
     _onClearButtonClick(event) {
       event.preventDefault();
       this._onClearAction();
@@ -1263,12 +1272,6 @@ export const ComboBoxMixin = (subclass) =>
         this._focusedIndex = this.filteredItems.indexOf(e.detail.item);
         this.close();
       }
-    }
-
-    /** @private */
-    __onClearButtonMouseDown(event) {
-      event.preventDefault(); // Prevent native focusout event
-      this.inputElement.focus();
     }
 
     /** @private */
