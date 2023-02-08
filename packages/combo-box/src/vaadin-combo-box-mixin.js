@@ -599,6 +599,17 @@ export const ComboBoxMixin = (subclass) =>
       return event.composedPath()[0] === this.clearElement;
     }
 
+    /** @protected */
+    _onClearButtonClick(event) {
+      event.preventDefault();
+      this._onClearAction();
+
+      // De-select dropdown item
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
+    }
+
     /**
      * @param {Event} event
      * @private
@@ -629,10 +640,8 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onClick(event) {
       if (this._isClearButton(event)) {
-        return;
-      }
-
-      if (event.composedPath().includes(this._toggleElement)) {
+        this._onClearButtonClick(event);
+      } else if (event.composedPath().includes(this._toggleElement)) {
         this._onToggleButtonClick(event);
       } else {
         this._onHostClick(event);
@@ -858,11 +867,6 @@ export const ComboBoxMixin = (subclass) =>
 
       if (this.allowCustomValue) {
         this.value = '';
-      }
-
-      // De-select dropdown item
-      if (this.opened) {
-        this.requestContentUpdate();
       }
 
       this._detectAndDispatchChange();
