@@ -287,16 +287,17 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Override method inherited from `InputControlMixin` to handle clear
-   * button click and stop event from propagating to the host element.
+   * Override the method from `InputControlMixin`
+   * to prevent the input from getting focused on
+   * clear button click because this part is managed
+   * by `ComboBoxMixin`.
+   *
    * @param {Event} event
    * @protected
-   * @override
    */
   _onClearButtonClick(event) {
-    event.stopPropagation();
-
-    this._handleClearButtonClick(event);
+    event.preventDefault();
+    this._onClearAction();
   }
 
   /**

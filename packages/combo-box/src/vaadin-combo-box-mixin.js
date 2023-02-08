@@ -601,20 +601,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /**
      * @param {Event} event
-     * @protected
-     */
-    _handleClearButtonClick(event) {
-      event.preventDefault();
-      this._clear();
-
-      // De-select dropdown item
-      if (this.opened) {
-        this.requestContentUpdate();
-      }
-    }
-
-    /**
-     * @param {Event} event
      * @private
      */
     _onToggleButtonClick(event) {
@@ -641,15 +627,15 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _onClick(e) {
-      const path = e.composedPath();
+    _onClick(event) {
+      if (this._isClearButton(event)) {
+        return;
+      }
 
-      if (this._isClearButton(e)) {
-        this._handleClearButtonClick(e);
-      } else if (path.indexOf(this._toggleElement) > -1) {
-        this._onToggleButtonClick(e);
+      if (event.composedPath().includes(this._toggleElement)) {
+        this._onToggleButtonClick(event);
       } else {
-        this._onHostClick(e);
+        this._onHostClick(event);
       }
     }
 
@@ -827,7 +813,7 @@ export const ComboBoxMixin = (subclass) =>
         } else if (this.clearButtonVisible && !this.opened && !!this.value) {
           e.stopPropagation();
           // The clear button is visible and the overlay is closed, so clear the value.
-          this._clear();
+          this._onClearAction();
         }
       } else if (this.opened) {
         // Auto-open is enabled
@@ -845,7 +831,7 @@ export const ComboBoxMixin = (subclass) =>
       } else if (this.clearButtonVisible && !!this.value) {
         e.stopPropagation();
         // The clear button is visible and the overlay is closed, so clear the value.
-        this._clear();
+        this._onClearAction();
       }
     }
 
@@ -867,11 +853,16 @@ export const ComboBoxMixin = (subclass) =>
      * Clears the current value.
      * @protected
      */
-    _clear() {
+    _onClearAction() {
       this.selectedItem = null;
 
       if (this.allowCustomValue) {
         this.value = '';
+      }
+
+      // De-select dropdown item
+      if (this.opened) {
+        this.requestContentUpdate();
       }
 
       this._detectAndDispatchChange();
@@ -1308,7 +1299,7 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       event.preventDefault();
-      this._clear();
+      this._onClearAction();
     }
 
     /**
