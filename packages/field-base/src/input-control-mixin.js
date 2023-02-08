@@ -148,6 +148,7 @@ export const InputControlMixin = (superclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
+      this.inputElement.focus();
       this._onClearAction();
     }
 
@@ -209,7 +210,6 @@ export const InputControlMixin = (superclass) =>
     /** @protected */
     _onClearAction() {
       this.clear();
-      this.inputElement.focus();
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }

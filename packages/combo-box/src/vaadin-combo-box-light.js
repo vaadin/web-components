@@ -201,6 +201,28 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
       this._onClearAction();
     }
   }
+
+  /**
+   * Override the method from `ComboBoxMixin`
+   * to clear the input on clear button click.
+   *
+   * @protected
+   * @override
+   */
+  _onClick(event) {
+    if (this._isClearButton(event)) {
+      this.__onClearButtonClick(event);
+      return;
+    }
+
+    super._onClick(event);
+  }
+
+  /** @private */
+  __onClearButtonClick(event) {
+    event.preventDefault();
+    this._onClearAction();
+  }
 }
 
 customElements.define(ComboBoxLight.is, ComboBoxLight);

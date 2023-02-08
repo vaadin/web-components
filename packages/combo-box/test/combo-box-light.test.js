@@ -13,13 +13,12 @@ import {
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { getFirstItem } from './helpers.js';
 
 class MyInput extends PolymerElement {
@@ -330,7 +329,7 @@ describe('custom buttons', () => {
   });
 
   describe('clear-button', () => {
-    let clearButton, inputElement;
+    let clearButton;
 
     /**
      * Get the most specific element at the given viewport coordinates.
@@ -382,7 +381,6 @@ describe('custom buttons', () => {
 
     beforeEach(() => {
       clearButton = comboBox.querySelector('.clear-button');
-      inputElement = comboBox.querySelector('vaadin-text-field');
       comboBox.value = 'foo';
     });
 
@@ -429,10 +427,13 @@ describe('custom buttons', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should focus the input element on clear button click', async () => {
-      const spy = sinon.spy(comboBox.inputElement, 'focus');
-      click(clearButton);
-      expect(spy.calledOnce).to.be.true;
+    it('should prevent mousedown event to avoid input blur', () => {
+      comboBox.open();
+
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 });

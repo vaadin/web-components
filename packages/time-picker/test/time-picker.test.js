@@ -247,10 +247,13 @@ describe('time-picker', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should focus the input element on clear button click', async () => {
-      const spy = sinon.spy(comboBox.inputElement, 'focus');
-      clearButton.click();
-      expect(spy.calledOnce).to.be.true;
+    it('should prevent mousedown event to avoid input blur', () => {
+      comboBox.open();
+
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+
+      expect(event.defaultPrevented).to.be.true;
     });
 
     it('should propagate clear button to the internal combo-box', () => {
