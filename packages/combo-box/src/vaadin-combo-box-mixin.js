@@ -255,10 +255,8 @@ export const ComboBoxMixin = (subclass) =>
       super();
       this._boundOnFocusout = this._onFocusout.bind(this);
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
-      this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
-      this._boundOnTouchend = this._onTouchend.bind(this);
     }
 
     /**
@@ -332,10 +330,6 @@ export const ComboBoxMixin = (subclass) =>
         input.setAttribute('autocorrect', 'off');
 
         this._revertInputValueToValue();
-
-        if (this.clearElement) {
-          this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
-        }
       }
     }
 
@@ -351,7 +345,6 @@ export const ComboBoxMixin = (subclass) =>
       this._lastCommittedValue = this.value;
 
       this.addEventListener('click', this._boundOnClick);
-      this.addEventListener('touchend', this._boundOnTouchend);
 
       const bringToFrontListener = () => {
         requestAnimationFrame(() => {
@@ -599,6 +592,12 @@ export const ComboBoxMixin = (subclass) =>
       return event.composedPath()[0] === this.clearElement;
     }
 
+    /** @protected */
+    _onClearButtonClick(event) {
+      event.preventDefault();
+      this._onClearAction();
+    }
+
     /**
      * @param {Event} event
      * @private
@@ -629,10 +628,8 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onClick(event) {
       if (this._isClearButton(event)) {
-        return;
-      }
-
-      if (event.composedPath().includes(this._toggleElement)) {
+        this._onClearButtonClick(event);
+      } else if (event.composedPath().includes(this._toggleElement)) {
         this._onToggleButtonClick(event);
       } else {
         this._onHostClick(event);
@@ -854,6 +851,10 @@ export const ComboBoxMixin = (subclass) =>
      * @protected
      */
     _onClearAction() {
+      if (!isTouch) {
+        this.inputElement.focus();
+      }
+
       this.selectedItem = null;
 
       if (this.allowCustomValue) {
@@ -1262,12 +1263,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    __onClearButtonMouseDown(event) {
-      event.preventDefault(); // Prevent native focusout event
-      this.inputElement.focus();
-    }
-
-    /** @private */
     _onFocusout(event) {
       // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
       // Do not focus the input in this case, because it would break announcement for the item.
@@ -1290,16 +1285,6 @@ export const ComboBoxMixin = (subclass) =>
 
         this._closeOrCommit();
       }
-    }
-
-    /** @private */
-    _onTouchend(event) {
-      if (!this.clearElement || event.composedPath()[0] !== this.clearElement) {
-        return;
-      }
-
-      event.preventDefault();
-      this._onClearAction();
     }
 
     /**

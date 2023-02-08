@@ -296,13 +296,10 @@ describe('clearing a selection', () => {
     expect(comboBox.opened).to.eql(false);
   });
 
-  it('should prevent mousedown event to avoid input blur', () => {
-    comboBox.open();
-
-    const event = new CustomEvent('mousedown', { cancelable: true });
-    clearIcon.dispatchEvent(event);
-
-    expect(event.defaultPrevented).to.be.true;
+  it('should focus the input element on clear button click', async () => {
+    const spy = sinon.spy(comboBox.inputElement, 'focus');
+    clearIcon.click();
+    expect(spy.calledOnce).to.be.true;
   });
 });
 
