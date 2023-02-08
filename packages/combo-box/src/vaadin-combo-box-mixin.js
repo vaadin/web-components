@@ -599,13 +599,19 @@ export const ComboBoxMixin = (subclass) =>
       return event.composedPath()[0] === this.clearElement;
     }
 
+    /** @private */
+    __onClearButtonMouseDown(event) {
+      event.preventDefault(); // Prevent native focusout event
+      this.inputElement.focus();
+    }
+
     /**
      * @param {Event} event
      * @protected
      */
-    _handleClearButtonClick(event) {
+    _onClearButtonClick(event) {
       event.preventDefault();
-      this._clear();
+      this._onClearAction();
 
       // De-select dropdown item
       if (this.opened) {
@@ -641,15 +647,13 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _onClick(e) {
-      const path = e.composedPath();
-
-      if (this._isClearButton(e)) {
-        this._handleClearButtonClick(e);
-      } else if (path.indexOf(this._toggleElement) > -1) {
-        this._onToggleButtonClick(e);
+    _onClick(event) {
+      if (this._isClearButton(event)) {
+        this._onClearButtonClick(event);
+      } else if (event.composedPath().includes(this._toggleElement)) {
+        this._onToggleButtonClick(event);
       } else {
-        this._onHostClick(e);
+        this._onHostClick(event);
       }
     }
 
@@ -827,7 +831,7 @@ export const ComboBoxMixin = (subclass) =>
         } else if (this.clearButtonVisible && !this.opened && !!this.value) {
           e.stopPropagation();
           // The clear button is visible and the overlay is closed, so clear the value.
-          this._clear();
+          this._onClearAction();
         }
       } else if (this.opened) {
         // Auto-open is enabled
@@ -845,7 +849,7 @@ export const ComboBoxMixin = (subclass) =>
       } else if (this.clearButtonVisible && !!this.value) {
         e.stopPropagation();
         // The clear button is visible and the overlay is closed, so clear the value.
-        this._clear();
+        this._onClearAction();
       }
     }
 
@@ -867,7 +871,7 @@ export const ComboBoxMixin = (subclass) =>
      * Clears the current value.
      * @protected
      */
-    _clear() {
+    _onClearAction() {
       this.selectedItem = null;
 
       if (this.allowCustomValue) {
@@ -1271,12 +1275,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    __onClearButtonMouseDown(event) {
-      event.preventDefault(); // Prevent native focusout event
-      this.inputElement.focus();
-    }
-
-    /** @private */
     _onFocusout(event) {
       // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
       // Do not focus the input in this case, because it would break announcement for the item.
@@ -1308,7 +1306,7 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       event.preventDefault();
-      this._clear();
+      this._onClearAction();
     }
 
     /**
