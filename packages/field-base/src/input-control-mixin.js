@@ -7,6 +7,7 @@ import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { ClearButtonMixin } from './clear-button-mixin.js';
 import { FieldMixin } from './field-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 import { SlotStylesMixin } from './slot-styles-mixin.js';
@@ -19,11 +20,12 @@ import { SlotStylesMixin } from './slot-styles-mixin.js';
  * @mixes FieldMixin
  * @mixes InputConstraintsMixin
  * @mixes KeyboardMixin
+ * @mixes ClearButtonMixin
  * @mixes SlotStylesMixin
  */
 export const InputControlMixin = (superclass) =>
   class InputControlMixinClass extends SlotStylesMixin(
-    DelegateFocusMixin(InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass)))),
+    DelegateFocusMixin(InputConstraintsMixin(FieldMixin(ClearButtonMixin(KeyboardMixin(superclass))))),
   ) {
     static get properties() {
       return {
@@ -49,16 +51,6 @@ export const InputControlMixin = (superclass) =>
          */
         autoselect: {
           type: Boolean,
-          value: false,
-        },
-
-        /**
-         * Set to true to display the clear icon which clears the input.
-         * @attr {boolean} clear-button-visible
-         */
-        clearButtonVisible: {
-          type: Boolean,
-          reflectToAttribute: true,
           value: false,
         },
 
@@ -109,17 +101,6 @@ export const InputControlMixin = (superclass) =>
       this._boundOnBeforeInput = this._onBeforeInput.bind(this);
     }
 
-    /**
-     * Any element extending this mixin is required to implement this getter.
-     * It returns the reference to the clear button element.
-     * @protected
-     * @return {Element | null | undefined}
-     */
-    get clearElement() {
-      console.warn(`Please implement the 'clearElement' property in <${this.localName}>`);
-      return null;
-    }
-
     /** @protected */
     get slotStyles() {
       // Needed for Safari, where ::slotted(...)::placeholder does not work
@@ -133,25 +114,6 @@ export const InputControlMixin = (superclass) =>
       ];
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-
-      if (this.clearElement) {
-        this.clearElement.addEventListener('click', (e) => this._onClearButtonClick(e));
-      }
-    }
-
-    /**
-     * @param {Event} event
-     * @protected
-     */
-    _onClearButtonClick(event) {
-      event.preventDefault();
-      this.inputElement.focus();
-      this._onClearAction();
-    }
-
     /**
      * Override an event listener from `DelegateFocusMixin`.
      * @param {FocusEvent} event
@@ -163,23 +125,6 @@ export const InputControlMixin = (superclass) =>
 
       if (this.autoselect && this.inputElement) {
         this.inputElement.select();
-      }
-    }
-
-    /**
-     * Override an event listener inherited from `KeydownMixin` to clear on Esc.
-     * Components that extend this mixin can prevent this behavior by overriding
-     * this method without calling `super._onEscape` to provide custom logic.
-     * @param {KeyboardEvent} event
-     * @protected
-     * @override
-     */
-    _onEscape(event) {
-      super._onEscape(event);
-
-      if (this.clearButtonVisible && !!this.value) {
-        event.stopPropagation();
-        this._onClearAction();
       }
     }
 
@@ -205,13 +150,6 @@ export const InputControlMixin = (superclass) =>
           cancelable: event.cancelable,
         }),
       );
-    }
-
-    /** @protected */
-    _onClearAction() {
-      this.clear();
-      this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
     /**
