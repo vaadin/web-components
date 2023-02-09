@@ -19,7 +19,18 @@ export declare class ClearButtonMixinClass {
   /**
    * Set to true to display the clear icon which clears the input.
    *
+   * It is up to the component to choose where to place the clear icon:
+   * in the Shadow DOM or in the light DOM. In any way, a reference to
+   * the clear icon element should be provided via the `clearElement` getter.
+   *
    * @attr {boolean} clear-button-visible
    */
   clearButtonVisible: boolean;
+
+  /**
+   * Clears the value and dispatches `input` and `change` events
+   * on the input element. This method should be called
+   * when the clear action originates from the user.
+   */
+  protected _onClearAction(): void;
 }
