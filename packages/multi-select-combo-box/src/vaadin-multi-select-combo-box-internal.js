@@ -153,20 +153,6 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
-   * Override method from `InputMixin`.
-   *
-   * @protected
-   * @override
-   */
-  clear() {
-    super.clear();
-
-    if (this.inputElement) {
-      this.inputElement.value = '';
-    }
-  }
-
-  /**
    * Override Enter handler to keep overlay open
    * when item is selected or unselected.
    * @param {!Event} event
