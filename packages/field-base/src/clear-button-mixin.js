@@ -92,6 +92,8 @@ export const ClearButtonMixin = (superclass) =>
      */
     _onClearAction() {
       this.clear();
+      // Note, according to the HTML spec, the native change event isn't composed
+      // while the input event is composed.
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }
