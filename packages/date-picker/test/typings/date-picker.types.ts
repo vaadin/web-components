@@ -6,6 +6,7 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
@@ -96,6 +97,7 @@ assertType<KeyboardMixinClass>(datePicker);
 assertType<DelegateFocusMixinClass>(datePicker);
 assertType<LabelMixinClass>(datePicker);
 assertType<InputConstraintsMixinClass>(datePicker);
+assertType<ClearButtonMixinClass>(datePicker);
 assertType<InputControlMixinClass>(datePicker);
 assertType<InputMixinClass>(datePicker);
 assertType<ValidateMixinClass>(datePicker);

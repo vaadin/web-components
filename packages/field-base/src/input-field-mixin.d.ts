@@ -10,6 +10,7 @@ import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegat
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { ClearButtonMixinClass } from './clear-button-mixin.js';
 import type { FieldMixinClass } from './field-mixin.js';
 import type { InputConstraintsMixinClass } from './input-constraints-mixin.js';
 import type { InputControlMixinClass } from './input-control-mixin.js';
@@ -23,7 +24,8 @@ import type { ValidateMixinClass } from './validate-mixin.js';
  */
 export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> &
+): Constructor<ClearButtonMixinClass> &
+  Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
