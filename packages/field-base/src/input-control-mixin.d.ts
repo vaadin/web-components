@@ -10,6 +10,7 @@ import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegat
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { ClearButtonMixinClass } from './clear-button-mixin.js';
 import type { FieldMixinClass } from './field-mixin.js';
 import type { InputConstraintsMixinClass } from './input-constraints-mixin.js';
 import type { InputMixinClass } from './input-mixin.js';
@@ -22,7 +23,8 @@ import type { ValidateMixinClass } from './validate-mixin.js';
  */
 export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> &
+): Constructor<ClearButtonMixinClass> &
+  Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
@@ -56,12 +58,6 @@ export declare class InputControlMixinClass {
    * If true, the input text gets fully selected when the field is focused using click or touch / tap.
    */
   autoselect: boolean;
-
-  /**
-   * Set to true to display the clear icon which clears the input.
-   * @attr {boolean} clear-button-visible
-   */
-  clearButtonVisible: boolean;
 
   /**
    * The name of this field.
