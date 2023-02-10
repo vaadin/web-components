@@ -12,7 +12,6 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
  *
  * @polymerMixin
  * @mixes InputFieldMixin
- * @mixes PatternMixin
  */
 export const TextFieldMixin = (superClass) =>
   class TextFieldMixinClass extends InputFieldMixin(superClass) {
