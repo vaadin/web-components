@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-email-field.js';
 
@@ -35,14 +35,16 @@ describe('email-field', () => {
   describe('default', () => {
     let emailField;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field></vaadin-email-field>');
+      await nextRender();
     });
 
     describe('valid email addresses', () => {
       validAddresses.forEach((address) => {
-        it(`should treat ${address} as valid`, () => {
+        it(`should treat ${address} as valid`, async () => {
           emailField.value = address;
+          await nextFrame();
           emailField.validate();
           expect(emailField.invalid).to.be.false;
         });
@@ -51,8 +53,9 @@ describe('email-field', () => {
 
     describe('invalid email addresses', () => {
       invalidAddresses.forEach((address) => {
-        it(`should treat ${address} as invalid`, () => {
+        it(`should treat ${address} as invalid`, async () => {
           emailField.value = address;
+          await nextFrame();
           emailField.validate();
           expect(emailField.invalid).to.be.true;
         });
@@ -63,8 +66,9 @@ describe('email-field', () => {
   describe('custom pattern', () => {
     let emailField;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field pattern=".+@example.com"></vaadin-email-field>');
+      await nextRender();
     });
 
     it('should not override custom pattern', () => {
@@ -126,15 +130,16 @@ describe('email-field', () => {
   });
 
   describe('validation', () => {
-    let field;
+    let field, validatedSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync('<vaadin-email-field></vaadin-email-field>');
+      await nextRender();
+      validatedSpy = sinon.spy();
+      field.addEventListener('validated', validatedSpy);
     });
 
     it('should fire a validated event on validation success', () => {
-      const validatedSpy = sinon.spy();
-      field.addEventListener('validated', validatedSpy);
       field.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -142,10 +147,9 @@ describe('email-field', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
-      const validatedSpy = sinon.spy();
-      field.addEventListener('validated', validatedSpy);
+    it('should fire a validated event on validation failure', async () => {
       field.required = true;
+      await nextFrame();
       field.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
