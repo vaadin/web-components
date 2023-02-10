@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-email-field.js';
 
 const validAddresses = [
   'email@example.com',
