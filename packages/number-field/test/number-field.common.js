@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { arrowDown, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-number-field.js';
 
 describe('number-field', () => {
   let numberField, input, decreaseButton, increaseButton;
