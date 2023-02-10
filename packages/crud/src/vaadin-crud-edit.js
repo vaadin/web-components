@@ -10,6 +10,21 @@
  */
 import { html } from '@polymer/polymer/polymer-element.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+/**
+ * Use registerStyles instead of the `<style>` tag to make sure
+ * that this CSS will override core styles of `vaadin-button`.
+ */
+registerStyles(
+  'vaadin-crud-edit',
+  css`
+    :host {
+      display: block;
+    }
+  `,
+  { moduleId: 'vaadin-crud-edit-styles' },
+);
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
@@ -25,11 +40,6 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
 class CrudEdit extends Button {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
       <div part="icon"></div>
       <slot name="tooltip"></slot>
     `;
