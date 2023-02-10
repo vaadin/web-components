@@ -15,7 +15,12 @@ import { numberFieldStyles } from './vaadin-number-field-styles.js';
 
 /**
  * LitElement based version of `<vaadin-number-field>` web component.
- * Note: this is a prototype not supposed to be used publicly.
+ *
+ * ## Disclaimer
+ *
+ * This component is an experiment not intended for publishing to npm.
+ * There is no ETA regarding specific Vaadin version where it'll land.
+ * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
