@@ -26,7 +26,9 @@ export const ButtonMixin = (superClass) =>
          * @protected
          */
         tabindex: {
+          type: Number,
           value: 0,
+          reflectToAttribute: true,
         },
       };
     }
