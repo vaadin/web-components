@@ -24,8 +24,10 @@ describe('text-area', () => {
     });
 
     describe('native', () => {
-      function assertAttrCanBeSet(prop, value) {
+      async function assertAttrCanBeSet(prop, value) {
         textArea[prop] = value;
+        await nextFrame();
+
         const attrValue = native.getAttribute(prop);
 
         if (value === true) {
@@ -37,54 +39,53 @@ describe('text-area', () => {
         }
       }
 
-      function assertPropCanBeSet(prop, value) {
-        for (let i = 0; i < 3; i++) {
-          // Check different values
-          const newValue = typeof value === 'boolean' ? i % 2 === 0 : value + i;
-          textArea[prop] = newValue;
-          expect(native[prop]).to.be.equal(newValue);
-        }
-      }
-
       ['placeholder', 'value'].forEach((prop) => {
-        it(`should set string property ${prop}`, () => {
-          assertPropCanBeSet(prop, 'foo');
+        it(`should set string property ${prop}`, async () => {
+          textArea[prop] = 'foo';
+          await nextFrame();
+          expect(native[prop]).to.be.equal('foo');
         });
       });
 
       ['disabled'].forEach((prop) => {
-        it(`should set boolean property ${prop}`, () => {
-          assertPropCanBeSet(prop, true);
+        it(`should set boolean property ${prop}`, async () => {
+          textArea[prop] = true;
+          await nextFrame();
+          expect(native[prop]).to.be.true;
+
+          textArea[prop] = false;
+          await nextFrame();
+          expect(native[prop]).to.be.false;
         });
       });
 
       ['maxlength', 'minlength'].forEach((prop) => {
-        it(`should set numeric attribute ${prop}`, () => {
-          assertAttrCanBeSet(prop, 2);
+        it(`should set numeric attribute ${prop}`, async () => {
+          await assertAttrCanBeSet(prop, 2);
         });
       });
 
       ['autocomplete'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, () => {
-          assertAttrCanBeSet(prop, 'on');
+        it(`should set boolean attribute ${prop}`, async () => {
+          await assertAttrCanBeSet(prop, 'on');
         });
       });
 
       ['autocapitalize'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, () => {
-          assertAttrCanBeSet(prop, 'none');
+        it(`should set boolean attribute ${prop}`, async () => {
+          await assertAttrCanBeSet(prop, 'none');
         });
       });
 
       ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, () => {
-          assertAttrCanBeSet(prop, true);
-          assertAttrCanBeSet(prop, false);
+        it(`should set boolean attribute ${prop}`, async () => {
+          await assertAttrCanBeSet(prop, true);
+          await assertAttrCanBeSet(prop, false);
         });
       });
     });
 
-    describe('binding', () => {
+    describe('value', () => {
       it('should set default value to empty string', () => {
         expect(textArea.value).to.be.equal('');
       });
@@ -94,29 +95,34 @@ describe('text-area', () => {
         expect(textArea.value).to.be.equal('foo');
       });
 
-      it('should update has-value attribute when value is set', () => {
+      it('should update has-value attribute when value is set', async () => {
         textArea.value = 'foo';
+        await nextFrame();
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
-      it('should not update has-value attribute when value is set to undefined', () => {
+      it('should not update has-value attribute when value is set to undefined', async () => {
         textArea.value = undefined;
+        await nextFrame();
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
-      it('should not update has-value attribute when value is set to empty string', () => {
+      it('should not update has-value attribute when value is set to empty string', async () => {
         textArea.value = '';
+        await nextFrame();
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
       // User could accidentally set a 0 or false value
-      it('should update has-value attribute when numeric value is set', () => {
+      it('should update has-value attribute when numeric value is set', async () => {
         textArea.value = 0;
+        await nextFrame();
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
-      it('should update has-value attribute when boolean value is set', () => {
+      it('should update has-value attribute when boolean value is set', async () => {
         textArea.value = false;
+        await nextFrame();
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
     });
@@ -151,17 +157,18 @@ describe('text-area', () => {
       container = textArea.shadowRoot.querySelector('.vaadin-text-area-container');
     });
 
-    it('should grow height with unwrapped text', () => {
+    it('should grow height with unwrapped text', async () => {
       const originalHeight = parseInt(window.getComputedStyle(inputField).height);
 
       // Make sure there are enough characters to grow the textarea
       textArea.value = Array(400).join('400');
+      await nextFrame();
 
       const newHeight = parseInt(window.getComputedStyle(inputField).height);
       expect(newHeight).to.be.at.least(originalHeight + 10);
     });
 
-    it('should not grow over max-height', () => {
+    it('should not grow over max-height', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';
       textArea.style.maxHeight = '100px';
@@ -174,13 +181,14 @@ describe('text-area', () => {
         lot
         of
         rows`;
+      await nextFrame();
 
       expect(parseFloat(window.getComputedStyle(textArea).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(container).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.lte(100);
     });
 
-    it('should not shrink less than min-height', () => {
+    it('should not shrink less than min-height', async () => {
       textArea.style.minHeight = '125px';
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
@@ -189,13 +197,14 @@ describe('text-area', () => {
 
       // Check that value modification doesn't break min-height rule
       textArea.value = '1 row';
+      await nextFrame();
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
       expect(window.getComputedStyle(container).height).to.be.equal('125px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
     });
 
-    it('should stay between min and max height', () => {
+    it('should stay between min and max height', async () => {
       textArea.style.minHeight = '100px';
       textArea.style.maxHeight = '175px';
 
@@ -216,30 +225,40 @@ describe('text-area', () => {
         and
         even
         more`;
+      await nextFrame();
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
       expect(window.getComputedStyle(container).height).to.be.equal('175px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(150);
     });
 
-    it('should increase inputField height', () => {
+    it('should increase input container height', async () => {
       textArea.style.height = '200px';
       textArea.value = 'foo';
+      await nextFrame();
       expect(inputField.clientHeight).to.be.closeTo(200, 10);
     });
 
-    it('should maintain scroll top', () => {
+    it('should maintain scroll top', async () => {
       textArea.style.maxHeight = '100px';
       textArea.value = Array(400).join('400');
+      await nextFrame();
+
       inputField.scrollTop = 200;
       textArea.value += 'foo';
+      await nextFrame();
+
       expect(inputField.scrollTop).to.equal(200);
     });
 
-    it('should decrease height automatically', () => {
+    it('should decrease height automatically', async () => {
       textArea.value = Array(400).join('400');
+      await nextFrame();
+
       const height = textArea.clientHeight;
       textArea.value = '';
+      await nextFrame();
+
       expect(textArea.clientHeight).to.be.below(height);
     });
 
@@ -271,21 +290,26 @@ describe('text-area', () => {
       );
     });
 
-    it('should have matching height', () => {
+    it('should have matching height', async () => {
       inputField.style.padding = '0';
       textArea.style.maxHeight = '100px';
 
       textArea.value = Array(400).join('400');
+      await nextFrame();
+
       textArea.value = textArea.value.slice(0, -1);
+      await nextFrame();
       expect(native.clientHeight).to.equal(inputField.scrollHeight);
     });
 
-    it('should cover native field', () => {
+    it('should cover native textarea', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';
       textArea.style.minHeight = '300px';
       textArea.style.padding = '0';
+
       textArea.value = 'foo';
+      await nextFrame();
 
       expect(native.clientHeight).to.equal(
         Math.round(
@@ -315,9 +339,10 @@ describe('text-area', () => {
           .style.getPropertyValue('--_text-area-vertical-scroll-position');
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         textArea.style.height = '100px';
         textArea.value = 'a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz';
+        await nextFrame();
       });
 
       it('should be 0 initially', () => {
