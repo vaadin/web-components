@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-button.js';
 
 describe('vaadin-button', () => {
   let button;
@@ -69,6 +68,7 @@ describe('vaadin-button', () => {
         const spy = sinon.spy();
         button.addEventListener('click', spy);
         button.disabled = true;
+        await nextFrame();
 
         await sendKeys({ down: key });
 
