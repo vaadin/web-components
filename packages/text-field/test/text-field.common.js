@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-text-field.js';
 
 describe('text-field', () => {
   let textField, input;
@@ -175,6 +174,7 @@ describe('text-field', () => {
       it('should select content on focus when autoselect is true', async () => {
         textField.value = '123';
         textField.autoselect = true;
+        await nextFrame();
         input.dispatchEvent(new CustomEvent('focus', { bubbles: false }));
         await aTimeout(1);
         expect(input.selectionEnd - input.selectionStart).to.equal(3);
