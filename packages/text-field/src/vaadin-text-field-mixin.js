@@ -6,7 +6,6 @@
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 
 /**
  * A mixin providing common text field functionality.
