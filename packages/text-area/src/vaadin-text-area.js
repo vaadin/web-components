@@ -10,8 +10,9 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
+import { textAreaStyles } from './vaadin-text-area-styles.js';
 
-registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-area-styles' });
+registerStyles('vaadin-text-area', [inputFieldShared, textAreaStyles], { moduleId: 'vaadin-text-area-styles' });
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
@@ -65,73 +66,6 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolymerEl
 
   static get template() {
     return html`
-      <style>
-        :host {
-          animation: 1ms vaadin-text-area-appear;
-        }
-
-        .vaadin-text-area-container {
-          flex: auto;
-        }
-
-        /* The label, helper text and the error message should neither grow nor shrink. */
-        [part='label'],
-        [part='helper-text'],
-        [part='error-message'] {
-          flex: none;
-        }
-
-        [part='input-field'] {
-          flex: auto;
-          overflow: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        ::slotted(textarea) {
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          flex: auto;
-          overflow: hidden;
-          width: 100%;
-          height: 100%;
-          outline: none;
-          resize: none;
-          margin: 0;
-          padding: 0 0.25em;
-          border: 0;
-          border-radius: 0;
-          min-width: 0;
-          font: inherit;
-          font-size: 1em;
-          line-height: normal;
-          color: inherit;
-          background-color: transparent;
-          /* Disable default invalid style in Firefox */
-          box-shadow: none;
-        }
-
-        /* Override styles from <vaadin-input-container> */
-        [part='input-field'] ::slotted(textarea) {
-          align-self: stretch;
-          white-space: pre-wrap;
-        }
-
-        [part='input-field'] ::slotted(:not(textarea)) {
-          align-self: flex-start;
-        }
-
-        /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
-        :host([disabled]) ::slotted(textarea) {
-          user-select: none;
-        }
-
-        @keyframes vaadin-text-area-appear {
-          to {
-            opacity: 1;
-          }
-        }
-      </style>
-
       <div class="vaadin-text-area-container">
         <div part="label">
           <slot name="label"></slot>
