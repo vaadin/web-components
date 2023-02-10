@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-text-area.js';
 
 describe('text-area', () => {
   let textArea;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     textArea = fixtureSync('<vaadin-text-area></vaadin-text-area>');
+    await nextRender();
   });
 
   describe('properties', () => {
