@@ -10,8 +10,11 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
+import { numberFieldStyles } from './vaadin-number-field-styles.js';
 
-registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-number-field-styles' });
+registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
+  moduleId: 'vaadin-number-field-styles',
+});
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
@@ -54,31 +57,6 @@ export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(Pol
 
   static get template() {
     return html`
-      <style>
-        :host([readonly]) [part$='button'] {
-          pointer-events: none;
-        }
-
-        [part='decrease-button']::before {
-          content: '\\2212';
-        }
-
-        [part='increase-button']::before {
-          content: '+';
-        }
-
-        [part='decrease-button'],
-        [part='increase-button'] {
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-
-        :host([dir='rtl']) [part='input-field'] {
-          direction: ltr;
-        }
-      </style>
-
       <div class="vaadin-field-container">
         <div part="label">
           <slot name="label"></slot>
