@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-progress-bar.d.ts",
+    "!src/vaadin-lit-progress-bar.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
