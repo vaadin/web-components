@@ -5,9 +5,9 @@
  */
 import type { CSSResult, TemplateResult } from 'lit';
 
-export const styles: CSSResult;
+export const buttonStyles: CSSResult;
 
-export function template<
+export function buttonTemplate<
   T extends HTMLTemplateElement | TemplateResult,
   F extends (strings: TemplateStringsArray, ...values: any[]) => T,
 >(tag: F): T;
