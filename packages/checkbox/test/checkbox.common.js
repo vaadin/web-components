@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-checkbox.js';
 
 describe('checkbox', () => {
   let checkbox, input, label, link;
@@ -64,8 +63,9 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
-    it('should not toggle checked property on click when disabled', () => {
+    it('should not toggle checked property on click when disabled', async () => {
       checkbox.disabled = true;
+      await nextFrame();
       checkbox.click();
       expect(checkbox.checked).to.be.false;
     });
@@ -81,6 +81,7 @@ describe('checkbox', () => {
     it('should be checked on Space press when initially checked is false and indeterminate is true', async () => {
       checkbox.checked = false;
       checkbox.indeterminate = true;
+      await nextFrame();
 
       // Focus on the input
       await sendKeys({ press: 'Tab' });
@@ -94,6 +95,7 @@ describe('checkbox', () => {
     it('should not be checked on Space press when initially checked is true and indeterminate is true', async () => {
       checkbox.checked = true;
       checkbox.indeterminate = true;
+      await nextFrame();
 
       // Focus on the input
       await sendKeys({ press: 'Tab' });
@@ -104,18 +106,22 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should be checked on click when initially checked is false and indeterminate is true', () => {
+    it('should be checked on click when initially checked is false and indeterminate is true', async () => {
       checkbox.checked = false;
       checkbox.indeterminate = true;
+      await nextFrame();
+
       checkbox.click();
 
       expect(checkbox.checked).to.be.true;
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should not be checked on click when initially checked is true and indeterminate is true', () => {
+    it('should not be checked on click when initially checked is true and indeterminate is true', async () => {
       checkbox.checked = true;
       checkbox.indeterminate = true;
+      await nextFrame();
+
       checkbox.click();
 
       expect(checkbox.checked).to.be.false;
@@ -215,16 +221,19 @@ describe('checkbox', () => {
   });
 
   describe('indeterminate property', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      await nextFrame();
       input = checkbox.inputElement;
     });
 
-    it('should delegate the property to the input', () => {
+    it('should delegate the property to the input', async () => {
       checkbox.indeterminate = true;
+      await nextFrame();
       expect(input.indeterminate).to.be.true;
 
       checkbox.indeterminate = false;
+      await nextFrame();
       expect(input.indeterminate).to.be.false;
     });
   });
