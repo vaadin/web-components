@@ -13,7 +13,10 @@ import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { checkboxStyles } from './vaadin-checkbox-styles.js';
+
+registerStyles('vaadin-checkbox', checkboxStyles, { moduleId: 'vaadin-checkbox-styles' });
 
 /**
  * `<vaadin-checkbox>` is an input field representing a binary choice.
@@ -65,57 +68,6 @@ class Checkbox extends LabelMixin(
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .vaadin-checkbox-container {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          align-items: baseline;
-        }
-
-        [part='checkbox'],
-        ::slotted(input),
-        ::slotted(label) {
-          grid-row: 1;
-        }
-
-        [part='checkbox'],
-        ::slotted(input) {
-          grid-column: 1;
-        }
-
-        [part='checkbox'] {
-          width: var(--vaadin-checkbox-size, 1em);
-          height: var(--vaadin-checkbox-size, 1em);
-        }
-
-        [part='checkbox']::before {
-          display: block;
-          content: '\\202F';
-          line-height: var(--vaadin-checkbox-size, 1em);
-          contain: paint;
-        }
-
-        /* visually hidden */
-        ::slotted(input) {
-          opacity: 0;
-          cursor: inherit;
-          margin: 0;
-          align-self: stretch;
-          -webkit-appearance: none;
-        }
-      </style>
       <div class="vaadin-checkbox-container">
         <div part="checkbox" aria-hidden="true"></div>
         <slot name="input"></slot>
