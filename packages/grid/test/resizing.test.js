@@ -94,7 +94,7 @@ describe('resizing', () => {
   });
 
   it('should update details row height', () => {
-    grid.openItemDetails(grid._cache.items[0]);
+    grid.openItemDetails(grid._dataProviderController.rootCache.items[0]);
     const bodyRows = getRows(grid.$.items);
     const cells = getRowCells(bodyRows[0]);
     const detailsCell = cells.pop();

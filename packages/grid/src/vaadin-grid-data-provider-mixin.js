@@ -4,115 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
-
-/**
- * @private
- */
-export const ItemCache = class ItemCache {
-  /**
-   * @param {!HTMLElement} grid
-   * @param {!ItemCache | undefined} parentCache
-   * @param {!GridItem | undefined} parentItem
-   */
-  constructor(grid, parentCache, parentItem) {
-    /** @type {!HTMLElement} */
-    this.grid = grid;
-    /** @type {!ItemCache | undefined} */
-    this.parentCache = parentCache;
-    /** @type {!GridItem | undefined} */
-    this.parentItem = parentItem;
-    /** @type {object} */
-    this.itemCaches = {};
-    /** @type {object[]} */
-    this.items = [];
-    /** @type {number} */
-    this.effectiveSize = 0;
-    /** @type {number} */
-    this.size = 0;
-    /** @type {object} */
-    this.pendingRequests = {};
-  }
-
-  /**
-   * @return {boolean}
-   */
-  isLoading() {
-    return Boolean(
-      Object.keys(this.pendingRequests).length ||
-        Object.keys(this.itemCaches).filter((index) => {
-          return this.itemCaches[index].isLoading();
-        })[0],
-    );
-  }
-
-  /**
-   * @param {number} index
-   * @return {!GridItem | undefined}
-   */
-  getItemForIndex(index) {
-    const { cache, scaledIndex } = this.getCacheAndIndex(index);
-    return cache.items[scaledIndex];
-  }
-
-  updateSize() {
-    this.effectiveSize =
-      !this.parentItem || this.grid._isExpanded(this.parentItem)
-        ? this.size +
-          Object.keys(this.itemCaches).reduce((prev, curr) => {
-            const subCache = this.itemCaches[curr];
-            subCache.updateSize();
-            return prev + subCache.effectiveSize;
-          }, 0)
-        : 0;
-  }
-
-  /**
-   * @param {number} scaledIndex
-   */
-  ensureSubCacheForScaledIndex(scaledIndex) {
-    if (!this.itemCaches[scaledIndex]) {
-      const subCache = new ItemCache(this.grid, this, this.items[scaledIndex]);
-      this.itemCaches[scaledIndex] = subCache;
-      this.grid._loadPage(0, subCache);
-    }
-  }
-
-  /**
-   * @param {number} index
-   * @return {{cache: !ItemCache, scaledIndex: number}}
-   */
-  getCacheAndIndex(index) {
-    let thisLevelIndex = index;
-    for (const [index, subCache] of Object.entries(this.itemCaches)) {
-      const numberIndex = Number(index);
-      if (thisLevelIndex <= numberIndex) {
-        return { cache: this, scaledIndex: thisLevelIndex };
-      } else if (thisLevelIndex <= numberIndex + subCache.effectiveSize) {
-        return subCache.getCacheAndIndex(thisLevelIndex - numberIndex - 1);
-      }
-      thisLevelIndex -= subCache.effectiveSize;
-    }
-    return { cache: this, scaledIndex: thisLevelIndex };
-  }
-
-  /**
-   * Gets the scaled index as flattened index on this cache level.
-   * In practice, this means that the effective size of any expanded
-   * subcaches preceding the index are added to the value.
-   * @param {number} scaledIndex
-   * @return {number} The flat index on this cache level.
-   */
-  getFlatIndex(scaledIndex) {
-    const clampedIndex = Math.max(0, Math.min(this.size - 1, scaledIndex));
-
-    return Object.entries(this.itemCaches).reduce((prev, [index, subCache]) => {
-      return clampedIndex > Number(index) ? prev + subCache.effectiveSize : prev;
-    }, clampedIndex);
-  }
-};
 
 /**
  * @polymerMixin
@@ -182,18 +77,6 @@ export const DataProviderMixin = (superClass) =>
         },
 
         /**
-         * @type {!ItemCache}
-         * @protected
-         */
-        _cache: {
-          type: Object,
-          value() {
-            const cache = new ItemCache(this);
-            return cache;
-          },
-        },
-
-        /**
          * @protected
          */
         _hasData: {
@@ -244,12 +127,32 @@ export const DataProviderMixin = (superClass) =>
       return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems.*)'];
     }
 
+    constructor() {
+      super();
+
+      /** @type {DataProviderController} */
+      this._dataProviderController = new DataProviderController(this, {
+        size: this.size,
+        pageSize: this.pageSize,
+        isExpanded: this._isExpanded.bind(this),
+        dataProvider: this.dataProvider ? this.dataProvider.bind(this) : null,
+        dataProviderParams: () => {
+          return {
+            sortOrders: this._mapSorters(),
+            filters: this._mapFilters(),
+          };
+        },
+      });
+
+      this._dataProviderController.addEventListener('page-requested', this._onDataProviderPageRequested.bind(this));
+      this._dataProviderController.addEventListener('page-received', this._onDataProviderPageReceived.bind(this));
+      this._dataProviderController.addEventListener('page-loaded', this._onDataProviderPageLoaded.bind(this));
+    }
+
     /** @private */
     _sizeChanged(size) {
-      const delta = size - this._cache.size;
-      this._cache.size += delta;
-      this._cache.effectiveSize += delta;
-      this._effectiveSize = this._cache.effectiveSize;
+      this._dataProviderController.setSize(size);
+      this._effectiveSize = this._dataProviderController.effectiveSize;
     }
 
     /** @private */
@@ -272,17 +175,17 @@ export const DataProviderMixin = (superClass) =>
       }
 
       el.index = index;
-      const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
-      const item = cache.items[scaledIndex];
+
+      const { item } = this._dataProviderController.getFlatIndexContext(index);
       if (item) {
         this.__updateLoading(el, false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
-          cache.ensureSubCacheForScaledIndex(scaledIndex);
+          this._dataProviderController.ensureFlatIndexHierarchy(index);
         }
       } else {
         this.__updateLoading(el, true);
-        this._loadPage(this._getPageForIndex(scaledIndex), cache);
+        this._dataProviderController.ensureFlatIndexLoaded(index);
       }
     }
 
@@ -322,8 +225,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _expandedItemsChanged() {
-      this._cache.updateSize();
-      this._effectiveSize = this._cache.effectiveSize;
+      this._dataProviderController.recalculateEffectiveSize();
+      this._effectiveSize = this._dataProviderController.effectiveSize;
       this.__updateVisibleRows();
     }
 
@@ -363,119 +266,68 @@ export const DataProviderMixin = (superClass) =>
      * @return {number}
      * @protected
      */
-    _getIndexLevel(index) {
-      let { cache } = this._cache.getCacheAndIndex(index);
-      let level = 0;
-      while (cache.parentCache) {
-        cache = cache.parentCache;
-        level += 1;
-      }
+    _getIndexLevel(index = 0) {
+      const { level } = this._dataProviderController.getFlatIndexContext(index);
       return level;
     }
 
-    /**
-     * @param {number} page
-     * @param {ItemCache} cache
-     * @protected
-     */
-    _loadPage(page, cache) {
-      // Make sure same page isn't requested multiple times.
-      if (!cache.pendingRequests[page] && this.dataProvider) {
-        this._setLoading(true);
-        cache.pendingRequests[page] = true;
-        const params = {
-          page,
-          pageSize: this.pageSize,
-          sortOrders: this._mapSorters(),
-          filters: this._mapFilters(),
-          parentItem: cache.parentItem,
-        };
-
-        this.dataProvider(params, (items, size) => {
-          if (size !== undefined) {
-            cache.size = size;
-          } else if (params.parentItem) {
-            cache.size = items.length;
-          }
-
-          // Populate the cache with new items
-          items.forEach((item, itemsIndex) => {
-            const itemIndex = page * this.pageSize + itemsIndex;
-            cache.items[itemIndex] = item;
-          });
-
-          // With the new items added, update the cache size and the grid's effective size
-          this._cache.updateSize();
-          this._effectiveSize = this._cache.effectiveSize;
-
-          // After updating the cache, check if some of the expanded items should have sub-caches loaded
-          this._getRenderedRows().forEach((row) => {
-            const { cache, scaledIndex } = this._cache.getCacheAndIndex(row.index);
-            const item = cache.items[scaledIndex];
-            if (item && this._isExpanded(item)) {
-              cache.ensureSubCacheForScaledIndex(scaledIndex);
-            }
-          });
-
-          this._hasData = true;
-
-          // Remove the pending request
-          delete cache.pendingRequests[page];
-
-          // Schedule a debouncer to update the visible rows
-          this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
-            this._setLoading(false);
-
-            this._getRenderedRows().forEach((row) => {
-              const cachedItem = this._cache.getItemForIndex(row.index);
-              if (cachedItem) {
-                this._getItem(row.index, row);
-              }
-            });
-
-            this.__scrollToPendingIndexes();
-          });
-
-          // If the grid is not loading anything, flush the debouncer immediately
-          if (!this._cache.isLoading()) {
-            this._debouncerApplyCachedData.flush();
-          }
-
-          // Notify that new data has been received
-          this._onDataProviderPageLoaded();
-        });
-      }
+    /** @protected */
+    _onDataProviderPageRequested() {
+      this._setLoading(true);
     }
 
     /** @protected */
-    _onDataProviderPageLoaded() {}
+    _onDataProviderPageReceived() {
+      // With the new items added, update the cache size and the grid's effective size
+      this._effectiveSize = this._dataProviderController.effectiveSize;
 
-    /**
-     * @param {number} index
-     * @return {number}
-     * @private
-     */
-    _getPageForIndex(index) {
-      return Math.floor(index / this.pageSize);
+      // After updating the cache, check if some of the expanded items should have sub-caches loaded
+      this._getRenderedRows().forEach((row) => {
+        this._dataProviderController.ensureFlatIndexHierarchy(row.index);
+      });
+
+      this._hasData = true;
+    }
+
+    /** @protected */
+    _onDataProviderPageLoaded() {
+      // Schedule a debouncer to update the visible rows
+      this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
+        this._setLoading(false);
+
+        this._getRenderedRows().forEach((row) => {
+          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
+          if (item) {
+            this._getItem(row.index, row);
+          }
+        });
+
+        this.__scrollToPendingIndexes();
+      });
+
+      // If the grid is not loading anything, flush the debouncer immediately
+      if (!this._dataProviderController.isLoading()) {
+        this._debouncerApplyCachedData.flush();
+      }
     }
 
     /**
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache() {
-      this._cache = new ItemCache(this);
-      this._cache.size = this.size || 0;
-      this._cache.updateSize();
+      this._dataProviderController.clearCache();
       this._hasData = false;
       this.__updateVisibleRows();
 
       if (!this._effectiveSize) {
-        this._loadPage(0, this._cache);
+        this._dataProviderController.loadFirstPage();
       }
     }
 
     /** @private */
     _pageSizeChanged(pageSize, oldPageSize) {
+      this._dataProviderController.setPageSize(pageSize);
+
       if (oldPageSize !== undefined && pageSize !== oldPageSize) {
         this.clearCache();
       }
@@ -495,6 +347,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _dataProviderChanged(dataProvider, oldDataProvider) {
+      this._dataProviderController.setDataProvider(dataProvider ? dataProvider.bind(this) : null);
+
       if (oldDataProvider !== undefined) {
         this.clearCache();
       }
@@ -513,7 +367,7 @@ export const DataProviderMixin = (superClass) =>
       if (!this._hasData) {
         // Load data before adding rows to make sure they have content when
         // rendered for the first time.
-        this._loadPage(0, this._cache);
+        this._dataProviderController.loadFirstPage();
       }
     }
 
@@ -563,37 +417,13 @@ export const DataProviderMixin = (superClass) =>
       // ending up in a loading state. Try scrolling to the index until the target
       // index stabilizes.
       let targetIndex;
-      while (targetIndex !== (targetIndex = this.__getGlobalFlatIndex(indexes))) {
+      while (targetIndex !== (targetIndex = this._dataProviderController.getFlatIndexByPath(indexes))) {
         this._scrollToFlatIndex(targetIndex);
       }
 
-      if (this._cache.isLoading() || !this.clientHeight) {
+      if (this._dataProviderController.isLoading() || !this.clientHeight) {
         this.__pendingScrollToIndexes = indexes;
       }
-    }
-
-    /**
-     * Recursively returns the globally flat index of the item the given indexes point to.
-     * Each index in the array points to a sub-item of the previous index.
-     * Using `Infinity` as an index will point to the last item on the level.
-     *
-     * @param {!Array<number>} indexes
-     * @param {!ItemCache} cache
-     * @param {number} flatIndex
-     * @return {number}
-     * @private
-     */
-    __getGlobalFlatIndex([levelIndex, ...subIndexes], cache = this._cache, flatIndex = 0) {
-      if (levelIndex === Infinity) {
-        // Treat Infinity as the last index on the level
-        levelIndex = cache.size - 1;
-      }
-      const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
-      const subCache = cache.itemCaches[levelIndex];
-      if (subCache && subCache.effectiveSize && subIndexes.length) {
-        return this.__getGlobalFlatIndex(subIndexes, subCache, flatIndex + flatIndexOnLevel + 1);
-      }
-      return flatIndex + flatIndexOnLevel;
     }
 
     /** @private */
