@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-checkbox.d.ts",
+    "!src/vaadin-lit-checkbox.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
