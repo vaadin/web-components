@@ -260,10 +260,10 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __initSubMenu(subMenu) {
-      this._subMenu = subMenu;
+    __initSubMenu() {
+      const subMenu = document.createElement(this.constructor.is);
 
-      subMenu.$.overlay.modeless = true;
+      subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
 
       // Sub-menu doesn't have a target to wrap,
@@ -307,6 +307,8 @@ export const ItemsMixin = (superClass) =>
           }
         }
       });
+
+      return subMenu;
     }
 
     /** @private */
@@ -328,14 +330,16 @@ export const ItemsMixin = (superClass) =>
       const subMenu = this._subMenu;
 
       if (item) {
-        if (subMenu.items !== item._item.children) {
+        const { children } = item._item;
+
+        if (subMenu.items !== children) {
           subMenu.close();
         }
         if (!this.opened) {
           return;
         }
 
-        if (item._item.children && item._item.children.length) {
+        if (children && children.length) {
           this.__updateExpanded(item, true);
 
           // Forward parent overlay class
@@ -353,19 +357,16 @@ export const ItemsMixin = (superClass) =>
      * @param {!ContextMenuRendererContext} context
      * @protected
      */
-    __itemsRenderer(root, menu, context) {
+    __itemsRenderer(root, menu, { detail }) {
       this.__initMenu(root, menu);
 
       const subMenu = root.querySelector(this.constructor.is);
       subMenu.closeOn = menu.closeOn;
 
       const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
-
       listBox.innerHTML = '';
 
-      const items = Array.from(context.detail.children || menu.items);
-
-      items.forEach((item) => {
+      [...(detail.children || menu.items)].forEach((item) => {
         const component = this.__createComponent(item);
         listBox.appendChild(component);
       });
@@ -407,10 +408,9 @@ export const ItemsMixin = (superClass) =>
         this._listBox = listBox;
         root.appendChild(listBox);
 
-        const subMenu = document.createElement(this.constructor.is);
-        // Append before accessing the overlay
+        const subMenu = this.__initSubMenu();
+        this._subMenu = subMenu;
         root.appendChild(subMenu);
-        this.__initSubMenu(subMenu);
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
