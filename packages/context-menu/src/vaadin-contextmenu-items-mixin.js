@@ -195,12 +195,85 @@ export const ItemsMixin = (superClass) =>
       this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
 
       if (item.children && item.children.length) {
+        this.__updateExpanded(component, false);
         component.setAttribute('aria-haspopup', 'true');
         component.setAttribute('aria-expanded', 'false');
-        component.removeAttribute('expanded');
       }
 
       return component;
+    }
+
+    /** @private */
+    __initOverlay() {
+      const overlay = this.$.overlay;
+
+      overlay.$.backdrop.addEventListener('click', () => {
+        this.close();
+      });
+
+      // Open a submenu on click event when a touch device is used.
+      // On desktop, a submenu opens on hover.
+      overlay.addEventListener(isTouch ? 'click' : 'mouseover', (event) => {
+        this.__showSubMenu(event);
+      });
+
+      overlay.addEventListener('keydown', (event) => {
+        const { key } = event;
+        const isRTL = this.__isRTL;
+
+        const isArrowRight = key === 'ArrowRight';
+        const isArrowLeft = key === 'ArrowLeft';
+
+        if ((!isRTL && isArrowRight) || (isRTL && isArrowLeft) || key === 'Enter' || key === ' ') {
+          // Open a sub-menu
+          this.__showSubMenu(event);
+        } else if ((!isRTL && isArrowLeft) || (isRTL && isArrowRight)) {
+          // Close the menu
+          this.close();
+          this.listenOn.focus();
+        } else if (key === 'Escape' || key === 'Tab') {
+          // Close all menus
+          this.dispatchEvent(new CustomEvent('close-all-menus'));
+        }
+      });
+    }
+
+    /** @private */
+    __showSubMenu(event, item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`)) {
+      // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
+      if (!this.__openListenerActive) {
+        return;
+      }
+
+      // Don't open sub-menus while the menu is still opening
+      if (this.$.overlay.hasAttribute('opening')) {
+        requestAnimationFrame(() => {
+          this.__showSubMenu(event, item);
+        });
+
+        return;
+      }
+
+      const subMenu = this._subMenu;
+
+      if (item) {
+        if (subMenu.items !== item._item.children) {
+          subMenu.close();
+        }
+        if (!this.opened) {
+          return;
+        }
+
+        if (item._item.children && item._item.children.length) {
+          this.__updateExpanded(item, true);
+
+          // Forward parent overlay class
+          const { overlayClass } = this;
+          this.__openSubMenu(subMenu, item, overlayClass);
+        } else {
+          subMenu.listenOn.focus();
+        }
+      }
     }
 
     /**
@@ -259,6 +332,8 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
+        this.__initOverlay();
+
         const listBox = document.createElement(`${this._tagNamePrefix}-list-box`);
         root.appendChild(listBox);
 
@@ -268,6 +343,7 @@ export const ItemsMixin = (superClass) =>
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
         const subMenu = document.createElement(this.constructor.is);
+        this._subMenu = subMenu;
         subMenu.setAttribute('hidden', '');
         root.appendChild(subMenu);
         subMenu.$.overlay.modeless = true;
@@ -278,8 +354,7 @@ export const ItemsMixin = (superClass) =>
           if (!e.detail.value) {
             const expandedItem = listBox.querySelector('[expanded]');
             if (expandedItem) {
-              expandedItem.setAttribute('aria-expanded', 'false');
-              expandedItem.removeAttribute('expanded');
+              this.__updateExpanded(expandedItem, false);
             }
           }
         });
@@ -304,68 +379,9 @@ export const ItemsMixin = (superClass) =>
         });
         menu.addEventListener('close-all-menus', menu.close);
         menu.addEventListener('item-selected', menu.close);
-        menu.$.overlay.$.backdrop.addEventListener('click', () => menu.close());
-
-        menu.$.overlay.addEventListener('keydown', (e) => {
-          const isRTL = this.__isRTL;
-          if ((!isRTL && e.keyCode === 37) || (isRTL && e.keyCode === 39)) {
-            menu.close();
-            menu.listenOn.focus();
-          } else if (e.key === 'Escape' || e.key === 'Tab') {
-            menu.dispatchEvent(new CustomEvent('close-all-menus'));
-          }
-        });
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
-        });
-        const openSubMenu = (
-          e,
-          itemElement = e.composedPath().find((e) => e.localName === `${this._tagNamePrefix}-item`),
-        ) => {
-          // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
-          if (!this.__openListenerActive) {
-            return;
-          }
-
-          // Don't open sub-menus while the menu is still opening
-          if (menu.$.overlay.hasAttribute('opening')) {
-            requestAnimationFrame(() => openSubMenu(e, itemElement));
-            return;
-          }
-
-          if (itemElement) {
-            if (subMenu.items !== itemElement._item.children) {
-              subMenu.close();
-            }
-            if (!menu.opened) {
-              return;
-            }
-            if (itemElement._item.children && itemElement._item.children.length) {
-              itemElement.setAttribute('aria-expanded', 'true');
-              itemElement.setAttribute('expanded', '');
-
-              // Forward parent overlay class
-              const { overlayClass } = menu;
-              this.__openSubMenu(subMenu, itemElement, overlayClass);
-            } else {
-              subMenu.listenOn.focus();
-            }
-          }
-        };
-
-        // Open a submenu on click event when a touch device is used.
-        // On desktop, a submenu opens on hover.
-        menu.$.overlay.addEventListener(isTouch ? 'click' : 'mouseover', openSubMenu);
-
-        menu.$.overlay.addEventListener('keydown', (e) => {
-          const isRTL = this.__isRTL;
-          const shouldOpenSubMenu =
-            (!isRTL && e.keyCode === 39) || (isRTL && e.keyCode === 37) || e.keyCode === 13 || e.keyCode === 32;
-
-          if (shouldOpenSubMenu) {
-            openSubMenu(e);
-          }
         });
       } else {
         const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
@@ -375,5 +391,11 @@ export const ItemsMixin = (superClass) =>
           listBox.removeAttribute('theme');
         }
       }
+    }
+
+    /** @private */
+    __updateExpanded(component, expanded) {
+      component.setAttribute('aria-expanded', expanded.toString());
+      component.toggleAttribute('expanded', expanded);
     }
   };
