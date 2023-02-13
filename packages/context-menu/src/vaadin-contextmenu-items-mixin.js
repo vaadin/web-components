@@ -197,7 +197,6 @@ export const ItemsMixin = (superClass) =>
       if (item.children && item.children.length) {
         this.__updateExpanded(component, false);
         component.setAttribute('aria-haspopup', 'true');
-        component.setAttribute('aria-expanded', 'false');
       }
 
       return component;
