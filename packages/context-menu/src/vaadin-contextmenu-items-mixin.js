@@ -203,6 +203,28 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
+    __initListBox() {
+      const listBox = document.createElement(`${this._tagNamePrefix}-list-box`);
+
+      if (this._theme) {
+        listBox.setAttribute('theme', this._theme);
+      }
+
+      listBox.addEventListener('selected-changed', (event) => {
+        const { value } = event.detail;
+        if (typeof value === 'number') {
+          const item = listBox.items[value]._item;
+          if (!item.children) {
+            this.dispatchEvent(new CustomEvent('item-selected', { detail: { value: item } }));
+          }
+          listBox.selected = null;
+        }
+      });
+
+      return listBox;
+    }
+
+    /** @private */
     __initOverlay() {
       const overlay = this.$.overlay;
 
@@ -233,6 +255,56 @@ export const ItemsMixin = (superClass) =>
         } else if (key === 'Escape' || key === 'Tab') {
           // Close all menus
           this.dispatchEvent(new CustomEvent('close-all-menus'));
+        }
+      });
+    }
+
+    /** @private */
+    __initSubMenu(subMenu) {
+      this._subMenu = subMenu;
+
+      subMenu.$.overlay.modeless = true;
+      subMenu.openOn = 'opensubmenu';
+
+      // Sub-menu doesn't have a target to wrap,
+      // so there is no need to keep it visible.
+      subMenu.setAttribute('hidden', '');
+
+      // Close sub-menu when the parent menu closes.
+      this.addEventListener('opened-changed', (event) => {
+        if (!event.detail.value) {
+          this._subMenu.close();
+        }
+      });
+
+      // Forward event to the parent menu element.
+      subMenu.addEventListener('close-all-menus', () => {
+        this.dispatchEvent(new CustomEvent('close-all-menus'));
+      });
+
+      // Forward event to the parent menu element.
+      subMenu.addEventListener('item-selected', (event) => {
+        const { detail } = event;
+        this.dispatchEvent(new CustomEvent('item-selected', { detail }));
+      });
+
+      // Listen to the forwarded event from sub-menu.
+      this.addEventListener('close-all-menus', () => {
+        this.close();
+      });
+
+      // Listen to the forwarded event from sub-menu.
+      this.addEventListener('item-selected', () => {
+        this.close();
+      });
+
+      // Mark parent item as collapsed when closing.
+      subMenu.addEventListener('opened-changed', (event) => {
+        if (!event.detail.value) {
+          const expandedItem = this._listBox.querySelector('[expanded]');
+          if (expandedItem) {
+            this.__updateExpanded(expandedItem, false);
+          }
         }
       });
     }
@@ -310,11 +382,7 @@ export const ItemsMixin = (superClass) =>
         theme = Array.isArray(item.theme) ? item.theme.join(' ') : item.theme;
       }
 
-      if (theme) {
-        component.setAttribute('theme', theme);
-      } else {
-        component.removeAttribute('theme');
-      }
+      this.__updateTheme(component, theme);
     }
 
     /** @private */
@@ -330,65 +398,25 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __initMenu(root, menu) {
+      // NOTE: in this method, `menu` and `this` reference the same element,
+      // so we can use either of those. Original implementation used `menu`.
       if (!root.firstElementChild) {
         this.__initOverlay();
 
-        const listBox = document.createElement(`${this._tagNamePrefix}-list-box`);
+        const listBox = this.__initListBox();
+        this._listBox = listBox;
         root.appendChild(listBox);
 
-        if (this._theme) {
-          listBox.setAttribute('theme', this._theme);
-        }
-        requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
-
         const subMenu = document.createElement(this.constructor.is);
-        this._subMenu = subMenu;
-        subMenu.setAttribute('hidden', '');
+        // Append before accessing the overlay
         root.appendChild(subMenu);
-        subMenu.$.overlay.modeless = true;
-        subMenu.openOn = 'opensubmenu';
-
-        menu.addEventListener('opened-changed', (e) => !e.detail.value && subMenu.close());
-        subMenu.addEventListener('opened-changed', (e) => {
-          if (!e.detail.value) {
-            const expandedItem = listBox.querySelector('[expanded]');
-            if (expandedItem) {
-              this.__updateExpanded(expandedItem, false);
-            }
-          }
-        });
-
-        listBox.addEventListener('selected-changed', (e) => {
-          if (typeof e.detail.value === 'number') {
-            const item = e.target.items[e.detail.value]._item;
-            if (!item.children) {
-              const detail = { value: item };
-              menu.dispatchEvent(new CustomEvent('item-selected', { detail }));
-            }
-            listBox.selected = null;
-          }
-        });
-
-        subMenu.addEventListener('item-selected', (e) => {
-          menu.dispatchEvent(new CustomEvent('item-selected', { detail: e.detail }));
-        });
-
-        subMenu.addEventListener('close-all-menus', () => {
-          menu.dispatchEvent(new CustomEvent('close-all-menus'));
-        });
-        menu.addEventListener('close-all-menus', menu.close);
-        menu.addEventListener('item-selected', menu.close);
+        this.__initSubMenu(subMenu);
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
         });
       } else {
-        const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
-        if (this._theme) {
-          listBox.setAttribute('theme', this._theme);
-        } else {
-          listBox.removeAttribute('theme');
-        }
+        this.__updateTheme(this._listBox, this._theme);
       }
     }
 
@@ -396,5 +424,14 @@ export const ItemsMixin = (superClass) =>
     __updateExpanded(component, expanded) {
       component.setAttribute('aria-expanded', expanded.toString());
       component.toggleAttribute('expanded', expanded);
+    }
+
+    /** @private */
+    __updateTheme(component, theme) {
+      if (theme) {
+        component.setAttribute('theme', theme);
+      } else {
+        component.removeAttribute('theme');
+      }
     }
   };
