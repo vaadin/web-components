@@ -38,6 +38,7 @@ class MenuBarSubmenu extends ContextMenu {
         id="overlay"
         on-opened-changed="_onOverlayOpened"
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
+        modeless="[[_modeless]]"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         model="[[_context]]"
