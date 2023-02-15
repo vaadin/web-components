@@ -321,7 +321,6 @@ describe('vaadin-app-layout', () => {
         layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
         toggle.focus();
         layout.drawerOpened = true;
-        await onceResized(layout);
         expect(document.activeElement).to.equal(toggle);
         await oneEvent(drawer, 'transitionend');
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
