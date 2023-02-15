@@ -382,7 +382,7 @@ describe('vaadin-app-layout', () => {
         it('should move focus to the drawer toggle after the closing animation completes', async () => {
           layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
           layout.drawerOpened = false;
-          await nextFrame();
+          await onceResized(layout);
           expect(layout.shadowRoot.activeElement).to.equal(drawer);
           await oneEvent(drawer, 'transitionend');
           expect(document.activeElement).to.equal(toggle);
