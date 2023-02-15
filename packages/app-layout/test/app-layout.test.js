@@ -335,7 +335,7 @@ describe('vaadin-app-layout', () => {
       describe('opened', () => {
         beforeEach(async () => {
           layout.drawerOpened = true;
-          await nextFrame();
+          await onceResized(layout);
         });
 
         it('should close the drawer on Escape press', () => {
