@@ -392,7 +392,7 @@ describe('vaadin-app-layout', () => {
           const spy = sinon.spy(toggle, 'focus');
           layout.drawerOpened = false;
           layout.drawerOpened = true;
-          await onceResized(layout);
+          await nextFrame();
           expect(spy.called).to.be.false;
         });
       });
