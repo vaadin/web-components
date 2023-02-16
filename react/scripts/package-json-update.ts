@@ -28,7 +28,7 @@ Object.assign(
 
         return [
           `./${moduleName}.js`,
-          { default: `./${moduleName}.js`, types: `./${moduleName}.d.ts` },
+          { types: `./${moduleName}.d.ts`, default: `./${moduleName}.js` },
         ] as ExportsRecord;
       })
     ).sort(compareExportsPaths),

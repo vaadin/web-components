@@ -150,300 +150,300 @@
   "exports": {
     "./package.json": "./package.json",
     "./Accordion.js": {
-      "default": "./Accordion.js",
-      "types": "./Accordion.d.ts"
+      "types": "./Accordion.d.ts",
+      "default": "./Accordion.js"
     },
     "./AccordionPanel.js": {
-      "default": "./AccordionPanel.js",
-      "types": "./AccordionPanel.d.ts"
+      "types": "./AccordionPanel.d.ts",
+      "default": "./AccordionPanel.js"
     },
     "./AppLayout.js": {
-      "default": "./AppLayout.js",
-      "types": "./AppLayout.d.ts"
+      "types": "./AppLayout.d.ts",
+      "default": "./AppLayout.js"
     },
     "./Avatar.js": {
-      "default": "./Avatar.js",
-      "types": "./Avatar.d.ts"
+      "types": "./Avatar.d.ts",
+      "default": "./Avatar.js"
     },
     "./AvatarGroup.js": {
-      "default": "./AvatarGroup.js",
-      "types": "./AvatarGroup.d.ts"
+      "types": "./AvatarGroup.d.ts",
+      "default": "./AvatarGroup.js"
     },
     "./Board.js": {
-      "default": "./Board.js",
-      "types": "./Board.d.ts"
+      "types": "./Board.d.ts",
+      "default": "./Board.js"
     },
     "./BoardRow.js": {
-      "default": "./BoardRow.js",
-      "types": "./BoardRow.d.ts"
+      "types": "./BoardRow.d.ts",
+      "default": "./BoardRow.js"
     },
     "./Button.js": {
-      "default": "./Button.js",
-      "types": "./Button.d.ts"
+      "types": "./Button.d.ts",
+      "default": "./Button.js"
     },
     "./Chart.js": {
-      "default": "./Chart.js",
-      "types": "./Chart.d.ts"
+      "types": "./Chart.d.ts",
+      "default": "./Chart.js"
     },
     "./ChartSeries.js": {
-      "default": "./ChartSeries.js",
-      "types": "./ChartSeries.d.ts"
+      "types": "./ChartSeries.d.ts",
+      "default": "./ChartSeries.js"
     },
     "./Checkbox.js": {
-      "default": "./Checkbox.js",
-      "types": "./Checkbox.d.ts"
+      "types": "./Checkbox.d.ts",
+      "default": "./Checkbox.js"
     },
     "./CheckboxGroup.js": {
-      "default": "./CheckboxGroup.js",
-      "types": "./CheckboxGroup.d.ts"
+      "types": "./CheckboxGroup.d.ts",
+      "default": "./CheckboxGroup.js"
     },
     "./ComboBox.js": {
-      "default": "./ComboBox.js",
-      "types": "./ComboBox.d.ts"
+      "types": "./ComboBox.d.ts",
+      "default": "./ComboBox.js"
     },
     "./ComboBoxLight.js": {
-      "default": "./ComboBoxLight.js",
-      "types": "./ComboBoxLight.d.ts"
+      "types": "./ComboBoxLight.d.ts",
+      "default": "./ComboBoxLight.js"
     },
     "./ConfirmDialog.js": {
-      "default": "./ConfirmDialog.js",
-      "types": "./ConfirmDialog.d.ts"
+      "types": "./ConfirmDialog.d.ts",
+      "default": "./ConfirmDialog.js"
     },
     "./ContextMenu.js": {
-      "default": "./ContextMenu.js",
-      "types": "./ContextMenu.d.ts"
+      "types": "./ContextMenu.d.ts",
+      "default": "./ContextMenu.js"
     },
     "./CookieConsent.js": {
-      "default": "./CookieConsent.js",
-      "types": "./CookieConsent.d.ts"
+      "types": "./CookieConsent.d.ts",
+      "default": "./CookieConsent.js"
     },
     "./Crud.js": {
-      "default": "./Crud.js",
-      "types": "./Crud.d.ts"
+      "types": "./Crud.d.ts",
+      "default": "./Crud.js"
     },
     "./CrudEdit.js": {
-      "default": "./CrudEdit.js",
-      "types": "./CrudEdit.d.ts"
+      "types": "./CrudEdit.d.ts",
+      "default": "./CrudEdit.js"
     },
     "./CrudEditColumn.js": {
-      "default": "./CrudEditColumn.js",
-      "types": "./CrudEditColumn.d.ts"
+      "types": "./CrudEditColumn.d.ts",
+      "default": "./CrudEditColumn.js"
     },
     "./CustomField.js": {
-      "default": "./CustomField.js",
-      "types": "./CustomField.d.ts"
+      "types": "./CustomField.d.ts",
+      "default": "./CustomField.js"
     },
     "./DatePicker.js": {
-      "default": "./DatePicker.js",
-      "types": "./DatePicker.d.ts"
+      "types": "./DatePicker.d.ts",
+      "default": "./DatePicker.js"
     },
     "./DatePickerLight.js": {
-      "default": "./DatePickerLight.js",
-      "types": "./DatePickerLight.d.ts"
+      "types": "./DatePickerLight.d.ts",
+      "default": "./DatePickerLight.js"
     },
     "./DateTimePicker.js": {
-      "default": "./DateTimePicker.js",
-      "types": "./DateTimePicker.d.ts"
+      "types": "./DateTimePicker.d.ts",
+      "default": "./DateTimePicker.js"
     },
     "./Details.js": {
-      "default": "./Details.js",
-      "types": "./Details.d.ts"
+      "types": "./Details.d.ts",
+      "default": "./Details.js"
     },
     "./Dialog.js": {
-      "default": "./Dialog.js",
-      "types": "./Dialog.d.ts"
+      "types": "./Dialog.d.ts",
+      "default": "./Dialog.js"
     },
     "./DrawerToggle.js": {
-      "default": "./DrawerToggle.js",
-      "types": "./DrawerToggle.d.ts"
+      "types": "./DrawerToggle.d.ts",
+      "default": "./DrawerToggle.js"
     },
     "./EmailField.js": {
-      "default": "./EmailField.js",
-      "types": "./EmailField.d.ts"
+      "types": "./EmailField.d.ts",
+      "default": "./EmailField.js"
     },
     "./FormItem.js": {
-      "default": "./FormItem.js",
-      "types": "./FormItem.d.ts"
+      "types": "./FormItem.d.ts",
+      "default": "./FormItem.js"
     },
     "./FormLayout.js": {
-      "default": "./FormLayout.js",
-      "types": "./FormLayout.d.ts"
+      "types": "./FormLayout.d.ts",
+      "default": "./FormLayout.js"
     },
     "./Grid.js": {
-      "default": "./Grid.js",
-      "types": "./Grid.d.ts"
+      "types": "./Grid.d.ts",
+      "default": "./Grid.js"
     },
     "./GridColumn.js": {
-      "default": "./GridColumn.js",
-      "types": "./GridColumn.d.ts"
+      "types": "./GridColumn.d.ts",
+      "default": "./GridColumn.js"
     },
     "./GridColumnGroup.js": {
-      "default": "./GridColumnGroup.js",
-      "types": "./GridColumnGroup.d.ts"
+      "types": "./GridColumnGroup.d.ts",
+      "default": "./GridColumnGroup.js"
     },
     "./GridFilter.js": {
-      "default": "./GridFilter.js",
-      "types": "./GridFilter.d.ts"
+      "types": "./GridFilter.d.ts",
+      "default": "./GridFilter.js"
     },
     "./GridFilterColumn.js": {
-      "default": "./GridFilterColumn.js",
-      "types": "./GridFilterColumn.d.ts"
+      "types": "./GridFilterColumn.d.ts",
+      "default": "./GridFilterColumn.js"
     },
     "./GridPro.js": {
-      "default": "./GridPro.js",
-      "types": "./GridPro.d.ts"
+      "types": "./GridPro.d.ts",
+      "default": "./GridPro.js"
     },
     "./GridProEditColumn.js": {
-      "default": "./GridProEditColumn.js",
-      "types": "./GridProEditColumn.d.ts"
+      "types": "./GridProEditColumn.d.ts",
+      "default": "./GridProEditColumn.js"
     },
     "./GridSelectionColumn.js": {
-      "default": "./GridSelectionColumn.js",
-      "types": "./GridSelectionColumn.d.ts"
+      "types": "./GridSelectionColumn.d.ts",
+      "default": "./GridSelectionColumn.js"
     },
     "./GridSortColumn.js": {
-      "default": "./GridSortColumn.js",
-      "types": "./GridSortColumn.d.ts"
+      "types": "./GridSortColumn.d.ts",
+      "default": "./GridSortColumn.js"
     },
     "./GridSorter.js": {
-      "default": "./GridSorter.js",
-      "types": "./GridSorter.d.ts"
+      "types": "./GridSorter.d.ts",
+      "default": "./GridSorter.js"
     },
     "./GridTreeColumn.js": {
-      "default": "./GridTreeColumn.js",
-      "types": "./GridTreeColumn.d.ts"
+      "types": "./GridTreeColumn.d.ts",
+      "default": "./GridTreeColumn.js"
     },
     "./GridTreeToggle.js": {
-      "default": "./GridTreeToggle.js",
-      "types": "./GridTreeToggle.d.ts"
+      "types": "./GridTreeToggle.d.ts",
+      "default": "./GridTreeToggle.js"
     },
     "./HorizontalLayout.js": {
-      "default": "./HorizontalLayout.js",
-      "types": "./HorizontalLayout.d.ts"
+      "types": "./HorizontalLayout.d.ts",
+      "default": "./HorizontalLayout.js"
     },
     "./Icon.js": {
-      "default": "./Icon.js",
-      "types": "./Icon.d.ts"
+      "types": "./Icon.d.ts",
+      "default": "./Icon.js"
     },
     "./Iconset.js": {
-      "default": "./Iconset.js",
-      "types": "./Iconset.d.ts"
+      "types": "./Iconset.d.ts",
+      "default": "./Iconset.js"
     },
     "./IntegerField.js": {
-      "default": "./IntegerField.js",
-      "types": "./IntegerField.d.ts"
+      "types": "./IntegerField.d.ts",
+      "default": "./IntegerField.js"
     },
     "./Item.js": {
-      "default": "./Item.js",
-      "types": "./Item.d.ts"
+      "types": "./Item.d.ts",
+      "default": "./Item.js"
     },
     "./ListBox.js": {
-      "default": "./ListBox.js",
-      "types": "./ListBox.d.ts"
+      "types": "./ListBox.d.ts",
+      "default": "./ListBox.js"
     },
     "./LoginForm.js": {
-      "default": "./LoginForm.js",
-      "types": "./LoginForm.d.ts"
+      "types": "./LoginForm.d.ts",
+      "default": "./LoginForm.js"
     },
     "./LoginOverlay.js": {
-      "default": "./LoginOverlay.js",
-      "types": "./LoginOverlay.d.ts"
+      "types": "./LoginOverlay.d.ts",
+      "default": "./LoginOverlay.js"
     },
     "./Map.js": {
-      "default": "./Map.js",
-      "types": "./Map.d.ts"
+      "types": "./Map.d.ts",
+      "default": "./Map.js"
     },
     "./MenuBar.js": {
-      "default": "./MenuBar.js",
-      "types": "./MenuBar.d.ts"
+      "types": "./MenuBar.d.ts",
+      "default": "./MenuBar.js"
     },
     "./Message.js": {
-      "default": "./Message.js",
-      "types": "./Message.d.ts"
+      "types": "./Message.d.ts",
+      "default": "./Message.js"
     },
     "./MessageInput.js": {
-      "default": "./MessageInput.js",
-      "types": "./MessageInput.d.ts"
+      "types": "./MessageInput.d.ts",
+      "default": "./MessageInput.js"
     },
     "./MessageList.js": {
-      "default": "./MessageList.js",
-      "types": "./MessageList.d.ts"
+      "types": "./MessageList.d.ts",
+      "default": "./MessageList.js"
     },
     "./Notification.js": {
-      "default": "./Notification.js",
-      "types": "./Notification.d.ts"
+      "types": "./Notification.d.ts",
+      "default": "./Notification.js"
     },
     "./NumberField.js": {
-      "default": "./NumberField.js",
-      "types": "./NumberField.d.ts"
+      "types": "./NumberField.d.ts",
+      "default": "./NumberField.js"
     },
     "./PasswordField.js": {
-      "default": "./PasswordField.js",
-      "types": "./PasswordField.d.ts"
+      "types": "./PasswordField.d.ts",
+      "default": "./PasswordField.js"
     },
     "./ProgressBar.js": {
-      "default": "./ProgressBar.js",
-      "types": "./ProgressBar.d.ts"
+      "types": "./ProgressBar.d.ts",
+      "default": "./ProgressBar.js"
     },
     "./RadioButton.js": {
-      "default": "./RadioButton.js",
-      "types": "./RadioButton.d.ts"
+      "types": "./RadioButton.d.ts",
+      "default": "./RadioButton.js"
     },
     "./RadioGroup.js": {
-      "default": "./RadioGroup.js",
-      "types": "./RadioGroup.d.ts"
+      "types": "./RadioGroup.d.ts",
+      "default": "./RadioGroup.js"
     },
     "./RichTextEditor.js": {
-      "default": "./RichTextEditor.js",
-      "types": "./RichTextEditor.d.ts"
+      "types": "./RichTextEditor.d.ts",
+      "default": "./RichTextEditor.js"
     },
     "./Scroller.js": {
-      "default": "./Scroller.js",
-      "types": "./Scroller.d.ts"
+      "types": "./Scroller.d.ts",
+      "default": "./Scroller.js"
     },
     "./Select.js": {
-      "default": "./Select.js",
-      "types": "./Select.d.ts"
+      "types": "./Select.d.ts",
+      "default": "./Select.js"
     },
     "./SplitLayout.js": {
-      "default": "./SplitLayout.js",
-      "types": "./SplitLayout.d.ts"
+      "types": "./SplitLayout.d.ts",
+      "default": "./SplitLayout.js"
     },
     "./Tab.js": {
-      "default": "./Tab.js",
-      "types": "./Tab.d.ts"
+      "types": "./Tab.d.ts",
+      "default": "./Tab.js"
     },
     "./Tabs.js": {
-      "default": "./Tabs.js",
-      "types": "./Tabs.d.ts"
+      "types": "./Tabs.d.ts",
+      "default": "./Tabs.js"
     },
     "./TextArea.js": {
-      "default": "./TextArea.js",
-      "types": "./TextArea.d.ts"
+      "types": "./TextArea.d.ts",
+      "default": "./TextArea.js"
     },
     "./TextField.js": {
-      "default": "./TextField.js",
-      "types": "./TextField.d.ts"
+      "types": "./TextField.d.ts",
+      "default": "./TextField.js"
     },
     "./TimePicker.js": {
-      "default": "./TimePicker.js",
-      "types": "./TimePicker.d.ts"
+      "types": "./TimePicker.d.ts",
+      "default": "./TimePicker.js"
     },
     "./Tooltip.js": {
-      "default": "./Tooltip.js",
-      "types": "./Tooltip.d.ts"
+      "types": "./Tooltip.d.ts",
+      "default": "./Tooltip.js"
     },
     "./Upload.js": {
-      "default": "./Upload.js",
-      "types": "./Upload.d.ts"
+      "types": "./Upload.d.ts",
+      "default": "./Upload.js"
     },
     "./VerticalLayout.js": {
-      "default": "./VerticalLayout.js",
-      "types": "./VerticalLayout.d.ts"
+      "types": "./VerticalLayout.d.ts",
+      "default": "./VerticalLayout.js"
     },
     "./VirtualList.js": {
-      "default": "./VirtualList.js",
-      "types": "./VirtualList.d.ts"
+      "types": "./VirtualList.d.ts",
+      "default": "./VirtualList.js"
     },
     "./css/Lumo.css": {
       "default": "./css/Lumo.css"
