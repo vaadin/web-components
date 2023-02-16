@@ -34,3 +34,4 @@ src/generated/
 /*.d.ts.map
 /*.js
 /*.js.map
+!/*.config.js

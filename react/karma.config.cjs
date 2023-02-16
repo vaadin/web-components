@@ -1,5 +1,6 @@
-const karmaMocha = require('karma-mocha');
 const karmaChromeLauncher = require('karma-chrome-launcher');
+const karmaCoverage = require('karma-coverage');
+const karmaMocha = require('karma-mocha');
 const karmaVite = require('karma-vite');
 const puppeteer = require('puppeteer');
 
@@ -14,7 +15,7 @@ module.exports = (config) => {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-    plugins: [karmaMocha, karmaChromeLauncher, karmaVite],
+    plugins: [karmaMocha, karmaChromeLauncher, karmaVite, karmaCoverage],
 
     browsers: ['ChromeHeadlessNoSandbox'],
     browserNoActivityTimeout: 60000, //default 10000
@@ -56,7 +57,7 @@ module.exports = (config) => {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', coverage && 'coverage-istanbul'].filter(Boolean),
+    reporters: ['progress', coverage && 'coverage'].filter(Boolean),
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
@@ -78,5 +79,10 @@ module.exports = (config) => {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity,
+
+    coverageReporter: {
+      dir: '.coverage/',
+      reporters: [!isCI && { type: 'html', subdir: 'html' }, { type: 'lcovonly', subdir: '.' }].filter(Boolean),
+    },
   });
 };
