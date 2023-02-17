@@ -9,10 +9,13 @@
     // WARNING: Avoid enabling the `skipLibCheck` option as it disables type checking
     // for the components' type declarations (e.g packages/button/src/vaadin-button.d.ts).
     "skipLibCheck": false,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
   },
   "include": [
     "packages/**/test/typings",
-    "test/typings"
+    "test/typings",
+    "dev"
   ]
 }

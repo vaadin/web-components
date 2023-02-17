@@ -1,6 +1,7 @@
 /* eslint-env node */
 const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
+const { esbuildPlugin } = require('@web/dev-server-esbuild');
 
 const unitTestsConfig = createUnitTestsConfig({
   coverageConfig: {
@@ -15,6 +16,7 @@ const unitTestsConfig = createUnitTestsConfig({
 });
 
 module.exports = {
+  plugins: [esbuildPlugin({ ts: true, tsconfig: './tsconfig.json' })],
   ...unitTestsConfig,
   ...devServerConfig,
 };

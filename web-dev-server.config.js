@@ -1,5 +1,6 @@
 /* eslint-env node */
 const fs = require('fs');
+const { esbuildPlugin } = require('@web/dev-server-esbuild');
 
 const preventFouc = `
   <style>
@@ -20,6 +21,7 @@ const preventFouc = `
 
 module.exports = {
   plugins: [
+    esbuildPlugin({ ts: true, tsconfig: './tsconfig.json' }),
     {
       name: 'dev-page-listing',
       transform(context) {

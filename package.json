@@ -34,6 +34,7 @@
     "@polymer/iron-component-page": "^4.0.1",
     "@vaadin/testing-helpers": "^0.4.0",
     "@web/dev-server": "^0.1.35",
+    "@web/dev-server-esbuild": "^0.3.3",
     "@web/rollup-plugin-html": "^1.11.0",
     "@web/test-runner": "^0.15.0",
     "@web/test-runner-commands": "^0.6.5",
