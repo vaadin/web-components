@@ -3,8 +3,8 @@ import { css, html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import type { TextAreaValueChangedEvent } from '@vaadin/text-area';
 
-@customElement('lit-component')
-class LitComponent extends LitElement {
+@customElement('lit-example')
+class LitExample extends LitElement {
   static override styles = css`
     :host {
       display: block;
