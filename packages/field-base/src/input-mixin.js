@@ -88,6 +88,7 @@ export const InputMixin = dedupingMixin(
        * Override this getter if the property is different from the default `value` one.
        *
        * @protected
+       * @return {string}
        */
       get _inputElementValueProperty() {
         return 'value';
@@ -97,6 +98,7 @@ export const InputMixin = dedupingMixin(
        * The input element's value.
        *
        * @protected
+       * @return {string}
        */
       get _inputElementValue() {
         return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;
