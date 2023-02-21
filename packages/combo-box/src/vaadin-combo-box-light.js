@@ -121,7 +121,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
    * @return {string}
    * @protected
    */
-  get _propertyForValue() {
+  get _inputElementValueProperty() {
     return dashToCamelCase(this.attrForValue);
   }
 

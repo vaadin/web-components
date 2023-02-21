@@ -82,6 +82,23 @@ export const InputMixin = dedupingMixin(
         return this.value != null && this.value !== '';
       }
 
+      /** @protected */
+      get _inputElementValueProperty() {
+        return 'value';
+      }
+
+      /** @protected */
+      get _inputElementValue() {
+        return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;
+      }
+
+      /** @protected */
+      set _inputElementValue(value) {
+        if (this.inputElement) {
+          this.inputElement[this._inputElementValueProperty] = value;
+        }
+      }
+
       /**
        * Clear the value of the field.
        */
@@ -90,9 +107,7 @@ export const InputMixin = dedupingMixin(
 
         // Clear the input immediately without waiting for the observer.
         // Otherwise, when using Lit, the old value would be restored.
-        if (this.inputElement) {
-          this.inputElement.value = '';
-        }
+        this._inputElementValue = '';
       }
 
       /**
@@ -132,11 +147,7 @@ export const InputMixin = dedupingMixin(
           return;
         }
 
-        if (value != null) {
-          this.inputElement.value = value;
-        } else {
-          this.inputElement.value = '';
-        }
+        this._inputElementValue = value !== null ? value : '';
       }
 
       /**

@@ -34,6 +34,10 @@ export declare class InputMixinClass {
    */
   protected readonly _hasValue: boolean;
 
+  protected readonly _inputElementValueProperty: string;
+
+  protected _inputElementValue: string | undefined;
+
   /**
    * Clear the value of the field.
    */

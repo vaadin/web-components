@@ -96,15 +96,8 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
     };
   }
 
-  /** @return {string | undefined} */
-  get _inputValue() {
-    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
-  }
-
-  set _inputValue(value) {
-    if (this.inputElement) {
-      this.inputElement[dashToCamelCase(this.attrForValue)] = value;
-    }
+  get _inputElementValueProperty() {
+    return dashToCamelCase(this.attrForValue);
   }
 
   /** @protected */
