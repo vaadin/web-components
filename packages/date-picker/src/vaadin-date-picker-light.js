@@ -97,8 +97,8 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
   }
 
   /**
-   * Override this method from InputMixin to make
-   * the input element value property configurable.
+   * This method from InputMixin is overridden to make
+   * the input element value property customizable.
    *
    * @protected
    * @override

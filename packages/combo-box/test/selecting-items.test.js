@@ -351,7 +351,7 @@ describe('selecting a custom value', () => {
 
     expect(comboBox.value).to.eql('foobar');
     expect(comboBox.selectedItem).to.be.null;
-    expect(comboBox._inputElementValue).to.eql('foobar');
+    expect(comboBox.inputElement.value).to.eql('foobar');
     expect(comboBox.hasAttribute('has-value')).to.be.true;
   });
 
