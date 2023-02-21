@@ -147,7 +147,7 @@ export const InputMixin = dedupingMixin(
           return;
         }
 
-        this._inputElementValue = value !== null ? value : '';
+        this._inputElementValue = value != null ? value : '';
       }
 
       /**
