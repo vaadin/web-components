@@ -82,17 +82,31 @@ export const InputMixin = dedupingMixin(
         return this.value != null && this.value !== '';
       }
 
-      /** @protected */
+      /**
+       * A property for getting and setting the input element's value.
+       *
+       * Override this getter if the property is different from the default `value` one.
+       *
+       * @protected
+       */
       get _inputElementValueProperty() {
         return 'value';
       }
 
-      /** @protected */
+      /**
+       * The input element's value.
+       *
+       * @protected
+       */
       get _inputElementValue() {
         return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;
       }
 
-      /** @protected */
+      /**
+       * The input element's value.
+       *
+       * @protected
+       */
       set _inputElementValue(value) {
         if (this.inputElement) {
           this.inputElement[this._inputElementValueProperty] = value;

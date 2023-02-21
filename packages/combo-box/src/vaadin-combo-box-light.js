@@ -118,8 +118,12 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   }
 
   /**
-   * @return {string}
+   * Override this method from InputMixin to make
+   * the input element value property configurable.
+   *
    * @protected
+   * @override
+   * @return {string}
    */
   get _inputElementValueProperty() {
     return dashToCamelCase(this.attrForValue);
