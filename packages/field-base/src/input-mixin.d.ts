@@ -35,6 +35,11 @@ export declare class InputMixinClass {
   protected readonly _hasValue: boolean;
 
   /**
+   * Whether the input element has any non-empty value.
+   */
+  protected _hasInputValue: boolean;
+
+  /**
    * Clear the value of the field.
    */
   clear(): void;

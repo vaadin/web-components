@@ -54,7 +54,8 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
-           * When true, the input element has a non-empty value entered by the user.
+           * Whether the input element has any non-empty value.
+           *
            * @protected
            */
           _hasInputValue: {
