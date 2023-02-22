@@ -35,7 +35,7 @@ export declare class InputMixinClass {
   protected readonly _hasValue: boolean;
 
   /**
-   * A property for getting and setting the input element's value.
+   * A property for accessing the input element's value.
    *
    * Override this getter if the property is different from the default `value` one.
    */

@@ -118,8 +118,9 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   }
 
   /**
-   * Override getter from `InputMixin` to allow using arbitrary property 
-   * name instead of `value` for accessing the input element value.
+   * Override this getter from `InputMixin` to allow using
+   * an arbitrary property name instead of `value`
+   * for accessing the input element's value.
    *
    * @protected
    * @override

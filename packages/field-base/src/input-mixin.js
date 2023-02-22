@@ -83,7 +83,7 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
-       * A property for getting and setting the input element's value.
+       * A property for accessing the input element's value.
        *
        * Override this getter if the property is different from the default `value` one.
        *
