@@ -1,10 +1,10 @@
 import '../../vaadin-date-picker.js';
+import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import type { DelegateFocusMixinClass } from '@vaadin/component-base/src/delegate-focus-mixin.js';
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';

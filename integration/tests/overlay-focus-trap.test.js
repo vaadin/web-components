@@ -5,7 +5,7 @@ import '@vaadin/button/vaadin-button.js';
 import '@vaadin/overlay/vaadin-overlay.js';
 import '@vaadin/radio-group/vaadin-radio-group.js';
 import '@vaadin/text-field/vaadin-text-field.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
   let overlay, focusableElements;

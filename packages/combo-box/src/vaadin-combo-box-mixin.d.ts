@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';

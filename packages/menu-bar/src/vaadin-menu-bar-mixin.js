@@ -3,10 +3,10 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
-import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
