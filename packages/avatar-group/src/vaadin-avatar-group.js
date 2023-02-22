@@ -11,7 +11,7 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html, render } from 'lit';
-import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
