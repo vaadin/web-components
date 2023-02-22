@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { announce } from '../src/a11y-announcer.js';
+import { announce } from '../src/announce.js';
 
-describe('a11y announcer', () => {
+describe('announce', () => {
   let region;
 
   before(() => {

@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/a11y-base": "24.0.0-beta1",
     "@vaadin/checkbox": "24.0.0-beta1",
     "@vaadin/checkbox-group": "24.0.0-beta1",
     "@vaadin/combo-box": "24.0.0-beta1",
