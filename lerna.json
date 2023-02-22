@@ -5,5 +5,5 @@
   ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "24.0.0-beta3"
+  "version": "24.0.0-rc1"
 }
