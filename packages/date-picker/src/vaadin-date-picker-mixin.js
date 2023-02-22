@@ -525,10 +525,10 @@ export const DatePickerMixin = (subclass) =>
      * @return {boolean} True if the value is valid
      */
     checkValidity() {
+      const inputValue = this._inputElementValue;
       const inputValid =
-        !this._inputElementValue ||
-        (!!this._selectedDate &&
-          this._inputElementValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
+        !inputValue ||
+        (!!this._selectedDate && inputValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
       const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
       let inputValidity = true;
