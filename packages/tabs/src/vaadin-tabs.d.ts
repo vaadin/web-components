@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 

@@ -6,8 +6,8 @@
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 

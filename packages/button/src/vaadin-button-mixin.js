@@ -3,9 +3,9 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
+import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 
 /**
  * A mixin providing common button functionality.

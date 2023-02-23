@@ -3,11 +3,11 @@
  * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';

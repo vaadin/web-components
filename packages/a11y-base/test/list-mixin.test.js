@@ -15,9 +15,9 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ListMixin } from '../src/list-mixin.js';
-import { PolylitMixin } from '../src/polylit-mixin.js';
 
 const runTests = (defineHelper, baseMixin) => {
   let list;

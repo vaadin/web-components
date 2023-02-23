@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';

@@ -1,5 +1,5 @@
 import '../../vaadin-list-box.js';
-import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
+import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
 import type { MultiSelectListMixinClass } from '../../src/vaadin-multi-select-list-mixin.js';
 import type {
   ListBoxItemsChangedEvent,

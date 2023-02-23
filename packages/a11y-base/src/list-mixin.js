@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { timeOut } from './async.js';
-import { Debouncer } from './debounce.js';
-import { getNormalizedScrollLeft, setNormalizedScrollLeft } from './dir-utils.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**

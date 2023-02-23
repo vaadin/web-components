@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
 /**
