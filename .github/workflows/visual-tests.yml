@@ -16,20 +16,23 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Visual tests
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:lumo
+        run: pnpm run test:lumo
 
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}
@@ -48,20 +51,23 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Visual tests
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:material
+        run: pnpm run test:material
 
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}

@@ -41,7 +41,7 @@ const hasAllParam = process.argv.includes('--all');
  */
 const isLockfileChanged = () => {
   const log = execSync('git diff --name-only origin/main HEAD').toString();
-  return log.split('\n').some((line) => line.includes('yarn.lock'));
+  return log.split('\n').some((line) => line.includes('pnpm-lock.yaml'));
 };
 
 /**
@@ -94,9 +94,9 @@ const getTestPackages = (allPackages) => {
     return allPackages;
   }
 
-  // If yarn.lock has changed, return all packages.
+  // If pnpm-lock.yaml has changed, return all packages.
   if (isLockfileChanged()) {
-    console.log('yarn.lock has changed, testing all packages');
+    console.log('pnpm-lock.yaml has changed, testing all packages');
     return allPackages;
   }
 

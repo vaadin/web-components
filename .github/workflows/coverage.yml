@@ -18,14 +18,17 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Test
-        run: yarn test --all --coverage
+        run: pnpm test --all --coverage

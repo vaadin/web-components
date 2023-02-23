@@ -1,0 +1,26 @@
+diff --git a/dist/commands/publish/index.js b/dist/commands/publish/index.js
+index 85e802bb43b2d974706af9f555af3a2b7e3ee54a..2096494d2adbc491d4a2b533d680dbbf3860b648 100644
+--- a/dist/commands/publish/index.js
++++ b/dist/commands/publish/index.js
+@@ -4365,7 +4365,7 @@ var require_src = __commonJS({
+           signGitTag,
+           forceGitTag
+         };
+-        this.savePrefix = this.options.exact ? "" : "^";
++        this.savePrefix = this.options.exact ? "" : "~";
+       }
+       initialize() {
+         if (!this.project.isIndependent()) {
+diff --git a/dist/commands/version/index.js b/dist/commands/version/index.js
+index 737f1f5935b77a450209f121670c0892f4c3a5ee..1dcd254384fcec7ff5137d3d75eca6cee74225a0 100644
+--- a/dist/commands/version/index.js
++++ b/dist/commands/version/index.js
+@@ -4122,7 +4122,7 @@ var require_src = __commonJS({
+           signGitTag,
+           forceGitTag
+         };
+-        this.savePrefix = this.options.exact ? "" : "^";
++        this.savePrefix = this.options.exact ? "" : "~";
+       }
+       initialize() {
+         if (!this.project.isIndependent()) {

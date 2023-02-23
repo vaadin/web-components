@@ -22,13 +22,13 @@ of steps to perform when creating a new major or minor version branch of the mon
 Setup the repo:
 
 ```sh
-yarn
+pnpm i
 ```
 
 Start the development server:
 
 ```sh
-yarn start
+pnpm start
 ```
 
 ## Linting
@@ -36,25 +36,25 @@ yarn start
 Run all the code style checks:
 
 ```sh
-yarn lint
+pnpm lint
 ```
 
 Run ESLint and Prettier checks:
 
 ```sh
-yarn lint:js
+pnpm lint:js
 ```
 
 Run Stylelint to check themes:
 
 ```sh
-yarn lint:css
+pnpm lint:css
 ```
 
 Run TypeScript to check typings:
 
 ```sh
-yarn lint:types
+pnpm lint:types
 ```
 
 ## Testing
@@ -76,43 +76,43 @@ Not all variables are necessary for all scripts, individual sections below will 
 Run tests in Chrome:
 
 ```sh
-yarn test
+pnpm test
 ```
 
 Run tests in Firefox:
 
 ```sh
-yarn test:firefox
+pnpm test:firefox
 ```
 
 Run tests in WebKit:
 
 ```sh
-yarn test:webkit
+pnpm test:webkit
 ```
 
 By default, tests will only run for changed packages. To run tests for all packages, use the `--all` flag:
 
 ```sh
-yarn test --all
+pnpm test -- --all
 ```
 
 Run tests for single package:
 
 ```sh
-yarn test --group combo-box
+pnpm test -- --group combo-box
 ```
 
 Debug tests for single package:
 
 ```sh
-yarn debug --group combo-box
+pnpm debug -- --group combo-box
 ```
 
 Run tests with code coverage:
 
 ```sh
-yarn test --coverage
+pnpm test -- --coverage
 ```
 
 ### Visual tests
@@ -122,31 +122,31 @@ To run the visual tests, please make sure that the `SAUCE_USERNAME` and `SAUCE_A
 Run tests for Lumo:
 
 ```sh
-yarn test:lumo
+pnpm test:lumo
 ```
 
 Run tests for Material:
 
 ```sh
-yarn test:material
+pnpm test:material
 ```
 
 Update reference screenshots for Lumo:
 
 ```sh
-yarn update:lumo
+pnpm update:lumo
 ```
 
 Update reference screenshots for Material:
 
 ```sh
-yarn update:material
+pnpm update:material
 ```
 
 Update screenshots for single package:
 
 ```sh
-yarn update:lumo --group combo-box
+pnpm update:lumo -- --group combo-box
 ```
 
 ### Snapshot tests
@@ -154,19 +154,19 @@ yarn update:lumo --group combo-box
 Run snapshot tests that are in `test/dom` folders under components:
 
 ```sh
-yarn test:it
+pnpm test:it
 ```
 
 Update snapshots for all components that have corresponding tests:
 
 ```sh
-yarn update:snapshots
+pnpm update:snapshots
 ```
 
 Update snapshots for single package:
 
 ```sh
-yarn update:snapshots --group combo-box
+pnpm update:snapshots -- --group combo-box
 ```
 
 ### Integration tests
@@ -174,7 +174,7 @@ yarn update:snapshots --group combo-box
 Run integration tests that are in the separate `integration` folder:
 
 ```sh
-yarn test:it
+pnpm test:it
 ```
 
 ## Making a version bump
@@ -214,7 +214,7 @@ Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/main/wtr-u
 const isLockfileChanged = () => {
 -  const log = execSync('git diff --name-only origin/main HEAD').toString();
 +  const log = execSync('git diff --name-only origin/24.0 HEAD').toString();
-  return log.split('\n').some((line) => line.includes('yarn.lock'));
+  return log.split('\n').some((line) => line.includes('pnpm.lock'));
 };
 ```
 
@@ -276,7 +276,7 @@ Add the new version branch to the `CheckoutBranch` parameter:
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):
 
 ```sh
-yarn icons
+pnpm icons
 ```
 
 ## Using a local clone of the repo
@@ -350,7 +350,7 @@ export default overrideVaadinConfig(customConfig);
 Then run the following command in the web components monorepo:
 
 ```
-yarn
+pnpm i
 ```
 
 This will symlink the individual component packages into the `node_modules` folder.

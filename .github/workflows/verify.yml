@@ -12,23 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Lint JavaScript
-        run: yarn lint:js
+        run: pnpm run lint:js
 
       - name: Lint CSS
-        run: yarn lint:css
+        run: pnpm run lint:css
 
       - name: Lint TypeScript
-        run: yarn lint:types
+        run: pnpm run lint:types
   snapshots:
     name: Snapshot tests
     runs-on: ubuntu-latest
@@ -37,17 +40,20 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Test
-        run: yarn test:snapshots
+        run: pnpm run test:snapshots
   integration:
     name: Integration tests
     runs-on: ubuntu-latest
@@ -56,14 +62,17 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
+        run: pnpm install
 
       - name: Test
-        run: yarn test:it
+        run: pnpm run test:it
