@@ -43,6 +43,7 @@
     "@vaadin/field-base": "24.0.0-beta1",
     "@vaadin/input-container": "24.0.0-beta1",
     "@vaadin/lit-renderer": "24.0.0-beta1",
+    "@vaadin/overlay": "24.0.0-beta1",
     "@vaadin/vaadin-lumo-styles": "24.0.0-beta1",
     "@vaadin/vaadin-material-styles": "24.0.0-beta1",
     "@vaadin/vaadin-themable-mixin": "24.0.0-beta1"

@@ -41,6 +41,7 @@
     "@vaadin/button": "24.0.0-beta1",
     "@vaadin/component-base": "24.0.0-beta1",
     "@vaadin/context-menu": "24.0.0-beta1",
+    "@vaadin/overlay": "24.0.0-beta1",
     "@vaadin/vaadin-lumo-styles": "24.0.0-beta1",
     "@vaadin/vaadin-material-styles": "24.0.0-beta1",
     "@vaadin/vaadin-themable-mixin": "24.0.0-beta1"
