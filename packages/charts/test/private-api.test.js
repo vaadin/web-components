@@ -21,6 +21,14 @@ describe('vaadin-chart private API', () => {
       expect(config.tooltip).to.not.have.property('_fn_formatter');
     });
 
+    it('should inflate function body strings inside arrays', () => {
+      // eslint-disable-next-line camelcase
+      const config = [{ tooltip: { _fn_formatter: 'return "awesome chart"' } }];
+      inflateFunctions(config);
+      expect(config[0].tooltip.formatter).to.be.a('function');
+      expect(config[0].tooltip).to.not.have.property('_fn_formatter');
+    });
+
     it('should inflate empty function strings', () => {
       // eslint-disable-next-line camelcase
       const config = { tooltip: { _fn_formatter: '' } };
