@@ -132,10 +132,6 @@ export declare class ComboBoxMixinClass<TItem> {
    */
   itemIdPath: string | null | undefined;
 
-  protected readonly _propertyForValue: string;
-
-  protected _inputElementValue: string | undefined;
-
   /**
    * Tag name prefix used by scroller and items.
    */
