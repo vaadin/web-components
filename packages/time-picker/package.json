@@ -40,6 +40,7 @@
     "@vaadin/component-base": "24.0.0-rc1",
     "@vaadin/field-base": "24.0.0-rc1",
     "@vaadin/input-container": "24.0.0-rc1",
+    "@vaadin/item": "24.0.0-rc1",
     "@vaadin/overlay": "24.0.0-rc1",
     "@vaadin/vaadin-lumo-styles": "24.0.0-rc1",
     "@vaadin/vaadin-material-styles": "24.0.0-rc1",
