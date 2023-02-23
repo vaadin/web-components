@@ -1,9 +1,7 @@
 export function inflateFunctions(config) {
   if (
     // Check if param is a primitive/null/undefined value
-    !(config instanceof Object) ||
-    // Check if param is a plain object (not an array or HC object)
-    config.constructor !== Object
+    !(config instanceof Object)
   ) {
     return;
   }
@@ -17,7 +15,7 @@ export function inflateFunctions(config) {
         config[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
       }
       delete config[attr];
-    } else if (targetProperty instanceof Object) {
+    } else {
       inflateFunctions(targetProperty);
     }
   });
