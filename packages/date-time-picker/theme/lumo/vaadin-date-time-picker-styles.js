@@ -8,13 +8,13 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const dateTimePicker = css`
   ::slotted([slot='date-picker']) {
     margin-inline-end: 2px;
-    --vaadin-input-container-top-end-radius: 0;
-    --vaadin-input-container-bottom-end-radius: 0;
+    --vaadin-input-field-top-end-radius: 0;
+    --vaadin-input-field-bottom-end-radius: 0;
   }
 
   ::slotted([slot='time-picker']) {
-    --vaadin-input-container-top-start-radius: 0;
-    --vaadin-input-container-bottom-start-radius: 0;
+    --vaadin-input-field-top-start-radius: 0;
+    --vaadin-input-field-bottom-start-radius: 0;
   }
 `;
 
