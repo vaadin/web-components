@@ -65,7 +65,7 @@ async function shiftTab() {
 }
 
 describe('focus-trap-controller', () => {
-  let element, controller, trap;
+  let element, controller, trap, outside1, outside2;
 
   describe('trapFocus', () => {
     beforeEach(() => {
@@ -73,7 +73,9 @@ describe('focus-trap-controller', () => {
       controller = new FocusTrapController(element);
       element.addController(controller);
       trap = element.querySelector('#trap');
-      element.querySelector('#outside-input-1').focus();
+      outside1 = element.querySelector('#outside-input-1');
+      outside2 = element.querySelector('#outside-input-2');
+      outside1.focus();
     });
 
     it('should set focus on the first focusable element in the default tab order', () => {
@@ -100,6 +102,12 @@ describe('focus-trap-controller', () => {
       input.focus();
       controller.trapFocus(trap);
       expect(document.activeElement).to.equal(input);
+    });
+
+    it('should set aria-hidden attribute on elements outside the trap node', () => {
+      controller.trapFocus(trap);
+      expect(outside1.getAttribute('aria-hidden')).to.equal('true');
+      expect(outside2.getAttribute('aria-hidden')).to.equal('true');
     });
 
     describe('no focusable elements', () => {
@@ -131,6 +139,8 @@ describe('focus-trap-controller', () => {
   });
 
   describe('releaseFocus', () => {
+    let outside1, outside2;
+
     beforeEach(() => {
       element = fixtureSync(`<focus-trap-element></focus-trap-element>`);
       controller = new FocusTrapController(element);
@@ -140,6 +150,17 @@ describe('focus-trap-controller', () => {
 
     it('should not throw when no trap node', () => {
       expect(() => controller.releaseFocus(trap)).not.to.throw(Error);
+    });
+
+    it('should remove aria-hidden attribute when releasing focus', () => {
+      outside1 = element.querySelector('#outside-input-1');
+      outside2 = element.querySelector('#outside-input-2');
+
+      controller.trapFocus(trap);
+      controller.releaseFocus(trap);
+
+      expect(outside1.hasAttribute('aria-hidden')).to.be.false;
+      expect(outside2.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 

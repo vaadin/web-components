@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { hideOthers } from './aria-hidden.js';
 import { getFocusableElements, isElementFocused } from './focus-utils.js';
 
 const instances = [];
@@ -84,6 +85,8 @@ export class FocusTrapController {
       throw new Error('The trap node should have at least one focusable descendant or be focusable itself.');
     }
 
+    this.__showOthers = hideOthers(trapNode);
+
     instances.push(this);
 
     if (this.__focusedElementIndex === -1) {
@@ -97,6 +100,11 @@ export class FocusTrapController {
    */
   releaseFocus() {
     this.__trapNode = null;
+
+    if (this.__showOthers) {
+      this.__showOthers();
+      this.__showOthers = null;
+    }
 
     instances.pop();
   }
