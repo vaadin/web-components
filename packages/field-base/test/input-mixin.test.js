@@ -201,7 +201,7 @@ const runTests = (defineHelper, baseMixin) => {
       await nextFrame();
     });
 
-    describe('the field has no input', () => {
+    describe('empty field', () => {
       it('should fire the event once when entering input', async () => {
         input.value = 'foo';
         fire(input, 'input');
