@@ -217,7 +217,7 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
 
-    describe('the field has input', () => {
+    describe('user-originated input', () => {
       beforeEach(async () => {
         input.value = 'foo';
         fire(input, 'input');
