@@ -35,6 +35,8 @@ describe('virtualizer', () => {
       scrollContainer,
     });
 
+    sinon.spy(virtualizer.__adapter, 'scrollToIndex');
+
     virtualizer.size = size;
   }
 
@@ -43,6 +45,10 @@ describe('virtualizer', () => {
   it('should have the first item at the top', () => {
     const item = elementsContainer.querySelector('#item-0');
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
+  });
+
+  it('should not invoke scrollToIndex on init', () => {
+    expect(virtualizer.__adapter.scrollToIndex.called).to.be.false;
   });
 
   it('should realign automatically on child item resize', async () => {

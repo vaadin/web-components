@@ -255,7 +255,7 @@ export class IronListAdapter {
     // Record the scroll position before changing the size
     let fvi; // First visible index
     let fviOffsetBefore; // Scroll offset of the first visible index
-    if (size > 0) {
+    if (size > 0 && this._scrollTop > 0) {
       fvi = this.adjustedFirstVisibleIndex;
       fviOffsetBefore = this.__getIndexScrollOffset(fvi);
     }
@@ -266,10 +266,9 @@ export class IronListAdapter {
     this._itemsChanged({
       path: 'items',
     });
-    flush();
 
     // Try to restore the scroll position if the new size is larger than 0
-    if (size > 0) {
+    if (fvi !== undefined && size > 0) {
       fvi = Math.min(fvi, size - 1);
       this.scrollToIndex(fvi);
 
