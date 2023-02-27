@@ -52,10 +52,10 @@ describe('aria-hidden', () => {
         // Leaf element isn't hidden
         expect(target2.hasAttribute(attr)).to.be.false;
 
-        // Parent element is hidden
+        // Leaf's parent node is hidden
         expect(target2.parentNode.getAttribute(attr)).to.equal('true');
 
-        // Sibling element is hidden
+        // Sibling element is hidden too
         expect(sibling.getAttribute(attr)).to.equal('true');
       });
 
@@ -135,6 +135,20 @@ describe('aria-hidden', () => {
         expect(target1.hasAttribute(attr)).to.be.false;
         expect(target2.parentNode.hasAttribute(attr)).to.be.false;
         expect(sibling.hasAttribute(attr)).to.be.false;
+      });
+
+      it(`should remove ${attr} correctly after un-hiding only one target`, () => {
+        const unhide1 = hideFunc(target1, parent);
+        const unhide2 = hideFunc(target2, parent);
+        callbacks.add(unhide1);
+
+        unhide2();
+
+        // First target element should not be hidden anymore
+        expect(target1.hasAttribute(attr)).to.be.false;
+        // Other elements should still be hidden as expected
+        expect(target2.parentNode.hasAttribute(attr)).to.be.true;
+        expect(sibling.hasAttribute(attr)).to.be.true;
       });
 
       it(`should set different attribute markers when using setting ${attr}`, () => {
