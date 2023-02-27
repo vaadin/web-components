@@ -227,6 +227,7 @@ export const MenuBarMixin = (superClass) =>
           item.removeAttribute('role');
           item.removeAttribute('aria-expanded');
           item.removeAttribute('aria-haspopup');
+          item.removeAttribute('tabindex');
         }
       });
       this.__updateOverflow([]);

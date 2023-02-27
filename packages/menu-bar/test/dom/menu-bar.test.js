@@ -30,6 +30,11 @@ describe('menu-bar', () => {
           return item;
         })(),
       },
+      {
+        text: 'Share',
+        component: 'div',
+        children: [{ text: 'Twitter' }, { text: 'Facebook' }],
+      },
     ];
     await nextRender();
   });
@@ -49,5 +54,16 @@ describe('menu-bar', () => {
     menu._buttons[1].click();
     await nextRender();
     await expect(menu._subMenu.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('overflow', async () => {
+    menu.style.width = '50px'; // hide all buttons but the "More options" button
+    await nextRender();
+    menu._overflow.click(); // show the overlay menu (More options)
+    menu._overflow.click(); // to hide the overlay menu again
+    menu.style.width = null; // to restore the original size of menubar
+    await nextRender();
+    await nextRender();
+    await expect(menu).dom.to.equalSnapshot();
   });
 });

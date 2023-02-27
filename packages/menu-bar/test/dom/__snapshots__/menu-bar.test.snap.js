@@ -38,6 +38,18 @@ snapshots["menu-bar basic"] =
   <vaadin-menu-bar-button
     aria-expanded="false"
     aria-haspopup="true"
+    role="menuitem"
+    tabindex="0"
+  >
+    <vaadin-menu-bar-item aria-selected="false">
+      <div>
+        Share
+      </div>
+    </vaadin-menu-bar-item>
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
     aria-label="More options"
     hidden=""
     role="menuitem"
@@ -124,4 +136,75 @@ snapshots["menu-bar overlay class"] =
 </vaadin-menu-bar-overlay>
 `;
 /* end snapshot menu-bar overlay class */
+
+snapshots["menu-bar overflow"] = 
+`<vaadin-menu-bar
+  role="menubar"
+  style="pointer-events: auto;"
+>
+  <vaadin-menu-bar-button
+    role="menuitem"
+    style="width: 39.1094px;"
+    tabindex="0"
+  >
+    Home
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    role="menuitem"
+    style="width: 49.7656px;"
+    tabindex="0"
+  >
+    Reports
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-disabled="true"
+    disabled=""
+    role="menuitem"
+    style="width: 69.3125px;"
+    tabindex="-1"
+  >
+    Dashboard
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    role="menuitem"
+    style="width: 32.875px;"
+    tabindex="0"
+  >
+    <vaadin-menu-bar-item aria-selected="false">
+      <strong>
+        Help
+      </strong>
+    </vaadin-menu-bar-item>
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    role="menuitem"
+    style="width: 36.4375px;"
+    tabindex="0"
+  >
+    <vaadin-menu-bar-item aria-selected="false">
+      Share
+    </vaadin-menu-bar-item>
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    active=""
+    aria-expanded="true"
+    aria-haspopup="true"
+    aria-label="More options"
+    expanded=""
+    hidden=""
+    role="menuitem"
+    slot="overflow"
+    tabindex="0"
+  >
+    <div aria-hidden="true">
+      ···
+    </div>
+  </vaadin-menu-bar-button>
+</vaadin-menu-bar>
+`;
+/* end snapshot menu-bar overflow */
 
