@@ -225,6 +225,8 @@ export const MenuBarMixin = (superClass) =>
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
           button.appendChild(item);
           item.removeAttribute('role');
+          item.removeAttribute('aria-expanded');
+          item.removeAttribute('aria-haspopup');
         }
       });
       this.__updateOverflow([]);
