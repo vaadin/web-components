@@ -201,7 +201,7 @@ const runTests = (defineHelper, baseMixin) => {
       await nextFrame();
     });
 
-    describe('empty field', () => {
+    describe('without user input', () => {
       it('should fire the event once when entering input', async () => {
         input.value = 'foo';
         fire(input, 'input');
@@ -217,7 +217,7 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
 
-    describe('user-originated input', () => {
+    describe('with user input', () => {
       beforeEach(async () => {
         input.value = 'foo';
         fire(input, 'input');
