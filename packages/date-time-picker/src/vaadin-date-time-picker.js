@@ -634,11 +634,11 @@ class DateTimePicker extends FieldMixin(
 
   /** @private */
   __i18nChanged(changeRecord) {
-    if (this.__datePicker && this.__datePicker.$) {
+    if (this.__datePicker) {
       this.__datePicker.set(changeRecord.path, changeRecord.value);
     }
 
-    if (this.__timePicker && this.__timePicker.$) {
+    if (this.__timePicker) {
       this.__timePicker.set(changeRecord.path, changeRecord.value);
     }
   }
