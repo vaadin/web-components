@@ -54,7 +54,11 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
-           * When true, the input element has a non-empty value entered by the user.
+           * Whether the input element has user input.
+           *
+           * Note, the property indicates true only if the input has been entered by the user.
+           * In the case of programmatic changes, the property must be reset to false.
+           *
            * @protected
            */
           _hasInputValue: {
@@ -86,6 +90,8 @@ export const InputMixin = dedupingMixin(
        * Clear the value of the field.
        */
       clear() {
+        this._hasInputValue = false;
+
         this.value = '';
 
         // Clear the input immediately without waiting for the observer.
