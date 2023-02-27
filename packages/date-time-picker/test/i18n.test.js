@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
@@ -94,5 +94,23 @@ customElements.define(
       expect(dateTimePicker.i18n).to.have.property('cancel', 'Peruuta');
       expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
     });
+  });
+});
+
+describe('i18n set before added to the DOM', () => {
+  let dateTimePicker, datePicker;
+
+  beforeEach(() => {
+    dateTimePicker = document.createElement('vaadin-date-time-picker');
+    datePicker = document.createElement('vaadin-date-picker');
+    datePicker.slot = 'date-picker';
+    datePicker.i18n = { ...datePicker.i18n, cancel: 'CUSTOM' };
+    dateTimePicker.appendChild(datePicker);
+  });
+
+  it.only('should have the correct i18n', async () => {
+    await nextFrame();
+    document.body.appendChild(dateTimePicker);
+    expect(datePicker.i18n.cancel).to.equal('CUSTOM');
   });
 });
