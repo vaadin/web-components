@@ -6,23 +6,23 @@ import '../src/vaadin-date-picker.js';
 import { getFocusedCell, monthsEqual, open, outsideClick, waitForOverlayRender } from './helpers.js';
 
 describe('dropdown', () => {
-  let datepicker, input, overlay;
+  let datePicker, input, overlay;
 
   beforeEach(() => {
-    datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-    input = datepicker.inputElement;
-    overlay = datepicker.$.overlay;
+    datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    input = datePicker.inputElement;
+    overlay = datePicker.$.overlay;
   });
 
   it('should update position of the overlay after changing opened property', async () => {
-    datepicker.opened = true;
+    datePicker.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
     expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
-  it('should detach overlay on datepicker detach', async () => {
-    await open(datepicker);
-    datepicker.parentElement.removeChild(datepicker);
+  it('should detach overlay on datePicker detach', async () => {
+    await open(datePicker);
+    datePicker.parentElement.removeChild(datePicker);
     expect(overlay.parentElement).to.not.be.ok;
   });
 
@@ -30,12 +30,12 @@ describe('dropdown', () => {
     let toggleButton;
 
     beforeEach(() => {
-      toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
+      toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
     });
 
     it('should open by tapping the calendar icon', () => {
       toggleButton.click();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
       expect(overlay.opened).to.be.true;
     });
 
@@ -44,7 +44,7 @@ describe('dropdown', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       toggleButton.click();
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(overlay.opened).to.be.false;
     });
 
@@ -56,8 +56,8 @@ describe('dropdown', () => {
 
   describe('scroll to date', () => {
     it('should scroll to today by default', async () => {
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -66,10 +66,10 @@ describe('dropdown', () => {
     });
 
     it('should scroll to initial position', async () => {
-      datepicker.initialPosition = '2016-01-01';
+      datePicker.initialPosition = '2016-01-01';
 
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -78,10 +78,10 @@ describe('dropdown', () => {
     });
 
     it('should scroll to selected value', async () => {
-      datepicker.value = '2000-02-01';
+      datePicker.value = '2000-02-01';
 
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -90,40 +90,40 @@ describe('dropdown', () => {
     });
 
     it('should remember the initial position on reopen', async () => {
-      await open(datepicker);
-      const overlayContent = datepicker._overlayContent;
+      await open(datePicker);
+      const overlayContent = datePicker._overlayContent;
       const initialPosition = overlayContent.initialPosition;
 
-      datepicker.close();
+      datePicker.close();
       await nextRender();
 
-      await open(datepicker);
+      await open(datePicker);
       expect(overlayContent.initialPosition).to.be.eql(initialPosition);
     });
 
     it('should scroll to date on reopen', async () => {
-      datepicker.open();
+      datePicker.open();
 
       // We must scroll to initial position on reopen because
       // scrollTop can be reset while the dropdown is closed.
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
       expect(spy.called).to.be.true;
 
-      datepicker.close();
+      datePicker.close();
       await nextRender();
       spy.resetHistory();
 
-      await open(datepicker);
+      await open(datePicker);
       expect(spy.called).to.be.true;
     });
 
     it('should scroll to min date when today is not allowed', async () => {
-      datepicker.min = '2100-01-01';
+      datePicker.min = '2100-01-01';
 
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -132,10 +132,10 @@ describe('dropdown', () => {
     });
 
     it('should scroll to max date when today is not allowed', async () => {
-      datepicker.max = '2000-01-01';
+      datePicker.max = '2000-01-01';
 
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -144,13 +144,13 @@ describe('dropdown', () => {
     });
 
     it('should scroll to initial position even when not allowed', async () => {
-      datepicker.min = '2016-01-01';
-      datepicker.max = '2016-12-31';
+      datePicker.min = '2016-01-01';
+      datePicker.max = '2016-12-31';
 
-      datepicker.initialPosition = '2015-01-01';
+      datePicker.initialPosition = '2015-01-01';
 
-      datepicker.open();
-      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
+      datePicker.open();
+      const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
       await waitForOverlayRender();
 
@@ -162,7 +162,7 @@ describe('dropdown', () => {
   describe('outside click', () => {
     it('should restore focus to the input on outside click', async () => {
       input.focus();
-      await open(datepicker);
+      await open(datePicker);
       outsideClick();
       await aTimeout(0);
       expect(document.activeElement).to.equal(input);
@@ -170,7 +170,7 @@ describe('dropdown', () => {
 
     it('should focus the input on outside click', async () => {
       expect(document.activeElement).to.equal(document.body);
-      await open(datepicker);
+      await open(datePicker);
       outsideClick();
       await aTimeout(0);
       expect(document.activeElement).to.equal(input);
@@ -179,33 +179,33 @@ describe('dropdown', () => {
     it('should restore focus-ring attribute set before opening on outside click', async () => {
       // Focus the input with Tab
       await sendKeys({ press: 'Tab' });
-      await open(datepicker);
+      await open(datePicker);
       outsideClick();
       await aTimeout(0);
-      expect(datepicker.hasAttribute('focus-ring')).to.be.true;
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not remove focus-ring attribute set after opening on outside click', async () => {
-      await open(datepicker);
+      await open(datePicker);
       input.focus();
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
       outsideClick();
       await aTimeout(0);
-      expect(datepicker.hasAttribute('focus-ring')).to.be.true;
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not set focus-ring attribute if it was not set before opening', async () => {
-      await open(datepicker);
+      await open(datePicker);
       outsideClick();
       await aTimeout(0);
-      expect(datepicker.hasAttribute('focus-ring')).to.be.false;
+      expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
 
   describe('date tap', () => {
     function dateTap() {
-      const date = getFocusedCell(datepicker._overlayContent);
+      const date = getFocusedCell(datePicker._overlayContent);
       mousedown(date);
       date.focus();
       date.click();
@@ -213,17 +213,17 @@ describe('dropdown', () => {
 
     it('should close the overlay on date tap', async () => {
       input.focus();
-      await open(datepicker);
+      await open(datePicker);
 
       dateTap();
       await aTimeout(0);
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
     });
 
     it('should restore focus to the input on date tap', async () => {
       input.focus();
-      await open(datepicker);
+      await open(datePicker);
 
       dateTap();
       await aTimeout(0);
@@ -234,43 +234,43 @@ describe('dropdown', () => {
     it('should restore focus-ring attribute set before opening on date tap', async () => {
       // Focus the input with Tab
       await sendKeys({ press: 'Tab' });
-      await open(datepicker);
+      await open(datePicker);
 
       dateTap();
       await aTimeout(0);
 
-      expect(datepicker.hasAttribute('focus-ring')).to.be.true;
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not remove focus-ring attribute after opening on date tap', async () => {
-      await open(datepicker);
+      await open(datePicker);
       // Focus the input with Tab
       await sendKeys({ press: 'Tab' });
 
       dateTap();
       await aTimeout(0);
 
-      expect(datepicker.hasAttribute('focus-ring')).to.be.true;
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
   });
 
   describe('virtual keyboard', () => {
     it('should disable virtual keyboard on close', async () => {
-      await open(datepicker);
-      datepicker.close();
+      await open(datePicker);
+      datePicker.close();
       expect(input.inputMode).to.equal('none');
     });
 
     it('should re-enable virtual keyboard on touchstart', async () => {
-      await open(datepicker);
-      datepicker.close();
-      touchstart(datepicker);
+      await open(datePicker);
+      datePicker.close();
+      touchstart(datePicker);
       expect(input.inputMode).to.equal('');
     });
 
     it('should re-enable virtual keyboard on blur', async () => {
-      await open(datepicker);
-      datepicker.close();
+      await open(datePicker);
+      datePicker.close();
       await sendKeys({ press: 'Tab' });
       expect(input.inputMode).to.equal('');
     });
