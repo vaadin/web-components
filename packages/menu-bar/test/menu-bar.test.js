@@ -668,6 +668,7 @@ describe('item components', () => {
       { component: makeComponent('3') },
       { text: 'Item 4 text', component: makeComponent('4') },
       { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
+      { component: makeComponent('6'), children: [{ text: 'SubItem6.1' }, { text: 'SubItem6.2' }] },
     ];
     await nextRender(menu);
     buttons = menu._buttons;
@@ -720,6 +721,21 @@ describe('item components', () => {
     const item = buttons[2].firstChild;
     expect(item).to.equal(buttons[2].item.component);
     expect(item.getAttribute('role')).to.not.equal('menuitem');
+  });
+
+  it('should restore menu bar item attribute state when moved from sub-menu back to menu bar', async () => {
+    const item = buttons[5].firstChild;
+    const initialAttributesState = item.getAttributeNames();
+    menu.style.width = '250px';
+    await onceResized(menu);
+    await nextFrame();
+    const subMenu = menu._subMenu;
+    overflow.click();
+    await nextRender(subMenu);
+    subMenu.close();
+    menu.style.width = 'auto';
+    await onceResized(menu);
+    expect(item.getAttributeNames()).to.have.members(initialAttributesState);
   });
 
   it('should close the overflow sub-menu on resize', async () => {

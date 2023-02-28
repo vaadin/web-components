@@ -223,14 +223,19 @@ export const MenuBarMixin = (superClass) =>
         // Teleport item component back from "overflow" sub-menu
         const item = button.item && button.item.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
-          button.appendChild(item);
-          item.removeAttribute('role');
-          item.removeAttribute('aria-expanded');
-          item.removeAttribute('aria-haspopup');
-          item.removeAttribute('tabindex');
+          this.__restoreItem(button, item);
         }
       });
       this.__updateOverflow([]);
+    }
+
+    /** @private */
+    __restoreItem(button, item) {
+      button.appendChild(item);
+      item.removeAttribute('role');
+      item.removeAttribute('aria-expanded');
+      item.removeAttribute('aria-haspopup');
+      item.removeAttribute('tabindex');
     }
 
     /** @private */
