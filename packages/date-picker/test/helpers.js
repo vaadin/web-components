@@ -47,15 +47,15 @@ export function getDefaultI18n() {
   };
 }
 
-export function open(datepicker) {
+export function open(datePicker) {
   return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', async () => {
+    listenOnce(datePicker.$.overlay, 'vaadin-overlay-open', async () => {
       // Wait until infinite scrollers are rendered
       await waitForOverlayRender();
 
       resolve();
     });
-    datepicker.open();
+    datePicker.open();
   });
 }
 
@@ -68,10 +68,10 @@ export async function waitForOverlayRender() {
   flush();
 }
 
-export function close(datepicker) {
+export function close(datePicker) {
   return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
-    datepicker.close();
+    listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', resolve);
+    datePicker.close();
   });
 }
 
@@ -116,17 +116,17 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   });
 }
 
-export function isFullscreen(datepicker) {
-  return datepicker.$.overlay.getAttribute('fullscreen') !== null;
+export function isFullscreen(datePicker) {
+  return datePicker.$.overlay.getAttribute('fullscreen') !== null;
 }
 
 // As a side-effect has to toggle the overlay once to initialize it
-export function getOverlayContent(datepicker) {
-  if (datepicker.$.overlay.hasAttribute('disable-upgrade')) {
-    datepicker.open();
-    datepicker.close();
+export function getOverlayContent(datePicker) {
+  if (datePicker.$.overlay.hasAttribute('disable-upgrade')) {
+    datePicker.open();
+    datePicker.close();
   }
-  return datepicker.$.overlay.content.querySelector('#overlay-content');
+  return datePicker.$.overlay.content.querySelector('#overlay-content');
 }
 
 export function getFocusedMonth(overlayContent) {

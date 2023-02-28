@@ -8,7 +8,7 @@ import '@vaadin/dialog';
 import { getOverlayContent, open, waitForScrollToFinish } from '@vaadin/date-picker/test/helpers.js';
 
 describe('date-picker in dialog', () => {
-  let dialog, datepicker;
+  let dialog, datePicker;
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
@@ -17,19 +17,19 @@ describe('date-picker in dialog', () => {
     };
     dialog.opened = true;
     await nextFrame();
-    datepicker = dialog.$.overlay.querySelector('vaadin-date-picker');
+    datePicker = dialog.$.overlay.querySelector('vaadin-date-picker');
   });
 
   afterEach(async () => {
-    datepicker.opened = false;
+    datePicker.opened = false;
     dialog.opened = false;
     await nextFrame();
   });
 
   describe('modal', () => {
     beforeEach(async () => {
-      datepicker.inputElement.focus();
-      await open(datepicker);
+      datePicker.inputElement.focus();
+      await open(datePicker);
       await nextRender();
     });
 
@@ -38,12 +38,12 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(getOverlayContent(datepicker));
+      await waitForScrollToFinish(getOverlayContent(datePicker));
 
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
 
-      expect(getOverlayContent(datepicker).$.todayButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datePicker).$.todayButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
@@ -52,7 +52,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
 
-      expect(getOverlayContent(datepicker).$.cancelButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datePicker).$.cancelButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on calendar date Shift Tab when inside a dialog', async () => {
@@ -60,9 +60,9 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(getOverlayContent(datepicker));
+      await waitForScrollToFinish(getOverlayContent(datePicker));
 
-      const spy = sinon.spy(datepicker.inputElement, 'focus');
+      const spy = sinon.spy(datePicker.inputElement, 'focus');
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
@@ -74,7 +74,7 @@ describe('date-picker in dialog', () => {
     it('should not close the dialog when closing date-picker on input element Escape', async () => {
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -92,7 +92,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -105,7 +105,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -117,7 +117,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
   });
@@ -125,21 +125,21 @@ describe('date-picker in dialog', () => {
   describe('modeless', () => {
     beforeEach(async () => {
       dialog.modeless = true;
-      await open(datepicker);
+      await open(datePicker);
     });
 
     it('should not end up behind the dialog overlay on mousedown', async () => {
-      datepicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
+      datePicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       await nextFrame();
-      expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
+      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
         parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
       );
     });
 
     it('should not end up behind the dialog overlay on touchstart', async () => {
-      touchstart(datepicker);
+      touchstart(datePicker);
       await nextFrame();
-      expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
+      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
         parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
       );
     });

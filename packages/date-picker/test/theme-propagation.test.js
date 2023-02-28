@@ -4,25 +4,25 @@ import '../src/vaadin-date-picker.js';
 import { open } from './helpers.js';
 
 describe('theme attribute', () => {
-  let datepicker;
+  let datePicker;
 
   beforeEach(() => {
-    datepicker = fixtureSync(`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
+    datePicker = fixtureSync(`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
   });
 
   it('should propagate theme attribute to the input container', () => {
-    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     expect(inputField.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to overlay', () => {
-    datepicker.open();
-    expect(datepicker.$.overlay.getAttribute('theme')).to.equal('foo');
+    datePicker.open();
+    expect(datePicker.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to overlay content', () => {
-    datepicker.open();
-    const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
+    datePicker.open();
+    const overlayContent = datePicker.$.overlay.content.querySelector('#overlay-content');
     expect(overlayContent.getAttribute('theme')).to.equal('foo');
   });
 
@@ -30,8 +30,8 @@ describe('theme attribute', () => {
     let overlayContent;
 
     beforeEach(async () => {
-      await open(datepicker);
-      overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
+      await open(datePicker);
+      overlayContent = datePicker.$.overlay.content.querySelector('#overlay-content');
       overlayContent.$.yearScroller.bufferSize = 0;
       overlayContent.$.monthScroller.bufferSize = 1;
       overlayContent.$.yearScroller._finishInit();
