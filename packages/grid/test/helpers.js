@@ -4,7 +4,7 @@ export const flushGrid = (grid) => {
   grid._observer.flush();
 
   [
-    grid.__debouncerUpdateColumnTree,
+    grid.__updateColumnTreeDebouncer,
     grid._debounceScrolling,
     grid._debounceOverflow,
     grid._debouncerHiddenChanged,
