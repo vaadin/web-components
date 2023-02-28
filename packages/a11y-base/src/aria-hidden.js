@@ -27,29 +27,51 @@ let lockCount = 0;
  * @param {Element | Shadow} node
  * @return {Element | null}
  */
-const unwrapHost = (node) => node.host || unwrapHost(node.parentNode);
+const unwrapHost = (node) => (node ? node.host || unwrapHost(node.parentNode) : null);
 
 /**
- * @param {HTMLEle} parent
+ * @param {?Node} node
+ * @return {boolean}
+ */
+const isElement = (node) => node && node.nodeType === Node.ELEMENT_NODE;
+
+/**
+ * @param  {...unknown} args
+ */
+const logError = (...args) => {
+  console.error(`Error: ${args.join(' ')}. Skip setting aria-hidden.`);
+};
+
+/**
+ * @param {HTMLElement} parent
  * @param {Element[]} targets
  * @return {Element}
  */
 const correctTargets = (parent, targets) =>
   targets
     .map((target) => {
+      if (!isElement(parent)) {
+        logError(parent, 'is not a valid element');
+        return null;
+      }
+
+      if (!isElement(target)) {
+        logError(target, 'is not a valid element');
+        return null;
+      }
+
       if (parent.contains(target)) {
         return target;
       }
 
       const correctedTarget = unwrapHost(target);
 
-      if (correctedTarget && parent.contains(correctedTarget)) {
-        return correctedTarget;
+      if (!(correctedTarget && parent.contains(correctedTarget))) {
+        logError(target, 'is not contained inside', parent);
+        return null;
       }
 
-      console.error('aria-hidden', target, 'in not contained inside', parent, '. Doing nothing');
-
-      return null;
+      return correctedTarget;
     })
     .filter((x) => Boolean(x));
 
@@ -183,8 +205,10 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
 export const hideOthers = (originalTarget, parentNode = document.body, markerName = 'data-aria-hidden') => {
   const targets = Array.from(Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
 
-  // We should not hide ariaLive elements - https://github.com/theKashey/aria-hidden/issues/10
-  targets.push(...Array.from(parentNode.querySelectorAll('[aria-live]')));
+  if (parentNode) {
+    // We should not hide ariaLive elements - https://github.com/theKashey/aria-hidden/issues/10
+    targets.push(...Array.from(parentNode.querySelectorAll('[aria-live]')));
+  }
 
   return applyAttributeToOthers(targets, parentNode, markerName, 'aria-hidden');
 };

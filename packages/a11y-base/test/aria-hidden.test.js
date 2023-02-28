@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { hideOthers, inertOthers } from '../src/aria-hidden.js';
 
 describe('aria-hidden', () => {
@@ -219,6 +220,57 @@ describe('aria-hidden', () => {
           // Elements are no longer hidden
           expect(target1.hasAttribute(attr)).to.be.false;
           expect(target2.parentNode.hasAttribute(attr)).to.be.false;
+        });
+
+        describe('error handling', () => {
+          let errorStub;
+
+          beforeEach(() => {
+            errorStub = sinon.stub(console, 'error');
+          });
+
+          afterEach(() => {
+            errorStub.restore();
+          });
+
+          it(`should not throw when trying to set ${attr} and passing empty target`, () => {
+            expect(() => {
+              hideFunc(null);
+            }).to.not.throw(Error);
+          });
+
+          it(`should log error when trying to set ${attr} and passing empty target`, () => {
+            hideFunc(null);
+
+            expect(errorStub.calledOnce).to.be.true;
+            expect(errorStub.firstCall.args[0]).to.include('is not a valid element');
+          });
+
+          it(`should not throw when trying to set ${attr} and passing empty parent`, () => {
+            expect(() => {
+              hideFunc(target1, null);
+            }).to.not.throw(Error);
+          });
+
+          it(`should log error when trying to set ${attr} and passing empty parent`, () => {
+            hideFunc(target1, null);
+
+            expect(errorStub.calledOnce).to.be.true;
+            expect(errorStub.firstCall.args[0]).to.include('is not a valid element');
+          });
+
+          it(`should not throw when trying to set ${attr} and passing target outside parent`, () => {
+            expect(() => {
+              hideFunc(target1, sibling);
+            }).to.not.throw(Error);
+          });
+
+          it(`should log error when trying to set ${attr} and passing target outside parent`, () => {
+            hideFunc(target1, sibling);
+
+            expect(errorStub.calledOnce).to.be.true;
+            expect(errorStub.firstCall.args[0]).to.include('is not contained inside');
+          });
         });
       });
     });
