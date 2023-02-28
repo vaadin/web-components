@@ -45,16 +45,16 @@ const logError = (...args) => {
 /**
  * @param {HTMLElement} parent
  * @param {Element[]} targets
- * @return {Element}
+ * @return {Element[]}
  */
-const correctTargets = (parent, targets) =>
-  targets
-    .map((target) => {
-      if (!isElement(parent)) {
-        logError(parent, 'is not a valid element');
-        return null;
-      }
+const correctTargets = (parent, targets) => {
+  if (!isElement(parent)) {
+    logError(parent, 'is not a valid element');
+    return [];
+  }
 
+  return targets
+    .map((target) => {
       if (!isElement(target)) {
         logError(target, 'is not a valid element');
         return null;
@@ -65,15 +65,15 @@ const correctTargets = (parent, targets) =>
       }
 
       const correctedTarget = unwrapHost(target);
-
-      if (!(correctedTarget && parent.contains(correctedTarget))) {
-        logError(target, 'is not contained inside', parent);
-        return null;
+      if (correctedTarget && parent.contains(correctedTarget)) {
+        return correctedTarget;
       }
 
-      return correctedTarget;
+      logError(target, 'is not contained inside', parent);
+      return null;
     })
     .filter((x) => Boolean(x));
+};
 
 /**
  * Marks everything except given node(or nodes) as aria-hidden
