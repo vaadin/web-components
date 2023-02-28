@@ -577,39 +577,10 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getIntrinsicWidth(col) {
-    if (this.__intrinsicWidthCache.has(col)) {
-      return this.__intrinsicWidthCache.get(col);
+    if (!this.__intrinsicWidthCache.has(col)) {
+      this.__calculateAndCacheIntrinsicWidths([col]);
     }
-
-    const width = this.__calculateIntrinsicWidth(col);
-    this.__intrinsicWidthCache.set(col, width);
-
-    return width;
-  }
-
-  /** @private */
-  __calculateIntrinsicWidth(col) {
-    const initialWidth = col.width;
-    const initialFlexGrow = col.flexGrow;
-
-    col.width = 'auto';
-    col.flexGrow = 0;
-
-    // Note: _allCells only contains cells which are currently rendered in DOM
-    const width = col._allCells
-      .filter((cell) => {
-        // Exclude body cells that are out of the visible viewport
-        return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
-      })
-      .reduce((width, cell) => {
-        // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        return Math.max(width, cell.offsetWidth + 1);
-      }, 0);
-
-    col.flexGrow = initialFlexGrow;
-    col.width = initialWidth;
-
-    return width;
+    return this.__intrinsicWidthCache.get(col);
   }
 
   /** @private */
@@ -667,10 +638,70 @@ class Grid extends ElementMixin(
     }
 
     this.__intrinsicWidthCache = new Map();
+    // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
+    this.__viewportRowsCache = this.__getViewportRows();
+
+    // Pre-cache the intrinsic width of each column
+    this.__calculateAndCacheIntrinsicWidths(cols);
 
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
     });
+  }
+
+  /**
+   * Toggles the cell content for the given column to use or not use auto width.
+   *
+   * While content for all the column cells uses auto width (instead of the default 100%),
+   * their offsetWidth can be used to calculate the collective intrinsic width of the column.
+   *
+   * @private
+   */
+  __setVisibleCellContentAutoWidth(col, autoWidth) {
+    col._allCells
+      .filter((cell) => {
+        if (this.$.items.contains(cell)) {
+          return this.__viewportRowsCache.includes(cell.parentElement);
+        }
+        return true;
+      })
+      .forEach((cell) => {
+        cell.__calculatingAutoWidth = autoWidth;
+        cell._content.style.width = autoWidth ? 'auto' : '';
+        cell._content.style.position = autoWidth ? 'absolute' : '';
+      });
+  }
+
+  /**
+   * Calculates and caches the intrinsic width of each given column.
+   *
+   * @private
+   */
+  __calculateAndCacheIntrinsicWidths(cols) {
+    // Make all the columns use auto width at once before measuring to
+    // avoid reflows in between the measurements
+    cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, true));
+    // Measure and cache
+    cols.forEach((col) => {
+      const width = this.__getAutoWidthCellsMaxWidth(col);
+      this.__intrinsicWidthCache.set(col, width);
+    });
+    // Reset the columns to use 100% width
+    cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, false));
+  }
+
+  /**
+   * Returns the maximum intrinsic width of the cell content in the given column.
+   * Only cells which are marked as using auto width are considered.
+   *
+   * @private
+   */
+  __getAutoWidthCellsMaxWidth(col) {
+    // Note: _allCells only contains cells which are currently rendered in DOM
+    return col._allCells.reduce((width, cell) => {
+      // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+      return cell.__calculatingAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
+    }, 0);
   }
 
   /**
