@@ -92,7 +92,7 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @protected */
     _debounceUpdateColumnTree() {
-      this.__debouncerUpdateColumnTree = Debouncer.debounce(this.__debouncerUpdateColumnTree, microTask, () =>
+      this.__updateColumnTreeDebouncer = Debouncer.debounce(this.__updateColumnTreeDebouncer, microTask, () =>
         this._updateColumnTree(),
       );
     }
