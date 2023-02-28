@@ -54,15 +54,15 @@ export async function waitForOverlayRender() {
   flush();
 }
 
-export async function open(datepicker) {
-  datepicker.open();
+export async function open(datePicker) {
+  datePicker.open();
   await waitForOverlayRender();
 }
 
-export function close(datepicker) {
+export function close(datePicker) {
   return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
-    datepicker.close();
+    listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', resolve);
+    datePicker.close();
   });
 }
 
