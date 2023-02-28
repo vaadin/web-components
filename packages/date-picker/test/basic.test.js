@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -7,11 +7,13 @@ import { parseDate } from '../src/vaadin-date-picker-helper.js';
 import { close, open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('basic features', () => {
-  let datePicker, input;
+  let datePicker, input, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    await nextRender();
     input = datePicker.inputElement;
+    overlay = datePicker.$.overlay;
   });
 
   it('should parse date components with varying number of digits', () => {
@@ -71,50 +73,13 @@ describe('basic features', () => {
 
   it('should open on input tap', async () => {
     tap(input);
-    await oneEvent(datePicker.$.overlay, 'vaadin-overlay-open');
+    await oneEvent(overlay, 'vaadin-overlay-open');
   });
 
-  it('should focus the input on touch tap', () => {
+  it('should focus the input on touch tap', async () => {
     touchTap(input);
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(document.activeElement).to.equal(input);
-  });
-
-  it('should open on input container element click', () => {
-    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
-    click(inputField);
-    expect(datePicker.opened).to.be.true;
-  });
-
-  it('should prevent default for the handled click event', () => {
-    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
-    const event = click(inputField);
-    expect(event.defaultPrevented).to.be.true;
-  });
-
-  it('should not prevent default for click when autoOpenDisabled', () => {
-    datePicker.autoOpenDisabled = true;
-    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
-    const event = click(inputField);
-    expect(event.defaultPrevented).to.be.false;
-  });
-
-  it('should lead zeros correctly', () => {
-    datePicker.value = '+000300-02-01';
-    expect(input.value).to.equal('2/1/0300');
-  });
-
-  it('should format display correctly', () => {
-    datePicker.value = '2000-02-01';
-    expect(input.value).to.equal('2/1/2000');
-    datePicker.value = '1999-12-31';
-    expect(input.value).to.equal('12/31/1999');
-  });
-
-  it('should format display correctly with sub 100 years', () => {
-    datePicker.value = '+000001-02-01';
-    expect(input.value).to.equal('2/1/0001');
-    datePicker.value = '+000099-02-01';
-    expect(input.value).to.equal('2/1/0099');
   });
 
   it('should not change datePicker width', async () => {
@@ -125,6 +90,53 @@ describe('basic features', () => {
 
     await open(datePicker);
     expect(datePicker.clientWidth).to.equal(width);
+  });
+
+  describe('input field', () => {
+    let inputField;
+
+    beforeEach(() => {
+      inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
+    });
+
+    it('should open overlay on input field element click', async () => {
+      click(inputField);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(datePicker.opened).to.be.true;
+    });
+
+    it('should prevent default for the handled click event', async () => {
+      const event = click(inputField);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should not prevent default for click when autoOpenDisabled', () => {
+      datePicker.autoOpenDisabled = true;
+      const event = click(inputField);
+      expect(event.defaultPrevented).to.be.false;
+    });
+  });
+
+  describe('input value format', () => {
+    it('should lead zeros correctly', () => {
+      datePicker.value = '+000300-02-01';
+      expect(input.value).to.equal('2/1/0300');
+    });
+
+    it('should format display correctly', () => {
+      datePicker.value = '2000-02-01';
+      expect(input.value).to.equal('2/1/2000');
+      datePicker.value = '1999-12-31';
+      expect(input.value).to.equal('12/31/1999');
+    });
+
+    it('should format display correctly with sub 100 years', () => {
+      datePicker.value = '+000001-02-01';
+      expect(input.value).to.equal('2/1/0001');
+      datePicker.value = '+000099-02-01';
+      expect(input.value).to.equal('2/1/0099');
+    });
   });
 
   describe('value property formats', () => {

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n, open } from './helpers.js';
+import { activateScroller, close, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
@@ -13,10 +13,10 @@ describe('WAI-ARIA', () => {
       input = datePicker.inputElement;
     });
 
-    it('should toggle aria-expanded attribute on open', () => {
-      datePicker.open();
+    it('should toggle aria-expanded attribute on open', async () => {
+      await open(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('true');
-      datePicker.close();
+      await close(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 

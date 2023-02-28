@@ -33,8 +33,9 @@ describe('dropdown', () => {
       toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
     });
 
-    it('should open by tapping the calendar icon', () => {
+    it('should open by tapping the calendar icon', async () => {
       toggleButton.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(datePicker.opened).to.be.true;
       expect(overlay.opened).to.be.true;
     });

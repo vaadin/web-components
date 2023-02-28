@@ -15,8 +15,9 @@ describe('keyboard', () => {
     return datePicker._overlayContent.focusedDate;
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+    await nextRender();
     input = datePicker.inputElement;
     input.focus();
   });
@@ -50,6 +51,7 @@ describe('keyboard', () => {
 
     it('should select focused date on Enter', async () => {
       await sendKeys({ type: '1/1/2001' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
       expect(datePicker.value).to.equal('2001-01-01');
     });
@@ -466,6 +468,7 @@ describe('keyboard', () => {
 
     it('should parse a single digit', async () => {
       await sendKeys({ type: '20' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(today.getFullYear());
       expect(result.getMonth()).to.equal(today.getMonth());
@@ -474,6 +477,7 @@ describe('keyboard', () => {
 
     it('should parse two digits', async () => {
       await sendKeys({ type: '6/20' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(today.getFullYear());
       expect(result.getMonth()).to.equal(5);
@@ -482,6 +486,7 @@ describe('keyboard', () => {
 
     it('should parse three digits', async () => {
       await sendKeys({ type: '6/20/1999' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(1999);
       expect(result.getMonth()).to.equal(5);
@@ -490,12 +495,14 @@ describe('keyboard', () => {
 
     it('should parse three digits with small year', async () => {
       await sendKeys({ type: '6/20/0099' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(99);
     });
 
     it('should parse three digits with negative year', async () => {
       await sendKeys({ type: '6/20/-1' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(-1);
     });
@@ -506,6 +513,7 @@ describe('keyboard', () => {
         referenceDate: '2022-01-01',
       };
       await sendKeys({ type: '09/09/09' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(2009);
       expect(result.getMonth()).to.equal(8);
@@ -575,11 +583,13 @@ describe('keyboard', () => {
 
     it('should not fire change on focused date change', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       expect(spy.called).to.be.false;
     });
 
     it('should fire change on user text input commit', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
       expect(spy.called).to.be.true;
     });
@@ -589,6 +599,7 @@ describe('keyboard', () => {
       datePicker.addEventListener('value-changed', valueChangedSpy);
 
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
 
       expect(valueChangedSpy.calledOnce).to.be.true;
@@ -640,6 +651,7 @@ describe('keyboard', () => {
 
     it('should not fire change on programmatic value change when text input changed', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       datePicker.value = '2000-01-01';
       await close(datePicker);
       expect(spy.called).to.be.false;
@@ -654,6 +666,7 @@ describe('keyboard', () => {
 
     it('should not fire change when reverting input with Escape', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Escape' });
       expect(spy.called).to.be.false;
     });
