@@ -154,7 +154,7 @@ yarn update:lumo --group combo-box
 Run snapshot tests that are in `test/dom` folders under components:
 
 ```sh
-yarn test:it
+yarn test:snapshots
 ```
 
 Update snapshots for all components that have corresponding tests:
