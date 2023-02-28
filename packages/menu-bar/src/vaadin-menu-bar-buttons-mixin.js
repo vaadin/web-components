@@ -110,11 +110,10 @@ export const ButtonsMixin = (superClass) =>
     /** @private */
     __restoreItem(button, item) {
       button.appendChild(item);
-      item.removeAttribute('role');
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
-      item.classList.remove('vaadin-menu-item');
+      item.removeAttribute('class');
     }
 
     /** @private */

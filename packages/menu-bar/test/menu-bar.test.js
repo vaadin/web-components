@@ -739,7 +739,7 @@ describe('item components', () => {
       await onceResized(menu);
       const item = buttons[2].firstChild;
       expect(item).to.equal(buttons[2].item.component);
-      expect(item.getAttribute('role')).to.not.equal('menuitem');
+      expect(item.classList.contains('vaadin-menu-item')).to.be.false;
     });
 
     it('should restore menu bar item attribute state when moved from sub-menu back to menu bar', async () => {
