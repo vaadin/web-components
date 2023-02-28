@@ -101,11 +101,20 @@ export const ButtonsMixin = (superClass) =>
         // Teleport item component back from "overflow" sub-menu
         const item = btn.item && btn.item.component;
         if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
-          btn.appendChild(item);
-          item.classList.remove('vaadin-menu-item');
+          this.__restoreItem(btn, item);
         }
       }
       this.__updateOverflow([]);
+    }
+
+    /** @private */
+    __restoreItem(button, item) {
+      button.appendChild(item);
+      item.removeAttribute('role');
+      item.removeAttribute('aria-expanded');
+      item.removeAttribute('aria-haspopup');
+      item.removeAttribute('tabindex');
+      item.classList.remove('vaadin-menu-item');
     }
 
     /** @private */
