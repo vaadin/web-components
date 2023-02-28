@@ -6,49 +6,49 @@ import '../vaadin-date-picker-light.js';
 import { open, setInputValue, waitForScrollToFinish } from './helpers.js';
 
 describe('custom input', () => {
-  let datepicker, overlay;
+  let datePicker, overlay;
 
   beforeEach(() => {
-    datepicker = fixtureSync(`
+    datePicker = fixtureSync(`
       <vaadin-date-picker-light attr-for-value="value">
         <input class="input">
       </vaadin-date-picker-light>
     `);
-    overlay = datepicker.$.overlay;
+    overlay = datePicker.$.overlay;
   });
 
   it('should open calendar on tap', () => {
-    tap(datepicker);
+    tap(datePicker);
     expect(overlay.opened).to.be.true;
   });
 
   it('should open calendar on input', () => {
-    setInputValue(datepicker, '1');
+    setInputValue(datePicker, '1');
     expect(overlay.opened).to.be.true;
   });
 
   it('should not open calendar on input when autoOpenDisabled is true', () => {
-    datepicker.autoOpenDisabled = true;
-    setInputValue(datepicker, '1');
+    datePicker.autoOpenDisabled = true;
+    setInputValue(datePicker, '1');
     expect(overlay.opened).not.to.be.true;
   });
 
   it('should close on overlay date tap', async () => {
-    await open(datepicker);
-    const spy = sinon.spy(datepicker, 'close');
-    fire(datepicker._overlayContent, 'date-tap', { date: new Date() });
+    await open(datePicker);
+    const spy = sinon.spy(datePicker, 'close');
+    fire(datePicker._overlayContent, 'date-tap', { date: new Date() });
     expect(spy.called).to.be.true;
   });
 
   it('should show week numbers', async () => {
-    datepicker.showWeekNumbers = true;
-    await open(datepicker);
-    expect(datepicker._overlayContent.showWeekNumbers).to.be.true;
+    datePicker.showWeekNumbers = true;
+    await open(datePicker);
+    expect(datePicker._overlayContent.showWeekNumbers).to.be.true;
   });
 
   describe('theme attribute', () => {
     beforeEach(() => {
-      datepicker.setAttribute('theme', 'foo');
+      datePicker.setAttribute('theme', 'foo');
     });
 
     it('should propagate theme attribute to overlay', () => {
@@ -56,17 +56,17 @@ describe('custom input', () => {
     });
 
     it('should propagate theme attribute to overlay content', async () => {
-      await open(datepicker);
-      expect(datepicker._overlayContent.getAttribute('theme')).to.equal('foo');
+      await open(datePicker);
+      expect(datePicker._overlayContent.getAttribute('theme')).to.equal('foo');
     });
 
     describe('in content', () => {
       beforeEach(async () => {
-        await open(datepicker);
+        await open(datePicker);
       });
 
       it('should propagate theme attribute to month calendar', async () => {
-        const overlayContent = datepicker._overlayContent;
+        const overlayContent = datePicker._overlayContent;
         await waitForScrollToFinish(overlayContent);
         const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
         expect(monthCalendar.getAttribute('theme')).to.equal('foo');
