@@ -14,7 +14,15 @@ import { FocusTrapController } from './focus-trap-controller.js';
  * consumer web component. This is done in to ensure the controller only does one thing.
  */
 export class AriaModalController {
+  /**
+   * @param {HTMLElement} host
+   */
   constructor(host) {
+    /**
+     * The controller host element.
+     *
+     * @type {HTMLElement}
+     */
     this.host = host;
   }
 
