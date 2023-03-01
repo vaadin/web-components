@@ -668,10 +668,24 @@ class Grid extends ElementMixin(
         return true;
       })
       .forEach((cell) => {
-        cell.__calculatingAutoWidth = autoWidth;
+        cell.__measuringAutoWidth = autoWidth;
         cell._content.style.width = autoWidth ? 'auto' : '';
         cell._content.style.position = autoWidth ? 'absolute' : '';
       });
+  }
+
+  /**
+   * Returns the maximum intrinsic width of the cell content in the given column.
+   * Only cells which are marked for measuring auto width are considered.
+   *
+   * @private
+   */
+  __getAutoWidthCellsMaxWidth(col) {
+    // Note: _allCells only contains cells which are currently rendered in DOM
+    return col._allCells.reduce((width, cell) => {
+      // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+      return cell.__measuringAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
+    }, 0);
   }
 
   /**
@@ -690,20 +704,6 @@ class Grid extends ElementMixin(
     });
     // Reset the columns to use 100% width
     cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, false));
-  }
-
-  /**
-   * Returns the maximum intrinsic width of the cell content in the given column.
-   * Only cells which are marked as using auto width are considered.
-   *
-   * @private
-   */
-  __getAutoWidthCellsMaxWidth(col) {
-    // Note: _allCells only contains cells which are currently rendered in DOM
-    return col._allCells.reduce((width, cell) => {
-      // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-      return cell.__calculatingAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
-    }, 0);
   }
 
   /**
