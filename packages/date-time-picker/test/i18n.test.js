@@ -97,20 +97,25 @@ customElements.define(
   });
 });
 
-describe('i18n set to slotted date picker before it is added to the DOM', () => {
+describe('setting i18n on a slotted picker before connected to the DOM', () => {
   let dateTimePicker, datePicker;
 
   beforeEach(() => {
     dateTimePicker = document.createElement('vaadin-date-time-picker');
-    datePicker = document.createElement('vaadin-date-picker');
-    datePicker.slot = 'date-picker';
-    datePicker.i18n = { ...datePicker.i18n, cancel: 'Peruuta' };
-    dateTimePicker.appendChild(datePicker);
   });
 
-  it('slotted date picker should have the correct i18n', async () => {
-    await aTimeout(0);
-    document.body.appendChild(dateTimePicker);
-    expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
+  describe('date-picker', () => {
+    beforeEach(() => {
+      datePicker = document.createElement('vaadin-date-picker');
+      datePicker.slot = 'date-picker';
+      datePicker.i18n = { ...datePicker.i18n, cancel: 'Peruuta' };
+      dateTimePicker.appendChild(datePicker);
+    });
+
+    it('should not have i18n overridden', async () => {
+      await aTimeout(0);
+      document.body.appendChild(dateTimePicker);
+      expect(datePicker.i18n.cancel).to.equal('Peruuta');
+    });
   });
 });
