@@ -639,7 +639,9 @@ class Grid extends ElementMixin(
 
     this.__intrinsicWidthCache = new Map();
     // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
-    this.__viewportRowsCache = this.__getViewportRows();
+    const fvi = this._firstVisibleIndex;
+    const lvi = this._lastVisibleIndex;
+    this.__viewportRowsCache = this._getVisibleRows().filter((row) => row.index >= fvi && row.index <= lvi);
 
     // Pre-cache the intrinsic width of each column
     this.__calculateAndCacheIntrinsicWidths(cols);
