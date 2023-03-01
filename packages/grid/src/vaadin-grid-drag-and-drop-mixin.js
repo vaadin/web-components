@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, updateRowStates } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateRowStates, updateStringRowStates } from './vaadin-grid-helpers.js';
 
 const DropMode = {
   BETWEEN: 'between',
@@ -255,7 +255,7 @@ export const DragAndDropMixin = (superClass) =>
         } else if (row) {
           this._dragOverItem = row._item;
           if (row.getAttribute('dragover') !== this._dropLocation) {
-            updateRowStates(row, { dragover: this._dropLocation }, true);
+            updateStringRowStates(row, { dragover: this._dropLocation });
           }
         } else {
           this._clearDragStyles();
@@ -310,7 +310,7 @@ export const DragAndDropMixin = (superClass) =>
     _clearDragStyles() {
       this.removeAttribute('dragover');
       iterateChildren(this.$.items, (row) => {
-        updateRowStates(row, { dragover: null }, true);
+        updateStringRowStates(row, { dragover: null });
       });
     }
 
