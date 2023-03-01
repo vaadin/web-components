@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
@@ -17,13 +17,15 @@ describe('custom input', () => {
     overlay = datePicker.$.overlay;
   });
 
-  it('should open calendar on tap', () => {
+  it('should open calendar on tap', async () => {
     tap(datePicker);
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(overlay.opened).to.be.true;
   });
 
-  it('should open calendar on input', () => {
+  it('should open calendar on input', async () => {
     setInputValue(datePicker, '1');
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(overlay.opened).to.be.true;
   });
 
