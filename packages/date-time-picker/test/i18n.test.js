@@ -108,7 +108,7 @@ describe('i18n set before added to the DOM', () => {
     dateTimePicker.appendChild(datePicker);
   });
 
-  it.only('should have the correct i18n', async () => {
+  it('should have the correct i18n', async () => {
     await nextFrame();
     document.body.appendChild(dateTimePicker);
     expect(datePicker.i18n.cancel).to.equal('CUSTOM');
