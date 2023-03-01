@@ -97,7 +97,25 @@ customElements.define(
   });
 });
 
-describe('i18n set to child date picker before added to the DOM', () => {
+describe('setting i18n on a slotted picker before connected to the DOM', () => {
+     beforeEach(() => {
+         dateTimePicker = document.createElement('vaadin-date-time-picker');
+     });
+     
+     describe('date-picker', () => {
+       beforeEach(() => {
+         slottedDatePicker = document.createElement('vaadin-date-picker');
+         slottedDatePicker.slot = 'date-picker';
+         slottedDatePicker.i18n = { ...slottedDatePicker.i18n, cancel: 'Peruuta' };
+         dateTimePicker.appendChild(slottedDatePicker);
+       });
+       
+       it('should not have i18n overridden', () => {
+         ...
+       });
+     }); 
+  });
+})
   let dateTimePicker, slottedDatePicker;
 
   beforeEach(() => {
