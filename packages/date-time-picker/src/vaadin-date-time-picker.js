@@ -403,10 +403,6 @@ class DateTimePicker extends FieldMixin(
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
-
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this.__onDomChange(info.addedNodes);
-    });
   }
 
   /** @protected */
@@ -415,6 +411,10 @@ class DateTimePicker extends FieldMixin(
 
     this.__datePicker = this._getDirectSlotChild('date-picker');
     this.__timePicker = this._getDirectSlotChild('time-picker');
+
+    this._observer = new FlattenedNodesObserver(this, (info) => {
+      this.__onDomChange(info.addedNodes);
+    });
 
     if (this.autofocus && !this.disabled) {
       window.requestAnimationFrame(() => this.focus());
