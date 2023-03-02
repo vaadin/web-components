@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { AriaModalController } from '../src/aria-modal-controller.js';
