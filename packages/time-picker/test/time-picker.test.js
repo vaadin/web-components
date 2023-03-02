@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -166,6 +166,14 @@ describe('time-picker', () => {
       expect(spy.callCount).to.equal(2);
     });
 
+    it('should commit user input on Enter', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '00:00' });
+      expect(timePicker.value).to.equal('');
+      await sendKeys({ press: 'Enter' });
+      expect(timePicker.value).to.equal('00:00');
+    });
+
     it('should clear value with null', () => {
       timePicker.value = '12:00';
       timePicker.value = null;
@@ -289,100 +297,6 @@ describe('time-picker', () => {
       timePicker.autoselect = true;
       inputElement.focus();
       expect(spy.calledOnce).to.be.true;
-    });
-  });
-
-  describe('change event', () => {
-    let spy;
-
-    beforeEach(() => {
-      spy = sinon.spy();
-      timePicker.addEventListener('change', spy);
-    });
-
-    it('should fire change on user text input commit', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      await sendKeys({ press: 'Enter' });
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should fire change on user arrow input commit', () => {
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should fire change on clear button click', () => {
-      timePicker.clearButtonVisible = true;
-      timePicker.value = '00:00';
-      timePicker.$.clearButton.click();
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should fire change on arrow key when no dropdown opens', () => {
-      timePicker.step = 0.5;
-      arrowDown(inputElement);
-      expect(spy.calledOnce).to.be.true;
-      arrowUp(inputElement);
-      expect(spy.calledTwice).to.be.true;
-    });
-
-    it('should not fire change on focused time change', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire change on programmatic value change', () => {
-      timePicker.value = '01:00';
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire change on programmatic value change after manual one', () => {
-      timePicker.value = '00:00';
-      timePicker.open();
-      inputElement.value = '';
-      arrowDown(inputElement);
-      enter(inputElement);
-      expect(spy.calledOnce).to.be.true;
-      // Mimic native change happening on text-field blur
-      document.body.click();
-      timePicker.value = '02:00';
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not fire change if the value was not changed', () => {
-      timePicker.value = '01:00';
-      timePicker.open();
-      enter(inputElement);
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire change on revert', () => {
-      timePicker.open();
-      timePicker.value = '01:00';
-      esc(inputElement);
-      esc(inputElement);
-      expect(spy.called).to.be.false;
-    });
-
-    it('should fire just one change event', async () => {
-      timePicker.focus();
-      timePicker.open();
-      await sendKeys({ type: '0' });
-      enter(inputElement);
-      inputElement.blur();
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should not change value on input', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      expect(timePicker.value).to.equal('');
-      await sendKeys({ press: 'Enter' });
-      expect(timePicker.value).to.equal('00:00');
     });
   });
 
