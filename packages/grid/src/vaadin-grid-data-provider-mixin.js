@@ -102,7 +102,7 @@ export const ItemCache = class ItemCache {
    * In practice, this means that the effective size of any expanded
    * subcaches preceding the index are added to the value.
    * @param {number} scaledIndex
-   * @returns {number} The flat index on this cache level.
+   * @return {number} The flat index on this cache level.
    */
   getFlatIndex(scaledIndex) {
     const clampedIndex = Math.max(0, Math.min(this.size - 1, scaledIndex));
@@ -571,7 +571,7 @@ export const DataProviderMixin = (superClass) =>
      * @param {number} flatIndex
      * @return {number}
      * @private
-     **/
+     */
     __getGlobalFlatIndex([levelIndex, ...subIndexes], cache = this._cache, flatIndex = 0) {
       if (levelIndex === Infinity) {
         // Treat Infinity as the last index on the level

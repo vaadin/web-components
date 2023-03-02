@@ -11,8 +11,6 @@ export declare class ScrollMixinClass {
   /**
    * Scroll to a flat index in the grid. The method doesn't take into account
    * the hierarchy of the items.
-   *
-   * @param index Row index to scroll to
    */
   protected _scrollToFlatIndex(index: number): void;
 }
