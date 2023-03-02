@@ -5,6 +5,7 @@
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -303,6 +304,9 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
 
     this.__focusTrapController = new FocusTrapController(this);
+
+    this.__ariaModalController = new AriaModalController(this);
+    this.addController(this.__ariaModalController);
   }
 
   /**
@@ -489,6 +493,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       afterNextRender(this, () => {
         if (this.focusTrap) {
           this.__focusTrapController.trapFocus(this.$.overlay);
+          this.__ariaModalController.showModal();
         }
 
         const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
@@ -503,6 +508,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     } else if (wasOpened) {
       if (this.focusTrap) {
         this.__focusTrapController.releaseFocus();
+        this.__ariaModalController.close();
       }
 
       this._animatedClosing();
