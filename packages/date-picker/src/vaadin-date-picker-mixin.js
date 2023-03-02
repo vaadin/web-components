@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
@@ -789,32 +790,38 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
+      const content = this._overlayContent;
+
       // Detect which date to show
       const initialPosition = this._getInitialPosition();
-      this._overlayContent.initialPosition = initialPosition;
+      content.initialPosition = initialPosition;
 
       // Scroll the date into view
-      const scrollFocusDate = this._overlayContent.focusedDate || initialPosition;
-      this._overlayContent.scrollToDate(scrollFocusDate);
+      const scrollFocusDate = content.focusedDate || initialPosition;
+      content.scrollToDate(scrollFocusDate);
 
       // Ensure the date is focused
       this._ignoreFocusedDateChange = true;
-      this._overlayContent.focusedDate = scrollFocusDate;
+      content.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
 
       if (this._focusOverlayOnOpen) {
-        this._overlayContent.focusDateElement();
+        content.focusDateElement();
         this._focusOverlayOnOpen = false;
       } else {
         this._focus();
       }
 
-      if (this._noInput && this.focusElement) {
-        this.focusElement.blur();
+      const input = this._nativeInput;
+      if (this._noInput && input) {
+        input.blur();
         this._overlayContent.focusDateElement();
       }
+
+      const focusables = this._noInput ? content : [input, content];
+      this.__showOthers = hideOthers(focusables);
     }
 
     /** @private */
@@ -853,6 +860,12 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      // Reset `aria-hidden` state.
+      if (this.__showOthers) {
+        this.__showOthers();
+        this.__showOthers = null;
+      }
+
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
       // No need to select date on close if it was confirmed by the user.
