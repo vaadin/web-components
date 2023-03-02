@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, open, waitForOverlayRender } from './helpers.js';
+import { close, open, waitForScrollToFinish } from './helpers.js';
 
 describe('events', () => {
   let datePicker;
@@ -22,13 +22,13 @@ describe('events', () => {
 
     it('should not fire the event on focused date change', async () => {
       await sendKeys({ type: '1/2/2000' });
-      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker._overlayContent);
       expect(changeSpy.called).to.be.false;
     });
 
     it('should fire the event when committing user input with Enter', async () => {
       await sendKeys({ type: '1/2/2000' });
-      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.called).to.be.true;
     });
@@ -38,7 +38,7 @@ describe('events', () => {
       datePicker.addEventListener('value-changed', valueChangedSpy);
 
       await sendKeys({ type: '1/2/2000' });
-      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Enter' });
 
       expect(valueChangedSpy.calledOnce).to.be.true;
@@ -46,24 +46,24 @@ describe('events', () => {
     });
 
     it('should fire the event when selecting a date with Enter', async () => {
-      // Open the overlay
+      // Open the calendar.
       await open(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datePicker);
+      await waitForScrollToFinish(datePicker._overlayContent);
 
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should fire the event when selecting a date with Space', async () => {
-      // Open the overlay
+      // Open the calendar.
       await open(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datePicker);
+      await waitForScrollToFinish(datePicker._overlayContent);
 
       await sendKeys({ press: 'Space' });
       expect(changeSpy.calledOnce).to.be.true;
@@ -90,7 +90,7 @@ describe('events', () => {
 
     it('should not fire the event on programmatic value change when having user input', async () => {
       await sendKeys({ type: '1/2/2000' });
-      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker._overlayContent);
       datePicker.value = '2000-01-01';
       await close(datePicker);
       expect(changeSpy.called).to.be.false;
@@ -105,7 +105,7 @@ describe('events', () => {
 
     it('should not fire the event when reverting the user input with Escape', async () => {
       await sendKeys({ type: '1/2/2000' });
-      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Escape' });
       expect(changeSpy.called).to.be.false;
     });
