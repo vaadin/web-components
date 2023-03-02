@@ -20,20 +20,20 @@ describe('events', () => {
       datePicker.inputElement.focus();
     });
 
-    it('should not fire the event on focused date change', async () => {
+    it('should not be fired on focused date change', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should fire the event when committing user input with Enter', async () => {
+    it('should be fired when committing user input with Enter', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.called).to.be.true;
     });
 
-    it('should fire the event after the value-changed event', async () => {
+    it('should be fired after the value-changed event', async () => {
       const valueChangedSpy = sinon.spy();
       datePicker.addEventListener('value-changed', valueChangedSpy);
 
@@ -45,7 +45,7 @@ describe('events', () => {
       expect(changeSpy.calledAfter(valueChangedSpy)).to.be.true;
     });
 
-    it('should fire the event when selecting a date with Enter', async () => {
+    it('should be fired when selecting a date with Enter', async () => {
       // Open the calendar.
       await open(datePicker);
 
@@ -57,7 +57,7 @@ describe('events', () => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should fire the event when selecting a date with Space', async () => {
+    it('should be fired when selecting a date with Space', async () => {
       // Open the calendar.
       await open(datePicker);
 
@@ -69,26 +69,26 @@ describe('events', () => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should fire the event on clear button click', () => {
+    it('should be fired on clear button click', () => {
       datePicker.clearButtonVisible = true;
       datePicker.value = '2000-01-01';
       datePicker.$.clearButton.click();
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should not fire the event on programmatic value change', () => {
+    it('should not be fired on programmatic value change', () => {
       datePicker.value = '2000-01-01';
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not fire the event on programmatic value change when opened', async () => {
+    it('should not be fired on programmatic value change when opened', async () => {
       await open(datePicker);
       datePicker.value = '2000-01-01';
       await close(datePicker);
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not fire the event on programmatic value change when having user input', async () => {
+    it('should not be fired on programmatic value change when having user input', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
       datePicker.value = '2000-01-01';
@@ -96,14 +96,14 @@ describe('events', () => {
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not fire the event on Enter if the value has not changed', async () => {
+    it('should not be fired on Enter if the value has not changed', async () => {
       datePicker.value = '2000-01-01';
       await open(datePicker);
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not fire the event when reverting the user input with Escape', async () => {
+    it('should not be fired when reverting the user input with Escape', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Escape' });
