@@ -9,7 +9,7 @@ import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';

@@ -22,6 +22,7 @@ const keyName = {
   feat: ':rocket:　New Features',
   fix: ':bug:　Bug Fixes',
   refactor: ':nail_care:　Polish',
+  experiment: ':construction:　Experiments',
   docs: ':memo:　Documentation',
   test: ':microscope:　Tests',
   chore: ':house:　Internal',

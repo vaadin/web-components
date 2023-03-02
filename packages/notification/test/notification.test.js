@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, isIOS, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
@@ -9,12 +8,12 @@ describe('vaadin-notification', () => {
 
   beforeEach(() => {
     notification = fixtureSync(`
-      <vaadin-notification duration="20">
-        <template>
-          Your work has been <strong>saved</strong>
-        </template>
-      </vaadin-notification>
+      <vaadin-notification duration="20"></vaadin-notification>
     `);
+
+    notification.renderer = (root) => {
+      root.innerHTML = `Your work has been <strong>saved</strong>`;
+    };
 
     // Force sync card attaching and removal instead of waiting for the animation
     sinon.stub(notification, '_animatedAppendNotificationCard').callsFake(() => notification._appendNotificationCard());

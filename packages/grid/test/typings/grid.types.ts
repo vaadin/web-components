@@ -1,4 +1,4 @@
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type {

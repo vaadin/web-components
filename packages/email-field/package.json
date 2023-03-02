@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-email-field.d.ts",
+    "!src/vaadin-lit-email-field.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -39,7 +41,8 @@
     "@vaadin/text-field": "24.0.0-beta1",
     "@vaadin/vaadin-lumo-styles": "24.0.0-beta1",
     "@vaadin/vaadin-material-styles": "24.0.0-beta1",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-beta1"
+    "@vaadin/vaadin-themable-mixin": "24.0.0-beta1",
+    "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

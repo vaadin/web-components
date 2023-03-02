@@ -17,21 +17,21 @@ registerStyles(
       box-sizing: border-box;
       border-radius:
         /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius#syntax */
-        var(--vaadin-input-container-top-start-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-top-end-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-bottom-end-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-bottom-start-radius, var(--_input-container-radius));
+        var(--vaadin-input-field-top-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-top-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-bottom-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
       /* Fallback */
-      --_input-container-radius: var(--vaadin-input-container-border-radius, var(--lumo-border-radius-m));
+      --_input-container-radius: var(--vaadin-input-field-border-radius, var(--lumo-border-radius-m));
     }
 
     :host([dir='rtl']) {
       border-radius:
         /* Don't use logical props, see https://github.com/vaadin/vaadin-time-picker/issues/145 */
-        var(--vaadin-input-container-top-end-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-top-start-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-bottom-start-radius, var(--_input-container-radius))
-        var(--vaadin-input-container-bottom-end-radius, var(--_input-container-radius));
+        var(--vaadin-input-field-top-end-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-top-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius))
+        var(--vaadin-input-field-bottom-end-radius, var(--_input-container-radius));
     }
 
     /* Used for hover and activation effects */

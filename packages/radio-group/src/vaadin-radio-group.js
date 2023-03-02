@@ -5,10 +5,10 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';

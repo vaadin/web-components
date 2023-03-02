@@ -19,7 +19,7 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import {
   attributeRenderer,
   flushGrid,

@@ -1,6 +1,6 @@
 import '../../vaadin-select.js';
+import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
-import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';

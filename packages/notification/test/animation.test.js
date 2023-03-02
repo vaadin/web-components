@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -35,12 +34,8 @@ describe('animated notifications', () => {
   beforeEach(async () => {
     wrapper = fixtureSync(`
       <div>
-        <vaadin-notification position="bottom-center">
-          <template>Notification</template>
-        </vaadin-notification>
-        <vaadin-notification position="middle">
-          <template>Notification</template>
-        </vaadin-notification>
+        <vaadin-notification position="bottom-center"></vaadin-notification>
+        <vaadin-notification position="middle"></vaadin-notification>
       </div>
     `);
     notifications = Array.from(wrapper.children);
@@ -51,6 +46,9 @@ describe('animated notifications', () => {
     notifications.forEach((elm) => {
       elm.duration = duration;
       elm.opened = true;
+      elm.renderer = (root) => {
+        root.textContent = 'Notification';
+      };
     });
     await aTimeout(duration);
   });

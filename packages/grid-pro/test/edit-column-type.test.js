@@ -11,7 +11,6 @@ import {
   space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -20,27 +19,28 @@ import { Select } from '@vaadin/select/src/vaadin-select.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 
+function itemPropertyRenderer(root, column, model) {
+  root.textContent = model.item[column.getAttribute('renderer-property')];
+}
+
 describe('edit column editor type', () => {
-  describe('with representation template', () => {
+  describe('with representation renderer', () => {
     let grid, cell, column, editor;
 
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-pro-edit-column path="name" editor-type="text">
-            <template>[[item.name]]</template>
-          </vaadin-grid-pro-edit-column>
-          <vaadin-grid-pro-edit-column path="title" editor-type="select">
-            <template>[[item.title]]</template>
-          </vaadin-grid-pro-edit-column>
-          <vaadin-grid-pro-edit-column path="married" editor-type="checkbox">
-            <template>[[item.married]]</template>
-          </vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.age]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-pro-edit-column renderer-property="name" path="name" editor-type="text"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column renderer-property="title" path="title" editor-type="select"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column renderer-property="married" path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-column renderer-property="age"></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+
+      grid.querySelectorAll('[renderer-property]').forEach((column) => {
+        column.renderer = itemPropertyRenderer;
+      });
+
       grid.items = createItems();
       flushGrid(grid);
     });
@@ -80,11 +80,14 @@ describe('edit column editor type', () => {
           <vaadin-grid-pro-edit-column path="title"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.married]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column renderer-property="married"></vaadin-grid-column>
         </vaadin-gri-pro>
       `);
+
+      grid.querySelectorAll('[renderer-property]').forEach((column) => {
+        column.renderer = itemPropertyRenderer;
+      });
+
       grid.items = createItems();
       column = grid.firstElementChild;
       column.editorType = 'checkbox';
@@ -141,11 +144,13 @@ describe('edit column editor type', () => {
             <vaadin-grid-pro-edit-column path="title"></vaadin-grid-pro-edit-column>
             <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
             <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-            <vaadin-grid-column>
-              <template>[[item.married]]</template>
-            </vaadin-grid-column>
+            <vaadin-grid-column renderer-property="married"></vaadin-grid-column>
           </vaadin-gri-pro>
         `);
+
+        grid.querySelectorAll('[renderer-property]').forEach((column) => {
+          column.renderer = itemPropertyRenderer;
+        });
         grid.items = createItems();
         column = grid.querySelector('[path="title"]');
         column.editorType = 'select';
@@ -228,11 +233,13 @@ describe('edit column editor type', () => {
             <vaadin-grid-pro-edit-column path="title"></vaadin-grid-pro-edit-column>
             <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
             <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-            <vaadin-grid-column>
-              <template>[[item.married]]</template>
-            </vaadin-grid-column>
+            <vaadin-grid-column renderer-property="married"></vaadin-grid-column>
           </vaadin-gri-pro>
         `);
+
+        grid.querySelectorAll('[renderer-property]').forEach((column) => {
+          column.renderer = itemPropertyRenderer;
+        });
         grid.items = createItems();
         column = grid.querySelector('[path="title"]');
         column.editorType = 'select';
@@ -294,11 +301,13 @@ describe('edit column editor type', () => {
           <vaadin-grid-pro-edit-column path="title"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.married]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column renderer-property="married"></vaadin-grid-column>
         </vaadin-gri-pro>
       `);
+
+      grid.querySelectorAll('[renderer-property]').forEach((column) => {
+        column.renderer = itemPropertyRenderer;
+      });
       grid.items = createItems();
       flushGrid(grid);
       columns = grid._columnTree[0];

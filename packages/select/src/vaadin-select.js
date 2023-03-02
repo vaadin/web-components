@@ -9,10 +9,11 @@ import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -661,11 +662,12 @@ class Select extends OverlayClassMixin(
       }
     }
 
-    // Use item ID if there is a selected item or placeholder text
-    valueButton.setAttribute(
-      'aria-labelledby',
-      selected || this.placeholder ? `${this._labelId} ${this._itemId}` : this._labelId,
-    );
+    // Add the item ID to aria-labelledby if there is a selected item or a placeholder text.
+    if (selected || this.placeholder) {
+      addValueToAttribute(valueButton, 'aria-labelledby', this._itemId);
+    } else {
+      removeValueFromAttribute(valueButton, 'aria-labelledby', this._itemId);
+    }
   }
 
   /** @private */

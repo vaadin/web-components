@@ -54,7 +54,11 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
-           * When true, the input element has a non-empty value entered by the user.
+           * Whether the input element has user input.
+           *
+           * Note, the property indicates true only if the input has been entered by the user.
+           * In the case of programmatic changes, the property must be reset to false.
+           *
            * @protected
            */
           _hasInputValue: {
@@ -83,16 +87,49 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * A property for accessing the input element's value.
+       *
+       * Override this getter if the property is different from the default `value` one.
+       *
+       * @protected
+       * @return {string}
+       */
+      get _inputElementValueProperty() {
+        return 'value';
+      }
+
+      /**
+       * The input element's value.
+       *
+       * @protected
+       * @return {string}
+       */
+      get _inputElementValue() {
+        return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;
+      }
+
+      /**
+       * The input element's value.
+       *
+       * @protected
+       */
+      set _inputElementValue(value) {
+        if (this.inputElement) {
+          this.inputElement[this._inputElementValueProperty] = value;
+        }
+      }
+
+      /**
        * Clear the value of the field.
        */
       clear() {
+        this._hasInputValue = false;
+
         this.value = '';
 
         // Clear the input immediately without waiting for the observer.
         // Otherwise, when using Lit, the old value would be restored.
-        if (this.inputElement) {
-          this.inputElement.value = '';
-        }
+        this._inputElementValue = '';
       }
 
       /**
@@ -132,11 +169,7 @@ export const InputMixin = dedupingMixin(
           return;
         }
 
-        if (value != null) {
-          this.inputElement.value = value;
-        } else {
-          this.inputElement.value = '';
-        }
+        this._inputElementValue = value != null ? value : '';
       }
 
       /**

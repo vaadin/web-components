@@ -23,6 +23,7 @@ const DEFAULT_PHYSICAL_COUNT = 3;
  * If something in the scrolling engine needs to be changed
  * for the virtualizer's purposes, override a function
  * in virtualizer-iron-list-adapter.js instead of changing it here.
+ * If a function on this file is no longer needed, the code can be safely deleted.
  *
  * This will allow us to keep the iron-list code here as close to
  * the original as possible.
@@ -561,39 +562,6 @@ export const ironList = {
       return this._virtualStart + (pidx - this._physicalStart);
     }
     return this._virtualStart + (this._physicalCount - this._physicalStart) + pidx;
-  },
-
-  /**
-   * Updates the height for a given set of items.
-   *
-   * @param {!Array<number>=} itemSet
-   */
-  _updateMetrics(itemSet) {
-    // Make sure we distributed all the physical items
-    // so we can measure them.
-    flush();
-
-    let newPhysicalSize = 0;
-    let oldPhysicalSize = 0;
-    const prevAvgCount = this._physicalAverageCount;
-    const prevPhysicalAvg = this._physicalAverage;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this._iterateItems((pidx, vidx) => {
-      oldPhysicalSize += this._physicalSizes[pidx];
-      this._physicalSizes[pidx] = this._physicalItems[pidx].offsetHeight;
-      newPhysicalSize += this._physicalSizes[pidx];
-      this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
-    }, itemSet);
-
-    this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
-
-    // Update the average if it measured something.
-    if (this._physicalAverageCount !== prevAvgCount) {
-      this._physicalAverage = Math.round(
-        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
-      );
-    }
   },
 
   /**

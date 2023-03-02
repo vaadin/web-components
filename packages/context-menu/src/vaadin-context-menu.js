@@ -225,12 +225,12 @@ class ContextMenu extends OverlayClassMixin(
         id="overlay"
         on-opened-changed="_onOverlayOpened"
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
+        modeless="[[_modeless]]"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         model="[[_context]]"
         theme$="[[_theme]]"
-      >
-      </vaadin-context-menu-overlay>
+      ></vaadin-context-menu-overlay>
     `;
   }
 
@@ -307,6 +307,14 @@ class ContextMenu extends OverlayClassMixin(
        */
       renderer: {
         type: Function,
+      },
+
+      /**
+       * When true, the menu overlay is modeless.
+       * @protected
+       */
+      _modeless: {
+        type: Boolean,
       },
 
       /** @private */

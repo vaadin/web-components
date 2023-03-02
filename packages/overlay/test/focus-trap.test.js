@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '../vaadin-overlay.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;

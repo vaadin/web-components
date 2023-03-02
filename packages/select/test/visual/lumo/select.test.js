@@ -59,6 +59,12 @@ describe('select', () => {
     await visualDiff(div, 'placeholder');
   });
 
+  it('label and placeholder', async () => {
+    element.label = 'Label';
+    element.placeholder = 'Placeholder';
+    await visualDiff(div, 'label-and-placeholder');
+  });
+
   it('readonly placeholder', async () => {
     element.placeholder = 'Placeholder';
     element.readonly = true;

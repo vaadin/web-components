@@ -164,6 +164,13 @@ describe('keyboard', () => {
   });
 
   describe('selecting items', () => {
+    const verifyEnterKeyPropagation = (allowPropagation) => {
+      const enterEvent = keyboardEventFor('keydown', 13, [], 'Enter');
+      const stopPropagationSpy = sinon.spy(enterEvent, 'stopPropagation');
+      input.dispatchEvent(enterEvent);
+      expect(stopPropagationSpy.called).to.equal(!allowPropagation);
+    };
+
     describe('auto-open', () => {
       beforeEach(async () => {
         comboBox.value = 'bar';
@@ -199,18 +206,41 @@ describe('keyboard', () => {
       });
 
       it('should stop propagation of the keyboard enter event when dropdown is opened', () => {
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
-        enterKeyDown(input);
-        expect(keydownSpy.called).to.be.false;
+        verifyEnterKeyPropagation(false);
       });
 
       it('should stop propagation of the keyboard enter event when input value is invalid', () => {
         setInputValue(comboBox, 'foobar');
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
+
+        verifyEnterKeyPropagation(false);
+      });
+
+      it('should propagate keyboard enter event after entering an unknown option when custom values are allowed', () => {
+        comboBox.allowCustomValue = true;
+        setInputValue(comboBox, 'foobar');
         enterKeyDown(input);
-        expect(keydownSpy.called).to.be.false;
+
+        verifyEnterKeyPropagation(true);
+      });
+
+      it('should propagate keyboard enter event if filtered items are cleared after selecting a predefined option', () => {
+        setInputValue(comboBox, 'foo');
+        enterKeyDown(input);
+        // Simulate user or data provider mixin resetting filtered items after closing overlay
+        comboBox.filteredItems = [];
+        expect(comboBox._focusedIndex).to.equal(-1);
+
+        verifyEnterKeyPropagation(true);
+      });
+
+      it('should propagate keyboard enter event after clearing the value', () => {
+        setInputValue(comboBox, 'foo');
+        enterKeyDown(input);
+
+        setInputValue(comboBox, '');
+        enterKeyDown(input);
+
+        verifyEnterKeyPropagation(true);
       });
 
       it('should not close the overlay with enter when custom values are not allowed', () => {
@@ -399,37 +429,39 @@ describe('keyboard', () => {
 
       it('should stop propagation of the keyboard enter event when input value is invalid', () => {
         setInputValue(comboBox, 'foobar');
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
-        enterKeyDown(input);
-        expect(keydownSpy.called).to.be.false;
+
+        verifyEnterKeyPropagation(false);
       });
 
-      it('should not stop propagation of the keyboard enter event when input has a predefined option', () => {
+      it('should propagate the keyboard enter event when input has a predefined option', () => {
         setInputValue(comboBox, 'foo');
         expect(comboBox.opened).to.be.false;
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
-        enterKeyDown(input);
-        expect(keydownSpy.called).to.be.true;
+
+        verifyEnterKeyPropagation(true);
       });
 
-      it('should not stop propagation of the keyboard enter event when input has a custom value', () => {
+      it('should propagate keyboard enter event if filtered items are cleared after selecting a predefined option', () => {
+        setInputValue(comboBox, 'foo');
+        enterKeyDown(input);
+        // Simulate user or data provider mixin resetting filtered items after closing overlay
+        comboBox.filteredItems = [];
+        expect(comboBox._focusedIndex).to.equal(-1);
+
+        verifyEnterKeyPropagation(true);
+      });
+
+      it('should propagate the keyboard enter event when input has a custom value', () => {
         comboBox.allowCustomValue = true;
         setInputValue(comboBox, 'foobar');
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
-        enterKeyDown(input);
-        expect(keydownSpy.called).to.be.true;
+
+        verifyEnterKeyPropagation(true);
       });
 
-      it('should not stop propagation of the keyboard enter event when input is empty', () => {
+      it('should propagate the keyboard enter event when input is empty', () => {
         comboBox.allowCustomValue = true;
         setInputValue(comboBox, '');
-        const keydownSpy = sinon.spy();
-        document.addEventListener('keydown', keydownSpy);
-        enterKeyDown(input);
-        expect(keydownSpy.called).to.be.true;
+
+        verifyEnterKeyPropagation(true);
       });
     });
   });

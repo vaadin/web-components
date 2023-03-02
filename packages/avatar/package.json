@@ -37,6 +37,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/a11y-base": "24.0.0-beta1",
     "@vaadin/component-base": "24.0.0-beta1",
     "@vaadin/item": "24.0.0-beta1",
     "@vaadin/list-box": "24.0.0-beta1",

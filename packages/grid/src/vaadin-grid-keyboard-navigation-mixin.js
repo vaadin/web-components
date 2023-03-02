@@ -3,8 +3,8 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
  * @polymerMixin

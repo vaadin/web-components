@@ -1,0 +1,53 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2023 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { html, LitElement } from 'lit';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
+import { checkboxStyles } from './vaadin-checkbox-styles.js';
+
+/**
+ * LitElement based version of `<vaadin-checkbox>` web component.
+ *
+ * ## Disclaimer
+ *
+ * This component is an experiment not intended for publishing to npm.
+ * There is no ETA regarding specific Vaadin version where it'll land.
+ * Feel free to try this code in your apps as per Apache 2.0 license.
+ */
+export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-checkbox';
+  }
+
+  static get styles() {
+    return checkboxStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div class="vaadin-checkbox-container">
+        <div part="checkbox" aria-hidden="true"></div>
+        <slot name="input"></slot>
+        <slot name="label"></slot>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+  }
+}
+
+customElements.define(Checkbox.is, Checkbox);

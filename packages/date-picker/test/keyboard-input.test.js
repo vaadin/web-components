@@ -8,16 +8,17 @@ import { getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('keyboard', () => {
-  let datepicker;
+  let datePicker;
   let input;
 
   function focusedDate() {
-    return datepicker._overlayContent.focusedDate;
+    return datePicker._overlayContent.focusedDate;
   }
 
-  beforeEach(() => {
-    datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
-    input = datepicker.inputElement;
+  beforeEach(async () => {
+    datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+    await nextRender();
+    input = datePicker.inputElement;
     input.focus();
   });
 
@@ -31,7 +32,7 @@ describe('keyboard', () => {
     });
 
     it('should change focused date on user input', async () => {
-      datepicker.value = '2000-01-01';
+      datePicker.value = '2000-01-01';
 
       input.select();
       await sendKeys({ type: '1/30/2000' });
@@ -50,13 +51,14 @@ describe('keyboard', () => {
 
     it('should select focused date on Enter', async () => {
       await sendKeys({ type: '1/1/2001' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
-      expect(datepicker.value).to.equal('2001-01-01');
+      expect(datePicker.value).to.equal('2001-01-01');
     });
 
     it('should update focused date on value change', async () => {
-      datepicker.value = '2000-01-01';
-      await open(datepicker);
+      datePicker.value = '2000-01-01';
+      await open(datePicker);
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(1);
       expect(focusedDate().getFullYear()).to.equal(2000);
@@ -65,26 +67,26 @@ describe('keyboard', () => {
     // FIXME: flaky test often failing locally due to scroll animation
     it.skip('should display focused date while overlay focused', async () => {
       await sendKeys({ type: '1/2/2000' });
-      const content = datepicker._overlayContent;
+      const content = datePicker._overlayContent;
       await waitForScrollToFinish(content);
 
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
 
-      await nextRender(datepicker);
+      await nextRender(datePicker);
 
       await sendKeys({ press: 'ArrowDown' });
       expect(input.value).not.to.equal('1/2/2000');
     });
 
     it('should reflect focused date to input', async () => {
-      datepicker.value = '2000-01-01';
-      await open(datepicker);
+      datePicker.value = '2000-01-01';
+      await open(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
 
-      await nextRender(datepicker);
+      await nextRender(datePicker);
 
       await sendKeys({ press: 'ArrowDown' });
       expect(input.value).to.equal('1/8/2000');
@@ -93,8 +95,8 @@ describe('keyboard', () => {
 
   describe('no parseDate', () => {
     beforeEach(() => {
-      datepicker.i18n = {
-        ...datepicker.i18n,
+      datePicker.i18n = {
+        ...datePicker.i18n,
         parseDate: null,
       };
     });
@@ -111,9 +113,9 @@ describe('keyboard', () => {
     });
 
     it('should select focused date on close', async () => {
-      await open(datepicker);
-      await close(datepicker);
-      expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
+      await open(datePicker);
+      await close(datePicker);
+      expect(datePicker._selectedDate).to.equal(datePicker._focusedDate);
     });
   });
 
@@ -121,53 +123,53 @@ describe('keyboard', () => {
     it('should open the overlay on input', async () => {
       await sendKeys({ type: 'j' });
       await waitForOverlayRender();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
     });
 
     it('should open the overlay on Arrow Down', async () => {
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
     });
 
     it('should open the overlay on Arrow Up', async () => {
       await sendKeys({ press: 'ArrowUp' });
       await waitForOverlayRender();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
     });
 
     it('should open on Arrow Down if autoOpenDisabled is true', async () => {
-      datepicker.autoOpenDisabled = true;
+      datePicker.autoOpenDisabled = true;
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
     });
 
     it('should open on Arrow Up if autoOpenDisabled is true', async () => {
-      datepicker.autoOpenDisabled = true;
+      datePicker.autoOpenDisabled = true;
       await sendKeys({ press: 'ArrowUp' });
       await waitForOverlayRender();
-      expect(datepicker.opened).to.be.true;
+      expect(datePicker.opened).to.be.true;
     });
 
     it('should not open the overlay on Arrow Right', async () => {
       await sendKeys({ press: 'ArrowRight' });
-      expect(datepicker.opened).to.be.not.ok;
+      expect(datePicker.opened).to.be.not.ok;
     });
 
     it('should not open the overlay on Arrow Left', async () => {
       await sendKeys({ press: 'ArrowLeft' });
-      expect(datepicker.opened).to.be.not.ok;
+      expect(datePicker.opened).to.be.not.ok;
     });
 
     it('should not open the overlay on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expect(datepicker.opened).to.be.not.ok;
+      expect(datePicker.opened).to.be.not.ok;
     });
 
     it('should not throw on Enter before opening overlay', () => {
       expect(() => {
-        datepicker.focus();
+        datePicker.focus();
         enter(input);
       }).not.to.throw(Error);
     });
@@ -178,8 +180,8 @@ describe('keyboard', () => {
 
     beforeEach(async () => {
       // Open the overlay
-      await open(datepicker);
-      overlayContent = datepicker._overlayContent;
+      await open(datePicker);
+      overlayContent = datePicker._overlayContent;
       await idleCallback();
     });
 
@@ -187,7 +189,7 @@ describe('keyboard', () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
       await waitForOverlayRender();
-      expect(datepicker.hasAttribute('focused')).to.be.true;
+      expect(datePicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should move focus back to the input on Cancel button tap', async () => {
@@ -262,7 +264,7 @@ describe('keyboard', () => {
     it('should clear selection on close', async () => {
       input.select();
 
-      await close(datepicker);
+      await close(datePicker);
       expect(input.selectionStart).to.equal(input.selectionEnd);
     });
 
@@ -313,27 +315,27 @@ describe('keyboard', () => {
     describe('empty', () => {
       beforeEach(async () => {
         // Open the overlay
-        await open(datepicker);
+        await open(datePicker);
       });
 
       it('should close the overlay when input is focused', async () => {
         await sendKeys({ press: 'Escape' });
-        expect(datepicker.opened).to.be.false;
+        expect(datePicker.opened).to.be.false;
       });
 
       it('should close the overlay when calendar has focus', async () => {
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
-        expect(datepicker.opened).to.be.false;
+        expect(datePicker.opened).to.be.false;
       });
 
       it('should move focus from the calendar back to input', async () => {
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
         expect(document.activeElement).to.not.equal(input);
 
         await sendKeys({ press: 'Escape' });
@@ -342,7 +344,7 @@ describe('keyboard', () => {
 
       it('should revert input value on input Esc when empty', async () => {
         await sendKeys({ type: '1/2/2000' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
         expect(input.value).to.equal('');
@@ -350,10 +352,10 @@ describe('keyboard', () => {
 
       it('should not change value on input Esc when empty', async () => {
         await sendKeys({ type: '1/2/2000' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
-        expect(datepicker.value).to.equal('');
+        expect(datePicker.value).to.equal('');
       });
 
       it('should revert input value on calendar Esc when empty', async () => {
@@ -361,7 +363,7 @@ describe('keyboard', () => {
 
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
 
@@ -373,18 +375,18 @@ describe('keyboard', () => {
 
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
 
-        expect(datepicker.value).to.equal('');
+        expect(datePicker.value).to.equal('');
       });
     });
 
     describe('with value', () => {
       beforeEach(async () => {
-        datepicker.value = '2000-01-01';
-        await open(datepicker);
+        datePicker.value = '2000-01-01';
+        await open(datePicker);
         input.select();
       });
 
@@ -400,7 +402,7 @@ describe('keyboard', () => {
         await sendKeys({ type: '1/2/2000' });
 
         await sendKeys({ press: 'Escape' });
-        expect(datepicker.value).to.equal('2000-01-01');
+        expect(datePicker.value).to.equal('2000-01-01');
       });
 
       it('should revert input value on calendar Esc when value is set', async () => {
@@ -409,7 +411,7 @@ describe('keyboard', () => {
 
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
         expect(input.value).to.equal('1/1/2000');
@@ -421,10 +423,10 @@ describe('keyboard', () => {
 
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         await sendKeys({ press: 'Escape' });
-        expect(datepicker.value).to.equal('2000-01-01');
+        expect(datePicker.value).to.equal('2000-01-01');
       });
     });
   });
@@ -434,7 +436,7 @@ describe('keyboard', () => {
 
     async function checkMonthAndDayOffset(monthOffsetToAdd, dayOffsetToAdd, expectedYearOffset) {
       input.value = '';
-      const referenceDate = new Date(datepicker.i18n.referenceDate);
+      const referenceDate = new Date(datePicker.i18n.referenceDate);
       const yearToTest = referenceDate.getFullYear() + 50;
       await sendKeys({
         type: `${referenceDate.getMonth() + 1 + monthOffsetToAdd}/${referenceDate.getDate() + dayOffsetToAdd}/${
@@ -447,8 +449,8 @@ describe('keyboard', () => {
 
     async function checkYearOffset(offsetToAdd, expectedOffset) {
       input.value = '';
-      const referenceDateYear = datepicker.i18n.referenceDate
-        ? new Date(datepicker.i18n.referenceDate).getFullYear()
+      const referenceDateYear = datePicker.i18n.referenceDate
+        ? new Date(datePicker.i18n.referenceDate).getFullYear()
         : today.getFullYear();
       const yearToTest = referenceDateYear + offsetToAdd;
       await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
@@ -466,6 +468,7 @@ describe('keyboard', () => {
 
     it('should parse a single digit', async () => {
       await sendKeys({ type: '20' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(today.getFullYear());
       expect(result.getMonth()).to.equal(today.getMonth());
@@ -474,6 +477,7 @@ describe('keyboard', () => {
 
     it('should parse two digits', async () => {
       await sendKeys({ type: '6/20' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(today.getFullYear());
       expect(result.getMonth()).to.equal(5);
@@ -482,6 +486,7 @@ describe('keyboard', () => {
 
     it('should parse three digits', async () => {
       await sendKeys({ type: '6/20/1999' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(1999);
       expect(result.getMonth()).to.equal(5);
@@ -490,22 +495,25 @@ describe('keyboard', () => {
 
     it('should parse three digits with small year', async () => {
       await sendKeys({ type: '6/20/0099' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(99);
     });
 
     it('should parse three digits with negative year', async () => {
       await sendKeys({ type: '6/20/-1' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(-1);
     });
 
     it('should parse in base 10', async () => {
-      datepicker.i18n = {
-        ...datepicker.i18n,
+      datePicker.i18n = {
+        ...datePicker.i18n,
         referenceDate: '2022-01-01',
       };
       await sendKeys({ type: '09/09/09' });
+      await waitForOverlayRender();
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(2009);
       expect(result.getMonth()).to.equal(8);
@@ -537,24 +545,24 @@ describe('keyboard', () => {
     });
 
     it('should parse short year with a custom reference date later in century', async () => {
-      datepicker.i18n = {
-        ...datepicker.i18n,
+      datePicker.i18n = {
+        ...datePicker.i18n,
         referenceDate: '1999-01-01',
       };
       await checkYearOffsets();
     });
 
     it('should parse short year with a custom reference date earlier in century', async () => {
-      datepicker.i18n = {
-        ...datepicker.i18n,
+      datePicker.i18n = {
+        ...datePicker.i18n,
         referenceDate: '2001-01-01',
       };
       await checkYearOffsets();
     });
 
     it('should parse short year with a custom reference date and ambiguous year difference', async () => {
-      datepicker.i18n = {
-        ...datepicker.i18n,
+      datePicker.i18n = {
+        ...datePicker.i18n,
         referenceDate: '2001-03-15',
       };
       await checkMonthAndDayOffset(0, 0, 0);
@@ -570,25 +578,28 @@ describe('keyboard', () => {
 
     beforeEach(() => {
       spy = sinon.spy();
-      datepicker.addEventListener('change', spy);
+      datePicker.addEventListener('change', spy);
     });
 
     it('should not fire change on focused date change', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       expect(spy.called).to.be.false;
     });
 
     it('should fire change on user text input commit', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
       expect(spy.called).to.be.true;
     });
 
     it('should fire change after value-changed event', async () => {
       const valueChangedSpy = sinon.spy();
-      datepicker.addEventListener('value-changed', valueChangedSpy);
+      datePicker.addEventListener('value-changed', valueChangedSpy);
 
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Enter' });
 
       expect(valueChangedSpy.calledOnce).to.be.true;
@@ -597,11 +608,11 @@ describe('keyboard', () => {
 
     it('should fire change on selecting date with Enter', async () => {
       // Open the overlay
-      await open(datepicker);
+      await open(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datepicker);
+      await nextRender(datePicker);
 
       await sendKeys({ press: 'Enter' });
       expect(spy.calledOnce).to.be.true;
@@ -609,51 +620,53 @@ describe('keyboard', () => {
 
     it('should fire change on selecting date with Space', async () => {
       // Open the overlay
-      await open(datepicker);
+      await open(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datepicker);
+      await nextRender(datePicker);
 
       await sendKeys({ press: 'Space' });
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should fire change clear button click', () => {
-      datepicker.clearButtonVisible = true;
-      datepicker.value = '2000-01-01';
-      datepicker.$.clearButton.click();
+      datePicker.clearButtonVisible = true;
+      datePicker.value = '2000-01-01';
+      datePicker.$.clearButton.click();
       expect(spy.calledOnce).to.be.true;
     });
 
     it('should not fire change on programmatic value change', () => {
-      datepicker.value = '2000-01-01';
+      datePicker.value = '2000-01-01';
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on programmatic value change when opened', async () => {
-      await open(datepicker);
-      datepicker.value = '2000-01-01';
-      await close(datepicker);
+      await open(datePicker);
+      datePicker.value = '2000-01-01';
+      await close(datePicker);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on programmatic value change when text input changed', async () => {
       await sendKeys({ type: '1/2/2000' });
-      datepicker.value = '2000-01-01';
-      await close(datepicker);
+      await waitForOverlayRender();
+      datePicker.value = '2000-01-01';
+      await close(datePicker);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change if the value was not changed', async () => {
-      datepicker.value = '2000-01-01';
-      await open(datepicker);
+      datePicker.value = '2000-01-01';
+      await open(datePicker);
       await sendKeys({ press: 'Enter' });
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change when reverting input with Escape', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Escape' });
       expect(spy.called).to.be.false;
     });
@@ -661,65 +674,65 @@ describe('keyboard', () => {
 
   describe('auto open disabled', () => {
     beforeEach(() => {
-      datepicker.autoOpenDisabled = true;
+      datePicker.autoOpenDisabled = true;
     });
 
     it('should not open overlay on input', async () => {
       await sendKeys({ type: 'j' });
-      expect(datepicker.opened).not.to.be.true;
+      expect(datePicker.opened).not.to.be.true;
     });
 
     it('should focus parsed date when opening overlay', async () => {
       await sendKeys({ type: '1/20/2000' });
-      await open(datepicker);
+      await open(datePicker);
       await waitForOverlayRender();
 
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(20);
     });
 
-    it('should set datepicker value on blur', async () => {
+    it('should set datePicker value on blur', async () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Tab' });
-      expect(datepicker.value).to.equal('2000-01-01');
+      expect(datePicker.value).to.equal('2000-01-01');
     });
 
     it('should revert input value on Esc when overlay not initialized', async () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Escape' });
       expect(input.value).to.equal('');
-      expect(datepicker.value).to.equal('');
+      expect(datePicker.value).to.equal('');
     });
 
     it('should revert input value on Esc when overlay has been initialized', async () => {
-      await open(datepicker);
-      await close(datepicker);
+      await open(datePicker);
+      await close(datePicker);
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Escape' });
-      expect(datepicker.value).to.equal('');
+      expect(datePicker.value).to.equal('');
     });
 
     it('should not revert input value on esc after selected value is removed', async () => {
-      await open(datepicker);
+      await open(datePicker);
       await sendKeys({ type: '1/1/2000' });
-      await close(datepicker);
+      await close(datePicker);
       input.value = '';
       await sendKeys({ press: 'Escape' });
-      expect(datepicker.value).to.equal('');
+      expect(datePicker.value).to.equal('');
     });
 
     it('should apply the input value on enter when overlay not initialized', async () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Enter' });
-      expect(datepicker.value).to.equal('2000-01-01');
+      expect(datePicker.value).to.equal('2000-01-01');
     });
 
     it('should apply input value on enter when overlay has been initialized', async () => {
-      await open(datepicker);
-      await close(datepicker);
+      await open(datePicker);
+      await close(datePicker);
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Enter' });
-      expect(datepicker.value).to.equal('2000-01-01');
+      expect(datePicker.value).to.equal('2000-01-01');
     });
   });
 
@@ -728,32 +741,32 @@ describe('keyboard', () => {
     let changeSpy;
 
     beforeEach(() => {
-      validateSpy = sinon.spy(datepicker, 'validate');
+      validateSpy = sinon.spy(datePicker, 'validate');
       changeSpy = sinon.spy();
-      datepicker.addEventListener('change', changeSpy);
+      datePicker.addEventListener('change', changeSpy);
     });
 
     describe('overlay is open and value selected', () => {
       beforeEach(async () => {
-        await open(datepicker);
+        await open(datePicker);
         await sendKeys({ type: '01/02/20' });
-        await nextRender(datepicker);
+        await nextRender(datePicker);
       });
 
       it('should validate without change on Esc', async () => {
         await sendKeys({ press: 'Escape' });
 
         // Wait for overlay to finish closing
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.called).to.be.false;
       });
 
       it('should change after validate on overlay close', (done) => {
-        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
+        listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', () => {
           // Wait for overlay to finish closing
-          nextRender(datepicker).then(() => {
+          nextRender(datePicker).then(() => {
             expect(validateSpy.calledOnce).to.be.true;
             expect(changeSpy.calledOnce).to.be.true;
             expect(changeSpy.calledAfter(validateSpy)).to.be.true;
@@ -761,14 +774,14 @@ describe('keyboard', () => {
           });
         });
 
-        datepicker.close();
+        datePicker.close();
       });
 
       it('should change after validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
 
         // Wait for overlay to finish closing
-        await nextRender(datepicker);
+        await nextRender(datePicker);
 
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
@@ -778,26 +791,26 @@ describe('keyboard', () => {
 
     describe('overlay is closed, value is set', () => {
       beforeEach(async () => {
-        await open(datepicker);
+        await open(datePicker);
         await sendKeys({ type: '01/02/20' });
-        await close(datepicker);
+        await close(datePicker);
         validateSpy.resetHistory();
         changeSpy.resetHistory();
         // Wait for overlay to finish closing
-        await nextRender(datepicker);
-        datepicker._focus();
+        await nextRender(datePicker);
+        datePicker._focus();
       });
 
       it('should change after validate on clear button click', () => {
-        datepicker.clearButtonVisible = true;
-        datepicker.$.clearButton.click();
+        datePicker.clearButtonVisible = true;
+        datePicker.$.clearButton.click();
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
       });
 
       it('should change after validate on Esc with clear button', async () => {
-        datepicker.clearButtonVisible = true;
+        datePicker.clearButtonVisible = true;
         await sendKeys({ press: 'Escape' });
         expect(validateSpy.calledOnce).to.be.true;
         expect(changeSpy.calledOnce).to.be.true;
@@ -831,7 +844,7 @@ describe('keyboard', () => {
 
     describe('autoOpenDisabled true', () => {
       beforeEach(() => {
-        datepicker.autoOpenDisabled = true;
+        datePicker.autoOpenDisabled = true;
       });
 
       it('should change after validate on Enter', async () => {
@@ -874,11 +887,11 @@ describe('keyboard', () => {
           await sendKeys({ press: 'Enter' });
           validateSpy.resetHistory();
           changeSpy.resetHistory();
-          datepicker._focusAndSelect();
+          datePicker._focusAndSelect();
         });
 
         it('should change after validate on Esc with clear button', async () => {
-          datepicker.clearButtonVisible = true;
+          datePicker.clearButtonVisible = true;
           await sendKeys({ press: 'Escape' });
           expect(validateSpy.calledOnce).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;

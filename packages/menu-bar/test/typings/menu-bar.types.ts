@@ -1,8 +1,8 @@
 import '../../vaadin-menu-bar.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
-import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';

@@ -268,6 +268,11 @@ declare class ContextMenu extends OverlayClassMixin(ElementMixin(ThemePropertyMi
   renderer: ContextMenuRenderer | null | undefined;
 
   /**
+   * When true, the menu overlay is modeless.
+   */
+  protected _modeless: boolean;
+
+  /**
    * Requests an update for the content of the menu overlay.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *

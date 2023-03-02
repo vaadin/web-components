@@ -2,28 +2,28 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n, open } from './helpers.js';
+import { activateScroller, close, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
-    let datepicker, input;
+    let datePicker, input;
 
     beforeEach(() => {
-      datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-      input = datepicker.inputElement;
+      datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      input = datePicker.inputElement;
     });
 
-    it('should toggle aria-expanded attribute on open', () => {
-      datepicker.open();
+    it('should toggle aria-expanded attribute on open', async () => {
+      await open(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('true');
-      datepicker.close();
+      await close(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
     it('should set aria-hidden on all calendars except focused one', async () => {
-      await open(datepicker);
-      await nextRender(datepicker);
-      const calendars = datepicker._overlayContent.querySelectorAll('vaadin-month-calendar');
+      await open(datePicker);
+      await nextRender(datePicker);
+      const calendars = datePicker._overlayContent.querySelectorAll('vaadin-month-calendar');
       calendars.forEach((calendar) => {
         const focused = calendar.shadowRoot.querySelector('[part~="focused"]');
         expect(calendar.getAttribute('aria-hidden')).to.equal(focused ? null : 'true');

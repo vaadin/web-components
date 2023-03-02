@@ -329,6 +329,7 @@ describe('column groups', () => {
       });
 
       sinon.spy(grid, '__updateHeaderFooterRowVisibility');
+      sinon.spy(grid, '_updateColumnTree');
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
 
@@ -338,6 +339,10 @@ describe('column groups', () => {
     it('should update header and footer rows visibility once', () => {
       // 6 header and footer rows are created
       expect(grid.__updateHeaderFooterRowVisibility.callCount).to.equal(6);
+    });
+
+    it('should update column tree once', () => {
+      expect(grid._updateColumnTree.callCount).to.equal(1);
     });
 
     it('should have right content in header', () => {
