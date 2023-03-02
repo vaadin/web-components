@@ -2,6 +2,7 @@ export { announce } from './src/announce.js';
 export { ActiveMixin } from './src/active-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DisabledMixin } from './src/disabled-mixin.js';
+export { FieldAriaController } from './src/field-aria-controller.js';
 export { FocusMixin } from './src/focus-mixin.js';
 export {
   getFocusableElements,

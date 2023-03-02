@@ -1,17 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldAriaController } from '../src/field-aria-controller.js';
 
-customElements.define('field-element', class extends ControllerMixin(PolymerElement) {});
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper('field-aria', '<slot></slot>', (Base) => class extends baseMixin(Base) {});
 
-describe('field-aria-controller', () => {
   let element, input, controller;
 
   describe('default', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<field-element></field-element>`);
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       controller = new FieldAriaController(element);
       element.addController(controller);
     });
@@ -30,12 +31,13 @@ describe('field-aria-controller', () => {
   });
 
   describe('field', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
-        <field-element>
+        <${tag}>
           <input aria-labelledby="custom-id" aria-describedby="custom-id">
-        </field-element>
+        </${tag}>
       `);
+      await nextRender();
       input = element.querySelector('input');
       controller = new FieldAriaController(element);
       element.addController(controller);
@@ -123,10 +125,14 @@ describe('field-aria-controller', () => {
   });
 
   describe('field group', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
-        <field-element aria-labelledby="custom-id" aria-describedby="custom-id"></field-element>
+        <${tag}
+          aria-labelledby="custom-id"
+          aria-describedby="custom-id"
+        ></${tag}>
       `);
+      await nextRender();
       controller = new FieldAriaController(element);
       element.addController(controller);
     });
@@ -218,4 +224,12 @@ describe('field-aria-controller', () => {
       });
     });
   });
+};
+
+describe('FieldAriaController + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('FieldAriaController + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
