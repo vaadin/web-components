@@ -81,7 +81,7 @@ describe('events', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire when the custom value equals the label of the selected item', () => {
+    it('should not be fired when the custom value equals the label of the selected item', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('custom-value-set', spy);
       comboBox.selectedItem = {
@@ -96,7 +96,7 @@ describe('events', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should fire when the custom value equals the value of the selected item', () => {
+    it('should be fired when the custom value equals the value of the selected item', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('custom-value-set', spy);
       comboBox.selectedItem = {
@@ -111,7 +111,7 @@ describe('events', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire twice when the custom value set listener causes blur', () => {
+    it('should not be fired twice when the custom value set listener causes blur', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('custom-value-set', spy);
 
@@ -127,7 +127,7 @@ describe('events', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should fire twice when another custom value is committed by the user', () => {
+    it('should be fired twice when another custom value is committed by the user', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('custom-value-set', spy);
 
