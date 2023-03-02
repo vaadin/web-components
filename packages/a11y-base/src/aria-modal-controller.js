@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { hideOthers } from './aria-hidden.js';
-import { FocusTrapController } from './focus-trap-controller.js';
 
 /**
  * A controller for handling modal state on the elements with `dialog` and `alertdialog` role.
