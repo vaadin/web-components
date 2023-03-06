@@ -1147,7 +1147,7 @@ class Grid extends ElementMixin(
       this.__itemsReceived();
 
       requestAnimationFrame(() => {
-        this.__scrollToPendingIndex();
+        this.__scrollToPendingIndexes();
       });
     }
   }
