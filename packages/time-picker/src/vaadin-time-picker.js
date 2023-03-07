@@ -125,7 +125,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
-          on-clear-action="__onComboBoxClearAction"
+          on-has-input-value-changed="__onComboBoxHasInputValueChanged"
         >
           <vaadin-input-container
             part="input-field"
@@ -644,9 +644,13 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this.__dispatchChange();
   }
 
-  /** @private */
-  __onComboBoxClearAction() {
-    this._hasInputValue = false;
+  /**
+   * Synchronizes the `_hasInputValue` property with the internal combo-box's one.
+   *
+   * @private
+   */
+  __onComboBoxHasInputValueChanged() {
+    this._hasInputValue = this.$.comboBox._hasInputValue;
   }
 
   /** @private */

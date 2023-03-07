@@ -115,21 +115,40 @@ describe('events', () => {
         expect(hasInputValueChangedSpy.calledOnce).to.be.true;
       });
 
-      // describe('with user input', () => {
-      //   beforeEach(async () => {
-      //     await sendKeys({ type: '12:00' });
-      //     hasInputValueChangedSpy.resetHistory();
-      //   });
+      describe('with user input', () => {
+        beforeEach(async () => {
+          await sendKeys({ type: '12:00' });
+          hasInputValueChangedSpy.resetHistory();
+        });
 
-      //   it('should be fired when clearing the user input with Esc', async () => {
-      //     // Clear selection in the dropdown.
-      //     await sendKeys({ press: 'Escape' });
-      //     // Clear the user input.
-      //     await sendKeys({ press: 'Escape' });
-      //     expect(timePicker.inputElement.value).to.be.empty;
-      //     expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-      //   });
-      // });
+        it('should be fired when clearing the user input with Esc', async () => {
+          // Clear selection in the dropdown.
+          await sendKeys({ press: 'Escape' });
+          // Clear the user input.
+          await sendKeys({ press: 'Escape' });
+          expect(timePicker.inputElement.value).to.be.empty;
+          expect(hasInputValueChangedSpy.calledOnce).to.be.true;
+        });
+      });
+
+      describe('with bad user input', async () => {
+        beforeEach(async () => {
+          await sendKeys({ type: 'foo' });
+          hasInputValueChangedSpy.resetHistory();
+        });
+
+        it('should be fired when clearing bad user input with Esc', async () => {
+          await sendKeys({ press: 'Escape' });
+          expect(hasInputValueChangedSpy.calledOnce).to.be.true;
+        });
+
+        it('should be fired when clearing committed bad user input with Esc', async () => {
+          await sendKeys({ press: 'Enter' });
+          hasInputValueChangedSpy.resetHistory();
+          await sendKeys({ press: 'Escape' });
+          expect(hasInputValueChangedSpy.calledOnce).to.be.true;
+        });
+      });
     });
 
     describe('with value', () => {
@@ -149,7 +168,6 @@ describe('events', () => {
       });
 
       it('should be fired when clearing the value with Esc', async () => {
-        // Clear the value.
         await sendKeys({ press: 'Escape' });
         expect(timePicker.inputElement.value).to.be.empty;
         expect(valueChangedSpy.calledOnce).to.be.true;

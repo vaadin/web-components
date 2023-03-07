@@ -71,6 +71,27 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
     return this.querySelector('[part="clear-button"]');
   }
 
+  /**
+   * @override
+   * @protected
+   */
+  get _inputElementValue() {
+    return super._inputElementValue;
+  }
+
+  /**
+   * The setter is overridden to ensure the `_hasInputValue` property
+   * doesn't wrongly indicate true after the input element's value
+   * is reverted or cleared.
+   *
+   * @override
+   * @protected
+   */
+  set _inputElementValue(value) {
+    super._inputElementValue = value;
+    this._hasInputValue = value.length > 0;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -80,12 +101,6 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
 
     // See https://github.com/vaadin/vaadin-time-picker/issues/145
     this.setAttribute('dir', 'ltr');
-  }
-
-  /** @override */
-  _onClearAction() {
-    this.dispatchEvent(new CustomEvent('clear-action'));
-    super._onClearAction();
   }
 }
 
