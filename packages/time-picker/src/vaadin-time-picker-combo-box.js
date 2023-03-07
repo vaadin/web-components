@@ -81,6 +81,12 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
     // See https://github.com/vaadin/vaadin-time-picker/issues/145
     this.setAttribute('dir', 'ltr');
   }
+
+  /** @override */
+  _onClearAction() {
+    this.dispatchEvent(new CustomEvent('clear-action'));
+    super._onClearAction();
+  }
 }
 
 customElements.define(TimePickerComboBox.is, TimePickerComboBox);
