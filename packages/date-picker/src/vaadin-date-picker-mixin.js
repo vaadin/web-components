@@ -526,10 +526,6 @@ export const DatePickerMixin = (subclass) =>
      * @return {boolean} True if the value is valid
      */
     checkValidity() {
-      const inputValue = this._inputElementValue;
-      const inputValid =
-        !inputValue ||
-        (!!this._selectedDate && inputValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
       const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
       let inputValidity = true;
@@ -542,7 +538,12 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      return inputValid && minMaxValid && inputValidity;
+      return !this._hasBadInput && minMaxValid && inputValidity;
+    }
+
+    /** @override */
+    _updateHasBadInput() {
+      this._hasBadInput = !!this._inputElementValue && !this._getParsedDate(this._inputElementValue);
     }
 
     /**
@@ -1107,6 +1108,8 @@ export const DatePickerMixin = (subclass) =>
         this.open();
       }
       this._userInputValueChanged();
+
+      this._updateHasBadInput();
     }
 
     /** @private */

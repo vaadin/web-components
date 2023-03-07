@@ -412,7 +412,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return !!(
       this.inputElement.checkValidity() &&
       (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-      (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
+      !this._hasBadInput
     );
   }
 
@@ -638,6 +638,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __onComboBoxChange(event) {
     event.stopPropagation();
 
+    this._updateHasBadInput();
+
     this.validate();
 
     this.__dispatchChange();
@@ -712,6 +714,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
       (!this.__getMsec(parsedMax) || this.__getMsec(time) <= this.__getMsec(parsedMax))
     );
+  }
+
+  /** @override */
+  _updateHasBadInput() {
+    this._hasBadInput =
+      !!this._inputElementValue && this.i18n.parseTime && !this.i18n.parseTime(this._inputElementValue);
   }
 
   /**

@@ -19,6 +19,17 @@ import { ValidateMixin } from './validate-mixin.js';
 export const InputConstraintsMixin = dedupingMixin(
   (superclass) =>
     class InputConstraintsMixinClass extends DelegateStateMixin(ValidateMixin(InputMixin(superclass))) {
+      static get properties() {
+        return {
+          /** @protected */
+          _hasBadInput: {
+            type: Boolean,
+            value: false,
+            observer: '_hasBadInputChanged',
+          },
+        };
+      }
+
       /**
        * An array of attributes which participate in the input validation.
        * Changing these attributes will cause the input to re-validate.
@@ -33,6 +44,17 @@ export const InputConstraintsMixin = dedupingMixin(
 
       static get delegateAttrs() {
         return [...super.delegateAttrs, 'required'];
+      }
+
+      /** @override */
+      get _inputElementValue() {
+        return super._inputElementValue;
+      }
+
+      /** @override */
+      set _inputElementValue(value) {
+        super._inputElementValue = value;
+        this._updateHasBadInput();
       }
 
       /** @protected */
@@ -126,6 +148,24 @@ export const InputConstraintsMixin = dedupingMixin(
       __isValidConstraint(constraint) {
         // 0 is valid for `minlength` and `maxlength`
         return Boolean(constraint) || constraint === 0;
+      }
+
+      /** @override */
+      _onInput() {
+        this._updateHasBadInput();
+        super._onInput();
+      }
+
+      /** @private */
+      _updateHasBadInput() {
+        this._hasBadInput = this.inputElement.validity.badInput;
+      }
+
+      /** @protected */
+      _hasBadInputChanged(newValue, oldValue) {
+        if (newValue || oldValue) {
+          this.dispatchEvent(new CustomEvent('has-bad-input-changed'));
+        }
       }
     },
 );
