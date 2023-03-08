@@ -82,7 +82,7 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   /**
    * The setter is overridden to ensure the `_hasInputValue` property
    * doesn't wrongly indicate true after the input element's value
-   * is reverted or cleared.
+   * is reverted or cleared programmatically.
    *
    * @override
    * @protected
