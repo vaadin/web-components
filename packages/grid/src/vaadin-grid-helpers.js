@@ -87,7 +87,7 @@ export function updateCellsPart(cells, part, value) {
  * @param {!HTMLElement} row
  * @param {Object} states
  */
-export function updateRowStates(row, states) {
+export function updateBooleanRowStates(row, states) {
   const cells = getBodyRowCells(row);
 
   Object.entries(states).forEach(([state, value]) => {
@@ -113,20 +113,20 @@ export function updateStringRowStates(row, states) {
 
   Object.entries(states).forEach(([state, value]) => {
     const prevValue = row.getAttribute(state);
-    const prevRowPart = `${state}-${prevValue}-row`;
-    const rowPart = `${state}-${value}-row`;
 
     // Row state attribute
     updateState(row, state, value);
 
     // remove previous part from row and cells if there was any
     if (prevValue) {
+      const prevRowPart = `${state}-${prevValue}-row`;
       updatePart(row, false, prevRowPart);
       updateCellsPart(cells, `${prevRowPart}-cell`, false);
     }
 
     // set new part to rows and cells if there is a value
     if (value) {
+      const rowPart = `${state}-${value}-row`;
       updatePart(row, value, rowPart);
       updateCellsPart(cells, `${rowPart}-cell`, value);
     }

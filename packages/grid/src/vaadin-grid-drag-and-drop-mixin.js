@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, updateRowStates, updateStringRowStates } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateBooleanRowStates, updateStringRowStates } from './vaadin-grid-helpers.js';
 
 const DropMode = {
   BETWEEN: 'between',
@@ -156,12 +156,12 @@ export const DragAndDropMixin = (superClass) =>
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
-        updateRowStates(row, { dragstart: rows.length > 1 ? `${rows.length}` : '' });
+        updateBooleanRowStates(row, { dragstart: rows.length > 1 ? `${rows.length}` : '' });
         this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
         this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
-          updateRowStates(row, { dragstart: null });
+          updateBooleanRowStates(row, { dragstart: false });
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
         });
@@ -398,7 +398,7 @@ export const DragAndDropMixin = (superClass) =>
         }
       });
 
-      updateRowStates(row, {
+      updateBooleanRowStates(row, {
         'drag-disabled': !!dragDisabled,
         'drop-disabled': !!dropDisabled,
       });
