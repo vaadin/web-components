@@ -579,6 +579,27 @@ describe('drag and drop', () => {
         fireDragOver(row, 'under');
         expect(row.getAttribute('dragover')).to.equal('below');
       });
+
+      it('should clear previous dragover row part attribute on dragover change', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        fireDragOver(row, 'below');
+        expect(row.getAttribute('part')).to.not.contain('dragover-above-row');
+        expect(row.getAttribute('part')).to.contain('dragover-below-row');
+      });
+
+      it('should clear previous dragover cells part attribute on dragover change', () => {
+        grid.dropMode = 'between';
+        const row = grid.$.items.children[0];
+        fireDragOver(row, 'above');
+        fireDragOver(row, 'below');
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.not.contain('dragover-above-row-cell');
+          expect(cell.getAttribute('part')).to.contain('dragover-below-row-cell');
+        });
+      });
     });
 
     describe('dragleave', () => {
@@ -589,7 +610,7 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should clear the grid drag styles', () => {
+      it('should clear the grid dragover attribute', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
         expect(grid.hasAttribute('dragover')).to.be.true;
@@ -597,13 +618,36 @@ describe('drag and drop', () => {
         expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should clear the row drag styles', () => {
+      it('should clear the row dragover attribute', () => {
         grid.dropMode = 'on-top';
         fireDragOver();
         const row = grid.$.items.children[0];
         expect(row.hasAttribute('dragover')).to.be.true;
         fireDragLeave();
         expect(row.hasAttribute('dragover')).to.be.false;
+      });
+
+      it('should clear the row dragover parts', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        expect(row.getAttribute('part')).to.contain('dragover-');
+        fireDragLeave();
+        expect(row.getAttribute('part')).to.not.contain('dragover-');
+      });
+
+      it('should clear the cells dragover parts', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragover-');
+        });
+        fireDragLeave();
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.not.contain('dragover-');
+        });
       });
     });
 
@@ -663,6 +707,29 @@ describe('drag and drop', () => {
         expect(row.hasAttribute('dragover')).to.be.true;
         fireDrop();
         expect(row.hasAttribute('dragover')).to.be.false;
+      });
+
+      it('should clear the row dragover parts', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        expect(row.getAttribute('part')).to.contain('dragover-');
+        fireDrop();
+        expect(row.getAttribute('part')).to.not.contain('dragover-');
+      });
+
+      it('should clear the cells dragover parts', () => {
+        grid.dropMode = 'on-top';
+        fireDragOver();
+        const row = grid.$.items.children[0];
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragover-');
+        });
+        fireDrop();
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.not.contain('dragover-');
+        });
       });
 
       it('should dispatch a grid specific event', () => {
