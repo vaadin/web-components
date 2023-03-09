@@ -10,6 +10,16 @@
 export declare function setAriaDescribedBy(target: HTMLElement, newId: string, oldId?: string): void;
 
 /**
+ * Removes the current `aria-labelledby` attribute value on the given element.
+ */
+export function removeAriaLabelledBy(target: HTMLElement): void;
+
+/**
+ * Restore the generated `aria-labelledby` attribute value on the given element.
+ */
+export function restoreGeneratedAriaLabellledBy(target: HTMLElement): void;
+
+/**
  * Update `aria-labelledby` attribute value on the given element.
  */
-export declare function setAriaLabelledBy(target: HTMLElement, newId: string, oldId?: string): void;
+export declare function setAriaLabelledBy(target: HTMLElement, newId: string, oldId?: string, fromUser?: boolean): void;

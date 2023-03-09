@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { setAriaLabelledBy } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -202,7 +203,8 @@ class FormItem extends ThemableMixin(PolymerElement) {
    * @private
    */
   __linkLabelToField(field) {
-    addValueToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+    // addValueToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+    setAriaLabelledBy(this._getFieldAriaTarget(field), this.__labelId, null, false);
   }
 
   /**
@@ -213,7 +215,8 @@ class FormItem extends ThemableMixin(PolymerElement) {
    * @private
    */
   __unlinkLabelFromField(field) {
-    removeValueFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+    // removeValueFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+    setAriaLabelledBy(this._getFieldAriaTarget(field), null, this.__labelId, null, false);
   }
 
   /** @private */

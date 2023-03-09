@@ -3,13 +3,17 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import {
+  removeAriaLabelledBy,
+  restoreGeneratedAriaLabellledBy,
+  setAriaLabelledBy,
+} from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ErrorController } from './error-controller.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { HelperController } from './helper-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
-
 /**
  * A mixin to provide common field logic: label, error message and helper text.
  *
@@ -48,6 +52,16 @@ export const FieldMixin = (superclass) =>
         helperText: {
           type: String,
           observer: '_helperTextChanged',
+        },
+
+        accessibleName: {
+          type: String,
+          observer: '_accessibleNameChanged',
+        },
+
+        accessibleNameRef: {
+          type: String,
+          observer: '_accessibleNameRefChanged',
         },
       };
     }
@@ -111,6 +125,20 @@ export const FieldMixin = (superclass) =>
       } else {
         this._fieldAriaController.setHelperId(null);
       }
+    }
+
+    _accessibleNameChanged(value, oldValue) {
+      if (value) {
+        removeAriaLabelledBy(this.inputElement);
+        this.inputElement.setAttribute('aria-label', value);
+      } else if (oldValue) {
+        restoreGeneratedAriaLabellledBy(this.inputElement);
+        this.inputElement.removeAttribute('aria-label');
+      }
+    }
+
+    _accessibleNameRefChanged(value, oldValue) {
+      setAriaLabelledBy(this.inputElement, value, oldValue, true);
     }
 
     /** @private */
