@@ -397,26 +397,33 @@ export const DataProviderMixin = (superClass) =>
             cache.size = items.length;
           }
 
-          const currentItems = Array.from(this.$.items.children).map((row) => row._item);
-
           // Populate the cache with new items
           items.forEach((item, itemsIndex) => {
             const itemIndex = page * this.pageSize + itemsIndex;
             cache.items[itemIndex] = item;
-            if (this._isExpanded(item) && currentItems.indexOf(item) > -1) {
-              // Force synchronous data request for expanded item sub-cache
-              cache.ensureSubCacheForScaledIndex(itemIndex);
+          });
+
+          // With the new items added, update the cache size and the grid's effective size
+          this._cache.updateSize();
+          this._effectiveSize = this._cache.effectiveSize;
+
+          // After updating the cache, check if some of the expanded items should have sub-caches loaded
+          this._getVisibleRows().forEach((row) => {
+            const { cache, scaledIndex } = this._cache.getCacheAndIndex(row.index);
+            const item = cache.items[scaledIndex];
+            if (item && this._isExpanded(item)) {
+              cache.ensureSubCacheForScaledIndex(scaledIndex);
             }
           });
 
           this._hasData = true;
 
+          // Remove the pending request
           delete cache.pendingRequests[page];
 
+          // Schedule a debouncer to update the visible rows
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
             this._setLoading(false);
-            this._cache.updateSize();
-            this._effectiveSize = this._cache.effectiveSize;
 
             iterateChildren(this.$.items, (row) => {
               if (!row.hidden) {
@@ -430,10 +437,13 @@ export const DataProviderMixin = (superClass) =>
             this.__scrollToPendingIndexes();
           });
 
+          // If the grid is not loading anything, flush the debouncer immediately
           if (!this._cache.isLoading()) {
             this._debouncerApplyCachedData.flush();
           }
 
+          // TODO: Move this into the debouncer as well
+          // Notify that the data has been received
           this.__itemsReceived();
         });
       }
