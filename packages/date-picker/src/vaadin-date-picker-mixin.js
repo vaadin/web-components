@@ -908,6 +908,9 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _applyInputValue(date) {
       this._inputElementValue = date ? this._getFormattedDate(this.i18n.formatDate, date) : '';
+      // It is no longer input entered by the user,
+      // so reset the `hasInputValue` property.
+      this._hasInputValue = false;
     }
 
     /** @private */
@@ -972,8 +975,11 @@ export const DatePickerMixin = (subclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.value = '';
       this._inputElementValue = '';
+      // It is no longer input entered by the user,
+      // so reset the `hasInputValue` property.
+      this._hasInputValue = false;
+      this.value = '';
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
