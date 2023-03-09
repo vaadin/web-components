@@ -77,31 +77,29 @@ function setAriaIDReference(target, attr, newId, oldId, fromUser = false) {
   const storedValues = attributeMap.get(target);
 
   if (!fromUser && !!storedValues) {
-    // TODO update comment
     // If there's any stored values, it means the attribute is being handled by the user
     // Replace the "oldId" with "newId" on the stored values set and leave
     storedValues.delete(oldId);
     storedValues.add(newId);
-    // The labelledBy is not restored properly after removing slotted label (still pointing to the slotted label id)
     return;
+    // The labelledBy is not restored properly after removing slotted label (still pointing to the slotted label id)
   }
 
   if (fromUser) {
     if (!storedValues) {
       storeIDReference(target, attr);
+    } else if (!newId) {
+      // TODO update comment: give control back to generated
+      // If called from user and newId == null, then clean the atrribute value, and
+      // restore the attribute value with the generated stored values
+      // TODO test generated a8eName == provided by user
+      attributeMap.delete(target);
     }
+
     // TODO update comment
     // If there's no stored values and fromUser == true,
     // then store and clean the current attribute value and set the newId (if present)
     cleanAriaIDReference(target, attr);
-
-    if (!newId && !!storedValues) {
-      // TODO update comment: give control back to generated
-      // If called from user and newId == null, then clean the atrribute value, and
-      // restore the attribute value with the generated stored values
-      attributeMap.delete(target);
-      // If not returned and generated a8eName == provided by user
-    }
   }
 
   // TODO: Add a test for oldId == newId; check if IF can be removed;
