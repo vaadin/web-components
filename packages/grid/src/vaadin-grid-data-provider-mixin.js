@@ -442,8 +442,7 @@ export const DataProviderMixin = (superClass) =>
             this._debouncerApplyCachedData.flush();
           }
 
-          // TODO: Move this into the debouncer as well
-          // Notify that the data has been received
+          // Notify that new data has been received
           this.__itemsReceived();
         });
       }
