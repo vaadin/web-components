@@ -70,13 +70,19 @@ describe('aria-id-reference', () => {
     expect(element.getAttribute('aria-labelledby')).to.equal('id-0');
   });
 
-  // it('should be able to set ')
+  it('should not set aria-labelledby when label is updated', () => {
+    setAriaLabelledBy(element, 'id-0', null, false);
+    setAriaLabelledBy(element, 'custom-id-1', null, true);
 
-  /*
-   should be able to replace generated aria-labelledby with a custom value
-   should be able to restore generated aria-labelledby value
-   should be able to change user generated aria-labelledby
-   should be able to clear and restore genereated aria-labelledby value
+    setAriaLabelledBy(element, 'id-1', 'id-0', false);
+    expect(element.getAttribute('aria-labelledby')).to.equal('custom-id-1');
+  });
 
-  */
+  // it('should not set aria-labelledby when label is updated', () => {
+  //   setAriaLabelledBy(element, 'id-0', null, false);
+  //   setAriaLabelledBy(element, 'custom-id-1', null, true);
+
+  //   setAriaLabelledBy(element, 'id-1', 'id-0', false);
+  //   expect(element.getAttribute('aria-labelledby')).to.equal('custom-id-1');
+  // });
 });

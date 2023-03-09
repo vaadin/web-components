@@ -38,18 +38,24 @@ function getAttrMap(attr) {
  * @param {boolean} storeValue whether or not the current value of the attribute should be stored on the map
  * @returns
  */
-function cleanAriaIDReference(target, attr, storeValue = true) {
+function cleanAriaIDReference(target, attr) {
   if (!target) {
     return;
   }
 
-  if (storeValue) {
-    const attributeMap = getAttrMap(attr);
-    const values = stringToSet(target.getAttribute(attr));
-    attributeMap.set(target, new Set(values));
-  }
-
   target.removeAttribute(attr);
+}
+
+/**
+ * Storing values of the accessible attributes in a Set inside of the WeakMap.
+ *
+ * @param {HTMLElement} target
+ * @param {string} attr the attribute to be stored
+ */
+function storeIDReference(target, attr) {
+  const attributeMap = getAttrMap(attr);
+  const values = stringToSet(target.getAttribute(attr));
+  attributeMap.set(target, new Set(values));
 }
 
 /**
@@ -68,41 +74,43 @@ function setAriaIDReference(target, attr, newId, oldId, fromUser = false) {
   }
 
   const attributeMap = getAttrMap(attr);
-  const hasStoredValues = attributeMap.has(target);
+  const storedValues = attributeMap.get(target);
 
-  if (fromUser !== hasStoredValues) {
-    if (hasStoredValues) {
-      // If there's any stored values, it means the attribute is being handled by the user
-      // Replace the "oldId" with "newId" on the stored values set and leave
-      const storedValues = attributeMap.get(target);
-      storedValues.delete(oldId);
-      storedValues.add(newId);
-    } else {
-      // If there's no stored values and fromUser == true,
-      // then store and clean the current attribute value and set the newId (if present)
-      cleanAriaIDReference(target, attr, !hasStoredValues);
-      if (newId) {
-        addValueToAttribute(target, attr, newId);
-      }
-    }
-    return;
-  } else if (fromUser && !newId) {
-    // If called from user and newId == null, then clean the atrribute value, and
-    // restore the attribute value with the generated stored values
-    const storedValues = attributeMap.get(target);
-    cleanAriaIDReference(target, attr, false);
-    addValueToAttribute(target, attr, setToString(storedValues));
-    attributeMap.delete(target);
+  if (!fromUser && !!storedValues) {
+    // TODO update comment
+    // If there's any stored values, it means the attribute is being handled by the user
+    // Replace the "oldId" with "newId" on the stored values set and leave
+    storedValues.delete(oldId);
+    storedValues.add(newId);
+    // The labelledBy is not restored properly after removing slotted label (still pointing to the slotted label id)
     return;
   }
 
-  if (oldId) {
+  if (fromUser) {
+    if (!storedValues) {
+      storeIDReference(target, attr);
+    }
+    // TODO update comment
+    // If there's no stored values and fromUser == true,
+    // then store and clean the current attribute value and set the newId (if present)
+    cleanAriaIDReference(target, attr);
+
+    if (!newId && !!storedValues) {
+      // TODO update comment: give control back to generated
+      // If called from user and newId == null, then clean the atrribute value, and
+      // restore the attribute value with the generated stored values
+      attributeMap.delete(target);
+      // If not returned and generated a8eName == provided by user
+    }
+  }
+
+  // TODO: Add a test for oldId == newId; check if IF can be removed;
+  if (oldId !== newId) {
     removeValueFromAttribute(target, attr, oldId);
   }
 
-  if (newId) {
-    addValueToAttribute(target, attr, newId);
-  }
+  // TODO: Add a test for storedValues == undefined | null | ""
+  addValueToAttribute(target, attr, !newId ? setToString(storedValues) : newId);
 }
 
 /**
@@ -131,7 +139,9 @@ export function restoreGeneratedAriaLabellledBy(target) {
  * @param {HTMLElement} target
  */
 export function removeAriaLabelledBy(target) {
-  cleanAriaIDReference(target, 'aria-labelledby');
+  const attr = 'aria-labelledby';
+  storeIDReference(target, attr);
+  cleanAriaIDReference(target, attr);
 }
 
 /**
