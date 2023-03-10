@@ -1,11 +1,13 @@
 export function inflateFunctions(config) {
+  if (Array.isArray(config)) {
+    config.forEach(inflateFunctions);
+    return;
+  }
   if (
-    // Check if param is an array
-    !Array.isArray(config) &&
     // Check if param is a primitive/null/undefined value
-    (!(config instanceof Object) ||
-      // Check if param is a plain object (not a HC object)
-      config.constructor !== Object)
+    !(config instanceof Object) ||
+    // Check if param is a plain object (not a HC object)
+    config.constructor !== Object
   ) {
     return;
   }
