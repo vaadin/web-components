@@ -179,7 +179,7 @@ describe('validation', () => {
       setInputValue(datePicker, 'foo');
 
       datePicker.addEventListener('value-changed', () => {
-        expect(datePicker._inputValue).to.equal('foo');
+        expect(datePicker.inputElement.value).to.equal('foo');
         done();
       });
       datePicker.close();

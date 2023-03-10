@@ -281,32 +281,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * @return {string}
-     * @protected
-     */
-    get _propertyForValue() {
-      return 'value';
-    }
-
-    /**
-     * @return {string | undefined}
-     * @protected
-     */
-    get _inputElementValue() {
-      return this.inputElement ? this.inputElement[this._propertyForValue] : undefined;
-    }
-
-    /**
-     * @param {string} value
-     * @protected
-     */
-    set _inputElementValue(value) {
-      if (this.inputElement) {
-        this.inputElement[this._propertyForValue] = value;
-      }
-    }
-
-    /**
      * Override method inherited from `InputMixin`
      * to customize the input element.
      * @protected
