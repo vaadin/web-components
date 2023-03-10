@@ -191,8 +191,8 @@ describe('adding files', () => {
     });
 
     it('should allow files with extensions containing multiple dots', () => {
-      upload.accept = 'image/*,.hello.world,video/*';
-      file.name = 'bar.hello.world';
+      upload.accept = 'image/*,.bar.baz,video/*';
+      file.name = 'foo.bar.baz';
       upload._addFiles([file]);
       expect(upload.files.length).to.equal(1);
     });
