@@ -194,7 +194,7 @@ describe('adding files', () => {
       upload.accept = 'image/*,.bar.baz,video/*';
       file.name = 'foo.bar.baz';
       upload._addFiles([file]);
-      expect(upload.files.length).to.equal(1);
+      expect(upload.files).to.have.lengthOf(1);
     });
 
     it('should allow files with correct mime type', () => {
