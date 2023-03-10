@@ -879,13 +879,10 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-
     // Escape regex operators common to mime types
     let escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
-
     // Make extension patterns match the end of the file name
     escapedAccept = escapedAccept.replace(/\\\.[^,]*($|(?=,))/gu, (extension) => `.*${extension}$`);
-
     // Create accept regex that can match comma separated patterns, star (*) wildcards
     const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/gu, '|').replace(/\/\*/gu, '/.*')})$`, 'iu');
     if (this.accept && !(re.test(file.type) || re.test(file.name))) {
