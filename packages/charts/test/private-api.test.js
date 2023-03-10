@@ -29,6 +29,16 @@ describe('vaadin-chart private API', () => {
       expect(config.tooltip).to.not.have.property('_fn_formatter');
     });
 
+    it('should inflate function strings in array', () => {
+      const exportFunction = 'function () {this.exportChart();}';
+      // eslint-disable-next-line camelcase
+      const config = { exporting: { buttons: { contextButton: { menuItems: [{ _fn_onclick: exportFunction }] } } } };
+      inflateFunctions(config);
+      const exportButton = config.exporting.buttons.contextButton.menuItems[0];
+      expect(exportButton.onclick.toString()).to.be.equal(exportFunction);
+      expect(exportButton).to.not.have.property('_fn_onclick');
+    });
+
     it('should not try to inflate if a non-object value is passed', () => {
       // Check for no errors being thrown
       inflateFunctions(null);
