@@ -249,41 +249,26 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
-    // Prevent element update while the scroll position is being restored
-    this.__preventElementUpdates = true;
-
-    // Record the scroll position before changing the size
-    let fvi; // First visible index
-    let fviOffsetBefore; // Scroll offset of the first visible index
-    if (size > 0) {
-      fvi = this.adjustedFirstVisibleIndex;
-      fviOffsetBefore = this.__getIndexScrollOffset(fvi);
-    }
-
     // Change the size
     this.__size = size;
 
-    this._itemsChanged({
-      path: 'items',
-    });
-    flush();
-
-    // Try to restore the scroll position if the new size is larger than 0
-    if (size > 0) {
-      fvi = Math.min(fvi, size - 1);
-      this.scrollToIndex(fvi);
-
-      const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
-      if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
-        this._scrollTop += fviOffsetBefore - fviOffsetAfter;
-      }
+    if (!this._physicalItems) {
+      // Not initialized yet
+      this._itemsChanged({
+        path: 'items',
+      });
+      this.__preventElementUpdates = true;
+      flush();
+      this.__preventElementUpdates = false;
+    } else {
+      // Already initialized, just update _virtualCount
+      this._virtualCount = this.items.length;
     }
 
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    this.__preventElementUpdates = false;
     // Schedule and flush a resize handler
     this._resizeHandler();
     flush();
