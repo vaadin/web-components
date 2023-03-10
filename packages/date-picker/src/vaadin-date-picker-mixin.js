@@ -327,6 +327,20 @@ export const DatePickerMixin = (subclass) =>
 
         /** @private */
         _overlayContent: Object,
+
+        /**
+         * In date-picker, unlike other components extending `InputMixin`,
+         * the property indicates true only if the input has been entered by the user.
+         * In the case of programmatic changes, the property is reset to false.
+         * Read more about why this workaround is needed:
+         * https://github.com/vaadin/web-components/issues/5639
+         *
+         * @protected
+         * @override
+         */
+        _hasInputValue: {
+          type: Boolean,
+        },
       };
     }
 
@@ -350,6 +364,30 @@ export const DatePickerMixin = (subclass) =>
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundOverlayRenderer = this._overlayRenderer.bind(this);
+    }
+
+    /**
+     * @override
+     * @protected
+     */
+    get _inputElementValue() {
+      return super._inputElementValue;
+    }
+
+    /**
+     * The setter is overridden to reset the `_hasInputValue` property
+     * to false when the input element's value is updated programmatically.
+     * In date-picker, `_hasInputValue` is supposed to indicate true only
+     * if the input has been entered by the user.
+     * Read more about why this workaround is needed:
+     * https://github.com/vaadin/web-components/issues/5639
+     *
+     * @override
+     * @protected
+     */
+    set _inputElementValue(value) {
+      super._inputElementValue = value;
+      this._hasInputValue = false;
     }
 
     /**
@@ -959,8 +997,8 @@ export const DatePickerMixin = (subclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.value = '';
       this._inputElementValue = '';
+      this.value = '';
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }

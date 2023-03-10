@@ -54,10 +54,7 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
-           * Whether the input element has user input.
-           *
-           * Note, the property indicates true only if the input has been entered by the user.
-           * In the case of programmatic changes, the property must be reset to false.
+           * Whether the input element has a non-empty value.
            *
            * @protected
            */
