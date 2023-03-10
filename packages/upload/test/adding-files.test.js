@@ -190,6 +190,13 @@ describe('adding files', () => {
       expect(upload.files.length).to.equal(1);
     });
 
+    it('should allow files with extensions containing multiple dots', () => {
+      upload.accept = 'image/*,.hello.world,video/*';
+      file.name = 'bar.hello.world';
+      upload._addFiles([file]);
+      expect(upload.files.length).to.equal(1);
+    });
+
     it('should allow files with correct mime type', () => {
       upload.accept = 'application/x-octet-stream';
       upload._addFiles([file]);

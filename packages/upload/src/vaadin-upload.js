@@ -879,12 +879,16 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-    const fileExt = file.name.match(/\.[^.]*$|$/u)[0];
+
     // Escape regex operators common to mime types
-    const escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
+    let escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
+
+    // Make extension patterns match the end of the file name
+    escapedAccept = escapedAccept.replace(/(^|(?<=[ ,]))\\\.[^ ,]*($|(?=[ ,]))/gu, (extension) => `.*${extension}$`);
+
     // Create accept regex that can match comma separated patterns, star (*) wildcards
     const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/gu, '|').replace(/\/\*/gu, '/.*')})$`, 'iu');
-    if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
+    if (this.accept && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: this.i18n.error.incorrectFileType },
