@@ -269,7 +269,8 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    // Schedule and flush a resize handler
+    // Schedule and flush a resize handler. This will cause a
+    // re-render for the elements.
     this._resizeHandler();
     flush();
   }
