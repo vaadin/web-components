@@ -30,7 +30,7 @@ describe('rich-text-editor', () => {
     await visualDiff(div, 'min-height');
   });
 
-  it('min-height', async () => {
+  it('max-height', async () => {
     element.style.maxHeight = '500px';
     element.value = `[
       {"insert":"High quality rich text editor for the web"},

@@ -45,7 +45,10 @@ snapshots["vaadin-checkbox host disabled"] =
 
 snapshots["vaadin-checkbox shadow default"] = 
 `<div class="vaadin-checkbox-container">
-  <div part="checkbox">
+  <div
+    aria-hidden="true"
+    part="checkbox"
+  >
   </div>
   <slot name="input">
   </slot>

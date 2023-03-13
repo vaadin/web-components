@@ -124,7 +124,7 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-blockquote']::before {
-    content: '”';
+    content: '\\201D';
     font-size: 2em;
     height: 0.6em;
   }

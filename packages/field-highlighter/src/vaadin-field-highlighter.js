@@ -5,7 +5,7 @@
  */
 import './vaadin-field-outline.js';
 import './vaadin-user-tags.js';
-import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { CheckboxGroupObserver } from './fields/vaadin-checkbox-group-observer.js';
 import { DatePickerObserver } from './fields/vaadin-date-picker-observer.js';
 import { DateTimePickerObserver } from './fields/vaadin-date-time-picker-observer.js';

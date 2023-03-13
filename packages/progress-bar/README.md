@@ -13,7 +13,7 @@ A web component for showing the completion status of a task or process.
 <vaadin-progress-bar indeterminate></vaadin-progress-bar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/docs/latest/components/progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/progress-bar/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/docs/latest/components/progress-bar)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/progress-bar';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/progress-bar/vaadin-progress-bar.js) of the package uses Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/progress-bar/vaadin-progress-bar.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

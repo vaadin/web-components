@@ -4,24 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';
+import type { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxItemRenderer } from './vaadin-combo-box-item-mixin.js';
 
-export type ComboBoxDefaultItem = any;
+export type { ComboBoxDefaultItem, ComboBoxItemModel };
 
-export interface ComboBoxItemModel<TItem> {
-  index: number;
-  item: TItem;
-}
-
-export type ComboBoxRenderer<TItem> = (
-  root: HTMLElement,
-  comboBox: ComboBox<TItem>,
-  model: ComboBoxItemModel<TItem>,
-) => void;
+export type ComboBoxRenderer<TItem> = ComboBoxItemRenderer<TItem, ComboBox<TItem>>;
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
@@ -87,7 +79,7 @@ export declare class ComboBoxMixinClass<TItem> {
   /**
    * The `String` value for the selected item of the combo box.
    *
-   * When there’s no item selected, the value is an empty string.
+   * When there is no item selected, the value is an empty string.
    *
    * Use `selectedItem` property to get the raw selected item from
    * the `items` array.
@@ -139,10 +131,6 @@ export declare class ComboBoxMixinClass<TItem> {
    * @attr {string} item-id-path
    */
   itemIdPath: string | null | undefined;
-
-  protected readonly _propertyForValue: string;
-
-  protected _inputElementValue: string | undefined;
 
   /**
    * Tag name prefix used by scroller and items.

@@ -13,7 +13,7 @@ A web component to display a banner for users to give consent to the usage of co
 <vaadin-cookie-consent></vaadin-cookie-consent>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/cookie-consent/screenshot.png" width="847" alt="Screenshot of vaadin-details">](https://vaadin.com/docs/latest/components/cookie-consent)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/cookie-consent/screenshot.png" width="847" alt="Screenshot of vaadin-details">](https://vaadin.com/docs/latest/components/cookie-consent)
 
 ## Installation
 

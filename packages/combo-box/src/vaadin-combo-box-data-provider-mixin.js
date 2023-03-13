@@ -311,13 +311,11 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     _flushPendingRequests(size) {
       if (this._pendingRequests) {
         const lastPage = Math.ceil(size / this.pageSize);
-        const pendingRequestsKeys = Object.keys(this._pendingRequests);
-        for (let reqIdx = 0; reqIdx < pendingRequestsKeys.length; reqIdx++) {
-          const page = parseInt(pendingRequestsKeys[reqIdx]);
-          if (page >= lastPage) {
-            this._pendingRequests[page]([], size);
+        Object.entries(this._pendingRequests).forEach(([page, callback]) => {
+          if (parseInt(page) >= lastPage) {
+            callback([], size);
           }
-        }
+        });
       }
     }
   };

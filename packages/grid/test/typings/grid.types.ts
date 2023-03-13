@@ -1,4 +1,4 @@
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type {
@@ -88,7 +88,7 @@ assertType<DragAndDropMixinClass<TestGridItem>>(narrowedGrid);
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
   assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
-  assertType<TestGridItem>(event.detail.value);
+  assertType<TestGridItem | null | undefined>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('cell-activate', (event) => {
@@ -166,7 +166,7 @@ assertType<string | null | undefined>(narrowedGrid.itemIdPath);
 assertType<string>(narrowedGrid.itemHasChildrenPath);
 
 assertType<TestGridItem[] | null | undefined>(narrowedGrid.items);
-assertType<TestGridItem | null>(narrowedGrid.activeItem);
+assertType<TestGridItem | null | undefined>(narrowedGrid.activeItem);
 assertType<boolean>(narrowedGrid.columnReorderingAllowed);
 
 assertType<TestGridItem[]>(narrowedGrid.selectedItems);
@@ -197,6 +197,7 @@ narrowedGrid.rowDetailsRenderer = rowDetailsRenderer;
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.openItemDetails);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.closeItemDetails);
 assertType<(arg0: number) => void>(narrowedGrid.scrollToIndex);
+assertType<(...arg0: number[]) => void>(narrowedGrid.scrollToIndex);
 
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.selectItem);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);
@@ -315,6 +316,7 @@ assertType<GridSorter>(sorter);
 sorter.addEventListener('sorter-changed', (event) => {
   assertType<GridSorterChangedEvent>(event);
   assertType<boolean>(event.detail.shiftClick);
+  assertType<boolean>(event.detail.fromSorterClick);
 });
 
 sorter.addEventListener('direction-changed', (event) => {

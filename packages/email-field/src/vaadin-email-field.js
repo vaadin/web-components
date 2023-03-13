@@ -4,23 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { emailFieldStyles } from './vaadin-email-field-styles.js';
 
-// See https://github.com/vaadin/vaadin-text-field/issues/466
-registerStyles(
-  'vaadin-email-field',
-  css`
-    :host([dir='rtl']) [part='input-field'] {
-      direction: ltr;
-    }
-
-    :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-      direction: rtl;
-      text-align: left;
-    }
-  `,
-  { moduleId: 'vaadin-email-field-styles' },
-);
+registerStyles('vaadin-email-field', emailFieldStyles, { moduleId: 'vaadin-email-field-styles' });
 
 /**
  * `<vaadin-email-field>` is a Web Component for email field control in forms.

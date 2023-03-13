@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
-import { allResized, onceResized } from './common.js';
+import { allResized, onceResized } from './helpers.js';
 
 describe('redraw', () => {
   describe('board', () => {

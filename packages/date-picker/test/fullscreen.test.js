@@ -3,10 +3,10 @@ import { fixtureSync, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, open, touchTap, waitForOverlayRender } from './common.js';
+import { getFocusedCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('fullscreen mode', () => {
-  let datepicker, input, overlay, width, height;
+  let datePicker, input, overlay, width, height;
 
   before(() => {
     width = window.innerWidth;
@@ -15,9 +15,9 @@ describe('fullscreen mode', () => {
 
   beforeEach(async () => {
     await setViewport({ width: 420, height });
-    datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-    input = datepicker.inputElement;
-    overlay = datepicker.$.overlay;
+    datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    input = datePicker.inputElement;
+    overlay = datePicker.$.overlay;
   });
 
   afterEach(async () => {
@@ -26,13 +26,13 @@ describe('fullscreen mode', () => {
 
   describe('overlay attribute', () => {
     it('should set fullscreen attribute on the overlay when a viewport is small', async () => {
-      await open(datepicker);
+      await open(datePicker);
       expect(overlay.hasAttribute('fullscreen')).to.be.true;
     });
 
     it('should remove fullscreen mode from the the overlay after resizing viewport', async () => {
       await setViewport({ width: 500, height });
-      await open(datepicker);
+      await open(datePicker);
       expect(overlay.hasAttribute('fullscreen')).to.be.false;
     });
   });
@@ -42,7 +42,7 @@ describe('fullscreen mode', () => {
       it('should open overlay on input tap', async () => {
         tap(input);
         await waitForOverlayRender();
-        expect(datepicker.opened).to.be.true;
+        expect(datePicker.opened).to.be.true;
       });
 
       it('should not focus the input on touch tap', async () => {
@@ -60,13 +60,13 @@ describe('fullscreen mode', () => {
 
       it('should blur input element when opening overlay', async () => {
         const spy = sinon.spy(input, 'blur');
-        await open(datepicker);
+        await open(datePicker);
         expect(spy.called).to.be.true;
       });
 
       it('should focus date element when opening overlay', async () => {
-        await open(datepicker);
-        const cell = getFocusedCell(datepicker._overlayContent);
+        await open(datePicker);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.include('today');
       });
@@ -74,12 +74,12 @@ describe('fullscreen mode', () => {
 
     describe('auto open disabled', () => {
       beforeEach(() => {
-        datepicker.autoOpenDisabled = true;
+        datePicker.autoOpenDisabled = true;
       });
 
       it('should not open overlay on input tap', () => {
         tap(input);
-        expect(datepicker.opened).not.to.be.true;
+        expect(datePicker.opened).not.to.be.true;
       });
 
       it('should focus the input on touch tap', () => {
@@ -96,13 +96,13 @@ describe('fullscreen mode', () => {
 
       it('should blur input element when opening overlay', async () => {
         const spy = sinon.spy(input, 'blur');
-        await open(datepicker);
+        await open(datePicker);
         expect(spy.called).to.be.true;
       });
 
       it('should not focus the input when opening overlay', async () => {
         touchTap(input);
-        await open(datepicker);
+        await open(datePicker);
         expect(document.activeElement).to.not.equal(input);
       });
     });
@@ -110,15 +110,15 @@ describe('fullscreen mode', () => {
 
   describe('focused attribute', () => {
     it('should keep focused attribute after opening overlay', async () => {
-      datepicker.focus();
-      await open(datepicker);
-      expect(datepicker.hasAttribute('focused')).to.be.true;
+      datePicker.focus();
+      await open(datePicker);
+      expect(datePicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should remove focused attribute when closing overlay', async () => {
-      await open(datepicker);
+      await open(datePicker);
       await sendKeys({ press: 'Escape' });
-      expect(datepicker.hasAttribute('focused')).to.be.false;
+      expect(datePicker.hasAttribute('focused')).to.be.false;
     });
   });
 
@@ -126,22 +126,22 @@ describe('fullscreen mode', () => {
     let overlayContent;
 
     beforeEach(async () => {
-      await open(datepicker);
-      overlayContent = datepicker._overlayContent;
+      await open(datePicker);
+      overlayContent = datePicker._overlayContent;
     });
 
     it('should close the dropdown on Today button Esc', async () => {
       overlayContent._todayButton.focus();
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
     });
 
     it('should close the dropdown on Cancel button Esc', async () => {
       overlayContent.focusCancel();
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
     });
 
     it('should move focus to Cancel button on date cell Shift Tab', async () => {

@@ -1,5 +1,4 @@
 export { CheckedMixin } from './src/checked-mixin.js';
-export { FieldAriaController } from './src/field-aria-controller.js';
 export { FieldMixin } from './src/field-mixin.js';
 export { InputController } from './src/input-controller.js';
 export { InputControlMixin } from './src/input-control-mixin.js';

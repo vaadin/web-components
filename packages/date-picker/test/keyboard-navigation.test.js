@@ -11,28 +11,28 @@ import {
   open,
   waitForOverlayRender,
   waitForScrollToFinish,
-} from './common.js';
+} from './helpers.js';
 
 describe('keyboard navigation', () => {
   describe('date-picker', () => {
-    let datepicker;
+    let datePicker;
     let input;
 
     describe('default', () => {
       beforeEach(() => {
-        datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
-        input = datepicker.inputElement;
+        datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+        input = datePicker.inputElement;
         input.focus();
       });
 
       it('should be focused on today if no value / initial position is set', async () => {
         const today = new Date();
-        await open(datepicker);
+        await open(datePicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datepicker._overlayContent);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
 
@@ -48,32 +48,32 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datepicker._overlayContent);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
     });
 
     describe('value', () => {
       beforeEach(() => {
-        datepicker = fixtureSync('<vaadin-date-picker value="2001-01-01"></vaadin-date-picker>');
-        input = datepicker.inputElement;
+        datePicker = fixtureSync('<vaadin-date-picker value="2001-01-01"></vaadin-date-picker>');
+        input = datePicker.inputElement;
         input.focus();
       });
 
       it('should be focused on selected value when overlay is opened', async () => {
-        await open(datepicker);
+        await open(datePicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datepicker._overlayContent);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
       it('should not lose focused date after deselecting', async () => {
-        await open(datepicker);
+        await open(datePicker);
 
-        const content = datepicker._overlayContent;
+        const content = datePicker._overlayContent;
         const focused = content.focusedDate;
 
         // Move focus to the calendar
@@ -89,18 +89,18 @@ describe('keyboard navigation', () => {
 
     describe('initial position', () => {
       beforeEach(() => {
-        datepicker = fixtureSync('<vaadin-date-picker initial-position="2001-01-01"></vaadin-date-picker>');
-        input = datepicker.inputElement;
+        datePicker = fixtureSync('<vaadin-date-picker initial-position="2001-01-01"></vaadin-date-picker>');
+        input = datePicker.inputElement;
         input.focus();
       });
 
       it('should be focused on initial position when opened', async () => {
-        await open(datepicker);
+        await open(datePicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datepicker._overlayContent);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
@@ -114,7 +114,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datepicker._overlayContent);
+        const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
     });

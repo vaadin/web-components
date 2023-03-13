@@ -5,14 +5,14 @@
  */
 import './vaadin-details-summary.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CollapsibleMixin } from './collapsible-mixin.js';
 import { SummaryController } from './summary-controller.js';
-import { DetailsMixin } from './vaadin-details-mixin.js';
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -52,14 +52,14 @@ import { DetailsMixin } from './vaadin-details-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
+ * @mixes CollapsibleMixin
  * @mixes ControllerMixin
- * @mixes DetailsMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsMixin(
+class Details extends CollapsibleMixin(
   DelegateStateMixin(DelegateFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))),
 ) {
   static get template() {

@@ -3,9 +3,9 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import type { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
@@ -87,14 +87,13 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  *
  * ### Internal components
  *
- * In addition to `<vaadin-date-time-picker>` itself, the following internal
- * components are themable:
+ * The following components are created by `<vaadin-date-time-picker>` and placed in light DOM:
  *
- * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
- * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
+ * - [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
+ * - [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
- * propagated to the internal components listed above.
+ * propagated to these components.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *

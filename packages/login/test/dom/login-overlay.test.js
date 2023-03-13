@@ -41,6 +41,11 @@ describe('vaadin-login-overlay', () => {
       overlay.i18n = I18N_FINNISH;
       await expect(wrapper).dom.to.equalSnapshot();
     });
+
+    it('overlay class', async () => {
+      overlay.overlayClass = 'custom login-overlay';
+      await expect(wrapper).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

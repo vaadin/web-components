@@ -10,8 +10,6 @@ const getOutlineTarget = (element, tagName) => {
     case 'vaadin-big-decimal-field':
     case 'vaadin-combo-box':
     case 'vaadin-date-picker':
-    case 'vaadin-date-time-picker-date-picker':
-    case 'vaadin-date-time-picker-time-picker':
     case 'vaadin-email-field':
     case 'vaadin-integer-field':
     case 'vaadin-number-field':

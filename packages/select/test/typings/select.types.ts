@@ -1,10 +1,16 @@
 import '../../vaadin-select.js';
+import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
+import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
+import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { SelectItem } from '../../src/vaadin-select-item.js';
+import type { SelectListBox } from '../../src/vaadin-select-list-box.js';
 import type {
   Select,
   SelectChangeEvent,
   SelectInvalidChangedEvent,
-  SelectItem,
+  SelectItem as Item,
   SelectOpenedChangedEvent,
   SelectRenderer,
   SelectValidatedEvent,
@@ -16,7 +22,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const select: Select = document.createElement('vaadin-select');
 
 // Properties
-assertType<SelectItem[] | null | undefined>(select.items);
+assertType<Item[] | null | undefined>(select.items);
 assertType<boolean>(select.opened);
 assertType<SelectRenderer | undefined>(select.renderer);
 assertType<string>(select.value);
@@ -32,7 +38,7 @@ assertType<() => boolean>(select.validate);
 assertType<ValidateMixinClass>(select);
 
 // Item properties
-const item: SelectItem = select.items ? select.items[0] : {};
+const item: Item = select.items ? select.items[0] : {};
 assertType<string | undefined>(item.label);
 assertType<string | undefined>(item.value);
 assertType<boolean | undefined>(item.disabled);
@@ -70,3 +76,19 @@ const renderer: SelectRenderer = (root, owner) => {
 };
 
 select.renderer = renderer;
+
+// Item
+const option = document.createElement('vaadin-select-item');
+
+assertType<SelectItem>(option);
+assertType<ItemMixinClass>(option);
+assertType<DirMixinClass>(option);
+assertType<ThemableMixinClass>(option);
+
+// Item
+const listBox = document.createElement('vaadin-select-list-box');
+
+assertType<SelectListBox>(listBox);
+assertType<ListMixinClass>(listBox);
+assertType<DirMixinClass>(listBox);
+assertType<ThemableMixinClass>(listBox);

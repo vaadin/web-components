@@ -6,7 +6,7 @@ snapshots["vaadin-avatar-group default"] =
   <vaadin-avatar
     abbr="+NaN"
     aria-expanded="false"
-    aria-haspopup="listbox"
+    aria-haspopup="menu"
     hidden=""
     role="button"
     slot="overflow"
@@ -43,7 +43,7 @@ snapshots["vaadin-avatar-group items"] =
   <vaadin-avatar
     abbr="+2"
     aria-expanded="false"
-    aria-haspopup="listbox"
+    aria-haspopup="menu"
     hidden=""
     role="button"
     slot="overflow"
@@ -85,7 +85,7 @@ snapshots["vaadin-avatar-group theme"] =
   <vaadin-avatar
     abbr="+2"
     aria-expanded="false"
-    aria-haspopup="listbox"
+    aria-haspopup="menu"
     hidden=""
     role="button"
     slot="overflow"
@@ -124,7 +124,7 @@ snapshots["vaadin-avatar-group opened default"] =
   <vaadin-avatar
     abbr="+2"
     aria-expanded="false"
-    aria-haspopup="listbox"
+    aria-haspopup="menu"
     focused=""
     role="button"
     slot="overflow"
@@ -145,15 +145,14 @@ snapshots["vaadin-avatar-group opened overlay"] =
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-list-box
+  <vaadin-avatar-group-menu
     aria-orientation="vertical"
-    role="listbox"
+    role="menu"
   >
-    <vaadin-item
+    <vaadin-avatar-group-menu-item
       aria-selected="false"
-      role="option"
+      role="menuitem"
       tabindex="0"
-      theme="avatar-group-item"
     >
       <vaadin-avatar
         abbr="MP"
@@ -164,12 +163,11 @@ snapshots["vaadin-avatar-group opened overlay"] =
       >
       </vaadin-avatar>
       Mno Pqr
-    </vaadin-item>
-    <vaadin-item
+    </vaadin-avatar-group-menu-item>
+    <vaadin-avatar-group-menu-item
       aria-selected="false"
-      role="option"
+      role="menuitem"
       tabindex="-1"
-      theme="avatar-group-item"
     >
       <vaadin-avatar
         abbr="SV"
@@ -180,8 +178,8 @@ snapshots["vaadin-avatar-group opened overlay"] =
       >
       </vaadin-avatar>
       Stu Vwx
-    </vaadin-item>
-  </vaadin-list-box>
+    </vaadin-avatar-group-menu-item>
+  </vaadin-avatar-group-menu>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group opened overlay */
@@ -195,15 +193,14 @@ snapshots["vaadin-avatar-group opened overlay class"] =
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-list-box
+  <vaadin-avatar-group-menu
     aria-orientation="vertical"
-    role="listbox"
+    role="menu"
   >
-    <vaadin-item
+    <vaadin-avatar-group-menu-item
       aria-selected="false"
-      role="option"
+      role="menuitem"
       tabindex="0"
-      theme="avatar-group-item"
     >
       <vaadin-avatar
         abbr="MP"
@@ -214,12 +211,11 @@ snapshots["vaadin-avatar-group opened overlay class"] =
       >
       </vaadin-avatar>
       Mno Pqr
-    </vaadin-item>
-    <vaadin-item
+    </vaadin-avatar-group-menu-item>
+    <vaadin-avatar-group-menu-item
       aria-selected="false"
-      role="option"
+      role="menuitem"
       tabindex="-1"
-      theme="avatar-group-item"
     >
       <vaadin-avatar
         abbr="SV"
@@ -230,8 +226,8 @@ snapshots["vaadin-avatar-group opened overlay class"] =
       >
       </vaadin-avatar>
       Stu Vwx
-    </vaadin-item>
-  </vaadin-list-box>
+    </vaadin-avatar-group-menu-item>
+  </vaadin-avatar-group-menu>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group opened overlay class */

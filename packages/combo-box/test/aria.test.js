@@ -43,11 +43,12 @@ describe('ARIA', () => {
       expect(input.getAttribute('aria-activedescendant')).to.equal(items[1].id);
     });
 
-    it('should set aria-selected on item elements depending on the focused item', () => {
-      arrowDownKeyDown(input); // Move focus to the 1st item.
+    it('should set aria-selected on item elements depending on the selected item', () => {
+      comboBox.value = 'foo';
       expect(items[0].getAttribute('aria-selected')).to.equal('true');
       expect(items[1].getAttribute('aria-selected')).to.equal('false');
-      arrowDownKeyDown(input); // Move focus to the 2nd item.
+
+      comboBox.value = 'bar';
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
     });

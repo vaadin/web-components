@@ -1,4 +1,5 @@
 import { isIOS } from '@vaadin/testing-helpers';
+export { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 export const infiniteDataProvider = (params, callback) => {
   callback(
@@ -82,25 +83,6 @@ export const dragAndDropOver = (source, target) => {
   );
 };
 
-export const flushGrid = (grid) => {
-  grid._observer.flush();
-  if (grid._debounceScrolling) {
-    grid._debounceScrolling.flush();
-  }
-  grid._afterScroll();
-  if (grid._debounceOverflow) {
-    grid._debounceOverflow.flush();
-  }
-  if (grid._debouncerHiddenChanged) {
-    grid._debouncerHiddenChanged.flush();
-  }
-  if (grid._debouncerApplyCachedData) {
-    grid._debouncerApplyCachedData.flush();
-  }
-
-  grid.__virtualizer.flush();
-};
-
 export const getRows = (container) => {
   return container.querySelectorAll('tr');
 };
@@ -113,14 +95,14 @@ export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };
 
-export const getContainerCellContent = (container, row, col) => {
-  return getCellContent(getContainerCell(container, row, col));
-};
-
 export const getContainerCell = (container, row, col) => {
   const rows = getRows(container);
   const cells = getRowCells(rows[row]);
   return cells[col];
+};
+
+export const getContainerCellContent = (container, row, col) => {
+  return getCellContent(getContainerCell(container, row, col));
 };
 
 export const getCellEditor = (cell) => {

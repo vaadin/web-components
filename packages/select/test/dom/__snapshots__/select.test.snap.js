@@ -17,7 +17,6 @@ snapshots["vaadin-select host default"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0"
     role="button"
     slot="value"
     tabindex="0"
@@ -70,16 +69,13 @@ snapshots["vaadin-select host placeholder"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 value-vaadin-select-3"
+    aria-labelledby="value-vaadin-select-3"
     placeholder=""
     role="button"
     slot="value"
     tabindex="0"
   >
-    <vaadin-select-item
-      aria-selected="false"
-      id="value-vaadin-select-3"
-    >
+    <vaadin-select-item id="value-vaadin-select-3">
       Placeholder
     </vaadin-select-item>
   </vaadin-select-value-button>
@@ -107,7 +103,6 @@ snapshots["vaadin-select host disabled"] =
     aria-disabled="true"
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0"
     disabled=""
     role="button"
     slot="value"
@@ -134,7 +129,6 @@ snapshots["vaadin-select host required"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0"
     aria-required="true"
     role="button"
     slot="value"
@@ -161,13 +155,12 @@ snapshots["vaadin-select host value"] =
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 value-vaadin-select-3"
+    aria-labelledby="value-vaadin-select-3"
     role="button"
     slot="value"
     tabindex="0"
   >
     <vaadin-select-item
-      aria-selected="true"
       id="value-vaadin-select-3"
       selected=""
     >
@@ -195,7 +188,6 @@ snapshots["vaadin-select host helper"] =
     aria-describedby="helper-vaadin-select-1"
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0"
     role="button"
     slot="value"
     tabindex="0"
@@ -233,7 +225,6 @@ snapshots["vaadin-select host error"] =
     aria-expanded="false"
     aria-haspopup="listbox"
     aria-invalid="true"
-    aria-labelledby="label-vaadin-select-0"
     invalid=""
     role="button"
     slot="value"
@@ -260,7 +251,6 @@ snapshots["vaadin-select host opened default"] =
   <vaadin-select-value-button
     aria-expanded="true"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0"
     role="button"
     slot="value"
     tabindex="0"

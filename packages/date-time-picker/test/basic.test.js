@@ -325,11 +325,11 @@ describe('Theme attribute', () => {
     beforeEach(() => {
       dateTimePicker = document.createElement('vaadin-date-time-picker');
 
-      datePicker = document.createElement('vaadin-date-time-picker-date-picker');
+      datePicker = document.createElement('vaadin-date-picker');
       datePicker.setAttribute('slot', 'date-picker');
       dateTimePicker.appendChild(datePicker);
 
-      timePicker = document.createElement('vaadin-date-time-picker-time-picker');
+      timePicker = document.createElement('vaadin-time-picker');
       timePicker.setAttribute('slot', 'time-picker');
       dateTimePicker.appendChild(timePicker);
     });

@@ -667,17 +667,18 @@ describe('item components', () => {
       { text: 'Item 2' },
       { component: makeComponent('3') },
       { text: 'Item 4 text', component: makeComponent('4') },
-      { text: 'Item 5', component: document.createElement('vaadin-context-menu-item') },
+      { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
+      { component: makeComponent('6'), children: [{ text: 'SubItem6.1' }, { text: 'SubItem6.2' }] },
     ];
     await nextRender(menu);
     buttons = menu._buttons;
     overflow = buttons[buttons.length - 1];
   });
 
-  it('should render the component inside the context-menu item', () => {
+  it('should render the component inside the menu-bar item', () => {
     const item = buttons[2].firstChild;
     expect(item).to.equal(buttons[2].item.component);
-    expect(item.localName).to.equal('vaadin-context-menu-item');
+    expect(item.localName).to.equal('vaadin-menu-bar-item');
     const div = item.firstChild;
     expect(div).to.equal(menu.items[2].component);
     expect(div.localName).to.equal('div');
@@ -688,7 +689,7 @@ describe('item components', () => {
   it('should override the component text when defined on the item', () => {
     const item = buttons[3].firstChild;
     expect(item).to.equal(buttons[3].item.component);
-    expect(item.localName).to.equal('vaadin-context-menu-item');
+    expect(item.localName).to.equal('vaadin-menu-bar-item');
     const div = item.firstChild;
     expect(div).to.equal(menu.items[3].component);
     expect(div.localName).to.equal('div');
@@ -696,30 +697,11 @@ describe('item components', () => {
     expect(getComputedStyle(div).width).to.equal('100px');
   });
 
-  it('should render provided context-menu item as a component', () => {
+  it('should render provided menu-bar item as a component', () => {
     expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
     expect(buttons[4].item.component).to.equal(menu.items[4].component);
     expect(buttons[4].item.component.children.length).to.equal(0);
     expect(buttons[4].item.component.textContent).to.equal('Item 5');
-  });
-
-  it('should teleport the same component to overflow sub-menu and back', async () => {
-    menu.style.width = '250px';
-    await onceResized(menu);
-    await nextFrame();
-    const subMenu = menu._subMenu;
-    overflow.click();
-    await nextRender(subMenu);
-    const listBox = subMenu.$.overlay.querySelector('vaadin-context-menu-list-box');
-    expect(listBox.items[0]).to.equal(buttons[2].item.component);
-    expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
-    expect(listBox.items[0].firstChild.localName).to.equal('div');
-    subMenu.close();
-    menu.style.width = 'auto';
-    await onceResized(menu);
-    const item = buttons[2].firstChild;
-    expect(item).to.equal(buttons[2].item.component);
-    expect(item.getAttribute('role')).to.not.equal('menuitem');
   });
 
   it('should close the overflow sub-menu on resize', async () => {
@@ -738,6 +720,42 @@ describe('item components', () => {
     const style = getComputedStyle(item);
     expect(style.position).to.equal('relative');
     expect(Number(style.zIndex)).to.equal(1);
+  });
+
+  describe('overflow', () => {
+    let subMenu;
+
+    beforeEach(async () => {
+      menu.style.width = '250px';
+      await onceResized(menu);
+      subMenu = menu._subMenu;
+    });
+
+    it('should teleport the same component to overflow sub-menu and back', async () => {
+      overflow.click();
+      await nextRender(subMenu);
+      const listBox = subMenu.$.overlay.querySelector('vaadin-menu-bar-list-box');
+      expect(listBox.items[0]).to.equal(buttons[2].item.component);
+      expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
+      expect(listBox.items[0].firstChild.localName).to.equal('div');
+      subMenu.close();
+      menu.style.width = 'auto';
+      await onceResized(menu);
+      const item = buttons[2].firstChild;
+      expect(item).to.equal(buttons[2].item.component);
+      expect(item.getAttribute('role')).to.not.equal('menuitem');
+    });
+
+    it('should restore menu bar item attribute state when moved from sub-menu back to menu bar', async () => {
+      const item = buttons[5].firstChild;
+      const itemAttributes = item.getAttributeNames();
+      overflow.click();
+      await nextRender(subMenu);
+      subMenu.close();
+      menu.style.width = 'auto';
+      await onceResized(menu);
+      expect(item.getAttributeNames()).to.have.members(itemAttributes);
+    });
   });
 });
 

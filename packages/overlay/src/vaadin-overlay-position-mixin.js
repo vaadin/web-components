@@ -93,12 +93,25 @@ export const PositionMixin = (superClass) =>
           type: Boolean,
           value: false,
         },
+
+        /**
+         * If the overlay content has no intrinsic height, this property can be used to set
+         * the minimum vertical space (in pixels) required by the overlay. Setting a value to
+         * the property effectively disables the content measurement in favor of using this
+         * fixed value for determining the open direction.
+         *
+         * @attr {number} required-vertical-space
+         */
+        requiredVerticalSpace: {
+          type: Number,
+          value: 0,
+        },
       };
     }
 
     static get observers() {
       return [
-        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
+        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap, requiredVerticalSpace)',
         '__overlayOpenedChanged(opened, positionTarget)',
       ];
     }
@@ -262,7 +275,8 @@ export const PositionMixin = (superClass) =>
     __shouldAlignStartVertically(targetRect) {
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
-      const contentHeight = Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
+      const contentHeight =
+        this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
       this.__oldContentHeight = this.$.overlay.offsetHeight;
 
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);

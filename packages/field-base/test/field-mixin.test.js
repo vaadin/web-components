@@ -1,12 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'field-mixin',
     `
       <style>
@@ -35,7 +36,7 @@ const runTests = (baseClass) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends FieldMixin(InputMixin(Base)) {
+      class extends FieldMixin(InputMixin(baseMixin(Base))) {
         ready() {
           super.ready();
 
@@ -50,7 +51,7 @@ const runTests = (baseClass) => {
       },
   );
 
-  const groupTag = define[baseClass](
+  const groupTag = defineHelper(
     'field-mixin-group',
     `
       <slot name="label"></slot>
@@ -58,7 +59,7 @@ const runTests = (baseClass) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends FieldMixin(Base) {
+      class extends FieldMixin(baseMixin(Base)) {
         ready() {
           super.ready();
 
@@ -464,7 +465,7 @@ const runTests = (baseClass) => {
 
     describe('slotted custom element', () => {
       beforeEach(async () => {
-        const helperTag = define[baseClass]('custom-helper', '<div>Helper</div>', (Base) => Base);
+        const helperTag = defineHelper('custom-helper', '<div>Helper</div>', (Base) => Base);
         element = fixtureSync(`
           <${tag}>
             <${helperTag} slot="helper"></${helperTag}>
@@ -885,9 +886,9 @@ const runTests = (baseClass) => {
 };
 
 describe('FieldMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('FieldMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

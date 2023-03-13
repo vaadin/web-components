@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
@@ -93,6 +93,29 @@ customElements.define(
     it('should have initial value for i18n', () => {
       expect(dateTimePicker.i18n).to.have.property('cancel', 'Peruuta');
       expect(datePicker.i18n).to.have.property('cancel', 'Peruuta');
+    });
+  });
+});
+
+describe('setting i18n on a slotted picker before connected to the DOM', () => {
+  let dateTimePicker, datePicker;
+
+  beforeEach(() => {
+    dateTimePicker = document.createElement('vaadin-date-time-picker');
+  });
+
+  describe('date-picker', () => {
+    beforeEach(() => {
+      datePicker = document.createElement('vaadin-date-picker');
+      datePicker.slot = 'date-picker';
+      datePicker.i18n = { ...datePicker.i18n, cancel: 'Peruuta' };
+      dateTimePicker.appendChild(datePicker);
+    });
+
+    it('should not have i18n overridden', async () => {
+      await aTimeout(0);
+      document.body.appendChild(dateTimePicker);
+      expect(datePicker.i18n.cancel).to.equal('Peruuta');
     });
   });
 });

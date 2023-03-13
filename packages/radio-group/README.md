@@ -12,7 +12,7 @@ A web component that allows the user to choose one item from a group of choices.
 </vaadin-radio-group>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/radio-group/screenshot.png" width="370" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/docs/latest/components/radio-button)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/radio-group/screenshot.png" width="370" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/docs/latest/components/radio-button)
 
 ## Installation
 
@@ -31,7 +31,7 @@ import '@vaadin/radio-group';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/radio-group/vaadin-radio-group.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/radio-group/vaadin-radio-group.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

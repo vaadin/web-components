@@ -5,14 +5,13 @@ import '../vaadin-rich-text-editor.js';
 
 describe('accessibility', () => {
   'use strict';
+  let rte, content, buttons, announcer, editor;
 
   const flushFormatAnnouncer = () => {
     rte.__debounceAnnounceFormatting?.flush();
   };
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
-
-  let rte, content, buttons, announcer, editor;
 
   beforeEach(() => {
     rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');

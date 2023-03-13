@@ -8,6 +8,7 @@ import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -251,8 +252,9 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  */
-class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
+class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -316,7 +318,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened, _card)'];
+    return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened, _overlayElement)'];
   }
 
   /**
@@ -386,10 +388,15 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @protected */
+  get _card() {
+    return this._overlayElement;
+  }
+
+  /** @protected */
   ready() {
     super.ready();
 
-    this._card = this.shadowRoot.querySelector('vaadin-notification-card');
+    this._overlayElement = this.shadowRoot.querySelector('vaadin-notification-card');
 
     processTemplates(this);
   }

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
@@ -12,15 +11,15 @@ describe('keyboard navigation', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid-pro>
-        <vaadin-grid-pro-edit-column path="name" suppress-template-warning>
-          <template class="header">Name</template>
-          <template>[[index]] [[item.name]]</template>
-          <template class="footer"></template>
-        </vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
         <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
         <vaadin-grid-column path="name"></vaadin-grid-column>
       </vaadin-grid-pro>
     `);
+    grid.querySelector('[path="name"]').renderer = (root, _, { index, item }) => {
+      root.textContent = `${index} ${item.name}`;
+    };
+
     grid.items = createItems();
     flushGrid(grid);
   });

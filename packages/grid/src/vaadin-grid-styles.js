@@ -15,7 +15,8 @@ registerStyles(
     }
 
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
       animation: 1ms vaadin-grid-appear;
       height: 400px;
       flex: 1 1 auto;
@@ -32,7 +33,9 @@ registerStyles(
     }
 
     #scroller {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
       transform: translateY(0);
       width: auto;
       height: auto;

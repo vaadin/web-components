@@ -3,9 +3,9 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-context-menu-item.js';
+import './vaadin-context-menu-list-box.js';
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import { Item } from '@vaadin/item/src/vaadin-item.js';
-import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 export interface ContextMenuItem {
   text?: string;
@@ -15,27 +15,6 @@ export interface ContextMenuItem {
   theme?: string[] | string;
   children?: ContextMenuItem[];
 }
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
- */
-declare class ContextMenuItemElement extends Item {}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'vaadin-context-menu-item': ContextMenuItemElement;
-    'vaadin-context-menu-list-box': ContextMenuListBox;
-  }
-}
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @protected
- */
-declare class ContextMenuListBox extends ListBox {}
 
 export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ItemsMixinClass> & T;
 
@@ -51,22 +30,27 @@ export declare class ItemsMixinClass {
    *
    * ```javascript
    * contextMenu.items = [
-   *   {text: 'Menu Item 1', theme: 'primary', children:
+   *   { text: 'Menu Item 1', theme: 'primary', children:
    *     [
-   *       {text: 'Menu Item 1-1', checked: true},
-   *       {text: 'Menu Item 1-2'}
+   *       { text: 'Menu Item 1-1', checked: true },
+   *       { text: 'Menu Item 1-2' }
    *     ]
    *   },
-   *   {component: 'hr'},
-   *   {text: 'Menu Item 2', children:
+   *   { component: 'hr' },
+   *   { text: 'Menu Item 2', children:
    *     [
-   *       {text: 'Menu Item 2-1'},
-   *       {text: 'Menu Item 2-2', disabled: true}
+   *       { text: 'Menu Item 2-1' },
+   *       { text: 'Menu Item 2-2', disabled: true }
    *     ]
    *   },
-   *   {text: 'Menu Item 3', disabled: true}
+   *   { text: 'Menu Item 3', disabled: true }
    * ];
    * ```
    */
   items: ContextMenuItem[] | undefined;
+
+  /**
+   * Tag name prefix used by overlay, list-box and items.
+   */
+  protected readonly _tagNamePrefix: string;
 }

@@ -7,8 +7,11 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
+
+registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -50,66 +53,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   }
 
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-block;
-          position: relative;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        /* Aligns the button with form fields when placed on the same line.
-          Note, to make it work, the form fields should have the same "::before" pseudo-element. */
-        .vaadin-button-container::before {
-          content: '\\2003';
-          display: inline-block;
-          width: 0;
-          max-height: 100%;
-        }
-
-        .vaadin-button-container {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          min-height: inherit;
-          text-shadow: inherit;
-        }
-
-        [part='prefix'],
-        [part='suffix'] {
-          flex: none;
-        }
-
-        [part='label'] {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      </style>
-      <div class="vaadin-button-container">
-        <span part="prefix" aria-hidden="true">
-          <slot name="prefix"></slot>
-        </span>
-        <span part="label">
-          <slot></slot>
-        </span>
-        <span part="suffix" aria-hidden="true">
-          <slot name="suffix"></slot>
-        </span>
-      </div>
-      <slot name="tooltip"></slot>
-    `;
+    return buttonTemplate(html);
   }
 
   /** @protected */

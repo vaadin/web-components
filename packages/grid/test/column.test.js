@@ -1,14 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getBodyCellContent,
-  getCellContent,
   getContainerCell,
   getContainerCellContent,
   getHeaderCellContent,
@@ -20,23 +18,35 @@ class GridContainer extends PolymerElement {
   static get template() {
     return html`
       <vaadin-grid id="grid" size="10">
-        <vaadin-grid-column-group>
-          <template class="header">group header1</template>
-          <vaadin-grid-column>
-            <template class="header">header1</template>
-            <template>cell</template>
-            <template class="footer">footer1</template>
-          </vaadin-grid-column>
-          <vaadin-grid-column>
-            <template class="header">header2</template>
-            <template>cell</template>
-            <template class="footer">footer2</template>
-          </vaadin-grid-column>
+        <vaadin-grid-column-group header="group header1">
+          <vaadin-grid-column
+            header="header1"
+            footerRenderer="[[footerRenderer1]]"
+            renderer="[[cellRenderer]]"
+          ></vaadin-grid-column>
+
+          <vaadin-grid-column
+            header="header2"
+            footerRenderer="[[footerRenderer2]]"
+            renderer="[[cellRenderer]]"
+          ></vaadin-grid-column>
         </vaadin-grid-column-group>
 
         <vaadin-grid-column id="emptycolumn"></vaadin-grid-column>
       </vaadin-grid>
     `;
+  }
+
+  footerRenderer1(root) {
+    root.textContent = 'footer1';
+  }
+
+  footerRenderer2(root) {
+    root.textContent = 'footer2';
+  }
+
+  cellRenderer(root) {
+    root.textContent = 'cell';
   }
 }
 
@@ -243,16 +253,6 @@ describe('column', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should not override header template content', async () => {
-        const template = document.createElement('template');
-        template.innerHTML = 'foo';
-        template.classList.add('header');
-        emptyColumn.appendChild(template);
-        await nextRender();
-        emptyColumn.path = 'bar';
-        expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
-      });
-
       it('should use path generated header if header renderer is removed', () => {
         emptyColumn.headerRenderer = (root) => {
           root.textContent = 'foo';
@@ -274,15 +274,6 @@ describe('column', () => {
           root.textContent = 'foo';
         };
         emptyColumn.path = 'foo';
-        expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
-      });
-
-      it('should not override template content', async () => {
-        const template = document.createElement('template');
-        template.innerHTML = 'foo';
-        emptyColumn.path = 'foo';
-        emptyColumn.appendChild(template);
-        await nextRender();
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
 
@@ -349,16 +340,6 @@ describe('column', () => {
         emptyColumn.headerRenderer = (root) => {
           root.textContent = 'foo';
         };
-        emptyColumn.header = 'Bar';
-        expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
-      });
-
-      it('should not override header template text content', async () => {
-        const template = document.createElement('template');
-        template.innerHTML = 'foo';
-        template.classList.add('header');
-        emptyColumn.appendChild(template);
-        await nextRender();
         emptyColumn.header = 'Bar';
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
@@ -476,20 +457,7 @@ describe('column', () => {
     });
   });
 
-  describe('cell template', () => {
-    it('should read template from light DOM', () => {
-      expect(getCellContent(getContainerCell(grid.$.items, 0, 0)).textContent).to.contain('cell');
-    });
-  });
-
-  describe('header templates', () => {
-    it('should read templates from light DOM', () => {
-      expect(getHeaderCellContent(grid, 0, 0).textContent).to.contain('group header1');
-      expect(getHeaderCellContent(grid, 1, 0).textContent).to.contain('header1');
-    });
-  });
-
-  describe('dom observing', () => {
+  describe('observing', () => {
     let grid, column;
 
     beforeEach(() => {
@@ -505,48 +473,43 @@ describe('column', () => {
       flushGrid(grid);
     });
 
-    ['header', 'body', 'footer'].forEach((templateName) => {
+    ['header', 'body', 'footer'].forEach((sectionName) => {
       let cell;
 
       beforeEach(() => {
-        if (templateName === 'header') {
+        if (sectionName === 'header') {
           cell = getContainerCell(grid.$.header, 0, 0);
         }
-        if (templateName === 'footer') {
+        if (sectionName === 'footer') {
           cell = getContainerCell(grid.$.footer, 0, 0);
         }
-        if (templateName === 'body') {
+        if (sectionName === 'body') {
           cell = getContainerCell(grid.$.items, 0, 0);
         }
       });
 
-      it(`should observe for adding ${templateName} templates`, async () => {
-        const template = fixtureSync(`
-          <template class="${templateName}">content</template>
-        `);
-
-        column.appendChild(template);
+      it(`should observe for adding ${sectionName} renderer`, async () => {
+        column[sectionName === 'body' ? 'renderer' : `${sectionName}Renderer`] = (root) => {
+          root.textContent = 'content';
+        };
         await nextRender();
 
         expect(cell._content.textContent).to.equal('content');
       });
 
-      it(`should observe for replacing ${templateName} templates`, async () => {
-        const template1 = fixtureSync(`
-          <template class="${templateName}">content1</template>
-        `);
-        const template2 = fixtureSync(`
-          <template class="${templateName}">content2</template>
-        `);
-
-        column.appendChild(template1);
-        await nextRender();
+      it(`should observe for replacing ${sectionName} renderer`, async () => {
+        const rendererName = sectionName === 'body' ? 'renderer' : `${sectionName}Renderer`;
+        column[rendererName] = (root) => {
+          root.textContent = 'content1';
+        };
+        await nextFrame();
 
         expect(cell._content.textContent).to.equal('content1');
 
-        column.removeChild(template1);
-        column.appendChild(template2);
-        await nextRender();
+        column[rendererName] = (root) => {
+          root.textContent = 'content2';
+        };
+        await nextFrame();
 
         expect(cell._content.textContent).to.equal('content2');
       });

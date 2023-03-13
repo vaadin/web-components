@@ -1,8 +1,10 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/item/theme/material/vaadin-item.js';
+import '@vaadin/list-box/theme/material/vaadin-list-box.js';
 import '../../../theme/material/vaadin-context-menu.js';
 import '../../not-animated-styles.js';
-import { openSubMenus } from '../../common.js';
+import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {
   let element;

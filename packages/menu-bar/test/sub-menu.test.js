@@ -80,7 +80,7 @@ describe('sub-menu', () => {
     buttons[0].click();
     await nextRender(subMenu);
     expect(spy.calledOnce).to.be.true;
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     expect(item.hasAttribute('focused')).to.be.false;
   });
 
@@ -88,7 +88,7 @@ describe('sub-menu', () => {
     buttons[0].click();
     await nextRender(subMenu);
     const overlay = subMenu.$.overlay.$.overlay;
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
     arrowDown(overlay);
     expect(spy.calledOnce).to.be.true;
@@ -98,7 +98,7 @@ describe('sub-menu', () => {
     buttons[0].click();
     await nextRender(subMenu);
     const overlay = subMenu.$.overlay.$.overlay;
-    const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    const items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     const spy = sinon.spy(last, 'focus');
     arrowUp(overlay);
@@ -118,7 +118,7 @@ describe('sub-menu', () => {
     arrowDown(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
     await nextRender(subMenu);
     expect(spy.calledOnce).to.be.true;
@@ -128,7 +128,7 @@ describe('sub-menu', () => {
     arrowUp(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
-    const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    const items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     const spy = sinon.spy(last, 'focus');
     await nextRender(subMenu);
@@ -138,7 +138,7 @@ describe('sub-menu', () => {
   it('should close sub-menu on first item arrow up', async () => {
     arrowDown(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
-    item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     expect(item).to.be.ok;
     await nextRender(subMenu);
     arrowUp(item);
@@ -151,7 +151,7 @@ describe('sub-menu', () => {
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowLeft(item);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
@@ -163,7 +163,7 @@ describe('sub-menu', () => {
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowLeft(item);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
@@ -176,7 +176,7 @@ describe('sub-menu', () => {
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowRight(item);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
@@ -188,7 +188,7 @@ describe('sub-menu', () => {
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowRight(item);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
@@ -200,11 +200,11 @@ describe('sub-menu', () => {
     arrowDown(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
-    let item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    let item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     await nextRender(subMenu);
     arrowLeft(item);
     await nextRender(subMenu);
-    item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
     arrowDown(buttons[2]);
     expect(spy.calledOnce).to.be.true;
@@ -214,11 +214,11 @@ describe('sub-menu', () => {
     arrowDown(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     await nextRender(subMenu);
     arrowLeft(item);
     await nextRender(subMenu);
-    const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    const items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     const spy = sinon.spy(last, 'focus');
     arrowUp(buttons[2]);
@@ -235,7 +235,7 @@ describe('sub-menu', () => {
     await nextRender(menu);
     arrowDown(buttons[0]);
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowLeft(item);
     await nextRender(subMenu);
     arrowLeft(buttons[2]);
@@ -250,7 +250,7 @@ describe('sub-menu', () => {
     await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
-    const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    const item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     arrowLeft(item);
     await nextRender(subMenu);
     esc(buttons[2]);
@@ -274,7 +274,7 @@ describe('sub-menu', () => {
 
     const spy = sinon.spy();
     menu.addEventListener('item-selected', spy);
-    item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     item.click();
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
@@ -285,7 +285,7 @@ describe('sub-menu', () => {
   it('should not close submenu on item contextmenu event', async () => {
     buttons[0].click();
     await nextRender(subMenu);
-    item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+    item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
     item.dispatchEvent(new CustomEvent('contextmenu', { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
@@ -294,7 +294,7 @@ describe('sub-menu', () => {
   it('should not close on parent item click', async () => {
     arrowUp(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
-    const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    const items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     await nextRender(subMenu);
     last.click();
@@ -389,7 +389,7 @@ describe('sub-menu', () => {
       await nextRender(subMenu);
       expect(buttons[0].hasAttribute('expanded')).to.be.true;
 
-      item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
+      item = subMenu.$.overlay.querySelector('vaadin-menu-bar-item');
       arrowUp(item);
       await nextRender(subMenu);
       expect(buttons[0].hasAttribute('expanded')).to.be.false;
@@ -593,7 +593,7 @@ describe('theme attribute', () => {
   });
 
   it('should override the component theme attribute with the item.theme property', async () => {
-    let items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    let items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
 
     expect(items[0].getAttribute('theme')).to.equal('sub-item-theme');
     expect(items[1].getAttribute('theme')).to.equal('foo');
@@ -603,7 +603,7 @@ describe('theme attribute', () => {
     buttons[0].dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
 
-    items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
 
     expect(items[0].getAttribute('theme')).to.equal('sub-item-theme');
     expect(items[1].hasAttribute('theme')).to.be.false;
@@ -655,11 +655,11 @@ describe('touch', () => {
     await oneEvent(subMenu, 'opened-changed');
     await nextRender(subMenu);
     const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
-    items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
     open(item);
     await nextRender(subMenu2);
-    items = subMenu2.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    items = subMenu2.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
     touchstart(item);
     touchend(item);
@@ -673,12 +673,12 @@ describe('touch', () => {
     await oneEvent(subMenu, 'opened-changed');
     await nextRender(subMenu);
     const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
-    items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
+    items = subMenu.$.overlay.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
     open(item);
     await nextRender(subMenu2);
     const subMenu3 = subMenu2.$.overlay.querySelector('vaadin-menu-bar-submenu');
-    item = subMenu2.$.overlay.querySelector('vaadin-context-menu-item');
+    item = subMenu2.$.overlay.querySelector('vaadin-menu-bar-item');
     expect(item).to.be.ok;
     open(item);
     await nextRender(subMenu3);

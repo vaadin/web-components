@@ -143,6 +143,56 @@ export class IronListAdapter {
     });
   }
 
+  /**
+   * Updates the height for a given set of items.
+   *
+   * @param {!Array<number>=} itemSet
+   */
+  _updateMetrics(itemSet) {
+    // Make sure we distributed all the physical items
+    // so we can measure them.
+    flush();
+
+    let newPhysicalSize = 0;
+    let oldPhysicalSize = 0;
+    const prevAvgCount = this._physicalAverageCount;
+    const prevPhysicalAvg = this._physicalAverage;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this._iterateItems((pidx, vidx) => {
+      oldPhysicalSize += this._physicalSizes[pidx];
+      this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+      newPhysicalSize += this._physicalSizes[pidx];
+      this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
+    }, itemSet);
+
+    this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+
+    // Update the average if it measured something.
+    if (this._physicalAverageCount !== prevAvgCount) {
+      this._physicalAverage = Math.round(
+        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
+      );
+    }
+  }
+
+  __getBorderBoxHeight(el) {
+    const style = getComputedStyle(el);
+
+    const itemHeight = parseFloat(style.height) || 0;
+
+    if (style.boxSizing === 'border-box') {
+      return itemHeight;
+    }
+
+    const paddingBottom = parseFloat(style.paddingBottom) || 0;
+    const paddingTop = parseFloat(style.paddingTop) || 0;
+    const borderBottomWidth = parseFloat(style.borderBottomWidth) || 0;
+    const borderTopWidth = parseFloat(style.borderTopWidth) || 0;
+
+    return itemHeight + paddingBottom + paddingTop + borderBottomWidth + borderTopWidth;
+  }
+
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
     if (el.style.paddingTop) {
@@ -199,42 +249,28 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
-    // Prevent element update while the scroll position is being restored
-    this.__preventElementUpdates = true;
-
-    // Record the scroll position before changing the size
-    let fvi; // First visible index
-    let fviOffsetBefore; // Scroll offset of the first visible index
-    if (size > 0) {
-      fvi = this.adjustedFirstVisibleIndex;
-      fviOffsetBefore = this.__getIndexScrollOffset(fvi);
-    }
-
     // Change the size
     this.__size = size;
 
-    this._itemsChanged({
-      path: 'items',
-    });
-    flush();
-
-    // Try to restore the scroll position if the new size is larger than 0
-    if (size > 0) {
-      fvi = Math.min(fvi, size - 1);
-      this.scrollToIndex(fvi);
-
-      const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
-      if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
-        this._scrollTop += fviOffsetBefore - fviOffsetAfter;
-      }
+    if (!this._physicalItems) {
+      // Not initialized yet
+      this._itemsChanged({
+        path: 'items',
+      });
+      this.__preventElementUpdates = true;
+      flush();
+      this.__preventElementUpdates = false;
+    } else {
+      // Already initialized, just update _virtualCount
+      this._virtualCount = this.items.length;
     }
 
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    this.__preventElementUpdates = false;
-    // Schedule and flush a resize handler
+    // Schedule and flush a resize handler. This will cause a
+    // re-render for the elements.
     this._resizeHandler();
     flush();
   }

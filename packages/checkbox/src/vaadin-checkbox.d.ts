@@ -3,9 +3,9 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
@@ -41,20 +41,20 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * The following shadow DOM parts are available for styling:
  *
  * Part name   | Description
- * ------------|----------------
- * `checkbox`  | The wrapper element that contains slotted `<input type="checkbox">`
+ * ------------|-------------
+ * `checkbox`  | The element representing a stylable custom checkbox.
  *
  * The following state attributes are available for styling:
  *
- * Attribute       | Description | Part name
- * ----------------|-------------|--------------
- * `active`        | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
- * `disabled`      | Set when the checkbox is disabled. | `:host`
- * `focus-ring`    | Set when the checkbox is focused using the keyboard. | `:host`
- * `focused`       | Set when the checkbox is focused. | `:host`
- * `indeterminate` | Set when the checkbox is in the indeterminate state. | `:host`
- * `checked`       | Set when the checkbox is checked. | `:host`
- * `has-label`     | Set when the checkbox has a label. | `:host`
+ * Attribute       | Description
+ * ----------------|-------------
+ * `active`        | Set when the checkbox is activated with mouse, touch or the keyboard.
+ * `checked`       | Set when the checkbox is checked.
+ * `disabled`      | Set when the checkbox is disabled.
+ * `focus-ring`    | Set when the checkbox is focused using the keyboard.
+ * `focused`       | Set when the checkbox is focused.
+ * `indeterminate` | Set when the checkbox is in the indeterminate state.
+ * `has-label`     | Set when the checkbox has a label.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *

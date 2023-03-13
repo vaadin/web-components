@@ -1,16 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputController } from '../src/input-controller.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'input-constraints-mixin',
     '<slot name="input"></slot>',
     (Base) =>
-      class extends InputConstraintsMixin(Base) {
+      class extends InputConstraintsMixin(baseMixin(Base)) {
         static get properties() {
           return {
             minlength: {
@@ -272,9 +273,9 @@ const runTests = (baseClass) => {
 };
 
 describe('InputConstraintsMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('InputConstraintsMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

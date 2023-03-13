@@ -13,7 +13,7 @@ A component for displaying web maps.
 <vaadin-map></vaadin-map>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/map/screenshot.png" width="636" alt="Screenshot of vaadin-map">](https://vaadin.com/docs/latest/components/map)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/map/screenshot.png" width="636" alt="Screenshot of vaadin-map">](https://vaadin.com/docs/latest/components/map)
 
 ## Installation
 

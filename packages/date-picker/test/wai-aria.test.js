@@ -2,28 +2,29 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n, open } from './common.js';
+import { activateScroller, close, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
-    let datepicker, input;
+    let datePicker, input;
 
-    beforeEach(() => {
-      datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-      input = datepicker.inputElement;
+    beforeEach(async () => {
+      datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      await nextRender();
+      input = datePicker.inputElement;
     });
 
-    it('should toggle aria-expanded attribute on open', () => {
-      datepicker.open();
+    it('should toggle aria-expanded attribute on open', async () => {
+      await open(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('true');
-      datepicker.close();
+      await close(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
     it('should set aria-hidden on all calendars except focused one', async () => {
-      await open(datepicker);
-      await nextRender(datepicker);
-      const calendars = datepicker._overlayContent.querySelectorAll('vaadin-month-calendar');
+      await open(datePicker);
+      await nextRender(datePicker);
+      const calendars = datePicker._overlayContent.querySelectorAll('vaadin-month-calendar');
       calendars.forEach((calendar) => {
         const focused = calendar.shadowRoot.querySelector('[part~="focused"]');
         expect(calendar.getAttribute('aria-hidden')).to.equal(focused ? null : 'true');
@@ -82,6 +83,41 @@ describe('WAI-ARIA', () => {
       await nextFrame();
       const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
       expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/u);
+    });
+  });
+
+  describe('aria-hidden', () => {
+    let wrapper, datePicker, input, button;
+
+    beforeEach(async () => {
+      wrapper = fixtureSync(`
+        <div>
+          <button>Button</button>
+          <vaadin-date-picker></vaadin-date-picker>
+          <input placeholder="input" />
+        </div>
+      `);
+      await nextRender();
+      [button, datePicker, input] = wrapper.children;
+    });
+
+    it('should set aria-hidden on other elements when overlay is opened', async () => {
+      await open(datePicker);
+      expect(button.getAttribute('aria-hidden')).to.equal('true');
+      expect(input.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should not set aria-hidden on slotted input and overlay element', async () => {
+      await open(datePicker);
+      expect(datePicker.inputElement.hasAttribute('aria-hidden')).to.be.false;
+      expect(datePicker.$.overlay.hasAttribute('aria-hidden')).to.be.false;
+    });
+
+    it('should remove aria-hidden from other elements when overlay is closed', async () => {
+      await open(datePicker);
+      await close(datePicker);
+      expect(button.hasAttribute('aria-hidden')).to.be.false;
+      expect(input.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 });

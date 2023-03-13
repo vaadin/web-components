@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-upload.js';
-import { createFile } from './common.js';
+import { createFile } from './helpers.js';
 
 const FAKE_FILE = createFile(100000, 'application/uknown');
 

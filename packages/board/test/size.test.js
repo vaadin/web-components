@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
-import { allResized } from './common.js';
+import { allResized } from './helpers.js';
 
 describe('size', () => {
   let container, rows, rowDefault, rowSmaller, rowLarger;

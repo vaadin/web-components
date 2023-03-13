@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -68,7 +68,7 @@ export interface GridItemModel<TItem> {
 /**
  * Fired when the `activeItem` property changes.
  */
-export type GridActiveItemChangedEvent<TItem> = CustomEvent<{ value: TItem }>;
+export type GridActiveItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 /**
  * Fired when the cell is activated with click or keyboard.
@@ -262,9 +262,8 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * The `<vaadin-grid>` calls this function lazily, only when it needs more data
  * to be displayed.
  *
- * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in
- * the API reference below for the detailed data provider arguments description,
- * and the “Assigning Data” page in the demos.
+ * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) property
+ * documentation for the detailed data provider arguments description.
  *
  * __Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__
  *

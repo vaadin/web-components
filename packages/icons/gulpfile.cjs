@@ -41,16 +41,13 @@ gulp.task('icons', () => {
         fileModifier(file, contents) {
           // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
-import '@vaadin/icon/vaadin-iconset.js';
-import '@vaadin/icon/vaadin-icon.js';
+import { Iconset } from '@vaadin/icon/vaadin-iconset.js';
 
 const template = document.createElement('template');
 
-template.innerHTML = \`<vaadin-iconset name="vaadin" size="16">
-<svg><defs>\n${contents}\n</defs></svg>
-</vaadin-iconset>\`;
+template.innerHTML = \`<svg><defs>\n${contents}\n</defs></svg>\`;
 
-document.head.appendChild(template.content);\n`;
+Iconset.register('vaadin', 16, template);\n`;
         },
       }),
     )

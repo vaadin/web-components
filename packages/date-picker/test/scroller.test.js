@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { InfiniteScroller } from '../src/vaadin-infinite-scroller.js';
-import { activateScroller, getFirstVisibleItem } from './common.js';
+import { activateScroller, getFirstVisibleItem } from './helpers.js';
 
 customElements.define(
   'vaadin-infinite-scroller',

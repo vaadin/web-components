@@ -9,7 +9,8 @@
  * license.
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog, DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(

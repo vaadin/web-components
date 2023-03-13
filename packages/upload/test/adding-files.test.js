@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { change, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
-import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
+import { createFile, createFiles, touchDevice, xhrCreator } from './helpers.js';
 
 describe('adding files', () => {
   let upload, files;
@@ -188,6 +188,20 @@ describe('adding files', () => {
       file.name = 'bar.FOO';
       upload._addFiles([file]);
       expect(upload.files.length).to.equal(1);
+    });
+
+    it('should allow files with extensions containing multiple dots', () => {
+      upload.accept = 'image/*,.bar.baz,video/*';
+      file.name = 'foo.bar.baz';
+      upload._addFiles([file]);
+      expect(upload.files).to.have.lengthOf(1);
+    });
+
+    it('should reject files that have partial extension match', () => {
+      upload.accept = 'image/*,.bar.baz,video/*';
+      file.name = 'foo.baz';
+      upload._addFiles([file]);
+      expect(upload.files).to.have.lengthOf(0);
     });
 
     it('should allow files with correct mime type', () => {

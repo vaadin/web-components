@@ -1,5 +1,5 @@
 import '../../vaadin-tabs.js';
-import type { ListMixinClass } from '@vaadin/component-base/src/list-mixin.js';
+import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
 

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-horizontal-layout.js';
-import { getComputedCSSPropertyValue } from './common.js';
+import { getComputedCSSPropertyValue } from './helpers.js';
 
 describe('vaadin-horizontal-layout', () => {
   describe('basic features', () => {

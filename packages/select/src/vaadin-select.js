@@ -9,10 +9,11 @@ import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -247,10 +248,8 @@ class Select extends OverlayClassMixin(
       renderer: Function,
 
       /**
-       * It stores the the `value` property of the selected item, providing the
-       * value for iron-form.
-       * When there’s an item selected, it's the value of that item, otherwise
-       * it's an empty string.
+       * The `value` property of the selected item, or an empty string
+       * if no item is selected.
        * On change or initialization, the component finds the item which matches the
        * value and displays it.
        * If no value is provided to the component, it selects the first item without
@@ -447,8 +446,6 @@ class Select extends OverlayClassMixin(
         true,
       );
 
-      menuElement.setAttribute('role', 'listbox');
-
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
     }
@@ -458,7 +455,6 @@ class Select extends OverlayClassMixin(
   __initMenuItems(menuElement) {
     if (menuElement.items) {
       this._items = menuElement.items;
-      this._items.forEach((item) => item.setAttribute('role', 'option'));
     }
   }
 
@@ -594,8 +590,7 @@ class Select extends OverlayClassMixin(
     // Store reference to the original item
     labelItem._sourceItem = selected;
 
-    this.__initValueItemElement(labelItem);
-    this.focusElement.appendChild(labelItem);
+    this.__appendValueItemElement(labelItem, this.focusElement);
 
     // Ensure the item gets proper styles
     labelItem.selected = true;
@@ -621,10 +616,13 @@ class Select extends OverlayClassMixin(
 
   /**
    * @param {!HTMLElement} itemElement
+   * @param {!HTMLElement} parent
    * @private
    */
-  __initValueItemElement(itemElement) {
+  __appendValueItemElement(itemElement, parent) {
+    parent.appendChild(itemElement);
     itemElement.removeAttribute('tabindex');
+    itemElement.removeAttribute('aria-selected');
     itemElement.removeAttribute('role');
     itemElement.setAttribute('id', this._itemId);
   }
@@ -646,8 +644,7 @@ class Select extends OverlayClassMixin(
     if (!selected) {
       if (this.placeholder) {
         const item = this.__createItemElement({ label: this.placeholder });
-        this.__initValueItemElement(item);
-        valueButton.appendChild(item);
+        this.__appendValueItemElement(item, valueButton);
         valueButton.setAttribute('placeholder', '');
       }
     } else {
@@ -665,11 +662,12 @@ class Select extends OverlayClassMixin(
       }
     }
 
-    // Use item ID if there is a selected item or placeholder text
-    valueButton.setAttribute(
-      'aria-labelledby',
-      selected || this.placeholder ? `${this._labelId} ${this._itemId}` : this._labelId,
-    );
+    // Add the item ID to aria-labelledby if there is a selected item or a placeholder text.
+    if (selected || this.placeholder) {
+      addValueToAttribute(valueButton, 'aria-labelledby', this._itemId);
+    } else {
+      removeValueFromAttribute(valueButton, 'aria-labelledby', this._itemId);
+    }
   }
 
   /** @private */

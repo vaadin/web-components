@@ -115,13 +115,13 @@ export const ScrollMixin = (superClass) =>
     }
 
     /**
-     * Scroll to a specific row index in the virtual list. Note that the row index is
-     * not always the same for any particular item. For example, sorting/filtering/expanding
-     * or collapsing hierarchical items can affect the row index related to an item.
+     * Scroll to a flat index in the grid. The method doesn't take into account
+     * the hierarchy of the items.
      *
      * @param {number} index Row index to scroll to
+     * @protected
      */
-    scrollToIndex(index) {
+    _scrollToFlatIndex(index) {
       index = Math.min(this._effectiveSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
       this.__scrollIntoViewport(index);
@@ -237,6 +237,13 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     _updateOverflow() {
+      this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
+        this.__doUpdateOverflow();
+      });
+    }
+
+    /** @private */
+    __doUpdateOverflow() {
       // Set overflow styling attributes
       let overflow = '';
       const table = this.$.table;
@@ -272,14 +279,12 @@ export const ScrollMixin = (superClass) =>
         overflow += ' left';
       }
 
-      this._debounceOverflow = Debouncer.debounce(this._debounceOverflow, animationFrame, () => {
-        const value = overflow.trim();
-        if (value.length > 0 && this.getAttribute('overflow') !== value) {
-          this.setAttribute('overflow', value);
-        } else if (value.length === 0 && this.hasAttribute('overflow')) {
-          this.removeAttribute('overflow');
-        }
-      });
+      const value = overflow.trim();
+      if (value.length > 0 && this.getAttribute('overflow') !== value) {
+        this.setAttribute('overflow', value);
+      } else if (value.length === 0 && this.hasAttribute('overflow')) {
+        this.removeAttribute('overflow');
+      }
     }
 
     /** @protected */
@@ -361,16 +366,16 @@ export const ScrollMixin = (superClass) =>
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
       const transformFrozen = `translate(${x}px, 0)`;
-      for (let i = 0; i < this._frozenCells.length; i++) {
-        this._frozenCells[i].style.transform = transformFrozen;
-      }
+      this._frozenCells.forEach((cell) => {
+        cell.style.transform = transformFrozen;
+      });
 
       // Position cells frozen to end
       const remaining = this.__isRTL ? normalizedScrollLeft : scrollLeft + clientWidth - scrollWidth;
       const transformFrozenToEnd = `translate(${remaining}px, 0)`;
-      for (let i = 0; i < this._frozenToEndCells.length; i++) {
-        this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
-      }
+      this._frozenToEndCells.forEach((cell) => {
+        cell.style.transform = transformFrozenToEnd;
+      });
 
       // Only update the --_grid-horizontal-scroll-position custom property when navigating
       // on row focus mode to avoid performance issues.

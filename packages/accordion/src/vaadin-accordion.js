@@ -5,14 +5,14 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
-import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
- * `<vaadin-accordion>` is a Web Component implementing accordion widget —
+ * `<vaadin-accordion>` is a Web Component implementing accordion widget:
  * a vertically stacked set of expandable panels. The component should be
  * used as a wrapper for two or more `<vaadin-accordion-panel>` components.
  *

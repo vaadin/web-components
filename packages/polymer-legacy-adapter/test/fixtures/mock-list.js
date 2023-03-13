@@ -7,10 +7,6 @@ export class MockList extends HTMLElement {
     this.shadowRoot.innerHTML = `<div id="items"></div>`;
   }
 
-  connectedCallback() {
-    window.Vaadin.templateRendererCallback?.(this);
-  }
-
   get renderer() {
     return this.__renderer;
   }
@@ -33,6 +29,10 @@ export class MockList extends HTMLElement {
     return {
       items: this.shadowRoot.querySelector('#items'),
     };
+  }
+
+  connectedCallback() {
+    window.Vaadin.templateRendererCallback?.(this);
   }
 
   render() {

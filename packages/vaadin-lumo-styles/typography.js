@@ -50,45 +50,34 @@ const typography = css`
     line-height: var(--lumo-line-height-xs);
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  :where(h1, h2, h3, h4, h5, h6) {
     font-weight: 600;
     line-height: var(--lumo-line-height-xs);
-    margin-top: 1.25em;
+    margin: 0;
   }
 
-  h1 {
+  :where(h1) {
     font-size: var(--lumo-font-size-xxxl);
-    margin-bottom: 0.75em;
   }
 
-  h2 {
+  :where(h2) {
     font-size: var(--lumo-font-size-xxl);
-    margin-bottom: 0.5em;
   }
 
-  h3 {
+  :where(h3) {
     font-size: var(--lumo-font-size-xl);
-    margin-bottom: 0.5em;
   }
 
-  h4 {
+  :where(h4) {
     font-size: var(--lumo-font-size-l);
-    margin-bottom: 0.5em;
   }
 
-  h5 {
+  :where(h5) {
     font-size: var(--lumo-font-size-m);
-    margin-bottom: 0.25em;
   }
 
-  h6 {
+  :where(h6) {
     font-size: var(--lumo-font-size-xs);
-    margin-bottom: 0;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }

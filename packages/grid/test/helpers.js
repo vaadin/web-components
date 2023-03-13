@@ -3,25 +3,29 @@ import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();
-  grid._afterScroll();
-  if (grid._debounceScrolling) {
-    grid._debounceScrolling.flush();
-  }
-  if (grid._debounceOverflow) {
-    grid._debounceOverflow.flush();
-  }
-  if (grid._debouncerHiddenChanged) {
-    grid._debouncerHiddenChanged.flush();
-  }
-  if (grid._debouncerApplyCachedData) {
-    grid._debouncerApplyCachedData.flush();
-  }
-  if (grid.__debounceUpdateFrozenColumn) {
-    grid.__debounceUpdateFrozenColumn.flush();
-  }
+
+  [
+    grid.__updateColumnTreeDebouncer,
+    grid._debounceScrolling,
+    grid._debounceOverflow,
+    grid._debouncerHiddenChanged,
+    grid._debouncerApplyCachedData,
+    grid.__debounceUpdateFrozenColumn,
+  ].forEach((debouncer) => debouncer?.flush());
 
   grid.__virtualizer.flush();
 };
+
+export function attributeRenderer(attributeName) {
+  return (root, column, model) => {
+    const attributeValue = column.getAttribute(attributeName) || attributeName;
+    if (model) {
+      root.textContent = `${attributeValue} ${model.item.value}`;
+    } else {
+      root.textContent = attributeValue;
+    }
+  };
+}
 
 export const getCell = (grid, index) => {
   return grid.$.items.querySelectorAll('[part~="cell"]')[index];
@@ -140,6 +144,16 @@ export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };
 
+export const getContainerCell = (container, row, col) => {
+  const rows = getRows(container);
+  const cells = getRowCells(rows[row]);
+  return cells[col];
+};
+
+export const getContainerCellContent = (container, row, col) => {
+  return getCellContent(getContainerCell(container, row, col));
+};
+
 export const getHeaderCellContent = (grid, row, col) => {
   const container = grid.$.header;
   return getContainerCellContent(container, row, col);
@@ -150,14 +164,18 @@ export const getBodyCellContent = (grid, row, col) => {
   return getContainerCellContent(container, row, col);
 };
 
-export const getContainerCellContent = (container, row, col) => {
-  return getCellContent(getContainerCell(container, row, col));
-};
-
-export const getContainerCell = (container, row, col) => {
-  const rows = getRows(container);
-  const cells = getRowCells(rows[row]);
-  return cells[col];
+export const fire = (type, detail, options) => {
+  options ||= {};
+  detail = detail === null || detail === undefined ? {} : detail;
+  const event = new Event(type, {
+    bubbles: options.bubbles === undefined ? true : options.bubbles,
+    cancelable: Boolean(options.cancelable),
+    composed: options.composed === undefined ? true : options.composed,
+  });
+  event.detail = detail;
+  const node = options.node || window;
+  node.dispatchEvent(event);
+  return event;
 };
 
 export const dragStart = (source) => {
@@ -238,20 +256,6 @@ export const makeSoloTouchEvent = (type, xy, node) => {
   return event;
 };
 
-export const fire = (type, detail, options) => {
-  options ||= {};
-  detail = detail === null || detail === undefined ? {} : detail;
-  const event = new Event(type, {
-    bubbles: options.bubbles === undefined ? true : options.bubbles,
-    cancelable: Boolean(options.cancelable),
-    composed: options.composed === undefined ? true : options.composed,
-  });
-  event.detail = detail;
-  const node = options.node || window;
-  node.dispatchEvent(event);
-  return event;
-};
-
 export const nextResize = (target) => {
   return new Promise((resolve) => {
     new ResizeObserver(() => setTimeout(resolve)).observe(target);
@@ -261,7 +265,7 @@ export const nextResize = (target) => {
 /**
  * Resolves once the function is invoked on the given object.
  */
-function onceInvoked(object, functionName) {
+export function onceInvoked(object, functionName) {
   return new Promise((resolve) => {
     const stub = sinon.stub(object, functionName).callsFake((...args) => {
       stub.restore();

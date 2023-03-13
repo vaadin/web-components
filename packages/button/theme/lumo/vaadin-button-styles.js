@@ -28,7 +28,7 @@ const button = css`
     flex-shrink: 0;
   }
 
-  /* Set only for the internal parts so we don’t affect the host vertical alignment */
+  /* Set only for the internal parts so we don't affect the host vertical alignment */
   [part='label'],
   [part='prefix'],
   [part='suffix'] {

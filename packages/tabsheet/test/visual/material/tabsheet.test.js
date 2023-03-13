@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/tabs/test/visual/not-animated-styles.js';
 import '../../../theme/material/vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
@@ -27,13 +28,13 @@ describe('tabsheet', () => {
             <vaadin-tabsheet>
               <div slot="prefix">Prefix</div>
               <div slot="suffix">Suffix</div>
-      
+
               <vaadin-tabs slot="tabs">
                 <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
                 <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
                 <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
               </vaadin-tabs>
-      
+
               <div tab="tab-1">
                 Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
                 Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,

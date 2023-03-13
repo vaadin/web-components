@@ -7,6 +7,52 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+/**
+ * Use registerStyles instead of the `<style>` tag to make sure
+ * that this CSS will override core styles of `vaadin-button`.
+ */
+registerStyles(
+  'vaadin-drawer-toggle',
+  css`
+    :host {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      position: relative;
+      outline: none;
+      height: 24px;
+      width: 24px;
+      padding: 4px;
+    }
+
+    [part='icon'],
+    [part='icon']::after,
+    [part='icon']::before {
+      position: absolute;
+      top: 8px;
+      height: 3px;
+      width: 24px;
+      background-color: #000;
+    }
+
+    [part='icon']::after,
+    [part='icon']::before {
+      content: '';
+    }
+
+    [part='icon']::after {
+      top: 6px;
+    }
+
+    [part='icon']::before {
+      top: 12px;
+    }
+  `,
+  { moduleId: 'vaadin-drawer-toggle-styles' },
+);
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -22,42 +68,6 @@ import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 class DrawerToggle extends Button {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          cursor: default;
-          position: relative;
-          outline: none;
-          height: 24px;
-          width: 24px;
-          padding: 4px;
-        }
-
-        [part='icon'],
-        [part='icon']::after,
-        [part='icon']::before {
-          position: absolute;
-          top: 8px;
-          height: 3px;
-          width: 24px;
-          background-color: #000;
-        }
-
-        [part='icon']::after,
-        [part='icon']::before {
-          content: '';
-        }
-
-        [part='icon']::after {
-          top: 6px;
-        }
-
-        [part='icon']::before {
-          top: 12px;
-        }
-      </style>
       <slot id="slot">
         <div part="icon"></div>
       </slot>

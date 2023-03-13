@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog, DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -79,18 +80,6 @@ class ConfirmDialogOverlay extends DialogOverlay {
       footerPart.appendChild(footerTemplate.content.cloneNode(true));
     }
     return memoizedTemplate;
-  }
-
-  /**
-   * Override method inherited from `Overlay` to notify when overlay is closed.
-   * The `vaadin-overlay-close` event is not suitable, as it fires before closing.
-   * @protected
-   * @override
-   */
-  _finishClosing() {
-    super._finishClosing();
-
-    this.dispatchEvent(new CustomEvent('vaadin-confirm-dialog-close'));
   }
 
   /**

@@ -76,6 +76,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       <vaadin-confirm-dialog-dialog
         id="dialog"
         opened="{{opened}}"
+        overlay-class="[[overlayClass]]"
         aria-label="[[_getAriaLabel(header)]]"
         theme$="[[_theme]]"
         no-close-on-outside-click
@@ -226,6 +227,16 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
 
       /**
+       * A space-delimited list of CSS class names
+       * to set on the underlying overlay element.
+       *
+       * @attr {string} overlay-class
+       */
+      overlayClass: {
+        type: String,
+      },
+
+      /**
        * A reference to the "Cancel" button which will be teleported to the overlay.
        * @private
        */
@@ -313,7 +324,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this._overlayElement = this.$.dialog.$.overlay;
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
-    this._overlayElement.addEventListener('vaadin-confirm-dialog-close', () => this.__onDialogClosed());
+    this._overlayElement.addEventListener('vaadin-overlay-closed', () => this.__onDialogClosed());
 
     this._headerController = new SlotController(this, 'header', 'h3', {
       initializer: (node) => {

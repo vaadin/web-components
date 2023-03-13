@@ -30,20 +30,20 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  *
  * ```javascript
  * contextMenu.items = [
- *   {text: 'Menu Item 1', theme: 'primary', children:
+ *   { text: 'Menu Item 1', theme: 'primary', children:
  *     [
- *       {text: 'Menu Item 1-1', checked: true},
- *       {text: 'Menu Item 1-2'}
+ *       { text: 'Menu Item 1-1', checked: true },
+ *       { text: 'Menu Item 1-2' }
  *     ]
  *   },
- *   {component: 'hr'},
- *   {text: 'Menu Item 2', children:
+ *   { component: 'hr' },
+ *   { text: 'Menu Item 2', children:
  *     [
- *       {text: 'Menu Item 2-1'},
- *       {text: 'Menu Item 2-2', disabled: true}
+ *       { text: 'Menu Item 2-1' },
+ *       { text: 'Menu Item 2-2', disabled: true }
  *     ]
  *   },
- *   {text: 'Menu Item 3', disabled: true}
+ *   { text: 'Menu Item 3', disabled: true }
  * ];
  *
  * contextMenu.addEventListener('item-selected', e => {
@@ -94,7 +94,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### “vaadin-contextmenu” Gesture Event
+ * ### `vaadin-contextmenu` Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
  * which is dispatched after either `contextmenu` or long touch events.
@@ -225,12 +225,12 @@ class ContextMenu extends OverlayClassMixin(
         id="overlay"
         on-opened-changed="_onOverlayOpened"
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
+        modeless="[[_modeless]]"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         model="[[_context]]"
         theme$="[[_theme]]"
-      >
-      </vaadin-context-menu-overlay>
+      ></vaadin-context-menu-overlay>
     `;
   }
 
@@ -307,6 +307,14 @@ class ContextMenu extends OverlayClassMixin(
        */
       renderer: {
         type: Function,
+      },
+
+      /**
+       * When true, the menu overlay is modeless.
+       * @protected
+       */
+      _modeless: {
+        type: Boolean,
       },
 
       /** @private */

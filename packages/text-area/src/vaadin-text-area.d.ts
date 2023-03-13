@@ -4,10 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
-import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { TextAreaMixin } from './vaadin-text-area-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -85,17 +83,7 @@ export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEve
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
-  /**
-   * Maximum number of characters (in Unicode code points) that the user can enter.
-   */
-  maxlength: number | null | undefined;
-
-  /**
-   * Minimum number of characters (in Unicode code points) that the user can enter.
-   */
-  minlength: number | null | undefined;
-
+declare class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof TextAreaEventMap>(
     type: K,
     listener: (this: TextArea, ev: TextAreaEventMap[K]) => void,

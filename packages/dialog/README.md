@@ -18,7 +18,7 @@ A web component for presenting information and user interface elements in an ove
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/dialog/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/docs/latest/components/dialog)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/dialog/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/docs/latest/components/dialog)
 
 ## Installation
 
@@ -37,7 +37,7 @@ import '@vaadin/dialog';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/dialog/vaadin-dialog.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/dialog/vaadin-dialog.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -14,7 +14,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `vaadin-accordion-heading` is the element for the headings in the accordion.
  * As recommended by the WAI ARIA Best Practices, each heading needs to wrap a
  * `<button>`. This element puts that button in the Shadow DOM, as it is more
- * convenient to use and doesn’t make styling of the heading more problematic.
+ * convenient to use and doesn't make styling of the heading more problematic.
  *
  * The WAI ARIA Best Practices also recommend setting `aria-level` depending
  * on what level the headings are. It is hard to determine the level of a heading

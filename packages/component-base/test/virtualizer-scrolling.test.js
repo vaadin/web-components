@@ -250,8 +250,8 @@ describe('virtualizer - scrollbar scrolling', () => {
 
     // Scroll to start, taking a couple of steps on the way
     const scrollPositions = [115000, 3500, 0];
-    for (let i = 0; i < scrollPositions.length; i++) {
-      scrollTarget.scrollTop = scrollPositions[i];
+    for (const scrollPosition of scrollPositions) {
+      scrollTarget.scrollTop = scrollPosition;
       await nextFrame();
     }
 

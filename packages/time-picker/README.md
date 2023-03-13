@@ -11,7 +11,7 @@ A web component that allows to enter a time, either by typing, or by selecting f
 <vaadin-time-picker label="Delivery Time"></vaadin-time-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/time-picker/screenshot.png" width="215" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/docs/latest/components/time-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/time-picker/screenshot.png" width="215" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/docs/latest/components/time-picker)
 
 ## Installation
 
@@ -30,7 +30,7 @@ import '@vaadin/time-picker';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/time-picker/vaadin-time-picker.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/time-picker/vaadin-time-picker.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

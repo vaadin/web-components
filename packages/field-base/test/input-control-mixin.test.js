@@ -1,12 +1,22 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, keyboardEventFor, keyDownOn, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import {
+  defineLit,
+  definePolymer,
+  escKeyDown,
+  fixtureSync,
+  keyboardEventFor,
+  keyDownOn,
+  nextFrame,
+  nextRender,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'input-control-mixin',
     `
       <div part="label">
@@ -20,7 +30,7 @@ const runTests = (baseClass) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends InputControlMixin(Base) {
+      class extends InputControlMixin(baseMixin(Base)) {
         get clearElement() {
           return this.$.clearButton;
         }
@@ -457,9 +467,9 @@ const runTests = (baseClass) => {
 };
 
 describe('InputControlMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('InputControlMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

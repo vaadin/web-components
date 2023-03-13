@@ -9,7 +9,9 @@
  * license.
  */
 import type OpenLayersMap from 'ol/Map.js';
-import { ElementMixin, FocusMixin, ResizeMixin } from '@vaadin/component-base';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 
 /**

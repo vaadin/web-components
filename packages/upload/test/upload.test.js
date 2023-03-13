@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { createFile, createFiles, removeFile, xhrCreator } from './common.js';
+import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
   let upload, file;
@@ -411,9 +411,9 @@ describe('upload', () => {
       upload.files = files;
       upload.files[1].complete = true;
 
-      for (let i = 0; i < upload.files.length; i++) {
-        expect(upload.files[i].uploading).not.to.be.ok;
-      }
+      upload.files.forEach((file) => {
+        expect(file.uploading).not.to.be.ok;
+      });
       upload.addEventListener('upload-start', (e) => {
         expect(e.detail.xhr).to.be.ok;
         expect(e.detail.file).to.be.ok;
@@ -433,9 +433,9 @@ describe('upload', () => {
       upload.files = files;
       upload.files[2].name = tempFileName;
 
-      for (let i = 0; i < upload.files.length; i++) {
-        expect(upload.files[i].uploading).not.to.be.ok;
-      }
+      upload.files.forEach((file) => {
+        expect(file.uploading).not.to.be.ok;
+      });
       upload.addEventListener('upload-start', (e) => {
         expect(e.detail.xhr).to.be.ok;
         expect(e.detail.file).to.be.ok;

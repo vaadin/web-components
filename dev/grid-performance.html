@@ -15,15 +15,13 @@
         }
       }
 
-      vaadin-grid-cell-content > * {
+      vaadin-grid-cell-content:not(:empty) {
         animation: content-ready 1s;
       }
     </style>
 
     <script type="module">
       import '@vaadin/grid/all-imports';
-      import '@vaadin/text-field';
-      import '@vaadin/checkbox';
 
       // Set up the grid
       const grid = document.querySelector('vaadin-grid');
@@ -39,16 +37,13 @@
         cb(pageItems, levelSize);
       };
 
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 400; i++) {
         const column = document.createElement('vaadin-grid-column');
         column.header = `Col ${i}`;
         column.width = '140px';
         column.flexShrink = 0;
         column.renderer = (root, column, model) => {
-          if (!root.firstElementChild) {
-            root.innerHTML = `<vaadin-text-field style="width: 100px"></vaadin-text-field>`;
-          }
-          root.firstElementChild.value = `${i} - ${model.item.name}`;
+          root.textContent = `${i} - ${model.item.name}`;
         };
         grid.appendChild(column);
       }

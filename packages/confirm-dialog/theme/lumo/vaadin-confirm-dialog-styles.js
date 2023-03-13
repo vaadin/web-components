@@ -8,7 +8,7 @@ registerStyles(
     [part='header'] ::slotted(h3) {
       margin-top: 0 !important;
       margin-bottom: 0 !important;
-      margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+      margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m)) !important;
     }
 
     [part='message'] {

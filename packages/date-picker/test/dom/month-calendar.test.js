@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { getDefaultI18n } from '../common.js';
+import { getDefaultI18n } from '../helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar;

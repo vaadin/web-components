@@ -25,8 +25,19 @@ const style = css`
   }
 `;
 
+/**
+ * Default values for component-specific custom properties.
+ */
+const globals = css`
+  html {
+    --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
+    --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
+    --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
+  }
+`;
+
 const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}</style>`;
+$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}$</style>`;
 document.head.appendChild($tpl.content);
 
-export { style };
+export { globals, style };

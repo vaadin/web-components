@@ -1,11 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ValidateMixin } from '../src/validate-mixin.js';
-import { define } from './helpers.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass]('validate-mixin', '<input>', (Base) => class extends ValidateMixin(Base) {});
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper('validate-mixin', '<input>', (Base) => class extends ValidateMixin(baseMixin(Base)) {});
 
   let element;
 
@@ -138,11 +139,11 @@ const runTests = (baseClass) => {
   });
 
   describe('invalid cannot be set to false', () => {
-    const tagWithShouldSetInvalid = define[baseClass](
+    const tagWithShouldSetInvalid = defineHelper(
       'validate-mixin-with-should-set-invalid',
       '<input>',
       (Base) =>
-        class extends ValidateMixin(Base) {
+        class extends ValidateMixin(baseMixin(Base)) {
           _shouldSetInvalid(invalid) {
             return invalid;
           }
@@ -166,9 +167,9 @@ const runTests = (baseClass) => {
 };
 
 describe('ValidateMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('ValidateMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

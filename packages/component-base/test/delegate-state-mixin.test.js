@@ -1,14 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { ControllerMixin } from '../src/controller-mixin.js';
 import { DelegateStateMixin } from '../src/delegate-state-mixin.js';
-import { define } from './helpers.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'delegate-state-mixin',
     '<input id="input">',
     (Base) =>
-      class extends DelegateStateMixin(Base) {
+      class extends DelegateStateMixin(baseMixin(Base)) {
         static get properties() {
           return {
             title: {
@@ -148,9 +149,9 @@ const runTests = (baseClass) => {
 };
 
 describe('DelegateStateMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('DelegateStateMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

@@ -11,7 +11,7 @@ A web component that allows to enter a date by typing or by selecting from a cal
 <vaadin-date-picker label="Label" value="2018-12-03" clear-button-visible></vaadin-date-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/date-picker/screenshot.png" width="343" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/docs/latest/components/date-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/date-picker/screenshot.png" width="343" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/docs/latest/components/date-picker)
 
 ## Installation
 
@@ -30,7 +30,7 @@ import '@vaadin/date-picker';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/date-picker/vaadin-date-picker.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/date-picker/vaadin-date-picker.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

@@ -31,7 +31,7 @@ A powerful and easy to use layout web component for building responsive views.
 </vaadin-board>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/docs/latest/components/board)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/board/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/docs/latest/components/board)
 
 ## Installation
 

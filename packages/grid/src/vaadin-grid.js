@@ -7,12 +7,12 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -27,7 +27,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { getBodyRowCells, iterateChildren, updateCellsPart, updateRowStates } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, updateBooleanRowStates, updateCellsPart } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -134,9 +134,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * The `<vaadin-grid>` calls this function lazily, only when it needs more data
  * to be displayed.
  *
- * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in
- * the API reference below for the detailed data provider arguments description,
- * and the “Assigning Data” page in the demos.
+ * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) property
+ * documentation for the detailed data provider arguments description.
  *
  * __Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__
  *
@@ -583,39 +582,10 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getIntrinsicWidth(col) {
-    if (this.__intrinsicWidthCache.has(col)) {
-      return this.__intrinsicWidthCache.get(col);
+    if (!this.__intrinsicWidthCache.has(col)) {
+      this.__calculateAndCacheIntrinsicWidths([col]);
     }
-
-    const width = this.__calculateIntrinsicWidth(col);
-    this.__intrinsicWidthCache.set(col, width);
-
-    return width;
-  }
-
-  /** @private */
-  __calculateIntrinsicWidth(col) {
-    const initialWidth = col.width;
-    const initialFlexGrow = col.flexGrow;
-
-    col.width = 'auto';
-    col.flexGrow = 0;
-
-    // Note: _allCells only contains cells which are currently rendered in DOM
-    const width = col._allCells
-      .filter((cell) => {
-        // Exclude body cells that are out of the visible viewport
-        return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
-      })
-      .reduce((width, cell) => {
-        // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        return Math.max(width, cell.offsetWidth + 1);
-      }, 0);
-
-    col.flexGrow = initialFlexGrow;
-    col.width = initialWidth;
-
-    return width;
+    return this.__intrinsicWidthCache.get(col);
   }
 
   /** @private */
@@ -673,10 +643,72 @@ class Grid extends ElementMixin(
     }
 
     this.__intrinsicWidthCache = new Map();
+    // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
+    const fvi = this._firstVisibleIndex;
+    const lvi = this._lastVisibleIndex;
+    this.__viewportRowsCache = this._getVisibleRows().filter((row) => row.index >= fvi && row.index <= lvi);
+
+    // Pre-cache the intrinsic width of each column
+    this.__calculateAndCacheIntrinsicWidths(cols);
 
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
     });
+  }
+
+  /**
+   * Toggles the cell content for the given column to use or not use auto width.
+   *
+   * While content for all the column cells uses auto width (instead of the default 100%),
+   * their offsetWidth can be used to calculate the collective intrinsic width of the column.
+   *
+   * @private
+   */
+  __setVisibleCellContentAutoWidth(col, autoWidth) {
+    col._allCells
+      .filter((cell) => {
+        if (this.$.items.contains(cell)) {
+          return this.__viewportRowsCache.includes(cell.parentElement);
+        }
+        return true;
+      })
+      .forEach((cell) => {
+        cell.__measuringAutoWidth = autoWidth;
+        cell._content.style.width = autoWidth ? 'auto' : '';
+        cell._content.style.position = autoWidth ? 'absolute' : '';
+      });
+  }
+
+  /**
+   * Returns the maximum intrinsic width of the cell content in the given column.
+   * Only cells which are marked for measuring auto width are considered.
+   *
+   * @private
+   */
+  __getAutoWidthCellsMaxWidth(col) {
+    // Note: _allCells only contains cells which are currently rendered in DOM
+    return col._allCells.reduce((width, cell) => {
+      // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+      return cell.__measuringAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
+    }, 0);
+  }
+
+  /**
+   * Calculates and caches the intrinsic width of each given column.
+   *
+   * @private
+   */
+  __calculateAndCacheIntrinsicWidths(cols) {
+    // Make all the columns use auto width at once before measuring to
+    // avoid reflows in between the measurements
+    cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, true));
+    // Measure and cache
+    cols.forEach((col) => {
+      const width = this.__getAutoWidthCellsMaxWidth(col);
+      this.__intrinsicWidthCache.set(col, width);
+    });
+    // Reset the columns to use 100% width
+    cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, false));
   }
 
   /**
@@ -782,7 +814,7 @@ class Grid extends ElementMixin(
       if (isChrome) {
         // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
         const mouseUpListener = (event) => {
-          // If focus is on element within the cell content — respect it, do not change
+          // If focus is on element within the cell content - respect it, do not change
           const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
           // Only focus if mouse is released on cell content itself
           const mouseUpWithinCell = event.composedPath().includes(cellContent);
@@ -982,7 +1014,7 @@ class Grid extends ElementMixin(
 
   /** @private */
   _updateRowOrderParts(row, index = row.index) {
-    updateRowStates(row, {
+    updateBooleanRowStates(row, {
       first: index === 0,
       last: index === this._effectiveSize - 1,
       odd: index % 2 !== 0,
@@ -992,7 +1024,7 @@ class Grid extends ElementMixin(
 
   /** @private */
   _updateRowStateParts(row, { expanded, selected, detailsOpened }) {
-    updateRowStates(row, {
+    updateBooleanRowStates(row, {
       expanded,
       selected,
       'details-opened': detailsOpened,
@@ -1121,7 +1153,7 @@ class Grid extends ElementMixin(
       this.__itemsReceived();
 
       requestAnimationFrame(() => {
-        this.__scrollToPendingIndex();
+        this.__scrollToPendingIndexes();
       });
     }
   }

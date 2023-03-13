@@ -7,6 +7,7 @@ import './vaadin-login-form.js';
 import './vaadin-login-overlay-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
@@ -47,8 +48,9 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes LoginMixin
+ * @mixes OverlayClassMixin
  */
-class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class LoginOverlay extends LoginMixin(OverlayClassMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <vaadin-login-overlay-wrapper
@@ -59,6 +61,8 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
         title="[[title]]"
         description="[[description]]"
         theme$="[[_theme]]"
+        on-vaadin-overlay-escape-press="_preventClosingLogin"
+        on-vaadin-overlay-outside-click="_preventClosingLogin"
       >
         <vaadin-login-form
           theme="with-overlay"
@@ -121,19 +125,16 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
   ready() {
     super.ready();
 
-    this._preventClosingLogin = this._preventClosingLogin.bind(this);
+    this._overlayElement = this.$.vaadinLoginOverlayWrapper;
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
-    this.$.vaadinLoginOverlayWrapper.addEventListener('vaadin-overlay-outside-click', this._preventClosingLogin);
-    this.$.vaadinLoginOverlayWrapper.addEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
-
     // Restore opened state if overlay was open when disconnecting
     if (this.__restoreOpened) {
-      this.$.vaadinLoginOverlayWrapper.opened = true;
+      this.opened = true;
     }
   }
 
@@ -141,12 +142,9 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.$.vaadinLoginOverlayWrapper.removeEventListener('vaadin-overlay-outside-click', this._preventClosingLogin);
-    this.$.vaadinLoginOverlayWrapper.removeEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
-
     // Close overlay and memorize opened state
-    this.__restoreOpened = this.$.vaadinLoginOverlayWrapper.opened;
-    this.$.vaadinLoginOverlayWrapper.opened = false;
+    this.__restoreOpened = this.opened;
+    this.opened = false;
   }
 
   /** @private */

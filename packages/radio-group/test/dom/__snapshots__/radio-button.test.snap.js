@@ -53,7 +53,10 @@ snapshots["vaadin-radio-button host disabled"] =
 
 snapshots["vaadin-radio-button shadow default"] = 
 `<div class="vaadin-radio-button-container">
-  <div part="radio">
+  <div
+    aria-hidden="true"
+    part="radio"
+  >
   </div>
   <slot name="input">
   </slot>

@@ -27,11 +27,8 @@ export declare class ScrollMixinClass {
   lazyColumns: boolean | null | undefined;
 
   /**
-   * Scroll to a specific row index in the virtual list. Note that the row index is
-   * not always the same for any particular item. For example, sorting/filtering/expanding
-   * or collapsing hierarchical items can affect the row index related to an item.
-   *
-   * @param index Row index to scroll to
+   * Scroll to a flat index in the grid. The method doesn't take into account
+   * the hierarchy of the items.
    */
-  scrollToIndex(index: number): void;
+  protected _scrollToFlatIndex(index: number): void;
 }

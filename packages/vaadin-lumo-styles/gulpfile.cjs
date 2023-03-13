@@ -33,7 +33,7 @@ function createCopyright() {
 }
 
 function createIconset(folder, filenames, idPrefix = '') {
-  let output = `<svg xmlns="http://www.w3.org/2000/svg">\n<defs>\n`;
+  let output = `<svg xmlns="http://www.w3.org/2000/svg"><defs>\n`;
   filenames.forEach((filename) => {
     // Skip non-svg files
     if (filename.indexOf('.svg') === -1) {
@@ -55,7 +55,7 @@ function createIconset(folder, filenames, idPrefix = '') {
     }
   });
 
-  output += `</defs>\n</svg>`;
+  output += `</defs></svg>`;
   return output;
 }
 
@@ -100,14 +100,14 @@ gulp.task('icons', (done) => {
         filenames.sort(sortIconFilesNormalized);
 
         const vaadinIcons = `${createCopyright()}
-import '@vaadin/icon/vaadin-iconset.js';
 import './version.js';
+import { Iconset } from '@vaadin/icon/vaadin-iconset.js';
 
 const template = document.createElement('template');
 
-template.innerHTML = \`<vaadin-iconset name="lumo" size="1000">
-${createIconset(folder, filenames, 'lumo:')}
-</vaadin-iconset>\`;\n\ndocument.head.appendChild(template.content);\n`;
+template.innerHTML = \`${createIconset(folder, filenames, 'lumo:')}\`;
+
+Iconset.register('lumo', 1000, template);\n`;
 
         fs.writeFile('vaadin-iconset.js', vaadinIcons, (err) => {
           if (err) {

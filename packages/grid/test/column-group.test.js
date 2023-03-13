@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { flushGrid, getContainerCell } from './helpers.js';
@@ -12,16 +11,8 @@ describe('column group', () => {
   beforeEach(() => {
     group = fixtureSync(`
       <vaadin-grid-column-group>
-        <template class="header"></template>
-        <template class="footer"></template>
-        <vaadin-grid-column flex-grow="1" width="20%">
-          <template class="header"></template>
-          <template></template>
-        </vaadin-grid-column>
-        <vaadin-grid-column flex-grow="2" width="200px">
-          <template class="header"></template>
-          <template></template>
-        </vaadin-grid-column>
+        <vaadin-grid-column flex-grow="1" width="20%"></vaadin-grid-column>
+        <vaadin-grid-column flex-grow="2" width="200px"></vaadin-grid-column>
       </vaadin-grid-column-group>
     `);
     columns = group.querySelectorAll('vaadin-grid-column');
@@ -191,45 +182,39 @@ describe('column group', () => {
       flushGrid(grid);
     });
 
-    ['header', 'footer'].forEach((templateName) => {
+    ['header', 'footer'].forEach((sectionName) => {
       let cell;
 
       beforeEach(() => {
-        if (templateName === 'header') {
+        if (sectionName === 'header') {
           cell = getContainerCell(grid.$.header, 0, 0);
         }
-        if (templateName === 'footer') {
+        if (sectionName === 'footer') {
           cell = getContainerCell(grid.$.footer, 1, 0);
         }
       });
 
-      it(`should observe for adding ${templateName} templates`, async () => {
-        const template = fixtureSync(`
-          <template class="${templateName}">content</template>
-        `);
-
-        column.appendChild(template);
+      it(`should observe for adding ${sectionName} renderers`, async () => {
+        column[`${sectionName}Renderer`] = (root) => {
+          root.textContent = 'content';
+        };
         await nextRender();
 
         expect(cell._content.textContent).to.equal('content');
       });
 
-      it(`should observe for replacing ${templateName} templates`, async () => {
-        const template1 = fixtureSync(`
-          <template class="${templateName}">content1</template>
-        `);
-        const template2 = fixtureSync(`
-          <template class="${templateName}">content2</template>
-        `);
-
-        column.appendChild(template1);
-        await nextRender();
+      it(`should observe for replacing ${sectionName} renderers`, async () => {
+        column[`${sectionName}Renderer`] = (root) => {
+          root.textContent = 'content1';
+        };
+        await nextFrame();
 
         expect(cell._content.textContent).to.equal('content1');
 
-        column.removeChild(template1);
-        column.appendChild(template2);
-        await nextRender();
+        column[`${sectionName}Renderer`] = (root) => {
+          root.textContent = 'content2';
+        };
+        await nextFrame();
 
         expect(cell._content.textContent).to.equal('content2');
       });

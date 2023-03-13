@@ -1,14 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { ControllerMixin } from '../src/controller-mixin.js';
 import { OverlayClassMixin } from '../src/overlay-class-mixin.js';
-import { define } from './helpers.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (baseClass) => {
-  const tag = define[baseClass](
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
     'overlay-class-mixin',
     '<slot name="overlay">',
     (Base) =>
-      class extends OverlayClassMixin(Base) {
+      class extends OverlayClassMixin(baseMixin(Base)) {
         ready() {
           super.ready();
 
@@ -149,9 +150,9 @@ const runTests = (baseClass) => {
 };
 
 describe('OverlayClassMixin + Polymer', () => {
-  runTests('polymer');
+  runTests(definePolymer, ControllerMixin);
 });
 
 describe('OverlayClassMixin + Lit', () => {
-  runTests('lit');
+  runTests(defineLit, PolylitMixin);
 });

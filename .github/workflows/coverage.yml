@@ -1,10 +1,10 @@
-# Runs tests for all packages after pushes to master to check code coverage on a project level
+# Runs tests for all packages after pushes to main to check code coverage on a project level
 name: Coverage
 
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: read

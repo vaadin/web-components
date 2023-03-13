@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ListMixin } from '@vaadin/component-base/src/list-mixin.js';
+import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating multiple selection of childNodes.
@@ -101,12 +101,18 @@ export const MultiSelectListMixin = (superClass) =>
         this.items.forEach((item) => {
           item.selected = false;
         });
+
+        this.removeAttribute('aria-multiselectable');
       }
 
       // Changing from single to multiple selection, add selected to selectedValues.
-      if (value && !oldValue && this.selected !== undefined) {
-        this.selectedValues = [...this.selectedValues, this.selected];
-        this.selected = undefined;
+      if (value && !oldValue) {
+        this.setAttribute('aria-multiselectable', 'true');
+
+        if (this.selected !== undefined) {
+          this.selectedValues = [...this.selectedValues, this.selected];
+          this.selected = undefined;
+        }
       }
     }
 

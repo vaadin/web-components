@@ -46,49 +46,56 @@ describe('scrolling mode', () => {
   });
 
   describe('overflow attribute', () => {
-    it('bottom end right', () => {
+    it('bottom end right', async () => {
       grid.scrollToIndex(0);
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.equal('bottom end right');
     });
 
-    it('bottom start left', () => {
+    it('bottom start left', async () => {
       grid.scrollToIndex(0);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.equal('bottom start left');
     });
 
-    it('bottom top', () => {
+    it('bottom top', async () => {
       grid.scrollToIndex(1);
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.contain('top');
       expect(grid.getAttribute('overflow')).to.contain('bottom');
     });
 
-    it('left right', () => {
+    it('left right', async () => {
       grid.$.table.scrollLeft = 1;
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.contain('left');
       expect(grid.getAttribute('overflow')).to.contain('right');
     });
 
-    it('start end', () => {
+    it('start end', async () => {
       grid.$.table.scrollLeft = 1;
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.contain('start');
       expect(grid.getAttribute('overflow')).to.contain('end');
     });
 
-    it('top end right', () => {
+    it('top end right', async () => {
       scrollToEnd(grid);
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.equal('top end right');
     });
 
-    it('top start left', () => {
+    it('top start left', async () => {
       scrollToEnd(grid);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+      await nextFrame();
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.equal('top start left');
     });
@@ -114,20 +121,24 @@ describe('scrolling mode', () => {
         grid.setAttribute('dir', 'rtl');
       });
 
-      it('end', () => {
+      it('end', async () => {
+        await nextFrame();
+        flushGrid(grid);
         expect(grid.getAttribute('overflow')).to.contain('end');
         expect(grid.getAttribute('overflow')).to.not.contain('start');
       });
 
-      it('start end', () => {
+      it('start end', async () => {
         grid.$.table.scrollLeft = -1;
+        await nextFrame();
         flushGrid(grid);
         expect(grid.getAttribute('overflow')).to.contain('start');
         expect(grid.getAttribute('overflow')).to.contain('end');
       });
 
-      it('start', () => {
+      it('start', async () => {
         grid.$.table.scrollLeft = -grid.$.table.scrollWidth;
+        await nextFrame();
         flushGrid(grid);
         expect(grid.getAttribute('overflow')).to.contain('start');
         expect(grid.getAttribute('overflow')).to.not.contain('end');

@@ -12,7 +12,7 @@ export const clearButton = css`
   }
 
   [part='clear-button']::before {
-    content: '✕';
+    content: '\\2715';
   }
 
   :host([clear-button-visible][has-value]:not([disabled]):not([readonly])) [part='clear-button'] {

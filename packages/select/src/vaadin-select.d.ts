@@ -3,10 +3,10 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -216,10 +216,8 @@ declare class Select extends OverlayClassMixin(
   renderer: SelectRenderer | undefined;
 
   /**
-   * It stores the the `value` property of the selected item, providing the
-   * value for iron-form.
-   * When there’s an item selected, it's the value of that item, otherwise
-   * it's an empty string.
+   * The `value` property of the selected item, or an empty string
+   * if no item is selected.
    * On change or initialization, the component finds the item which matches the
    * value and displays it.
    * If no value is provided to the component, it selects the first item without

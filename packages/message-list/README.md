@@ -16,7 +16,7 @@ A web component that allows you to show a list of messages, for example, a chat 
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/docs/latest/components/message-list)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/docs/latest/components/message-list)
 
 ## Installation
 
@@ -35,7 +35,7 @@ import '@vaadin/message-list';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/message-list/vaadin-message-list.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/message-list/vaadin-message-list.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

@@ -5,10 +5,10 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
-import { open, waitForScrollToFinish } from '@vaadin/date-picker/test/common.js';
+import { open, waitForScrollToFinish } from '@vaadin/date-picker/test/helpers.js';
 
 describe('date-picker in dialog', () => {
-  let dialog, datepicker;
+  let dialog, datePicker;
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
@@ -17,11 +17,11 @@ describe('date-picker in dialog', () => {
     };
     dialog.opened = true;
     await nextFrame();
-    datepicker = dialog.$.overlay.querySelector('vaadin-date-picker');
+    datePicker = dialog.$.overlay.querySelector('vaadin-date-picker');
   });
 
   afterEach(async () => {
-    datepicker.opened = false;
+    datePicker.opened = false;
     dialog.opened = false;
     await nextFrame();
   });
@@ -30,10 +30,10 @@ describe('date-picker in dialog', () => {
     let overlayContent;
 
     beforeEach(async () => {
-      datepicker.inputElement.focus();
-      await open(datepicker);
+      datePicker.inputElement.focus();
+      await open(datePicker);
       await nextRender();
-      overlayContent = datepicker._overlayContent;
+      overlayContent = datePicker._overlayContent;
     });
 
     it('should focus the Today button on second Tab when inside a dialog', async () => {
@@ -65,7 +65,7 @@ describe('date-picker in dialog', () => {
       await nextRender();
       await waitForScrollToFinish(overlayContent);
 
-      const spy = sinon.spy(datepicker.inputElement, 'focus');
+      const spy = sinon.spy(datePicker.inputElement, 'focus');
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
@@ -77,7 +77,7 @@ describe('date-picker in dialog', () => {
     it('should not close the dialog when closing date-picker on input element Escape', async () => {
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -95,7 +95,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -108,7 +108,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
@@ -120,7 +120,7 @@ describe('date-picker in dialog', () => {
 
       await sendKeys({ press: 'Escape' });
 
-      expect(datepicker.opened).to.be.false;
+      expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
   });
@@ -128,21 +128,21 @@ describe('date-picker in dialog', () => {
   describe('modeless', () => {
     beforeEach(async () => {
       dialog.modeless = true;
-      await open(datepicker);
+      await open(datePicker);
     });
 
     it('should not end up behind the dialog overlay on mousedown', async () => {
-      datepicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
+      datePicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       await nextFrame();
-      expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
+      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
         parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
       );
     });
 
     it('should not end up behind the dialog overlay on touchstart', async () => {
-      touchstart(datepicker);
+      touchstart(datePicker);
       await nextFrame();
-      expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
+      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
         parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
       );
     });

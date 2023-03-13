@@ -3,37 +3,9 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-context-menu-item.js';
+import './vaadin-context-menu-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { Item } from '@vaadin/item/src/vaadin-item.js';
-import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @extends Item
- * @protected
- */
-class ContextMenuItemElement extends Item {
-  static get is() {
-    return 'vaadin-context-menu-item';
-  }
-}
-
-customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
-
-/**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
- *
- * @extends ListBox
- * @protected
- */
-class ContextMenuListBox extends ListBox {
-  static get is() {
-    return 'vaadin-context-menu-list-box';
-  }
-}
-
-customElements.define(ContextMenuListBox.is, ContextMenuListBox);
 
 /**
  * @polymerMixin
@@ -65,20 +37,20 @@ export const ItemsMixin = (superClass) =>
          *
          * ```javascript
          * contextMenu.items = [
-         *   {text: 'Menu Item 1', theme: 'primary', children:
+         *   { text: 'Menu Item 1', theme: 'primary', children:
          *     [
-         *       {text: 'Menu Item 1-1', checked: true},
-         *       {text: 'Menu Item 1-2'}
+         *       { text: 'Menu Item 1-1', checked: true },
+         *       { text: 'Menu Item 1-2' }
          *     ]
          *   },
-         *   {component: 'hr'},
-         *   {text: 'Menu Item 2', children:
+         *   { component: 'hr' },
+         *   { text: 'Menu Item 2', children:
          *     [
-         *       {text: 'Menu Item 2-1'},
-         *       {text: 'Menu Item 2-2', disabled: true}
+         *       { text: 'Menu Item 2-1' },
+         *       { text: 'Menu Item 2-2', disabled: true }
          *     ]
          *   },
-         *   {text: 'Menu Item 3', disabled: true}
+         *   { text: 'Menu Item 3', disabled: true }
          * ];
          * ```
          *
@@ -98,6 +70,15 @@ export const ItemsMixin = (superClass) =>
       };
     }
 
+    /**
+     * Tag name prefix used by overlay, list-box and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-context-menu';
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -105,7 +86,7 @@ export const ItemsMixin = (superClass) =>
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
       this.__itemsOutsideClickListener = (e) => {
-        if (!e.composedPath().some((el) => el.localName === 'vaadin-context-menu-overlay')) {
+        if (!e.composedPath().some((el) => el.localName === `${this._tagNamePrefix}-overlay`)) {
           this.dispatchEvent(new CustomEvent('items-outside-click'));
         }
       };
@@ -177,55 +158,216 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
+     * @param {!ContextMenuItem} item
+     * @return {HTMLElement}
+     * @private
+     */
+    __createComponent(item) {
+      let component;
+
+      if (item.component instanceof HTMLElement) {
+        component = item.component;
+      } else {
+        component = document.createElement(item.component || `${this._tagNamePrefix}-item`);
+      }
+
+      // Support menu-bar / context-menu item
+      if (component._hasVaadinItemMixin) {
+        component.setAttribute('role', 'menuitem');
+      }
+
+      if (component.localName === 'hr') {
+        component.setAttribute('role', 'separator');
+      } else {
+        // Accept not `menuitem` elements e.g. `<button>`
+        component.setAttribute('aria-haspopup', 'false');
+      }
+
+      this._setMenuItemTheme(component, item, this._theme);
+
+      component._item = item;
+
+      if (item.text) {
+        component.textContent = item.text;
+      }
+
+      this.__toggleMenuComponentAttribute(component, 'menu-item-checked', item.checked);
+      this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
+
+      if (item.children && item.children.length) {
+        this.__updateExpanded(component, false);
+        component.setAttribute('aria-haspopup', 'true');
+      }
+
+      return component;
+    }
+
+    /** @private */
+    __initListBox() {
+      const listBox = document.createElement(`${this._tagNamePrefix}-list-box`);
+
+      if (this._theme) {
+        listBox.setAttribute('theme', this._theme);
+      }
+
+      listBox.addEventListener('selected-changed', (event) => {
+        const { value } = event.detail;
+        if (typeof value === 'number') {
+          const item = listBox.items[value]._item;
+          if (!item.children) {
+            this.dispatchEvent(new CustomEvent('item-selected', { detail: { value: item } }));
+          }
+          listBox.selected = null;
+        }
+      });
+
+      return listBox;
+    }
+
+    /** @private */
+    __initOverlay() {
+      const overlay = this.$.overlay;
+
+      overlay.$.backdrop.addEventListener('click', () => {
+        this.close();
+      });
+
+      // Open a submenu on click event when a touch device is used.
+      // On desktop, a submenu opens on hover.
+      overlay.addEventListener(isTouch ? 'click' : 'mouseover', (event) => {
+        this.__showSubMenu(event);
+      });
+
+      overlay.addEventListener('keydown', (event) => {
+        const { key } = event;
+        const isRTL = this.__isRTL;
+
+        const isArrowRight = key === 'ArrowRight';
+        const isArrowLeft = key === 'ArrowLeft';
+
+        if ((!isRTL && isArrowRight) || (isRTL && isArrowLeft) || key === 'Enter' || key === ' ') {
+          // Open a sub-menu
+          this.__showSubMenu(event);
+        } else if ((!isRTL && isArrowLeft) || (isRTL && isArrowRight)) {
+          // Close the menu
+          this.close();
+          this.listenOn.focus();
+        } else if (key === 'Escape' || key === 'Tab') {
+          // Close all menus
+          this.dispatchEvent(new CustomEvent('close-all-menus'));
+        }
+      });
+    }
+
+    /** @private */
+    __initSubMenu() {
+      const subMenu = document.createElement(this.constructor.is);
+
+      subMenu._modeless = true;
+      subMenu.openOn = 'opensubmenu';
+
+      // Sub-menu doesn't have a target to wrap,
+      // so there is no need to keep it visible.
+      subMenu.setAttribute('hidden', '');
+
+      // Close sub-menu when the parent menu closes.
+      this.addEventListener('opened-changed', (event) => {
+        if (!event.detail.value) {
+          this._subMenu.close();
+        }
+      });
+
+      // Forward event to the parent menu element.
+      subMenu.addEventListener('close-all-menus', () => {
+        this.dispatchEvent(new CustomEvent('close-all-menus'));
+      });
+
+      // Forward event to the parent menu element.
+      subMenu.addEventListener('item-selected', (event) => {
+        const { detail } = event;
+        this.dispatchEvent(new CustomEvent('item-selected', { detail }));
+      });
+
+      // Listen to the forwarded event from sub-menu.
+      this.addEventListener('close-all-menus', () => {
+        this.close();
+      });
+
+      // Listen to the forwarded event from sub-menu.
+      this.addEventListener('item-selected', () => {
+        this.close();
+      });
+
+      // Mark parent item as collapsed when closing.
+      subMenu.addEventListener('opened-changed', (event) => {
+        if (!event.detail.value) {
+          const expandedItem = this._listBox.querySelector('[expanded]');
+          if (expandedItem) {
+            this.__updateExpanded(expandedItem, false);
+          }
+        }
+      });
+
+      return subMenu;
+    }
+
+    /** @private */
+    __showSubMenu(event, item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`)) {
+      // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
+      if (!this.__openListenerActive) {
+        return;
+      }
+
+      // Don't open sub-menus while the menu is still opening
+      if (this.$.overlay.hasAttribute('opening')) {
+        requestAnimationFrame(() => {
+          this.__showSubMenu(event, item);
+        });
+
+        return;
+      }
+
+      const subMenu = this._subMenu;
+
+      if (item) {
+        const { children } = item._item;
+
+        if (subMenu.items !== children) {
+          subMenu.close();
+        }
+        if (!this.opened) {
+          return;
+        }
+
+        if (children && children.length) {
+          this.__updateExpanded(item, true);
+
+          // Forward parent overlay class
+          const { overlayClass } = this;
+          this.__openSubMenu(subMenu, item, overlayClass);
+        } else {
+          subMenu.listenOn.focus();
+        }
+      }
+    }
+
+    /**
      * @param {!HTMLElement} root
      * @param {!ContextMenu} menu
      * @param {!ContextMenuRendererContext} context
      * @protected
      */
-    __itemsRenderer(root, menu, context) {
+    __itemsRenderer(root, menu, { detail }) {
       this.__initMenu(root, menu);
 
       const subMenu = root.querySelector(this.constructor.is);
       subMenu.closeOn = menu.closeOn;
 
-      const listBox = root.querySelector('vaadin-context-menu-list-box');
-
+      const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
       listBox.innerHTML = '';
 
-      const items = Array.from(context.detail.children || menu.items);
-
-      items.forEach((item) => {
-        let component;
-        if (item.component instanceof HTMLElement) {
-          component = item.component;
-        } else {
-          component = document.createElement(item.component || 'vaadin-context-menu-item');
-        }
-
-        if (component instanceof Item) {
-          component.setAttribute('role', 'menuitem');
-        } else if (component.localName === 'hr') {
-          component.setAttribute('role', 'separator');
-        }
-
-        this._setMenuItemTheme(component, item, this._theme);
-
-        component._item = item;
-
-        if (item.text) {
-          component.textContent = item.text;
-        }
-
-        this.__toggleMenuComponentAttribute(component, 'menu-item-checked', item.checked);
-        this.__toggleMenuComponentAttribute(component, 'disabled', item.disabled);
-
-        component.setAttribute('aria-haspopup', 'false');
-        if (item.children && item.children.length) {
-          component.setAttribute('aria-haspopup', 'true');
-          component.setAttribute('aria-expanded', 'false');
-          component.removeAttribute('expanded');
-        }
-
+      [...(detail.children || menu.items)].forEach((item) => {
+        const component = this.__createComponent(item);
         listBox.appendChild(component);
       });
     }
@@ -241,11 +383,7 @@ export const ItemsMixin = (superClass) =>
         theme = Array.isArray(item.theme) ? item.theme.join(' ') : item.theme;
       }
 
-      if (theme) {
-        component.setAttribute('theme', theme);
-      } else {
-        component.removeAttribute('theme');
-      }
+      this.__updateTheme(component, theme);
     }
 
     /** @private */
@@ -261,122 +399,39 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __initMenu(root, menu) {
+      // NOTE: in this method, `menu` and `this` reference the same element,
+      // so we can use either of those. Original implementation used `menu`.
       if (!root.firstElementChild) {
-        const listBox = document.createElement('vaadin-context-menu-list-box');
+        this.__initOverlay();
+
+        const listBox = this.__initListBox();
+        this._listBox = listBox;
         root.appendChild(listBox);
 
-        if (this._theme) {
-          listBox.setAttribute('theme', this._theme);
-        }
-        requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
-
-        const subMenu = document.createElement(this.constructor.is);
-        subMenu.setAttribute('hidden', '');
+        const subMenu = this.__initSubMenu();
+        this._subMenu = subMenu;
         root.appendChild(subMenu);
-        subMenu.$.overlay.modeless = true;
-        subMenu.openOn = 'opensubmenu';
-
-        menu.addEventListener('opened-changed', (e) => !e.detail.value && subMenu.close());
-        subMenu.addEventListener('opened-changed', (e) => {
-          if (!e.detail.value) {
-            const expandedItem = listBox.querySelector('[expanded]');
-            if (expandedItem) {
-              expandedItem.setAttribute('aria-expanded', 'false');
-              expandedItem.removeAttribute('expanded');
-            }
-          }
-        });
-
-        listBox.addEventListener('selected-changed', (e) => {
-          if (typeof e.detail.value === 'number') {
-            const item = e.target.items[e.detail.value]._item;
-            if (!item.children) {
-              const detail = { value: item };
-              menu.dispatchEvent(new CustomEvent('item-selected', { detail }));
-            }
-            listBox.selected = null;
-          }
-        });
-
-        subMenu.addEventListener('item-selected', (e) => {
-          menu.dispatchEvent(new CustomEvent('item-selected', { detail: e.detail }));
-        });
-
-        subMenu.addEventListener('close-all-menus', () => {
-          menu.dispatchEvent(new CustomEvent('close-all-menus'));
-        });
-        menu.addEventListener('close-all-menus', menu.close);
-        menu.addEventListener('item-selected', menu.close);
-        menu.$.overlay.$.backdrop.addEventListener('click', () => menu.close());
-
-        menu.$.overlay.addEventListener('keydown', (e) => {
-          const isRTL = this.__isRTL;
-          if ((!isRTL && e.keyCode === 37) || (isRTL && e.keyCode === 39)) {
-            menu.close();
-            menu.listenOn.focus();
-          } else if (e.key === 'Escape' || e.key === 'Tab') {
-            menu.dispatchEvent(new CustomEvent('close-all-menus'));
-          }
-        });
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
         });
-        const openSubMenu = (
-          e,
-          itemElement = e.composedPath().find((e) => e.localName === 'vaadin-context-menu-item'),
-        ) => {
-          // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
-          if (!this.__openListenerActive) {
-            return;
-          }
-
-          // Don't open sub-menus while the menu is still opening
-          if (menu.$.overlay.hasAttribute('opening')) {
-            requestAnimationFrame(() => openSubMenu(e, itemElement));
-            return;
-          }
-
-          if (itemElement) {
-            if (subMenu.items !== itemElement._item.children) {
-              subMenu.close();
-            }
-            if (!menu.opened) {
-              return;
-            }
-            if (itemElement._item.children && itemElement._item.children.length) {
-              itemElement.setAttribute('aria-expanded', 'true');
-              itemElement.setAttribute('expanded', '');
-
-              // Forward parent overlay class
-              const { overlayClass } = menu;
-              this.__openSubMenu(subMenu, itemElement, overlayClass);
-            } else {
-              subMenu.listenOn.focus();
-            }
-          }
-        };
-
-        // Open a submenu on click event when a touch device is used.
-        // On desktop, a submenu opens on hover.
-        menu.$.overlay.addEventListener(isTouch ? 'click' : 'mouseover', openSubMenu);
-
-        menu.$.overlay.addEventListener('keydown', (e) => {
-          const isRTL = this.__isRTL;
-          const shouldOpenSubMenu =
-            (!isRTL && e.keyCode === 39) || (isRTL && e.keyCode === 37) || e.keyCode === 13 || e.keyCode === 32;
-
-          if (shouldOpenSubMenu) {
-            openSubMenu(e);
-          }
-        });
       } else {
-        const listBox = root.querySelector('vaadin-context-menu-list-box');
-        if (this._theme) {
-          listBox.setAttribute('theme', this._theme);
-        } else {
-          listBox.removeAttribute('theme');
-        }
+        this.__updateTheme(this._listBox, this._theme);
+      }
+    }
+
+    /** @private */
+    __updateExpanded(component, expanded) {
+      component.setAttribute('aria-expanded', expanded.toString());
+      component.toggleAttribute('expanded', expanded);
+    }
+
+    /** @private */
+    __updateTheme(component, theme) {
+      if (theme) {
+        component.setAttribute('theme', theme);
+      } else {
+        component.removeAttribute('theme');
       }
     }
   };

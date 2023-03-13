@@ -18,7 +18,7 @@ A web component for selecting one or more values from a scrollable list of items
 </vaadin-list-box>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/list-box/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/docs/latest/components/list-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/list-box/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/docs/latest/components/list-box)
 
 ## Installation
 
@@ -37,7 +37,7 @@ import '@vaadin/list-box';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

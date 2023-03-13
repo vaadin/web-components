@@ -148,6 +148,14 @@ declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMi
    */
   cancelTheme: string;
 
+  /**
+   * A space-delimited list of CSS class names
+   * to set on the underlying overlay element.
+   *
+   * @attr {string} overlay-class
+   */
+  overlayClass: string;
+
   addEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
@@ -96,9 +96,12 @@ describe('resize-mixin', () => {
       describe('multiple children', () => {
         let sibling, spy1, spy2;
 
-        beforeEach(() => {
+        beforeEach(async () => {
           sibling = element.cloneNode(true);
           parent.appendChild(sibling);
+
+          await nextFrame();
+          await nextFrame();
 
           spy1 = sinon.spy(element, '_onResize');
           spy2 = sinon.spy(sibling, '_onResize');

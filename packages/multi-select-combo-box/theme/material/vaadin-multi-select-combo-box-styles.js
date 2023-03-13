@@ -6,22 +6,42 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { comboBoxItem } from '@vaadin/combo-box/theme/material/vaadin-combo-box-item-styles.js';
+import { comboBoxLoader, comboBoxOverlay } from '@vaadin/combo-box/theme/material/vaadin-combo-box-overlay-styles.js';
+import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
+import { loader } from '@vaadin/vaadin-material-styles/mixins/loader.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-multi-select-combo-box-item',
-  css`
-    @media (any-hover: hover) {
-      :host(:hover[readonly]) {
-        background-color: transparent;
-        cursor: default;
-      }
+const multiSelectComboBoxItem = css`
+  @media (any-hover: hover) {
+    :host(:hover[readonly]) {
+      background-color: transparent;
+      cursor: default;
     }
-  `,
-  {
-    moduleId: 'material-multi-select-combo-box-item',
-  },
+  }
+`;
+
+registerStyles('vaadin-multi-select-combo-box-item', [item, comboBoxItem, multiSelectComboBoxItem], {
+  moduleId: 'material-multi-select-combo-box-item',
+});
+
+registerStyles(
+  'vaadin-multi-select-combo-box-overlay',
+  [
+    menuOverlay,
+    comboBoxOverlay,
+    loader,
+    comboBoxLoader,
+    css`
+      :host {
+        --_vaadin-multi-select-combo-box-items-container-border-width: 8px 0;
+        --_vaadin-multi-select-combo-box-items-container-border-style: solid;
+      }
+    `,
+  ],
+  { moduleId: 'material-multi-select-combo-box-overlay' },
 );
 
 const multiSelectComboBox = css`

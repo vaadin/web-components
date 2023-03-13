@@ -6,7 +6,7 @@
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -52,9 +52,9 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * components are themable:
  *
  * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
- * - `<vaadin-context-menu-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
@@ -108,7 +108,7 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
        * @property {string} tooltip - Text to be set as the menu button's tooltip.
        * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
        * @property {union: string | object} component - The component to represent the button content.
-       * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
+       * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
        * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
        * @property {union: string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
        * @property {SubMenuItem[]} children - Array of submenu items.
@@ -119,7 +119,7 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
        * @type {object}
        * @property {string} text - Text to be set as the menu item component's textContent.
        * @property {union: string | object} component - The component to represent the item.
-       * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
+       * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
        * @property {boolean} disabled - If true, the item is disabled and cannot be selected.
        * @property {boolean} checked - If true, the item shows a checkmark next to it.
        * @property {SubMenuItem[]} children - Array of child submenu items.

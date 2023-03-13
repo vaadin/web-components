@@ -10,7 +10,8 @@ import '@vaadin/radio-group/theme/lumo/vaadin-radio-group.js';
 import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
 import '../../../theme/lumo/vaadin-field-highlighter.js';
-import { setUsers } from '../common.js';
+import '../common.js';
+import { setUsers } from '../helpers.js';
 
 describe('field-highlighter', () => {
   let div, element;

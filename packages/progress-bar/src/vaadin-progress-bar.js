@@ -5,8 +5,11 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { progressBarStyles } from './vaadin-progress-bar-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
+
+registerStyles('vaadin-progress-bar', progressBarStyles, { moduleId: 'vaadin-progress-bar-styles' });
 
 /**
  * `<vaadin-progress-bar>` is a Web Component for progress bars.
@@ -45,44 +48,16 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * @mixes ElementMixin
  */
 class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
+  static get is() {
+    return 'vaadin-progress-bar';
+  }
+
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-          width: 100%; /* prevent collapsing inside non-stretching column flex */
-          height: 8px;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='bar'] {
-          height: 100%;
-        }
-
-        [part='value'] {
-          height: 100%;
-          transform-origin: 0 50%;
-          transform: scaleX(var(--vaadin-progress-value));
-        }
-
-        /* RTL specific styles */
-
-        :host([dir='rtl']) [part='value'] {
-          transform-origin: 100% 50%;
-        }
-      </style>
-
       <div part="bar">
         <div part="value"></div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-progress-bar';
   }
 }
 

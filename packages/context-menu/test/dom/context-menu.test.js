@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../src/vaadin-context-menu.js';
 import '../not-animated-styles.js';
-import { openSubMenus } from '../common.js';
+import { openSubMenus } from '../helpers.js';
 
 describe('context-menu', () => {
   let menu, overlay;

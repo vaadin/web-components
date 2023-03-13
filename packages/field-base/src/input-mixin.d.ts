@@ -35,6 +35,18 @@ export declare class InputMixinClass {
   protected readonly _hasValue: boolean;
 
   /**
+   * A property for accessing the input element's value.
+   *
+   * Override this getter if the property is different from the default `value` one.
+   */
+  protected readonly _inputElementValueProperty: string;
+
+  /**
+   * The input element's value.
+   */
+  protected _inputElementValue: string | undefined;
+
+  /**
    * Clear the value of the field.
    */
   clear(): void;
@@ -47,9 +59,9 @@ export declare class InputMixinClass {
 
   protected _inputElementChanged(input: HTMLElement, oldInput: HTMLElement): void;
 
-  protected _onChange(event: void): void;
+  protected _onChange(event: Event): void;
 
-  protected _onInput(event: void): void;
+  protected _onInput(event: Event): void;
 
   protected _setInputElement(input: HTMLElement): void;
 
