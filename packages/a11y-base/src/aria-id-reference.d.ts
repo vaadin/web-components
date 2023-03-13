@@ -32,7 +32,7 @@ export function removeAriaLabelledBy(target: HTMLElement): void;
 /**
  * Restore the generated `aria-labelledby` attribute value on the given element.
  */
-export function restoreGeneratedAriaLabellledBy(target: HTMLElement): void;
+export function restoreGeneratedAriaLabelledBy(target: HTMLElement): void;
 
 /**
  * Update `aria-labelledby` attribute value on the given element.
