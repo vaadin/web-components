@@ -899,7 +899,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _getAcceptRegex() {
+  get __acceptRegexp() {
     if (!this.accept) {
       return;
     }
