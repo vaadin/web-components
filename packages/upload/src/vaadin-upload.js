@@ -495,7 +495,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   /** @private */
   get __acceptRegexp() {
     if (!this.accept) {
-      return undefined;
+      return null;
     }
     const processedTokens = this.accept.split(',').map((token) => {
       let processedToken = token.trim();
