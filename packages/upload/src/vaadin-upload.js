@@ -492,6 +492,26 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     ];
   }
 
+  /** @private */
+  get __acceptRegexp() {
+    if (!this.accept) {
+      return undefined;
+    }
+    const processedTokens = this.accept.split(',').map((token) => {
+      let processedToken = token.trim();
+      // Escape regex operators common to mime types
+      processedToken = processedToken.replace(/[+.]/gu, '\\$&');
+      // Make extension patterns match the end of the file name
+      if (processedToken.startsWith('\\.')) {
+        processedToken = `.*${processedToken}$`;
+      }
+      // Handle star (*) wildcards
+      return processedToken.replace(/\/\*/gu, '/.*');
+    });
+    // Create accept regex
+    return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -879,7 +899,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-    const re = this._getAcceptRegex();
+    const re = this.__acceptRegexp;
     if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
@@ -896,26 +916,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     if (!this.noAuto) {
       this._uploadFile(file);
     }
-  }
-
-  /** @private */
-  get __acceptRegexp() {
-    if (!this.accept) {
-      return;
-    }
-    const processedAccept = this.accept.split(',').map((token) => {
-      let processedToken = token.trim();
-      // Escape regex operators common to mime types
-      processedToken = processedToken.replace(/[+.]/gu, '\\$&');
-      // Make extension patterns match the end of the file name
-      if (processedToken.startsWith('\\.')) {
-        processedToken = `.*${processedToken}$`;
-      }
-      // Handle star (*) wildcards
-      return processedToken.replace(/\/\*/gu, '/.*');
-    });
-    // Create accept regex
-    return new RegExp(`^(${processedAccept.join('|')})$`, 'iu');
   }
 
   /**
