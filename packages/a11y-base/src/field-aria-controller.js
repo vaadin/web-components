@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { setAriaDescribedBy, setAriaLabelledBy } from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -97,7 +97,7 @@ export class FieldAriaController {
    * @private
    */
   __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    this.__setAriaAttributeId('aria-labelledby', labelId, oldLabelId);
+    setAriaLabelledBy(this.__target, labelId, oldLabelId);
   }
 
   /**
@@ -108,11 +108,8 @@ export class FieldAriaController {
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    if (this.__isGroupField) {
-      this.__setAriaAttributeId('aria-labelledby', errorId, oldErrorId);
-    } else {
-      this.__setAriaAttributeId('aria-describedby', errorId, oldErrorId);
-    }
+    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
+    setAriaCallback(this.__target, errorId, oldErrorId);
   }
 
   /**
@@ -123,11 +120,8 @@ export class FieldAriaController {
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    if (this.__isGroupField) {
-      this.__setAriaAttributeId('aria-labelledby', helperId, oldHelperId);
-    } else {
-      this.__setAriaAttributeId('aria-describedby', helperId, oldHelperId);
-    }
+    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
+    setAriaCallback(this.__target, helperId, oldHelperId);
   }
 
   /**
@@ -148,25 +142,6 @@ export class FieldAriaController {
       this.__target.setAttribute('aria-required', 'true');
     } else {
       this.__target.removeAttribute('aria-required');
-    }
-  }
-
-  /**
-   * @param {string | null | undefined} newId
-   * @param {string | null | undefined} oldId
-   * @private
-   */
-  __setAriaAttributeId(attr, newId, oldId) {
-    if (!this.__target) {
-      return;
-    }
-
-    if (oldId) {
-      removeValueFromAttribute(this.__target, attr, oldId);
-    }
-
-    if (newId) {
-      addValueToAttribute(this.__target, attr, newId);
     }
   }
 }
