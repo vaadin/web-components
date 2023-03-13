@@ -41,10 +41,12 @@ export function getAncestorRootNodes(node) {
 }
 
 /**
+ * Takes a string with values separated by space and returns a set the values
+ *
  * @param {string} value
  * @return {Set<string>}
  */
-function deserializeAttributeValue(value) {
+export function deserializeAttributeValue(value) {
   if (!value) {
     return new Set();
   }
@@ -53,10 +55,15 @@ function deserializeAttributeValue(value) {
 }
 
 /**
+ * Takes a set of string values and returns a string with values separated by space
+ *
  * @param {Set<string>} values
  * @return {string}
  */
-function serializeAttributeValue(values) {
+export function serializeAttributeValue(values) {
+  if (!values) {
+    return '';
+  }
   return [...values].join(' ');
 }
 
