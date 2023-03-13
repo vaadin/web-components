@@ -432,6 +432,26 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     };
   }
 
+  /** @private */
+  get __acceptRegexp() {
+    if (!this.accept) {
+      return null;
+    }
+    const processedTokens = this.accept.split(',').map((token) => {
+      let processedToken = token.trim();
+      // Escape regex operators common to mime types
+      processedToken = processedToken.replace(/[+.]/g, '\\$&');
+      // Make extension patterns match the end of the file name
+      if (processedToken.startsWith('\\.')) {
+        processedToken = `.*${processedToken}$`;
+      }
+      // Handle star (*) wildcards
+      return processedToken.replace(/\/\*/g, '/.*');
+    });
+    // Create accept regex
+    return new RegExp(`^(${processedTokens.join('|')})$`, 'i');
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -779,12 +799,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       );
       return;
     }
-    const fileExt = file.name.match(/\.[^.]*$|$/)[0];
-    // Escape regex operators common to mime types
-    const escapedAccept = this.accept.replace(/[+.]/g, '\\$&');
-    // Create accept regex that can match comma separated patterns, star (*) wildcards
-    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
-    if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
+    const re = this.__acceptRegexp;
+    if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: this.i18n.error.incorrectFileType },
