@@ -177,12 +177,9 @@ export const ScrollMixin = (superClass) =>
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
           this._debounceColumnContentVisibility,
-          // TODO: Condsider using animationFrame. Scrolling a multi-column grid horizontally
-          // on a mobile device could be a bit laggy.
-          timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
-          () => {
-            this.__updateColumnsBodyContentHidden();
-          },
+          // TODO: Condsider using a timeout. Using animationFrame could be a bit laggy on a mobile device.
+          animationFrame,
+          () => this.__updateColumnsBodyContentHidden(),
         );
       }
     }
@@ -197,9 +194,52 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      this._columnTree[this._columnTree.length - 1].forEach((column) => {
-        column._bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
-      });
+      // TODO: Frozen-to-end
+
+      let columnsStart;
+      let frozenWidth = 0;
+      let sawVisibleColumns = false;
+      for (const column of this._getColumnsInOrder()) {
+        if (!column._sizerCell) {
+          break;
+        }
+        const bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
+
+        if (column.frozen) {
+          frozenWidth += column._sizerCell.offsetWidth;
+        } else if (!columnsStart && !bodyContentHidden) {
+          // TODO: RTL
+          columnsStart = `${column._sizerCell.offsetLeft - frozenWidth}px`;
+          this.$.items.style.setProperty('--_grid-columns-start', columnsStart);
+        }
+
+        if (column._bodyContentHidden === bodyContentHidden) {
+          if (!column.frozen) {
+            if (!bodyContentHidden) {
+              sawVisibleColumns = true;
+            } else if (sawVisibleColumns) {
+              // If we saw a visible column before, then we can stop iterating
+              // because the rest of the columns are also outside the viewport
+              return;
+            }
+          }
+        }
+
+        if (column._bodyContentHidden !== bodyContentHidden) {
+          column._cells.forEach((cell) => {
+            if (cell !== column._sizerCell) {
+              if (bodyContentHidden) {
+                cell.remove();
+              } else if (cell.__parentRow) {
+                // TODO: Insert to the correct position
+                cell.__parentRow.appendChild(cell);
+              }
+            }
+          });
+
+          column._bodyContentHidden = bodyContentHidden;
+        }
+      }
     }
 
     /**
@@ -212,25 +252,23 @@ export const ScrollMixin = (superClass) =>
         return true;
       }
 
-      // Find any cell of the column and check if it’s inside the viewport
-      for (const cell of column._allCells) {
-        if (cell.isConnected) {
-          // TODO: Test 1px offset (keyboard navigation)
-          return (
-            cell.offsetLeft + cell.offsetWidth > this._scrollLeft - 1 &&
-            cell.offsetLeft < this._scrollLeft + this.clientWidth + 1
-          );
-        }
+      // Check if the column's sizer cell is inside the viewport
+      if (column._sizerCell.isConnected) {
+        // TODO: Test 1px offset (keyboard navigation)
+        return (
+          column._sizerCell.offsetLeft + column._sizerCell.offsetWidth > this._scrollLeft - 1 &&
+          column._sizerCell.offsetLeft < this._scrollLeft + this.clientWidth + 1
+        );
       }
-
       return true;
     }
 
     /** @private */
-    __lazyColumnsChanged(columnTree) {
+    __lazyColumnsChanged(columnTree, lazyColumns) {
       if (!columnTree) {
         return;
       }
+      this.$.scroller.toggleAttribute('lazy-columns', !!lazyColumns);
 
       this.__updateColumnsBodyContentHidden();
     }

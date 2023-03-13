@@ -207,7 +207,6 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_bodyContentHiddenChanged(_bodyContentHidden, _cells, _cells.*)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
@@ -247,23 +246,6 @@ export const ColumnBaseMixin = (superClass) =>
         .concat(this._headerCell)
         .concat(this._footerCell)
         .filter((cell) => cell);
-    }
-
-    /** @protected */
-    _bodyContentHiddenChanged(bodyContentHidden, bodyCells) {
-      if (!bodyCells) {
-        return;
-      }
-
-      bodyCells.forEach((cell) => {
-        if (!bodyContentHidden && cell.hasAttribute('content-hidden')) {
-          // Unhide the cell content
-          cell.removeAttribute('content-hidden');
-        } else if (bodyContentHidden && !cell.hasAttribute('content-hidden')) {
-          // Hide the cell content
-          cell.setAttribute('content-hidden', '');
-        }
-      });
     }
 
     /** @protected */

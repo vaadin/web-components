@@ -125,6 +125,10 @@ registerStyles(
       opacity: 0;
     }
 
+    [lazy-columns] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+      transform: translateX(var(--_grid-columns-start));
+    }
+
     #items [part~='row'] {
       position: absolute;
     }
@@ -170,10 +174,6 @@ registerStyles(
       box-sizing: border-box;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    [part~='cell'][content-hidden] ::slotted(vaadin-grid-cell-content) {
-      display: none;
     }
 
     [hidden] {
