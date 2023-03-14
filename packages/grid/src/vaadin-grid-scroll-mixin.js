@@ -194,36 +194,15 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      // TODO: Frozen-to-end
+      const columnsInOrder = this._getColumnsInOrder();
 
-      let columnsStart;
-      let frozenWidth = 0;
-      let sawVisibleColumns = false;
-      for (const column of this._getColumnsInOrder()) {
-        if (!column._sizerCell) {
-          break;
-        }
+      // Return if sizer cells are not yet assigned to columns
+      if (!columnsInOrder[0] || !columnsInOrder[0]._sizerCell) {
+        return;
+      }
+
+      for (const column of columnsInOrder) {
         const bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
-
-        if (column.frozen) {
-          frozenWidth += column._sizerCell.offsetWidth;
-        } else if (!columnsStart && !bodyContentHidden) {
-          // TODO: RTL
-          columnsStart = `${column._sizerCell.offsetLeft - frozenWidth}px`;
-          this.$.items.style.setProperty('--_grid-columns-start', columnsStart);
-        }
-
-        if (column._bodyContentHidden === bodyContentHidden) {
-          if (!column.frozen) {
-            if (!bodyContentHidden) {
-              sawVisibleColumns = true;
-            } else if (sawVisibleColumns) {
-              // If we saw a visible column before, then we can stop iterating
-              // because the rest of the columns are also outside the viewport
-              return;
-            }
-          }
-        }
 
         if (column._bodyContentHidden !== bodyContentHidden) {
           column._cells.forEach((cell) => {
@@ -236,9 +215,26 @@ export const ScrollMixin = (superClass) =>
               }
             }
           });
-
-          column._bodyContentHidden = bodyContentHidden;
         }
+
+        column._bodyContentHidden = bodyContentHidden;
+      }
+
+      // Frozen columns may have changed their visibility
+      this._frozenCellsChanged();
+
+      if (this.lazyColumns) {
+        // Calculate the offset to apply to the body cells
+        const firstVisibleColumn = columnsInOrder.find((column) => !column.frozen && !column._bodyContentHidden);
+
+        const lastFrozenColumn = [...columnsInOrder].reverse().find((column) => column.frozen);
+        const lastFrozenColumnEnd = lastFrozenColumn
+          ? lastFrozenColumn._sizerCell.offsetLeft + lastFrozenColumn._sizerCell.offsetWidth
+          : 0;
+        this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
+        this.$.items.style.setProperty('--_grid-columns-start', `${this.__lazyColumnsStart}px`);
+
+        this.__updateHorizontalScrollPosition();
       }
     }
 
@@ -390,6 +386,9 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __updateHorizontalScrollPosition() {
+      if (!this._columnTree) {
+        return;
+      }
       const scrollWidth = this.$.table.scrollWidth;
       const clientWidth = this.$.table.clientWidth;
       const scrollLeft = Math.max(0, this.$.table.scrollLeft);
@@ -411,8 +410,32 @@ export const ScrollMixin = (superClass) =>
       // Position cells frozen to end
       const remaining = this.__isRTL ? normalizedScrollLeft : scrollLeft + clientWidth - scrollWidth;
       const transformFrozenToEnd = `translate(${remaining}px, 0)`;
+
+      let transformFrozenToEndBody = transformFrozenToEnd;
+
+      if (this.lazyColumns) {
+        // Lazy columns is used, calculate the offset to apply to the frozen to end cells
+        const columnsInOrder = this._getColumnsInOrder();
+
+        const lastVisibleColumn = [...columnsInOrder]
+          .reverse()
+          .find((column) => !column.frozenToEnd && !column._bodyContentHidden);
+        const lastVisibleColumnEnd = lastVisibleColumn._sizerCell.offsetLeft + lastVisibleColumn._sizerCell.offsetWidth;
+
+        const firstFrozenToEndColumn = columnsInOrder.find((column) => column.frozenToEnd);
+        const firstFrozenToEndColumnStart = firstFrozenToEndColumn ? firstFrozenToEndColumn._sizerCell.offsetLeft : 0;
+
+        transformFrozenToEndBody = `translate(${
+          remaining + (firstFrozenToEndColumnStart - lastVisibleColumnEnd) + this.__lazyColumnsStart
+        }px, 0)`;
+      }
+
       this._frozenToEndCells.forEach((cell) => {
-        cell.style.transform = transformFrozenToEnd;
+        if (this.$.items.contains(cell)) {
+          cell.style.transform = transformFrozenToEndBody;
+        } else {
+          cell.style.transform = transformFrozenToEnd;
+        }
       });
 
       // Only update the --_grid-horizontal-scroll-position custom property when navigating
