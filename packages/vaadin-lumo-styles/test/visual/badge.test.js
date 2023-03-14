@@ -1,10 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import { badge } from '../../badge.js';
-
-const badgeStyle = document.createElement('style');
-badgeStyle.textContent = badge.cssText;
-document.head.appendChild(badgeStyle);
+import '../../badge-all.js';
 
 describe('badge', () => {
   it('flex-shrink', async () => {

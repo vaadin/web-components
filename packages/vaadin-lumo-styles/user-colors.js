@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const userColors = css`
   :host {
@@ -28,8 +29,5 @@ const userColors = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${userColors.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
-
+addLumoGlobalStyles('user-colors', userColors);
 export { userColors };

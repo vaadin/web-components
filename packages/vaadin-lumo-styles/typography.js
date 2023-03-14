@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const font = css`
   :host {
@@ -123,9 +124,6 @@ const typography = css`
 `;
 
 registerStyles('', typography, { moduleId: 'lumo-typography' });
-
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('font', font);
 
 export { font, typography };
