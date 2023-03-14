@@ -49,6 +49,24 @@ export const FieldMixin = (superclass) =>
           type: String,
           observer: '_helperTextChanged',
         },
+
+        /**
+         * String used to label the component to screen reader users.
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+          observer: '_accessibleNameChanged',
+        },
+
+        /**
+         * Id of the element used as label of the component to screen reader users.
+         * @attr {string} accessible-name-ref
+         */
+        accessibleNameRef: {
+          type: String,
+          observer: '_accessibleNameRefChanged',
+        },
       };
     }
 
@@ -113,14 +131,22 @@ export const FieldMixin = (superclass) =>
       }
     }
 
+    _accessibleNameChanged(accessibleName) {
+      this._fieldAriaController.setAriaLabel(accessibleName);
+    }
+
+    _accessibleNameRefChanged(accessibleNameRef) {
+      this._fieldAriaController.setLabelId(accessibleNameRef, true);
+    }
+
     /** @private */
     __labelChanged(hasLabel, labelNode) {
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
       if (hasLabel) {
-        this._fieldAriaController.setLabelId(labelNode.id);
+        this._fieldAriaController.setLabelId(labelNode.id, false);
       } else {
-        this._fieldAriaController.setLabelId(null);
+        this._fieldAriaController.setLabelId(null, false);
       }
     }
 
