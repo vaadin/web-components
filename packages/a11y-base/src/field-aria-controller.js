@@ -3,7 +3,12 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setAriaDescribedBy, setAriaLabelledBy } from '@vaadin/a11y-base/src/aria-id-reference.js';
+import {
+  removeAriaLabelledBy,
+  restoreGeneratedAriaLabelledBy,
+  setAriaDescribedBy,
+  setAriaLabelledBy,
+} from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -58,9 +63,32 @@ export class FieldAriaController {
    *
    * @param {string | null} labelId
    */
-  setLabelId(labelId) {
-    this.__setLabelIdToAriaAttribute(labelId, this.__labelId);
-    this.__labelId = labelId;
+  setLabelId(labelId, fromUser = false) {
+    const oldLabelId = fromUser ? this.__labelIdFromUser : this.__labelId;
+    this.__setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser);
+    if (fromUser) {
+      this.__labelIdFromUser = labelId;
+    } else {
+      this.__labelId = labelId;
+    }
+  }
+
+  /**
+   * Defines the `aria-label` attribute of the target element.
+   *
+   * To remove the attribute, pass `null` as `label`.
+   *
+   * @param {string | null | undefined} label
+   */
+  setAriaLabel(label) {
+    if (label) {
+      removeAriaLabelledBy(this.__target);
+      this.__target.setAttribute('aria-label', label);
+    } else if (this.__label) {
+      restoreGeneratedAriaLabelledBy(this.__target);
+      this.__target.removeAttribute('aria-label');
+    }
+    this.__label = label;
   }
 
   /**
@@ -94,10 +122,11 @@ export class FieldAriaController {
   /**
    * @param {string | null | undefined} labelId
    * @param {string | null | undefined} oldLabelId
+   * @param {boolean | null | undefined} fromUser
    * @private
    */
-  __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    setAriaLabelledBy(this.__target, labelId, oldLabelId);
+  __setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser = false) {
+    setAriaLabelledBy(this.__target, labelId, oldLabelId, fromUser);
   }
 
   /**
