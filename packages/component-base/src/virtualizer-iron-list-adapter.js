@@ -45,6 +45,8 @@ export class IronListAdapter {
       this.scrollTarget.style.overflow = 'auto';
     }
 
+    console.log(getComputedStyle(this.scrollContainer).position);
+
     if (getComputedStyle(this.scrollContainer).position === 'static') {
       this.scrollContainer.style.position = 'relative';
     }
