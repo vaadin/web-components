@@ -827,6 +827,11 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
+    _onOverlayOutsideClick() {
+      this._applyInputValue(this._selectedDate);
+    }
+
+    /** @protected */
     _onOverlayOpened() {
       const content = this._overlayContent;
 

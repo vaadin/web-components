@@ -202,6 +202,18 @@ describe('dropdown', () => {
       await aTimeout(0);
       expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
+
+    it('should clear deselected date from input after outside click', async () => {
+      await open(datePicker);
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+      // Select and deselect date
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'Space' });
+      outsideClick();
+      await aTimeout(0);
+      expect(input.value).to.be.empty;
+    });
   });
 
   describe('date tap', () => {
