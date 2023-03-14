@@ -196,5 +196,8 @@ const color = css`
 `;
 
 registerStyles('', color, { moduleId: 'lumo-color' });
+const $tpl2 = document.createElement('template');
+$tpl2.innerHTML = `<style>${color.toString().replace(':host', 'html')}</style>`;
+document.head.appendChild($tpl2.content);
 
 export { colorBase, color };
