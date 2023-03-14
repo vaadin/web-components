@@ -126,7 +126,7 @@ registerStyles(
     }
 
     [lazy-columns] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
-      transform: translateX(var(--_grid-columns-start));
+      transform: translateX(var(--_grid-lazy-columns-start));
     }
 
     #items [part~='row'] {

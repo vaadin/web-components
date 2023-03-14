@@ -617,10 +617,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    _onRendererOrBindingChanged(renderer, cells, bodyContentHidden, ..._bindings) {
-      if (bodyContentHidden) {
-        return;
-      }
+    _onRendererOrBindingChanged(renderer, cells, _bodyContentHidden, ..._bindings) {
       this._renderBodyCellsContent(renderer, cells);
     }
 

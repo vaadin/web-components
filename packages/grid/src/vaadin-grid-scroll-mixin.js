@@ -177,7 +177,7 @@ export const ScrollMixin = (superClass) =>
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
           this._debounceColumnContentVisibility,
-          // TODO: Condsider using a timeout. Using animationFrame could be a bit laggy on a mobile device.
+          // TODO: Condsider using a timeout. Using animationFrame could be a bit laggy on a mobile device AND DESKTOP SAFARI!
           animationFrame,
           () => this.__updateColumnsBodyContentHidden(),
         );
@@ -201,10 +201,12 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      for (const column of columnsInOrder) {
+      let bodyContentHiddenChanged = false;
+      columnsInOrder.forEach((column) => {
         const bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
 
         if (column._bodyContentHidden !== bodyContentHidden) {
+          bodyContentHiddenChanged = true;
           column._cells.forEach((cell) => {
             if (cell !== column._sizerCell) {
               if (bodyContentHidden) {
@@ -218,10 +220,12 @@ export const ScrollMixin = (superClass) =>
         }
 
         column._bodyContentHidden = bodyContentHidden;
-      }
+      });
 
-      // Frozen columns may have changed their visibility
-      this._frozenCellsChanged();
+      if (bodyContentHiddenChanged) {
+        // Frozen columns may have changed their visibility
+        this._frozenCellsChanged();
+      }
 
       if (this.lazyColumns) {
         // Calculate the offset to apply to the body cells
@@ -232,9 +236,7 @@ export const ScrollMixin = (superClass) =>
           ? lastFrozenColumn._sizerCell.offsetLeft + lastFrozenColumn._sizerCell.offsetWidth
           : 0;
         this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
-        this.$.items.style.setProperty('--_grid-columns-start', `${this.__lazyColumnsStart}px`);
-
-        this.__updateHorizontalScrollPosition();
+        this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
       }
     }
 
@@ -425,9 +427,8 @@ export const ScrollMixin = (superClass) =>
         const firstFrozenToEndColumn = columnsInOrder.find((column) => column.frozenToEnd);
         const firstFrozenToEndColumnStart = firstFrozenToEndColumn ? firstFrozenToEndColumn._sizerCell.offsetLeft : 0;
 
-        transformFrozenToEndBody = `translate(${
-          remaining + (firstFrozenToEndColumnStart - lastVisibleColumnEnd) + this.__lazyColumnsStart
-        }px, 0)`;
+        const translateX = remaining + (firstFrozenToEndColumnStart - lastVisibleColumnEnd) + this.__lazyColumnsStart;
+        transformFrozenToEndBody = `translate(${translateX}px, 0)`;
       }
 
       this._frozenToEndCells.forEach((cell) => {
