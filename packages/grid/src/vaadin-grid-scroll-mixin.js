@@ -236,6 +236,7 @@ export const ScrollMixin = (superClass) =>
           ? lastFrozenColumn._sizerCell.offsetLeft + lastFrozenColumn._sizerCell.offsetWidth
           : 0;
         this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
+        // TODO: Test
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
       }
     }
@@ -251,21 +252,15 @@ export const ScrollMixin = (superClass) =>
       }
 
       // Check if the column's sizer cell is inside the viewport
-      if (column._sizerCell.isConnected) {
-        // TODO: Test 1px offset (keyboard navigation)
-        return (
-          column._sizerCell.offsetLeft + column._sizerCell.offsetWidth > this._scrollLeft - 1 &&
-          column._sizerCell.offsetLeft < this._scrollLeft + this.clientWidth + 1
-        );
-      }
-      return true;
+      // TODO: Test 1px offset (keyboard navigation)
+      return (
+        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth > this._scrollLeft - 1 &&
+        column._sizerCell.offsetLeft < this._scrollLeft + this.clientWidth + 1
+      );
     }
 
     /** @private */
-    __lazyColumnsChanged(columnTree, lazyColumns) {
-      if (!columnTree) {
-        return;
-      }
+    __lazyColumnsChanged(_columnTree, lazyColumns) {
       this.$.scroller.toggleAttribute('lazy-columns', !!lazyColumns);
 
       this.__updateColumnsBodyContentHidden();

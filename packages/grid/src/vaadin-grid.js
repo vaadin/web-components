@@ -1134,7 +1134,7 @@ class Grid extends ElementMixin(
     this._filterDragAndDrop(row, model);
 
     iterateChildren(row, (cell) => {
-      if (cell._renderer && (!cell._column || !cell._column._bodyContentHidden)) {
+      if (cell._renderer) {
         const owner = cell._column || this;
         cell._renderer.call(owner, cell._content, owner, model);
       }
