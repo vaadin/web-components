@@ -125,7 +125,9 @@ const typography = css`
 registerStyles('', typography, { moduleId: 'lumo-typography' });
 
 const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
+$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}${typography
+  .toString()
+  .replace(':host', 'html')}</style>`;
 document.head.appendChild($tpl.content);
 
 export { font, typography };
