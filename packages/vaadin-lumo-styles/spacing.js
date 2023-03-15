@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const spacing = css`
   :host {
@@ -31,8 +32,6 @@ const spacing = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${spacing.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('spacing-props', spacing);
 
 export { spacing };
