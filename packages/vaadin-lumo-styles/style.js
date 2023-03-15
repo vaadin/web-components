@@ -37,6 +37,6 @@ const globals = css`
   }
 `;
 
-addLumoGlobalStyles('style', style);
+addLumoGlobalStyles('style-props', style);
 
 export { globals, style };

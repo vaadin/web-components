@@ -29,5 +29,5 @@ const userColors = css`
   }
 `;
 
-addLumoGlobalStyles('user-colors', userColors);
+addLumoGlobalStyles('user-color-props', userColors);
 export { userColors };

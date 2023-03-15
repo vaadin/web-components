@@ -124,6 +124,6 @@ const typography = css`
 `;
 
 registerStyles('', typography, { moduleId: 'lumo-typography' });
-addLumoGlobalStyles('font', font);
+addLumoGlobalStyles('typography-props', font);
 
 export { font, typography };

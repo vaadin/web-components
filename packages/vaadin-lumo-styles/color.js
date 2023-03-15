@@ -81,7 +81,7 @@ const colorBase = css`
   }
 `;
 
-addLumoGlobalStyles('color-base', colorBase);
+addLumoGlobalStyles('color-props', colorBase);
 
 const color = css`
   [theme~='dark'] {

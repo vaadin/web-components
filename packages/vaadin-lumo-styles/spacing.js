@@ -32,6 +32,6 @@ const spacing = css`
   }
 `;
 
-addLumoGlobalStyles('spacing', spacing);
+addLumoGlobalStyles('spacing-props', spacing);
 
 export { spacing };
