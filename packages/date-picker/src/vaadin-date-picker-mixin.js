@@ -828,7 +828,9 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOutsideClick() {
-      this._applyInputValue(this._selectedDate);
+      if (document.activeElement !== this.inputElement) {
+        this._selectedDate = this._focusedDate;
+      }
     }
 
     /** @protected */

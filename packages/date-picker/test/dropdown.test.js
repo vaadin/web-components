@@ -203,16 +203,16 @@ describe('dropdown', () => {
       expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
 
-    it('should clear deselected date from input after outside click', async () => {
+    it('should commit focused date on outside click', async () => {
+      datePicker.value = '2001-02-13';
       await open(datePicker);
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
-      // Select and deselect date
-      await sendKeys({ press: 'Space' });
-      await sendKeys({ press: 'Space' });
+      // Navigate to another date
+      await sendKeys({ press: 'ArrowDown' });
       outsideClick();
       await aTimeout(0);
-      expect(input.value).to.be.empty;
+      expect(datePicker.value).to.equal('2001-02-20');
     });
   });
 
