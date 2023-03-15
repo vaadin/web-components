@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setAriaDescribedBy, setAriaLabelledBy } from '@vaadin/a11y-base/src/aria-id-reference.js';
+import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -97,7 +97,7 @@ export class FieldAriaController {
    * @private
    */
   __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    setAriaLabelledBy(this.__target, labelId, oldLabelId);
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser: false });
   }
 
   /**
@@ -108,8 +108,8 @@ export class FieldAriaController {
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
-    setAriaCallback(this.__target, errorId, oldErrorId);
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: errorId, oldId: oldErrorId, fromUser: false });
   }
 
   /**
@@ -120,8 +120,8 @@ export class FieldAriaController {
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
-    setAriaCallback(this.__target, helperId, oldHelperId);
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: helperId, oldId: oldHelperId, fromUser: false });
   }
 
   /**
