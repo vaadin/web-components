@@ -24,6 +24,6 @@ const sizing = css`
   }
 `;
 
-addLumoGlobalStyles('sizing', sizing);
+addLumoGlobalStyles('sizing-props', sizing);
 
 export { sizing };
