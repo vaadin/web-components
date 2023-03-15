@@ -16,7 +16,9 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/grid/vaadin-grid.js';
-import { flushGrid, getCell, getContainerCell } from '@vaadin/grid/test/helpers.js';
+import { html, render } from 'lit';
+import { columnBodyRenderer } from '@vaadin/grid/lit';
+import { flushGrid, getCell, getCellContent, getContainerCell } from '@vaadin/grid/test/helpers.js';
 import { Tooltip } from '@vaadin/tooltip';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
@@ -381,5 +383,41 @@ describe('tooltip', () => {
 
       expect(tooltip.opened).to.be.false;
     });
+  });
+});
+
+describe('tooltip in column renderer', () => {
+  let container, grid, cell, items;
+
+  beforeEach(async () => {
+    container = fixtureSync('<div></div>');
+    items = ['first', 'second', 'third'];
+    render(
+      html` <vaadin-grid .items="${items}">
+        <vaadin-grid-column
+          ${columnBodyRenderer(
+            (item) => html`
+              <div id="${item}">${item}</div>
+              <vaadin-tooltip for="${item}" .text="${item}"></vaadin-tooltip>
+            `,
+            items,
+          )}
+        ></vaadin-grid-column>
+      </vaadin-grid>`,
+      container,
+    );
+    await nextFrame();
+    grid = container.querySelector('vaadin-grid');
+    cell = getContainerCell(grid.$.items, 2, 0);
+  });
+
+  it('should still target correct element after grid content is sorted differently', async () => {
+    grid.items = [...items.reverse()];
+
+    await nextRender();
+    const cellContent = getCellContent(cell);
+    const tooltip = cellContent.querySelector('vaadin-tooltip[for="first"]');
+    const correctTarget = cellContent.querySelector('#first');
+    expect(tooltip.target).to.equal(correctTarget);
   });
 });

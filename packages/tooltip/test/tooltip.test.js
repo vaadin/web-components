@@ -170,9 +170,10 @@ describe('vaadin-tooltip', () => {
     });
 
     describe('element found', () => {
-      it('should use for attribute to link target using ID', () => {
+      it('should use for attribute to link target using ID', async () => {
         target.setAttribute('id', 'foo');
         tooltip.for = 'foo';
+        await nextFrame();
         expect(tooltip.target).to.eql(target);
       });
     });
@@ -186,14 +187,16 @@ describe('vaadin-tooltip', () => {
         console.warn.restore();
       });
 
-      it('should warn when element with given ID is not found', () => {
+      it('should warn when element with given ID is not found', async () => {
         tooltip.for = 'bar';
+        await nextFrame();
         expect(console.warn.called).to.be.true;
       });
 
-      it('should keep the target when providing incorrect for', () => {
+      it('should keep the target when providing incorrect for', async () => {
         tooltip.target = target;
         tooltip.for = 'bar';
+        await nextFrame();
         expect(tooltip.target).to.eql(target);
       });
     });
