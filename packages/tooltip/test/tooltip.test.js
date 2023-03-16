@@ -119,66 +119,40 @@ describe('vaadin-tooltip', () => {
   describe('target', () => {
     let target;
 
-    describe('basic', () => {
-      beforeEach(() => {
-        target = document.createElement('div');
-        target.textContent = 'Target';
-        document.body.appendChild(target);
-      });
-
-      afterEach(() => {
-        document.body.removeChild(target);
-      });
-
-      it('should set target as overlay positionTarget', () => {
-        tooltip.target = target;
-        expect(overlay.positionTarget).to.eql(target);
-      });
-
-      it('should set aria-describedby on the target element', () => {
-        tooltip.target = target;
-        expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
-      });
-
-      it('should retain existing aria-describedby attribute', () => {
-        target.setAttribute('aria-describedby', 'foo');
-        tooltip.target = target;
-
-        expect(target.getAttribute('aria-describedby')).to.contain('foo');
-        expect(target.getAttribute('aria-describedby')).to.contain(overlay.id);
-      });
-
-      it('should restore aria-describedby when clearing target', () => {
-        target.setAttribute('aria-describedby', 'foo');
-        tooltip.target = target;
-
-        tooltip.target = null;
-        expect(target.getAttribute('aria-describedby')).to.equal('foo');
-      });
+    beforeEach(() => {
+      target = document.createElement('div');
+      target.textContent = 'Target';
+      document.body.appendChild(target);
     });
 
-    describe('moving', () => {
-      let container;
+    afterEach(() => {
+      document.body.removeChild(target);
+    });
 
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div>
-              <div id='first'>First</div>
-              <div id='second'>Second</div>
-          </div>
-        `);
-        target = container.querySelector('#second');
-        tooltip.target = target;
-        await nextFrame();
-      });
+    it('should set target as overlay positionTarget', () => {
+      tooltip.target = target;
+      expect(overlay.positionTarget).to.eql(target);
+    });
 
-      it('should still open overlay when target element was moved', async () => {
-        const firstElement = container.querySelector('#first');
-        firstElement.before(target);
-        await waitForIntersectionObserver();
-        mouseenter(target);
-        expect(overlay.opened).to.be.true;
-      });
+    it('should set aria-describedby on the target element', () => {
+      tooltip.target = target;
+      expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
+    });
+
+    it('should retain existing aria-describedby attribute', () => {
+      target.setAttribute('aria-describedby', 'foo');
+      tooltip.target = target;
+
+      expect(target.getAttribute('aria-describedby')).to.contain('foo');
+      expect(target.getAttribute('aria-describedby')).to.contain(overlay.id);
+    });
+
+    it('should restore aria-describedby when clearing target', () => {
+      target.setAttribute('aria-describedby', 'foo');
+      tooltip.target = target;
+
+      tooltip.target = null;
+      expect(target.getAttribute('aria-describedby')).to.equal('foo');
     });
   });
 
@@ -710,6 +684,30 @@ describe('vaadin-tooltip', () => {
       otherOverlay.opened = true;
       await nextRender();
 
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('moving target', () => {
+    let container, target;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+          <div>
+              <div id='first'>First</div>
+              <div id='second'>Second</div>
+          </div>
+        `);
+      target = container.querySelector('#second');
+      tooltip.target = target;
+      await nextFrame();
+    });
+
+    it('should still open overlay when target element was moved', async () => {
+      const firstElement = container.querySelector('#first');
+      firstElement.before(target);
+      await waitForIntersectionObserver();
+      mouseenter(target);
       expect(overlay.opened).to.be.true;
     });
   });
