@@ -535,9 +535,10 @@ export const DatePickerMixin = (subclass) =>
         this._close();
       });
 
-      // User confirmed selected date by pressing Enter or Today.
+      // User confirmed selected date by pressing Enter, Space, or Today.
       content.addEventListener('date-selected', (e) => {
-        this.__userConfirmedDate = true;
+        // Reset if a date is deselected.
+        this.__userConfirmedDate = !!e.detail.date;
 
         this._selectDate(e.detail.date);
       });
@@ -824,17 +825,6 @@ export const DatePickerMixin = (subclass) =>
     _onOverlayEscapePress() {
       this._focusedDate = this._selectedDate;
       this._close();
-    }
-
-    /** @protected */
-    _onOverlayOutsideClick() {
-      if (!this.opened) {
-        this._selectParsedOrFocusedDate();
-        this.validate();
-        if (this._inputElementValue === '' && this.value !== '') {
-          this.value = '';
-        }
-      }
     }
 
     /** @protected */

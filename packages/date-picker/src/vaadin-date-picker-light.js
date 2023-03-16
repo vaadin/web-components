@@ -68,7 +68,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
         fullscreen$="[[_fullscreen]]"
         opened="{{opened}}"
         on-vaadin-overlay-escape-press="_onOverlayEscapePress"
-        on-vaadin-overlay-outside-click="_onOverlayOutsideClick"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-closing="_onOverlayClosed"
         restore-focus-on-close
