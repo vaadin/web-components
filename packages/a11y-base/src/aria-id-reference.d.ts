@@ -4,37 +4,38 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/**
- * Removes the current `aria-describedby` attribute value on the given element.
- */
-export function removeAriaDescribedBy(target: HTMLElement): void;
+export type AriaIDReferenceConfig = {
+  newId: string | null;
+  oldId: string | null;
+  fromUser: boolean | null;
+};
 
 /**
- * Restore the generated `aria-describedby` attribute value on the given element.
+ * Sets a new ID reference for a {@link target} element and an ARIA {@link attr | attribute}.
+ *
+ * @param config.newId
+ *  The new ARIA ID reference to set. If `null`, the attribute is removed,
+ *  and `config.fromUser` is `true`, any stored values are restored. If there
+ *  are stored values and `config.fromUser` is `false`, then `config.newId`
+ *  is added to the stored values set.
+ * @param config.oldId
+ *  The ARIA ID reference to be removed from the attribute. If there are stored
+ *  values and `config.fromUser` is `false`, then `config.oldId` is removed from
+ *  the stored values set.
+ * @param config.fromUser
+ *  Indicates whether the function is called by the user or internally.
+ *  When `config.fromUser` is called with `true` for the first time,
+ *  the function will clear and store the attribute value for the given element.
  */
-export function restoreGeneratedAriaDescribedBy(target: HTMLElement): void;
+export function setAriaIDReference(target: HTMLElement, attr: string, config: AriaIDReferenceConfig): void;
 
 /**
- * Update `aria-describedby` attribute value on the given element.
+ * Removes the {@link attr | attribute} value of the given {@link target} element.
+ * It also stores the current value, if no stored values are present.
  */
-export declare function setAriaDescribedBy(
-  target: HTMLElement,
-  newId: string,
-  oldId?: string,
-  fromUser?: boolean,
-): void;
+export function removeAriaIDReference(target: HTMLElement, attr: string): void;
 
 /**
- * Removes the current `aria-labelledby` attribute value on the given element.
+ * Restores the generated values of the {@link attr | attribute} to the given {@link target} element.
  */
-export function removeAriaLabelledBy(target: HTMLElement): void;
-
-/**
- * Restore the generated `aria-labelledby` attribute value on the given element.
- */
-export function restoreGeneratedAriaLabelledBy(target: HTMLElement): void;
-
-/**
- * Update `aria-labelledby` attribute value on the given element.
- */
-export declare function setAriaLabelledBy(target: HTMLElement, newId: string, oldId?: string, fromUser?: boolean): void;
+export function restoreGeneratedAriaIDReference(target: HTMLElement, attr: string): void;

@@ -54,6 +54,9 @@ function storeAriaIDReference(target, attr) {
     return;
   }
   const attributeMap = getAttrMap(attr);
+  if (attributeMap.has(target)) {
+    return;
+  }
   const values = deserializeAttributeValue(target.getAttribute(attr));
   attributeMap.set(target, new Set(values));
 }
@@ -64,17 +67,39 @@ function storeAriaIDReference(target, attr) {
  * @param {HTMLElement} target
  * @param {string} attr
  */
-function restoreGeneratedAriaIDReference(target, attr) {
+export function restoreGeneratedAriaIDReference(target, attr) {
   if (!target || !attr) {
     return;
   }
   addValueToAttribute(target, attr, serializeAttributeValue(getAttrMap(attr).get(target)));
 }
 
-function setAriaIDReference(target, attr, newId, oldId, fromUser = false) {
-  if (!target) {
+/**
+ * Sets a new ID reference for a target element and an ARIA attribute.
+ *
+ * @typedef {Object} AriaIdReferenceConfig
+ * @property {string | null | undefined} newId
+ * @property {string | null | undefined} oldId
+ * @property {boolean | null | undefined} fromUser
+ * @param {HTMLElement} target
+ * @param {string} attr
+ * @param {AriaIdReferenceConfig | null | undefined} config
+ * @param config.newId The new ARIA ID reference to set. If `null`, the attribute is removed,
+ * and `config.fromUser` is true, any stored values are restored. If there are stored values
+ * and `config.fromUser` is `false`, then `config.newId` is added to the stored values set.
+ * @param config.oldId The ARIA ID reference to be removed from the attribute. If there are
+ * stored values and `config.fromUser` is `false`, then `config.oldId` is removed from the
+ * stored values set.
+ * @param config.fromUser Indicates whether the function is called by the user or internally.
+ * When `config.fromUser` is called with `true` for the first time, the function will clear
+ * and stores the attribute value for the given element.
+ */
+export function setAriaIDReference(target, attr, config = { newId: null, oldId: null, fromUser: false }) {
+  if (!target || !attr) {
     return;
   }
+
+  const { newId, oldId, fromUser } = config;
 
   const attributeMap = getAttrMap(attr);
   const storedValues = attributeMap.get(target);
@@ -99,7 +124,6 @@ function setAriaIDReference(target, attr, newId, oldId, fromUser = false) {
       attributeMap.delete(target);
     }
 
-    // TODO update comment
     // If it's from user, then clear the attribute value before setting newId
     cleanAriaIDReference(target, attr);
   }
@@ -113,63 +137,13 @@ function setAriaIDReference(target, attr, newId, oldId, fromUser = false) {
 }
 
 /**
- * Restore the generated `aria-describedby` attribute value on the given element.
+ * Removes the {@link attr | attribute} value of the given {@link target} element.
+ * It also stores the current value, if no stored values are present.
  *
  * @param {HTMLElement} target
+ * @param {string} attr
  */
-export function restoreGeneratedAriaDescribedBy(target) {
-  restoreGeneratedAriaIDReference(target, 'aria-describedby');
-}
-
-/**
- * Removes the current `aria-describedby` attribute value on the given element.
- *
- * @param {HTMLElement} target
- */
-export function removeAriaDescribedBy(target) {
-  const attr = 'aria-describedby';
+export function removeAriaIDReference(target, attr) {
   storeAriaIDReference(target, attr);
   cleanAriaIDReference(target, attr);
-}
-
-/**
- * Update `aria-describedby` attribute value on the given element.
- *
- * @param {HTMLElement} target
- * @param {string} newId
- * @param {string} oldId
- */
-export function setAriaDescribedBy(target, newId, oldId, fromUser) {
-  setAriaIDReference(target, 'aria-describedby', newId, oldId, fromUser);
-}
-
-/**
- * Restore the generated `aria-labelledby` attribute value on the given element.
- *
- * @param {HTMLElement} target
- */
-export function restoreGeneratedAriaLabelledBy(target) {
-  restoreGeneratedAriaIDReference(target, 'aria-labelledby');
-}
-
-/**
- * Removes the current `aria-labelledby` attribute value on the given element.
- *
- * @param {HTMLElement} target
- */
-export function removeAriaLabelledBy(target) {
-  const attr = 'aria-labelledby';
-  storeAriaIDReference(target, attr);
-  cleanAriaIDReference(target, attr);
-}
-
-/**
- * Update `aria-labelledby` attribute value on the given element.
- *
- * @param {HTMLElement} target
- * @param {string} newId
- * @param {string} oldId
- */
-export function setAriaLabelledBy(target, newId, oldId, fromUser) {
-  setAriaIDReference(target, 'aria-labelledby', newId, oldId, fromUser);
 }

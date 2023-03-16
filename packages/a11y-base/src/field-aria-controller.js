@@ -4,10 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
-  removeAriaLabelledBy,
-  restoreGeneratedAriaLabelledBy,
-  setAriaDescribedBy,
-  setAriaLabelledBy,
+  removeAriaIDReference,
+  restoreGeneratedAriaIDReference,
+  setAriaIDReference,
 } from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
@@ -82,10 +81,10 @@ export class FieldAriaController {
    */
   setAriaLabel(label) {
     if (label) {
-      removeAriaLabelledBy(this.__target);
+      removeAriaIDReference(this.__target);
       this.__target.setAttribute('aria-label', label);
     } else if (this.__label) {
-      restoreGeneratedAriaLabelledBy(this.__target);
+      restoreGeneratedAriaIDReference(this.__target);
       this.__target.removeAttribute('aria-label');
     }
     this.__label = label;
@@ -125,8 +124,8 @@ export class FieldAriaController {
    * @param {boolean | null | undefined} fromUser
    * @private
    */
-  __setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser = false) {
-    setAriaLabelledBy(this.__target, labelId, oldLabelId, fromUser);
+  __setLabelIdToAriaAttribute(labelId, oldLabelId) {
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser: false });
   }
 
   /**
@@ -137,8 +136,8 @@ export class FieldAriaController {
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
-    setAriaCallback(this.__target, errorId, oldErrorId);
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: errorId, oldId: oldErrorId, fromUser: false });
   }
 
   /**
@@ -149,8 +148,8 @@ export class FieldAriaController {
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    const setAriaCallback = this.__isGroupField ? setAriaLabelledBy : setAriaDescribedBy;
-    setAriaCallback(this.__target, helperId, oldHelperId);
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: helperId, oldId: oldHelperId, fromUser: false });
   }
 
   /**
