@@ -9,6 +9,7 @@ import {
   getFocusedCell,
   idleCallback,
   open,
+  outsideClick,
   waitForOverlayRender,
   waitForScrollToFinish,
 } from './helpers.js';
@@ -84,6 +85,18 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'Space' });
 
         expect(content.focusedDate.getTime()).to.equal(focused.getTime());
+      });
+
+      it('should commit focused date on outside click after deselecting', async () => {
+        await open(datePicker);
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+        // De-select the selected date
+        await sendKeys({ press: 'Space' });
+        // Navigate to another date
+        await sendKeys({ press: 'ArrowRight' });
+        outsideClick();
+        expect(datePicker.value).to.equal('2001-01-02');
       });
     });
 
