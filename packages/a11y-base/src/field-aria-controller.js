@@ -81,10 +81,10 @@ export class FieldAriaController {
    */
   setAriaLabel(label) {
     if (label) {
-      removeAriaIDReference(this.__target);
+      removeAriaIDReference(this.__target, 'aria-labelledby');
       this.__target.setAttribute('aria-label', label);
     } else if (this.__label) {
-      restoreGeneratedAriaIDReference(this.__target);
+      restoreGeneratedAriaIDReference(this.__target, 'aria-labelledby');
       this.__target.removeAttribute('aria-label');
     }
     this.__label = label;
@@ -124,8 +124,8 @@ export class FieldAriaController {
    * @param {boolean | null | undefined} fromUser
    * @private
    */
-  __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser: false });
+  __setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser = false) {
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser });
   }
 
   /**
