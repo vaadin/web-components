@@ -214,6 +214,20 @@ describe('dropdown', () => {
       await aTimeout(0);
       expect(datePicker.value).to.equal('2001-02-20');
     });
+
+    it('should commit focused date on outside click after deselecting', async () => {
+      datePicker.value = '2001-02-13';
+      await open(datePicker);
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+      // De-select the selected date
+      await sendKeys({ press: 'Space' });
+      // Navigate to another date
+      await sendKeys({ press: 'ArrowDown' });
+      outsideClick();
+      await aTimeout(0);
+      expect(datePicker.value).to.equal('2001-02-20');
+    });
   });
 
   describe('date tap', () => {
