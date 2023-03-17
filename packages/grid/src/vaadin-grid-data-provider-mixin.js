@@ -5,7 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { getBodyRowCells, iterateChildren, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
  * @private
