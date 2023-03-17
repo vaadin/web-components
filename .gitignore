@@ -15,6 +15,9 @@ packages/icons/test/visual/screenshots/failed
 # VSCode user configuration folders
 .vscode
 
+# IntelliJ project files
+.idea
+
 # Generated web-types JSON files
 web-types.json
 web-types.lit.json

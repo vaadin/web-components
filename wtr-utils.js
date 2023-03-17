@@ -48,7 +48,8 @@ const isLockfileChanged = () => {
  * Get packages changed since main.
  */
 const getChangedPackages = () => {
-  const output = execSync('./node_modules/.bin/lerna la --since origin/main --json --loglevel silent');
+  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
+  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`);
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
@@ -192,7 +193,7 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
       </script>
-      <script type="module" src="${testFramework}"></script>
+      <script type='module' src='${testFramework}'></script>
     </body>
   </html>
 `;
