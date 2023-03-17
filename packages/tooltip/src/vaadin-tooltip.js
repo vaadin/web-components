@@ -474,8 +474,8 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
     this.__onOverlayOpen = this.__onOverlayOpen.bind(this);
 
     this.__targetVisibilityObserver = new IntersectionObserver(
-      ([entry]) => {
-        this.__onTargetVisibilityChange(entry.isIntersecting);
+      (entries) => {
+        entries.forEach((entry) => this.__onTargetVisibilityChange(entry.isIntersecting));
       },
       { threshold: 1 },
     );
