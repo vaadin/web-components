@@ -161,12 +161,6 @@ export { idlePeriod };
 /**
  * Async interface for enqueuing callbacks that run at microtask timing.
  *
- * Note that microtask timing is achieved via a single `MutationObserver`,
- * and thus callbacks enqueued with this API will all run in a single
- * batch, and not interleaved with other microtasks such as promises.
- * Promises are avoided as an implementation choice for the time being
- * due to Safari bugs that cause Promises to lack microtask guarantees.
- *
  * @namespace
  * @summary Async interface for enqueuing callbacks that run at microtask
  *   timing.
