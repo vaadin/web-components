@@ -12,6 +12,7 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
+import { html, render } from 'lit';
 import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
@@ -175,6 +176,29 @@ describe('vaadin-tooltip', () => {
         tooltip.for = 'foo';
         await nextFrame();
         expect(tooltip.target).to.eql(target);
+      });
+
+      it('should still target correct element after sorting the items differently', async () => {
+        const container = fixtureSync('<div></div>');
+        function renderTooltips(items) {
+          render(
+            html`
+              ${items.map(
+                (item) => html`
+                  <vaadin-tooltip for="${item}"></vaadin-tooltip>
+                  <div id=${item}></div>
+                `,
+              )}
+            `,
+            container,
+          );
+        }
+
+        renderTooltips(['bar', 'foo']);
+        renderTooltips(['foo']);
+
+        await nextFrame();
+        expect(container.querySelector('vaadin-tooltip[for="foo"]').target).to.equal(container.querySelector('#foo'));
       });
     });
 

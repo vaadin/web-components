@@ -561,6 +561,10 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
 
   /** @private */
   __setTargetById(targetId) {
+    if (!this.isConnected) {
+      return;
+    }
+
     const target = this.getRootNode().getElementById(targetId);
 
     if (target) {
