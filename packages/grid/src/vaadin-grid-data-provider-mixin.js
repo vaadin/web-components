@@ -425,12 +425,10 @@ export const DataProviderMixin = (superClass) =>
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
             this._setLoading(false);
 
-            iterateChildren(this.$.items, (row) => {
-              if (!row.hidden) {
-                const cachedItem = this._cache.getItemForIndex(row.index);
-                if (cachedItem) {
-                  this._getItem(row.index, row);
-                }
+            this._getVisibleRows().forEach((row) => {
+              const cachedItem = this._cache.getItemForIndex(row.index);
+              if (cachedItem) {
+                this._getItem(row.index, row);
               }
             });
 
