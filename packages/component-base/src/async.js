@@ -20,13 +20,10 @@
  * asynchronous tasks.
  */
 
-// Microtask implemented using Mutation Observer
 let microtaskCurrHandle = 0;
 let microtaskLastHandle = 0;
 const microtaskCallbacks = [];
-let microtaskNodeContent = 0;
 let microtaskScheduled = false;
-const microtaskNode = document.createTextNode('');
 
 function microtaskFlush() {
   microtaskScheduled = false;
@@ -46,8 +43,6 @@ function microtaskFlush() {
   microtaskCallbacks.splice(0, len);
   microtaskLastHandle += len;
 }
-
-new window.MutationObserver(microtaskFlush).observe(microtaskNode, { characterData: true });
 
 /**
  * Async interface wrapper around `setTimeout`.
@@ -187,8 +182,7 @@ const microTask = {
   run(callback) {
     if (!microtaskScheduled) {
       microtaskScheduled = true;
-      microtaskNode.textContent = microtaskNodeContent;
-      microtaskNodeContent += 1;
+      queueMicrotask(() => microtaskFlush());
     }
     microtaskCallbacks.push(callback);
     const result = microtaskCurrHandle;
