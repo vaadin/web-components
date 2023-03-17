@@ -187,6 +187,9 @@ describe('vaadin-app-layout', () => {
       toggle = layout.querySelector('#toggle');
       drawer = layout.shadowRoot.querySelector('[part=drawer]');
       backdrop = layout.shadowRoot.querySelector('[part=backdrop]');
+      // Wait for the initial resize observer callback
+      await onceResized(layout);
+      await nextFrame();
     }
 
     describe('desktop layout', () => {
@@ -288,7 +291,7 @@ describe('vaadin-app-layout', () => {
         new MutationObserver(spy).observe(drawer, { attributes: true, attributeFilter: ['tabindex'] });
         layout.drawerOpened = true;
         layout.drawerOpened = false;
-        await onceResized(layout);
+        await nextFrame();
         expect(spy.called).to.be.false;
       });
 
@@ -313,7 +316,7 @@ describe('vaadin-app-layout', () => {
       it('should move focus to the drawer when opening the drawer', async () => {
         toggle.focus();
         layout.drawerOpened = true;
-        await onceResized(layout);
+        await nextFrame();
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
       });
 
@@ -321,6 +324,7 @@ describe('vaadin-app-layout', () => {
         layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
         toggle.focus();
         layout.drawerOpened = true;
+        await nextFrame();
         expect(document.activeElement).to.equal(toggle);
         await oneEvent(drawer, 'transitionend');
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
@@ -334,7 +338,7 @@ describe('vaadin-app-layout', () => {
       describe('opened', () => {
         beforeEach(async () => {
           layout.drawerOpened = true;
-          await onceResized(layout);
+          await nextFrame();
         });
 
         it('should close the drawer on Escape press', () => {
