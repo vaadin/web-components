@@ -694,8 +694,8 @@ describe('vaadin-tooltip', () => {
     beforeEach(async () => {
       container = fixtureSync(`
           <div>
-              <div id='first'>First</div>
-              <div id='second'>Second</div>
+              <div id="first">First</div>
+              <div id="second">Second</div>
           </div>
         `);
       target = container.querySelector('#second');
