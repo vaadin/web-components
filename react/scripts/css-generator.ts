@@ -71,6 +71,12 @@ const vmGlobal = {
         // @ts-ignore
         storeItem(globalContents, globalWindow.__moduleId, content);
       },
+      insertAdjacentElement(where: InsertPosition, el: { localName: string; id?: string; textContent: string }) {
+        if (el.localName === 'style') {
+          // @ts-ignore
+          storeItem(globalContents, globalWindow.__moduleId, el.textContent);
+        }
+      },
     },
   },
 };

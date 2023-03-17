@@ -13,7 +13,7 @@
  */
 
 const axios = require('axios');
-const https = require("https");
+const https = require('https');
 const exec = require('util').promisify(require('child_process').exec);
 const { exe } = require('child_process');
 
@@ -25,31 +25,30 @@ let arrBranch = [];
 let arrUser = [];
 let arrMergedBy = [];
 
-const repo = "vaadin/react-components";
+const repo = 'vaadin/react-components';
 const token = process.env['GITHUB_TOKEN'];
 if (!token) {
   console.log(`GITHUB_TOKEN is not set, skipping PR creation`);
   process.exit(1);
 }
 
-async function getAllCommits(){
+async function getAllCommits() {
   let url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
   try {
     const options = {
-      headers:
-      {
+      headers: {
         'User-Agent': 'Vaadin Cherry Pick',
-        'Authorization': `token ${token}`,
+        Authorization: `token ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
     };
 
     res = await axios.get(url, options);
     data = res.data;
-    data = data.filter(da => da.labels.length > 0 && da.merged_at !== null);
+    data = data.filter((da) => da.labels.length > 0 && da.merged_at !== null);
 
     if (data.length === 0) {
-      console.log("No commits needs to be picked.");
+      console.log('No commits needs to be picked.');
       process.exit(0);
     }
     return data;
@@ -59,15 +58,14 @@ async function getAllCommits(){
   }
 }
 
-async function getCommit(commitURL){
+async function getCommit(commitURL) {
   try {
     const options = {
-      headers:
-      {
+      headers: {
         'User-Agent': 'Vaadin Cherry Pick',
-        'Authorization': `token ${token}`,
+        Authorization: `token ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
     };
 
     res = await axios.get(commitURL, options);
@@ -80,24 +78,31 @@ async function getCommit(commitURL){
   }
 }
 
-async function filterCommits(commits){
+async function filterCommits(commits) {
   for (let commit of commits) {
     let target = false;
     let picked = false;
-    for (let label of commit.labels){
-      if(label.name.includes("target/")){
+    for (let label of commit.labels) {
+      if (label.name.includes('target/')) {
         target = true;
       }
-      if(label.name.includes("cherry-picked") || label.name.includes("need to pick manually")){
+      if (label.name.includes('cherry-picked') || label.name.includes('need to pick manually')) {
         picked = true;
       }
     }
-    if(target === true && picked === false){
+    if (target === true && picked === false) {
       let singleCommit = await getCommit(commit.url);
-      commit.labels.forEach(label => {
+      commit.labels.forEach((label) => {
         let branch = /target\/(.*)/.exec(label.name);
-        if (branch){
-          console.log(commit.number, commit.user.login, commit.url, commit.merge_commit_sha, branch[1], singleCommit.merged_by.login);
+        if (branch) {
+          console.log(
+            commit.number,
+            commit.user.login,
+            commit.url,
+            commit.merge_commit_sha,
+            branch[1],
+            singleCommit.merged_by.login,
+          );
           arrPR.push(commit.number);
           arrSHA.push(commit.merge_commit_sha);
           arrURL.push(commit.url);
@@ -106,13 +111,13 @@ async function filterCommits(commits){
           arrUser.push(`@${commit.user.login}`);
           arrMergedBy.push(`@${singleCommit.merged_by.login}`);
         }
-      })
+      });
     }
   }
 }
 
-async function cherryPickCommits(){
-  for(let i=arrPR.length-1; i>=0; i--){
+async function cherryPickCommits() {
+  for (let i = arrPR.length - 1; i >= 0; i--) {
     let branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
 
     await exec('git checkout main');
@@ -120,15 +125,15 @@ async function cherryPickCommits(){
     await exec(`git checkout ${arrBranch[i]}`);
     await exec(`git reset --hard origin/${arrBranch[i]}`);
 
-    try{
+    try {
       await exec(`git checkout -b ${branchName}`);
     } catch (err) {
       console.error(`Cannot Create Branch, error : ${err}`);
       process.exit(1);
     }
 
-    try{
-      let {stdout, stderr} = await exec(`git cherry-pick ${arrSHA[i]}`);
+    try {
+      let { stdout, stderr } = await exec(`git cherry-pick ${arrSHA[i]}`);
     } catch (err) {
       console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
       await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
@@ -147,68 +152,75 @@ async function cherryPickCommits(){
   }
 }
 
-async function labelCommit(url, label){
-  let issueURL = url.replace("pulls", "issues") + "/labels";
+async function labelCommit(url, label) {
+  let issueURL = url.replace('pulls', 'issues') + '/labels';
   const options = {
-    headers:{
+    headers: {
       'User-Agent': 'Vaadin Cherry Pick',
-      'Authorization': `token ${token}`,
-    }
+      Authorization: `token ${token}`,
+    },
   };
 
-  await axios.post(issueURL, {"labels":[label]}, options);
+  await axios.post(issueURL, { labels: [label] }, options);
 }
 
-async function postComment(url, userName, mergedBy, branch, message){
-  let issueURL = url.replace("pulls", "issues") + "/comments";
+async function postComment(url, userName, mergedBy, branch, message) {
+  let issueURL = url.replace('pulls', 'issues') + '/comments';
   const options = {
-    headers:{
+    headers: {
       'User-Agent': 'Vaadin Cherry Pick',
-      'Authorization': `token ${token}`,
-    }
+      Authorization: `token ${token}`,
+    },
   };
 
-  await axios.post(issueURL, {"body":`Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`}, options);
+  await axios.post(
+    issueURL,
+    {
+      body: `Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`,
+    },
+    options,
+  );
 }
 
+async function createPR(title, head, base) {
+  const payload = { title, head, base };
 
-async function createPR(title, head, base){
-  const payload = {title, head, base};
-
-  return new Promise(resolve => {
-    const content = JSON.stringify({ title, head, base }, null, 1)
-    const req = https.request({
-      method: 'POST',
-      hostname: 'api.github.com',
-      path: `/repos/${repo}/pulls`,
-      headers: {
-        'Authorization': `token ${token}`,
-        'User-Agent': 'Vaadin Cherry Pick',
-        'Content-Type': 'application/json',
-        'Content-Length': content.length,
+  return new Promise((resolve) => {
+    const content = JSON.stringify({ title, head, base }, null, 1);
+    const req = https.request(
+      {
+        method: 'POST',
+        hostname: 'api.github.com',
+        path: `/repos/${repo}/pulls`,
+        headers: {
+          Authorization: `token ${token}`,
+          'User-Agent': 'Vaadin Cherry Pick',
+          'Content-Type': 'application/json',
+          'Content-Length': content.length,
+        },
+        body: content,
       },
-      body: content
-    }, res => {
-      let body = "";
-      res.on("data", data => {
-        body += data;
-      });
-      res.on("end", () => {
-        resolve(body);
-      });
-    });
-    req.write(content)
-  }).then(body => {
+      (res) => {
+        let body = '';
+        res.on('data', (data) => {
+          body += data;
+        });
+        res.on('end', () => {
+          resolve(body);
+        });
+      },
+    );
+    req.write(content);
+  }).then((body) => {
     const resp = JSON.parse(body);
     console.log(`Created PR '${title}' ${resp.url}`);
   });
 }
 
-async function main(){
+async function main() {
   let allCommits = await getAllCommits();
   await filterCommits(allCommits);
   await cherryPickCommits();
-
 }
 
 main();
