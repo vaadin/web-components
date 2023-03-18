@@ -39,6 +39,8 @@ registerStyles(
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       will-change: transform;
       cursor: var(--lumo-clickable-cursor);
+      /* Default field border color */
+      --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
     }
 
     /* Used for activation "halo" */
@@ -73,6 +75,10 @@ registerStyles(
       background-clip: content-box;
     }
 
+    :host([checked]) {
+      --vaadin-input-field-border-color: transparent;
+    }
+
     :host([checked]) [part='radio'] {
       background-color: var(--lumo-primary-color);
     }
@@ -101,12 +107,14 @@ registerStyles(
     }
 
     :host([focus-ring]) [part='radio'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct),
+        inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 
     :host([disabled]) {
       pointer-events: none;
       color: var(--lumo-disabled-text-color);
+      --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
     }
 
     :host([disabled]) ::slotted(label) {
