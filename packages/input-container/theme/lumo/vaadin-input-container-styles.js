@@ -23,6 +23,8 @@ registerStyles(
         var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
       /* Fallback */
       --_input-container-radius: var(--vaadin-input-field-border-radius, var(--lumo-border-radius-m));
+      /* Default field border color */
+      --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
     }
 
     :host([dir='rtl']) {
