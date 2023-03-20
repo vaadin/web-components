@@ -61,10 +61,7 @@ export function deserializeAttributeValue(value) {
  * @return {string}
  */
 export function serializeAttributeValue(values) {
-  if (!values) {
-    return '';
-  }
-  return [...values].join(' ');
+  return values ? [...values].join(' ') : '';
 }
 
 /**
