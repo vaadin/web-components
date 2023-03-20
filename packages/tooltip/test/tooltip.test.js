@@ -714,6 +714,30 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
   });
+
+  describe('moving target', () => {
+    let container, target;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+          <div>
+              <div id="first">First</div>
+              <div id="second">Second</div>
+          </div>
+        `);
+      target = container.querySelector('#second');
+      tooltip.target = target;
+      await nextFrame();
+    });
+
+    it('should still open overlay when target element was moved', async () => {
+      const firstElement = container.querySelector('#first');
+      firstElement.before(target);
+      await waitForIntersectionObserver();
+      mouseenter(target);
+      expect(overlay.opened).to.be.true;
+    });
+  });
 });
 
 describe('manual opened', () => {
