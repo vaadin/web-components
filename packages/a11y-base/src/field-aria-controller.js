@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -97,7 +97,7 @@ export class FieldAriaController {
    * @private
    */
   __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    this.__setAriaAttributeId('aria-labelledby', labelId, oldLabelId);
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId });
   }
 
   /**
@@ -108,11 +108,8 @@ export class FieldAriaController {
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    if (this.__isGroupField) {
-      this.__setAriaAttributeId('aria-labelledby', errorId, oldErrorId);
-    } else {
-      this.__setAriaAttributeId('aria-describedby', errorId, oldErrorId);
-    }
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: errorId, oldId: oldErrorId, fromUser: false });
   }
 
   /**
@@ -123,11 +120,8 @@ export class FieldAriaController {
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
-    if (this.__isGroupField) {
-      this.__setAriaAttributeId('aria-labelledby', helperId, oldHelperId);
-    } else {
-      this.__setAriaAttributeId('aria-describedby', helperId, oldHelperId);
-    }
+    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
+    setAriaIDReference(this.__target, ariaAttribute, { newId: helperId, oldId: oldHelperId, fromUser: false });
   }
 
   /**
@@ -148,25 +142,6 @@ export class FieldAriaController {
       this.__target.setAttribute('aria-required', 'true');
     } else {
       this.__target.removeAttribute('aria-required');
-    }
-  }
-
-  /**
-   * @param {string | null | undefined} newId
-   * @param {string | null | undefined} oldId
-   * @private
-   */
-  __setAriaAttributeId(attr, newId, oldId) {
-    if (!this.__target) {
-      return;
-    }
-
-    if (oldId) {
-      removeValueFromAttribute(this.__target, attr, oldId);
-    }
-
-    if (newId) {
-      addValueToAttribute(this.__target, attr, newId);
     }
   }
 }
