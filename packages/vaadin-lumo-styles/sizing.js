@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const sizing = css`
   :host {
@@ -23,8 +24,6 @@ const sizing = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${sizing.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('sizing-props', sizing);
 
 export { sizing };

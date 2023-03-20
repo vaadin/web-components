@@ -12,6 +12,7 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
+import { html, render } from 'lit';
 import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
@@ -170,10 +171,34 @@ describe('vaadin-tooltip', () => {
     });
 
     describe('element found', () => {
-      it('should use for attribute to link target using ID', () => {
+      it('should use for attribute to link target using ID', async () => {
         target.setAttribute('id', 'foo');
         tooltip.for = 'foo';
+        await nextFrame();
         expect(tooltip.target).to.eql(target);
+      });
+
+      it('should still target correct element after sorting the items differently', async () => {
+        const container = fixtureSync('<div></div>');
+        function renderTooltips(items) {
+          render(
+            html`
+              ${items.map(
+                (item) => html`
+                  <vaadin-tooltip for="${item}"></vaadin-tooltip>
+                  <div id=${item}></div>
+                `,
+              )}
+            `,
+            container,
+          );
+        }
+
+        renderTooltips(['bar', 'foo']);
+        renderTooltips(['foo']);
+
+        await nextFrame();
+        expect(container.querySelector('vaadin-tooltip[for="foo"]').target).to.equal(container.querySelector('#foo'));
       });
     });
 
@@ -186,14 +211,16 @@ describe('vaadin-tooltip', () => {
         console.warn.restore();
       });
 
-      it('should warn when element with given ID is not found', () => {
+      it('should warn when element with given ID is not found', async () => {
         tooltip.for = 'bar';
+        await nextFrame();
         expect(console.warn.called).to.be.true;
       });
 
-      it('should keep the target when providing incorrect for', () => {
+      it('should keep the target when providing incorrect for', async () => {
         tooltip.target = target;
         tooltip.for = 'bar';
+        await nextFrame();
         expect(tooltip.target).to.eql(target);
       });
     });
@@ -684,6 +711,30 @@ describe('vaadin-tooltip', () => {
       otherOverlay.opened = true;
       await nextRender();
 
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('moving target', () => {
+    let container, target;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+          <div>
+              <div id="first">First</div>
+              <div id="second">Second</div>
+          </div>
+        `);
+      target = container.querySelector('#second');
+      tooltip.target = target;
+      await nextFrame();
+    });
+
+    it('should still open overlay when target element was moved', async () => {
+      const firstElement = container.querySelector('#first');
+      firstElement.before(target);
+      await waitForIntersectionObserver();
+      mouseenter(target);
       expect(overlay.opened).to.be.true;
     });
   });

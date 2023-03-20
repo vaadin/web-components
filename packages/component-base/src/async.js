@@ -20,13 +20,10 @@
  * asynchronous tasks.
  */
 
-// Microtask implemented using Mutation Observer
 let microtaskCurrHandle = 0;
 let microtaskLastHandle = 0;
 const microtaskCallbacks = [];
-let microtaskNodeContent = 0;
 let microtaskScheduled = false;
-const microtaskNode = document.createTextNode('');
 
 function microtaskFlush() {
   microtaskScheduled = false;
@@ -46,8 +43,6 @@ function microtaskFlush() {
   microtaskCallbacks.splice(0, len);
   microtaskLastHandle += len;
 }
-
-new window.MutationObserver(microtaskFlush).observe(microtaskNode, { characterData: true });
 
 /**
  * Async interface wrapper around `setTimeout`.
@@ -166,12 +161,6 @@ export { idlePeriod };
 /**
  * Async interface for enqueuing callbacks that run at microtask timing.
  *
- * Note that microtask timing is achieved via a single `MutationObserver`,
- * and thus callbacks enqueued with this API will all run in a single
- * batch, and not interleaved with other microtasks such as promises.
- * Promises are avoided as an implementation choice for the time being
- * due to Safari bugs that cause Promises to lack microtask guarantees.
- *
  * @namespace
  * @summary Async interface for enqueuing callbacks that run at microtask
  *   timing.
@@ -187,8 +176,7 @@ const microTask = {
   run(callback) {
     if (!microtaskScheduled) {
       microtaskScheduled = true;
-      microtaskNode.textContent = microtaskNodeContent;
-      microtaskNodeContent += 1;
+      queueMicrotask(() => microtaskFlush());
     }
     microtaskCallbacks.push(callback);
     const result = microtaskCurrHandle;

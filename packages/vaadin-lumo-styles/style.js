@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const style = css`
   :host {
@@ -36,8 +37,6 @@ const globals = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}$</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('style-props', style);
 
 export { globals, style };
