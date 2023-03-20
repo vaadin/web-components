@@ -285,5 +285,13 @@ describe('lazy columns', () => {
       await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
       expectCellsDomOrderToMatchColumnOrder();
     });
+
+    it('should visually position the rendered cells correctly', async () => {
+      const firstRow = grid._getVisibleRows()[0];
+      [...firstRow.children].forEach((cell) => {
+        expect(cell.getBoundingClientRect().left).to.equal(cell._column._headerCell.getBoundingClientRect().left);
+        expect(cell.getBoundingClientRect().right).to.equal(cell._column._headerCell.getBoundingClientRect().right);
+      });
+    });
   });
 });

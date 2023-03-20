@@ -242,7 +242,6 @@ export const ScrollMixin = (superClass) =>
           ? lastFrozenColumn._sizerCell.offsetLeft + lastFrozenColumn._sizerCell.offsetWidth
           : 0;
         this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
-        // TODO: Test
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
       }
     }
