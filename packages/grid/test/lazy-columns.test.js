@@ -190,12 +190,22 @@ describe('lazy columns', () => {
      * Expect the cells DOM order to match the column order
      */
     function expectCellsDomOrderToMatchColumnOrder() {
-      const columnsInOrder = grid._getColumnsInOrder();
       const firstRow = grid._getVisibleRows()[0];
       const expectedOrder = [...firstRow.children].sort(
-        (a, b) => columnsInOrder.indexOf(a._column) - columnsInOrder.indexOf(b._column),
+        (a, b) => columns.indexOf(a._column) - columns.indexOf(b._column),
       );
       expect(expectedOrder).to.deep.equal([...firstRow.children]);
+    }
+
+    /**
+     * Expect the cells visual order to match the column order
+     */
+    function expectCellsVisualOrderToMatchColumnOrder() {
+      const firstRow = grid._getVisibleRows()[0];
+      [...firstRow.children].forEach((cell) => {
+        expect(cell.getBoundingClientRect().left).to.equal(cell._column._headerCell.getBoundingClientRect().left);
+        expect(cell.getBoundingClientRect().right).to.equal(cell._column._headerCell.getBoundingClientRect().right);
+      });
     }
 
     beforeEach(async () => {
@@ -287,11 +297,29 @@ describe('lazy columns', () => {
     });
 
     it('should visually position the rendered cells correctly', async () => {
-      const firstRow = grid._getVisibleRows()[0];
-      [...firstRow.children].forEach((cell) => {
-        expect(cell.getBoundingClientRect().left).to.equal(cell._column._headerCell.getBoundingClientRect().left);
-        expect(cell.getBoundingClientRect().right).to.equal(cell._column._headerCell.getBoundingClientRect().right);
-      });
+      expectCellsVisualOrderToMatchColumnOrder();
+    });
+
+    it('should visually position the rendered cells correctly after scrolling', async () => {
+      // Scroll back a bit
+      await scrollHorizontallyTo(grid.$.table.scrollLeft - 100);
+      await scrollHorizontallyTo(grid.$.table.scrollLeft - 100);
+
+      expectCellsVisualOrderToMatchColumnOrder();
+    });
+
+    it('should visually position the frozen cells correctly', async () => {
+      columns[0].frozen = true;
+      await nextFrame();
+
+      expectCellsVisualOrderToMatchColumnOrder();
+    });
+
+    it('should visually position the frozen to end cells correctly', async () => {
+      columns.at(-1).frozenToEnd = true;
+      await nextFrame();
+
+      expectCellsVisualOrderToMatchColumnOrder();
     });
   });
 });
