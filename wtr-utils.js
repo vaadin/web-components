@@ -193,7 +193,7 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
       </script>
-      <script type='module' src='${testFramework}'></script>
+      <script type="module" src="${testFramework}"></script>
     </body>
   </html>
 `;
