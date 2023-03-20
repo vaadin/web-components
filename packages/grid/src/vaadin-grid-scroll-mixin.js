@@ -215,8 +215,11 @@ export const ScrollMixin = (superClass) =>
               if (bodyContentHidden) {
                 cell.remove();
               } else if (cell.__parentRow) {
-                // TODO: Insert to the correct position
-                cell.__parentRow.appendChild(cell);
+                // Add the cell to the correct DOM position in the row
+                const followingColumnCell = [...cell.__parentRow.children].find(
+                  (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(column),
+                );
+                cell.__parentRow.insertBefore(cell, followingColumnCell);
               }
             }
           });

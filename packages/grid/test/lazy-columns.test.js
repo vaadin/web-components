@@ -186,6 +186,18 @@ describe('lazy columns', () => {
       await oneEvent(grid.$.table, 'scroll');
     }
 
+    /**
+     * Expect the cells DOM order to match the column order
+     */
+    function expectCellsDomOrderToMatchColumnOrder() {
+      const columnsInOrder = grid._getColumnsInOrder();
+      const firstRow = grid._getVisibleRows()[0];
+      const expectedOrder = [...firstRow.children].sort(
+        (a, b) => columnsInOrder.indexOf(a._column) - columnsInOrder.indexOf(b._column),
+      );
+      expect(expectedOrder).to.deep.equal([...firstRow.children]);
+    }
+
     beforeEach(async () => {
       resetRenderers();
       await scrollHorizontallyTo(grid.$.table.scrollWidth);
@@ -261,6 +273,17 @@ describe('lazy columns', () => {
       await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
 
       expect(getBodyCellContent(0).textContent).to.equal('updated 0');
+    });
+
+    it('should maintain the sequential DOM order of the cells', async () => {
+      expectCellsDomOrderToMatchColumnOrder();
+
+      // Scroll back a bit
+      await scrollHorizontallyTo(grid.$.table.scrollLeft - 100);
+      await scrollHorizontallyTo(grid.$.table.scrollLeft - 100);
+
+      await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
+      expectCellsDomOrderToMatchColumnOrder();
     });
   });
 });
