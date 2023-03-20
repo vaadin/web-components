@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
@@ -769,6 +770,16 @@ const runTests = (defineHelper, baseMixin) => {
         element.accessibleName = null;
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal(ariaLabelledby);
+      });
+
+      it('should not throw if accessibleName is set before element is attached', async () => {
+        const parent = element.parentNode;
+        element = document.createElement(tag);
+        sinon.spy(element._fieldAriaController, 'setAriaLabel');
+        element.accessibleName = 'accessible name';
+        parent.appendChild(element);
+        await nextFrame();
+        expect(element._fieldAriaController.setAriaLabel.threw('TypeError')).to.be.false;
       });
     });
 

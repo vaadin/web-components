@@ -40,6 +40,7 @@ export class FieldAriaController {
     this.__setLabelIdToAriaAttribute(this.__labelId);
     this.__setErrorIdToAriaAttribute(this.__errorId);
     this.__setHelperIdToAriaAttribute(this.__helperId);
+    this.setAriaLabel(this.__label);
   }
 
   /**
@@ -62,13 +63,7 @@ export class FieldAriaController {
    * @param {string | null | undefined} label
    */
   setAriaLabel(label) {
-    if (label) {
-      removeAriaIDReference(this.__target, 'aria-labelledby');
-      this.__target.setAttribute('aria-label', label);
-    } else if (this.__label) {
-      restoreGeneratedAriaIDReference(this.__target, 'aria-labelledby');
-      this.__target.removeAttribute('aria-label');
-    }
+    this.__setAriaLabelToAttribute(label);
     this.__label = label;
   }
 
@@ -116,6 +111,23 @@ export class FieldAriaController {
   setHelperId(helperId) {
     this.__setHelperIdToAriaAttribute(helperId, this.__helperId);
     this.__helperId = helperId;
+  }
+
+  /**
+   * @param {string | null | undefined} label
+   * @private
+   * */
+  __setAriaLabelToAttribute(label) {
+    if (!this.__target) {
+      return;
+    }
+    if (label) {
+      removeAriaIDReference(this.__target, 'aria-labelledby');
+      this.__target.setAttribute('aria-label', label);
+    } else if (this.__label) {
+      restoreGeneratedAriaIDReference(this.__target, 'aria-labelledby');
+      this.__target.removeAttribute('aria-label');
+    }
   }
 
   /**
