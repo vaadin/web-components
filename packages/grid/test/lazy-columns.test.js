@@ -53,8 +53,18 @@ describe('lazy columns', () => {
     expect(isBodyCellContentHidden(columnIndex)).to.be.true;
   }
 
+  function getLastVisibleColumnIndex() {
+    return grid._getColumnsInOrder().findIndex((column, index, columns) => {
+      return (
+        column._sizerCell.getBoundingClientRect().left < grid.getBoundingClientRect().right &&
+        (!columns[index + 1] ||
+          columns[index + 1]._sizerCell.getBoundingClientRect().left > grid.getBoundingClientRect().right)
+      );
+    });
+  }
+
   beforeEach(async () => {
-    grid = fixtureSync(`<vaadin-grid style="width: 200px;"></vaadin-grid>`);
+    grid = fixtureSync(`<vaadin-grid style="width: 400px;"></vaadin-grid>`);
     cellContent = 'cell';
 
     columns = [];
@@ -86,7 +96,7 @@ describe('lazy columns', () => {
   });
 
   it('should not render columns outside the viewport', () => {
-    expectBodyCellNotRendered(2);
+    expectBodyCellNotRendered(getLastVisibleColumnIndex() + 1);
     expectBodyCellNotRendered(columns.length - 1);
   });
 
@@ -100,14 +110,14 @@ describe('lazy columns', () => {
   it('new rows - should not render columns outside the viewport', () => {
     resetRenderers();
     grid.items = [{ name: `Item 1` }, { name: `Item 2` }];
-    expectBodyCellNotRendered(2);
+    expectBodyCellNotRendered(getLastVisibleColumnIndex() + 1);
     expectBodyCellNotRendered(columns.length - 1);
   });
 
   it('should render columns revealed columns on resize', async () => {
     grid.style.width = `${grid.$.table.scrollWidth}px`;
     await onceResized(grid);
-    expectBodyCellUpdated(2);
+    expectBodyCellUpdated(getLastVisibleColumnIndex());
     expectBodyCellUpdated(columns.length - 1);
   });
 
@@ -151,7 +161,7 @@ describe('lazy columns', () => {
     resetRenderers();
     grid.lazyColumns = true;
 
-    expectBodyCellNotRendered(2);
+    expectBodyCellNotRendered(getLastVisibleColumnIndex() + 1);
     expectBodyCellNotRendered(columns.length - 1);
   });
 
