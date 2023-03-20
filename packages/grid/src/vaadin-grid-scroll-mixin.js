@@ -170,9 +170,10 @@ export const ScrollMixin = (superClass) =>
         this._hideTooltip(true);
       }
 
-      // TODO: _updateOverflow on each scroll event is really expensive. Consider throttling it.
       this._updateOverflow();
 
+      // If horizontal scroll position changed and lazy column rendering is enabled,
+      // update the visible columns.
       if (this.lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
@@ -184,11 +185,7 @@ export const ScrollMixin = (superClass) =>
       }
     }
 
-    /**
-     * Iterates all the columns and marks their _bodyContentHidden true
-     * in case they are outside the viewport and lazyColumns is set.
-     * @private
-     */
+    /** @private */
     __updateColumnsBodyContentHidden() {
       if (!this._columnTree) {
         return;
@@ -202,6 +199,12 @@ export const ScrollMixin = (superClass) =>
       }
 
       let bodyContentHiddenChanged = false;
+
+      // Remove the column cells from the DOM if the column is outside the viewport.
+      // Add the column cells to the DOM if the column is inside the viewport.
+      //
+      // Update the _bodyContentHidden property of the column to reflect the current
+      // visibility state and make it run renderers for the cells if necessary.
       columnsInOrder.forEach((column) => {
         const bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
 
