@@ -63,9 +63,15 @@ describe('vaadin-details', () => {
       details.opened = true;
       expect(contentNode.getAttribute('aria-hidden')).to.equal('false');
     });
+
+    it('should not close when a content is clicked', () => {
+      details.opened = true;
+      contentNode.click();
+      expect(details.opened).to.be.true;
+    });
   });
 
-  ['default', 'custom'].forEach((type) => {
+  ['default', 'custom', 'component'].forEach((type) => {
     const fixtures = {
       default: `
         <vaadin-details summary="Summary">
@@ -75,6 +81,12 @@ describe('vaadin-details', () => {
       custom: `
         <vaadin-details>
           <vaadin-details-summary slot="summary">Summary</vaadin-details-summary>
+          <div>Content</div>
+        </vaadin-details>
+      `,
+      component: `
+        <vaadin-details>
+          <vaadin-details-summary slot="summary"><div>Summary<div></vaadin-details-summary>
           <div>Content</div>
         </vaadin-details>
       `,
@@ -94,6 +106,17 @@ describe('vaadin-details', () => {
 
         summary.click();
         expect(details.opened).to.be.false;
+      });
+
+      it(`should toggle opened on ${type} summary child click`, () => {
+        const child = summary.firstChild;
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          child.click();
+          expect(details.opened).to.be.true;
+
+          child.click();
+          expect(details.opened).to.be.false;
+        }
       });
 
       it(`should toggle opened on ${type} summary Enter`, async () => {

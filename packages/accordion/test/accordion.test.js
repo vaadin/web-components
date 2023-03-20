@@ -32,7 +32,7 @@ describe('vaadin-accordion', () => {
           <div>Content 2</div>
         </vaadin-accordion-panel>
         <vaadin-accordion-panel>
-          <vaadin-accordion-heading slot="summary">Panel 3</vaadin-accordion-heading>
+          <vaadin-accordion-heading slot="summary"><div>Panel 3</div></vaadin-accordion-heading>
           <div>Content 3</div>
         </vaadin-accordion-panel>
       </vaadin-accordion>
@@ -137,6 +137,11 @@ describe('vaadin-accordion', () => {
       accordion.addEventListener('opened-changed', spy);
       getHeading(1).click();
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should open panel when component in summary is clicked', () => {
+      getHeading(2).firstChild.click();
+      expect(accordion.items[2].opened).to.be.true;
     });
   });
 

@@ -64,10 +64,15 @@ export const CollapsibleMixin = (superClass) =>
       // Only handle click and not keydown, because `vaadin-details-summary` uses `ButtonMixin`
       // that already covers this logic, and `vaadin-accordion-heading` uses native `<button>`.
       this.addEventListener('click', (event) => {
-        if (event.target === this.focusElement) {
+        if (this._isChildOfFocusElement(event.target)) {
           this.opened = !this.opened;
         }
       });
+    }
+
+    /** @private */
+    _isChildOfFocusElement(node) {
+      return this.focusElement && this.focusElement.contains(node);
     }
 
     /** @private */
