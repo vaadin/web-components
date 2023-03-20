@@ -131,10 +131,12 @@ export const FieldMixin = (superclass) =>
       }
     }
 
+    /** @private */
     _accessibleNameChanged(accessibleName) {
       this._fieldAriaController.setAriaLabel(accessibleName);
     }
 
+    /** @private */
     _accessibleNameRefChanged(accessibleNameRef) {
       this._fieldAriaController.setLabelId(accessibleNameRef, true);
     }
@@ -144,9 +146,9 @@ export const FieldMixin = (superclass) =>
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
       if (hasLabel) {
-        this._fieldAriaController.setLabelId(labelNode.id, false);
+        this._fieldAriaController.setLabelId(labelNode.id);
       } else {
-        this._fieldAriaController.setLabelId(null, false);
+        this._fieldAriaController.setLabelId(null);
       }
     }
 

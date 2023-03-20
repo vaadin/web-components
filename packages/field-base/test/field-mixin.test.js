@@ -779,26 +779,6 @@ const runTests = (defineHelper, baseMixin) => {
         input = element.querySelector('[slot=input]');
       });
 
-      /*
-        it('should not override aria-labelledby if no accessible-name-ref is defined', () => {
-
-        })
-        it('should set aria-labelledby when accessible-name-ref is defined', () => {
-
-        })
-        it('should change aria-labelledby if accessible-name-ref is changed', () => {
-
-        })
-        it('should restore aria-labelledby by if accessible-name-ref is cleared', () => {
-
-        })
-        it('should not remove aria-labelledby if acessible-name-ref is defined and label is cleared', () => {
-
-        })
-        it('should not change aria-labelledby if accessible-name-ref is defined and label is changed', () => {
-
-        })
-      */
       it('should not override aria-labelledby if no accessible-name-ref is defined', () => {
         expect(input.hasAttribute('aria-labelledby')).to.be.true;
       });
@@ -808,6 +788,7 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
+
       it('should change aria-labelledby if accessible-name-ref is changed', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextFrame();
@@ -815,6 +796,7 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-1');
       });
+
       it('should restore aria-labelledby by if accessible-name-ref is cleared', async () => {
         const previousAriaLabelledBy = input.getAttribute('aria-labelledby');
         expect(previousAriaLabelledBy).to.not.be.empty;
@@ -824,6 +806,7 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal(previousAriaLabelledBy);
       });
+
       it('should not remove aria-labelledby if acessible-name-ref is defined and label is cleared', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextFrame();
@@ -831,6 +814,7 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
+
       it('should not change aria-labelledby if accessible-name-ref is defined and label is changed', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextFrame();

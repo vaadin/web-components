@@ -55,24 +55,6 @@ export class FieldAriaController {
   }
 
   /**
-   * Links the target element with a slotted label element
-   * via the target's attribute `aria-labelledby`.
-   *
-   * To unlink the previous slotted label element, pass `null` as `labelId`.
-   *
-   * @param {string | null} labelId
-   */
-  setLabelId(labelId, fromUser = false) {
-    const oldLabelId = fromUser ? this.__labelIdFromUser : this.__labelId;
-    this.__setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser);
-    if (fromUser) {
-      this.__labelIdFromUser = labelId;
-    } else {
-      this.__labelId = labelId;
-    }
-  }
-
-  /**
    * Defines the `aria-label` attribute of the target element.
    *
    * To remove the attribute, pass `null` as `label`.
@@ -88,6 +70,24 @@ export class FieldAriaController {
       this.__target.removeAttribute('aria-label');
     }
     this.__label = label;
+  }
+
+  /**
+   * Links the target element with a slotted label element
+   * via the target's attribute `aria-labelledby`.
+   *
+   * To unlink the previous slotted label element, pass `null` as `labelId`.
+   *
+   * @param {string | null} labelId
+   */
+  setLabelId(labelId, fromUser = false) {
+    const oldLabelId = fromUser ? this.__labelIdFromUser : this.__labelId;
+    this.__setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser);
+    if (fromUser) {
+      this.__labelIdFromUser = labelId;
+    } else {
+      this.__labelId = labelId;
+    }
   }
 
   /**
