@@ -521,7 +521,12 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const columnIndex = this.__getIndexOfChildElement(activeCell);
+      let columnIndex = this.__getIndexOfChildElement(activeCell);
+      if (this.$.items.contains(activeCell)) {
+        // lazy column rendering may be enabled, so we need use the always visible sizer cells to find the column index
+        columnIndex = [...this.$.sizer.children].findIndex((sizerCell) => sizerCell._column === activeCell._column);
+      }
+
       const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
@@ -574,9 +579,23 @@ export const KeyboardNavigationMixin = (superClass) =>
           return acc;
         }, {});
         const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
-        const dstCell = dstRow.children[dstColumnIndex];
 
-        this._scrollHorizontallyToCell(dstCell);
+        let dstCell;
+        if (this.$.items.contains(activeCell)) {
+          const dstSizerCell = this.$.sizer.children[dstColumnIndex];
+
+          this._scrollHorizontallyToCell(dstSizerCell);
+          if (this.lazyColumns) {
+            this.__updateColumnsBodyContentHidden();
+          }
+          dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
+          // Ensure correct horizontal scroll position once the destination cell is available.
+          this._scrollHorizontallyToCell(dstCell);
+        } else {
+          dstCell = dstRow.children[dstColumnIndex];
+          this._scrollHorizontallyToCell(dstCell);
+        }
+
         dstCell.focus();
       }
     }
@@ -942,7 +961,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _scrollHorizontallyToCell(dstCell) {
-      if (dstCell.hasAttribute('frozen') || dstCell.hasAttribute('frozen-to-end') || this.__isDetailsCell(dstCell)) {
+      if (dstCell._column.frozen || dstCell._column.frozenToEnd || this.__isDetailsCell(dstCell)) {
         // These cells are, by design, always visible, no need to scroll.
         return;
       }
@@ -953,12 +972,22 @@ export const KeyboardNavigationMixin = (superClass) =>
       const tableRect = this.$.table.getBoundingClientRect();
       let leftBoundary = tableRect.left,
         rightBoundary = tableRect.right;
+
+      // Scroll before frozen columns adjustment to make sure frozen cells
+      // are aligned with the frozen columns sizer cells.
+      if (dstCellRect.left < leftBoundary) {
+        this.$.table.scrollLeft += Math.round(dstCellRect.left - leftBoundary);
+      }
+      if (dstCellRect.right > rightBoundary) {
+        this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
+      }
+
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
         if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
-        if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
+        if (cell._column.frozen || cell._column.frozenToEnd) {
           leftBoundary = cell.getBoundingClientRect().right;
           break;
         }
@@ -968,7 +997,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
-        if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
+        if (cell._column.frozen || cell._column.frozenToEnd) {
           rightBoundary = cell.getBoundingClientRect().left;
           break;
         }

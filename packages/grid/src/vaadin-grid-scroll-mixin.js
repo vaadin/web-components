@@ -257,10 +257,9 @@ export const ScrollMixin = (superClass) =>
       }
 
       // Check if the column's sizer cell is inside the viewport
-      // TODO: Test 1px offset (keyboard navigation)
       return (
-        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth > this._scrollLeft - 1 &&
-        column._sizerCell.offsetLeft < this._scrollLeft + this.clientWidth + 1
+        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth >= this._scrollLeft &&
+        column._sizerCell.offsetLeft <= this._scrollLeft + this.clientWidth
       );
     }
 
