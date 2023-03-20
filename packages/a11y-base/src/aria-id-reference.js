@@ -92,7 +92,7 @@ export function restoreGeneratedAriaIDReference(target, attr) {
  * stored values set.
  * @param config.fromUser Indicates whether the function is called by the user or internally.
  * When `config.fromUser` is called with `true` for the first time, the function will clear
- * and stores the attribute value for the given element.
+ * and store the attribute value for the given element.
  */
 export function setAriaIDReference(target, attr, config = { newId: null, oldId: null, fromUser: false }) {
   if (!target || !attr) {
