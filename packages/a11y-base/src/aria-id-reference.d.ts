@@ -11,7 +11,7 @@ export type AriaIDReferenceConfig = {
 };
 
 /**
- * Sets a new ID reference for a {@link target} element and an ARIA {@link attr | attribute}.
+ * Sets a new ID reference for a target element and an ARIA attribute.
  *
  * @param config.newId
  *  The new ARIA ID reference to set. If `null`, the attribute is removed,
@@ -30,12 +30,12 @@ export type AriaIDReferenceConfig = {
 export function setAriaIDReference(target: HTMLElement, attr: string, config: AriaIDReferenceConfig): void;
 
 /**
- * Removes the {@link attr | attribute} value of the given {@link target} element.
+ * Removes the attribute value of the given target element.
  * It also stores the current value, if no stored values are present.
  */
 export function removeAriaIDReference(target: HTMLElement, attr: string): void;
 
 /**
- * Restores the generated values of the {@link attr | attribute} to the given {@link target} element.
+ * Restores the generated values of the attribute to the given target element.
  */
 export function restoreGeneratedAriaIDReference(target: HTMLElement, attr: string): void;
