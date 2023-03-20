@@ -6,6 +6,8 @@
 import './vaadin-tooltip-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -474,8 +476,8 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
     this.__onOverlayOpen = this.__onOverlayOpen.bind(this);
 
     this.__targetVisibilityObserver = new IntersectionObserver(
-      ([entry]) => {
-        this.__onTargetVisibilityChange(entry.isIntersecting);
+      (entries) => {
+        entries.forEach((entry) => this.__onTargetVisibilityChange(entry.isIntersecting));
       },
       { threshold: 1 },
     );
@@ -551,13 +553,24 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __forChanged(forId) {
     if (forId) {
-      const target = this.getRootNode().getElementById(forId);
+      this.__setTargetByIdDebouncer = Debouncer.debounce(this.__setTargetByIdDebouncer, microTask, () =>
+        this.__setTargetById(forId),
+      );
+    }
+  }
 
-      if (target) {
-        this.target = target;
-      } else {
-        console.warn(`No element with id="${forId}" found to show tooltip.`);
-      }
+  /** @private */
+  __setTargetById(targetId) {
+    if (!this.isConnected) {
+      return;
+    }
+
+    const target = this.getRootNode().getElementById(targetId);
+
+    if (target) {
+      this.target = target;
+    } else {
+      console.warn(`No element with id="${targetId}" found to show tooltip.`);
     }
   }
 

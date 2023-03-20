@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const colorBase = css`
   :host {
@@ -80,9 +81,7 @@ const colorBase = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${colorBase.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('color-props', colorBase);
 
 const color = css`
   [theme~='dark'] {

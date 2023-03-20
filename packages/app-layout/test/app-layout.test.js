@@ -12,6 +12,26 @@ import sinon from 'sinon';
 import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
 
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver has processed a resize.
+ */
+async function onceResized(layout) {
+  await onceInvoked(layout, '_updateOffsetSize');
+}
+
 describe('vaadin-app-layout', () => {
   let layout;
 
@@ -90,12 +110,12 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar');
         layout.appendChild(navbarContent);
-        await nextFrame();
+        await onceResized(layout);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await nextFrame();
+        await onceResized(layout);
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -134,12 +154,12 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(navbarContent);
-        await nextFrame();
+        await onceResized(layout);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await nextFrame();
+        await onceResized(layout);
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -167,6 +187,9 @@ describe('vaadin-app-layout', () => {
       toggle = layout.querySelector('#toggle');
       drawer = layout.shadowRoot.querySelector('[part=drawer]');
       backdrop = layout.shadowRoot.querySelector('[part=backdrop]');
+      // Wait for the initial resize observer callback
+      await onceResized(layout);
+      await nextFrame();
     }
 
     describe('desktop layout', () => {

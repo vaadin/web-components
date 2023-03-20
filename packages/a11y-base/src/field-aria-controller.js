@@ -124,8 +124,8 @@ export class FieldAriaController {
    * @param {boolean | null | undefined} fromUser
    * @private
    */
-  __setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser = false) {
-    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser });
+  __setLabelIdToAriaAttribute(labelId, oldLabelId) {
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId });
   }
 
   /**
