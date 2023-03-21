@@ -49,7 +49,7 @@ const isLockfileChanged = () => {
  */
 const getChangedPackages = () => {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`);
+  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`); // NOSONAR
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 

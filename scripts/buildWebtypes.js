@@ -34,7 +34,7 @@ const additionalAttributes = [
  */
 function getRelevantPackages() {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} ls --json --loglevel silent`);
+  const output = execSync(`${pathToLerna} ls --json --loglevel silent`); // NOSONAR
   const allPackages = JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
   return allPackages.filter((pkg) => !blacklistedPackages.some((blacklistedPackage) => pkg.match(blacklistedPackage)));
 }
