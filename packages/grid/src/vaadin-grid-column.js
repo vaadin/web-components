@@ -101,6 +101,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _bodyContentHidden: {
           type: Boolean,
+          value: false,
         },
 
         /**

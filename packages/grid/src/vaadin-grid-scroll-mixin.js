@@ -21,6 +21,8 @@ export const ScrollMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * TODO: Document
+         *
          * Makes the content on the grid columns render lazily when
          * the column cells are scrolled into view.
          *
@@ -36,11 +38,12 @@ export const ScrollMixin = (superClass) =>
          * NOTE: columns with auto-width will only take the header content into account
          * when calculating the width for columns that are initially outside the viewport.
          *
-         * @attr {boolean} lazy-columns
-         * @type {boolean}
+         * @attr {string} column-rendering
+         * @type {string}
          */
-        lazyColumns: {
-          type: Boolean,
+        columnRendering: {
+          type: String,
+          value: 'eager',
         },
 
         /**
@@ -67,7 +70,7 @@ export const ScrollMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__lazyColumnsChanged(_columnTree, lazyColumns)'];
+      return ['__columnRenderingChanged(_columnTree, columnRendering)'];
     }
 
     /** @private */
@@ -86,6 +89,11 @@ export const ScrollMixin = (superClass) =>
      */
     set _scrollTop(top) {
       this.$.table.scrollTop = top;
+    }
+
+    /** @protected */
+    get _lazyColumns() {
+      return this.columnRendering === 'lazy';
     }
 
     /** @protected */
@@ -174,7 +182,7 @@ export const ScrollMixin = (superClass) =>
 
       // If horizontal scroll position changed and lazy column rendering is enabled,
       // update the visible columns.
-      if (this.lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
+      if (this._lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
         this.__cachedScrollLeft = this._scrollLeft;
         this._debounceColumnContentVisibility = Debouncer.debounce(
           this._debounceColumnContentVisibility,
@@ -206,7 +214,7 @@ export const ScrollMixin = (superClass) =>
       // Update the _bodyContentHidden property of the column to reflect the current
       // visibility state and make it run renderers for the cells if necessary.
       columnsInOrder.forEach((column) => {
-        const bodyContentHidden = this.lazyColumns && !this.__isColumnInViewport(column);
+        const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
 
         if (column._bodyContentHidden !== bodyContentHidden) {
           bodyContentHiddenChanged = true;
@@ -233,7 +241,7 @@ export const ScrollMixin = (superClass) =>
         this._frozenCellsChanged();
       }
 
-      if (this.lazyColumns) {
+      if (this._lazyColumns) {
         // Calculate the offset to apply to the body cells
         const firstVisibleColumn = columnsInOrder.find((column) => !column.frozen && !column._bodyContentHidden);
 
@@ -264,8 +272,8 @@ export const ScrollMixin = (superClass) =>
     }
 
     /** @private */
-    __lazyColumnsChanged(_columnTree, lazyColumns) {
-      this.$.scroller.toggleAttribute('lazy-columns', !!lazyColumns);
+    __columnRenderingChanged(_columnTree, columnRendering) {
+      this.$.scroller.setAttribute('column-rendering', columnRendering);
 
       this.__updateColumnsBodyContentHidden();
     }
@@ -414,8 +422,8 @@ export const ScrollMixin = (superClass) =>
 
       let transformFrozenToEndBody = transformFrozenToEnd;
 
-      if (this.lazyColumns) {
-        // Lazy columns is used, calculate the offset to apply to the frozen to end cells
+      if (this._lazyColumns) {
+        // Lazy column rendering is used, calculate the offset to apply to the frozen to end cells
         const columnsInOrder = this._getColumnsInOrder();
 
         const lastVisibleColumn = [...columnsInOrder]

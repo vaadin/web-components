@@ -98,16 +98,16 @@
       refreshLoop();
 
       // Controls
-      const lazyColumns = document.querySelector('vaadin-checkbox');
-      lazyColumns.addEventListener('checked-changed', (e) => {
-        grid.lazyColumns = e.detail.value;
+      const lazyColumnRendering = document.querySelector('vaadin-checkbox');
+      lazyColumnRendering.addEventListener('checked-changed', (e) => {
+        grid.lazyColumnRendering = e.detail.value;
       });
-      lazyColumns.checked = grid.lazyColumns;
+      lazyColumnRendering.checked = grid.columnRendering === 'lazy';
     </script>
 
-    <vaadin-grid item-id-path="name" lazy-columns></vaadin-grid>
+    <vaadin-grid item-id-path="name" column-rendering="lazy"></vaadin-grid>
 
-    <vaadin-checkbox label="Lazy Columns" style="margin-top: 30px"></vaadin-checkbox>
+    <vaadin-checkbox label="Lazy column rendering" style="margin-top: 30px"></vaadin-checkbox>
 
     <div id="render-time"></div>
 

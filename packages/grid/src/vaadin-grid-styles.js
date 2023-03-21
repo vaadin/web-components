@@ -125,7 +125,7 @@ registerStyles(
       opacity: 0;
     }
 
-    [lazy-columns] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+    [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
       transform: translateX(var(--_grid-lazy-columns-start));
     }
 

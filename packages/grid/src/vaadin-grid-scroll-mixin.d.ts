@@ -9,6 +9,8 @@ export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class ScrollMixinClass {
   /**
+   * TODO: Document
+   *
    * Makes the content on the grid columns render lazily when
    * the column cells are scrolled into view.
    *
@@ -24,7 +26,7 @@ export declare class ScrollMixinClass {
    * NOTE: columns with auto-width will only take the header content into account
    * when calculating the width for columns that are initially outside the viewport.
    */
-  lazyColumns: boolean | null | undefined;
+  columnRendering: 'eager' | 'lazy';
 
   /**
    * Scroll to a flat index in the grid. The method doesn't take into account

@@ -8,7 +8,7 @@ const timeouts = {
   UPDATE_CONTENT_VISIBILITY: 100,
 };
 
-describe('lazy columns', () => {
+describe('lazy column rendering', () => {
   let grid, cellContent, columns;
 
   function resetRenderers() {
@@ -84,7 +84,7 @@ describe('lazy columns', () => {
 
     grid.items = [{ name: `Item 1` }];
 
-    grid.lazyColumns = true;
+    grid.columnRendering = 'lazy';
     // Wait for the initial resize observer callback
     await onceResized(grid);
     flushGrid(grid);
@@ -148,7 +148,7 @@ describe('lazy columns', () => {
   });
 
   it('should switch back to eager columns', () => {
-    grid.lazyColumns = false;
+    grid.columnRendering = 'eager';
 
     expectBodyCellUpdated(0);
     expectBodyCellUpdated(1);
@@ -157,9 +157,9 @@ describe('lazy columns', () => {
   });
 
   it('should switch back to lazy columns', () => {
-    grid.lazyColumns = false;
+    grid.columnRendering = 'eager';
     resetRenderers();
-    grid.lazyColumns = true;
+    grid.columnRendering = 'lazy';
 
     expectBodyCellNotRendered(getLastVisibleColumnIndex() + 1);
     expectBodyCellNotRendered(columns.length - 1);

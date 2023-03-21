@@ -585,7 +585,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const dstSizerCell = this.$.sizer.children[dstColumnIndex];
 
           this._scrollHorizontallyToCell(dstSizerCell);
-          if (this.lazyColumns) {
+          if (this._lazyColumns) {
             this.__updateColumnsBodyContentHidden();
           }
           dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
