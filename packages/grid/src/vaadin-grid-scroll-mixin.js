@@ -251,6 +251,11 @@ export const ScrollMixin = (superClass) =>
           : 0;
         this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
+
+        // Make sure the body has a focusable cell element in lazy columns mode
+        if (!this.__rowFocusMode && this.isConnected && this._itemsFocusable && !this._itemsFocusable.isConnected) {
+          this._itemsFocusable = this.__getViewportRows()[0].children[0];
+        }
       }
     }
 
