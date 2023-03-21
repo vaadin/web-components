@@ -730,7 +730,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     describe('accessible-name', () => {
       beforeEach(async () => {
-        element = fixtureSync(`<${tag} label="Label" helper-text="Helper" error-message="Error Message"></${tag}>`);
+        element = fixtureSync(`<${tag} label="Label"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
@@ -750,7 +750,7 @@ const runTests = (defineHelper, baseMixin) => {
       });
 
       it('should remove aria-labelledby by if no accessible name is defined', async () => {
-        element.accessibleName = 'acessible name';
+        element.accessibleName = 'accessible name';
         await nextFrame();
         expect(input.hasAttribute('aria-labelledby')).to.be.false;
       });
@@ -763,9 +763,9 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('should restore aria-labelledby value if acessible-name is cleared', async () => {
+      it('should restore aria-labelledby value if accessible-name is cleared', async () => {
         const ariaLabelledby = input.getAttribute('aria-labelledby');
-        element.accessibleName = 'acessible name';
+        element.accessibleName = 'accessible name';
         await nextFrame();
         element.accessibleName = null;
         await nextFrame();
@@ -783,9 +783,9 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
 
-    describe('acessible-name-ref', () => {
+    describe('accessible-name-ref', () => {
       beforeEach(async () => {
-        element = fixtureSync(`<${tag} label="Label" helper-text="Helper" error-message="Error Message"></${tag}>`);
+        element = fixtureSync(`<${tag} label="Label"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
@@ -818,7 +818,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal(previousAriaLabelledBy);
       });
 
-      it('should not remove aria-labelledby if acessible-name-ref is defined and label is cleared', async () => {
+      it('should not remove aria-labelledby if accessible-name-ref is defined and label is cleared', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextFrame();
         element.label = null;
