@@ -250,9 +250,7 @@ export const ScrollMixin = (superClass) =>
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
 
         // Make sure the body has a focusable element in lazy columns mode
-        if (this._itemsFocusable && !this._itemsFocusable.isConnected) {
-          this._resetKeyboardNavigation();
-        }
+        this._resetKeyboardNavigation();
       }
     }
 
