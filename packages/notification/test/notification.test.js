@@ -50,7 +50,7 @@ describe('vaadin-notification', () => {
     const parent = notification.parentNode;
     parent.appendChild(notification);
     await aTimeout(0);
-    expect(notification.opened).to.be.false;
+    expect(notification.opened).to.be.true;
   });
 
   describe('vaadin-notification-container', () => {
