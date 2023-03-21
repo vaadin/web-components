@@ -38,9 +38,10 @@ describe('vaadin-notification', () => {
     expect(getComputedStyle(notification).display).to.equal('none');
   });
 
-  it('should close on detach', () => {
+  it('should close on detach', async () => {
     expect(notification.opened).to.be.true;
     notification.remove();
+    await aTimeout(0);
     expect(notification.opened).to.be.false;
   });
 
