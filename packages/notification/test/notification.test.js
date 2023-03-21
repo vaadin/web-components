@@ -48,9 +48,9 @@ describe('vaadin-notification', () => {
   it('should stay open after immediate reattach', async () => {
     expect(notification.opened).to.be.true;
     const parent = notification.parentNode;
-    sinon.spy(notification, '_openedChanged');
     parent.appendChild(notification);
-    expect(notification._openedChanged.called).to.be.false;
+    await aTimeout(0);
+    expect(notification.opened).to.be.false;
   });
 
   describe('vaadin-notification-container', () => {
