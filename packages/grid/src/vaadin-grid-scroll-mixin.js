@@ -259,7 +259,7 @@ export const ScrollMixin = (superClass) =>
     /** @private */
     __getColumnEnd(column) {
       if (!column) {
-        return 0;
+        return this.__isRTL ? this.$.table.clientWidth : 0;
       }
       return column._sizerCell.offsetLeft + (this.__isRTL ? 0 : column._sizerCell.offsetWidth);
     }
@@ -267,7 +267,7 @@ export const ScrollMixin = (superClass) =>
     /** @private */
     __getColumnStart(column) {
       if (!column) {
-        return 0;
+        return this.__isRTL ? this.$.table.clientWidth : 0;
       }
       return column._sizerCell.offsetLeft + (this.__isRTL ? column._sizerCell.offsetWidth : 0);
     }
