@@ -583,11 +583,15 @@ export const KeyboardNavigationMixin = (superClass) =>
         let dstCell;
         if (this.$.items.contains(activeCell)) {
           const dstSizerCell = this.$.sizer.children[dstColumnIndex];
-
-          this._scrollHorizontallyToCell(dstSizerCell);
           if (this._lazyColumns) {
+            // If the column is not in the viewport, scroll it into view.
+            if (!this.__isColumnInViewport(dstSizerCell._column)) {
+              dstSizerCell.scrollIntoView();
+            }
             this.__updateColumnsBodyContentHidden();
+            this.__updateHorizontalScrollPosition();
           }
+
           dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
           // Ensure correct horizontal scroll position once the destination cell is available.
           this._scrollHorizontallyToCell(dstCell);
@@ -961,6 +965,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _scrollHorizontallyToCell(dstCell) {
+      // TODO: Revert changes
       if (dstCell._column.frozen || dstCell._column.frozenToEnd || this.__isDetailsCell(dstCell)) {
         // These cells are, by design, always visible, no need to scroll.
         return;
@@ -972,15 +977,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       const tableRect = this.$.table.getBoundingClientRect();
       let leftBoundary = tableRect.left,
         rightBoundary = tableRect.right;
-
-      // Scroll before frozen columns adjustment to make sure frozen cells
-      // are aligned with the frozen columns sizer cells.
-      if (dstCellRect.left < leftBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.left - leftBoundary);
-      }
-      if (dstCellRect.right > rightBoundary) {
-        this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
-      }
 
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
