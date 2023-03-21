@@ -166,10 +166,10 @@ describe('text-field', () => {
 
   describe('borders enabled', () => {
     before(() => {
-      document.getRootNode().style.setProperty('--vaadin-input-field-border-width', '1px');
+      document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
     });
     after(() => {
-      document.getRootNode().style.removeProperty('--vaadin-input-field-border-width');
+      document.documentElement.style.removeProperty('--vaadin-input-field-border-width');
     });
     it('Bordered input field, default state', async () => {
       await visualDiff(div, 'bordered-input-field-default');
