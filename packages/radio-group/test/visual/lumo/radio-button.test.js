@@ -71,4 +71,32 @@ describe('radio-button', () => {
       await visualDiff(div, 'rtl-empty');
     });
   });
+
+  describe('borders enabled', () => {
+    before(() => {
+      document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
+    });
+    after(() => {
+      document.documentElement.style.removeProperty('--vaadin-input-field-border-width');
+    });
+    it('bordered default', async () => {
+      await visualDiff(div, 'bordered-default');
+    });
+    it('bordered focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'bordered-focus-ring');
+    });
+    it('bordered checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'bordered-checked');
+    });
+    it('bordered-disabled', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'bordered-disabled');
+    });
+    it('Bordered dark', async () => {
+      document.documentElement.setAttribute('theme', 'dark');
+      await visualDiff(div, 'bordered-dark');
+    });
+  });
 });
