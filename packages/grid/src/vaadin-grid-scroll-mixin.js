@@ -291,7 +291,11 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __columnRenderingChanged(_columnTree, columnRendering) {
-      this.$.scroller.setAttribute('column-rendering', columnRendering);
+      if (columnRendering === 'eager') {
+        this.$.scroller.removeAttribute('column-rendering');
+      } else {
+        this.$.scroller.setAttribute('column-rendering', columnRendering);
+      }
 
       this.__updateColumnsBodyContentHidden();
     }
