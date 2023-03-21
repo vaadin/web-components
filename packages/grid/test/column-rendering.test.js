@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyDownOn, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getHeaderCellContent, onceResized } from './helpers.js';
+import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';
 
 const timeouts = {
   UPDATE_CONTENT_VISIBILITY: 100,
@@ -330,6 +330,137 @@ describe('lazy column rendering', () => {
       await nextFrame();
 
       expectCellsVisualOrderToMatchColumnOrder();
+    });
+  });
+
+  describe('keyboard navigation', () => {
+    function left() {
+      keyDownOn(grid.shadowRoot.activeElement, 37, [], 'ArrowLeft');
+    }
+
+    function right() {
+      keyDownOn(grid.shadowRoot.activeElement, 39, [], 'ArrowRight');
+    }
+
+    function end() {
+      keyDownOn(grid.shadowRoot.activeElement, 35, [], 'End');
+    }
+
+    function home() {
+      keyDownOn(grid.shadowRoot.activeElement, 36, [], 'Home');
+    }
+
+    function tab() {
+      keyDownOn(grid.shadowRoot.activeElement, 9, [], 'Tab');
+    }
+
+    function shiftTab() {
+      keyDownOn(grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
+    }
+
+    function getFocusedCellText() {
+      const focusedCell = grid.shadowRoot.activeElement;
+      return getCellContent(focusedCell).textContent;
+    }
+
+    beforeEach(async () => {
+      getBodyCell(0, 0).focus();
+      await nextFrame();
+    });
+
+    it('should focus the cells of initially hidden columns', () => {
+      const lastVisibleIndex = getLastVisibleColumnIndex();
+      const lastVisibleCell = getBodyCell(0, lastVisibleIndex);
+      lastVisibleCell.focus();
+      left();
+      expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex - 1}`);
+      right();
+      expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex}`);
+      right();
+      expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex + 1}`);
+      right();
+      expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex + 2}`);
+    });
+
+    it('should focus the last cell on the row', () => {
+      end();
+      expect(getFocusedCellText()).to.equal(`cell ${columns.length - 1}`);
+    });
+
+    it('should focus the first cell on the row', () => {
+      end();
+      home();
+      expect(getFocusedCellText()).to.equal('cell 0');
+    });
+
+    it('should focus the frozen to end cell without scrolling', async () => {
+      columns.at(-1).frozenToEnd = true;
+      const left = grid.$.table.scrollLeft;
+      await nextFrame();
+      end();
+      expect(grid.$.table.scrollLeft).to.equal(left);
+    });
+
+    it('should focus the frozen cell without scrolling', async () => {
+      columns[0].frozen = true;
+      end();
+      const left = grid.$.table.scrollLeft;
+      await nextFrame();
+      home();
+      expect(grid.$.table.scrollLeft).to.equal(left);
+    });
+
+    it('should focus the cell before frozen to end cell', () => {
+      columns.at(-1).frozenToEnd = true;
+      end();
+      left();
+      expect(getFocusedCellText()).to.equal(`cell ${columns.length - 2}`);
+    });
+
+    it('should focus the cell after frozen cell', () => {
+      columns[0].frozen = true;
+      end();
+      home();
+      right();
+      expect(getFocusedCellText()).to.equal('cell 1');
+    });
+
+    it('should have a focusable body cell after scrolling', async () => {
+      // Tab to header
+      shiftTab();
+
+      // Scroll to the end
+      grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+      await oneEvent(grid.$.table, 'scroll');
+      await nextFrame();
+
+      const left = grid.$.table.scrollLeft;
+      // Tab to body
+      tab();
+
+      // Expect the focused element to be a cell
+      expect(grid.shadowRoot.activeElement.localName).to.equal('td');
+      // Expect still to be scrolled to the end
+      expect(grid.$.table.scrollLeft).to.equal(left);
+    });
+
+    it('should not change the focusable body cell after scrolling', async () => {
+      right();
+      const focusedCellText = getFocusedCellText();
+      // Tab to header
+      shiftTab();
+      await nextFrame();
+
+      grid.$.table.scrollLeft += 1;
+      await oneEvent(grid.$.table, 'scroll');
+
+      // Tab to body
+      tab();
+      await nextFrame();
+      await nextFrame();
+
+      // Expect the focused element to be the same cell
+      expect(getFocusedCellText()).to.equal(focusedCellText);
     });
   });
 });

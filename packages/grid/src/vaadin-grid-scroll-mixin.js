@@ -249,9 +249,9 @@ export const ScrollMixin = (superClass) =>
         this.__lazyColumnsStart = this.__getColumnStart(firstVisibleColumn) - lastFrozenColumnEnd;
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
 
-        // Make sure the body has a focusable cell element in lazy columns mode
-        if (!this.__rowFocusMode && this.isConnected && this._itemsFocusable && !this._itemsFocusable.isConnected) {
-          this._itemsFocusable = this.__getViewportRows()[0].children[0];
+        // Make sure the body has a focusable element in lazy columns mode
+        if (this._itemsFocusable && !this._itemsFocusable.isConnected) {
+          this._resetKeyboardNavigation();
         }
       }
     }
@@ -396,10 +396,6 @@ export const ScrollMixin = (superClass) =>
         if (col.frozen && !col.hidden) {
           lastFrozen = i;
         }
-
-        if ((col.frozen || col.frozenToEnd) && col._bodyContentHidden) {
-          this.__updateColumnsBodyContentHidden();
-        }
       }
 
       if (lastFrozen !== undefined) {
@@ -409,6 +405,8 @@ export const ScrollMixin = (superClass) =>
       if (firstFrozenToEnd !== undefined) {
         columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
       }
+
+      this.__updateColumnsBodyContentHidden();
     }
 
     /** @private */
