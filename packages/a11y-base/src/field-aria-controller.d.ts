@@ -29,12 +29,19 @@ export class FieldAriaController {
   setRequired(required: boolean): void;
 
   /**
+   * Defines the `aria-label` attribute of the target element.
+   *
+   * To remove the attribute, pass `null` as `label`.
+   */
+  setAriaLabel(label: string | null): void;
+
+  /**
    * Links the target element with a slotted label element
    * via the target's attribute `aria-labelledby`.
    *
    * To unlink the previous slotted label element, pass `null` as `labelId`.
    */
-  setLabelId(labelId: string | null): void;
+  setLabelId(labelId: string | null, fromUser: boolean | null): void;
 
   /**
    * Links the target element with a slotted error element via the target's attribute:

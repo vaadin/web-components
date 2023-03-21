@@ -39,6 +39,18 @@ export declare class FieldMixinClass {
    */
   errorMessage: string | null | undefined;
 
+  /**
+   * String used to label the component to screen reader users.
+   * @attr {string} accessible-name
+   */
+  accessibleName: string | null | undefined;
+
+  /**
+   * Id of the element used as label of the component to screen reader users.
+   * @attr {string} accessible-name-ref
+   */
+  accessibleNameRef: string | null | undefined;
+
   protected readonly _errorNode: HTMLElement;
 
   protected readonly _helperNode?: HTMLElement;

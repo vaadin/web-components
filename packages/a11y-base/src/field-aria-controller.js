@@ -3,7 +3,11 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
+import {
+  removeAriaIDReference,
+  restoreGeneratedAriaIDReference,
+  setAriaIDReference,
+} from '@vaadin/a11y-base/src/aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -36,6 +40,7 @@ export class FieldAriaController {
     this.__setLabelIdToAriaAttribute(this.__labelId);
     this.__setErrorIdToAriaAttribute(this.__errorId);
     this.__setHelperIdToAriaAttribute(this.__helperId);
+    this.setAriaLabel(this.__label);
   }
 
   /**
@@ -51,6 +56,18 @@ export class FieldAriaController {
   }
 
   /**
+   * Defines the `aria-label` attribute of the target element.
+   *
+   * To remove the attribute, pass `null` as `label`.
+   *
+   * @param {string | null | undefined} label
+   */
+  setAriaLabel(label) {
+    this.__setAriaLabelToAttribute(label);
+    this.__label = label;
+  }
+
+  /**
    * Links the target element with a slotted label element
    * via the target's attribute `aria-labelledby`.
    *
@@ -58,9 +75,14 @@ export class FieldAriaController {
    *
    * @param {string | null} labelId
    */
-  setLabelId(labelId) {
-    this.__setLabelIdToAriaAttribute(labelId, this.__labelId);
-    this.__labelId = labelId;
+  setLabelId(labelId, fromUser = false) {
+    const oldLabelId = fromUser ? this.__labelIdFromUser : this.__labelId;
+    this.__setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser);
+    if (fromUser) {
+      this.__labelIdFromUser = labelId;
+    } else {
+      this.__labelId = labelId;
+    }
   }
 
   /**
@@ -92,12 +114,30 @@ export class FieldAriaController {
   }
 
   /**
+   * @param {string | null | undefined} label
+   * @private
+   * */
+  __setAriaLabelToAttribute(label) {
+    if (!this.__target) {
+      return;
+    }
+    if (label) {
+      removeAriaIDReference(this.__target, 'aria-labelledby');
+      this.__target.setAttribute('aria-label', label);
+    } else if (this.__label) {
+      restoreGeneratedAriaIDReference(this.__target, 'aria-labelledby');
+      this.__target.removeAttribute('aria-label');
+    }
+  }
+
+  /**
    * @param {string | null | undefined} labelId
    * @param {string | null | undefined} oldLabelId
+   * @param {boolean | null | undefined} fromUser
    * @private
    */
-  __setLabelIdToAriaAttribute(labelId, oldLabelId) {
-    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId });
+  __setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser) {
+    setAriaIDReference(this.__target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser });
   }
 
   /**
