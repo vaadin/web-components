@@ -39,10 +39,19 @@ describe('vaadin-notification', () => {
     expect(getComputedStyle(notification).display).to.equal('none');
   });
 
-  it('should close on detach', () => {
+  it('should close on detach', async () => {
     expect(notification.opened).to.be.true;
     notification.remove();
+    await aTimeout(0);
     expect(notification.opened).to.be.false;
+  });
+
+  it('should stay open after immediate reattach', async () => {
+    expect(notification.opened).to.be.true;
+    const parent = notification.parentNode;
+    parent.appendChild(notification);
+    await aTimeout(0);
+    expect(notification.opened).to.be.true;
   });
 
   describe('vaadin-notification-container', () => {

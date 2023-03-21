@@ -404,7 +404,11 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.opened = false;
+    queueMicrotask(() => {
+      if (!this.isConnected) {
+        this.opened = false;
+      }
+    });
   }
 
   /**
