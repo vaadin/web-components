@@ -243,13 +243,10 @@ export const ScrollMixin = (superClass) =>
 
       if (this._lazyColumns) {
         // Calculate the offset to apply to the body cells
-        const firstVisibleColumn = columnsInOrder.find((column) => !column.frozen && !column._bodyContentHidden);
-
         const lastFrozenColumn = [...columnsInOrder].reverse().find((column) => column.frozen);
-        const lastFrozenColumnEnd = lastFrozenColumn
-          ? lastFrozenColumn._sizerCell.offsetLeft + lastFrozenColumn._sizerCell.offsetWidth
-          : 0;
-        this.__lazyColumnsStart = firstVisibleColumn._sizerCell.offsetLeft - lastFrozenColumnEnd;
+        const lastFrozenColumnEnd = this.__getColumnEnd(lastFrozenColumn);
+        const firstVisibleColumn = columnsInOrder.find((column) => !column.frozen && !column._bodyContentHidden);
+        this.__lazyColumnsStart = this.__getColumnStart(firstVisibleColumn) - lastFrozenColumnEnd;
         this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
 
         // Make sure the body has a focusable cell element in lazy columns mode
@@ -259,13 +256,29 @@ export const ScrollMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __getColumnEnd(column) {
+      if (!column) {
+        return 0;
+      }
+      return column._sizerCell.offsetLeft + (this.__isRTL ? 0 : column._sizerCell.offsetWidth);
+    }
+
+    /** @private */
+    __getColumnStart(column) {
+      if (!column) {
+        return 0;
+      }
+      return column._sizerCell.offsetLeft + (this.__isRTL ? column._sizerCell.offsetWidth : 0);
+    }
+
     /**
      * Returns true if the given column is horizontally inside the viewport.
      * @private
      */
     __isColumnInViewport(column) {
       if (column.frozen || column.frozenToEnd) {
-        // Consider frozen columns to always be inside the viewport
+        // Assume frozen columns to always be inside the viewport
         return true;
       }
 
@@ -434,10 +447,10 @@ export const ScrollMixin = (superClass) =>
         const lastVisibleColumn = [...columnsInOrder]
           .reverse()
           .find((column) => !column.frozenToEnd && !column._bodyContentHidden);
-        const lastVisibleColumnEnd = lastVisibleColumn._sizerCell.offsetLeft + lastVisibleColumn._sizerCell.offsetWidth;
+        const lastVisibleColumnEnd = this.__getColumnEnd(lastVisibleColumn);
 
         const firstFrozenToEndColumn = columnsInOrder.find((column) => column.frozenToEnd);
-        const firstFrozenToEndColumnStart = firstFrozenToEndColumn ? firstFrozenToEndColumn._sizerCell.offsetLeft : 0;
+        const firstFrozenToEndColumnStart = this.__getColumnStart(firstFrozenToEndColumn);
 
         const translateX = remaining + (firstFrozenToEndColumnStart - lastVisibleColumnEnd) + this.__lazyColumnsStart;
         transformFrozenToEndBody = `translate(${translateX}px, 0)`;
