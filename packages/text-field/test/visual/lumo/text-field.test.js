@@ -163,4 +163,32 @@ describe('text-field', () => {
       await visualDiff(div, 'rtl-error-message');
     });
   });
+
+  describe('borders enabled', () => {
+    before(() => {
+      document.getRootNode().style.setProperty('--vaadin-input-field-border-width', '1px');
+    });
+    after(() => {
+      document.getRootNode().style.removeProperty('--vaadin-input-field-border-width');
+    });
+    it('Bordered input field, default state', async () => {
+      await visualDiff(div, 'bordered-input-field-default');
+    });
+    it('Bordered input field, disabled state', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'bordered-input-field-disabled');
+    });
+    it('Bordered input field, readonly state', async () => {
+      element.readonly = true;
+      await visualDiff(div, 'bordered-input-field-default');
+    });
+    it('Bordered input field, invalid state', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'bordered-input-field-invalid');
+    });
+    it('Bordered input field, dark mode', async () => {
+      div.setAttribute('theme', 'dark');
+      await visualDiff(div, 'bordered-input-field-dark');
+    });
+  });
 });
