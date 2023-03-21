@@ -54,7 +54,8 @@ const typography = css`
   :where(h1, h2, h3, h4, h5, h6) {
     font-weight: 600;
     line-height: var(--lumo-line-height-xs);
-    margin: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
 
   :where(h1) {
