@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
 import '../../../theme/lumo/vaadin-text-field.js';
 
@@ -180,14 +181,14 @@ describe('text-field', () => {
     });
     it('Bordered input field, readonly state', async () => {
       element.readonly = true;
-      await visualDiff(div, 'bordered-input-field-default');
+      await visualDiff(div, 'bordered-input-field-readonly');
     });
     it('Bordered input field, invalid state', async () => {
       element.invalid = true;
       await visualDiff(div, 'bordered-input-field-invalid');
     });
     it('Bordered input field, dark mode', async () => {
-      div.setAttribute('theme', 'dark');
+      document.documentElement.setAttribute('theme', 'dark');
       await visualDiff(div, 'bordered-input-field-dark');
     });
   });
