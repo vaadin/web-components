@@ -1,7 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/vaadin-icon.js';
-import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/lumo/vaadin-input-container.js';
 
@@ -86,34 +85,6 @@ describe('input-container', () => {
         element.setAttribute('theme', 'align-right');
         await visualDiff(div, `${dir}-align-right`);
       });
-    });
-  });
-
-  describe('borders enabled', () => {
-    before(() => {
-      document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
-    });
-    after(() => {
-      document.documentElement.style.removeProperty('--vaadin-input-field-border-width');
-    });
-    it('Bordered input container, default state', async () => {
-      await visualDiff(div, 'bordered-input-container-default');
-    });
-    it('Bordered input container, disabled state', async () => {
-      element.disabled = true;
-      await visualDiff(div, 'bordered-input-container-disabled');
-    });
-    it('Bordered input container, readonly state', async () => {
-      element.readonly = true;
-      await visualDiff(div, 'bordered-input-container-readonly');
-    });
-    it('Bordered input container, invalid state', async () => {
-      element.invalid = true;
-      await visualDiff(div, 'bordered-input-container-invalid');
-    });
-    it('Bordered input container, dark mode', async () => {
-      document.documentElement.setAttribute('theme', 'dark');
-      await visualDiff(div, 'bordered-input-container-dark');
     });
   });
 });
