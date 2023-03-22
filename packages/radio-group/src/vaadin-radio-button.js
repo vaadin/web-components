@@ -116,6 +116,14 @@ class RadioButton extends LabelMixin(
           align-self: stretch;
           -webkit-appearance: none;
         }
+
+        /* Normally invisible outline for forced-colors support */
+        [part='radio'] {
+          outline: 1px solid transparent;
+        }
+        :host([focus-ring]) [part='radio'] {
+          outline-width: 2px;
+        }
       </style>
       <div class="vaadin-radio-button-container">
         <div part="radio" aria-hidden="true"></div>

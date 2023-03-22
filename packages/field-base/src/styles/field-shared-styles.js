@@ -29,7 +29,8 @@ export const fieldShared = css`
 
   /* Normally invisible outline for forced-colors support */
   [part='input-field'] {
-    outline: inset 1px transparent;
+    outline: 1px solid transparent;
+    outline-offset: -1px;
   }
   :host([focus-ring]) [part='input-field'] {
     outline-width: 2px;
