@@ -338,6 +338,21 @@ registerStyles(
       right: 0;
       left: auto;
     }
+
+    @media (forced-colors: active) {
+      [part~='selected-row'] [part~='first-column-cell']::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border: 2px solid;
+      }
+      [part~='focused-cell']::before {
+        outline: 2px solid !important;
+        outline-offset: -1px;
+      }
+    }
   `,
   { moduleId: 'vaadin-grid-styles' },
 );
