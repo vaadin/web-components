@@ -48,8 +48,8 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button'][on] {
-    background-color: var(--lumo-primary-color-10pct);
-    color: var(--lumo-primary-text-color);
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
   }
 
   [part~='toolbar-button']:active {
