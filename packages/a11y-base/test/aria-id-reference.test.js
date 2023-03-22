@@ -111,4 +111,19 @@ describe('aria-id-reference', () => {
     restoreGeneratedAriaIDReference(element, attribute);
     expect(element.getAttribute(attribute)).to.be.equal('id-0');
   });
+
+  it(`should be able to set generated ${attribute} after remove/restore are called`, () => {
+    removeAriaIDReference(element, attribute);
+    restoreGeneratedAriaIDReference(element, attribute);
+    setAriaIDReference(element, attribute, { newId: 'id-0', oldId: null, fromUser: false });
+
+    expect(element.getAttribute(attribute)).to.be.equal('id-0');
+  });
+
+  it(`should not add empty ${attribute} if no value was stored`, () => {
+    removeAriaIDReference(element, attribute);
+    restoreGeneratedAriaIDReference(element, attribute);
+
+    expect(element.getAttribute(attribute)).to.be.null;
+  });
 });

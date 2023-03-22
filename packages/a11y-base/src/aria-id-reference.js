@@ -71,7 +71,14 @@ export function restoreGeneratedAriaIDReference(target, attr) {
   if (!target || !attr) {
     return;
   }
-  addValueToAttribute(target, attr, serializeAttributeValue(getAttrMap(attr).get(target)));
+  const attributeMap = getAttrMap(attr);
+  const values = attributeMap.get(target);
+  if (!values || values.size === 0) {
+    target.removeAttribute(attr);
+  } else {
+    addValueToAttribute(target, attr, serializeAttributeValue(values));
+  }
+  attributeMap.delete(target);
 }
 
 /**
