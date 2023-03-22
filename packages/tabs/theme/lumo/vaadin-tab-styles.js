@@ -44,6 +44,17 @@ registerStyles(
       min-width: 0;
     }
 
+    @media (forced-colors: active) {
+      :host([focused]) {
+        outline: 1px solid;
+        outline-offset: -1px;
+      }
+      :host([orientation='vertical'][selected]) {
+        border-bottom: none;
+        border-left: 2px solid;
+      }
+    }
+
     :host(:hover),
     :host([focus-ring]) {
       color: var(--lumo-body-text-color);
