@@ -9,22 +9,38 @@ export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class ScrollMixinClass {
   /**
-   * TODO: Document
+   * Allows you to choose between modes for rendering columns in the grid:
    *
-   * Makes the content on the grid columns render lazily when
-   * the column cells are scrolled into view.
+   * "eager" (default): All columns are rendered upfront, regardless of their visibility within the viewport.
+   * This mode should generally be preferred, as it avoids the limitations imposed by the "lazy" mode.
+   * Use this mode unless the grid has a large number of columns and performance outweighs the limitations
+   * in priority.
    *
-   * If true, the grid will be able to optimize cell rendering
-   * significantly when there are multiple columns in the grid.
+   * "lazy": Optimizes the rendering of cells when there are multiple columns in the grid by virtualizing
+   * horizontal scrolling. In this mode, body cells are rendered only when their corresponding columns are
+   * inside the visible viewport.
    *
-   * NOTE: make sure that each cell on a single row has the same
-   * intrinsic height as all other cells on that row.
-   * Otherwise, you may experience jumpiness when scrolling the grid
-   * horizontally when lazily rendered cells with different
-   * heights are scrolled into view.
+   * Using "lazy" rendering should be used only if you're dealing with a large number of columns and performance
+   * is your highest priority. For most use cases, the default "eager" mode is recommended due to the
+   * limitations imposed by the "lazy" mode.
    *
-   * NOTE: columns with auto-width will only take the header content into account
-   * when calculating the width for columns that are initially outside the viewport.
+   * When using the "lazy" mode, keep the following limitations in mind:
+   *
+   * Row Height: When only a number of columns are visible at once, the height of a row can only be that of
+   * the highest cell currently visible on that row. Make sure each cell on a single row has the same height
+   * as all other cells on that row. If row cells have different heights, users may experience jumpiness when
+   * scrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.
+   *
+   * Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,
+   * only the header content is taken into account when calculating the column width because the body cells
+   * of the columns outside the viewport are not initially rendered.
+   *
+   * Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct
+   * headers when only a subset of the body cells on a row is rendered.
+   *
+   * Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because
+   * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
+   * and thus not rendered.
    */
   columnRendering: 'eager' | 'lazy';
 
