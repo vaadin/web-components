@@ -7,6 +7,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ScrollMixinClass> & T;
 
+export type ColumnRendering = 'eager' | 'lazy';
+
 export declare class ScrollMixinClass {
   /**
    * Allows you to choose between modes for rendering columns in the grid:
@@ -42,7 +44,7 @@ export declare class ScrollMixinClass {
    * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
    * and thus not rendered.
    */
-  columnRendering: 'eager' | 'lazy';
+  columnRendering: ColumnRendering;
 
   /**
    * Scroll to a flat index in the grid. The method doesn't take into account

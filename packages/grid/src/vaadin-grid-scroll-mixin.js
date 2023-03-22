@@ -54,8 +54,8 @@ export const ScrollMixin = (superClass) =>
          * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
          * and thus not rendered.
          *
-         * @attr {string} column-rendering
-         * @type {string}
+         * @attr {eager|lazy} column-rendering
+         * @type {!ColumnRendering}
          */
         columnRendering: {
           type: String,
