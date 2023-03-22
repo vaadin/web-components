@@ -28,19 +28,19 @@ export declare class ScrollMixinClass {
    *
    * When using the "lazy" mode, keep the following limitations in mind:
    *
-   * Row Height: When only a number of columns are visible at once, the height of a row can only be that of
+   * - Row Height: When only a number of columns are visible at once, the height of a row can only be that of
    * the highest cell currently visible on that row. Make sure each cell on a single row has the same height
    * as all other cells on that row. If row cells have different heights, users may experience jumpiness when
    * scrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.
    *
-   * Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,
+   * - Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,
    * only the header content is taken into account when calculating the column width because the body cells
    * of the columns outside the viewport are not initially rendered.
    *
-   * Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct
+   * - Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct
    * headers when only a subset of the body cells on a row is rendered.
    *
-   * Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because
+   * - Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because
    * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
    * and thus not rendered.
    */
