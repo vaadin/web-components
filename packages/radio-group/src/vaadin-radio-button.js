@@ -117,12 +117,13 @@ class RadioButton extends LabelMixin(
           -webkit-appearance: none;
         }
 
-        /* Normally invisible outline for forced-colors support */
-        [part='radio'] {
-          outline: 1px solid transparent;
-        }
-        :host([focus-ring]) [part='radio'] {
-          outline-width: 2px;
+        @media (forced-colors: active) {
+          [part='radio'] {
+            outline: 1px solid;
+          }
+          :host([focus-ring]) [part='radio'] {
+            outline-width: 2px;
+          }
         }
       </style>
       <div class="vaadin-radio-button-container">

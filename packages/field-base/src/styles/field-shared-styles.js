@@ -27,12 +27,13 @@ export const fieldShared = css`
     display: none;
   }
 
-  /* Normally invisible outline for forced-colors support */
-  [part='input-field'] {
-    outline: 1px solid transparent;
-    outline-offset: -1px;
-  }
-  :host([focus-ring]) [part='input-field'] {
-    outline-width: 2px;
+  @media (forced-colors: active) {
+    [part='input-field'] {
+      outline: 1px solid;
+      outline-offset: -1px;
+    }
+    :host([focus-ring]) [part='input-field'] {
+      outline-width: 2px;
+    }
   }
 `;

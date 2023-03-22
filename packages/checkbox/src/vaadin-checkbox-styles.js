@@ -56,15 +56,16 @@ export const checkboxStyles = css`
     -webkit-appearance: none;
   }
 
-  /* Normally invisible outline for forced-colors support */
-  [part='checkbox'] {
-    outline: 1px solid transparent;
-  }
-  :host(:is([checked], [indeterminate])) [part='checkbox']::after {
-    outline: 1px solid transparent;
-  }
-  :host([focus-ring]) [part='checkbox'],
-  :host([focus-ring]) [part='checkbox']::after {
-    outline-width: 2px;
+  @media (forced-colors: active) {
+    [part='checkbox'] {
+      outline: 1px solid;
+    }
+    :host(:is([checked], [indeterminate])) [part='checkbox']::after {
+      outline: 1px solid;
+    }
+    :host([focus-ring]) [part='checkbox'],
+    :host([focus-ring]) [part='checkbox']::after {
+      outline-width: 2px;
+    }
   }
 `;
