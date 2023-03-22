@@ -179,6 +179,18 @@ describe('time-picker', () => {
       timePicker.value = null;
       expect(timePicker.value).to.equal('');
     });
+
+    it('should display the new value on value property change', () => {
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('12:00');
+    });
+
+    it('should not preserve bad input on value property change', () => {
+      setInputValue(timePicker, 'invalid');
+      enter(inputElement);
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('12:00');
+    });
   });
 
   describe('toggle overlay', () => {
