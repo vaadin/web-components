@@ -181,6 +181,12 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
         [part='overlay'] {
           pointer-events: auto;
         }
+
+        @media (forced-colors: active) {
+          [part='overlay'] {
+            outline: 1px solid;
+          }
+        }
       </style>
 
       <div part="overlay">
