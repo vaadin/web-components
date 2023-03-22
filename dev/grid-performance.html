@@ -100,7 +100,7 @@
       // Controls
       const lazyColumnRendering = document.querySelector('vaadin-checkbox');
       lazyColumnRendering.addEventListener('checked-changed', (e) => {
-        grid.lazyColumnRendering = e.detail.value;
+        grid.columnRendering = e.detail.value ? 'lazy' : 'eager';
       });
       lazyColumnRendering.checked = grid.columnRendering === 'lazy';
     </script>

@@ -4,10 +4,6 @@ import Sinon from 'sinon';
 import '../vaadin-grid.js';
 import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';
 
-const timeouts = {
-  UPDATE_CONTENT_VISIBILITY: 100,
-};
-
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
     let grid, cellContent, columns;
@@ -66,9 +62,11 @@ const timeouts = {
       });
     }
 
-    async function scrollHorizontally(delta) {
+    const UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT = 100;
+    async function scrollHorizontally(delta, debounceTimeout = UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT) {
       grid.$.table.scrollLeft += dir === 'rtl' ? -delta : delta;
       await oneEvent(grid.$.table, 'scroll');
+      await aTimeout(debounceTimeout);
     }
 
     before(() => {
@@ -232,8 +230,6 @@ const timeouts = {
       beforeEach(async () => {
         resetRenderers();
         await scrollHorizontally(grid.$.table.scrollWidth);
-        // Wait for the debouncer to flush
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
       });
 
       it('should render columns inside the viewport', () => {
@@ -265,28 +261,25 @@ const timeouts = {
         expectBodyCellUpdated(0);
       });
 
-      it.skip('should debounce scrolling', async () => {
+      it('should debounce scrolling', async () => {
         resetRenderers();
 
         // Scroll back to the beginning
-        await scrollHorizontally(-grid.$.table.scrollWidth);
-        // Half of the debounce timeout so the debouncer is not yet executed
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        // Use half of the debounce timeout so the debouncer is not yet executed
+        await scrollHorizontally(-grid.$.table.scrollWidth, UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT / 2);
         expectBodyCellNotRendered(0);
 
         // Scroll back to the end
-        await scrollHorizontally(grid.$.table.scrollWidth);
-        // Half of the debounce timeout so the debouncer is not yet executed
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        // Use half of the debounce timeout so the debouncer is not yet executed
+        await scrollHorizontally(grid.$.table.scrollWidth, UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT / 2);
 
         // Scroll back to the beginning
-        await scrollHorizontally(-grid.$.table.scrollWidth);
-        // Half of the debounce timeout so the debouncer is not yet executed
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        // Use half of the debounce timeout so the debouncer is not yet executed
+        await scrollHorizontally(-grid.$.table.scrollWidth, UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT / 2);
         expectBodyCellNotRendered(0);
 
-        // Seconf half of the debounce timeout so the debouncer is executed
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY / 2);
+        // Wait for the second half of the debounce timeout so the debouncer is executed
+        await aTimeout(UPDATE_CONTENT_VISIBILITY_DEBOUNCER_TIMEOUT / 2);
         expectBodyCellUpdated(0);
       });
 
@@ -300,8 +293,6 @@ const timeouts = {
 
         // Scroll back to the beginning
         await scrollHorizontally(-grid.$.table.scrollWidth);
-        // Wait for the debouncer to flush
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
 
         expect(getBodyCellContent(0).textContent).to.equal('updated 0');
       });
@@ -313,7 +304,6 @@ const timeouts = {
         await scrollHorizontally(-100);
         await scrollHorizontally(-100);
 
-        await aTimeout(timeouts.UPDATE_CONTENT_VISIBILITY);
         expectCellsDomOrderToMatchColumnOrder();
       });
 

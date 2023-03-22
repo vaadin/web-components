@@ -180,17 +180,18 @@ export const ScrollMixin = (superClass) =>
 
       this._updateOverflow();
 
-      // If horizontal scroll position changed and lazy column rendering is enabled,
-      // update the visible columns.
-      if (this._lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
-        this.__cachedScrollLeft = this._scrollLeft;
-        this._debounceColumnContentVisibility = Debouncer.debounce(
-          this._debounceColumnContentVisibility,
-          // TODO: Condsider using a timeout. Using animationFrame could be a bit laggy on a mobile device AND DESKTOP SAFARI!
-          animationFrame,
-          () => this.__updateColumnsBodyContentHidden(),
-        );
-      }
+      this._debounceColumnContentVisibility = Debouncer.debounce(
+        this._debounceColumnContentVisibility,
+        timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
+        () => {
+          // If horizontal scroll position changed and lazy column rendering is enabled,
+          // update the visible columns.
+          if (this._lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
+            this.__cachedScrollLeft = this._scrollLeft;
+            this.__updateColumnsBodyContentHidden();
+          }
+        },
+      );
     }
 
     /** @private */
