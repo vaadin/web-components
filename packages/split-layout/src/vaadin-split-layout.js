@@ -206,7 +206,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
             outline: 1px solid;
           }
           [part~='handle']::after {
-            background-color: black !important;
+            background-color: AccentColor !important;
             forced-color-adjust: none;
           }
         }

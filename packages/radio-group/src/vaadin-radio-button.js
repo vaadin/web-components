@@ -121,7 +121,7 @@ class RadioButton extends LabelMixin(
           [part='radio'] {
             outline: 1px solid;
           }
-          :host([focus-ring]) [part='radio'] {
+          :host([focused]) [part='radio'] {
             outline-width: 2px;
           }
         }

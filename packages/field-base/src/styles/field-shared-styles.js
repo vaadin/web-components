@@ -32,7 +32,7 @@ export const fieldShared = css`
       outline: 1px solid;
       outline-offset: -1px;
     }
-    :host([focus-ring]) [part='input-field'] {
+    :host([focused]) [part='input-field'] {
       outline-width: 2px;
     }
   }

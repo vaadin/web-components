@@ -63,8 +63,8 @@ export const checkboxStyles = css`
     :host(:is([checked], [indeterminate])) [part='checkbox']::after {
       outline: 1px solid;
     }
-    :host([focus-ring]) [part='checkbox'],
-    :host([focus-ring]) [part='checkbox']::after {
+    :host([focused]) [part='checkbox'],
+    :host([focused]) [part='checkbox']::after {
       outline-width: 2px;
     }
   }
