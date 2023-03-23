@@ -49,6 +49,24 @@ export const FieldMixin = (superclass) =>
           type: String,
           observer: '_helperTextChanged',
         },
+
+        /**
+         * String used to label the component to screen reader users.
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+          observer: '_accessibleNameChanged',
+        },
+
+        /**
+         * Id of the element used as label of the component to screen reader users.
+         * @attr {string} accessible-name-ref
+         */
+        accessibleNameRef: {
+          type: String,
+          observer: '_accessibleNameRefChanged',
+        },
       };
     }
 
@@ -111,6 +129,16 @@ export const FieldMixin = (superclass) =>
       } else {
         this._fieldAriaController.setHelperId(null);
       }
+    }
+
+    /** @private */
+    _accessibleNameChanged(accessibleName) {
+      this._fieldAriaController.setAriaLabel(accessibleName);
+    }
+
+    /** @private */
+    _accessibleNameRefChanged(accessibleNameRef) {
+      this._fieldAriaController.setLabelId(accessibleNameRef, true);
     }
 
     /** @private */

@@ -12,6 +12,7 @@ describe('rich-text-editor', () => {
   });
 
   it('basic', async () => {
+    element.shadowRoot.querySelector('.ql-editor').focus();
     await visualDiff(div, 'basic');
   });
 

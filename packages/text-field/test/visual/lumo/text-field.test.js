@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
 import '../../../theme/lumo/vaadin-text-field.js';
 
@@ -161,6 +162,34 @@ describe('text-field', () => {
       element.required = true;
       element.validate();
       await visualDiff(div, 'rtl-error-message');
+    });
+  });
+
+  describe('borders enabled', () => {
+    before(() => {
+      document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
+    });
+    after(() => {
+      document.documentElement.style.removeProperty('--vaadin-input-field-border-width');
+    });
+    it('Bordered input container, default state', async () => {
+      await visualDiff(div, 'bordered-input-container-default');
+    });
+    it('Bordered input container, disabled state', async () => {
+      element.disabled = true;
+      await visualDiff(div, 'bordered-input-container-disabled');
+    });
+    it('Bordered input container, readonly state', async () => {
+      element.readonly = true;
+      await visualDiff(div, 'bordered-input-container-readonly');
+    });
+    it('Bordered input container, invalid state', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'bordered-input-container-invalid');
+    });
+    it('Bordered input container, dark mode', async () => {
+      document.documentElement.setAttribute('theme', 'dark');
+      await visualDiff(div, 'bordered-input-container-dark');
     });
   });
 });

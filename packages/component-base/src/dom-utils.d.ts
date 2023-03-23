@@ -14,6 +14,16 @@
 export function getAncestorRootNodes(node: Node): Node[];
 
 /**
+ * Takes a string with values separated by space and returns a set the values
+ */
+export function deserializeAttributeValue(value: string): Set<string>;
+
+/**
+ * Takes a set of string values and returns a string with values separated by space
+ */
+export function serializeAttributeValue(values: Set<string>): string;
+
+/**
  * Adds a value to an attribute containing space-delimited values.
  */
 export function addValueToAttribute(element: HTMLElement, attr: string, value: string): void;
