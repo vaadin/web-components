@@ -34,6 +34,7 @@ export const progressBarStyles = css`
     [part='bar'] {
       outline: 1px solid;
     }
+
     [part='value'] {
       background-color: AccentColor !important;
       forced-color-adjust: none;

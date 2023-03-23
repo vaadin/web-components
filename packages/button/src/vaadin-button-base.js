@@ -55,6 +55,7 @@ export const buttonStyles = css`
     :host {
       outline: 1px solid;
     }
+
     :host([focused]) {
       outline-width: 2px;
     }

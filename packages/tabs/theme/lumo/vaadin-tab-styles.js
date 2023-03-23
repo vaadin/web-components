@@ -49,6 +49,7 @@ registerStyles(
         outline: 1px solid;
         outline-offset: -1px;
       }
+
       :host([orientation='vertical'][selected]) {
         border-bottom: none;
         border-left: 2px solid;

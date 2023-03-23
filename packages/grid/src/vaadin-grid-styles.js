@@ -348,6 +348,7 @@ registerStyles(
         bottom: 0;
         border: 2px solid;
       }
+
       [part~='focused-cell']::before {
         outline: 2px solid !important;
         outline-offset: -1px;
