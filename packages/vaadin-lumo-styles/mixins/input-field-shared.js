@@ -86,9 +86,15 @@ const inputField = css`
     opacity: 0;
   }
 
+  /* Read-only style */
+  :host([readonly]) {
+    --vaadin-input-field-border-color: transparent;
+  }
+
   /* Disabled style */
   :host([disabled]) {
     pointer-events: none;
+    --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
   }
 
   :host([disabled]) [part='label'],
@@ -98,6 +104,10 @@ const inputField = css`
   }
 
   /* Invalid style */
+  :host([invalid]) {
+    --vaadin-input-field-border-color: var(--lumo-error-color);
+  }
+
   :host([invalid][focus-ring]) [part='input-field'] {
     box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
   }

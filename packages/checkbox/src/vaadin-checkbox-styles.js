@@ -38,6 +38,9 @@ export const checkboxStyles = css`
   [part='checkbox'] {
     width: var(--vaadin-checkbox-size, 1em);
     height: var(--vaadin-checkbox-size, 1em);
+    --_input-border-width: var(--vaadin-input-field-border-width, 0);
+    --_input-border-color: var(--vaadin-input-field-border-color, transparent);
+    box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
   }
 
   [part='checkbox']::before {
