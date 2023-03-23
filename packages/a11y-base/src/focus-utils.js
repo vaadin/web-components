@@ -27,6 +27,20 @@ window.addEventListener(
 );
 
 /**
+ * Returns the actually focused element by traversing shadow
+ * trees recursively to ensure it's the leaf element.
+ *
+ * @return {Element}
+ */
+export function getDeepActiveElement() {
+  let host = document.activeElement || document.body;
+  while (host.shadowRoot && host.shadowRoot.activeElement) {
+    host = host.shadowRoot.activeElement;
+  }
+  return host;
+}
+
+/**
  * Returns true if the window has received a keydown
  * event since the last mousedown event.
  *
