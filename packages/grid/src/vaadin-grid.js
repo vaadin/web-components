@@ -7,7 +7,7 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
+import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -742,7 +742,7 @@ class Grid extends ElementMixin(
 
     this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
       this.__afterCreateScrollerRowsDebouncer,
-      microTask,
+      animationFrame,
       () => {
         this._afterScroll();
         this.__itemsReceived();
