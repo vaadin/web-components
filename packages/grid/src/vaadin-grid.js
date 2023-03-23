@@ -5,7 +5,6 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
@@ -741,12 +740,14 @@ class Grid extends ElementMixin(
       );
     }
 
-    beforeNextRender(this, () => {
-      this._updateFirstAndLastColumn();
-      this._resetKeyboardNavigation();
-      this._afterScroll();
-      this.__itemsReceived();
-    });
+    this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
+      this.__afterCreateScrollerRowsDebouncer,
+      microTask,
+      () => {
+        this._afterScroll();
+        this.__itemsReceived();
+      },
+    );
     return rows;
   }
 
