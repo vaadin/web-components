@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import { defineCE, fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import {
+  getDeepActiveElement,
   getFocusableElements,
   isElementFocusable,
   isElementFocused,
@@ -214,6 +215,84 @@ describe('focus-utils', () => {
       tabKeyDown(document.body);
       mousedown(document.body);
       expect(isKeyboardActive()).to.be.false;
+    });
+  });
+
+  describe('getDeepActiveElement', () => {
+    describe('document scope', () => {
+      let element;
+
+      beforeEach(() => {
+        element = fixtureSync(`
+          <div>
+            <button id="el-1">Button</button>
+            <a id="el-2" href="#foo">Href</a>
+            <input id="el-3">
+          </div>
+        `);
+      });
+
+      it('should handle document level elements', async () => {
+        [...element.children].forEach((el) => {
+          el.focus();
+          expect(getDeepActiveElement()).to.eql(el);
+        });
+      });
+    });
+
+    describe('shadow scope', () => {
+      const innerTag = defineCE(
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+              <div id="el-b-1" tabindex="0">Button</div>
+              <a id="el-b-2" href="#foo">Href</a>
+            `;
+          }
+        },
+      );
+
+      const outerTag = defineCE(
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+              <button id="el-a-1">Button</button>
+              <input id="el-a-2" />
+              <${innerTag}></${innerTag}>
+            `;
+          }
+        },
+      );
+
+      let element, outerRoot, innerRoot;
+
+      beforeEach(() => {
+        element = fixtureSync(`
+          <div>
+            <${outerTag}></${outerTag}>
+            <button id="el-1">Button</button>
+          </div>
+        `);
+        outerRoot = element.querySelector(outerTag).shadowRoot;
+        innerRoot = outerRoot.querySelector(innerTag).shadowRoot;
+      });
+
+      it('should traverse nested shadow roots to find active element', () => {
+        [
+          outerRoot.querySelector('#el-a-1'),
+          outerRoot.querySelector('#el-a-2'),
+          innerRoot.querySelector('#el-b-1'),
+          innerRoot.querySelector('#el-b-2'),
+          element.querySelector('#el-1'),
+        ].forEach((el) => {
+          el.focus();
+          expect(getDeepActiveElement()).to.eql(el);
+        });
+      });
     });
   });
 });
