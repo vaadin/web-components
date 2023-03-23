@@ -8,7 +8,7 @@
  * Returns the actually focused element by traversing shadow
  * trees recursively to ensure it's the leaf element.
  */
-export declare function getDeepActiveElement(): Element | null;
+export declare function getDeepActiveElement(): Element;
 
 /**
  * Returns true if the window has received a keydown
