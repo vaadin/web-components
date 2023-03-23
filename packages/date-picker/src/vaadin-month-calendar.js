@@ -63,6 +63,15 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         :host([week-numbers]) [part~='date'] {
           width: 12.5%;
         }
+
+        @media (forced-colors: active) {
+          [part~='date'][part~='focused'] {
+            outline: 1px solid;
+          }
+          [part~='date'][part~='selected'] {
+            outline: 3px solid;
+          }
+        }
       </style>
 
       <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n.monthNames)]]</div>
