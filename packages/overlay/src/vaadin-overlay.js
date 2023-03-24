@@ -11,6 +11,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { OpenedMixin } from './vaadin-overlay-opened-mixin.js';
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -75,8 +76,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes DirMixin
  * @mixes ControllerMixin
+ * @mixes OpenedMixin
  */
-class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
+class Overlay extends OpenedMixin(ThemableMixin(DirMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -159,16 +161,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
   static get properties() {
     return {
-      /**
-       * When true, the overlay is visible and attached to body.
-       */
-      opened: {
-        type: Boolean,
-        notify: true,
-        observer: '_openedChanged',
-        reflectToAttribute: true,
-      },
-
       /**
        * Owner element passed with renderer function
        * @type {HTMLElement}
@@ -351,21 +343,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
   }
 
-  /**
-   * @param {Event=} sourceEvent
-   */
-  close(sourceEvent) {
-    const evt = new CustomEvent('vaadin-overlay-close', {
-      bubbles: true,
-      cancelable: true,
-      detail: { sourceEvent },
-    });
-    this.dispatchEvent(evt);
-    if (!evt.defaultPrevented) {
-      this.opened = false;
-    }
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -400,13 +377,18 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /** @private */
+  _isOverlayEvent(event) {
+    return event.composedPath().includes(this._overlay);
+  }
+
+  /** @private */
   _mouseDownListener(event) {
-    this._mouseDownInside = event.composedPath().indexOf(this.$.overlay) >= 0;
+    this._mouseDownInside = this._isOverlayEvent(event);
   }
 
   /** @private */
   _mouseUpListener(event) {
-    this._mouseUpInside = event.composedPath().indexOf(this.$.overlay) >= 0;
+    this._mouseUpInside = this._isOverlayEvent(event);
   }
 
   /**
@@ -429,7 +411,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
    * @private
    */
   _outsideClickListener(event) {
-    if (event.composedPath().includes(this.$.overlay) || this._mouseDownInside || this._mouseUpInside) {
+    if (this._isOverlayEvent(event) || this._mouseDownInside || this._mouseUpInside) {
       this._mouseDownInside = false;
       this._mouseUpInside = false;
       return;
@@ -447,7 +429,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this.dispatchEvent(evt);
 
     if (this.opened && !evt.defaultPrevented) {
-      this.close(event);
+      this._close(event);
     }
   }
 
@@ -474,12 +456,12 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       this.dispatchEvent(evt);
 
       if (this.opened && !evt.defaultPrevented) {
-        this.close(event);
+        this._close(event);
       }
     }
   }
 
-  /** @private */
+  /** @protected */
   _openedChanged(opened, wasOpened) {
     if (opened) {
       // Store focused node.
@@ -584,14 +566,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /** @private */
-  _attachOverlay() {
-    this._placeholder = document.createComment('vaadin-overlay-placeholder');
-    this.parentNode.insertBefore(this._placeholder, this);
-    document.body.appendChild(this);
-    this.bringToFront();
-  }
-
-  /** @private */
   _finishOpening() {
     this.removeAttribute('opening');
   }
@@ -643,12 +617,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         this._finishClosing();
       }
     }
-  }
-
-  /** @private */
-  _detachOverlay() {
-    this._placeholder.parentNode.insertBefore(this, this._placeholder);
-    this._placeholder.parentNode.removeChild(this._placeholder);
   }
 
   /** @private */
