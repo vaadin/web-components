@@ -41,11 +41,13 @@ export class IronListAdapter {
 
     this.__resizeObserver = new ResizeObserver(() => this._resizeHandler());
 
-    if (getComputedStyle(this.scrollTarget).overflow === 'visible') {
+    const overflow = getComputedStyle(this.scrollTarget).overflow;
+    if (overflow === 'visible' || overflow === '') {
       this.scrollTarget.style.overflow = 'auto';
     }
 
-    if (getComputedStyle(this.scrollContainer).position === 'static') {
+    const position = getComputedStyle(this.scrollContainer).position;
+    if (position === 'static' || position === '') {
       this.scrollContainer.style.position = 'relative';
     }
 
