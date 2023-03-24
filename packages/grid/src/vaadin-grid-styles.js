@@ -125,6 +125,10 @@ registerStyles(
       opacity: 0;
     }
 
+    [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+      transform: translateX(var(--_grid-lazy-columns-start));
+    }
+
     #items [part~='row'] {
       position: absolute;
     }

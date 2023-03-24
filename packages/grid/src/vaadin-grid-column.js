@@ -99,6 +99,15 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {boolean}
          * @protected
          */
+        _bodyContentHidden: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * @type {boolean}
+         * @protected
+         */
         _firstFrozenToEnd: {
           type: Boolean,
           value: false,
@@ -207,7 +216,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)',
+        '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
