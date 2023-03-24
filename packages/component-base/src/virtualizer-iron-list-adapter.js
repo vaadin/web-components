@@ -544,6 +544,29 @@ export class IronListAdapter {
   }
 
   /**
+   * Increases the pool size.
+   * @override
+   */
+  _increasePoolIfNeeded(count) {
+    if (this._physicalCount > 2 && count) {
+      // The iron-list logic has already created some physical items and
+      // has decided to create more. Since each item creation round is
+      // expensive, let's try to create the remaining items in one go.
+
+      // Calculate the total item count that would be needed to fill the viewport
+      // plus the buffer assuming rest of the items to be of the average size
+      // of the items already created.
+      const totalItemCount = Math.ceil(this._optPhysicalSize / this._physicalAverage);
+      const missingItemCount = totalItemCount - this._physicalCount;
+      // Create the remaining items in one go. Use a maximum of 100 items
+      // as a safety measure.
+      super._increasePoolIfNeeded(Math.max(count, Math.min(100, missingItemCount)));
+    } else {
+      super._increasePoolIfNeeded(count);
+    }
+  }
+
+  /**
    * @returns {Number|undefined} - The browser's default font-size in pixels
    * @private
    */

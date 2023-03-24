@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer - item height', () => {
@@ -179,5 +180,60 @@ describe('virtualizer - item height - sub-pixel', () => {
 
     const containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
+  });
+});
+
+describe('virtualizer - item height - initial render', () => {
+  let virtualizer, elementsContainer, itemHeight, createElements;
+
+  beforeEach(() => {
+    const scrollTarget = fixtureSync(`
+      <div style="height: 300px;">
+        <div class="container"></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+    elementsContainer = scrollContainer;
+
+    createElements = sinon.spy((count) => Array.from({ length: count }, () => document.createElement('div')));
+
+    virtualizer = new Virtualizer({
+      createElements,
+      updateElement: (el, index) => {
+        el.style.width = '100%';
+        el.style.height = itemHeight;
+        el.textContent = `Item ${index}`;
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+  });
+
+  it('should have the expected amount of physical elements: 100px item height', async () => {
+    itemHeight = '100px';
+    virtualizer.size = 100;
+    await nextFrame();
+    expect(elementsContainer.childElementCount).to.equal(5);
+  });
+
+  it('should have the expected amount of physical elements: 20px item height', async () => {
+    itemHeight = '20px';
+    virtualizer.size = 100;
+    await nextFrame();
+    expect(elementsContainer.childElementCount).to.equal(20);
+  });
+
+  it('should have created the items in the expected amount of batches: 100px item height', async () => {
+    itemHeight = '100px';
+    virtualizer.size = 100;
+    await nextFrame();
+    expect(createElements.callCount).to.equal(2);
+  });
+
+  it('should have created the items in the expected amount of batches: 20px item height', async () => {
+    itemHeight = '20px';
+    virtualizer.size = 100;
+    await nextFrame();
+    expect(createElements.callCount).to.equal(2);
   });
 });
