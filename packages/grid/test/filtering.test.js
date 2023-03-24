@@ -208,8 +208,8 @@ describe('filtering', () => {
     flushFilters(grid);
 
     grid.allRowsVisible = true;
-    await nextFrame();
     flushGrid(grid);
+    await nextFrame();
     expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
   });
 
