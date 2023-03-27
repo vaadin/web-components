@@ -41,6 +41,9 @@ export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolymerEl
           border-width: var(--_vaadin-multi-select-combo-box-items-container-border-width);
           border-style: var(--_vaadin-multi-select-combo-box-items-container-border-style);
           border-color: var(--_vaadin-multi-select-combo-box-items-container-border-color, transparent);
+
+          /* Firefox returns empty styles when setting position in virtualizer-iron-list-adapter.js,
+             so we have set it explicitly here */
           position: relative;
         }
       </style>

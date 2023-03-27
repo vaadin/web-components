@@ -39,6 +39,9 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolymerElement) {
           border-width: var(--_vaadin-time-picker-items-container-border-width);
           border-style: var(--_vaadin-time-picker-items-container-border-style);
           border-color: var(--_vaadin-time-picker-items-container-border-color, transparent);
+
+          /* Firefox returns empty styles when setting position in virtualizer-iron-list-adapter.js,
+             so we have set it explicitly here */
           position: relative;
         }
       </style>

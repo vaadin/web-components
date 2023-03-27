@@ -60,6 +60,8 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
         }
 
         #items {
+          /* Firefox returns empty styles when setting position in virtualizer-iron-list-adapter.js,
+             so we have set it explicitly here */
           position: relative;
         }
       </style>
