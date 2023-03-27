@@ -58,6 +58,10 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
         :host(:not([grid])) #items > ::slotted(*) {
           width: 100%;
         }
+
+        #items {
+          position: relative;
+        }
       </style>
 
       <div id="items">
