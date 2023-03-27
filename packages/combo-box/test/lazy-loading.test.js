@@ -813,7 +813,7 @@ describe('lazy loading', () => {
         it('should render selectedItem as selected when setting it while loading more items', async () => {
           const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
 
-          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          scrollToIndex(comboBox, comboBox.pageSize - 1);
           await nextFrame();
           expect(comboBox.loading).to.be.true;
 
@@ -865,7 +865,7 @@ describe('lazy loading', () => {
             label: `label ${comboBox.pageSize - 1}`,
           };
 
-          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          scrollToIndex(comboBox, comboBox.pageSize - 1);
           await nextFrame();
           expect(comboBox.loading).to.be.true;
 
