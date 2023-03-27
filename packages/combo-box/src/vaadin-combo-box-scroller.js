@@ -40,6 +40,7 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolymerElement) {
           border-width: var(--_vaadin-combo-box-items-container-border-width);
           border-style: var(--_vaadin-combo-box-items-container-border-style);
           border-color: var(--_vaadin-combo-box-items-container-border-color, transparent);
+          position: relative;
         }
       </style>
       <div id="selector">

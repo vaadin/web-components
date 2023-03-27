@@ -39,6 +39,7 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolymerElement) {
           border-width: var(--_vaadin-time-picker-items-container-border-width);
           border-style: var(--_vaadin-time-picker-items-container-border-style);
           border-color: var(--_vaadin-time-picker-items-container-border-color, transparent);
+          position: relative;
         }
       </style>
       <div id="selector">
