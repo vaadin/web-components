@@ -209,31 +209,35 @@ describe('virtualizer - item height - initial render', () => {
     });
   });
 
-  it('should have the expected amount of physical elements: 100px item height', async () => {
-    itemHeight = '100px';
-    virtualizer.size = 100;
-    await nextFrame();
-    expect(elementsContainer.childElementCount).to.equal(5);
+  describe('large item height', () => {
+    beforeEach(async () => {
+      itemHeight = '100px';
+      virtualizer.size = 100;
+      await nextFrame();
+    });
+
+    it('should have the expected amount of physical elements', () => {
+      expect(elementsContainer.childElementCount).to.equal(5);
+    });
+
+    it('should have created the items in the expected amount of batches', () => {
+      expect(createElements.callCount).to.equal(2);
+    });
   });
 
-  it('should have the expected amount of physical elements: 20px item height', async () => {
-    itemHeight = '20px';
-    virtualizer.size = 100;
-    await nextFrame();
-    expect(elementsContainer.childElementCount).to.equal(20);
-  });
+  describe('small item height', () => {
+    beforeEach(async () => {
+      itemHeight = '20px';
+      virtualizer.size = 100;
+      await nextFrame();
+    });
 
-  it('should have created the items in the expected amount of batches: 100px item height', async () => {
-    itemHeight = '100px';
-    virtualizer.size = 100;
-    await nextFrame();
-    expect(createElements.callCount).to.equal(2);
-  });
+    it('should have the expected amount of physical elements', () => {
+      expect(elementsContainer.childElementCount).to.equal(20);
+    });
 
-  it('should have created the items in the expected amount of batches: 20px item height', async () => {
-    itemHeight = '20px';
-    virtualizer.size = 100;
-    await nextFrame();
-    expect(createElements.callCount).to.equal(2);
+    it('should have created the items in the expected amount of batches', () => {
+      expect(createElements.callCount).to.equal(2);
+    });
   });
 });
