@@ -4,5 +4,6 @@
   "trailingComma": "all",
   "tabWidth": 2,
   "singleQuote": true,
-  "htmlWhitespaceSensitivity": "strict"
+  "htmlWhitespaceSensitivity": "strict",
+  "endOfLine": "auto"
 }
