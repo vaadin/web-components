@@ -41,6 +41,7 @@ export class ComboBoxScroller extends PolymerElement {
           border-width: var(--_vaadin-combo-box-items-container-border-width);
           border-style: var(--_vaadin-combo-box-items-container-border-style);
           border-color: var(--_vaadin-combo-box-items-container-border-color);
+          position: relative;
         }
       </style>
       <div id="selector">
