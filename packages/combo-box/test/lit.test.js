@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { html, render } from 'lit';
+import { html, LitElement, render } from 'lit';
 import { getViewportItems } from './helpers.js';
 
 describe('lit', () => {
@@ -34,6 +34,43 @@ describe('lit', () => {
         render(html`new-${index}`, root);
       };
       expect(getViewportItems(comboBox)[0].textContent).to.equal('new-0');
+    });
+  });
+
+  describe('complex structure', () => {
+    let container, comboBox, selector;
+
+    class TestSlotContainer extends LitElement {
+      render() {
+        return html`<slot></slot> `;
+      }
+    }
+    customElements.define('test-slot-container', TestSlotContainer);
+
+    class TestSlottedComboComponent extends LitElement {
+      render() {
+        return html`
+          <test-slot-container>
+            <vaadin-combo-box .items="${['First', 'Second', 'Third']}"></vaadin-combo-box>
+          </test-slot-container>
+        `;
+      }
+    }
+    customElements.define('test-slotted-combo-component', TestSlottedComboComponent);
+
+    beforeEach(async () => {
+      container = fixtureSync('<div></div>');
+      render(html`<test-slotted-combo-component></test-slotted-combo-component>`, container);
+      await nextFrame();
+      const component = container.querySelector('test-slotted-combo-component');
+      comboBox = component.shadowRoot.querySelector('vaadin-combo-box');
+      selector = comboBox._scroller.shadowRoot.children.selector;
+    });
+
+    it('should not show horizontal scrollbar when placed in slotted container', async () => {
+      comboBox.open();
+
+      expect(getComputedStyle(selector).position).to.equal('relative');
     });
   });
 });
