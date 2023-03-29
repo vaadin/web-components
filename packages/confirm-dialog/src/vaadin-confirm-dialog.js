@@ -5,9 +5,11 @@
  */
 import './vaadin-confirm-dialog-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -325,6 +327,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
     this._overlayElement.addEventListener('vaadin-overlay-closed', () => this.__onDialogClosed());
+    this._overlayElement.setAttribute('role', 'alertdialog');
 
     this._headerController = new SlotController(this, 'header', 'h3', {
       initializer: (node) => {
@@ -338,7 +341,13 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       multiple: true,
       observe: false,
       initializer: (node) => {
-        this._messageNodes = [...this._messageNodes, node];
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'contents';
+        wrapper.id = `confirm-dialog-message-${generateUniqueId()}`;
+        wrapper.appendChild(node);
+        this.appendChild(wrapper);
+        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapper.id });
+        this._messageNodes = [...this._messageNodes, wrapper];
       },
     });
     this.addController(this._messageController);
@@ -432,9 +441,9 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   /** @private */
   __updateMessageNodes(nodes, message) {
     if (nodes && nodes.length > 0) {
-      const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
-      if (defaultNode) {
-        defaultNode.textContent = message;
+      const defaultWrapperNode = nodes.find((node) => node === this._messageController.defaultNode?.parentElement);
+      if (defaultWrapperNode) {
+        defaultWrapperNode.firstChild.textContent = message;
       }
     }
   }
