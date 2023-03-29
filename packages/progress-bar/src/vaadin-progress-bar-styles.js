@@ -29,4 +29,15 @@ export const progressBarStyles = css`
   :host([dir='rtl']) [part='value'] {
     transform-origin: 100% 50%;
   }
+
+  @media (forced-colors: active) {
+    [part='bar'] {
+      outline: 1px solid;
+    }
+
+    [part='value'] {
+      background-color: AccentColor !important;
+      forced-color-adjust: none;
+    }
+  }
 `;

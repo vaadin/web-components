@@ -50,6 +50,17 @@ export const buttonStyles = css`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  @media (forced-colors: active) {
+    :host {
+      outline: 1px solid;
+      outline-offset: -1px;
+    }
+
+    :host([focused]) {
+      outline-width: 2px;
+    }
+  }
 `;
 
 export const buttonTemplate = (html) => html`

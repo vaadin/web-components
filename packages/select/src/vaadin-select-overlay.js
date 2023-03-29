@@ -14,6 +14,11 @@ registerStyles(
       align-items: flex-start;
       justify-content: flex-start;
     }
+    @media (forced-colors: active) {
+      [part='overlay'] {
+        outline: 3px solid;
+      }
+    }
   `,
   { moduleId: 'vaadin-select-overlay-styles' },
 );

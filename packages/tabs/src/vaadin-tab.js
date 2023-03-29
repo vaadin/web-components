@@ -49,6 +49,16 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerEl
         :host([hidden]) {
           display: none !important;
         }
+
+        @media (forced-colors: active) {
+          :host([focused]) {
+            outline: 1px solid;
+            outline-offset: -1px;
+          }
+          :host([selected]) {
+            border-bottom: 2px solid;
+          }
+        }
       </style>
       <slot></slot>
       <slot name="tooltip"></slot>

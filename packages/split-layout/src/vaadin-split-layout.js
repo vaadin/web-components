@@ -200,6 +200,16 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           left: 50%;
           transform: translate3d(-50%, -50%, 0);
         }
+
+        @media (forced-colors: active) {
+          [part~='splitter'] {
+            outline: 1px solid;
+          }
+          [part~='handle']::after {
+            background-color: AccentColor !important;
+            forced-color-adjust: none;
+          }
+        }
       </style>
       <slot id="primary" name="primary"></slot>
       <div part="splitter" id="splitter">

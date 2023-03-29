@@ -80,6 +80,12 @@ registerStyles(
     :host([has-bounds-set]) [part='overlay'] {
       max-width: none;
     }
+
+    @media (forced-colors: active) {
+      [part='overlay'] {
+        outline: 3px solid !important;
+      }
+    }
   `,
   { moduleId: 'vaadin-dialog-overlay-styles' },
 );
