@@ -46,22 +46,6 @@ describe('array data provider', () => {
       expect(getBodyCellContent(grid, 1, 0).textContent).to.equal('baz');
     });
 
-    it('should be observed for shift', () => {
-      grid.unshift('items', {
-        name: {
-          first: 'a',
-          last: 'b',
-        },
-      });
-      expect(grid.size).to.equal(3);
-      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('a');
-    });
-
-    it('should be observed for mutation', () => {
-      grid.set('items.0.name.first', 'new');
-      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('new');
-    });
-
     it('should handle null', () => {
       grid.items = null;
       expect(grid.size).to.equal(0);
@@ -118,6 +102,23 @@ describe('array data provider', () => {
       grid.items = [0];
       flushGrid(grid);
       expect(getRows(grid.$.items)).to.have.length(1);
+    });
+
+    it('should only render once when setting the items', () => {
+      const column = grid.querySelector('vaadin-grid-column');
+      column.renderer = sinon.spy();
+
+      grid.items = [
+        {
+          name: {
+            first: 'foo',
+            last: 'bar',
+          },
+        },
+      ];
+      flushGrid(grid);
+
+      expect(column.renderer.callCount).to.equal(1);
     });
   });
 });

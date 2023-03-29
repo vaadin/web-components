@@ -416,8 +416,6 @@ export const DataProviderMixin = (superClass) =>
             }
           });
 
-          this._hasData = true;
-
           // Remove the pending request
           delete cache.pendingRequests[page];
 
@@ -439,6 +437,8 @@ export const DataProviderMixin = (superClass) =>
           if (!this._cache.isLoading()) {
             this._debouncerApplyCachedData.flush();
           }
+
+          this._hasData = true;
 
           // Notify that new data has been received
           this.__itemsReceived();
