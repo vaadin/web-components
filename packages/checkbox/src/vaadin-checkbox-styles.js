@@ -59,10 +59,12 @@ export const checkboxStyles = css`
   @media (forced-colors: active) {
     [part='checkbox'] {
       outline: 1px solid;
+      outline-offset: -1px;
     }
 
     :host(:is([checked], [indeterminate])) [part='checkbox']::after {
       outline: 1px solid;
+      outline-offset: -1px;
     }
 
     :host([focused]) [part='checkbox'],

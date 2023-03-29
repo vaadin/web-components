@@ -54,6 +54,7 @@ export const buttonStyles = css`
   @media (forced-colors: active) {
     :host {
       outline: 1px solid;
+      outline-offset: -1px;
     }
 
     :host([focused]) {

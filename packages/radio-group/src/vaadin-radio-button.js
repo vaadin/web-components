@@ -120,6 +120,7 @@ class RadioButton extends LabelMixin(
         @media (forced-colors: active) {
           [part='radio'] {
             outline: 1px solid;
+            outline-offset: -1px;
           }
           :host([focused]) [part='radio'] {
             outline-width: 2px;
