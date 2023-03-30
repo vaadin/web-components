@@ -22,7 +22,7 @@ export const ArrayDataProviderMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, _filters, _sorters)'];
+      return ['__dataProviderOrItemsChanged(dataProvider, items.*, isAttached, _filters, _sorters)'];
     }
 
     /** @private */
@@ -37,10 +37,11 @@ export const ArrayDataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __dataProviderOrItemsChanged(dataProvider, items, isAttached) {
+    __dataProviderOrItemsChanged(dataProvider, itemsChange, isAttached) {
       if (!isAttached) {
         return;
       }
+      const items = itemsChange ? itemsChange.value : null;
 
       if (this._arrayDataProvider) {
         // Has an items array data provider beforehand
