@@ -79,6 +79,19 @@ describe('vaadin-confirm-dialog', () => {
     it('should set aria-label on the dialog', () => {
       expect(dialog.ariaLabel).to.equal('confirmation');
     });
+
+    it('should set `aria-labelleby` on the overlay when `accessibleDescriptionRef` is defined', () => {
+      const customId = 'id-0';
+      confirm.accessibleDescriptionRef = customId;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(customId);
+    });
+
+    it('should restore `aria-labelleby` on the overlay when `accessibleDescriptionRef` is removed', () => {
+      const generatedDescribedByValue = overlay.getAttribute('aria-describedby');
+      confirm.accessibleDescriptionRef = 'id-0';
+      confirm.accessibleDescriptionRef = null;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(generatedDescribedByValue);
+    });
   });
 
   describe('header', () => {
