@@ -251,8 +251,10 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
       : getNormalizedScrollLeft(this._scrollerElement, this.getAttribute('dir'));
     const scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
 
-    let overflow = scrollPosition > 0 ? 'start' : '';
-    overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
+    let overflow = Math.floor(scrollPosition) > 0 ? 'start' : '';
+    if (Math.ceil(scrollPosition) < Math.ceil(scrollSize - this._scrollOffset)) {
+      overflow += ' end';
+    }
 
     if (this.__direction === 1) {
       overflow = overflow.replace(/start|end/giu, (matched) => {
