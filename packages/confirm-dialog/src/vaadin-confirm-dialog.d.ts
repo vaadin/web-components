@@ -74,6 +74,19 @@ export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEve
  */
 declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(HTMLElement))) {
   /**
+   * Sets the `aria-describedby` attribute of the overlay element.
+   *
+   * By default, all elements inside the message area are linked
+   * through the `aria-describedby` attribute. However, there are
+   * cases where this can confuse screen reader users (eg. the dialog
+   * may present a password confirmation form). For these cases,
+   * it's better to associate only the elements that will help describe
+   * the confirmation dialog through this API.
+   * @attr {string} accessible-description-ref
+   */
+  accessibleDescriptionRef: string | null | undefined;
+
+  /**
    * True if the overlay is currently displayed.
    */
   opened: boolean;

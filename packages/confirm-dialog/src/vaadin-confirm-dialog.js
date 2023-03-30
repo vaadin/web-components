@@ -104,6 +104,20 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   static get properties() {
     return {
       /**
+       * Sets the `aria-describedby` attribute of the overlay element.
+       *
+       * By default, all elements inside the message area are linked
+       * through the `aria-describedby` attribute. However, there are
+       * cases where this can confuse screen reader users (eg. the dialog
+       * may present a password confirmation form). For these cases,
+       * it's better to associate only the elements that will help describe
+       * the confirmation dialog through this API.
+       */
+      accessibleDescriptionRef: {
+        type: String,
+        observer: '_accessibleDescriptionRefChanged',
+      },
+      /**
        * True if the overlay is currently displayed.
        * @type {boolean}
        */
@@ -373,6 +387,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
     });
     this.addController(this._confirmController);
+  }
+
+  /** @private */
+  _accessibleDescriptionRefChanged(newValue, oldValue) {
+    setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: newValue, oldId: oldValue, fromUser: true });
   }
 
   /** @private */
