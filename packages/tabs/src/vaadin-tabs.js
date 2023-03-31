@@ -251,7 +251,14 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
       : getNormalizedScrollLeft(this._scrollerElement, this.getAttribute('dir'));
     const scrollSize = this._vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
 
-    let overflow = Math.floor(scrollPosition) > 0 ? 'start' : '';
+    // Note that we are not comparing floored scrollPosition to be greater than zero here, which would make a natural
+    // sense, but to be greater than one intentionally. There is a known bug in Chromium browsers on Linux/Mac
+    // (https://bugs.chromium.org/p/chromium/issues/detail?id=1123301), which returns invalid value of scrollLeft when
+    // text direction is RTL. The value is off by one pixel in that case. Comparing scrollPosition to be greater than
+    // one on the following line is a workaround for that bug. Comparing scrollPosition to be greater than one means,
+    // that the left overflow and left arrow will be displayed "one pixel" later than normal. In other words, if the tab
+    // scroller element is scrolled just by 1px, the overflow is not yet showing.
+    let overflow = Math.floor(scrollPosition) > 1 ? 'start' : '';
     if (Math.ceil(scrollPosition) < Math.ceil(scrollSize - this._scrollOffset)) {
       overflow += ' end';
     }
