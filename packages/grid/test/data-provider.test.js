@@ -770,7 +770,7 @@ describe('wrapped grid', () => {
 
       container.dataProvider = (params, callback) => {
         expect(grid.loading).to.be.true;
-        callback(Array(params.pageSize));
+        callback(Array.from({ length: params.pageSize }, (_, i) => i));
         expect(grid.loading).not.to.be.true;
 
         cancelAnimationFrame(raf);
@@ -791,7 +791,7 @@ describe('wrapped grid', () => {
       container.dataProvider = (params, callback) => {
         cb = callback;
       };
-      cb(Array(25));
+      cb(Array.from({ length: 25 }, (_, i) => i));
       expect(grid.loading).not.to.be.true;
       grid.clearCache();
       expect(grid.loading).to.be.true;
@@ -812,14 +812,14 @@ describe('wrapped grid', () => {
 
     it('should clear loading attribute from rows when data received', () => {
       container.dataProvider = (params, callback) => {
-        callback([{}]);
+        callback([{}], 1);
       };
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
     });
 
     it('should remove loading from cells part attribute when data received', () => {
       container.dataProvider = (params, callback) => {
-        callback([{}]);
+        callback([{}], 1);
       };
       const row = getRows(grid.$.items)[0];
       getRowCells(row).forEach((cell) => {
