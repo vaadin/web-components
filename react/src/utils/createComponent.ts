@@ -8,6 +8,14 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type React from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 
+const $wnd = window as any;
+$wnd.Vaadin = $wnd.Vaadin || {};
+$wnd.Vaadin.registrations = $wnd.Vaadin.registrations || [];
+$wnd.Vaadin.registrations.push({
+  is: '@hilla/react-components',
+  version: /* updated-by-script */ '2.1.0-alpha6',
+});
+
 // TODO: Remove when types from @lit-labs/react are exported
 export type EventNames = Record<string, EventName | string>;
 type Constructor<T> = { new (): T; name: string };

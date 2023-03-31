@@ -20,3 +20,16 @@ Object.keys(packageJson.dependencies!).forEach((name) => {
 });
 
 await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), 'utf8');
+
+// Update version metadata in the sources
+
+const versionSourceFile = 'src/utils/createComponent.ts';
+console.log(`Updating version metadata in "${versionSourceFile}"...`);
+const versionSourcePath = resolve(rootDir, versionSourceFile);
+const versionSource = await readFile(versionSourcePath, 'utf8');
+const newVersionSource = versionSource.replace(
+  /version:.+,/g,
+  `version: /* updated-by-script */ '${packageJson.version}',`,
+);
+
+await writeFile(versionSourcePath, newVersionSource, 'utf8');
