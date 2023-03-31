@@ -273,7 +273,7 @@ export const DataProviderMixin = (superClass) =>
       el.index = index;
       const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
-      if (item) {
+      if (item !== undefined) {
         this.__updateLoading(el, false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
