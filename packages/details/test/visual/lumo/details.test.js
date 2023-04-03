@@ -81,7 +81,7 @@ describe('details', () => {
     });
 
     it('RTL theme reverse filled', async () => {
-      element.setAttribute('theme', 'reverse-filled');
+      element.setAttribute('theme', 'reverse filled');
       await visualDiff(div, 'rtl-theme-reverse-filled');
     });
   });

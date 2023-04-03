@@ -34,7 +34,7 @@ describe('accordion-panel', () => {
   });
 
   it('theme reverse filled', async () => {
-    element.setAttribute('theme', 'reverse-filled');
+    element.setAttribute('theme', 'reverse filled');
     await visualDiff(div, 'theme-reverse-filled');
   });
 
@@ -62,7 +62,7 @@ describe('accordion-panel', () => {
     });
 
     it('RTL theme reverse filled', async () => {
-      element.setAttribute('theme', 'reverse-filled');
+      element.setAttribute('theme', 'reverse filled');
       await visualDiff(div, 'rtl-theme-reverse-filled');
     });
   });
