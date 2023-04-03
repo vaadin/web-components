@@ -48,22 +48,22 @@ describe('accordion-panel', () => {
     });
 
     it('RTL basic', async () => {
-      await visualDiff(div, 'basic');
+      await visualDiff(div, 'rtl-basic');
     });
 
     it('RTL opened', async () => {
       element.opened = true;
-      await visualDiff(div, 'opened');
+      await visualDiff(div, 'rtl-opened');
     });
 
     it('RTL theme reverse', async () => {
       element.setAttribute('theme', 'reverse');
-      await visualDiff(div, 'theme-reverse');
+      await visualDiff(div, 'rtl-theme-reverse');
     });
 
     it('RTL theme reverse filled', async () => {
       element.setAttribute('theme', 'reverse-filled');
-      await visualDiff(div, 'theme-reverse-filled');
+      await visualDiff(div, 'rtl-theme-reverse-filled');
     });
   });
 });
