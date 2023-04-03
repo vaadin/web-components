@@ -33,9 +33,9 @@ describe('accordion-panel', () => {
     await visualDiff(div, 'theme-reverse');
   });
 
-  it('theme filled reverse', async () => {
-    element.setAttribute('theme', 'filled-reverse');
-    await visualDiff(div, 'theme-filled-reverse');
+  it('theme reverse filled', async () => {
+    element.setAttribute('theme', 'reverse-filled');
+    await visualDiff(div, 'theme-reverse-filled');
   });
 
   describe('RTL', () => {
