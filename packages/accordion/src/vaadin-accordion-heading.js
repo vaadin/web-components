@@ -69,6 +69,7 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
         button {
           display: flex;
           align-items: center;
+          justify-content: inherit;
           width: 100%;
           margin: 0;
           padding: 0;
