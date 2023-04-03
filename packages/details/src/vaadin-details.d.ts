@@ -40,7 +40,6 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * Part name        | Description
  * -----------------|----------------
- * `toggle`         | The element used as indicator, can represent an icon.
  * `content`        | The wrapper for the collapsible details content.
  *
  * The following attributes are exposed for styling:
