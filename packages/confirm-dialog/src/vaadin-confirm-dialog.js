@@ -115,7 +115,6 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
        */
       accessibleDescriptionRef: {
         type: String,
-        observer: '_accessibleDescriptionRefChanged',
       },
       /**
        * True if the overlay is currently displayed.
@@ -318,6 +317,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNodes(_messageNodes, message)',
       '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
+      '__accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef)',
     ];
   }
 
@@ -390,8 +390,16 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   /** @private */
-  _accessibleDescriptionRefChanged(newValue, oldValue) {
-    setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: newValue, oldId: oldValue, fromUser: true });
+  __accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef) {
+    if (!_overlayElement || accessibleDescriptionRef === this.__oldAccessibleDescriptionRef) {
+      return;
+    }
+    setAriaIDReference(this._overlayElement, 'aria-describedby', {
+      newId: accessibleDescriptionRef,
+      oldId: this.__oldAccessibleDescriptionRef,
+      fromUser: true,
+    });
+    this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
   }
 
   /** @private */
