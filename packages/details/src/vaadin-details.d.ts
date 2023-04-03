@@ -40,9 +40,7 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * Part name        | Description
  * -----------------|----------------
- * `summary`        | The element used to open and close collapsible content.
  * `toggle`         | The element used as indicator, can represent an icon.
- * `summary-content`| The wrapper for the slotted summary content.
  * `content`        | The wrapper for the collapsible details content.
  *
  * The following attributes are exposed for styling:
