@@ -31,6 +31,7 @@ describe('tabs', () => {
       <vaadin-tabs>
         <vaadin-tab>Foo</vaadin-tab>
         <vaadin-tab>Bar</vaadin-tab>
+        <vaadin-tab>Some</vaadin-tab>
         <span></span>
         <vaadin-tab disabled>Baz</vaadin-tab>
         <vaadin-tab>
@@ -59,7 +60,7 @@ describe('tabs', () => {
 
   describe('items', () => {
     it('should only add vaadin-tab components to items', () => {
-      expect(tabs.items.length).to.equal(4);
+      expect(tabs.items.length).to.equal(5);
       tabs.items.forEach((item) => {
         expect(item.tagName.toLowerCase()).to.equal('vaadin-tab');
       });
