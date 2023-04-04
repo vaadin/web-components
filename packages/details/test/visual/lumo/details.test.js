@@ -45,6 +45,16 @@ describe('details', () => {
       element.disabled = true;
       await visualDiff(div, 'disabled-opened');
     });
+
+    it('theme reverse', async () => {
+      element.setAttribute('theme', 'reverse');
+      await visualDiff(div, 'theme-reverse');
+    });
+
+    it('theme reverse filled', async () => {
+      element.setAttribute('theme', 'reverse filled');
+      await visualDiff(div, 'theme-reverse-filled');
+    });
   });
 
   describe('RTL', () => {
@@ -63,6 +73,16 @@ describe('details', () => {
     it('RTL opened', async () => {
       element.opened = true;
       await visualDiff(div, 'rtl-opened');
+    });
+
+    it('RTL theme reverse', async () => {
+      element.setAttribute('theme', 'reverse');
+      await visualDiff(div, 'rtl-theme-reverse');
+    });
+
+    it('RTL theme reverse filled', async () => {
+      element.setAttribute('theme', 'reverse filled');
+      await visualDiff(div, 'rtl-theme-reverse-filled');
     });
   });
 });
