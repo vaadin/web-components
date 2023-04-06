@@ -62,6 +62,11 @@ export const checkboxStyles = css`
       outline-offset: -1px;
     }
 
+    :host([disabled]) [part='checkbox'],
+    :host([disabled]) [part='checkbox']::after {
+      outline-color: GrayText;
+    }
+
     :host(:is([checked], [indeterminate])) [part='checkbox']::after {
       outline: 1px solid;
       outline-offset: -1px;

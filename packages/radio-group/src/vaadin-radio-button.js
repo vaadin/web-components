@@ -125,6 +125,9 @@ class RadioButton extends LabelMixin(
           :host([focused]) [part='radio'] {
             outline-width: 2px;
           }
+          :host([disabled]) [part='radio'] {
+            outline-color: GrayText;
+          }
         }
       </style>
       <div class="vaadin-radio-button-container">
