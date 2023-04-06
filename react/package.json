@@ -449,74 +449,102 @@
       "types": "./VirtualList.d.ts",
       "default": "./VirtualList.js"
     },
-    "./css/Lumo.css": {
-      "default": "./css/Lumo.css"
-    },
-    "./css/lumo/Badge.css": {
-      "default": "./css/lumo/Badge.css"
-    },
-    "./css/lumo/Color.css": {
-      "default": "./css/lumo/Color.css"
-    },
-    "./css/lumo/ColorBase.css": {
-      "default": "./css/lumo/ColorBase.css"
-    },
-    "./css/lumo/Font.css": {
-      "default": "./css/lumo/Font.css"
-    },
-    "./css/lumo/FontIcons.css": {
-      "default": "./css/lumo/FontIcons.css"
-    },
-    "./css/lumo/Globals.css": {
-      "default": "./css/lumo/Globals.css"
-    },
-    "./css/lumo/Sizing.css": {
-      "default": "./css/lumo/Sizing.css"
-    },
-    "./css/lumo/Spacing.css": {
-      "default": "./css/lumo/Spacing.css"
-    },
-    "./css/lumo/Style.css": {
-      "default": "./css/lumo/Style.css"
-    },
-    "./css/lumo/Typography.css": {
-      "default": "./css/lumo/Typography.css"
-    },
-    "./css/lumo/UserColors.css": {
-      "default": "./css/lumo/UserColors.css"
-    },
-    "./css/lumo/Utility.module.css": {
-      "default": "./css/lumo/Utility.module.css"
-    },
-    "./css/Material.css": {
-      "default": "./css/Material.css"
-    },
-    "./css/material/Color.css": {
-      "default": "./css/material/Color.css"
-    },
-    "./css/material/ColorBase.css": {
-      "default": "./css/material/ColorBase.css"
-    },
-    "./css/material/ColorDark.css": {
-      "default": "./css/material/ColorDark.css"
-    },
-    "./css/material/ColorLight.css": {
-      "default": "./css/material/ColorLight.css"
-    },
-    "./css/material/Font.css": {
-      "default": "./css/material/Font.css"
-    },
-    "./css/material/FontIcons.css": {
-      "default": "./css/material/FontIcons.css"
-    },
-    "./css/material/Shadow.css": {
-      "default": "./css/material/Shadow.css"
-    },
-    "./css/material/Typography.css": {
-      "default": "./css/material/Typography.css"
-    },
-    "./css/material/UserColors.css": {
-      "default": "./css/material/UserColors.css"
-    }
+    "./Accordion": "./Accordion.js",
+    "./AccordionPanel": "./AccordionPanel.js",
+    "./AppLayout": "./AppLayout.js",
+    "./Avatar": "./Avatar.js",
+    "./AvatarGroup": "./AvatarGroup.js",
+    "./Board": "./Board.js",
+    "./BoardRow": "./BoardRow.js",
+    "./Button": "./Button.js",
+    "./Chart": "./Chart.js",
+    "./ChartSeries": "./ChartSeries.js",
+    "./Checkbox": "./Checkbox.js",
+    "./CheckboxGroup": "./CheckboxGroup.js",
+    "./ComboBox": "./ComboBox.js",
+    "./ComboBoxLight": "./ComboBoxLight.js",
+    "./ConfirmDialog": "./ConfirmDialog.js",
+    "./ContextMenu": "./ContextMenu.js",
+    "./CookieConsent": "./CookieConsent.js",
+    "./Crud": "./Crud.js",
+    "./CrudEdit": "./CrudEdit.js",
+    "./CrudEditColumn": "./CrudEditColumn.js",
+    "./CustomField": "./CustomField.js",
+    "./DatePicker": "./DatePicker.js",
+    "./DatePickerLight": "./DatePickerLight.js",
+    "./DateTimePicker": "./DateTimePicker.js",
+    "./Details": "./Details.js",
+    "./Dialog": "./Dialog.js",
+    "./DrawerToggle": "./DrawerToggle.js",
+    "./EmailField": "./EmailField.js",
+    "./FormItem": "./FormItem.js",
+    "./FormLayout": "./FormLayout.js",
+    "./Grid": "./Grid.js",
+    "./GridColumn": "./GridColumn.js",
+    "./GridColumnGroup": "./GridColumnGroup.js",
+    "./GridFilter": "./GridFilter.js",
+    "./GridFilterColumn": "./GridFilterColumn.js",
+    "./GridPro": "./GridPro.js",
+    "./GridProEditColumn": "./GridProEditColumn.js",
+    "./GridSelectionColumn": "./GridSelectionColumn.js",
+    "./GridSortColumn": "./GridSortColumn.js",
+    "./GridSorter": "./GridSorter.js",
+    "./GridTreeColumn": "./GridTreeColumn.js",
+    "./GridTreeToggle": "./GridTreeToggle.js",
+    "./HorizontalLayout": "./HorizontalLayout.js",
+    "./Icon": "./Icon.js",
+    "./Iconset": "./Iconset.js",
+    "./IntegerField": "./IntegerField.js",
+    "./Item": "./Item.js",
+    "./ListBox": "./ListBox.js",
+    "./LoginForm": "./LoginForm.js",
+    "./LoginOverlay": "./LoginOverlay.js",
+    "./Map": "./Map.js",
+    "./MenuBar": "./MenuBar.js",
+    "./Message": "./Message.js",
+    "./MessageInput": "./MessageInput.js",
+    "./MessageList": "./MessageList.js",
+    "./Notification": "./Notification.js",
+    "./NumberField": "./NumberField.js",
+    "./PasswordField": "./PasswordField.js",
+    "./ProgressBar": "./ProgressBar.js",
+    "./RadioButton": "./RadioButton.js",
+    "./RadioGroup": "./RadioGroup.js",
+    "./RichTextEditor": "./RichTextEditor.js",
+    "./Scroller": "./Scroller.js",
+    "./Select": "./Select.js",
+    "./SplitLayout": "./SplitLayout.js",
+    "./Tab": "./Tab.js",
+    "./Tabs": "./Tabs.js",
+    "./TextArea": "./TextArea.js",
+    "./TextField": "./TextField.js",
+    "./TimePicker": "./TimePicker.js",
+    "./Tooltip": "./Tooltip.js",
+    "./Upload": "./Upload.js",
+    "./VerticalLayout": "./VerticalLayout.js",
+    "./VirtualList": "./VirtualList.js",
+    "./css/Lumo.css": "./css/Lumo.css",
+    "./css/lumo/Badge.css": "./css/lumo/Badge.css",
+    "./css/lumo/Color.css": "./css/lumo/Color.css",
+    "./css/lumo/ColorBase.css": "./css/lumo/ColorBase.css",
+    "./css/lumo/Font.css": "./css/lumo/Font.css",
+    "./css/lumo/FontIcons.css": "./css/lumo/FontIcons.css",
+    "./css/lumo/Globals.css": "./css/lumo/Globals.css",
+    "./css/lumo/Sizing.css": "./css/lumo/Sizing.css",
+    "./css/lumo/Spacing.css": "./css/lumo/Spacing.css",
+    "./css/lumo/Style.css": "./css/lumo/Style.css",
+    "./css/lumo/Typography.css": "./css/lumo/Typography.css",
+    "./css/lumo/UserColors.css": "./css/lumo/UserColors.css",
+    "./css/lumo/Utility.module.css": "./css/lumo/Utility.module.css",
+    "./css/Material.css": "./css/Material.css",
+    "./css/material/Color.css": "./css/material/Color.css",
+    "./css/material/ColorBase.css": "./css/material/ColorBase.css",
+    "./css/material/ColorDark.css": "./css/material/ColorDark.css",
+    "./css/material/ColorLight.css": "./css/material/ColorLight.css",
+    "./css/material/Font.css": "./css/material/Font.css",
+    "./css/material/FontIcons.css": "./css/material/FontIcons.css",
+    "./css/material/Shadow.css": "./css/material/Shadow.css",
+    "./css/material/Typography.css": "./css/material/Typography.css",
+    "./css/material/UserColors.css": "./css/material/UserColors.css"
   }
 }

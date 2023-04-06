@@ -12,26 +12,43 @@ const exports: Record<string, PackageJson.Exports> = {
   './package.json': './package.json',
 };
 
-type ExportsRecord = readonly [exportsPath: string, exportsObject: Partial<PackageJson.ExportConditions>];
+type PlainExportsEntry = readonly [entrypoint: string, path: string];
+type ConditionalExportsEntry = readonly [entrypoint: string, exportConditions: Partial<PackageJson.ExportConditions>];
+type ExportsEntry = PlainExportsEntry | ConditionalExportsEntry;
 
 const collator = new Intl.Collator('en', { sensitivity: 'base' });
-function compareExportsPaths([pathA]: ExportsRecord, [pathB]: ExportsRecord) {
-  return collator.compare(pathA, pathB);
+function compareExportsPaths([entrypointA]: ExportsEntry, [entrypointB]: ExportsEntry) {
+  return collator.compare(entrypointA, entrypointB);
 }
+
+const moduleNames = await fromAsync(fswalk(srcDir), async ([path]) => {
+  return basename(path, extname(path));
+});
 
 Object.assign(
   exports,
   Object.fromEntries(
-    (
-      await fromAsync(fswalk(srcDir), async ([path]) => {
-        const moduleName = basename(path, extname(path));
+    moduleNames
+      .map(
+        (moduleName) =>
+          [
+            `./${moduleName}.js`,
+            { types: `./${moduleName}.d.ts`, default: `./${moduleName}.js` },
+          ] as ConditionalExportsEntry,
+      )
+      .sort(compareExportsPaths),
+  ),
+);
 
-        return [
-          `./${moduleName}.js`,
-          { types: `./${moduleName}.d.ts`, default: `./${moduleName}.js` },
-        ] as ExportsRecord;
-      })
-    ).sort(compareExportsPaths),
+// Add extensionless compatibility export aliases. NOTE: the order
+// is important, the earlier entries with .js have higher priority
+// and are preferred over the ones without the extension.
+Object.assign(
+  exports,
+  Object.fromEntries(
+    moduleNames
+      .map((moduleName) => [`./${moduleName}`, `./${moduleName}.js`] as PlainExportsEntry)
+      .sort(compareExportsPaths),
   ),
 );
 
@@ -44,7 +61,7 @@ Object.assign(
       await fromAsync(fswalk(outCssDir, { recursive: true }), async ([path]) => {
         const cssPath = relative(outCssDir, path).replaceAll(sep, '/');
 
-        return [`./css/${cssPath}`, { default: `./css/${cssPath}` }] as ExportsRecord;
+        return [`./css/${cssPath}`, `./css/${cssPath}`] as PlainExportsEntry;
       })
     ).sort(compareExportsPaths),
   ),
