@@ -122,7 +122,11 @@ registerStyles(
     }
 
     [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
-      opacity: 0;
+      visibility: hidden;
+    }
+
+    [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+      transform: translateX(var(--_grid-lazy-columns-start));
     }
 
     #items [part~='row'] {

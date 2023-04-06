@@ -1,3 +1,4 @@
+import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
@@ -279,6 +280,8 @@ export function onceInvoked(object, functionName) {
  */
 export async function onceResized(grid) {
   await onceInvoked(grid, '_onResize');
+  // Grid's resize observer uses setTimeout
+  await aTimeout(0);
 }
 
 export const shiftClick = (node) => {

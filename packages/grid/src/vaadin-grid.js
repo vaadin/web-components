@@ -5,10 +5,9 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
+import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -503,7 +502,12 @@ class Grid extends ElementMixin(
       reorderElements: true,
     });
 
-    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
+    new ResizeObserver(() =>
+      setTimeout(() => {
+        this.__updateFooterPositioning();
+        this.__updateColumnsBodyContentHidden();
+      }),
+    ).observe(this.$.table);
 
     processTemplates(this);
 
@@ -741,12 +745,14 @@ class Grid extends ElementMixin(
       );
     }
 
-    beforeNextRender(this, () => {
-      this._updateFirstAndLastColumn();
-      this._resetKeyboardNavigation();
-      this._afterScroll();
-      this.__itemsReceived();
-    });
+    this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
+      this.__afterCreateScrollerRowsDebouncer,
+      animationFrame,
+      () => {
+        this._afterScroll();
+        this.__itemsReceived();
+      },
+    );
     return rows;
   }
 
@@ -865,7 +871,14 @@ class Grid extends ElementMixin(
             column._cells.push(cell);
           }
           cell.setAttribute('part', 'cell body-cell');
-          row.appendChild(cell);
+          cell.__parentRow = row;
+          if (!column._bodyContentHidden) {
+            row.appendChild(cell);
+          }
+
+          if (row === this.$.sizer) {
+            column._sizerCell = cell;
+          }
 
           if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
@@ -1004,6 +1017,7 @@ class Grid extends ElementMixin(
   _columnTreeChanged(columnTree) {
     this._renderColumnTree(columnTree);
     this.recalculateColumnWidths();
+    this.__updateColumnsBodyContentHidden();
   }
 
   /** @private */

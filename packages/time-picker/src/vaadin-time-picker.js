@@ -626,8 +626,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         this.__updateValue(parsedObj);
       }
     } else {
-      // If user input can not be parsed, keep it.
-      if (value !== '') {
+      // If the user input can not be parsed, set a flag
+      // that prevents `__valueChanged` from removing the input
+      // after setting the value property to an empty string below.
+      if (this.value !== '' && value !== '') {
         this.__keepInvalidInput = true;
       }
 
