@@ -78,9 +78,11 @@ const colorBase = css`
     --lumo-success-color-10pct: hsla(145, 72%, 31%, 0.1);
     --lumo-success-text-color: hsl(145, 85%, 25%);
     --lumo-success-contrast-color: #fff;
+  }
 
-    /* forced-colors mode adjustments */
-    @media (forced-colors: active) {
+  /* forced-colors mode adjustments */
+  @media (forced-colors: active) {
+    html {
       --lumo-disabled-text-color: GrayText;
     }
   }
