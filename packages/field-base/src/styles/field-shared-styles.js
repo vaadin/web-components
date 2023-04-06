@@ -35,5 +35,8 @@ export const fieldShared = css`
     :host([focused]) [part='input-field'] {
       outline-width: 2px;
     }
+    :host([readonly]) [part='input-field'] {
+      outline-style: dashed;
+    }
   }
 `;

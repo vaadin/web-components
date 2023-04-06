@@ -70,6 +70,13 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
         :host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
           display: none !important;
         }
+
+        @media (forced-colors: active) {
+          :host {
+            outline: 1px solid;
+            outline-offset: -1px;
+          }
+        }
       </style>
       <div part="label">[[label]]</div>
       <div part="remove-button" role="button" on-click="_onRemoveClick"></div>
