@@ -31,6 +31,7 @@ describe('tabs', () => {
       <vaadin-tabs>
         <vaadin-tab>Foo</vaadin-tab>
         <vaadin-tab>Bar</vaadin-tab>
+        <vaadin-tab>Some</vaadin-tab>
         <span></span>
         <vaadin-tab disabled>Baz</vaadin-tab>
         <vaadin-tab>
@@ -59,7 +60,7 @@ describe('tabs', () => {
 
   describe('items', () => {
     it('should only add vaadin-tab components to items', () => {
-      expect(tabs.items.length).to.equal(4);
+      expect(tabs.items.length).to.equal(5);
       tabs.items.forEach((item) => {
         expect(item.tagName.toLowerCase()).to.equal('vaadin-tab');
       });
@@ -114,6 +115,10 @@ describe('tabs', () => {
             await nextFrame();
           });
 
+          afterEach(() => {
+            document.body.style.zoom = '';
+          });
+
           it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, () => {
             expect(tabs.getAttribute('overflow')).to.be.equal('end');
           });
@@ -127,18 +132,24 @@ describe('tabs', () => {
             tabs._scroll(horizontalRtl ? -2 : 2);
           });
 
-          // TODO: passes locally but fails in GitHub Actions due to 1px difference.
-          const chrome = /HeadlessChrome/u.test(navigator.userAgent);
-          (horizontalRtl && chrome ? it.skip : it)(
-            `when orientation=${orientation} should have overflow="start" if scroll is at the end`,
-            (done) => {
+          it(`when orientation=${orientation} should have overflow="start" if scroll is at the end`, (done) => {
+            listenOnce(tabs._scrollerElement, 'scroll', () => {
+              expect(tabs.getAttribute('overflow')).to.be.equal('start');
+              done();
+            });
+            tabs._scroll(horizontalRtl ? -200 : 200);
+          });
+
+          [1.25, 1.33, 1.5, 1.75].forEach((zoomLevel) => {
+            it(`when orientation=${orientation} should have overflow="start" if scroll is at the end on page zoomed to ${zoomLevel}`, (done) => {
+              document.body.style.zoom = zoomLevel;
               listenOnce(tabs._scrollerElement, 'scroll', () => {
                 expect(tabs.getAttribute('overflow')).to.be.equal('start');
                 done();
               });
               tabs._scroll(horizontalRtl ? -200 : 200);
-            },
-          );
+            });
+          });
 
           it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
             const scroll = tabs._scrollerElement;

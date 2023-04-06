@@ -521,7 +521,12 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const columnIndex = this.__getIndexOfChildElement(activeCell);
+      let columnIndex = this.__getIndexOfChildElement(activeCell);
+      if (this.$.items.contains(activeCell)) {
+        // lazy column rendering may be enabled, so we need use the always visible sizer cells to find the column index
+        columnIndex = [...this.$.sizer.children].findIndex((sizerCell) => sizerCell._column === activeCell._column);
+      }
+
       const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
@@ -574,9 +579,27 @@ export const KeyboardNavigationMixin = (superClass) =>
           return acc;
         }, {});
         const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
-        const dstCell = dstRow.children[dstColumnIndex];
 
-        this._scrollHorizontallyToCell(dstCell);
+        let dstCell;
+        if (this.$.items.contains(activeCell)) {
+          const dstSizerCell = this.$.sizer.children[dstColumnIndex];
+          if (this._lazyColumns) {
+            // If the column is not in the viewport, scroll it into view.
+            if (!this.__isColumnInViewport(dstSizerCell._column)) {
+              dstSizerCell.scrollIntoView();
+            }
+            this.__updateColumnsBodyContentHidden();
+            this.__updateHorizontalScrollPosition();
+          }
+
+          dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
+          // Ensure correct horizontal scroll position once the destination cell is available.
+          this._scrollHorizontallyToCell(dstCell);
+        } else {
+          dstCell = dstRow.children[dstColumnIndex];
+          this._scrollHorizontallyToCell(dstCell);
+        }
+
         dstCell.focus();
       }
     }

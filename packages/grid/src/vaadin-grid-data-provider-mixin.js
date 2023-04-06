@@ -273,7 +273,7 @@ export const DataProviderMixin = (superClass) =>
       el.index = index;
       const { cache, scaledIndex } = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
-      if (item) {
+      if (item !== undefined) {
         this.__updateLoading(el, false);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
@@ -424,14 +424,7 @@ export const DataProviderMixin = (superClass) =>
           // Schedule a debouncer to update the visible rows
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
             this._setLoading(false);
-
-            this._getVisibleRows().forEach((row) => {
-              const cachedItem = this._cache.getItemForIndex(row.index);
-              if (cachedItem) {
-                this._getItem(row.index, row);
-              }
-            });
-
+            this.__updateVisibleRows();
             this.__scrollToPendingIndexes();
           });
 

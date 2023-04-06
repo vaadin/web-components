@@ -68,9 +68,16 @@ describe('time-picker', () => {
       expect(timePicker.value).to.be.equal('');
     });
 
-    it('should propagate value to the inputElement', () => {
+    it('should propagate value property to the input element', () => {
       timePicker.value = '12:00';
       expect(inputElement.value).to.be.equal('12:00');
+    });
+
+    it('should not preserve bad input on value property change', () => {
+      setInputValue(timePicker, 'invalid');
+      enter(inputElement);
+      timePicker.value = '12:00';
+      expect(inputElement.value).to.equal('12:00');
     });
 
     it('should format input value consistently when committing same input value', () => {

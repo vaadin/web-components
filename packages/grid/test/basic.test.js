@@ -66,19 +66,19 @@ describe('basic features', () => {
     expect(getLastVisibleItem(grid).index).to.equal(lastIndex);
   });
 
-  it('should change the opacity of cell content in loading rows from 1 to 0 and back', () => {
+  it('should change the visibility of cell content in loading rows', () => {
     const firstRow = grid.shadowRoot.querySelector('#items [part~="row"]');
     const cellContent = getBodyCellContent(grid, 0, 0);
 
-    expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
+    expect(window.getComputedStyle(cellContent).visibility).to.eql('visible');
 
     firstRow.setAttribute('loading', '');
 
-    expect(window.getComputedStyle(cellContent).opacity).to.eql('0');
+    expect(window.getComputedStyle(cellContent).visibility).to.eql('hidden');
 
     firstRow.removeAttribute('loading', '');
 
-    expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
+    expect(window.getComputedStyle(cellContent).visibility).to.eql('visible');
   });
 
   it('scroll to index', () => {

@@ -23,6 +23,7 @@ const gridProEditor = css`
     border-radius: 0;
     flex-grow: 1;
     font-weight: 400;
+    --vaadin-input-field-border-color: transparent;
   }
 
   /* reset outline inherited from text-field */

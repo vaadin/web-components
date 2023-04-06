@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
@@ -192,7 +192,7 @@ describe('filtering', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should display all filtered items', () => {
+  it('should display all filtered items', async () => {
     flushFilters(grid);
     grid._filters[0].value = '';
     grid._filters[1].value = '';
@@ -206,8 +206,11 @@ describe('filtering', () => {
 
     grid._filters[0].value = '99';
     flushFilters(grid);
+
+    grid.allRowsVisible = true;
     flushGrid(grid);
-    expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(18);
+    await nextFrame();
+    expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
   });
 
   it('should not overflow filter text field', () => {

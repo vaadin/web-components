@@ -1,0 +1,23 @@
+# For more detail why this file is necessary for seamless cooperation of *nix and windows developers, please read the following:
+# https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+# Set the default behavior for text files, in case people don't have core.autocrlf set.
+# Handle line endings automatically for files detected as text and leave all files detected as binary untouched.
+* text=auto
+
+# The above will handle all files NOT found below.
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.js    text
+*.ts    text
+*.yml   text
+*.html  text
+*.json  text
+*.md    text
+*.css   text
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.png   binary
+*.jpg   binary

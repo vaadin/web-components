@@ -39,6 +39,13 @@ registerStyles(
       background-color: var(--lumo-contrast-20pct);
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       cursor: var(--lumo-clickable-cursor);
+      /* Default field border color */
+      --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
+    }
+
+    :host([indeterminate]),
+    :host([checked]) {
+      --vaadin-input-field-border-color: transparent;
     }
 
     :host([indeterminate]) [part='checkbox'],
@@ -80,13 +87,15 @@ registerStyles(
 
     /* Focus ring */
     :host([focus-ring]) [part='checkbox'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct),
+        inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 
     /* Disabled */
     :host([disabled]) {
       pointer-events: none;
       color: var(--lumo-disabled-text-color);
+      --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
     }
 
     :host([disabled]) ::slotted(label) {
