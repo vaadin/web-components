@@ -7,4 +7,4 @@
 
 ## License
 
-Apache License 2.0
+This program is available under Vaadin Commercial License and Service Terms. For license terms, see LICENSE.

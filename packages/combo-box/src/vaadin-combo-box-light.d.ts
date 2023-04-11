@@ -1,7 +1,12 @@
 /**
  * @license
- * Copyright (c) 2015 - 2023 Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ * Copyright (c) 2000 - 2023 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
  */
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';

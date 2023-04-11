@@ -33,7 +33,7 @@ To display an icon, use [`<vaadin-icon>`](https://www.npmjs.com/package/@vaadin/
 
 The icon files (SVG, PNG, fonts) are licensed under Creative Commons [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
-The source code in this repository is licensed under Apache License 2.0.
+This program is available under Vaadin Commercial License and Service Terms. For license terms, see LICENSE.
 
 All brand icons are trademarks of their respective owners.
 The use of these trademarks does not indicate endorsement of the trademark holder by Vaadin Icons, nor vice versa.
