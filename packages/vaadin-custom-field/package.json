@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-custom-field",
-  "license": "Apache-2.0",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/22.1/LICENSE",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
