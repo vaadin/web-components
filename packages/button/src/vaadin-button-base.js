@@ -60,6 +60,10 @@ export const buttonStyles = css`
     :host([focused]) {
       outline-width: 2px;
     }
+
+    :host([disabled]) {
+      outline-color: GrayText;
+    }
   }
 `;
 
