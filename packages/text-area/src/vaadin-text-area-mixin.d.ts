@@ -11,6 +11,7 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -25,7 +26,8 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
  */
 export declare function TextAreaMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> &
+): Constructor<ClearButtonMixinClass> &
+  Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
