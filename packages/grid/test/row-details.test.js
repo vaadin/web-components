@@ -285,7 +285,7 @@ describe('row details', () => {
 
   describe('details opened attribute', () => {
     let dataset = [];
-    const dataProvider = (params, callback) => callback(dataset, dataset.length);
+    const dataProvider = (params, callback) => callback(dataset);
 
     const countRowsMarkedAsDetailsOpened = (grid) => {
       return grid.$.items.querySelectorAll('tr[details-opened]').length;
@@ -294,7 +294,7 @@ describe('row details', () => {
     beforeEach(async () => {
       dataset = buildDataSet(10);
       grid = fixtureSync(`
-        <vaadin-grid style="width: 50px; height: 400px" size="10">
+        <vaadin-grid style="width: 50px; height: 400px" size="100">
           <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
