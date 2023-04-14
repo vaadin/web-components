@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addMaterialGlobalStyles } from './global.js';
 
 const font = css`
   :host {
@@ -105,9 +106,7 @@ const typography = css`
 
 registerStyles('', typography, { moduleId: 'material-typography' });
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addMaterialGlobalStyles('font', font);
 
 export { font, typography };
 
