@@ -5,9 +5,9 @@
  */
 export { registerStyles, css, unsafeCSS } from './vaadin-themable-mixin.js';
 
-export const addGlobalThemeStyles = (id, prefix, ...styles) => {
+export const addGlobalThemeStyles = (id, ...styles) => {
   const styleTag = document.createElement('style');
-  styleTag.id = `${prefix}${id}`;
+  styleTag.id = id;
   styleTag.textContent = styles
     .map((style) => style.toString())
     .join('\n')
