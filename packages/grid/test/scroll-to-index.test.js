@@ -213,8 +213,8 @@ describe('scroll to index', () => {
 
     it('should not reassign the first item on scrollToIndex', () => {
       const newExpectedSize = grid.size + 1;
-      data.push({ index: 11 });
       grid.size = newExpectedSize;
+      data.push({ index: 11 });
       grid.scrollToIndex(grid.size - 1);
 
       expect(grid.$.items.children[0]._item.index).to.equal(0);
