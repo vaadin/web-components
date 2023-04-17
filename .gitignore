@@ -17,6 +17,7 @@ packages/icons/test/visual/screenshots/failed
 
 # IntelliJ project files
 .idea
+*.iml
 
 # Generated web-types JSON files
 web-types.json
