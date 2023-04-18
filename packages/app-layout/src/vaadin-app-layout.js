@@ -784,10 +784,10 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       this.$.navbarTop.removeAttribute('hidden');
     }
 
-    if (touchOptimized) {
-      this.$.navbarBottom.removeAttribute('hidden');
-    } else {
+    if (this.$.navbarBottom.querySelector('[name=navbar-bottom]').assignedNodes().length === 0) {
       this.$.navbarBottom.setAttribute('hidden', '');
+    } else {
+      this.$.navbarBottom.removeAttribute('hidden');
     }
 
     this._updateOffsetSize();
