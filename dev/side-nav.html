@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side nav</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/side-nav';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/button';
+      import '@vaadin/tooltip';
+      import '@vaadin/notification';
+    </script>
+  </head>
+  <body>
+
+  <vaadin-notification></vaadin-notification>
+
+  <vaadin-side-nav collapsible>
+    <span slot="label">Main menu</span>
+
+    <vaadin-side-nav-item path="/dashboard">
+      <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
+      Dashboard
+      <span theme="badge primary" slot="suffix" aria-label="(2 new items)">2</span>
+    </vaadin-side-nav-item>
+
+    <vaadin-side-nav-item>
+      <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
+      Parent
+
+      <vaadin-side-nav-item path="/child1" slot="children">
+        Child 1
+      </vaadin-side-nav-item>
+
+      <vaadin-side-nav-item path="/child2" slot="children">
+        Child 2
+      </vaadin-side-nav-item>
+    </vaadin-side-nav-item>
+
+    <vaadin-side-nav-item path="/button">
+      <vaadin-button>
+        Edit
+        <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
+      </vaadin-button>
+    </vaadin-side-nav-item>
+  </vaadin-side-nav>
+
+    <script>
+      const button = document.querySelector('vaadin-button');
+      button.addEventListener('click', (root, event) => {
+        const notification = document.querySelector('vaadin-notification');
+        notification.renderer = (root) => (root.textContent = 'Button clicked');
+        notification.open();
+      });
+    </script>
+  </body>
+</html>
