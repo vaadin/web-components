@@ -145,7 +145,7 @@ export const FieldMixin = (superclass) =>
     __labelChanged(hasLabel, labelNode) {
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
-      if (hasLabel) {
+      if (hasLabel && !this.accessibleName && !this.accessibleNameRef) {
         this._fieldAriaController.setLabelId(labelNode.id);
       } else {
         this._fieldAriaController.setLabelId(null);

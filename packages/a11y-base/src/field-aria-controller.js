@@ -37,7 +37,9 @@ export class FieldAriaController {
   setTarget(target) {
     this.__target = target;
     this.__setAriaRequiredAttribute(this.__required);
-    this.__setLabelIdToAriaAttribute(this.__labelId);
+    const isFromUser = this.__labelIdFromUser != null;
+    const labelId = isFromUser ? this.__labelIdFromUser : this.__labelId;
+    this.__setLabelIdToAriaAttribute(labelId, labelId, isFromUser);
     this.__setErrorIdToAriaAttribute(this.__errorId);
     this.__setHelperIdToAriaAttribute(this.__helperId);
     this.setAriaLabel(this.__label);
