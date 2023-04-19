@@ -8,7 +8,13 @@ import {
 import type { GridRowDetailsReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 
-export * from './generated/Grid.js';
+// "@vaadin/grid/vaadin-grid.js" has additional re-exports from "grid-column.js"
+// for historical reasons. This exports "GridColumn" web component, which gets
+// suggested in React context, see https://github.com/vaadin/react-components/issues/68
+// Fix: use re-exports from raw "src/vaadin-grid.js" as a workaround, until
+// the re-export is removed.
+export * from '@vaadin/grid/src/vaadin-grid.js';
+export { GridElement, type GridEventMap } from './generated/Grid.js';
 
 export type GridProps<TItem> = Partial<Omit<_GridProps<TItem>, 'rowDetailsRenderer'>> &
   Readonly<{
