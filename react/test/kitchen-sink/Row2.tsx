@@ -4,6 +4,7 @@ import { Checkbox } from '../../src/Checkbox.js';
 import { CheckboxGroup } from '../../src/CheckboxGroup.js';
 import { ComboBox } from '../../src/ComboBox.js';
 import { ConfirmDialog } from '../../src/ConfirmDialog.js';
+import { MultiSelectComboBox } from '../../src/MultiSelectComboBox.js';
 
 function CheckboxesWithListener() {
   const [checked, setChecked] = useState('first');
@@ -30,6 +31,7 @@ export default function Row2() {
         <Checkbox value="accept_terms" label="Accept Terms"></Checkbox>
       </CheckboxGroup>
       <ComboBox label="ComboBox" items={['foo', 'bar']}></ComboBox>
+      <MultiSelectComboBox label="MultiSelectComboBox" items={['foo', 'bar', 'baz']}></MultiSelectComboBox>
       <ConfirmDialog></ConfirmDialog>
     </BoardRow>
   );

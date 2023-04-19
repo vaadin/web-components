@@ -24,6 +24,7 @@ export const genericElements = new Map<string, GenericElementInfo>([
   ['GridSelectionColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
   ['GridSortColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
   ['GridTreeColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['MultiSelectComboBox', { numberOfGenerics: 1 }],
   ['VirtualList', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
 ]);
 
@@ -44,6 +45,19 @@ export const eventSettings = new Map<string, EventSettings>([
     { makeUnknown: ['size-changed', 'data-provider-changed', 'enter-next-row-changed', 'single-cell-edit-changed'] },
   ],
   ['GridProEditColumn', { makeUnknown: ['editor-type-changed'] }],
+  [
+    'MultiSelectComboBox',
+    {
+      remove: [
+        // Internal events
+        'vaadin-combo-box-dropdown-closed',
+        'vaadin-combo-box-dropdown-opened',
+        // FIXME: missing event typing in the web component, see
+        // https://github.com/vaadin/web-components/issues/4900#issuecomment-1512927512
+        'opened-changed',
+      ],
+    },
+  ],
   ['RadioButton', { remove: ['value-changed'] }],
 ]);
 

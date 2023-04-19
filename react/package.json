@@ -70,6 +70,7 @@
     "@vaadin/menu-bar": "24.1.0-alpha8",
     "@vaadin/message-input": "24.1.0-alpha8",
     "@vaadin/message-list": "24.1.0-alpha8",
+    "@vaadin/multi-select-combo-box": "24.1.0-alpha8",
     "@vaadin/notification": "24.1.0-alpha8",
     "@vaadin/number-field": "24.1.0-alpha8",
     "@vaadin/password-field": "24.1.0-alpha8",
@@ -373,6 +374,10 @@
       "types": "./MessageList.d.ts",
       "default": "./MessageList.js"
     },
+    "./MultiSelectComboBox.js": {
+      "types": "./MultiSelectComboBox.d.ts",
+      "default": "./MultiSelectComboBox.js"
+    },
     "./Notification.js": {
       "types": "./Notification.d.ts",
       "default": "./Notification.js"
@@ -504,6 +509,7 @@
     "./Message": "./Message.js",
     "./MessageInput": "./MessageInput.js",
     "./MessageList": "./MessageList.js",
+    "./MultiSelectComboBox": "./MultiSelectComboBox.js",
     "./Notification": "./Notification.js",
     "./NumberField": "./NumberField.js",
     "./PasswordField": "./PasswordField.js",
@@ -527,6 +533,7 @@
     "./css/lumo/Badge.css": "./css/lumo/Badge.css",
     "./css/lumo/Color.css": "./css/lumo/Color.css",
     "./css/lumo/ColorBase.css": "./css/lumo/ColorBase.css",
+    "./css/lumo/ColorLegacy.css": "./css/lumo/ColorLegacy.css",
     "./css/lumo/Font.css": "./css/lumo/Font.css",
     "./css/lumo/FontIcons.css": "./css/lumo/FontIcons.css",
     "./css/lumo/Globals.css": "./css/lumo/Globals.css",
