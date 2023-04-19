@@ -833,6 +833,15 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
+      it('should change aria-labellebdy when accessibleNameRef is set before element is attached', async () => {
+        const parent = element.parentNode;
+        element = document.createElement(tag);
+        element.accessibleNameRef = 'accessible-name-ref-0';
+        parent.appendChild(element);
+        await nextFrame();
+        input = element.querySelector('[slot=input]');
+        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+      });
     });
 
     describe('field group', () => {
