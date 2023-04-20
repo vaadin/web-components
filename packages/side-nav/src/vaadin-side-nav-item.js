@@ -6,14 +6,13 @@
 import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemStyles } from '../theme/lumo/vaadin-side-nav-styles.js';
 
 /**
  * An element used internally by `<vaadin-side-nav>`. Not intended to be used separately.
  */
-class SideNavItem extends ItemMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-side-nav-item';
   }

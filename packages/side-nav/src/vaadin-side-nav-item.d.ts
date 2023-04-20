@@ -6,10 +6,9 @@
 import { LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-declare class SideNavItem extends ItemMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   path: string;
 
   expanded: boolean;
