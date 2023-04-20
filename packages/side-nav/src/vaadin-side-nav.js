@@ -47,13 +47,13 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     const label = this.querySelector('[slot="label"]');
     if (label && this.collapsible) {
       return html`
-        <details ?open="${!this.collapsed}" @toggle="${this.toggleCollapsed}">${this.renderBody(label)}</details>
+        <details ?open="${!this.collapsed}" @toggle="${this.toggleCollapsed}">${this._renderBody(label)}</details>
       `;
     }
     return this.renderBody(label);
   }
 
-  renderBody(label) {
+  _renderBody(label) {
     if (label) {
       // eslint-disable-next-line no-plusplus
       if (!label.id) label.id = `app-nav-label-${id++}`;
