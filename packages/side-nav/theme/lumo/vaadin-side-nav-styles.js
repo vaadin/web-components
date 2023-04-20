@@ -136,7 +136,7 @@ export const sideNavItemStyles = css`
   }
 
   slot[name='children'] {
-    --_child-indent: calc(var(--_child-indent-2, 0px) + var(--vcf-nav-child-indent, var(--lumo-space-l)));
+    --_child-indent: calc(var(--_child-indent-2, 0px) + var(--vaadin-side-nav-child-indent, var(--lumo-space-l)));
   }
 
   slot[name='children']::slotted(*) {
