@@ -11,3 +11,4 @@ import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import './vaadin-side-nav-styles.js';
 import '../../src/vaadin-side-nav.js';
+import '../../src/vaadin-side-nav-item.js';
