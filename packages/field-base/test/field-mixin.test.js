@@ -772,14 +772,16 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal(ariaLabelledby);
       });
 
-      it('should not throw if accessibleName is set before element is attached', async () => {
-        const parent = element.parentNode;
-        element = document.createElement(tag);
-        sinon.spy(element._fieldAriaController, 'setAriaLabel');
-        element.accessibleName = 'accessible name';
-        parent.appendChild(element);
-        await nextFrame();
-        expect(element._fieldAriaController.setAriaLabel.threw('TypeError')).to.be.false;
+      describe('dettached element', () => {
+        it('should not throw if accessibleName is set before element is attached', async () => {
+          const parent = fixtureSync('<div></div>');
+          element = document.createElement(tag);
+          sinon.spy(element._fieldAriaController, 'setAriaLabel');
+          element.accessibleName = 'accessible name';
+          parent.appendChild(element);
+          await nextFrame();
+          expect(element._fieldAriaController.setAriaLabel.threw('TypeError')).to.be.false;
+        });
       });
     });
 
@@ -833,14 +835,17 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
-      it('should change aria-labellebdy when accessibleNameRef is set before element is attached', async () => {
-        const parent = element.parentNode;
-        element = document.createElement(tag);
-        element.accessibleNameRef = 'accessible-name-ref-0';
-        parent.appendChild(element);
-        await nextFrame();
-        input = element.querySelector('[slot=input]');
-        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+
+      describe('dettached element', () => {
+        it('should change aria-labellebdy when accessibleNameRef is set before element is attached', async () => {
+          const parent = fixtureSync('<div></div>');
+          element = document.createElement(tag);
+          element.accessibleNameRef = 'accessible-name-ref-0';
+          parent.appendChild(element);
+          await nextFrame();
+          input = element.querySelector('[slot=input]');
+          expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+        });
       });
     });
 
