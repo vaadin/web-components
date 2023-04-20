@@ -772,7 +772,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal(ariaLabelledby);
       });
 
-      describe('dettached element', () => {
+      describe('accessible-name is set before attached to the DOM', () => {
         it('should not throw if accessibleName is set before element is attached', async () => {
           const parent = fixtureSync('<div></div>');
           element = document.createElement(tag);
@@ -836,7 +836,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
-      describe('dettached element', () => {
+      describe('accessible-name-ref is set before attached to the DOM', () => {
         it('should change aria-labellebdy when accessibleNameRef is set before element is attached', async () => {
           const parent = fixtureSync('<div></div>');
           element = document.createElement(tag);
