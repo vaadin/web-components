@@ -14,6 +14,8 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
   expanded: boolean;
 
   active: boolean;
+
+  toggleExpanded(event: MouseEvent): void;
 }
 
 declare global {

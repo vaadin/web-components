@@ -12,6 +12,8 @@ declare class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement
   collapsible: boolean;
 
   collapsed: boolean;
+
+  toggleCollapsed(event: Event): void;
 }
 
 declare global {
