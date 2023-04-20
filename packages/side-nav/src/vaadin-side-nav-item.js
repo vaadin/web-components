@@ -38,12 +38,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
         value: false,
         reflectToAttribute: true,
       },
-
-      /** @private */
-      button: Object,
-
-      /** @private */
-      childrenSlot: Object,
     };
   }
 
