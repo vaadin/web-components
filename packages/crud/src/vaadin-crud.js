@@ -991,11 +991,11 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     }
 
     if (grid === this._gridController.defaultNode) {
-      grid.include = include;
-      grid.exclude = exclude;
       grid.noFilter = noFilter;
       grid.noHead = noHead;
       grid.noSort = noSort;
+      grid.include = include;
+      grid.exclude = exclude;
 
       if (theme) {
         grid.setAttribute('theme', theme);

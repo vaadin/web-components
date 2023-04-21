@@ -38,6 +38,22 @@ describe('crud grid properties', () => {
         expect(getHeaderCellContent(grid, 1, 0)).to.not.be.ok;
       });
     });
+
+    describe('set with include', () => {
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.items = ITEMS;
+        crud.noSort = true;
+        crud.include = 'name';
+        grid = crud.querySelector('vaadin-crud-grid');
+        await nextRender();
+      });
+
+      it('should not have sorters but filters', () => {
+        expect(getHeaderCellContent(grid, 0, 0).firstChild.localName).to.be.equal('vaadin-grid-filter');
+        expect(getHeaderCellContent(grid, 1, 0)).to.not.be.ok;
+      });
+    });
   });
 
   describe('no-filter', () => {
@@ -70,6 +86,22 @@ describe('crud grid properties', () => {
         expect(getHeaderCellContent(grid, 1, 0)).to.not.be.ok;
       });
     });
+
+    describe('set with include', () => {
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.items = ITEMS;
+        crud.noFilter = true;
+        crud.include = 'name';
+        grid = crud.querySelector('vaadin-crud-grid');
+        await nextRender();
+      });
+
+      it('should not have filters but sorters', () => {
+        expect(getHeaderCellContent(grid, 0, 0).firstChild.localName).to.be.equal('vaadin-grid-sorter');
+        expect(getHeaderCellContent(grid, 1, 0)).to.not.be.ok;
+      });
+    });
   });
 
   describe('no-head', () => {
@@ -93,6 +125,22 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.items = ITEMS;
         crud.noHead = true;
+        grid = crud.querySelector('vaadin-crud-grid');
+        await nextRender();
+      });
+
+      it('should not have headers', () => {
+        expect(getHeaderCellContent(grid, 0, 0).childElementCount).to.equal(0);
+        expect(getHeaderCellContent(grid, 1, 0).childElementCount).to.equal(0);
+      });
+    });
+
+    describe('set with include', () => {
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.items = ITEMS;
+        crud.noHead = true;
+        crud.include = 'name';
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
