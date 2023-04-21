@@ -143,6 +143,9 @@ export const FieldMixin = (superclass) =>
 
     /** @private */
     __labelChanged(hasLabel, labelNode) {
+      if (this.accessibleName || this.accessibleNameRef) {
+        return;
+      }
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
       if (hasLabel) {

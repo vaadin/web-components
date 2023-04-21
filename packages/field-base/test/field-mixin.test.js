@@ -771,15 +771,21 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.be.equal(ariaLabelledby);
       });
+    });
 
-      it('should not throw if accessibleName is set before element is attached', async () => {
-        const parent = element.parentNode;
-        element = document.createElement(tag);
-        sinon.spy(element._fieldAriaController, 'setAriaLabel');
-        element.accessibleName = 'accessible name';
-        parent.appendChild(element);
-        await nextFrame();
-        expect(element._fieldAriaController.setAriaLabel.threw('TypeError')).to.be.false;
+    describe('accessible-name is set initially', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} label="Label" accessible-name="accessible-name"></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should have accessibleName value in aria-label', () => {
+        expect(input.getAttribute('aria-label')).to.equal('accessible-name');
+      });
+
+      it('input should have aria-labellebdy by empty', () => {
+        expect(input.getAttribute('aria-labelledby')).to.be.null;
       });
     });
 
@@ -831,6 +837,18 @@ const runTests = (defineHelper, baseMixin) => {
         await nextFrame();
         element.label = 'Another label';
         await nextFrame();
+        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+      });
+    });
+
+    describe('accessible-name-ref is set initially', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} label="Label" accessible-name-ref="accessible-name-ref-0"></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should contain accessibleNameRef in aria-labelledby', async () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
     });
