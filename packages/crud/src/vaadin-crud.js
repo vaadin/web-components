@@ -637,7 +637,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return [
       '__headerPropsChanged(_defaultHeader, __isNew, i18n.newItem, i18n.editItem)',
       '__formPropsChanged(_form, _theme, include, exclude)',
-      '__gridPropsChanged(_grid, _theme, include, exclude, noFilter, noHead, noSort)',
+      '__gridPropsChanged(_grid, _theme, include, exclude, noFilter, noHead, noSort, items)',
       '__i18nChanged(i18n, _grid)',
       '__editOnClickChanged(editOnClick, _grid)',
       '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
@@ -921,9 +921,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     if (this.dataProvider) {
       this.__dataProviderChanged(this.dataProvider);
     }
-    if (this.items) {
-      this.__itemsChanged(this.items);
-    }
     if (this.editedItem) {
       this.__editedItemChanged(this.editedItem);
     }
@@ -981,11 +978,19 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    * @param {string} theme
    * @param {string | string[] | undefined} include
    * @param {string | RegExp} exclude
+   * @param {boolean} noFilter
+   * @param {boolean} noHead
+   * @param {boolean} noSort
+   * @param {Array<unknown> | undefined} items
    * @private
    */
   // eslint-disable-next-line max-params
-  __gridPropsChanged(grid, theme, include, exclude, noFilter, noHead, noSort) {
-    if (grid && grid === this._gridController.defaultNode) {
+  __gridPropsChanged(grid, theme, include, exclude, noFilter, noHead, noSort, items) {
+    if (!grid) {
+      return;
+    }
+
+    if (grid === this._gridController.defaultNode) {
       grid.include = include;
       grid.exclude = exclude;
       grid.noFilter = noFilter;
@@ -998,6 +1003,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         grid.removeAttribute('theme');
       }
     }
+
+    grid.items = items;
   }
 
   /**
@@ -1157,10 +1164,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   __itemsChanged(items) {
     if (this.items && this.items[0]) {
       this.__model = items[0];
-    }
-
-    if (this._grid) {
-      this._grid.items = items;
     }
   }
 

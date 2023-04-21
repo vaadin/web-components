@@ -3,6 +3,7 @@ import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent }
 import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
+import { getHeaderCellContent } from './helpers.js';
 
 describe('crud', () => {
   let crud, btnSave;

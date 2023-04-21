@@ -14,6 +14,11 @@ export const getCellContent = (cell) => {
 
 export const getContainerCell = (container, row, col) => {
   const rows = getRows(container);
+
+  if (!rows[row]) {
+    return null;
+  }
+
   const cells = getRowCells(rows[row]);
   return cells[col];
 };
