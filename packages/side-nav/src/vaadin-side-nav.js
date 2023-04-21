@@ -50,7 +50,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         <details ?open="${!this.collapsed}" @toggle="${this.toggleCollapsed}">${this._renderBody(label)}</details>
       `;
     }
-    return this.renderBody(label);
+    return this._renderBody(label);
   }
 
   _renderBody(label) {
