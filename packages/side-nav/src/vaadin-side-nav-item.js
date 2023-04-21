@@ -23,9 +23,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   static get properties() {
     return {
-      path: {
-        value: '',
-      },
+      path: String,
 
       expanded: {
         type: Boolean,
