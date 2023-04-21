@@ -4,6 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+const csrfActionDataProvider = () => {
+  const csrfMetaName = document.querySelector('meta[name=_csrf_parameter]');
+  const csrfMetaValue = document.querySelector('meta[name=_csrf]');
+  if (csrfMetaName && csrfMetaValue) {
+    const csrfData = {};
+    csrfData.key = csrfMetaName.content;
+    csrfData.value = csrfMetaValue.content;
+    return [csrfData];
+  }
+};
+
 /**
  * @polymerMixin
  */
@@ -139,5 +150,10 @@ export const LoginMixin = (superClass) =>
           value: false,
         },
       };
+    }
+
+    constructor() {
+      super();
+      this.actionDataProvider = csrfActionDataProvider;
     }
   };

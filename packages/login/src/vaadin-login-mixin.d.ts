@@ -26,6 +26,13 @@ export interface LoginI18n {
 
 export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LoginMixinClass> & T;
 
+type KeyValue = {
+  key: string;
+  value: string;
+};
+
+type ActionDataProvider = () => KeyValue[];
+
 export declare class LoginMixinClass {
   /**
    * If set, a synchronous POST call will be fired to the path defined.
@@ -33,6 +40,8 @@ export declare class LoginMixinClass {
    */
   action: string | null;
 
+  /** Invoked before firing a synchronous POST call to the `action` path which can return additional values to include in the POST request. */
+  actionDataProvider: ActionDataProvider;
   /**
    * If set, disable the "Log in" button and prevent user from submitting login form.
    * It is re-enabled automatically, when error is set to true, allowing form resubmission

@@ -42,7 +42,7 @@ describe('login form with csrf', () => {
     const { vaadinLoginPassword } = fillUsernameAndPassword(loginForm);
     enter(vaadinLoginPassword);
     expect(submitStub.called).to.be.true;
-    const csrfInput = loginForm.querySelector('#csrf');
+    const csrfInput = loginForm.querySelector('[name="_csrf"]');
     expect(csrfInput.name).to.equal('_csrf');
     expect(csrfInput.value).to.equal('28e4c684-fb5e-4c79-b8e2-a2177569edfa');
   });

@@ -8,10 +8,6 @@ snapshots["vaadin-login-form host default"] =
       method="POST"
       slot="form"
     >
-      <input
-        id="csrf"
-        type="hidden"
-      >
       <vaadin-text-field
         autocapitalize="none"
         autocomplete="username"
@@ -116,10 +112,6 @@ snapshots["vaadin-login-form host i18n"] =
       method="POST"
       slot="form"
     >
-      <input
-        id="csrf"
-        type="hidden"
-      >
       <vaadin-text-field
         autocapitalize="none"
         autocomplete="username"
@@ -224,10 +216,6 @@ snapshots["vaadin-login-form host noForgotPassword"] =
       method="POST"
       slot="form"
     >
-      <input
-        id="csrf"
-        type="hidden"
-      >
       <vaadin-text-field
         autocapitalize="none"
         autocomplete="username"

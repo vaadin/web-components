@@ -61,7 +61,6 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       </style>
       <vaadin-login-form-wrapper theme$="[[_theme]]" error="[[error]]" i18n="[[i18n]]">
         <form method="POST" action$="[[action]]" slot="form">
-          <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
             label="[[i18n.form.username]]"
@@ -160,13 +159,26 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
     const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));
     if (this.action && firedEvent) {
-      const csrfMetaName = document.querySelector('meta[name=_csrf_parameter]');
-      const csrfMetaValue = document.querySelector('meta[name=_csrf]');
-      if (csrfMetaName && csrfMetaValue) {
-        this.$.csrf.name = csrfMetaName.content;
-        this.$.csrf.value = csrfMetaValue.content;
+      const form = this.querySelector('form');
+
+      // Remove any previously added data
+      Array.from(form.querySelectorAll(':scope > input[data-autocreated]')).forEach((e) => e.remove());
+
+      if (this.actionDataProvider) {
+        const values = this.actionDataProvider();
+        if (values) {
+          values.forEach((value) => {
+            const inputElement = document.createElement('input');
+            inputElement.setAttribute('data-autocreated', '');
+            inputElement.type = 'hidden';
+            inputElement.name = value.key;
+            inputElement.value = value.value;
+
+            form.append(inputElement);
+          });
+        }
       }
-      this.querySelector('form').submit();
+      form.submit();
     }
   }
 

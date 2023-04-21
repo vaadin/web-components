@@ -126,6 +126,7 @@ class LoginOverlay extends LoginMixin(OverlayClassMixin(ElementMixin(ThemableMix
     super.ready();
 
     this._overlayElement = this.$.vaadinLoginOverlayWrapper;
+    this.$.vaadinLoginForm.actionDataProvider = this.actionDataProvider;
   }
 
   /** @protected */

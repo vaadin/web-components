@@ -17,10 +17,6 @@ snapshots["vaadin-login-overlay host default"] =
         method="POST"
         slot="form"
       >
-        <input
-          id="csrf"
-          type="hidden"
-        >
         <vaadin-text-field
           autocapitalize="none"
           autocomplete="username"
@@ -135,10 +131,6 @@ snapshots["vaadin-login-overlay host i18n"] =
         method="POST"
         slot="form"
       >
-        <input
-          id="csrf"
-          type="hidden"
-        >
         <vaadin-text-field
           autocapitalize="none"
           autocomplete="username"
@@ -254,10 +246,6 @@ snapshots["vaadin-login-overlay host overlay class"] =
         method="POST"
         slot="form"
       >
-        <input
-          id="csrf"
-          type="hidden"
-        >
         <vaadin-text-field
           autocapitalize="none"
           autocomplete="username"
