@@ -11,7 +11,7 @@ import ts, {
 } from 'typescript';
 import type { GenericJsContribution } from '../../types/schema.js';
 import { fswalk, type WalkOptions } from './fswalk.js';
-import { elementsWithMissingEntrypoint } from './settings.js';
+import { elementsWithMissingEntrypoint, elementToClassNamingConventionViolations } from './settings.js';
 
 export function camelCase(str: string) {
   // CamelCase join
@@ -25,6 +25,23 @@ const prefixPattern = /vaadin/gi;
 
 export function stripPrefix(str: string) {
   return str.replaceAll(prefixPattern, '');
+}
+
+/**
+ * Converts the given `vaadin-element-name` to `ElementName` class name
+ * by following naming conventions and known exceptions.
+ *
+ * @param elementName The dash separated custom element name.
+ *
+ * @returns The camel case class name without Vaadin prefix.
+ */
+export function convertElementNameToClassName(elementName: string) {
+  if (elementToClassNamingConventionViolations.has(elementName)) {
+    return elementToClassNamingConventionViolations.get(elementName);
+  }
+
+  const conventionalClassName = stripPrefix(camelCase(elementName));
+  return conventionalClassName;
 }
 
 export function createSourceFile(statements: readonly Statement[], fileName: string): SourceFile {

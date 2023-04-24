@@ -81,6 +81,7 @@
     "@vaadin/select": "24.1.0-alpha9",
     "@vaadin/split-layout": "24.1.0-alpha9",
     "@vaadin/tabs": "24.1.0-alpha9",
+    "@vaadin/tabsheet": "24.1.0-alpha9",
     "@vaadin/text-area": "24.1.0-alpha9",
     "@vaadin/text-field": "24.1.0-alpha9",
     "@vaadin/time-picker": "24.1.0-alpha9",
@@ -426,6 +427,10 @@
       "types": "./Tabs.d.ts",
       "default": "./Tabs.js"
     },
+    "./TabSheet.js": {
+      "types": "./TabSheet.d.ts",
+      "default": "./TabSheet.js"
+    },
     "./TextArea.js": {
       "types": "./TextArea.d.ts",
       "default": "./TextArea.js"
@@ -522,6 +527,7 @@
     "./SplitLayout": "./SplitLayout.js",
     "./Tab": "./Tab.js",
     "./Tabs": "./Tabs.js",
+    "./TabSheet": "./TabSheet.js",
     "./TextArea": "./TextArea.js",
     "./TextField": "./TextField.js",
     "./TimePicker": "./TimePicker.js",

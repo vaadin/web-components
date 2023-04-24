@@ -8,6 +8,7 @@ import { DrawerToggle } from '../../src/DrawerToggle.js';
 import { Notification } from '../../src/Notification.js';
 import { Tab } from '../../src/Tab.js';
 import { Tabs } from '../../src/Tabs.js';
+import { TabSheet } from '../../src/TabSheet.js';
 import { DialogComponent } from './DialogComponent.js';
 import Row1 from './Row1.js';
 import Row2 from './Row2.js';
@@ -18,6 +19,7 @@ import Row6 from './Row6.js';
 import Row7 from './Row7.js';
 import Row8 from './Row8.js';
 import Row9 from './Row9.js';
+import Row10 from './Row10.js';
 
 export default function App({}) {
   const [notificationOpened, setNotificationOpened] = useState(false);
@@ -52,6 +54,7 @@ export default function App({}) {
         <Row7 />
         <Row8 />
         <Row9 />
+        <Row10 />
       </Board>
     </AppLayout>
   );

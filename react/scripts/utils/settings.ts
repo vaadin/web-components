@@ -103,3 +103,5 @@ export const descriptionOverrides = new Map<string, Partial<JSONSchemaForWebType
     },
   ],
 ]);
+
+export const elementToClassNamingConventionViolations = new Map<string, string>([['vaadin-tabsheet', 'TabSheet']]);

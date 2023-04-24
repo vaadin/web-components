@@ -9,6 +9,7 @@ import fromAsync from './utils/fromAsync.js';
 import { fswalk } from './utils/fswalk.js';
 import {
   camelCase,
+  convertElementNameToClassName,
   createImportPath,
   createSourceFile,
   exists,
@@ -39,7 +40,7 @@ const stubPaths: readonly string[] = filterEmptyItems(
         return;
       }
 
-      const moduleName = stripPrefix(camelCase(element.name));
+      const moduleName = convertElementNameToClassName(element.name);
       const modulePath = resolve(srcDir, `${moduleName}.ts`);
       const moduleTsxPath = resolve(srcDir, `${moduleName}.tsx`);
 
