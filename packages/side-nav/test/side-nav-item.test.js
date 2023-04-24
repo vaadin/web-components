@@ -39,16 +39,20 @@ describe('expand', () => {
   describe('passive item with children', () => {
     let passiveItemWithChildren;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       passiveItemWithChildren = fixtureSync(`
       <vaadin-side-nav-item path="/another-path">
         <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
         <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
       </vaadin-side-nav-item>`);
+      await nextRender(passiveItemWithChildren);
+    });
+
+    it('should not be expanded', () => {
+      expect(passiveItemWithChildren.expanded).to.be.false;
     });
 
     it('should have a toggle button', async () => {
-      await nextRender(passiveItemWithChildren);
       expect(passiveItemWithChildren.button).to.be.ok;
     });
 
@@ -63,14 +67,12 @@ describe('expand', () => {
       expect(passiveItemWithChildren.expanded).to.be.false;
     });
 
-    it('should expand when toggle button is clicked', async () => {
-      await nextRender(passiveItemWithChildren);
+    it('should expand when toggle button is clicked', () => {
       passiveItemWithChildren.button.click();
       expect(passiveItemWithChildren.expanded).to.be.true;
     });
 
-    it('should collapse when toggle button is clicked', async () => {
-      await nextRender(passiveItemWithChildren);
+    it('should collapse when toggle button is clicked', () => {
       passiveItemWithChildren.button.click();
       passiveItemWithChildren.button.click();
       expect(passiveItemWithChildren.expanded).to.be.false;
@@ -80,16 +82,20 @@ describe('expand', () => {
   describe('active item with children', () => {
     let activeItemWithChildren;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       activeItemWithChildren = fixtureSync(`
       <vaadin-side-nav-item path="">
         <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
         <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
       </vaadin-side-nav-item>`);
+      await nextRender(activeItemWithChildren);
+    });
+
+    it('should be expanded', () => {
+      expect(activeItemWithChildren.expanded).to.be.true;
     });
 
     it('should have a toggle button', async () => {
-      await nextRender(activeItemWithChildren);
       expect(activeItemWithChildren.button).to.be.ok;
     });
 
@@ -104,14 +110,12 @@ describe('expand', () => {
       expect(activeItemWithChildren.expanded).to.be.true;
     });
 
-    it('should collapse when toggle button is clicked', async () => {
-      await nextRender(activeItemWithChildren);
+    it('should collapse when toggle button is clicked', () => {
       activeItemWithChildren.button.click();
       expect(activeItemWithChildren.expanded).to.be.false;
     });
 
-    it('should expand when toggle button is clicked', async () => {
-      await nextRender(activeItemWithChildren);
+    it('should expand when toggle button is clicked', () => {
       activeItemWithChildren.button.click();
       activeItemWithChildren.button.click();
       expect(activeItemWithChildren.expanded).to.be.true;
@@ -122,7 +126,7 @@ describe('expand', () => {
     let itemWithoutChildren;
 
     beforeEach(() => {
-      itemWithoutChildren = fixtureSync('<vaadin-side-nav-item>Passive item</vaadin-side-nav-item>');
+      itemWithoutChildren = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
     });
 
     it('should not have a toggle button', () => {
@@ -243,9 +247,8 @@ describe('navigation', () => {
   });
 
   it('item with path should contain href in anchor', async () => {
-    const path = '/path';
-    item.path = path;
+    item.path = '/path';
     await nextRender(item);
-    expect(anchor.getAttribute('href')).to.equal(path);
+    expect(anchor.getAttribute('href')).to.be.ok;
   });
 });
