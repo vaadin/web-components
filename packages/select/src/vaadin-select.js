@@ -9,10 +9,10 @@ import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -154,6 +154,16 @@ class Select extends OverlayClassMixin(
         ::slotted([slot='value']) {
           flex-grow: 1;
         }
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          border: 0;
+        }
       </style>
 
       <div class="vaadin-select-container">
@@ -193,6 +203,9 @@ class Select extends OverlayClassMixin(
       ></vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
+      <div class="sr-only">
+        <slot name="sr-label"></slot>
+      </div>
     `;
   }
 
@@ -627,6 +640,58 @@ class Select extends OverlayClassMixin(
     itemElement.setAttribute('id', this._itemId);
   }
 
+  /**
+   * @param {string} accessibleName
+   * @private
+   */
+  _accessibleNameChanged(accessibleName) {
+    if (accessibleName) {
+      if (!this._srLabel) {
+        const srLabel = this._createScreenReaderLabel();
+        this.appendChild(srLabel);
+        this._srLabel = srLabel;
+      }
+      this._srLabel.textContent = accessibleName;
+    } else {
+      this._srLabel.textContent = null;
+    }
+    this._setCustomAriaLabelledBy(accessibleName ? this._srLabel.id : null);
+  }
+
+  /**
+   * @param {string} accessibleNameRef
+   * @private
+   */
+  _accessibleNameRefChanged(accessibleNameRef) {
+    this._setCustomAriaLabelledBy(accessibleNameRef);
+  }
+
+  /**
+   * @param {string} ariaLabelledby
+   * @private
+   */
+  _setCustomAriaLabelledBy(ariaLabelledby) {
+    if (!this._items) {
+      return;
+    }
+    const selected = this._items[this._menuElement.selected];
+    const labelId = ariaLabelledby
+      ? `${ariaLabelledby} ${selected || this.placeholder ? this._itemId : ''}`.trim()
+      : null;
+    this._fieldAriaController.setLabelId(labelId, true);
+  }
+
+  /**
+   * @returns HTMLLabelElement
+   * @private
+   */
+  _createScreenReaderLabel() {
+    const label = document.createElement('label');
+    label.id = `sr-label-vaadin-select-${generateUniqueId()}`;
+    label.setAttribute('slot', 'sr-label');
+    return label;
+  }
+
   /** @private */
   __updateValueButton() {
     const valueButton = this.focusElement;
@@ -662,11 +727,11 @@ class Select extends OverlayClassMixin(
       }
     }
 
-    // Add the item ID to aria-labelledby if there is a selected item or a placeholder text.
-    if (selected || this.placeholder) {
-      addValueToAttribute(valueButton, 'aria-labelledby', this._itemId);
-    } else {
-      removeValueFromAttribute(valueButton, 'aria-labelledby', this._itemId);
+    const labelledIdReferenceConfig = selected || this.placeholder ? { newId: this._itemId } : { oldId: this._itemId };
+
+    setAriaIDReference(valueButton, 'aria-labelledby', labelledIdReferenceConfig);
+    if (this.accessibleName || this.accessibleNameRef) {
+      this._setCustomAriaLabelledBy(this.accessibleNameRef || this._srLabel.id);
     }
   }
 
