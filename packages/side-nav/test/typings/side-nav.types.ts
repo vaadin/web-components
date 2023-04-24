@@ -23,7 +23,7 @@ assertType<ThemableMixinClass>(sideNav);
 const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 
 // Item properties
-assertType<string>(sideNavItem.path);
+assertType<string | null | undefined>(sideNavItem.path);
 assertType<boolean>(sideNavItem.active);
 assertType<boolean>(sideNavItem.expanded);
 assertType<(event: MouseEvent) => void>(sideNavItem.toggleExpanded);
