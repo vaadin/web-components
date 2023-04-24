@@ -88,33 +88,35 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   _updateActive() {
-    const hasBaseUri = document.baseURI !== document.location.href;
-    const pathAbsolute = this.path.startsWith('/');
-    if (hasBaseUri && !pathAbsolute) {
-      const pathRelativeToRoot = document.location.pathname;
-      const basePath = new URL(document.baseURI).pathname;
-      const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
-      const pathRelativeToBase =
-        basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath)
-          ? pathWithoutBase
-          : pathRelativeToRoot;
-      this.active = pathRelativeToBase === this.path;
-    } else {
-      // Absolute path or no base uri in use. No special comparison needed
-      // eslint-disable-next-line no-lonely-if
-      if (pathAbsolute) {
-        // Compare an absolute view path
-        this.active = document.location.pathname === this.path;
-      } else {
-        // Compare a relative view path (strip the starting slash)
-        this.active = document.location.pathname.substring(1) === this.path;
-      }
+    if (!this.path) {
+      this.active = false;
+      return;
     }
+    this.active = this._calculateActive();
     this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
-
     if (this.active) {
       this.expanded = true;
     }
+  }
+
+  _calculateActive() {
+    const pathAbsolute = this.path.startsWith('/');
+    // Absolute path or no base uri in use. No special comparison needed
+    if (pathAbsolute) {
+      // Compare an absolute view path
+      return document.location.pathname === this.path;
+    }
+    const hasBaseUri = document.baseURI !== document.location.href;
+    if (!hasBaseUri) {
+      // Compare a relative view path (strip the starting slash)
+      return document.location.pathname.substring(1) === this.path;
+    }
+    const pathRelativeToRoot = document.location.pathname;
+    const basePath = new URL(document.baseURI).pathname;
+    const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
+    const pathRelativeToBase =
+      basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath) ? pathWithoutBase : pathRelativeToRoot;
+    return pathRelativeToBase === this.path;
   }
 }
 
