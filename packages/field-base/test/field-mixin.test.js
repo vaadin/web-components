@@ -787,6 +787,13 @@ const runTests = (defineHelper, baseMixin) => {
       it('input should have aria-labellebdy by empty', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.null;
       });
+
+      it('should set default label to `aria-labellebdy` when accessible-name is removed', async () => {
+        const label = element.querySelector('[slot=label]');
+        element.accessibleName = null;
+        await nextRender();
+        expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
+      });
     });
 
     describe('accessible-name-ref', () => {
@@ -850,6 +857,13 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should contain accessibleNameRef in aria-labelledby', async () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+      });
+
+      it('should set default label to `aria-labellebdy` when accessible-name-ref is removed', async () => {
+        const label = element.querySelector('[slot=label]');
+        element.accessibleNameRef = null;
+        await nextRender();
+        expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
       });
     });
 
