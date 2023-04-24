@@ -81,7 +81,7 @@ describe('expand', () => {
 
     beforeEach(() => {
       activeItemWithChildren = fixtureSync(`
-      <vaadin-side-nav-item>
+      <vaadin-side-nav-item path="">
         <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
         <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
       </vaadin-side-nav-item>`);
@@ -151,7 +151,7 @@ describe('active', () => {
     let activeItem;
 
     beforeEach(() => {
-      activeItem = fixtureSync(`<vaadin-side-nav-item></vaadin-side-nav-item>`);
+      activeItem = fixtureSync(`<vaadin-side-nav-item path=""></vaadin-side-nav-item>`);
     });
 
     it('should be expanded', () => {

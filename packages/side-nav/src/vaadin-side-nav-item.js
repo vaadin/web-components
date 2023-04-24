@@ -89,7 +89,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   _updateActive() {
-    if (!this.path) {
+    if (!this.path && this.path !== '') {
       this.active = false;
       return;
     }
