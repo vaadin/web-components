@@ -698,6 +698,8 @@ const runTests = (defineHelper, baseMixin) => {
   });
 
   describe('disabled', () => {
+    let items;
+
     beforeEach(async () => {
       list = fixtureSync(`
         <${listTag}>
@@ -708,20 +710,21 @@ const runTests = (defineHelper, baseMixin) => {
         </${listTag}>
       `);
       await nextRender();
+      items = [...list.children];
     });
 
     it('should reset previously selected item when listbox and items are disabled', async () => {
       list.selected = 3;
       await nextFrame();
-      expect(list.items[3].selected).to.be.true;
+      expect(items[3].selected).to.be.true;
 
       list.disabled = true;
-      list.children.forEach((item) => {
+      items.forEach((item) => {
         item.disabled = true;
       });
       await nextFrame();
 
-      expect(list.items[3].selected).to.be.false;
+      expect(items[3].selected).to.be.false;
     });
 
     it('should restore previously selected item when listbox becomes re-enabled', async () => {
@@ -729,7 +732,7 @@ const runTests = (defineHelper, baseMixin) => {
       await nextFrame();
 
       list.disabled = true;
-      list.children.forEach((item) => {
+      items.forEach((item) => {
         item.disabled = true;
       });
       await nextFrame();
@@ -737,7 +740,7 @@ const runTests = (defineHelper, baseMixin) => {
       list.disabled = false;
       await nextFrame();
 
-      expect(list.items[3].selected).to.be.true;
+      expect(items[3].selected).to.be.true;
     });
   });
 
