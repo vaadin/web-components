@@ -222,3 +222,30 @@ describe('suffix', () => {
     expect(suffixSlot.assignedNodes()).to.contain(suffixContent);
   });
 });
+
+describe('navigation', () => {
+  let anchor, item;
+
+  beforeEach(async () => {
+    item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
+    await nextRender(item);
+    anchor = item.shadowRoot.querySelector('a');
+  });
+
+  it('item without path should not contain href in anchor', () => {
+    expect(anchor.getAttribute('href')).to.be.not.ok;
+  });
+
+  it('item with empty path should contain empty href in anchor', async () => {
+    item.path = '';
+    await nextRender(item);
+    expect(anchor.getAttribute('href')).to.be.empty;
+  });
+
+  it('item with path should contain href in anchor', async () => {
+    const path = '/path';
+    item.path = path;
+    await nextRender(item);
+    expect(anchor.getAttribute('href')).to.equal(path);
+  });
+});
