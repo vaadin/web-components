@@ -10,6 +10,10 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavStyles } from '../theme/lumo/vaadin-side-nav-styles.js';
 
+function isEnabled() {
+  return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
+}
+
 // Used for generating unique IDs for label elements
 let id = 0;
 
@@ -74,6 +78,12 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 }
 
-customElements.define(SideNav.is, SideNav);
+if (isEnabled()) {
+  customElements.define(SideNav.is, SideNav);
+} else {
+  console.warn(
+    'WARNING: The side-nav component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/side-nav/enable.js"` *before* importing the side-nav module itself.',
+  );
+}
 
 export { SideNav };
