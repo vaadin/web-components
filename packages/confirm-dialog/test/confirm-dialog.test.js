@@ -206,10 +206,10 @@ describe('vaadin-confirm-dialog', () => {
       const secondChild = '<div>Additionale content</div>';
       beforeEach(async () => {
         confirm = fixtureSync(`
-        <vaadin-confirm-dialog opened>
-          ${firstChild}
-          ${secondChild}
-        </vaadin-confirm-dialog>
+          <vaadin-confirm-dialog opened>
+            ${firstChild}
+            ${secondChild}
+          </vaadin-confirm-dialog>
         `);
         overlay = confirm.$.dialog.$.overlay;
         await oneEvent(overlay, 'vaadin-overlay-open');
