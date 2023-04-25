@@ -343,10 +343,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       initializer: (node) => {
         const wrapper = document.createElement('div');
         wrapper.style.display = 'contents';
-        wrapper.id = `confirm-dialog-message-${generateUniqueId()}`;
+        const wrapperId = `confirm-dialog-message-${generateUniqueId()}`;
+        wrapper.id = wrapperId;
         wrapper.appendChild(node);
         this.appendChild(wrapper);
-        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapper.id });
+        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapperId });
         this._messageNodes = [...this._messageNodes, wrapper];
       },
     });
