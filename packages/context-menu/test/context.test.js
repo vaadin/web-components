@@ -116,4 +116,15 @@ describe('context', () => {
     expect(spy.calledOnce).to.be.true;
     expect(menu.opened).to.be.false;
   });
+
+  it('should not close when moved within the DOM', () => {
+    fire(target, 'contextmenu');
+    expect(menu.opened).to.be.true;
+
+    const newParent = document.createElement('div');
+    document.body.appendChild(newParent);
+
+    newParent.appendChild(menu);
+    expect(menu.opened).to.be.true;
+  });
 });
