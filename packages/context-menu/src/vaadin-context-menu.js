@@ -367,6 +367,11 @@ class ContextMenu extends OverlayClassMixin(
 
     this.__boundOnScroll = this.__onScroll.bind(this);
     window.addEventListener('scroll', this.__boundOnScroll, true);
+
+    // Restore opened state if overlay was opened when disconnecting
+    if (this.__restoreOpened) {
+      this._setOpened(true);
+    }
   }
 
   /** @protected */
@@ -374,6 +379,9 @@ class ContextMenu extends OverlayClassMixin(
     super.disconnectedCallback();
 
     window.removeEventListener('scroll', this.__boundOnScroll, true);
+
+    // Close overlay and memorize opened state
+    this.__restoreOpened = this.opened;
     this.close();
   }
 
