@@ -74,7 +74,11 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 
   toggleCollapsed(e) {
-    this.collapsed = !e.target.open;
+    if (e) {
+      this.collapsed = !e.target.open;
+    } else {
+      this.collapsed = !this.collapsed;
+    }
   }
 }
 
