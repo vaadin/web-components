@@ -17,6 +17,40 @@ function isEnabled() {
 // Used for generating unique IDs for label elements
 let id = 0;
 
+/**
+ * `<vaadin-side-nav>` is a Web Component for navigation menus.
+ *
+ * ```
+ *   <vaadin-side-nav>
+ *     <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
+ *     <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
+ *     <vaadin-side-nav-item>Item 3</vaadin-side-nav-item>
+ *     <vaadin-side-nav-item>Item 4</vaadin-side-nav-item>
+ *   </vaadin-side-nav>
+ * ```
+ *
+ * ### Customization
+ *
+ * You can configure the component by using `slot` names.
+ *
+ * Slot name | Description
+ * ----------|-------------
+ * `label`   | The label (text) inside the side nav.
+ *
+ * #### Example:
+ *
+ * ```
+ *   <vaadin-side-nav>
+ *     <span slot="label">Main menu</span>
+ *     <vaadin-side-nav-item>Item</vaadin-side-nav-item>
+ *   </vaadin-side-nav>
+ * ```
+ *
+ * @extends LitElement
+ * @mixes PolylitMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
+ */
 class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-side-nav';
@@ -28,12 +62,22 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   static get properties() {
     return {
+      /**
+       * When present, shows the toggle icon and enables collapsing.
+       *
+       * @type {boolean}
+       */
       collapsible: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
       },
 
+      /**
+       * When present, the side nav is collapsed to hide the items.
+       *
+       * @type {boolean}
+       */
       collapsed: {
         type: Boolean,
         value: false,
@@ -42,22 +86,25 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     };
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
     this.setAttribute('role', 'navigation');
   }
 
+  /** @protected */
   render() {
     const label = this.querySelector('[slot="label"]');
     if (label && this.collapsible) {
       return html`
-        <details ?open="${!this.collapsed}" @toggle="${this.toggleCollapsed}">${this._renderBody(label)}</details>
+        <details ?open="${!this.collapsed}" @toggle="${this.__toggleCollapsed}">${this.__renderBody(label)}</details>
       `;
     }
-    return this._renderBody(label);
+    return this.__renderBody(label);
   }
 
-  _renderBody(label) {
+  /** @private */
+  __renderBody(label) {
     if (label) {
       // eslint-disable-next-line no-plusplus
       if (!label.id) label.id = `side-nav-label-${id++}`;
@@ -73,7 +120,8 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
-  toggleCollapsed(e) {
+  /** @private */
+  __toggleCollapsed(e) {
     if (e) {
       this.collapsed = !e.target.open;
     } else {

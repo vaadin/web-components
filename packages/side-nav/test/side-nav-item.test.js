@@ -53,28 +53,17 @@ describe('expand', () => {
     });
 
     it('should have a toggle button', async () => {
-      expect(passiveItemWithChildren.button).to.be.ok;
-    });
-
-    it('should expand programmatically', () => {
-      passiveItemWithChildren.toggleExpanded();
-      expect(passiveItemWithChildren.expanded).to.be.true;
-    });
-
-    it('should collapse programmatically', () => {
-      passiveItemWithChildren.toggleExpanded();
-      passiveItemWithChildren.toggleExpanded();
-      expect(passiveItemWithChildren.expanded).to.be.false;
+      expect(passiveItemWithChildren._button).to.be.ok;
     });
 
     it('should expand when toggle button is clicked', () => {
-      passiveItemWithChildren.button.click();
+      passiveItemWithChildren._button.click();
       expect(passiveItemWithChildren.expanded).to.be.true;
     });
 
     it('should collapse when toggle button is clicked', () => {
-      passiveItemWithChildren.button.click();
-      passiveItemWithChildren.button.click();
+      passiveItemWithChildren._button.click();
+      passiveItemWithChildren._button.click();
       expect(passiveItemWithChildren.expanded).to.be.false;
     });
   });
@@ -96,28 +85,17 @@ describe('expand', () => {
     });
 
     it('should have a toggle button', async () => {
-      expect(activeItemWithChildren.button).to.be.ok;
-    });
-
-    it('should collapse programmatically', () => {
-      activeItemWithChildren.toggleExpanded();
-      expect(activeItemWithChildren.expanded).to.be.false;
-    });
-
-    it('should expand programmatically', () => {
-      activeItemWithChildren.toggleExpanded();
-      activeItemWithChildren.toggleExpanded();
-      expect(activeItemWithChildren.expanded).to.be.true;
+      expect(activeItemWithChildren._button).to.be.ok;
     });
 
     it('should collapse when toggle button is clicked', () => {
-      activeItemWithChildren.button.click();
+      activeItemWithChildren._button.click();
       expect(activeItemWithChildren.expanded).to.be.false;
     });
 
     it('should expand when toggle button is clicked', () => {
-      activeItemWithChildren.button.click();
-      activeItemWithChildren.button.click();
+      activeItemWithChildren._button.click();
+      activeItemWithChildren._button.click();
       expect(activeItemWithChildren.expanded).to.be.true;
     });
   });
@@ -130,7 +108,7 @@ describe('expand', () => {
     });
 
     it('should not have a toggle button', () => {
-      expect(itemWithoutChildren.button).to.be.not.ok;
+      expect(itemWithoutChildren._button).to.be.not.ok;
     });
   });
 });

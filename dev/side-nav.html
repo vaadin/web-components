@@ -10,7 +10,7 @@
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/scroller';
-      import "@vaadin/side-nav/enable";
+      import '@vaadin/side-nav/enable';
       import '@vaadin/side-nav';
     </script>
     <style>
@@ -20,35 +20,29 @@
     </style>
   </head>
   <body>
-  <vaadin-scroller>
-    <div class="content">
-      <vaadin-side-nav collapsible>
-        <span slot="label">Main menu</span>
+    <vaadin-scroller>
+      <div class="content">
+        <vaadin-side-nav collapsible>
+          <span slot="label">Main menu</span>
 
-        <vaadin-side-nav-item path="/dev">
-          <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
-          Dev main page
-          <span theme="badge primary" slot="suffix" aria-label="(2 new items)">2</span>
-        </vaadin-side-nav-item>
-
-        <vaadin-side-nav-item>
-          <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
-          Dev pages
-
-          <vaadin-side-nav-item path="/dev/grid.html" slot="children">
-            Grid
+          <vaadin-side-nav-item path="/dev">
+            <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
+            Dev main page
+            <span theme="badge primary" slot="suffix" aria-label="(2 new items)">2</span>
           </vaadin-side-nav-item>
 
-          <vaadin-side-nav-item path="/dev/select.html" slot="children">
-            Select
-          </vaadin-side-nav-item>
-        </vaadin-side-nav-item>
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
+            Dev pages
 
-        <vaadin-side-nav-item>
-          Label only (no path)
-        </vaadin-side-nav-item>
-      </vaadin-side-nav>
-    </div>
-  </vaadin-scroller>
+            <vaadin-side-nav-item path="/dev/grid.html" slot="children"> Grid </vaadin-side-nav-item>
+
+            <vaadin-side-nav-item path="/dev/select.html" slot="children"> Select </vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item> Label only (no path) </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      </div>
+    </vaadin-scroller>
   </body>
 </html>

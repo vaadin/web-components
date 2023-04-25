@@ -14,6 +14,46 @@ function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
 }
 
+/**
+ * An element used internally by `<vaadin-side-nav>`. Represents a navigation target.
+ * Not intended to be used separately.
+ *
+ * ```
+ *   <vaadin-side-nav-item>
+ *     Item 1
+ *     <vaadin-side-nav-item path="/path1" slot="children">
+ *       Child item 1
+ *     </vaadin-side-nav-item>
+ *     <vaadin-side-nav-item path="/path2" slot="children">
+ *       Child item 2
+ *     </vaadin-side-nav-item>
+ *   </vaadin-side-nav-item>
+ * ```
+ *
+ * ### Customization
+ *
+ * You can configure the item by using `slot` names.
+ *
+ * Slot name | Description
+ * ----------|-------------
+ * `prefix`  | A slot for content before the label (e.g. an icon).
+ * `suffix`  | A slot for content after the label (e.g. an icon).
+ *
+ * #### Example:
+ *
+ * ```
+ *  <vaadin-side-nav-item>
+ *     <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
+ *     Item
+ *     <span theme="badge primary" slot="suffix">Suffix</span>
+ *   </vaadin-side-nav-item>
+ * ```
+ *
+ * @extends LitElement
+ * @mixes PolylitMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
+ */
 class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-side-nav-item';
@@ -25,14 +65,27 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   static get properties() {
     return {
+      /**
+       * The path to navigate to.
+       */
       path: String,
 
+      /**
+       * When present, the item is expanded to show the children items.
+       *
+       * @type {boolean}
+       */
       expanded: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
       },
 
+      /**
+       * Toggles the `active` attribute.
+       *
+       * @type {boolean}
+       */
       active: {
         type: Boolean,
         value: false,
@@ -41,19 +94,22 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     };
   }
 
-  get button() {
+  /** @protected */
+  get _button() {
     return this.shadowRoot.querySelector('button');
   }
 
-  get childrenSlot() {
+  /** @protected */
+  get _childrenSlot() {
     return this.shadowRoot.querySelector('#children');
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
     this.setAttribute('role', 'listitem');
-    this._updateActive();
-    this.__boundUpdateActive = this._updateActive.bind(this);
+    this.__updateActive();
+    this.__boundUpdateActive = this.__updateActive.bind(this);
     window.addEventListener('popstate', this.__boundUpdateActive);
   }
 
@@ -72,7 +128,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
         <slot name="suffix"></slot>
         <button
           part="toggle-button"
-          @click="${this.toggleExpanded}"
+          @click="${this.__toggleExpanded}"
           ?hidden="${!this.querySelector('[slot=children]')}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
@@ -83,7 +139,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     `;
   }
 
-  toggleExpanded(e) {
+  /** @private */
+  __toggleExpanded(e) {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -91,19 +148,21 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     this.expanded = !this.expanded;
   }
 
-  _updateActive() {
+  /** @private */
+  __updateActive() {
     if (!this.path && this.path !== '') {
       this.active = false;
       return;
     }
-    this.active = this._calculateActive();
+    this.active = this.__calculateActive();
     this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
     if (this.active) {
       this.expanded = true;
     }
   }
 
-  _calculateActive() {
+  /** @private */
+  __calculateActive() {
     const pathAbsolute = this.path.startsWith('/');
     // Absolute path or no base uri in use. No special comparison needed
     if (pathAbsolute) {

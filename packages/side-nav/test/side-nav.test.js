@@ -51,16 +51,5 @@ describe('side-nav', () => {
       await nextRender(sideNav);
       expect(sideNav.collapsed).to.be.true;
     });
-
-    it('should expand programmatically', () => {
-      sideNav.toggleCollapsed();
-      expect(sideNav.collapsed).to.be.true;
-    });
-
-    it('should collapse programmatically', () => {
-      sideNav.toggleCollapsed();
-      sideNav.toggleCollapsed();
-      expect(sideNav.collapsed).to.be.false;
-    });
   });
 });
