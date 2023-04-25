@@ -20,6 +20,7 @@ import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -339,6 +340,8 @@ class Select extends OverlayClassMixin(
     super();
 
     this._itemId = `value-${this.localName}-${generateUniqueId()}`;
+    this._srLabelController = new LabelController(this);
+    this._srLabelController.slotName = 'sr-label';
   }
 
   /** @protected */
@@ -358,7 +361,7 @@ class Select extends OverlayClassMixin(
 
     this._valueButtonController = new ButtonController(this);
     this.addController(this._valueButtonController);
-
+    this.addController(this._srLabelController);
     this.addController(
       new MediaQueryController(this._phoneMediaQuery, (matches) => {
         this._phone = matches;
@@ -645,17 +648,8 @@ class Select extends OverlayClassMixin(
    * @private
    */
   _accessibleNameChanged(accessibleName) {
-    if (accessibleName) {
-      if (!this._srLabel) {
-        const srLabel = this._createScreenReaderLabel();
-        this.appendChild(srLabel);
-        this._srLabel = srLabel;
-      }
-      this._srLabel.textContent = accessibleName;
-    } else {
-      this._srLabel.textContent = null;
-    }
-    this._setCustomAriaLabelledBy(accessibleName ? this._srLabel.id : null);
+    this._srLabelController.setLabel(accessibleName);
+    this._setCustomAriaLabelledBy(accessibleName ? this._srLabelController.defaultId : null);
   }
 
   /**
@@ -731,7 +725,7 @@ class Select extends OverlayClassMixin(
 
     setAriaIDReference(valueButton, 'aria-labelledby', labelledIdReferenceConfig);
     if (this.accessibleName || this.accessibleNameRef) {
-      this._setCustomAriaLabelledBy(this.accessibleNameRef || this._srLabel.id);
+      this._setCustomAriaLabelledBy(this.accessibleNameRef || this._srLabelController.defaultId);
     }
   }
 
