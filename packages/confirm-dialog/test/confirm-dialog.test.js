@@ -165,6 +165,14 @@ describe('vaadin-confirm-dialog', () => {
         const messageNode = messageSlot.assignedNodes()[0];
         expect(messageNode.textContent.trim()).to.equal('New message');
       });
+
+      describe('a11y', () => {
+        it('should associate message node with aria-describedby', () => {
+          const messageNode = messageSlot.assignedNodes()[0];
+          const overlayDescribedBy = overlay.getAttribute('aria-describedby');
+          expect(overlayDescribedBy).to.equal(messageNode.id);
+        });
+      });
     });
 
     describe('slot', () => {
@@ -190,6 +198,49 @@ describe('vaadin-confirm-dialog', () => {
         confirm.message = 'New message';
         const messageNode = messageSlot.assignedNodes()[0];
         expect(messageNode.textContent.trim()).to.equal('Confirmation message');
+      });
+    });
+
+    describe('a11y', () => {
+      const firstChild = 'Confirm message';
+      const secondChild = '<div>Additionale content</div>';
+      beforeEach(async () => {
+        confirm = fixtureSync(`
+          <vaadin-confirm-dialog opened>
+            ${firstChild}
+            ${secondChild}
+          </vaadin-confirm-dialog>
+        `);
+        overlay = confirm.$.dialog.$.overlay;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
+      });
+
+      it('should wrap slotted children inside <div> elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        expect(nodes[0].textContent.trim()).to.equal(firstChild);
+        expect(nodes[1].innerHTML.trim()).to.equal(secondChild);
+      });
+
+      it('should generate id for wrapper elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        nodes.forEach((node) => expect(node.id).to.be.not.null);
+      });
+
+      it('should set "display: contents" on the wrapper elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        nodes.forEach((node) => expect(node.style.display).to.equal('contents'));
+      });
+
+      it('should associate generated ids with aria-describedby in overlay', () => {
+        const nodes = messageSlot.assignedNodes();
+        const overlayDescribedBy = overlay.getAttribute('aria-describedby');
+        expect(overlayDescribedBy).to.be.not.null;
+
+        const overlayDescribedByItems = overlayDescribedBy.split(' ');
+        expect(overlayDescribedByItems).to.have.lengthOf(2);
+        const wrapperIds = nodes.map((node) => node.id);
+        expect(overlayDescribedByItems).to.have.members(wrapperIds);
       });
     });
   });
