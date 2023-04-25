@@ -383,6 +383,10 @@ snapshots["vaadin-select shadow default"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow default */
 
@@ -447,6 +451,10 @@ snapshots["vaadin-select shadow disabled"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow disabled */
 
@@ -511,6 +519,10 @@ snapshots["vaadin-select shadow readonly"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow readonly */
 
@@ -575,6 +587,10 @@ snapshots["vaadin-select shadow invalid"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow invalid */
 
@@ -639,6 +655,10 @@ snapshots["vaadin-select shadow theme"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow theme */
 
