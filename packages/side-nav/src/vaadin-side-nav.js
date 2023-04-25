@@ -60,7 +60,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   _renderBody(label) {
     if (label) {
       // eslint-disable-next-line no-plusplus
-      if (!label.id) label.id = `app-nav-label-${id++}`;
+      if (!label.id) label.id = `side-nav-label-${id++}`;
       this.setAttribute('aria-labelledby', label.id);
     } else {
       this.removeAttribute('aria-labelledby');
