@@ -113,9 +113,9 @@ export const ButtonsMixin = (superClass) =>
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
-      item.classList.remove('vaadin-context-menu-parent-item', 'vaadin-menu-item')
-      if(item.classList.length == 0) {
-        item.removeAttribute('class')
+      item.classList.remove('vaadin-context-menu-parent-item', 'vaadin-menu-item');
+      if (item.classList.length === 0) {
+        item.removeAttribute('class');
       }
     }
 

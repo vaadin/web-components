@@ -755,7 +755,7 @@ describe('item components', () => {
 
     it('should keep the class names when moved to submenu and back', async () => {
       const item = buttons[5].firstChild;
-      item.classList.add('test-class-1')
+      item.classList.add('test-class-1');
       overflow.click();
       await nextRender(subMenu);
       subMenu.close();
