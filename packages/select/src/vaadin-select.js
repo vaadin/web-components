@@ -23,10 +23,13 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
+import { screenReaderOnly } from '@vaadin/field-base/src/styles/sr-only-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonController } from './button-controller.js';
 
-registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 'vaadin-select-styles' });
+registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderOnly], {
+  moduleId: 'vaadin-select-styles',
+});
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -154,16 +157,6 @@ class Select extends OverlayClassMixin(
       <style>
         ::slotted([slot='value']) {
           flex-grow: 1;
-        }
-        .sr-only {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          padding: 0;
-          margin: -1px;
-          overflow: hidden;
-          clip: rect(0, 0, 0, 0);
-          border: 0;
         }
       </style>
 
