@@ -661,11 +661,15 @@ class Select extends OverlayClassMixin(
     if (!this._items) {
       return;
     }
-    const selected = this._items[this._menuElement.selected];
-    const labelId = ariaLabelledby
-      ? `${ariaLabelledby} ${selected || this.placeholder ? this._itemId : ''}`.trim()
-      : null;
+    const labelId = this._getLabelIdWithItemId(ariaLabelledby);
     this._fieldAriaController.setLabelId(labelId, true);
+  }
+
+  _getLabelIdWithItemId(labelId) {
+    const selected = this._items ? this._items[this._menuElement.selected] : false;
+    const itemId = selected || this.placeholder ? this._itemId : '';
+
+    return labelId ? `${labelId} ${itemId}`.trim() : null;
   }
 
   /**
