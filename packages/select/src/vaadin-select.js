@@ -665,6 +665,11 @@ class Select extends OverlayClassMixin(
     this._fieldAriaController.setLabelId(labelId, true);
   }
 
+  /**
+   * @param {string | null} labelId
+   * @returns string | null
+   * @private
+   */
   _getLabelIdWithItemId(labelId) {
     const selected = this._items ? this._items[this._menuElement.selected] : false;
     const itemId = selected || this.placeholder ? this._itemId : '';
