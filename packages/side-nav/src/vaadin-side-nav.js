@@ -7,15 +7,13 @@
 import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavStyles } from '../theme/lumo/vaadin-side-nav-styles.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
 }
-
-// Used for generating unique IDs for label elements
-let id = 0;
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -106,8 +104,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /** @private */
   __renderBody(label) {
     if (label) {
-      // eslint-disable-next-line no-plusplus
-      if (!label.id) label.id = `side-nav-label-${id++}`;
+      if (!label.id) label.id = `side-nav-label-${generateUniqueId()}`;
       this.setAttribute('aria-labelledby', label.id);
     } else {
       this.removeAttribute('aria-labelledby');
