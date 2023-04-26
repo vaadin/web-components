@@ -638,7 +638,7 @@ class Select extends OverlayClassMixin(
 
   /**
    * @param {string} accessibleName
-   * @private
+   * @protected
    */
   _accessibleNameChanged(accessibleName) {
     this._srLabelController.setLabel(accessibleName);
@@ -647,7 +647,7 @@ class Select extends OverlayClassMixin(
 
   /**
    * @param {string} accessibleNameRef
-   * @private
+   * @protected
    */
   _accessibleNameRefChanged(accessibleNameRef) {
     this._setCustomAriaLabelledBy(accessibleNameRef);
