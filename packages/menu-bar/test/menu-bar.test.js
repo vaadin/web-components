@@ -756,6 +756,17 @@ describe('item components', () => {
       await onceResized(menu);
       expect(item.getAttributeNames()).to.have.members(itemAttributes);
     });
+
+    it('should keep the class names when moved to submenu and back', async () => {
+      const item = buttons[5].firstChild;
+      item.classList.add('test-class-1');
+      overflow.click();
+      await nextRender(subMenu);
+      subMenu.close();
+      menu.style.width = 'auto';
+      await onceResized(menu);
+      expect(item.classList.contains('test-class-1')).to.be.true;
+    });
   });
 });
 
