@@ -758,6 +758,7 @@ describe('item components', () => {
     });
 
     it('should keep the class names when moved to submenu and back', async () => {
+      // Simulate a custom class name being added through the Flow menu bar item component
       const item = buttons[5].firstChild;
       item.classList.add('test-class-1');
       overflow.click();
