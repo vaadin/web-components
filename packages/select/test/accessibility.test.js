@@ -7,10 +7,7 @@ import './not-animated-styles.js';
 import '../vaadin-select.js';
 
 describe('accessibility', () => {
-  /**  @type {HTMLElement} */
-  let select;
-  /**  @type {HTMLElement} */
-  let valueButton;
+  let select, valueButton;
 
   beforeEach(async () => {
     select = fixtureSync(`<vaadin-select label="Label"></vaadin-select>`);
@@ -68,19 +65,23 @@ describe('accessibility', () => {
     it('should be null by default', () => {
       expect(select.accessibleName).to.not.exist;
     });
+
     it('should create slotted element on value change', () => {
       select.accessibleName = 'accessible name';
       expect(select.querySelector('[slot=sr-label]')).to.exist;
     });
+
     it('should set property value as text content to slotted element', () => {
       select.accessibleName = 'accessible name';
       expect(select.querySelector('[slot=sr-label]').textContent).to.equal('accessible name');
     });
+
     it('should replace `aria-labelledby` with slotted element unique id', () => {
       select.accessibleName = 'accessible name';
       const srLabel = select.querySelector('[slot=sr-label]');
       expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
     });
+
     it('should restore `aria-labelledby` when value is removed', () => {
       const initialLabelledByValue = valueButton.getAttribute('aria-labelledby');
       expect(initialLabelledByValue).to.exist;
@@ -88,28 +89,33 @@ describe('accessibility', () => {
       select.accessibleName = null;
       expect(valueButton.getAttribute('aria-labelledby')).to.equal(initialLabelledByValue);
     });
+
     it('should keep `aria-labelledby` if value is changed', () => {
       select.accessibleName = 'accessible name';
       select.value = 'Option 0';
       const srLabel = select.querySelector('[slot=sr-label]');
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(srLabel.id);
     });
+
     it('should add item id to `aria-labelledby` when placeholder is defined', () => {
       select.accessibleName = 'accessible name';
       select.placeholder = 'placeholder';
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
     });
+
     it('should remove item id from `aria-labelledby` when placeholder is removed', () => {
       select.accessibleName = 'accessible name';
       select.placeholder = 'placeholder';
       select.placeholder = null;
       expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
     });
+
     it('should add item id to `aria-labelledby` when selected item is set', () => {
       select.accessibleName = 'accessible name';
       select.value = 'Option 1';
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
     });
+
     it('should remove item id from `aria-labelledby` when selected item is removed', () => {
       select.accessibleName = 'accessible name';
       select.value = 'Option 1';
@@ -160,10 +166,12 @@ describe('accessibility', () => {
     it('should be null by default', () => {
       expect(select.accessibleNameRef).to.not.exist;
     });
+
     it('should replace `aria-labelledby` with value given to the property', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
     });
+
     it('should restore `aria-labelledby` when value is removed', () => {
       const initialLabelledByValue = valueButton.getAttribute('aria-labelledby');
       expect(initialLabelledByValue).to.exist;
@@ -171,27 +179,32 @@ describe('accessibility', () => {
       select.accessibleNameRef = null;
       expect(valueButton.getAttribute('aria-labelledby')).to.equal(initialLabelledByValue);
     });
+
     it('should keep `aria-labelledby` if select value is changed', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       select.value = 'Option 0';
       expect(valueButton.getAttribute('aria-labelledby')).to.contain('accessible-name-ref');
     });
+
     it('should add item id to `aria-labelledby` when placeholder is defined', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       select.placeholder = 'placeholder';
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
     });
+
     it('should remove item id from `aria-labelledby` when placeholder is removed', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       select.placeholder = 'placeholder';
       select.placeholder = null;
       expect(valueButton.getAttribute('aria-labelledby')).to.not.contain(select._itemId);
     });
+
     it('should add item id to `aria-labelledby` when selected item is set', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       select.value = 'Option 1';
       expect(valueButton.getAttribute('aria-labelledby')).to.contain(select._itemId);
     });
+
     it('should remove item id from `aria-labelledby` when selected item is removed', () => {
       select.accessibleNameRef = 'accessible-name-ref';
       select.value = 'Option 1';
