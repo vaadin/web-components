@@ -53,7 +53,7 @@ describe('accessibility', () => {
 
   describe('accessible-name', async () => {
     beforeEach(async () => {
-      select = /** @type {HTMLElement} */ fixtureSync('<vaadin-select label="label"></vaadin-select>');
+      select = fixtureSync('<vaadin-select label="label"></vaadin-select>');
       select.items = [
         { label: 'Option 1', value: 'Option 1' },
         { label: 'Option 2', value: 'Option 2' },
@@ -149,12 +149,25 @@ describe('accessibility', () => {
         select.accessibleName = null;
         expect(valueButton.getAttribute('aria-labelledby')).to.equal(label.id);
       });
+
+      describe('no items added initially', () => {
+        beforeEach(async () => {
+          select = fixtureSync('<vaadin-select label="label" accessible-name="accessible name"></vaadin-select>');
+          valueButton = select.querySelector('vaadin-select-value-button');
+          await nextRender();
+        });
+
+        it('should have slotted element id value in aria-labelledby', () => {
+          const srLabel = select.querySelector('[slot=sr-label]');
+          expect(valueButton.getAttribute('aria-labelledby')).to.equal(srLabel.id);
+        });
+      });
     });
   });
 
   describe('accessible-name-ref', async () => {
     beforeEach(async () => {
-      select = /** @type {HTMLElement} */ fixtureSync('<vaadin-select label="label"></vaadin-select>');
+      select = fixtureSync('<vaadin-select label="label"></vaadin-select>');
       select.items = [
         { label: 'Option 1', value: 'Option 1' },
         { label: 'Option 2', value: 'Option 2' },
@@ -231,6 +244,20 @@ describe('accessibility', () => {
         const label = select.querySelector('[slot=label]');
         select.accessibleNameRef = null;
         expect(valueButton.getAttribute('aria-labelledby')).to.equal(label.id);
+      });
+
+      describe('no items added initially', () => {
+        beforeEach(async () => {
+          select = fixtureSync(
+            '<vaadin-select label="label" accessible-name-ref="accessible-name-ref"></vaadin-select>',
+          );
+          valueButton = select.querySelector('vaadin-select-value-button');
+          await nextRender();
+        });
+
+        it('should have property value in aria-labelledby', () => {
+          expect(valueButton.getAttribute('aria-labelledby')).to.equal('accessible-name-ref');
+        });
       });
     });
   });
