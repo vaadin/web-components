@@ -658,9 +658,6 @@ class Select extends OverlayClassMixin(
    * @private
    */
   _setCustomAriaLabelledBy(ariaLabelledby) {
-    if (!this._items) {
-      return;
-    }
     const labelId = this._getLabelIdWithItemId(ariaLabelledby);
     this._fieldAriaController.setLabelId(labelId, true);
   }
