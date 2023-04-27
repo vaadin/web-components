@@ -16,7 +16,7 @@ describe('focus-utils', () => {
     beforeEach(() => {
       element = fixtureSync(`
         <div class="parent">
-          <div class="child"></div>
+          <div class="child">foo</div>
         </div>
       `);
     });
@@ -42,6 +42,11 @@ describe('focus-utils', () => {
     });
 
     it('should return false for visible elements', () => {
+      expect(isElementHidden(element)).to.be.false;
+    });
+
+    it('should return false when using fixed positioning', () => {
+      element.style.position = 'fixed';
       expect(isElementHidden(element)).to.be.false;
     });
   });
