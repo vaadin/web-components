@@ -134,7 +134,9 @@ export function isElementHidden(element) {
   // `offsetParent` is `null` when the element itself
   // or one of its ancestors is hidden with `display: none`.
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
-  if (element.offsetParent === null) {
+  // However `offsetParent` is also null when the element is using fixed
+  // positioning, so additionally check if the element takes up layout space.
+  if (element.offsetParent === null && element.clientWidth === 0 && element.clientHeight === 0) {
     return true;
   }
 
