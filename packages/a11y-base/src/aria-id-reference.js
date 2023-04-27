@@ -114,8 +114,8 @@ export function setAriaIDReference(target, attr, config = { newId: null, oldId: 
   if (!fromUser && !!storedValues) {
     // If there's any stored values, it means the attribute is being handled by the user
     // Replace the "oldId" with "newId" on the stored values set and leave
-    storedValues.delete(oldId);
-    storedValues.add(newId);
+    oldId && storedValues.delete(oldId);
+    newId && storedValues.add(newId);
     return;
   }
 
