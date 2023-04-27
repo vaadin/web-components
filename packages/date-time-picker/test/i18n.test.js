@@ -177,8 +177,19 @@ describe('accessibility', () => {
         pickerFocusElement = dateTimePicker.querySelector(`[slot=${part}-picker]`).focusElement;
       });
 
-      it(`should have accessibleName + ${part}Label set on the input`, () => {
+      it(`should have accessible-name + ${part}Label set on the input`, () => {
         expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-accessible-name picker-label');
+      });
+
+      it(`should use label + ${part}Label if accessible-name is removed`, () => {
+        dateTimePicker.accessibleName = null;
+        expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-label picker-label');
+      });
+
+      it(`should use ${part}Label if accessible-name and label are removed`, () => {
+        dateTimePicker.accessibleName = null;
+        dateTimePicker.label = null;
+        expect(pickerFocusElement.getAttribute('aria-label')).to.equal('picker-label');
       });
     });
   });
