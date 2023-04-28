@@ -49,6 +49,8 @@ function isEnabled() {
  *   </vaadin-side-nav-item>
  * ```
  *
+ * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
+ *
  * @extends LitElement
  * @mixes PolylitMixin
  * @mixes ThemableMixin
@@ -78,6 +80,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       expanded: {
         type: Boolean,
         value: false,
+        notify: true,
         reflectToAttribute: true,
       },
 

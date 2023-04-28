@@ -44,6 +44,8 @@ function isEnabled() {
  *   </vaadin-side-nav>
  * ```
  *
+ * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
+ *
  * @extends LitElement
  * @mixes PolylitMixin
  * @mixes ThemableMixin
@@ -79,6 +81,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       collapsed: {
         type: Boolean,
         value: false,
+        notify: true,
         reflectToAttribute: true,
       },
     };

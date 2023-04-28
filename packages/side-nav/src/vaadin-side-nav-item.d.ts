@@ -9,6 +9,17 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * Fired when the `expanded` property changes.
+ */
+export type SideNavItemExpandedChangedEvent = CustomEvent<{ value: boolean }>;
+
+export interface SideNavItemCustomEventMap {
+  'expanded-changed': SideNavItemExpandedChangedEvent;
+}
+
+export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMap;
+
+/**
  * An element used internally by `<vaadin-side-nav>`. Represents a navigation target.
  * Not intended to be used separately.
  *
@@ -42,6 +53,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *     <span theme="badge primary" slot="suffix">Suffix</span>
  *   </vaadin-side-nav-item>
  * ```
+ *
+ * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
 declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /**
@@ -58,6 +71,18 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
    * Toggles the `active` attribute.
    */
   active: boolean;
+
+  addEventListener<K extends keyof SideNavItemEventMap>(
+    type: K,
+    listener: (this: SideNavItem, ev: SideNavItemEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof SideNavItemEventMap>(
+    type: K,
+    listener: (this: SideNavItem, ev: SideNavItemEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {

@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../enable.js';
 import '../vaadin-side-nav.js';
 
@@ -50,6 +51,14 @@ describe('side-nav', () => {
       sideNav.collapsed = true;
       await nextRender(sideNav);
       expect(sideNav.collapsed).to.be.true;
+    });
+
+    it('should dispatch collapsed-changed event when collapsed changes', async () => {
+      const spy = sinon.spy();
+      sideNav.addEventListener('collapsed-changed', spy);
+      await nextRender(sideNav);
+      sideNav.shadowRoot.querySelector('summary[part="label"]').click();
+      expect(spy.calledOnce).to.be.true;
     });
   });
 });

@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../enable.js';
 import '../vaadin-side-nav-item.js';
 
@@ -65,6 +66,14 @@ describe('expand', () => {
       passiveItemWithChildren._button.click();
       passiveItemWithChildren._button.click();
       expect(passiveItemWithChildren.expanded).to.be.false;
+    });
+
+    it('should dispatch expanded-changed event when expanded changes', async () => {
+      const spy = sinon.spy();
+      passiveItemWithChildren.addEventListener('expanded-changed', spy);
+      passiveItemWithChildren._button.click();
+      await nextRender(passiveItemWithChildren);
+      expect(spy.calledOnce).to.be.true;
     });
   });
 
