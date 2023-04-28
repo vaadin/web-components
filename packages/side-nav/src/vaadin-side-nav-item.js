@@ -78,6 +78,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       expanded: {
         type: Boolean,
         value: false,
+        notify: true,
         reflectToAttribute: true,
       },
 

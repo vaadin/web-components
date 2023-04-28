@@ -79,6 +79,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       collapsed: {
         type: Boolean,
         value: false,
+        notify: true,
         reflectToAttribute: true,
       },
     };
