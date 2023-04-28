@@ -49,6 +49,8 @@ function isEnabled() {
  *   </vaadin-side-nav-item>
  * ```
  *
+ * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
+ *
  * @extends LitElement
  * @mixes PolylitMixin
  * @mixes ThemableMixin

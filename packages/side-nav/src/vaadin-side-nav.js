@@ -44,6 +44,8 @@ function isEnabled() {
  *   </vaadin-side-nav>
  * ```
  *
+ * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
+ *
  * @extends LitElement
  * @mixes PolylitMixin
  * @mixes ThemableMixin
