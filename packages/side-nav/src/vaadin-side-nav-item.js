@@ -8,7 +8,6 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { sideNavItemStyles } from '../theme/lumo/vaadin-side-nav-styles.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -59,10 +58,6 @@ function isEnabled() {
 class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-side-nav-item';
-  }
-
-  static get styles() {
-    return sideNavItemStyles;
   }
 
   static get properties() {
