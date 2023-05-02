@@ -9,14 +9,7 @@ const drawerToggle = css`
     height: 48px;
     padding: 0;
     border-radius: 50%;
-  }
-
-  :host(:not([dir='rtl'])) {
-    margin-right: 1em;
-  }
-
-  :host([dir='rtl']) {
-    margin-left: 1em;
+    margin-inline-end: 1em;
   }
 
   [part='icon'],
