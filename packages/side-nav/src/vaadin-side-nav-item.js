@@ -98,11 +98,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   /** @protected */
-  get _childrenSlot() {
-    return this.shadowRoot.querySelector('#children');
-  }
-
-  /** @protected */
   connectedCallback() {
     super.connectedCallback();
     this.setAttribute('role', 'listitem');
