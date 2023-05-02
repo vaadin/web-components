@@ -1288,6 +1288,14 @@
   resolved "https://registry.yarnpkg.com/@open-wc/dedupe-mixin/-/dedupe-mixin-1.3.1.tgz#5c1a1eeb0386b344290ebe3f1fca0c4869933dbf"
   integrity sha512-ukowSvzpZQDUH0Y3znJTsY88HkiGk3Khc0WGpIPhap1xlerieYi27QBg6wx/nTurpWfU6XXXsx9ocxDYCdtw0Q==
 
+"@open-wc/semantic-dom-diff@^0.19.5-next.1":
+  version "0.19.9"
+  resolved "https://registry.yarnpkg.com/@open-wc/semantic-dom-diff/-/semantic-dom-diff-0.19.9.tgz#fd27659cbace40c6a59078233f4fa14a308a45b1"
+  integrity sha512-iUL0OPA6PeLQVEEJ/gsgkEiwOGgK4E1KS//zTB+u+OAh0NifNTfxDxIHQa7rEGvplaq2b2zztT2yyzOzj+MlAA==
+  dependencies:
+    "@types/chai" "^4.3.1"
+    "@web/test-runner-commands" "^0.6.5"
+
 "@open-wc/semantic-dom-diff@^0.19.7":
   version "0.19.7"
   resolved "https://registry.yarnpkg.com/@open-wc/semantic-dom-diff/-/semantic-dom-diff-0.19.7.tgz#92361f0d2dcb54a8d5cf11d5ea40b8e7ffa58eb4"
@@ -1535,7 +1543,7 @@
     "@polymer/iron-overlay-behavior" "^3.0.0-pre.27"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/polymer@^3.0.0", "@polymer/polymer@^3.2.0", "@polymer/polymer@^3.5.1":
+"@polymer/polymer@^3.0.0", "@polymer/polymer@^3.2.0", "@polymer/polymer@^3.4.1", "@polymer/polymer@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.5.1.tgz#4b5234e43b8876441022bcb91313ab3c4a29f0c8"
   integrity sha512-JlAHuy+1qIC6hL1ojEUfIVD58fzTpJAoCxFwV5yr0mYTXV1H8bz5zy0+rC963Cgr9iNXQ4T9ncSjC2fkF9BQfw==
@@ -2027,6 +2035,37 @@
     "@typescript-eslint/types" "5.49.0"
     eslint-visitor-keys "^3.3.0"
 
+"@vaadin/component-base@24.0.0-alpha12":
+  version "24.0.0-alpha12"
+  resolved "https://registry.yarnpkg.com/@vaadin/component-base/-/component-base-24.0.0-alpha12.tgz#5ce1391c1321ab6600854df7c5e535665ae0409d"
+  integrity sha512-a/vepnN3j8QPh+KcsddZZicODSFhN3og62PK817rBdFiWEtiNOmBJhvGhy8YwphIrlPB2vnuFFbtdHyq43179g==
+  dependencies:
+    "@open-wc/dedupe-mixin" "^1.3.0"
+    "@polymer/polymer" "^3.0.0"
+    "@vaadin/vaadin-development-mode-detector" "^2.0.0"
+    "@vaadin/vaadin-usage-statistics" "^2.1.0"
+    lit "^2.0.0"
+
+"@vaadin/icon@24.0.0-alpha12":
+  version "24.0.0-alpha12"
+  resolved "https://registry.yarnpkg.com/@vaadin/icon/-/icon-24.0.0-alpha12.tgz#bbc0c05dc874bdbb747964f81cc0e7a5c66c674f"
+  integrity sha512-VABFAbK5YyA3sWetox410myJ7PcfRto7bKxnDw9Q8YXrnoZyZhRSUbqyEA1czgB6Ndd73tEc1dTSUeeqSWSicw==
+  dependencies:
+    "@polymer/polymer" "^3.0.0"
+    "@vaadin/component-base" "24.0.0-alpha12"
+    "@vaadin/vaadin-lumo-styles" "24.0.0-alpha12"
+    "@vaadin/vaadin-themable-mixin" "24.0.0-alpha12"
+    lit "^2.0.0"
+
+"@vaadin/testing-helpers@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.2.tgz#f1a5c35ccaaa3012be419b27823386593927a1d8"
+  integrity sha512-oteeq6wjcnPVfU7IGUXym+/Y0F0wLEhQJmaXsdEqVkX1uPEBQpV4VqaMosFYLmsPd7DYqZYtl3N7tKJHoIdC8g==
+  dependencies:
+    "@esm-bundle/chai" "^4.3.1"
+    "@open-wc/semantic-dom-diff" "^0.19.5-next.1"
+    "@polymer/polymer" "^3.4.1"
+
 "@vaadin/testing-helpers@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.4.0.tgz#72aee1b28c3626ab8044be6ea0d7b181e57322ec"
@@ -2041,6 +2080,31 @@
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-development-mode-detector/-/vaadin-development-mode-detector-2.0.5.tgz#5098216dae30d8eeabe46c7cbe494a352fe09691"
   integrity sha512-miirBQw10UHjKwRv29iZniXCo41cLg3wFotoyTeUZ2PTGIDk/fZVFr4Q4WVKZrp3D15878vz94nNQROSmPLjdg==
+
+"@vaadin/vaadin-lumo-styles@24.0.0-alpha12":
+  version "24.0.0-alpha12"
+  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-lumo-styles/-/vaadin-lumo-styles-24.0.0-alpha12.tgz#8b2ff0326e6b7417c52b3d6c9706bcfd3313803b"
+  integrity sha512-4+IlDOREnYwa+2WlTAqCu2vMokrcqSxd/EWTnS/19SkhhA/N/OX3IP1aDdoeWgkvE+4ESfDqY9tOtH0hIlu3wA==
+  dependencies:
+    "@polymer/polymer" "^3.0.0"
+    "@vaadin/icon" "24.0.0-alpha12"
+    "@vaadin/vaadin-themable-mixin" "24.0.0-alpha12"
+
+"@vaadin/vaadin-material-styles@24.0.0-alpha12":
+  version "24.0.0-alpha12"
+  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-material-styles/-/vaadin-material-styles-24.0.0-alpha12.tgz#d2403032bb4a2648c4bb45b19be1c2f233ac5b36"
+  integrity sha512-6mAw5hijtDdc1uzwXZuuWxO0JUw+n6yYfzMGDvJ6s/FTcmBj8C0OHcjOX3+jXfsNN67sdzO8oHmB53Xragcehg==
+  dependencies:
+    "@polymer/polymer" "^3.0.0"
+    "@vaadin/vaadin-themable-mixin" "24.0.0-alpha12"
+
+"@vaadin/vaadin-themable-mixin@24.0.0-alpha12":
+  version "24.0.0-alpha12"
+  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-themable-mixin/-/vaadin-themable-mixin-24.0.0-alpha12.tgz#0143db44c115a110623dc0861114cd3d2ef37413"
+  integrity sha512-hjjp4h6atM46rVnN42ZhAX3NCwROEkajdQXN2+EaGd0yKQTQxtXdg6RVUj5o5IHgJw2VMYQbyJpzHZpB7mZW/Q==
+  dependencies:
+    "@open-wc/dedupe-mixin" "^1.3.0"
+    lit "^2.0.0"
 
 "@vaadin/vaadin-usage-statistics@^2.1.0":
   version "2.1.2"
