@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-badge.js';
+((window.Vaadin ||= {}).featureFlags ||= {}).badgeComponent = true;
 
 describe('badge', () => {
   let div, element;

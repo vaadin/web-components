@@ -2,6 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-badge.js';
 
+((window.Vaadin ||= {}).featureFlags ||= {}).badgeComponent = true;
+
 describe('badge', () => {
   let badge;
 

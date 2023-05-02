@@ -60,6 +60,15 @@ class Badge extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-badge';
   }
+
+  constructor() {
+    super();
+    if (!window?.Vaadin?.featureFlags?.badgeComponent) {
+      throw new Error(
+        `${Badge.is} can only be used when the feature flag window.Vaadin.featureFlags.badgeComponent===true`,
+      );
+    }
+  }
 }
 
 customElements.define(Badge.is, Badge);

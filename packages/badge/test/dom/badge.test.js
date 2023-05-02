@@ -3,6 +3,8 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../vaadin-badge.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
+((window.Vaadin ||= {}).featureFlags ||= {}).badgeComponent = true;
+
 describe('vaadin-badge', () => {
   let badge;
 
