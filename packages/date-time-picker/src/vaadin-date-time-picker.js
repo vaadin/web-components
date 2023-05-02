@@ -395,6 +395,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       '__themeChanged(_theme, __datePicker, __timePicker)',
       '__overlayClassChanged(overlayClass, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
+      '__labelOrAccessibleNameChanged(label, accessibleName, i18n, __datePicker, __timePicker)',
     ];
   }
 
@@ -638,6 +639,19 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     if (timePicker) {
       timePicker.i18n = { ...timePicker.i18n, ...i18n };
+    }
+  }
+
+  /** @private */
+  __labelOrAccessibleNameChanged(label, accessibleName, i18n, datePicker, timePicker) {
+    const name = accessibleName || label || '';
+
+    if (datePicker) {
+      datePicker.accessibleName = `${name} ${i18n.dateLabel || ''}`.trim();
+    }
+
+    if (timePicker) {
+      timePicker.accessibleName = `${name} ${i18n.timeLabel || ''}`.trim();
     }
   }
 

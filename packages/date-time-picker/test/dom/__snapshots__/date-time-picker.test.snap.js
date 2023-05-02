@@ -330,6 +330,7 @@ snapshots["vaadin-date-time-picker host label"] =
     <input
       aria-expanded="false"
       aria-haspopup="dialog"
+      aria-label="Label"
       autocomplete="off"
       id="input-vaadin-date-picker-6"
       role="combobox"
@@ -352,6 +353,7 @@ snapshots["vaadin-date-time-picker host label"] =
     <input
       aria-autocomplete="list"
       aria-expanded="false"
+      aria-label="Label"
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
