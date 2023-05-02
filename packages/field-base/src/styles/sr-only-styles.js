@@ -6,14 +6,22 @@
 import { css } from 'lit';
 
 export const screenReaderOnly = css`
+  /**
+  * @note Taken from Gaël Poupard gist
+  * @author Gaël Poupard
+  * @see https://gist.github.com/ffoodd/000b59f431e3e64e4ce1a24d5bb36034
+  */
   .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
   }
 `;
