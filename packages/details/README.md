@@ -1,4 +1,4 @@
-# @vaadin/custom-field
+# @vaadin/details
 
 A web component that provides an expandable panel for showing and hiding content.
 
