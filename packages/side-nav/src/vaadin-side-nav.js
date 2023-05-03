@@ -83,8 +83,8 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 
   /** @protected */
-  firstUpdated() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "navigation".
