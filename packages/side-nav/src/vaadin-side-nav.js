@@ -9,6 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -80,6 +81,10 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         reflectToAttribute: true,
       },
     };
+  }
+
+  static get styles() {
+    return sideNavBaseStyles;
   }
 
   /** @protected */
