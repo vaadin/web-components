@@ -15,6 +15,12 @@ export const ComboBoxOverlayMixin = (superClass) =>
       return ['_setOverlayWidth(positionTarget, opened)'];
     }
 
+    constructor() {
+      super();
+
+      this.requiredVerticalSpace = 200;
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
