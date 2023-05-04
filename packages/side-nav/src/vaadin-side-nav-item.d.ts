@@ -67,6 +67,13 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
    */
   expanded: boolean;
 
+  /**
+   * Whether the path of the item matches the current path.
+   * Set when the item is appended to DOM or when navigated back
+   * to the page that contains this item using the browser.
+   */
+  readonly active: boolean;
+
   addEventListener<K extends keyof SideNavItemEventMap>(
     type: K,
     listener: (this: SideNavItem, ev: SideNavItemEventMap[K]) => void,

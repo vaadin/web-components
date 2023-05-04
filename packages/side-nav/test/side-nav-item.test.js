@@ -123,6 +123,14 @@ describe('expand', () => {
 });
 
 describe('active', () => {
+  describe('read-only', () => {
+    it('should retain active state', () => {
+      const activeItem = fixtureSync(`<vaadin-side-nav-item path=""></vaadin-side-nav-item>`);
+      activeItem.active = false;
+      expect(activeItem.active).to.be.true;
+    });
+  });
+
   describe('passive item', () => {
     let passiveItem;
 
@@ -135,7 +143,7 @@ describe('active', () => {
     });
 
     it('should not be active', () => {
-      expect(passiveItem._active).to.be.false;
+      expect(passiveItem.active).to.be.false;
     });
   });
 
@@ -151,7 +159,7 @@ describe('active', () => {
     });
 
     it('should be active', () => {
-      expect(activeItem._active).to.be.true;
+      expect(activeItem.active).to.be.true;
     });
   });
 });
