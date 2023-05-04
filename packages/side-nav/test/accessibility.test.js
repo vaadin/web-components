@@ -28,8 +28,14 @@ describe('accessibility', () => {
     });
 
     describe('ARIA roles', () => {
-      it('should set "navigation" role on side-nav', () => {
+      it('should set "navigation" role by default on side-nav', () => {
         expect(sideNav.getAttribute('role')).to.equal('navigation');
+      });
+
+      it('should have custom role effective', async () => {
+        const sideNavWithCustomRole = fixtureSync('<vaadin-side-nav role="custom role"></vaadin-side-nav>');
+        await nextRender(sideNavWithCustomRole);
+        expect(sideNavWithCustomRole.getAttribute('role')).to.equal('custom role');
       });
     });
   });
