@@ -18,16 +18,16 @@ function isEnabled() {
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
  * Not intended to be used separately.
  *
- * ```
- *   <vaadin-side-nav-item>
- *     Item 1
- *     <vaadin-side-nav-item path="/path1" slot="children">
- *       Child item 1
- *     </vaadin-side-nav-item>
- *     <vaadin-side-nav-item path="/path2" slot="children">
- *       Child item 2
- *     </vaadin-side-nav-item>
+ * ```html
+ * <vaadin-side-nav-item>
+ *   Item 1
+ *   <vaadin-side-nav-item path="/path1" slot="children">
+ *     Child item 1
  *   </vaadin-side-nav-item>
+ *   <vaadin-side-nav-item path="/path2" slot="children">
+ *     Child item 2
+ *   </vaadin-side-nav-item>
+ * </vaadin-side-nav-item>
  * ```
  *
  * ### Customization
