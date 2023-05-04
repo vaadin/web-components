@@ -142,10 +142,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   /** @private */
   __toggleExpanded(e) {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
     this.expanded = !this.expanded;
   }
 
