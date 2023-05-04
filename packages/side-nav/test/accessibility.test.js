@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../enable.js';
 import '../vaadin-side-nav-item.js';
 import '../vaadin-side-nav.js';
@@ -22,8 +22,9 @@ describe('accessibility', () => {
   describe('side nav', () => {
     let sideNav;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       sideNav = fixtureSync('<vaadin-side-nav></vaadin-side-nav>');
+      await nextRender(sideNav);
     });
 
     describe('ARIA roles', () => {
