@@ -20,7 +20,7 @@ export interface SideNavItemCustomEventMap {
 export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMap;
 
 /**
- * An element used internally by `<vaadin-side-nav>`. Represents a navigation target.
+ * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
  * Not intended to be used separately.
  *
  * ```
