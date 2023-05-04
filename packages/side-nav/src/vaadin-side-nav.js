@@ -59,7 +59,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get properties() {
     return {
       /**
-       * When present, shows the toggle icon and enables collapsing.
+       * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
        *
        * @type {boolean}
        */
@@ -70,7 +70,7 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       },
 
       /**
-       * When present, the side nav is collapsed to hide the items.
+       * Whether the side nav is collapsed. When collapsed, the items are hidden.
        *
        * @type {boolean}
        */
