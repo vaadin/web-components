@@ -17,14 +17,13 @@ function isEnabled() {
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
- *
- * ```
- *   <vaadin-side-nav>
- *     <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
- *     <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
- *     <vaadin-side-nav-item>Item 3</vaadin-side-nav-item>
- *     <vaadin-side-nav-item>Item 4</vaadin-side-nav-item>
- *   </vaadin-side-nav>
+ * ```html
+ * <vaadin-side-nav>
+ *   <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
+ *   <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
+ *   <vaadin-side-nav-item>Item 3</vaadin-side-nav-item>
+ *   <vaadin-side-nav-item>Item 4</vaadin-side-nav-item>
+ * </vaadin-side-nav>
  * ```
  *
  * ### Customization
@@ -36,12 +35,11 @@ function isEnabled() {
  * `label`   | The label (text) inside the side nav.
  *
  * #### Example:
- *
- * ```
- *   <vaadin-side-nav>
- *     <span slot="label">Main menu</span>
- *     <vaadin-side-nav-item>Item</vaadin-side-nav-item>
- *   </vaadin-side-nav>
+ * ```html
+ * <vaadin-side-nav>
+ *   <span slot="label">Main menu</span>
+ *   <vaadin-side-nav-item>Item</vaadin-side-nav-item>
+ * </vaadin-side-nav>
  * ```
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
