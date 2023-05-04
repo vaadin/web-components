@@ -19,7 +19,10 @@ registerStyles(
   css`
     :host,
     :host::before,
-    :host::after {
+    :host::after,
+    button,
+    button::before,
+    button::after {
       transition: none !important;
     }
   `,
