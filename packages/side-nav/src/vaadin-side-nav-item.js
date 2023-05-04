@@ -41,12 +41,12 @@ function isEnabled() {
  *
  * #### Example:
  *
- * ```
- *  <vaadin-side-nav-item>
- *     <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
- *     Item
- *     <span theme="badge primary" slot="suffix">Suffix</span>
- *   </vaadin-side-nav-item>
+ * ```html
+ * <vaadin-side-nav-item>
+ *   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
+ *   Item
+ *   <span theme="badge primary" slot="suffix">Suffix</span>
+ * </vaadin-side-nav-item>
  * ```
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
