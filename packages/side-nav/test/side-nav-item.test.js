@@ -135,7 +135,7 @@ describe('active', () => {
     });
 
     it('should not be active', () => {
-      expect(passiveItem.active).to.be.false;
+      expect(passiveItem._active).to.be.false;
     });
   });
 
@@ -151,7 +151,7 @@ describe('active', () => {
     });
 
     it('should be active', () => {
-      expect(activeItem.active).to.be.true;
+      expect(activeItem._active).to.be.true;
     });
   });
 });

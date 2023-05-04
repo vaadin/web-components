@@ -81,13 +81,15 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       },
 
       /**
-       * Whether the path of the item matches the current path.
+       * An internal property that specifies whether the path of
+       * the item matches the current path.
        * Set when the item is appended to DOM or when navigated back
        * to the page that contains this item using the browser.
        *
        * @type {boolean}
+       * @private
        */
-      active: {
+      _active: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
@@ -122,7 +124,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   render() {
     return html`
-      <a href="${ifDefined(this.path)}" part="item" aria-current="${this.active ? 'page' : false}">
+      <a href="${ifDefined(this.path)}" part="item" aria-current="${this._active ? 'page' : false}">
         <slot name="prefix"></slot>
         <slot></slot>
         <slot name="suffix"></slot>
@@ -151,12 +153,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @private */
   __updateActive() {
     if (!this.path && this.path !== '') {
-      this.active = false;
+      this._active = false;
       return;
     }
-    this.active = this.__calculateActive();
+    this._active = this.__calculateActive();
     this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
-    if (this.active) {
+    if (this._active) {
       this.expanded = true;
     }
   }
