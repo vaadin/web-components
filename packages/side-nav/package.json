@@ -25,7 +25,8 @@
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",
-    "web-types.lit.json"
+    "web-types.lit.json",
+    "enable.js"
   ],
   "keywords": [
     "Vaadin",
