@@ -57,7 +57,7 @@ declare class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement
   collapsible: boolean;
 
   /**
-   * When present, the side nav is collapsed to hide the items.
+   * Whether the side nav is collapsed. When collapsed, the items are hidden.
    */
   collapsed: boolean;
 
