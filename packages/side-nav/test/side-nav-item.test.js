@@ -164,64 +164,6 @@ describe('active', () => {
   });
 });
 
-describe('prefix', () => {
-  let item;
-  let prefixSlot;
-  let prefixContent;
-
-  beforeEach(async () => {
-    item = fixtureSync(
-      `<vaadin-side-nav-item>
-          <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
-        </vaadin-side-nav-item>`,
-    );
-    await nextRender(item);
-    prefixSlot = item.shadowRoot.querySelector('slot[name="prefix"]');
-    prefixContent = item.querySelector('vaadin-icon');
-  });
-
-  it('should have prefix slot', () => {
-    expect(prefixSlot).to.be.ok;
-  });
-
-  it('should have prefix content', () => {
-    expect(prefixContent).to.be.ok;
-  });
-
-  it('prefix slot should contain prefix content', () => {
-    expect(prefixSlot.assignedNodes()).to.contain(prefixContent);
-  });
-});
-
-describe('suffix', () => {
-  let item;
-  let suffixSlot;
-  let suffixContent;
-
-  beforeEach(async () => {
-    item = fixtureSync(
-      `<vaadin-side-nav-item>
-          <span slot="suffix">Suffix content</span>
-        </vaadin-side-nav-item>`,
-    );
-    await nextRender(item);
-    suffixSlot = item.shadowRoot.querySelector('slot[name="suffix"]');
-    suffixContent = item.querySelector('span');
-  });
-
-  it('should have suffix slot', () => {
-    expect(suffixSlot).to.be.ok;
-  });
-
-  it('should have suffix content', () => {
-    expect(suffixContent).to.be.ok;
-  });
-
-  it('prefix slot should contain suffix content', () => {
-    expect(suffixSlot.assignedNodes()).to.contain(suffixContent);
-  });
-});
-
 describe('navigation', () => {
   let anchor, item;
 

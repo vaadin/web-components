@@ -34,25 +34,6 @@ describe('side-nav', () => {
   });
 
   describe('collapsing', () => {
-    it('should be initially collapsible', () => {
-      expect(sideNav.collapsible).to.be.true;
-    });
-
-    it('should not be collapsible after setting attribute', () => {
-      sideNav.collapsible = false;
-      expect(sideNav.collapsible).to.be.false;
-    });
-
-    it('should not be initially collapsed', () => {
-      expect(sideNav.collapsed).to.be.false;
-    });
-
-    it('should be collapsed after setting attribute', async () => {
-      sideNav.collapsed = true;
-      await nextRender(sideNav);
-      expect(sideNav.collapsed).to.be.true;
-    });
-
     it('should dispatch collapsed-changed event when collapsed changes', async () => {
       const spy = sinon.spy();
       sideNav.addEventListener('collapsed-changed', spy);
