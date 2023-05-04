@@ -40,7 +40,7 @@ describe('vaadin-side-nav-item', () => {
       await expect(activeItem).dom.to.equalSnapshot();
     });
 
-    it('with path', async () => {
+    it('path', async () => {
       sideNavItem.path = 'path';
       await nextRender(sideNavItem);
       await expect(sideNavItem).dom.to.equalSnapshot();
