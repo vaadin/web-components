@@ -5,7 +5,10 @@ registerStyles(
   css`
     :host,
     :host::before,
-    :host::after {
+    :host::after,
+    summary,
+    summary::before,
+    summary::after {
       transition: none !important;
     }
   `,
