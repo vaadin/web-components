@@ -64,12 +64,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   static get properties() {
     return {
       /**
-       * The path to navigate to.
+       * The path to navigate to
        */
       path: String,
 
       /**
-       * When present, the item is expanded to show the children items.
+       * Whether to show the child items or not
        *
        * @type {boolean}
        */
@@ -81,7 +81,9 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       },
 
       /**
-       * Toggles the `active` attribute.
+       * Whether the path of the item matches the current path.
+       * Set when the item is appended to DOM or when navigated back
+       * to the page that contains this item using the browser.
        *
        * @type {boolean}
        */

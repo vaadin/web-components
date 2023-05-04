@@ -58,17 +58,19 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  */
 declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /**
-   * The path to navigate to.
+   * The path to navigate to
    */
   path: string | null | undefined;
 
   /**
- * Whether to show  the child items or not
+   * Whether to show the child items or not
    */
   expanded: boolean;
 
   /**
-   * Toggles the `active` attribute.
+   * Whether the path of the item matches the current path.
+   * Set when the item is appended to DOM or when navigated back
+   * to the page that contains this item using the browser.
    */
   active: boolean;
 
