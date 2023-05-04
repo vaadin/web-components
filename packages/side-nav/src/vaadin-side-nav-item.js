@@ -123,7 +123,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   render() {
     return html`
-      <a href="${ifDefined(this.path)}" part="item" aria-current="${this.active ? 'page' : false}">
+      <a href="${ifDefined(this.path)}" part="item" aria-current="${this.active ? 'page' : 'false'}">
         <slot name="prefix"></slot>
         <slot></slot>
         <slot name="suffix"></slot>
