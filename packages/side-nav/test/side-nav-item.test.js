@@ -246,4 +246,11 @@ describe('navigation', () => {
     await nextRender(item);
     expect(anchor.getAttribute('href')).to.be.ok;
   });
+
+  it('should not trigger navigation when toggle button is clicked', async () => {
+    const spy = sinon.spy();
+    anchor.addEventListener('click', spy);
+    item._button.click();
+    expect(spy.called).to.be.false;
+  });
 });
