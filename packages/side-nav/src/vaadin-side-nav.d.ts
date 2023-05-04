@@ -52,7 +52,7 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
  */
 declare class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /**
-   * When present, shows the toggle icon and enables collapsing.
+   * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
    */
   collapsible: boolean;
 
