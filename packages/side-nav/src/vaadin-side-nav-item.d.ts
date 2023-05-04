@@ -63,7 +63,7 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
   path: string | null | undefined;
 
   /**
-   * When present, the item is expanded to show the children items.
+ * Whether to show  the child items or not
    */
   expanded: boolean;
 
