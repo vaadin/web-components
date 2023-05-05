@@ -878,10 +878,9 @@ const runTests = (defineHelper, baseMixin) => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      describe('aria-labelledby', () => {
+      describe('aria-describedby', () => {
         it('should only contain label id and helper id when the field is valid', () => {
-          const aria = element.getAttribute('aria-labelledby');
-          expect(aria).to.include(label.id);
+          const aria = element.getAttribute('aria-describedby');
           expect(aria).to.include(helper.id);
           expect(aria).to.not.include(error.id);
         });
@@ -890,22 +889,9 @@ const runTests = (defineHelper, baseMixin) => {
           element.invalid = true;
           await nextFrame();
           await aTimeout(0);
-          const aria = element.getAttribute('aria-labelledby');
-          expect(aria).to.include(label.id);
+          const aria = element.getAttribute('aria-describedby');
           expect(aria).to.include(helper.id);
           expect(aria).to.include(error.id);
-        });
-      });
-
-      describe('aria-describedby', () => {
-        it('should be empty when the field is valid', () => {
-          expect(element.hasAttribute('aria-describedby')).to.be.false;
-        });
-
-        it('should be empty when the field is invalid', async () => {
-          element.invalid = true;
-          await nextFrame();
-          expect(element.hasAttribute('aria-describedby')).to.be.false;
         });
       });
     });
