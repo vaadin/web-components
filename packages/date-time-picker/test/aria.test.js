@@ -18,19 +18,26 @@ describe('ARIA', () => {
     expect(dateTimePicker.getAttribute('role')).to.equal('group');
   });
 
-  it('should add label and helper text to aria-labelledby when field is valid', () => {
+  it('should add label text to aria-labelledby when field is valid', () => {
     const aria = dateTimePicker.getAttribute('aria-labelledby');
-    expect(aria).to.include(helper.id);
+    expect(aria).to.not.include(helper.id);
     expect(aria).to.not.include(error.id);
     expect(aria).to.include(label.id);
   });
 
-  it('should add error message to aria-labelledby when field is invalid', async () => {
+  it('should add helper text to aria-describedby when field is valid', () => {
+    const aria = dateTimePicker.getAttribute('aria-describedby');
+    expect(aria).to.include(helper.id);
+    expect(aria).to.not.include(error.id);
+    expect(aria).to.not.include(label.id);
+  });
+
+  it('should add error message to aria-describedby when field is invalid', async () => {
     dateTimePicker.invalid = true;
     await aTimeout(0);
-    const aria = dateTimePicker.getAttribute('aria-labelledby');
+    const aria = dateTimePicker.getAttribute('aria-describedby');
     expect(aria).to.include(helper.id);
     expect(aria).to.include(error.id);
-    expect(aria).to.include(label.id);
+    expect(aria).to.not.include(label.id);
   });
 });
