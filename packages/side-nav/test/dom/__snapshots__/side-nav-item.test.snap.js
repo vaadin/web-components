@@ -234,7 +234,6 @@ snapshots["vaadin-side-nav-item shadow active"] =
     aria-controls="children"
     aria-expanded="true"
     aria-label="Toggle child items"
-    hidden=""
     part="toggle-button"
   >
   </button>
