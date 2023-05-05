@@ -35,9 +35,9 @@ describe('vaadin-side-nav-item', () => {
     });
 
     it('active', async () => {
-      const activeItem = fixtureSync('<vaadin-side-nav-item path=""></vaadin-side-nav-item>');
-      await nextRender(activeItem);
-      await expect(activeItem).dom.to.equalSnapshot();
+      sideNavItem.path = '';
+      await nextRender(sideNavItem);
+      await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
     it('path', async () => {

@@ -69,9 +69,32 @@ snapshots["vaadin-side-nav-item item active"] =
   active=""
   child-active=""
   expanded=""
-  path=""
   role="listitem"
 >
+  <vaadin-icon
+    icon="vaadin:chart"
+    slot="prefix"
+  >
+  </vaadin-icon>
+  Item
+  <span
+    slot="suffix"
+    theme="badge primary"
+  >
+    2
+  </span>
+  <vaadin-side-nav-item
+    role="listitem"
+    slot="children"
+  >
+    Child item 1
+  </vaadin-side-nav-item>
+  <vaadin-side-nav-item
+    role="listitem"
+    slot="children"
+  >
+    Child item 2
+  </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
 /* end snapshot vaadin-side-nav-item item active */
@@ -317,4 +340,34 @@ snapshots["vaadin-side-nav-item shadow path"] =
 </slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow path */
+
+snapshots["vaadin-side-nav-item item path"] = 
+`<vaadin-side-nav-item role="listitem">
+  <vaadin-icon
+    icon="vaadin:chart"
+    slot="prefix"
+  >
+  </vaadin-icon>
+  Item
+  <span
+    slot="suffix"
+    theme="badge primary"
+  >
+    2
+  </span>
+  <vaadin-side-nav-item
+    role="listitem"
+    slot="children"
+  >
+    Child item 1
+  </vaadin-side-nav-item>
+  <vaadin-side-nav-item
+    role="listitem"
+    slot="children"
+  >
+    Child item 2
+  </vaadin-side-nav-item>
+</vaadin-side-nav-item>
+`;
+/* end snapshot vaadin-side-nav-item item path */
 

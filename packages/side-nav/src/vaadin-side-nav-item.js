@@ -61,6 +61,10 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     return 'vaadin-side-nav-item';
   }
 
+  static get observers() {
+    return ['__pathChanged(path)'];
+  }
+
   static get properties() {
     return {
       /**
@@ -138,6 +142,11 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       </a>
       <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
     `;
+  }
+
+  /** @private */
+  __pathChanged() {
+    this.__updateActive();
   }
 
   /** @private */
