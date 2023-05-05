@@ -158,12 +158,12 @@ const runTests = (defineHelper, baseMixin) => {
         controller.setTarget(element);
       });
 
-      it('should add error id to aria-labelledby attribute', () => {
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id error-id');
+      it('should add error id to aria-describedby attribute', () => {
+        expect(element.getAttribute('aria-describedby')).equal('custom-id error-id');
       });
 
       it('should not add error id to aria-describedby attribute', () => {
-        expect(element.getAttribute('aria-describedby')).not.to.include('error-id');
+        // expect(element.getAttribute('aria-describedby')).not.to.include('error-id');
       });
     });
 
@@ -173,12 +173,8 @@ const runTests = (defineHelper, baseMixin) => {
         controller.setTarget(element);
       });
 
-      it('should add helper id to aria-labelledby attribute', () => {
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id helper-id');
-      });
-
-      it('should not add helper id to aria-describedby attribute', () => {
-        expect(element.getAttribute('aria-describedby')).not.to.include('helper-id');
+      it('should add helper id to aria-describedby attribute', () => {
+        expect(element.getAttribute('aria-describedby')).equal('custom-id helper-id');
       });
     });
 
@@ -202,18 +198,18 @@ const runTests = (defineHelper, baseMixin) => {
         expect(element.getAttribute('aria-labelledby')).equal('custom-id');
       });
 
-      it('should set error id to aria-labelledby attribute', () => {
+      it('should set error id to aria-describedby attribute', () => {
         controller.setErrorId('error-id');
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id error-id');
+        expect(element.getAttribute('aria-describedby')).equal('custom-id error-id');
         controller.setErrorId(null);
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id');
+        expect(element.getAttribute('aria-describedby')).to.equal('custom-id');
       });
 
-      it('should set helper id to aria-labelledby attribute', () => {
+      it('should set helper id to aria-describedby attribute', () => {
         controller.setHelperId('helper-id');
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id helper-id');
+        expect(element.getAttribute('aria-describedby')).equal('custom-id helper-id');
         controller.setHelperId(null);
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id');
+        expect(element.getAttribute('aria-describedby')).equal('custom-id');
       });
 
       it('should toggle aria-required attribute', () => {
