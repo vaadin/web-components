@@ -161,10 +161,6 @@ const runTests = (defineHelper, baseMixin) => {
       it('should add error id to aria-describedby attribute', () => {
         expect(element.getAttribute('aria-describedby')).equal('custom-id error-id');
       });
-
-      it('should not add error id to aria-describedby attribute', () => {
-        // expect(element.getAttribute('aria-describedby')).not.to.include('error-id');
-      });
     });
 
     describe('helper id', () => {
