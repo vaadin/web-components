@@ -1,0 +1,54 @@
+{
+  "name": "@vaadin/side-nav",
+  "version": "24.1.0-alpha8",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-side-nav",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/side-nav"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-side-nav.js",
+  "module": "vaadin-side-nav.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json",
+    "enable.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-side-nav",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@vaadin/component-base": "24.1.0-alpha8",
+    "@vaadin/vaadin-lumo-styles": "24.1.0-alpha8",
+    "@vaadin/vaadin-material-styles": "24.1.0-alpha8",
+    "@vaadin/vaadin-themable-mixin": "24.1.0-alpha8",
+    "lit": "^2.0.0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.4.0",
+    "lit": "^2.0.0",
+    "sinon": "^13.0.2"
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
