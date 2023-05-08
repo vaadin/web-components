@@ -866,49 +866,6 @@ const runTests = (defineHelper, baseMixin) => {
         expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
       });
     });
-
-    describe('field group', () => {
-      beforeEach(async () => {
-        element = fixtureSync(
-          `<${groupTag} label="Label" helper-text="Helper" error-message="Error Message"></${groupTag}>`,
-        );
-        await nextRender();
-        label = element.querySelector('[slot=label]');
-        error = element.querySelector('[slot=error-message]');
-        helper = element.querySelector('[slot=helper]');
-      });
-
-      describe('aria-labelledby', () => {
-        it('should only contain label id and helper id when the field is valid', () => {
-          const aria = element.getAttribute('aria-labelledby');
-          expect(aria).to.include(label.id);
-          expect(aria).to.include(helper.id);
-          expect(aria).to.not.include(error.id);
-        });
-
-        it('should add error id asynchronously after the field becomes invalid', async () => {
-          element.invalid = true;
-          await nextFrame();
-          await aTimeout(0);
-          const aria = element.getAttribute('aria-labelledby');
-          expect(aria).to.include(label.id);
-          expect(aria).to.include(helper.id);
-          expect(aria).to.include(error.id);
-        });
-      });
-
-      describe('aria-describedby', () => {
-        it('should be empty when the field is valid', () => {
-          expect(element.hasAttribute('aria-describedby')).to.be.false;
-        });
-
-        it('should be empty when the field is invalid', async () => {
-          element.invalid = true;
-          await nextFrame();
-          expect(element.hasAttribute('aria-describedby')).to.be.false;
-        });
-      });
-    });
   });
 
   describe('slotted label', () => {

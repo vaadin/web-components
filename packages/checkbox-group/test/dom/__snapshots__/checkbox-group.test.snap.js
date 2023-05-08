@@ -281,7 +281,7 @@ snapshots["vaadin-checkbox-group host required"] =
 
 snapshots["vaadin-checkbox-group host helper"] = 
 `<vaadin-checkbox-group
-  aria-labelledby="helper-vaadin-checkbox-group-1"
+  aria-describedby="helper-vaadin-checkbox-group-1"
   has-helper=""
   role="group"
 >
@@ -348,7 +348,7 @@ snapshots["vaadin-checkbox-group host helper"] =
 
 snapshots["vaadin-checkbox-group host error"] = 
 `<vaadin-checkbox-group
-  aria-labelledby="error-message-vaadin-checkbox-group-2"
+  aria-describedby="error-message-vaadin-checkbox-group-2"
   has-error-message=""
   invalid=""
   role="group"
