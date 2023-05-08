@@ -35,9 +35,9 @@ export function stripPrefix(str: string) {
  *
  * @returns The camel case class name without Vaadin prefix.
  */
-export function convertElementNameToClassName(elementName: string) {
+export function convertElementNameToClassName(elementName: string): string {
   if (elementToClassNamingConventionViolations.has(elementName)) {
-    return elementToClassNamingConventionViolations.get(elementName);
+    return elementToClassNamingConventionViolations.get(elementName)!;
   }
 
   const conventionalClassName = stripPrefix(camelCase(elementName));
