@@ -392,7 +392,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
 
   /** @private */
   __accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef) {
-    if (!_overlayElement || accessibleDescriptionRef === this.__oldAccessibleDescriptionRef) {
+    if (!_overlayElement || (!accessibleDescriptionRef && !this.__oldAccessibleDescriptionRef)) {
       return;
     }
     setAriaIDReference(this._overlayElement, 'aria-describedby', {
