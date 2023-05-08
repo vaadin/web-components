@@ -35,6 +35,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@vaadin/component-base": "24.1.0-alpha9",
     "@vaadin/vaadin-lumo-styles": "24.1.0-alpha9",
     "@vaadin/vaadin-material-styles": "24.1.0-alpha9",
