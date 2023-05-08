@@ -606,14 +606,12 @@ describe('vaadin-confirm-dialog', () => {
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
 
-      it('should set `aria-describedby` correclty if `accessibleDescriptionRef` is set before attach', () => {
+      it('should set `aria-describedby` when `accessibleDescriptionRef` is set before attach', () => {
         confirm.accessibleDescriptionRef = 'id-0';
         confirm.opened = true;
         document.body.appendChild(confirm);
 
-        const dialog = confirm.$.dialog;
-        const overlay = dialog.$.overlay;
-
+        const overlay = confirm.$.dialog.$.overlay;
         expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
       });
     });

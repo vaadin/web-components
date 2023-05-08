@@ -78,7 +78,7 @@ declare class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMi
    *
    * By default, all elements inside the message area are linked
    * through the `aria-describedby` attribute. However, there are
-   * cases where this can confuse screen reader users (eg. the dialog
+   * cases where this can confuse screen reader users (e.g. the dialog
    * may present a password confirmation form). For these cases,
    * it's better to associate only the elements that will help describe
    * the confirmation dialog through this API.
