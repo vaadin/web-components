@@ -142,7 +142,17 @@ describe('vaadin-app-layout', () => {
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
 
-      it('should remove hidden attribute on navbar-bottom on resize', () => {
+      it('should not show empty navbar-bottom on resize', () => {
+        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
+        window.dispatchEvent(new Event('resize'));
+        expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
+      });
+
+      it('should remove hidden attribute on non-empty navbar-bottom on resize', () => {
+        const header = document.createElement('h1');
+        header.textContent = 'Header';
+        header.setAttribute('slot', 'navbar touch-optimized');
+        layout.appendChild(header);
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
         window.dispatchEvent(new Event('resize'));
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.false;

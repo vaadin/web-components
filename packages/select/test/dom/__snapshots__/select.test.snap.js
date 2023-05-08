@@ -22,6 +22,11 @@ snapshots["vaadin-select host default"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host default */
@@ -49,6 +54,11 @@ snapshots["vaadin-select host label"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host label */
@@ -79,6 +89,11 @@ snapshots["vaadin-select host placeholder"] =
       Placeholder
     </vaadin-select-item>
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host placeholder */
@@ -109,6 +124,11 @@ snapshots["vaadin-select host disabled"] =
     tabindex="-1"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host disabled */
@@ -135,6 +155,11 @@ snapshots["vaadin-select host required"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host required */
@@ -167,6 +192,11 @@ snapshots["vaadin-select host value"] =
       Option 1
     </vaadin-select-item>
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host value */
@@ -193,6 +223,11 @@ snapshots["vaadin-select host helper"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
   <div
     id="helper-vaadin-select-1"
     slot="helper"
@@ -231,6 +266,11 @@ snapshots["vaadin-select host error"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host error */
@@ -256,6 +296,11 @@ snapshots["vaadin-select host opened default"] =
     tabindex="0"
   >
   </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
 </vaadin-select>
 `;
 /* end snapshot vaadin-select host opened default */
@@ -383,6 +428,10 @@ snapshots["vaadin-select shadow default"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow default */
 
@@ -447,6 +496,10 @@ snapshots["vaadin-select shadow disabled"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow disabled */
 
@@ -511,6 +564,10 @@ snapshots["vaadin-select shadow readonly"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow readonly */
 
@@ -575,6 +632,10 @@ snapshots["vaadin-select shadow invalid"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow invalid */
 
@@ -639,6 +700,10 @@ snapshots["vaadin-select shadow theme"] =
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
+<div class="sr-only">
+  <slot name="sr-label">
+  </slot>
+</div>
 `;
 /* end snapshot vaadin-select shadow theme */
 

@@ -10,6 +10,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -357,10 +358,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       initializer: (node) => {
         const wrapper = document.createElement('div');
         wrapper.style.display = 'contents';
-        wrapper.id = `confirm-dialog-message-${generateUniqueId()}`;
+        const wrapperId = `confirm-dialog-message-${generateUniqueId()}`;
+        wrapper.id = wrapperId;
         wrapper.appendChild(node);
         this.appendChild(wrapper);
-        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapper.id });
+        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapperId });
         this._messageNodes = [...this._messageNodes, wrapper];
       },
     });

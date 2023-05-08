@@ -20,16 +20,6 @@ export class FieldAriaController {
   }
 
   /**
-   * `true` if the target element is the host component itself, `false` otherwise.
-   *
-   * @return {boolean}
-   * @private
-   */
-  get __isGroupField() {
-    return this.__target === this.host;
-  }
-
-  /**
    * Sets a target element to which ARIA attributes are added.
    *
    * @param {HTMLElement} target
@@ -37,7 +27,11 @@ export class FieldAriaController {
   setTarget(target) {
     this.__target = target;
     this.__setAriaRequiredAttribute(this.__required);
-    this.__setLabelIdToAriaAttribute(this.__labelId);
+    // We need to make sure that value in __labelId is stored
+    this.__setLabelIdToAriaAttribute(this.__labelId, this.__labelId);
+    if (this.__labelIdFromUser != null) {
+      this.__setLabelIdToAriaAttribute(this.__labelIdFromUser, this.__labelIdFromUser, true);
+    }
     this.__setErrorIdToAriaAttribute(this.__errorId);
     this.__setHelperIdToAriaAttribute(this.__helperId);
     this.setAriaLabel(this.__label);
@@ -146,10 +140,7 @@ export class FieldAriaController {
    * @private
    */
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
-    // For groups, add all IDs to aria-labelledby rather than aria-describedby -
-    // that should guarantee that it's announced when the group is entered.
-    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
-    setAriaIDReference(this.__target, ariaAttribute, { newId: errorId, oldId: oldErrorId, fromUser: false });
+    setAriaIDReference(this.__target, 'aria-describedby', { newId: errorId, oldId: oldErrorId, fromUser: false });
   }
 
   /**
@@ -158,10 +149,7 @@ export class FieldAriaController {
    * @private
    */
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
-    // For groups, add all IDs to aria-labelledby rather than aria-describedby -
-    // that should guarantee that it's announced when the group is entered.
-    const ariaAttribute = this.__isGroupField ? 'aria-labelledby' : 'aria-describedby';
-    setAriaIDReference(this.__target, ariaAttribute, { newId: helperId, oldId: oldHelperId, fromUser: false });
+    setAriaIDReference(this.__target, 'aria-describedby', { newId: helperId, oldId: oldHelperId, fromUser: false });
   }
 
   /**

@@ -79,6 +79,13 @@ const colorBase = css`
     --lumo-success-text-color: hsl(145, 85%, 25%);
     --lumo-success-contrast-color: #fff;
   }
+
+  /* forced-colors mode adjustments */
+  @media (forced-colors: active) {
+    html {
+      --lumo-disabled-text-color: GrayText;
+    }
+  }
 `;
 
 addLumoGlobalStyles('color-props', colorBase);

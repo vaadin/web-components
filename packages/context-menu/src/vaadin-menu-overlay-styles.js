@@ -23,4 +23,10 @@ export const styles = css`
   [part='overlay'] {
     background-color: #fff;
   }
+
+  @media (forced-colors: active) {
+    [part='overlay'] {
+      outline: 3px solid !important;
+    }
+  }
 `;

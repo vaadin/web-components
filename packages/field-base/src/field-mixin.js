@@ -131,12 +131,12 @@ export const FieldMixin = (superclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _accessibleNameChanged(accessibleName) {
       this._fieldAriaController.setAriaLabel(accessibleName);
     }
 
-    /** @private */
+    /** @protected */
     _accessibleNameRefChanged(accessibleNameRef) {
       this._fieldAriaController.setLabelId(accessibleNameRef, true);
     }

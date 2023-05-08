@@ -26,4 +26,17 @@ export const fieldShared = css`
   :host(:not([has-label])) [part='label'] {
     display: none;
   }
+
+  @media (forced-colors: active) {
+    :host(:not([readonly])) [part='input-field'] {
+      outline: 1px solid;
+      outline-offset: -1px;
+    }
+    :host([focused]) [part='input-field'] {
+      outline-width: 2px;
+    }
+    :host([disabled]) [part='input-field'] {
+      outline-color: GrayText;
+    }
+  }
 `;

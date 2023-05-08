@@ -63,7 +63,7 @@ snapshots["vaadin-custom-field host required"] =
 
 snapshots["vaadin-custom-field host helper"] = 
 `<vaadin-custom-field
-  aria-labelledby="helper-vaadin-custom-field-1"
+  aria-describedby="helper-vaadin-custom-field-1"
   has-helper=""
   role="group"
 >
@@ -90,7 +90,7 @@ snapshots["vaadin-custom-field host helper"] =
 
 snapshots["vaadin-custom-field host error"] = 
 `<vaadin-custom-field
-  aria-labelledby="error-message-vaadin-custom-field-2"
+  aria-describedby="error-message-vaadin-custom-field-2"
   has-error-message=""
   invalid=""
   role="group"

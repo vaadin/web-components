@@ -58,4 +58,27 @@ export const checkboxStyles = css`
     align-self: stretch;
     -webkit-appearance: none;
   }
+
+  @media (forced-colors: active) {
+    [part='checkbox'] {
+      outline: 1px solid;
+      outline-offset: -1px;
+    }
+
+    :host([disabled]) [part='checkbox'],
+    :host([disabled]) [part='checkbox']::after {
+      outline-color: GrayText;
+    }
+
+    :host(:is([checked], [indeterminate])) [part='checkbox']::after {
+      outline: 1px solid;
+      outline-offset: -1px;
+      border-radius: inherit;
+    }
+
+    :host([focused]) [part='checkbox'],
+    :host([focused]) [part='checkbox']::after {
+      outline-width: 2px;
+    }
+  }
 `;

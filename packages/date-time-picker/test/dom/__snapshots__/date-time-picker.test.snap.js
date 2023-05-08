@@ -330,6 +330,7 @@ snapshots["vaadin-date-time-picker host label"] =
     <input
       aria-expanded="false"
       aria-haspopup="dialog"
+      aria-label="Label"
       autocomplete="off"
       id="input-vaadin-date-picker-6"
       role="combobox"
@@ -352,6 +353,7 @@ snapshots["vaadin-date-time-picker host label"] =
     <input
       aria-autocomplete="list"
       aria-expanded="false"
+      aria-label="Label"
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
@@ -367,7 +369,7 @@ snapshots["vaadin-date-time-picker host label"] =
 
 snapshots["vaadin-date-time-picker host helper"] = 
 `<vaadin-date-time-picker
-  aria-labelledby="helper-vaadin-date-time-picker-1"
+  aria-describedby="helper-vaadin-date-time-picker-1"
   has-helper=""
   role="group"
 >
@@ -441,7 +443,7 @@ snapshots["vaadin-date-time-picker host helper"] =
 
 snapshots["vaadin-date-time-picker host error"] = 
 `<vaadin-date-time-picker
-  aria-labelledby="error-message-vaadin-date-time-picker-2"
+  aria-describedby="error-message-vaadin-date-time-picker-2"
   has-error-message=""
   invalid=""
   role="group"

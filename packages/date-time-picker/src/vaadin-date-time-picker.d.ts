@@ -11,8 +11,22 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import type { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
-
+export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {
+  /**
+   * Accessible label to the date picker.
+   * The property works in conjunction with label and accessibleName defined on the field.
+   * If both properties are defined, then accessibleName takes precedence.
+   * Then, the dateLabel value is concatenated with it.
+   */
+  dateLabel: string | null | undefined;
+  /**
+   * Accessible label to the time picker.
+   * The property works in conjunction with label and accessibleName defined on the field.
+   * If both properties are defined, then accessibleName takes precedence.
+   * Then, the dateLabel value is concatenated with it.
+   */
+  timeLabel: string | null | undefined;
+}
 /**
  * Fired when the user commits a value change.
  */

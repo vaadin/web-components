@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addMaterialGlobalStyles } from './global.js';
 
 const shadow = css`
   /* prettier-ignore */
@@ -21,8 +22,6 @@ const shadow = css`
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${shadow.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addMaterialGlobalStyles('shadow', shadow);
 
 export { shadow };

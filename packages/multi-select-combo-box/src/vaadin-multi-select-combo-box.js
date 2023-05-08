@@ -479,6 +479,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       `
         ${tag}[has-value] input::placeholder {
           color: transparent !important;
+          forced-color-adjust: none;
         }
       `,
     ];
