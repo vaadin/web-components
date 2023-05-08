@@ -196,16 +196,16 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should set error id to aria-describedby attribute', () => {
         controller.setErrorId('error-id');
-        expect(element.getAttribute('aria-describedby')).equal('custom-id error-id');
+        expect(element.getAttribute('aria-describedby')).to.equal('custom-id error-id');
         controller.setErrorId(null);
         expect(element.getAttribute('aria-describedby')).to.equal('custom-id');
       });
 
       it('should set helper id to aria-describedby attribute', () => {
         controller.setHelperId('helper-id');
-        expect(element.getAttribute('aria-describedby')).equal('custom-id helper-id');
+        expect(element.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
         controller.setHelperId(null);
-        expect(element.getAttribute('aria-describedby')).equal('custom-id');
+        expect(element.getAttribute('aria-describedby')).to.equal('custom-id');
       });
 
       it('should toggle aria-required attribute', () => {
