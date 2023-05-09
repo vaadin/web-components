@@ -182,6 +182,14 @@ declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLE
    */
   closeDrawerOn: string;
 
+  /**
+   * Set to true to disable closing the drawer on Escape press
+   * Pressing Escape only closes the drawer if it is opened as overlay
+   *
+   * @attr {boolean} no-close-drawer-on-esc
+   */
+  noCloseDrawerOnEsc: boolean;
+
   addEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
     listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,

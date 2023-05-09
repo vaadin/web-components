@@ -383,6 +383,17 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         value: 'vaadin-router-location-changed',
         observer: '_closeDrawerOnChanged',
       },
+
+      /**
+       * Set to true to disable closing the drawer on Escape press
+       * Pressing Escape only closes the drawer if it is opened as overlay
+       *
+       * @type {boolean}
+       */
+      noCloseDrawerOnEsc: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -401,6 +412,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
     this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
     this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
+    this.__closeDrawerOnEscListener = this.__closeDrawerOnEscListener.bind(this);
     this.__focusTrapController = new FocusTrapController(this);
   }
 
@@ -412,6 +424,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     window.addEventListener('resize', this.__boundResizeListener);
     this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
+
+    window.addEventListener('keydown', this.__closeDrawerOnEscListener);
 
     beforeNextRender(this, this._afterFirstRender);
 
@@ -537,6 +551,21 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   /** @private */
   __closeOverlayDrawer() {
     if (this.overlay) {
+      this.drawerOpened = false;
+    }
+  }
+
+  /**
+   * @param {KeyboardEvent} e
+   * @private
+   */
+  __closeDrawerOnEscListener(e) {
+    if (this.noCloseDrawerOnEsc) {
+      return;
+    }
+
+    // Only close if drawer is opened in overlay mode
+    if (e.key === 'Escape' && this.overlay) {
       this.drawerOpened = false;
     }
   }
