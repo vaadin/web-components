@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import {
   aTimeout,
   esc,
+  escKeyDown,
   fixtureSync,
   makeSoloTouchEvent,
   nextFrame,
@@ -274,6 +275,17 @@ describe('vaadin-app-layout', () => {
         layout.drawerOpened = true;
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
+
+      describe('a11y', () => {
+        beforeEach(async () => {
+          layout.drawerOpened = true;
+          await nextFrame();
+        });
+        it('should not close drawer on pressing Escape', () => {
+          escKeyDown(layout);
+          expect(layout.drawerOpened).to.be.true;
+        });
+      });
     });
 
     describe('mobile layout', () => {
@@ -407,6 +419,23 @@ describe('vaadin-app-layout', () => {
           layout.drawerOpened = true;
           await nextFrame();
           expect(spy.called).to.be.false;
+        });
+      });
+
+      describe('a11y', () => {
+        beforeEach(async () => {
+          layout.drawerOpened = true;
+          await nextFrame();
+        });
+        it('should close drawer on pressing Escape', () => {
+          escKeyDown(layout);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should not close drawer if `noCloseDrawerOnEsc` is set to true', () => {
+          layout.noCloseDrawerOnEsc = true;
+          escKeyDown(layout);
+          expect(layout.drawerOpened).to.be.true;
         });
       });
     });
