@@ -533,7 +533,6 @@
     "./css/lumo/Badge.css": "./css/lumo/Badge.css",
     "./css/lumo/Color.css": "./css/lumo/Color.css",
     "./css/lumo/ColorBase.css": "./css/lumo/ColorBase.css",
-    "./css/lumo/ColorLegacy.css": "./css/lumo/ColorLegacy.css",
     "./css/lumo/Font.css": "./css/lumo/Font.css",
     "./css/lumo/FontIcons.css": "./css/lumo/FontIcons.css",
     "./css/lumo/Globals.css": "./css/lumo/Globals.css",

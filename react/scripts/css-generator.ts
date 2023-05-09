@@ -129,6 +129,18 @@ class CSSResult {
   }
 }
 
+type CSSResultGroup = CSSResult | readonly CSSResult[] | readonly CSSResultGroup[];
+
+type CSSResultTransformer<R> = (cssResult: CSSResult) => R;
+
+function transformCss<R>(css: CSSResultGroup, transformer: CSSResultTransformer<R>): readonly R[] {
+  if (Array.isArray(css)) {
+    return css.flatMap((item) => transformCss(item, transformer));
+  } else if (css instanceof CSSResult) {
+    return [transformer(css)];
+  } else return [];
+}
+
 const registerStyles = '@vaadin/vaadin-themable-mixin/register-styles.js';
 const registerStylesId = resolveSpecifier(registerStyles, import.meta.url);
 
@@ -139,6 +151,9 @@ function shimRegisterStyles(moduleId: string) {
     },
     registerStyles() {},
     unsafeCSS,
+    addGlobalThemeStyles(id: string, ...values: ReadonlyArray<CSSResultGroup>) {
+      transformCss(values, (cssResult) => (cssResult.hasGlobalReference = true));
+    },
   });
 }
 
@@ -222,8 +237,6 @@ async function parseStylePackage(packageName: string) {
 // Parse css packages
 await Promise.all(stylePackages.map(parseStylePackage));
 
-type CSSResultGroup = CSSResult | readonly CSSResult[] | readonly CSSResultGroup[];
-
 function renderCssResult(cssPath: string, cssResult: CSSResult): string {
   const resultPath = getCssPath(cssResult.moduleId, cssResult.name);
   const cssContents: string[] = [];
@@ -246,15 +259,7 @@ function renderCssResult(cssPath: string, cssResult: CSSResult): string {
 }
 
 function renderCss(cssPath: string, css: CSSResultGroup): string {
-  const contents: string[] = [];
-  if (Array.isArray(css)) {
-    for (const cssItem of css) {
-      contents.push(renderCss(cssPath, cssItem));
-    }
-  } else if (css instanceof CSSResult) {
-    contents.push(renderCssResult(cssPath, css));
-  }
-  return contents.join('\n');
+  return transformCss(css, (cssResult) => renderCssResult(cssPath, cssResult)).join('\n');
 }
 
 const output: Map<string, string> = new Map();
