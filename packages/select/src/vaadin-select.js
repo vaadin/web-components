@@ -674,17 +674,6 @@ class Select extends OverlayClassMixin(
     return labelId ? `${labelId} ${itemId}`.trim() : null;
   }
 
-  /**
-   * @returns HTMLLabelElement
-   * @private
-   */
-  _createScreenReaderLabel() {
-    const label = document.createElement('label');
-    label.id = `sr-label-vaadin-select-${generateUniqueId()}`;
-    label.setAttribute('slot', 'sr-label');
-    return label;
-  }
-
   /** @private */
   __updateValueButton() {
     const valueButton = this.focusElement;
