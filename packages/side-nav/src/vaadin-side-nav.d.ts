@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2023 Vaadin Ltd.
+ * Copyright (c) 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
@@ -21,6 +21,7 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
+ *
  * ```html
  * <vaadin-side-nav>
  *   <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
@@ -38,7 +39,8 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
  * ----------|-------------
  * `label`   | The label (text) inside the side nav.
  *
- * #### Example:
+ * #### Example
+ *
  * ```html
  * <vaadin-side-nav>
  *   <span slot="label">Main menu</span>
