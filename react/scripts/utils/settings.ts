@@ -1,3 +1,5 @@
+import type { JSONSchemaForWebTypes } from '../../types/schema.js';
+
 export interface MissingEvents {
   all?: boolean;
   some?: readonly string[];
@@ -62,3 +64,42 @@ export const eventSettings = new Map<string, EventSettings>([
 ]);
 
 export const elementsWithMissingEntrypoint = new Set<string>([]);
+
+export const descriptionOverrides = new Map<string, Partial<JSONSchemaForWebTypes>>([
+  [
+    '@vaadin/confirm-dialog',
+    {
+      contributions: {
+        html: {
+          elements: [
+            {
+              name: 'vaadin-confirm-dialog',
+              attributes: [],
+              js: {
+                properties: [],
+                events: [
+                  {
+                    name: 'cancel',
+                    description: '',
+                  },
+                  {
+                    name: 'confirm',
+                    description: '',
+                  },
+                  {
+                    name: 'reject',
+                    description: '',
+                  },
+                  {
+                    name: 'opened-changed',
+                    description: '',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+]);

@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { nodeModulesDir } from './utils/config.js';
 import filterEmptyItems from './utils/filterEmptyItems.js';
+import { descriptionOverrides } from './utils/settings.js';
 
 export type SchemaElementWithPackage = readonly [packageName: string, element: SchemaHTMLElement];
 
@@ -14,7 +15,12 @@ export async function loadDescriptions(): Promise<ReadonlyArray<JSONSchemaForWeb
     dirs.map(async (dir) => {
       try {
         const contents = await readFile(resolve(webComponentsDir, dir, 'web-types.json'), 'utf8');
-        return JSON.parse(contents) as JSONSchemaForWebTypes;
+        const parsedSchema = JSON.parse(contents) as JSONSchemaForWebTypes;
+        const overrides = descriptionOverrides.get(parsedSchema.name) || {};
+        return {
+          ...parsedSchema,
+          ...overrides,
+        };
       } catch (_) {
         // ignore file that doesn't exist
         return undefined;
