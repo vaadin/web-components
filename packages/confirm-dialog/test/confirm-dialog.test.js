@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
@@ -78,6 +78,19 @@ describe('vaadin-confirm-dialog', () => {
 
     it('should set aria-label on the dialog', () => {
       expect(dialog.ariaLabel).to.equal('confirmation');
+    });
+
+    it('should set `aria-describedby` on the overlay when `accessibleDescriptionRef` is defined', () => {
+      const customId = 'id-0';
+      confirm.accessibleDescriptionRef = customId;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(customId);
+    });
+
+    it('should restore `aria-describedby` on the overlay when `accessibleDescriptionRef` is removed', () => {
+      const generatedDescribedByValue = overlay.getAttribute('aria-describedby');
+      confirm.accessibleDescriptionRef = 'id-0';
+      confirm.accessibleDescriptionRef = null;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(generatedDescribedByValue);
     });
   });
 
@@ -591,6 +604,15 @@ describe('vaadin-confirm-dialog', () => {
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
+      });
+
+      it('should set `aria-describedby` when `accessibleDescriptionRef` is set before attach', () => {
+        confirm.accessibleDescriptionRef = 'id-0';
+        confirm.opened = true;
+        document.body.appendChild(confirm);
+
+        const overlay = confirm.$.dialog.$.overlay;
+        expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
       });
     });
   });
