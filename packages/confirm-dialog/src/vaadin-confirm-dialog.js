@@ -442,7 +442,9 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   /** @private */
   __updateMessageNodes(nodes, message) {
     if (nodes && nodes.length > 0) {
-      const defaultWrapperNode = nodes.find((node) => node === this._messageController.defaultNode?.parentElement);
+      const defaultWrapperNode = nodes.find(
+        (node) => this._messageController.defaultNode && node === this._messageController.defaultNode.parentElement,
+      );
       if (defaultWrapperNode) {
         defaultWrapperNode.firstChild.textContent = message;
       }
