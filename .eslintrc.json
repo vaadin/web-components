@@ -9,7 +9,8 @@
   },
   "plugins": [
     "no-only-tests",
-    "simple-import-sort"
+    "simple-import-sort",
+    "es"
   ],
   "extends": [
     "vaadin/typescript",
@@ -66,6 +67,13 @@
     "sort-keys": "off"
   },
   "overrides": [
+    {
+      // Disable optional-chaining rule for source files, as it is not supported by Polymer analyzer
+      "files": ["packages/*/src/**/*.js"],
+      "rules": {
+        "es/no-optional-chaining": "error"
+      }
+    },
     {
       "files": ["scripts/**/*.js", "*.js"],
       "rules": {
