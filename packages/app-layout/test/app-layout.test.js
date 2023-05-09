@@ -281,6 +281,7 @@ describe('vaadin-app-layout', () => {
           layout.drawerOpened = true;
           await nextFrame();
         });
+
         it('should not close drawer on pressing Escape', () => {
           escKeyDown(layout);
           expect(layout.drawerOpened).to.be.true;
@@ -427,6 +428,7 @@ describe('vaadin-app-layout', () => {
           layout.drawerOpened = true;
           await nextFrame();
         });
+
         it('should close drawer on pressing Escape', () => {
           escKeyDown(layout);
           expect(layout.drawerOpened).to.be.false;

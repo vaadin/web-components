@@ -385,8 +385,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       },
 
       /**
-       * Set to true to disable closing the drawer on Escape press
-       * Pressing Escape only closes the drawer if it is opened as overlay
+       * Set to true to disable closing the drawer on Escape press.
+       * Pressing Escape only closes the drawer if it is opened as overlay on small devices.
        *
        * @type {boolean}
        */
