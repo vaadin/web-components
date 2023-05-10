@@ -111,7 +111,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
    */
   firstUpdated() {
     // By default, if the user hasn't provided a custom role,
-    // the role attribute is set to "navigation".
+    // the role attribute is set to "listitem".
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
     }
