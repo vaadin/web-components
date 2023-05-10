@@ -16,6 +16,8 @@ export interface LoginI18n {
   errorMessage: {
     title: string;
     message: string;
+    username: string;
+    password: string;
   };
   header?: {
     title?: string;
