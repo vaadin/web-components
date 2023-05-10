@@ -109,6 +109,123 @@ snapshots["vaadin-login-form host default"] =
 `;
 /* end snapshot vaadin-login-form host default */
 
+snapshots["vaadin-login-form host required"] = 
+`<vaadin-login-form>
+  <vaadin-login-form-wrapper>
+    <form
+      method="POST"
+      slot="form"
+    >
+      <input
+        id="csrf"
+        type="hidden"
+      >
+      <vaadin-text-field
+        autocapitalize="none"
+        autocomplete="username"
+        autocorrect="off"
+        focused=""
+        has-error-message=""
+        has-label=""
+        id="vaadinLoginUsername"
+        invalid=""
+        name="username"
+        required=""
+        spellcheck="false"
+      >
+        <input
+          aria-invalid="true"
+          aria-labelledby="label-vaadin-text-field-0"
+          autocapitalize="none"
+          autocomplete="username"
+          autocorrect="off"
+          id="input-vaadin-text-field-6"
+          invalid=""
+          name="username"
+          required=""
+          slot="input"
+          type="text"
+        >
+        <label
+          for="input-vaadin-text-field-6"
+          id="label-vaadin-text-field-0"
+          slot="label"
+        >
+          Username
+        </label>
+        <div
+          id="error-message-vaadin-text-field-2"
+          role="alert"
+          slot="error-message"
+        >
+          Username is required
+        </div>
+      </vaadin-text-field>
+      <vaadin-password-field
+        autocomplete="current-password"
+        has-error-message=""
+        has-label=""
+        id="vaadinLoginPassword"
+        invalid=""
+        name="password"
+        required=""
+        spellcheck="false"
+      >
+        <input
+          aria-invalid="true"
+          aria-labelledby="label-vaadin-password-field-3"
+          autocomplete="current-password"
+          id="input-vaadin-password-field-7"
+          invalid=""
+          name="password"
+          required=""
+          slot="input"
+          type="password"
+        >
+        <label
+          for="input-vaadin-password-field-7"
+          id="label-vaadin-password-field-3"
+          slot="label"
+        >
+          Password
+        </label>
+        <div
+          id="error-message-vaadin-password-field-5"
+          role="alert"
+          slot="error-message"
+        >
+          Password is required
+        </div>
+        <vaadin-password-field-button
+          aria-label="Show password"
+          aria-pressed="false"
+          role="button"
+          slot="reveal"
+          tabindex="0"
+        >
+        </vaadin-password-field-button>
+      </vaadin-password-field>
+      <vaadin-button
+        role="button"
+        tabindex="0"
+        theme="primary contained submit"
+      >
+        Log in
+      </vaadin-button>
+    </form>
+    <vaadin-button
+      role="button"
+      slot="forgot-password"
+      tabindex="0"
+      theme="tertiary small"
+    >
+      Forgot password
+    </vaadin-button>
+  </vaadin-login-form-wrapper>
+</vaadin-login-form>
+`;
+/* end snapshot vaadin-login-form host required */
+
 snapshots["vaadin-login-form host i18n"] = 
 `<vaadin-login-form>
   <vaadin-login-form-wrapper>
@@ -216,6 +333,123 @@ snapshots["vaadin-login-form host i18n"] =
 </vaadin-login-form>
 `;
 /* end snapshot vaadin-login-form host i18n */
+
+snapshots["vaadin-login-form host i18n-required"] = 
+`<vaadin-login-form>
+  <vaadin-login-form-wrapper>
+    <form
+      method="POST"
+      slot="form"
+    >
+      <input
+        id="csrf"
+        type="hidden"
+      >
+      <vaadin-text-field
+        autocapitalize="none"
+        autocomplete="username"
+        autocorrect="off"
+        focused=""
+        has-error-message=""
+        has-label=""
+        id="vaadinLoginUsername"
+        invalid=""
+        name="username"
+        required=""
+        spellcheck="false"
+      >
+        <input
+          aria-invalid="true"
+          aria-labelledby="label-vaadin-text-field-0"
+          autocapitalize="none"
+          autocomplete="username"
+          autocorrect="off"
+          id="input-vaadin-text-field-6"
+          invalid=""
+          name="username"
+          required=""
+          slot="input"
+          type="text"
+        >
+        <label
+          for="input-vaadin-text-field-6"
+          id="label-vaadin-text-field-0"
+          slot="label"
+        >
+          Käyttäjänimi
+        </label>
+        <div
+          id="error-message-vaadin-text-field-2"
+          role="alert"
+          slot="error-message"
+        >
+          Käyttäjätunnus vaaditaan
+        </div>
+      </vaadin-text-field>
+      <vaadin-password-field
+        autocomplete="current-password"
+        has-error-message=""
+        has-label=""
+        id="vaadinLoginPassword"
+        invalid=""
+        name="password"
+        required=""
+        spellcheck="false"
+      >
+        <input
+          aria-invalid="true"
+          aria-labelledby="label-vaadin-password-field-3"
+          autocomplete="current-password"
+          id="input-vaadin-password-field-7"
+          invalid=""
+          name="password"
+          required=""
+          slot="input"
+          type="password"
+        >
+        <label
+          for="input-vaadin-password-field-7"
+          id="label-vaadin-password-field-3"
+          slot="label"
+        >
+          Salasana
+        </label>
+        <div
+          id="error-message-vaadin-password-field-5"
+          role="alert"
+          slot="error-message"
+        >
+          Salasana vaaditaan
+        </div>
+        <vaadin-password-field-button
+          aria-label="Show password"
+          aria-pressed="false"
+          role="button"
+          slot="reveal"
+          tabindex="0"
+        >
+        </vaadin-password-field-button>
+      </vaadin-password-field>
+      <vaadin-button
+        role="button"
+        tabindex="0"
+        theme="primary contained submit"
+      >
+        Kirjaudu sisään
+      </vaadin-button>
+    </form>
+    <vaadin-button
+      role="button"
+      slot="forgot-password"
+      tabindex="0"
+      theme="tertiary small"
+    >
+      Unohtuiko salasana?
+    </vaadin-button>
+  </vaadin-login-form-wrapper>
+</vaadin-login-form>
+`;
+/* end snapshot vaadin-login-form host i18n-required */
 
 snapshots["vaadin-login-form host noForgotPassword"] = 
 `<vaadin-login-form>
@@ -407,238 +641,4 @@ snapshots["vaadin-login-form shadow i18n"] =
 </section>
 `;
 /* end snapshot vaadin-login-form shadow i18n */
-
-snapshots["vaadin-login-form host required"] = 
-`<vaadin-login-form>
-  <vaadin-login-form-wrapper>
-    <form
-      method="POST"
-      slot="form"
-    >
-      <input
-        id="csrf"
-        type="hidden"
-      >
-      <vaadin-text-field
-        autocapitalize="none"
-        autocomplete="username"
-        autocorrect="off"
-        focused=""
-        has-error-message=""
-        has-label=""
-        id="vaadinLoginUsername"
-        invalid=""
-        name="username"
-        required=""
-        spellcheck="false"
-      >
-        <input
-          aria-invalid="true"
-          aria-labelledby="label-vaadin-text-field-0"
-          autocapitalize="none"
-          autocomplete="username"
-          autocorrect="off"
-          id="input-vaadin-text-field-6"
-          invalid=""
-          name="username"
-          required=""
-          slot="input"
-          type="text"
-        >
-        <label
-          for="input-vaadin-text-field-6"
-          id="label-vaadin-text-field-0"
-          slot="label"
-        >
-          Username
-        </label>
-        <div
-          id="error-message-vaadin-text-field-2"
-          role="alert"
-          slot="error-message"
-        >
-          Username is required
-        </div>
-      </vaadin-text-field>
-      <vaadin-password-field
-        autocomplete="current-password"
-        has-error-message=""
-        has-label=""
-        id="vaadinLoginPassword"
-        invalid=""
-        name="password"
-        required=""
-        spellcheck="false"
-      >
-        <input
-          aria-invalid="true"
-          aria-labelledby="label-vaadin-password-field-3"
-          autocomplete="current-password"
-          id="input-vaadin-password-field-7"
-          invalid=""
-          name="password"
-          required=""
-          slot="input"
-          type="password"
-        >
-        <label
-          for="input-vaadin-password-field-7"
-          id="label-vaadin-password-field-3"
-          slot="label"
-        >
-          Password
-        </label>
-        <div
-          id="error-message-vaadin-password-field-5"
-          role="alert"
-          slot="error-message"
-        >
-          Password is required
-        </div>
-        <vaadin-password-field-button
-          aria-label="Show password"
-          aria-pressed="false"
-          role="button"
-          slot="reveal"
-          tabindex="0"
-        >
-        </vaadin-password-field-button>
-      </vaadin-password-field>
-      <vaadin-button
-        role="button"
-        tabindex="0"
-        theme="primary contained submit"
-      >
-        Log in
-      </vaadin-button>
-    </form>
-    <vaadin-button
-      role="button"
-      slot="forgot-password"
-      tabindex="0"
-      theme="tertiary small"
-    >
-      Forgot password
-    </vaadin-button>
-  </vaadin-login-form-wrapper>
-</vaadin-login-form>
-`;
-/* end snapshot vaadin-login-form host required */
-
-snapshots["vaadin-login-form host i18n-required"] = 
-`<vaadin-login-form>
-  <vaadin-login-form-wrapper>
-    <form
-      method="POST"
-      slot="form"
-    >
-      <input
-        id="csrf"
-        type="hidden"
-      >
-      <vaadin-text-field
-        autocapitalize="none"
-        autocomplete="username"
-        autocorrect="off"
-        focused=""
-        has-error-message=""
-        has-label=""
-        id="vaadinLoginUsername"
-        invalid=""
-        name="username"
-        required=""
-        spellcheck="false"
-      >
-        <input
-          aria-invalid="true"
-          aria-labelledby="label-vaadin-text-field-0"
-          autocapitalize="none"
-          autocomplete="username"
-          autocorrect="off"
-          id="input-vaadin-text-field-6"
-          invalid=""
-          name="username"
-          required=""
-          slot="input"
-          type="text"
-        >
-        <label
-          for="input-vaadin-text-field-6"
-          id="label-vaadin-text-field-0"
-          slot="label"
-        >
-          Käyttäjänimi
-        </label>
-        <div
-          id="error-message-vaadin-text-field-2"
-          role="alert"
-          slot="error-message"
-        >
-          Käyttäjätunnus vaaditaan
-        </div>
-      </vaadin-text-field>
-      <vaadin-password-field
-        autocomplete="current-password"
-        has-error-message=""
-        has-label=""
-        id="vaadinLoginPassword"
-        invalid=""
-        name="password"
-        required=""
-        spellcheck="false"
-      >
-        <input
-          aria-invalid="true"
-          aria-labelledby="label-vaadin-password-field-3"
-          autocomplete="current-password"
-          id="input-vaadin-password-field-7"
-          invalid=""
-          name="password"
-          required=""
-          slot="input"
-          type="password"
-        >
-        <label
-          for="input-vaadin-password-field-7"
-          id="label-vaadin-password-field-3"
-          slot="label"
-        >
-          Salasana
-        </label>
-        <div
-          id="error-message-vaadin-password-field-5"
-          role="alert"
-          slot="error-message"
-        >
-          Salasana vaaditaan
-        </div>
-        <vaadin-password-field-button
-          aria-label="Show password"
-          aria-pressed="false"
-          role="button"
-          slot="reveal"
-          tabindex="0"
-        >
-        </vaadin-password-field-button>
-      </vaadin-password-field>
-      <vaadin-button
-        role="button"
-        tabindex="0"
-        theme="primary contained submit"
-      >
-        Kirjaudu sisään
-      </vaadin-button>
-    </form>
-    <vaadin-button
-      role="button"
-      slot="forgot-password"
-      tabindex="0"
-      theme="tertiary small"
-    >
-      Unohtuiko salasana?
-    </vaadin-button>
-  </vaadin-login-form-wrapper>
-</vaadin-login-form>
-`;
-/* end snapshot vaadin-login-form host i18n-required */
 
