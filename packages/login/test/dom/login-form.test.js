@@ -17,6 +17,8 @@ describe('vaadin-login-form', () => {
     errorMessage: {
       title: 'Väärä käyttäjätunnus tai salasana',
       message: 'Tarkista että käyttäjätunnus ja salasana ovat oikein ja yritä uudestaan.',
+      username: 'Käyttäjätunnus vaaditaan',
+      password: 'Salasana vaaditaan',
     },
     additionalInformation: 'Jos tarvitset lisätietoja käyttäjälle.',
   };
@@ -31,8 +33,23 @@ describe('vaadin-login-form', () => {
       await expect(form).dom.to.equalSnapshot();
     });
 
+    it('required', async () => {
+      form.querySelectorAll('[required]').forEach((el) => {
+        el.invalid = true;
+      });
+      await expect(form).dom.to.equalSnapshot();
+    });
+
     it('i18n', async () => {
       form.i18n = I18N_FINNISH;
+      await expect(form).dom.to.equalSnapshot();
+    });
+
+    it('i18n-required', async () => {
+      form.i18n = I18N_FINNISH;
+      form.querySelectorAll('[required]').forEach((el) => {
+        el.invalid = true;
+      });
       await expect(form).dom.to.equalSnapshot();
     });
 
