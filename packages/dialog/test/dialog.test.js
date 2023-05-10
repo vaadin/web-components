@@ -163,7 +163,7 @@ describe('vaadin-dialog', () => {
     });
   });
 
-  describe('focus restoring', () => {
+  describe('focus restoration', () => {
     let dialog, button;
 
     beforeEach(() => {
