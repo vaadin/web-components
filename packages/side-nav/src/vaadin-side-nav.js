@@ -1,9 +1,8 @@
 /**
  * @license
- * Copyright (c) 2017 - 2023 Vaadin Ltd.
+ * Copyright (c) 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-
 import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -17,6 +16,7 @@ function isEnabled() {
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
+ *
  * ```html
  * <vaadin-side-nav>
  *   <vaadin-side-nav-item>Item 1</vaadin-side-nav-item>
@@ -34,7 +34,8 @@ function isEnabled() {
  * ----------|-------------
  * `label`   | The label (text) inside the side nav.
  *
- * #### Example:
+ * #### Example
+ *
  * ```html
  * <vaadin-side-nav>
  *   <span slot="label">Main menu</span>
@@ -87,8 +88,6 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @protected */
   firstUpdated() {
-    super.ready();
-
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "navigation".
     if (!this.hasAttribute('role')) {

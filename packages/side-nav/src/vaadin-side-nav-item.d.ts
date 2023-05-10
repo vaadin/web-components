@@ -44,7 +44,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
  *
- * #### Example:
+ * #### Example
  *
  * ```html
  * <vaadin-side-nav-item>

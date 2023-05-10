@@ -20,13 +20,13 @@
   "module": "vaadin-side-nav.js",
   "type": "module",
   "files": [
+    "enable.js",
     "src",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "web-types.json",
-    "web-types.lit.json",
-    "enable.js"
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",

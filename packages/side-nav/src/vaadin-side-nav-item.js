@@ -39,7 +39,7 @@ function isEnabled() {
  * `prefix`  | A slot for content before the label (e.g. an icon).
  * `suffix`  | A slot for content after the label (e.g. an icon).
  *
- * #### Example:
+ * #### Example
  *
  * ```html
  * <vaadin-side-nav-item>
@@ -59,10 +59,6 @@ function isEnabled() {
 class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-side-nav-item';
-  }
-
-  static get observers() {
-    return ['__pathChanged(path)'];
   }
 
   static get properties() {
@@ -109,10 +105,33 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     return this.shadowRoot.querySelector('button');
   }
 
+  /**
+   * @protected
+   * @override
+   */
+  firstUpdated() {
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "listitem".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'listitem');
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('path')) {
+      this.__updateActive();
+    }
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this.setAttribute('role', 'listitem');
     this.__updateActive();
     this.__boundUpdateActive = this.__updateActive.bind(this);
     window.addEventListener('popstate', this.__boundUpdateActive);
@@ -142,11 +161,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       </a>
       <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
     `;
-  }
-
-  /** @private */
-  __pathChanged() {
-    this.__updateActive();
   }
 
   /** @private */
