@@ -275,7 +275,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         <slot name="navbar"></slot>
       </div>
       <div part="backdrop" on-click="_onBackdropClick" on-touchend="_onBackdropTouchend"></div>
-      <div part="drawer" id="drawer" on-keydown="__onDrawerKeyDown">
+      <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
       <div content>
@@ -713,18 +713,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     if (toggle) {
       toggle.focus();
       toggle.setAttribute('focus-ring', 'focus');
-    }
-  }
-
-  /**
-   * Closes the drawer on Escape press if it has been opened in the overlay mode.
-   *
-   * @param {KeyboardEvent} event
-   * @private
-   */
-  __onDrawerKeyDown(event) {
-    if (event.key === 'Escape' && this.overlay) {
-      this.drawerOpened = false;
     }
   }
 

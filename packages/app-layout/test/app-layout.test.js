@@ -258,11 +258,6 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
-      it('should not close the drawer on Escape press', () => {
-        esc(drawer);
-        expect(layout.drawerOpened).to.be.true;
-      });
-
       it('should set aria-expanded on the toggle to true by default', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
         layout.drawerOpened = true;
@@ -362,11 +357,6 @@ describe('vaadin-app-layout', () => {
         beforeEach(async () => {
           layout.drawerOpened = true;
           await nextFrame();
-        });
-
-        it('should close the drawer on Escape press', () => {
-          esc(drawer);
-          expect(layout.drawerOpened).to.be.false;
         });
 
         it('should close the drawer on backdrop click', () => {
