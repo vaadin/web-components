@@ -10,6 +10,7 @@ import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -526,6 +527,16 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   __storeFocus() {
     // Store the focused node.
     this.__restoreFocusNode = getDeepActiveElement();
+
+    // Determine and store the node that has the `focus-ring` attribute
+    // in order to restore the attribute when the overlay closes.
+    const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
+    if (this.restoreFocusOnClose && restoreFocusNode) {
+      const restoreFocusNodeHost = (restoreFocusNode.assignedSlot || restoreFocusNode).getRootNode().host;
+      this.__restoreFocusRingNode = [restoreFocusNode, restoreFocusNodeHost].find((node) => {
+        return node && node.hasAttribute('focus-ring');
+      });
+    }
   }
 
   /** @private */
@@ -548,6 +559,13 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       // (e.g. combo-box overlay close on outside click).
       setTimeout(() => restoreFocusNode.focus());
       this.__restoreFocusNode = null;
+    }
+
+    // Restore the `focus-ring` attribute if it was present
+    // when the overlay was opening.
+    if (this.__restoreFocusRingNode) {
+      this.__restoreFocusRingNode.setAttribute('focus-ring', '');
+      this.__restoreFocusRingNode = null;
     }
   }
 
