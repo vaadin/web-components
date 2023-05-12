@@ -28,11 +28,71 @@ export const ItemCache = class ItemCache {
     /** @type {object} */
     this.items = {};
     /** @type {number} */
-    this.effectiveSize = 0;
-    /** @type {number} */
     this.size = 0;
     /** @type {object} */
     this.pendingRequests = {};
+
+    /**
+     * @type {number}
+     * @private
+     */
+    this.__effectiveSize = undefined;
+  }
+
+  /**
+   * A memoized sum of the cache's size + its sub-caches' size.
+   * To reset the memoized result, `invalidateEffectiveSize()` needs to be called.
+   *
+   * @return {number}
+   */
+  get effectiveSize() {
+    if (!this.__effectiveSize) {
+      if (!this.parentItem || this.grid._isExpanded(this.parentItem)) {
+        const subCachesEffectiveSize = Object.values(this.itemCaches).reduce(
+          (total, subCache) => total + subCache.effectiveSize,
+          0,
+        );
+
+        this.__effectiveSize = (this.size || 0) + subCachesEffectiveSize;
+      } else {
+        this.__effectiveSize = 0;
+      }
+    }
+
+    return this.__effectiveSize;
+  }
+
+  /**
+   * Resets the memoized result of the `effectiveSize` getter
+   * of the current cache. The getter will automatically
+   * recompute with the next call.
+   */
+  invalidateEffectiveSize() {
+    this.__effectiveSize = undefined;
+  }
+
+  /**
+   * Resets the memoized result of the `effectiveSize` getter
+   * of the current cache and also its ancestor caches.
+   * The getters will automatically recompute with the next call.
+   */
+  invalidateAncestorsEffectiveSize() {
+    this.invalidateEffectiveSize();
+    if (this.parentCache) {
+      this.parentCache.invalidateAncestorsEffectiveSize();
+    }
+  }
+
+  /**
+   * Resets the memoized result of the `effectiveSize` getter
+   * of the current cache and also its descendant caches.
+   * The getters will automatically recompute with the next call.
+   */
+  invalidateDescendantsEffectiveSize() {
+    this.invalidateEffectiveSize();
+    Object.values(this.itemCaches).forEach((subCache) => {
+      subCache.invalidateDescendantsEffectiveSize();
+    });
   }
 
   /**
@@ -54,18 +114,6 @@ export const ItemCache = class ItemCache {
   getItemForIndex(index) {
     const { cache, scaledIndex } = this.getCacheAndIndex(index);
     return cache.items[scaledIndex];
-  }
-
-  updateSize() {
-    this.effectiveSize =
-      !this.parentItem || this.grid._isExpanded(this.parentItem)
-        ? this.size +
-          Object.keys(this.itemCaches).reduce((prev, curr) => {
-            const subCache = this.itemCaches[curr];
-            subCache.updateSize();
-            return prev + subCache.effectiveSize;
-          }, 0)
-        : 0;
   }
 
   /**
@@ -245,9 +293,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _sizeChanged(size) {
-      const delta = size - this._cache.size;
-      this._cache.size += delta;
-      this._cache.effectiveSize += delta;
+      this._cache.size = size;
+      this._cache.invalidateEffectiveSize();
       this._effectiveSize = this._cache.effectiveSize;
     }
 
@@ -321,7 +368,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _expandedItemsChanged() {
-      this._cache.updateSize();
+      this._cache.invalidateDescendantsEffectiveSize();
       this._effectiveSize = this._cache.effectiveSize;
       this.__updateVisibleRows();
     }
@@ -404,7 +451,7 @@ export const DataProviderMixin = (superClass) =>
           });
 
           // With the new items added, update the cache size and the grid's effective size
-          this._cache.updateSize();
+          cache.invalidateAncestorsEffectiveSize();
           this._effectiveSize = this._cache.effectiveSize;
 
           // After updating the cache, check if some of the expanded items should have sub-caches loaded
@@ -461,7 +508,7 @@ export const DataProviderMixin = (superClass) =>
     clearCache() {
       this._cache = new ItemCache(this);
       this._cache.size = this.size || 0;
-      this._cache.updateSize();
+      this._cache.invalidateEffectiveSize();
       this._hasData = false;
       this.__updateVisibleRows();
 

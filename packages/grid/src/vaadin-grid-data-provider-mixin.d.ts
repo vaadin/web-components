@@ -49,7 +49,11 @@ export declare class ItemCache<TItem> {
 
   getItemForIndex(index: number): TItem | undefined;
 
-  updateSize(): void;
+  invalidateEffectiveSize(): void;
+
+  invalidateAncestorsEffectiveSize(): void;
+
+  invalidateDescendantsEffectiveSize(): void;
 
   ensureSubCacheForScaledIndex(scaledIndex: number): void;
 
