@@ -232,14 +232,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   _recalculateFlexBasis(forceResize) {
     const width = this.getBoundingClientRect().width;
     const breakpoints = this._measureBreakpointsInPx();
-    const shouldRecalculate =
-      forceResize ||
-      // Should not recalculate if row is invisible
-      (this.offsetParent !== null &&
-        (width !== this._oldWidth ||
-          breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
-          breakpoints.mediumSize !== this._oldBreakpoints.mediumSize));
-    if (shouldRecalculate) {
+    if (forceResize || this._shouldRecalculate(width, breakpoints)) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
       const filteredNodes = nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
       this._addStyleNames(width, breakpoints);
@@ -255,6 +248,19 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
       this._oldWidth = width;
       this._oldBreakpoints = breakpoints;
     }
+  }
+
+  /** @private */
+  _shouldRecalculate(width, breakpoints) {
+    // Should not recalculate if row is invisible
+    if (this.offsetParent === null) {
+      return false;
+    }
+    return (
+      width !== this._oldWidth ||
+      breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
+      breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
+    );
   }
 
   /**
