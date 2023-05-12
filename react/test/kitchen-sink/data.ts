@@ -1,4 +1,4 @@
-enum CrudRole {
+export enum CrudRole {
   ADMIN = 'admin',
   USER = 'user',
 }
