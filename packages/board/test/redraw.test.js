@@ -202,6 +202,14 @@ describe('redraw', () => {
       await onceResized(first);
       expect(first.className).to.equal('large');
     });
+
+    it('should not recalculate flex basis for a hidden row', async () => {
+      first.style.display = 'none';
+      container.style.width = '100px';
+      first._onResize();
+
+      expect(first.className).to.equal('large');
+    });
   });
 
   describe('nested row class names', () => {

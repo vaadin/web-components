@@ -232,12 +232,14 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   _recalculateFlexBasis(forceResize) {
     const width = this.getBoundingClientRect().width;
     const breakpoints = this._measureBreakpointsInPx();
-    if (
+    const shouldRecalculate =
       forceResize ||
-      width !== this._oldWidth ||
-      breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
-      breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
-    ) {
+      // Should not recalculate if row is invisible
+      (this.offsetParent !== null &&
+        (width !== this._oldWidth ||
+          breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
+          breakpoints.mediumSize !== this._oldBreakpoints.mediumSize));
+    if (shouldRecalculate) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
       const filteredNodes = nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
       this._addStyleNames(width, breakpoints);
