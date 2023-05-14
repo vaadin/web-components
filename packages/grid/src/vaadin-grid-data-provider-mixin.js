@@ -30,9 +30,25 @@ export const ItemCache = class ItemCache {
     /** @type {number} */
     this.effectiveSize = 0;
     /** @type {number} */
-    this.size = 0;
+    this.__size = 0;
     /** @type {object} */
     this.pendingRequests = {};
+  }
+
+  get size() {
+    return this.__size || 0;
+  }
+
+  set size(size) {
+    const delta = size - this.__size;
+    this.__size = size;
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias, consistent-this
+    let cache = this;
+    while (cache) {
+      cache.effectiveSize += delta;
+      cache = cache.parentCache;
+    }
   }
 
   /**
@@ -245,9 +261,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _sizeChanged(size) {
-      const delta = size - this._cache.size;
-      this._cache.size += delta;
-      this._cache.effectiveSize += delta;
+      this._cache.size = size;
       this._effectiveSize = this._cache.effectiveSize;
     }
 
@@ -403,8 +417,7 @@ export const DataProviderMixin = (superClass) =>
             cache.items[itemIndex] = item;
           });
 
-          // With the new items added, update the cache size and the grid's effective size
-          this._cache.updateSize();
+          // With the new items added, update the grid's effective size
           this._effectiveSize = this._cache.effectiveSize;
 
           // After updating the cache, check if some of the expanded items should have sub-caches loaded
@@ -461,7 +474,6 @@ export const DataProviderMixin = (superClass) =>
     clearCache() {
       this._cache = new ItemCache(this);
       this._cache.size = this.size || 0;
-      this._cache.updateSize();
       this._hasData = false;
       this.__updateVisibleRows();
 
