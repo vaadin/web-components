@@ -34,71 +34,23 @@ customElements.define(
 describe('restore focus', () => {
   let wrapper, overlay, focusable, focusInput;
 
-  before(() => {
-    focusInput = document.createElement('input');
-    document.body.appendChild(focusInput);
-  });
-
-  after(() => {
-    document.body.removeChild(focusInput);
-  });
-
   beforeEach(() => {
+    focusInput = document.createElement('input');
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
     overlay = wrapper.$.overlay;
     focusable = wrapper.$.focusable;
   });
 
-  afterEach(() => {
-    document.body.focus();
-  });
-
-  it('should not restore focus on close by default (restore-focus-on-close=false)', async () => {
-    overlay.restoreFocusOnClose = false;
-    focusInput.focus();
-    await open(overlay);
-    // Emulate focus leaving the input
-    focusInput.blur();
-    document.body.focus();
-    await close(overlay);
-    expect(overlay._getActiveElement()).to.not.equal(focusInput);
-  });
-
-  it('should restore focus on close (restore-focus-on-close=true)', async () => {
-    overlay.restoreFocusOnClose = true;
-    focusInput.focus();
-    await open(overlay);
-    // Emulate focus leaving the input
-    focusInput.blur();
-    document.body.focus();
-    await close(overlay);
-    expect(overlay._getActiveElement()).to.equal(focusInput);
-  });
-
-  it('should restore focus on close in Shadow DOM (restore-focus-on-close=true)', async () => {
-    overlay.restoreFocusOnClose = true;
-    focusable.focus();
-    await open(overlay);
-    await close(overlay);
-    expect(overlay._getActiveElement()).to.equal(focusable);
-  });
-
-  it('should not restore focus on close if focus was changed', async () => {
-    overlay.restoreFocusOnClose = true;
-    focusInput.focus();
-    await open(overlay);
-    focusable.focus();
-    await close(overlay);
-    expect(overlay._getActiveElement()).to.equal(focusable);
-  });
-
-  describe('restoreFocusNode', () => {
+  describe('basic', () => {
     beforeEach(() => {
-      overlay.restoreFocusNode = focusInput;
+      document.body.appendChild(focusInput);
     });
 
-    it('should not restore focus on close by default (restore-focus-on-close=false)', async () => {
-      overlay.restoreFocusOnClose = false;
+    afterEach(() => {
+      document.body.removeChild(focusInput);
+    });
+
+    it('should not restore focus on close by default', async () => {
       focusInput.focus();
       await open(overlay);
       // Emulate focus leaving the input
@@ -108,13 +60,65 @@ describe('restore focus', () => {
       expect(overlay._getActiveElement()).to.not.equal(focusInput);
     });
 
-    it('should restore focus to the restoreFocusNode', async () => {
-      overlay.restoreFocusOnClose = true;
-      focusable.focus();
-      await open(overlay);
-      focusable.blur();
-      await close(overlay);
-      expect(overlay._getActiveElement()).to.equal(focusInput);
+    describe('restoreFocusOnClose', () => {
+      beforeEach(() => {
+        overlay.restoreFocusOnClose = true;
+      });
+
+      it('should restore focus on close', async () => {
+        focusInput.focus();
+        await open(overlay);
+        // Emulate focus leaving the input
+        focusInput.blur();
+        document.body.focus();
+        await close(overlay);
+        expect(overlay._getActiveElement()).to.equal(focusInput);
+      });
+
+      it('should restore focus on close in Shadow DOM', async () => {
+        focusable.focus();
+        await open(overlay);
+        await close(overlay);
+        expect(overlay._getActiveElement()).to.equal(focusable);
+      });
+
+      it('should not restore focus on close if focus was moved outside overlay', async () => {
+        focusInput.focus();
+        await open(overlay);
+        focusable.focus();
+        await close(overlay);
+        expect(overlay._getActiveElement()).to.equal(focusable);
+      });
+    });
+
+    describe('restoreFocusNode', () => {
+      beforeEach(() => {
+        overlay.restoreFocusNode = focusInput;
+      });
+
+      it('should not restore focus on close by default', async () => {
+        focusInput.focus();
+        await open(overlay);
+        // Emulate focus leaving the input
+        focusInput.blur();
+        document.body.focus();
+        await close(overlay);
+        expect(overlay._getActiveElement()).to.not.equal(focusInput);
+      });
+
+      describe('restoreFocusOnClose', () => {
+        beforeEach(() => {
+          overlay.restoreFocusOnClose = true;
+        });
+
+        it('should restore focus to the restoreFocusNode', async () => {
+          focusable.focus();
+          await open(overlay);
+          focusable.blur();
+          await close(overlay);
+          expect(overlay._getActiveElement()).to.equal(focusInput);
+        });
+      });
     });
   });
 });
