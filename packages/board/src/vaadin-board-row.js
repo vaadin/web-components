@@ -9,6 +9,7 @@
  * license.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
@@ -253,7 +254,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   /** @private */
   _shouldRecalculate(width, breakpoints) {
     // Should not recalculate if row is invisible
-    if (this.offsetParent === null) {
+    if (isElementHidden(this)) {
       return false;
     }
     return (
