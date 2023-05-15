@@ -28,14 +28,14 @@ export declare class ColumnBaseMixinClass<TItem> {
 
   /**
    * When true, the column is frozen. When a column inside of a column group is frozen,
-   * all of the sibling columns inside the group will get frozen also.
+   * all the sibling columns inside the group will get frozen also.
    */
   frozen: boolean;
 
   /**
    * When true, the column is frozen to end of grid.
    *
-   * When a column inside of a column group is frozen to end, all of the sibling columns
+   * When a column inside a column group is frozen to end, all of the sibling columns
    * inside the group will get frozen to end also.
    *
    * Column can not be set as `frozen` and `frozenToEnd` at the same time.
@@ -108,7 +108,7 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
    *   the rendered item, contains:
    *   - `model.index` The index of the item.
    *   - `model.item` The item.
-   *   - `model.expanded` Sublevel toggle state.
+   *   - `model.expanded` Sub-level toggle state.
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    *   - `model.detailsOpened` Details opened state.
@@ -120,6 +120,11 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
    * The property name is also shown in the column header if an explicit header or renderer isn't defined.
    */
   path: string | null | undefined;
+
+  /**
+   * When true, the row is rendered as header row, it will help for a11y developments.
+   */
+  rowHeader: boolean | null | undefined;
 
   /**
    * Automatically sets the width of the column based on the column contents when this is set to `true`.

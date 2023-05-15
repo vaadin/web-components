@@ -728,7 +728,13 @@ class Grid extends ElementMixin(
 
     const cell = document.createElement(tagName);
     cell.id = slotName.replace('-content-', '-');
-    cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
+
+    if (column.rowHeader) {
+      tagName = 'th';
+      cell.setAttribute('scope', 'row');
+    } else {
+      cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
+    }
 
     // For now we only support tooltip on desktop
     if (!isAndroid && !isIOS) {

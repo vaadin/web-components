@@ -836,6 +836,14 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
         value: false,
       },
 
+        /**
+         * Custom function for rendering the header content.
+         */
+        rowHeader: {
+            type: Boolean,
+            value: false,
+        },
+
       /**
        * When true, wraps the cell's slot into an element with role="button", and sets
        * the tabindex attribute on the button element, instead of the cell itself.
