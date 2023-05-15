@@ -97,7 +97,7 @@ export const border = css`
   .border-warning-10 {
     border-color: var(--lumo-warning-color-10pct);
   }
-  .border-warning-text {
+  .border-warning-strong {
     border-color: var(--lumo-warning-text-color);
   }
 
