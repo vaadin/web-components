@@ -9,6 +9,7 @@
  * license.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
@@ -232,12 +233,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   _recalculateFlexBasis(forceResize) {
     const width = this.getBoundingClientRect().width;
     const breakpoints = this._measureBreakpointsInPx();
-    if (
-      forceResize ||
-      width !== this._oldWidth ||
-      breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
-      breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
-    ) {
+    if (forceResize || this._shouldRecalculate(width, breakpoints)) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
       const filteredNodes = nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
       this._addStyleNames(width, breakpoints);
@@ -253,6 +249,19 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
       this._oldWidth = width;
       this._oldBreakpoints = breakpoints;
     }
+  }
+
+  /** @private */
+  _shouldRecalculate(width, breakpoints) {
+    // Should not recalculate if row is invisible
+    if (isElementHidden(this)) {
+      return false;
+    }
+    return (
+      width !== this._oldWidth ||
+      breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
+      breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
+    );
   }
 
   /**
