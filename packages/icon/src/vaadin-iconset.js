@@ -114,6 +114,7 @@ class Iconset extends ElementMixin(PolymerElement) {
     const iconSvg = iconset._icons[iconId];
 
     return {
+      preserveAspectRatio: iconSvg ? iconSvg.getAttribute('preserveAspectRatio') : null,
       svg: cloneSvgNode(iconSvg),
       size: iconset.size,
       viewBox: iconSvg ? iconSvg.getAttribute('viewBox') : null,
