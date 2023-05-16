@@ -95,10 +95,7 @@ snapshots["vaadin-text-area shadow default"] =
     >
     </span>
   </div>
-  <vaadin-input-container
-    part="input-field"
-    style="--_text-area-vertical-scroll-position:0px;"
-  >
+  <vaadin-input-container part="input-field">
     <slot
       name="prefix"
       slot="prefix"
@@ -147,7 +144,6 @@ snapshots["vaadin-text-area shadow disabled"] =
   <vaadin-input-container
     disabled=""
     part="input-field"
-    style="--_text-area-vertical-scroll-position:0px;"
   >
     <slot
       name="prefix"
@@ -197,7 +193,6 @@ snapshots["vaadin-text-area shadow readonly"] =
   <vaadin-input-container
     part="input-field"
     readonly=""
-    style="--_text-area-vertical-scroll-position:0px;"
   >
     <slot
       name="prefix"
@@ -247,7 +242,6 @@ snapshots["vaadin-text-area shadow invalid"] =
   <vaadin-input-container
     invalid=""
     part="input-field"
-    style="--_text-area-vertical-scroll-position:0px;"
   >
     <slot
       name="prefix"
@@ -296,7 +290,6 @@ snapshots["vaadin-text-area shadow theme"] =
   </div>
   <vaadin-input-container
     part="input-field"
-    style="--_text-area-vertical-scroll-position:0px;"
     theme="align-right"
   >
     <slot

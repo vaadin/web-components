@@ -30,28 +30,34 @@ describe('vaadin-text-area', () => {
   });
 
   describe('shadow', () => {
+    const SNAPSHOT_CONFIG = {
+      // Exclude custom CSS property set as inline style,
+      // as corresponding logic is covered by unit tests.
+      ignoreAttributes: ['style'],
+    };
+
     it('default', async () => {
-      await expect(textArea).shadowDom.to.equalSnapshot();
+      await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('disabled', async () => {
       textArea.disabled = true;
-      await expect(textArea).shadowDom.to.equalSnapshot();
+      await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('readonly', async () => {
       textArea.readonly = true;
-      await expect(textArea).shadowDom.to.equalSnapshot();
+      await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('invalid', async () => {
       textArea.invalid = true;
-      await expect(textArea).shadowDom.to.equalSnapshot();
+      await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('theme', async () => {
       textArea.setAttribute('theme', 'align-right');
-      await expect(textArea).shadowDom.to.equalSnapshot();
+      await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 });
