@@ -257,11 +257,12 @@ export const MenuBarMixin = (superClass) =>
         for (i = buttons.length; i > 0; i--) {
           const btn = buttons[i - 1];
           const btnStyle = getComputedStyle(btn);
+          const buttonOffsetLeft = btn.getBoundingClientRect().left - container.getBoundingClientRect().left;
 
           // If this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btn.offsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btn.offsetLeft >= overflow.offsetWidth)
+            (!isRTL && buttonOffsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
+            (isRTL && buttonOffsetLeft >= overflow.offsetWidth)
           ) {
             break;
           }

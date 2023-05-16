@@ -326,8 +326,11 @@ describe('overflow button', () => {
   let menu, buttons, overflow;
 
   beforeEach(async () => {
-    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    fixtureSync(
+      '<div><div style="width:100px;display:inline-block;"></div><vaadin-menu-bar style="display:inline-block;"></vaadin-menu-bar></div>',
+    );
 
+    menu = document.querySelector('vaadin-menu-bar');
     menu.style.width = '250px';
 
     menu.items = [
