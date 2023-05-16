@@ -6,6 +6,7 @@
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -482,8 +483,10 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      // Store focused node.
-      this.__restoreFocusNode = this._getActiveElement();
+      if (this.restoreFocusOnClose) {
+        this.__storeFocus();
+      }
+
       this._animatedOpening();
 
       afterNextRender(this, () => {
@@ -505,6 +508,10 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         this.__focusTrapController.releaseFocus();
       }
 
+      if (this.restoreFocusOnClose) {
+        this.__restoreFocus();
+      }
+
       this._animatedClosing();
 
       document.removeEventListener('keydown', this._boundKeydownListener);
@@ -512,6 +519,35 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       if (!this.modeless) {
         this._removeGlobalListeners();
       }
+    }
+  }
+
+  /** @private */
+  __storeFocus() {
+    // Store the focused node.
+    this.__restoreFocusNode = getDeepActiveElement();
+  }
+
+  /** @private */
+  __restoreFocus() {
+    // If the activeElement is `<body>` or inside the overlay,
+    // we are allowed to restore the focus. In all the other
+    // cases focus might have been moved elsewhere by another
+    // component or by the user interaction (e.g. click on a
+    // button outside the overlay).
+    const activeElement = getDeepActiveElement();
+    if (activeElement !== document.body && !this._deepContains(activeElement)) {
+      return;
+    }
+
+    // Use restoreFocusNode if specified, otherwise fallback to the node
+    // which was focused before opening the overlay.
+    const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
+    if (restoreFocusNode) {
+      // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
+      // (e.g. combo-box overlay close on outside click).
+      setTimeout(() => restoreFocusNode.focus());
+      this.__restoreFocusNode = null;
     }
   }
 
@@ -611,27 +647,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
     if (this._placeholder) {
       this._exitModalState();
-
-      // Use this.restoreFocusNode if specified, otherwise fallback to the node
-      // which was focused before opening the overlay.
-      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-
-      if (this.restoreFocusOnClose && restoreFocusNode) {
-        // If the activeElement is `<body>` or inside the overlay,
-        // we are allowed to restore the focus. In all the other
-        // cases focus might have been moved elsewhere by another
-        // component or by the user interaction (e.g. click on a
-        // button outside the overlay).
-        const activeElement = this._getActiveElement();
-
-        if (activeElement === document.body || this._deepContains(activeElement)) {
-          // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
-          // (e.g. combo-box overlay close on outside click).
-          setTimeout(() => restoreFocusNode.focus());
-        }
-        this.__restoreFocusNode = null;
-      }
-
       this.setAttribute('closing', '');
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
@@ -745,20 +760,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
       this.requestContentUpdate();
     }
-  }
-
-  /**
-   * @return {!Element}
-   * @private
-   */
-  _getActiveElement() {
-    // Document.activeElement can be null
-    // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
-    let active = document.activeElement || document.body;
-    while (active.shadowRoot && active.shadowRoot.activeElement) {
-      active = active.shadowRoot.activeElement;
-    }
-    return active;
   }
 
   /**

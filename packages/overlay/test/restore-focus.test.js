@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { close, open } from './helpers.js';
 
 customElements.define(
@@ -57,7 +58,7 @@ describe('restore focus', () => {
       focusInput.blur();
       document.body.focus();
       await close(overlay);
-      expect(overlay._getActiveElement()).to.not.equal(focusInput);
+      expect(isElementFocused(focusInput)).to.be.false;
     });
 
     describe('restoreFocusOnClose', () => {
@@ -72,14 +73,14 @@ describe('restore focus', () => {
         focusInput.blur();
         document.body.focus();
         await close(overlay);
-        expect(overlay._getActiveElement()).to.equal(focusInput);
+        expect(isElementFocused(focusInput)).to.be.true;
       });
 
       it('should restore focus on close in Shadow DOM', async () => {
         focusable.focus();
         await open(overlay);
         await close(overlay);
-        expect(overlay._getActiveElement()).to.equal(focusable);
+        expect(isElementFocused(focusable)).to.be.true;
       });
 
       it('should not restore focus on close if focus was moved outside overlay', async () => {
@@ -87,7 +88,7 @@ describe('restore focus', () => {
         await open(overlay);
         focusable.focus();
         await close(overlay);
-        expect(overlay._getActiveElement()).to.equal(focusable);
+        expect(isElementFocused(focusable)).to.be.true;
       });
     });
 
@@ -103,7 +104,7 @@ describe('restore focus', () => {
         focusInput.blur();
         document.body.focus();
         await close(overlay);
-        expect(overlay._getActiveElement()).to.not.equal(focusInput);
+        expect(isElementFocused(focusInput)).to.be.false;
       });
 
       describe('restoreFocusOnClose', () => {
@@ -116,7 +117,7 @@ describe('restore focus', () => {
           await open(overlay);
           focusable.blur();
           await close(overlay);
-          expect(overlay._getActiveElement()).to.equal(focusInput);
+          expect(isElementFocused(focusInput)).to.be.true;
         });
       });
     });
