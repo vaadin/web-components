@@ -91,6 +91,16 @@ export const border = css`
     border-color: var(--lumo-success-color-10pct);
   }
 
+  .border-warning {
+    border-color: var(--lumo-warning-color);
+  }
+  .border-warning-10 {
+    border-color: var(--lumo-warning-color-10pct);
+  }
+  .border-warning-strong {
+    border-color: var(--lumo-warning-text-color);
+  }
+
   /* === Border radius === */
   .rounded-none {
     border-radius: 0;

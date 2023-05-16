@@ -128,6 +128,12 @@ export const typography = css`
   .text-success-contrast {
     color: var(--lumo-success-contrast-color);
   }
+  .text-warning {
+    color: var(--lumo-warning-text-color);
+  }
+  .text-warning-contrast {
+    color: var(--lumo-warning-contrast-color);
+  }
 
   /* === Text overflow === */
   .overflow-clip {
