@@ -81,7 +81,6 @@ describe('restore focus', () => {
         focusInput.focus();
         await open(overlay);
         overlay.blur();
-        document.body.focus();
         await close(overlay);
         expect(isElementFocused(focusInput)).to.be.true;
       });
