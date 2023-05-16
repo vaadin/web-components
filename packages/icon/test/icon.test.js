@@ -7,6 +7,7 @@ import { Iconset } from '../vaadin-iconset.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
+const ANGLE_RIGHT = '<path d="M4 13h2l5-5-5-5h-2l5 5z"></path>';
 const PLUS = '<path d="M3.5,7V0M0,3.5h7"></path>';
 const MINUS = '<path d="M2 7h12v2h-12v-2z"></path>';
 
@@ -127,6 +128,7 @@ describe('vaadin-icon', () => {
             <defs>
               <g id="vaadin:angle-down">${ANGLE_DOWN}</g>
               <g id="vaadin:angle-up">${ANGLE_UP}</g>
+              <g id="vaadin:angle-right" preserveAspectRatio="xMidYMin slice">${ANGLE_RIGHT}</g>
               <g id="vaadin:plus" viewBox="0 0 7 7">${PLUS}</g>
               <svg id="vaadin:minus" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="red">${MINUS}</svg>
             </defs>
@@ -180,6 +182,11 @@ describe('vaadin-icon', () => {
         icon.icon = 'vaadin:minus';
         const child = svgElement.firstElementChild;
         expect(child.getAttribute('fill')).to.equal('red');
+      });
+
+      it('should preserve the preserveAspectRatio attribute set on the icon', () => {
+        icon.icon = 'vaadin:angle-right';
+        expect(svgElement.getAttribute('preserveAspectRatio')).to.equal('xMidYMin slice');
       });
 
       it('should preserve the viewBox attribute set on the icon', () => {
