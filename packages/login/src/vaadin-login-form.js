@@ -179,7 +179,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       const nextInput =
         inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
       if (inputActive.validate()) {
-        if (nextInput.validate()) {
+        if (nextInput.checkValidity()) {
           this.submit();
         } else {
           nextInput.focus();
