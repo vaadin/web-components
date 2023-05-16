@@ -158,7 +158,7 @@ describe('restore focus', () => {
         focusInput.setAttribute('focus-ring', '');
         await open(overlay);
         focusInput.removeAttribute('focus-ring');
-        document.body.focus();
+        overlay.blur();
         await close(overlay);
         expect(focusInput.hasAttribute('focus-ring')).to.be.true;
       });
