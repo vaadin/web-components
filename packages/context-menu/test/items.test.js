@@ -244,6 +244,7 @@ describe('items', () => {
     escKeyDown(getMenuItems(subMenu)[0]);
     expect(subMenu.opened).to.be.false;
     expect(rootMenu.opened).to.be.true;
+    expect(getMenuItems(rootMenu)[0].hasAttribute('focused')).to.be.true;
   });
 
   it('should close all menus on Tab', () => {
