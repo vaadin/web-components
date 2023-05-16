@@ -530,7 +530,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     // Determine and store the node that has the `focus-ring` attribute
     // in order to restore the attribute when the overlay closes.
     const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-    if (this.restoreFocusOnClose && restoreFocusNode) {
+    if (restoreFocusNode) {
       const restoreFocusNodeHost = (restoreFocusNode.assignedSlot || restoreFocusNode).getRootNode().host;
       this.__restoreFocusRingNode = [restoreFocusNode, restoreFocusNodeHost].find((node) => {
         return node && node.hasAttribute('focus-ring');
