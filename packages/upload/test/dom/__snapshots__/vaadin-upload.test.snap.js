@@ -25,7 +25,6 @@ snapshots["vaadin-upload host default"] =
           aria-valuenow="0"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
@@ -38,7 +37,6 @@ snapshots["vaadin-upload host default"] =
           aria-valuenow="0.6"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0.6;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
@@ -54,7 +52,6 @@ snapshots["vaadin-upload host default"] =
           aria-valuenow="0"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
@@ -92,7 +89,6 @@ snapshots["vaadin-upload host max files"] =
           aria-valuenow="0"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
@@ -105,7 +101,6 @@ snapshots["vaadin-upload host max files"] =
           aria-valuenow="0.6"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0.6;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
@@ -121,7 +116,6 @@ snapshots["vaadin-upload host max files"] =
           aria-valuenow="0"
           role="progressbar"
           slot="progress"
-          style="--vaadin-progress-value:0;"
         >
         </vaadin-progress-bar>
       </vaadin-upload-file>
