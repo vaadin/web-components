@@ -323,12 +323,16 @@ describe('root menu layout', () => {
 });
 
 describe('overflow button', () => {
-  let menu, buttons, overflow;
+  let wrapper, menu, buttons, overflow;
 
   beforeEach(async () => {
-    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-
-    menu.style.width = '250px';
+    wrapper = fixtureSync(`
+      <div style="display: flex">
+        <div style="width: 100px;"></div>
+        <vaadin-menu-bar style="width: 250px"></vaadin-menu-bar>
+      </div>
+    `);
+    menu = wrapper.querySelector('vaadin-menu-bar');
 
     menu.items = [
       { text: 'Item 1' },
