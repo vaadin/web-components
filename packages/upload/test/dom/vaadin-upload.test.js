@@ -20,13 +20,19 @@ describe('vaadin-upload', () => {
   });
 
   describe('host', () => {
+    const SNAPSHOT_CONFIG = {
+      // Exclude inline style as we are not testing
+      // the `vaadin-progress-bar` internal logic.
+      ignoreAttributes: ['style'],
+    };
+
     it('default', async () => {
-      await expect(upload).dom.to.equalSnapshot();
+      await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('max files', async () => {
       upload.maxFiles = 1;
-      await expect(upload).dom.to.equalSnapshot();
+      await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 
