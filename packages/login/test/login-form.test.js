@@ -95,6 +95,14 @@ describe('login form', () => {
     expect(vaadinLoginPassword.hasAttribute('focused')).to.be.true;
   });
 
+  it('should not mark password as invalid if username is filled and user hits ENTER (password is empty)', () => {
+    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
+    vaadinLoginUsername.value = 'username';
+
+    enter(vaadinLoginUsername);
+    expect(vaadinLoginPassword.hasAttribute('invalid')).to.be.false;
+  });
+
   it('should mark password as invalid if user hits ENTER when field is empty', () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
 
