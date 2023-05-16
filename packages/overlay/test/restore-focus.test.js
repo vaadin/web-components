@@ -42,7 +42,7 @@ describe('restore focus', () => {
     focusable = wrapper.$.focusable;
   });
 
-  describe('basic', () => {
+  describe('default', () => {
     beforeEach(() => {
       document.body.appendChild(focusInput);
     });
@@ -58,9 +58,32 @@ describe('restore focus', () => {
       expect(isElementFocused(focusInput)).to.be.false;
     });
 
-    describe('restoreFocusOnClose', () => {
+    describe('restoreFocusNode', () => {
       beforeEach(() => {
-        overlay.restoreFocusOnClose = true;
+        overlay.restoreFocusNode = focusInput;
+      });
+
+      it('should not restore focus on close by default', async () => {
+        focusInput.focus();
+        await open(overlay);
+        await close(overlay);
+        expect(isElementFocused(focusInput)).to.be.false;
+      });
+    });
+  });
+
+  describe('restoreFocusOnClose', () => {
+    beforeEach(() => {
+      overlay.restoreFocusOnClose = true;
+    });
+
+    describe('basic', () => {
+      beforeEach(() => {
+        document.body.appendChild(focusInput);
+      });
+
+      afterEach(() => {
+        document.body.removeChild(focusInput);
       });
 
       it('should restore focus on close', async () => {
@@ -92,23 +115,10 @@ describe('restore focus', () => {
         await close(overlay);
         expect(isElementFocused(focusable)).to.be.true;
       });
-    });
 
-    describe('restoreFocusNode', () => {
-      beforeEach(() => {
-        overlay.restoreFocusNode = focusInput;
-      });
-
-      it('should not restore focus on close by default', async () => {
-        focusInput.focus();
-        await open(overlay);
-        await close(overlay);
-        expect(isElementFocused(focusInput)).to.be.false;
-      });
-
-      describe('restoreFocusOnClose', () => {
+      describe('restoreFocusNode', () => {
         beforeEach(() => {
-          overlay.restoreFocusOnClose = true;
+          overlay.restoreFocusNode = focusInput;
         });
 
         it('should restore focus to the restoreFocusNode', async () => {
