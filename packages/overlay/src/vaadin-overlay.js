@@ -10,7 +10,6 @@ import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
