@@ -5,13 +5,11 @@
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -75,9 +73,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
- * @mixes ControllerMixin
+ * @mixes OverlayFocusMixin
  */
-class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
+class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -225,34 +223,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         observer: '_hiddenChanged',
       },
 
-      /**
-       * When true move focus to the first focusable element in the overlay,
-       * or to the overlay if there are no focusable elements.
-       * @type {boolean}
-       */
-      focusTrap: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to true to enable restoring of focus when overlay is closed.
-       * @type {boolean}
-       */
-      restoreFocusOnClose: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to specify the element which should be focused on overlay close,
-       * if `restoreFocusOnClose` is set to true.
-       * @type {HTMLElement}
-       */
-      restoreFocusNode: {
-        type: HTMLElement,
-      },
-
       /** @private */
       _mouseDownInside: {
         type: Boolean,
@@ -302,8 +272,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
-
-    this.__focusTrapController = new FocusTrapController(this);
   }
 
   /**
@@ -325,8 +293,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     // and <vaadin-context-menu>).
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
-
-    this.addController(this.__focusTrapController);
 
     processTemplates(this);
   }
@@ -483,16 +449,12 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      if (this.restoreFocusOnClose) {
-        this.__storeFocus();
-      }
+      this._storeFocus();
 
       this._animatedOpening();
 
       afterNextRender(this, () => {
-        if (this.focusTrap) {
-          this.__focusTrapController.trapFocus(this.$.overlay);
-        }
+        this._trapFocus();
 
         const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
         this.dispatchEvent(evt);
@@ -504,13 +466,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         this._addGlobalListeners();
       }
     } else if (wasOpened) {
-      if (this.focusTrap) {
-        this.__focusTrapController.releaseFocus();
-      }
-
-      if (this.restoreFocusOnClose) {
-        this.__restoreFocus();
-      }
+      this._resetFocus();
 
       this._animatedClosing();
 
@@ -519,52 +475,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       if (!this.modeless) {
         this._removeGlobalListeners();
       }
-    }
-  }
-
-  /** @private */
-  __storeFocus() {
-    // Store the focused node.
-    this.__restoreFocusNode = getDeepActiveElement();
-
-    // Determine and store the node that has the `focus-ring` attribute
-    // in order to restore the attribute when the overlay closes.
-    const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-    if (restoreFocusNode) {
-      const restoreFocusNodeHost = (restoreFocusNode.assignedSlot || restoreFocusNode).getRootNode().host;
-      this.__restoreFocusRingNode = [restoreFocusNode, restoreFocusNodeHost].find((node) => {
-        return node && node.hasAttribute('focus-ring');
-      });
-    }
-  }
-
-  /** @private */
-  __restoreFocus() {
-    // If the activeElement is `<body>` or inside the overlay,
-    // we are allowed to restore the focus. In all the other
-    // cases focus might have been moved elsewhere by another
-    // component or by the user interaction (e.g. click on a
-    // button outside the overlay).
-    const activeElement = getDeepActiveElement();
-    if (activeElement !== document.body && !this._deepContains(activeElement)) {
-      return;
-    }
-
-    // Use restoreFocusNode if specified, otherwise fallback to the node
-    // which was focused before opening the overlay.
-    const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-    if (restoreFocusNode) {
-      // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
-      // (e.g. combo-box overlay close on outside click).
-      setTimeout(() => restoreFocusNode.focus());
-      this.__restoreFocusNode = null;
-    }
-
-    // Restore the `focus-ring` attribute if it was present
-    // when the overlay was opening.
-    if (this.__restoreFocusRingNode) {
-      this.__restoreFocusRingNode.setAttribute('focus-ring', '');
-      this.__restoreFocusRingNode = null;
     }
   }
 
