@@ -3,7 +3,7 @@ import { aTimeout, esc, fixtureSync, nextRender, oneEvent } from '@vaadin/testin
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
-import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-confirm-dialog', () => {
   describe('custom element definition', () => {
