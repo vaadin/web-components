@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { close, open } from './helpers.js';
 
 customElements.define(

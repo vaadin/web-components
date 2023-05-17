@@ -3,7 +3,7 @@ import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
-import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import {
   flushGrid,

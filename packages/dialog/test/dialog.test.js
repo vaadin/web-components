@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
-import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-dialog', () => {
   describe('custom element definition', () => {
