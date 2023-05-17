@@ -248,11 +248,14 @@ export const ItemsMixin = (superClass) =>
         if ((!isRTL && isArrowRight) || (isRTL && isArrowLeft) || key === 'Enter' || key === ' ') {
           // Open a sub-menu
           this.__showSubMenu(event);
-        } else if ((!isRTL && isArrowLeft) || (isRTL && isArrowRight)) {
+        } else if ((!isRTL && isArrowLeft) || (isRTL && isArrowRight) || key === 'Escape') {
+          if (key === 'Escape') {
+            event.stopPropagation();
+          }
           // Close the menu
           this.close();
           this.listenOn.focus();
-        } else if (key === 'Escape' || key === 'Tab') {
+        } else if (key === 'Tab') {
           // Close all menus
           this.dispatchEvent(new CustomEvent('close-all-menus'));
         }
