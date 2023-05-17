@@ -167,12 +167,17 @@ describe('vaadin-dialog', () => {
     let dialog, button;
 
     beforeEach(() => {
-      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
-      button = fixtureSync('<button></button>');
+      const wrapper = fixtureSync(`
+        <div>
+          <vaadin-dialog></vaadin-dialog>
+          <button></button>
+        </div>
+      `);
+      [dialog, button] = wrapper.children;
       button.focus();
     });
 
-    it('should move focus to dialog on open', async () => {
+    it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
       await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       expect(isElementFocused(dialog.$.overlay)).to.be.true;
