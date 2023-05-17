@@ -127,6 +127,7 @@ class ConfirmDialogDialog extends Dialog {
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>
     `;
