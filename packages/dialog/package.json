@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/a11y-base": "24.1.0-beta1",
     "@vaadin/testing-helpers": "^0.4.0",
     "@vaadin/text-area": "24.1.0-beta1",
     "lit": "^2.0.0",

@@ -103,6 +103,7 @@ class Dialog extends OverlayClassMixin(
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        restore-focus-on-close
         focus-trap
       ></vaadin-dialog-overlay>
     `;
