@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-dialog', () => {
   describe('custom element definition', () => {
@@ -180,7 +180,7 @@ describe('vaadin-dialog', () => {
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
       await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-      expect(isElementFocused(dialog.$.overlay)).to.be.true;
+      expect(getDeepActiveElement()).to.equal(dialog.$.overlay);
     });
 
     it('should restore focus on dialog close', async () => {
@@ -188,7 +188,7 @@ describe('vaadin-dialog', () => {
       await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       dialog.opened = false;
       await aTimeout(0);
-      expect(isElementFocused(button)).to.be.true;
+      expect(getDeepActiveElement()).to.equal(button);
     });
   });
 });
