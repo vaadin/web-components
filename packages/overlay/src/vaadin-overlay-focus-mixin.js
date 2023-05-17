@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -48,6 +49,7 @@ export const OverlayFocusMixin = (superClass) =>
     constructor() {
       super();
 
+      this.__ariaModalController = new AriaModalController(this);
       this.__focusTrapController = new FocusTrapController(this);
     }
 
@@ -55,6 +57,7 @@ export const OverlayFocusMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this.addController(this.__ariaModalController);
       this.addController(this.__focusTrapController);
     }
 
@@ -65,6 +68,7 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _resetFocus() {
       if (this.focusTrap) {
+        this.__ariaModalController.close();
         this.__focusTrapController.releaseFocus();
       }
 
@@ -91,6 +95,7 @@ export const OverlayFocusMixin = (superClass) =>
      */
     _trapFocus() {
       if (this.focusTrap) {
+        this.__ariaModalController.showModal();
         this.__focusTrapController.trapFocus(this.$.overlay);
       }
     }
