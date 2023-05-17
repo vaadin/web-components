@@ -10,6 +10,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
   has-header=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="alertdialog"
   with-backdrop=""
 >
@@ -52,6 +53,7 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
   has-header=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="alertdialog"
   theme="custom"
   with-backdrop=""
@@ -96,6 +98,7 @@ snapshots["vaadin-confirm-dialog overlay class"] =
   has-header=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="alertdialog"
   with-backdrop=""
 >
