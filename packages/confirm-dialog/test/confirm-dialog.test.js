@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, esc, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-confirm-dialog', () => {
   describe('custom element definition', () => {
@@ -614,6 +615,37 @@ describe('vaadin-confirm-dialog', () => {
         const overlay = confirm.$.dialog.$.overlay;
         expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
       });
+    });
+  });
+
+  describe('focus restoration', () => {
+    let confirm, button, overlay;
+
+    beforeEach(() => {
+      const wrapper = fixtureSync(`
+        <div>
+          <vaadin-confirm-dialog></vaadin-confirm-dialog>
+          <button></button>
+        </div>
+      `);
+      [confirm, button] = wrapper.children;
+      overlay = confirm.$.dialog.$.overlay;
+      button.focus();
+    });
+
+    it('should move focus to the dialog on open', async () => {
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      const confirmButton = overlay.querySelector('[slot=confirm-button]');
+      expect(getDeepActiveElement()).to.equal(confirmButton);
+    });
+
+    it('should restore focus on dialog close', async () => {
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      confirm.opened = false;
+      await aTimeout(0);
+      expect(getDeepActiveElement()).to.equal(button);
     });
   });
 });
