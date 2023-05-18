@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-dialog', () => {
   describe('custom element definition', () => {
@@ -164,7 +164,7 @@ describe('vaadin-dialog', () => {
   });
 
   describe('focus restoration', () => {
-    let dialog, button;
+    let dialog, button, overlay;
 
     beforeEach(() => {
       const wrapper = fixtureSync(`
@@ -174,21 +174,22 @@ describe('vaadin-dialog', () => {
         </div>
       `);
       [dialog, button] = wrapper.children;
+      overlay = dialog.$.overlay;
       button.focus();
     });
 
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
-      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-      expect(isElementFocused(dialog.$.overlay)).to.be.true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
     it('should restore focus on dialog close', async () => {
       dialog.opened = true;
-      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+      await oneEvent(overlay, 'vaadin-overlay-open');
       dialog.opened = false;
       await aTimeout(0);
-      expect(isElementFocused(button)).to.be.true;
+      expect(getDeepActiveElement()).to.equal(button);
     });
   });
 });

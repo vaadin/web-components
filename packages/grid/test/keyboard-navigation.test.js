@@ -19,7 +19,7 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import {
   attributeRenderer,
   flushGrid,
@@ -1606,7 +1606,7 @@ describe('keyboard navigation', () => {
 
       enter();
 
-      expect(isElementFocused(focusable)).to.be.true;
+      expect(getDeepActiveElement()).to.equal(focusable);
     });
 
     it('should exit interaction mode from focused single-line input with enter', () => {

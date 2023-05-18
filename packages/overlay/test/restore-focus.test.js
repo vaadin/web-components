@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { close, open } from './helpers.js';
 
 customElements.define(
@@ -66,7 +66,7 @@ describe('restore focus', () => {
       focusInput.focus();
       await open(overlay);
       await close(overlay);
-      expect(isElementFocused(focusInput)).to.be.false;
+      expect(getDeepActiveElement()).to.not.equal(focusInput);
     });
 
     it('should not restore focus-ring attribute on close by default', async () => {
@@ -87,7 +87,7 @@ describe('restore focus', () => {
         focusInput.focus();
         await open(overlay);
         await close(overlay);
-        expect(isElementFocused(focusInput)).to.be.false;
+        expect(getDeepActiveElement()).to.not.equal(focusInput);
       });
 
       it('should not restore focus-ring attribute on close by default', async () => {
@@ -119,7 +119,7 @@ describe('restore focus', () => {
         focusInput.focus();
         await open(overlay);
         await close(overlay);
-        expect(isElementFocused(focusInput)).to.be.true;
+        expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
       it('should restore focus-ring attribute on close', async () => {
@@ -142,7 +142,7 @@ describe('restore focus', () => {
         focusable.focus();
         await open(overlay);
         await close(overlay);
-        expect(isElementFocused(focusable)).to.be.true;
+        expect(getDeepActiveElement()).to.equal(focusable);
       });
 
       it('should restore focus on close if focus was moved to body', async () => {
@@ -150,7 +150,7 @@ describe('restore focus', () => {
         await open(overlay);
         overlay.blur();
         await close(overlay);
-        expect(isElementFocused(focusInput)).to.be.true;
+        expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
       it('should restore focus-ring attribute on close if focus was moved to body', async () => {
@@ -168,7 +168,7 @@ describe('restore focus', () => {
         await open(overlay);
         focusable.focus();
         await close(overlay);
-        expect(isElementFocused(focusable)).to.be.true;
+        expect(getDeepActiveElement()).to.equal(focusable);
       });
 
       it('should not restore focus-ring attribute if focus was moved outside overlay', async () => {
@@ -190,7 +190,7 @@ describe('restore focus', () => {
           focusable.focus();
           await open(overlay);
           await close(overlay);
-          expect(isElementFocused(focusInput)).to.be.true;
+          expect(getDeepActiveElement()).to.equal(focusInput);
         });
 
         it('should restore focus-ring attribute on the restoreFocusNode', async () => {
