@@ -1,7 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { down, fixtureSync, focusin, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('accessibility', () => {
   'use strict';
@@ -158,6 +160,35 @@ describe('accessibility', () => {
       editor.setSelection(0, 2);
       const e = keyboardEventFor('keydown', 9, ['shift']);
       content.dispatchEvent(e);
+    });
+
+    it('should remove focus of editor on esc', async () => {
+      editor.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(document.activeElement).to.not.be.equal(rte);
+    });
+
+    it('should move focus to next element after esc followed by tab are pressed', async () => {
+      const wrapper = fixtureSync(`<div>
+        <vaadin-rich-text-editor></vaadin-rich-text-editor>
+        <button>button</button>
+      </div>`);
+      const [rte, button] = wrapper.children;
+      editor = rte._editor;
+      editor.focus();
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.be.equal(button);
+    });
+
+    it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
+      editor.focus();
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      const e = keyboardEventFor('keydown', 9, ['shift']);
+      expect(getDeepActiveElement()).to.be.equal(buttons[0]);
     });
 
     it('should change indentation and prevent shift-tab keydown in the code block', () => {
