@@ -593,6 +593,12 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       });
     });
 
+    editorContent.addEventListener('keydown', (e /** @type {KeyboardEvent} */) => {
+      if (e.key === 'Escape') {
+        this._editor.blur();
+      }
+    });
+
     editorContent.addEventListener('focusout', () => {
       if (this._toolbarState === STATE.FOCUSED) {
         this._cleanToolbarState();
