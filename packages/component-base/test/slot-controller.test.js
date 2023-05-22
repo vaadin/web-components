@@ -359,7 +359,7 @@ describe('slot-controller', () => {
         expect(children[0]).to.be.instanceOf(HTMLButtonElement);
       });
 
-      it('should replace an element when new elements added to the slot', async () => {
+      it('should remove default node when new elements added to the slot', async () => {
         const defaultNode = children[0];
 
         const foo = document.createElement('div');
@@ -374,6 +374,20 @@ describe('slot-controller', () => {
         expect(slotChildren[0]).to.equal(foo);
         expect(slotChildren[1]).to.equal(bar);
         expect(defaultNode.isConnected).to.be.false;
+      });
+
+      it('should store a reference to the default node in nodes array', () => {
+        const nodes = controller.nodes;
+        expect(nodes).to.be.instanceOf(Array);
+        expect(nodes.length).to.equal(1);
+        expect(nodes[0]).to.equal(controller.defaultNode);
+      });
+
+      it('should remove default node from nodes array when adding new element', async () => {
+        const nodes = controller.nodes;
+        expect(nodes).to.be.instanceOf(Array);
+        expect(nodes.length).to.equal(1);
+        expect(nodes[0]).to.equal(controller.defaultNode);
       });
     });
 
@@ -394,8 +408,23 @@ describe('slot-controller', () => {
       it('should store a reference to custom slotted elements in nodes array', () => {
         const nodes = controller.nodes;
         expect(nodes).to.be.instanceOf(Array);
+        expect(nodes.length).to.equal(2);
         expect(nodes[0]).to.equal(children[0]);
         expect(nodes[1]).to.equal(children[1]);
+      });
+
+      it('should update references to custom slotted elements in nodes array', async () => {
+        const newChild = document.createElement('div');
+        element.append(newChild);
+
+        await nextFrame();
+
+        const nodes = controller.nodes;
+        expect(nodes).to.be.instanceOf(Array);
+        expect(nodes.length).to.equal(3);
+        expect(nodes[0]).to.equal(children[0]);
+        expect(nodes[1]).to.equal(children[1]);
+        expect(nodes[2]).to.equal(newChild);
       });
 
       it('should get a reference to list of elements passed to un-named slot', () => {
@@ -408,6 +437,14 @@ describe('slot-controller', () => {
         expect(initializeSpy.calledTwice).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(children[0]);
         expect(initializeSpy.secondCall.args[0]).to.equal(children[1]);
+      });
+
+      it('should not remove custom elements when adding another custom element', async () => {
+        const newChild = document.createElement('div');
+        element.append(newChild);
+
+        await nextFrame();
+        expect(element.childElementCount).to.equal(3);
       });
     });
   });
