@@ -6,6 +6,7 @@
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementHidden } from '@vaadin/a11y-base';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -506,6 +507,10 @@ class Grid extends ElementMixin(
       setTimeout(() => {
         this.__updateFooterPositioning();
         this.__updateColumnsBodyContentHidden();
+        if (this._recalculateColumnWidthOnceVisible) {
+          this._recalculateColumnWidthOnceVisible = false;
+          this.recalculateColumnWidths();
+        }
       }),
     ).observe(this.$.table);
 
@@ -717,12 +722,16 @@ class Grid extends ElementMixin(
     if (!this._columnTree) {
       return; // No columns
     }
+    if (isElementHidden(this)) {
+      this._recalculateColumnWidthOnceVisible = true;
+      return;
+    }
     if (this._cache.isLoading()) {
       this._recalculateColumnWidthOnceLoadingFinished = true;
-    } else {
-      const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
-      this._recalculateColumnWidths(cols);
+      return;
     }
+    const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
+    this._recalculateColumnWidths(cols);
   }
 
   /** @private */
