@@ -163,11 +163,6 @@ declare class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(HTMLEleme
    */
   hidden: boolean;
 
-  /**
-   * Returns true if this is the last one in the opened overlays stack.
-   */
-  protected readonly _last: boolean;
-
   close(sourceEvent?: Event | null): void;
 
   /**
@@ -177,11 +172,6 @@ declare class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(HTMLEleme
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  /**
-   * Brings the overlay as visually the frontmost one
-   */
-  bringToFront(): void;
 
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,

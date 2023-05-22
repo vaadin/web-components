@@ -10,6 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
+import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -75,7 +76,7 @@ import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
  * @mixes DirMixin
  * @mixes OverlayFocusMixin
  */
-class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement))) {
+class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -272,15 +273,6 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
-  }
-
-  /**
-   * Returns true if this is the last one in the opened overlays stack
-   * @return {boolean}
-   * @protected
-   */
-  get _last() {
-    return this === Overlay.__attachedInstances.pop();
   }
 
   /** @protected */
@@ -616,52 +608,10 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
   }
 
   /** @private */
-  _enterModalState() {
-    if (document.body.style.pointerEvents !== 'none') {
-      // Set body pointer-events to 'none' to disable mouse interactions with
-      // other document nodes.
-      this._previousDocumentPointerEvents = document.body.style.pointerEvents;
-      document.body.style.pointerEvents = 'none';
-    }
-
-    // Disable pointer events in other attached overlays
-    Overlay.__attachedInstances.forEach((el) => {
-      if (el !== this) {
-        el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
-      }
-    });
-  }
-
-  /** @private */
   _removeGlobalListeners() {
     document.removeEventListener('mousedown', this._boundMouseDownListener);
     document.removeEventListener('mouseup', this._boundMouseUpListener);
     document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
-  }
-
-  /** @private */
-  _exitModalState() {
-    if (this._previousDocumentPointerEvents !== undefined) {
-      // Restore body pointer-events
-      document.body.style.pointerEvents = this._previousDocumentPointerEvents;
-      delete this._previousDocumentPointerEvents;
-    }
-
-    // Restore pointer events in the previous overlay(s)
-    const instances = Overlay.__attachedInstances;
-    let el;
-    // Use instances.pop() to ensure the reverse order
-    while ((el = instances.pop())) {
-      if (el === this) {
-        // Skip the current instance
-        continue;
-      }
-      el.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
-      if (!el.modeless) {
-        // Stop after the last modal
-        break;
-      }
-    }
   }
 
   /** @private */
@@ -705,20 +655,6 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
       n = n.parentNode || n.host;
     }
     return n === this;
-  }
-
-  /**
-   * Brings the overlay as visually the frontmost one
-   */
-  bringToFront() {
-    let zIndex = '';
-    const frontmost = Overlay.__attachedInstances.filter((o) => o !== this).pop();
-    if (frontmost) {
-      const frontmostZIndex = frontmost.__zIndex;
-      zIndex = frontmostZIndex + 1;
-    }
-    this.style.zIndex = zIndex;
-    this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
   }
 
   /**
