@@ -6,7 +6,7 @@
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { isElementHidden } from '@vaadin/a11y-base';
+import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
