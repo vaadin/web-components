@@ -252,16 +252,6 @@ class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin
     return ['_rendererOrDataChanged(renderer, owner, model, opened)'];
   }
 
-  /**
-   * Returns all attached overlays in visual stacking order.
-   * @private
-   */
-  static get __attachedInstances() {
-    return Array.from(document.body.children)
-      .filter((el) => el instanceof Overlay && !el.hasAttribute('closing'))
-      .sort((a, b) => a.__zIndex - b.__zIndex || 0);
-  }
-
   constructor() {
     super();
     this._boundMouseDownListener = this._mouseDownListener.bind(this);
