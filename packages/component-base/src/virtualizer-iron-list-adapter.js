@@ -284,7 +284,7 @@ export class IronListAdapter {
     // When reducing size while invisible, iron-list does not update items, so
     // their hidden state is not updated and their __lastUpdatedIndex is not
     // reset. In that case do it manually here.
-    if (!this._visible) {
+    if (!this._isVisible) {
       this._iterateItems((pidx, vidx) => {
         const el = this._physicalItems[pidx];
         el.hidden = vidx >= size;
