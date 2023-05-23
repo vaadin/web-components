@@ -290,7 +290,6 @@ describe('virtualizer', () => {
 
     // Hide container and reduce the size to 0 (the item gets hidden)
     scrollTarget.style.display = 'none';
-    elementsContainer.style.display = 'none';
     virtualizer.size = 0;
 
     // Update the prefix used by the renderer to "bar-"
@@ -298,7 +297,6 @@ describe('virtualizer', () => {
 
     // Show container again, increase the size back to 1
     scrollTarget.style.display = 'block';
-    elementsContainer.style.display = 'block';
     virtualizer.size = 1;
 
     // Expect the unhidden item to be re-rendered with the new prefix even though its index hasn't changed
