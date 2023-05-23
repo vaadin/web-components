@@ -6,6 +6,7 @@ interface Vaadin {
   usageStatsChecker?: {
     maybeGatherAndSend(): void;
   };
+  featureFlags?: Record<string, boolean>;
 }
 
 interface Window {
