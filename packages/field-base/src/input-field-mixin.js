@@ -98,40 +98,4 @@ export const InputFieldMixin = (superclass) =>
         this.validate();
       }
     }
-
-    /**
-     * Override an event listener from `InputMixin`
-     * to mark as valid after user started typing.
-     * @param {Event} event
-     * @protected
-     * @override
-     */
-    _onInput(event) {
-      super._onInput(event);
-
-      if (this.invalid) {
-        this.validate();
-      }
-    }
-
-    /**
-     * Override an observer from `InputMixin` to validate the field
-     * when a new value is set programmatically.
-     *
-     * @param {string | undefined} newValue
-     * @param {string | undefined} oldValue
-     * @protected
-     * @override
-     */
-    _valueChanged(newValue, oldValue) {
-      super._valueChanged(newValue, oldValue);
-
-      if (oldValue === undefined) {
-        return;
-      }
-
-      if (this.invalid) {
-        this.validate();
-      }
-    }
   };

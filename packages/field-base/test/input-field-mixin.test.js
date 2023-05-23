@@ -168,25 +168,6 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate on input event', async () => {
-      element.required = true;
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      input.focus();
-      await sendKeys({ type: 'f' });
-      expect(spy.calledOnce).to.be.true;
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should validate on value change when field is invalid', async () => {
-      const spy = sinon.spy(element, 'validate');
-      element.invalid = true;
-      element.value = 'foo';
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
-
     it('should call checkValidity on the input when required', () => {
       const spy = sinon.spy(input, 'checkValidity');
       element.required = true;
