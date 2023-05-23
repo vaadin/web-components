@@ -3,13 +3,15 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
+import { OverlayFocusMixin } from '@vaadin/overlay/src/vaadin-overlay-focus-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
 /**
  * @polymerMixin
  */
 export const MenuOverlayMixin = (superClass) =>
-  class MenuOverlayMixin extends PositionMixin(superClass) {
+  class MenuOverlayMixin extends OverlayFocusMixin(PositionMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -29,6 +31,8 @@ export const MenuOverlayMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+
+      this.restoreFocusOnClose = true;
 
       this.addEventListener('keydown', (e) => {
         if (!e.defaultPrevented && e.composedPath()[0] === this.$.overlay && [38, 40].indexOf(e.keyCode) > -1) {
@@ -115,5 +119,49 @@ export const MenuOverlayMixin = (superClass) =>
           this.style.top = `${parseFloat(this.style.top) - parseFloat(style.paddingTop)}px`;
         }
       }
+    }
+
+    /**
+     * Override method inherited from `OverlayFocusMixin` to disable
+     * focus restoration on sub-menu overlay close. Focus should
+     * be only restored when the root menu closes.
+     *
+     * @protected
+     * @override
+     * @return {boolean}
+     */
+    _shouldRestoreFocus() {
+      if (this.parentOverlay) {
+        // Do not restore focus on sub-menu close.
+        return false;
+      }
+
+      return super._shouldRestoreFocus();
+    }
+
+    /**
+     * Override method inherited from `OverlayFocusMixin` to return
+     * true if the overlay contains the given node, including
+     * those within descendant menu overlays.
+     *
+     * @protected
+     * @override
+     * @param {Node} node
+     * @return {boolean}
+     */
+    _deepContains(node) {
+      // Find the closest menu overlay for the given node.
+      let overlay = getClosestElement(this.localName, node);
+      while (overlay) {
+        if (overlay === this) {
+          // The node is inside a descendant menu overlay.
+          return true;
+        }
+
+        // Traverse the overlay hierarchy to check parent overlays.
+        overlay = overlay.parentOverlay;
+      }
+
+      return false;
     }
   };
