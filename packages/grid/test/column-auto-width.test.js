@@ -44,6 +44,18 @@ describe('column auto-width', () => {
     });
   }
 
+  class TestContainer extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `
+        <slot name="custom-slot"></slot>
+      `;
+    }
+  }
+
+  customElements.define('test-container', TestContainer);
+
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 600px; height: 200px;" hidden>
@@ -159,6 +171,31 @@ describe('column auto-width', () => {
     await nextFrame();
     grid.recalculateColumnWidths();
     expectColumnWidthsToBeOk(columns, [114]);
+  });
+
+  it('should defer calculating column widths when the grid is not visible', async () => {
+    grid.items = testItems;
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns, [74]);
+
+    // Move grid to a custom element without setting proper slot name beforehand
+    // This reproduces a case in split-layout, which automatically applies slot
+    // names to children, but only after they have been connected. In this case
+    // columns should not resize while the grid is invisible, because their size
+    // would collapse to zero.
+    const container = fixtureSync('<test-container></test-container>');
+    container.appendChild(grid);
+
+    // Column widths should not have recalculated
+    await nextFrame();
+    expectColumnWidthsToBeOk(columns, [74]);
+
+    // Apply correct slot name
+    grid.slot = 'custom-slot';
+
+    // Column widths should recalculate, keeping the same width
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns, [74]);
   });
 });
 
