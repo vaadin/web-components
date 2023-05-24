@@ -12,6 +12,7 @@ import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadi
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { isElementHidden } from '@vaadin/component-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -464,7 +465,15 @@ class Grid extends ElementMixin(
       reorderElements: true,
     });
 
-    new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
+    new ResizeObserver(() =>
+      setTimeout(() => {
+        this.__updateFooterPositioning();
+        if (this._recalculateColumnWidthOnceVisible) {
+          this._recalculateColumnWidthOnceVisible = false;
+          this.recalculateColumnWidths();
+        }
+      }),
+    ).observe(this.$.table);
 
     processTemplates(this);
 
@@ -648,12 +657,16 @@ class Grid extends ElementMixin(
     if (!this._columnTree) {
       return; // No columns
     }
+    if (isElementHidden(this)) {
+      this._recalculateColumnWidthOnceVisible = true;
+      return;
+    }
     if (this._cache.isLoading()) {
       this._recalculateColumnWidthOnceLoadingFinished = true;
-    } else {
-      const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
-      this._recalculateColumnWidths(cols);
+      return;
     }
+    const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
+    this._recalculateColumnWidths(cols);
   }
 
   /** @private */
