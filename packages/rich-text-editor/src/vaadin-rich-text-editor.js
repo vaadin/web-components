@@ -593,9 +593,22 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       });
     });
 
-    editorContent.addEventListener('keydown', (e /** @type {KeyboardEvent} */) => {
+    const TAB_KEY = 9;
+
+    editorContent.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        this._editor.blur();
+        this.__tabBindings = this._editor.keyboard.bindings[TAB_KEY];
+        this._editor.keyboard.bindings[TAB_KEY] = null;
+      } else if (this.__tabBindings) {
+        this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+        this.__tabBindings = null;
+      }
+    });
+
+    editorContent.addEventListener('blur', () => {
+      if (this.__tabBindings) {
+        this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+        this.__tabBindings = null;
       }
     });
 
