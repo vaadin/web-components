@@ -46,16 +46,6 @@ export declare class OverlayFocusMixinClass {
   protected _trapFocus(): void;
 
   /**
-   * Returns true if focus is still inside the overlay or on the body element,
-   * otherwise false.
-   *
-   * Focus shouldn't be restored if it's been moved elsewhere by another
-   * component or as a result of a user interaction e.g. the user clicked
-   * on a button outside the overlay while the overlay was open.
-   */
-  protected _shouldRestoreFocus(): boolean;
-
-  /**
    * Returns true if the overlay contains the given node,
    * including those within shadow DOM trees.
    */
