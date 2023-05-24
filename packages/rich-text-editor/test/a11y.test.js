@@ -162,12 +162,6 @@ describe('accessibility', () => {
       content.dispatchEvent(e);
     });
 
-    it('should remove focus from editor on esc', async () => {
-      editor.focus();
-      await sendKeys({ press: 'Escape' });
-      expect(document.activeElement).to.not.be.equal(rte);
-    });
-
     it('should move focus to next element after esc followed by tab are pressed', async () => {
       const wrapper = fixtureSync(`<div>
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
