@@ -11,7 +11,7 @@
  * The array is collected by a bottom-up DOM traversing that starts with the given node
  * and involves both the light DOM and ancestor shadow DOM trees.
  *
- * @param {Node} node The starting node for the traversal
+ * @param {Node} node
  * @return {Node[]}
  */
 export function getAncestorRootNodes(node) {
