@@ -162,7 +162,7 @@ describe('accessibility', () => {
       content.dispatchEvent(e);
     });
 
-    it('should remove focus of editor on esc', async () => {
+    it('should remove focus from editor on esc', async () => {
       editor.focus();
       await sendKeys({ press: 'Escape' });
       expect(document.activeElement).to.not.be.equal(rte);
@@ -187,7 +187,6 @@ describe('accessibility', () => {
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
-      const e = keyboardEventFor('keydown', 9, ['shift']);
       expect(getDeepActiveElement()).to.be.equal(buttons[0]);
     });
 
