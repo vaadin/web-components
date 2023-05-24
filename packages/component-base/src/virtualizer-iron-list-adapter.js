@@ -281,6 +281,13 @@ export class IronListAdapter {
       this._virtualCount = this.items.length;
     }
 
+    // When reducing size while invisible, iron-list does not update items, so
+    // their hidden state is not updated and their __lastUpdatedIndex is not
+    // reset. In that case force an update here.
+    if (!this._isVisible) {
+      this._assignModels();
+    }
+
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
     }
