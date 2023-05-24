@@ -13,6 +13,7 @@ import '@vaadin/grid/src/vaadin-grid-column-group.js';
 import '@vaadin/grid/src/vaadin-grid-sorter.js';
 import '@vaadin/grid/src/vaadin-grid-filter.js';
 import './vaadin-crud-edit-column.js';
+import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { capitalize, getProperty } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
@@ -56,6 +57,30 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   static get observers() {
     return ['__onItemsChange(items)', '__onHideEditColumnChange(hideEditColumn)'];
+  }
+
+  /** @protected */
+  _getRowContainingNode(node) {
+    const content = getClosestElement('vaadin-grid-cell-content', node);
+    if (!content) {
+      return;
+    }
+
+    const cell = content.assignedSlot.parentElement;
+    return cell.parentElement;
+  }
+
+  /** @protected */
+  _isItemAssigedToRow(item, row) {
+    const model = this.__getRowModel(row);
+    return this.getItemId(item) === this.getItemId(model.item);
+  }
+
+  /** @protected */
+  _focusFirstRowInViewport() {
+    const row = this.__getFirstVisibleItem();
+    this.__rowFocusMode = true;
+    row.focus();
   }
 
   /** @private */
