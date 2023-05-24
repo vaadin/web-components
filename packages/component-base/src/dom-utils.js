@@ -11,7 +11,7 @@
  * The array is collected by a bottom-up DOM traversing that starts with the given node
  * and involves both the light DOM and ancestor shadow DOM trees.
  *
- * @param {Node} node
+ * @param {Node} node The starting node for the traversal
  * @return {Node[]}
  */
 export function getAncestorRootNodes(node) {
@@ -38,6 +38,22 @@ export function getAncestorRootNodes(node) {
   }
 
   return result;
+}
+
+/**
+ * Traverses the given node and its parents, including those that are across
+ * the shadow root boundaries, until it finds a node that matches the selector.
+ *
+ * @param {string} selector The CSS selector to match against
+ * @param {Node} node The starting node for the traversal
+ * @return {Node | null} The closest matching element, or null if no match is found
+ */
+export function getClosestElement(selector, node) {
+  if (!node) {
+    return null;
+  }
+
+  return node.closest(selector) || getClosestElement(selector, node.getRootNode().host);
 }
 
 /**
