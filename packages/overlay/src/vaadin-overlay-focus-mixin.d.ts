@@ -54,4 +54,10 @@ export declare class OverlayFocusMixinClass {
    * on a button outside the overlay while the overlay was open.
    */
   protected _shouldRestoreFocus(): boolean;
+
+  /**
+   * Returns true if the overlay contains the given node,
+   * including those within shadow DOM trees.
+   */
+  protected _deepContains(node: Node): boolean;
 }
