@@ -14,6 +14,12 @@
 export function getAncestorRootNodes(node: Node): Node[];
 
 /**
+ * Traverses the given node and its parents, including those that are across
+ * the shadow root boundaries, until it finds a node that matches the selector.
+ */
+export function getClosestElement(selector: string, node: Node): Node | null;
+
+/**
  * Takes a string with values separated by space and returns a set the values
  */
 export function deserializeAttributeValue(value: string): Set<string>;
