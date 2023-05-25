@@ -690,24 +690,6 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
   }
 
   /**
-   * @param {!Node} node
-   * @return {boolean}
-   * @private
-   */
-  _deepContains(node) {
-    if (this.contains(node)) {
-      return true;
-    }
-    let n = node;
-    const doc = node.ownerDocument;
-    // Walk from node to `this` or `document`
-    while (n && n !== doc && n !== this) {
-      n = n.parentNode || n.host;
-    }
-    return n === this;
-  }
-
-  /**
    * Brings the overlay as visually the frontmost one
    */
   bringToFront() {
