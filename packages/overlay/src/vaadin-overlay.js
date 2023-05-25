@@ -630,24 +630,6 @@ class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin
   }
 
   /**
-   * @param {!Node} node
-   * @return {boolean}
-   * @private
-   */
-  _deepContains(node) {
-    if (this.contains(node)) {
-      return true;
-    }
-    let n = node;
-    const doc = node.ownerDocument;
-    // Walk from node to `this` or `document`
-    while (n && n !== doc && n !== this) {
-      n = n.parentNode || n.host;
-    }
-    return n === this;
-  }
-
-  /**
    * @event vaadin-overlay-open
    * Fired after the overlay is opened.
    */
