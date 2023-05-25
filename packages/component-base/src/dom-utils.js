@@ -41,6 +41,22 @@ export function getAncestorRootNodes(node) {
 }
 
 /**
+ * Traverses the given node and its parents, including those that are across
+ * the shadow root boundaries, until it finds a node that matches the selector.
+ *
+ * @param {string} selector The CSS selector to match against
+ * @param {Node} node The starting node for the traversal
+ * @return {Node | null} The closest matching element, or null if no match is found
+ */
+export function getClosestElement(selector, node) {
+  if (!node) {
+    return null;
+  }
+
+  return node.closest(selector) || getClosestElement(selector, node.getRootNode().host);
+}
+
+/**
  * Takes a string with values separated by space and returns a set the values
  *
  * @param {string} value
