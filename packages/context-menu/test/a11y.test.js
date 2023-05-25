@@ -8,7 +8,7 @@ import { getMenuItems } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
-    let contextMenu, button, overlay;
+    let contextMenu, button;
 
     beforeEach(() => {
       contextMenu = fixtureSync(`
@@ -18,7 +18,6 @@ describe('a11y', () => {
       `);
       contextMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', children: [{ text: 'Item 1/0' }] }];
       button = contextMenu.querySelector('button');
-      overlay = contextMenu.$.overlay;
       button.focus();
     });
 
