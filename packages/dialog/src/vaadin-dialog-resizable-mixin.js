@@ -51,10 +51,7 @@ registerStyles(
     .resizer.edge {
       height: 8px;
       width: 8px;
-      top: -4px;
-      right: -4px;
-      bottom: -4px;
-      left: -4px;
+      inset: -4px;
     }
 
     .resizer.edge.n {
