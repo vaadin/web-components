@@ -56,10 +56,7 @@ const button = css`
     /* We rely on the host always being relative */
     position: absolute;
     z-index: 1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     background-color: currentColor;
     border-radius: inherit;
     opacity: 0;
