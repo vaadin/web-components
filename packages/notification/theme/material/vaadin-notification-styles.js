@@ -7,18 +7,12 @@ registerStyles(
   'vaadin-notification-container',
   css`
     :host {
-      top: 0;
-      bottom: 0;
-      left: 4px;
-      right: 4px;
+      inset: 0 4px;
     }
 
     @media (min-width: 420px) {
       :host {
-        top: 0;
-        bottom: 0;
-        left: 12px;
-        right: 12px;
+        top: 0 12px;
       }
     }
   `,
