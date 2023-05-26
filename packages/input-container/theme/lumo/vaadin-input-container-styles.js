@@ -40,10 +40,7 @@ registerStyles(
     :host::after {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       border-radius: inherit;
       pointer-events: none;
       background-color: var(--lumo-contrast-50pct);
