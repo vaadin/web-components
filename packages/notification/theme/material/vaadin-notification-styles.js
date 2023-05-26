@@ -12,7 +12,7 @@ registerStyles(
 
     @media (min-width: 420px) {
       :host {
-        top: 0 12px;
+        inset: 0 12px;
       }
     }
   `,
