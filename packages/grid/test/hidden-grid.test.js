@@ -40,7 +40,7 @@ describe('hidden grid', () => {
         <vaadin-grid size="1000">
           <vaadin-grid-column header="foo"></vaadin-grid-column>
         </vaadin-grid>
-    `);
+      `);
       grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
         root.textContent = model.index + 1;
       };
