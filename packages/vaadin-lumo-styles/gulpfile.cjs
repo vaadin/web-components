@@ -151,30 +151,28 @@ Iconset.register('lumo', 1000, template);\n`;
           let output = createCopyright();
           output += `
 import './version.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
-const template = document.createElement('template');
+const fontIcons = css\`
+  @font-face {
+    font-family: 'lumo-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')}) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 
-template.innerHTML = \`
-  <style>
-    @font-face {
-      font-family: 'lumo-icons';
-      src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')}) format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    html {
+  html {
 `;
           glyphs.forEach((g) => {
             const name = g.name.replace(/\s/g, '-').toLowerCase();
             const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
-            output += `      --lumo-icons-${name}: "${unicode}";\n`;
+            output += `    --lumo-icons-${name}: "${unicode}";\n`;
           });
-          output += `    }
-  </style>
+          output += `  }
 \`;
 
-document.head.appendChild(template.content);
+addLumoGlobalStyles('font-icons', fontIcons);
 `;
           fs.writeFile('font-icons.js', output, (err) => {
             if (err) {
