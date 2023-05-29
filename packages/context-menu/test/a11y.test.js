@@ -6,6 +6,15 @@ import '../vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getMenuItems } from './helpers.js';
 
+function outsideClick() {
+  // Move focus to body
+  document.body.tabIndex = 0;
+  document.body.focus();
+  document.body.tabIndex = -1;
+  // Outside click
+  document.body.click();
+}
+
 describe('a11y', () => {
   describe('focus restoration', () => {
     let contextMenu, contextMenuButton, beforeButton, afterButton;
@@ -32,6 +41,27 @@ describe('a11y', () => {
       expect(getDeepActiveElement()).to.equal(menuItem);
     });
 
+    it('should restore focus on outside click', async () => {
+      contextMenuButton.click();
+      await nextRender();
+      outsideClick();
+      await nextRender();
+      expect(getDeepActiveElement()).to.equal(contextMenuButton);
+    });
+
+    it('should restore focus on outside click when a sub-menu is open', async () => {
+      contextMenuButton.click();
+      await nextRender();
+      // Move focus to Item 1
+      await sendKeys({ press: 'ArrowDown' });
+      // Open Item 1
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      outsideClick();
+      await nextRender();
+      expect(getDeepActiveElement()).to.equal(contextMenuButton);
+    });
+
     it('should restore focus on root menu item selection', async () => {
       contextMenuButton.click();
       await nextRender();
@@ -41,7 +71,7 @@ describe('a11y', () => {
       expect(getDeepActiveElement()).to.equal(contextMenuButton);
     });
 
-    it('should restore focus on sub menu item selection', async () => {
+    it('should restore focus on sub-menu item selection', async () => {
       contextMenuButton.click();
       await nextRender();
       // Move focus to Item 1
