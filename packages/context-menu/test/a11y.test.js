@@ -8,37 +8,41 @@ import { getMenuItems } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
-    let contextMenu, button;
+    let contextMenu, contextMenuButton, beforeButton, afterButton;
 
     beforeEach(() => {
-      contextMenu = fixtureSync(`
-        <vaadin-context-menu open-on="click">
-          <button>Open context menu</button>
-        </vaadin-context-menu>
+      const wrapper = fixtureSync(`
+        <div>
+          <button>Before</button>
+          <vaadin-context-menu open-on="click">
+            <button>Open context menu</button>
+          </vaadin-context-menu>
+          <button>After</button>
       `);
+      [beforeButton, contextMenu, afterButton] = wrapper.children;
       contextMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', children: [{ text: 'Item 1/0' }] }];
-      button = contextMenu.querySelector('button');
-      button.focus();
+      contextMenuButton = contextMenu.querySelector('button');
+      contextMenuButton.focus();
     });
 
     it('should move focus to the menu on open', async () => {
-      button.click();
+      contextMenuButton.click();
       await nextRender();
       const menuItem = getMenuItems(contextMenu)[0];
       expect(getDeepActiveElement()).to.equal(menuItem);
     });
 
     it('should restore focus on root menu item selection', async () => {
-      button.click();
+      contextMenuButton.click();
       await nextRender();
       // Select Item 0
       await sendKeys({ press: 'Enter' });
       await nextRender();
-      expect(getDeepActiveElement()).to.equal(button);
+      expect(getDeepActiveElement()).to.equal(contextMenuButton);
     });
 
     it('should restore focus on sub menu item selection', async () => {
-      button.click();
+      contextMenuButton.click();
       await nextRender();
       // Move focus to Item 1
       await sendKeys({ press: 'ArrowDown' });
@@ -48,7 +52,23 @@ describe('a11y', () => {
       // Select Item 1/1
       await sendKeys({ press: 'Enter' });
       await nextRender();
-      expect(getDeepActiveElement()).to.equal(button);
+      expect(getDeepActiveElement()).to.equal(contextMenuButton);
+    });
+
+    it('should move focus to the prev element outside the menu on Shift+Tab pressed inside', async () => {
+      contextMenuButton.click();
+      await nextRender();
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(getDeepActiveElement()).to.equal(beforeButton);
+    });
+
+    it('should move focus to the next element outside the menu on Tab pressed inside', async () => {
+      contextMenuButton.click();
+      await nextRender();
+      await sendKeys({ press: 'Tab' });
+      expect(getDeepActiveElement()).to.equal(afterButton);
     });
   });
 });
