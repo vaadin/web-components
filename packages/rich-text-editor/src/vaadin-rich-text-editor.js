@@ -596,7 +596,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     const TAB_KEY = 9;
 
     editorContent.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && !this.__tabBindings) {
         this.__tabBindings = this._editor.keyboard.bindings[TAB_KEY];
         this._editor.keyboard.bindings[TAB_KEY] = null;
       } else if (this.__tabBindings) {
