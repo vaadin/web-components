@@ -172,7 +172,7 @@ describe('accessibility', () => {
       editor.focus();
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.be.equal(button);
+      expect(document.activeElement).to.equal(button);
     });
 
     it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
@@ -181,7 +181,7 @@ describe('accessibility', () => {
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
-      expect(getDeepActiveElement()).to.be.equal(buttons[0]);
+      expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 
     it('should change indentation and prevent shift-tab keydown in the code block', () => {
