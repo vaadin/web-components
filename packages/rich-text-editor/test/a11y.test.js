@@ -184,7 +184,7 @@ describe('accessibility', () => {
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 
-    it('should keep default Tab behavior if Esc is hit multiple times', async () => {
+    it('should restore default Tab behavior after multiple Esc and then Tab', async () => {
       const wrapper = fixtureSync(`<div>
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
         <button>button</button>
