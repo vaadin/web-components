@@ -185,9 +185,21 @@ describe('accessibility', () => {
     });
 
     it('should keep default Tab behavior if Esc is hit multiple times', async () => {
+      const wrapper = fixtureSync(`<div>
+        <vaadin-rich-text-editor></vaadin-rich-text-editor>
+        <button>button</button>
+      </div>`);
+      const [rte, button] = wrapper.children;
+      editor = rte._editor;
       editor.focus();
+      // Hitting Escape multiple times and Tab should move focus to next element
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(button);
+
+      // Checking that default Tab behavior is restored
+      editor.focus();
       await sendKeys({ press: 'Tab' });
       if (rte.__debounceSetValue) {
         rte.__debounceSetValue.flush();
