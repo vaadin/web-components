@@ -161,9 +161,9 @@ export const OverlayFocusMixin = (superClass) =>
       if (restoreFocusNode) {
         if (getDeepActiveElement() === document.body) {
           // In Firefox and Safari, focusing the restoreFocusNode synchronously
-          // doesn't work as expected when closing the overlay on outside click.
-          // In this case, these browsers force focus to move to the body element
-          // and retain it there until the next event loop iteration.
+          // doesn't work as expected when the overlay is closed by outside click.
+          // These browsers force focus to move to the body element and retain it
+          // there until the next event loop iteration.
           setTimeout(() => restoreFocusNode.focus());
         } else {
           restoreFocusNode.focus();
