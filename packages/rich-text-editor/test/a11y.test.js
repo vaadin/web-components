@@ -184,6 +184,17 @@ describe('accessibility', () => {
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 
+    it('should keep default Tab behavior if Esc is hit multiple times', async () => {
+      editor.focus();
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Tab' });
+      if (rte.__debounceSetValue) {
+        rte.__debounceSetValue.flush();
+      }
+      expect(rte.htmlValue).to.equal('<p>\t</p>');
+    });
+
     it('should change indentation and prevent shift-tab keydown in the code block', () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
