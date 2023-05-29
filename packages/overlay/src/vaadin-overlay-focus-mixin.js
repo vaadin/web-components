@@ -166,8 +166,6 @@ export const OverlayFocusMixin = (superClass) =>
           // there until the next event loop iteration.
           setTimeout(() => restoreFocusNode.focus());
         } else {
-          // In other cases, restore focus synchronously to allow tabbing outside
-          // the overlay when no focus trap is present.
           restoreFocusNode.focus();
         }
 
