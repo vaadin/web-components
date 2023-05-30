@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { arrowDown, arrowRight, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-menu-bar.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { outsideClick } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
@@ -32,10 +33,31 @@ describe('a11y', () => {
       expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
-    it('should restore focus on sub-menu item selection', async () => {
-      buttons[0].click();
+    it('should restore focus on outside click', async () => {
+      // Open Item 0
+      arrowDown(getDeepActiveElement());
       await nextRender();
-      // Move to Item 0
+      outsideClick();
+      await nextRender();
+      expect(getDeepActiveElement()).to.equal(buttons[0]);
+    });
+
+    it('should restore focus on outside click when a sub-menu is open', async () => {
+      // Open Item 0
+      arrowDown(getDeepActiveElement());
+      await nextRender();
+      // Move to Item 0/1
+      arrowDown(getDeepActiveElement());
+      await nextRender();
+      // Open Item 0/1
+      arrowRight(getDeepActiveElement());
+      outsideClick();
+      await nextRender();
+      expect(getDeepActiveElement()).to.equal(buttons[0]);
+    });
+
+    it('should restore focus on sub-menu item selection', async () => {
+      // Open Item 0
       arrowDown(getDeepActiveElement());
       await nextRender();
       // Select Item 0/0
@@ -44,9 +66,7 @@ describe('a11y', () => {
     });
 
     it('should restore focus on nested sub-menu item selection', async () => {
-      buttons[0].click();
-      await nextRender();
-      // Move to Item 0
+      // Open Item 0
       arrowDown(getDeepActiveElement());
       await nextRender();
       // Move to Item 0/1
