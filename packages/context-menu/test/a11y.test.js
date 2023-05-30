@@ -4,16 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getMenuItems } from './helpers.js';
-
-function outsideClick() {
-  // Move focus to body
-  document.body.tabIndex = 0;
-  document.body.focus();
-  document.body.tabIndex = -1;
-  // Outside click
-  document.body.click();
-}
+import { getMenuItems, outsideClick } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
