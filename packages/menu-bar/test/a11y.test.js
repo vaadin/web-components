@@ -1,15 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import { arrowDown, arrowRight, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import '../src/vaadin-menu-bar.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
     let menuBar, overlay, buttons;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       menuBar = fixtureSync(`<vaadin-menu-bar></vaadin-menu-bar>`);
       menuBar.items = [
         {
@@ -29,34 +27,36 @@ describe('a11y', () => {
     });
 
     it('should move focus to the sub-menu on open', async () => {
-      await sendKeys({ press: 'ArrowDown' });
+      buttons[0].click();
       await nextRender();
-      const menuItem = overlay.querySelector('[role=menuitem]');
-      expect(getDeepActiveElement()).to.equal(menuItem);
+      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
     it('should restore focus on sub-menu item selection', async () => {
-      // Open Item 0
-      await sendKeys({ press: 'ArrowDown' });
+      buttons[0].click();
+      await nextRender();
+      // Move to Item 0
+      arrowDown(getDeepActiveElement());
       await nextRender();
       // Select Item 0/0
-      await sendKeys({ press: 'Enter' });
-      await nextRender();
+      enter(getDeepActiveElement());
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 
     it('should restore focus on nested sub-menu item selection', async () => {
-      // Open Item 0
-      await sendKeys({ press: 'ArrowDown' });
+      buttons[0].click();
+      await nextRender();
+      // Move to Item 0
+      arrowDown(getDeepActiveElement());
       await nextRender();
       // Move to Item 0/1
-      await sendKeys({ press: 'ArrowDown' });
+      arrowDown(getDeepActiveElement());
+      await nextRender();
       // Open Item 0/1
-      await sendKeys({ press: 'ArrowRight' });
+      arrowRight(getDeepActiveElement());
       await nextRender();
       // Select Item 0/1/0
-      await sendKeys({ press: 'Enter' });
-      await nextRender();
+      enter(getDeepActiveElement());
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
   });
