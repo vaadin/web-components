@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
@@ -17,6 +17,13 @@ describe('scrollable tabs', () => {
         <vaadin-tab>Baz1</vaadin-tab>
         <vaadin-tab>Foo2</vaadin-tab>
         <vaadin-tab>Bar2</vaadin-tab>
+        <vaadin-tab>Baz2</vaadin-tab>
+        <vaadin-tab>Foo3</vaadin-tab>
+        <vaadin-tab>Bar3</vaadin-tab>
+        <vaadin-tab>Baz3</vaadin-tab>
+        <vaadin-tab>Foo4</vaadin-tab>
+        <vaadin-tab>Bar4</vaadin-tab>
+        <vaadin-tab>Baz4</vaadin-tab>
       </vaadin-tabs>
     `);
     tabs._observer.flush();
@@ -53,9 +60,10 @@ describe('scrollable tabs', () => {
     });
 
     it('should scroll forward when arrow button is clicked', () => {
+      const initialScrollLeft = scroller.scrollLeft;
       const btn = tabs.shadowRoot.querySelector('[part="forward-button"]');
       btn.click();
-      expect(scroller.scrollLeft).to.be.closeTo(scroller.scrollWidth - scroller.offsetWidth, 1);
+      expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
     });
 
     it('should scroll back when arrow button is clicked', () => {
@@ -63,6 +71,66 @@ describe('scrollable tabs', () => {
       const btn = tabs.shadowRoot.querySelector('[part="back-button"]');
       btn.click();
       expect(scroller.scrollLeft).to.be.equal(0);
+    });
+
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        beforeEach(async () => {
+          tabs.setAttribute('dir', dir);
+          await nextFrame();
+        });
+
+        it('should display the next item first on forward button click', async () => {
+          // Iterate with ascending index
+          let initialFirstNotFullyVisibleItemIndex;
+          for (let i = 1; i < items.length; i++) {
+            if (!tabs._isItemFullyVisible(items[i])) {
+              initialFirstNotFullyVisibleItemIndex = i;
+              break;
+            }
+          }
+          const button = tabs.shadowRoot.querySelector('[part="forward-button"]');
+          button.click();
+          // Wait for the button visibility to change
+          await aTimeout(50);
+          // Iterate with ascending index
+          let firstFullyVisibleItemIndex;
+          for (let i = 0; i < items.length; i++) {
+            if (tabs._isItemFullyVisible(items[i])) {
+              firstFullyVisibleItemIndex = i;
+              break;
+            }
+          }
+          expect(firstFullyVisibleItemIndex).to.equal(initialFirstNotFullyVisibleItemIndex);
+        });
+
+        it('should display the previous item first on back button click', async () => {
+          tabs._scrollToItem(items.length - 1);
+          // Wait for the button visibility to change
+          await aTimeout(50);
+          // Iterate with descending index
+          let initialFirstNotFullyVisibleItemIndex;
+          for (let i = items.length - 2; i >= 0; i--) {
+            if (!tabs._isItemFullyVisible(items[i])) {
+              initialFirstNotFullyVisibleItemIndex = i;
+              break;
+            }
+          }
+          const button = tabs.shadowRoot.querySelector('[part="back-button"]');
+          button.click();
+          // Wait for the button visibility to change
+          await aTimeout(50);
+          // Iterate with descending index
+          let firstFullyVisibleItemIndex;
+          for (let i = items.length - 1; i >= 0; i--) {
+            if (tabs._isItemFullyVisible(items[i])) {
+              firstFullyVisibleItemIndex = i;
+              break;
+            }
+          }
+          expect(firstFullyVisibleItemIndex).to.equal(initialFirstNotFullyVisibleItemIndex);
+        });
+      });
     });
   });
 

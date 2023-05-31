@@ -299,9 +299,10 @@ export const ListMixin = (superClass) =>
     /**
      * Scroll the container to have the next item by the edge of the viewport.
      * @param {number} idx
+     * @param {boolean} scrollToNear
      * @protected
      */
-    _scrollToItem(idx) {
+    _scrollToItem(idx, scrollToNear = false) {
       const item = this.items[idx];
       if (!item) {
         return;
@@ -314,16 +315,28 @@ export const ListMixin = (superClass) =>
       const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
 
       let scrollDistance = 0;
-      if (
+
+      const moveForward =
         (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]]) ||
-        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]])
-      ) {
-        scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
-      } else if (
-        (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
-        (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]])
-      ) {
-        scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
+        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]]);
+
+      if (moveForward) {
+        if (scrollToNear) {
+          scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
+        } else {
+          scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
+        }
+      } else {
+        const moveBackwards =
+          (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
+          (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]]);
+        if (moveBackwards) {
+          if (scrollToNear) {
+            scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
+          } else {
+            scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
+          }
+        }
       }
 
       this._scroll(scrollDistance);

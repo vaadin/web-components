@@ -236,12 +236,70 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
 
   /** @private */
   _scrollForward() {
-    this._scroll(-this.__direction * this._scrollOffset);
+    const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
+    const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
+    const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
+    let itemIndexToScrollTo;
+    for (let i = this.items.length - 1; i >= 0; i--) {
+      if (
+        this._isItemFullyVisible(this.items[i], forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect)
+      ) {
+        break;
+      }
+      itemIndexToScrollTo = i;
+    }
+    this._scrollToItem(itemIndexToScrollTo, true);
   }
 
   /** @private */
   _scrollBack() {
-    this._scroll(this.__direction * this._scrollOffset);
+    const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
+    const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
+    const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
+    let itemIndexToScrollTo;
+    for (let i = 0; i < this.items.length; i++) {
+      if (
+        this._isItemFullyVisible(this.items[i], forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect)
+      ) {
+        break;
+      }
+      itemIndexToScrollTo = i;
+    }
+    this._scrollToItem(itemIndexToScrollTo, true);
+  }
+
+  /** @private */
+  _isItemFullyVisible(
+    item,
+    forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button'),
+    backButtonWidth = this._getNavigationButtonVisibleWidth('back-button'),
+    scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect(),
+  ) {
+    if (this._vertical) {
+      throw new Error('Visibility check is only supported for horizontal tabs.');
+    }
+    const buttonOnTheRightWidth = this.__isRTL ? backButtonWidth : forwardButtonWidth;
+    const buttonOnTheLeftWidth = this.__isRTL ? forwardButtonWidth : backButtonWidth;
+    const itemBoundingClientRect = item.getBoundingClientRect();
+    if (scrollerElementBoundingClientRect.right - buttonOnTheRightWidth < Math.floor(itemBoundingClientRect.right)) {
+      return false;
+    }
+    if (scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth > Math.floor(itemBoundingClientRect.left)) {
+      return false;
+    }
+    return true;
+  }
+
+  /** @private */
+  _getNavigationButtonVisibleWidth(buttonPartName) {
+    if (this._vertical) {
+      throw new Error('Navigation buttons are only available in horizontal tabs.');
+    }
+    const navigationButton = this.shadowRoot.querySelector(`[part="${buttonPartName}"]`);
+    if (window.getComputedStyle(navigationButton).opacity === '0') {
+      return 0;
+    }
+    return navigationButton.clientWidth;
   }
 
   /** @private */
