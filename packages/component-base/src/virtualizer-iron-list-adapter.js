@@ -299,6 +299,11 @@ export class IronListAdapter {
   toggleScrollListener() {}
 
   _scrollHandler() {
+    // The scroll target is hidden.
+    if (this.scrollTarget.offsetHeight === 0) {
+      return;
+    }
+
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
 
     super._scrollHandler();
