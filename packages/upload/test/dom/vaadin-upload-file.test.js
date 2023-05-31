@@ -15,8 +15,14 @@ describe('vaadin-upload-file', () => {
   });
 
   describe('shadow', () => {
+    const SNAPSHOT_CONFIG = {
+      // Exclude inline style as we are not testing
+      // the `vaadin-progress-bar` internal logic.
+      ignoreAttributes: ['style'],
+    };
+
     it('default', async () => {
-      await expect(uploadFile).shadowDom.to.equalSnapshot();
+      await expect(uploadFile).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 });
