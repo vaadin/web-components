@@ -49,8 +49,9 @@ describe('vaadin-confirm-dialog', () => {
       expect(confirm.opened).to.be.false;
     });
 
-    it('should propagate opened to internal dialog', () => {
+    it('should propagate opened to internal dialog', async () => {
       confirm.opened = true;
+      await nextRender();
       expect(dialog.opened).to.be.true;
     });
 
@@ -607,10 +608,11 @@ describe('vaadin-confirm-dialog', () => {
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
 
-      it('should set `aria-describedby` when `accessibleDescriptionRef` is set before attach', () => {
+      it('should set `aria-describedby` when `accessibleDescriptionRef` is set before attach', async () => {
         confirm.accessibleDescriptionRef = 'id-0';
         confirm.opened = true;
         document.body.appendChild(confirm);
+        await nextRender();
 
         const overlay = confirm.$.dialog.$.overlay;
         expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
