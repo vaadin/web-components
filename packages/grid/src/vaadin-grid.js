@@ -407,7 +407,7 @@ class Grid extends ElementMixin(
       },
 
       /** @private */
-      _recalculateColumnWidthOnceLoadingFinished: {
+      __pendingRecalculateColumnWidths: {
         type: Boolean,
         value: true,
       },
@@ -507,10 +507,7 @@ class Grid extends ElementMixin(
       setTimeout(() => {
         this.__updateFooterPositioning();
         this.__updateColumnsBodyContentHidden();
-        if (this._recalculateColumnWidthOnceVisible) {
-          this._recalculateColumnWidthOnceVisible = false;
-          this.recalculateColumnWidths();
-        }
+        this.__tryToRecalculateColumnWidthsIfPending();
       }),
     ).observe(this.$.table);
 
@@ -570,18 +567,6 @@ class Grid extends ElementMixin(
   /** @private */
   __hasRowsWithClientHeight() {
     return !!Array.from(this.$.items.children).filter((row) => row.clientHeight).length;
-  }
-
-  /** @protected */
-  __itemsReceived() {
-    if (
-      this._recalculateColumnWidthOnceLoadingFinished &&
-      !this._cache.isLoading() &&
-      this.__hasRowsWithClientHeight()
-    ) {
-      this._recalculateColumnWidthOnceLoadingFinished = false;
-      this.recalculateColumnWidths();
-    }
   }
 
   /** @private */
@@ -722,16 +707,34 @@ class Grid extends ElementMixin(
     if (!this._columnTree) {
       return; // No columns
     }
-    if (isElementHidden(this)) {
-      this._recalculateColumnWidthOnceVisible = true;
-      return;
-    }
-    if (this._cache.isLoading()) {
-      this._recalculateColumnWidthOnceLoadingFinished = true;
+    if (isElementHidden(this) || this._cache.isLoading()) {
+      this.__pendingRecalculateColumnWidths = true;
       return;
     }
     const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
     this._recalculateColumnWidths(cols);
+  }
+
+  /** @private */
+  __tryToRecalculateColumnWidthsIfPending() {
+    if (
+      this.__pendingRecalculateColumnWidths &&
+      !isElementHidden(this) &&
+      !this._cache.isLoading() &&
+      this.__hasRowsWithClientHeight()
+    ) {
+      this.__pendingRecalculateColumnWidths = false;
+      this.recalculateColumnWidths();
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onDataProviderPageLoaded() {
+    super._onDataProviderPageLoaded();
+    this.__tryToRecalculateColumnWidthsIfPending();
   }
 
   /** @private */
@@ -759,7 +762,7 @@ class Grid extends ElementMixin(
       animationFrame,
       () => {
         this._afterScroll();
-        this.__itemsReceived();
+        this.__tryToRecalculateColumnWidthsIfPending();
       },
     );
     return rows;
@@ -1167,7 +1170,7 @@ class Grid extends ElementMixin(
     // ShadyCSS applies scoping suffixes to animation names
     if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
       e.stopPropagation();
-      this.__itemsReceived();
+      this.__tryToRecalculateColumnWidthsIfPending();
 
       requestAnimationFrame(() => {
         this.__scrollToPendingIndexes();
