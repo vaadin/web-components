@@ -314,20 +314,16 @@ export const ListMixin = (superClass) =>
       const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
 
       let scrollDistance = 0;
-
-      const moveForward =
+      if (
         (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]]) ||
-        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]]);
-
-      if (moveForward) {
+        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]])
+      ) {
         scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
-      } else {
-        const moveBackwards =
-          (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
-          (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]]);
-        if (moveBackwards) {
-          scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
-        }
+      } else if (
+        (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
+        (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]])
+      ) {
+        scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
       }
 
       this._scroll(scrollDistance);
