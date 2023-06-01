@@ -441,10 +441,13 @@ export const DataProviderMixin = (superClass) =>
           }
 
           // Notify that new data has been received
-          this.__itemsReceived();
+          this._onDataProviderPageLoaded();
         });
       }
     }
+
+    /** @protected */
+    _onDataProviderPageLoaded() {}
 
     /**
      * @param {number} index
