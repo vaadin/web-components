@@ -171,6 +171,13 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     return ['__tabsItemsChanged(items, items.*)'];
   }
 
+  /** @private */
+  __itemVisibility = Object.freeze({
+    invisible: 0,
+    partial: 1,
+    full: 2,
+  });
+
   constructor() {
     super();
 
@@ -239,16 +246,34 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
     const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
     const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
-    let itemIndexToScrollTo;
+    let itemToScrollTo;
     for (let i = this.items.length - 1; i >= 0; i--) {
-      if (
-        this._isItemFullyVisible(this.items[i], forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect)
-      ) {
+      const itemVisibility = this._getItemVisibility(
+        this.items[i],
+        forwardButtonWidth,
+        backButtonWidth,
+        scrollerElementBoundingClientRect,
+      );
+      if (itemVisibility === this.__itemVisibility.partial) {
+        itemToScrollTo = this.items[i];
         break;
       }
-      itemIndexToScrollTo = i;
+      if (itemVisibility === this.__itemVisibility.full) {
+        itemToScrollTo = this.items[Math.min(i + 1, this.items.length - 1)];
+        break;
+      }
     }
-    this._scrollToItem(itemIndexToScrollTo, true);
+    const itemBoundingClientRect = itemToScrollTo.getBoundingClientRect();
+    const transitionCompensation = 20;
+    let scrollOffset;
+    if (this.__isRTL) {
+      const scrollerRightEdge = scrollerElementBoundingClientRect.right - backButtonWidth - transitionCompensation;
+      scrollOffset = itemBoundingClientRect.right - scrollerRightEdge;
+    } else {
+      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + backButtonWidth + transitionCompensation;
+      scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
+    }
+    this._scroll(scrollOffset);
   }
 
   /** @private */
@@ -256,20 +281,38 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
     const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
     const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
-    let itemIndexToScrollTo;
-    for (let i = 0; i < this.items.length; i++) {
-      if (
-        this._isItemFullyVisible(this.items[i], forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect)
-      ) {
+    let itemToScrollTo;
+    for (let i = 0; i < this.items.length - 1; i++) {
+      const itemVisibility = this._getItemVisibility(
+        this.items[i],
+        forwardButtonWidth,
+        backButtonWidth,
+        scrollerElementBoundingClientRect,
+      );
+      if (itemVisibility === this.__itemVisibility.partial) {
+        itemToScrollTo = this.items[i];
         break;
       }
-      itemIndexToScrollTo = i;
+      if (itemVisibility === this.__itemVisibility.full) {
+        itemToScrollTo = this.items[Math.max(i - 1, 0)];
+        break;
+      }
     }
-    this._scrollToItem(itemIndexToScrollTo, true);
+    const itemBoundingClientRect = itemToScrollTo.getBoundingClientRect();
+    const transitionCompensation = 20;
+    let scrollOffset;
+    if (this.__isRTL) {
+      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + backButtonWidth + transitionCompensation;
+      scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
+    } else {
+      const scrollerRightEdge = scrollerElementBoundingClientRect.right - backButtonWidth - transitionCompensation;
+      scrollOffset = itemBoundingClientRect.right - scrollerRightEdge;
+    }
+    this._scroll(scrollOffset);
   }
 
   /** @private */
-  _isItemFullyVisible(
+  _getItemVisibility(
     item,
     forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button'),
     backButtonWidth = this._getNavigationButtonVisibleWidth('back-button'),
@@ -280,14 +323,22 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     }
     const buttonOnTheRightWidth = this.__isRTL ? backButtonWidth : forwardButtonWidth;
     const buttonOnTheLeftWidth = this.__isRTL ? forwardButtonWidth : backButtonWidth;
+    const scrollerRightEdge = scrollerElementBoundingClientRect.right - buttonOnTheRightWidth;
+    const scrollerLeftEdge = scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth;
     const itemBoundingClientRect = item.getBoundingClientRect();
-    if (scrollerElementBoundingClientRect.right - buttonOnTheRightWidth < Math.floor(itemBoundingClientRect.right)) {
-      return false;
+    if (
+      scrollerRightEdge <= Math.floor(itemBoundingClientRect.left) ||
+      scrollerLeftEdge >= Math.floor(itemBoundingClientRect.right)
+    ) {
+      return this.__itemVisibility.invisible;
     }
-    if (scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth > Math.floor(itemBoundingClientRect.left)) {
-      return false;
+    if (
+      scrollerRightEdge >= Math.floor(itemBoundingClientRect.right) &&
+      scrollerLeftEdge <= Math.floor(itemBoundingClientRect.left)
+    ) {
+      return this.__itemVisibility.full;
     }
-    return true;
+    return this.__itemVisibility.partial;
   }
 
   /** @private */
@@ -295,11 +346,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     if (this._vertical) {
       throw new Error('Navigation buttons are only available in horizontal tabs.');
     }
-    const navigationButton = this.shadowRoot.querySelector(`[part="${buttonPartName}"]`);
-    if (window.getComputedStyle(navigationButton).opacity === '0') {
-      return 0;
-    }
-    return navigationButton.clientWidth;
+    return this.shadowRoot.querySelector(`[part="${buttonPartName}"]`).clientWidth;
   }
 
   /** @private */

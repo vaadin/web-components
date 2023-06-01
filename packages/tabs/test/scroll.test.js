@@ -84,7 +84,7 @@ describe('scrollable tabs', () => {
           // Iterate with ascending index
           let initialFirstNotFullyVisibleItemIndex;
           for (let i = 1; i < items.length; i++) {
-            if (!tabs._isItemFullyVisible(items[i])) {
+            if (tabs._getItemVisibility(items[i]) !== tabs.__itemVisibility.full) {
               initialFirstNotFullyVisibleItemIndex = i;
               break;
             }
@@ -96,7 +96,7 @@ describe('scrollable tabs', () => {
           // Iterate with ascending index
           let firstFullyVisibleItemIndex;
           for (let i = 0; i < items.length; i++) {
-            if (tabs._isItemFullyVisible(items[i])) {
+            if (tabs._getItemVisibility(items[i]) === tabs.__itemVisibility.full) {
               firstFullyVisibleItemIndex = i;
               break;
             }
@@ -111,7 +111,7 @@ describe('scrollable tabs', () => {
           // Iterate with descending index
           let initialFirstNotFullyVisibleItemIndex;
           for (let i = items.length - 2; i >= 0; i--) {
-            if (!tabs._isItemFullyVisible(items[i])) {
+            if (tabs._getItemVisibility(items[i]) !== tabs.__itemVisibility.full) {
               initialFirstNotFullyVisibleItemIndex = i;
               break;
             }
@@ -123,7 +123,7 @@ describe('scrollable tabs', () => {
           // Iterate with descending index
           let firstFullyVisibleItemIndex;
           for (let i = items.length - 1; i >= 0; i--) {
-            if (tabs._isItemFullyVisible(items[i])) {
+            if (tabs._getItemVisibility(items[i]) === tabs.__itemVisibility.full) {
               firstFullyVisibleItemIndex = i;
               break;
             }

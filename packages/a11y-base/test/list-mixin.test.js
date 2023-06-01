@@ -638,32 +638,6 @@ const runTests = (defineHelper, baseMixin) => {
         list._scrollToItem(1);
         expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
       });
-
-      it('should scroll less horizontally when scrolled to near', async () => {
-        list.orientation = 'horizontal';
-        await nextFrame();
-        const initialScrollLeft = list._scrollerElement.scrollLeft;
-
-        list._scrollToItem(2, true);
-        const scrollLeftAfterScrollToNear = list._scrollerElement.scrollLeft;
-        expect(scrollLeftAfterScrollToNear).to.be.greaterThan(initialScrollLeft);
-
-        list._scrollToItem(2);
-        expect(list._scrollerElement.scrollLeft).to.be.greaterThan(scrollLeftAfterScrollToNear);
-      });
-
-      it('should scroll less vertically when scrolled to near', async () => {
-        list.orientation = 'vertical';
-        await nextFrame();
-        const initialScrollTop = list._scrollerElement.scrollTop;
-
-        list._scrollToItem(2, true);
-        const scrollTopAfterScrollToNear = list._scrollerElement.scrollTop;
-        expect(scrollTopAfterScrollToNear).to.be.greaterThan(initialScrollTop);
-
-        list._scrollToItem(2);
-        expect(list._scrollerElement.scrollTop).to.be.greaterThan(scrollTopAfterScrollToNear);
-      });
     });
 
     describe('scroll in advance', () => {
