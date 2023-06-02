@@ -243,6 +243,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     for (let i = this.items.length - 1; i >= 0; i--) {
       const isItemVisible = this._isItemVisible(
         this.items[i],
+        true,
         forwardButtonWidth,
         backButtonWidth,
         scrollerElementBoundingClientRect,
@@ -277,6 +278,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     for (let i = 0; i < this.items.length - 1; i++) {
       const isItemVisible = this._isItemVisible(
         this.items[i],
+        true,
         forwardButtonWidth,
         backButtonWidth,
         scrollerElementBoundingClientRect,
@@ -303,12 +305,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
   }
 
   /** @private */
-  _isItemVisible(
-    item,
-    forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button'),
-    backButtonWidth = this._getNavigationButtonVisibleWidth('back-button'),
-    scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect(),
-  ) {
+  _isItemVisible(item, includePartial, forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect) {
     if (this._vertical) {
       throw new Error('Visibility check is only supported for horizontal tabs.');
     }
@@ -317,9 +314,15 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerRightEdge = scrollerElementBoundingClientRect.right - buttonOnTheRightWidth;
     const scrollerLeftEdge = scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth;
     const itemBoundingClientRect = item.getBoundingClientRect();
+    if (includePartial) {
+      return (
+        scrollerRightEdge > Math.floor(itemBoundingClientRect.left) &&
+        scrollerLeftEdge < Math.floor(itemBoundingClientRect.right)
+      );
+    }
     return (
-      scrollerRightEdge > Math.floor(itemBoundingClientRect.left) &&
-      scrollerLeftEdge < Math.floor(itemBoundingClientRect.right)
+      scrollerRightEdge > Math.floor(itemBoundingClientRect.right) &&
+      scrollerLeftEdge < Math.floor(itemBoundingClientRect.left)
     );
   }
 
