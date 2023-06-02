@@ -171,13 +171,6 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     return ['__tabsItemsChanged(items, items.*)'];
   }
 
-  /** @private */
-  __itemVisibility = Object.freeze({
-    invisible: 0,
-    partial: 1,
-    full: 2,
-  });
-
   constructor() {
     super();
 
@@ -248,18 +241,14 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
     let itemToScrollTo;
     for (let i = this.items.length - 1; i >= 0; i--) {
-      const itemVisibility = this._getItemVisibility(
+      const isItemVisible = this._isItemVisible(
         this.items[i],
         forwardButtonWidth,
         backButtonWidth,
         scrollerElementBoundingClientRect,
       );
-      if (itemVisibility === this.__itemVisibility.partial) {
+      if (isItemVisible) {
         itemToScrollTo = this.items[i];
-        break;
-      }
-      if (itemVisibility === this.__itemVisibility.full) {
-        itemToScrollTo = this.items[Math.min(i + 1, this.items.length - 1)];
         break;
       }
     }
@@ -272,6 +261,9 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     } else {
       const scrollerLeftEdge = scrollerElementBoundingClientRect.left + backButtonWidth + transitionCompensation;
       scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
+    }
+    if (Math.floor(scrollOffset) === 0) {
+      scrollOffset = -this.__direction * (this._scrollOffset - backButtonWidth - transitionCompensation);
     }
     this._scroll(scrollOffset);
   }
@@ -283,18 +275,14 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
     let itemToScrollTo;
     for (let i = 0; i < this.items.length - 1; i++) {
-      const itemVisibility = this._getItemVisibility(
+      const isItemVisible = this._isItemVisible(
         this.items[i],
         forwardButtonWidth,
         backButtonWidth,
         scrollerElementBoundingClientRect,
       );
-      if (itemVisibility === this.__itemVisibility.partial) {
+      if (isItemVisible) {
         itemToScrollTo = this.items[i];
-        break;
-      }
-      if (itemVisibility === this.__itemVisibility.full) {
-        itemToScrollTo = this.items[Math.max(i - 1, 0)];
         break;
       }
     }
@@ -302,17 +290,20 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const transitionCompensation = 20;
     let scrollOffset;
     if (this.__isRTL) {
-      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + backButtonWidth + transitionCompensation;
+      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + forwardButtonWidth + transitionCompensation;
       scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
     } else {
-      const scrollerRightEdge = scrollerElementBoundingClientRect.right - backButtonWidth - transitionCompensation;
+      const scrollerRightEdge = scrollerElementBoundingClientRect.right - forwardButtonWidth - transitionCompensation;
       scrollOffset = itemBoundingClientRect.right - scrollerRightEdge;
+    }
+    if (Math.floor(scrollOffset) === 0) {
+      scrollOffset = this.__direction * (this._scrollOffset - forwardButtonWidth - transitionCompensation);
     }
     this._scroll(scrollOffset);
   }
 
   /** @private */
-  _getItemVisibility(
+  _isItemVisible(
     item,
     forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button'),
     backButtonWidth = this._getNavigationButtonVisibleWidth('back-button'),
@@ -326,19 +317,10 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerRightEdge = scrollerElementBoundingClientRect.right - buttonOnTheRightWidth;
     const scrollerLeftEdge = scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth;
     const itemBoundingClientRect = item.getBoundingClientRect();
-    if (
-      scrollerRightEdge <= Math.floor(itemBoundingClientRect.left) ||
-      scrollerLeftEdge >= Math.floor(itemBoundingClientRect.right)
-    ) {
-      return this.__itemVisibility.invisible;
-    }
-    if (
-      scrollerRightEdge >= Math.floor(itemBoundingClientRect.right) &&
-      scrollerLeftEdge <= Math.floor(itemBoundingClientRect.left)
-    ) {
-      return this.__itemVisibility.full;
-    }
-    return this.__itemVisibility.partial;
+    return (
+      scrollerRightEdge > Math.floor(itemBoundingClientRect.left) &&
+      scrollerLeftEdge < Math.floor(itemBoundingClientRect.right)
+    );
   }
 
   /** @private */
