@@ -38,60 +38,6 @@ snapshots["vaadin-message userName"] =
 `;
 /* end snapshot vaadin-message userName */
 
-snapshots["vaadin-message userAbbr"] = 
-`<slot name="avatar">
-</slot>
-<div part="content">
-  <div part="header">
-    <span part="name">
-    </span>
-    <span part="time">
-    </span>
-  </div>
-  <div part="message">
-    <slot>
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-message userAbbr */
-
-snapshots["vaadin-message userImg"] = 
-`<slot name="avatar">
-</slot>
-<div part="content">
-  <div part="header">
-    <span part="name">
-    </span>
-    <span part="time">
-    </span>
-  </div>
-  <div part="message">
-    <slot>
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-message userImg */
-
-snapshots["vaadin-message userColorIndex"] = 
-`<slot name="avatar">
-</slot>
-<div part="content">
-  <div part="header">
-    <span part="name">
-    </span>
-    <span part="time">
-    </span>
-  </div>
-  <div part="message">
-    <slot>
-    </slot>
-  </div>
-</div>
-`;
-/* end snapshot vaadin-message userColorIndex */
-
 snapshots["vaadin-message time"] = 
 `<slot name="avatar">
 </slot>
@@ -111,3 +57,60 @@ snapshots["vaadin-message time"] =
 `;
 /* end snapshot vaadin-message time */
 
+snapshots["vaadin-message avatar username"] =
+  `<vaadin-message>
+  <vaadin-avatar
+    abbr="JD"
+    aria-hidden="true"
+    name="Joan Doe"
+    role="button"
+    slot="avatar"
+    tabindex="-1"
+  >
+  </vaadin-avatar>
+</vaadin-message>
+`;
+/* end snapshot vaadin-message avatar username */
+
+snapshots["vaadin-message avatar abbr"] =
+`<vaadin-message>
+  <vaadin-avatar
+    abbr="JD"
+    aria-hidden="true"
+    role="button"
+    slot="avatar"
+    tabindex="-1"
+  >
+  </vaadin-avatar>
+</vaadin-message>
+`;
+/* end snapshot vaadin-message avatar abbr */
+
+snapshots["vaadin-message avatar img"] =
+`<vaadin-message>
+  <vaadin-avatar
+    aria-hidden="true"
+    img="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+    role="button"
+    slot="avatar"
+    tabindex="-1"
+  >
+  </vaadin-avatar>
+</vaadin-message>
+`;
+/* end snapshot vaadin-message avatar img */
+
+snapshots["vaadin-message avatar userColorIndex"] =
+`<vaadin-message>
+  <vaadin-avatar
+    aria-hidden="true"
+    has-color-index=""
+    role="button"
+    slot="avatar"
+    style="--vaadin-avatar-user-color: var(--vaadin-user-color-2);"
+    tabindex="-1"
+  >
+  </vaadin-avatar>
+</vaadin-message>
+`;
+/* end snapshot vaadin-message avatar userColorIndex */
