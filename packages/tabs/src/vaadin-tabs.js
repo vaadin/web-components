@@ -321,8 +321,8 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
       );
     }
     return (
-      scrollerRightEdge > Math.floor(itemBoundingClientRect.right) &&
-      scrollerLeftEdge < Math.floor(itemBoundingClientRect.left)
+      scrollerRightEdge >= Math.floor(itemBoundingClientRect.right) &&
+      scrollerLeftEdge <= Math.floor(itemBoundingClientRect.left)
     );
   }
 
