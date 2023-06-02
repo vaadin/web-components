@@ -3,6 +3,7 @@ import { fixtureSync, focusin, focusout, mousedown, nextFrame, oneEvent, tabKeyD
 import sinon from 'sinon';
 import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-avatar.js';
+import { Tooltip } from '@vaadin/tooltip';
 
 describe('vaadin-avatar', () => {
   let avatar, imgElement, iconElement, abbrElement;
@@ -192,6 +193,12 @@ describe('vaadin-avatar', () => {
     describe('tooltip', () => {
       let tooltip;
 
+      before(() => {
+        Tooltip.setDefaultFocusDelay(0);
+        Tooltip.setDefaultHoverDelay(0);
+        Tooltip.setDefaultHideDelay(0);
+      });
+
       beforeEach(async () => {
         avatar.withTooltip = true;
         await nextFrame();
@@ -246,6 +253,17 @@ describe('vaadin-avatar', () => {
       it('should remove tooltip element when withTooltip is set to false', () => {
         avatar.withTooltip = false;
         expect(tooltip.parentNode).to.be.null;
+      });
+
+      it('should show tooltip when avatar is at the edge of a scroll container', () => {
+        const container = fixtureSync('<div></div>');
+        container.setAttribute('style', 'width: 100px; height: 100px; overflow: auto;');
+        container.appendChild(avatar);
+
+        const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+        tabKeyDown(avatar);
+        avatar.focus();
+        expect(overlay.opened).to.be.true;
       });
     });
   });
