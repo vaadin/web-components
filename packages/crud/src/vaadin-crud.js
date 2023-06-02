@@ -1233,17 +1233,18 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __ensureNotPrevented(event) {
-    const result = this.dispatchEvent(event);
-    return event.defaultPrevented === false || result;
+  __fireEvent(type, item) {
+    const event = new CustomEvent(type, { detail: { item }, cancelable: true });
+    this.dispatchEvent(event);
+    return event.defaultPrevented === false;
   }
 
   /** @private */
   __openEditor(type, item) {
     this.__isDirty = false;
     this.__isNew = !item;
-    const event = new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item }, cancelable: true });
-    if (this.__ensureNotPrevented(event)) {
+    const result = this.__fireEvent(this.__isNew ? 'new' : 'edit', item);
+    if (result) {
       this.editedItem = item || {};
     } else {
       this.editorOpened = true;
@@ -1263,8 +1264,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         setProperty(path, e.value, item);
       }
     });
-    const event = new CustomEvent('save', { detail: { item }, cancelable: true });
-    if (this.__ensureNotPrevented(event)) {
+    const result = this.__fireEvent('save', item);
+    if (result) {
       if (this.__isNew && !this.dataProvider) {
         if (!this.items) {
           this.items = [item];
@@ -1293,8 +1294,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __confirmCancel() {
-    const event = new CustomEvent('cancel', { detail: { item: this.editedItem }, cancelable: true });
-    if (this.__ensureNotPrevented(event)) {
+    const result = this.__fireEvent('cancel', this.editedItem);
+    if (result) {
       this.__closeEditor();
     }
   }
@@ -1306,8 +1307,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __confirmDelete() {
-    const event = new CustomEvent('delete', { detail: { item: this.editedItem }, cancelable: true });
-    if (this.__ensureNotPrevented(event)) {
+    const result = this.__fireEvent('delete', this.editedItem);
+    if (result) {
       if (this.items && this.items.indexOf(this.editedItem) >= 0) {
         this.items.splice(this.items.indexOf(this.editedItem), 1);
       }
