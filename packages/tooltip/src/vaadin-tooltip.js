@@ -478,7 +478,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       ([entry]) => {
         this.__onTargetVisibilityChange(entry.isIntersecting);
       },
-      { threshold: 1 },
+      { threshold: 0 },
     );
 
     this._stateController = new TooltipStateController(this);
