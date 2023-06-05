@@ -126,6 +126,49 @@ describe('scrollable tabs', () => {
           const uniqueItemCount = [...new Set(allFullyVisibleItems)].length;
           expect(uniqueItemCount).to.equal(items.length);
         });
+
+        it('should not get stuck with wide tabs when scrolled forward to the end via button', async () => {
+          tabs.style.width = '100px';
+
+          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the forward button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            forwardButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          // Wait for the button visibility to change
+          await aTimeout(300);
+
+          // The button should be invisible if the end was reached
+          expect(tabs._getNavigationButtonVisibleWidth('forward-button')).to.equal(0);
+        });
+
+        it('should not get stuck with wide tabs when scrolled back to the start via button', async () => {
+          tabs.style.width = '100px';
+
+          // Initially scroll to the end
+          tabs._scrollToItem(items.length - 1);
+
+          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the back button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            backButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          // Wait for the button visibility to change
+          await aTimeout(300);
+
+          // The button should be invisible if the end was reached
+          expect(tabs._getNavigationButtonVisibleWidth('back-button')).to.equal(0);
+        });
       });
     });
   });
