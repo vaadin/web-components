@@ -8,6 +8,7 @@ import './detect-ios-navbar.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -662,6 +663,9 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     this.$.drawer.setAttribute('tabindex', '0');
     this.__focusTrapController.trapFocus(this.$.drawer);
+
+    // Hide all the elements except drawer toggle and the drawer content
+    this.__showOthers = hideOthers([...this.querySelectorAll('vaadin-drawer-toggle, [slot="drawer"]')]);
   }
 
   /** @private */
@@ -673,6 +677,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     if (this.drawerOpened) {
       // The drawer has been opened during the CSS transition.
       return;
+    }
+
+    // Un-hide content elements
+    if (this.__showOthers) {
+      this.__showOthers();
+      this.__showOthers = null;
     }
 
     this.__focusTrapController.releaseFocus();
