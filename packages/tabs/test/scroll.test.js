@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
@@ -80,85 +80,51 @@ describe('scrollable tabs', () => {
           await nextFrame();
         });
 
-        it('should display the next item first on forward button click', async () => {
-          const forwardButtonWidth = tabs._getNavigationButtonVisibleWidth('forward-button');
-          const backButtonWidth = tabs._getNavigationButtonVisibleWidth('back-button');
-          const scrollerElementBoundingClientRect = tabs._scrollerElement.getBoundingClientRect();
-          // Iterate with ascending index
-          let initialFirstNotFullyVisibleItemIndex;
-          for (let i = 1; i < items.length; i++) {
-            if (
-              !tabs._isItemVisible(
-                items[i],
-                false,
-                forwardButtonWidth,
-                backButtonWidth,
-                scrollerElementBoundingClientRect,
-              )
-            ) {
-              initialFirstNotFullyVisibleItemIndex = i;
-              break;
-            }
-          }
-          tabs.shadowRoot.querySelector('[part="forward-button"]').click();
-          // Iterate with ascending index
-          let firstFullyVisibleItemIndex;
-          for (let i = 0; i < items.length; i++) {
-            if (
-              tabs._isItemVisible(
-                items[i],
-                false,
-                forwardButtonWidth,
-                backButtonWidth,
-                scrollerElementBoundingClientRect,
-              )
-            ) {
-              firstFullyVisibleItemIndex = i;
-              break;
-            }
-          }
-          expect(firstFullyVisibleItemIndex).to.equal(initialFirstNotFullyVisibleItemIndex);
+        it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
+          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+          let allFullyVisibleItems = [];
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the forward button until the end is reached
+          do {
+            const currentFullyVisibleItems = [...tabs.items]
+              .reverse()
+              // eslint-disable-next-line @typescript-eslint/no-loop-func
+              .filter((item) => tabs._isItemVisible(item, false));
+            allFullyVisibleItems = allFullyVisibleItems.concat(currentFullyVisibleItems);
+            previousScrollLeft = currentScrollLeft;
+            forwardButton.click();
+            // Wait for the button visibility to change
+            await aTimeout(300);
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          const uniqueItemCount = [...new Set(allFullyVisibleItems)].length;
+          expect(uniqueItemCount).to.equal(items.length);
         });
 
-        it('should display the previous item first on back button click', async () => {
-          const forwardButtonWidth = tabs._getNavigationButtonVisibleWidth('forward-button');
-          const backButtonWidth = tabs._getNavigationButtonVisibleWidth('back-button');
-          const scrollerElementBoundingClientRect = tabs._scrollerElement.getBoundingClientRect();
+        it('should have displayed all the items fully when scrolled back to the start via button', async () => {
+          // Initially scroll to the end
           tabs._scrollToItem(items.length - 1);
-          // Iterate with descending index
-          let initialFirstNotFullyVisibleItemIndex;
-          for (let i = items.length - 2; i >= 0; i--) {
-            if (
-              !tabs._isItemVisible(
-                items[i],
-                false,
-                forwardButtonWidth,
-                backButtonWidth,
-                scrollerElementBoundingClientRect,
-              )
-            ) {
-              initialFirstNotFullyVisibleItemIndex = i;
-              break;
-            }
-          }
-          tabs.shadowRoot.querySelector('[part="back-button"]').click();
-          // Iterate with descending index
-          let firstFullyVisibleItemIndex;
-          for (let i = items.length - 1; i >= 0; i--) {
-            if (
-              tabs._isItemVisible(
-                items[i],
-                false,
-                forwardButtonWidth,
-                backButtonWidth,
-                scrollerElementBoundingClientRect,
-              )
-            ) {
-              firstFullyVisibleItemIndex = i;
-              break;
-            }
-          }
-          expect(firstFullyVisibleItemIndex).to.equal(initialFirstNotFullyVisibleItemIndex);
+
+          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
+          let allFullyVisibleItems = [];
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the back button until the start is reached
+          do {
+            // eslint-disable-next-line @typescript-eslint/no-loop-func
+            const currentFullyVisibleItems = tabs.items.filter((item) => tabs._isItemVisible(item, false));
+            allFullyVisibleItems = allFullyVisibleItems.concat(currentFullyVisibleItems);
+            previousScrollLeft = currentScrollLeft;
+            backButton.click();
+            // Wait for the button visibility to change
+            await aTimeout(300);
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          const uniqueItemCount = [...new Set(allFullyVisibleItems)].length;
+          expect(uniqueItemCount).to.equal(items.length);
         });
       });
     });

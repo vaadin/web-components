@@ -236,102 +236,99 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
 
   /** @private */
   _scrollForward() {
-    const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
-    const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
-    const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
-    let itemToScrollTo;
-    for (let i = this.items.length - 1; i >= 0; i--) {
-      const isItemVisible = this._isItemVisible(
-        this.items[i],
-        true,
-        forwardButtonWidth,
-        backButtonWidth,
-        scrollerElementBoundingClientRect,
-      );
-      if (isItemVisible) {
-        itemToScrollTo = this.items[i];
-        break;
-      }
-    }
-    const itemBoundingClientRect = itemToScrollTo.getBoundingClientRect();
-    const transitionCompensation = 20;
+    // Calculations here are performed in order to optimize the loop that checks item visibility.
+    const forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button');
+    const backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button');
+    const scrollerRect = this._scrollerElement.getBoundingClientRect();
+    const itemToScrollTo = [...this.items]
+      .reverse()
+      .find((item) => this._isItemVisible(item, true, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect));
+    const itemRect = itemToScrollTo.getBoundingClientRect();
+    // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
+    // A CSS variable can be introduced to get rid of this value.
+    const overflowIndicatorCompensation = 20;
+    const totalCompensation =
+      overflowIndicatorCompensation + this.shadowRoot.querySelector('[part="back-button"]').clientWidth;
     let scrollOffset;
     if (this.__isRTL) {
-      const scrollerRightEdge = scrollerElementBoundingClientRect.right - backButtonWidth - transitionCompensation;
-      scrollOffset = itemBoundingClientRect.right - scrollerRightEdge;
+      const scrollerRightEdge = scrollerRect.right - totalCompensation;
+      scrollOffset = itemRect.right - scrollerRightEdge;
     } else {
-      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + backButtonWidth + transitionCompensation;
-      scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
+      const scrollerLeftEdge = scrollerRect.left + totalCompensation;
+      scrollOffset = itemRect.left - scrollerLeftEdge;
     }
-    if (Math.floor(scrollOffset) === 0) {
-      scrollOffset = -this.__direction * (this._scrollOffset - backButtonWidth - transitionCompensation);
+    // It is possible that a scroll offset is calculated to be between 0 and 1. In this case, this offset
+    // can be rounded down to zero, rendering the button useless. It is also possible that the offset is
+    // calculated such that it results in scrolling backwards for a wide tab or edge cases. This is a
+    // workaround for such cases.
+    if (-this.__direction * scrollOffset < 1) {
+      scrollOffset = -this.__direction * (this._scrollOffset - totalCompensation);
     }
     this._scroll(scrollOffset);
   }
 
   /** @private */
   _scrollBack() {
-    const forwardButtonWidth = this._getNavigationButtonVisibleWidth('forward-button');
-    const backButtonWidth = this._getNavigationButtonVisibleWidth('back-button');
-    const scrollerElementBoundingClientRect = this._scrollerElement.getBoundingClientRect();
-    let itemToScrollTo;
-    for (let i = 0; i < this.items.length - 1; i++) {
-      const isItemVisible = this._isItemVisible(
-        this.items[i],
-        true,
-        forwardButtonWidth,
-        backButtonWidth,
-        scrollerElementBoundingClientRect,
-      );
-      if (isItemVisible) {
-        itemToScrollTo = this.items[i];
-        break;
-      }
-    }
-    const itemBoundingClientRect = itemToScrollTo.getBoundingClientRect();
-    const transitionCompensation = 20;
+    // Calculations here are performed in order to optimize the loop that checks item visibility.
+    const forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button');
+    const backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button');
+    const scrollerRect = this._scrollerElement.getBoundingClientRect();
+    const itemToScrollTo = this.items.find((item) =>
+      this._isItemVisible(item, true, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect),
+    );
+    const itemRect = itemToScrollTo.getBoundingClientRect();
+    // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
+    // A CSS variable can be introduced to get rid of this value.
+    const overflowIndicatorCompensation = 20;
+    const totalCompensation =
+      overflowIndicatorCompensation + this.shadowRoot.querySelector('[part="forward-button"]').clientWidth;
     let scrollOffset;
     if (this.__isRTL) {
-      const scrollerLeftEdge = scrollerElementBoundingClientRect.left + forwardButtonWidth + transitionCompensation;
-      scrollOffset = itemBoundingClientRect.left - scrollerLeftEdge;
+      const scrollerLeftEdge = scrollerRect.left + totalCompensation;
+      scrollOffset = itemRect.left - scrollerLeftEdge;
     } else {
-      const scrollerRightEdge = scrollerElementBoundingClientRect.right - forwardButtonWidth - transitionCompensation;
-      scrollOffset = itemBoundingClientRect.right - scrollerRightEdge;
+      const scrollerRightEdge = scrollerRect.right - totalCompensation;
+      scrollOffset = itemRect.right - scrollerRightEdge;
     }
-    if (Math.floor(scrollOffset) === 0) {
-      scrollOffset = this.__direction * (this._scrollOffset - forwardButtonWidth - transitionCompensation);
+    // It is possible that a scroll offset is calculated to be between 0 and 1. In this case, this offset
+    // can be rounded down to zero, rendering the button useless. It is also possible that the offset is
+    // calculated such that it results in scrolling forward for a wide tab or edge cases. This is a
+    // workaround for such cases.
+    if (this.__direction * scrollOffset < 1) {
+      scrollOffset = this.__direction * (this._scrollOffset - totalCompensation);
     }
     this._scroll(scrollOffset);
   }
 
   /** @private */
-  _isItemVisible(item, includePartial, forwardButtonWidth, backButtonWidth, scrollerElementBoundingClientRect) {
+  _isItemVisible(
+    item,
+    includePartial = true,
+    forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button'),
+    backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button'),
+    scrollerRect = this._scrollerElement.getBoundingClientRect(),
+  ) {
     if (this._vertical) {
       throw new Error('Visibility check is only supported for horizontal tabs.');
     }
-    const buttonOnTheRightWidth = this.__isRTL ? backButtonWidth : forwardButtonWidth;
-    const buttonOnTheLeftWidth = this.__isRTL ? forwardButtonWidth : backButtonWidth;
-    const scrollerRightEdge = scrollerElementBoundingClientRect.right - buttonOnTheRightWidth;
-    const scrollerLeftEdge = scrollerElementBoundingClientRect.left + buttonOnTheLeftWidth;
-    const itemBoundingClientRect = item.getBoundingClientRect();
+    const buttonOnTheRightWidth = this.__isRTL ? backButtonVisibleWidth : forwardButtonVisibleWidth;
+    const buttonOnTheLeftWidth = this.__isRTL ? forwardButtonVisibleWidth : backButtonVisibleWidth;
+    const scrollerRightEdge = scrollerRect.right - buttonOnTheRightWidth;
+    const scrollerLeftEdge = scrollerRect.left + buttonOnTheLeftWidth;
+    const itemRect = item.getBoundingClientRect();
     if (includePartial) {
-      return (
-        scrollerRightEdge > Math.floor(itemBoundingClientRect.left) &&
-        scrollerLeftEdge < Math.floor(itemBoundingClientRect.right)
-      );
+      return scrollerRightEdge > Math.floor(itemRect.left) && scrollerLeftEdge < Math.ceil(itemRect.right);
     }
-    return (
-      scrollerRightEdge >= Math.floor(itemBoundingClientRect.right) &&
-      scrollerLeftEdge <= Math.floor(itemBoundingClientRect.left)
-    );
+    return scrollerRightEdge >= Math.floor(itemRect.right) && scrollerLeftEdge <= Math.ceil(itemRect.left);
   }
 
   /** @private */
   _getNavigationButtonVisibleWidth(buttonPartName) {
-    if (this._vertical) {
-      throw new Error('Navigation buttons are only available in horizontal tabs.');
+    const navigationButton = this.shadowRoot.querySelector(`[part="${buttonPartName}"]`);
+    if (window.getComputedStyle(navigationButton).opacity === '0') {
+      return 0;
     }
-    return this.shadowRoot.querySelector(`[part="${buttonPartName}"]`).clientWidth;
+    return navigationButton.clientWidth;
   }
 
   /** @private */
