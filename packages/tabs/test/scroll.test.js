@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
@@ -82,25 +82,14 @@ describe('scrollable tabs', () => {
 
         it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
           const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
-          let allFullyVisibleItems = [];
-          let previousScrollLeft;
-          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
-          // Click the forward button until the end is reached
-          do {
-            const currentFullyVisibleItems = [...tabs.items]
-              .reverse()
-              // eslint-disable-next-line @typescript-eslint/no-loop-func
-              .filter((item) => tabs._isItemVisible(item, false));
-            allFullyVisibleItems = allFullyVisibleItems.concat(currentFullyVisibleItems);
-            previousScrollLeft = currentScrollLeft;
-            forwardButton.click();
-            // Wait for the button visibility to change
-            await aTimeout(300);
-            currentScrollLeft = tabs._scrollerElement.scrollLeft;
-          } while (previousScrollLeft !== currentScrollLeft);
 
-          const uniqueItemCount = [...new Set(allFullyVisibleItems)].length;
-          expect(uniqueItemCount).to.equal(items.length);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.equal(0);
+
+          forwardButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(310, 5);
+
+          forwardButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 5);
         });
 
         it('should have displayed all the items fully when scrolled back to the start via button', async () => {
@@ -108,23 +97,14 @@ describe('scrollable tabs', () => {
           tabs._scrollToItem(items.length - 1);
 
           const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
-          let allFullyVisibleItems = [];
-          let previousScrollLeft;
-          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
-          // Click the back button until the start is reached
-          do {
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
-            const currentFullyVisibleItems = tabs.items.filter((item) => tabs._isItemVisible(item, false));
-            allFullyVisibleItems = allFullyVisibleItems.concat(currentFullyVisibleItems);
-            previousScrollLeft = currentScrollLeft;
-            backButton.click();
-            // Wait for the button visibility to change
-            await aTimeout(300);
-            currentScrollLeft = tabs._scrollerElement.scrollLeft;
-          } while (previousScrollLeft !== currentScrollLeft);
 
-          const uniqueItemCount = [...new Set(allFullyVisibleItems)].length;
-          expect(uniqueItemCount).to.equal(items.length);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 5);
+
+          backButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(228, 5);
+
+          backButton.click();
+          expect(tabs._scrollerElement.scrollLeft).to.equal(0);
         });
 
         it('should not get stuck with wide tabs when scrolled forward to the end via button', async () => {
@@ -140,11 +120,9 @@ describe('scrollable tabs', () => {
             currentScrollLeft = tabs._scrollerElement.scrollLeft;
           } while (previousScrollLeft !== currentScrollLeft);
 
-          // Wait for the button visibility to change
-          await aTimeout(300);
-
-          // The button should be invisible if the end was reached
-          expect(tabs._getNavigationButtonVisibleWidth('forward-button')).to.equal(0);
+          const scrollerEndPosition =
+            -tabs.__direction * tabs._scrollerElement.scrollLeft + tabs._scrollerElement.offsetWidth;
+          expect(scrollerEndPosition).to.equal(tabs._scrollerElement.scrollWidth);
         });
 
         it('should not get stuck with wide tabs when scrolled back to the start via button', async () => {
@@ -163,11 +141,7 @@ describe('scrollable tabs', () => {
             currentScrollLeft = tabs._scrollerElement.scrollLeft;
           } while (previousScrollLeft !== currentScrollLeft);
 
-          // Wait for the button visibility to change
-          await aTimeout(300);
-
-          // The button should be invisible if the end was reached
-          expect(tabs._getNavigationButtonVisibleWidth('back-button')).to.equal(0);
+          expect(tabs._scrollerElement.scrollLeft).to.equal(0);
         });
       });
     });

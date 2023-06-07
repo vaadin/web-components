@@ -301,13 +301,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
   }
 
   /** @private */
-  _isItemVisible(
-    item,
-    includePartial = true,
-    forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button'),
-    backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button'),
-    scrollerRect = this._scrollerElement.getBoundingClientRect(),
-  ) {
+  _isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect) {
     if (this._vertical) {
       throw new Error('Visibility check is only supported for horizontal tabs.');
     }
@@ -316,10 +310,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerRightEdge = scrollerRect.right - buttonOnTheRightWidth;
     const scrollerLeftEdge = scrollerRect.left + buttonOnTheLeftWidth;
     const itemRect = item.getBoundingClientRect();
-    if (includePartial) {
-      return scrollerRightEdge > Math.floor(itemRect.left) && scrollerLeftEdge < Math.ceil(itemRect.right);
-    }
-    return scrollerRightEdge >= Math.floor(itemRect.right) && scrollerLeftEdge <= Math.ceil(itemRect.left);
+    return scrollerRightEdge > Math.floor(itemRect.left) && scrollerLeftEdge < Math.ceil(itemRect.right);
   }
 
   /** @private */
