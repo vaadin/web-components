@@ -16,13 +16,21 @@ export class AriaModalController {
   /**
    * @param {HTMLElement} host
    */
-  constructor(host) {
+  constructor(host, callback) {
     /**
      * The controller host element.
      *
      * @type {HTMLElement}
      */
     this.host = host;
+
+    /**
+     * The callback used to detect which element
+     * to use as a target. Defaults to the host.
+     *
+     * @type {Function}
+     */
+    this.callback = typeof callback === 'function' ? callback : () => host;
   }
 
   /**
@@ -33,7 +41,8 @@ export class AriaModalController {
    * https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal
    */
   showModal() {
-    this.__showOthers = hideOthers(this.host);
+    const targets = this.callback();
+    this.__showOthers = hideOthers(targets);
   }
 
   /**

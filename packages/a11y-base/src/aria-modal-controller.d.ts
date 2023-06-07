@@ -15,6 +15,12 @@ export class AriaModalController implements ReactiveController {
    */
   host: HTMLElement;
 
+  /**
+   * The callback used to detect which element
+   * to use as a target. Defaults to the host.
+   */
+  callback: () => HTMLElement | HTMLElement[];
+
   constructor(node: HTMLElement);
 
   /**
