@@ -974,7 +974,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /**
-   * @param {HTMLElement | undefined} form
+   * @param {HTMLElement | undefined} grid
    * @param {string} theme
    * @param {string | string[] | undefined} include
    * @param {string | RegExp} exclude
@@ -1034,7 +1034,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /**
-   * @param {HTMLElement | undefined} saveButton
+   * @param {HTMLElement | undefined} cancelButton
    * @param {string} i18nLabel
    * @private
    */
@@ -1057,7 +1057,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /**
    * @param {string} type
-   * @param {HTMLElement} newButton
+   * @param {HTMLElement} button
    * @private
    */
   __setupSlottedButton(type, button) {
