@@ -57,8 +57,8 @@ snapshots["vaadin-message time"] =
 `;
 /* end snapshot vaadin-message time */
 
-snapshots["vaadin-message avatar username"] =
-  `<vaadin-message>
+snapshots["vaadin-message avatar username"] = 
+`<vaadin-message>
   <vaadin-avatar
     abbr="JD"
     aria-hidden="true"
@@ -72,7 +72,7 @@ snapshots["vaadin-message avatar username"] =
 `;
 /* end snapshot vaadin-message avatar username */
 
-snapshots["vaadin-message avatar abbr"] =
+snapshots["vaadin-message avatar abbr"] = 
 `<vaadin-message>
   <vaadin-avatar
     abbr="JD"
@@ -86,7 +86,7 @@ snapshots["vaadin-message avatar abbr"] =
 `;
 /* end snapshot vaadin-message avatar abbr */
 
-snapshots["vaadin-message avatar img"] =
+snapshots["vaadin-message avatar img"] = 
 `<vaadin-message>
   <vaadin-avatar
     aria-hidden="true"
@@ -100,7 +100,7 @@ snapshots["vaadin-message avatar img"] =
 `;
 /* end snapshot vaadin-message avatar img */
 
-snapshots["vaadin-message avatar userColorIndex"] =
+snapshots["vaadin-message avatar userColorIndex"] = 
 `<vaadin-message>
   <vaadin-avatar
     aria-hidden="true"
@@ -114,3 +114,4 @@ snapshots["vaadin-message avatar userColorIndex"] =
 </vaadin-message>
 `;
 /* end snapshot vaadin-message avatar userColorIndex */
+
