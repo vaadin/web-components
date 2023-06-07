@@ -195,12 +195,12 @@ describe('a11y', () => {
         });
 
         it('should restore focus to first visible row on delete', async () => {
-          // Scroll a bit to get a couple of rows out of the grid's viewport.
-          grid.scrollToIndex(2);
-          await nextRender();
-
           editButtons[8].focus();
           editButtons[8].click();
+          await nextRender();
+
+          // Scroll a bit to get a couple of rows out of the grid's viewport.
+          grid.scrollToIndex(2);
           await nextRender();
 
           deleteButton.focus();
