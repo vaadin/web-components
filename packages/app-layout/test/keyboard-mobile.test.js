@@ -17,6 +17,7 @@ describe('mobile navigation', () => {
       <div>
         <vaadin-app-layout style="--vaadin-app-layout-transition: none;">
           <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+          <h1 slot="navbar">App title</h1>
           <section slot="drawer">
             <input placeholder="Drawer input" />
           </section>
@@ -111,6 +112,30 @@ describe('mobile navigation', () => {
       it('should move focus from the drawer toggle to the layout content on Tab', async () => {
         await tab();
         expect(document.activeElement).to.equal(contentInput);
+      });
+    });
+
+    describe('aria-hidden', () => {
+      it('should set aria-hidden on elements outside layout', () => {
+        expect(outerInput.getAttribute('aria-hidden')).to.equal('true');
+      });
+
+      it('should set aria-hidden on the main slot content', () => {
+        expect(contentInput.parentElement.getAttribute('aria-hidden')).to.equal('true');
+      });
+
+      it('should set aria-hidden on the navbar content', () => {
+        expect(layout.querySelector('h1').getAttribute('aria-hidden')).to.equal('true');
+      });
+
+      it('should not set aria-hidden on the drawer toggle', () => {
+        expect(toggle.hasAttribute('aria-hidden')).to.be.false;
+      });
+
+      it('should remove aria-hidden from the content on close', async () => {
+        await esc();
+        await nextFrame();
+        expect(contentInput.parentElement.hasAttribute('aria-hidden')).to.be.false;
       });
     });
   });

@@ -8,6 +8,7 @@ import './detect-ios-navbar.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -401,6 +402,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
     this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
     this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
+
+    // Hide all the elements except the drawer toggle and drawer content
+    this.__ariaModalController = new AriaModalController(this, () => [
+      ...this.querySelectorAll('vaadin-drawer-toggle, [slot="drawer"]'),
+    ]);
     this.__focusTrapController = new FocusTrapController(this);
   }
 
@@ -661,6 +667,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     }
 
     this.$.drawer.setAttribute('tabindex', '0');
+
+    this.__ariaModalController.showModal();
     this.__focusTrapController.trapFocus(this.$.drawer);
   }
 
@@ -675,6 +683,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       return;
     }
 
+    this.__ariaModalController.close();
     this.__focusTrapController.releaseFocus();
     this.$.drawer.removeAttribute('tabindex');
 
