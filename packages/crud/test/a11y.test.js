@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import { sendKeys } from '@web/test-runner-commands';
-import '../vaadin-crud.js';
+import '../src/vaadin-crud.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getBodyRowsInViewport } from './helpers.js';
 
@@ -153,6 +153,25 @@ describe('a11y', () => {
 
         const firstVisibleRow = getBodyRowsInViewport(grid)[0];
         expect(getDeepActiveElement()).to.equal(firstVisibleRow);
+      });
+
+      it('should switch to row focus mode when restoring focus to first visible row', async () => {
+        editButtons[0].focus();
+        editButtons[0].click();
+        await nextRender();
+
+        // Scroll to the end to trigger the grid to re-use
+        // the saved focused element (the edit button) for another item.
+        grid.scrollToIndex(crud.items.length - 1);
+        await nextRender();
+
+        cancelButton.focus();
+        cancelButton.click();
+        await nextRender();
+
+        await sendKeys({ press: 'ArrowDown' });
+        const secondVisibleRow = getBodyRowsInViewport(grid)[1];
+        expect(getDeepActiveElement()).to.equal(secondVisibleRow);
       });
     });
 
