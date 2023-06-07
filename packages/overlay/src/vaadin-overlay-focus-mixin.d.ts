@@ -36,7 +36,7 @@ export declare class OverlayFocusMixinClass {
   protected _resetFocus(): void;
 
   /**
-   * Store previously focused node when the overlay starts to open.
+   * Save the previously focused node when the overlay starts to open.
    */
   protected _saveFocus(): void;
 
