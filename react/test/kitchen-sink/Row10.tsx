@@ -1,7 +1,7 @@
 import { BoardRow } from '../../src/BoardRow.js';
 import { Tab } from '../../src/Tab.js';
 import { Tabs } from '../../src/Tabs.js';
-import { TabSheet } from '../../src/TabSheet.js';
+import { tab, TabSheet } from '../../src/TabSheet.js';
 
 export default function Row10() {
   return (
@@ -16,8 +16,7 @@ export default function Row10() {
           <Tab id="tab-3">Tab 3</Tab>
         </Tabs>
 
-        {/* @ts-expect-error TS2322: "tab" is not an HTML standard attribute */}
-        <div tab="tab-1">Panel 1</div>
+        <div {...tab('tab-1')}>Panel 1</div>
         {/* @ts-expect-error TS2322: "tab" is not an HTML standard attribute */}
         <div tab="tab-2">Panel 2</div>
         {/* @ts-expect-error TS2322: "tab" is not an HTML standard attribute */}
