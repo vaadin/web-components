@@ -14,9 +14,6 @@ export class FocusRestorationController {
    * when `restoreFocus()` is called. If no node is provided,
    * the currently focused node in the DOM is saved as a target.
    *
-   * It also determines and saves the node that has the `focus-ring` attribute
-   * in order to restore the attribute when restoring focus.
-   *
    * @param {Node | null | undefined} focusNode
    */
   saveFocus(focusNode) {
