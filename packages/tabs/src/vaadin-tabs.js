@@ -242,7 +242,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const scrollerRect = this._scrollerElement.getBoundingClientRect();
     const itemToScrollTo = [...this.items]
       .reverse()
-      .find((item) => this._isItemVisible(item, true, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect));
+      .find((item) => this._isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect));
     const itemRect = itemToScrollTo.getBoundingClientRect();
     // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
     // A CSS variable can be introduced to get rid of this value.
@@ -274,7 +274,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     const backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button');
     const scrollerRect = this._scrollerElement.getBoundingClientRect();
     const itemToScrollTo = this.items.find((item) =>
-      this._isItemVisible(item, true, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect),
+      this._isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect),
     );
     const itemRect = itemToScrollTo.getBoundingClientRect();
     // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
