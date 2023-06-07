@@ -141,16 +141,6 @@ export const OverlayFocusMixin = (superClass) =>
     __storeFocus() {
       // Store the focused node.
       this.__restoreFocusNode = getDeepActiveElement();
-
-      // Determine and store the node that has the `focus-ring` attribute
-      // in order to restore the attribute when the overlay closes.
-      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-      if (restoreFocusNode) {
-        const restoreFocusNodeHost = (restoreFocusNode.assignedSlot || restoreFocusNode).getRootNode().host;
-        this.__restoreFocusRingNode = [restoreFocusNode, restoreFocusNodeHost].find((node) => {
-          return node && node.hasAttribute('focus-ring');
-        });
-      }
     }
 
     /** @private */
@@ -170,13 +160,6 @@ export const OverlayFocusMixin = (superClass) =>
         }
 
         this.__restoreFocusNode = null;
-      }
-
-      // Restore the `focus-ring` attribute if it was present
-      // when the overlay was opening.
-      if (this.__restoreFocusRingNode) {
-        this.__restoreFocusRingNode.setAttribute('focus-ring', '');
-        this.__restoreFocusRingNode = null;
       }
     }
   };

@@ -70,16 +70,6 @@ describe('restore focus', () => {
       expect(getDeepActiveElement()).to.not.equal(focusInput);
     });
 
-    it('should not restore focus-ring attribute on close by default', async () => {
-      focusInput.focus();
-      focusInput.setAttribute('focus-ring', '');
-      overlay.opened = true;
-      await nextRender();
-      focusInput.removeAttribute('focus-ring');
-      overlay.opened = false;
-      expect(focusInput.hasAttribute('focus-ring')).to.be.false;
-    });
-
     describe('restoreFocusNode', () => {
       beforeEach(() => {
         overlay.restoreFocusNode = focusInput;
@@ -91,16 +81,6 @@ describe('restore focus', () => {
         await nextRender();
         overlay.opened = false;
         expect(getDeepActiveElement()).to.not.equal(focusInput);
-      });
-
-      it('should not restore focus-ring attribute on close by default', async () => {
-        focusInput.focus();
-        focusInput.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInput.removeAttribute('focus-ring');
-        overlay.opened = false;
-        expect(focusInput.hasAttribute('focus-ring')).to.be.false;
       });
     });
   });
@@ -127,24 +107,6 @@ describe('restore focus', () => {
         expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
-      it('should restore focus-ring attribute on close', async () => {
-        focusInput.focus();
-        focusInput.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInput.removeAttribute('focus-ring');
-        overlay.opened = false;
-        expect(focusInput.hasAttribute('focus-ring')).to.be.true;
-      });
-
-      it('should not restore focus-ring attribute on close if it was not present', async () => {
-        focusInput.focus();
-        overlay.opened = true;
-        await nextRender();
-        overlay.opened = false;
-        expect(focusInput.hasAttribute('focus-ring')).to.be.false;
-      });
-
       it('should restore focus on close in Shadow DOM', async () => {
         focusable.focus();
         overlay.opened = true;
@@ -162,16 +124,6 @@ describe('restore focus', () => {
         expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
-      it('should restore focus-ring attribute on outside click', async () => {
-        focusInput.focus();
-        focusInput.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInput.removeAttribute('focus-ring');
-        outsideClick();
-        expect(focusInput.hasAttribute('focus-ring')).to.be.true;
-      });
-
       it('should not restore focus on close if focus was moved outside overlay', async () => {
         focusInput.focus();
         overlay.opened = true;
@@ -179,17 +131,6 @@ describe('restore focus', () => {
         focusable.focus();
         overlay.opened = false;
         expect(getDeepActiveElement()).to.equal(focusable);
-      });
-
-      it('should not restore focus-ring attribute if focus was moved outside overlay', async () => {
-        focusInput.focus();
-        focusInput.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInput.removeAttribute('focus-ring');
-        focusable.focus();
-        overlay.opened = false;
-        expect(focusInput.hasAttribute('focus-ring')).to.be.false;
       });
 
       describe('restoreFocusNode', () => {
@@ -204,54 +145,6 @@ describe('restore focus', () => {
           overlay.opened = false;
           expect(getDeepActiveElement()).to.equal(focusInput);
         });
-
-        it('should restore focus-ring attribute on the restoreFocusNode', async () => {
-          focusable.focus();
-          focusInput.setAttribute('focus-ring', '');
-          overlay.opened = true;
-          await nextRender();
-          focusInput.removeAttribute('focus-ring');
-          overlay.opened = false;
-          expect(focusInput.hasAttribute('focus-ring')).to.be.true;
-        });
-      });
-    });
-
-    describe('focus node inside a slot', () => {
-      let focusInputWrapper;
-
-      beforeEach(() => {
-        focusInputWrapper = fixtureSync('<focus-input-wrapper></focus-input-wrapper>');
-        focusInputWrapper.appendChild(focusInput);
-      });
-
-      it('should restore focus-ring attribute on the host component', async () => {
-        focusInput.focus();
-        focusInputWrapper.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInputWrapper.removeAttribute('focus-ring');
-        overlay.opened = false;
-        expect(focusInputWrapper.hasAttribute('focus-ring')).to.be.true;
-      });
-    });
-
-    describe('focus node inside Shadow DOM', () => {
-      let focusInputWrapper;
-
-      beforeEach(() => {
-        focusInputWrapper = fixtureSync('<focus-input-wrapper></focus-input-wrapper>');
-        focusInputWrapper.shadowRoot.appendChild(focusInput);
-      });
-
-      it('should restore focus-ring attribute on the host component', async () => {
-        focusInput.focus();
-        focusInputWrapper.setAttribute('focus-ring', '');
-        overlay.opened = true;
-        await nextRender();
-        focusInputWrapper.removeAttribute('focus-ring');
-        overlay.opened = false;
-        expect(focusInputWrapper.hasAttribute('focus-ring')).to.be.true;
       });
     });
   });
