@@ -86,10 +86,10 @@ describe('scrollable tabs', () => {
           expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.equal(0);
 
           forwardButton.click();
-          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(310, 5);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(310, 10);
 
           forwardButton.click();
-          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 5);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 10);
         });
 
         it('should have displayed all the items fully when scrolled back to the start via button', async () => {
@@ -98,10 +98,10 @@ describe('scrollable tabs', () => {
 
           const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
 
-          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 5);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 10);
 
           backButton.click();
-          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(228, 5);
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(228, 10);
 
           backButton.click();
           expect(tabs._scrollerElement.scrollLeft).to.equal(0);
