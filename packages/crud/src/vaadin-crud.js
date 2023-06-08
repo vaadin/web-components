@@ -25,16 +25,48 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { getProperty, setProperty } from './vaadin-crud-helpers.js';
 
 /**
+ * A controller for initializing slotted button.
  * @private
- * A to initialize slotted button.
  */
 class ButtonSlotController extends SlotController {
   constructor(host, type, theme) {
-    super(host, `${type}-button`, 'vaadin-button', {
-      initializer: (button) => {
-        button.setAttribute('theme', theme);
-      },
-    });
+    super(host, `${type}-button`, 'vaadin-button');
+
+    this.type = type;
+    this.theme = theme;
+  }
+
+  /**
+   * Override method inherited from `SlotController`
+   * to mark custom slotted button as the default.
+   *
+   * @param {Node} node
+   * @protected
+   * @override
+   */
+  initNode(node) {
+    // Needed by Flow counterpart to apply i18n to custom button
+    if (node._isDefault) {
+      this.defaultNode = node;
+    }
+
+    if (node === this.defaultNode) {
+      node.setAttribute('theme', this.theme);
+    }
+
+    const { host, type } = this;
+    const property = `_${type}Button`;
+    const listener = `__${type}`;
+
+    // TODO: restore default button when a corresponding slotted button is removed.
+    // This would require us to detect where to insert a button after teleporting it,
+    // which happens after opening a dialog and closing it (default editor position).
+    if (host[property] && host[property] !== node) {
+      host[property].remove();
+    }
+
+    node.addEventListener('click', host[listener]);
+    host[property] = node;
   }
 }
 
@@ -664,6 +696,11 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.__onGridSizeChanged = this.__onGridSizeChanged.bind(this);
     this.__onGridActiveItemChanged = this.__onGridActiveItemChanged.bind(this);
 
+    this._newButtonController = new ButtonSlotController(this, 'new', 'primary');
+    this._saveButtonController = new ButtonSlotController(this, 'save', 'primary');
+    this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary');
+    this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error');
+
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
@@ -705,12 +742,12 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
     this.addController(new SlotController(this, 'form', 'vaadin-crud-form'));
 
-    this.addController(new ButtonSlotController(this, 'new', 'primary'));
+    this.addController(this._newButtonController);
 
     // NOTE: order in which buttons are added should match the order of slots in template
-    this.addController(new ButtonSlotController(this, 'save', 'primary'));
-    this.addController(new ButtonSlotController(this, 'cancel', 'tertiary'));
-    this.addController(new ButtonSlotController(this, 'delete', 'tertiary error'));
+    this.addController(this._saveButtonController);
+    this.addController(this._cancelButtonController);
+    this.addController(this._deleteButtonController);
 
     this.addController(
       new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
@@ -863,9 +900,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __onDomChange(addedNodes) {
-    // TODO: restore default button when a corresponding slotted button is removed.
-    // This would require us to detect where to insert a button after teleporting it,
-    // which happens after opening a dialog and closing it (default editor position).
     addedNodes
       .filter((node) => node.nodeType === Node.ELEMENT_NODE)
       .forEach((node) => {
@@ -881,9 +915,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           this.__editOnClickChanged(this.editOnClick, this._grid);
         } else if (slotAttributeValue === 'form') {
           this._form = node;
-        } else if (slotAttributeValue.indexOf('button') >= 0) {
-          const [button] = slotAttributeValue.split('-');
-          this.__setupSlottedButton(button, node);
         }
       });
 
@@ -1016,7 +1047,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   __saveButtonPropsChanged(saveButton, i18nLabel, isDirty) {
     if (saveButton) {
       saveButton.toggleAttribute('disabled', this.__isSaveBtnDisabled(isDirty));
-      saveButton.textContent = i18nLabel;
+
+      if (saveButton === this._saveButtonController.defaultNode) {
+        saveButton.textContent = i18nLabel;
+      }
     }
   }
 
@@ -1028,8 +1062,11 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    */
   __deleteButtonPropsChanged(deleteButton, i18nLabel, isNew) {
     if (deleteButton) {
-      deleteButton.textContent = i18nLabel;
       deleteButton.toggleAttribute('hidden', isNew);
+
+      if (deleteButton === this._deleteButtonController.defaultNode) {
+        deleteButton.textContent = i18nLabel;
+      }
     }
   }
 
@@ -1039,7 +1076,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    * @private
    */
   __cancelButtonPropsChanged(cancelButton, i18nLabel) {
-    if (cancelButton) {
+    if (cancelButton && cancelButton === this._cancelButtonController.defaultNode) {
       cancelButton.textContent = i18nLabel;
     }
   }
@@ -1050,26 +1087,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    * @private
    */
   __newButtonPropsChanged(newButton, i18nNewItem) {
-    if (newButton) {
+    if (newButton && newButton === this._newButtonController.defaultNode) {
       newButton.textContent = i18nNewItem;
     }
-  }
-
-  /**
-   * @param {string} type
-   * @param {HTMLElement} button
-   * @private
-   */
-  __setupSlottedButton(type, button) {
-    const property = `_${type}Button`;
-    const listener = `__${type}`;
-
-    if (this[property] && this[property] !== button) {
-      this[property].remove();
-    }
-
-    button.addEventListener('click', this[listener]);
-    this[property] = button;
   }
 
   /** @private */
