@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowRight, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { arrowDown, arrowRight, enter, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import '../src/vaadin-menu-bar.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { outsideClick } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {

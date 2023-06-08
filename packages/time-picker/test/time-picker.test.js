@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
-import { outsideClick, setInputValue } from './helpers.js';
+import { setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
   let timePicker, comboBox, inputElement;
