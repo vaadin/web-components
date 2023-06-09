@@ -43,4 +43,19 @@ describe('focus-restoration-controller', () => {
     await aTimeout(0);
     expect(getDeepActiveElement()).to.equal(button1);
   });
+
+  it('should not restore focus if no node was saved', () => {
+    button1.focus();
+    controller.restoreFocus();
+    expect(getDeepActiveElement()).to.equal(button1);
+  });
+
+  it('should not restore focus again if it was already restored', () => {
+    button1.focus();
+    controller.saveFocus();
+    controller.restoreFocus();
+    button2.focus();
+    controller.restoreFocus();
+    expect(getDeepActiveElement()).to.equal(button2);
+  });
 });

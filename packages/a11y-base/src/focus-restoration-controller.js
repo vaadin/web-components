@@ -38,5 +38,7 @@ export class FocusRestorationController {
     } else {
       focusNode.focus();
     }
+
+    this.focusNode = null;
   }
 }
