@@ -1,10 +1,20 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fire, fixtureSync, focusout, isIOS, tap, touchstart } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  click,
+  fire,
+  fixtureSync,
+  focusout,
+  isIOS,
+  outsideClick,
+  tap,
+  touchstart,
+} from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getFirstItem, outsideClick, setInputValue } from './helpers.js';
+import { getFirstItem, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;

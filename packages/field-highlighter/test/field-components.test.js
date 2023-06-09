@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { arrowDown, fixtureSync, nextFrame, nextRender, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/checkbox-group';
@@ -11,7 +11,7 @@ import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
 import { html, render } from 'lit';
-import { close, outsideClick, waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
+import { close, waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {

@@ -47,7 +47,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/a11y-base": "24.2.0-alpha0",
-    "@vaadin/testing-helpers": "^0.4.0",
+    "@vaadin/testing-helpers": "^0.4.2",
     "sinon": "^13.0.2"
   },
   "web-types": [
