@@ -431,7 +431,7 @@ class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      this._storeFocus();
+      this._saveFocus();
 
       this._animatedOpening();
 

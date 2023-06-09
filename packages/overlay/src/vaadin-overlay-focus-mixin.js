@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
+import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -51,6 +52,7 @@ export const OverlayFocusMixin = (superClass) =>
 
       this.__ariaModalController = new AriaModalController(this);
       this.__focusTrapController = new FocusTrapController(this);
+      this.__focusRestorationController = new FocusRestorationController();
     }
 
     /** @protected */
@@ -59,6 +61,7 @@ export const OverlayFocusMixin = (superClass) =>
 
       this.addController(this.__ariaModalController);
       this.addController(this.__focusTrapController);
+      this.addController(this.__focusRestorationController);
     }
 
     /**
@@ -73,18 +76,18 @@ export const OverlayFocusMixin = (superClass) =>
       }
 
       if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
-        this.__restoreFocus();
+        this.__focusRestorationController.restoreFocus();
       }
     }
 
     /**
-     * Store previously focused node when the overlay starts to open.
+     * Save the previously focused node when the overlay starts to open.
      *
      * @protected
      */
-    _storeFocus() {
+    _saveFocus() {
       if (this.restoreFocusOnClose) {
-        this.__storeFocus();
+        this.__focusRestorationController.saveFocus(this.restoreFocusNode);
       }
     }
 
@@ -135,31 +138,5 @@ export const OverlayFocusMixin = (superClass) =>
         n = n.parentNode || n.host;
       }
       return n === this;
-    }
-
-    /** @private */
-    __storeFocus() {
-      // Store the focused node.
-      this.__restoreFocusNode = getDeepActiveElement();
-    }
-
-    /** @private */
-    __restoreFocus() {
-      // Use restoreFocusNode if specified, otherwise fallback to the node
-      // which was focused before opening the overlay.
-      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-      if (restoreFocusNode) {
-        if (getDeepActiveElement() === document.body) {
-          // In Firefox and Safari, focusing the restoreFocusNode synchronously
-          // doesn't work as expected when the overlay is closing on outside click.
-          // These browsers force focus to move to the body element and retain it
-          // there until the next event loop iteration.
-          setTimeout(() => restoreFocusNode.focus());
-        } else {
-          restoreFocusNode.focus();
-        }
-
-        this.__restoreFocusNode = null;
-      }
     }
   };
