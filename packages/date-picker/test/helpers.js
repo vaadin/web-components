@@ -77,20 +77,6 @@ export function idleCallback() {
 }
 
 /**
- * Emulates clicking outside the dropdown overlay
- */
-export function outsideClick() {
-  // Move focus to body
-  document.body.tabIndex = 0;
-  // Clear keyboardActive flag
-  mousedown(document.body);
-  document.body.focus();
-  document.body.tabIndex = -1;
-  // Outside click
-  document.body.click();
-}
-
-/**
  * Emulates a touch on the target resulting in clicking and focusing it.
  */
 export function touchTap(target) {

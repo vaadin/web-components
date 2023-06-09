@@ -32,7 +32,7 @@
     "@esm-bundle/chai": "^4.3.4",
     "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.1",
-    "@vaadin/testing-helpers": "^0.4.0",
+    "@vaadin/testing-helpers": "^0.4.2",
     "@web/dev-server": "^0.1.35",
     "@web/rollup-plugin-html": "^1.11.0",
     "@web/test-runner": "^0.15.0",

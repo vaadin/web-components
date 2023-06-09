@@ -51,7 +51,7 @@
     "@vaadin/number-field": "~24.1.0",
     "@vaadin/password-field": "~24.1.0",
     "@vaadin/select": "~24.1.0",
-    "@vaadin/testing-helpers": "^0.4.0",
+    "@vaadin/testing-helpers": "^0.4.2",
     "@vaadin/text-area": "~24.1.0",
     "@vaadin/text-field": "~24.1.0",
     "@vaadin/time-picker": "~24.1.0",

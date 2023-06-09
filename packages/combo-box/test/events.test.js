@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { clickItem, outsideClick, setInputValue } from './helpers.js';
+import { clickItem, setInputValue } from './helpers.js';
 
 describe('events', () => {
   let comboBox;
