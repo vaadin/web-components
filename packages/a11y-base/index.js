@@ -5,6 +5,7 @@ export { DisabledMixin } from './src/disabled-mixin.js';
 export { FieldAriaController } from './src/field-aria-controller.js';
 export { FocusMixin } from './src/focus-mixin.js';
 export { FocusTrapController } from './src/focus-trap-controller.js';
+export { FocusRestorationController } from './src/focus-restoration-controller.js';
 export {
   getFocusableElements,
   isElementFocusable,
