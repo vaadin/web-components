@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import { FocusRestorationController } from '../src/focus-restoration-controller.js';
 import { getDeepActiveElement } from '../src/focus-utils.js';
-import { outsideClick } from './helpers.js';
 
 describe('focus-restoration-controller', () => {
   let controller, button1, button2;
