@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getCellContent, getHeaderCellContent, getRows, onceResized } from './helpers.js';
+import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
