@@ -1,16 +1,11 @@
 export { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 function isRowInViewport(grid, row) {
-  const scrollTarget = grid.shadowRoot.querySelector('table');
-  const scrollTargetRect = scrollTarget.getBoundingClientRect();
-  const rowRect = row.getBoundingClientRect();
-  const offset = parseInt(getComputedStyle(row.firstElementChild).borderTopWidth);
-  const headerHeight = grid.shadowRoot.querySelector('thead').offsetHeight;
-  const footerHeight = grid.shadowRoot.querySelector('tfoot').offsetHeight;
-  return (
-    rowRect.bottom > scrollTargetRect.top + headerHeight + offset &&
-    rowRect.top < scrollTargetRect.bottom - footerHeight - offset
-  );
+  const scrollTargetRect = grid.$.table.getBoundingClientRect();
+  const itemRect = row.getBoundingClientRect();
+  const headerHeight = grid.$.header.getBoundingClientRect().height;
+  const footerHeight = grid.$.footer.getBoundingClientRect().height;
+  return itemRect.bottom > scrollTargetRect.top + headerHeight && itemRect.top < scrollTargetRect.bottom - footerHeight;
 }
 
 export const getRows = (container) => {
