@@ -12,9 +12,11 @@ describe('crud buttons', () => {
   }
 
   ['default', 'slotted'].forEach((mode) => {
+    const isDefault = mode === 'default';
+
     describe(mode, () => {
       beforeEach(async () => {
-        if (mode === 'default') {
+        if (isDefault) {
           crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
         } else {
           crud = fixtureSync(`
@@ -33,31 +35,33 @@ describe('crud buttons', () => {
       });
 
       describe('i18n', () => {
-        it('should set the label for the delete button', () => {
-          expect(deleteButton.textContent).to.equal(crud.i18n.deleteItem);
-        });
+        (isDefault ? describe : describe.skip)('i18n', () => {
+          it('should set the label for the delete button', () => {
+            expect(deleteButton.textContent).to.equal(crud.i18n.deleteItem);
+          });
 
-        it('should update the label of the delete button on i18n property change', () => {
-          crud.i18n = { ...crud.i18n, deleteItem: 'Custom' };
-          expect(deleteButton.textContent).to.equal('Custom');
-        });
+          it('should update the label of the delete button on i18n property change', () => {
+            crud.i18n = { ...crud.i18n, deleteItem: 'Custom' };
+            expect(deleteButton.textContent).to.equal('Custom');
+          });
 
-        it('should set the label for the save button', () => {
-          expect(saveButton.textContent).to.equal(crud.i18n.saveItem);
-        });
+          it('should set the label for the save button', () => {
+            expect(saveButton.textContent).to.equal(crud.i18n.saveItem);
+          });
 
-        it('should update the label of the save button on i18n property change', () => {
-          crud.i18n = { ...crud.i18n, saveItem: 'Custom' };
-          expect(saveButton.textContent).to.equal('Custom');
-        });
+          it('should update the label of the save button on i18n property change', () => {
+            crud.i18n = { ...crud.i18n, saveItem: 'Custom' };
+            expect(saveButton.textContent).to.equal('Custom');
+          });
 
-        it('should set the label for the cancel button', () => {
-          expect(cancelButton.textContent).to.equal(crud.i18n.cancel);
-        });
+          it('should set the label for the cancel button', () => {
+            expect(cancelButton.textContent).to.equal(crud.i18n.cancel);
+          });
 
-        it('should update the label of the cancel button on i18n property change', () => {
-          crud.i18n = { ...crud.i18n, cancel: 'Custom' };
-          expect(cancelButton.textContent).to.equal('Custom');
+          it('should update the label of the cancel button on i18n property change', () => {
+            crud.i18n = { ...crud.i18n, cancel: 'Custom' };
+            expect(cancelButton.textContent).to.equal('Custom');
+          });
         });
       });
 
@@ -599,30 +603,156 @@ describe('crud buttons', () => {
   });
 
   describe('lazy', () => {
+    let button;
+
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      await nextRender(crud);
+      await nextRender();
+      button = document.createElement('vaadin-button');
     });
 
-    it('should set the label for the delete button when it is added lazily', async () => {
-      const newButton = fixtureSync(`<vaadin-button slot="delete-button"></vaadin-button>`);
-      crud.appendChild(newButton);
-      await nextRender(crud);
-      expect(newButton.textContent).to.equal(crud.i18n.deleteItem);
+    describe('new', () => {
+      beforeEach(() => {
+        button.setAttribute('slot', 'new-button');
+      });
+
+      it('should not change text content of the custom new item button added lazily', async () => {
+        button.textContent = 'New user';
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal('New user');
+      });
+
+      it('should set text content of the new item button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal(crud.i18n.newItem);
+      });
+
+      it('should update the new item button marked as default on i18n property change', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        crud.i18n = { ...crud.i18n, newItem: 'Add user' };
+        await nextRender();
+
+        expect(button.textContent).to.equal('Add user');
+      });
     });
 
-    it('should set the label for the save button when it is added lazily', async () => {
-      const newButton = fixtureSync(`<vaadin-button slot="save-button"></vaadin-button>`);
-      crud.appendChild(newButton);
-      await nextRender(crud);
-      expect(newButton.textContent).to.equal(crud.i18n.saveItem);
+    describe('delete', () => {
+      beforeEach(() => {
+        button.setAttribute('slot', 'delete-button');
+      });
+
+      it('should not change text content of the custom delete button added lazily', async () => {
+        button.textContent = 'Drop user';
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal('Drop user');
+      });
+
+      it('should set text content of the delete button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal(crud.i18n.deleteItem);
+      });
+
+      it('should update the delete button marked as default on i18n property change', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        crud.i18n = { ...crud.i18n, deleteItem: 'Drop user' };
+        await nextRender();
+
+        expect(button.textContent).to.equal('Drop user');
+      });
     });
 
-    it('should set the label for the cancel button when it is added lazily', async () => {
-      const newButton = fixtureSync(`<vaadin-button slot="cancel-button"></vaadin-button>`);
-      crud.appendChild(newButton);
-      await nextRender(crud);
-      expect(newButton.textContent).to.equal(crud.i18n.cancel);
+    describe('save', () => {
+      beforeEach(() => {
+        button.setAttribute('slot', 'save-button');
+      });
+
+      it('should not set text content for the custom save button added lazily', async () => {
+        button.textContent = 'Save user';
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal('Save user');
+      });
+
+      it('should set text content for the save button when marked as the default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal(crud.i18n.saveItem);
+      });
+
+      it('should update the save button marked as default on i18n property change', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        crud.i18n = { ...crud.i18n, saveItem: 'Save user' };
+        await nextRender();
+
+        expect(button.textContent).to.equal('Save user');
+      });
+    });
+
+    describe('cancel', () => {
+      beforeEach(() => {
+        button.setAttribute('slot', 'cancel-button');
+      });
+
+      it('should not set text content for the custom cancel button added lazily', async () => {
+        button.textContent = 'Discard';
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal('Discard');
+      });
+
+      it('should set text content for the cancel button when marked as the default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.textContent).to.equal(crud.i18n.cancel);
+      });
+
+      it('should update the cancel button marked as default on i18n property change', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        crud.i18n = { ...crud.i18n, cancel: 'Discard' };
+        await nextRender();
+
+        expect(button.textContent).to.equal('Discard');
+      });
     });
   });
 
