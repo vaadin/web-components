@@ -205,6 +205,8 @@ export class SlotController extends EventTarget {
       const newNodes = info.addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
 
       if (info.removedNodes.length) {
+        this.nodes = current.filter((node) => !info.removedNodes.includes(node));
+
         info.removedNodes.forEach((node) => {
           this.teardownNode(node);
         });
