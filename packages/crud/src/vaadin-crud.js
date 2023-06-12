@@ -1283,7 +1283,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     if (rowCount === 1) {
       this._newButton.focus();
     } else {
-      this._grid._focusFirstRowInViewport();
+      this._grid._focusFirstVisibleRow();
     }
   }
 
@@ -1299,7 +1299,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     if (this._grid._isItemAssigedToRow(this.editedItem, row) && this._grid._isInViewport(row)) {
       this.__focusRestorationController.restoreFocus();
     } else {
-      this._grid._focusFirstRowInViewport();
+      this._grid._focusFirstVisibleRow();
     }
   }
 

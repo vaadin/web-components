@@ -77,7 +77,7 @@ class CrudGrid extends IncludedMixin(Grid) {
   }
 
   /** @protected */
-  _focusFirstRowInViewport() {
+  _focusFirstVisibleRow() {
     const row = this.__getFirstVisibleItem();
     this.__rowFocusMode = true;
     row.focus();
