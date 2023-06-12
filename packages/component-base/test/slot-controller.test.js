@@ -389,6 +389,24 @@ describe('slot-controller', () => {
         expect(nodes.length).to.equal(1);
         expect(nodes[0]).to.equal(controller.defaultNode);
       });
+
+      it('should remove node from nodes array when removing it from the DOM', async () => {
+        const foo = document.createElement('div');
+        foo.textContent = 'foo';
+        const bar = document.createElement('div');
+        bar.textContent = 'bar';
+
+        element.append(foo, bar);
+        await nextFrame();
+
+        element.removeChild(foo);
+        await nextFrame();
+
+        const nodes = controller.nodes;
+        expect(nodes).to.be.instanceOf(Array);
+        expect(nodes.length).to.equal(1);
+        expect(nodes[0]).to.equal(bar);
+      });
     });
 
     describe('custom', () => {
