@@ -702,6 +702,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary');
     this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error');
 
+    this.__focusRestorationController = new FocusRestorationController();
+
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
@@ -756,7 +758,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       }),
     );
 
-    this.__focusRestorationController = new FocusRestorationController(this);
     this.addController(this.__focusRestorationController);
   }
 
