@@ -177,7 +177,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const wasFocused = this.shadowRoot.activeElement === this._itemsFocusable;
 
-      this._getVisibleRows().forEach((row) => {
+      this._getRenderedRows().forEach((row) => {
         if (row.index === this._focusedItemIndex) {
           if (this.__rowFocusMode) {
             // Row focus mode

@@ -463,12 +463,12 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getFirstVisibleItem() {
-    return this._getVisibleRows().find((row) => this._isInViewport(row));
+    return this._getRenderedRows().find((row) => this._isInViewport(row));
   }
 
   /** @private */
   __getLastVisibleItem() {
-    return this._getVisibleRows()
+    return this._getRenderedRows()
       .reverse()
       .find((row) => this._isInViewport(row));
   }
@@ -485,7 +485,7 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _getVisibleRows() {
+  _getRenderedRows() {
     return Array.from(this.$.items.children)
       .filter((item) => !item.hidden)
       .sort((a, b) => a.index - b.index);
@@ -530,7 +530,7 @@ class Grid extends ElementMixin(
 
   /** @private */
   __focusBodyCell({ item, column }) {
-    const row = this._getVisibleRows().find((row) => row._item === item);
+    const row = this._getRenderedRows().find((row) => row._item === item);
     const cell = row && [...row.children].find((cell) => cell._column === column);
     if (cell) {
       cell.focus();
@@ -635,7 +635,7 @@ class Grid extends ElementMixin(
     // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
     const fvi = this._firstVisibleIndex;
     const lvi = this._lastVisibleIndex;
-    this.__viewportRowsCache = this._getVisibleRows().filter((row) => row.index >= fvi && row.index <= lvi);
+    this.__viewportRowsCache = this._getRenderedRows().filter((row) => row.index >= fvi && row.index <= lvi);
 
     // Pre-cache the intrinsic width of each column
     this.__calculateAndCacheIntrinsicWidths(cols);
