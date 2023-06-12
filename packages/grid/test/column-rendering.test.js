@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../vaadin-grid.js';
-import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';
+import { flushGrid, getCellContent, getHeaderCellContent, getRows, onceResized } from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
@@ -15,7 +15,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
     }
 
     function getBodyCell(rowIndex, columnIndex) {
-      const row = grid.$.items.children[rowIndex];
+      const row = grid._getRenderedRows()[rowIndex];
       return [...row.children].find((cell) => cell.firstElementChild.assignedNodes()[0].__columnIndex === columnIndex);
     }
 
@@ -209,7 +209,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
        * Expect the cells DOM order to match the column order
        */
       function expectCellsDomOrderToMatchColumnOrder() {
-        const firstRow = grid.$.items.firstElementChild;
+        const firstRow = grid._getRenderedRows()[0];
         const expectedOrder = [...firstRow.children].sort(
           (a, b) => columns.indexOf(a._column) - columns.indexOf(b._column),
         );
@@ -220,7 +220,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
        * Expect the cells visual order to match the column order
        */
       function expectCellsVisualOrderToMatchColumnOrder() {
-        const firstRow = grid.$.items.firstElementChild;
+        const firstRow = grid._getRenderedRows()[0];
         [...firstRow.children].forEach((cell) => {
           expect(cell.getBoundingClientRect().left).to.equal(cell._column._headerCell.getBoundingClientRect().left);
           expect(cell.getBoundingClientRect().right).to.equal(cell._column._headerCell.getBoundingClientRect().right);
