@@ -15,7 +15,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
     }
 
     function getBodyCell(rowIndex, columnIndex) {
-      const row = grid._getVisibleRows()[rowIndex];
+      const row = grid._getRenderedRows()[rowIndex];
       return [...row.children].find((cell) => cell.firstElementChild.assignedNodes()[0].__columnIndex === columnIndex);
     }
 
@@ -209,7 +209,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
        * Expect the cells DOM order to match the column order
        */
       function expectCellsDomOrderToMatchColumnOrder() {
-        const firstRow = grid._getVisibleRows()[0];
+        const firstRow = grid._getRenderedRows()[0];
         const expectedOrder = [...firstRow.children].sort(
           (a, b) => columns.indexOf(a._column) - columns.indexOf(b._column),
         );
@@ -220,7 +220,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
        * Expect the cells visual order to match the column order
        */
       function expectCellsVisualOrderToMatchColumnOrder() {
-        const firstRow = grid._getVisibleRows()[0];
+        const firstRow = grid._getRenderedRows()[0];
         [...firstRow.children].forEach((cell) => {
           expect(cell.getBoundingClientRect().left).to.equal(cell._column._headerCell.getBoundingClientRect().left);
           expect(cell.getBoundingClientRect().right).to.equal(cell._column._headerCell.getBoundingClientRect().right);

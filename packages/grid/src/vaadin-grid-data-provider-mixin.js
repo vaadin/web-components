@@ -408,7 +408,7 @@ export const DataProviderMixin = (superClass) =>
           this._effectiveSize = this._cache.effectiveSize;
 
           // After updating the cache, check if some of the expanded items should have sub-caches loaded
-          this._getVisibleRows().forEach((row) => {
+          this._getRenderedRows().forEach((row) => {
             const { cache, scaledIndex } = this._cache.getCacheAndIndex(row.index);
             const item = cache.items[scaledIndex];
             if (item && this._isExpanded(item)) {
@@ -425,7 +425,7 @@ export const DataProviderMixin = (superClass) =>
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
             this._setLoading(false);
 
-            this._getVisibleRows().forEach((row) => {
+            this._getRenderedRows().forEach((row) => {
               const cachedItem = this._cache.getItemForIndex(row.index);
               if (cachedItem) {
                 this._getItem(row.index, row);
