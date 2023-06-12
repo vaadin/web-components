@@ -4,7 +4,7 @@ import { setViewport } from '@web/test-runner-commands';
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-crud.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getBodyRowsInViewport } from './helpers.js';
+import { getVisibleRows } from './helpers.js';
 
 describe('a11y', () => {
   let crud;
@@ -114,7 +114,7 @@ describe('a11y', () => {
         saveButton.focus();
         saveButton.click();
 
-        const firstVisibleRow = getBodyRowsInViewport(grid)[0];
+        const firstVisibleRow = getVisibleRows(grid.$.items)[0];
         expect(getDeepActiveElement()).to.equal(firstVisibleRow);
       });
 
@@ -151,7 +151,7 @@ describe('a11y', () => {
         cancelButton.click();
         await nextRender();
 
-        const firstVisibleRow = getBodyRowsInViewport(grid)[0];
+        const firstVisibleRow = getVisibleRows(grid.$.items)[0];
         expect(getDeepActiveElement()).to.equal(firstVisibleRow);
       });
 
@@ -170,7 +170,7 @@ describe('a11y', () => {
         await nextRender();
 
         await sendKeys({ press: 'ArrowDown' });
-        const secondVisibleRow = getBodyRowsInViewport(grid)[1];
+        const secondVisibleRow = getVisibleRows(grid.$.items)[1];
         expect(getDeepActiveElement()).to.equal(secondVisibleRow);
       });
     });
@@ -211,7 +211,7 @@ describe('a11y', () => {
           confirmButton.focus();
           confirmButton.click();
 
-          const firstVisibleRow = getBodyRowsInViewport(grid)[0];
+          const firstVisibleRow = getVisibleRows(grid.$.items)[0];
           expect(getDeepActiveElement()).to.equal(firstVisibleRow);
         });
       });

@@ -1,6 +1,7 @@
 export { flushGrid } from '@vaadin/grid/test/helpers.js';
 
-function isRowInViewport(grid, row) {
+function isRowVisible(row) {
+  const grid = row.getRootNode().host;
   const scrollTargetRect = grid.$.table.getBoundingClientRect();
   const itemRect = row.getBoundingClientRect();
   const headerHeight = grid.$.header.getBoundingClientRect().height;
@@ -9,7 +10,7 @@ function isRowInViewport(grid, row) {
 }
 
 export const getRows = (container) => {
-  return container.querySelectorAll('tr');
+  return [...container.querySelectorAll('tr')];
 };
 
 export const getRowCells = (row) => {
@@ -45,6 +46,6 @@ export const getBodyCellContent = (grid, row, col) => {
   return getContainerCellContent(container, row, col);
 };
 
-export function getBodyRowsInViewport(grid) {
-  return [...getRows(grid.$.items)].filter((row) => isRowInViewport(grid, row));
+export function getVisibleRows(container) {
+  return getRows(container).filter((row) => isRowVisible(row));
 }
