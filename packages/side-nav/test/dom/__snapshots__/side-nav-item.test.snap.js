@@ -2,7 +2,10 @@
 export const snapshots = {};
 
 snapshots["vaadin-side-nav-item item default"] = 
-`<vaadin-side-nav-item role="listitem">
+`<vaadin-side-nav-item
+  has-children=""
+  role="listitem"
+>
   <vaadin-icon
     icon="vaadin:chart"
     slot="prefix"
@@ -34,6 +37,7 @@ snapshots["vaadin-side-nav-item item default"] =
 snapshots["vaadin-side-nav-item item expanded"] = 
 `<vaadin-side-nav-item
   expanded=""
+  has-children=""
   role="listitem"
 >
   <vaadin-icon
@@ -69,6 +73,7 @@ snapshots["vaadin-side-nav-item item active"] =
   active=""
   child-active=""
   expanded=""
+  has-children=""
   role="listitem"
 >
   <vaadin-icon
@@ -341,7 +346,10 @@ snapshots["vaadin-side-nav-item shadow path"] =
 /* end snapshot vaadin-side-nav-item shadow path */
 
 snapshots["vaadin-side-nav-item item path"] = 
-`<vaadin-side-nav-item role="listitem">
+`<vaadin-side-nav-item
+  has-children=""
+  role="listitem"
+>
   <vaadin-icon
     icon="vaadin:chart"
     slot="prefix"

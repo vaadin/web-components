@@ -24,6 +24,40 @@ describe('side-nav-item', () => {
     });
   });
 
+  describe('has-children', () => {
+    beforeEach(async () => {
+      item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
+      await nextRender();
+    });
+
+    it('should not have has-children attribute by default', () => {
+      expect(item.hasAttribute('has-children')).to.be.false;
+    });
+
+    it('should set has-children attribute when adding child item', async () => {
+      const child = document.createElement('vaadin-side-nav-item');
+      child.setAttribute('slot', 'children');
+
+      item.appendChild(child);
+      await nextRender();
+
+      expect(item.hasAttribute('has-children')).to.be.true;
+    });
+
+    it('should remove has-children attribute when removing child item', async () => {
+      const child = document.createElement('vaadin-side-nav-item');
+      child.setAttribute('slot', 'children');
+
+      item.appendChild(child);
+      await nextRender();
+
+      item.removeChild(child);
+      await nextRender();
+
+      expect(item.hasAttribute('has-children')).to.be.false;
+    });
+  });
+
   describe('active', () => {
     beforeEach(async () => {
       item = fixtureSync(`<vaadin-side-nav-item path=""></vaadin-side-nav-item>`);

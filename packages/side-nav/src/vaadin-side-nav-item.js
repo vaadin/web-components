@@ -7,11 +7,37 @@ import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
+}
+
+/**
+ * A controller to manage the item content children slot.
+ */
+class ChildrenController extends SlotController {
+  constructor(host) {
+    super(host, 'children', null, { observe: true, multiple: true });
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  initAddedNode() {
+    this.host.requestUpdate();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  teardownNode() {
+    this.host.requestUpdate();
+  }
 }
 
 /**
@@ -100,6 +126,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     return sideNavItemBaseStyles;
   }
 
+  constructor() {
+    super();
+
+    this._childrenController = new ChildrenController(this);
+  }
+
   /** @protected */
   get _button() {
     return this.shadowRoot.querySelector('button');
@@ -110,6 +142,9 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
    * @override
    */
   firstUpdated() {
+    // Controller to detect whether the item has child items.
+    this.addController(this._childrenController);
+
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "listitem".
     if (!this.hasAttribute('role')) {
@@ -127,6 +162,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     if (props.has('path')) {
       this.__updateActive();
     }
+
+    this.toggleAttribute('has-children', this._childrenController.nodes.length > 0);
   }
 
   /** @protected */
@@ -153,7 +190,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
         <button
           part="toggle-button"
           @click="${this.__toggleExpanded}"
-          ?hidden="${!this.querySelector('[slot=children]')}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
           aria-label="Toggle child items"

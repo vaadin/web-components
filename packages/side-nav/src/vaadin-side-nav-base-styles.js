@@ -30,6 +30,10 @@ export const sideNavItemBaseStyles = css`
     flex: none;
   }
 
+  :host(:not([has-children])) button {
+    display: none !important;
+  }
+
   :host(:not([path])) a {
     position: relative;
   }
