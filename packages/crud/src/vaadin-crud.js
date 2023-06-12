@@ -1280,8 +1280,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __restoreFocusOnDelete() {
-    const rowCount = this._grid._effectiveSize;
-    if (rowCount === 1) {
+    if (this._grid._effectiveSize === 1) {
       this._newButton.focus();
     } else {
       this._grid._focusFirstVisibleRow();
