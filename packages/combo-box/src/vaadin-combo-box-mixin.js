@@ -536,7 +536,11 @@ export const ComboBoxMixin = (subclass) =>
         // For touch devices, we don't want to popup virtual keyboard
         // unless input element is explicitly focused by the user.
         if (!this._isInputFocused() && !isTouch) {
-          this.focus();
+          if (this.inputElement) {
+            this._closeOnBlurIsPrevented = true;
+            this.inputElement.focus();
+            this._closeOnBlurIsPrevented = false;
+          }
         }
 
         this._overlayElement.restoreFocusOnClose = true;

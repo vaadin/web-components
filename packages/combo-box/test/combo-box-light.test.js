@@ -278,10 +278,11 @@ describe('custom buttons', () => {
   });
 
   describe('toggle-button', () => {
-    let toggleButton;
+    let toggleButton, inputElement;
 
     beforeEach(() => {
       toggleButton = comboBox.querySelector('.toggle-button');
+      inputElement = comboBox.querySelector('input');
     });
 
     it('should toggle overlay by clicking toggle element', () => {
@@ -325,6 +326,12 @@ describe('custom buttons', () => {
       await sendKeys({ press: 'ArrowUp' });
 
       expect(comboBox.opened).to.be.true;
+    });
+
+    it('should focus input element on toggle button click', () => {
+      click(toggleButton);
+      expect(comboBox.opened).to.be.true;
+      expect(document.activeElement).to.equal(inputElement);
     });
   });
 

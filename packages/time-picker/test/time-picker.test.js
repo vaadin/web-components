@@ -286,6 +286,20 @@ describe('time-picker', () => {
     });
   });
 
+  describe('toggle button', () => {
+    let toggleButton;
+
+    beforeEach(() => {
+      toggleButton = timePicker.$.toggleButton;
+    });
+
+    it('should focus input element on toggle button click', () => {
+      toggleButton.click();
+      expect(comboBox.opened).to.be.true;
+      expect(document.activeElement).to.equal(inputElement);
+    });
+  });
+
   describe('autoselect', () => {
     it('should set autoselect to false by default', () => {
       expect(timePicker.autoselect).to.be.false;

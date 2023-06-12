@@ -225,6 +225,20 @@ describe('basic', () => {
     });
   });
 
+  describe('toggle button', () => {
+    let toggleButton;
+
+    beforeEach(() => {
+      toggleButton = comboBox.$.toggleButton;
+    });
+
+    it('should focus input element on toggle button click', () => {
+      toggleButton.click();
+      expect(internal.opened).to.be.true;
+      expect(document.activeElement).to.equal(inputElement);
+    });
+  });
+
   describe('chips', () => {
     const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
