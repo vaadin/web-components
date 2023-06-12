@@ -72,7 +72,7 @@ export const OverlayFocusMixin = (superClass) =>
         this.__focusTrapController.releaseFocus();
       }
 
-      if (this.restoreFocusOnClose) {
+      if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
         this.__restoreFocus();
       }
     }
@@ -100,6 +100,43 @@ export const OverlayFocusMixin = (superClass) =>
       }
     }
 
+    /**
+     * Returns true if focus is still inside the overlay or on the body element,
+     * otherwise false.
+     *
+     * Focus shouldn't be restored if it's been moved elsewhere by another
+     * component or as a result of a user interaction e.g. the user clicked
+     * on a button outside the overlay while the overlay was open.
+     *
+     * @protected
+     * @return {boolean}
+     */
+    _shouldRestoreFocus() {
+      const activeElement = getDeepActiveElement();
+      return activeElement === document.body || this._deepContains(activeElement);
+    }
+
+    /**
+     * Returns true if the overlay contains the given node,
+     * including those within shadow DOM trees.
+     *
+     * @param {Node} node
+     * @return {boolean}
+     * @protected
+     */
+    _deepContains(node) {
+      if (this.contains(node)) {
+        return true;
+      }
+      let n = node;
+      const doc = node.ownerDocument;
+      // Walk from node to `this` or `document`
+      while (n && n !== doc && n !== this) {
+        n = n.parentNode || n.host;
+      }
+      return n === this;
+    }
+
     /** @private */
     __storeFocus() {
       // Store the focused node.
@@ -118,23 +155,20 @@ export const OverlayFocusMixin = (superClass) =>
 
     /** @private */
     __restoreFocus() {
-      // If the activeElement is `<body>` or inside the overlay,
-      // we are allowed to restore the focus. In all the other
-      // cases focus might have been moved elsewhere by another
-      // component or by the user interaction (e.g. click on a
-      // button outside the overlay).
-      const activeElement = getDeepActiveElement();
-      if (activeElement !== document.body && !this._deepContains(activeElement)) {
-        return;
-      }
-
       // Use restoreFocusNode if specified, otherwise fallback to the node
       // which was focused before opening the overlay.
       const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
       if (restoreFocusNode) {
-        // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
-        // (e.g. combo-box overlay close on outside click).
-        setTimeout(() => restoreFocusNode.focus());
+        if (getDeepActiveElement() === document.body) {
+          // In Firefox and Safari, focusing the restoreFocusNode synchronously
+          // doesn't work as expected when the overlay is closing on outside click.
+          // These browsers force focus to move to the body element and retain it
+          // there until the next event loop iteration.
+          setTimeout(() => restoreFocusNode.focus());
+        } else {
+          restoreFocusNode.focus();
+        }
+
         this.__restoreFocusNode = null;
       }
 
