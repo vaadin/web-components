@@ -1,7 +1,16 @@
 export { flushGrid } from '@vaadin/grid/test/helpers.js';
 
+function isRowVisible(row) {
+  const grid = row.getRootNode().host;
+  const scrollTargetRect = grid.$.table.getBoundingClientRect();
+  const itemRect = row.getBoundingClientRect();
+  const headerHeight = grid.$.header.getBoundingClientRect().height;
+  const footerHeight = grid.$.footer.getBoundingClientRect().height;
+  return itemRect.bottom > scrollTargetRect.top + headerHeight && itemRect.top < scrollTargetRect.bottom - footerHeight;
+}
+
 export const getRows = (container) => {
-  return container.querySelectorAll('tr');
+  return [...container.querySelectorAll('tr')];
 };
 
 export const getRowCells = (row) => {
@@ -36,3 +45,7 @@ export const getBodyCellContent = (grid, row, col) => {
   const container = grid.$.items;
   return getContainerCellContent(container, row, col);
 };
+
+export function getVisibleRows(container) {
+  return getRows(container).filter((row) => isRowVisible(row));
+}
