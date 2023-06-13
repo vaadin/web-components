@@ -1,9 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  fire,
+  fixtureSync,
+  mousedown,
+  nextRender,
+  oneEvent,
+  outsideClick,
+  touchstart,
+} from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, monthsEqual, open, outsideClick, waitForOverlayRender } from './helpers.js';
+import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 
 describe('dropdown', () => {
   let datePicker, input, overlay;
