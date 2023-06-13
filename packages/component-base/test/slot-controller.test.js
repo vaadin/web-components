@@ -465,5 +465,25 @@ describe('slot-controller', () => {
         expect(element.childElementCount).to.equal(3);
       });
     });
+
+    describe('no tag node', () => {
+      beforeEach(async () => {
+        element = fixtureSync('<slot-controller-element></slot-controller-element>');
+        initializeSpy = sinon.spy();
+        controller = new SlotController(element, '', null, {
+          multiple: true,
+        });
+        element.addController(controller);
+        children = element.querySelectorAll(':not([slot])');
+        // Wait for initial slotchange event
+        await nextFrame();
+      });
+
+      it('should keep nodes array empty when no tag name for default node provided', () => {
+        const nodes = controller.nodes;
+        expect(nodes).to.be.instanceOf(Array);
+        expect(nodes).to.have.lengthOf(0);
+      });
+    });
   });
 });

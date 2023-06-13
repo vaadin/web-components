@@ -81,8 +81,10 @@ export class SlotController extends EventTarget {
 
     if (children.length === 0) {
       const defaultNode = this.attachDefaultNode();
-      this.nodes = [defaultNode];
-      this.initNode(defaultNode);
+      if (defaultNode) {
+        this.nodes = [defaultNode];
+        this.initNode(defaultNode);
+      }
     } else {
       this.nodes = children;
       children.forEach((node) => {
