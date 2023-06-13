@@ -482,7 +482,7 @@ describe('slot-controller', () => {
       it('should keep nodes array empty when no tag name for default node provided', () => {
         const nodes = controller.nodes;
         expect(nodes).to.be.instanceOf(Array);
-        expect(nodes.length).to.equal(0);
+        expect(nodes).to.have.lengthOf(0);
       });
     });
   });
