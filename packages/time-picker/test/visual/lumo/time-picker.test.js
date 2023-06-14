@@ -1,3 +1,4 @@
+import { mousedown } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
@@ -22,6 +23,11 @@ describe('time-picker', () => {
     await sendKeys({ press: 'Tab' });
 
     await visualDiff(div, 'focus-ring');
+
+    // at this moment focus-utils.js -> isKeyboardActive is true.
+    // Click once here to reset it so other tests are not affected by it.
+    // A focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
   it('disabled', async () => {
