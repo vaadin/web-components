@@ -30,6 +30,12 @@ export const sideNavItemBaseStyles = css`
     flex: none;
   }
 
+  [part='children'] {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
   :host(:not([has-children])) button {
     display: none !important;
   }
@@ -101,8 +107,9 @@ export const sideNavBaseStyles = css`
     justify-content: center;
   }
 
-  slot {
-    /* Needed to make role="list" work */
-    display: block;
+  [part='children'] {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
   }
 `;

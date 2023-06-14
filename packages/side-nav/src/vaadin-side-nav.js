@@ -118,7 +118,9 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       <summary part="label" ?hidden="${label == null}">
         <slot name="label" @slotchange="${() => this.requestUpdate()}"></slot>
       </summary>
-      <slot role="list"></slot>
+      <ul part="children">
+        <slot></slot>
+      </ul>
     `;
   }
 
