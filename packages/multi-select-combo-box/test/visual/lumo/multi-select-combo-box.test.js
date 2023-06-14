@@ -17,6 +17,13 @@ describe('multi-select-combo-box', () => {
     element.items = ['Apple', 'Banana', 'Lemon', 'Pear'];
   });
 
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
+  });
+
   it('basic', async () => {
     await visualDiff(div, 'basic');
   });
@@ -25,11 +32,6 @@ describe('multi-select-combo-box', () => {
     await sendKeys({ press: 'Tab' });
 
     await visualDiff(div, 'focus-ring');
-
-    // at this moment focus-utils.js -> isKeyboardActive is true.
-    // Click once here to reset it so other tests are not affected by it.
-    // A focus-ring would be shown in other tests otherwise.
-    mousedown(document.body);
   });
 
   it('disabled', async () => {
