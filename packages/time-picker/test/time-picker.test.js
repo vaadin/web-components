@@ -4,6 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
@@ -293,7 +294,8 @@ describe('time-picker', () => {
       toggleButton = timePicker.$.toggleButton;
     });
 
-    it('should focus input element on toggle button click', () => {
+    // WebKit returns true for isTouch in the test envirnoment. This test fails when isTouch == true, which is a correct behavior
+    (isTouch ? it.skip : it)('should focus input element on toggle button click', async () => {
       toggleButton.click();
       expect(comboBox.opened).to.be.true;
       expect(document.activeElement).to.equal(inputElement);

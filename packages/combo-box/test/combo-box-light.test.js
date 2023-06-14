@@ -19,6 +19,7 @@ import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem } from './helpers.js';
 
 class MyInput extends PolymerElement {
@@ -328,7 +329,8 @@ describe('custom buttons', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should focus input element on toggle button click', () => {
+    // WebKit returns true for isTouch in the test envirnoment. This test fails when isTouch == true, which is a correct behavior
+    (isTouch ? it.skip : it)('should focus input element on toggle button click', () => {
       click(toggleButton);
       expect(comboBox.opened).to.be.true;
       expect(document.activeElement).to.equal(inputElement);
