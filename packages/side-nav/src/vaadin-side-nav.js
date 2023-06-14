@@ -6,12 +6,51 @@
 import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
+}
+
+/**
+ * A controller to manage the label slot.
+ */
+class LabelController extends SlotController {
+  static generateId(host) {
+    const prefix = 'side-nav-label';
+    return `${prefix}-${generateUniqueId()}`;
+  }
+
+  constructor(host) {
+    super(host, 'label', null, { useUniqueId: true });
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  initAddedNode(node) {
+    this.host.requestUpdate();
+
+    if (!node.id) {
+      node.setAttribute('id', this.defaultId);
+    }
+
+    this.host.setAttribute('aria-labelledby', node.id);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  teardownNode(node) {
+    this.host.requestUpdate();
+
+    this.host.removeAttribute('aria-labelledby');
+  }
 }
 
 /**
@@ -86,8 +125,17 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     return sideNavBaseStyles;
   }
 
+  constructor() {
+    super();
+
+    this._labelController = new LabelController(this);
+  }
+
   /** @protected */
   firstUpdated() {
+    // Controller to detect whether there is a label provided.
+    this.addController(this._labelController);
+
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "navigation".
     if (!this.hasAttribute('role')) {
@@ -97,7 +145,8 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @protected */
   render() {
-    const label = this.querySelector('[slot="label"]');
+    // Check if there is a label assigned to the slot.
+    const label = this._labelController.getSlotChild();
     if (label && this.collapsible) {
       return html`
         <details ?open="${!this.collapsed}" @toggle="${this.__toggleCollapsed}">${this.__renderBody(label)}</details>
@@ -108,15 +157,9 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @private */
   __renderBody(label) {
-    if (label) {
-      if (!label.id) label.id = `side-nav-label-${generateUniqueId()}`;
-      this.setAttribute('aria-labelledby', label.id);
-    } else {
-      this.removeAttribute('aria-labelledby');
-    }
     return html`
       <summary part="label" ?hidden="${label == null}">
-        <slot name="label" @slotchange="${() => this.requestUpdate()}"></slot>
+        <slot name="label"></slot>
       </summary>
       <slot role="list"></slot>
     `;
