@@ -94,6 +94,23 @@ describe('side-nav-item', () => {
     });
   });
 
+  describe('path alias', () => {
+    beforeEach(async () => {
+      item = fixtureSync(`<vaadin-side-nav-item path="/another-path" pathAliases="/"></vaadin-side-nav-item>`);
+      await nextRender();
+    });
+
+    it('should set active property to true for matching path alias', () => {
+      expect(item.active).to.be.true;
+    });
+
+    it('should set active property to false for matching path alias with no path', async () => {
+      item.path = undefined;
+      await item.updateComplete;
+      expect(item.active).to.be.false;
+    });
+  });
+
   describe('expanded', () => {
     let toggle;
 
