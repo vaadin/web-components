@@ -10,6 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { doesPathMatchItem, getCurrentRelativePath } from './vaadin-side-nav-helpers.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -230,35 +231,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   /** @private */
   __calculateActive() {
-    const isPathAbsolute = this.path.startsWith('/');
-    const hasBaseUri = document.baseURI !== document.location.href;
-    // Absolute path or no base uri in use. No special comparison needed
-    if (isPathAbsolute || !hasBaseUri) {
-      return this.__doesPathMatchItem(document.location.pathname);
-    }
-    const pathRelativeToRoot = document.location.pathname;
-    const basePath = new URL(document.baseURI).pathname;
-    const pathRelativeToBase =
-      basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath)
-        ? pathRelativeToRoot.substring(basePath.length)
-        : pathRelativeToRoot;
-    return this.__doesPathMatchItem(pathRelativeToBase);
-  }
-
-  /** @private */
-  __doesPathMatchItem(pathToMatch) {
-    const sanitizedPathToMatch = pathToMatch.startsWith('/') ? pathToMatch.substring(1) : pathToMatch;
-    const sanitizedItemPath = this.path.startsWith('/') ? this.path.substring(1) : this.path;
-    if (sanitizedPathToMatch === sanitizedItemPath) {
-      return true;
-    }
-    if (this.pathAliases || this.pathAliases === '') {
-      return this.pathAliases.split(',').some((alias) => {
-        const sanitizedAlias = alias.startsWith('/') ? alias.substring(1) : alias;
-        return sanitizedPathToMatch === sanitizedAlias;
-      });
-    }
-    return false;
+    const currentRelativePath = getCurrentRelativePath(document);
+    return doesPathMatchItem(currentRelativePath, this);
   }
 }
 
