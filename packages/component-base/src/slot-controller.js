@@ -81,8 +81,10 @@ export class SlotController extends EventTarget {
 
     if (children.length === 0) {
       const defaultNode = this.attachDefaultNode();
-      this.nodes = [defaultNode];
-      this.initNode(defaultNode);
+      if (defaultNode) {
+        this.nodes = [defaultNode];
+        this.initNode(defaultNode);
+      }
     } else {
       this.nodes = children;
       children.forEach((node) => {
@@ -205,6 +207,8 @@ export class SlotController extends EventTarget {
       const newNodes = info.addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
 
       if (info.removedNodes.length) {
+        this.nodes = current.filter((node) => !info.removedNodes.includes(node));
+
         info.removedNodes.forEach((node) => {
           this.teardownNode(node);
         });

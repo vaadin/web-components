@@ -17,6 +17,7 @@ import './vaadin-crud-form.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -701,6 +702,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary');
     this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error');
 
+    this.__focusRestorationController = new FocusRestorationController();
+
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this.__onDomChange(info.addedNodes);
     });
@@ -754,6 +757,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         this._fullscreen = matches;
       }),
     );
+
+    this.addController(this.__focusRestorationController);
   }
 
   /**
@@ -1261,6 +1266,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __openEditor(type, item) {
+    this.__focusRestorationController.saveFocus();
+
     this.__isDirty = false;
     this.__isNew = !item;
     const result = this.__fireEvent(this.__isNew ? 'new' : 'edit', item);
@@ -1268,6 +1275,31 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.editedItem = item || {};
     } else {
       this.editorOpened = true;
+    }
+  }
+
+  /** @private */
+  __restoreFocusOnDelete() {
+    if (this._grid._effectiveSize === 1) {
+      this._newButton.focus();
+    } else {
+      this._grid._focusFirstVisibleRow();
+    }
+  }
+
+  /** @private */
+  __restoreFocusOnSaveOrCancel() {
+    const focusNode = this.__focusRestorationController.focusNode;
+    const row = this._grid._getRowContainingNode(focusNode);
+    if (!row) {
+      this.__focusRestorationController.restoreFocus();
+      return;
+    }
+
+    if (this._grid._isItemAssigedToRow(this.editedItem, row) && this._grid._isInViewport(row)) {
+      this.__focusRestorationController.restoreFocus();
+    } else {
+      this._grid._focusFirstVisibleRow();
     }
   }
 
@@ -1298,6 +1330,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         }
         Object.assign(this.editedItem, item);
       }
+
+      this.__restoreFocusOnSaveOrCancel();
       this._grid.clearCache();
       this.__closeEditor();
     }
@@ -1316,6 +1350,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   __confirmCancel() {
     const result = this.__fireEvent('cancel', this.editedItem);
     if (result) {
+      this.__restoreFocusOnSaveOrCancel();
       this.__closeEditor();
     }
   }
@@ -1332,6 +1367,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       if (this.items && this.items.indexOf(this.editedItem) >= 0) {
         this.items.splice(this.items.indexOf(this.editedItem), 1);
       }
+
+      this.__restoreFocusOnDelete();
       this._grid.clearCache();
       this.__closeEditor();
     }
