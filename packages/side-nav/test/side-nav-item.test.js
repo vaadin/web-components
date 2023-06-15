@@ -96,18 +96,36 @@ describe('side-nav-item', () => {
 
   describe('path alias', () => {
     beforeEach(async () => {
-      item = fixtureSync(`<vaadin-side-nav-item path="/another-path" pathAliases="/"></vaadin-side-nav-item>`);
+      item = fixtureSync(`<vaadin-side-nav-item path="/path" pathAliases="/"></vaadin-side-nav-item>`);
       await nextRender();
     });
 
-    it('should set active property to true for matching path alias', () => {
+    it('should set active property to true for matching alias with path', () => {
       expect(item.active).to.be.true;
     });
 
-    it('should set active property to false for matching path alias with no path', async () => {
+    it('should set active property to false for matching alias without path', async () => {
       item.path = undefined;
       await item.updateComplete;
       expect(item.active).to.be.false;
+    });
+
+    it('should update active property when aliases are updated', async () => {
+      item.pathAliases = 'aliases';
+      await item.updateComplete;
+      expect(item.active).to.be.false;
+    });
+
+    it('should set active property to true for matching empty alias', async () => {
+      item.pathAliases = '';
+      await item.updateComplete;
+      expect(item.active).to.be.true;
+    });
+
+    it('should set active property to true for a match in multiple aliases', async () => {
+      item.pathAliases = '/,/alias';
+      await item.updateComplete;
+      expect(item.active).to.be.true;
     });
   });
 
