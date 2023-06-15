@@ -183,14 +183,13 @@ snapshots["vaadin-side-nav-item shadow default"] =
   >
   </button>
 </a>
-<slot
+<ul
   hidden=""
-  id="children"
-  name="children"
   part="children"
-  role="list"
 >
-</slot>
+  <slot name="children">
+  </slot>
+</ul>
 `;
 /* end snapshot vaadin-side-nav-item shadow default */
 
@@ -213,13 +212,10 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
   >
   </button>
 </a>
-<slot
-  id="children"
-  name="children"
-  part="children"
-  role="list"
->
-</slot>
+<ul part="children">
+  <slot name="children">
+  </slot>
+</ul>
 `;
 /* end snapshot vaadin-side-nav-item shadow expanded */
 
@@ -243,13 +239,10 @@ snapshots["vaadin-side-nav-item shadow active"] =
   >
   </button>
 </a>
-<slot
-  id="children"
-  name="children"
-  part="children"
-  role="list"
->
-</slot>
+<ul part="children">
+  <slot name="children">
+  </slot>
+</ul>
 `;
 /* end snapshot vaadin-side-nav-item shadow active */
 
@@ -334,14 +327,13 @@ snapshots["vaadin-side-nav-item shadow path"] =
   >
   </button>
 </a>
-<slot
+<ul
   hidden=""
-  id="children"
-  name="children"
   part="children"
-  role="list"
 >
-</slot>
+  <slot name="children">
+  </slot>
+</ul>
 `;
 /* end snapshot vaadin-side-nav-item shadow path */
 

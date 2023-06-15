@@ -72,8 +72,10 @@ snapshots["vaadin-side-nav shadow default"] =
   <slot name="label">
   </slot>
 </summary>
-<slot role="list">
-</slot>
+<ul part="children">
+  <slot>
+  </slot>
+</ul>
 `;
 /* end snapshot vaadin-side-nav shadow default */
 
@@ -83,8 +85,10 @@ snapshots["vaadin-side-nav shadow collapsible"] =
     <slot name="label">
     </slot>
   </summary>
-  <slot role="list">
-  </slot>
+  <ul part="children">
+    <slot>
+    </slot>
+  </ul>
 </details>
 `;
 /* end snapshot vaadin-side-nav shadow collapsible */
@@ -95,8 +99,10 @@ snapshots["vaadin-side-nav shadow collapsed"] =
     <slot name="label">
     </slot>
   </summary>
-  <slot role="list">
-  </slot>
+  <ul part="children">
+    <slot>
+    </slot>
+  </ul>
 </details>
 `;
 /* end snapshot vaadin-side-nav shadow collapsed */

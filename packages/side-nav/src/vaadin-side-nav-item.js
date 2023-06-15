@@ -195,7 +195,9 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
           aria-label="Toggle child items"
         ></button>
       </a>
-      <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
+      <ul part="children" ?hidden="${!this.expanded}">
+        <slot name="children"></slot>
+      </ul>
     `;
   }
 
