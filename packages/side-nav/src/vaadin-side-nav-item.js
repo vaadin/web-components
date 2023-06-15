@@ -231,7 +231,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   /** @private */
   __calculateActive() {
-    const currentRelativePath = getCurrentRelativePath(document);
+    const currentRelativePath = getCurrentRelativePath();
     return doesPathMatchItem(currentRelativePath, this);
   }
 }

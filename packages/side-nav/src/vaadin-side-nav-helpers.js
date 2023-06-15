@@ -26,10 +26,7 @@ export function doesPathMatchItem(path, item) {
   return false;
 }
 
-/**
- * @param {Document} document
- */
-export function getCurrentRelativePath(document) {
+export function getCurrentRelativePath() {
   const path = document.location.pathname;
   const hasBaseUri = !path.startsWith('/') && document.baseURI !== document.location.href;
   if (hasBaseUri) {
