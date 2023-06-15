@@ -96,7 +96,7 @@ describe('side-nav-item', () => {
 
   describe('path alias', () => {
     beforeEach(async () => {
-      item = fixtureSync(`<vaadin-side-nav-item path="/path" pathAliases="/"></vaadin-side-nav-item>`);
+      item = fixtureSync(`<vaadin-side-nav-item path="/path" path-aliases="/"></vaadin-side-nav-item>`);
       await nextRender();
     });
 
