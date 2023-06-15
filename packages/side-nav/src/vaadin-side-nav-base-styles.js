@@ -83,28 +83,19 @@ export const sideNavBaseStyles = css`
     display: none !important;
   }
 
-  summary {
+  button {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-  }
-
-  summary ::slotted([slot='label']) {
-    display: block;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::marker {
-    content: '';
-  }
-
-  summary::after {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: inherit;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: initial;
+    color: inherit;
+    border: initial;
+    outline: none;
+    font: inherit;
+    text-align: inherit;
   }
 
   [part='children'] {

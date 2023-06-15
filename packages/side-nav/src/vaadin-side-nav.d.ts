@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -50,7 +51,7 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  */
-declare class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+declare class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   /**
    * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
    */
