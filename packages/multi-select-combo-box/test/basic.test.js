@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
-import { isTouch } from '@vaadin/component-base/src/browser-utils';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 describe('basic', () => {
   let comboBox, internal, inputElement;
