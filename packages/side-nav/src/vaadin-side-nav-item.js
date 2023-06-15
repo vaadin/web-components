@@ -101,7 +101,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       pathAliases: {
         type: String,
         reflectToAttribute: true,
-        attribute: true,
       },
 
       /**
