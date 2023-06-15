@@ -1,4 +1,3 @@
-import { SideNavItem } from './vaadin-side-nav-item.js';
 /**
  * @license
  * Copyright (c) 2023 Vaadin Ltd.
@@ -6,19 +5,20 @@ import { SideNavItem } from './vaadin-side-nav-item.js';
  */
 
 /**
- * @param {string} path
- * @param {SideNavItem} item
+ * @param {string} pathToMatch
+ * @param {string} itemPath
+ * @param {string} itemPathAliases
  */
-export function doesPathMatchItem(path, item) {
-  const sanitizedPathToMatch = path.startsWith('/') ? path.substring(1) : path;
-  const sanitizedItemPath = item.path.startsWith('/') ? item.path.substring(1) : item.path;
+export function isMatchingPath(pathToMatch, itemPath, itemPathAliases) {
+  const sanitizedPathToMatch = pathToMatch.startsWith('/') ? pathToMatch.substring(1) : pathToMatch;
+  const sanitizedItemPath = itemPath.startsWith('/') ? itemPath.substring(1) : itemPath;
   // Try matching the item path
   if (sanitizedPathToMatch === sanitizedItemPath) {
     return true;
   }
   // Try matching the item path aliases given they exist
-  if (item.pathAliases || item.pathAliases === '') {
-    return item.pathAliases.split(',').some((alias) => {
+  if (itemPathAliases || itemPathAliases === '') {
+    return itemPathAliases.split(',').some((alias) => {
       const sanitizedAlias = alias.startsWith('/') ? alias.substring(1) : alias;
       return sanitizedPathToMatch === sanitizedAlias;
     });

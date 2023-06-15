@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
-import { doesPathMatchItem, getCurrentRelativePath } from './vaadin-side-nav-helpers.js';
+import { getCurrentRelativePath, isMatchingPath } from './vaadin-side-nav-helpers.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -232,7 +232,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @private */
   __calculateActive() {
     const currentRelativePath = getCurrentRelativePath();
-    return doesPathMatchItem(currentRelativePath, this);
+    return isMatchingPath(currentRelativePath, this.path, this.pathAliases);
   }
 }
 
