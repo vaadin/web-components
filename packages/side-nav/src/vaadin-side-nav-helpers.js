@@ -1,4 +1,9 @@
 import { SideNavItem } from './vaadin-side-nav-item.js';
+/**
+ * @license
+ * Copyright (c) 2023 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 
 /**
  * @param {string} path
