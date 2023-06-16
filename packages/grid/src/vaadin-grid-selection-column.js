@@ -5,6 +5,7 @@
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { GridColumn } from './vaadin-grid-column.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
@@ -104,6 +105,7 @@ class GridSelectionColumn extends GridColumn {
     this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
     this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
     this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
+    this.__onSelectionColumnCellTrack = this.__onSelectionColumnCellTrack.bind(this);
   }
 
   /** @protected */
@@ -149,6 +151,76 @@ class GridSelectionColumn extends GridColumn {
     checkbox.indeterminate = this.__indeterminate;
   }
 
+  /** @private */
+  __lassoAutoScroller() {
+    if (this.__lassoDragStartIndex !== undefined) {
+      // Get the row being hovered over
+      const renderedRows = this._grid._getRenderedRows();
+      const hoveredRow = renderedRows.find((row) => {
+        const rowRect = row.getBoundingClientRect();
+        return this.__lassoCurrentY >= rowRect.top && this.__lassoCurrentY <= rowRect.bottom;
+      });
+
+      // Get the index of the row being hovered over or the first/last
+      // visible row if hovering outside the grid
+      let hoveredIndex = hoveredRow ? hoveredRow.index : undefined;
+      const gridRect = this._grid.getBoundingClientRect();
+      if (this.__lassoCurrentY < gridRect.top) {
+        hoveredIndex = this._grid._firstVisibleIndex;
+      } else if (this.__lassoCurrentY > gridRect.bottom) {
+        hoveredIndex = this._grid._lastVisibleIndex;
+      }
+
+      if (hoveredIndex !== undefined) {
+        // Select all items between the start and the current row
+        renderedRows.forEach((row) => {
+          if (
+            (hoveredIndex > this.__lassoDragStartIndex &&
+              row.index >= this.__lassoDragStartIndex &&
+              row.index <= hoveredIndex) ||
+            (hoveredIndex < this.__lassoDragStartIndex &&
+              row.index <= this.__lassoDragStartIndex &&
+              row.index >= hoveredIndex)
+          ) {
+            if (this.__lassoSelect) {
+              this._grid.selectItem(row._item);
+            } else {
+              this._grid.deselectItem(row._item);
+            }
+            
+          }
+        });
+      }
+
+      // Auto scroll the grid
+      this._grid.$.table.scrollTop += (this.__lassoDy || 0) / 20;
+
+      // Schedule the next auto scroll
+      setTimeout(() => this.__lassoAutoScroller(), 20);
+    }
+  }
+
+  /** @private */
+  __onSelectionColumnCellTrack(e) {
+    this.__lassoDy = e.detail.dy;
+    this.__lassoCurrentY = e.detail.y;
+
+    if (e.detail.state === 'start') {
+      const renderedRows = this._grid._getRenderedRows();
+      // Get the row where the drag started
+      const lassoStartRow = renderedRows.find((row) => row.contains(e.currentTarget.assignedSlot));
+      // Whether to select or deselect the items on drag
+      this.__lassoSelect = !this._grid._isSelected(lassoStartRow._item);
+      // Store the index of the row where the drag started
+      this.__lassoDragStartIndex = lassoStartRow.index;
+      // Start the auto scroller
+      this.__lassoAutoScroller();
+    } else if (e.detail.state === 'end') {
+      // Clear the drag start index
+      this.__lassoDragStartIndex = undefined;
+    }
+  }
+
   /**
    * Renders the Select Row checkbox to the body cell.
    *
@@ -160,6 +232,7 @@ class GridSelectionColumn extends GridColumn {
       checkbox = document.createElement('vaadin-checkbox');
       checkbox.setAttribute('aria-label', 'Select Row');
       checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
+      addListener(root, 'track', this.__onSelectionColumnCellTrack);
       root.appendChild(checkbox);
     }
 
