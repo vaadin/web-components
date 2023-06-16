@@ -318,7 +318,10 @@ snapshots["vaadin-time-picker host name"] =
 /* end snapshot vaadin-time-picker host name */
 
 snapshots["vaadin-time-picker host opened default"] = 
-`<vaadin-time-picker opened="">
+`<vaadin-time-picker
+  focused=""
+  opened=""
+>
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
