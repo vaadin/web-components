@@ -5,6 +5,7 @@ registerStyles(
   'vaadin-multi-select-combo-box',
   css`
     :host([focused][focus-ring]) ::slotted(input),
+    :host([focused][has-value]) ::slotted(input),
     :host([focused][opened]) ::slotted(input) {
       caret-color: transparent !important;
     }
