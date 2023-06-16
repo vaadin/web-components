@@ -537,9 +537,7 @@ export const ComboBoxMixin = (subclass) =>
         // unless input element is explicitly focused by the user.
         if (!this._isInputFocused() && !isTouch) {
           if (this.inputElement) {
-            this._closeOnBlurIsPrevented = true;
             this.inputElement.focus();
-            this._closeOnBlurIsPrevented = false;
           }
         }
 

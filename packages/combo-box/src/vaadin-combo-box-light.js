@@ -206,6 +206,29 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
       this._onClearAction();
     }
   }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onFocusout(event) {
+    // prevent closing the overlay when moving focus from clear or toggle buttons to the internal input
+    if (this._isBlurringControlButtons(event) && this._isFocusingInputElement(event)) {
+      return;
+    }
+
+    super._onFocusout(event);
+  }
+
+  /** @protected */
+  _isFocusingInputElement(event) {
+    return event.relatedTarget && event.relatedTarget === this._nativeInput;
+  }
+
+  /** @protected */
+  _isBlurringControlButtons(event) {
+    return event.target && (event.target === this._toggleElement || event.target === this.clearElement);
+  }
 }
 
 customElements.define(ComboBoxLight.is, ComboBoxLight);
