@@ -4,24 +4,37 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/** @private */
+function __sanitizePath(path) {
+  let sanitizedPath = path.trim();
+  if (sanitizedPath.startsWith('/')) {
+    sanitizedPath = sanitizedPath.substring(1);
+  }
+  return sanitizedPath.trim();
+}
+
+/** @private */
+function __pathExists(path) {
+  return path || path === '';
+}
+
 /**
  * @param {string} pathToMatch
  * @param {string} itemPath
  * @param {string} itemPathAliases
  */
 export function isMatchingPath(pathToMatch, itemPath, itemPathAliases) {
-  const sanitizedPathToMatch = pathToMatch.startsWith('/') ? pathToMatch.substring(1) : pathToMatch;
-  const sanitizedItemPath = itemPath.startsWith('/') ? itemPath.substring(1) : itemPath;
+  if (!__pathExists(pathToMatch) || !__pathExists(itemPath)) {
+    return false;
+  }
+  const sanitizedPathToMatch = __sanitizePath(pathToMatch);
   // Try matching the item path
-  if (sanitizedPathToMatch === sanitizedItemPath) {
+  if (sanitizedPathToMatch === __sanitizePath(itemPath)) {
     return true;
   }
   // Try matching the item path aliases given they exist
-  if (itemPathAliases || itemPathAliases === '') {
-    return itemPathAliases.split(',').some((alias) => {
-      const sanitizedAlias = alias.startsWith('/') ? alias.substring(1) : alias;
-      return sanitizedPathToMatch === sanitizedAlias;
-    });
+  if (__pathExists(itemPathAliases)) {
+    return itemPathAliases.split(',').some((alias) => sanitizedPathToMatch === __sanitizePath(alias));
   }
   return false;
 }
