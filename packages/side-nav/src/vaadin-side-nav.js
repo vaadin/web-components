@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -50,9 +52,13 @@ function isEnabled() {
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-side-nav';
+  }
+
+  static get shadowRootOptions() {
+    return { ...LitElement.shadowRootOptions, delegatesFocus: true };
   }
 
   static get properties() {
@@ -86,6 +92,17 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     return sideNavBaseStyles;
   }
 
+  constructor() {
+    super();
+
+    this._labelId = `side-nav-label-${generateUniqueId()}`;
+  }
+
+  /** @protected */
+  get focusElement() {
+    return this.shadowRoot.querySelector('button');
+  }
+
   /** @protected */
   firstUpdated() {
     // By default, if the user hasn't provided a custom role,
@@ -97,36 +114,55 @@ class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @protected */
   render() {
-    const label = this.querySelector('[slot="label"]');
-    if (label && this.collapsible) {
-      return html`
-        <details ?open="${!this.collapsed}" @toggle="${this.__toggleCollapsed}">${this.__renderBody(label)}</details>
-      `;
-    }
-    return this.__renderBody(label);
-  }
-
-  /** @private */
-  __renderBody(label) {
-    if (label) {
-      if (!label.id) label.id = `side-nav-label-${generateUniqueId()}`;
-      this.setAttribute('aria-labelledby', label.id);
-    } else {
-      this.removeAttribute('aria-labelledby');
-    }
     return html`
-      <summary part="label" ?hidden="${label == null}">
-        <slot name="label" @slotchange="${() => this.requestUpdate()}"></slot>
-      </summary>
-      <ul part="children">
+      <button
+        part="label"
+        @click="${this._onLabelClick}"
+        aria-expanded="${ifDefined(this.collapsible ? !this.collapsed : null)}"
+        aria-controls="children"
+      >
+        <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
+        <span part="toggle" aria-hidden="true"></span>
+      </button>
+      <ul id="children" part="children" ?hidden="${this.collapsed}" aria-hidden="${this.collapsed ? 'true' : 'false'}">
         <slot></slot>
       </ul>
     `;
   }
 
+  /**
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldSetFocus(event) {
+    return event.composedPath()[0] === this.focusElement;
+  }
+
   /** @private */
-  __toggleCollapsed(e) {
-    this.collapsed = !e.target.open;
+  _onLabelClick() {
+    if (this.collapsible) {
+      this.__toggleCollapsed();
+    }
+  }
+
+  /** @private */
+  _onLabelSlotChange() {
+    const label = this.querySelector('[slot="label"]');
+    if (label) {
+      if (!label.id) {
+        label.id = this._labelId;
+      }
+      this.setAttribute('aria-labelledby', label.id);
+    } else {
+      this.removeAttribute('aria-labelledby');
+    }
+  }
+
+  /** @private */
+  __toggleCollapsed() {
+    this.collapsed = !this.collapsed;
   }
 }
 
