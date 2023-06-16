@@ -331,6 +331,7 @@ snapshots["vaadin-multi-select-combo-box host placeholder"] =
 
 snapshots["vaadin-multi-select-combo-box host opened default"] = 
 `<vaadin-multi-select-combo-box
+  focused=""
   opened=""
   placeholder=""
 >
