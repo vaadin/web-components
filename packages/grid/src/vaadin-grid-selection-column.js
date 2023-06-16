@@ -58,6 +58,8 @@ class GridSelectionColumn extends GridSelectionColumnBaseMixin(GridColumn) {
     this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
     this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
     this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
+    this.__onSelectionColumnCellTrack = this.__onSelectionColumnCellTrack.bind(this);
+    this.__onSelectionColumnCellMouseDown = this.__onSelectionColumnCellMouseDown.bind(this);
   }
 
   /** @protected */
@@ -164,12 +166,13 @@ class GridSelectionColumn extends GridSelectionColumnBaseMixin(GridColumn) {
   /** @private */
   __onActiveItemChanged(e) {
     const activeItem = e.detail.value;
-    if (this.autoSelect) {
+    if (this.autoSelect && !this.__lassoWasEnabled) {
       const item = activeItem || this.__previousActiveItem;
       if (item) {
         this._grid._toggleItem(item);
       }
     }
+    this.__lassoWasEnabled = false;
     this.__previousActiveItem = activeItem;
   }
 
