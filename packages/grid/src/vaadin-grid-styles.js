@@ -32,6 +32,13 @@ registerStyles(
       pointer-events: none;
     }
 
+    :host([disable-text-selection]) {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
     #scroller {
       display: flex;
       flex-direction: column;

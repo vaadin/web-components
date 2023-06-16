@@ -6,6 +6,7 @@ import '../vaadin-grid-selection-column.js';
 import '../vaadin-grid-filter-column.js';
 import '../vaadin-grid-column-group.js';
 import {
+  fire,
   flushGrid,
   getBodyCellContent,
   getCellContent,
@@ -508,5 +509,132 @@ describe('multi selection column', () => {
     selectionColumn.selectAll = true;
 
     expect(grid.selectedItems).to.eql(grid.items);
+  });
+});
+
+describe('select rows by dragging', () => {
+  let grid;
+  let rows;
+  let selectionColumn;
+  let clock;
+
+  function fireTrackEvent(targetCell, startCell, eventState) {
+    const targetCellRect = targetCell.getBoundingClientRect();
+    const startCellRect = startCell.getBoundingClientRect();
+    fire(
+      'track',
+      { state: eventState, y: targetCellRect.y, dy: targetCellRect.y - startCellRect.y },
+      { node: targetCell },
+    );
+  }
+
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 200px; height: 150px;">
+        <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+
+    grid.items = ['foo', 'bar', 'baz', 'qux', 'quux', 'corge'];
+
+    flushGrid(grid);
+
+    selectionColumn = grid._columnTree[0][0];
+    rows = getRows(grid.$.items);
+
+    clock = sinon.useFakeTimers({
+      shouldClearNativeTimers: true,
+    });
+  });
+
+  afterEach(() => {
+    clock.restore();
+  });
+
+  it('should select items on mouse drag when selectRowsByDragging is enabled', () => {
+    selectionColumn.selectRowsByDragging = true;
+
+    let startCell;
+
+    [].slice.call(rows, 1, 4).forEach((row, index) => {
+      let eventState = 'track';
+      if (index === 0) {
+        eventState = 'start';
+        startCell = getCellContent(getRowCells(row)[0]);
+      } else if (index === 3) {
+        eventState = 'end';
+      }
+
+      const currentCell = getCellContent(getRowCells(row)[0]);
+      fireTrackEvent(currentCell, startCell, eventState);
+      clock.next();
+    });
+
+    expect(grid.selectedItems).to.eql(grid.items.slice(1, 4));
+  });
+
+  it('should not select any items on mouse drag when selectRowsByDragging is disabled', () => {
+    const sourceCell = getCellContent(getRowCells(rows[0])[0]);
+    const targetCell = getCellContent(getRowCells(rows[1])[0]);
+
+    fireTrackEvent(sourceCell, sourceCell, 'start');
+    clock.next();
+    fireTrackEvent(sourceCell, sourceCell, 'track');
+    clock.next();
+    fireTrackEvent(targetCell, sourceCell, 'end');
+
+    expect(grid.selectedItems).to.empty;
+  });
+
+  it('should select a single row on mouse drag', () => {
+    selectionColumn.selectRowsByDragging = true;
+
+    const cell = getCellContent(getRowCells(rows[1])[0]);
+
+    fireTrackEvent(cell, cell, 'start');
+    clock.next();
+    fireTrackEvent(cell, cell, 'track');
+    clock.next();
+    fireTrackEvent(cell, cell, 'end');
+
+    expect(grid.selectedItems).to.eql(grid.items.slice(1, 2));
+  });
+
+  it('should deselect rows on mouse drag', () => {
+    selectionColumn.selectRowsByDragging = true;
+
+    grid.selectedItems = [rows[1]._item, rows[3]._item, rows[4]._item];
+
+    let startCell;
+
+    [].slice.call(rows, 1, 5).forEach((row, index) => {
+      let eventState = 'track';
+      if (index === 0) {
+        eventState = 'start';
+        startCell = getCellContent(getRowCells(row)[0]);
+      } else if (index === 4) {
+        eventState = 'end';
+      }
+
+      const currentCell = getCellContent(getRowCells(row)[0]);
+      fireTrackEvent(currentCell, startCell, eventState);
+      clock.next();
+    });
+
+    expect(grid.selectedItems).to.empty;
+  });
+
+  it('should toggle text selection on mouse dragging', () => {
+    selectionColumn.selectRowsByDragging = true;
+
+    const scroller = grid.$.scroller;
+    const sourceCell = getCellContent(getRowCells(rows[0])[0]);
+
+    fire('track', { state: 'start' }, { node: sourceCell });
+    expect(scroller.hasAttribute('column-resizing')).to.be.true;
+
+    fire('track', { state: 'end' }, { node: sourceCell });
+    expect(scroller.hasAttribute('column-resizing')).to.be.false;
   });
 });
