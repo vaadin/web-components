@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { arePathsMatching } from '@vaadin/component-base/src/uri-utils.js';
+import { arePathsMatching } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 

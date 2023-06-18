@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arePathsMatching } from '../src/uri-utils.js';
+import { arePathsMatching } from '../src/url-utils.js';
 
 describe('url-utils', () => {
   describe('arePathsMatching', () => {
