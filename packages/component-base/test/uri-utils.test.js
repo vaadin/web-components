@@ -5,7 +5,7 @@ describe('url-utils', () => {
   describe('isMatchingPath', () => {
   const pathOptions = ['', '/', '/path', 'base/path'];
 
-  it('should return true if the paths match', () => {
+  it('should return true when paths match', () => {
     pathOptions.forEach((path) => expect(isMatchingPath(path, path)).to.be.true);
   });
 
