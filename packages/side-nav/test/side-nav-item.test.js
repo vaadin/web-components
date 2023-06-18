@@ -123,7 +123,7 @@ describe('side-nav-item', () => {
     });
 
     it('should set active property to true for a match in multiple aliases', async () => {
-      item.pathAliases = '/,/alias';
+      item.pathAliases = '/alias,/';
       await item.updateComplete;
       expect(item.active).to.be.true;
     });
