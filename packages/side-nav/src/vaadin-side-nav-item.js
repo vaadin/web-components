@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { isMatchingPath } from '@vaadin/component-base/src/uri-utils.js';
+import { arePathsMatching } from '@vaadin/component-base/src/uri-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 
@@ -233,12 +233,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     if (this.path == null) {
       return false;
     }
-    if (isMatchingPath(document.location.pathname, this.path)) {
+    if (arePathsMatching(document.location.pathname, this.path)) {
       return true;
     }
     return (
       this.pathAliases != null &&
-      this.pathAliases.split(',').some((alias) => isMatchingPath(document.location.pathname, alias))
+      this.pathAliases.split(',').some((alias) => arePathsMatching(document.location.pathname, alias))
     );
   }
 }
