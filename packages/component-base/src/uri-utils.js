@@ -11,5 +11,6 @@
  * @param {string} path2
  */
 export function isMatchingPath(path1, path2) {
-  return new URL(path1, document.baseURI).pathname === new URL(path2, document.baseURI).pathname;
+  const base = document.baseURI;
+  return new URL(path1, base).pathname === new URL(path2, base).pathname;
 }
