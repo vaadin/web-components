@@ -63,7 +63,7 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
   path: string | null | undefined;
 
   /**
-   * A comma-separated lists of path aliases matching this item.
+   * A comma-separated list of alternative paths matching this item.
    */
   pathAliases: string | null | undefined;
 
