@@ -5,15 +5,11 @@
  */
 
 /**
- * Check if a path matches to any within an array of paths
+ * Check if two paths match
  *
- * @param {string} pathToMatch
- * @param {Array<String>} paths
+ * @param {string} path1
+ * @param {string} path2
  */
-export function isMatchingPath(pathToMatch, paths) {
-  if (!paths || (!pathToMatch && pathToMatch !== '')) {
-    return false;
-  }
-  const normalizedPathToMatch = new URL(pathToMatch, document.baseURI).pathname;
-  return paths.some((path) => normalizedPathToMatch === new URL(path, document.baseURI).pathname);
+export function isMatchingPath(path1, path2) {
+  return new URL(path1, document.baseURI).pathname === new URL(path2, document.baseURI).pathname;
 }

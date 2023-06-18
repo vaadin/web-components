@@ -233,11 +233,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     if (!this.__pathExists(this.path)) {
       return false;
     }
-    const itemPaths = [this.path];
-    if (this.__pathExists(this.pathAliases)) {
-      itemPaths.push(...this.pathAliases.split(','));
+    if (isMatchingPath(document.location.pathname, this.path)) {
+      return true;
     }
-    return isMatchingPath(document.location.pathname, itemPaths);
+    return (
+      this.__pathExists(this.pathAliases) &&
+      this.pathAliases.split(',').some((alias) => isMatchingPath(document.location.pathname, alias))
+    );
   }
 
   /** @private */
