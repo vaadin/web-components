@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { isMatchingPath } from '../src/uri-utils.js';
 
-describe('path matching', () => {
+describe('url-utils', () => {
+  describe('isMatchingPath', () => {
   const pathOptions = ['', '/', '/path', 'base/path'];
 
   it('should return true if the paths match', () => {
