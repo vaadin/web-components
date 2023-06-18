@@ -9,7 +9,7 @@ describe('url-utils', () => {
     pathOptions.forEach((path) => expect(isMatchingPath(path, path)).to.be.true);
   });
 
-  it('should return true if the paths do not match', () => {
+  it('should return false when paths do not match', () => {
     expect(isMatchingPath('/path1', '/path2')).to.be.false;
   });
 
