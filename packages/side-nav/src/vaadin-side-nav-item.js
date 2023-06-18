@@ -96,7 +96,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       path: String,
 
       /**
-       * A comma-separated lists of path aliases matching this item.
+       * A comma-separated list of alternative paths matching this item.
        */
       pathAliases: {
         type: String,
