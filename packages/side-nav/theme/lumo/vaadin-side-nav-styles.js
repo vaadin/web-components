@@ -38,7 +38,7 @@ export const sideNavStyles = css`
     box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
   }
 
-  [part='toggle'] {
+  [part='toggle-button'] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -53,20 +53,20 @@ export const sideNavStyles = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  [part='toggle']::before {
+  [part='toggle-button']::before {
     content: var(--lumo-icons-angle-right);
   }
 
-  :host(:not([collapsible])) [part='toggle'] {
+  :host(:not([collapsible])) [part='toggle-button'] {
     display: none !important;
   }
 
-  :host(:not([collapsed])) [part='toggle'] {
+  :host(:not([collapsed])) [part='toggle-button'] {
     transform: rotate(90deg);
   }
 
   @media (any-hover: hover) {
-    [part='label']:hover [part='toggle'] {
+    [part='label']:hover [part='toggle-button'] {
       color: var(--lumo-body-text-color);
     }
   }

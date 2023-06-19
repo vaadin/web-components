@@ -76,7 +76,7 @@ snapshots["vaadin-side-nav shadow default"] =
   </slot>
   <span
     aria-hidden="true"
-    part="toggle"
+    part="toggle-button"
   >
   </span>
 </button>
@@ -101,7 +101,7 @@ snapshots["vaadin-side-nav shadow collapsible"] =
   </slot>
   <span
     aria-hidden="true"
-    part="toggle"
+    part="toggle-button"
   >
   </span>
 </button>
@@ -126,7 +126,7 @@ snapshots["vaadin-side-nav shadow collapsed"] =
   </slot>
   <span
     aria-hidden="true"
-    part="toggle"
+    part="toggle-button"
   >
   </span>
 </button>
