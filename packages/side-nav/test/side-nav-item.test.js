@@ -134,8 +134,6 @@ describe('side-nav-item', () => {
     });
 
     describe('active item with children', () => {
-      let item;
-
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item path="">
@@ -160,6 +158,44 @@ describe('side-nav-item', () => {
         toggle.click();
         toggle.click();
         expect(item.expanded).to.be.true;
+      });
+    });
+
+    describe('content part', () => {
+      let content;
+
+      beforeEach(async () => {
+        item = fixtureSync(`
+          <vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 1</vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children">Child 2</vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        `);
+        await nextRender();
+        content = item.shadowRoot.querySelector('[part="content"]');
+        toggle = item.shadowRoot.querySelector('button');
+      });
+
+      it('should click toggle on content click when item has children', () => {
+        const spy = sinon.spy(toggle, 'click');
+        content.click();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not click toggle on content click when item has valid path', async () => {
+        item.path = '/foo';
+        await item.updateComplete;
+        const spy = sinon.spy(toggle, 'click');
+        content.click();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not click toggle on content click when item has no children', async () => {
+        [...item.children].forEach((child) => child.remove());
+        await nextRender();
+        const spy = sinon.spy(toggle, 'click');
+        content.click();
+        expect(spy.called).to.be.false;
       });
     });
   });

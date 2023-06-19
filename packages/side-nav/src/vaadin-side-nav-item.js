@@ -183,10 +183,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   render() {
     return html`
-      <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
-        <slot name="prefix"></slot>
-        <slot></slot>
-        <slot name="suffix"></slot>
+      <div part="content" @click="${this._onContentClick}">
+        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
+          <slot name="prefix"></slot>
+          <slot></slot>
+          <slot name="suffix"></slot>
+        </a>
         <button
           part="toggle-button"
           @click="${this.__toggleExpanded}"
@@ -194,11 +196,21 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
           aria-expanded="${this.expanded}"
           aria-label="Toggle child items"
         ></button>
-      </a>
+      </div>
       <ul part="children" ?hidden="${!this.expanded}">
         <slot name="children"></slot>
       </ul>
     `;
+  }
+
+  /** @private */
+  _onContentClick(event) {
+    const [link, button] = event.currentTarget.children;
+
+    // Toggle item expanded state unless the click event is captured by the link
+    if (!link.hasAttribute('href') && this.hasAttribute('has-children')) {
+      button.click();
+    }
   }
 
   /** @private */
