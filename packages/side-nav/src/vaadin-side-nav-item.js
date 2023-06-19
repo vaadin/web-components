@@ -191,7 +191,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
         </a>
         <button
           part="toggle-button"
-          @click="${this.__toggleExpanded}"
+          @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
           aria-label="Toggle child items"
@@ -204,19 +204,23 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   /** @private */
-  _onContentClick(event) {
-    const [link, button] = event.currentTarget.children;
+  _onButtonClick(event) {
+    // Prevent the event from being handled
+    // by the content click listener below
+    event.stopPropagation();
+    this.__toggleExpanded();
+  }
 
-    // Toggle item expanded state unless the click event is captured by the link
-    if (!link.hasAttribute('href') && this.hasAttribute('has-children')) {
-      button.click();
+  /** @private */
+  _onContentClick() {
+    // Toggle item expanded state unless the link has a non-empty path
+    if (this.path == null && this.hasAttribute('has-children')) {
+      this.__toggleExpanded();
     }
   }
 
   /** @private */
-  __toggleExpanded(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  __toggleExpanded() {
     this.expanded = !this.expanded;
   }
 

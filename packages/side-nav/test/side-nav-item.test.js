@@ -176,21 +176,26 @@ describe('side-nav-item', () => {
         toggle = item.shadowRoot.querySelector('button');
       });
 
-      it('should click toggle on content click when item has children', () => {
-        const spy = sinon.spy(toggle, 'click');
+      it('should toggle expanded state on content click when item has children', async () => {
+        expect(item.expanded).to.be.false;
+
         content.click();
-        expect(spy.calledOnce).to.be.true;
+        await item.updateComplete;
+        expect(item.expanded).to.be.true;
+
+        content.click();
+        await item.updateComplete;
+        expect(item.expanded).to.be.false;
       });
 
-      it('should not click toggle on content click when item has valid path', async () => {
+      it('should not change expanded state on content click when item has valid path', async () => {
         item.path = '/foo';
         await item.updateComplete;
-        const spy = sinon.spy(toggle, 'click');
         content.click();
-        expect(spy.called).to.be.false;
+        expect(item.expanded).to.be.false;
       });
 
-      it('should not click toggle on content click when item has no children', async () => {
+      it('should not change expanded state on content click when item has no children', async () => {
         [...item.children].forEach((child) => child.remove());
         await nextRender();
         const spy = sinon.spy(toggle, 'click');
