@@ -27,7 +27,8 @@ export declare class ColumnBaseMixinClass<TItem> {
   resizable: boolean | null | undefined;
 
   /**
-   * When true, the column is frozen. When a column inside of a column group is frozen,
+   * When true, the column is frozen.
+   * When a column inside a column group is frozen,
    * all the sibling columns inside the group will get frozen also.
    */
   frozen: boolean;
@@ -122,7 +123,14 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
   path: string | null | undefined;
 
   /**
-   * When true, the row is rendered as header row, it will help for a11y developments.
+   * When set to true, the row is rendered as a header row, this is an accessibility feature.
+   * This cell will be emphasized in screen readers:
+   * The combination of the header cells is announced by the screen reader,
+   * identifying the current row as uniquely as possible.
+   *
+   * Cells in these columns are rendered as <th scope="row"> instead of the normal <td role="gridcell">.
+   *
+   * @attr {boolean} row-header
    */
   rowHeader: boolean | null | undefined;
 

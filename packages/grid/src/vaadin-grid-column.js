@@ -37,8 +37,9 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, the column is frozen. When a column inside of a column group is frozen,
-         * all of the sibling columns inside the group will get frozen also.
+         * When true, the column is frozen.
+         * When a column inside a column group is frozen,
+         * all the sibling columns inside the group will get frozen also.
          * @type {boolean}
          */
         frozen: {
@@ -846,7 +847,14 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       },
 
       /**
-       * Custom function for rendering the header content.
+       * When set to true, the row is rendered as a header row, this is an accessibility feature.
+       * This cell will be emphasized in screen readers:
+       * The combination of the header cells is announced by the screen reader,
+       * identifying the current row as uniquely as possible.
+       *
+       * Cells in these columns are rendered as <th scope="row"> instead of the normal <td role="gridcell">.
+       *
+       * @attr {boolean} row-header
        */
       rowHeader: {
         type: Boolean,
