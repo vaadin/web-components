@@ -10,6 +10,8 @@ describe('accessibility', () => {
     grid = fixtureSync('<vaadin-grid></vaadin-grid>');
     const col1 = document.createElement('vaadin-grid-column');
     const col2 = document.createElement('vaadin-grid-column');
+    const col3 = document.createElement('vaadin-grid-column');
+    col3.setAttribute('row-header', '');
     if (grouped) {
       const grp = document.createElement('vaadin-grid-column-group');
       grp.headerRenderer = (root) => {
@@ -20,10 +22,12 @@ describe('accessibility', () => {
       };
       grp.appendChild(col1);
       grp.appendChild(col2);
+      grp.appendChild(col3);
       grid.appendChild(grp);
     } else {
       grid.appendChild(col1);
       grid.appendChild(col2);
+      grid.appendChild(col3);
     }
 
     col1.headerRenderer = col2.headerRenderer = (root) => {
@@ -82,14 +86,24 @@ describe('accessibility', () => {
         expect(grid.$.footer.children[0].getAttribute('role')).to.equal('row');
       });
 
+      it('should have scope row on table cell for the rowheader columns and role gridcell row for other columns', () => {
+        for (let i = 0; i < grid.$.items.children.length; i++) {
+          expect(grid.$.items.children[i].children[0].getAttribute('role')).to.equal('gridcell');
+          expect(grid.$.items.children[i].children[0].tagName.toLowerCase()).to.equal('td');
+          expect(grid.$.items.children[i].children[1].getAttribute('role')).to.equal('gridcell');
+          expect(grid.$.items.children[i].children[1].tagName.toLowerCase()).to.equal('td');
+          expect(grid.$.items.children[i].children[2].getAttribute('scope')).to.equal('row');
+          expect(grid.$.items.children[i].children[2].tagName.toLowerCase()).to.equal('th');
+        }
+      });
+
+      it('should row-header for the last grid column as we added', () => {
+        expect(grid.children[2].getAttribute('row-header')).to.exist;
+      });
+
       it('should have role columnheader on header cells', () => {
         expect(grid.$.header.children[0].children[0].getAttribute('role')).to.equal('columnheader');
         expect(grid.$.header.children[0].children[1].getAttribute('role')).to.equal('columnheader');
-      });
-
-      it('should have role gridcell on body cells', () => {
-        expect(grid.$.items.children[0].children[0].getAttribute('role')).to.equal('gridcell');
-        expect(grid.$.items.children[0].children[1].getAttribute('role')).to.equal('gridcell');
       });
     });
 
@@ -135,7 +149,7 @@ describe('accessibility', () => {
 
   describe('treegrid', () => {
     function hierarchicalDataProvider({ parentItem }, callback) {
-      // Let's use a count lower than pageSize so we can ignore page + pageSize for now
+      // Let's use a count lower than pageSize, so we can ignore page + pageSize for now
       const itemsOnEachLevel = 5;
 
       const items = [...Array(itemsOnEachLevel)].map((_, i) => {
@@ -210,7 +224,7 @@ describe('accessibility', () => {
 
     describe('column count', () => {
       it('should have aria-colcount on the table', () => {
-        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('2');
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
       });
 
       it('should update aria-colcount when column is added', async () => {
@@ -220,7 +234,7 @@ describe('accessibility', () => {
         };
         grid.appendChild(column);
         await nextFrame();
-        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('4');
       });
     });
 
@@ -324,7 +338,7 @@ describe('accessibility', () => {
 
     describe('column groups', () => {
       it('should have aria-colspan on group header cell', () => {
-        expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
+        expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('3');
       });
     });
   });
