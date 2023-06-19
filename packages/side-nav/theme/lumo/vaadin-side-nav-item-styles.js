@@ -7,7 +7,7 @@ import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
-  a {
+  [part='link'] {
     gap: var(--lumo-space-xs);
     padding: var(--lumo-space-s);
     padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
@@ -32,7 +32,7 @@ export const sideNavItemStyles = css`
   }
 
   @media (any-hover: hover) {
-    a:hover {
+    [part='link']:hover {
       color: var(--lumo-header-text-color);
     }
 
@@ -41,7 +41,7 @@ export const sideNavItemStyles = css`
     }
   }
 
-  a:active:focus {
+  [part='link']:active:focus {
     background-color: var(--lumo-contrast-5pct);
   }
 
@@ -60,19 +60,19 @@ export const sideNavItemStyles = css`
   }
 
   @supports selector(:focus-visible) {
-    a,
+    [part='link'],
     button {
       outline: none;
     }
 
-    a:focus-visible,
+    [part='link']:focus-visible,
     button:focus-visible {
       border-radius: var(--lumo-border-radius-m);
       box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
     }
   }
 
-  a:active {
+  [part='link']:active {
     color: var(--lumo-header-text-color);
   }
 
@@ -96,7 +96,7 @@ export const sideNavItemStyles = css`
     --_child-indent-2: var(--_child-indent);
   }
 
-  :host([active]) a {
+  :host([active]) [part='link'] {
     color: var(--lumo-primary-text-color);
     background-color: var(--lumo-primary-color-10pct);
   }

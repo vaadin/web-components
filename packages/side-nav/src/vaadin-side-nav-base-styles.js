@@ -14,7 +14,7 @@ export const sideNavItemBaseStyles = css`
     display: none !important;
   }
 
-  a {
+  [part='link'] {
     flex: auto;
     min-width: 0;
     display: flex;
