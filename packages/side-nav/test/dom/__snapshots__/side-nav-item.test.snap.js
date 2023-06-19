@@ -167,7 +167,7 @@ snapshots["vaadin-side-nav-item item with path"] =
 snapshots["vaadin-side-nav-item shadow default"] = 
 `<a
   aria-current="false"
-  part="item"
+  part="link"
 >
   <slot name="prefix">
   </slot>
@@ -196,7 +196,7 @@ snapshots["vaadin-side-nav-item shadow default"] =
 snapshots["vaadin-side-nav-item shadow expanded"] = 
 `<a
   aria-current="false"
-  part="item"
+  part="link"
 >
   <slot name="prefix">
   </slot>
@@ -223,7 +223,7 @@ snapshots["vaadin-side-nav-item shadow active"] =
 `<a
   aria-current="page"
   href=""
-  part="item"
+  part="link"
 >
   <slot name="prefix">
   </slot>
@@ -311,7 +311,7 @@ snapshots["vaadin-side-nav-item shadow path"] =
 `<a
   aria-current="false"
   href="path"
-  part="item"
+  part="link"
 >
   <slot name="prefix">
   </slot>
