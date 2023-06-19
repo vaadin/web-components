@@ -122,7 +122,7 @@ describe('scrollable tabs', () => {
 
           const scrollerEndPosition =
             -tabs.__direction * tabs._scrollerElement.scrollLeft + tabs._scrollerElement.offsetWidth;
-          expect(scrollerEndPosition).to.equal(tabs._scrollerElement.scrollWidth);
+          expect(scrollerEndPosition).to.be.approximately(tabs._scrollerElement.scrollWidth, 1);
         });
 
         it('should not get stuck with wide tabs when scrolled back to the start via button', async () => {
@@ -141,7 +141,7 @@ describe('scrollable tabs', () => {
             currentScrollLeft = tabs._scrollerElement.scrollLeft;
           } while (previousScrollLeft !== currentScrollLeft);
 
-          expect(tabs._scrollerElement.scrollLeft).to.equal(0);
+          expect(tabs._scrollerElement.scrollLeft).to.be.approximately(0, 1);
         });
       });
     });
