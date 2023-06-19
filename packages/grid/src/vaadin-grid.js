@@ -726,11 +726,16 @@ class Grid extends ElementMixin(
     const cellContent = document.createElement('vaadin-grid-cell-content');
     cellContent.setAttribute('slot', slotName);
 
+    const isRowHeader = column && column.rowHeader;
+
+    if (isRowHeader) {
+      tagName = 'th';
+    }
+
     const cell = document.createElement(tagName);
     cell.id = slotName.replace('-content-', '-');
 
-    if (column.rowHeader) {
-      tagName = 'th';
+    if (isRowHeader) {
       cell.setAttribute('scope', 'row');
     } else {
       cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
