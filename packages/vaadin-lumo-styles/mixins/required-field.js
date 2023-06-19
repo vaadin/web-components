@@ -20,6 +20,10 @@ const requiredField = css`
     line-height: 1;
     padding-right: 1em;
     padding-bottom: 0.5em;
+    /* As a workaround for diacritics being cut off, add a top padding and a 
+    negative margin to compensate */
+    padding-top: 0.25em;
+    margin-top: -0.25em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -45,7 +49,7 @@ const requiredField = css`
   }
 
   :host([required]) [part='required-indicator']::after {
-    content: var(--lumo-required-field-indicator, '•');
+    content: var(--lumo-required-field-indicator, '\\2022');
     transition: opacity 0.2s;
     color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
     position: absolute;

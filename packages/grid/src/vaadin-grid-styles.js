@@ -15,7 +15,8 @@ registerStyles(
     }
 
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
       animation: 1ms vaadin-grid-appear;
       height: 400px;
       flex: 1 1 auto;
@@ -32,7 +33,9 @@ registerStyles(
     }
 
     #scroller {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
       transform: translateY(0);
       width: auto;
       height: auto;
@@ -119,7 +122,11 @@ registerStyles(
     }
 
     [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
-      opacity: 0;
+      visibility: hidden;
+    }
+
+    [column-rendering='lazy'] [part~='body-cell']:not([frozen]):not([frozen-to-end]) {
+      transform: translateX(var(--_grid-lazy-columns-start));
     }
 
     #items [part~='row'] {
@@ -334,6 +341,22 @@ registerStyles(
     :host([dir='rtl']) [frozen-to-end] [part~='resize-handle']::before {
       right: 0;
       left: auto;
+    }
+
+    @media (forced-colors: active) {
+      [part~='selected-row'] [part~='first-column-cell']::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border: 2px solid;
+      }
+
+      [part~='focused-cell']::before {
+        outline: 2px solid !important;
+        outline-offset: -1px;
+      }
     }
   `,
   { moduleId: 'vaadin-grid-styles' },

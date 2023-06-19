@@ -201,6 +201,25 @@ describe('virtualizer', () => {
     expect(updateElement.called).to.be.false;
   });
 
+  it('should not request item updates on size increase when scrolled', async () => {
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    virtualizer.scrollToIndex(50);
+    // Manually scroll down a bit
+    scrollTarget.scrollTop += 100;
+    await nextFrame();
+
+    // Increase the size so it shouldn't affect the current viewport items
+    updateElement.resetHistory();
+    virtualizer.size = 200;
+
+    expect(updateElement.called).to.be.false;
+  });
+
   it('should request a different set of items on size decrease', () => {
     const updateElement = sinon.spy((el, index) => {
       el.textContent = `item-${index}`;
@@ -252,6 +271,32 @@ describe('virtualizer', () => {
     prefix = 'bar-';
 
     // Increase the size back to 1
+    virtualizer.size = 1;
+
+    // Expect the unhidden item to be re-rendered with the new prefix even though its index hasn't changed
+    expect(elementsContainer.firstElementChild.textContent).to.equal('bar-0');
+  });
+
+  it('should re-render an unhidden item if it was hidden while container was invisible', async () => {
+    // Create a virtualizer with just one item (rendered content "foo-0")
+    let prefix = 'foo-';
+    const updateElement = (el, index) => {
+      el.textContent = `${prefix}${index}`;
+    };
+    init({ size: 1, updateElement });
+
+    // Wait for a possible resize observer flush
+    await aTimeout(100);
+
+    // Hide container and reduce the size to 0 (the item gets hidden)
+    scrollTarget.style.display = 'none';
+    virtualizer.size = 0;
+
+    // Update the prefix used by the renderer to "bar-"
+    prefix = 'bar-';
+
+    // Show container again, increase the size back to 1
+    scrollTarget.style.display = 'block';
     virtualizer.size = 1;
 
     // Expect the unhidden item to be re-rendered with the new prefix even though its index hasn't changed

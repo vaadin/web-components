@@ -411,9 +411,9 @@ describe('upload', () => {
       upload.files = files;
       upload.files[1].complete = true;
 
-      for (let i = 0; i < upload.files.length; i++) {
-        expect(upload.files[i].uploading).not.to.be.ok;
-      }
+      upload.files.forEach((file) => {
+        expect(file.uploading).not.to.be.ok;
+      });
       upload.addEventListener('upload-start', (e) => {
         expect(e.detail.xhr).to.be.ok;
         expect(e.detail.file).to.be.ok;
@@ -433,9 +433,9 @@ describe('upload', () => {
       upload.files = files;
       upload.files[2].name = tempFileName;
 
-      for (let i = 0; i < upload.files.length; i++) {
-        expect(upload.files[i].uploading).not.to.be.ok;
-      }
+      upload.files.forEach((file) => {
+        expect(file.uploading).not.to.be.ok;
+      });
       upload.addEventListener('upload-start', (e) => {
         expect(e.detail.xhr).to.be.ok;
         expect(e.detail.file).to.be.ok;

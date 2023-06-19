@@ -1,31 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import { aTimeout, esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-customElements.define(
-  'x-dialog',
-  class XDialog extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-dialog id="dialog">
-          <template>
-            <span>[[message]]</span>
-            <input value="{{text::input}}" />
-          </template>
-        </vaadin-dialog>
-      `;
-    }
-
-    static get properties() {
-      return {
-        message: String,
-        text: String,
-      };
-    }
-  },
-);
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-dialog', () => {
   describe('custom element definition', () => {
@@ -63,12 +39,13 @@ describe('vaadin-dialog', () => {
 
     beforeEach(() => {
       dialog = fixtureSync(`
-        <vaadin-dialog opened theme="foo">
-          <template>
-            <div>Simple dialog</div>
-          </template>
-        </vaadin-dialog>
+        <vaadin-dialog opened theme="foo"></vaadin-dialog>
       `);
+
+      dialog.renderer = (root) => {
+        root.innerHTML = '<div>Simple dialog</div>';
+      };
+
       overlay = dialog.$.overlay;
       backdrop = overlay.$.backdrop;
     });
@@ -165,14 +142,14 @@ describe('vaadin-dialog', () => {
     });
   });
 
-  describe('without template', () => {
+  describe('without renderer', () => {
     let dialog;
 
     beforeEach(() => {
       dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
     });
 
-    it('should not throw an exception if template is not present', () => {
+    it('should not throw an exception if renderer is not present', () => {
       const openDialog = () => {
         dialog.opened = true;
       };
@@ -186,26 +163,33 @@ describe('vaadin-dialog', () => {
     });
   });
 
-  describe('data binding', () => {
-    let container, dialog, overlay;
+  describe('focus restoration', () => {
+    let dialog, button, overlay;
 
     beforeEach(() => {
-      container = fixtureSync('<x-dialog></x-dialog>');
-      dialog = container.$.dialog;
+      const wrapper = fixtureSync(`
+        <div>
+          <vaadin-dialog></vaadin-dialog>
+          <button></button>
+        </div>
+      `);
+      [dialog, button] = wrapper.children;
       overlay = dialog.$.overlay;
+      button.focus();
+    });
+
+    it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
-    it('should bind parent property', () => {
-      container.message = 'foo';
-      expect(overlay.querySelector('span').textContent.trim()).to.equal('foo');
-    });
-
-    it('should support two-way data binding', () => {
-      const input = overlay.querySelector('input');
-      input.value = 'bar';
-      input.dispatchEvent(new CustomEvent('input'));
-      expect(container.text).to.equal('bar');
+    it('should restore focus on dialog close', async () => {
+      dialog.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      dialog.opened = false;
+      await aTimeout(0);
+      expect(getDeepActiveElement()).to.equal(button);
     });
   });
 });

@@ -3,6 +3,7 @@ import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
 import {
   addValueToAttribute,
   getAncestorRootNodes,
+  getClosestElement,
   isEmptyTextNode,
   removeValueFromAttribute,
 } from '../src/dom-utils.js';
@@ -39,6 +40,51 @@ describe('dom-utils', () => {
       expect(nodes).to.have.lengthOf(2);
       expect(nodes[0]).to.equal(element.shadowRoot);
       expect(nodes[1]).to.equal(document);
+    });
+  });
+
+  describe('getClosestElement', () => {
+    let element;
+
+    const tag = defineCE(
+      class ShadowElement extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: 'open' });
+          this.shadowRoot.innerHTML = `
+            <div class="parent parent-1">
+              <div class="parent parent-2">
+                <div class="child"></div>
+              </div>
+            </div>
+          `;
+        }
+      },
+    );
+
+    it('should return the closest element matching the selector within the shadow root', () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      const node = element.shadowRoot.querySelector('.child');
+      const expected = element.shadowRoot.querySelector('.parent-2');
+      expect(getClosestElement('.parent', node)).to.equal(expected);
+    });
+
+    it('should return the closest element matching the selector across the shadow root', () => {
+      element = fixtureSync(`<div class="wrapper"><${tag}></${tag}></div>`);
+      const node = element.querySelector(tag).shadowRoot.querySelector('.parent');
+      expect(getClosestElement('.wrapper', node)).to.equal(element);
+    });
+
+    it('should return null when no closest element is found', () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      const node = element.shadowRoot.querySelector('.child');
+      expect(getClosestElement('.not-existing-class', node)).to.be.null;
+    });
+
+    it('should return the passed element if it matches the selector', () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      const node = element.shadowRoot.querySelector('.child');
+      expect(getClosestElement('.child', node)).to.equal(node);
     });
   });
 

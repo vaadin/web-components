@@ -3,9 +3,9 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 

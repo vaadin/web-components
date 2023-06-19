@@ -13,7 +13,7 @@ A web component for displaying, editing, creating, and deleting items from a dat
 <vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'></vaadin-crud>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/crud/screenshot.gif" width="702" alt="Screenshot of vaadin-crud">](https://vaadin.com/docs/latest/components/crud)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/crud/screenshot.gif" width="702" alt="Screenshot of vaadin-crud">](https://vaadin.com/docs/latest/components/crud)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/crud';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/crud/vaadin-crud.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/crud/vaadin-crud.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

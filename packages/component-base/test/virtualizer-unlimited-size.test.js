@@ -179,8 +179,8 @@ describe('unlimited size', () => {
     const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
     const itemRect = item.getBoundingClientRect();
     expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
-      Math.round(itemRect.top),
-      Math.round(itemRect.bottom),
+      Math.floor(itemRect.top),
+      Math.ceil(itemRect.bottom),
     );
   });
 
@@ -198,8 +198,8 @@ describe('unlimited size', () => {
     const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
     const itemRect = item.getBoundingClientRect();
     expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
-      Math.round(itemRect.top),
-      Math.round(itemRect.bottom),
+      Math.floor(itemRect.top),
+      Math.ceil(itemRect.bottom),
     );
   });
 });

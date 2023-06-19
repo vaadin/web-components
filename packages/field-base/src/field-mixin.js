@@ -3,9 +3,9 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FieldAriaController } from '@vaadin/a11y-base/src/field-aria-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ErrorController } from './error-controller.js';
-import { FieldAriaController } from './field-aria-controller.js';
 import { HelperController } from './helper-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -48,6 +48,24 @@ export const FieldMixin = (superclass) =>
         helperText: {
           type: String,
           observer: '_helperTextChanged',
+        },
+
+        /**
+         * String used to label the component to screen reader users.
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+          observer: '_accessibleNameChanged',
+        },
+
+        /**
+         * Id of the element used as label of the component to screen reader users.
+         * @attr {string} accessible-name-ref
+         */
+        accessibleNameRef: {
+          type: String,
+          observer: '_accessibleNameRefChanged',
         },
       };
     }
@@ -111,6 +129,16 @@ export const FieldMixin = (superclass) =>
       } else {
         this._fieldAriaController.setHelperId(null);
       }
+    }
+
+    /** @protected */
+    _accessibleNameChanged(accessibleName) {
+      this._fieldAriaController.setAriaLabel(accessibleName);
+    }
+
+    /** @protected */
+    _accessibleNameRefChanged(accessibleNameRef) {
+      this._fieldAriaController.setLabelId(accessibleNameRef, true);
     }
 
     /** @private */

@@ -3,10 +3,10 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
-import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
@@ -123,7 +123,7 @@ export const MenuBarMixin = (superClass) =>
 
           const dots = document.createElement('div');
           dots.setAttribute('aria-hidden', 'true');
-          dots.textContent = '···';
+          dots.innerHTML = '&centerdot;'.repeat(3);
           btn.appendChild(dots);
 
           this._overflow = btn;
@@ -215,20 +215,27 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __restoreButtons(buttons) {
-      for (let i = 0; i < buttons.length; i++) {
-        const btn = buttons[i];
-        btn.disabled = (btn.item && btn.item.disabled) || this.disabled;
-        btn.style.visibility = '';
-        btn.style.position = '';
+      buttons.forEach((button) => {
+        button.disabled = (button.item && button.item.disabled) || this.disabled;
+        button.style.visibility = '';
+        button.style.position = '';
 
         // Teleport item component back from "overflow" sub-menu
-        const item = btn.item && btn.item.component;
+        const item = button.item && button.item.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
-          btn.appendChild(item);
-          item.removeAttribute('role');
+          this.__restoreItem(button, item);
         }
-      }
+      });
       this.__updateOverflow([]);
+    }
+
+    /** @private */
+    __restoreItem(button, item) {
+      button.appendChild(item);
+      item.removeAttribute('role');
+      item.removeAttribute('aria-expanded');
+      item.removeAttribute('aria-haspopup');
+      item.removeAttribute('tabindex');
     }
 
     /** @private */
@@ -245,16 +252,18 @@ export const MenuBarMixin = (superClass) =>
         this._hasOverflow = true;
 
         const isRTL = this.__isRTL;
+        const containerLeft = container.getBoundingClientRect().left;
 
         let i;
         for (i = buttons.length; i > 0; i--) {
           const btn = buttons[i - 1];
           const btnStyle = getComputedStyle(btn);
+          const btnLeft = btn.getBoundingClientRect().left - containerLeft;
 
           // If this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btn.offsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btn.offsetLeft >= overflow.offsetWidth)
+            (!isRTL && btnLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
+            (isRTL && btnLeft >= overflow.offsetWidth)
           ) {
             break;
           }

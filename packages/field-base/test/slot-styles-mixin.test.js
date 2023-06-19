@@ -1,28 +1,31 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotStylesMixin } from '../src/slot-styles-mixin.js';
 
-describe('slot-styles-mixin', () => {
+const runTests = (defineHelper, baseMixin) => {
   const COLOR = 'rgb(0, 100, 0)';
-  let wrapper, element, button;
 
-  before(() => {
-    customElements.define(
-      'slot-styles-mixin-element',
-      class extends SlotStylesMixin(ControllerMixin(PolymerElement)) {
-        static get template() {
-          return html`<slot name="button"></slot>`;
+  const tag = defineHelper(
+    'slot-styles-mixin',
+    `
+      <style>
+        :host {
+          display: block;
         }
-
+      </style>
+      <slot name="button"></slot>
+      `,
+    (Base) =>
+      class extends SlotStylesMixin(baseMixin(Base)) {
         get slotStyles() {
           return [
             `
-              button[slot='button'] {
-                color: ${COLOR};
-              }
+            button[slot='button'] {
+              color: ${COLOR};
+            }
             `,
           ];
         }
@@ -37,14 +40,19 @@ describe('slot-styles-mixin', () => {
           );
         }
       },
-    );
-  });
+  );
 
-  beforeEach(() => {
+  let wrapper, element, button;
+
+  beforeEach(async () => {
     wrapper = fixtureSync('<div></div');
     wrapper.attachShadow({ mode: 'open' });
-    element = document.createElement('slot-styles-mixin-element');
+    wrapper.shadowRoot.innerHTML = '<slot></slot>';
+
+    element = document.createElement(tag);
     wrapper.shadowRoot.appendChild(element);
+    await nextRender();
+
     button = element.querySelector('button');
   });
 
@@ -56,9 +64,10 @@ describe('slot-styles-mixin', () => {
     expect(getComputedStyle(button).color).to.equal(COLOR);
   });
 
-  it('should only append styles with same ID once', () => {
-    const sibling = document.createElement('slot-styles-mixin-element');
+  it('should only append styles with same ID once', async () => {
+    const sibling = document.createElement(tag);
     element.parentNode.appendChild(sibling);
+    await nextRender();
     expect(wrapper.shadowRoot.querySelectorAll('style').length).to.equal(1);
   });
 
@@ -76,4 +85,12 @@ describe('slot-styles-mixin', () => {
     wrapper.appendChild(element);
     expect(getComputedStyle(button).color).to.equal(COLOR);
   });
+};
+
+describe('SlotStylesMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('SlotStylesMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

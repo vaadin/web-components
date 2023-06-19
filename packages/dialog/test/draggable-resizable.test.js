@@ -1,19 +1,21 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-area/vaadin-text-area.js';
 import './not-animated-styles.js';
 import '../src/vaadin-dialog.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 customElements.define(
   'internally-draggable',
-  class extends PolymerElement {
-    static get template() {
-      return html` <div class="draggable">
-        <span>draggable</span>
-      </div>`;
+  class extends HTMLElement {
+    constructor() {
+      super();
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <div class="draggable">
+          <span>draggable</span>
+        </div>
+      `;
     }
   },
 );
@@ -48,24 +50,24 @@ function resize(target, dx, dy, mouseButton = 0) {
 describe('helper methods', () => {
   let wrapper, dialogs, dialog1, dialog2, overlay, overlayPart, container;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync(`
       <div>
-        <vaadin-dialog modeless draggable opened>
-          <template>
-            <div>Modeless dialog 1</div>
-          </template>
-        </vaadin-dialog>
-        <vaadin-dialog modeless draggable opened>
-          <template>
-            <div>Modeless dialog 2</div>
-          </template>
-        </vaadin-dialog>
+        <vaadin-dialog modeless draggable opened></vaadin-dialog>
+        <vaadin-dialog modeless draggable opened></vaadin-dialog>
       </div>
     `);
+    await nextRender();
     dialogs = wrapper.children;
     dialog1 = dialogs[0];
+    dialog1.renderer = (root) => {
+      root.innerHTML = '<div>Modeless dialog 1</div>';
+    };
+
     dialog2 = dialogs[1];
+    dialog2.renderer = (root) => {
+      root.innerHTML = '<div>Modeless dialog 2</div>';
+    };
     overlay = dialog1.$.overlay;
     overlayPart = overlay.$.overlay;
     container = overlay.$.resizerContainer;
@@ -112,14 +114,14 @@ describe('helper methods', () => {
 describe('resizable', () => {
   let dialog, overlayPart, bounds, dx;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dialog = fixtureSync(`
-      <vaadin-dialog resizable opened modeless>
-        <template>
-          <div>Resizable dialog</div>
-        </template>
-      </vaadin-dialog>
+      <vaadin-dialog resizable opened modeless></vaadin-dialog>
     `);
+    await nextRender();
+    dialog.renderer = (root) => {
+      root.innerHTML = '<div>Resizable dialog</div>';
+    };
     overlayPart = dialog.$.overlay.$.overlay;
     bounds = overlayPart.getBoundingClientRect();
     dx = 30;
@@ -345,17 +347,20 @@ describe('draggable', () => {
     dispatchMouseEvent(target, 'mouseup', toXY, mouseButton);
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dialog = fixtureSync(`
-      <vaadin-dialog draggable opened modeless>
-        <template>
-          <div>Draggable dialog</div>
-          <div class="draggable">Draggable area</div>
-          <internally-draggable></internally-draggable>
-          <button>OK</button>
-        </template>
-      </vaadin-dialog>
+      <vaadin-dialog draggable opened modeless></vaadin-dialog>
     `);
+    await nextRender();
+    dialog.renderer = (root) => {
+      root.innerHTML = `
+        <div>Draggable dialog</div>
+        <div class="draggable">Draggable area</div>
+        <internally-draggable></internally-draggable>
+        <button>OK</button>
+      `;
+    };
+
     container = dialog.$.overlay.$.resizerContainer;
     content = dialog.$.overlay.$.content;
     button = dialog.$.overlay.querySelector('button');
@@ -594,24 +599,22 @@ describe('touch', () => {
     resizableContainer,
     draggableContainer;
 
-  beforeEach(() => {
-    resizable = fixtureSync(`
-      <vaadin-dialog resizable opened modeless>
-        <template>
-          <div>Resizable dialog</div>
-        </template>
-      </vaadin-dialog>
-    `);
-    draggable = fixtureSync(`
-      <vaadin-dialog draggable opened modeless>
-        <template>
-          <div>Draggable dialog</div>
-          <div class="draggable">Draggable area</div>
-          <internally-draggable></internally-draggable>
-          <button>OK</button>
-        </template>
-      </vaadin-dialog>
-    `);
+  beforeEach(async () => {
+    resizable = fixtureSync('<vaadin-dialog resizable modeless></vaadin-dialog>');
+    resizable.renderer = (root) => {
+      root.innerHTML = `<div>Resizable dialog</div>`;
+    };
+
+    draggable = fixtureSync('<vaadin-dialog draggable modeless></vaadin-dialog>');
+    draggable.renderer = (root) => {
+      root.innerHTML = `
+        <div>Draggable dialog</div>
+        <div class="draggable">Draggable area</div>
+        <internally-draggable></internally-draggable>
+        <button>OK</button>
+      `;
+    };
+
     resizableOverlay = resizable.$.overlay;
     draggableOverlay = draggable.$.overlay;
     resizableContainer = resizableOverlay.$.resizerContainer;
@@ -619,6 +622,7 @@ describe('touch', () => {
     resizableOverlayPart = resizableOverlay.$.overlay;
     resizable.opened = true;
     draggable.opened = true;
+    await nextRender();
   });
 
   it('should prevent default of the touchstart when dragged on desktop', () => {
@@ -699,31 +703,30 @@ describe('touch', () => {
 });
 
 describe('bring to front', () => {
-  let wrapper, dialogs, modalDialog, modelessDialog;
+  let wrapper, modalDialog, modelessDialog;
 
   beforeEach(() => {
     wrapper = fixtureSync(`
       <div>
-        <vaadin-dialog id="modalDialog">
-          <template>
-            MODAL_DIALOG
-          </template>
-        </vaadin-dialog>
-        <vaadin-dialog id="modelessDialog" modeless>
-          <template>
-            MODELESS_DIALOG
-          </template>
-        </vaadin-dialog>
+        <vaadin-dialog id="modalDialog"></vaadin-dialog>
+        <vaadin-dialog id="modelessDialog" modeless></vaadin-dialog>
       </div>
     `);
-    dialogs = wrapper.children;
-    modalDialog = dialogs[0];
-    modelessDialog = dialogs[1];
+    [modalDialog, modelessDialog] = wrapper.children;
+
+    modalDialog.renderer = (root) => {
+      root.textContent = 'MODAL_DIALOG';
+    };
+
+    modelessDialog.renderer = (root) => {
+      root.textContent = 'MODELESS_DIALOG';
+    };
   });
 
-  it('modal should not bring to front and close if a modeless dialog is on top', () => {
+  it('modal should not bring to front and close if a modeless dialog is on top', async () => {
     modalDialog.opened = true;
     modelessDialog.opened = true;
+    await nextRender();
 
     const expectedTextContent = modelessDialog.$.overlay.innerText.trim();
 
@@ -746,12 +749,12 @@ describe('bring to front', () => {
 describe('overflowing content', () => {
   let dialog, overlay, overlayPart, container;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dialog = fixtureSync(`
-      <vaadin-dialog resizable opened modeless>
-        <template></template>
-      </vaadin-dialog>
+      <vaadin-dialog resizable opened modeless></vaadin-dialog>
     `);
+    await nextRender();
+
     overlay = dialog.$.overlay;
     overlayPart = overlay.$.overlay;
     container = overlay.$.resizerContainer;

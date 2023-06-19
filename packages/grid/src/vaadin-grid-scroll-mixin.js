@@ -10,6 +10,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
   SCROLLING: 500,
+  UPDATE_CONTENT_VISIBILITY: 100,
 };
 
 /**
@@ -19,6 +20,48 @@ export const ScrollMixin = (superClass) =>
   class ScrollMixin extends ResizeMixin(superClass) {
     static get properties() {
       return {
+        /**
+         * Allows you to choose between modes for rendering columns in the grid:
+         *
+         * "eager" (default): All columns are rendered upfront, regardless of their visibility within the viewport.
+         * This mode should generally be preferred, as it avoids the limitations imposed by the "lazy" mode.
+         * Use this mode unless the grid has a large number of columns and performance outweighs the limitations
+         * in priority.
+         *
+         * "lazy": Optimizes the rendering of cells when there are multiple columns in the grid by virtualizing
+         * horizontal scrolling. In this mode, body cells are rendered only when their corresponding columns are
+         * inside the visible viewport.
+         *
+         * Using "lazy" rendering should be used only if you're dealing with a large number of columns and performance
+         * is your highest priority. For most use cases, the default "eager" mode is recommended due to the
+         * limitations imposed by the "lazy" mode.
+         *
+         * When using the "lazy" mode, keep the following limitations in mind:
+         *
+         * - Row Height: When only a number of columns are visible at once, the height of a row can only be that of
+         * the highest cell currently visible on that row. Make sure each cell on a single row has the same height
+         * as all other cells on that row. If row cells have different heights, users may experience jumpiness when
+         * scrolling the grid horizontally as lazily rendered cells with different heights are scrolled into view.
+         *
+         * - Auto-width Columns: For the columns that are initially outside the visible viewport but still use auto-width,
+         * only the header content is taken into account when calculating the column width because the body cells
+         * of the columns outside the viewport are not initially rendered.
+         *
+         * - Screen Reader Compatibility: Screen readers may not be able to associate the focused cells with the correct
+         * headers when only a subset of the body cells on a row is rendered.
+         *
+         * - Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because
+         * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
+         * and thus not rendered.
+         *
+         * @attr {eager|lazy} column-rendering
+         * @type {!ColumnRendering}
+         */
+        columnRendering: {
+          type: String,
+          value: 'eager',
+        },
+
         /**
          * Cached array of frozen cells
          * @private
@@ -42,6 +85,10 @@ export const ScrollMixin = (superClass) =>
       };
     }
 
+    static get observers() {
+      return ['__columnRenderingChanged(_columnTree, columnRendering)'];
+    }
+
     /** @private */
     get _scrollLeft() {
       return this.$.table.scrollLeft;
@@ -58,6 +105,11 @@ export const ScrollMixin = (superClass) =>
      */
     set _scrollTop(top) {
       this.$.table.scrollTop = top;
+    }
+
+    /** @protected */
+    get _lazyColumns() {
+      return this.columnRendering === 'lazy';
     }
 
     /** @protected */
@@ -87,13 +139,13 @@ export const ScrollMixin = (superClass) =>
     }
 
     /**
-     * Scroll to a specific row index in the virtual list. Note that the row index is
-     * not always the same for any particular item. For example, sorting/filtering/expanding
-     * or collapsing hierarchical items can affect the row index related to an item.
+     * Scroll to a flat index in the grid. The method doesn't take into account
+     * the hierarchy of the items.
      *
      * @param {number} index Row index to scroll to
+     * @protected
      */
-    scrollToIndex(index) {
+    _scrollToFlatIndex(index) {
       index = Math.min(this._effectiveSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
       this.__scrollIntoViewport(index);
@@ -143,6 +195,124 @@ export const ScrollMixin = (superClass) =>
       }
 
       this._updateOverflow();
+
+      this._debounceColumnContentVisibility = Debouncer.debounce(
+        this._debounceColumnContentVisibility,
+        timeOut.after(timeouts.UPDATE_CONTENT_VISIBILITY),
+        () => {
+          // If horizontal scroll position changed and lazy column rendering is enabled,
+          // update the visible columns.
+          if (this._lazyColumns && this.__cachedScrollLeft !== this._scrollLeft) {
+            this.__cachedScrollLeft = this._scrollLeft;
+            this.__updateColumnsBodyContentHidden();
+          }
+        },
+      );
+    }
+
+    /** @private */
+    __updateColumnsBodyContentHidden() {
+      if (!this._columnTree) {
+        return;
+      }
+
+      const columnsInOrder = this._getColumnsInOrder();
+
+      // Return if sizer cells are not yet assigned to columns
+      if (!columnsInOrder[0] || !columnsInOrder[0]._sizerCell) {
+        return;
+      }
+
+      let bodyContentHiddenChanged = false;
+
+      // Remove the column cells from the DOM if the column is outside the viewport.
+      // Add the column cells to the DOM if the column is inside the viewport.
+      //
+      // Update the _bodyContentHidden property of the column to reflect the current
+      // visibility state and make it run renderers for the cells if necessary.
+      columnsInOrder.forEach((column) => {
+        const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
+
+        if (column._bodyContentHidden !== bodyContentHidden) {
+          bodyContentHiddenChanged = true;
+          column._cells.forEach((cell) => {
+            if (cell !== column._sizerCell) {
+              if (bodyContentHidden) {
+                cell.remove();
+              } else if (cell.__parentRow) {
+                // Add the cell to the correct DOM position in the row
+                const followingColumnCell = [...cell.__parentRow.children].find(
+                  (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(column),
+                );
+                cell.__parentRow.insertBefore(cell, followingColumnCell);
+              }
+            }
+          });
+        }
+
+        column._bodyContentHidden = bodyContentHidden;
+      });
+
+      if (bodyContentHiddenChanged) {
+        // Frozen columns may have changed their visibility
+        this._frozenCellsChanged();
+      }
+
+      if (this._lazyColumns) {
+        // Calculate the offset to apply to the body cells
+        const lastFrozenColumn = [...columnsInOrder].reverse().find((column) => column.frozen);
+        const lastFrozenColumnEnd = this.__getColumnEnd(lastFrozenColumn);
+        const firstVisibleColumn = columnsInOrder.find((column) => !column.frozen && !column._bodyContentHidden);
+        this.__lazyColumnsStart = this.__getColumnStart(firstVisibleColumn) - lastFrozenColumnEnd;
+        this.$.items.style.setProperty('--_grid-lazy-columns-start', `${this.__lazyColumnsStart}px`);
+
+        // Make sure the body has a focusable element in lazy columns mode
+        this._resetKeyboardNavigation();
+      }
+    }
+
+    /** @private */
+    __getColumnEnd(column) {
+      if (!column) {
+        return this.__isRTL ? this.$.table.clientWidth : 0;
+      }
+      return column._sizerCell.offsetLeft + (this.__isRTL ? 0 : column._sizerCell.offsetWidth);
+    }
+
+    /** @private */
+    __getColumnStart(column) {
+      if (!column) {
+        return this.__isRTL ? this.$.table.clientWidth : 0;
+      }
+      return column._sizerCell.offsetLeft + (this.__isRTL ? column._sizerCell.offsetWidth : 0);
+    }
+
+    /**
+     * Returns true if the given column is horizontally inside the viewport.
+     * @private
+     */
+    __isColumnInViewport(column) {
+      if (column.frozen || column.frozenToEnd) {
+        // Assume frozen columns to always be inside the viewport
+        return true;
+      }
+
+      // Check if the column's sizer cell is inside the viewport
+      return (
+        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth >= this._scrollLeft &&
+        column._sizerCell.offsetLeft <= this._scrollLeft + this.clientWidth
+      );
+    }
+
+    /** @private */
+    __columnRenderingChanged(_columnTree, columnRendering) {
+      if (columnRendering === 'eager') {
+        this.$.scroller.removeAttribute('column-rendering');
+      } else {
+        this.$.scroller.setAttribute('column-rendering', columnRendering);
+      }
+
+      this.__updateColumnsBodyContentHidden();
     }
 
     /** @private */
@@ -254,10 +424,15 @@ export const ScrollMixin = (superClass) =>
       if (firstFrozenToEnd !== undefined) {
         columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
       }
+
+      this.__updateColumnsBodyContentHidden();
     }
 
     /** @private */
     __updateHorizontalScrollPosition() {
+      if (!this._columnTree) {
+        return;
+      }
       const scrollWidth = this.$.table.scrollWidth;
       const clientWidth = this.$.table.clientWidth;
       const scrollLeft = Math.max(0, this.$.table.scrollLeft);
@@ -272,16 +447,39 @@ export const ScrollMixin = (superClass) =>
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
       const transformFrozen = `translate(${x}px, 0)`;
-      for (let i = 0; i < this._frozenCells.length; i++) {
-        this._frozenCells[i].style.transform = transformFrozen;
-      }
+      this._frozenCells.forEach((cell) => {
+        cell.style.transform = transformFrozen;
+      });
 
       // Position cells frozen to end
       const remaining = this.__isRTL ? normalizedScrollLeft : scrollLeft + clientWidth - scrollWidth;
       const transformFrozenToEnd = `translate(${remaining}px, 0)`;
-      for (let i = 0; i < this._frozenToEndCells.length; i++) {
-        this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
+
+      let transformFrozenToEndBody = transformFrozenToEnd;
+
+      if (this._lazyColumns) {
+        // Lazy column rendering is used, calculate the offset to apply to the frozen to end cells
+        const columnsInOrder = this._getColumnsInOrder();
+
+        const lastVisibleColumn = [...columnsInOrder]
+          .reverse()
+          .find((column) => !column.frozenToEnd && !column._bodyContentHidden);
+        const lastVisibleColumnEnd = this.__getColumnEnd(lastVisibleColumn);
+
+        const firstFrozenToEndColumn = columnsInOrder.find((column) => column.frozenToEnd);
+        const firstFrozenToEndColumnStart = this.__getColumnStart(firstFrozenToEndColumn);
+
+        const translateX = remaining + (firstFrozenToEndColumnStart - lastVisibleColumnEnd) + this.__lazyColumnsStart;
+        transformFrozenToEndBody = `translate(${translateX}px, 0)`;
       }
+
+      this._frozenToEndCells.forEach((cell) => {
+        if (this.$.items.contains(cell)) {
+          cell.style.transform = transformFrozenToEndBody;
+        } else {
+          cell.style.transform = transformFrozenToEnd;
+        }
+      });
 
       // Only update the --_grid-horizontal-scroll-position custom property when navigating
       // on row focus mode to avoid performance issues.

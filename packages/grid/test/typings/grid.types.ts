@@ -1,4 +1,4 @@
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type {
@@ -160,6 +160,7 @@ assertType<boolean>(narrowedGrid.disabled);
 
 assertType<number>(narrowedGrid.pageSize);
 assertType<number>(narrowedGrid.size);
+assertType<'eager' | 'lazy'>(narrowedGrid.columnRendering);
 assertType<boolean | null | undefined>(narrowedGrid.loading);
 assertType<string | null | undefined>(narrowedGrid.itemIdPath);
 assertType<string>(narrowedGrid.itemHasChildrenPath);
@@ -196,6 +197,7 @@ narrowedGrid.rowDetailsRenderer = rowDetailsRenderer;
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.openItemDetails);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.closeItemDetails);
 assertType<(arg0: number) => void>(narrowedGrid.scrollToIndex);
+assertType<(...arg0: number[]) => void>(narrowedGrid.scrollToIndex);
 
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.selectItem);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);

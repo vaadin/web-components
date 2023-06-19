@@ -5,7 +5,7 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
@@ -130,22 +130,22 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       this._updateFlexAndWidth();
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'frozen' && !this.frozen) {
       this.frozen = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'lastFrozen' && !this._lastFrozen) {
       this._lastFrozen = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'frozenToEnd' && !this.frozenToEnd) {
       this.frozenToEnd = value;
     }
 
-    // Don’t unfreeze the frozen group because of a non-frozen child
+    // Don't unfreeze the frozen group because of a non-frozen child
     if (path === 'firstFrozenToEnd' && !this._firstFrozenToEnd) {
       this._firstFrozenToEnd = value;
     }
@@ -279,7 +279,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    // Don’t propagate the default `false` value.
+    // Don't propagate the default `false` value.
     if (frozen !== false) {
       this.__scheduleAutoFreezeWarning(rootColumns, 'frozen');
 
@@ -295,7 +295,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    // Don’t propagate the default `false` value.
+    // Don't propagate the default `false` value.
     if (frozenToEnd !== false) {
       this.__scheduleAutoFreezeWarning(rootColumns, 'frozenToEnd');
 
@@ -377,12 +377,10 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         this._updateVisibleChildColumns(this._childColumns);
         this._preventHiddenSynchronization = false;
 
-        // Update the column tree with microtask timing to avoid shady style scope issues
-        microTask.run(() => {
-          if (this._grid && this._grid._updateColumnTree) {
-            this._grid._updateColumnTree();
-          }
-        });
+        // Update the column tree
+        if (this._grid && this._grid._debounceUpdateColumnTree) {
+          this._grid._debounceUpdateColumnTree();
+        }
       }
     });
     this._observer.flush();

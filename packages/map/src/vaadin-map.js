@@ -12,8 +12,8 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defaults as defaultControls } from 'ol/control';
 import { defaults as defaultInteractions } from 'ol/interaction';
 import OpenLayersMap from 'ol/Map.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -258,7 +258,7 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         }
 
         .ol-zoom-out:empty::before {
-          content: var(--vaadin-map-icon-zoom-out, '–');
+          content: var(--vaadin-map-icon-zoom-out, '\\2013');
         }
 
         .ol-attribution {
@@ -274,11 +274,11 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         }
 
         .ol-attribution button span:empty::before {
-          content: var(--vaadin-map-icon-attribution-collapse, '▸');
+          content: var(--vaadin-map-icon-attribution-collapse, '\\25B8');
         }
 
         .ol-attribution.ol-collapsed button span:empty::before {
-          content: var(--vaadin-map-icon-attribution-expand, 'ℹ');
+          content: var(--vaadin-map-icon-attribution-expand, '\\2139');
         }
 
         .ol-attribution ul {
@@ -304,7 +304,7 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         }
 
         .ol-compass:empty::before {
-          content: var(--vaadin-map-icon-compass, '↑');
+          content: var(--vaadin-map-icon-compass, '\\2191');
         }
 
         .ol-full-screen {
@@ -312,11 +312,11 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         }
 
         .ol-full-screen button:empty::before {
-          content: var(--vaadin-map-icon-fullscreen, '⤢');
+          content: var(--vaadin-map-icon-fullscreen, '\\2922');
         }
 
         .ol-full-screen .ol-full-screen-true:empty::before {
-          content: var(--vaadin-map-icon-close, '×');
+          content: var(--vaadin-map-icon-close, '\\00D7');
         }
 
         .ol-overviewmap {
@@ -326,11 +326,11 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         }
 
         .ol-overviewmap button span:empty::before {
-          content: var(--vaadin-map-icon-overview-map-collapse, '▾');
+          content: var(--vaadin-map-icon-overview-map-collapse, '\\25BE');
         }
 
         .ol-overviewmap.ol-collapsed button span:empty::before {
-          content: var(--vaadin-map-icon-overview-map-expand, '▴');
+          content: var(--vaadin-map-icon-overview-map-expand, '\\25B4');
         }
 
         .ol-overviewmap-map {

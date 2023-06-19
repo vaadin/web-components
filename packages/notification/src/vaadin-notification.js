@@ -181,6 +181,12 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
         [part='overlay'] {
           pointer-events: auto;
         }
+
+        @media (forced-colors: active) {
+          [part='overlay'] {
+            outline: 3px solid;
+          }
+        }
       </style>
 
       <div part="overlay">
@@ -404,7 +410,11 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.opened = false;
+    queueMicrotask(() => {
+      if (!this.isConnected) {
+        this.opened = false;
+      }
+    });
   }
 
   /**

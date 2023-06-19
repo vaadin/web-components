@@ -6,6 +6,7 @@ import type {
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -28,6 +29,7 @@ const timePicker = document.createElement('vaadin-time-picker');
 assertType<ControllerMixinClass>(timePicker);
 assertType<ElementMixinClass>(timePicker);
 assertType<InputControlMixinClass>(timePicker);
+assertType<ClearButtonMixinClass>(timePicker);
 assertType<PatternMixinClass>(timePicker);
 assertType<ValidateMixinClass>(timePicker);
 assertType<ThemableMixinClass>(timePicker);

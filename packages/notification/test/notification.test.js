@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, isIOS, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
@@ -9,12 +8,12 @@ describe('vaadin-notification', () => {
 
   beforeEach(() => {
     notification = fixtureSync(`
-      <vaadin-notification duration="20">
-        <template>
-          Your work has been <strong>saved</strong>
-        </template>
-      </vaadin-notification>
+      <vaadin-notification duration="20"></vaadin-notification>
     `);
+
+    notification.renderer = (root) => {
+      root.innerHTML = `Your work has been <strong>saved</strong>`;
+    };
 
     // Force sync card attaching and removal instead of waiting for the animation
     sinon.stub(notification, '_animatedAppendNotificationCard').callsFake(() => notification._appendNotificationCard());
@@ -39,10 +38,19 @@ describe('vaadin-notification', () => {
     expect(getComputedStyle(notification).display).to.equal('none');
   });
 
-  it('should close on detach', () => {
+  it('should close on detach', async () => {
     expect(notification.opened).to.be.true;
     notification.remove();
+    await aTimeout(0);
     expect(notification.opened).to.be.false;
+  });
+
+  it('should stay open after immediate reattach', async () => {
+    expect(notification.opened).to.be.true;
+    const parent = notification.parentNode;
+    parent.appendChild(notification);
+    await aTimeout(0);
+    expect(notification.opened).to.be.true;
   });
 
   describe('vaadin-notification-container', () => {

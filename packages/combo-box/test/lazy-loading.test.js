@@ -164,10 +164,7 @@ describe('lazy loading', () => {
         });
       });
 
-      // eslint-disable-next-line prefer-arrow-callback
-      describe('when open', function () {
-        // eslint-disable-next-line no-invalid-this
-        this.timeout(15000);
+      describe('when open', () => {
         beforeEach(() => {
           comboBox.inputElement.focus();
           comboBox.opened = true;
@@ -816,7 +813,7 @@ describe('lazy loading', () => {
         it('should render selectedItem as selected when setting it while loading more items', async () => {
           const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
 
-          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          scrollToIndex(comboBox, comboBox.pageSize - 1);
           await nextFrame();
           expect(comboBox.loading).to.be.true;
 
@@ -868,7 +865,7 @@ describe('lazy loading', () => {
             label: `label ${comboBox.pageSize - 1}`,
           };
 
-          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          scrollToIndex(comboBox, comboBox.pageSize - 1);
           await nextFrame();
           expect(comboBox.loading).to.be.true;
 

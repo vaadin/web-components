@@ -1,11 +1,11 @@
 import '../../vaadin-button.js';
-import type { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import type { ActiveMixinClass } from '@vaadin/a11y-base/src/active-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { TabindexMixinClass } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import type { TabindexMixinClass } from '@vaadin/component-base/src/tabindex-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const assertType = <TExpected>(value: TExpected) => value;

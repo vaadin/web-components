@@ -95,14 +95,14 @@ export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };
 
-export const getContainerCellContent = (container, row, col) => {
-  return getCellContent(getContainerCell(container, row, col));
-};
-
 export const getContainerCell = (container, row, col) => {
   const rows = getRows(container);
   const cells = getRowCells(rows[row]);
   return cells[col];
+};
+
+export const getContainerCellContent = (container, row, col) => {
+  return getCellContent(getContainerCell(container, row, col));
 };
 
 export const getCellEditor = (cell) => {
@@ -139,15 +139,3 @@ export const createItems = () => {
     { name: 'baz', age: 40, married: false, title: 'mr' },
   ];
 };
-
-/**
- * Emulates clicking outside the dropdown overlay
- */
-export function outsideClick() {
-  // Move focus to body
-  document.body.tabIndex = 0;
-  document.body.focus();
-  document.body.tabIndex = -1;
-  // Outside click
-  document.body.click();
-}

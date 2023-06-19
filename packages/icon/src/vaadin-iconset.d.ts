@@ -30,7 +30,15 @@ declare class Iconset extends ElementMixin(HTMLElement) {
    * Returns SVGTemplateResult for the `icon` ID matching `name` of the
    * iconset, or `nothing` literal if there is no matching icon found.
    */
-  static getIconSvg(icon: string, name?: string): { svg: IconSvgLiteral; size?: number; viewBox?: string | null };
+  static getIconSvg(
+    icon: string,
+    name?: string,
+  ): {
+    preserveAspectRatio?: string | null;
+    svg: IconSvgLiteral;
+    size?: number;
+    viewBox?: string | null;
+  };
 
   /**
    * The name of the iconset. Every iconset is required to have its own unique name.

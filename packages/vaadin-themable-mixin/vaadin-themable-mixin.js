@@ -24,6 +24,40 @@ export { css, unsafeCSS };
 const themeRegistry = [];
 
 /**
+ * Check if the custom element type has themes applied.
+ * @param {Function} elementClass
+ * @returns {boolean}
+ */
+function classHasThemes(elementClass) {
+  return elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes');
+}
+
+/**
+ * Check if the custom element type has themes applied.
+ * @param {string} tagName
+ * @returns {boolean}
+ */
+function hasThemes(tagName) {
+  return classHasThemes(customElements.get(tagName));
+}
+
+/**
+ * Flattens the styles into a single array of styles.
+ * @param {CSSResultGroup} styles
+ * @param {CSSResult[]} result
+ * @returns {CSSResult[]}
+ */
+function flattenStyles(styles = []) {
+  return [styles].flat(Infinity).filter((style) => {
+    if (style instanceof CSSResult) {
+      return true;
+    }
+    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
+    return false;
+  });
+}
+
+/**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
@@ -98,22 +132,6 @@ function getIncludePriority(moduleName = '') {
 }
 
 /**
- * Flattens the styles into a single array of styles.
- * @param {CSSResultGroup} styles
- * @param {CSSResult[]} result
- * @returns {CSSResult[]}
- */
-function flattenStyles(styles = []) {
-  return [styles].flat(Infinity).filter((style) => {
-    if (style instanceof CSSResult) {
-      return true;
-    }
-    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-    return false;
-  });
-}
-
-/**
  * Gets an array of CSSResults matching the include property of the theme.
  * @param {Theme} theme
  * @returns {CSSResult[]}
@@ -171,24 +189,6 @@ function getThemes(tagName) {
   }
   // No theme modules found, return the default module if it exists
   return getAllThemes().filter((theme) => theme.moduleId === defaultModuleName);
-}
-
-/**
- * Check if the custom element type has themes applied.
- * @param {string} tagName
- * @returns {boolean}
- */
-function hasThemes(tagName) {
-  return classHasThemes(customElements.get(tagName));
-}
-
-/**
- * Check if the custom element type has themes applied.
- * @param {Function} elementClass
- * @returns {boolean}
- */
-function classHasThemes(elementClass) {
-  return elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes');
 }
 
 /**

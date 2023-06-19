@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const style = css`
   :host {
@@ -32,12 +33,10 @@ const globals = css`
   html {
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
-    --vaadin-input-container-border-radius: var(--lumo-border-radius-m);
+    --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${style.toString().replace(':host', 'html')}$</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('style-props', style);
 
 export { globals, style };

@@ -5,6 +5,7 @@
  */
 import './version.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addLumoGlobalStyles } from './global.js';
 
 const colorBase = css`
   :host {
@@ -77,12 +78,23 @@ const colorBase = css`
     --lumo-success-color-10pct: hsla(145, 72%, 31%, 0.1);
     --lumo-success-text-color: hsl(145, 85%, 25%);
     --lumo-success-contrast-color: #fff;
+
+    /* Warning */
+    --lumo-warning-color: hsl(48, 100%, 50%);
+    --lumo-warning-color-10pct: hsla(48, 100%, 50%, 0.25);
+    --lumo-warning-text-color: hsl(32, 100%, 30%);
+    --lumo-warning-contrast-color: var(--lumo-shade-90pct);
+  }
+
+  /* forced-colors mode adjustments */
+  @media (forced-colors: active) {
+    html {
+      --lumo-disabled-text-color: GrayText;
+    }
   }
 `;
 
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${colorBase.toString().replace(':host', 'html')}</style>`;
-document.head.appendChild($tpl.content);
+addLumoGlobalStyles('color-props', colorBase);
 
 const color = css`
   [theme~='dark'] {
@@ -153,6 +165,12 @@ const color = css`
     --lumo-success-color-50pct: hsla(145, 92%, 51%, 0.5);
     --lumo-success-color-10pct: hsla(145, 92%, 51%, 0.1);
     --lumo-success-text-color: hsl(145, 85%, 46%);
+
+    /* Warning */
+    --lumo-warning-color: hsl(43, 100%, 48%);
+    --lumo-warning-color-10pct: hsla(40, 100%, 50%, 0.2);
+    --lumo-warning-text-color: hsl(45, 100%, 60%);
+    --lumo-warning-contrast-color: var(--lumo-shade-90pct);
   }
 
   html {

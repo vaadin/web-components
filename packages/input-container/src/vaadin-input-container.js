@@ -21,20 +21,23 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
           flex: 0 1 auto;
           border-radius:
             /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
-            var(--vaadin-input-container-top-start-radius, var(--__border-radius))
-            var(--vaadin-input-container-top-end-radius, var(--__border-radius))
-            var(--vaadin-input-container-bottom-end-radius, var(--__border-radius))
-            var(--vaadin-input-container-bottom-start-radius, var(--__border-radius));
-          --_border-radius: var(--vaadin-input-container-border-radius, 0px);
+            var(--vaadin-input-field-top-start-radius, var(--__border-radius))
+            var(--vaadin-input-field-top-end-radius, var(--__border-radius))
+            var(--vaadin-input-field-bottom-end-radius, var(--__border-radius))
+            var(--vaadin-input-field-bottom-start-radius, var(--__border-radius));
+          --_border-radius: var(--vaadin-input-field-border-radius, 0px);
+          --_input-border-width: var(--vaadin-input-field-border-width, 0);
+          --_input-border-color: var(--vaadin-input-field-border-color, transparent);
+          box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
         }
 
         :host([dir='rtl']) {
           border-radius:
             /* Don't use logical props, see https://github.com/vaadin/vaadin-time-picker/issues/145 */
-            var(--vaadin-input-container-top-end-radius, var(--_border-radius))
-            var(--vaadin-input-container-top-start-radius, var(--_border-radius))
-            var(--vaadin-input-container-bottom-start-radius, var(--_border-radius))
-            var(--vaadin-input-container-bottom-end-radius, var(--_border-radius));
+            var(--vaadin-input-field-top-end-radius, var(--_border-radius))
+            var(--vaadin-input-field-top-start-radius, var(--_border-radius))
+            var(--vaadin-input-field-bottom-start-radius, var(--_border-radius))
+            var(--vaadin-input-field-bottom-end-radius, var(--_border-radius));
         }
 
         :host([hidden]) {

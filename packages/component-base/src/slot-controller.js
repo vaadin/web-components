@@ -81,8 +81,10 @@ export class SlotController extends EventTarget {
 
     if (children.length === 0) {
       const defaultNode = this.attachDefaultNode();
-      this.nodes = [defaultNode];
-      this.initNode(defaultNode);
+      if (defaultNode) {
+        this.nodes = [defaultNode];
+        this.initNode(defaultNode);
+      }
     } else {
       this.nodes = children;
       children.forEach((node) => {
@@ -205,25 +207,28 @@ export class SlotController extends EventTarget {
       const newNodes = info.addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
 
       if (info.removedNodes.length) {
+        this.nodes = current.filter((node) => !info.removedNodes.includes(node));
+
         info.removedNodes.forEach((node) => {
           this.teardownNode(node);
         });
       }
 
       if (newNodes && newNodes.length > 0) {
-        // Custom node is added, remove the current one.
-        current.forEach((node) => {
-          if (node && node.isConnected) {
-            node.parentNode.removeChild(node);
-          }
-        });
-
         if (this.multiple) {
-          this.nodes = newNodes;
+          // Remove default node if exists
+          if (this.defaultNode) {
+            this.defaultNode.remove();
+          }
+          this.nodes = [...current, ...newNodes].filter((node) => node !== this.defaultNode);
           newNodes.forEach((node) => {
             this.initAddedNode(node);
           });
         } else {
+          // Remove previous node if exists
+          if (this.node) {
+            this.node.remove();
+          }
           this.node = newNodes[0];
           this.initAddedNode(this.node);
         }

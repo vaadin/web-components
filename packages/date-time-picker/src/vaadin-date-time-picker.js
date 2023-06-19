@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DatePicker } from '@vaadin/date-picker/src/vaadin-date-picker.js';
@@ -395,6 +395,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       '__themeChanged(_theme, __datePicker, __timePicker)',
       '__overlayClassChanged(overlayClass, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
+      '__labelOrAccessibleNameChanged(label, accessibleName, i18n, __datePicker, __timePicker)',
     ];
   }
 
@@ -638,6 +639,19 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     if (timePicker) {
       timePicker.i18n = { ...timePicker.i18n, ...i18n };
+    }
+  }
+
+  /** @private */
+  __labelOrAccessibleNameChanged(label, accessibleName, i18n, datePicker, timePicker) {
+    const name = accessibleName || label || '';
+
+    if (datePicker) {
+      datePicker.accessibleName = `${name} ${i18n.dateLabel || ''}`.trim();
+    }
+
+    if (timePicker) {
+      timePicker.accessibleName = `${name} ${i18n.timeLabel || ''}`.trim();
     }
   }
 

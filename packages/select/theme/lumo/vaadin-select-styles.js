@@ -42,6 +42,10 @@ const select = css`
     color: var(--lumo-secondary-text-color);
   }
 
+  :host(:is([readonly], [disabled])) ::slotted([slot='value'][placeholder]) {
+    opacity: 0;
+  }
+
   [part='toggle-button']::before {
     content: var(--lumo-icons-dropdown);
   }

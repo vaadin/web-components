@@ -9,6 +9,7 @@
  */
 
 export interface AsyncInterface {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   run(fn: Function, delay?: number): number;
   cancel(handle: number): void;
 }
@@ -39,6 +40,7 @@ declare namespace timeOut {
    *
    * @returns Handle used for canceling task
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   function run(fn: Function, delay?: number): number;
 
   /**
@@ -103,6 +105,7 @@ declare namespace microTask {
    *
    * @returns Handle used for canceling task
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   function run(callback?: Function): number;
 
   /**

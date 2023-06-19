@@ -35,8 +35,16 @@ export const buttonsStyles = css`
     outline: none;
   }
 
-  [part~='toolbar-button'][on] {
-    background-color: #eee;
+  @media (forced-colors: active) {
+    [part~='toolbar-button']:focus,
+    [part~='toolbar-button']:hover {
+      outline: 1px solid !important;
+    }
+
+    [part~='toolbar-button'][on] {
+      outline: 2px solid;
+      outline-offset: -1px;
+    }
   }
 
   [part~='toolbar-button']::before {
@@ -124,7 +132,7 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-blockquote']::before {
-    content: '”';
+    content: '\\201D';
     font-size: 2em;
     height: 0.6em;
   }

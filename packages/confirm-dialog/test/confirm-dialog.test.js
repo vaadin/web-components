@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, esc, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-confirm-dialog', () => {
   describe('custom element definition', () => {
@@ -48,8 +49,9 @@ describe('vaadin-confirm-dialog', () => {
       expect(confirm.opened).to.be.false;
     });
 
-    it('should propagate opened to internal dialog', () => {
+    it('should propagate opened to internal dialog', async () => {
       confirm.opened = true;
+      await nextRender();
       expect(dialog.opened).to.be.true;
     });
 
@@ -78,6 +80,19 @@ describe('vaadin-confirm-dialog', () => {
 
     it('should set aria-label on the dialog', () => {
       expect(dialog.ariaLabel).to.equal('confirmation');
+    });
+
+    it('should set `aria-describedby` on the overlay when `accessibleDescriptionRef` is defined', () => {
+      const customId = 'id-0';
+      confirm.accessibleDescriptionRef = customId;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(customId);
+    });
+
+    it('should restore `aria-describedby` on the overlay when `accessibleDescriptionRef` is removed', () => {
+      const generatedDescribedByValue = overlay.getAttribute('aria-describedby');
+      confirm.accessibleDescriptionRef = 'id-0';
+      confirm.accessibleDescriptionRef = null;
+      expect(overlay.getAttribute('aria-describedby')).to.equal(generatedDescribedByValue);
     });
   });
 
@@ -165,6 +180,14 @@ describe('vaadin-confirm-dialog', () => {
         const messageNode = messageSlot.assignedNodes()[0];
         expect(messageNode.textContent.trim()).to.equal('New message');
       });
+
+      describe('a11y', () => {
+        it('should associate message node with aria-describedby', () => {
+          const messageNode = messageSlot.assignedNodes()[0];
+          const overlayDescribedBy = overlay.getAttribute('aria-describedby');
+          expect(overlayDescribedBy).to.equal(messageNode.id);
+        });
+      });
     });
 
     describe('slot', () => {
@@ -190,6 +213,49 @@ describe('vaadin-confirm-dialog', () => {
         confirm.message = 'New message';
         const messageNode = messageSlot.assignedNodes()[0];
         expect(messageNode.textContent.trim()).to.equal('Confirmation message');
+      });
+    });
+
+    describe('a11y', () => {
+      const firstChild = 'Confirm message';
+      const secondChild = '<div>Additionale content</div>';
+      beforeEach(async () => {
+        confirm = fixtureSync(`
+          <vaadin-confirm-dialog opened>
+            ${firstChild}
+            ${secondChild}
+          </vaadin-confirm-dialog>
+        `);
+        overlay = confirm.$.dialog.$.overlay;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
+      });
+
+      it('should wrap slotted children inside <div> elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        expect(nodes[0].textContent.trim()).to.equal(firstChild);
+        expect(nodes[1].innerHTML.trim()).to.equal(secondChild);
+      });
+
+      it('should generate id for wrapper elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        nodes.forEach((node) => expect(node.id).to.be.not.null);
+      });
+
+      it('should set "display: contents" on the wrapper elements', () => {
+        const nodes = messageSlot.assignedNodes();
+        nodes.forEach((node) => expect(node.style.display).to.equal('contents'));
+      });
+
+      it('should associate generated ids with aria-describedby in overlay', () => {
+        const nodes = messageSlot.assignedNodes();
+        const overlayDescribedBy = overlay.getAttribute('aria-describedby');
+        expect(overlayDescribedBy).to.be.not.null;
+
+        const overlayDescribedByItems = overlayDescribedBy.split(' ');
+        expect(overlayDescribedByItems).to.have.lengthOf(2);
+        const wrapperIds = nodes.map((node) => node.id);
+        expect(overlayDescribedByItems).to.have.members(wrapperIds);
       });
     });
   });
@@ -541,6 +607,47 @@ describe('vaadin-confirm-dialog', () => {
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
+
+      it('should set `aria-describedby` when `accessibleDescriptionRef` is set before attach', async () => {
+        confirm.accessibleDescriptionRef = 'id-0';
+        confirm.opened = true;
+        document.body.appendChild(confirm);
+        await nextRender();
+
+        const overlay = confirm.$.dialog.$.overlay;
+        expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
+      });
+    });
+  });
+
+  describe('focus restoration', () => {
+    let confirm, button, overlay;
+
+    beforeEach(() => {
+      const wrapper = fixtureSync(`
+        <div>
+          <vaadin-confirm-dialog></vaadin-confirm-dialog>
+          <button></button>
+        </div>
+      `);
+      [confirm, button] = wrapper.children;
+      overlay = confirm.$.dialog.$.overlay;
+      button.focus();
+    });
+
+    it('should move focus to the dialog on open', async () => {
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      const confirmButton = overlay.querySelector('[slot=confirm-button]');
+      expect(getDeepActiveElement()).to.equal(confirmButton);
+    });
+
+    it('should restore focus on dialog close', async () => {
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      confirm.opened = false;
+      await aTimeout(0);
+      expect(getDeepActiveElement()).to.equal(button);
     });
   });
 });

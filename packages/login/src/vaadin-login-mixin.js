@@ -102,7 +102,9 @@ export const LoginMixin = (superClass) =>
          *   },
          *   errorMessage: {
          *     title: 'Incorrect username or password',
-         *     message: 'Check that you have entered the correct username and password and try again.'
+         *     message: 'Check that you have entered the correct username and password and try again.',
+         *     username: 'Username is required',
+         *     password: 'Password is required'
          *   },
          *   additionalInformation: 'In case you need to provide some additional info for the user.'
          * }
@@ -125,6 +127,8 @@ export const LoginMixin = (superClass) =>
               errorMessage: {
                 title: 'Incorrect username or password',
                 message: 'Check that you have entered the correct username and password and try again.',
+                username: 'Username is required',
+                password: 'Password is required',
               },
             };
           },

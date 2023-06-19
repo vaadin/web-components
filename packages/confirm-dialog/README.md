@@ -13,7 +13,7 @@ A modal dialog web component for confirming user actions.
 </vaadin-confirm-dialog>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/confirm-dialog/screenshot.png" width="200" alt="Screenshot of vaadin-confirm-dialog">](https://vaadin.com/docs/latest/components/confirm-dialog)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/confirm-dialog/screenshot.png" width="200" alt="Screenshot of vaadin-confirm-dialog">](https://vaadin.com/docs/latest/components/confirm-dialog)
 
 ## Installation
 
@@ -32,7 +32,7 @@ import '@vaadin/confirm-dialog';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/confirm-dialog/vaadin-confirm-dialog.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/confirm-dialog/vaadin-confirm-dialog.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

@@ -24,7 +24,7 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/grid-pro/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/docs/latest/components/grid-pro)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/grid-pro/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/docs/latest/components/grid-pro)
 
 ## Installation
 
@@ -44,7 +44,7 @@ import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/grid-pro/vaadin-grid-pro.js) of the package uses the Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/grid-pro/vaadin-grid-pro.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the components from the `theme/material` folder:
 

@@ -121,7 +121,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### “vaadin-contextmenu” Gesture Event
+ * ### `vaadin-contextmenu` Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
  * which is dispatched after either `contextmenu` or long touch events.
@@ -266,6 +266,11 @@ declare class ContextMenu extends OverlayClassMixin(ElementMixin(ThemePropertyMi
    *   - `context.detail` the menu opening event detail.
    */
   renderer: ContextMenuRenderer | null | undefined;
+
+  /**
+   * When true, the menu overlay is modeless.
+   */
+  protected _modeless: boolean;
 
   /**
    * Requests an update for the content of the menu overlay.

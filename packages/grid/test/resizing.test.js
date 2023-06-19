@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -7,6 +8,7 @@ import {
   flushGrid,
   getContainerCellContent,
   getHeaderCellContent,
+  getLastVisibleItem,
   getPhysicalItems,
   getRowCells,
   getRows,
@@ -211,6 +213,75 @@ describe('all rows visible', () => {
       grid.items = [{ value: 1 }];
       flushGrid(grid);
       expect(getPhysicalItems(grid).length).to.be.above(0);
+    });
+  });
+
+  describe('max-height', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`
+        <div>
+          <vaadin-grid>
+            <vaadin-grid-column path="value"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+      `);
+      grid = wrapper.firstElementChild;
+      grid.allRowsVisible = true;
+      grid.style.maxHeight = '300px';
+      grid.items = [...Array(100)].map((_, idx) => ({ value: idx }));
+      grid.dataProvider = sinon.spy(grid.dataProvider);
+      flushGrid(grid);
+    });
+
+    it('should include rows', () => {
+      const lastRowRect = getLastVisibleItem(grid).getBoundingClientRect();
+      const gridRect = grid.getBoundingClientRect();
+      expect(lastRowRect.top).to.be.below(gridRect.bottom);
+      expect(lastRowRect.bottom).to.be.above(gridRect.bottom);
+    });
+
+    it('should not overflow rows', () => {
+      const gridRect = grid.getBoundingClientRect();
+      const belowGrid = document.elementFromPoint(gridRect.left + 1, gridRect.bottom + 1);
+      expect(grid.contains(belowGrid)).to.be.false;
+    });
+
+    it('should not grow beyond max-height', () => {
+      expect(grid.getBoundingClientRect().height).to.equal(300);
+    });
+
+    it('should shrink below max-height', () => {
+      grid.items = [{ value: 0 }];
+      flushGrid(grid);
+      expect(grid.getBoundingClientRect().height).to.be.below(100);
+    });
+
+    it('should have requested first page initially', () => {
+      const calls = grid.dataProvider.getCalls();
+      expect(calls.some((call) => call.firstArg.page === 0)).to.be.true;
+    });
+
+    it('should not have requested second page initially', () => {
+      const calls = grid.dataProvider.getCalls();
+      expect(calls.some((call) => call.firstArg.page === 1)).to.be.false;
+    });
+
+    it('should request second page when max-height is reset', () => {
+      grid.style.maxHeight = '';
+      flushGrid(grid);
+      const calls = grid.dataProvider.getCalls();
+      expect(calls.some((call) => call.firstArg.page === 1)).to.be.true;
+    });
+
+    it('should not overflow rows when using relative max-height', () => {
+      wrapper.style.height = '600px';
+      grid.style.maxHeight = '50%';
+
+      const gridRect = grid.getBoundingClientRect();
+      const belowGrid = document.elementFromPoint(gridRect.left + 1, gridRect.bottom + 1);
+      expect(grid.contains(belowGrid)).to.be.false;
     });
   });
 });

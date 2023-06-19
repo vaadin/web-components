@@ -28,7 +28,7 @@ import '@vaadin/text-area';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/text-area/vaadin-text-area.js) of the package uses Lumo theme.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/text-area/vaadin-text-area.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 

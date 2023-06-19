@@ -43,11 +43,6 @@ export function getDefaultI18n() {
   };
 }
 
-export async function open(datepicker) {
-  datepicker.open();
-  await waitForOverlayRender();
-}
-
 export async function waitForOverlayRender() {
   // First, wait for vaadin-overlay-open event
   await nextRender();
@@ -59,10 +54,15 @@ export async function waitForOverlayRender() {
   flush();
 }
 
-export function close(datepicker) {
+export async function open(datePicker) {
+  datePicker.open();
+  await waitForOverlayRender();
+}
+
+export function close(datePicker) {
   return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
-    datepicker.close();
+    listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', resolve);
+    datePicker.close();
   });
 }
 
@@ -74,20 +74,6 @@ export function idleCallback() {
       setTimeout(resolve, 16);
     }
   });
-}
-
-/**
- * Emulates clicking outside the dropdown overlay
- */
-export function outsideClick() {
-  // Move focus to body
-  document.body.tabIndex = 0;
-  // Clear keyboardActive flag
-  mousedown(document.body);
-  document.body.focus();
-  document.body.tabIndex = -1;
-  // Outside click
-  document.body.click();
 }
 
 /**
@@ -123,28 +109,15 @@ export function getFirstVisibleItem(scroller, bufferOffset = 0) {
 }
 
 export function getFocusedMonth(overlayContent) {
-  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
+  const months = [...overlayContent.querySelectorAll('vaadin-month-calendar')];
   return months.find((month) => {
-    const focused = month.shadowRoot.querySelector('[part~="focused"]');
-    return !!focused;
+    return !!month.shadowRoot.querySelector('[part~="focused"]');
   });
 }
 
 export function getFocusedCell(overlayContent) {
-  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
-
-  // Date that is currently focused
-  let focusedCell;
-
-  for (let i = 0; i < months.length; i++) {
-    focusedCell = months[i].shadowRoot.querySelector('[part~="focused"]');
-
-    if (focusedCell) {
-      break;
-    }
-  }
-
-  return focusedCell;
+  const focusedMonth = getFocusedMonth(overlayContent);
+  return focusedMonth.shadowRoot.querySelector('[part~="focused"]');
 }
 
 /**

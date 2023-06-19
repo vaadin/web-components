@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/text-area",
-  "version": "24.0.0-alpha12",
+  "version": "24.2.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-text-area.d.ts",
+    "!src/vaadin-lit-text-area.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -34,17 +36,20 @@
     "web-component"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.0.0-alpha12",
-    "@vaadin/field-base": "24.0.0-alpha12",
-    "@vaadin/input-container": "24.0.0-alpha12",
-    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha12",
-    "@vaadin/vaadin-material-styles": "24.0.0-alpha12",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha12"
+    "@vaadin/a11y-base": "24.2.0-alpha0",
+    "@vaadin/component-base": "24.2.0-alpha0",
+    "@vaadin/field-base": "24.2.0-alpha0",
+    "@vaadin/input-container": "24.2.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.2.0-alpha0",
+    "@vaadin/vaadin-material-styles": "24.2.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.2.0-alpha0",
+    "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.4.0",
+    "@vaadin/testing-helpers": "^0.4.2",
     "sinon": "^13.0.2"
   },
   "web-types": [

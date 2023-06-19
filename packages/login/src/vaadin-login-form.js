@@ -65,6 +65,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           <vaadin-text-field
             name="username"
             label="[[i18n.form.username]]"
+            error-message="[[i18n.errorMessage.username]]"
             id="vaadinLoginUsername"
             required
             on-keydown="_handleInputKeydown"
@@ -79,6 +80,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           <vaadin-password-field
             name="password"
             label="[[i18n.form.password]]"
+            error-message="[[i18n.errorMessage.password]]"
             id="vaadinLoginPassword"
             required
             on-keydown="_handleInputKeydown"
@@ -177,7 +179,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       const nextInput =
         inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
       if (inputActive.validate()) {
-        if (nextInput.validate()) {
+        if (nextInput.checkValidity()) {
           this.submit();
         } else {
           nextInput.focus();

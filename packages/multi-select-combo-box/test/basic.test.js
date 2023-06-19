@@ -4,6 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 describe('basic', () => {
   let comboBox, internal, inputElement;
@@ -222,6 +223,21 @@ describe('basic', () => {
       comboBox.selectedItems = ['apple', 'orange'];
       clearButton.dispatchEvent(new CustomEvent('touchend', { cancelable: true }));
       expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+  });
+
+  describe('toggle button', () => {
+    let toggleButton;
+
+    beforeEach(() => {
+      toggleButton = comboBox.$.toggleButton;
+    });
+
+    // WebKit returns true for isTouch in the test envirnoment. This test fails when isTouch == true, which is a correct behavior
+    (isTouch ? it.skip : it)('should focus input element on toggle button click', () => {
+      toggleButton.click();
+      expect(internal.opened).to.be.true;
+      expect(document.activeElement).to.equal(inputElement);
     });
   });
 

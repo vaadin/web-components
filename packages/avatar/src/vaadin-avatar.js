@@ -5,9 +5,9 @@
  */
 import './vaadin-avatar-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -111,7 +111,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
-        <text dy=".35em" text-anchor="middle"></text>
+        <text dy=".35em" text-anchor="middle">&#xea01;</text>
       </svg>
       <svg
         part="abbr"

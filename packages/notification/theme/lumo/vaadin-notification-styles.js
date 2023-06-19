@@ -183,6 +183,19 @@ registerStyles(
       --_lumo-button-primary-background-color: var(--lumo-error-contrast-color);
       --_lumo-button-primary-color: var(--lumo-error-text-color);
     }
+
+    :host([theme~='warning']) [part='overlay'] {
+      background: var(--lumo-warning-color);
+      color: var(--lumo-warning-contrast-color);
+      box-shadow: inset 0 0 0 1px var(--lumo-contrast-20pct), var(--lumo-box-shadow-l);
+    }
+
+    :host([theme~='warning']) {
+      --_lumo-button-background-color: var(--lumo-shade-20pct);
+      --_lumo-button-color: var(--lumo-warning-contrast-color);
+      --_lumo-button-primary-background-color: var(--lumo-shade-50pct);
+      --_lumo-button-primary-color: var(--lumo-primary-contrast-color);
+    }
   `,
   { moduleId: 'lumo-notification-card' },
 );

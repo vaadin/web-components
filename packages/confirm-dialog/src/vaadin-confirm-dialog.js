@@ -5,9 +5,11 @@
  */
 import './vaadin-confirm-dialog-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -101,6 +103,19 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
 
   static get properties() {
     return {
+      /**
+       * Sets the `aria-describedby` attribute of the overlay element.
+       *
+       * By default, all elements inside the message area are linked
+       * through the `aria-describedby` attribute. However, there are
+       * cases where this can confuse screen reader users (e.g. the dialog
+       * may present a password confirmation form). For these cases,
+       * it's better to associate only the elements that will help describe
+       * the confirmation dialog through this API.
+       */
+      accessibleDescriptionRef: {
+        type: String,
+      },
       /**
        * True if the overlay is currently displayed.
        * @type {boolean}
@@ -302,6 +317,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNodes(_messageNodes, message)',
       '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
+      '__accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef)',
     ];
   }
 
@@ -325,6 +341,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
     this._overlayElement.addEventListener('vaadin-overlay-closed', () => this.__onDialogClosed());
+    this._overlayElement.setAttribute('role', 'alertdialog');
 
     this._headerController = new SlotController(this, 'header', 'h3', {
       initializer: (node) => {
@@ -338,7 +355,14 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       multiple: true,
       observe: false,
       initializer: (node) => {
-        this._messageNodes = [...this._messageNodes, node];
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'contents';
+        const wrapperId = `confirm-dialog-message-${generateUniqueId()}`;
+        wrapper.id = wrapperId;
+        wrapper.appendChild(node);
+        this.appendChild(wrapper);
+        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapperId });
+        this._messageNodes = [...this._messageNodes, wrapper];
       },
     });
     this.addController(this._messageController);
@@ -364,6 +388,19 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       },
     });
     this.addController(this._confirmController);
+  }
+
+  /** @private */
+  __accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef) {
+    if (!_overlayElement || (!accessibleDescriptionRef && !this.__oldAccessibleDescriptionRef)) {
+      return;
+    }
+    setAriaIDReference(this._overlayElement, 'aria-describedby', {
+      newId: accessibleDescriptionRef,
+      oldId: this.__oldAccessibleDescriptionRef,
+      fromUser: true,
+    });
+    this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
   }
 
   /** @private */
@@ -432,9 +469,11 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   /** @private */
   __updateMessageNodes(nodes, message) {
     if (nodes && nodes.length > 0) {
-      const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
-      if (defaultNode) {
-        defaultNode.textContent = message;
+      const defaultWrapperNode = nodes.find(
+        (node) => this._messageController.defaultNode && node === this._messageController.defaultNode.parentElement,
+      );
+      if (defaultWrapperNode) {
+        defaultWrapperNode.firstChild.textContent = message;
       }
     }
   }

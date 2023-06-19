@@ -5,7 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { getBodyRowCells, iterateChildren, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
  * @private
@@ -85,18 +85,31 @@ export const ItemCache = class ItemCache {
    */
   getCacheAndIndex(index) {
     let thisLevelIndex = index;
-    const keys = Object.keys(this.itemCaches);
-    for (let i = 0; i < keys.length; i++) {
-      const expandedIndex = Number(keys[i]);
-      const subCache = this.itemCaches[expandedIndex];
-      if (thisLevelIndex <= expandedIndex) {
+    for (const [index, subCache] of Object.entries(this.itemCaches)) {
+      const numberIndex = Number(index);
+      if (thisLevelIndex <= numberIndex) {
         return { cache: this, scaledIndex: thisLevelIndex };
-      } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
-        return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
+      } else if (thisLevelIndex <= numberIndex + subCache.effectiveSize) {
+        return subCache.getCacheAndIndex(thisLevelIndex - numberIndex - 1);
       }
       thisLevelIndex -= subCache.effectiveSize;
     }
     return { cache: this, scaledIndex: thisLevelIndex };
+  }
+
+  /**
+   * Gets the scaled index as flattened index on this cache level.
+   * In practice, this means that the effective size of any expanded
+   * subcaches preceding the index are added to the value.
+   * @param {number} scaledIndex
+   * @return {number} The flat index on this cache level.
+   */
+  getFlatIndex(scaledIndex) {
+    const clampedIndex = Math.max(0, Math.min(this.size - 1, scaledIndex));
+
+    return Object.entries(this.itemCaches).reduce((prev, [index, subCache]) => {
+      return clampedIndex > Number(index) ? prev + subCache.effectiveSize : prev;
+    }, clampedIndex);
   }
 };
 
@@ -384,47 +397,57 @@ export const DataProviderMixin = (superClass) =>
             cache.size = items.length;
           }
 
-          const currentItems = Array.from(this.$.items.children).map((row) => row._item);
-
           // Populate the cache with new items
           items.forEach((item, itemsIndex) => {
             const itemIndex = page * this.pageSize + itemsIndex;
             cache.items[itemIndex] = item;
-            if (this._isExpanded(item) && currentItems.indexOf(item) > -1) {
-              // Force synchronous data request for expanded item sub-cache
-              cache.ensureSubCacheForScaledIndex(itemIndex);
+          });
+
+          // With the new items added, update the cache size and the grid's effective size
+          this._cache.updateSize();
+          this._effectiveSize = this._cache.effectiveSize;
+
+          // After updating the cache, check if some of the expanded items should have sub-caches loaded
+          this._getRenderedRows().forEach((row) => {
+            const { cache, scaledIndex } = this._cache.getCacheAndIndex(row.index);
+            const item = cache.items[scaledIndex];
+            if (item && this._isExpanded(item)) {
+              cache.ensureSubCacheForScaledIndex(scaledIndex);
             }
           });
 
           this._hasData = true;
 
+          // Remove the pending request
           delete cache.pendingRequests[page];
 
+          // Schedule a debouncer to update the visible rows
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
             this._setLoading(false);
-            this._cache.updateSize();
-            this._effectiveSize = this._cache.effectiveSize;
 
-            iterateChildren(this.$.items, (row) => {
-              if (!row.hidden) {
-                const cachedItem = this._cache.getItemForIndex(row.index);
-                if (cachedItem) {
-                  this._getItem(row.index, row);
-                }
+            this._getRenderedRows().forEach((row) => {
+              const cachedItem = this._cache.getItemForIndex(row.index);
+              if (cachedItem) {
+                this._getItem(row.index, row);
               }
             });
 
-            this.__scrollToPendingIndex();
+            this.__scrollToPendingIndexes();
           });
 
+          // If the grid is not loading anything, flush the debouncer immediately
           if (!this._cache.isLoading()) {
             this._debouncerApplyCachedData.flush();
           }
 
-          this.__itemsReceived();
+          // Notify that new data has been received
+          this._onDataProviderPageLoaded();
         });
       }
     }
+
+    /** @protected */
+    _onDataProviderPageLoaded() {}
 
     /**
      * @param {number} index
@@ -461,10 +484,10 @@ export const DataProviderMixin = (superClass) =>
     _checkSize() {
       if (this.size === undefined && this._effectiveSize === 0) {
         console.warn(
-          'The <vaadin-grid> needs the total number of items' +
-            ' in order to display rows. Set the total number of items' +
-            ' to the `size` property, or provide the total number of items' +
-            ' in the second argument of the `dataProvider`’s `callback` call.',
+          'The <vaadin-grid> needs the total number of items in' +
+            ' order to display rows, which you can specify either by setting' +
+            ' the `size` property, or by providing it to the second argument' +
+            ' of the `dataProvider` function `callback` call.',
         );
       }
     }
@@ -519,19 +542,65 @@ export const DataProviderMixin = (superClass) =>
       return result;
     }
 
-    scrollToIndex(index) {
-      super.scrollToIndex(index);
-      if (!isNaN(index) && (this._cache.isLoading() || !this.clientHeight)) {
-        this.__pendingScrollToIndex = index;
+    /**
+     * Scroll to a specific row index in the virtual list. Note that the row index is
+     * not always the same for any particular item. For example, sorting or filtering
+     * items can affect the row index related to an item.
+     *
+     * The `indexes` parameter can be either a single number or multiple numbers.
+     * The grid will first try to scroll to the item at the first index on the top level.
+     * In case the item at the first index is expanded, the grid will then try scroll to the
+     * item at the second index within the children of the expanded first item, and so on.
+     * Each given index points to a child of the item at the previous index.
+     *
+     * Using `Infinity` as an index will point to the last item on the level.
+     *
+     * @param indexes {...number} Row indexes to scroll to
+     */
+    scrollToIndex(...indexes) {
+      // Synchronous data provider may cause changes to the cache on scroll without
+      // ending up in a loading state. Try scrolling to the index until the target
+      // index stabilizes.
+      let targetIndex;
+      while (targetIndex !== (targetIndex = this.__getGlobalFlatIndex(indexes))) {
+        this._scrollToFlatIndex(targetIndex);
+      }
+
+      if (this._cache.isLoading() || !this.clientHeight) {
+        this.__pendingScrollToIndexes = indexes;
       }
     }
 
+    /**
+     * Recursively returns the globally flat index of the item the given indexes point to.
+     * Each index in the array points to a sub-item of the previous index.
+     * Using `Infinity` as an index will point to the last item on the level.
+     *
+     * @param {!Array<number>} indexes
+     * @param {!ItemCache} cache
+     * @param {number} flatIndex
+     * @return {number}
+     * @private
+     */
+    __getGlobalFlatIndex([levelIndex, ...subIndexes], cache = this._cache, flatIndex = 0) {
+      if (levelIndex === Infinity) {
+        // Treat Infinity as the last index on the level
+        levelIndex = cache.size - 1;
+      }
+      const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
+      const subCache = cache.itemCaches[levelIndex];
+      if (subCache && subCache.effectiveSize && subIndexes.length) {
+        return this.__getGlobalFlatIndex(subIndexes, subCache, flatIndex + flatIndexOnLevel + 1);
+      }
+      return flatIndex + flatIndexOnLevel;
+    }
+
     /** @private */
-    __scrollToPendingIndex() {
-      if (this.__pendingScrollToIndex && this.$.items.children.length) {
-        const index = this.__pendingScrollToIndex;
-        delete this.__pendingScrollToIndex;
-        this.scrollToIndex(index);
+    __scrollToPendingIndexes() {
+      if (this.__pendingScrollToIndexes && this.$.items.children.length) {
+        const indexes = this.__pendingScrollToIndexes;
+        delete this.__pendingScrollToIndexes;
+        this.scrollToIndex(...indexes);
       }
     }
 

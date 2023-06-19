@@ -94,7 +94,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * ### “vaadin-contextmenu” Gesture Event
+ * ### `vaadin-contextmenu` Gesture Event
  *
  * `vaadin-contextmenu` is a gesture event (a custom event),
  * which is dispatched after either `contextmenu` or long touch events.
@@ -225,12 +225,12 @@ class ContextMenu extends OverlayClassMixin(
         id="overlay"
         on-opened-changed="_onOverlayOpened"
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
+        modeless="[[_modeless]]"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         model="[[_context]]"
         theme$="[[_theme]]"
-      >
-      </vaadin-context-menu-overlay>
+      ></vaadin-context-menu-overlay>
     `;
   }
 
@@ -309,6 +309,14 @@ class ContextMenu extends OverlayClassMixin(
         type: Function,
       },
 
+      /**
+       * When true, the menu overlay is modeless.
+       * @protected
+       */
+      _modeless: {
+        type: Boolean,
+      },
+
       /** @private */
       _context: Object,
 
@@ -359,6 +367,11 @@ class ContextMenu extends OverlayClassMixin(
 
     this.__boundOnScroll = this.__onScroll.bind(this);
     window.addEventListener('scroll', this.__boundOnScroll, true);
+
+    // Restore opened state if overlay was opened when disconnecting
+    if (this.__restoreOpened) {
+      this._setOpened(true);
+    }
   }
 
   /** @protected */
@@ -366,6 +379,9 @@ class ContextMenu extends OverlayClassMixin(
     super.disconnectedCallback();
 
     window.removeEventListener('scroll', this.__boundOnScroll, true);
+
+    // Close overlay and memorize opened state
+    this.__restoreOpened = this.opened;
     this.close();
   }
 

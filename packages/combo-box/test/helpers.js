@@ -79,18 +79,6 @@ export const clickItem = (comboBox, index) => {
 };
 
 /**
- * Emulates clicking outside the dropdown overlay
- */
-export function outsideClick() {
-  // Move focus to body
-  document.body.tabIndex = 0;
-  document.body.focus();
-  document.body.tabIndex = -1;
-  // Outside click
-  document.body.click();
-}
-
-/**
  * Emulates the user filling in something in the combo-box input.
  *
  * @param {Element} comboBox

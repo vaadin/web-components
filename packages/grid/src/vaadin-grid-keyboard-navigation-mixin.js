@@ -3,8 +3,8 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
  * @polymerMixin
@@ -120,7 +120,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.addEventListener('focusout', this._onFocusOut);
 
       // When focus goes from cell to another cell, focusin/focusout events do
-      // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
+      // not escape the grid's shadowRoot, thus listening inside the shadowRoot.
       this.$.table.addEventListener('focusin', this._onContentFocusIn.bind(this));
 
       this.addEventListener('mousedown', () => {
@@ -177,7 +177,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       const wasFocused = this.shadowRoot.activeElement === this._itemsFocusable;
 
-      this._getVisibleRows().forEach((row) => {
+      this._getRenderedRows().forEach((row) => {
         if (row.index === this._focusedItemIndex) {
           if (this.__rowFocusMode) {
             // Row focus mode
@@ -243,7 +243,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       this._detectInteracting(e);
       if (this.interacting && keyGroup !== 'Interaction') {
-        // When in the interacting mode, only the “Interaction” keys are handled.
+        // When in the interacting mode, only the "Interaction" keys are handled.
         keyGroup = undefined;
       }
 
@@ -521,12 +521,17 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      const columnIndex = this.__getIndexOfChildElement(activeCell);
+      let columnIndex = this.__getIndexOfChildElement(activeCell);
+      if (this.$.items.contains(activeCell)) {
+        // lazy column rendering may be enabled, so we need use the always visible sizer cells to find the column index
+        columnIndex = [...this.$.sizer.children].findIndex((sizerCell) => sizerCell._column === activeCell._column);
+      }
+
       const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
-      // _focusedColumnOrder is memoized — this is to ensure predictable
+      // _focusedColumnOrder is memoized - this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
       if (this._focusedColumnOrder === undefined) {
         if (isCurrentCellRowDetails) {
@@ -545,7 +550,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       } else {
         // Focusing a regular cell on the destination row
 
-        // Find orderedColumnIndex — the index of order closest matching the
+        // Find orderedColumnIndex - the index of order closest matching the
         // original _focusedColumnOrder in the sorted array of orders
         // of the visible columns on the destination row.
         const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);
@@ -574,9 +579,27 @@ export const KeyboardNavigationMixin = (superClass) =>
           return acc;
         }, {});
         const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
-        const dstCell = dstRow.children[dstColumnIndex];
 
-        this._scrollHorizontallyToCell(dstCell);
+        let dstCell;
+        if (this.$.items.contains(activeCell)) {
+          const dstSizerCell = this.$.sizer.children[dstColumnIndex];
+          if (this._lazyColumns) {
+            // If the column is not in the viewport, scroll it into view.
+            if (!this.__isColumnInViewport(dstSizerCell._column)) {
+              dstSizerCell.scrollIntoView();
+            }
+            this.__updateColumnsBodyContentHidden();
+            this.__updateHorizontalScrollPosition();
+          }
+
+          dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
+          // Ensure correct horizontal scroll position once the destination cell is available.
+          this._scrollHorizontallyToCell(dstCell);
+        } else {
+          dstCell = dstRow.children[dstColumnIndex];
+          this._scrollHorizontallyToCell(dstCell);
+        }
+
         dstCell.focus();
       }
     }

@@ -118,10 +118,15 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   }
 
   /**
-   * @return {string}
+   * Override this getter from `InputMixin` to allow using
+   * an arbitrary property name instead of `value`
+   * for accessing the input element's value.
+   *
    * @protected
+   * @override
+   * @return {string}
    */
-  get _propertyForValue() {
+  get _inputElementValueProperty() {
     return dashToCamelCase(this.attrForValue);
   }
 
@@ -198,8 +203,24 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
     super._onChange(event);
 
     if (this._isClearButton(event)) {
-      this._clear();
+      this._onClearAction();
     }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onFocusout(event) {
+    const isBlurringControlButtons = event.target === this._toggleElement || event.target === this.clearElement;
+    const isFocusingInputElement = event.relatedTarget && event.relatedTarget === this._nativeInput;
+
+    // prevent closing the overlay when moving focus from clear or toggle buttons to the internal input
+    if (isBlurringControlButtons && isFocusingInputElement) {
+      return;
+    }
+
+    super._onFocusout(event);
   }
 }
 

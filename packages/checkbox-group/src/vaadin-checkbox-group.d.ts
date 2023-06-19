@@ -3,9 +3,9 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -38,10 +38,11 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
  *
  * ```html
- * <vaadin-checkbox-group label="Preferred language of contact:">
- *   <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
- *   <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
- *   <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
+ * <vaadin-checkbox-group label="Export data">
+ *   <vaadin-checkbox value="0" label="Order ID"></vaadin-checkbox>
+ *   <vaadin-checkbox value="1" label="Product name"></vaadin-checkbox>
+ *   <vaadin-checkbox value="2" label="Customer"></vaadin-checkbox>
+ *   <vaadin-checkbox value="3" label="Status"></vaadin-checkbox>
  * </vaadin-checkbox-group>
  * ```
  *

@@ -25,7 +25,7 @@ registerStyles(
     }
 
     [part='required-indicator']::after {
-      content: var(--lumo-required-field-indicator, '•');
+      content: var(--lumo-required-field-indicator, '\\2022');
       transition: opacity 0.2s;
       opacity: 0;
       color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));

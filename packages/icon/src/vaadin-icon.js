@@ -85,7 +85,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="[[__computeViewBox(size, __viewBox)]]"
-        preserveAspectRatio="xMidYMid meet"
+        preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
         aria-hidden="true"
       ></svg>
 
@@ -130,6 +130,15 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
       },
 
       /** @private */
+      __defaultPAR: {
+        type: String,
+        value: 'xMidYMid meet',
+      },
+
+      /** @private */
+      __preserveAspectRatio: String,
+
+      /** @private */
       __svgElement: Object,
 
       /** @private */
@@ -166,10 +175,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
   /** @protected */
   _applyIcon() {
-    const { svg, size, viewBox } = Iconset.getIconSvg(this.icon);
+    const { preserveAspectRatio, svg, size, viewBox } = Iconset.getIconSvg(this.icon);
 
     if (viewBox) {
       this.__viewBox = viewBox;
+    }
+
+    if (preserveAspectRatio) {
+      this.__preserveAspectRatio = preserveAspectRatio;
     }
 
     if (size && size !== this.size) {
@@ -195,6 +208,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     }
 
     renderSvg(svg, svgElement);
+  }
+
+  /** @private */
+  __computePAR(defaultPAR, preserveAspectRatio) {
+    return preserveAspectRatio || defaultPAR;
   }
 
   /** @private */

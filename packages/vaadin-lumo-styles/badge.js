@@ -52,6 +52,11 @@ const badge = css`
     background-color: var(--lumo-error-color-10pct);
   }
 
+  [theme~='badge'][theme~='warning'] {
+    color: var(--lumo-warning-text-color);
+    background-color: var(--lumo-warning-color-10pct);
+  }
+
   [theme~='badge'][theme~='contrast'] {
     color: var(--lumo-contrast-80pct);
     background-color: var(--lumo-contrast-5pct);
@@ -72,6 +77,11 @@ const badge = css`
   [theme~='badge'][theme~='error'][theme~='primary'] {
     color: var(--lumo-error-contrast-color);
     background-color: var(--lumo-error-color);
+  }
+
+  [theme~='badge'][theme~='warning'][theme~='primary'] {
+    color: var(--lumo-warning-contrast-color);
+    background-color: var(--lumo-warning-color);
   }
 
   [theme~='badge'][theme~='contrast'][theme~='primary'] {
@@ -138,6 +148,10 @@ const badge = css`
 
   [theme~='badge'][theme~='error']:not([icon]):empty {
     background-color: var(--lumo-error-color);
+  }
+
+  [theme~='badge'][theme~='warning']:not([icon]):empty {
+    background-color: var(--lumo-warning-color);
   }
 
   /* Pill */

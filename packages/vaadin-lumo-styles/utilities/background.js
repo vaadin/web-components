@@ -78,4 +78,11 @@ export const background = css`
   .bg-success-10 {
     background-color: var(--lumo-success-color-10pct);
   }
+
+  .bg-warning {
+    background-color: var(--lumo-warning-color);
+  }
+  .bg-warning-10 {
+    background-color: var(--lumo-warning-color-10pct);
+  }
 `;

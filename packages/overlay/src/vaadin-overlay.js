@@ -6,11 +6,11 @@
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
+import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -74,9 +74,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
- * @mixes ControllerMixin
+ * @mixes OverlayFocusMixin
  */
-class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
+class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -203,7 +203,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
       /**
        * When true the overlay won't disable the main content, showing
-       * it doesn’t change the functionality of the user interface.
+       * it doesn't change the functionality of the user interface.
        * @type {boolean}
        */
       modeless: {
@@ -222,34 +222,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         type: Boolean,
         reflectToAttribute: true,
         observer: '_hiddenChanged',
-      },
-
-      /**
-       * When true move focus to the first focusable element in the overlay,
-       * or to the overlay if there are no focusable elements.
-       * @type {boolean}
-       */
-      focusTrap: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to true to enable restoring of focus when overlay is closed.
-       * @type {boolean}
-       */
-      restoreFocusOnClose: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to specify the element which should be focused on overlay close,
-       * if `restoreFocusOnClose` is set to true.
-       * @type {HTMLElement}
-       */
-      restoreFocusNode: {
-        type: HTMLElement,
       },
 
       /** @private */
@@ -280,16 +252,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     return ['_rendererOrDataChanged(renderer, owner, model, opened)'];
   }
 
-  /**
-   * Returns all attached overlays in visual stacking order.
-   * @private
-   */
-  static get __attachedInstances() {
-    return Array.from(document.body.children)
-      .filter((el) => el instanceof Overlay && !el.hasAttribute('closing'))
-      .sort((a, b) => a.__zIndex - b.__zIndex || 0);
-  }
-
   constructor() {
     super();
     this._boundMouseDownListener = this._mouseDownListener.bind(this);
@@ -301,17 +263,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
-
-    this.__focusTrapController = new FocusTrapController(this);
-  }
-
-  /**
-   * Returns true if this is the last one in the opened overlays stack
-   * @return {boolean}
-   * @protected
-   */
-  get _last() {
-    return this === Overlay.__attachedInstances.pop();
   }
 
   /** @protected */
@@ -324,8 +275,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     // and <vaadin-context-menu>).
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
-
-    this.addController(this.__focusTrapController);
 
     processTemplates(this);
   }
@@ -482,14 +431,12 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      // Store focused node.
-      this.__restoreFocusNode = this._getActiveElement();
+      this._saveFocus();
+
       this._animatedOpening();
 
       afterNextRender(this, () => {
-        if (this.focusTrap) {
-          this.__focusTrapController.trapFocus(this.$.overlay);
-        }
+        this._trapFocus();
 
         const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
         this.dispatchEvent(evt);
@@ -501,9 +448,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
         this._addGlobalListeners();
       }
     } else if (wasOpened) {
-      if (this.focusTrap) {
-        this.__focusTrapController.releaseFocus();
-      }
+      this._resetFocus();
 
       this._animatedClosing();
 
@@ -611,27 +556,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
     if (this._placeholder) {
       this._exitModalState();
-
-      // Use this.restoreFocusNode if specified, otherwise fallback to the node
-      // which was focused before opening the overlay.
-      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
-
-      if (this.restoreFocusOnClose && restoreFocusNode) {
-        // If the activeElement is `<body>` or inside the overlay,
-        // we are allowed to restore the focus. In all the other
-        // cases focus might have been moved elsewhere by another
-        // component or by the user interaction (e.g. click on a
-        // button outside the overlay).
-        const activeElement = this._getActiveElement();
-
-        if (activeElement === document.body || this._deepContains(activeElement)) {
-          // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
-          // (e.g. combo-box overlay close on outside click).
-          setTimeout(() => restoreFocusNode.focus());
-        }
-        this.__restoreFocusNode = null;
-      }
-
       this.setAttribute('closing', '');
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
@@ -674,52 +598,10 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   }
 
   /** @private */
-  _enterModalState() {
-    if (document.body.style.pointerEvents !== 'none') {
-      // Set body pointer-events to 'none' to disable mouse interactions with
-      // other document nodes.
-      this._previousDocumentPointerEvents = document.body.style.pointerEvents;
-      document.body.style.pointerEvents = 'none';
-    }
-
-    // Disable pointer events in other attached overlays
-    Overlay.__attachedInstances.forEach((el) => {
-      if (el !== this) {
-        el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
-      }
-    });
-  }
-
-  /** @private */
   _removeGlobalListeners() {
     document.removeEventListener('mousedown', this._boundMouseDownListener);
     document.removeEventListener('mouseup', this._boundMouseUpListener);
     document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
-  }
-
-  /** @private */
-  _exitModalState() {
-    if (this._previousDocumentPointerEvents !== undefined) {
-      // Restore body pointer-events
-      document.body.style.pointerEvents = this._previousDocumentPointerEvents;
-      delete this._previousDocumentPointerEvents;
-    }
-
-    // Restore pointer events in the previous overlay(s)
-    const instances = Overlay.__attachedInstances;
-    let el;
-    // Use instances.pop() to ensure the reverse order
-    while ((el = instances.pop())) {
-      if (el === this) {
-        // Skip the current instance
-        continue;
-      }
-      el.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
-      if (!el.modeless) {
-        // Stop after the last modal
-        break;
-      }
-    }
   }
 
   /** @private */
@@ -745,52 +627,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
       this.requestContentUpdate();
     }
-  }
-
-  /**
-   * @return {!Element}
-   * @private
-   */
-  _getActiveElement() {
-    // Document.activeElement can be null
-    // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
-    let active = document.activeElement || document.body;
-    while (active.shadowRoot && active.shadowRoot.activeElement) {
-      active = active.shadowRoot.activeElement;
-    }
-    return active;
-  }
-
-  /**
-   * @param {!Node} node
-   * @return {boolean}
-   * @private
-   */
-  _deepContains(node) {
-    if (this.contains(node)) {
-      return true;
-    }
-    let n = node;
-    const doc = node.ownerDocument;
-    // Walk from node to `this` or `document`
-    while (n && n !== doc && n !== this) {
-      n = n.parentNode || n.host;
-    }
-    return n === this;
-  }
-
-  /**
-   * Brings the overlay as visually the frontmost one
-   */
-  bringToFront() {
-    let zIndex = '';
-    const frontmost = Overlay.__attachedInstances.filter((o) => o !== this).pop();
-    if (frontmost) {
-      const frontmostZIndex = frontmost.__zIndex;
-      zIndex = frontmostZIndex + 1;
-    }
-    this.style.zIndex = zIndex;
-    this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
   }
 
   /**

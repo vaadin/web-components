@@ -9,7 +9,7 @@ import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -492,6 +492,26 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     ];
   }
 
+  /** @private */
+  get __acceptRegexp() {
+    if (!this.accept) {
+      return null;
+    }
+    const processedTokens = this.accept.split(',').map((token) => {
+      let processedToken = token.trim();
+      // Escape regex operators common to mime types
+      processedToken = processedToken.replace(/[+.]/gu, '\\$&');
+      // Make extension patterns match the end of the file name
+      if (processedToken.startsWith('\\.')) {
+        processedToken = `.*${processedToken}$`;
+      }
+      // Handle star (*) wildcards
+      return processedToken.replace(/\/\*/gu, '/.*');
+    });
+    // Create accept regex
+    return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -879,12 +899,8 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       );
       return;
     }
-    const fileExt = file.name.match(/\.[^.]*$|$/u)[0];
-    // Escape regex operators common to mime types
-    const escapedAccept = this.accept.replace(/[+.]/gu, '\\$&');
-    // Create accept regex that can match comma separated patterns, star (*) wildcards
-    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/gu, '|').replace(/\/\*/gu, '/.*')})$`, 'iu');
-    if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
+    const re = this.__acceptRegexp;
+    if (re && !(re.test(file.type) || re.test(file.name))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
           detail: { file, error: this.i18n.error.incorrectFileType },

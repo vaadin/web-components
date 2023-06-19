@@ -5,8 +5,8 @@
  */
 import './vaadin-details-summary.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/component-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -33,9 +33,6 @@ import { SummaryController } from './summary-controller.js';
  *
  * Part name        | Description
  * -----------------|----------------
- * `summary`        | The element used to open and close collapsible content.
- * `toggle`         | The element used as indicator, can represent an icon.
- * `summary-content`| The wrapper for the slotted summary content.
  * `content`        | The wrapper for the collapsible details content.
  *
  * The following attributes are exposed for styling:

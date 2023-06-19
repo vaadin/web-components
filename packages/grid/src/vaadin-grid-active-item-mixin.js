@@ -5,6 +5,30 @@
  */
 
 /**
+ * @param {!Element} target
+ * @return {boolean}
+ * @protected
+ */
+export const isFocusable = (target) => {
+  if (!target.parentNode) {
+    return false;
+  }
+  const focusables = Array.from(
+    target.parentNode.querySelectorAll(
+      '[tabindex], button, input, select, textarea, object, iframe, a[href], area[href]',
+    ),
+  ).filter((element) => {
+    const part = element.getAttribute('part');
+    return !(part && part.includes('body-cell'));
+  });
+
+  const isFocusableElement = focusables.includes(target);
+  return (
+    !target.disabled && isFocusableElement && target.offsetParent && getComputedStyle(target).visibility !== 'hidden'
+  );
+};
+
+/**
  * @polymerMixin
  */
 export const ActiveItemMixin = (superClass) =>
@@ -97,27 +121,3 @@ export const ActiveItemMixin = (superClass) =>
      * @event cell-activate
      */
   };
-
-/**
- * @param {!Element} target
- * @return {boolean}
- * @protected
- */
-export const isFocusable = (target) => {
-  if (!target.parentNode) {
-    return false;
-  }
-  const focusables = Array.from(
-    target.parentNode.querySelectorAll(
-      '[tabindex], button, input, select, textarea, object, iframe, a[href], area[href]',
-    ),
-  ).filter((element) => {
-    const part = element.getAttribute('part');
-    return !(part && part.includes('body-cell'));
-  });
-
-  const isFocusableElement = focusables.includes(target);
-  return (
-    !target.disabled && isFocusableElement && target.offsetParent && getComputedStyle(target).visibility !== 'hidden'
-  );
-};

@@ -8,6 +8,8 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
+const debouncerQueue = new Set();
+
 /**
  * @summary Collapse multiple callbacks into one invocation after a timer.
  */
@@ -132,8 +134,6 @@ export class Debouncer {
     return this._timer != null;
   }
 }
-
-let debouncerQueue = new Set();
 
 /**
  * Adds a `Debouncer` to a list of globally flushable tasks.

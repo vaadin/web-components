@@ -6,6 +6,7 @@
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 
 export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: object) => void;
 
@@ -119,7 +120,7 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayCustomEventMap;
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  */
-declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement))) {
+declare class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(HTMLElement))) {
   /**
    * When true, the overlay is visible and attached to body.
    */
@@ -152,7 +153,7 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
 
   /**
    * When true the overlay won't disable the main content, showing
-   * it doesn’t change the functionality of the user interface.
+   * it doesn't change the functionality of the user interface.
    */
   modeless: boolean;
 
@@ -161,28 +162,6 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
    * immediately in case there is a closing animation in progress.
    */
   hidden: boolean;
-
-  /**
-   * When true move focus to the first focusable element in the overlay,
-   * or to the overlay if there are no focusable elements.
-   */
-  focusTrap: boolean;
-
-  /**
-   * Set to true to enable restoring of focus when overlay is closed.
-   */
-  restoreFocusOnClose: boolean;
-
-  /**
-   * Set to specify the element which should be focused on overlay close,
-   * if `restoreFocusOnClose` is set to true.
-   */
-  restoreFocusNode?: HTMLElement;
-
-  /**
-   * Returns true if this is the last one in the opened overlays stack.
-   */
-  protected readonly _last: boolean;
 
   close(sourceEvent?: Event | null): void;
 
@@ -193,11 +172,6 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  /**
-   * Brings the overlay as visually the frontmost one
-   */
-  bringToFront(): void;
 
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,

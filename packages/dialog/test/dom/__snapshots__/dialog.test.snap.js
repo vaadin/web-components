@@ -6,6 +6,7 @@ snapshots["vaadin-dialog overlay"] =
   focus-trap=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="dialog"
   with-backdrop=""
 >
@@ -20,6 +21,7 @@ snapshots["vaadin-dialog overlay modeless"] =
   id="overlay"
   modeless=""
   opened=""
+  restore-focus-on-close=""
   role="dialog"
 >
   content
@@ -32,6 +34,7 @@ snapshots["vaadin-dialog overlay theme"] =
   focus-trap=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="dialog"
   theme="custom"
   with-backdrop=""
@@ -47,6 +50,7 @@ snapshots["vaadin-dialog overlay class"] =
   focus-trap=""
   id="overlay"
   opened=""
+  restore-focus-on-close=""
   role="dialog"
   with-backdrop=""
 >

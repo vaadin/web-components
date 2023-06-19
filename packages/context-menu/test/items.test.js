@@ -240,9 +240,11 @@ describe('items', () => {
     document.documentElement.setAttribute('dir', 'ltr');
   });
 
-  it('should close all menus on esc', () => {
+  it('should close top-most menu on esc', () => {
     escKeyDown(getMenuItems(subMenu)[0]);
-    expect(rootMenu.opened).to.be.false;
+    expect(subMenu.opened).to.be.false;
+    expect(rootMenu.opened).to.be.true;
+    expect(getMenuItems(rootMenu)[0].hasAttribute('focused')).to.be.true;
   });
 
   it('should close all menus on Tab', () => {

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '../vaadin-grid.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -17,35 +16,33 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
+function simpleDetailsRenderer(root, _, { index }) {
+  root.innerHTML = `<span>${index}</span>-details`;
+}
+
+function indexRenderer(root, _, { index }) {
+  root.textContent = index;
+}
+
 class GridDetailsWrapper extends PolymerElement {
   static get template() {
     return html`
-      <vaadin-grid id="grid" style="width: 50px; height: 400px">
-        <template class="row-details"><span>[[index]]</span>-details</template>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+      <vaadin-grid id="grid" style="width: 50px; height: 400px" row-details-renderer="[[rowDetailsRenderer]]">
+        <vaadin-grid-column renderer="[[renderer]]"></vaadin-grid-column>
       </vaadin-grid>
     `;
+  }
+
+  rowDetailsRenderer(root, _, model) {
+    simpleDetailsRenderer(root, _, model);
+  }
+
+  renderer(root, _, model) {
+    indexRenderer(root, _, model);
   }
 }
 
 customElements.define('grid-details-wrapper', GridDetailsWrapper);
-
-class SlottedDetails extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-grid id="grid" style="width: 50px; height: 400px">
-        <slot></slot>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-}
-
-customElements.define('slotted-details', SlottedDetails);
 
 describe('row details', () => {
   let grid;
@@ -64,12 +61,12 @@ describe('row details', () => {
   it('should not increase row update count', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px" size="100">
-        <template class="row-details"><span>[[index]]</span>-details</template>
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.rowDetailsRenderer = simpleDetailsRenderer;
+    grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
+
     const spy = sinon.spy(grid, '_updateRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
@@ -81,12 +78,12 @@ describe('row details', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 50px; height: 400px" size="100">
-          <template class="row-details"><span>[[index]]</span>-details</template>
-          <vaadin-grid-column>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
+      grid.rowDetailsRenderer = simpleDetailsRenderer;
+      grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
+
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
       bodyRows = getRows(grid.$.items);
@@ -127,13 +124,13 @@ describe('row details', () => {
       expect(bodyRows[1].getBoundingClientRect().bottom).to.be.closeTo(bodyRows[2].getBoundingClientRect().top, 1);
     });
 
-    it('should stamp the details template', () => {
+    it('should render the details', () => {
       openRowDetails(1);
       const cells = getRowCells(bodyRows[1]);
       expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
     });
 
-    it('should not stamp the details template eagerly', () => {
+    it('should not render the details eagerly', () => {
       const cells = getRowCells(bodyRows[1]);
       expect(getCellContent(cells[1]).textContent.trim()).to.be.empty;
     });
@@ -237,7 +234,7 @@ describe('row details', () => {
       bodyRows = getRows(grid.$.items);
     });
 
-    it('should have the correct index on details template', () => {
+    it('should have the correct index on details', () => {
       // Open details for item 0
       grid.openItemDetails('foo');
 
@@ -251,43 +248,6 @@ describe('row details', () => {
     });
   });
 
-  describe('slotted template', () => {
-    let container;
-
-    beforeEach(() => {
-      container = fixtureSync(`
-        <slotted-details>
-          <template class="row-details"><span>[[index]]</span>-details</template>
-        </slotted-details>
-      `);
-      grid = container.$.grid;
-      grid.items = ['foo', 'bar', 'baz'];
-      flushGrid(grid);
-      bodyRows = getRows(grid.$.items);
-    });
-
-    it('should support slotted details templates', () => {
-      grid.openItemDetails('foo');
-      expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('0-details');
-    });
-
-    it('should change the details template', async () => {
-      grid.openItemDetails('foo');
-
-      const newTemplate = document.createElement('template');
-      newTemplate.classList.add('row-details');
-      newTemplate.innerHTML = '[[item]]-bar';
-
-      container.innerHTML = '';
-      container.appendChild(newTemplate);
-
-      await nextRender();
-      flushGrid(grid);
-
-      expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo-bar');
-    });
-  });
-
   describe('repeat', () => {
     const items = [];
     for (let i = 0; i < 50; i++) {
@@ -297,18 +257,19 @@ describe('row details', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 400px" size="100">
-          <template class="row-details">
-            <div>
-              <template is="dom-repeat" items="[[item.details]]">
-                <div>foo</div>
-              </template>
-            </div>
-          </template>
-          <vaadin-grid-column>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
+
+      grid.rowDetailsRenderer = (root, _grid, { item }) => {
+        root.innerHTML = `
+          <div>
+            ${'<div>foo</div>'.repeat(item.details.length)}
+          </div>
+        `;
+      };
+
+      grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
     });
 
     it('should have correct height', () => {
@@ -334,12 +295,12 @@ describe('row details', () => {
       dataset = buildDataSet(10);
       grid = fixtureSync(`
         <vaadin-grid style="width: 50px; height: 400px" size="100">
-          <template class="row-details"><span>[[index]]</span>-details</template>
-          <vaadin-grid-column>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
+      grid.rowDetailsRenderer = simpleDetailsRenderer;
+      grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
+
       grid.dataProvider = dataProvider;
       flushGrid(grid);
       bodyRows = getRows(grid.$.items);

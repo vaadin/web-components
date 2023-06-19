@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '../vaadin-overlay.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;
@@ -144,6 +144,63 @@ describe('focus-trap', () => {
       tabKeyDown(button);
 
       expect(getFocusedElementIndex()).to.equal(0);
+    });
+  });
+
+  describe('aria-hidden', () => {
+    let outer, inner, overlay;
+
+    beforeEach(async () => {
+      // Create outer element and pass it explicitly.
+      outer = document.createElement('main');
+
+      // Our `fixtureSync()` requires a single parent.
+      inner = fixtureSync(
+        `
+        <div>
+          <button>Foo</button>
+          <vaadin-overlay focus-trap></vaadin-overlay>
+          <button>Bar</button>
+        </div>
+      `,
+        outer,
+      );
+
+      overlay = inner.querySelector('vaadin-overlay');
+      await nextRender();
+      overlay.renderer = (root) => {
+        root.innerHTML = '<input placeholder="Input">';
+      };
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should set aria-hidden on other elements on overlay open', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expect(outer.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should remove aria-hidden from other elements on overlay close', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      overlay.opened = false;
+      await aTimeout(0);
+
+      expect(outer.hasAttribute('aria-hidden')).to.be.false;
+    });
+
+    it('should not set aria-hidden on other elements if focusTrap is set to false', async () => {
+      overlay.focusTrap = false;
+
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expect(outer.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 });

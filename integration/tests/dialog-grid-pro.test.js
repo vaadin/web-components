@@ -1,17 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusin, focusout, nextFrame, outsideClick } from '@vaadin/testing-helpers';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
 import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import {
-  createItems,
-  flushGrid,
-  getCellEditor,
-  getContainerCell,
-  outsideClick,
-} from '@vaadin/grid-pro/test/helpers.js';
+import { createItems, flushGrid, getCellEditor, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 async function clickOverlay(element) {
   focusout(element);

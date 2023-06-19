@@ -15,6 +15,56 @@ describe('slots', () => {
   describe('add button', () => {
     let addButton, input, inputClickSpy;
 
+    function initInput() {
+      // While the synthetic "Add Files" button click event is not trusted and
+      // it should generate a non-trusted click event on the hidden file input,
+      // at the time of writing Chrome and Firefox still open the file dialog.
+      // Use stub calling `preventDefault` to prevent dialog from opening.
+      inputClickSpy = sinon.stub().callsFake((e) => e.preventDefault());
+      input.addEventListener('click', inputClickSpy);
+    }
+
+    function runAddButtonTests(type) {
+      it(`should open file dialog on ${type} button click`, () => {
+        click(addButton);
+        expect(inputClickSpy.calledOnce).to.be.true;
+      });
+
+      it(`should open file dialog on ${type} button touchend`, () => {
+        const event = makeSoloTouchEvent('touchend', null, addButton);
+        expect(inputClickSpy.calledOnce).to.be.true;
+        expect(event.defaultPrevented).to.be.true;
+      });
+
+      it(`should reset file input value on ${type} button click`, () => {
+        // We can't simply assign `files` property of input[type="file"].
+        // Tweaking __proto__ to make it assignable below.
+        Object.setPrototypeOf(input, HTMLElement.prototype);
+        delete input.value;
+        input.value = 'foo';
+
+        click(addButton);
+        expect(input.value).to.be.empty;
+      });
+
+      it(`should disable the ${type} button when max files added`, () => {
+        // Enabled with default maxFiles value
+        expect(addButton.disabled).to.be.false;
+
+        upload.maxFiles = 1;
+        expect(addButton.disabled).to.be.false;
+
+        upload._addFile(createFile(100, 'image/jpeg'));
+        expect(addButton.disabled).to.be.true;
+      });
+
+      it(`should not open dialog on ${type} button click when max files added`, () => {
+        upload.maxFiles = 0;
+        click(addButton);
+        expect(inputClickSpy.called).to.be.false;
+      });
+    }
+
     describe('default', () => {
       beforeEach(() => {
         addButton = upload.querySelector('[slot="add-button"]');
@@ -88,56 +138,6 @@ describe('slots', () => {
         runAddButtonTests('custom');
       });
     });
-
-    function initInput() {
-      // While the synthetic "Add Files" button click event is not trusted and
-      // it should generate a non-trusted click event on the hidden file input,
-      // at the time of writing Chrome and Firefox still open the file dialog.
-      // Use stub calling `preventDefault` to prevent dialog from opening.
-      inputClickSpy = sinon.stub().callsFake((e) => e.preventDefault());
-      input.addEventListener('click', inputClickSpy);
-    }
-
-    function runAddButtonTests(type) {
-      it(`should open file dialog on ${type} button click`, () => {
-        click(addButton);
-        expect(inputClickSpy.calledOnce).to.be.true;
-      });
-
-      it(`should open file dialog on ${type} button touchend`, () => {
-        const event = makeSoloTouchEvent('touchend', null, addButton);
-        expect(inputClickSpy.calledOnce).to.be.true;
-        expect(event.defaultPrevented).to.be.true;
-      });
-
-      it(`should reset file input value on ${type} button click`, () => {
-        // We can't simply assign `files` property of input[type="file"].
-        // Tweaking __proto__ to make it assignable below.
-        Object.setPrototypeOf(input, HTMLElement.prototype);
-        delete input.value;
-        input.value = 'foo';
-
-        click(addButton);
-        expect(input.value).to.be.empty;
-      });
-
-      it(`should disable the ${type} button when max files added`, () => {
-        // Enabled with default maxFiles value
-        expect(addButton.disabled).to.be.false;
-
-        upload.maxFiles = 1;
-        expect(addButton.disabled).to.be.false;
-
-        upload._addFile(createFile(100, 'image/jpeg'));
-        expect(addButton.disabled).to.be.true;
-      });
-
-      it(`should not open dialog on ${type} button click when max files added`, () => {
-        upload.maxFiles = 0;
-        click(addButton);
-        expect(inputClickSpy.called).to.be.false;
-      });
-    }
   });
 
   describe('drop label', () => {

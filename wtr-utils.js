@@ -9,7 +9,7 @@ const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/p
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
-  'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
+  'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
   /^WARNING: Since Vaadin .* is deprecated.*/u,
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/u,
 ];
@@ -40,15 +40,16 @@ const hasAllParam = process.argv.includes('--all');
  * Check if lockfile has changed.
  */
 const isLockfileChanged = () => {
-  const log = execSync('git diff --name-only origin/master HEAD').toString();
+  const log = execSync('git diff --name-only origin/main HEAD').toString();
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 
 /**
- * Get packages changed since master.
+ * Get packages changed since main.
  */
 const getChangedPackages = () => {
-  const output = execSync('./node_modules/.bin/lerna la --since origin/master --json --loglevel silent');
+  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
+  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`); // NOSONAR
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 

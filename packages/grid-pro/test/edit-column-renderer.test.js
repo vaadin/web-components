@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -34,6 +33,10 @@ customElements.define(
   },
 );
 
+function nameRenderer(root, _, { item }) {
+  root.textContent = item.name;
+}
+
 describe('edit column renderer', () => {
   describe('default mode', () => {
     let grid, column, firstCell, input;
@@ -43,9 +46,7 @@ describe('edit column renderer', () => {
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.name]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
       column = grid.firstElementChild;
@@ -58,6 +59,8 @@ describe('edit column renderer', () => {
         wrapper.appendChild(text);
         root.appendChild(wrapper);
       };
+
+      grid.querySelector('vaadin-grid-column').renderer = nameRenderer;
 
       flushGrid(grid);
 
@@ -109,7 +112,7 @@ describe('edit column renderer', () => {
       expect(firstCell._content.textContent).to.equal(old);
     });
 
-    it('should updated content in the cell of another column using template on Enter', () => {
+    it('should updated content in the cell of another column using renderer on Enter', () => {
       enter(firstCell);
       input = getCellEditor(firstCell);
       input.value = 'new';
@@ -144,11 +147,11 @@ describe('edit column renderer', () => {
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.name]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('vaadin-grid-column').renderer = nameRenderer;
+
       column = grid.firstElementChild;
       grid.items = createItems();
       flushGrid(grid);
@@ -258,11 +261,11 @@ describe('edit column renderer', () => {
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="age"></vaadin-grid-pro-edit-column>
-          <vaadin-grid-column>
-            <template>[[item.name]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid-pro>
       `);
+      grid.querySelector('vaadin-grid-column').renderer = nameRenderer;
+
       column = grid.firstElementChild;
       column.editorValuePath = 'user.name';
       column.editModeRenderer = function (root) {

@@ -6,6 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -68,28 +69,7 @@ export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCus
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
-  /**
-   * Set to true to show increase/decrease buttons.
-   * @attr {boolean} step-buttons-visible
-   */
-  stepButtonsVisible: boolean;
-
-  /**
-   * The minimum value of the field.
-   */
-  min: number | null | undefined;
-
-  /**
-   * The maximum value of the field.
-   */
-  max: number | null | undefined;
-
-  /**
-   * Specifies the allowed number intervals of the field.
-   */
-  step: number | null | undefined;
-
+declare class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof NumberFieldEventMap>(
     type: K,
     listener: (this: NumberField, ev: NumberFieldEventMap[K]) => void,

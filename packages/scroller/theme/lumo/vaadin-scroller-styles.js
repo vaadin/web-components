@@ -17,10 +17,7 @@ const scroller = css`
     content: '';
     display: none;
     position: sticky;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: 0;
     z-index: 9999;
     height: 1px;
     margin-bottom: -1px;

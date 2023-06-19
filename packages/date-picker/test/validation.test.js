@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
-import { close, open, setInputValue } from './helpers.js';
+import { close, open, setInputValue, waitForOverlayRender } from './helpers.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {
@@ -12,6 +12,19 @@ class DatePicker2016 extends DatePicker {
 }
 
 customElements.define('vaadin-date-picker-2016', DatePicker2016);
+
+function waitForValueChange(datePicker, callback) {
+  let stub;
+
+  return new Promise((resolve) => {
+    stub = sinon.stub().callsFake((e) => {
+      resolve(stub);
+    });
+
+    datePicker.addEventListener('value-changed', stub);
+    callback();
+  });
+}
 
 describe('validation', () => {
   let datePicker;
@@ -71,8 +84,9 @@ describe('validation', () => {
   describe('basic', () => {
     let validateSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      await nextRender();
       validateSpy = sinon.spy(datePicker, 'validate');
     });
 
@@ -101,10 +115,11 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on clear button click', () => {
+    it('should validate on clear button click', async () => {
       datePicker.clearButtonVisible = true;
       // Set invalid value.
       setInputValue(datePicker, 'foo');
+      await waitForOverlayRender();
       enter(datePicker.inputElement);
       validateSpy.resetHistory();
       datePicker.$.clearButton.click();
@@ -156,62 +171,59 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should set proper validity by the time the value-changed event is fired', (done) => {
+    it('should set proper validity by the time the value-changed event is fired', async () => {
       // Set invalid value.
       setInputValue(datePicker, 'foo');
+      await waitForOverlayRender();
+
       expect(datePicker.validate()).to.be.false;
 
       validateSpy.resetHistory();
 
-      datePicker.addEventListener('value-changed', () => {
-        expect(validateSpy.callCount).to.equal(1);
-        expect(datePicker.invalid).to.be.false;
-        done();
-      });
-
-      datePicker.open();
       setInputValue(datePicker, '01/01/2000');
-      datePicker.close();
+      const valueChangeSpy = await waitForValueChange(datePicker, () => datePicker.close());
+
+      expect(valueChangeSpy.calledAfter(validateSpy)).to.be.true;
+      expect(validateSpy.callCount).to.equal(1);
+      expect(datePicker.invalid).to.be.false;
     });
 
-    it('should keep invalid input value during value-changed event', (done) => {
+    it('should keep invalid input value when closing overlay', async () => {
       datePicker.value = '2020-01-01';
       setInputValue(datePicker, 'foo');
-
-      datePicker.addEventListener('value-changed', () => {
-        expect(datePicker._inputValue).to.equal('foo');
-        done();
-      });
-      datePicker.close();
+      await waitForOverlayRender();
+      await waitForValueChange(datePicker, () => datePicker.close());
+      expect(datePicker.inputElement.value).to.equal('foo');
     });
 
-    it('should change invalid state only once', (done) => {
+    it('should change invalid state only once', async () => {
       datePicker.min = '2016-01-01';
       datePicker.max = '2016-12-31';
 
-      datePicker.addEventListener('value-changed', () => {
-        expect(invalidChangedSpy.calledOnce).to.be.true;
-        done();
-      });
-
       const invalidChangedSpy = sinon.spy();
       datePicker.addEventListener('invalid-changed', invalidChangedSpy);
-      datePicker.open();
-      datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+
+      await open(datePicker);
+
+      await waitForValueChange(datePicker, () => {
+        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      });
+
+      expect(invalidChangedSpy.calledOnce).to.be.true;
     });
 
-    it('should reflect correct invalid value on value-changed eventListener', (done) => {
+    it('should reflect correct invalid value on value-changed eventListener', async () => {
       datePicker.min = '2016-01-01';
       datePicker.max = '2016-12-31';
       datePicker.value = '2016-01-01'; // Valid
 
-      datePicker.addEventListener('value-changed', () => {
-        expect(datePicker.invalid).to.be.equal(true);
-        done();
+      await open(datePicker);
+
+      await waitForValueChange(datePicker, () => {
+        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
       });
 
-      datePicker.open();
-      datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      expect(datePicker.invalid).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -237,26 +249,33 @@ describe('validation', () => {
   });
 
   describe('input value', () => {
-    beforeEach(() => {
+    let overlay;
+
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      await nextRender();
+      overlay = datePicker.$.overlay;
       datePicker.inputElement.focus();
     });
 
-    it('should be valid when committing a valid date', () => {
+    it('should be valid when committing a valid date', async () => {
       setInputValue(datePicker, '1/1/2022');
+      await waitForOverlayRender();
       enter(datePicker.inputElement);
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should be invalid when trying to commit an invalid date', () => {
+    it('should be invalid when trying to commit an invalid date', async () => {
       setInputValue(datePicker, 'foo');
+      await waitForOverlayRender();
       enter(datePicker.inputElement);
       expect(datePicker.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit an invalid date', () => {
+    it('should set an empty value when trying to commit an invalid date', async () => {
       datePicker.value = '2020-01-01';
       setInputValue(datePicker, 'foo');
+      await waitForOverlayRender();
       enter(datePicker.inputElement);
       expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('foo');

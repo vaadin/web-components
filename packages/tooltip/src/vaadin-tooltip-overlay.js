@@ -33,6 +33,12 @@ registerStyles(
     :host([position^='end'][end-aligned]) [part='overlay'] {
       margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
     }
+
+    @media (forced-colors: active) {
+      [part='overlay'] {
+        outline: 1px dashed;
+      }
+    }
   `,
   { moduleId: 'vaadin-tooltip-overlay-styles' },
 );

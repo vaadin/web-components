@@ -5,7 +5,7 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
+import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { updateCellState } from './vaadin-grid-helpers.js';
 
@@ -50,13 +50,7 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @private */
     _hasColumnGroups(columns) {
-      for (let i = 0; i < columns.length; i++) {
-        if (columns[i].localName === 'vaadin-grid-column-group') {
-          return true;
-        }
-      }
-
-      return false;
+      return columns.some((column) => column.localName === 'vaadin-grid-column-group');
     }
 
     /**
@@ -97,6 +91,13 @@ export const DynamicColumnsMixin = (superClass) =>
     }
 
     /** @protected */
+    _debounceUpdateColumnTree() {
+      this.__updateColumnTreeDebouncer = Debouncer.debounce(this.__updateColumnTreeDebouncer, microTask, () =>
+        this._updateColumnTree(),
+      );
+    }
+
+    /** @protected */
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
       if (!arrayEquals(columnTree, this._columnTree)) {
@@ -115,7 +116,7 @@ export const DynamicColumnsMixin = (superClass) =>
 
           this.__removeSorters(this._sorters.filter(filterNotConnected));
           this.__removeFilters(this._filters.filter(filterNotConnected));
-          this._updateColumnTree();
+          this._debounceUpdateColumnTree();
         }
 
         this._debouncerCheckImports = Debouncer.debounce(

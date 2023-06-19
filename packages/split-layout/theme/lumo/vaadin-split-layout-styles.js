@@ -73,10 +73,7 @@ registerStyles(
     :host([theme~='minimal']) > [part='splitter']::after {
       content: '';
       position: absolute;
-      top: -4px;
-      right: -4px;
-      bottom: -4px;
-      left: -4px;
+      inset: -4px;
     }
 
     :host([theme~='small']) > [part='splitter'] > [part='handle']::after,
