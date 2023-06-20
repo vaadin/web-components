@@ -13,7 +13,7 @@ describe('url-utils', () => {
       expect(arePathsMatching('/path1', '/path2')).to.be.false;
     });
 
-    it('should return true if only one of the paths has trailing and leading spaces', () => {
+    it('should ignore leading and trailing spaces in paths', () => {
       paths.forEach((path) => {
         const pathWithExtraSpace = ` ${path} `;
         expect(arePathsMatching(pathWithExtraSpace, path)).to.be.true;
@@ -21,7 +21,7 @@ describe('url-utils', () => {
       });
     });
 
-    it('should return true if only one of the paths has a leading slash', () => {
+    it('should ignore a leading slash in paths', () => {
       paths.forEach((path) => {
         const pathWithoutLeadingSlash = path.startsWith('/') ? path.substring(1) : path;
         const pathWithLeadingSlash = path.startsWith('/') ? path : `/${path}`;
