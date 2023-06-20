@@ -42,10 +42,6 @@ export const sideNavItemStyles = css`
     padding-inline-end: var(--lumo-space-s);
   }
 
-  :host([has-children]) a {
-    width: calc(100% - var(--lumo-size-s));
-  }
-
   @media (any-hover: hover) {
     [part='link']:hover {
       color: var(--lumo-header-text-color);
