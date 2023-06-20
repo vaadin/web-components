@@ -3,7 +3,7 @@ import {
   createElement,
   type PropsWithChildren,
   type ReactElement,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useReducer,
 } from 'react';

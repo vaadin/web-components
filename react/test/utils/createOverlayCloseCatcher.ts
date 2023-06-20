@@ -1,4 +1,4 @@
-import { createRef, MutableRefObject } from 'react';
+import { createRef, type MutableRefObject } from 'react';
 
 export default function createOverlayCloseCatcher<T extends HTMLElement>(name: string, close: (ref: T) => void) {
   const ref = createRef<T>() as MutableRefObject<T>;

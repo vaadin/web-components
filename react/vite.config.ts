@@ -1,14 +1,21 @@
-import { resolve } from 'node:path';
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import type { PackageJson } from 'type-fest';
+import { defineConfig } from 'vite';
+
+const root = new URL(import.meta.url);
+
+const packageJson: PackageJson = await readFile(new URL('package.json', root), 'utf8').then(JSON.parse);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    __VERSION__: `'${packageJson.version ?? '0.0.0'}'`,
+  },
   build: {
     target: 'esnext',
   },
-  // @ts-expect-error: Unknown error "typeof import(@vitejs/plugin-react) has
-  // no call signatures". Not sure why it happens.
   plugins: [react()],
   root: resolve(process.cwd(), 'test/kitchen-sink'),
 });

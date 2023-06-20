@@ -108,9 +108,9 @@ export function template<T>(
 }
 
 export function transform<T extends Node>(transformer: (node: Node) => Node | undefined): TransformerFactory<T> {
-  return (context: TransformationContext) => (root: T) => {
+  return (context: TransformationContext) => (root: Node) => {
     const visitor = (node: Node): Node | undefined => ts.visitEachChild(transformer(node), visitor, context);
-    return ts.visitNode(root, visitor);
+    return ts.visitNode(root, visitor) as T;
   };
 }
 

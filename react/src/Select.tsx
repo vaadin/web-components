@@ -1,4 +1,4 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, ReactNode } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type ReactNode } from 'react';
 import { Select as _Select, type SelectElement, type SelectProps as _SelectProps } from './generated/Select.js';
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';

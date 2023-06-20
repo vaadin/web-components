@@ -1,7 +1,7 @@
 import { unlink, writeFile } from 'node:fs/promises';
 import { relative, resolve, basename } from 'node:path';
 import ts, {
-  ExpressionStatement,
+  type ExpressionStatement,
   type Identifier,
   type Node,
   type SourceFile,
@@ -21,7 +21,6 @@ import {
   type NamedGenericJsContribution,
   pickNamedEvents,
   search,
-  stripPrefix,
   template,
   transform,
   convertElementNameToClassName,
@@ -317,7 +316,7 @@ import {
   type ${COMPONENT_NAME}EventMap as _${COMPONENT_NAME}EventMap,
 } from "${MODULE_PATH}";
 import * as React from "react";
-import { createComponent, WebComponentProps } from "${CREATE_COMPONENT_PATH}";
+import { createComponent, type WebComponentProps } from "${CREATE_COMPONENT_PATH}";
 
 export * from "${MODULE_PATH}";
 
@@ -381,7 +380,7 @@ export const ${COMPONENT_NAME} = createComponent({
           return node;
         }
 
-        const tag = (node.jsDoc as readonly ts.JSDoc[])[0]?.tags?.[0];
+        const tag = (node.jsDoc as ts.JSDoc[] | undefined)?.[0]?.tags?.[0];
         if (!tag || !ts.isJSDocDeprecatedTag(tag)) {
           return node;
         }

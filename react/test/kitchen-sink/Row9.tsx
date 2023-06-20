@@ -3,7 +3,7 @@ import { SplitLayout } from '../../src/SplitLayout.js';
 import { TextArea } from '../../src/TextArea.js';
 import { Tooltip } from '../../src/Tooltip.js';
 import { Upload } from '../../src/Upload.js';
-import { VirtualList, VirtualListReactRendererProps } from '../../src/VirtualList.js';
+import { VirtualList, type VirtualListReactRendererProps } from '../../src/VirtualList.js';
 
 type Item = Readonly<{ value: string; index: number }>;
 

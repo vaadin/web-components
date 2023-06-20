@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from 'react';
+import { type PropsWithChildren, useState } from 'react';
 import { Button } from '../../src/Button.js';
 import { Dialog } from '../../src/Dialog.js';
 

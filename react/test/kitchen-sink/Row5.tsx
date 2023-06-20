@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { TextField } from '../../src/TextField.js';
 import { BoardRow } from '../../src/BoardRow.js';
 import { Grid, type GridDataProvider } from '../../src/Grid.js';
 import { GridColumn } from '../../src/GridColumn.js';
@@ -9,7 +10,7 @@ import { GridProEditColumn } from '../../src/GridProEditColumn.js';
 import { GridSortColumn } from '../../src/GridSortColumn.js';
 import { GridTreeColumn } from '../../src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../../src/renderers/grid.js';
-import { crudData, CrudDataItem } from './data.js';
+import { crudData, type CrudDataItem } from './data.js';
 
 type TreeGridDataItem = {
   id: number;
@@ -78,7 +79,13 @@ export default function Row5() {
       <GridPro<CrudDataItem> items={crudData}>
         <GridColumn<CrudDataItem> renderer={Display}></GridColumn>
         <GridColumn<CrudDataItem> path="size"></GridColumn>
-        <GridProEditColumn<CrudDataItem> path="name" editorType="text"></GridProEditColumn>
+        <GridProEditColumn<CrudDataItem>
+          path="name"
+          editModeRenderer={({ item }) => {
+            console.log(item);
+            return <TextField value={item.name} />;
+          }}
+        ></GridProEditColumn>
         <GridProEditColumn<CrudDataItem> path="name" editorType="text"></GridProEditColumn>
       </GridPro>
     </BoardRow>
