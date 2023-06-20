@@ -96,7 +96,7 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.

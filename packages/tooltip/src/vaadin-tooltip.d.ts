@@ -57,7 +57,7 @@ export type TooltipPosition =
  * `--vaadin-tooltip-offset-start`  | Used as an offset when the tooltip is aligned horizontally after the target
  * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
   /**

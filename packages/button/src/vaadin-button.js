@@ -39,7 +39,7 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  * `focus-ring` | Set when the button is focused using the keyboard.
  * `focused`    | Set when the button is focused.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ButtonMixin

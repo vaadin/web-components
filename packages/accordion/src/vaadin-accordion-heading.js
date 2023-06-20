@@ -39,7 +39,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `opened`     | Set when the collapsible content is expanded and visible.
  * `disabled`   | Set when the element is disabled.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ActiveMixin

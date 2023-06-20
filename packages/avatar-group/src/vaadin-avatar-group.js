@@ -50,7 +50,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
  *

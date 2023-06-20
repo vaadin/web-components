@@ -34,7 +34,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * `focus-ring` | Set when the button is focused using the keyboard.
  * `focused`    | Set when the button is focused.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
 

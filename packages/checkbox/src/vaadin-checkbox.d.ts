@@ -56,7 +56,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * `indeterminate` | Set when the checkbox is in the indeterminate state.
  * `has-label`     | Set when the checkbox has a label.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.

@@ -93,7 +93,7 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  * `disabled`          | Set when the menu bar is disabled
  * `has-single-button` | Set when there is only one button visible
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
  *
