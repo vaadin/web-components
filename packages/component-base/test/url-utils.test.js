@@ -1,24 +1,24 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { comparePaths } from '../src/url-utils.js';
+import { matchPaths } from '../src/url-utils.js';
 
 describe('url-utils', () => {
   describe('comparePaths', () => {
     const paths = ['', '/', '/path', 'base/path'];
 
     it('should return true when paths match', () => {
-      paths.forEach((path) => expect(comparePaths(path, path)).to.be.true);
+      paths.forEach((path) => expect(matchPaths(path, path)).to.be.true);
     });
 
     it('should return false when paths do not match', () => {
-      expect(comparePaths('/path1', '/path2')).to.be.false;
+      expect(matchPaths('/path1', '/path2')).to.be.false;
     });
 
     it('should ignore leading and trailing spaces in paths', () => {
       paths.forEach((path) => {
         const pathWithExtraSpace = ` ${path} `;
-        expect(comparePaths(pathWithExtraSpace, path)).to.be.true;
-        expect(comparePaths(path, pathWithExtraSpace)).to.be.true;
+        expect(matchPaths(pathWithExtraSpace, path)).to.be.true;
+        expect(matchPaths(path, pathWithExtraSpace)).to.be.true;
       });
     });
 
@@ -26,8 +26,8 @@ describe('url-utils', () => {
       paths.forEach((path) => {
         const pathWithoutLeadingSlash = path.startsWith('/') ? path.substring(1) : path;
         const pathWithLeadingSlash = path.startsWith('/') ? path : `/${path}`;
-        expect(comparePaths(pathWithoutLeadingSlash, pathWithLeadingSlash)).to.be.true;
-        expect(comparePaths(pathWithLeadingSlash, pathWithoutLeadingSlash)).to.be.true;
+        expect(matchPaths(pathWithoutLeadingSlash, pathWithLeadingSlash)).to.be.true;
+        expect(matchPaths(pathWithLeadingSlash, pathWithoutLeadingSlash)).to.be.true;
       });
     });
 
@@ -44,7 +44,7 @@ describe('url-utils', () => {
 
       it('should use document.baseURI as a base url', () => {
         baseUri.value('https://vaadin.com/docs/');
-        expect(comparePaths('https://vaadin.com/docs/components', 'components')).to.be.true;
+        expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
       });
     });
   });
