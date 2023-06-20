@@ -1,3 +1,5 @@
+import { SideNav } from '../../src/SideNav.js';
+import { SideNavItem } from '../../src/SideNavItem.js';
 import { Accordion } from '../../src/Accordion.js';
 import { AccordionPanel } from '../../src/AccordionPanel.js';
 import { AvatarGroup } from '../../src/AvatarGroup.js';
@@ -8,6 +10,11 @@ import { ChartSeries } from '../../src/ChartSeries.js';
 export default function Row1() {
   return (
     <BoardRow>
+      <SideNav>
+        <SideNavItem>Side Navigation Item 1</SideNavItem>
+        <SideNavItem>Side Navigation Item 2</SideNavItem>
+        <SideNavItem>Side Navigation Item 3</SideNavItem>
+      </SideNav>
       <Accordion theme="primary">
         <AccordionPanel>
           <div slot="summary">AccordeonPanel</div>
