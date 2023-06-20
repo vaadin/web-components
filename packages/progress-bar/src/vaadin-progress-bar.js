@@ -28,7 +28,7 @@ registerStyles('vaadin-progress-bar', progressBarStyles, { moduleId: 'vaadin-pro
  * `bar` | Progress-bar's background
  * `value` | Progress-bar's foreground
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * The following custom properties are available:
  *

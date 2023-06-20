@@ -135,7 +135,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
  * propagated to the internal components listed above.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.

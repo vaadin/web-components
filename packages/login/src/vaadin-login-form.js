@@ -39,7 +39,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
  * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
