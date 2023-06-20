@@ -548,6 +548,10 @@ describe('vaadin-confirm-dialog', () => {
         await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
+      afterEach(() => {
+        confirm.opened = false;
+      });
+
       it('should update width after opening the dialog', () => {
         confirm._contentWidth = '300px';
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
