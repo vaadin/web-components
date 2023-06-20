@@ -166,7 +166,7 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * Note: the `theme` attribute value set on `<vaadin-select>` is
  * propagated to the internal components listed above.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

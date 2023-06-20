@@ -76,6 +76,17 @@ class ChildrenController extends SlotController {
  * </vaadin-side-nav-item>
  * ```
  *
+ * ### Styling
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `content`       | The element that wraps link and toggle button
+ * `children`      | The element that wraps child items
+ * `link`          | The clickable anchor used for navigation
+ * `toggle-button` | The toggle button
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
  * @extends LitElement
