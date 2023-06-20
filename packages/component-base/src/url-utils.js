@@ -10,7 +10,7 @@
  * @param {string} path1
  * @param {string} path2
  */
-export function arePathsMatching(path1, path2) {
+export function matchPaths(path1, path2) {
   const base = document.baseURI;
   return new URL(path1, base).pathname === new URL(path2, base).pathname;
 }

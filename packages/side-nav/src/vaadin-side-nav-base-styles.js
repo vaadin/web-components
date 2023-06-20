@@ -14,7 +14,7 @@ export const sideNavItemBaseStyles = css`
     display: none !important;
   }
 
-  a {
+  [part='link'] {
     flex: auto;
     min-width: 0;
     display: flex;
@@ -28,6 +28,12 @@ export const sideNavItemBaseStyles = css`
     -webkit-appearance: none;
     appearance: none;
     flex: none;
+  }
+
+  [part='children'] {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
   }
 
   :host(:not([has-children])) button {
@@ -60,12 +66,6 @@ export const sideNavItemBaseStyles = css`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
-  slot[name='children'] {
-    /* Needed to make role="list" work */
-    display: block;
-    width: 100%;
-  }
 `;
 
 export const sideNavBaseStyles = css`
@@ -77,32 +77,24 @@ export const sideNavBaseStyles = css`
     display: none !important;
   }
 
-  summary {
+  button {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: inherit;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: initial;
+    color: inherit;
+    border: initial;
+    outline: none;
+    font: inherit;
+    text-align: inherit;
   }
 
-  summary ::slotted([slot='label']) {
-    display: block;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::marker {
-    content: '';
-  }
-
-  summary::after {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  slot {
-    /* Needed to make role="list" work */
-    display: block;
+  [part='children'] {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
   }
 `;

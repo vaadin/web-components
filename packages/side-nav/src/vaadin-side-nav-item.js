@@ -192,26 +192,44 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   render() {
     return html`
-      <a href="${ifDefined(this.path)}" part="item" aria-current="${this.active ? 'page' : 'false'}">
-        <slot name="prefix"></slot>
-        <slot></slot>
-        <slot name="suffix"></slot>
+      <div part="content" @click="${this._onContentClick}">
+        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
+          <slot name="prefix"></slot>
+          <slot></slot>
+          <slot name="suffix"></slot>
+        </a>
         <button
           part="toggle-button"
-          @click="${this.__toggleExpanded}"
+          @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
           aria-label="Toggle child items"
         ></button>
-      </a>
-      <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
+      </div>
+      <ul part="children" ?hidden="${!this.expanded}">
+        <slot name="children"></slot>
+      </ul>
     `;
   }
 
   /** @private */
-  __toggleExpanded(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  _onButtonClick(event) {
+    // Prevent the event from being handled
+    // by the content click listener below
+    event.stopPropagation();
+    this.__toggleExpanded();
+  }
+
+  /** @private */
+  _onContentClick() {
+    // Toggle item expanded state unless the link has a non-empty path
+    if (this.path == null && this.hasAttribute('has-children')) {
+      this.__toggleExpanded();
+    }
+  }
+
+  /** @private */
+  __toggleExpanded() {
     this.expanded = !this.expanded;
   }
 

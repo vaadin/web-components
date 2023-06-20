@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
@@ -17,6 +17,13 @@ describe('scrollable tabs', () => {
         <vaadin-tab>Baz1</vaadin-tab>
         <vaadin-tab>Foo2</vaadin-tab>
         <vaadin-tab>Bar2</vaadin-tab>
+        <vaadin-tab>Baz2</vaadin-tab>
+        <vaadin-tab>Foo3</vaadin-tab>
+        <vaadin-tab>Bar3</vaadin-tab>
+        <vaadin-tab>Baz3</vaadin-tab>
+        <vaadin-tab>Foo4</vaadin-tab>
+        <vaadin-tab>Bar4</vaadin-tab>
+        <vaadin-tab>Baz4</vaadin-tab>
       </vaadin-tabs>
     `);
     tabs._observer.flush();
@@ -53,9 +60,10 @@ describe('scrollable tabs', () => {
     });
 
     it('should scroll forward when arrow button is clicked', () => {
+      const initialScrollLeft = scroller.scrollLeft;
       const btn = tabs.shadowRoot.querySelector('[part="forward-button"]');
       btn.click();
-      expect(scroller.scrollLeft).to.be.closeTo(scroller.scrollWidth - scroller.offsetWidth, 1);
+      expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
     });
 
     it('should scroll back when arrow button is clicked', () => {
@@ -63,6 +71,79 @@ describe('scrollable tabs', () => {
       const btn = tabs.shadowRoot.querySelector('[part="back-button"]');
       btn.click();
       expect(scroller.scrollLeft).to.be.equal(0);
+    });
+
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        beforeEach(async () => {
+          tabs.setAttribute('dir', dir);
+          await nextFrame();
+        });
+
+        it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
+          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.equal(0);
+
+          forwardButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(310, 10);
+
+          forwardButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 10);
+        });
+
+        it('should have displayed all the items fully when scrolled back to the start via button', async () => {
+          // Initially scroll to the end
+          tabs._scrollToItem(items.length - 1);
+
+          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
+
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 10);
+
+          backButton.click();
+          expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(228, 10);
+
+          backButton.click();
+          expect(tabs._scrollerElement.scrollLeft).to.equal(0);
+        });
+
+        it('should not get stuck with wide tabs when scrolled forward to the end via button', async () => {
+          tabs.style.width = '100px';
+
+          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the forward button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            forwardButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          const scrollerEndPosition =
+            -tabs.__direction * tabs._scrollerElement.scrollLeft + tabs._scrollerElement.offsetWidth;
+          expect(scrollerEndPosition).to.be.approximately(tabs._scrollerElement.scrollWidth, 1);
+        });
+
+        it('should not get stuck with wide tabs when scrolled back to the start via button', async () => {
+          tabs.style.width = '100px';
+
+          // Initially scroll to the end
+          tabs._scrollToItem(items.length - 1);
+
+          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
+          let previousScrollLeft;
+          let currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          // Click the back button until it does not have any effect
+          do {
+            previousScrollLeft = currentScrollLeft;
+            backButton.click();
+            currentScrollLeft = tabs._scrollerElement.scrollLeft;
+          } while (previousScrollLeft !== currentScrollLeft);
+
+          expect(tabs._scrollerElement.scrollLeft).to.be.approximately(0, 1);
+        });
+      });
     });
   });
 

@@ -3,6 +3,8 @@
  * Copyright (c) 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-side-nav-item.js';
-import './vaadin-side-nav-styles.js';
-import '../../src/vaadin-side-nav.js';
+
+/**
+ * Check if two paths match
+ */
+export declare function matchPaths(path1: string, path2: string): boolean;
