@@ -32,7 +32,7 @@ class GridContainer extends PolymerElement {
           ></vaadin-grid-column>
         </vaadin-grid-column-group>
 
-        <vaadin-grid-column row-header id="emptycolumn"></vaadin-grid-column>
+        <vaadin-grid-column id="emptycolumn"></vaadin-grid-column>
       </vaadin-grid>
     `;
   }
@@ -237,7 +237,6 @@ describe('column', () => {
 
       it('should format proper header from the last path token', () => {
         emptyColumn.path = 'foo.barBaz';
-
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar baz');
       });
 
