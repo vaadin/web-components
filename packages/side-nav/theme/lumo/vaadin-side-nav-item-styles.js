@@ -9,6 +9,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 export const sideNavItemStyles = css`
   [part='content'] {
     display: flex;
+    align-items: center;
   }
 
   [part='link'] {
