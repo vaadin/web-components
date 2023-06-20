@@ -31,11 +31,15 @@ describe('url-utils', () => {
       });
     });
 
-    it('should use document.baseURI as a base url', () => {
-      sinon.stub(document, 'baseURI').value('https://vaadin.com/docs/');
-      const pathsMatching = arePathsMatching('https://vaadin.com/docs/components', 'components');
-      sinon.restore();
-      expect(pathsMatching).to.be.true;
+    describe('base url', () => {
+      afterEach(() => {
+        sinon.restore();
+      });
+
+      it('should use document.baseURI as a base url', () => {
+        sinon.stub(document, 'baseURI').value('https://vaadin.com/docs/');
+        expect(arePathsMatching('https://vaadin.com/docs/components', 'components')).to.be.true;
+      });
     });
   });
 });
