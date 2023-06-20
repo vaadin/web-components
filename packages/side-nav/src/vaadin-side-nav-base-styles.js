@@ -66,12 +66,6 @@ export const sideNavItemBaseStyles = css`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
-  slot[name='children'] {
-    /* Needed to make role="list" work */
-    display: block;
-    width: 100%;
-  }
 `;
 
 export const sideNavBaseStyles = css`
