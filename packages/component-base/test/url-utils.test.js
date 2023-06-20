@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
 import { arePathsMatching } from '../src/url-utils.js';
 
 describe('url-utils', () => {
@@ -28,6 +29,11 @@ describe('url-utils', () => {
         expect(arePathsMatching(pathWithoutLeadingSlash, pathWithLeadingSlash)).to.be.true;
         expect(arePathsMatching(pathWithLeadingSlash, pathWithoutLeadingSlash)).to.be.true;
       });
+    });
+
+    it('should ignore base uri in paths', () => {
+      sinon.stub(document, 'baseURI').value('https://base');
+      expect(arePathsMatching('https://base/path', 'path')).to.be.true;
     });
   });
 });
