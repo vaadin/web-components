@@ -32,8 +32,8 @@ describe('url-utils', () => {
     });
 
     it('should ignore base uri in paths', () => {
-      sinon.stub(document, 'baseURI').value('https://base');
-      expect(arePathsMatching('https://base/path', 'path')).to.be.true;
+      sinon.stub(document, 'baseURI').value('https://vaadin.com/docs');
+      expect(arePathsMatching('https://vaadin.com/docs/components', 'components')).to.be.true;
     });
   });
 });
