@@ -49,6 +49,16 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
  * </vaadin-side-nav>
  * ```
  *
+ * ### Styling
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `label`         | The label element
+ * `children`      | The element that wraps child items
+ * `toggle-button` | The toggle button
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  */
 declare class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
