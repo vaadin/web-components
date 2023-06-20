@@ -23,7 +23,7 @@ export const sideNavItemStyles = css`
     min-height: var(--lumo-icon-size-m);
   }
 
-  button {
+  [part='toggle-button'] {
     position: relative;
     border: 0;
     margin: calc((var(--lumo-icon-size-m) - var(--lumo-size-s)) / 2) 0;
@@ -47,7 +47,7 @@ export const sideNavItemStyles = css`
       color: var(--lumo-header-text-color);
     }
 
-    button:hover {
+    [part='toggle-button']:hover {
       color: var(--lumo-body-text-color);
     }
   }
@@ -56,7 +56,7 @@ export const sideNavItemStyles = css`
     background-color: var(--lumo-contrast-5pct);
   }
 
-  button::before {
+  [part='toggle-button']::before {
     font-family: lumo-icons;
     content: var(--lumo-icons-dropdown);
     font-size: 1.5em;
@@ -66,18 +66,18 @@ export const sideNavItemStyles = css`
     transition: transform 140ms;
   }
 
-  :host([expanded]) button::before {
+  :host([expanded]) [part='toggle-button']::before {
     transform: none;
   }
 
   @supports selector(:focus-visible) {
     [part='link'],
-    button {
+    [part='toggle-button'] {
       outline: none;
     }
 
     [part='link']:focus-visible,
-    button:focus-visible {
+    [part='toggle-button']:focus-visible {
       border-radius: var(--lumo-border-radius-m);
       box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
     }
