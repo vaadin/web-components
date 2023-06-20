@@ -32,12 +32,18 @@ describe('url-utils', () => {
     });
 
     describe('base url', () => {
+      let baseUri;
+
+      beforeEach(() => {
+        baseUri = sinon.stub(document, 'baseURI');
+      });
+
       afterEach(() => {
-        sinon.restore();
+        baseUri.restore();
       });
 
       it('should use document.baseURI as a base url', () => {
-        sinon.stub(document, 'baseURI').value('https://vaadin.com/docs/');
+        baseUri.value('https://vaadin.com/docs/');
         expect(arePathsMatching('https://vaadin.com/docs/components', 'components')).to.be.true;
       });
     });
