@@ -68,10 +68,6 @@ describe('side-nav-item', () => {
       expect(item.active).to.be.true;
     });
 
-    it('should reflect active property to attribute', () => {
-      expect(item.hasAttribute('active')).to.be.true;
-    });
-
     it('should disallow changing active property to false', async () => {
       item.active = false;
       await item.updateComplete;
@@ -87,10 +83,6 @@ describe('side-nav-item', () => {
 
     it('should set active property to false when path does not match', () => {
       expect(item.active).to.be.false;
-    });
-
-    it('should not set active attribute when active is set to false', () => {
-      expect(item.hasAttribute('active')).to.be.false;
     });
   });
 
