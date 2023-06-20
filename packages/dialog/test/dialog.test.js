@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, esc, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -113,18 +114,43 @@ describe('vaadin-dialog', () => {
       });
     });
 
-    describe('detaching', () => {
-      it('should close the overlay when detached', () => {
-        dialog.parentNode.removeChild(dialog);
+    describe('removing and adding to the DOM', () => {
+      it('should close the overlay when removed from DOM', async () => {
+        dialog.remove();
+        await aTimeout(0);
+
         expect(dialog.opened).to.be.false;
       });
 
-      it('should not close the overlay when moved within the DOM', () => {
+      it('should restore opened state when added to the DOM', async () => {
+        const parent = dialog.parentNode;
+        dialog.remove();
+        await aTimeout(0);
+        expect(dialog.opened).to.be.false;
+
+        parent.appendChild(dialog);
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should not close the overlay when moved within the DOM', async () => {
         const newParent = document.createElement('div');
         document.body.appendChild(newParent);
-
         newParent.appendChild(dialog);
+        await aTimeout(0);
+
         expect(dialog.opened).to.be.true;
+      });
+
+      it('should not dispatch opened changed events when moved within the DOM', async () => {
+        const onOpenedChanged = sinon.spy();
+        dialog.addEventListener('opened-changed', onOpenedChanged);
+
+        const newParent = document.createElement('div');
+        document.body.appendChild(newParent);
+        newParent.appendChild(dialog);
+        await aTimeout(0);
+
+        expect(onOpenedChanged.called).to.be.false;
       });
     });
 
