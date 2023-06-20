@@ -59,65 +59,88 @@ describe('side-nav-item', () => {
   });
 
   describe('active', () => {
-    beforeEach(async () => {
-      item = fixtureSync(`<vaadin-side-nav-item path=""></vaadin-side-nav-item>`);
-      await nextRender();
+    describe('no path set initially', () => {
+      beforeEach(async () => {
+        item = fixtureSync(`<vaadin-side-nav-item></vaadin-side-nav-item>`);
+        await nextRender();
+      });
+
+      it('should be inactive', () => {
+        expect(item.active).to.be.false;
+      });
+
+      it('should be inactive even if an alias matches', () => {
+        item.pathAliases = '/';
+        expect(item.active).to.be.false;
+      });
+
+      it('should be active when matching path is set', async () => {
+        item.path = '/';
+        await item.updateComplete;
+        expect(item.active).to.be.true;
+      });
+
+      it('should be active when an empty matching path is set', async () => {
+        item.path = '';
+        await item.updateComplete;
+        expect(item.active).to.be.true;
+      });
+
+      it('should be inactive when not matching path is set', () => {
+        item.path = '/path';
+        expect(item.active).to.be.false;
+      });
     });
 
-    it('should set active property to true for matching path', () => {
-      expect(item.active).to.be.true;
+    describe('matching path is set initially', () => {
+      beforeEach(async () => {
+        item = fixtureSync(`<vaadin-side-nav-item path=""></vaadin-side-nav-item>`);
+        await nextRender();
+      });
+
+      it('should be active', () => {
+        expect(item.active).to.be.true;
+      });
+
+      it('should disallow changing active property to false', async () => {
+        item.active = false;
+        await item.updateComplete;
+        expect(item.active).to.be.true;
+      });
+
+      it('should be active even when no aliases match', () => {
+        item.pathAliases = '/alias';
+        expect(item.active);
+      });
     });
 
-    it('should disallow changing active property to false', async () => {
-      item.active = false;
-      await item.updateComplete;
-      expect(item.active).to.be.true;
-    });
-  });
+    describe('not matching path is set initially', () => {
+      beforeEach(async () => {
+        item = fixtureSync(`<vaadin-side-nav-item path="/path"></vaadin-side-nav-item>`);
+        await nextRender();
+      });
 
-  describe('inactive', () => {
-    beforeEach(async () => {
-      item = fixtureSync(`<vaadin-side-nav-item path="/another-path"></vaadin-side-nav-item>`);
-      await nextRender();
-    });
+      it('should be inactive', () => {
+        expect(item.active).to.be.false;
+      });
 
-    it('should set active property to false when path does not match', () => {
-      expect(item.active).to.be.false;
-    });
-  });
+      it('should disallow changing active property to true', async () => {
+        item.active = true;
+        await item.updateComplete;
+        expect(item.active).to.be.false;
+      });
 
-  describe('path aliases', () => {
-    beforeEach(async () => {
-      item = fixtureSync(`<vaadin-side-nav-item path="/path" path-aliases="/"></vaadin-side-nav-item>`);
-      await nextRender();
-    });
+      it('should be active when an alias matches', () => {
+        item.pathAliases = '/, /alias';
+        expect(item.active);
+        item.pathAliases = '/alias, /';
+        expect(item.active);
+      });
 
-    it('should set active property to true for matching alias with path', () => {
-      expect(item.active).to.be.true;
-    });
-
-    it('should set active property to false for matching alias without path', async () => {
-      item.path = undefined;
-      await item.updateComplete;
-      expect(item.active).to.be.false;
-    });
-
-    it('should update active property when aliases are updated', async () => {
-      item.pathAliases = 'aliases';
-      await item.updateComplete;
-      expect(item.active).to.be.false;
-    });
-
-    it('should set active property to true for matching empty alias', async () => {
-      item.pathAliases = '';
-      await item.updateComplete;
-      expect(item.active).to.be.true;
-    });
-
-    it('should set active property to true for a match in multiple aliases', async () => {
-      item.pathAliases = '/alias,/';
-      await item.updateComplete;
-      expect(item.active).to.be.true;
+      it('should be active when an empty alias matches', () => {
+        item.pathAliases = '';
+        expect(item.active);
+      });
     });
   });
 
