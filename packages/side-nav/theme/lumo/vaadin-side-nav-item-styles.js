@@ -7,7 +7,13 @@ import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
+  [part='content'] {
+    display: flex;
+    align-items: center;
+  }
+
   [part='link'] {
+    width: 100%;
     gap: var(--lumo-space-xs);
     padding: var(--lumo-space-s);
     padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
@@ -18,6 +24,7 @@ export const sideNavItemStyles = css`
   }
 
   button {
+    position: relative;
     border: 0;
     margin: calc((var(--lumo-icon-size-m) - var(--lumo-size-s)) / 2) 0;
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
@@ -29,6 +36,10 @@ export const sideNavItemStyles = css`
     height: var(--lumo-size-s);
     cursor: var(--lumo-clickable-cursor, default);
     transition: color 140ms;
+  }
+
+  :host([has-children]) [part='content'] {
+    padding-inline-end: var(--lumo-space-s);
   }
 
   @media (any-hover: hover) {
