@@ -37,7 +37,7 @@ export const sideNavItemStyles = css`
     transition: color 140ms;
   }
 
-  :host([has-children]) [part='item'] {
+  :host([has-children]) [part='content'] {
     padding-inline-end: var(--lumo-space-s);
   }
 
