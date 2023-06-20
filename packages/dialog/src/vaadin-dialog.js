@@ -268,9 +268,15 @@ class Dialog extends OverlayClassMixin(
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    // Close overlay and memorize opened state
-    this.__restoreOpened = this.opened;
-    this.opened = false;
+    // Automatically close the overlay when dialog is removed from DOM
+    // Using a timeout to avoid toggling opened state, and dispatching change
+    // events, when just moving the dialog in the DOM
+    setTimeout(() => {
+      if (!this.isConnected) {
+        this.__restoreOpened = this.opened;
+        this.opened = false;
+      }
+    });
   }
 
   /** @private */
