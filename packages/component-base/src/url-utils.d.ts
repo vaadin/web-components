@@ -7,4 +7,4 @@
 /**
  * Check if two paths match
  */
-export declare function arePathsMatching(path1: string, path2: string): boolean;
+export declare function matchPaths(path1: string, path2: string): boolean;

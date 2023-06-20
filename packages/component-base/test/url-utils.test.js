@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { matchPaths } from '../src/url-utils.js';
 
 describe('url-utils', () => {
-  describe('comparePaths', () => {
+  describe('matchPaths', () => {
     const paths = ['', '/', '/path', 'base/path'];
 
     it('should return true when paths match', () => {
