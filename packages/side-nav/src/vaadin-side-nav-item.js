@@ -108,6 +108,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
       /**
        * A comma-separated list of alternative paths matching this item.
+       *
+       * @attr {string} path-aliases
        */
       pathAliases: {
         type: String,
