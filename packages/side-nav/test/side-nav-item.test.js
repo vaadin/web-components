@@ -173,7 +173,6 @@ describe('side-nav-item', () => {
         `);
         await nextRender();
         content = item.shadowRoot.querySelector('[part="content"]');
-        toggle = item.shadowRoot.querySelector('button');
       });
 
       it('should toggle expanded state on content click when item has children', async () => {
