@@ -27,16 +27,15 @@ export declare class ColumnBaseMixinClass<TItem> {
   resizable: boolean | null | undefined;
 
   /**
-   * When true, the column is frozen.
-   * When a column inside a column group is frozen,
-   * all the sibling columns inside the group will get frozen also.
+   * When true, the column is frozen. When a column inside of a column group is frozen,
+   * all of the sibling columns inside the group will get frozen also.
    */
   frozen: boolean;
 
   /**
    * When true, the column is frozen to end of grid.
    *
-   * When a column inside a column group is frozen to end, all of the sibling columns
+   * When a column inside of a column group is frozen to end, all of the sibling columns
    * inside the group will get frozen to end also.
    *
    * Column can not be set as `frozen` and `frozenToEnd` at the same time.
@@ -109,7 +108,7 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
    *   the rendered item, contains:
    *   - `model.index` The index of the item.
    *   - `model.item` The item.
-   *   - `model.expanded` Sub-level toggle state.
+   *   - `model.expanded` Sublevel toggle state.
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    *   - `model.detailsOpened` Details opened state.

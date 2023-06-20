@@ -577,7 +577,7 @@ describe('column - simple grid with rowHeader', () => {
     const firstCell = grid.shadowRoot.querySelector('tbody tr:first-child th:first-child');
     expect(firstCell).to.be.ok;
     expect(firstCell.getAttribute('scope')).to.equal('row');
-    expect(firstCell.tagName).to.equal('TH');
+    expect(firstCell.localName).to.equal('th');
     expect(column.rowHeader).to.be.true;
   });
 });

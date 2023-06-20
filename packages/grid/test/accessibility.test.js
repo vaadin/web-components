@@ -89,11 +89,11 @@ describe('accessibility', () => {
       it('should have scope row on table cell for the rowheader columns and role gridcell row for other columns', () => {
         for (const child of grid.$.items.children) {
           expect(child.children[0].getAttribute('role')).to.equal('gridcell');
-          expect(child.children[0].tagName.toLowerCase()).to.equal('td');
+          expect(child.children[0].localName).to.equal('td');
           expect(child.children[1].getAttribute('role')).to.equal('gridcell');
-          expect(child.children[1].tagName.toLowerCase()).to.equal('td');
+          expect(child.children[1].localName).to.equal('td');
           expect(child.children[2].getAttribute('scope')).to.equal('row');
-          expect(child.children[2].tagName.toLowerCase()).to.equal('th');
+          expect(child.children[2].localName).to.equal('th');
         }
       });
 
