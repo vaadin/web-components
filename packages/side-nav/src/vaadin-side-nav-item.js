@@ -8,6 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 
@@ -106,6 +107,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       path: String,
 
       /**
+       * A comma-separated list of alternative paths matching this item.
+       *
+       * @attr {string} path-aliases
+       */
+      pathAliases: String,
+
+      /**
        * Whether to show the child items or not
        *
        * @type {boolean}
@@ -170,7 +178,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   updated(props) {
     super.updated(props);
 
-    if (props.has('path')) {
+    if (props.has('path') || props.has('pathAliases')) {
       this.__updateActive();
     }
 
@@ -250,23 +258,16 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   /** @private */
   __calculateActive() {
-    const pathAbsolute = this.path.startsWith('/');
-    // Absolute path or no base uri in use. No special comparison needed
-    if (pathAbsolute) {
-      // Compare an absolute view path
-      return document.location.pathname === this.path;
+    if (this.path == null) {
+      return false;
     }
-    const hasBaseUri = document.baseURI !== document.location.href;
-    if (!hasBaseUri) {
-      // Compare a relative view path (strip the starting slash)
-      return document.location.pathname.substring(1) === this.path;
+    if (matchPaths(document.location.pathname, this.path)) {
+      return true;
     }
-    const pathRelativeToRoot = document.location.pathname;
-    const basePath = new URL(document.baseURI).pathname;
-    const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
-    const pathRelativeToBase =
-      basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath) ? pathWithoutBase : pathRelativeToRoot;
-    return pathRelativeToBase === this.path;
+    return (
+      this.pathAliases != null &&
+      this.pathAliases.split(',').some((alias) => matchPaths(document.location.pathname, alias))
+    );
   }
 }
 
