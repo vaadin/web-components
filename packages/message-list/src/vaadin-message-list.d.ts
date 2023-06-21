@@ -48,7 +48,7 @@ export interface MessageListItem {
  * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
  * state attributes and stylable shadow parts of message elements.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class MessageList extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**

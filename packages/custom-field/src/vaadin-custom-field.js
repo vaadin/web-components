@@ -67,7 +67,7 @@ const defaultFormatValue = (inputValues) => {
  * You may also manually set `disabled` or `readonly` attribute on this component to make the label
  * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
