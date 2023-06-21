@@ -441,7 +441,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         // Scroll back to the beginning
         await scrollHorizontally(-grid.$.table.scrollWidth);
 
-        // Expect the cell that was previously not visible to have the odd part
+        // Expect the cell that was previously not visible to have the last-row-cell part
         expect(getBodyCell(1, 0).getAttribute('part')).to.include('last-row-cell');
       });
     });
