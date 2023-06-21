@@ -332,6 +332,118 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
         expectCellsVisualOrderToMatchColumnOrder();
       });
+
+      it('should have cell class names on the revealed cells', async () => {
+        // Add a class name generator
+        grid.cellClassNameGenerator = () => 'foo';
+        await nextFrame();
+        expect(getBodyCell(0, getLastVisibleColumnIndex()).classList.contains('foo')).to.be.true;
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        // Expect the cell that was previously not visible to have the class name
+        expect(getBodyCell(0, 0).classList.contains('foo')).to.be.true;
+      });
+
+      it('should have cell part names on the revealed cells', async () => {
+        // Add a part name generator
+        grid.cellPartNameGenerator = () => 'foo';
+        await nextFrame();
+        expect(getBodyCell(0, getLastVisibleColumnIndex()).getAttribute('part')).to.include('foo');
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        // Expect the cell that was previously not visible to have the part name
+        expect(getBodyCell(0, 0).getAttribute('part')).to.include('foo');
+      });
+
+      it('should have area-selected on the revealed cells', async () => {
+        // Select the first item
+        grid.selectedItems = [grid.items[0]];
+        await nextFrame();
+        expect(getBodyCell(0, getLastVisibleColumnIndex()).getAttribute('aria-selected')).to.equal('true');
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        // Expect the cell that was previously not visible to have the aria-selected attribute
+        expect(getBodyCell(0, 0).getAttribute('aria-selected')).to.equal('true');
+      });
+
+      it('should relate revealed cells to the details cell', async () => {
+        // Add row details
+        grid.rowDetailsRenderer = (root) => {
+          root.innerHTML = `<div>Details</div>`;
+        };
+        await nextFrame();
+
+        const detailsCellId = grid.shadowRoot.querySelector('[part~="details-cell"]').id;
+        expect(getBodyCell(0, getLastVisibleColumnIndex()).getAttribute('aria-controls')).to.equal(detailsCellId);
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        // Expect the cell that was previously not visible to have the aria-controls attribute
+        expect(getBodyCell(0, 0).getAttribute('aria-controls')).to.equal(detailsCellId);
+      });
+
+      it('should mark revealed cells as draggable', async () => {
+        // Make rows draggable
+        grid.rowsDraggable = true;
+        await nextFrame();
+
+        expect(getBodyCellContent(getLastVisibleColumnIndex()).getAttribute('draggable')).to.equal('true');
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+        // Expect the cell that was previously not visible to have the draggable attribute
+        expect(getBodyCellContent(0).getAttribute('draggable')).to.equal('true');
+      });
+
+      it('should not create excess cells for a row', async () => {
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+
+        const cellCount = grid.shadowRoot.querySelector('tbody tr').childElementCount;
+
+        // Add row details (this will cause the row to be restructured)
+        grid.rowDetailsRenderer = (root) => {
+          root.innerHTML = `<div>Details</div>`;
+        };
+        await nextFrame();
+
+        // Scroll back to the end
+        await scrollHorizontally(grid.$.table.scrollWidth);
+
+        // Expect the row to have the same number plus one cell
+        expect(grid.shadowRoot.querySelector('tbody tr').childElementCount).to.equal(cellCount + 1);
+      });
+
+      it('should have loading state on the revealed cell', async () => {
+        // Add a data provider that never resolves
+        grid.dataProvider = () => {};
+        await nextFrame();
+
+        expect(getBodyCell(0, getLastVisibleColumnIndex()).getAttribute('part')).to.include('loading-row-cell');
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+
+        // Expect the cell that was previously not visible to have the loading state
+        expect(getBodyCell(0, 0).getAttribute('part')).to.include('loading-row-cell');
+      });
+
+      it('should have last-row-cell part on the revealed cell', async () => {
+        // Add new item
+        grid.items = [...grid.items, { name: `Item 2` }];
+        await nextFrame();
+
+        expect(getBodyCell(1, getLastVisibleColumnIndex()).getAttribute('part')).to.include('last-row-cell');
+
+        // Scroll back to the beginning
+        await scrollHorizontally(-grid.$.table.scrollWidth);
+
+        // Expect the cell that was previously not visible to have the last-row-cell part
+        expect(getBodyCell(1, 0).getAttribute('part')).to.include('last-row-cell');
+      });
     });
 
     describe(`keyboard navigation - ${dir}`, () => {
