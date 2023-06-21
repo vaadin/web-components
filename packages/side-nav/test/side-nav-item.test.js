@@ -69,8 +69,9 @@ describe('side-nav-item', () => {
         expect(item.active).to.be.false;
       });
 
-      it('should be inactive even if an alias matches', () => {
+      it('should be inactive even if an alias matches', async () => {
         item.pathAliases = '/';
+        await item.updateComplete;
         expect(item.active).to.be.false;
       });
 
@@ -86,8 +87,9 @@ describe('side-nav-item', () => {
         expect(item.active).to.be.true;
       });
 
-      it('should be inactive when not matching path is set', () => {
+      it('should be inactive when not matching path is set', async () => {
         item.path = '/path';
+        await item.updateComplete;
         expect(item.active).to.be.false;
       });
     });
@@ -108,8 +110,9 @@ describe('side-nav-item', () => {
         expect(item.active).to.be.true;
       });
 
-      it('should be active even when no aliases match', () => {
+      it('should be active even when no aliases match', async () => {
         item.pathAliases = '/alias';
+        await item.updateComplete;
         expect(item.active).to.be.true;
       });
     });
