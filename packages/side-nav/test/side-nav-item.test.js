@@ -130,15 +130,19 @@ describe('side-nav-item', () => {
         expect(item.active).to.be.false;
       });
 
-      it('should be active when an alias matches', () => {
+      it('should be active when an alias matches', async () => {
         item.pathAliases = '/, /alias';
+        await item.updateComplete;
         expect(item.active).to.be.true;
+
         item.pathAliases = '/alias, /';
+        await item.updateComplete;
         expect(item.active).to.be.true;
       });
 
-      it('should be active when an empty alias matches', () => {
+      it('should be active when an empty alias matches', async () => {
         item.pathAliases = '';
+        await item.updateComplete;
         expect(item.active).to.be.true;
       });
     });
