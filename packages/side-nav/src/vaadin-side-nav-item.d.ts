@@ -7,6 +7,7 @@ import { LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 /**
  * Fired when the `expanded` property changes.
@@ -76,7 +77,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
-declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+declare class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   /**
    * The path to navigate to
    */

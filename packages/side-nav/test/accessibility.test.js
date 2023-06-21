@@ -125,4 +125,40 @@ describe('accessibility', () => {
       expect(sideNav.hasAttribute('focus-ring')).to.be.false;
     });
   });
+
+  describe('i18n', () => {
+    let sideNav, items;
+
+    beforeEach(async () => {
+      sideNav = fixtureSync(`
+        <vaadin-side-nav>
+          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/bar">
+            Bar
+            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      `);
+      await nextRender();
+      items = [...sideNav.querySelectorAll('vaadin-side-nav-item')];
+    });
+
+    it('should set i18n on child items of the side-nav item', async () => {
+      const i18n = { toggle: 'Toggle' };
+      items[1].i18n = i18n;
+      await nextRender();
+      expect(items[2].i18n).to.deep.equal(i18n);
+      expect(items[3].i18n).to.deep.equal(i18n);
+    });
+
+    it('should set i18n on all the child items of the side-nav', async () => {
+      const i18n = { toggle: 'Toggle' };
+      sideNav.i18n = i18n;
+      await nextRender();
+      items.forEach((item) => {
+        expect(item.i18n).to.deep.equal(i18n);
+      });
+    });
+  });
 });

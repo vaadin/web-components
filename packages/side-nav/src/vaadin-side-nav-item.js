@@ -5,12 +5,13 @@
  */
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
-import { ChildrenController } from './vaadin-side-nav-children-controller.js';
+import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -77,8 +78,9 @@ function isEnabled() {
  * @mixes PolylitMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes SideNavChildrenMixin
  */
-class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-side-nav-item';
   }
@@ -126,15 +128,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   static get styles() {
-    return sideNavItemBaseStyles;
+    return [screenReaderOnly, sideNavItemBaseStyles];
   }
 
   constructor() {
     super();
 
     this.__boundUpdateCurrent = this.__updateCurrent.bind(this);
-
-    this._childrenController = new ChildrenController(this, 'children');
   }
 
   /** @protected */
@@ -147,8 +147,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
    * @override
    */
   firstUpdated() {
-    // Controller to detect whether the item has child items.
-    this.addController(this._childrenController);
+    super.firstUpdated();
 
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "listitem".
@@ -167,8 +166,6 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     if (props.has('path') || props.has('pathAliases')) {
       this.__updateCurrent();
     }
-
-    this.toggleAttribute('has-children', this._childrenController.nodes.length > 0);
   }
 
   /** @protected */
@@ -189,7 +186,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   render() {
     return html`
       <div part="content" @click="${this._onContentClick}">
-        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.current ? 'page' : 'false'}">
+        <a id="link" href="${ifDefined(this.path)}" part="link" aria-current="${this.current ? 'page' : 'false'}">
           <slot name="prefix"></slot>
           <slot></slot>
           <slot name="suffix"></slot>
@@ -199,12 +196,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
           @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
-          aria-label="Toggle child items"
+          aria-labelledby="link i18n"
         ></button>
       </div>
       <ul part="children" ?hidden="${!this.expanded}">
         <slot name="children"></slot>
       </ul>
+      <div class="sr-only" id="i18n">${this.i18n.toggle}</div>
     `;
   }
 
