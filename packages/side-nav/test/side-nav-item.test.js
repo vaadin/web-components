@@ -110,7 +110,7 @@ describe('side-nav-item', () => {
 
       it('should be active even when no aliases match', () => {
         item.pathAliases = '/alias';
-        expect(item.active);
+        expect(item.active).to.be.true;
       });
     });
 
