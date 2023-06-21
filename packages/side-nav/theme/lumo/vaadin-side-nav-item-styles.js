@@ -88,10 +88,11 @@ export const sideNavItemStyles = css`
   }
 
   slot:not([name]) {
-    margin: 0 var(--lumo-space-xs);
+    margin: 0 var(--lumo-space-s);
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    padding: 0.1em;
     color: var(--lumo-contrast-60pct);
   }
 
