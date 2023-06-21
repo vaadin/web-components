@@ -27,7 +27,13 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { getBodyRowCells, iterateChildren, updateBooleanRowStates, updateCellsPart } from './vaadin-grid-helpers.js';
+import {
+  getBodyRowCells,
+  iterateChildren,
+  iterateRowCells,
+  updateBooleanRowStates,
+  updateCellsPart,
+} from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -862,7 +868,7 @@ class Grid extends ElementMixin(
   _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
     const contentsFragment = document.createDocumentFragment();
 
-    iterateChildren(row, (cell) => {
+    iterateRowCells(row, (cell) => {
       cell._vacant = true;
     });
     row.innerHTML = '';

@@ -3,7 +3,12 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, updateBooleanRowStates, updateStringRowStates } from './vaadin-grid-helpers.js';
+import {
+  iterateChildren,
+  iterateRowCells,
+  updateBooleanRowStates,
+  updateStringRowStates,
+} from './vaadin-grid-helpers.js';
 
 const DropMode = {
   BETWEEN: 'between',
@@ -390,7 +395,7 @@ export const DragAndDropMixin = (superClass) =>
       const dragDisabled = !this.rowsDraggable || loading || (this.dragFilter && !this.dragFilter(model));
       const dropDisabled = !this.dropMode || loading || (this.dropFilter && !this.dropFilter(model));
 
-      iterateChildren(row, (cell) => {
+      iterateRowCells(row, (cell) => {
         if (dragDisabled) {
           cell._content.removeAttribute('draggable');
         } else {

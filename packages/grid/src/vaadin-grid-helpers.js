@@ -10,6 +10,15 @@ import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component
  * @return {HTMLTableCellElement[]} array of cells
  */
 export function getBodyRowCells(row) {
+  if (row.parentElement && row.parentElement.localName === 'tbody') {
+    // In case dealing with an attached body row, use the cells cached in the
+    // column to make sure also any physically detached cells
+    // (due to lazy column rendering) are included
+    const grid = row.getRootNode().host;
+    const columns = grid._getColumnsInOrder();
+    return columns.flatMap((column) => (column._cells && column._cells.find((cell) => cell.__parentRow === row)) || []);
+  }
+  // In any other case, query the cells directly from the row
   return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
 }
 
@@ -19,6 +28,18 @@ export function getBodyRowCells(row) {
  */
 export function iterateChildren(container, callback) {
   [...container.children].forEach(callback);
+}
+
+/**
+ * Iterates over the cells of a row. This includes the details cell if
+ * present and any other cell that may be physically detached from the row
+ * due to lazy column reordering.
+ *
+ * @param {HTMLTableRowElement} row the table row
+ * @param {Function} callback function to call on each cell
+ */
+export function iterateRowCells(row, callback) {
+  [...getBodyRowCells(row), ...row.querySelectorAll('[part~="details-cell"]')].forEach(callback);
 }
 
 /**
