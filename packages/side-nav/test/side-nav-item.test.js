@@ -132,7 +132,7 @@ describe('side-nav-item', () => {
 
       it('should be active when an alias matches', () => {
         item.pathAliases = '/, /alias';
-        expect(item.active);
+        expect(item.active).to.be.true;
         item.pathAliases = '/alias, /';
         expect(item.active);
       });
