@@ -139,7 +139,7 @@ describe('side-nav-item', () => {
 
       it('should be active when an empty alias matches', () => {
         item.pathAliases = '';
-        expect(item.active);
+        expect(item.active).to.be.true;
       });
     });
   });
