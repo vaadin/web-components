@@ -7,38 +7,13 @@ import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { ChildrenController } from './vaadin-side-nav-children-controller.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
-}
-
-/**
- * A controller to manage the item content children slot.
- */
-class ChildrenController extends SlotController {
-  constructor(host) {
-    super(host, 'children', null, { observe: true, multiple: true });
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  initAddedNode() {
-    this.host.requestUpdate();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  teardownNode() {
-    this.host.requestUpdate();
-  }
 }
 
 /**
@@ -157,7 +132,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   constructor() {
     super();
 
-    this._childrenController = new ChildrenController(this);
+    this._childrenController = new ChildrenController(this, 'children');
   }
 
   /** @protected */
