@@ -78,12 +78,21 @@ class ChildrenController extends SlotController {
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
  * Part name       | Description
  * ----------------|----------------
  * `content`       | The element that wraps link and toggle button
  * `children`      | The element that wraps child items
  * `link`          | The clickable anchor used for navigation
  * `toggle-button` | The toggle button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `expanded`     | Set when the element is expanded.
+ * `has-children` | Set when the element has child items.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
