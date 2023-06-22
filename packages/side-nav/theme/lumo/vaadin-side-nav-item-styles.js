@@ -23,6 +23,10 @@ export const sideNavItemStyles = css`
     min-height: var(--lumo-icon-size-m);
   }
 
+  [part='link'][href] {
+    cursor: pointer;
+  }
+
   [part='toggle-button'] {
     position: relative;
     border: 0;
