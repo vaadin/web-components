@@ -7,7 +7,7 @@ import { css, unsafeCSS } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mi
 import { addLumoGlobalStyles } from './global.js';
 import { typography } from './typography.js';
 
-const typographWithoutHost = css`
+const typographyWithoutHost = css`
   ${unsafeCSS(typography.cssText.replace(/,\s*:host/su, ''))}
 `;
-addLumoGlobalStyles('typography', typographWithoutHost, false);
+addLumoGlobalStyles('typography', typographyWithoutHost, false);

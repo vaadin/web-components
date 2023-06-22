@@ -9,9 +9,9 @@ describe('font-size', () => {
     wrapper = fixtureSync(`
       <div style="display: flex; flex-wrap: wrap; width: 600px">
         <style>
-            html {
-                --lumo-font-size-m: 1.5rem;
-            }
+          html {
+            --lumo-font-size-m: 1.5rem;
+          }
         </style>
         <span id="test" style="font-size: 1.5em">Font size 1.5em</span>
         <span id="test">Using font size 1.5rem from html definition</span>
