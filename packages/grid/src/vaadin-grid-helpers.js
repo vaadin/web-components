@@ -6,17 +6,14 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
+ * Returns the cells of the given row, excluding the details cell.
+ *
  * @param {HTMLTableRowElement} row the table row
  * @return {HTMLTableCellElement[]} array of cells
  */
 export function getBodyRowCells(row) {
-  if (row.__cells) {
-    // If available, use the cells cached in the row to make sure also any
-    // physically detached cells (due to lazy column rendering) are included
-    return row.__cells;
-  }
-  // In any other case, query the cells directly from the row
-  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  // If available, return the cached cells. Otherwise, query the cells directly from the row.
+  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
 }
 
 /**
