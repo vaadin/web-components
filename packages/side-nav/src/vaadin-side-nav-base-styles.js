@@ -28,6 +28,10 @@ export const sideNavItemBaseStyles = css`
     -webkit-appearance: none;
     appearance: none;
     flex: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
 
   [part='children'] {

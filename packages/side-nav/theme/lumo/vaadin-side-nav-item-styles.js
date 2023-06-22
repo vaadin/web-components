@@ -4,6 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
@@ -29,17 +30,9 @@ export const sideNavItemStyles = css`
 
   [part='toggle-button'] {
     position: relative;
-    border: 0;
-    margin: calc((var(--lumo-icon-size-m) - var(--lumo-size-s)) / 2) 0;
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
-    padding: 0;
-    background: transparent;
-    font: inherit;
-    color: var(--lumo-tertiary-text-color);
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);
-    cursor: var(--lumo-clickable-cursor, default);
-    transition: color 140ms;
   }
 
   :host([has-children]) [part='content'] {
@@ -61,11 +54,7 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button']::before {
-    font-family: lumo-icons;
     content: var(--lumo-icons-dropdown);
-    font-size: 1.5em;
-    line-height: var(--lumo-size-s);
-    display: inline-block;
     transform: rotate(-90deg);
     transition: transform 140ms;
   }
@@ -118,4 +107,4 @@ export const sideNavItemStyles = css`
   }
 `;
 
-registerStyles('vaadin-side-nav-item', sideNavItemStyles, { moduleId: 'lumo-side-nav-item' });
+registerStyles('vaadin-side-nav-item', [fieldButton, sideNavItemStyles], { moduleId: 'lumo-side-nav-item' });
