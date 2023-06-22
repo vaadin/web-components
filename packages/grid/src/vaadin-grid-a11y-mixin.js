@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
+import { getBodyRowCells, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -74,6 +74,19 @@ export const A11yMixin = (superClass) =>
       row.setAttribute('aria-selected', Boolean(selected));
       iterateRowCells(row, (cell) => {
         cell.setAttribute('aria-selected', Boolean(selected));
+      });
+    }
+
+    _a11yUpdateCellHeaders(row, model) {
+      const rowCells = getBodyRowCells(row);
+      const rowHeaderCells = rowCells.filter((cell) => cell._column.rowHeader);
+
+      rowCells.forEach((cell) => {
+        // TODO: Also include header group cells
+        const columnHeaderCells = [cell._column._headerCell];
+        if (!rowHeaderCells.includes(cell)) {
+          cell.setAttribute('headers', [...columnHeaderCells, ...rowHeaderCells].map((cell) => cell.id).join(' '));
+        }
       });
     }
 

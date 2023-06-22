@@ -46,6 +46,11 @@ export const ColumnBaseMixin = (superClass) =>
           value: false,
         },
 
+        rowHeader: {
+          type: Boolean,
+          value: false,
+        },
+
         /**
          * When true, the column is frozen to end of grid.
          *
@@ -222,6 +227,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
+        '_rowHeaderChanged(rowHeader, _cells.*)',
       ];
     }
 
@@ -247,6 +253,21 @@ export const ColumnBaseMixin = (superClass) =>
         .concat(this._headerCell)
         .concat(this._footerCell)
         .filter((cell) => cell);
+    }
+
+    _rowHeaderChanged(rowHeader, cells) {
+      if (!cells.value) {
+        return;
+      }
+
+      cells.value.forEach((cell) => {
+        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
+        if (rowHeader) {
+          cell.setAttribute('scope', 'row');
+        } else {
+          cell.removeAttribute('scope');
+        }
+      });
     }
 
     /** @protected */

@@ -1154,6 +1154,7 @@ class Grid extends ElementMixin(
 
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
+    this._a11yUpdateCellHeaders(row, model);
 
     this._updateRowStateParts(row, model);
 
