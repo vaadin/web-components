@@ -872,6 +872,11 @@ class Grid extends ElementMixin(
       cell._vacant = true;
     });
     row.innerHTML = '';
+    if (section === 'body') {
+      // Clear the cached cell references
+      row.__cells = [];
+      row.__detailsCell = null;
+    }
 
     columns
       .filter((column) => !column.hidden)
@@ -890,6 +895,8 @@ class Grid extends ElementMixin(
           }
           cell.setAttribute('part', 'cell body-cell');
           cell.__parentRow = row;
+          // Cache the cell reference
+          row.__cells.push(cell);
           if (!column._bodyContentHidden) {
             row.appendChild(cell);
           }
@@ -912,6 +919,8 @@ class Grid extends ElementMixin(
             }
             this._configureDetailsCell(detailsCell);
             row.appendChild(detailsCell);
+            // Cache the details cell reference
+            row.__detailsCell = detailsCell;
             this._a11ySetRowDetailsCell(row, detailsCell);
             detailsCell._vacant = false;
           }
