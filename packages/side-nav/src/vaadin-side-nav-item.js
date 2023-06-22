@@ -132,7 +132,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   constructor() {
     super();
 
-    this._childrenController = new ChildrenController(this);
+    this._childrenController = new ChildrenController(this, 'children');
   }
 
   /** @protected */

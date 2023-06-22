@@ -6,6 +6,8 @@
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
- * A controller to manage the item content children slot.
+ * A controller that manages the item content children slot.
  */
-export class ChildrenController extends SlotController {}
+export class ChildrenController extends SlotController {
+  constructor(node: HTMLElement, slotName: string);
+}
