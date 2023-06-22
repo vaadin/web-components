@@ -509,36 +509,13 @@ class Grid extends ElementMixin(
       reorderElements: true,
     });
 
-    // Memorize last scroll position in Firefox
-    if (this._firefox) {
-      this.$.table.addEventListener('scroll', () => {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible !== false) {
-          this.__memorizedScrollTop = this.$.table.scrollTop;
-        }
-      });
-    }
-
-    new ResizeObserver(() => {
-      // For Firefox, manually restore last scroll position when grid becomes
-      // visible again. This solves an issue where switching visibility of two
-      // grids causes Firefox trying to synchronize the scroll positions between
-      // the two grid's table elements.
-      // See https://github.com/vaadin/web-components/issues/5796
-      if (this._firefox) {
-        const isVisible = !isElementHidden(this);
-        if (isVisible && this.__previousVisible === false) {
-          this.$.table.scrollTop = this.__memorizedScrollTop || 0;
-        }
-        this.__previousVisible = isVisible;
-      }
-
+    new ResizeObserver(() =>
       setTimeout(() => {
         this.__updateFooterPositioning();
         this.__updateColumnsBodyContentHidden();
         this.__tryToRecalculateColumnWidthsIfPending();
-      });
-    }).observe(this.$.table);
+      }),
+    ).observe(this.$.table);
 
     processTemplates(this);
 
