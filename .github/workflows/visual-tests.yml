@@ -26,10 +26,15 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
+        uses: nick-fields/retry@v2
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:lumo
+        with:
+          timeout_minutes: 5
+          retry_wait_seconds: 60
+          max_attempts: 3
+          command: yarn test:lumo
 
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}
@@ -58,10 +63,15 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
+        uses: nick-fields/retry@v2
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        run: yarn test:material
+        with:
+          timeout_minutes: 5
+          retry_wait_seconds: 60
+          max_attempts: 3
+          command: yarn test:material
 
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}
