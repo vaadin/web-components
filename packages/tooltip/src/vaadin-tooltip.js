@@ -27,6 +27,18 @@ let warmUpTimeout = null;
 let cooldownTimeout = null;
 
 /**
+ * Resets the global tooltip warmup and cooldown state.
+ * Only for internal use in tests.
+ * @private
+ */
+export function resetGlobalTooltipState() {
+  warmedUp = false;
+  clearTimeout(warmUpTimeout);
+  clearTimeout(cooldownTimeout);
+  closing.clear();
+}
+
+/**
  * Controller for handling tooltip opened state.
  */
 class TooltipStateController {
