@@ -11,7 +11,7 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import { Tooltip } from '../vaadin-tooltip.js';
+import { resetGlobalTooltipState, Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('timers', () => {
@@ -41,9 +41,8 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
-      // Wait for cooldown timeout.
-      await aTimeout(0);
+    afterEach(() => {
+      resetGlobalTooltipState();
     });
 
     it('should open the overlay after a delay on mouseenter', async () => {
@@ -72,9 +71,8 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
-      // Wait for cooldown timeout.
-      await aTimeout(0);
+    afterEach(() => {
+      resetGlobalTooltipState();
     });
 
     it('should open the overlay after a delay on keyboard focus', async () => {
@@ -103,9 +101,8 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
-      // Wait for cooldown timeout.
-      await aTimeout(1);
+    afterEach(() => {
+      resetGlobalTooltipState();
     });
 
     it('should close the overlay after a hide delay on mouseleave', async () => {
@@ -431,9 +428,8 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
-      // Wait for cooldown timeout.
-      await aTimeout(2);
+    afterEach(() => {
+      resetGlobalTooltipState();
     });
 
     it('should close first tooltip and open the second one without waiting for hover delay', async () => {
