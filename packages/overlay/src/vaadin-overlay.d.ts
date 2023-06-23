@@ -3,10 +3,10 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
+import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
 
 export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: object) => void;
 
@@ -120,7 +120,7 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayCustomEventMap;
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  */
-declare class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(HTMLElement))) {
+declare class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(HTMLElement)))) {
   /**
    * When true, the overlay is visible and attached to body.
    */
