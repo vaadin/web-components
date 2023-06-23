@@ -41,7 +41,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -71,7 +71,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -101,7 +101,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -428,7 +428,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
