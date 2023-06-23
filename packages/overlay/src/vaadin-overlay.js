@@ -75,6 +75,7 @@ import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  * @mixes OverlayFocusMixin
+ * @mixes OverlayStackMixin
  */
 class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))) {
   static get template() {
