@@ -102,17 +102,17 @@ describe('renderer', () => {
   });
 
   it('should call renderer on owner change', async () => {
-    const spy = sinon.spy();
+    const renderer = sinon.spy();
 
     overlay.opened = true;
-    overlay.renderer = () => spy();
+    overlay.renderer = renderer;
     await nextRender();
 
-    spy.resetHistory();
+    renderer.resetHistory();
     overlay.owner = {};
     await nextRender();
 
-    expect(spy.calledOnce).to.be.true;
+    expect(renderer.calledOnce).to.be.true;
   });
 
   it('should call renderer when requesting content update', () => {
