@@ -78,15 +78,13 @@ describe('renderer', () => {
     const owner = {};
     overlay.owner = owner;
 
-    let self;
-    overlay.renderer = function () {
-      self = this;
-    };
+    const renderer = sinon.spy();
+    overlay.renderer = renderer;
 
     overlay.opened = true;
     await nextRender();
 
-    expect(self).to.equal(owner);
+    expect(renderer.firstCall.thisValue).to.equal(owner);
   });
 
   it('should call renderer on model change', async () => {
