@@ -45,9 +45,10 @@ customElements.define(
 describe('restore focus', () => {
   let wrapper, overlay, focusable, focusInput;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     focusInput = document.createElement('input');
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
+    await nextRender();
     overlay = wrapper.$.overlay;
     focusable = wrapper.$.focusable;
   });
@@ -66,6 +67,7 @@ describe('restore focus', () => {
       overlay.opened = true;
       await nextRender();
       overlay.opened = false;
+      await nextRender();
       expect(getDeepActiveElement()).to.not.equal(focusInput);
     });
 
@@ -79,6 +81,7 @@ describe('restore focus', () => {
         overlay.opened = true;
         await nextRender();
         overlay.opened = false;
+        await nextRender();
         expect(getDeepActiveElement()).to.not.equal(focusInput);
       });
     });
@@ -103,6 +106,7 @@ describe('restore focus', () => {
         overlay.opened = true;
         await nextRender();
         overlay.opened = false;
+        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
@@ -111,6 +115,7 @@ describe('restore focus', () => {
         overlay.opened = true;
         await nextRender();
         overlay.opened = false;
+        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusable);
       });
 
@@ -120,6 +125,7 @@ describe('restore focus', () => {
         await nextRender();
         focusable.focus();
         overlay.opened = false;
+        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusable);
       });
 
@@ -133,6 +139,7 @@ describe('restore focus', () => {
           overlay.opened = true;
           await nextRender();
           overlay.opened = false;
+          await nextRender();
           expect(getDeepActiveElement()).to.equal(focusInput);
         });
       });
