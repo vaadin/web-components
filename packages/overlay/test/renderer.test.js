@@ -123,10 +123,9 @@ describe('renderer', () => {
   });
 
   it('should not call renderer if overlay is not open', async () => {
-    const spy = sinon.spy();
-    overlay.renderer = () => spy();
+    overlay.renderer = sinon.spy();
     await nextRender();
-    expect(spy.called).to.be.false;
+    expect(overlay.renderer.called).to.be.false;
   });
 
   it('should clear the content when removing the renderer', async () => {
