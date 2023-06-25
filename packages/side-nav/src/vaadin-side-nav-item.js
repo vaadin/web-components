@@ -173,7 +173,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   connectedCallback() {
     super.connectedCallback();
     this.__updateActive();
-    this.__boundUpdateActive = this.__updateActive.bind(this);
+    this.__boundUpdateActive = () => setTimeout(() => this.__updateActive());
     window.addEventListener('popstate', this.__boundUpdateActive);
   }
 
