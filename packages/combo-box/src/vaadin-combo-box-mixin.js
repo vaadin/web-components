@@ -867,14 +867,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onOpened() {
-      // Defer scroll position adjustment to improve performance.
-      requestAnimationFrame(() => {
-        this._scrollIntoView(this._focusedIndex);
-
-        // Set attribute after the items are rendered when overlay is opened for the first time.
-        this._updateActiveDescendant(this._focusedIndex);
-      });
-
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
     }
@@ -895,6 +887,7 @@ export const ComboBoxMixin = (subclass) =>
         }
         // Make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
+        this._focusedIndex = -1;
       } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
         this.selectedItem = null;
 
@@ -1054,10 +1047,6 @@ export const ComboBoxMixin = (subclass) =>
         this._toggleHasValue(true);
         this._inputElementValue = this._getItemLabel(selectedItem);
       }
-
-      if (this.filteredItems) {
-        this._focusedIndex = this.filteredItems.indexOf(selectedItem);
-      }
     }
 
     /**
@@ -1136,18 +1125,6 @@ export const ComboBoxMixin = (subclass) =>
       const focusedItemIndex = this.__getItemIndexByValue(filteredItems, this._getItemValue(focusedItem));
       if (focusedItemIndex > -1) {
         this._focusedIndex = focusedItemIndex;
-      } else {
-        this.__setInitialFocusedIndex();
-      }
-    }
-
-    /** @private */
-    __setInitialFocusedIndex() {
-      const inputValue = this._inputElementValue;
-      if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
-        // When the input element value is the same as the current value or not defined,
-        // set the focused index to the item that matches the value.
-        this._focusedIndex = this.__getItemIndexByLabel(this.filteredItems, this._getItemLabel(this.selectedItem));
       } else {
         // When the user filled in something that is different from the current value = filtering is enabled,
         // set the focused index to the item that matches the filter query.
