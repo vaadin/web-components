@@ -38,7 +38,7 @@ describe('lazy loading', () => {
   let spyDataProvider;
   let spyAsyncDataProvider;
 
-  const getDataProvider = (adlItems) => (params, callback) => {
+  const getDataProvider = (allItems) => (params, callback) => {
     const filteredItems = allItems.filter((item) => item.indexOf(params.filter) > -1);
     const size = filteredItems.length;
     const offset = params.page * params.pageSize;
