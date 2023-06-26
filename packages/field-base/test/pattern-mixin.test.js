@@ -158,14 +158,14 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should pass validation when value matches JavaScript-specific regular expression', async () => {
-      element.pattern = '\\u1234\\cx[5-[]{2}';
+      element.pattern = '\\u1234\\cx[5-\\[]{2}';
       await nextFrame();
       commitInputValue('\u1234\x18[6');
       expect(element.checkValidity()).to.be.true;
     });
 
     it('should fail validation when value mismatches JavaScript-specific regular expression', async () => {
-      element.pattern = '\\u1234\\cx[5-[]{2}';
+      element.pattern = '\\u1234\\cx[5-\\[]{2}';
       await nextFrame();
       commitInputValue('\u1234\x18[4');
       expect(element.checkValidity()).to.be.false;
