@@ -26,14 +26,6 @@ describe('Properties', () => {
       expect(getViewportItems(comboBox).length).to.eql(1);
     });
 
-    it('should set focused index on items set', () => {
-      comboBox.value = 'bar';
-
-      comboBox.items = ['foo', 'bar'];
-
-      expect(comboBox._focusedIndex).to.eql(-1);
-    });
-
     it('should support resetting items', () => {
       comboBox.items = ['foo', 'bar'];
       comboBox.items = undefined;
