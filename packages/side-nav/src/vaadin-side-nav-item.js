@@ -116,7 +116,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
        *
        * @type {boolean}
        */
-      active: {
+      current: {
         type: Boolean,
         value: false,
         readOnly: true,
@@ -131,6 +131,8 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   constructor() {
     super();
+
+    this.__boundUpdateCurrent = this.__updateCurrent.bind(this);
 
     this._childrenController = new ChildrenController(this, 'children');
   }
@@ -163,7 +165,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     super.updated(props);
 
     if (props.has('path') || props.has('pathAliases')) {
-      this.__updateActive();
+      this.__updateCurrent();
     }
 
     this.toggleAttribute('has-children', this._childrenController.nodes.length > 0);
@@ -172,22 +174,22 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this.__updateActive();
-    this.__boundUpdateActive = this.__updateActive.bind(this);
-    window.addEventListener('popstate', this.__boundUpdateActive);
+    this.__updateCurrent();
+
+    window.addEventListener('popstate', this.__boundUpdateCurrent);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('popstate', this.__boundUpdateActive);
+    window.removeEventListener('popstate', this.__boundUpdateCurrent);
   }
 
   /** @protected */
   render() {
     return html`
       <div part="content" @click="${this._onContentClick}">
-        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
+        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.current ? 'page' : 'false'}">
           <slot name="prefix"></slot>
           <slot></slot>
           <slot name="suffix"></slot>
@@ -228,20 +230,20 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   }
 
   /** @private */
-  __updateActive() {
+  __updateCurrent() {
     if (!this.path && this.path !== '') {
-      this._setActive(false);
+      this._setCurrent(false);
       return;
     }
-    this._setActive(this.__calculateActive());
-    this.toggleAttribute('child-active', document.location.pathname.startsWith(this.path));
-    if (this.active) {
+    this._setCurrent(this.__isCurrent());
+    this.toggleAttribute('child-current', document.location.pathname.startsWith(this.path));
+    if (this.current) {
       this.expanded = true;
     }
   }
 
   /** @private */
-  __calculateActive() {
+  __isCurrent() {
     if (this.path == null) {
       return false;
     }

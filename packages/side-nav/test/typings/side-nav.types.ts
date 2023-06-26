@@ -29,7 +29,7 @@ const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 
 // Item properties
 assertType<string | null | undefined>(sideNavItem.path);
-assertType<boolean>(sideNavItem.active);
+assertType<boolean>(sideNavItem.current);
 assertType<boolean>(sideNavItem.expanded);
 
 // Item mixins

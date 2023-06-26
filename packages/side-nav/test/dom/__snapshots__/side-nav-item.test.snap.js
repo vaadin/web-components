@@ -68,10 +68,10 @@ snapshots["vaadin-side-nav-item item expanded"] =
 `;
 /* end snapshot vaadin-side-nav-item item expanded */
 
-snapshots["vaadin-side-nav-item item active"] = 
+snapshots["vaadin-side-nav-item item current"] = 
 `<vaadin-side-nav-item
-  active=""
-  child-active=""
+  child-current=""
+  current=""
   expanded=""
   has-children=""
   role="listitem"
@@ -102,7 +102,7 @@ snapshots["vaadin-side-nav-item item active"] =
   </vaadin-side-nav-item>
 </vaadin-side-nav-item>
 `;
-/* end snapshot vaadin-side-nav-item item active */
+/* end snapshot vaadin-side-nav-item item current */
 
 snapshots["vaadin-side-nav-item item path"] = 
 `<vaadin-side-nav-item
@@ -196,7 +196,7 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
 `;
 /* end snapshot vaadin-side-nav-item shadow expanded */
 
-snapshots["vaadin-side-nav-item shadow active"] = 
+snapshots["vaadin-side-nav-item shadow current"] = 
 `<div part="content">
   <a
     aria-current="page"
@@ -223,7 +223,7 @@ snapshots["vaadin-side-nav-item shadow active"] =
   </slot>
 </ul>
 `;
-/* end snapshot vaadin-side-nav-item shadow active */
+/* end snapshot vaadin-side-nav-item shadow current */
 
 snapshots["vaadin-side-nav-item shadow path"] = 
 `<div part="content">
