@@ -69,5 +69,11 @@ describe('vaadin-side-nav-item', () => {
       await nextRender(sideNavItem);
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
+
+    it('i18n', async () => {
+      sideNavItem.i18n = { toggle: 'Toggle children' };
+      await nextRender();
+      await expect(sideNavItem).shadowDom.to.equalSnapshot();
+    });
   });
 });
