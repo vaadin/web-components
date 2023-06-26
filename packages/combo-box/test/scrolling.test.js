@@ -86,13 +86,6 @@ describe('scrolling', () => {
       expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
     }
 
-    it.skip('should make selected item visible after open', async () => {
-      comboBox.value = comboBox.items[50];
-      comboBox.open();
-      await onceScrolled(comboBox);
-      expectSelectedItemPositionToBeVisible();
-    });
-
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
       focusout(input, overlay);
