@@ -99,7 +99,7 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
    * Set when the item is appended to DOM or when navigated back
    * to the page that contains this item using the browser.
    */
-  readonly active: boolean;
+  readonly current: boolean;
 
   addEventListener<K extends keyof SideNavItemEventMap>(
     type: K,

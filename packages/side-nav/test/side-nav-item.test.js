@@ -58,39 +58,39 @@ describe('side-nav-item', () => {
     });
   });
 
-  describe('active', () => {
+  describe('current', () => {
     describe('no path set initially', () => {
       beforeEach(async () => {
         item = fixtureSync(`<vaadin-side-nav-item></vaadin-side-nav-item>`);
         await nextRender();
       });
 
-      it('should be inactive', () => {
-        expect(item.active).to.be.false;
+      it('should not be current', () => {
+        expect(item.current).to.be.false;
       });
 
-      it('should be inactive even if an alias matches', async () => {
+      it('should not be current even if an alias matches', async () => {
         item.pathAliases = '/';
         await item.updateComplete;
-        expect(item.active).to.be.false;
+        expect(item.current).to.be.false;
       });
 
-      it('should be active when matching path is set', async () => {
+      it('should be current when matching path is set', async () => {
         item.path = '/';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
 
-      it('should be active when an empty matching path is set', async () => {
+      it('should be current when an empty matching path is set', async () => {
         item.path = '';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
 
-      it('should be inactive when not matching path is set', async () => {
+      it('should not be current when not matching path is set', async () => {
         item.path = '/path';
         await item.updateComplete;
-        expect(item.active).to.be.false;
+        expect(item.current).to.be.false;
       });
     });
 
@@ -100,20 +100,20 @@ describe('side-nav-item', () => {
         await nextRender();
       });
 
-      it('should be active', () => {
-        expect(item.active).to.be.true;
+      it('should be current', () => {
+        expect(item.current).to.be.true;
       });
 
-      it('should disallow changing active property to false', async () => {
-        item.active = false;
+      it('should disallow changing current property to false', async () => {
+        item.current = false;
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
 
-      it('should be active even when no aliases match', async () => {
+      it('should be current even when no aliases match', async () => {
         item.pathAliases = '/alias';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
     });
 
@@ -123,30 +123,30 @@ describe('side-nav-item', () => {
         await nextRender();
       });
 
-      it('should be inactive', () => {
-        expect(item.active).to.be.false;
+      it('should not be current', () => {
+        expect(item.current).to.be.false;
       });
 
-      it('should disallow changing active property to true', async () => {
-        item.active = true;
+      it('should disallow changing current property to true', async () => {
+        item.current = true;
         await item.updateComplete;
-        expect(item.active).to.be.false;
+        expect(item.current).to.be.false;
       });
 
-      it('should be active when an alias matches', async () => {
+      it('should be current when an alias matches', async () => {
         item.pathAliases = '/, /alias';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
 
         item.pathAliases = '/alias, /';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
 
-      it('should be active when an empty alias matches', async () => {
+      it('should be current when an empty alias matches', async () => {
         item.pathAliases = '';
         await item.updateComplete;
-        expect(item.active).to.be.true;
+        expect(item.current).to.be.true;
       });
     });
   });
@@ -154,7 +154,7 @@ describe('side-nav-item', () => {
   describe('expanded', () => {
     let toggle;
 
-    describe('inactive item with children', () => {
+    describe('not current item with children', () => {
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item path="/another-path">
@@ -190,7 +190,7 @@ describe('side-nav-item', () => {
       });
     });
 
-    describe('active item with children', () => {
+    describe('current item with children', () => {
       beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-side-nav-item path="">
