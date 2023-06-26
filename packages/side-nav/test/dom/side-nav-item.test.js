@@ -34,7 +34,7 @@ describe('vaadin-side-nav-item', () => {
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
-    it('active', async () => {
+    it('current', async () => {
       sideNavItem.path = '';
       await nextRender(sideNavItem);
       await expect(sideNavItem).dom.to.equalSnapshot();
@@ -58,7 +58,7 @@ describe('vaadin-side-nav-item', () => {
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 
-    it('active', async () => {
+    it('current', async () => {
       sideNavItem.path = '';
       await nextRender(sideNavItem);
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
@@ -67,6 +67,12 @@ describe('vaadin-side-nav-item', () => {
     it('path', async () => {
       sideNavItem.path = 'path';
       await nextRender(sideNavItem);
+      await expect(sideNavItem).shadowDom.to.equalSnapshot();
+    });
+
+    it('i18n', async () => {
+      sideNavItem.i18n = { toggle: 'Toggle children' };
+      await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
   });

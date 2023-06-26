@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-side-nav host default"] = 
 `<vaadin-side-nav
   aria-labelledby="side-nav-label-0"
+  has-children=""
   role="navigation"
 >
   <span
@@ -26,6 +27,7 @@ snapshots["vaadin-side-nav host collapsible"] =
 `<vaadin-side-nav
   aria-labelledby="side-nav-label-1"
   collapsible=""
+  has-children=""
   role="navigation"
 >
   <span
@@ -49,6 +51,7 @@ snapshots["vaadin-side-nav host collapsed"] =
   aria-labelledby="side-nav-label-2"
   collapsed=""
   collapsible=""
+  has-children=""
   role="navigation"
 >
   <span

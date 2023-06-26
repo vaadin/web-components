@@ -89,7 +89,7 @@ export const sideNavItemStyles = css`
     color: var(--lumo-contrast-60pct);
   }
 
-  :host([active]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+  :host([current]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
     color: inherit;
   }
 
@@ -101,7 +101,7 @@ export const sideNavItemStyles = css`
     --_child-indent-2: var(--_child-indent);
   }
 
-  :host([active]) [part='link'] {
+  :host([current]) [part='link'] {
     color: var(--lumo-primary-text-color);
     background-color: var(--lumo-primary-color-10pct);
   }

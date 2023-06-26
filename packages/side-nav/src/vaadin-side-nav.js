@@ -11,6 +11,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -71,8 +72,9 @@ function isEnabled() {
  * @mixes PolylitMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes SideNavChildrenMixin
  */
-class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-side-nav';
   }
@@ -118,6 +120,15 @@ class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this._labelId = `side-nav-label-${generateUniqueId()}`;
   }
 
+  /**
+   * Name of the slot to be used for children.
+   * @protected
+   * @override
+   */
+  get _itemsSlotName() {
+    return '';
+  }
+
   /** @protected */
   get focusElement() {
     return this.shadowRoot.querySelector('button');
@@ -125,6 +136,8 @@ class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   firstUpdated() {
+    super.firstUpdated();
+
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "navigation".
     if (!this.hasAttribute('role')) {

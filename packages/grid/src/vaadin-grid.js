@@ -12,6 +12,7 @@ import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -498,6 +499,23 @@ class Grid extends ElementMixin(
   }
 
   /** @protected */
+  _getRowContainingNode(node) {
+    const content = getClosestElement('vaadin-grid-cell-content', node);
+    if (!content) {
+      return;
+    }
+
+    const cell = content.assignedSlot.parentElement;
+    return cell.parentElement;
+  }
+
+  /** @protected */
+  _isItemAssignedToRow(item, row) {
+    const model = this.__getRowModel(row);
+    return this.getItemId(item) === this.getItemId(model.item);
+  }
+
+  /** @protected */
   ready() {
     super.ready();
 
@@ -541,6 +559,13 @@ class Grid extends ElementMixin(
     if (cell) {
       cell.focus();
     }
+  }
+
+  /** @protected */
+  _focusFirstVisibleRow() {
+    const row = this.__getFirstVisibleItem();
+    this.__rowFocusMode = true;
+    row.focus();
   }
 
   /** @private */
