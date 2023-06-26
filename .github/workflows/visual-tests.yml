@@ -31,7 +31,7 @@ jobs:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
-          timeout_minutes: 5
+          timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
           command: yarn test:lumo
@@ -68,7 +68,7 @@ jobs:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
         with:
-          timeout_minutes: 5
+          timeout_minutes: 20
           retry_wait_seconds: 60
           max_attempts: 3
           command: yarn test:material
