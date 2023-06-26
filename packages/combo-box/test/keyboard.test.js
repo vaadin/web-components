@@ -550,17 +550,6 @@ describe('keyboard', () => {
 
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
     });
-
-    it.skip('should scroll to focused item when opening overlay', async () => {
-      scrollToIndex(comboBox, 0);
-      comboBox.close();
-      comboBox.value = '50';
-
-      comboBox.open();
-
-      await onceScrolled(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.be.within(50 - getVisibleItemsCount(comboBox), 50);
-    });
   });
 
   describe('auto open disabled', () => {

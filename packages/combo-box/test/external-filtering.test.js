@@ -27,7 +27,7 @@ describe('external filtering', () => {
       expect(comboBox._scroller.items).to.eql(['foo', 'bar', 'baz']);
     });
 
-    it.skip('should remove focus while loading', async () => {
+    it('should remove focus while loading', async () => {
       setInputValue(comboBox, 'foo');
       comboBox.filteredItems = ['foo'];
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
@@ -38,7 +38,7 @@ describe('external filtering', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it.skip('should focus on filtered value', () => {
+    it('should focus on filtered value', () => {
       comboBox.filteredItems = ['foo'];
       setInputValue(comboBox, 'bar');
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);

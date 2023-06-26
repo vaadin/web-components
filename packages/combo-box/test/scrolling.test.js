@@ -93,19 +93,6 @@ describe('scrolling', () => {
       expectSelectedItemPositionToBeVisible();
     });
 
-    it.skip('should make selected item visible after reopen', async () => {
-      comboBox.open();
-      await nextFrame();
-
-      comboBox.value = comboBox.items[50];
-      comboBox.close();
-
-      comboBox.open();
-      await nextFrame();
-
-      expectSelectedItemPositionToBeVisible();
-    });
-
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
       focusout(input, overlay);
