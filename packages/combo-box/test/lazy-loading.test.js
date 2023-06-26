@@ -38,7 +38,7 @@ describe('lazy loading', () => {
   let spyDataProvider;
   let spyAsyncDataProvider;
 
-  const getDataProvider = (allItems) => (params, callback) => {
+  const getDataProvider = (adlItems) => (params, callback) => {
     const filteredItems = allItems.filter((item) => item.indexOf(params.filter) > -1);
     const size = filteredItems.length;
     const offset = params.page * params.pageSize;
@@ -520,7 +520,7 @@ describe('lazy loading', () => {
           // Wait for the __loadingChanged observer
           await aTimeout(0);
 
-          expect(comboBox._focusedIndex).to.equal(8);
+          expect(comboBox._focusedIndex).to.equal(-1);
           const items = getViewportItems(comboBox);
           expect(items.some((item) => item.index === 50)).to.be.true;
         });

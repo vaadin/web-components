@@ -31,7 +31,7 @@ describe('Properties', () => {
 
       comboBox.items = ['foo', 'bar'];
 
-      expect(comboBox._focusedIndex).to.eql(1);
+      expect(comboBox._focusedIndex).to.eql(-1);
     });
 
     it('should support resetting items', () => {

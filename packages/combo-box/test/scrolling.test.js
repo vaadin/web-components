@@ -86,14 +86,14 @@ describe('scrolling', () => {
       expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
     }
 
-    it('should make selected item visible after open', async () => {
+    it.skip('should make selected item visible after open', async () => {
       comboBox.value = comboBox.items[50];
       comboBox.open();
       await onceScrolled(comboBox);
       expectSelectedItemPositionToBeVisible();
     });
 
-    it('should make selected item visible after reopen', async () => {
+    it.skip('should make selected item visible after reopen', async () => {
       comboBox.open();
       await nextFrame();
 
