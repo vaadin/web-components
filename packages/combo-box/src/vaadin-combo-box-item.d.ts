@@ -27,7 +27,7 @@ import type { ComboBoxDefaultItem, ComboBoxItemMixinClass } from './vaadin-combo
  * `selected`   | Set when the item is selected
  * `focused`    | Set when the item is focused
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class ComboBoxItem extends HTMLElement {}
 

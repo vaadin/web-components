@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getMenuItems, outsideClick } from './helpers.js';
+import { getMenuItems } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {

@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren, updatePart } from './vaadin-grid-helpers.js';
+import { iterateChildren, iterateRowCells, updatePart } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -105,7 +105,7 @@ export const StylingMixin = (superClass) =>
 
     /** @private */
     _generateCellClassNames(row, model) {
-      iterateChildren(row, (cell) => {
+      iterateRowCells(row, (cell) => {
         if (cell.__generatedClasses) {
           cell.__generatedClasses.forEach((className) => cell.classList.remove(className));
         }
@@ -121,7 +121,7 @@ export const StylingMixin = (superClass) =>
 
     /** @private */
     _generateCellPartNames(row, model) {
-      iterateChildren(row, (cell) => {
+      iterateRowCells(row, (cell) => {
         if (cell.__generatedParts) {
           cell.__generatedParts.forEach((partName) => {
             // Remove previously generated part names

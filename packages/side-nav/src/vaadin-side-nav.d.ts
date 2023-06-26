@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -48,9 +49,29 @@ export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
  * </vaadin-side-nav>
  * ```
  *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `label`         | The label element
+ * `children`      | The element that wraps child items
+ * `toggle-button` | The toggle button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `collapsed`  | Set when the element is collapsed.
+ * `focus-ring` | Set when the label is focused using the keyboard.
+ * `focused`    | Set when the label is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  */
-declare class SideNav extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+declare class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   /**
    * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
    */

@@ -27,7 +27,13 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
-import { getBodyRowCells, iterateChildren, updateBooleanRowStates, updateCellsPart } from './vaadin-grid-helpers.js';
+import {
+  getBodyRowCells,
+  iterateChildren,
+  iterateRowCells,
+  updateBooleanRowStates,
+  updateCellsPart,
+} from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -255,7 +261,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `drag-disabled`       | Set to a row that isn't available for dragging                                                    | row
  * `drop-disabled`       | Set to a row that can't be dropped on top of                                                      | row
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.
@@ -463,12 +469,12 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getFirstVisibleItem() {
-    return this._getVisibleRows().find((row) => this._isInViewport(row));
+    return this._getRenderedRows().find((row) => this._isInViewport(row));
   }
 
   /** @private */
   __getLastVisibleItem() {
-    return this._getVisibleRows()
+    return this._getRenderedRows()
       .reverse()
       .find((row) => this._isInViewport(row));
   }
@@ -485,7 +491,7 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _getVisibleRows() {
+  _getRenderedRows() {
     return Array.from(this.$.items.children)
       .filter((item) => !item.hidden)
       .sort((a, b) => a.index - b.index);
@@ -530,7 +536,7 @@ class Grid extends ElementMixin(
 
   /** @private */
   __focusBodyCell({ item, column }) {
-    const row = this._getVisibleRows().find((row) => row._item === item);
+    const row = this._getRenderedRows().find((row) => row._item === item);
     const cell = row && [...row.children].find((cell) => cell._column === column);
     if (cell) {
       cell.focus();
@@ -635,7 +641,7 @@ class Grid extends ElementMixin(
     // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
     const fvi = this._firstVisibleIndex;
     const lvi = this._lastVisibleIndex;
-    this.__viewportRowsCache = this._getVisibleRows().filter((row) => row.index >= fvi && row.index <= lvi);
+    this.__viewportRowsCache = this._getRenderedRows().filter((row) => row.index >= fvi && row.index <= lvi);
 
     // Pre-cache the intrinsic width of each column
     this.__calculateAndCacheIntrinsicWidths(cols);
@@ -862,10 +868,15 @@ class Grid extends ElementMixin(
   _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
     const contentsFragment = document.createDocumentFragment();
 
-    iterateChildren(row, (cell) => {
+    iterateRowCells(row, (cell) => {
       cell._vacant = true;
     });
     row.innerHTML = '';
+    if (section === 'body') {
+      // Clear the cached cell references
+      row.__cells = [];
+      row.__detailsCell = null;
+    }
 
     columns
       .filter((column) => !column.hidden)
@@ -884,6 +895,8 @@ class Grid extends ElementMixin(
           }
           cell.setAttribute('part', 'cell body-cell');
           cell.__parentRow = row;
+          // Cache the cell reference
+          row.__cells.push(cell);
           if (!column._bodyContentHidden) {
             row.appendChild(cell);
           }
@@ -906,6 +919,8 @@ class Grid extends ElementMixin(
             }
             this._configureDetailsCell(detailsCell);
             row.appendChild(detailsCell);
+            // Cache the details cell reference
+            row.__detailsCell = detailsCell;
             this._a11ySetRowDetailsCell(row, detailsCell);
             detailsCell._vacant = false;
           }

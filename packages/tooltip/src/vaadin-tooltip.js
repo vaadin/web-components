@@ -27,6 +27,18 @@ let warmUpTimeout = null;
 let cooldownTimeout = null;
 
 /**
+ * Resets the global tooltip warmup and cooldown state.
+ * Only for internal use in tests.
+ * @private
+ */
+export function resetGlobalTooltipState() {
+  warmedUp = false;
+  clearTimeout(warmUpTimeout);
+  clearTimeout(cooldownTimeout);
+  closing.clear();
+}
+
+/**
  * Controller for handling tooltip opened state.
  */
 class TooltipStateController {
@@ -230,7 +242,7 @@ class TooltipStateController {
  * `--vaadin-tooltip-offset-start`  | Used as an offset when the tooltip is aligned horizontally after the target
  * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

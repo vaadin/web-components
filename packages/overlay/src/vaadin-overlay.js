@@ -61,7 +61,7 @@ import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
  * ---|---|---
  * `--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
@@ -75,6 +75,7 @@ import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  * @mixes OverlayFocusMixin
+ * @mixes OverlayStackMixin
  */
 class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))) {
   static get template() {
@@ -431,7 +432,7 @@ class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      this._storeFocus();
+      this._saveFocus();
 
       this._animatedOpening();
 

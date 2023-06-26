@@ -1,9 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { outsideClick } from './helpers.js';
 
 customElements.define(
   'overlay-field-wrapper',
@@ -113,15 +112,6 @@ describe('restore focus', () => {
         await nextRender();
         overlay.opened = false;
         expect(getDeepActiveElement()).to.equal(focusable);
-      });
-
-      it('should restore focus asynchronously on outside click', async () => {
-        focusInput.focus();
-        overlay.opened = true;
-        await nextRender();
-        outsideClick();
-        await aTimeout(0);
-        expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
       it('should not restore focus on close if focus was moved outside overlay', async () => {

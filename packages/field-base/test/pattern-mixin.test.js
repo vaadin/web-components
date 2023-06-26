@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fire, fixtureSync, isChrome, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -158,22 +158,18 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should pass validation when value matches JavaScript-specific regular expression', async () => {
-      element.pattern = '\\u1234\\cx[5-[]{2}';
+      element.pattern = '\\u1234\\cx[5-\\[]{2}';
       await nextFrame();
       commitInputValue('\u1234\x18[6');
       expect(element.checkValidity()).to.be.true;
     });
 
-    // FIXME: Fails in Chrome, see https://github.com/vaadin/web-components/issues/5938
-    (isChrome ? it.skip : it)(
-      'should fail validation when value mismatches JavaScript-specific regular expression',
-      async () => {
-        element.pattern = '\\u1234\\cx[5-[]{2}';
-        await nextFrame();
-        commitInputValue('\u1234\x18[4');
-        expect(element.checkValidity()).to.be.false;
-      },
-    );
+    it('should fail validation when value mismatches JavaScript-specific regular expression', async () => {
+      element.pattern = '\\u1234\\cx[5-\\[]{2}';
+      await nextFrame();
+      commitInputValue('\u1234\x18[4');
+      expect(element.checkValidity()).to.be.false;
+    });
   });
 
   describe('pattern + textarea', () => {

@@ -30,7 +30,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ButtonMixin

@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { iterateChildren } from './vaadin-grid-helpers.js';
+import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -72,7 +72,7 @@ export const A11yMixin = (superClass) =>
     _a11yUpdateRowSelected(row, selected) {
       // Jaws reads selection only for rows, NVDA only for cells
       row.setAttribute('aria-selected', Boolean(selected));
-      iterateChildren(row, (cell) => {
+      iterateRowCells(row, (cell) => {
         cell.setAttribute('aria-selected', Boolean(selected));
       });
     }
@@ -111,7 +111,7 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11ySetRowDetailsCell(row, detailsCell) {
-      iterateChildren(row, (cell) => {
+      iterateRowCells(row, (cell) => {
         if (cell !== detailsCell) {
           cell.setAttribute('aria-controls', detailsCell.id);
         }

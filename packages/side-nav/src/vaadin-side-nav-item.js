@@ -1,14 +1,16 @@
 /**
  * @license
- * Copyright (c) 2017 - 2023 Vaadin Ltd.
+ * Copyright (c) 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { ChildrenController } from './vaadin-side-nav-children-controller.js';
 
 function isEnabled() {
   return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
@@ -49,6 +51,26 @@ function isEnabled() {
  * </vaadin-side-nav-item>
  * ```
  *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `content`       | The element that wraps link and toggle button
+ * `children`      | The element that wraps child items
+ * `link`          | The clickable anchor used for navigation
+ * `toggle-button` | The toggle button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `expanded`     | Set when the element is expanded.
+ * `has-children` | Set when the element has child items.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
  * @extends LitElement
@@ -67,6 +89,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
        * The path to navigate to
        */
       path: String,
+
+      /**
+       * A comma-separated list of alternative paths matching this item.
+       *
+       * @attr {string} path-aliases
+       */
+      pathAliases: String,
 
       /**
        * Whether to show the child items or not
@@ -100,6 +129,12 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
     return sideNavItemBaseStyles;
   }
 
+  constructor() {
+    super();
+
+    this._childrenController = new ChildrenController(this, 'children');
+  }
+
   /** @protected */
   get _button() {
     return this.shadowRoot.querySelector('button');
@@ -110,6 +145,9 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
    * @override
    */
   firstUpdated() {
+    // Controller to detect whether the item has child items.
+    this.addController(this._childrenController);
+
     // By default, if the user hasn't provided a custom role,
     // the role attribute is set to "listitem".
     if (!this.hasAttribute('role')) {
@@ -124,9 +162,11 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   updated(props) {
     super.updated(props);
 
-    if (props.has('path')) {
+    if (props.has('path') || props.has('pathAliases')) {
       this.__updateActive();
     }
+
+    this.toggleAttribute('has-children', this._childrenController.nodes.length > 0);
   }
 
   /** @protected */
@@ -146,27 +186,44 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   /** @protected */
   render() {
     return html`
-      <a href="${ifDefined(this.path)}" part="item" aria-current="${this.active ? 'page' : 'false'}">
-        <slot name="prefix"></slot>
-        <slot></slot>
-        <slot name="suffix"></slot>
+      <div part="content" @click="${this._onContentClick}">
+        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
+          <slot name="prefix"></slot>
+          <slot></slot>
+          <slot name="suffix"></slot>
+        </a>
         <button
           part="toggle-button"
-          @click="${this.__toggleExpanded}"
-          ?hidden="${!this.querySelector('[slot=children]')}"
+          @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
           aria-label="Toggle child items"
         ></button>
-      </a>
-      <slot name="children" role="list" part="children" id="children" ?hidden="${!this.expanded}"></slot>
+      </div>
+      <ul part="children" ?hidden="${!this.expanded}">
+        <slot name="children"></slot>
+      </ul>
     `;
   }
 
   /** @private */
-  __toggleExpanded(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  _onButtonClick(event) {
+    // Prevent the event from being handled
+    // by the content click listener below
+    event.stopPropagation();
+    this.__toggleExpanded();
+  }
+
+  /** @private */
+  _onContentClick() {
+    // Toggle item expanded state unless the link has a non-empty path
+    if (this.path == null && this.hasAttribute('has-children')) {
+      this.__toggleExpanded();
+    }
+  }
+
+  /** @private */
+  __toggleExpanded() {
     this.expanded = !this.expanded;
   }
 
@@ -185,23 +242,16 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
 
   /** @private */
   __calculateActive() {
-    const pathAbsolute = this.path.startsWith('/');
-    // Absolute path or no base uri in use. No special comparison needed
-    if (pathAbsolute) {
-      // Compare an absolute view path
-      return document.location.pathname === this.path;
+    if (this.path == null) {
+      return false;
     }
-    const hasBaseUri = document.baseURI !== document.location.href;
-    if (!hasBaseUri) {
-      // Compare a relative view path (strip the starting slash)
-      return document.location.pathname.substring(1) === this.path;
+    if (matchPaths(document.location.pathname, this.path)) {
+      return true;
     }
-    const pathRelativeToRoot = document.location.pathname;
-    const basePath = new URL(document.baseURI).pathname;
-    const pathWithoutBase = pathRelativeToRoot.substring(basePath.length);
-    const pathRelativeToBase =
-      basePath !== pathRelativeToRoot && pathRelativeToRoot.startsWith(basePath) ? pathWithoutBase : pathRelativeToRoot;
-    return pathRelativeToBase === this.path;
+    return (
+      this.pathAliases != null &&
+      this.pathAliases.split(',').some((alias) => matchPaths(document.location.pathname, alias))
+    );
   }
 }
 

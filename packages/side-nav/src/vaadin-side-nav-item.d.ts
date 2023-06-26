@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2023 Vaadin Ltd.
+ * Copyright (c) 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
@@ -54,6 +54,26 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * </vaadin-side-nav-item>
  * ```
  *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|----------------
+ * `content`       | The element that wraps link and toggle button
+ * `children`      | The element that wraps child items
+ * `link`          | The clickable anchor used for navigation
+ * `toggle-button` | The toggle button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `expanded`     | Set when the element is expanded.
+ * `has-children` | Set when the element has child items.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
 declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
@@ -61,6 +81,13 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
    * The path to navigate to
    */
   path: string | null | undefined;
+
+  /**
+   * A comma-separated list of alternative paths matching this item.
+   *
+   * @attr {string} path-aliases
+   */
+  pathAliases: string | null | undefined;
 
   /**
    * Whether to show the child items or not

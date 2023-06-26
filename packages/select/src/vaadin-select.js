@@ -12,6 +12,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -23,7 +24,6 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
-import { screenReaderOnly } from '@vaadin/field-base/src/styles/sr-only-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonController } from './button-controller.js';
 
@@ -128,7 +128,7 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderO
  * Note: the `theme` attribute value set on `<vaadin-select>` is
  * propagated to the internal components listed above.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

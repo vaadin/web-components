@@ -6,11 +6,14 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
+ * Returns the cells of the given row, excluding the details cell.
+ *
  * @param {HTMLTableRowElement} row the table row
  * @return {HTMLTableCellElement[]} array of cells
  */
 export function getBodyRowCells(row) {
-  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  // If available, return the cached cells. Otherwise, query the cells directly from the row.
+  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
 }
 
 /**
@@ -19,6 +22,21 @@ export function getBodyRowCells(row) {
  */
 export function iterateChildren(container, callback) {
   [...container.children].forEach(callback);
+}
+
+/**
+ * Iterates over the cells of a row. This includes the details cell if
+ * present and any other cell that may be physically detached from the row
+ * due to lazy column reordering.
+ *
+ * @param {HTMLTableRowElement} row the table row
+ * @param {Function} callback function to call on each cell
+ */
+export function iterateRowCells(row, callback) {
+  getBodyRowCells(row).forEach(callback);
+  if (row.__detailsCell) {
+    callback(row.__detailsCell);
+  }
 }
 
 /**

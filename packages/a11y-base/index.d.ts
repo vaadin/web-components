@@ -12,6 +12,7 @@ export {
   isKeyboardActive,
 } from './src/focus-utils.js';
 export { FocusTrapController } from './src/focus-trap-controller.js';
+export { FocusRestorationController } from './src/focus-restoration-controller.js';
 export { KeyboardDirectionMixin } from './src/keyboard-direction-mixin.js';
 export { KeyboardMixin } from './src/keyboard-mixin.js';
 export { ListMixin } from './src/list-mixin.js';

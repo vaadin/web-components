@@ -7,7 +7,7 @@ import '../vaadin-side-nav.js';
 describe('side-nav', () => {
   let sideNav;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     sideNav = fixtureSync(`
       <vaadin-side-nav collapsible>
         <span slot="label">Main menu</span>
@@ -15,6 +15,7 @@ describe('side-nav', () => {
         <vaadin-side-nav-item>Item 2</vaadin-side-nav-item>
       </vaadin-side-nav>
     `);
+    await nextRender();
   });
 
   describe('custom element definition', () => {
@@ -34,11 +35,41 @@ describe('side-nav', () => {
   });
 
   describe('collapsing', () => {
+    let label;
+
+    beforeEach(() => {
+      label = sideNav.shadowRoot.querySelector('[part="label"]');
+    });
+
+    it('should set collapsed property to true on button element click', async () => {
+      label.click();
+      await sideNav.updateComplete;
+      expect(sideNav.collapsed).to.be.true;
+    });
+
+    it('should set collapsed property to false on subsequent button click', async () => {
+      label.click();
+      await sideNav.updateComplete;
+      expect(sideNav.collapsed).to.be.true;
+
+      label.click();
+      await sideNav.updateComplete;
+      expect(sideNav.collapsed).to.be.false;
+    });
+
+    it('should reflect collapsed property to the corresponding attribute', async () => {
+      expect(sideNav.hasAttribute('collapsed')).to.be.false;
+
+      label.click();
+      await sideNav.updateComplete;
+      expect(sideNav.hasAttribute('collapsed')).to.be.true;
+    });
+
     it('should dispatch collapsed-changed event when collapsed changes', async () => {
       const spy = sinon.spy();
       sideNav.addEventListener('collapsed-changed', spy);
-      await nextRender(sideNav);
-      sideNav.shadowRoot.querySelector('summary[part="label"]').click();
+      label.click();
+      await sideNav.updateComplete;
       expect(spy.calledOnce).to.be.true;
     });
   });

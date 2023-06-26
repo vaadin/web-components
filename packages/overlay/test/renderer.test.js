@@ -1,114 +1,144 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-overlay.js';
 
 describe('renderer', () => {
-  let rendererContent, renderModel;
+  let overlay, content;
 
-  beforeEach(() => {
-    rendererContent = document.createElement('p');
-    rendererContent.textContent = 'renderer-content';
-    renderModel = { selected: true };
+  beforeEach(async () => {
+    overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+    await nextRender();
+    content = document.createElement('p');
+    content.textContent = 'renderer-content';
   });
 
-  describe('without overlay', () => {
-    let overlay;
+  afterEach(async () => {
+    overlay.opened = false;
+    await nextRender();
+  });
 
-    beforeEach(() => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-    });
+  it('should use renderer when it is defined', async () => {
+    overlay.renderer = (root) => root.appendChild(content);
+    overlay.opened = true;
+    await nextRender();
+    expect(overlay.textContent.trim()).to.equal('renderer-content');
+  });
 
-    afterEach(() => {
-      overlay.opened = false;
-    });
+  it('should receive empty root, model and owner when they are defined', async () => {
+    const overlayOwner = {};
+    const overlayModel = {};
 
-    it('should use renderer when it is defined', () => {
-      overlay.renderer = (root) => root.appendChild(rendererContent);
-      overlay.opened = true;
-      expect(overlay.textContent.trim()).to.equal('renderer-content');
-    });
+    overlay.owner = overlayOwner;
+    overlay.model = overlayModel;
 
-    it('should receive empty root, model and owner when it is defined', () => {
-      const overlayOwner = {};
-      overlay.owner = overlayOwner;
-      overlay.model = renderModel;
-      overlay.renderer = (root, owner, model) => {
-        expect(root.firstChild).to.be.null;
-        expect(owner).to.eql(overlayOwner);
-        expect(model).to.eql(renderModel);
-      };
-    });
+    const renderer = sinon.spy();
 
-    it('should clean the root on renderer changed', () => {
-      overlay.renderer = (root) => root.appendChild(rendererContent);
-      overlay.opened = true;
-      expect(overlay.textContent.trim()).to.equal('renderer-content');
-      overlay.renderer = (root) => expect(root.firstChild).to.be.null;
-    });
+    overlay.renderer = renderer;
+    overlay.opened = true;
+    await nextRender();
 
-    it('should not clean the root on model or owner changed', () => {
-      overlay.renderer = (root, owner, model) => {
-        if (owner !== undefined || model !== undefined) {
-          expect(root.firstChild).not.to.be.null;
-        }
-        root.appendChild(rendererContent);
-      };
-      const overlayOwner = {};
-      overlay.owner = overlayOwner;
-      overlay.model = renderModel;
-    });
+    const [root, owner, model] = renderer.firstCall.args;
+    expect(root.firstChild).to.be.null;
+    expect(owner).to.eql(overlayOwner);
+    expect(model).to.eql(overlayModel);
+  });
 
-    it('should pass owner as this to the renderer', () => {
-      overlay.owner = {};
-      overlay.model = renderModel;
-      overlay.renderer = function (root, owner) {
-        expect(this).to.eql(owner);
-      };
-    });
+  it('should clean the root on renderer change', async () => {
+    overlay.renderer = (root) => root.appendChild(content);
+    overlay.opened = true;
+    await nextRender();
+    expect(overlay.textContent.trim()).to.equal('renderer-content');
 
-    it('should call renderer on model change', () => {
-      const spy = sinon.spy();
-      overlay.opened = true;
-      overlay.renderer = () => spy();
-      spy.resetHistory();
-      overlay.model = {};
-      expect(spy.calledOnce).to.be.true;
-    });
+    const renderer = sinon.spy();
+    overlay.renderer = renderer;
+    await nextRender();
 
-    it('should call renderer on owner change', () => {
-      const spy = sinon.spy();
-      overlay.opened = true;
-      overlay.renderer = () => spy();
-      spy.resetHistory();
-      overlay.owner = {};
-      expect(spy.calledOnce).to.be.true;
-    });
+    const root = renderer.firstCall.args[0];
+    expect(root.firstChild).to.be.null;
+  });
 
-    it('should run renderers when requesting content update', () => {
-      overlay.renderer = sinon.spy();
-      overlay.requestContentUpdate();
+  it('should not clean the root on model or owner change', async () => {
+    overlay.renderer = (root) => root.appendChild(content);
+    overlay.opened = true;
+    await nextRender();
+    expect(overlay.textContent.trim()).to.equal('renderer-content');
 
-      expect(overlay.renderer.calledOnce).to.be.true;
-    });
+    const overlayOwner = {};
+    const overlayModel = {};
 
-    it('should not render if overlay is not open', () => {
-      const spy = sinon.spy();
-      overlay.renderer = () => spy();
-      expect(spy.called).to.be.false;
-    });
+    overlay.owner = overlayOwner;
+    overlay.model = overlayModel;
+    await nextRender();
 
-    it('should clear the content when removing the renderer', () => {
-      overlay.renderer = (root) => {
-        root.innerHTML = 'foo';
-      };
-      overlay.opened = true;
+    expect(overlay.textContent.trim()).to.equal('renderer-content');
+  });
 
-      expect(overlay.textContent.trim()).to.equal('foo');
+  it('should pass owner as this to the renderer', async () => {
+    const owner = {};
+    overlay.owner = owner;
 
-      overlay.renderer = null;
+    const renderer = sinon.spy();
+    overlay.renderer = renderer;
 
-      expect(overlay.textContent.trim()).to.equal('');
-    });
+    overlay.opened = true;
+    await nextRender();
+
+    expect(renderer.firstCall.thisValue).to.equal(owner);
+  });
+
+  it('should call renderer on model change', async () => {
+    const renderer = sinon.spy();
+
+    overlay.opened = true;
+    overlay.renderer = renderer;
+    await nextRender();
+
+    renderer.resetHistory();
+    overlay.model = {};
+    await nextRender();
+
+    expect(renderer.calledOnce).to.be.true;
+  });
+
+  it('should call renderer on owner change', async () => {
+    const renderer = sinon.spy();
+
+    overlay.opened = true;
+    overlay.renderer = renderer;
+    await nextRender();
+
+    renderer.resetHistory();
+    overlay.owner = {};
+    await nextRender();
+
+    expect(renderer.calledOnce).to.be.true;
+  });
+
+  it('should call renderer when requesting content update', () => {
+    overlay.renderer = sinon.spy();
+    overlay.requestContentUpdate();
+
+    expect(overlay.renderer.calledOnce).to.be.true;
+  });
+
+  it('should not call renderer if overlay is not open', async () => {
+    overlay.renderer = sinon.spy();
+    await nextRender();
+    expect(overlay.renderer.called).to.be.false;
+  });
+
+  it('should clear the content when removing the renderer', async () => {
+    overlay.renderer = (root) => {
+      root.innerHTML = 'foo';
+    };
+
+    overlay.opened = true;
+    await nextRender();
+    expect(overlay.textContent.trim()).to.equal('foo');
+
+    overlay.renderer = null;
+    await nextRender();
+    expect(overlay.textContent.trim()).to.equal('');
   });
 });

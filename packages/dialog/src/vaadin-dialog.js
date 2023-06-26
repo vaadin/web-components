@@ -70,7 +70,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
@@ -269,9 +269,15 @@ class Dialog extends OverlayClassMixin(
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    // Close overlay and memorize opened state
-    this.__restoreOpened = this.opened;
-    this.opened = false;
+    // Automatically close the overlay when dialog is removed from DOM
+    // Using a timeout to avoid toggling opened state, and dispatching change
+    // events, when just moving the dialog in the DOM
+    setTimeout(() => {
+      if (!this.isConnected) {
+        this.__restoreOpened = this.opened;
+        this.opened = false;
+      }
+    });
   }
 
   /** @private */

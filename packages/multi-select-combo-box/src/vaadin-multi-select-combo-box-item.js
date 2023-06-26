@@ -27,7 +27,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `selected`   | Set when the item is selected
  * `focused`    | Set when the item is focused
  *
- * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @mixes ComboBoxItemMixin
  * @mixes ThemableMixin
