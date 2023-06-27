@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isIOS, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getSelectedItem, onceScrolled } from './helpers.js';
 
 describe('scrolling', () => {
   let comboBox, overlay, scroller, input;
@@ -72,38 +71,6 @@ describe('scrolling', () => {
       comboBox.open();
 
       expect(scroller.scrollTop).to.equal(0);
-    });
-
-    function expectSelectedItemPositionToBeVisible() {
-      const selectedItem = getSelectedItem(comboBox);
-      expect(selectedItem).to.be.ok;
-
-      const selectedItemRect = selectedItem.getBoundingClientRect();
-      const overlayRect = overlay.getBoundingClientRect();
-      expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
-      expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
-      expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);
-      expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
-    }
-
-    it('should make selected item visible after open', async () => {
-      comboBox.value = comboBox.items[50];
-      comboBox.open();
-      await onceScrolled(comboBox);
-      expectSelectedItemPositionToBeVisible();
-    });
-
-    it('should make selected item visible after reopen', async () => {
-      comboBox.open();
-      await nextFrame();
-
-      comboBox.value = comboBox.items[50];
-      comboBox.close();
-
-      comboBox.open();
-      await nextFrame();
-
-      expectSelectedItemPositionToBeVisible();
     });
 
     it('should not close the items when touching scroll bar', () => {

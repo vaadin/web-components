@@ -368,6 +368,7 @@ describe('time-picker', () => {
       timePicker.open();
       inputElement.value = '';
       arrowDown(inputElement);
+      arrowDown(inputElement);
       enter(inputElement);
       expect(spy.calledOnce).to.be.true;
       // Mimic native change happening on text-field blur
