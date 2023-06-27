@@ -1,37 +1,50 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 
-customElements.define(
-  'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(PolymerElement) {
-    static get template() {
-      return html`<slot name="input"></slot>`;
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      const input = this.querySelector('input');
-      this._setFocusElement(input);
-    }
-  },
-);
-
 describe('delegate-focus-mixin', () => {
-  let element, input;
+  let element, input, setFocusedSpy;
+
+  customElements.define(
+    'delegate-focus-mixin-element',
+    class extends DelegateFocusMixin(PolymerElement) {
+      static get template() {
+        return html`
+          <slot name="input"></slot>
+          <slot name="suffix"></slot>
+        `;
+      }
+
+      /** @protected */
+      ready() {
+        super.ready();
+
+        const input = this.querySelector('input');
+        this._setFocusElement(input);
+      }
+
+      _setFocused(focused) {
+        super._setFocused(focused);
+        setFocusedSpy?.(focused);
+      }
+    },
+  );
 
   describe('default', () => {
+    let button;
+
     beforeEach(() => {
+      setFocusedSpy = sinon.spy();
       element = fixtureSync(`
         <delegate-focus-mixin-element>
           <input slot="input" />
+          <button slot="suffix"></button>
         </delegate-focus-mixin-element>
       `);
       input = element.querySelector('input');
+      button = element.querySelector('button');
     });
 
     it('should focus the input on focus call', () => {
@@ -112,6 +125,16 @@ describe('delegate-focus-mixin', () => {
       target.setAttribute('disabled', '');
       element._setFocusElement(target);
       expect(target.disabled).to.be.false;
+    });
+
+    it('should not invoke setFocused when focusin is not triggered by focusElement', () => {
+      focusin(button);
+      expect(setFocusedSpy.called).to.be.false;
+    });
+
+    it('should not invoke setFocused when focusout is not triggered by focusElement', () => {
+      focusout(button);
+      expect(setFocusedSpy.called).to.be.false;
     });
   });
 
