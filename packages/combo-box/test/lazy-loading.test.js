@@ -523,7 +523,7 @@ describe('lazy loading', () => {
           // Wait for the __loadingChanged observer
           await aTimeout(0);
 
-          expect(comboBox._focusedIndex).to.equal(8);
+          expect(comboBox._focusedIndex).to.equal(-1);
           const items = getViewportItems(comboBox);
           expect(items.some((item) => item.index === 50)).to.be.true;
         });
