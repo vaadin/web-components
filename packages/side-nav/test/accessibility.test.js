@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '../enable.js';
 import '../vaadin-side-nav-item.js';
 import '../vaadin-side-nav.js';
 

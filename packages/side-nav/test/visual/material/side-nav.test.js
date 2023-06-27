@@ -1,6 +1,5 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../enable.js';
 import '../../../theme/material/vaadin-side-nav.js';
 
 describe('side-nav', () => {

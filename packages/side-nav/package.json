@@ -20,7 +20,6 @@
   "module": "vaadin-side-nav.js",
   "type": "module",
   "files": [
-    "enable.js",
     "src",
     "theme",
     "vaadin-*.d.ts",

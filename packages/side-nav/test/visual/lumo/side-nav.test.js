@@ -1,7 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../../../enable.js';
 import '../../../theme/lumo/vaadin-side-nav.js';
 import '@vaadin/icon';
 import '@vaadin/icons';

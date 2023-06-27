@@ -13,10 +13,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
-function isEnabled() {
-  return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.sideNavComponent;
-}
-
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
  * Not intended to be used separately.
@@ -255,8 +251,6 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
   }
 }
 
-if (isEnabled()) {
-  customElements.define(SideNavItem.is, SideNavItem);
-}
+customElements.define(SideNavItem.is, SideNavItem);
 
 export { SideNavItem };
