@@ -236,7 +236,7 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
     this._setCurrent(this.__isCurrent());
     this.toggleAttribute('child-current', document.location.pathname.startsWith(this.path));
     if (this.current) {
-      this.expanded = true;
+      this.expanded = this._items.length > 0;
     }
   }
 
