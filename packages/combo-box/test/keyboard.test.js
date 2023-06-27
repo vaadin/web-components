@@ -42,12 +42,12 @@ describe('keyboard', () => {
       expect(getFocusedIndex()).to.equal(-1);
     });
 
-    it('should have focus on the selected item after opened', () => {
+    it('should not focus on the selected item after opened', () => {
       comboBox.value = 'foo';
 
       arrowDownKeyDown(input);
 
-      expect(getFocusedIndex()).to.equal(0);
+      expect(getFocusedIndex()).to.equal(-1);
     });
 
     it('should propagate escape key event if dropdown is closed', () => {
@@ -185,7 +185,8 @@ describe('keyboard', () => {
         await aTimeout(1);
         enterKeyDown(input);
         await aTimeout(1);
-        expect(comboBox.value).to.equal('baz');
+        // keyboard navigation starts from the top
+        expect(comboBox.value).to.equal('foo');
       });
 
       it('should clear the selection with enter when input is cleared', () => {
@@ -331,7 +332,7 @@ describe('keyboard', () => {
 
       it('should prefill the input field when navigating down', () => {
         arrowDownKeyDown(input);
-        expect(input.value).to.eql('baz');
+        expect(input.value).to.eql('foo');
       });
 
       it('should select the input field text when navigating down', () => {
@@ -342,7 +343,7 @@ describe('keyboard', () => {
 
       it('should prefill the input field when navigating up', () => {
         arrowUpKeyDown(input);
-        expect(input.value).to.eql('foo');
+        expect(input.value).to.eql('baz');
       });
 
       it('should not prefill the input when there are no items to navigate', () => {
@@ -548,17 +549,6 @@ describe('keyboard', () => {
       await aTimeout(0);
 
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
-    });
-
-    it('should scroll to focused item when opening overlay', async () => {
-      scrollToIndex(comboBox, 0);
-      comboBox.close();
-      comboBox.value = '50';
-
-      comboBox.open();
-
-      await onceScrolled(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.be.within(50 - getVisibleItemsCount(comboBox), 50);
     });
   });
 
