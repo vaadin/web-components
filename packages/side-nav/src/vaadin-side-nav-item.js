@@ -93,11 +93,14 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
       path: String,
 
       /**
-       * A comma-separated list of alternative paths matching this item.
+       * The list of alternative paths matching this item
        *
-       * @attr {string} path-aliases
+       * @type {!Array<string>}
        */
-      pathAliases: String,
+      pathAliases: {
+        type: Array,
+        value: () => [],
+      },
 
       /**
        * Whether to show the child items or not
@@ -229,10 +232,6 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
 
   /** @private */
   __updateCurrent() {
-    if (!this.path && this.path !== '') {
-      this._setCurrent(false);
-      return;
-    }
     this._setCurrent(this.__isCurrent());
     if (this.current) {
       this.expanded = true;
@@ -244,12 +243,9 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
     if (this.path == null) {
       return false;
     }
-    if (matchPaths(document.location.pathname, this.path)) {
-      return true;
-    }
     return (
-      this.pathAliases != null &&
-      this.pathAliases.split(',').some((alias) => matchPaths(document.location.pathname, alias))
+      matchPaths(document.location.pathname, this.path) ||
+      this.pathAliases.some((alias) => matchPaths(document.location.pathname, alias))
     );
   }
 }
