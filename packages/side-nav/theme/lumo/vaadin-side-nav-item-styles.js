@@ -8,11 +8,6 @@ import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
-  [part='content'] {
-    display: flex;
-    align-items: center;
-  }
-
   [part='link'] {
     width: 100%;
     gap: var(--lumo-space-xs);
@@ -29,7 +24,6 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button'] {
-    position: relative;
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);

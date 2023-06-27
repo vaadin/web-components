@@ -10,8 +10,14 @@ export const sideNavItemBaseStyles = css`
     display: block;
   }
 
+  :host([hidden]),
   [hidden] {
     display: none !important;
+  }
+
+  [part='content'] {
+    display: flex;
+    align-items: center;
   }
 
   [part='link'] {
@@ -28,6 +34,7 @@ export const sideNavItemBaseStyles = css`
     -webkit-appearance: none;
     appearance: none;
     flex: none;
+    position: relative;
     margin: 0;
     padding: 0;
     border: 0;
@@ -42,10 +49,6 @@ export const sideNavItemBaseStyles = css`
 
   :host(:not([has-children])) button {
     display: none !important;
-  }
-
-  :host(:not([path])) a {
-    position: relative;
   }
 
   :host(:not([path])) button::after {
