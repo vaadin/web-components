@@ -182,7 +182,7 @@ export const DelegateFocusMixin = dedupingMixin(
        * @override
        */
       _shouldRemoveFocus(event) {
-        return event.relatedTarget === this.focusElement;
+        return event.target === this.focusElement;
       }
 
       /**
