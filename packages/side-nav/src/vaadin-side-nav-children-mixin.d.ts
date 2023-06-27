@@ -30,6 +30,11 @@ export declare class SideNavChildrenMixinClass {
   i18n: SideNavI18n;
 
   /**
+   * List of child items of this component.
+   */
+  protected readonly _items: HTMLElement[];
+
+  /**
    * Name of the slot to be used for children.
    */
   protected readonly _itemsSlotName: string;
