@@ -10,6 +10,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-tooltip-overlay',
   css`
+    :host {
+      z-index: 1100;
+    }
+
     [part='overlay'] {
       max-width: 40ch;
     }
