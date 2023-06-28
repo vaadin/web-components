@@ -70,7 +70,6 @@ snapshots["vaadin-side-nav-item item expanded"] =
 
 snapshots["vaadin-side-nav-item item current"] = 
 `<vaadin-side-nav-item
-  child-current=""
   current=""
   expanded=""
   has-children=""
