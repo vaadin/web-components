@@ -70,7 +70,7 @@ describe('side-nav-item', () => {
       });
 
       it('should not be current even if an alias matches', async () => {
-        item.pathAliases = '/';
+        item.pathAliases = ['/'];
         await item.updateComplete;
         expect(item.current).to.be.false;
       });
@@ -111,7 +111,7 @@ describe('side-nav-item', () => {
       });
 
       it('should be current even when no aliases match', async () => {
-        item.pathAliases = '/alias';
+        item.pathAliases = ['/alias'];
         await item.updateComplete;
         expect(item.current).to.be.true;
       });
@@ -134,17 +134,17 @@ describe('side-nav-item', () => {
       });
 
       it('should be current when an alias matches', async () => {
-        item.pathAliases = '/, /alias';
+        item.pathAliases = ['/', '/alias'];
         await item.updateComplete;
         expect(item.current).to.be.true;
 
-        item.pathAliases = '/alias, /';
+        item.pathAliases = ['/alias', '/'];
         await item.updateComplete;
         expect(item.current).to.be.true;
       });
 
       it('should be current when an empty alias matches', async () => {
-        item.pathAliases = '';
+        item.pathAliases = [''];
         await item.updateComplete;
         expect(item.current).to.be.true;
       });
