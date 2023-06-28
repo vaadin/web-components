@@ -1,4 +1,5 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '../../../enable.js';
@@ -12,6 +13,49 @@ describe('side-nav', () => {
   beforeEach(() => {
     div = document.createElement('div');
     div.style.padding = '10px';
+  });
+
+  describe('states', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+        <vaadin-side-nav collapsible>
+          <span slot="label">Messages</span>
+          <vaadin-side-nav-item path="/inbox">
+            <vaadin-icon icon="vaadin:inbox" slot="prefix"></vaadin-icon>
+            Inbox
+          </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/sent">
+            <vaadin-icon icon="vaadin:paperplane" slot="prefix"></vaadin-icon>
+            Sent
+          </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/trash">
+            <vaadin-icon icon="vaadin:trash" slot="prefix"></vaadin-icon>
+            Trash
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+        `,
+        div,
+      );
+      await nextRender();
+    });
+
+    it('focused label', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focused-label');
+    });
+
+    it('focused item', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'focused-item');
+    });
+
+    it('current item', async () => {
+      const item = document.querySelector('vaadin-side-nav-item');
+      item.setAttribute('current', '');
+      await visualDiff(div, 'current-item');
+    });
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
