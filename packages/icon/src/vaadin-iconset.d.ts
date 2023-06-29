@@ -3,14 +3,13 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Icon } from './vaadin-icon.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  */
-declare class Iconset extends ElementMixin(HTMLElement) {
+declare class Iconset extends HTMLElement {
   /**
    * Set of the `vaadin-icon` instances in the DOM.
    */

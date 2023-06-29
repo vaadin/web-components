@@ -3,8 +3,6 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { cloneSvgNode } from './vaadin-icon-svg.js';
 
 const iconsetRegistry = {};
@@ -38,41 +36,14 @@ function initIconsMap(iconset, name) {
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  *
  * @extends HTMLElement
- * @mixes ElementMixin
  */
-class Iconset extends ElementMixin(PolymerElement) {
-  static get template() {
-    return null;
-  }
-
+class Iconset extends HTMLElement {
   static get is() {
     return 'vaadin-iconset';
   }
 
-  static get properties() {
-    return {
-      /**
-       * The name of the iconset. Every iconset is required to have its own unique name.
-       * All the SVG icons in the iconset must have IDs conforming to its name.
-       *
-       * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
-       */
-      name: {
-        type: String,
-        observer: '__nameChanged',
-      },
-
-      /**
-       * The size of an individual icon. Note that icons must be square.
-       *
-       * When using `vaadin-icon`, the size of the iconset will take precedence
-       * over the size defined by the user to ensure correct appearance.
-       */
-      size: {
-        type: Number,
-        value: 24,
-      },
-    };
+  static get observedAttributes() {
+    return ['name', 'size'];
   }
 
   /**
@@ -138,17 +109,61 @@ class Iconset extends ElementMixin(PolymerElement) {
 
       iconset.size = size;
       iconset.name = name;
-
-      // Call this function manually instead of using observer
-      // to make it work without appending element to the DOM.
-      iconset.__nameChanged(name);
     }
+  }
+
+  constructor() {
+    super();
+
+    /** @private */
+    this.__name = '';
+
+    /** @private */
+    this.__size = 24;
+  }
+
+  /**
+   * The name of the iconset. Every iconset is required to have its own unique name.
+   * All the SVG icons in the iconset must have IDs conforming to its name.
+   *
+   * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
+   *
+   * @return {string}
+   */
+  get name() {
+    return this.__name;
+  }
+
+  /**
+   * @param {string} name
+   */
+  set name(name) {
+    const oldName = this.name;
+    this.__name = name;
+    this.__nameChanged(name, oldName);
+  }
+
+  /**
+   * The size of an individual icon. Note that icons must be square.
+   *
+   * When using `vaadin-icon`, the size of the iconset will take precedence
+   * over the size defined by the user to ensure correct appearance.
+   *
+   * @return {number}
+   */
+  get size() {
+    return this.__size;
+  }
+
+  /**
+   * @param {number} size
+   */
+  set size(size) {
+    this.__size = parseInt(size);
   }
 
   /** @protected */
   connectedCallback() {
-    super.connectedCallback();
-
     this.style.display = 'none';
 
     // Store reference and init icons.
@@ -156,6 +171,17 @@ class Iconset extends ElementMixin(PolymerElement) {
     iconsetRegistry[name] = this;
     initIconsMap(this, name);
     this.__updateIcons(name);
+  }
+
+  /** @protected */
+  attributeChangedCallback(attr, _oldVal, newVal) {
+    if (attr === 'name') {
+      this.name = newVal;
+    }
+
+    if (attr === 'size') {
+      this.size = newVal;
+    }
   }
 
   /**
