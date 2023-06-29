@@ -9,13 +9,12 @@ describe('notification and tooltip', () => {
       <div>
         <vaadin-notification></vaadin-notification>
         <div id="target"></div>
-        <vaadin-tooltip for="target" text="Tooltip"></vaadin-tooltip>
+        <vaadin-tooltip for="target" text="Tooltip" manual></vaadin-tooltip>
       </div>
     `);
     const notification = wrapper.querySelector('vaadin-notification');
-    notification.opened = true;
     const tooltip = wrapper.querySelector('vaadin-tooltip');
-    tooltip.manual = true;
+    notification.opened = true;
     tooltip.opened = true;
     await nextRender();
   });
