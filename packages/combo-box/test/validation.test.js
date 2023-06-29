@@ -5,12 +5,13 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('validation', () => {
-  let comboBox;
+  let comboBox, input;
 
   describe('basic', () => {
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
+      input = comboBox.inputElement;
     });
 
     it('should pass the validation when the field is valid', () => {
@@ -53,6 +54,23 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        const spy = sinon.spy(comboBox, 'validate');
+        input.focus();
+        input.blur();
+        expect(spy.called).to.be.false;
+      });
     });
   });
 
