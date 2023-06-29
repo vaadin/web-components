@@ -102,6 +102,28 @@ describe('validation', () => {
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
     });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', async () => {
+        // Focus on the first checkbox.
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus out of the checkbox group.
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(validateSpy.called).to.be.false;
+      });
+    });
   });
 
   describe('required', () => {
