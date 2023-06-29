@@ -199,6 +199,23 @@ const runTests = (defineHelper, baseMixin) => {
       element.checkValidity();
       expect(spy.calledOnce).to.be.false;
     });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        const spy = sinon.spy(element, 'validate');
+        input.focus();
+        input.blur();
+        expect(spy.called).to.be.false;
+      });
+    });
   });
 
   describe('slotted input value', () => {
