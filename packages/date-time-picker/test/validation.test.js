@@ -179,6 +179,28 @@ const fixtures = {
         expect(dateTimePicker.invalid).to.be.true;
       });
     });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on date-picker blur when document does not have focus', () => {
+        datePicker.focus();
+        datePicker.blur();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate on time-picker blur when document does not have focus', () => {
+        timePicker.focus();
+        timePicker.blur();
+        expect(validateSpy.called).to.be.false;
+      });
+    });
   });
 });
 
