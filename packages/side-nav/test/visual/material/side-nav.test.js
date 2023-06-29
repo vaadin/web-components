@@ -23,15 +23,15 @@ describe('side-nav', () => {
           <span slot="label">Messages</span>
           <vaadin-side-nav-item path="/inbox">
             <vaadin-icon icon="vaadin:inbox" slot="prefix"></vaadin-icon>
-            Inbox
+            <span>Inbox</span>
           </vaadin-side-nav-item>
           <vaadin-side-nav-item path="/sent">
             <vaadin-icon icon="vaadin:paperplane" slot="prefix"></vaadin-icon>
-            Sent
+            <span>Sent</span>
           </vaadin-side-nav-item>
           <vaadin-side-nav-item path="/trash">
             <vaadin-icon icon="vaadin:trash" slot="prefix"></vaadin-icon>
-            Trash
+            <span>Trash</span>
           </vaadin-side-nav-item>
         </vaadin-side-nav>
         `,
@@ -55,6 +55,13 @@ describe('side-nav', () => {
       const item = document.querySelector('vaadin-side-nav-item');
       item.setAttribute('current', '');
       await visualDiff(div, 'current-item');
+    });
+
+    it('overflowing item', async () => {
+      const span = document.querySelector('vaadin-side-nav-item span');
+      span.textContent = 'Very long item that does not fit';
+      element.style.maxWidth = '200px';
+      await visualDiff(div, 'overflowing-item');
     });
   });
 

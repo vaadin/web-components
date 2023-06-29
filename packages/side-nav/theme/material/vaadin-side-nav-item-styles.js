@@ -113,6 +113,7 @@ export const sideNavItemStyles = css`
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
     padding: 0.1em;
+    flex-shrink: 0;
     margin-inline-end: 24px;
     color: var(--material-secondary-text-color);
   }
