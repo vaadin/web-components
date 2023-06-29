@@ -114,6 +114,23 @@ describe('validation', () => {
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
     });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        const spy = sinon.spy(select, 'validate');
+        select.blur();
+
+        expect(spy.called).to.be.false;
+      });
+    });
   });
 
   describe('initial', () => {
