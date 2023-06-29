@@ -435,7 +435,11 @@ export const DatePickerMixin = (subclass) =>
           this._selectParsedOrFocusedDate();
         }
 
-        this.validate();
+        // Do not validate when focusout is caused by document
+        // losing focus, which happens on browser tab switch.
+        if (document.hasFocus()) {
+          this.validate();
+        }
 
         if (this._inputElementValue === '' && this.value !== '') {
           this.value = '';
