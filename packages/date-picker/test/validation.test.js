@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
@@ -82,11 +82,12 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy;
+    let validateSpy, input;
 
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       await nextRender();
+      input = datePicker.inputElement;
       validateSpy = sinon.spy(datePicker, 'validate');
     });
 
@@ -96,8 +97,8 @@ describe('validation', () => {
     });
 
     it('should validate on blur', () => {
-      datePicker.inputElement.focus();
-      datePicker.inputElement.blur();
+      input.focus();
+      input.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
@@ -111,7 +112,7 @@ describe('validation', () => {
     it('should not validate on input click while opened', async () => {
       await open(datePicker);
       validateSpy.resetHistory();
-      datePicker.inputElement.click();
+      input.click();
       expect(validateSpy.called).to.be.false;
     });
 
@@ -120,7 +121,7 @@ describe('validation', () => {
       // Set invalid value.
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
-      enter(datePicker.inputElement);
+      enter(input);
       validateSpy.resetHistory();
       datePicker.$.clearButton.click();
       expect(validateSpy.calledOnce).to.be.true;
@@ -158,7 +159,7 @@ describe('validation', () => {
 
     it('should be possible to force invalid status', () => {
       datePicker.invalid = true;
-      expect(datePicker.inputElement.hasAttribute('invalid')).to.be.true;
+      expect(input.hasAttribute('invalid')).to.be.true;
     });
 
     it('should re-validate old input after selecting date', async () => {
@@ -193,7 +194,7 @@ describe('validation', () => {
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
       await waitForValueChange(datePicker, () => datePicker.close());
-      expect(datePicker.inputElement.value).to.equal('foo');
+      expect(input.value).to.equal('foo');
     });
 
     it('should change invalid state only once', async () => {
@@ -249,26 +250,26 @@ describe('validation', () => {
   });
 
   describe('input value', () => {
-    let overlay;
+    let input;
 
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       await nextRender();
-      overlay = datePicker.$.overlay;
-      datePicker.inputElement.focus();
+      input = datePicker.inputElement;
+      input.focus();
     });
 
     it('should be valid when committing a valid date', async () => {
       setInputValue(datePicker, '1/1/2022');
       await waitForOverlayRender();
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
     it('should be invalid when trying to commit an invalid date', async () => {
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.true;
     });
 
@@ -276,9 +277,9 @@ describe('validation', () => {
       datePicker.value = '2020-01-01';
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.value).to.equal('');
-      expect(datePicker.inputElement.value).to.equal('foo');
+      expect(input.value).to.equal('foo');
     });
 
     describe('auto-open disabled', () => {
@@ -290,9 +291,9 @@ describe('validation', () => {
         datePicker.autoOpenDisabled = true;
         datePicker.value = '2020-01-01';
         setInputValue(datePicker, 'foo');
-        enter(datePicker.inputElement);
+        enter(input);
         expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('foo');
+        expect(input.value).to.equal('foo');
         expect(datePicker.invalid).to.be.true;
       });
 
@@ -300,31 +301,34 @@ describe('validation', () => {
         datePicker.autoOpenDisabled = true;
         datePicker.value = '2020-01-01';
         setInputValue(datePicker, 'foo');
-        datePicker.inputElement.blur();
+        input.blur();
         expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('foo');
+        expect(input.value).to.equal('foo');
         expect(datePicker.invalid).to.be.true;
       });
 
       it('should be valid on blur after entering a valid date', () => {
         datePicker.autoOpenDisabled = true;
         setInputValue(datePicker, '1/1/2022');
-        datePicker.inputElement.blur();
+        input.blur();
         expect(datePicker.invalid).to.be.false;
       });
 
       it('should be invalid on blur after entering an invalid date', () => {
         datePicker.autoOpenDisabled = true;
         setInputValue(datePicker, 'foo');
-        datePicker.inputElement.blur();
+        input.blur();
         expect(datePicker.invalid).to.be.true;
       });
     });
   });
 
   describe('required', () => {
+    let input;
+
     beforeEach(() => {
       datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
+      input = datePicker.inputElement;
     });
 
     it('should fail validation without value', () => {
@@ -338,22 +342,25 @@ describe('validation', () => {
 
     it('should be valid when committing a non-empty value', () => {
       setInputValue(datePicker, '1/1/2000');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
     it('should be invalid when committing an empty value', () => {
       setInputValue(datePicker, '1/1/2000');
-      enter(datePicker.inputElement);
+      enter(input);
       setInputValue(datePicker, '');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.true;
     });
   });
 
   describe('min', () => {
+    let input;
+
     beforeEach(() => {
       datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01"></vaadin-date-picker>`);
+      input = datePicker.inputElement;
     });
 
     it('should pass validation without value', () => {
@@ -377,26 +384,29 @@ describe('validation', () => {
 
     it('should be invalid when committing a value < min', () => {
       setInputValue(datePicker, '1/1/2000');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.true;
     });
 
     it('should be valid when committing a value > min', () => {
       setInputValue(datePicker, '1/1/2022');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
     it('should be valid when committing a value = min', () => {
       setInputValue(datePicker, '1/1/2022');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
   });
 
   describe('max', () => {
+    let input;
+
     beforeEach(() => {
       datePicker = fixtureSync(`<vaadin-date-picker max="2010-01-01"></vaadin-date-picker>`);
+      input = datePicker.inputElement;
     });
 
     it('should pass validation without value', () => {
@@ -420,19 +430,19 @@ describe('validation', () => {
 
     it('should be invalid when committing a value > max', () => {
       setInputValue(datePicker, '1/1/2022');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.true;
     });
 
     it('should be valid when committing a value < max', () => {
       setInputValue(datePicker, '1/1/2000');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
     it('should be valid when committing a value = max', () => {
       setInputValue(datePicker, '1/1/2010');
-      enter(datePicker.inputElement);
+      enter(input);
       expect(datePicker.invalid).to.be.false;
     });
   });
