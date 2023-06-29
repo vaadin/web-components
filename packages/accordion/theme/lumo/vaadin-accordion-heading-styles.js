@@ -9,6 +9,11 @@ const accordionHeading = css`
   [part='content'] {
     padding: var(--lumo-space-s) 0;
   }
+
+  :host([theme~='filled']) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 `;
 
 registerStyles('vaadin-accordion-heading', [detailsSummary, accordionHeading], { moduleId: 'lumo-accordion-heading' });
