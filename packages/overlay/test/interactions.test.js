@@ -34,7 +34,7 @@ describe('interactions', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should fire the event on Esc', () => {
+    it('should fire the vaadin-overlay-escape-press event on Esc', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
@@ -43,7 +43,7 @@ describe('interactions', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire the event on other key press', () => {
+    it('should not fire the vaadin-overlay-escape-press event on other key press', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
@@ -165,7 +165,7 @@ describe('interactions', () => {
     });
 
     describe('vaadin-overlay-closing event', () => {
-      it('should dispatch vaadin-overlay-closing when the overlay is closing', async () => {
+      it('should fire the event when the overlay is closing', async () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-closing', spy);
 
@@ -175,7 +175,7 @@ describe('interactions', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should not dispatch vaadin-overlay-closing when preventing vaadin-overlay-close', async () => {
+      it('should not fire the event when preventing vaadin-overlay-close', async () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-closing', spy);
         overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
