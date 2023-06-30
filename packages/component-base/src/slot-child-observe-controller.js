@@ -169,7 +169,7 @@ export class SlotChildObserveController extends SlotController {
   __updateNodeId(node) {
     // When in multiple mode, only set ID attribute on the element in default slot.
     const isFirstNode = !this.nodes || node === this.nodes[0];
-    if (node.nodeType === Node.ELEMENT_NODE && isFirstNode && !node.id) {
+    if (node.nodeType === Node.ELEMENT_NODE && (!this.multiple || isFirstNode) && !node.id) {
       node.id = this.defaultId;
     }
   }
