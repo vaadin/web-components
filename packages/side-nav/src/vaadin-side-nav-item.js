@@ -202,7 +202,7 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
           aria-labelledby="link i18n"
         ></button>
       </div>
-      <ul part="children" ?hidden="${!this.expanded}">
+      <ul part="children" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
         <slot name="children"></slot>
       </ul>
       <div class="sr-only" id="i18n">${this.i18n.toggle}</div>
