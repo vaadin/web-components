@@ -186,7 +186,7 @@ describe('interactions', () => {
     });
 
     describe('vaadin-overlay-closed event', () => {
-      it('should dispatch vaadin-overlay-closed after the overlay has closed', async () => {
+      it('should fire the event after the overlay has closed', async () => {
         const closingSpy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-closing', closingSpy);
 
@@ -200,7 +200,7 @@ describe('interactions', () => {
         expect(closedSpy.calledAfter(closingSpy)).to.be.true;
       });
 
-      it('should not dispatch vaadin-overlay-closed when preventing vaadin-overlay-close', async () => {
+      it('should not fire the event when preventing vaadin-overlay-close', async () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-closed', spy);
         overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
