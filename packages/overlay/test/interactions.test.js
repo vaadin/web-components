@@ -43,7 +43,7 @@ describe('interactions', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire the vaadin-overlay-escape-press event other key pressed', () => {
+    it('should not fire the vaadin-overlay-escape-press event on other key press', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
