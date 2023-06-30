@@ -13,8 +13,6 @@ describe('focus-trap', () => {
   describe('focusable elements', () => {
     beforeEach(async () => {
       overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
-      await nextRender();
-      overlayPart = overlay.$.overlay;
       overlay.renderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -28,12 +26,15 @@ describe('focus-trap', () => {
           `;
         }
       };
+      await nextRender();
+      overlayPart = overlay.$.overlay;
       overlay.requestContentUpdate();
       focusableElements = getFocusableElements(overlayPart);
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
     it('should properly detect focusable elements inside the content', () => {
