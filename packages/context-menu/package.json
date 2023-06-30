@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/context-menu",
-  "version": "24.1.1",
+  "version": "24.1.2",
   "publishConfig": {
     "access": "public"
   },
@@ -39,15 +39,15 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.1.1",
-    "@vaadin/component-base": "~24.1.1",
-    "@vaadin/item": "~24.1.1",
-    "@vaadin/list-box": "~24.1.1",
-    "@vaadin/lit-renderer": "~24.1.1",
-    "@vaadin/overlay": "~24.1.1",
-    "@vaadin/vaadin-lumo-styles": "~24.1.1",
-    "@vaadin/vaadin-material-styles": "~24.1.1",
-    "@vaadin/vaadin-themable-mixin": "~24.1.1"
+    "@vaadin/a11y-base": "~24.1.2",
+    "@vaadin/component-base": "~24.1.2",
+    "@vaadin/item": "~24.1.2",
+    "@vaadin/list-box": "~24.1.2",
+    "@vaadin/lit-renderer": "~24.1.2",
+    "@vaadin/overlay": "~24.1.2",
+    "@vaadin/vaadin-lumo-styles": "~24.1.2",
+    "@vaadin/vaadin-material-styles": "~24.1.2",
+    "@vaadin/vaadin-themable-mixin": "~24.1.2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

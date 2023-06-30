@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/checkbox",
-  "version": "24.1.1",
+  "version": "24.1.2",
   "publishConfig": {
     "access": "public"
   },
@@ -39,12 +39,12 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.1.1",
-    "@vaadin/component-base": "~24.1.1",
-    "@vaadin/field-base": "~24.1.1",
-    "@vaadin/vaadin-lumo-styles": "~24.1.1",
-    "@vaadin/vaadin-material-styles": "~24.1.1",
-    "@vaadin/vaadin-themable-mixin": "~24.1.1",
+    "@vaadin/a11y-base": "~24.1.2",
+    "@vaadin/component-base": "~24.1.2",
+    "@vaadin/field-base": "~24.1.2",
+    "@vaadin/vaadin-lumo-styles": "~24.1.2",
+    "@vaadin/vaadin-material-styles": "~24.1.2",
+    "@vaadin/vaadin-themable-mixin": "~24.1.2",
     "lit": "^2.0.0"
   },
   "devDependencies": {
