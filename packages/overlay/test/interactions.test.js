@@ -151,7 +151,7 @@ describe('interactions', () => {
     });
 
     describe('vaadin-overlay-close event', () => {
-      it('should prevent closing the overlay when preventing vaadin-overlay-close', (done) => {
+      it('should prevent closing the overlay if the event was prevented', (done) => {
         overlay.addEventListener('vaadin-overlay-close', (e) => {
           e.preventDefault();
 
