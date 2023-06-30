@@ -34,7 +34,7 @@ describe('interactions', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should fire the vaadin-overlay-escape-press event when Esc pressed', () => {
+    it('should fire the vaadin-overlay-escape-press event on Esc', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
