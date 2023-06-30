@@ -871,7 +871,7 @@ const runTests = (defineHelper, baseMixin) => {
   describe('slotted label', () => {
     beforeEach(async () => {
       element = fixtureSync(`
-        <${tag}>
+        <${tag} label="Default">
           <label slot="label">Label</label>
           <input slot="input">
         </${tag}>
@@ -885,6 +885,15 @@ const runTests = (defineHelper, baseMixin) => {
       const aria = input.getAttribute('aria-labelledby');
       expect(aria).to.be.ok;
       expect(aria).to.equal(label.id);
+    });
+
+    it('should restore aria-labelledby when removing slotted label', async () => {
+      label.remove();
+      await nextRender();
+      const defaultLabel = element.querySelector('[slot=label]');
+      const aria = input.getAttribute('aria-labelledby');
+      expect(aria).to.be.ok;
+      expect(aria).to.equal(defaultLabel.id);
     });
   });
 
