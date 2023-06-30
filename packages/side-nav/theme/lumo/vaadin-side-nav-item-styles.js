@@ -53,6 +53,10 @@ export const sideNavItemStyles = css`
     transition: transform 140ms;
   }
 
+  :host([dir='rtl']) [part='toggle-button']::before {
+    transform: rotate(90deg);
+  }
+
   :host([expanded]) [part='toggle-button']::before {
     transform: none;
   }
