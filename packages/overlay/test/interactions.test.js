@@ -34,7 +34,7 @@ describe('interactions', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should fire the vaadin-overlay-escape-press event on Esc', () => {
+    it('should fire the event on Esc', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
@@ -43,7 +43,7 @@ describe('interactions', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire the vaadin-overlay-escape-press event on other key press', () => {
+    it('should not fire the event on other key press', () => {
       const spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-escape-press', spy);
 
@@ -52,7 +52,7 @@ describe('interactions', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should not close on esc if vaadin-overlay-escape-press event was prevented', () => {
+    it('should not close on Esc if the event was prevented', () => {
       overlay.addEventListener('vaadin-overlay-escape-press', (e) => e.preventDefault());
 
       escKeyDown(document.body);
@@ -105,7 +105,7 @@ describe('interactions', () => {
     });
 
     describe('vaadin-overlay-outside-click event', () => {
-      it('should fire the vaadin-overlay-outside-click event on outside click', () => {
+      it('should fire the event on outside click', () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-outside-click', spy);
 
@@ -114,7 +114,7 @@ describe('interactions', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should fire the vaadin-overlay-outside-click event on backdrop click', () => {
+      it('should fire the event on backdrop click', () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-outside-click', spy);
 
@@ -124,7 +124,7 @@ describe('interactions', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should not fire the vaadin-overlay-outside-click event on inside click', () => {
+      it('should not fire the event on inside click', () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-outside-click', spy);
 
@@ -133,7 +133,7 @@ describe('interactions', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should not close on outside click if vaadin-overlay-outside-click event was prevented', () => {
+      it('should not close on outside click if the event was prevented', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
 
         click(parent);
@@ -141,7 +141,7 @@ describe('interactions', () => {
         expect(overlay.opened).to.be.true;
       });
 
-      it('should not close on backdrop click if vaadin-overlay-outside-click event was prevented', () => {
+      it('should not close on backdrop click if the event was prevented', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
 
         click(backdrop);
