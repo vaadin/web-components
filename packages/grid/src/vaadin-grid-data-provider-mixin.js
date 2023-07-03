@@ -25,8 +25,8 @@ export const ItemCache = class ItemCache {
     this.parentItem = parentItem;
     /** @type {object} */
     this.itemCaches = {};
-    /** @type {object} */
-    this.items = {};
+    /** @type {object[]} */
+    this.items = [];
     /** @type {number} */
     this.effectiveSize = 0;
     /** @type {number} */
