@@ -72,7 +72,7 @@ registerStyles(
         background: var(--material-background-color);
       }
 
-      [part='scroller']:focus {
+      [part='editor']:focus [part='scroller'] {
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
       }
 

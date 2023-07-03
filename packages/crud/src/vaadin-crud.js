@@ -273,6 +273,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           display: flex;
           flex-direction: column;
           height: 100%;
+          outline: none;
         }
 
         :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
@@ -293,7 +294,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           flex-direction: column;
           overflow: auto;
           flex: auto;
-          outline: none;
         }
 
         [part='footer'] {
@@ -313,8 +313,14 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           </div>
         </div>
 
-        <div id="editor" part="editor" hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]">
-          <div part="scroller" id="scroller" role="group" aria-labelledby="header">
+        <div
+          part="editor"
+          id="editor"
+          role="group"
+          aria-labelledby="header"
+          hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]"
+        >
+          <div part="scroller" id="scroller">
             <div part="header" id="header">
               <slot name="header"></slot>
             </div>
@@ -824,10 +830,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       // When using bottom / aside editor position,
       // auto-focus the scroller element on open.
       if (this._form.parentElement === this) {
-        this.$.scroller.setAttribute('tabindex', '0');
-        this.$.scroller.focus();
+        this.$.editor.setAttribute('tabindex', '0');
+        this.$.editor.focus();
       } else {
-        this.$.scroller.removeAttribute('tabindex');
+        this.$.editor.removeAttribute('tabindex');
       }
     }
 

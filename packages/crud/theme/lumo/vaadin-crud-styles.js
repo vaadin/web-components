@@ -64,7 +64,7 @@ registerStyles(
         padding: var(--lumo-space-l);
       }
 
-      [part='scroller']:focus {
+      [part='editor']:focus [part='scroller'] {
         box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
