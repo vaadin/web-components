@@ -191,5 +191,26 @@ describe('accessibility', () => {
       expect(items[2].disabled).to.be.false;
       expect(items[3].disabled).to.be.false;
     });
+
+    it('should remove href attribute from the link when disabled is set to true', async () => {
+      const link = items[0].shadowRoot.querySelector('[part="link"]');
+
+      items[0].disabled = true;
+      await nextRender();
+
+      expect(link.hasAttribute('href')).to.be.false;
+    });
+
+    it('should restore href attribute on the link when disabled is set to false', async () => {
+      const link = items[0].shadowRoot.querySelector('[part="link"]');
+
+      items[0].disabled = true;
+      await nextRender();
+
+      items[0].disabled = false;
+      await nextRender();
+
+      expect(link.getAttribute('href')).to.equal('/foo');
+    });
   });
 });
