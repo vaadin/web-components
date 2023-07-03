@@ -194,15 +194,15 @@ snapshots["vaadin-crud shadow default"] =
     </div>
   </div>
   <div
+    aria-labelledby="header"
     hidden=""
     id="editor"
     part="editor"
+    role="group"
   >
     <div
-      aria-labelledby="header"
       id="scroller"
       part="scroller"
-      role="group"
     >
       <div
         id="header"

@@ -96,6 +96,14 @@ registerStyles(
       [part='editor'] {
         background: var(--lumo-base-color);
         box-sizing: border-box;
+        position: relative;
+      }
+
+      [part='editor']:focus::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
