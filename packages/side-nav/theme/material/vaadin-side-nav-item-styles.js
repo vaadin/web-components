@@ -122,6 +122,10 @@ export const sideNavItemStyles = css`
     color: var(--material-secondary-text-color);
   }
 
+  :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--material-disabled-text-color);
+  }
+
   :host([current]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
     color: inherit;
   }
