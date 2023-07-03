@@ -256,4 +256,70 @@ describe('a11y', () => {
       </vaadin-crud>
   `),
   );
+
+  ['aside', 'bottom'].forEach((editorPosition) => {
+    describe(`create item - editor position ${editorPosition}`, () => {
+      let newButton, scroller;
+
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.editorPosition = editorPosition;
+        crud.items = [{ title: 'Item 1' }];
+        await nextRender();
+        newButton = crud.querySelector('[slot=new-button]');
+        scroller = crud.$.scroller;
+      });
+
+      afterEach(async () => {
+        crud.editorOpened = false;
+        await nextRender();
+      });
+
+      it(`should set tabindex on the scroller when using editor position ${editorPosition}`, async () => {
+        newButton.focus();
+        newButton.click();
+        await nextRender();
+        expect(scroller.getAttribute('tabindex')).to.equal('0');
+      });
+
+      it(`should move focus to the scroller when using editor position ${editorPosition}`, async () => {
+        newButton.focus();
+        newButton.click();
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(scroller);
+      });
+    });
+
+    describe(`edit item - editor position ${editorPosition}`, () => {
+      let editButtons, scroller;
+
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.editorPosition = editorPosition;
+        crud.items = [{ title: 'Item 1' }];
+        await nextRender();
+        editButtons = crud.querySelectorAll('vaadin-crud-edit');
+        scroller = crud.$.scroller;
+      });
+
+      afterEach(async () => {
+        crud.editorOpened = false;
+        await nextRender();
+      });
+
+      it(`should set tabindex on the scroller when using editor position ${editorPosition}`, async () => {
+        editButtons[0].focus();
+        editButtons[0].click();
+        await nextRender();
+        expect(scroller.getAttribute('tabindex')).to.equal('0');
+      });
+
+      it(`should move focus to the scroller when using editor position ${editorPosition}`, async () => {
+        editButtons[0].focus();
+        editButtons[0].click();
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(scroller);
+      });
+    });
+  });
 });

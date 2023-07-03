@@ -72,6 +72,10 @@ registerStyles(
         background: var(--material-background-color);
       }
 
+      [part='scroller']:focus {
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      }
+
       [part='toolbar'] {
         padding: 8px;
         background-color: var(--material-secondary-background-color);

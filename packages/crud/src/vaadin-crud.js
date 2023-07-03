@@ -293,6 +293,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           flex-direction: column;
           overflow: auto;
           flex: auto;
+          outline: none;
         }
 
         [part='footer'] {
@@ -819,6 +820,15 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
     if (opened) {
       this.__ensureChildren();
+
+      // When using bottom / aside editor position,
+      // auto-focus the scroller element on open.
+      if (this._form.parentElement === this) {
+        this.$.scroller.setAttribute('tabindex', '0');
+        this.$.scroller.focus();
+      } else {
+        this.$.scroller.removeAttribute('tabindex');
+      }
     }
 
     this.__toggleToolbar();

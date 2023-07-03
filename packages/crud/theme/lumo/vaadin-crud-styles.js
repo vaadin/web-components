@@ -64,6 +64,10 @@ registerStyles(
         padding: var(--lumo-space-l);
       }
 
+      [part='scroller']:focus {
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
       [part='toolbar'] {
         padding: var(--lumo-space-s) var(--lumo-space-m);
         background-color: var(--lumo-contrast-5pct);
