@@ -64,7 +64,7 @@ export const SideNavChildrenMixin = (superClass) =>
 
         /**
          * Count of child items.
-         * @private
+         * @protected
          */
         _itemsCount: {
           type: Number,

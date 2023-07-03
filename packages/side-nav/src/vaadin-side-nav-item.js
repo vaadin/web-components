@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -67,6 +68,7 @@ function isEnabled() {
  *
  * Attribute      | Description
  * ---------------|-------------
+ * `disabled`     | Set when the element is disabled.
  * `expanded`     | Set when the element is expanded.
  * `has-children` | Set when the element has child items.
  *
@@ -77,10 +79,11 @@ function isEnabled() {
  * @extends LitElement
  * @mixes PolylitMixin
  * @mixes ThemableMixin
+ * @mixes DisabledMixin
  * @mixes ElementMixin
  * @mixes SideNavChildrenMixin
  */
-class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-side-nav-item';
   }
@@ -169,6 +172,13 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
     if (props.has('path') || props.has('pathAliases')) {
       this.__updateCurrent();
     }
+
+    // Ensure all the child items are disabled
+    if (props.has('disabled') || props.has('_itemsCount')) {
+      this._items.forEach((item) => {
+        item.disabled = this.disabled;
+      });
+    }
   }
 
   /** @protected */
@@ -189,13 +199,21 @@ class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(Polyli
   render() {
     return html`
       <div part="content" @click="${this._onContentClick}">
-        <a id="link" href="${ifDefined(this.path)}" part="link" aria-current="${this.current ? 'page' : 'false'}">
+        <a
+          id="link"
+          ?disabled="${this.disabled}"
+          tabindex="${this.disabled ? '-1' : '0'}"
+          href="${ifDefined(this.disabled ? null : this.path)}"
+          part="link"
+          aria-current="${this.current ? 'page' : 'false'}"
+        >
           <slot name="prefix"></slot>
           <slot></slot>
           <slot name="suffix"></slot>
         </a>
         <button
           part="toggle-button"
+          ?disabled="${this.disabled}"
           @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"

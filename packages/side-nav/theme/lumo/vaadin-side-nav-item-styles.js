@@ -23,6 +23,10 @@ export const sideNavItemStyles = css`
     cursor: pointer;
   }
 
+  :host([disabled]) [part='link'] {
+    color: var(--lumo-disabled-text-color);
+  }
+
   [part='toggle-button'] {
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
     width: var(--lumo-size-s);
@@ -86,6 +90,10 @@ export const sideNavItemStyles = css`
     padding: 0.1em;
     flex-shrink: 0;
     color: var(--lumo-contrast-60pct);
+  }
+
+  :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--lumo-disabled-text-color);
   }
 
   :host([current]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {

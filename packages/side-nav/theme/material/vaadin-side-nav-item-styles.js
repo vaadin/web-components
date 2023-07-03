@@ -31,6 +31,10 @@ export const sideNavItemStyles = css`
     color: var(--material-primary-text-color);
   }
 
+  :host([disabled]) [part='link'] {
+    color: var(--material-disabled-text-color);
+  }
+
   :host([current]) [part='link']::before {
     position: absolute;
     content: '';
@@ -116,6 +120,10 @@ export const sideNavItemStyles = css`
     flex-shrink: 0;
     margin-inline-end: 24px;
     color: var(--material-secondary-text-color);
+  }
+
+  :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--material-disabled-text-color);
   }
 
   :host([current]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
