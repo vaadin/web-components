@@ -71,6 +71,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * Attribute      | Description
  * ---------------|-------------
+ * `disabled`     | Set when the element is disabled.
  * `expanded`     | Set when the element is expanded.
  * `has-children` | Set when the element has child items.
  *
