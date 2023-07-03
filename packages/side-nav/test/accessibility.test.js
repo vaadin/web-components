@@ -161,4 +161,35 @@ describe('accessibility', () => {
       });
     });
   });
+
+  describe('disabled', () => {
+    let sideNav, items;
+
+    beforeEach(async () => {
+      sideNav = fixtureSync(`
+        <vaadin-side-nav>
+          <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/bar">
+            Bar
+            <vaadin-side-nav-item path="/bar/baz" slot="children">Baz</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/bar/qux" slot="children">Qux</vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      `);
+      await nextRender();
+      items = [...sideNav.querySelectorAll('vaadin-side-nav-item')];
+    });
+
+    it('should propagate disabled to child items of the side-nav item', async () => {
+      items[1].disabled = true;
+      await nextRender();
+      expect(items[2].disabled).to.be.true;
+      expect(items[3].disabled).to.be.true;
+
+      items[1].disabled = false;
+      await nextRender();
+      expect(items[2].disabled).to.be.false;
+      expect(items[3].disabled).to.be.false;
+    });
+  });
 });

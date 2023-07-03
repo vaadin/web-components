@@ -172,6 +172,13 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     if (props.has('path') || props.has('pathAliases')) {
       this.__updateCurrent();
     }
+
+    // Ensure all the child items are disabled
+    if (props.has('disabled') || props.has('_itemsCount')) {
+      this._items.forEach((item) => {
+        item.disabled = this.disabled;
+      });
+    }
   }
 
   /** @protected */
