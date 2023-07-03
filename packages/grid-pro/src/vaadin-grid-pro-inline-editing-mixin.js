@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
@@ -298,7 +298,11 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _onEditorFocusOut() {
       // Schedule stop on editor component focusout
-      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
+      this._debouncerStopEdit = Debouncer.debounce(
+        this._debouncerStopEdit,
+        timeOut.after(0),
+        this._stopEdit.bind(this),
+      );
     }
 
     /** @private */
