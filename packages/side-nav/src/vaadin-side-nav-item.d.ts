@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -77,7 +78,9 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
-declare class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+declare class SideNavItem extends SideNavChildrenMixin(
+  DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
+) {
   /**
    * The path to navigate to
    */

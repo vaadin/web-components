@@ -31,6 +31,10 @@ export const sideNavItemStyles = css`
     color: var(--material-primary-text-color);
   }
 
+  :host([disabled]) [part='link'] {
+    color: var(--material-disabled-text-color);
+  }
+
   :host([current]) [part='link']::before {
     position: absolute;
     content: '';

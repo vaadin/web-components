@@ -15,6 +15,10 @@ export const sideNavItemBaseStyles = css`
     display: none !important;
   }
 
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
   [part='content'] {
     display: flex;
     align-items: center;
