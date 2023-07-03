@@ -828,7 +828,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.__ensureChildren();
 
       // When using bottom / aside editor position,
-      // auto-focus the scroller element on open.
+      // auto-focus the editor element on open.
       if (this._form.parentElement === this) {
         this.$.editor.setAttribute('tabindex', '0');
         this.$.editor.focus();
