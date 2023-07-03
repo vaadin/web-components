@@ -34,7 +34,7 @@ const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 // Item properties
 assertType<string | null | undefined>(sideNavItem.path);
 assertType<boolean>(sideNavItem.current);
-assertType<disabled>(sideNavItem.expanded);
+assertType<boolean>(sideNavItem.disabled);
 assertType<boolean>(sideNavItem.expanded);
 assertType<SideNavI18n>(sideNavItem.i18n);
 

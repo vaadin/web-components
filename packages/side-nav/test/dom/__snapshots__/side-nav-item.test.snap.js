@@ -356,12 +356,16 @@ snapshots["vaadin-side-nav-item item disabled"] =
     2
   </span>
   <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
     role="listitem"
     slot="children"
   >
     Child item 1
   </vaadin-side-nav-item>
   <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
     role="listitem"
     slot="children"
   >
