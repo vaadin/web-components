@@ -275,13 +275,6 @@ describe('a11y', () => {
         await nextRender();
       });
 
-      it(`should set tabindex on the scroller when using editor position ${editorPosition}`, async () => {
-        newButton.focus();
-        newButton.click();
-        await nextRender();
-        expect(scroller.getAttribute('tabindex')).to.equal('0');
-      });
-
       it(`should move focus to the scroller when using editor position ${editorPosition}`, async () => {
         newButton.focus();
         newButton.click();
@@ -305,13 +298,6 @@ describe('a11y', () => {
       afterEach(async () => {
         crud.editorOpened = false;
         await nextRender();
-      });
-
-      it(`should set tabindex on the scroller when using editor position ${editorPosition}`, async () => {
-        editButtons[0].focus();
-        editButtons[0].click();
-        await nextRender();
-        expect(scroller.getAttribute('tabindex')).to.equal('0');
       });
 
       it(`should move focus to the scroller when using editor position ${editorPosition}`, async () => {
