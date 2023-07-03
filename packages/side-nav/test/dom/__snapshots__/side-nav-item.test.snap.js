@@ -68,6 +68,45 @@ snapshots["vaadin-side-nav-item item expanded"] =
 `;
 /* end snapshot vaadin-side-nav-item item expanded */
 
+snapshots["vaadin-side-nav-item item disabled"] = 
+`<vaadin-side-nav-item
+  aria-disabled="true"
+  disabled=""
+  has-children=""
+  role="listitem"
+>
+  <vaadin-icon
+    icon="vaadin:chart"
+    slot="prefix"
+  >
+  </vaadin-icon>
+  Item
+  <span
+    slot="suffix"
+    theme="badge primary"
+  >
+    2
+  </span>
+  <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
+    role="listitem"
+    slot="children"
+  >
+    Child item 1
+  </vaadin-side-nav-item>
+  <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
+    role="listitem"
+    slot="children"
+  >
+    Child item 2
+  </vaadin-side-nav-item>
+</vaadin-side-nav-item>
+`;
+/* end snapshot vaadin-side-nav-item item disabled */
+
 snapshots["vaadin-side-nav-item item current"] = 
 `<vaadin-side-nav-item
   current=""
@@ -335,43 +374,4 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
 </div>
 `;
 /* end snapshot vaadin-side-nav-item shadow i18n */
-
-snapshots["vaadin-side-nav-item item disabled"] = 
-`<vaadin-side-nav-item
-  aria-disabled="true"
-  disabled=""
-  has-children=""
-  role="listitem"
->
-  <vaadin-icon
-    icon="vaadin:chart"
-    slot="prefix"
-  >
-  </vaadin-icon>
-  Item
-  <span
-    slot="suffix"
-    theme="badge primary"
-  >
-    2
-  </span>
-  <vaadin-side-nav-item
-    aria-disabled="true"
-    disabled=""
-    role="listitem"
-    slot="children"
-  >
-    Child item 1
-  </vaadin-side-nav-item>
-  <vaadin-side-nav-item
-    aria-disabled="true"
-    disabled=""
-    role="listitem"
-    slot="children"
-  >
-    Child item 2
-  </vaadin-side-nav-item>
-</vaadin-side-nav-item>
-`;
-/* end snapshot vaadin-side-nav-item item disabled */
 
