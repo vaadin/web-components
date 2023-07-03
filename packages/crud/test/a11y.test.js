@@ -256,4 +256,39 @@ describe('a11y', () => {
       </vaadin-crud>
   `),
   );
+
+  ['aside', 'bottom'].forEach((editorPosition) => {
+    describe(`editor focus - ${editorPosition} position`, () => {
+      let newButton, editButtons, editor;
+
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+        crud.editorPosition = editorPosition;
+        crud.items = [{ title: 'Item 1' }];
+        await nextRender();
+        newButton = crud.querySelector('[slot=new-button]');
+        editButtons = crud.querySelectorAll('vaadin-crud-edit');
+        editor = crud.$.editor;
+      });
+
+      afterEach(async () => {
+        crud.editorOpened = false;
+        await nextRender();
+      });
+
+      it('should move focus to the editor on new button click', async () => {
+        newButton.focus();
+        newButton.click();
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(editor);
+      });
+
+      it('should move focus to the editor on edit button click', async () => {
+        editButtons[0].focus();
+        editButtons[0].click();
+        await nextRender();
+        expect(getDeepActiveElement()).to.equal(editor);
+      });
+    });
+  });
 });
