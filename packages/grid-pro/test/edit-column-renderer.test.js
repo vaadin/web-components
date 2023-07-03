@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
+import { aTimeout, enter, esc, fixtureSync, focusout, mousedown, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -198,7 +198,7 @@ describe('edit column renderer', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should exit the edit mode on custom editor component focusout event', () => {
+    it('should exit the edit mode on custom editor component focusout event', async () => {
       column.editModeRenderer = function (root, _, model) {
         root.innerHTML = '';
         const input = document.createElement('input');
@@ -250,6 +250,25 @@ describe('edit column renderer', () => {
       flushGrid(grid);
 
       expect(getContainerCellContent(grid.$.items, 0, 0).innerHTML).to.equal('Bar');
+    });
+
+    it('should not exit the edit mode if clear button is clicked in the text-field', async () => {
+      column.editModeRenderer = function (root, _, model) {
+        root.innerHTML = '';
+        const field = document.createElement('vaadin-text-field');
+        field.value = model.item.name;
+        field.clearButtonVisible = true;
+        root.appendChild(field);
+      };
+      dblclick(cell._content);
+      editor = getCellEditor(cell);
+
+      // Simulate a mouse click on the clear button wich first focus out from the field
+      focusout(editor);
+      // and then the click is done
+      mousedown(editor.$.clearButton);
+      await aTimeout(0);
+      expect(getCellEditor(cell)).to.be.ok;
     });
   });
 
