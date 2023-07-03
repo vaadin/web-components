@@ -276,14 +276,14 @@ describe('a11y', () => {
         await nextRender();
       });
 
-      it('should move focus to the scroller on new button click', async () => {
+      it('should move focus to the editor on new button click', async () => {
         newButton.focus();
         newButton.click();
         await nextRender();
         expect(getDeepActiveElement()).to.equal(editor);
       });
 
-      it('should move focus to the scroller on edit button click', async () => {
+      it('should move focus to the editor on edit button click', async () => {
         editButtons[0].focus();
         editButtons[0].click();
         await nextRender();
