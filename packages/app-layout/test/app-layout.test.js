@@ -275,18 +275,18 @@ describe('vaadin-app-layout', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should not update offset size until end of the drawer transition', async () => {
-        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+      it('should only update offset size once during the drawer transition', async () => {
         layout.primarySection = 'drawer';
-
         await onceResized(layout);
         await nextRender();
 
+        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+
         const spy = sinon.spy(layout, '_updateOffsetSize');
         toggle.click();
-
         await oneEvent(drawer, 'transitionend');
-        expect(spy.called).to.be.false;
+
+        expect(spy.callCount).to.be.equal(1);
       });
     });
 

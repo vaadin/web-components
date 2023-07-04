@@ -10,9 +10,7 @@ import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/re
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -386,6 +384,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         value: 'vaadin-router-location-changed',
         observer: '_closeDrawerOnChanged',
       },
+
+      /** @private */
+      __isDrawerAnimating: {
+        type: Boolean,
+        observer: '__isDrawerAnimatingChanged',
+      },
     };
   }
 
@@ -444,9 +448,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       requestAnimationFrame(() => {
         // Prevent updating offset size multiple times
         // during the drawer open / close transition.
-        this.__debounceUpdateOffsetSize = Debouncer.debounce(this.__debounceUpdateOffsetSize, timeOut.after(20), () => {
+        if (this.__isDrawerAnimating) {
+          this.__updateOffsetSizePending = true;
+        } else {
           this._updateOffsetSize();
-        });
+        }
       });
     });
     this._navbarSizeObserver.observe(this.$.navbarTop);
@@ -460,6 +466,13 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     super.ready();
     this.addController(this.__focusTrapController);
     this.__setAriaExpanded();
+
+    this.$.drawer.addEventListener('transitionstart', () => {
+      this.__isDrawerAnimating = true;
+    });
+    this.$.drawer.addEventListener('transitionend', () => {
+      this.__isDrawerAnimating = false;
+    });
   }
 
   /** @protected */
@@ -531,6 +544,14 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
    */
   __i18nChanged() {
     this.__updateDrawerAriaAttributes();
+  }
+
+  /** @private */
+  __isDrawerAnimatingChanged(isAnimating) {
+    if (!isAnimating && this.__updateOffsetSizePending) {
+      this.__updateOffsetSizePending = false;
+      this._updateOffsetSize();
+    }
   }
 
   /** @protected */
