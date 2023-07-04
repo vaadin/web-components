@@ -51,6 +51,8 @@ export const ClearButtonMixin = (superclass) =>
       super.ready();
 
       if (this.clearElement) {
+        this.clearElement.addEventListener('mousedown', (event) => this._onClearButtonAction(event));
+        this.clearElement.addEventListener('touchstart', (event) => this._onClearButtonAction(event, false));
         this.clearElement.addEventListener('click', (event) => this._onClearButtonClick(event));
       }
     }
@@ -60,8 +62,21 @@ export const ClearButtonMixin = (superclass) =>
      * @protected
      */
     _onClearButtonClick(event) {
+      if (event.composedPath()[0] === this.clearElement) {
+        this._onClearButtonAction(event);
+      }
+    }
+
+    /**
+     * @param {Event} event
+     * @param {boolean} focusInputElement
+     * @protected
+     */
+    _onClearButtonAction(event, focusInputElement = true) {
       event.preventDefault();
-      this.inputElement.focus();
+      if (focusInputElement) {
+        this.inputElement.focus();
+      }
       this._onClearAction();
     }
 
