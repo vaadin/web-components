@@ -10,7 +10,9 @@ import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/re
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -440,11 +442,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     this._navbarSizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
-        // Avoid updating offset size multiple times
-        // during the drawer open / close transition
-        if (!this.__drawerToggleClicked) {
+        // Prevent updating offset size multiple times
+        // during the drawer open / close transition.
+        this.__debounceUpdateOffsetSize = Debouncer.debounce(this.__debounceUpdateOffsetSize, timeOut.after(20), () => {
           this._updateOffsetSize();
-        }
+        });
       });
     });
     this._navbarSizeObserver.observe(this.$.navbarTop);
@@ -538,18 +540,10 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   }
 
   /** @private */
-  async _drawerToggleClick(e) {
+  _drawerToggleClick(e) {
     e.stopPropagation();
 
-    // Prevent disabling the animation
-    this.__drawerToggleClicked = true;
-
     this.drawerOpened = !this.drawerOpened;
-
-    // Wait for the drawer CSS transition.
-    await this.__drawerTransitionComplete();
-
-    this.__drawerToggleClicked = false;
   }
 
   /** @private */

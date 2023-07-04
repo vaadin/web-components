@@ -275,7 +275,7 @@ describe('vaadin-app-layout', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should not update offset size during the drawer open transition', async () => {
+      it('should not update offset size until end of the drawer transition', async () => {
         layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
         layout.primarySection = 'drawer';
 
@@ -286,7 +286,6 @@ describe('vaadin-app-layout', () => {
         toggle.click();
 
         await oneEvent(drawer, 'transitionend');
-
         expect(spy.called).to.be.false;
       });
     });
