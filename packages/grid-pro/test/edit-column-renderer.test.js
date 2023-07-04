@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enter, esc, fixtureSync, focusout, mousedown, space } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
+import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -263,11 +264,9 @@ describe('edit column renderer', () => {
       dblclick(cell._content);
       editor = getCellEditor(cell);
 
-      // Simulate a mouse click on the clear button wich first focus out from the field
-      focusout(editor);
-      // and then the click is done
-      mousedown(editor.$.clearButton);
-      await aTimeout(0);
+      const { x, y } = editor.$.clearButton.getBoundingClientRect();
+      await sendMouse({ type: 'down', position: [Math.floor(x + 10), Math.floor(y + 10)] });
+      await nextFrame();
       expect(getCellEditor(cell)).to.be.ok;
     });
   });
