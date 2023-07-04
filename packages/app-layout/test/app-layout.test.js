@@ -274,6 +274,22 @@ describe('vaadin-app-layout', () => {
         layout.drawerOpened = true;
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
+
+      it('should not disable transition by setting attribute on toggle click', async () => {
+        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+        layout.primarySection = 'drawer';
+
+        await onceResized(layout);
+        await nextRender();
+
+        const spy = sinon.spy(layout, 'setAttribute');
+        toggle.click();
+
+        await onceResized(layout);
+        await nextRender();
+
+        expect(spy.called).to.be.false;
+      });
     });
 
     describe('mobile layout', () => {

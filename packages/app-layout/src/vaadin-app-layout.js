@@ -440,7 +440,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     this._navbarSizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
-        this._blockAnimationUntilAfterNextRender();
+        // Ignore resize caused by drawer toggle click
+        // to make drawer open / close transition work
+        if (!this.__drawerToggleClicked) {
+          this._blockAnimationUntilAfterNextRender();
+        }
         this._updateOffsetSize();
       });
     });
@@ -535,9 +539,18 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   }
 
   /** @private */
-  _drawerToggleClick(e) {
+  async _drawerToggleClick(e) {
     e.stopPropagation();
+
+    // Prevent disabling the animation
+    this.__drawerToggleClicked = true;
+
     this.drawerOpened = !this.drawerOpened;
+
+    // Wait for the drawer CSS transition.
+    await this.__drawerTransitionComplete();
+
+    this.__drawerToggleClicked = false;
   }
 
   /** @private */
