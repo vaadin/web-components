@@ -12,8 +12,6 @@ import './vaadin-grid-pro-edit-checkbox.js';
 import './vaadin-grid-pro-edit-select.js';
 import './vaadin-grid-pro-edit-text-field.js';
 import { get, set } from '@polymer/polymer/lib/utils/path.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
@@ -280,31 +278,12 @@ class GridProEditColumn extends GridColumn {
     const editor = this._getEditorComponent(cell);
     editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
     editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
-    editor.addEventListener('mousedown', this._onMouseDown(editor));
-    editor.addEventListener('mouseup', this._onMouseUp);
     editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
     document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
     this._setEditorOptions(editor);
     this._setEditorValue(editor, get(model.item, this.path));
     editor._grid = this._grid;
     this._focusEditor(editor);
-  }
-
-  _onMouseDown(editor) {
-    return (e) => {
-      this.__mouseDownDebouncer = Debouncer.debounce(this.__mouseDownDebouncer, animationFrame, () => {
-        if (e.target !== editor.inputElement) {
-          this._focusEditor(editor);
-          this._grid._cancelStopEdit();
-        }
-      });
-    };
-  }
-
-  _onMouseUp() {
-    if (this.__mouseDownDebouncer) {
-      this.__mouseDownDebouncer.cancel();
-    }
   }
 
   /**
