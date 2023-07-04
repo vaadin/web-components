@@ -275,18 +275,17 @@ describe('vaadin-app-layout', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should not disable transition by setting attribute on toggle click', async () => {
+      it('should not update offset size during the drawer open transition', async () => {
         layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
         layout.primarySection = 'drawer';
 
         await onceResized(layout);
         await nextRender();
 
-        const spy = sinon.spy(layout, 'setAttribute');
+        const spy = sinon.spy(layout, '_updateOffsetSize');
         toggle.click();
 
-        await onceResized(layout);
-        await nextRender();
+        await oneEvent(drawer, 'transitionend');
 
         expect(spy.called).to.be.false;
       });

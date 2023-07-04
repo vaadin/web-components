@@ -440,12 +440,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     this._navbarSizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
-        // Ignore resize caused by drawer toggle click
-        // to make drawer open / close transition work
+        // Avoid updating offset size multiple times
+        // during the drawer open / close transition
         if (!this.__drawerToggleClicked) {
-          this._blockAnimationUntilAfterNextRender();
+          this._updateOffsetSize();
         }
-        this._updateOffsetSize();
       });
     });
     this._navbarSizeObserver.observe(this.$.navbarTop);
