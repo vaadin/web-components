@@ -466,8 +466,10 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     });
     this.$.drawer.addEventListener('transitionend', () => {
       this.__isDrawerAnimating = false;
-      this.__updateOffsetSizePending = false;
-      this._updateOffsetSize();
+      if (this.__updateOffsetSizePending) {
+        this.__updateOffsetSizePending = false;
+        this._updateOffsetSize();
+      }
     });
   }
 
