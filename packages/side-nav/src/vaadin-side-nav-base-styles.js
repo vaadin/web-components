@@ -55,15 +55,6 @@ export const sideNavItemBaseStyles = css`
     display: none !important;
   }
 
-  :host(:not([path])) button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-
   slot[name='prefix'],
   slot[name='suffix'] {
     flex: none;
