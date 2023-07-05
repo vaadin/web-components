@@ -40,10 +40,7 @@ registerStyles(
       width: auto;
       height: auto;
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
     }
 
     :host([all-rows-visible]) {
@@ -154,10 +151,7 @@ registerStyles(
       align-items: inherit;
       outline: none;
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      inset: 0;
     }
 
     [part~='details-cell'] {
