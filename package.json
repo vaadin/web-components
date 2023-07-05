@@ -63,8 +63,7 @@
     "rimraf": "^5.0.1",
     "rollup": "^3.23.0",
     "rollup-plugin-terser": "^7.0.2",
-    "stylelint": "^15.0.0",
-    "stylelint-config-prettier": "^9.0.4",
+    "stylelint": "^15.10.0",
     "stylelint-config-vaadin": "^0.3.0",
     "typescript": "^4.8.4"
   },
