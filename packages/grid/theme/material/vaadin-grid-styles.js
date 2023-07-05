@@ -76,10 +76,7 @@ registerStyles(
       content: '';
       pointer-events: none;
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       background-color: var(--material-primary-color);
       opacity: 0;
       transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
@@ -143,10 +140,7 @@ registerStyles(
     :host([navigating]) [part~='row']:focus::before {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       pointer-events: none;
       transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
       z-index: 3;
@@ -157,10 +151,7 @@ registerStyles(
       content: '';
       position: absolute;
       z-index: 100;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       pointer-events: none;
       box-shadow: inset 0 0 0 2px var(--material-primary-color);
     }
@@ -176,10 +167,7 @@ registerStyles(
     [part~='row'][dragover] [part~='cell']::after {
       content: '';
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      inset: 0;
       height: 3px;
       pointer-events: none;
       background: var(--material-primary-color);
