@@ -89,6 +89,7 @@ const runTests = (defineHelper, baseMixin) => {
     it('should keep focus at the input on clear button touch', () => {
       input.focus();
       touchstart(clearButton);
+      touchend(clearButton);
       expect(document.activeElement).to.be.equal(input);
     });
 
