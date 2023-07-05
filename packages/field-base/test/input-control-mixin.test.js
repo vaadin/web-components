@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  click,
   defineLit,
   definePolymer,
   escKeyDown,
@@ -10,7 +9,6 @@ import {
   mousedown,
   nextFrame,
   nextRender,
-  touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -77,34 +75,10 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
+    it('should focus the input on clear button mousedown', () => {
       const spy = sinon.spy(input, 'focus');
-      button.click();
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should clear the input value on clear button mousedown', async () => {
       mousedown(button);
-      await nextFrame();
-      expect(input.value).to.equal('');
-    });
-
-    it('should clear the input value on clear button touch', async () => {
-      touchstart(button);
-      await nextFrame();
-      expect(input.value).to.equal('');
-    });
-
-    it('should not focus the input on clear button touch', () => {
-      const spy = sinon.spy(input, 'focus');
-      touchstart(button);
-      expect(spy.called).to.be.false;
-    });
-
-    it('should keep focus at the input on clear button touch', () => {
-      input.focus();
-      touchstart(button);
-      expect(document.activeElement).to.be.equal(input);
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should dispatch input event on clear button click', () => {

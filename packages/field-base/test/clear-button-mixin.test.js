@@ -6,8 +6,11 @@ import {
   fire,
   fixtureSync,
   keyboardEventFor,
+  mousedown,
   nextFrame,
   nextRender,
+  touchend,
+  touchstart,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
@@ -66,7 +69,28 @@ const runTests = (defineHelper, baseMixin) => {
     it('should focus the input on clear button click', () => {
       const spy = sinon.spy(input, 'focus');
       clearButton.click();
+      mousedown(clearButton);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should clear the input value on clear button touch', async () => {
+      touchstart(clearButton);
+      touchend(clearButton);
+      await nextFrame();
+      expect(input.value).to.equal('');
+    });
+
+    it('should not focus the input on clear button touch', () => {
+      const spy = sinon.spy(input, 'focus');
+      touchstart(clearButton);
+      touchend(clearButton);
+      expect(spy.called).to.be.false;
+    });
+
+    it('should keep focus at the input on clear button touch', () => {
+      input.focus();
+      touchstart(clearButton);
+      expect(document.activeElement).to.be.equal(input);
     });
 
     it('should dispatch input event on clear button click', () => {
