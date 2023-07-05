@@ -51,8 +51,8 @@ export const ClearButtonMixin = (superclass) =>
       super.ready();
 
       if (this.clearElement) {
-        this.clearElement.addEventListener('mousedown', (event) => this._onClearButtonAction(event));
-        this.clearElement.addEventListener('touchstart', (event) => this._onClearButtonAction(event, false));
+        this.clearElement.addEventListener('mousedown', (event) => this._onClearButtonMouseDown(event));
+        this.clearElement.addEventListener('touchend', (event) => this._onClearButtonTouchEnd(event));
         this.clearElement.addEventListener('click', (event) => this._onClearButtonClick(event));
       }
     }
@@ -62,9 +62,17 @@ export const ClearButtonMixin = (superclass) =>
      * @protected
      */
     _onClearButtonClick(event) {
-      if (event.composedPath()[0] === this.clearElement) {
-        this._onClearButtonAction(event);
-      }
+      event.preventDefault();
+      this._onClearAction();
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     */
+    _onClearButtonMouseDown(event) {
+      event.preventDefault();
+      this.inputElement.focus();
     }
 
     /**
@@ -72,11 +80,8 @@ export const ClearButtonMixin = (superclass) =>
      * @param {boolean} focusInputElement
      * @protected
      */
-    _onClearButtonAction(event, focusInputElement = true) {
+    _onClearButtonTouchEnd(event) {
       event.preventDefault();
-      if (focusInputElement) {
-        this.inputElement.focus();
-      }
       this._onClearAction();
     }
 
