@@ -553,7 +553,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   /** @private */
   _drawerToggleClick(e) {
     e.stopPropagation();
-
     this.drawerOpened = !this.drawerOpened;
   }
 
