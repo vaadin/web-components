@@ -459,8 +459,13 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     this._navbarSizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => {
-        this._blockAnimationUntilAfterNextRender();
-        this._updateOffsetSize();
+        // Prevent updating offset size multiple times
+        // during the drawer open / close transition.
+        if (this.__isDrawerAnimating) {
+          this.__updateOffsetSizePending = true;
+        } else {
+          this._updateOffsetSize();
+        }
       });
     });
     this._navbarSizeObserver.observe(this.$.navbarTop);
@@ -474,6 +479,24 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     super.ready();
     this.addController(this.__focusTrapController);
     this.__setAriaExpanded();
+
+    this.$.drawer.addEventListener('transitionstart', () => {
+      this.__isDrawerAnimating = true;
+    });
+
+    this.$.drawer.addEventListener('transitionend', () => {
+      // Update offset size after drawer animation.
+      if (this.__updateOffsetSizePending) {
+        this.__updateOffsetSizePending = false;
+        this._updateOffsetSize();
+      }
+
+      // Delay resetting the flag until animation frame
+      // to avoid updating offset size again on resize.
+      requestAnimationFrame(() => {
+        this.__isDrawerAnimating = false;
+      });
+    });
   }
 
   /** @protected */
