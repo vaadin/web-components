@@ -384,12 +384,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         value: 'vaadin-router-location-changed',
         observer: '_closeDrawerOnChanged',
       },
-
-      /** @private */
-      __isDrawerAnimating: {
-        type: Boolean,
-        observer: '__isDrawerAnimatingChanged',
-      },
     };
   }
 
@@ -472,6 +466,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     });
     this.$.drawer.addEventListener('transitionend', () => {
       this.__isDrawerAnimating = false;
+      this.__updateOffsetSizePending = false;
+      this._updateOffsetSize();
     });
   }
 
@@ -544,14 +540,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
    */
   __i18nChanged() {
     this.__updateDrawerAriaAttributes();
-  }
-
-  /** @private */
-  __isDrawerAnimatingChanged(isAnimating) {
-    if (!isAnimating && this.__updateOffsetSizePending) {
-      this.__updateOffsetSizePending = false;
-      this._updateOffsetSize();
-    }
   }
 
   /** @protected */
