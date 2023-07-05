@@ -287,6 +287,9 @@ describe('vaadin-app-layout', () => {
         await oneEvent(drawer, 'transitionend');
 
         expect(spy.callCount).to.be.equal(1);
+        await nextFrame();
+
+        expect(spy.callCount).to.be.equal(1);
       });
     });
 

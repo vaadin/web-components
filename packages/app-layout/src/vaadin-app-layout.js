@@ -464,12 +464,19 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this.$.drawer.addEventListener('transitionstart', () => {
       this.__isDrawerAnimating = true;
     });
+
     this.$.drawer.addEventListener('transitionend', () => {
-      this.__isDrawerAnimating = false;
+      // Update offset size after drawer animation.
       if (this.__updateOffsetSizePending) {
         this.__updateOffsetSizePending = false;
         this._updateOffsetSize();
       }
+
+      // Delay resetting the flag until animation frame
+      // to avoid updating offset size again on resize.
+      requestAnimationFrame(() => {
+        this.__isDrawerAnimating = false;
+      });
     });
   }
 
