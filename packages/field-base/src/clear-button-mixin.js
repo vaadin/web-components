@@ -67,7 +67,7 @@ export const ClearButtonMixin = (superclass) =>
     }
 
     /**
-     * @param {Event} event
+     * @param {MouseEvent} event
      * @protected
      */
     _onClearButtonMouseDown(event) {
