@@ -66,9 +66,8 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
+    it('should focus the input on clear button mousedown', () => {
       const spy = sinon.spy(input, 'focus');
-      clearButton.click();
       mousedown(clearButton);
       expect(spy.calledOnce).to.be.true;
     });
