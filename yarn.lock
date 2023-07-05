@@ -11363,10 +11363,10 @@ style-search@^0.1.0:
   resolved "https://registry.yarnpkg.com/style-search/-/style-search-0.1.0.tgz#7958c793e47e32e07d2b5cafe5c0bf8e12e77902"
   integrity sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==
 
-stylelint-config-vaadin@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/stylelint-config-vaadin/-/stylelint-config-vaadin-0.3.0.tgz#aa22e87e45ec85a52fb924a0d4b4913d6811af33"
-  integrity sha512-HC1zYjmVJdx1wce48HAC38XYuhQfeea447bUsUdw2Jwgfy5e5s/hCACQ4hdqet8o3M0YbKQXiVI/R9VkAf2ROg==
+stylelint-config-vaadin@^1.0.0-alpha.1:
+  version "1.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/stylelint-config-vaadin/-/stylelint-config-vaadin-1.0.0-alpha.1.tgz#20cf8811d7023c786078cc633706ee5f91e21640"
+  integrity sha512-b/TEovS7jyGJJz6OQPEaeV4ojowyHNTdEHlHrIk/CTiRRiy8TE40lKIAAn9NQsXUrFazYyqYPE4a7Yfz/X8nQQ==
 
 stylelint@^15.10.0:
   version "15.10.0"
