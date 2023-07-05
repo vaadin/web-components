@@ -6,10 +6,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const gridProEditor = css`
   :host([theme~='grid-pro-editor']) {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     padding: 0;
     will-change: transform;
     font-size: inherit;
