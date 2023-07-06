@@ -67,7 +67,6 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     (!isTouch ? it : it.skip)('should focus the input on clear button mousedown', () => {
-      console.log('got here!!!hhhh');
       const spy = sinon.spy(input, 'focus');
       mousedown(clearButton);
       expect(spy.calledOnce).to.be.true;
