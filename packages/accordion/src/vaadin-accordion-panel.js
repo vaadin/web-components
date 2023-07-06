@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-accordion-heading.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
@@ -41,47 +41,36 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @customElement
  * @extends HTMLElement
  * @mixes CollapsibleMixin
- * @mixes ControllerMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
  * @mixes ThemableMixin
  */
 class AccordionPanel extends CollapsibleMixin(
-  DelegateFocusMixin(DelegateStateMixin(ThemableMixin(ControllerMixin(PolymerElement)))),
+  DelegateFocusMixin(DelegateStateMixin(ThemableMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-accordion-panel';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+      :host([hidden]) {
+        display: none !important;
+      }
 
-        [part='content'] {
-          display: none;
-          overflow: hidden;
-        }
+      [part='content'] {
+        display: none;
+        overflow: hidden;
+      }
 
-        :host([opened]) [part='content'] {
-          display: block;
-          overflow: visible;
-        }
-      </style>
-
-      <slot name="summary"></slot>
-
-      <div part="content">
-        <slot></slot>
-      </div>
-
-      <slot name="tooltip"></slot>
+      :host([opened]) [part='content'] {
+        display: block;
+        overflow: visible;
+      }
     `;
   }
 
@@ -125,6 +114,19 @@ class AccordionPanel extends CollapsibleMixin(
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setPosition('bottom-start');
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <slot name="summary"></slot>
+
+      <div part="content">
+        <slot></slot>
+      </div>
+
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */

@@ -25,8 +25,9 @@ describe('vaadin-accordion-panel', () => {
       expect(panel.opened).to.be.false;
     });
 
-    it('should reflect opened property to attribute', () => {
+    it('should reflect opened property to attribute', async () => {
       panel.opened = true;
+      await nextRender();
       expect(panel.hasAttribute('opened')).to.be.true;
     });
 
@@ -34,8 +35,9 @@ describe('vaadin-accordion-panel', () => {
       expect(getComputedStyle(contentPart).display).to.equal('none');
     });
 
-    it('should show the content when opened is true', () => {
+    it('should show the content when opened is true', async () => {
       panel.opened = true;
+      await nextRender();
       expect(getComputedStyle(contentPart).display).to.equal('block');
     });
 
@@ -43,8 +45,9 @@ describe('vaadin-accordion-panel', () => {
       expect(contentNode.getAttribute('aria-hidden')).to.equal('true');
     });
 
-    it('should set aria-hidden on the slotted element to false when opened', () => {
+    it('should set aria-hidden on the slotted element to false when opened', async () => {
       panel.opened = true;
+      await nextRender();
       expect(contentNode.getAttribute('aria-hidden')).to.equal('false');
     });
   });
@@ -119,26 +122,31 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.false;
       });
 
-      it(`should fire opened-changed event on ${type} heading button click`, () => {
+      it(`should fire opened-changed event on ${type} heading button click`, async () => {
         const spy = sinon.spy();
         panel.addEventListener('opened-changed', spy);
         toggle.click();
+        await nextRender();
         expect(spy.calledOnce).to.be.true;
       });
 
-      it(`should update aria-expanded on ${type} heading button click`, () => {
+      it(`should update aria-expanded on ${type} heading button click`, async () => {
         toggle.click();
+        await nextRender();
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
 
         toggle.click();
+        await nextRender();
         expect(toggle.getAttribute('aria-expanded')).to.equal('false');
       });
 
-      it(`should propagate disabled attribute to ${type} heading`, () => {
+      it(`should propagate disabled attribute to ${type} heading`, async () => {
         panel.disabled = true;
+        await nextRender();
         expect(heading.hasAttribute('disabled')).to.be.true;
 
         panel.disabled = false;
+        await nextRender();
         expect(heading.hasAttribute('disabled')).to.be.false;
       });
     });

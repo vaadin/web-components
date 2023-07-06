@@ -94,53 +94,61 @@ describe('vaadin-accordion', () => {
       expect(accordion.hasAttribute('opened')).to.be.true;
     });
 
-    it('should update opened to new index when other panel is opened', () => {
+    it('should update opened to new index when other panel is opened', async () => {
       getHeading(1).click();
+      await nextRender();
       expect(accordion.items[1].opened).to.be.true;
       expect(accordion.opened).to.equal(1);
     });
 
-    it('should not update opened to new index when clicking disabled panel', () => {
+    it('should not update opened to new index when clicking disabled panel', async () => {
       accordion.items[1].disabled = true;
+      await nextRender();
       getHeading(1).click();
       expect(accordion.items[1].opened).to.be.false;
       expect(accordion.opened).to.equal(0);
     });
 
-    it('should close currently opened panel when another one is opened', () => {
+    it('should close currently opened panel when another one is opened', async () => {
       getHeading(1).click();
+      await nextRender();
       expect(accordion.items[1].opened).to.be.true;
       expect(accordion.items[0].opened).to.be.false;
     });
 
-    it('should set opened to null when the opened panel is closed', () => {
+    it('should set opened to null when the opened panel is closed', async () => {
       getHeading(0).click();
+      await nextRender();
       expect(accordion.items[0].opened).to.be.false;
       expect(accordion.opened).to.equal(null);
     });
 
-    it('should close currently opened panel when opened set to null', () => {
+    it('should close currently opened panel when opened set to null', async () => {
       accordion.opened = null;
+      await nextRender();
       expect(accordion.items[0].opened).to.be.false;
     });
 
-    it('should not change opened state if panel has been removed', () => {
+    it('should not change opened state if panel has been removed', async () => {
       const panel = accordion.items[1];
       accordion.removeChild(panel);
       accordion._observer.flush();
       panel.opened = true;
+      await nextRender();
       expect(accordion.opened).to.equal(0);
     });
 
-    it('should dispatch opened-changed event when opened changes', () => {
+    it('should dispatch opened-changed event when opened changes', async () => {
       const spy = sinon.spy();
       accordion.addEventListener('opened-changed', spy);
       getHeading(1).click();
+      await nextRender();
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should open panel when component in summary is clicked', () => {
+    it('should open panel when component in summary is clicked', async () => {
       getHeading(2).firstChild.click();
+      await nextRender();
       expect(accordion.items[2].opened).to.be.true;
     });
   });
@@ -151,17 +159,19 @@ describe('vaadin-accordion', () => {
       expect(accordion.items[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('should focus the next enabled panel heading if first is disabled', () => {
+    it('should focus the next enabled panel heading if first is disabled', async () => {
       accordion.items[0].disabled = true;
+      await nextRender();
       const focusSpy = sinon.spy(accordion.items[1], 'focus');
       accordion.focus();
       expect(focusSpy.calledOnce).to.be.true;
     });
 
-    it('should not focus any panel if all the panels are disabled', () => {
+    it('should not focus any panel if all the panels are disabled', async () => {
       accordion.items.forEach((item) => {
         item.disabled = true;
       });
+      await nextRender();
       const spies = accordion.items.map((item) => sinon.spy(item, 'focus'));
       accordion.focus();
       spies.forEach((spy) => {
@@ -205,8 +215,9 @@ describe('vaadin-accordion', () => {
         expect(accordion.items[0].hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should move focus to the second panel if first is disabled on "home" keydown', () => {
+      it('should move focus to the second panel if first is disabled on "home" keydown', async () => {
         accordion.items[0].disabled = true;
+        await nextRender();
         accordion.items[2].focus();
         heading = getHeading(2);
         homeKeyDown(heading);
@@ -220,8 +231,9 @@ describe('vaadin-accordion', () => {
         expect(accordion.items[2].hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should move focus to the closest enabled panel if last is disabled on "end" keydown', () => {
+      it('should move focus to the closest enabled panel if last is disabled on "end" keydown', async () => {
         accordion.items[2].disabled = true;
+        await nextRender();
         heading = getHeading(0);
         endKeyDown(heading);
         expect(accordion.items[1].hasAttribute('focused')).to.be.true;
@@ -240,9 +252,10 @@ describe('vaadin-accordion', () => {
         expect(accordion.items[2].hasAttribute('focused')).to.be.true;
       });
 
-      it('should not move focus but set focus-ring if all the panels except one are disabled', () => {
+      it('should not move focus but set focus-ring if all the panels except one are disabled', async () => {
         accordion.items[1].disabled = true;
         accordion.items[2].disabled = true;
+        await nextRender();
         heading = getHeading(0);
         arrowDownKeyDown(heading);
         expect(accordion.items[0].hasAttribute('focus-ring')).to.be.true;
@@ -266,11 +279,12 @@ describe('vaadin-accordion', () => {
         expect(preventSpy.calledOnce).to.be.true;
       });
 
-      it('should prevent default if all the panels except one are disabled', () => {
+      it('should prevent default if all the panels except one are disabled', async () => {
         const event = keyboardEventFor('keydown', 40, [], 'ArrowDown');
         const preventSpy = sinon.spy(event, 'preventDefault');
         accordion.items[1].disabled = true;
         accordion.items[2].disabled = true;
+        await nextRender();
         heading = getHeading(0);
         heading.dispatchEvent(event);
         expect(preventSpy.calledOnce).to.be.true;

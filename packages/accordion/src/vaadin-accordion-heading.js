@@ -3,10 +3,11 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -48,45 +49,43 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion-heading';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          outline: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
+  static get shadowRootOptions() {
+    return { ...LitElement.shadowRootOptions, delegatesFocus: true };
+  }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        outline: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-        button {
-          display: flex;
-          align-items: center;
-          justify-content: inherit;
-          width: 100%;
-          margin: 0;
-          padding: 0;
-          background-color: initial;
-          color: inherit;
-          border: initial;
-          outline: none;
-          font: inherit;
-          text-align: inherit;
-        }
-      </style>
-      <button id="button" part="content" disabled$="[[disabled]]" aria-expanded$="[[__updateAriaExpanded(opened)]]">
-        <span part="toggle" aria-hidden="true"></span>
-        <slot></slot>
-      </button>
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: inherit;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: initial;
+        color: inherit;
+        border: initial;
+        outline: none;
+        font: inherit;
+        text-align: inherit;
+      }
     `;
   }
 
@@ -102,16 +101,15 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
     };
   }
 
-  /**
-   * @param {DocumentFragment} dom
-   * @return {null}
-   * @protected
-   * @override
-   */
-  _attachDom(dom) {
-    const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
-    root.appendChild(dom);
-    return root;
+  /** @protected */
+  render() {
+    return html`
+      <style></style>
+      <button id="button" part="content" ?disabled="${this.disabled}" aria-expanded="${this.opened ? 'true' : 'false'}">
+        <span part="toggle" aria-hidden="true"></span>
+        <slot></slot>
+      </button>
+    `;
   }
 
   /** @protected */
@@ -123,11 +121,6 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'heading');
     }
-  }
-
-  /** @private */
-  __updateAriaExpanded(opened) {
-    return opened ? 'true' : 'false';
   }
 }
 
