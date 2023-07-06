@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  click,
   defineLit,
   definePolymer,
   escKeyDown,
