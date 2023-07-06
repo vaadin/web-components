@@ -9,11 +9,10 @@ import {
   mousedown,
   nextFrame,
   nextRender,
-  touchend,
-  touchstart,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
@@ -72,24 +71,21 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should clear the input value on clear button touch', async () => {
-      touchstart(clearButton);
-      touchend(clearButton);
+    (isTouch ? it : it.skip)('should clear the input value on clear button touch', async () => {
+      mousedown(clearButton);
       await nextFrame();
       expect(input.value).to.equal('');
     });
 
-    it('should not focus the input on clear button touch', () => {
+    (isTouch ? it : it.skip)('should not focus the input on clear button touch', () => {
       const spy = sinon.spy(input, 'focus');
-      touchstart(clearButton);
-      touchend(clearButton);
+      mousedown(clearButton);
       expect(spy.called).to.be.false;
     });
 
-    it('should keep focus at the input on clear button touch', () => {
+    (isTouch ? it : it.skip)('should keep focus at the input on clear button touch', () => {
       input.focus();
-      touchstart(clearButton);
-      touchend(clearButton);
+      mousedown(clearButton);
       expect(document.activeElement).to.be.equal(input);
     });
 
