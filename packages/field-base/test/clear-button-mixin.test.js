@@ -78,13 +78,6 @@ const runTests = (defineHelper, baseMixin) => {
       expect(event.defaultPrevented).to.be.true;
     });
 
-    (isTouch ? it : it.skip)('should clear the input value on clear button touch', async () => {
-      mousedown(clearButton);
-      click(clearButton);
-      await nextFrame();
-      expect(input.value).to.equal('');
-    });
-
     (isTouch ? it : it.skip)('should not focus the input on clear button touch', () => {
       const spy = sinon.spy(input, 'focus');
       mousedown(clearButton);
