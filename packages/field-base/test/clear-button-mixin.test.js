@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import {
+  click,
   defineLit,
   definePolymer,
   escKeyDown,
@@ -65,14 +66,22 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button mousedown', () => {
+    (!isTouch ? it : it.skip)('should focus the input on clear button mousedown', () => {
+      console.log('got here!!!hhhh');
       const spy = sinon.spy(input, 'focus');
       mousedown(clearButton);
       expect(spy.calledOnce).to.be.true;
     });
 
+    it('should prevent default on clear button mousedown', () => {
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
     (isTouch ? it : it.skip)('should clear the input value on clear button touch', async () => {
       mousedown(clearButton);
+      click(clearButton);
       await nextFrame();
       expect(input.value).to.equal('');
     });
