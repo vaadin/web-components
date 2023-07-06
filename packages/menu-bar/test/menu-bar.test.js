@@ -451,6 +451,19 @@ describe('overflow button', () => {
     expect(overflow.hasAttribute('hidden')).to.be.false;
   });
 
+  it('should set tabindex on the last remaining button when width decreased', async () => {
+    buttons[0].focus();
+    arrowRight(buttons[0]);
+
+    expect(buttons[0].getAttribute('tabindex')).to.equal('-1');
+    expect(buttons[1].getAttribute('tabindex')).to.equal('0');
+
+    menu.style.width = '150px';
+    await onceResized(menu);
+
+    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+  });
+
   it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
     const moreOptionsSv = 'Fler alternativ';
     expect(overflow.getAttribute('aria-label')).to.equal('More options');
