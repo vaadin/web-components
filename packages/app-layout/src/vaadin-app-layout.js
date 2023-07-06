@@ -276,7 +276,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         <slot name="navbar"></slot>
       </div>
       <div part="backdrop" on-click="_onBackdropClick" on-touchend="_onBackdropTouchend"></div>
-      <div part="drawer" id="drawer" on-keydown="__onDrawerKeyDown">
+      <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
       <div content>
@@ -399,6 +399,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     // TODO(jouni): might want to debounce
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
+    this.__onDrawerKeyDown = this.__onDrawerKeyDown.bind(this);
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
     this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
     this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
@@ -453,6 +454,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this._navbarSizeObserver.observe(this.$.navbarBottom);
 
     window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
+    window.addEventListener('keydown', this.__onDrawerKeyDown);
   }
 
   /** @protected */
