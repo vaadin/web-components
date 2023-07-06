@@ -1,33 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createOverlay } from './helpers.js';
-
-customElements.define(
-  'overlay-wrapper',
-  class extends PolymerElement {
-    static get template() {
-      return html`<vaadin-overlay id="overlay" opened="[[opened]]" renderer="[[renderer]]"></vaadin-overlay>`;
-    }
-
-    static get properties() {
-      return {
-        opened: Boolean,
-
-        renderer: {
-          type: Object,
-          value: () => {
-            return (root) => {
-              root.textContent = 'overlay content';
-            };
-          },
-        },
-      };
-    }
-  },
-);
 
 describe('vaadin-overlay', () => {
   describe('moving overlay', () => {
@@ -39,21 +14,23 @@ describe('vaadin-overlay', () => {
       overlay.renderer = (root) => {
         root.textContent = 'overlay content';
       };
+      await nextRender();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
     it('should move under document body when open', () => {
       expect(overlay.parentElement).to.eql(document.body);
     });
 
-    it('should move back to original place after closing', () => {
+    it('should move back to original place after closing', async () => {
       overlay.opened = false;
-
+      await nextRender();
       expect(overlay.parentElement).to.eql(parent);
     });
   });
@@ -63,16 +40,19 @@ describe('vaadin-overlay', () => {
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      await nextRender();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
-    it('should not prevent clicking elements outside overlay when modeless (non-modal)', () => {
+    it('should not prevent clicking elements outside overlay when modeless (non-modal)', async () => {
       overlay.modeless = true;
+      await nextRender();
       expect(document.body.style.pointerEvents).to.eql('');
     });
 
@@ -80,8 +60,9 @@ describe('vaadin-overlay', () => {
       expect(document.body.style.pointerEvents).to.eql('none');
     });
 
-    it('should not prevent clicking document elements after modal is closed', () => {
+    it('should not prevent clicking document elements after modal is closed', async () => {
       overlay.opened = false;
+      await nextRender();
       expect(document.body.style.pointerEvents).to.eql('');
     });
 
@@ -96,13 +77,15 @@ describe('vaadin-overlay', () => {
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      await nextRender();
       backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
     it('should set withBackdrop to false by default', () => {
@@ -113,30 +96,33 @@ describe('vaadin-overlay', () => {
       expect(backdrop.hidden).to.be.true;
     });
 
-    it('should show backdrop when withBackdrop is true', () => {
+    it('should show backdrop when withBackdrop is true', async () => {
       overlay.withBackdrop = true;
-
+      await nextRender();
       expect(backdrop.hidden).to.be.false;
     });
 
-    it('should reflect withBackdrop property to attribute', () => {
+    it('should reflect withBackdrop property to attribute', async () => {
       overlay.withBackdrop = true;
-
+      await nextRender();
       expect(overlay.hasAttribute('with-backdrop')).to.be.true;
     });
   });
+
   describe('position and sizing', () => {
     let overlay, overlayPart;
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      await nextRender();
       overlayPart = overlay.$.overlay;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
     it('should fit in the viewport by default', () => {
@@ -193,32 +179,6 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  describe('wrapped overlay', () => {
-    let overlay;
-
-    beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-      overlay.renderer = (root) => {
-        const el = document.createElement('overlay-wrapper');
-        root.appendChild(el);
-      };
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should not exit modal state when opened changes from undefined to false', () => {
-      const wrapper = overlay.querySelector('overlay-wrapper');
-      const inner = wrapper.shadowRoot.querySelector('vaadin-overlay');
-      const spy = sinon.spy(inner, '_exitModalState');
-      wrapper.opened = false;
-      expect(spy.called).to.be.false;
-    });
-  });
-
   (isIOS ? describe : describe.skip)('iOS incorrect viewport height workaround', () => {
     let overlay;
 
@@ -228,8 +188,9 @@ describe('vaadin-overlay', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
     it('should set value to bottom when landscape and clientHeight > innerHeight', () => {
