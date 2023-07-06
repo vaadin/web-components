@@ -356,17 +356,22 @@ describe('validation', () => {
       expect(datePicker.checkValidity()).to.be.true;
     });
 
-    it('should be valid when committing a non-empty value', () => {
+    it('should be valid when committing a non-empty value', async () => {
       setInputValue(datePicker, '1/1/2000');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should be invalid when committing an empty value', () => {
+    it('should be invalid when committing an empty value', async () => {
       setInputValue(datePicker, '1/1/2000');
+      await waitForOverlayRender();
       enter(input);
+
       setInputValue(datePicker, '');
+      await waitForOverlayRender();
       enter(input);
+
       expect(datePicker.invalid).to.be.true;
     });
   });
@@ -398,20 +403,23 @@ describe('validation', () => {
       expect(datePicker.checkValidity()).to.be.true;
     });
 
-    it('should be invalid when committing a value < min', () => {
+    it('should be invalid when committing a value < min', async () => {
       setInputValue(datePicker, '1/1/2000');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.true;
     });
 
-    it('should be valid when committing a value > min', () => {
+    it('should be valid when committing a value > min', async () => {
       setInputValue(datePicker, '1/1/2022');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should be valid when committing a value = min', () => {
+    it('should be valid when committing a value = min', async () => {
       setInputValue(datePicker, '1/1/2022');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.false;
     });
@@ -444,20 +452,23 @@ describe('validation', () => {
       expect(datePicker.checkValidity()).to.be.true;
     });
 
-    it('should be invalid when committing a value > max', () => {
+    it('should be invalid when committing a value > max', async () => {
       setInputValue(datePicker, '1/1/2022');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.true;
     });
 
-    it('should be valid when committing a value < max', () => {
+    it('should be valid when committing a value < max', async () => {
       setInputValue(datePicker, '1/1/2000');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should be valid when committing a value = max', () => {
+    it('should be valid when committing a value = max', async () => {
       setInputValue(datePicker, '1/1/2010');
+      await waitForOverlayRender();
       enter(input);
       expect(datePicker.invalid).to.be.false;
     });

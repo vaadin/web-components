@@ -118,6 +118,7 @@ describe('events', () => {
       hasInputValueChangedSpy = sinon.spy();
       valueChangedSpy = sinon.spy();
       datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
+      await nextRender();
       clearButton = datePicker.shadowRoot.querySelector('[part=clear-button]');
       datePicker.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
       datePicker.addEventListener('value-changed', valueChangedSpy);
