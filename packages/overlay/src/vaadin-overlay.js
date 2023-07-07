@@ -6,8 +6,11 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
+import { overlayStyles } from './vaadin-overlay-styles.js';
+
+registerStyles('vaadin-overlay', overlayStyles, { moduleId: 'vaadin-overlay-styles' });
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -76,71 +79,6 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
 class Overlay extends OverlayMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          z-index: 200;
-          position: fixed;
-
-          /* Despite of what the names say, <vaadin-overlay> is just a container
-          for position/sizing/alignment. The actual overlay is the overlay part. */
-
-          /* Default position constraints: the entire viewport. Note: themes can
-          override this to introduce gaps between the overlay and the viewport. */
-          top: 0;
-          right: 0;
-          bottom: var(--vaadin-overlay-viewport-bottom);
-          left: 0;
-
-          /* Use flexbox alignment for the overlay part. */
-          display: flex;
-          flex-direction: column; /* makes dropdowns sizing easier */
-          /* Align to center by default. */
-          align-items: center;
-          justify-content: center;
-
-          /* Allow centering when max-width/max-height applies. */
-          margin: auto;
-
-          /* The host is not clickable, only the overlay part is. */
-          pointer-events: none;
-
-          /* Remove tap highlight on touch devices. */
-          -webkit-tap-highlight-color: transparent;
-
-          /* CSS API for host */
-          --vaadin-overlay-viewport-bottom: 0;
-        }
-
-        :host([hidden]),
-        :host(:not([opened]):not([closing])) {
-          display: none !important;
-        }
-
-        [part='overlay'] {
-          -webkit-overflow-scrolling: touch;
-          overflow: auto;
-          pointer-events: auto;
-
-          /* Prevent overflowing the host in MSIE 11 */
-          max-width: 100%;
-          box-sizing: border-box;
-
-          -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
-        }
-
-        [part='backdrop'] {
-          z-index: -1;
-          content: '';
-          background: rgba(0, 0, 0, 0.5);
-          position: fixed;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          pointer-events: auto;
-        }
-      </style>
-
       <div id="backdrop" part="backdrop" hidden$="[[!withBackdrop]]"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
