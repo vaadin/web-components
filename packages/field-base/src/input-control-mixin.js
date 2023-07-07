@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
@@ -139,6 +140,7 @@ export const InputControlMixin = (superclass) =>
 
       if (this.clearElement) {
         this.clearElement.addEventListener('click', (e) => this._onClearButtonClick(e));
+        this.clearElement.addEventListener('mousedown', (e) => this._onClearButtonMouseDown(e));
       }
     }
 
@@ -148,8 +150,18 @@ export const InputControlMixin = (superclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.inputElement.focus();
       this.__clear();
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     */
+    _onClearButtonMouseDown(event) {
+      event.preventDefault();
+      if (!isTouch) {
+        this.inputElement.focus();
+      }
     }
 
     /**

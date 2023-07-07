@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, keyboardEventFor, keyDownOn, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
@@ -63,10 +64,28 @@ describe('input-control-mixin', () => {
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
+    (!isTouch ? it : it.skip)('should focus the input on clear button click', () => {
       const spy = sinon.spy(input, 'focus');
-      button.click();
+      mousedown(button);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should prevent default on clear button mousedown', () => {
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      button.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    (isTouch ? it : it.skip)('should not focus the input on clear button touch', () => {
+      const spy = sinon.spy(input, 'focus');
+      mousedown(button);
+      expect(spy.called).to.be.false;
+    });
+
+    (isTouch ? it : it.skip)('should keep focus at the input on clear button touch', () => {
+      input.focus();
+      mousedown(button);
+      expect(document.activeElement).to.be.equal(input);
     });
 
     it('should dispatch input event on clear button click', () => {
