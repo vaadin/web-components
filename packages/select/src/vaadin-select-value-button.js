@@ -3,8 +3,9 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -15,56 +16,60 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @protected
  */
-class SelectValueButton extends ButtonMixin(ThemableMixin(PolymerElement)) {
+class SelectValueButton extends ButtonMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-select-value-button';
   }
 
-  static get template() {
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+        position: relative;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        min-width: 0;
+        width: 0;
+      }
+
+      ::slotted(*) {
+        padding-left: 0;
+        padding-right: 0;
+        flex: auto;
+      }
+
+      /* placeholder styles */
+      ::slotted(*:not([selected])) {
+        line-height: 1;
+      }
+
+      .vaadin-button-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: inherit;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        text-shadow: inherit;
+      }
+
+      [part='label'] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        line-height: inherit;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-          position: relative;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-          min-width: 0;
-          width: 0;
-        }
-
-        ::slotted(*) {
-          padding-left: 0;
-          padding-right: 0;
-          flex: auto;
-        }
-
-        /* placeholder styles */
-        ::slotted(*:not([selected])) {
-          line-height: 1;
-        }
-
-        .vaadin-button-container {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-align: inherit;
-          width: 100%;
-          height: 100%;
-          min-height: inherit;
-          text-shadow: inherit;
-        }
-
-        [part='label'] {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          width: 100%;
-          line-height: inherit;
-        }
-      </style>
       <div class="vaadin-button-container">
         <span part="label">
           <slot></slot>

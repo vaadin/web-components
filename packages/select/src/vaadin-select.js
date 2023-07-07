@@ -8,7 +8,7 @@ import './vaadin-select-item.js';
 import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
@@ -17,6 +17,7 @@ import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mi
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -24,12 +25,8 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonController } from './button-controller.js';
-
-registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderOnly], {
-  moduleId: 'vaadin-select-styles',
-});
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -146,61 +143,25 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderO
  * @mixes OverlayClassMixin
  */
 class Select extends OverlayClassMixin(
-  DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement)))))),
+  DelegateFocusMixin(
+    DelegateStateMixin(KeyboardMixin(FieldMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))))),
+  ),
 ) {
   static get is() {
     return 'vaadin-select';
   }
 
-  static get template() {
-    return html`
-      <style>
+  static get styles() {
+    return [
+      fieldShared,
+      inputFieldContainer,
+      screenReaderOnly,
+      css`
         ::slotted([slot='value']) {
           flex-grow: 1;
         }
-      </style>
-
-      <div class="vaadin-select-container">
-        <div part="label" on-click="_onClick">
-          <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
-        </div>
-
-        <vaadin-input-container
-          part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
-          on-click="_onClick"
-        >
-          <slot name="prefix" slot="prefix"></slot>
-          <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" on-mousedown="_onToggleMouseDown"></div>
-        </vaadin-input-container>
-
-        <div part="helper-text">
-          <slot name="helper"></slot>
-        </div>
-
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-      </div>
-
-      <vaadin-select-overlay
-        position-target="[[_inputContainer]]"
-        opened="{{opened}}"
-        with-backdrop="[[_phone]]"
-        phone$="[[_phone]]"
-        theme$="[[_theme]]"
-      ></vaadin-select-overlay>
-
-      <slot name="tooltip"></slot>
-      <div class="sr-only">
-        <slot name="sr-label"></slot>
-      </div>
-    `;
+      `,
+    ];
   }
 
   static get properties() {
@@ -338,6 +299,54 @@ class Select extends OverlayClassMixin(
   }
 
   /** @protected */
+  render() {
+    return html`
+      <div class="vaadin-select-container">
+        <div part="label" @click="${this._onClick}">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
+        </div>
+
+        <vaadin-input-container
+          part="input-field"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${this._theme}"
+          @click="${this._onClick}"
+        >
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="value"></slot>
+          <div part="toggle-button" slot="suffix" aria-hidden="true" @mousedown="${this._onToggleMouseDown}"></div>
+        </vaadin-input-container>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+
+      <vaadin-select-overlay
+        .positionTarget="${this._inputContainer}"
+        .opened="${this.opened}"
+        .withBackdrop="${this._phone}"
+        ?phone="${this._phone}"
+        theme="${this._theme}"
+        @opened-changed="${this._onOpenedChanged}"
+        @vaadin-overlay-open="${this._onOverlayOpen}"
+      ></vaadin-select-overlay>
+
+      <slot name="tooltip"></slot>
+      <div class="sr-only">
+        <slot name="sr-label"></slot>
+      </div>
+    `;
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
@@ -411,7 +420,8 @@ class Select extends OverlayClassMixin(
       return;
     }
 
-    overlay.setProperties({ owner: this, renderer: renderer || this.__defaultRenderer });
+    overlay.owner = this;
+    overlay.renderer = renderer || this.__defaultRenderer;
 
     this.requestContentUpdate();
   }
@@ -424,6 +434,18 @@ class Select extends OverlayClassMixin(
   __itemsChanged(newItems, oldItems) {
     if (newItems || oldItems) {
       this.requestContentUpdate();
+    }
+  }
+
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
+  }
+
+  /** @private */
+  _onOverlayOpen() {
+    if (this._menuElement) {
+      this._menuElement.focus();
     }
   }
 
@@ -556,8 +578,6 @@ class Select extends OverlayClassMixin(
       if (hasFocusRing) {
         this.removeAttribute('focus-ring');
       }
-
-      this._menuElement.focus();
     } else if (wasOpened) {
       this.focus();
       if (this._openedWithFocusRing) {
