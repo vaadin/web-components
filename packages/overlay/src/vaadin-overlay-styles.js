@@ -15,10 +15,8 @@ export const overlayStyles = css`
 
     /* Default position constraints: the entire viewport. Note: themes can
           override this to introduce gaps between the overlay and the viewport. */
-    top: 0;
-    right: 0;
+    inset: 0;
     bottom: var(--vaadin-overlay-viewport-bottom);
-    left: 0;
 
     /* Use flexbox alignment for the overlay part. */
     display: flex;
