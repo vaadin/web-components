@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from './input-mixin.js';
 
 /**
@@ -51,6 +52,7 @@ export const ClearButtonMixin = (superclass) =>
       super.ready();
 
       if (this.clearElement) {
+        this.clearElement.addEventListener('mousedown', (event) => this._onClearButtonMouseDown(event));
         this.clearElement.addEventListener('click', (event) => this._onClearButtonClick(event));
       }
     }
@@ -61,8 +63,18 @@ export const ClearButtonMixin = (superclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.inputElement.focus();
       this._onClearAction();
+    }
+
+    /**
+     * @param {MouseEvent} event
+     * @protected
+     */
+    _onClearButtonMouseDown(event) {
+      event.preventDefault();
+      if (!isTouch) {
+        this.inputElement.focus();
+      }
     }
 
     /**
