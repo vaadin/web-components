@@ -199,7 +199,7 @@ describe('edit column renderer', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should exit the edit mode on custom editor component focusout event', async () => {
+    it('should exit the edit mode on custom editor component focusout event', () => {
       column.editModeRenderer = function (root, _, model) {
         root.innerHTML = '';
         const input = document.createElement('input');
@@ -265,7 +265,7 @@ describe('edit column renderer', () => {
       editor = getCellEditor(cell);
 
       const { x, y } = editor.$.clearButton.getBoundingClientRect();
-      await sendMouse({ type: 'down', position: [Math.floor(x + 10), Math.floor(y + 10)] });
+      await sendMouse({ type: 'click', position: [Math.floor(x + 10), Math.floor(y + 10)] });
       await nextFrame();
       expect(getCellEditor(cell)).to.be.ok;
     });
