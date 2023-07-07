@@ -398,7 +398,10 @@ export const DataProviderMixin = (superClass) =>
           }
 
           // Populate the cache with new items
-          cache.items.splice(page * this.pageSize, items.length, ...items);
+          items.forEach((item, itemsIndex) => {
+            const itemIndex = page * this.pageSize + itemsIndex;
+            cache.items[itemIndex] = item;
+          });
 
           // With the new items added, update the cache size and the grid's effective size
           this._cache.updateSize();
