@@ -466,8 +466,9 @@ describe('required', () => {
     datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
   });
 
-  it('should focus on required indicator click', () => {
+  it('should focus on required indicator click', async () => {
     datePicker.shadowRoot.querySelector('[part="required-indicator"]').click();
+    await waitForOverlayRender();
     expect(datePicker.hasAttribute('focused')).to.be.true;
   });
 });
