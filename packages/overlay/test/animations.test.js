@@ -1,26 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-overlay.js';
+import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import './animated-styles.js';
+import '../src/vaadin-overlay.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { createOverlay } from './helpers.js';
-
-registerStyles(
-  'vaadin-overlay',
-  css`
-    :host([animate][opening]),
-    :host([animate][closing]) {
-      animation: 50ms overlay-dummy-animation;
-    }
-
-    @keyframes overlay-dummy-animation {
-      to {
-        opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
-      }
-    }
-  `,
-);
 
 customElements.define(
   'two-overlays',
@@ -131,60 +115,89 @@ function afterOverlayClosingFinished(overlay, callback) {
   describe(`animated overlay${titleSuffix}`, () => {
     let overlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       overlay = createOverlay('overlay content');
       if (withAnimation) {
         overlay.setAttribute('animate', '');
       }
+      await nextRender();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlay.opened = false;
+      await nextRender();
     });
 
-    it('should flush closing overlay when re-opened while closing animation is in progress', () => {
+    it('should flush closing overlay when re-opened while closing animation is in progress', async () => {
       overlay.opened = true;
+      await nextRender();
       overlay._flushAnimation('opening');
 
       overlay.opened = false;
+      await nextRender();
+
       overlay.opened = true;
+      await nextRender();
 
       expect(overlay.hasAttribute('closing')).to.be.false;
     });
 
-    it('should flush opening overlay when closed while opening animation is in progress', () => {
+    it('should flush opening overlay when closed while opening animation is in progress', async () => {
       overlay.opened = true;
+      await nextRender();
+
       overlay.opened = false;
+      await nextRender();
 
       expect(overlay.hasAttribute('opening')).to.be.false;
     });
 
-    it('should detach the overlay even if it is scheduled for reopening', () => {
+    it('should detach the overlay even if it is scheduled for reopening', async () => {
       overlay.opened = true;
+      await nextRender();
+
       overlay.opened = false;
+      await nextRender();
+
       overlay.opened = true;
+      await nextRender();
+
       overlay.opened = false;
+      await nextRender();
       overlay._flushAnimation('closing');
 
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should not animate closing if the overlay is explicitly hidden', () => {
+    it('should not animate closing if the overlay is explicitly hidden', async () => {
       overlay.opened = true;
+      await nextRender();
+
       overlay.hidden = true;
+      await nextRender();
+
       overlay.opened = false;
+      await nextRender();
+
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should close the overlay if hidden is set while closing', () => {
+    it('should close the overlay if hidden is set while closing', async () => {
       overlay.opened = true;
+      await nextRender();
+
       overlay.opened = false;
+      await nextRender();
+
       overlay.hidden = true;
+      await nextRender();
+
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should close the overlay when ESC pressed while opening', () => {
+    it('should close the overlay when ESC pressed while opening', async () => {
       overlay.opened = true;
+      await nextRender();
       escKeyDown(document.body);
       expect(overlay.opened).to.equal(false);
     });
@@ -203,10 +216,11 @@ function afterOverlayClosingFinished(overlay, callback) {
       overlays[0].opened = true;
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
+      await nextRender();
     });
 
     it('should remove pointer events on previously opened overlay', (done) => {
@@ -221,18 +235,20 @@ function afterOverlayClosingFinished(overlay, callback) {
   describe(`simultaneous opening${titleSuffix}`, () => {
     let wrapper, overlays;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = fixtureSync('<two-overlays><two-overlays>');
+      await nextRender();
       overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
       if (withAnimation) {
         overlays.forEach((overlay) => overlay.setAttribute('animate', ''));
       }
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
+      await nextRender();
     });
 
     it('should not remove pointer events on last opened overlay', (done) => {
@@ -249,8 +265,9 @@ function afterOverlayClosingFinished(overlay, callback) {
   describe(`simultaneous closing${titleSuffix}`, () => {
     let wrapper, overlays;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = fixtureSync('<two-overlays><two-overlays>');
+      await nextRender();
       const third = document.createElement('vaadin-overlay');
       wrapper.shadowRoot.appendChild(third);
       overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
@@ -260,17 +277,19 @@ function afterOverlayClosingFinished(overlay, callback) {
       }
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
+      await nextRender();
     });
 
     it('should restore pointer events on the remaining overlay', (done) => {
-      afterOverlayOpeningFinished(overlays[2], () => {
+      afterOverlayOpeningFinished(overlays[2], async () => {
         expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
         overlays[1].opened = false;
         overlays[2].opened = false;
+        await nextFrame();
         expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
         done();
       });
@@ -283,13 +302,14 @@ function afterOverlayClosingFinished(overlay, callback) {
   describe(`simultaneous opening with animated content${titleSuffix}`, () => {
     let wrapper, overlays;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = fixtureSync(`
         <div>
           <vaadin-overlay></vaadin-overlay>
           <vaadin-overlay></vaadin-overlay>
         </div>
       `);
+      await nextRender();
       overlays = Array.from(wrapper.querySelectorAll('vaadin-overlay'));
       overlays[0].renderer = (root) => {
         if (!root.firstChild) {
@@ -312,10 +332,11 @@ function afterOverlayClosingFinished(overlay, callback) {
       }
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
+      await nextRender();
     });
 
     it('should not remove pointer events on last opened overlay', (done) => {
