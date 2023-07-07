@@ -3,67 +3,30 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { html, LitElement } from 'lit';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dialogOverlay, resizableOverlay } from './vaadin-dialog-styles.js';
-
-registerStyles('vaadin-dialog-overlay', [dialogOverlay, resizableOverlay], {
-  moduleId: 'vaadin-dialog-overlay-styles',
-});
-
-let memoizedTemplate;
 
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
+ * @mixes OverlayMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  * @private
  */
-export class DialogOverlay extends Overlay {
+export class DialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-dialog-overlay';
   }
 
-  static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-      const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
-      const overlayPart = memoizedTemplate.content.querySelector('[part="overlay"]');
-      const resizerContainer = document.createElement('section');
-      resizerContainer.id = 'resizerContainer';
-      resizerContainer.classList.add('resizer-container');
-      resizerContainer.appendChild(contentPart);
-      overlayPart.appendChild(resizerContainer);
-
-      const headerContainer = document.createElement('header');
-      headerContainer.setAttribute('part', 'header');
-      resizerContainer.insertBefore(headerContainer, contentPart);
-
-      const titleContainer = document.createElement('div');
-      titleContainer.setAttribute('part', 'title');
-      headerContainer.appendChild(titleContainer);
-
-      const titleSlot = document.createElement('slot');
-      titleSlot.setAttribute('name', 'title');
-      titleContainer.appendChild(titleSlot);
-
-      const headerContentContainer = document.createElement('div');
-      headerContentContainer.setAttribute('part', 'header-content');
-      headerContainer.appendChild(headerContentContainer);
-
-      const headerSlot = document.createElement('slot');
-      headerSlot.setAttribute('name', 'header-content');
-      headerContentContainer.appendChild(headerSlot);
-
-      const footerContainer = document.createElement('footer');
-      footerContainer.setAttribute('part', 'footer');
-      resizerContainer.appendChild(footerContainer);
-
-      const footerSlot = document.createElement('slot');
-      footerSlot.setAttribute('name', 'footer');
-      footerContainer.appendChild(footerSlot);
-    }
-    return memoizedTemplate;
+  static get styles() {
+    return [overlayStyles, dialogOverlay, resizableOverlay];
   }
 
   static get observers() {
@@ -75,16 +38,35 @@ export class DialogOverlay extends Overlay {
 
   static get properties() {
     return {
-      modeless: Boolean,
+      headerTitle: {
+        type: String,
+      },
 
-      withBackdrop: Boolean,
+      headerRenderer: {
+        attribute: false,
+      },
 
-      headerTitle: String,
-
-      headerRenderer: Function,
-
-      footerRenderer: Function,
+      footerRenderer: {
+        attribute: false,
+      },
     };
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
+      <div part="overlay" id="overlay" tabindex="0">
+        <section id="resizerContainer" class="resizer-container">
+          <header part="header">
+            <div part="title"><slot name="title"></slot></div>
+            <div part="header-content"><slot name="header-content"></slot></div>
+          </header>
+          <div part="content" id="content"><slot></slot></div>
+          <footer part="footer"><slot name="footer"></slot></footer>
+        </section>
+      </div>
+    `;
   }
 
   /** @protected */

@@ -4,9 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-dialog-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
@@ -85,34 +87,18 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @mixes OverlayClassMixin
  */
 class Dialog extends DialogDraggableMixin(
-  DialogResizableMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))))),
+  DialogResizableMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))))),
 ) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: none !important;
-        }
-      </style>
-
-      <vaadin-dialog-overlay
-        id="overlay"
-        header-title="[[headerTitle]]"
-        on-opened-changed="_onOverlayOpened"
-        on-mousedown="_bringOverlayToFront"
-        on-touchstart="_bringOverlayToFront"
-        theme$="[[_theme]]"
-        modeless="[[modeless]]"
-        with-backdrop="[[!modeless]]"
-        resizable$="[[resizable]]"
-        restore-focus-on-close
-        focus-trap
-      ></vaadin-dialog-overlay>
-    `;
-  }
-
   static get is() {
     return 'vaadin-dialog';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: none !important;
+      }
+    `;
   }
 
   static get properties() {
@@ -179,12 +165,29 @@ class Dialog extends DialogDraggableMixin(
     };
   }
 
-  static get observers() {
-    return [
-      '_openedChanged(opened)',
-      '_ariaLabelChanged(ariaLabel, headerTitle)',
-      '_rendererChanged(renderer, headerRenderer, footerRenderer)',
-    ];
+  /** @protected */
+  render() {
+    return html`
+      <vaadin-dialog-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        .headerTitle="${this.headerTitle}"
+        .renderer="${this.renderer}"
+        .headerRenderer="${this.headerRenderer}"
+        .footerRenderer="${this.footerRenderer}"
+        @opened-changed="${this._onOverlayOpened}"
+        @mousedown="${this._bringOverlayToFront}"
+        @touchstart="${this._bringOverlayToFront}"
+        theme="${ifDefined(this._theme)}"
+        aria-label="${ifDefined(this.ariaLabel || this.headerTitle)}"
+        .modeless="${this.modeless}"
+        .withBackdrop="${!this.modeless}"
+        ?resizable="${this.resizable}"
+        restore-focus-on-close
+        focus-trap
+      ></vaadin-dialog-overlay>
+    `;
   }
 
   /** @protected */
@@ -204,27 +207,8 @@ class Dialog extends DialogDraggableMixin(
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    if (this.$) {
-      this.$.overlay.requestContentUpdate();
-    }
-  }
-
-  /** @private */
-  _rendererChanged(renderer, headerRenderer, footerRenderer) {
-    this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
-  }
-
-  /** @private */
-  _openedChanged(opened) {
-    this.$.overlay.opened = opened;
-  }
-
-  /** @private */
-  _ariaLabelChanged(ariaLabel, headerTitle) {
-    if (ariaLabel || headerTitle) {
-      this.$.overlay.setAttribute('aria-label', ariaLabel || headerTitle);
-    } else {
-      this.$.overlay.removeAttribute('aria-label');
+    if (this._overlayElement) {
+      this._overlayElement.requestContentUpdate();
     }
   }
 }

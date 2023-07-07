@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+
 /**
  * @polymerMixin
  */
@@ -24,11 +25,13 @@ export const DialogResizableMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
+    async ready() {
       super.ready();
       this._originalBounds = {};
       this._originalMouseCoords = {};
       this._resizeListeners = { start: {}, resize: {}, stop: {} };
+
+      await this.$.overlay.updateComplete;
       this._addResizeListeners();
     }
 
