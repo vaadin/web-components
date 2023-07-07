@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
+import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
@@ -247,6 +248,23 @@ describe('edit column renderer', () => {
       flushGrid(grid);
 
       expect(getContainerCellContent(grid.$.items, 0, 0).innerHTML).to.equal('Bar');
+    });
+
+    it('should not exit the edit mode if clear button is clicked in the text-field', async () => {
+      column.editModeRenderer = function (root, _, model) {
+        root.innerHTML = '';
+        const field = document.createElement('vaadin-text-field');
+        field.value = model.item.name;
+        field.clearButtonVisible = true;
+        root.appendChild(field);
+      };
+      dblclick(cell._content);
+      editor = getCellEditor(cell);
+
+      const { x, y } = editor.$.clearButton.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [Math.floor(x + 10), Math.floor(y + 10)] });
+      await nextFrame();
+      expect(getCellEditor(cell)).to.be.ok;
     });
   });
 
