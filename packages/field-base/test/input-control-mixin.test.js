@@ -6,10 +6,12 @@ import {
   fixtureSync,
   keyboardEventFor,
   keyDownOn,
+  mousedown,
   nextFrame,
   nextRender,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
@@ -74,9 +76,9 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
+    (!isTouch ? it : it.skip)('should focus the input on clear clearButton mousedown', () => {
       const spy = sinon.spy(input, 'focus');
-      button.click();
+      mousedown(button);
       expect(spy.calledOnce).to.be.true;
     });
 
