@@ -3,8 +3,8 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../src/vaadin-date-picker.js';
-import { close, open, waitForScrollToFinish } from './helpers.js';
+import '../vaadin-date-picker.js';
+import { close, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('events', () => {
   let datePicker;
@@ -118,6 +118,7 @@ describe('events', () => {
       hasInputValueChangedSpy = sinon.spy();
       valueChangedSpy = sinon.spy();
       datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
+      await nextRender();
       clearButton = datePicker.shadowRoot.querySelector('[part=clear-button]');
       datePicker.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
       datePicker.addEventListener('value-changed', valueChangedSpy);
@@ -161,6 +162,7 @@ describe('events', () => {
     describe('with value', () => {
       beforeEach(async () => {
         await sendKeys({ type: '1/1/2022' });
+        await waitForScrollToFinish(datePicker._overlayContent);
         await sendKeys({ press: 'Enter' });
         valueChangedSpy.resetHistory();
         hasInputValueChangedSpy.resetHistory();
@@ -169,6 +171,7 @@ describe('events', () => {
       describe('with user input', () => {
         beforeEach(async () => {
           await sendKeys({ type: 'foo' });
+          await waitForOverlayRender();
           hasInputValueChangedSpy.resetHistory();
         });
 
