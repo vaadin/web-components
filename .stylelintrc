@@ -2,5 +2,10 @@
   "customSyntax": "postcss-lit",
   "extends": [
     "stylelint-config-vaadin"
-  ]
+  ],
+  "rules": {
+    "declaration-colon-newline-after": null,
+    "selector-descendant-combinator-no-non-space": null,
+    "value-list-comma-newline-after": null
+  }
 }
