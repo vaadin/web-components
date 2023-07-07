@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusin, focusout, nextFrame, outsideClick } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
 import '@vaadin/grid-pro';
@@ -51,8 +51,9 @@ const fixtures = {
   describe(`${type} grid-pro in dialog`, () => {
     let dialog, grid, dateCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       dialog = fixtureSync(fixtures[type]);
+      await nextRender();
       grid = dialog.$.overlay.querySelector('vaadin-grid-pro');
       grid.items = createItems();
       grid.style.width = '100px'; // Column default min width is 100px
