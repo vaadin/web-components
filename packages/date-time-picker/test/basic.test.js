@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
@@ -123,9 +123,10 @@ describe('Basic features', () => {
       expect(dateTimePicker.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not remove focused attribute when moving focus to overlay', () => {
+    it('should not remove focused attribute when moving focus to overlay', async () => {
       focusin(datePicker);
       datePicker.open();
+      await nextRender();
       focusout(datePicker, datePicker._overlayContent);
       expect(dateTimePicker.hasAttribute('focused')).to.be.true;
     });

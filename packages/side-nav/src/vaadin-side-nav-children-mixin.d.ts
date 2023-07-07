@@ -38,4 +38,9 @@ export declare class SideNavChildrenMixinClass {
    * Name of the slot to be used for children.
    */
   protected readonly _itemsSlotName: string;
+
+  /**
+   * Count of child items.
+   */
+  protected _itemsCount: number;
 }

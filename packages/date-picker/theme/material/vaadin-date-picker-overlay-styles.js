@@ -4,10 +4,12 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const datePickerOverlay = css`
   :host([fullscreen]) {
+    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
     top: 0 !important;
     right: 0 !important;
     bottom: var(--vaadin-overlay-viewport-bottom) !important;
     left: 0 !important;
+    /* stylelint-enable declaration-block-no-redundant-longhand-properties */
     align-items: stretch;
     justify-content: stretch;
   }

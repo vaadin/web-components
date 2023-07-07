@@ -262,6 +262,11 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
+      it('should not close the drawer on global Escape press', () => {
+        esc(document.body);
+        expect(layout.drawerOpened).to.be.true;
+      });
+
       it('should set aria-expanded on the toggle to true by default', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
         layout.drawerOpened = true;
@@ -273,6 +278,23 @@ describe('vaadin-app-layout', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('false');
         layout.drawerOpened = true;
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+      });
+
+      it('should only update offset size once during the drawer transition', async () => {
+        layout.primarySection = 'drawer';
+        await onceResized(layout);
+        await nextRender();
+
+        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+
+        const spy = sinon.spy(layout, '_updateOffsetSize');
+        toggle.click();
+        await oneEvent(drawer, 'transitionend');
+
+        expect(spy.callCount).to.be.equal(1);
+        await nextFrame();
+
+        expect(spy.callCount).to.be.equal(1);
       });
     });
 
@@ -353,6 +375,11 @@ describe('vaadin-app-layout', () => {
 
         it('should close the drawer on Escape press', () => {
           esc(drawer);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should close the drawer on global Escape press', () => {
+          esc(document.body);
           expect(layout.drawerOpened).to.be.false;
         });
 

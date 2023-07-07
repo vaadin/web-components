@@ -1,5 +1,6 @@
 import '../../vaadin-side-nav.js';
 import '../../vaadin-side-nav-item.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { PolylitMixinClass } from '@vaadin/component-base/src/polylit-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -33,10 +34,12 @@ const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 // Item properties
 assertType<string | null | undefined>(sideNavItem.path);
 assertType<boolean>(sideNavItem.current);
+assertType<boolean>(sideNavItem.disabled);
 assertType<boolean>(sideNavItem.expanded);
 assertType<SideNavI18n>(sideNavItem.i18n);
 
 // Item mixins
+assertType<DisabledMixinClass>(sideNavItem);
 assertType<ElementMixinClass>(sideNavItem);
 assertType<PolylitMixinClass>(sideNavItem);
 assertType<ThemableMixinClass>(sideNavItem);

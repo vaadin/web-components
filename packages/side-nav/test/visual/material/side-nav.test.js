@@ -57,6 +57,13 @@ describe('side-nav', () => {
       await visualDiff(div, 'current-item');
     });
 
+    it('disabled item', async () => {
+      const item = document.querySelector('vaadin-side-nav-item');
+      item.disabled = true;
+      await nextRender();
+      await visualDiff(div, 'disabled-item');
+    });
+
     it('overflowing item', async () => {
       const span = document.querySelector('vaadin-side-nav-item span');
       span.textContent = 'Very long item that does not fit';
