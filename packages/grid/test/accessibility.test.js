@@ -86,7 +86,7 @@ describe('accessibility', () => {
         expect(grid.$.footer.children[0].getAttribute('role')).to.equal('row');
       });
 
-      it('should have scope row on table cell for the rowheader columns and role gridcell row for other columns', () => {
+      it('should have role=rowheader for cells marked row-header, and role=gridcell row for other columns not marked with row-header', () => {
         for (const child of grid.$.items.children) {
           expect(child.children[0].getAttribute('role')).to.equal('gridcell');
           expect(child.children[0].tagName.toLowerCase()).to.equal('td');
@@ -98,7 +98,7 @@ describe('accessibility', () => {
         }
       });
 
-      it('should row-header for the last grid column as we added', () => {
+      it('the last column should have a row-header attribute added', () => {
         expect(grid.children[2].getAttribute('row-header')).to.exist;
       });
 

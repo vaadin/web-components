@@ -571,12 +571,11 @@ describe('column - simple grid with rowHeader', () => {
     await nextFrame();
   });
 
-  it('should look properly in the shadow dom (th tag and scope=row)', async () => {
+  it('should look properly in the shadow dom (role=rowheader)', async () => {
     await nextFrame();
     const firstCell = grid.shadowRoot.querySelector('tbody tr:first-child td:first-child');
     expect(firstCell).to.be.ok;
     expect(firstCell.getAttribute('role')).to.equal('rowheader');
-    // expect(firstCell.tagName).to.equal('TH');
     expect(column.rowHeader).to.be.true;
   });
 });
