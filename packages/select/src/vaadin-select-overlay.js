@@ -45,7 +45,7 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
   static get template() {
     return html`
       <div id="backdrop" part="backdrop" hidden$="[[!withBackdrop]]"></div>
-      <div part="overlay" id="overlay">
+      <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
           <slot></slot>
         </div>
