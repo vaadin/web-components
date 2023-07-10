@@ -47,7 +47,13 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, the column will be handled as a rowHeader and read properly by screen readers.
+         * When true, then in the shadow DOM, the column cells will be rendered with the `role="rowheader"` attribute.
+         * - This will cause the column will be handled as a rowHeader and read properly by screen readers.
+         *
+         * When false, then in the shadow DOM, the column cells will be rendered with the `role="gridcell"` attribute.
+         *
+         * @attr {boolean} row-header
+         * @type {boolean}
          */
         rowHeader: {
           type: Boolean,
