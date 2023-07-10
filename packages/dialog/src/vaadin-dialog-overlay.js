@@ -4,91 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dialogOverlay, resizableOverlay } from './vaadin-dialog-styles.js';
 
-registerStyles(
-  'vaadin-dialog-overlay',
-  css`
-    [part='header'],
-    [part='header-content'],
-    [part='footer'] {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      flex: none;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    [part='header'] {
-      flex-wrap: nowrap;
-    }
-
-    ::slotted([slot='header-content']),
-    ::slotted([slot='title']),
-    ::slotted([slot='footer']) {
-      display: contents;
-      pointer-events: auto;
-    }
-
-    ::slotted([slot='title']) {
-      font: inherit !important;
-      overflow-wrap: anywhere;
-    }
-
-    [part='header-content'] {
-      flex: 1;
-    }
-
-    :host([has-title]) [part='header-content'],
-    [part='footer'] {
-      justify-content: flex-end;
-    }
-
-    :host(:not([has-title]):not([has-header])) [part='header'],
-    :host(:not([has-header])) [part='header-content'],
-    :host(:not([has-title])) [part='title'],
-    :host(:not([has-footer])) [part='footer'] {
-      display: none !important;
-    }
-
-    :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-      height: auto;
-    }
-
-    @media (min-height: 320px) {
-      :host(:is([has-title], [has-header], [has-footer])) .resizer-container {
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
-
-      :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-        flex: 1;
-        overflow: auto;
-      }
-    }
-
-    /*
-      NOTE(platosha): Make some min-width to prevent collapsing of the content
-      taking the parent width, e. g., <vaadin-grid> and such.
-    */
-    [part='content'] {
-      min-width: 12em; /* matches the default <vaadin-text-field> width */
-    }
-
-    :host([has-bounds-set]) [part='overlay'] {
-      max-width: none;
-    }
-
-    @media (forced-colors: active) {
-      [part='overlay'] {
-        outline: 3px solid !important;
-      }
-    }
-  `,
-  { moduleId: 'vaadin-dialog-overlay-styles' },
-);
+registerStyles('vaadin-dialog-overlay', [dialogOverlay, resizableOverlay], {
+  moduleId: 'vaadin-dialog-overlay-styles',
+});
 
 let memoizedTemplate;
 
