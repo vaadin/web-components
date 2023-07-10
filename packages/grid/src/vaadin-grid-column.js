@@ -47,6 +47,14 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * When true, the column will be handled as a rowHeader and read properly by screen readers.
+         */
+        rowHeader: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * When true, the column is frozen to end of grid.
          *
          * When a column inside of a column group is frozen to end, all of the sibling columns
@@ -222,6 +230,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
+        '_rowHeaderChanged(rowHeader, _cells.*)',
       ];
     }
 
@@ -247,6 +256,26 @@ export const ColumnBaseMixin = (superClass) =>
         .concat(this._headerCell)
         .concat(this._footerCell)
         .filter((cell) => cell);
+    }
+
+    /**
+     * @param rowHeader
+     * @param cells
+     * @private
+     */
+    _rowHeaderChanged(rowHeader, cells) {
+      if (!cells.value) {
+        return;
+      }
+
+      cells.value.forEach((cell) => {
+        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
+        if (rowHeader) {
+          cell.setAttribute('scope', 'row');
+        } else {
+          cell.removeAttribute('scope');
+        }
+      });
     }
 
     /** @protected */
