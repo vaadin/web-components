@@ -11,6 +11,7 @@ import {
   keyboardEventFor,
   keyDownChar,
   nextFrame,
+  oneEvent,
   spaceKeyDown,
   tab,
 } from '@vaadin/testing-helpers';
@@ -386,29 +387,29 @@ describe('vaadin-select', () => {
     });
 
     describe('overlay opened', () => {
-      let menu;
+      let menu, overlay;
 
       beforeEach(async () => {
         menu = select._menuElement;
+        overlay = select._overlayElement;
         await nextFrame();
         select.focus();
         enterKeyDown(valueButton);
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should close the select on selecting the same value', () => {
         enterKeyDown(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
         click(select._items[0]);
-        expect(select._overlayElement.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
       });
 
       it('should focus the input on selecting value and closing the overlay', () => {
-        const focusedSpy = sinon.spy();
-        select.focusElement.focus = focusedSpy;
-
+        const focusedSpy = sinon.spy(valueButton, 'focus');
         click(select._items[1]);
         expect(select.value).to.be.equal(select._items[menu.selected].value);
-        expect(select._overlayElement.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
         expect(focusedSpy.called).to.be.true;
       });
 
@@ -419,25 +420,20 @@ describe('vaadin-select', () => {
       });
 
       it('should focus the button on closing the overlay if phone', () => {
-        const focusedSpy = sinon.spy();
-        select.focusElement.focus = focusedSpy;
-
+        const focusedSpy = sinon.spy(valueButton, 'focus');
         select._phone = true;
         click(select._items[1]);
         expect(focusedSpy.called).to.be.true;
       });
 
       it('should focus the button before moving the focus to next selectable element', () => {
-        const focusedSpy = sinon.spy();
-        select.focusElement.focus = focusedSpy;
-
+        const focusedSpy = sinon.spy(valueButton, 'focus');
         tab(menu);
         expect(focusedSpy.called).to.be.true;
       });
 
       it('should close the overlay when clicking on the overlay', () => {
-        select.opened = false;
-        select._overlayElement.click();
+        overlay.click();
         expect(select.opened).to.be.false;
       });
 
@@ -445,7 +441,6 @@ describe('vaadin-select', () => {
       // visible in landscape orientation. This is workarounded by exposing
       // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
       it('should support --vaadin-overlay-viewport-bottom CSS property', () => {
-        const overlay = select._overlayElement;
         overlay.setAttribute('phone', '');
         overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
         expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
