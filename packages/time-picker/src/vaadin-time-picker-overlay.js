@@ -3,46 +3,53 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-overlay-mixin.js';
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-time-picker-overlay',
-  css`
-    #overlay {
-      width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
-    }
+const timePickerOverlayStyles = css`
+  #overlay {
+    width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
+  }
 
-    [part='content'] {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-  `,
-  { moduleId: 'vaadin-time-picker-overlay-styles' },
-);
+  [part='content'] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
 
-let memoizedTemplate;
+registerStyles('vaadin-time-picker-overlay', [overlayStyles, timePickerOverlayStyles], {
+  moduleId: 'vaadin-time-picker-overlay-styles',
+});
 
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
- * @extends ComboBoxOverlay
+ * @extends HTMLElement
+ * @mixes ComboBoxOverlayMixin
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
-class TimePickerOverlay extends ComboBoxOverlayMixin(Overlay) {
+export class TimePickerOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-time-picker-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-      memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
-    }
-
-    return memoizedTemplate;
+    return html`
+      <div id="backdrop" part="backdrop" hidden></div>
+      <div part="overlay" id="overlay">
+        <div part="content" id="content">
+          <slot></slot>
+        </div>
+      </div>
+    `;
   }
 }
 
