@@ -11,6 +11,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/overlay/vaadin-overlay.js';
 import './not-animated-styles.js';
 import { html, render } from 'lit';
 import { Tooltip } from '../vaadin-tooltip.js';
