@@ -270,11 +270,6 @@ export const ColumnBaseMixin = (superClass) =>
 
       cells.value.forEach((cell) => {
         cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
-        if (rowHeader) {
-          cell.setAttribute('scope', 'row');
-        } else {
-          cell.removeAttribute('scope');
-        }
       });
     }
 
