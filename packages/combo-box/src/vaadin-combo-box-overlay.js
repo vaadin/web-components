@@ -3,54 +3,52 @@
  * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 
-registerStyles(
-  'vaadin-combo-box-overlay',
-  css`
-    #overlay {
-      width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
-    }
+const comboBoxOverlayStyles = css`
+  #overlay {
+    width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+  }
 
-    [part='content'] {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-  `,
-  { moduleId: 'vaadin-combo-box-overlay-styles' },
-);
+  [part='content'] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
 
-let memoizedTemplate;
+registerStyles('vaadin-combo-box-overlay', [overlayStyles, comboBoxOverlayStyles], {
+  moduleId: 'vaadin-combo-box-overlay-styles',
+});
 
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
  * @mixes ComboBoxOverlayMixin
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
-export class ComboBoxOverlay extends ComboBoxOverlayMixin(Overlay) {
+export class ComboBoxOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-combo-box-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-
-      const overlay = memoizedTemplate.content.querySelector('[part~="overlay"]');
-      overlay.removeAttribute('tabindex');
-
-      const loader = document.createElement('div');
-      loader.setAttribute('part', 'loader');
-
-      overlay.insertBefore(loader, overlay.firstElementChild);
-    }
-
-    return memoizedTemplate;
+    return html`
+      <div id="backdrop" part="backdrop" hidden></div>
+      <div part="overlay" id="overlay">
+        <div part="loader"></div>
+        <div part="content" id="content"><slot></slot></div>
+      </div>
+    `;
   }
 }
 
