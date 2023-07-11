@@ -16,7 +16,6 @@
  * provided by this mixin.
  *
  * @polymerMixin
- * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 export const GridSelectionColumnBaseMixin = (superClass) =>
   class GridSelectionColumnBaseMixin extends superClass {

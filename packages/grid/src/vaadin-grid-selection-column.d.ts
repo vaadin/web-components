@@ -5,6 +5,7 @@
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
 import { GridColumn } from './vaadin-grid-column.js';
+import type { GridSelectionColumnBaseMixinClass } from './vaadin-grid-selection-column-base-mixin.js';
 
 /**
  * Fired when the `selectAll` property changes.
@@ -39,21 +40,10 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
  *
  * __The default content can also be overridden__
  *
+ * @mixes GridSelectionColumnBaseMixin
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
-  /**
-   * When true, all the items are selected.
-   * @attr {boolean} select-all
-   */
-  selectAll: boolean;
-
-  /**
-   * When true, the active gets automatically selected.
-   * @attr {boolean} auto-select
-   */
-  autoSelect: boolean;
-
   addEventListener<K extends keyof GridSelectionColumnEventMap>(
     type: K,
     listener: (this: GridSelectionColumn<TItem>, ev: GridSelectionColumnEventMap[K]) => void,
@@ -66,6 +56,8 @@ declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TI
     options?: EventListenerOptions | boolean,
   ): void;
 }
+
+interface GridSelectionColumn extends GridSelectionColumnBaseMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {
