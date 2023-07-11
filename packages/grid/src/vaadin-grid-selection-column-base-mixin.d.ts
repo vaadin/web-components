@@ -5,9 +5,9 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare function GridSelectionColumnBaseMixin<T extends Constructor<HTMLElement>>(
+export declare function GridSelectionColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<GridSelectionColumnBaseMixinClass> & T;
+): Constructor<GridSelectionColumnBaseMixinClass<TItem>> & T;
 
 /**
  * A mixin that provides basic functionality for the
@@ -22,7 +22,7 @@ export declare function GridSelectionColumnBaseMixin<T extends Constructor<HTMLE
  *
  * @polymerMixin
  */
-export declare class GridSelectionColumnBaseMixinClass {
+export declare class GridSelectionColumnBaseMixinClass<TItem> {
   /**
    * When true, all the items are selected.
    * @attr {boolean} select-all
@@ -34,4 +34,24 @@ export declare class GridSelectionColumnBaseMixinClass {
    * @attr {boolean} auto-select
    */
   autoSelect: boolean;
+
+  /**
+   * Override to handle the user selecting all items.
+   */
+  protected _selectAll(): void;
+
+  /**
+   * Override to handle the user deselecting all items.
+   */
+  protected _deselectAll(): void;
+
+  /**
+   * Override to handle the user selecting an item.
+   */
+  protected _selectItem(item: TItem): void;
+
+  /**
+   * Override to handle the user deselecting an item.
+   */
+  protected _deselectItem(item: TItem): void;
 }

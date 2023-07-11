@@ -56,7 +56,7 @@ declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TI
   ): void;
 }
 
-interface GridSelectionColumn extends GridSelectionColumnBaseMixinClass {}
+interface GridSelectionColumn<TItem = GridDefaultItem> extends GridSelectionColumnBaseMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

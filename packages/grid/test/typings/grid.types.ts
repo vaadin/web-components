@@ -282,10 +282,10 @@ assertType<string | null | undefined>(narrowedFilterColumn.path);
 /* GridSelectionColumn */
 const genericSelectionColumn = document.createElement('vaadin-grid-selection-column');
 assertType<GridSelectionColumn>(genericSelectionColumn);
-assertType<GridSelectionColumnBaseMixinClass>(genericSelectionColumn);
 
 const narrowedSelectionColumn = genericSelectionColumn as GridSelectionColumn<TestGridItem>;
 assertType<GridColumn<TestGridItem>>(narrowedSelectionColumn);
+assertType<GridSelectionColumnBaseMixinClass<TestGridItem>>(narrowedSelectionColumn);
 
 narrowedSelectionColumn.addEventListener('select-all-changed', (event) => {
   assertType<GridSelectionColumnSelectAllChangedEvent>(event);
