@@ -122,6 +122,11 @@ registerStyles(
     dialogOverlay,
     editorStyles,
     css`
+      [part='overlay'] {
+        max-width: 54em;
+        min-width: 20em;
+      }
+
       @keyframes material-overlay-dummy-animation {
         0% {
           opacity: 1;
