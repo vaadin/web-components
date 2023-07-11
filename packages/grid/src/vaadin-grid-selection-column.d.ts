@@ -40,7 +40,6 @@ export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSe
  *
  * __The default content can also be overridden__
  *
- * @mixes GridSelectionColumnBaseMixin
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
 declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
