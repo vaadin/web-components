@@ -2,6 +2,8 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import { dialogOverlay } from '@vaadin/dialog/theme/lumo/vaadin-dialog-styles.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -133,6 +135,8 @@ registerStyles(
 registerStyles(
   'vaadin-crud-dialog-overlay',
   [
+    overlay,
+    dialogOverlay,
     editorStyles,
     css`
       [part='header'] ::slotted(h3) {

@@ -1,5 +1,7 @@
 import '@vaadin/vaadin-material-styles/typography.js';
 import '@vaadin/vaadin-material-styles/color.js';
+import { dialogOverlay } from '@vaadin/dialog/theme/material/vaadin-dialog-styles.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -116,8 +118,15 @@ registerStyles(
 registerStyles(
   'vaadin-crud-dialog-overlay',
   [
+    overlay,
+    dialogOverlay,
     editorStyles,
     css`
+      [part='overlay'] {
+        max-width: 54em;
+        min-width: 20em;
+      }
+
       @keyframes material-overlay-dummy-animation {
         0% {
           opacity: 1;
