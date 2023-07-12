@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
@@ -58,6 +58,50 @@ describe('password-field', () => {
 
   it('should focus the input on reveal button touchend', () => {
     const spy = sinon.spy(input, 'focus');
+
+    makeSoloTouchEvent('touchend', null, revealButton);
+
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should dispatch change event on reveal button touchend', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+
+    makeSoloTouchEvent('touchend', null, revealButton);
+
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should not dispatch change on reveal button touchend if value is the same', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    makeSoloTouchEvent('touchend', null, revealButton);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not dispatch change on reveal button touchend after native change', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+    fire(input, 'change');
+
+    spy.resetHistory();
+
+    makeSoloTouchEvent('touchend', null, revealButton);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should validate on prevented reveal button touchend', () => {
+    const spy = sinon.spy(passwordField, 'validate');
+
+    input.value = 'test';
 
     makeSoloTouchEvent('touchend', null, revealButton);
 

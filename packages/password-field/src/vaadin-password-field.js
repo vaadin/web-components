@@ -126,6 +126,7 @@ export class PasswordField extends TextField {
     this._setType('password');
     this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
     this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
+    this.__lastChange = '';
   }
 
   /** @protected */
@@ -170,6 +171,19 @@ export class PasswordField extends TextField {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
+  }
+
+  /**
+   * Override an event listener inherited from `InputControlMixin`
+   * to store the value at the moment of the native `change` event.
+   * @param {Event} event
+   * @protected
+   * @override
+   */
+  _onChange(event) {
+    super._onChange(event);
+
+    this.__lastChange = this.inputElement.value;
   }
 
   /**
@@ -247,6 +261,17 @@ export class PasswordField extends TextField {
     // Cancel the following click event
     e.preventDefault();
     this._togglePasswordVisibility();
+
+    // By preventing `focusout` event, we also suppress related `change` event.
+    // Detect if that was the case and if so, dispatch `change` event manually.
+    if (this.__lastChange !== this.inputElement.value) {
+      this.__lastChange = this.inputElement.value;
+
+      this.validate();
+
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
+
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
     this.inputElement.focus();
