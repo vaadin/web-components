@@ -12,8 +12,9 @@ describe('rich text editor', () => {
 
   const getButton = (fmt) => rte.shadowRoot.querySelector(`[part~="toolbar-button-${fmt}"]`);
 
-  beforeEach(() => {
+  beforeEach(async () => {
     rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+    await nextRender();
     editor = rte._editor;
   });
 

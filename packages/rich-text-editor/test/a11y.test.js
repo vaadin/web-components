@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { down, fixtureSync, focusin, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
+import { down, fixtureSync, focusin, isFirefox, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
@@ -15,8 +15,9 @@ describe('accessibility', () => {
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+    await nextRender();
     editor = rte._editor;
     buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
     content = rte.shadowRoot.querySelector('[contenteditable]');

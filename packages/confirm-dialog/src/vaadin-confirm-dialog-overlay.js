@@ -3,13 +3,15 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
 import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const confirmDialogOverlay = css`
   :host {
@@ -28,10 +30,6 @@ const confirmDialogOverlay = css`
   }
 `;
 
-registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, confirmDialogOverlay], {
-  moduleId: 'vaadin-confirm-dialog-overlay-styles',
-});
-
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  *
@@ -41,14 +39,19 @@ registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, c
  * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }
 
-  static get template() {
+  static get styles() {
+    return [overlayStyles, dialogOverlay, confirmDialogOverlay];
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
           <header part="header"><slot name="header"></slot></header>
@@ -96,32 +99,6 @@ class ConfirmDialogDialog extends Dialog {
     return 'vaadin-confirm-dialog-dialog';
   }
 
-  /**
-   * Override template to provide custom overlay tag name.
-   */
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: none;
-        }
-      </style>
-
-      <vaadin-confirm-dialog-overlay
-        id="overlay"
-        on-opened-changed="_onOverlayOpened"
-        on-mousedown="_bringOverlayToFront"
-        on-touchstart="_bringOverlayToFront"
-        theme$="[[_theme]]"
-        modeless="[[modeless]]"
-        with-backdrop="[[!modeless]]"
-        resizable$="[[resizable]]"
-        restore-focus-on-close
-        focus-trap
-      ></vaadin-confirm-dialog-overlay>
-    `;
-  }
-
   static get properties() {
     return {
       /**
@@ -150,6 +127,26 @@ class ConfirmDialogDialog extends Dialog {
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
     ];
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <vaadin-confirm-dialog-overlay
+        id="overlay"
+        .owner="${this}"
+        .opened="${this.opened}"
+        @opened-changed="${this._onOverlayOpened}"
+        @mousedown="${this._bringOverlayToFront}"
+        @touchstart="${this._bringOverlayToFront}"
+        theme="${ifDefined(this._theme)}"
+        .modeless="${this.modeless}"
+        .withBackdrop="${!this.modeless}"
+        ?resizable="${this.resizable}"
+        restore-focus-on-close
+        focus-trap
+      ></vaadin-confirm-dialog-overlay>
+    `;
   }
 
   /** @protected */

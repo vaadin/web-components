@@ -14,6 +14,7 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import '../vendor/vaadin-quill.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
@@ -577,10 +578,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.__patchFirefoxFocus();
     }
 
-    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      this.$.linkUrl.focus();
-    });
-
     const editorContent = editor.querySelector('.ql-editor');
 
     editorContent.setAttribute('role', 'textbox');
@@ -630,6 +627,12 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     this._editor.on('selection-change', this.__announceFormatting.bind(this));
+
+    afterNextRender(this, () => {
+      this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+        this.$.linkUrl.focus();
+      });
+    });
   }
 
   /** @private */

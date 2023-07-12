@@ -4,10 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-confirm-dialog-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -65,40 +66,18 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  */
-class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
-        :host,
-        [hidden] {
-          display: none !important;
-        }
-      </style>
-
-      <vaadin-confirm-dialog-dialog
-        id="dialog"
-        opened="{{opened}}"
-        overlay-class="[[overlayClass]]"
-        aria-label="[[_getAriaLabel(header)]]"
-        theme$="[[_theme]]"
-        no-close-on-outside-click
-        no-close-on-esc="[[noCloseOnEsc]]"
-        content-height="[[_contentHeight]]"
-        content-width="[[_contentWidth]]"
-      ></vaadin-confirm-dialog-dialog>
-
-      <div hidden>
-        <slot name="header"></slot>
-        <slot></slot>
-        <slot name="cancel-button"></slot>
-        <slot name="reject-button"></slot>
-        <slot name="confirm-button"></slot>
-      </div>
-    `;
-  }
-
+class ConfirmDialog extends ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-confirm-dialog';
+  }
+
+  static get styles() {
+    return css`
+      :host,
+      [hidden] {
+        display: none !important;
+      }
+    `;
   }
 
   static get properties() {
@@ -317,7 +296,7 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNodes(_messageNodes, message)',
       '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
-      '__accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef)',
+      '__accessibleDescriptionRefChanged(_overlayElement, _messageNodes, accessibleDescriptionRef)',
     ];
   }
 
@@ -334,9 +313,36 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   /** @protected */
-  ready() {
+  render() {
+    return html`
+      <vaadin-confirm-dialog-dialog
+        id="dialog"
+        .opened="${this.opened}"
+        .overlayClass="${this.overlayClass}"
+        aria-label="${this.header || 'confirmation'}"
+        theme="${ifDefined(this._theme)}"
+        no-close-on-outside-click
+        .noCloseOnEsc="${this.noCloseOnEsc}"
+        .contentHeight="${this._contentHeight}"
+        .contentWidth="${this._contentWidth}"
+        @opened-changed=${this._onOpenedChanged}"
+      ></vaadin-confirm-dialog-dialog>
+
+      <div hidden>
+        <slot name="header"></slot>
+        <slot></slot>
+        <slot name="cancel-button"></slot>
+        <slot name="reject-button"></slot>
+        <slot name="confirm-button"></slot>
+      </div>
+    `;
+  }
+
+  /** @protected */
+  async ready() {
     super.ready();
 
+    await this.$.dialog.updateComplete;
     this._overlayElement = this.$.dialog.$.overlay;
     this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
     this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
@@ -361,7 +367,6 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
         wrapper.id = wrapperId;
         wrapper.appendChild(node);
         this.appendChild(wrapper);
-        setAriaIDReference(this._overlayElement, 'aria-describedby', { newId: wrapperId });
         this._messageNodes = [...this._messageNodes, wrapper];
       },
     });
@@ -391,16 +396,29 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
   }
 
   /** @private */
-  __accessibleDescriptionRefChanged(_overlayElement, accessibleDescriptionRef) {
-    if (!_overlayElement || (!accessibleDescriptionRef && !this.__oldAccessibleDescriptionRef)) {
+  __accessibleDescriptionRefChanged(overlay, messageNodes, accessibleDescriptionRef) {
+    if (!overlay || !messageNodes) {
       return;
     }
-    setAriaIDReference(this._overlayElement, 'aria-describedby', {
-      newId: accessibleDescriptionRef,
-      oldId: this.__oldAccessibleDescriptionRef,
-      fromUser: true,
-    });
-    this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
+
+    if (accessibleDescriptionRef !== undefined) {
+      setAriaIDReference(overlay, 'aria-describedby', {
+        newId: accessibleDescriptionRef,
+        oldId: this.__oldAccessibleDescriptionRef,
+        fromUser: true,
+      });
+
+      this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
+    } else {
+      messageNodes.forEach((node) => {
+        setAriaIDReference(overlay, 'aria-describedby', { newId: node.id });
+      });
+    }
+  }
+
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
   }
 
   /** @private */
