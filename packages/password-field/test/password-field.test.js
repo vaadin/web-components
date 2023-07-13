@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, focusout, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
@@ -46,22 +46,51 @@ describe('password-field', () => {
     expect(input.type).to.equal('text');
   });
 
-  it('should prevent touchend event on reveal button', () => {
-    const event1 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event1.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('text');
-
-    const event2 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event2.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('password');
+  it('should prevent mousedown event on reveal button', () => {
+    const event = fire(revealButton, 'mousedown');
+    expect(event.defaultPrevented).to.be.true;
   });
 
-  it('should focus the input on reveal button touchend', () => {
+  it('should focus the input on reveal button mousedown', () => {
     const spy = sinon.spy(input, 'focus');
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    fire(revealButton, 'mousedown');
 
     expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should dispatch change event on focusout after changing the value', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+
+    focusout(input);
+
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should not dispatch change event on focusout if value is the same', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    focusout(input);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not dispatch change event on focusout after native change', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+    fire(input, 'change');
+
+    spy.resetHistory();
+
+    focusout(input);
+
+    expect(spy.called).to.be.false;
   });
 
   it('should toggle aria-pressed attribute on reveal button click', () => {
