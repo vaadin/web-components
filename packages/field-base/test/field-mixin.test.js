@@ -555,16 +555,16 @@ const runTests = (defineHelper, baseMixin) => {
           div.setAttribute('slot', 'helper');
           div.textContent = 'New';
           element.replaceChild(div, helper);
-          await nextUpdate(element);
+          await nextRender();
           expect(element._helperNode).to.equal(div);
         });
 
         it('should support adding lazy helper after removing the default one', async () => {
           element.removeChild(defaultHelper);
-          await nextUpdate(element);
+          await nextRender();
 
           element.appendChild(helper);
-          await nextUpdate(element);
+          await nextRender();
 
           expect(element._helperNode).to.equal(helper);
         });

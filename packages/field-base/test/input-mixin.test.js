@@ -37,7 +37,7 @@ const runTests = (defineHelper, baseMixin) => {
       input.setAttribute('slot', 'input');
       element.appendChild(input);
       element._setInputElement(input);
-      await nextUpdate(element);
+      await nextRender();
     });
 
     it('should set property to empty string by default', () => {
