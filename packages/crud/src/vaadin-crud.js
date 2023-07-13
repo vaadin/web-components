@@ -338,6 +338,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-crud-dialog
         id="dialog"
         opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
+        fullscreen="[[_fullscreen]]"
         aria-label="[[__editorAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
@@ -550,7 +551,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         type: Boolean,
         reflectToAttribute: true,
         notify: true,
-        observer: '__editorOpenedChanged',
       },
 
       /**
@@ -670,6 +670,11 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       _fullscreenMediaQuery: {
         value: '(max-width: 600px), (max-height: 600px)',
       },
+
+      /** @private  */
+      _dialogOverlay: {
+        type: Object,
+      },
     };
   }
 
@@ -684,6 +689,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
       '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)',
       '__newButtonPropsChanged(_newButton, i18n.newItem)',
+      '__editorOpenedChanged(editorOpened, _dialogOverlay)',
     ];
   }
 
@@ -737,9 +743,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   ready() {
     super.ready();
 
-    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
-    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
-
     this._headerController = new SlotController(this, 'header', 'h3', {
       initializer: (node) => {
         this._defaultHeader = node;
@@ -766,6 +769,14 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     );
 
     this.addController(this.__focusRestorationController);
+
+    // Wait for the dialog to render the overlay
+    afterNextRender(this, () => {
+      this._dialogOverlay = this.$.dialog.$.overlay;
+
+      this._dialogOverlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
+      this._dialogOverlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
+    });
   }
 
   /**
@@ -817,8 +828,12 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __editorOpenedChanged(opened, oldOpened) {
-    if (!opened && oldOpened) {
+  __editorOpenedChanged(opened, dialogOverlay) {
+    if (!dialogOverlay) {
+      return;
+    }
+
+    if (this.__oldOpened) {
       this.__closeEditor();
     } else {
       this.__formChanged(this._form);
@@ -841,6 +856,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
     // Make sure to reset scroll position
     this.$.scroller.scrollTop = 0;
+
+    this.__oldOpened = opened;
   }
 
   /** @private */
@@ -851,7 +868,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.__ensureChildren();
 
       this.toggleAttribute('fullscreen', fullscreen);
-      this.$.dialog.$.overlay.toggleAttribute('fullscreen', fullscreen);
     }
   }
 
@@ -865,6 +881,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   __moveChildNodes(target) {
+    if (!target) {
+      return;
+    }
+
     const nodes = [this._headerNode, this._form, this._saveButton, this._cancelButton, this._deleteButton];
     if (!nodes.every((node) => node instanceof HTMLElement)) {
       return;
@@ -891,7 +911,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   __ensureChildren() {
     if (this.__shouldOpenDialog(this._fullscreen, this.editorPosition)) {
       // Move form to dialog
-      this.__moveChildNodes(this.$.dialog.$.overlay);
+      this.__moveChildNodes(this._dialogOverlay);
     } else {
       // Move form to crud
       this.__moveChildNodes(this);

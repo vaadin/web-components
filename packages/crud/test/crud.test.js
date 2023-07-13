@@ -66,8 +66,9 @@ describe('crud', () => {
       expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
     });
 
-    it('should propagate theme to internal themable components', () => {
+    it('should propagate theme to internal themable components', async () => {
       crud.setAttribute('theme', 'foo');
+      await nextRender();
       [
         crud,
         crud._grid,
@@ -563,6 +564,7 @@ describe('crud', () => {
 
     it('should open same row again after item closed after click on "New"', async () => {
       crud._fullscreen = false;
+      await nextRender();
 
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
@@ -578,6 +580,7 @@ describe('crud', () => {
 
     it('should open same row again after item was discarded after click on "New"', async () => {
       crud._fullscreen = false;
+      await nextRender();
 
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;

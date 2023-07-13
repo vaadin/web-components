@@ -8,13 +8,14 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
 import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const crudDialogOverlay = css`
   [part='overlay'] {
@@ -48,10 +49,6 @@ const crudDialogOverlay = css`
   }
 `;
 
-registerStyles('vaadin-crud-dialog-overlay', [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlay], {
-  moduleId: 'vaadin-crud-dialog-overlay-styles',
-});
-
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
@@ -61,14 +58,19 @@ registerStyles('vaadin-crud-dialog-overlay', [overlayStyles, dialogOverlay, resi
  * @mixes ThemableMixin
  * @private
  */
-class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }
 
-  static get template() {
+  static get styles() {
+    return [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlay];
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
           <header part="header"><slot name="header"></slot></header>
@@ -106,26 +108,29 @@ customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
  * @private
  */
 class CrudDialog extends Dialog {
-  /**
-   * Override template to provide custom overlay tag name.
-   */
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: none;
-        }
-      </style>
+  static get properties() {
+    return {
+      fullscreen: {
+        type: Boolean,
+      },
+    };
+  }
 
+  /** @protected */
+  render() {
+    return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
-        on-opened-changed="_onOverlayOpened"
-        on-mousedown="_bringOverlayToFront"
-        on-touchstart="_bringOverlayToFront"
-        theme$="[[_theme]]"
-        modeless="[[modeless]]"
-        with-backdrop="[[!modeless]]"
-        resizable$="[[resizable]]"
+        .owner="${this}"
+        .opened="${this.opened}"
+        @opened-changed="${this._onOverlayOpened}"
+        @mousedown="${this._bringOverlayToFront}"
+        @touchstart="${this._bringOverlayToFront}"
+        theme="${this._theme}"
+        .modeless="${this.modeless}"
+        .withBackdrop="${!this.modeless}"
+        ?resizable="${this.resizable}"
+        ?fullscreen="${this.fullscreen}"
         focus-trap
       ></vaadin-crud-dialog-overlay>
     `;
