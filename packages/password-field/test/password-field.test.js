@@ -51,7 +51,7 @@ describe('password-field', () => {
     expect(event.defaultPrevented).to.be.true;
   });
 
-  it('should focus the input on reveal button touchend', () => {
+  it('should focus the input on reveal button mousedown', () => {
     const spy = sinon.spy(input, 'focus');
 
     fire(revealButton, 'mousedown');
