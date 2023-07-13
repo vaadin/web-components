@@ -125,20 +125,20 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should update items when an element is added', async () => {
       list.appendChild(document.createElement(itemTag));
-      await nextUpdate(list);
+      await nextRender();
       expect(list.items.length).to.be.equal(6);
     });
 
     it('should update items when an element is removed', async () => {
       list.removeChild(list.items[0]);
-      await nextUpdate(list);
+      await nextRender();
       expect(list.items.length).to.be.equal(4);
     });
 
     it('should update items when an element is moved', async () => {
       const [e2, e4] = [list.items[2], list.items[4]];
       list.insertBefore(e4, e2);
-      await nextUpdate(list);
+      await nextRender();
       expect(list.items[2]).to.be.equal(e4);
       expect(list.items[3]).to.be.equal(e2);
     });
@@ -147,7 +147,7 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy();
       list.addEventListener('items-changed', spy);
       list.appendChild(document.createElement(itemTag));
-      await nextUpdate(list);
+      await nextRender();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -155,7 +155,7 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy();
       list.addEventListener('items-changed', spy);
       list.removeChild(list.items[0]);
-      await nextUpdate(list);
+      await nextRender();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -593,7 +593,7 @@ const runTests = (defineHelper, baseMixin) => {
       const item = document.createElement(itemTag);
       item.textContent = 'foo';
       list.appendChild(item);
-      await nextUpdate(list);
+      await nextRender();
       expect(item.hasAttribute('orientation')).to.be.true;
     });
 
