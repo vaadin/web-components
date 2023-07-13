@@ -127,6 +127,15 @@ export const SelectBaseMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Whether the user has interacted with the field.
+         */
+        dirty: {
+          type: Boolean,
+          value: false,
+          notify: true,
+        },
+
         /** @private */
         _phone: Boolean,
 

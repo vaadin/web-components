@@ -163,6 +163,15 @@ class RadioGroup extends FieldMixin(
       _fieldName: {
         type: String,
       },
+
+      /**
+       * Whether the user has interacted with the field.
+       */
+      dirty: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
     };
   }
 
@@ -353,6 +362,8 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   __onRadioButtonCheckedChange(event) {
+    this.dirty = true;
+
     if (event.target.checked) {
       this.__selectRadioButton(event.target);
     }

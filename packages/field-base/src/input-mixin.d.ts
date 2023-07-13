@@ -29,6 +29,11 @@ export declare class InputMixinClass {
   value: string;
 
   /**
+   * Whether the user has interacted with the field.
+   */
+  dirty: boolean;
+
+  /**
    * Indicates whether the value is different from the default one.
    * Override if the `value` property has a type other than `string`.
    */

@@ -139,6 +139,15 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
         notify: true,
         observer: '__valueChanged',
       },
+
+      /**
+       * Whether the user has interacted with the field.
+       */
+      dirty: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
     };
   }
 
@@ -305,8 +314,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __onCheckboxCheckedChanged(event) {
-    const checkbox = event.target;
+    this.dirty = true;
 
+    const checkbox = event.target;
     if (checkbox.checked) {
       this.__addCheckboxToValue(checkbox.value);
     } else {

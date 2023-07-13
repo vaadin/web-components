@@ -85,6 +85,11 @@ declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementM
    */
   value: string[];
 
+  /**
+   * Whether the user has interacted with the field.
+   */
+  dirty: boolean;
+
   addEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
     listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,

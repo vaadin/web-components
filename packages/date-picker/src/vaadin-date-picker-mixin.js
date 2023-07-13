@@ -671,6 +671,7 @@ export const DatePickerMixin = (subclass) =>
 
       // Only set flag if the value will change.
       if (this.value !== value) {
+        this.dirty = true;
         this.__dispatchChange = true;
       }
 
@@ -1040,6 +1041,7 @@ export const DatePickerMixin = (subclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
+      this.dirty = true;
       this._inputElementValue = '';
       this.value = '';
       this.validate();

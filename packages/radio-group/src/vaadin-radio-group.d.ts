@@ -93,6 +93,11 @@ declare class RadioGroup extends FieldMixin(
    */
   readonly: boolean;
 
+  /**
+   * Whether the user has interacted with the field.
+   */
+  dirty: boolean;
+
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,

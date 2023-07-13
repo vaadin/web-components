@@ -115,6 +115,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         <vaadin-time-picker-combo-box
           id="comboBox"
           filtered-items="[[__dropdownItems]]"
+          dirty="{{dirty}}"
           value="{{_comboBoxValue}}"
           opened="{{opened}}"
           disabled="[[disabled]]"

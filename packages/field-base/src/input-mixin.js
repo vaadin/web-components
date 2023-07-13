@@ -54,6 +54,15 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
+           * Whether the user has interacted with the field.
+           */
+          dirty: {
+            type: Boolean,
+            value: false,
+            notify: true,
+          },
+
+          /**
            * Whether the input element has a non-empty value.
            *
            * @protected
@@ -194,7 +203,7 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
-       * An input event listener used to update `_hasInputValue` property.
+       * An input event listener used to update `_hasInputValue` and `dirty` properties.
        * Do not override this method.
        *
        * @param {Event} event
@@ -202,6 +211,7 @@ export const InputMixin = dedupingMixin(
        */
       __onInput(event) {
         this._setHasInputValue(event);
+        this.dirty = true;
         this._onInput(event);
       }
 
