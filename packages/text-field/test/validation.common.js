@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 describe('validation', () => {
@@ -75,7 +75,7 @@ describe('validation', () => {
 
     it('should fire a validated event on validation failure', async () => {
       field.required = true;
-      await nextFrame();
+      await nextUpdate(field);
 
       field.validate();
 
@@ -93,12 +93,12 @@ describe('validation', () => {
 
     it('should update "invalid" state when "required" is removed', async () => {
       field.required = true;
-      await nextFrame();
+      await nextUpdate(field);
       field.validate();
       expect(field.invalid).to.be.true;
 
       field.required = false;
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
   });
@@ -111,24 +111,24 @@ describe('validation', () => {
 
     it('should not validate the field when minlength is set', async () => {
       field.minlength = 2;
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
 
     it('should validate the field when invalid after minlength is changed', async () => {
       field.invalid = true;
-      await nextFrame();
+      await nextUpdate(field);
 
       const spy = sinon.spy(field, 'validate');
       field.minlength = 2;
-      await nextFrame();
+      await nextUpdate(field);
       expect(spy.calledOnce).to.be.true;
     });
 
     it.skip('should update "invalid" state when "minlength" is removed', async () => {
       field.minlength = 5;
       field.value = 'foo';
-      await nextFrame();
+      await nextUpdate(field);
 
       // There seems to be no way to make minlength/maxlength trigger invalid
       // state in a native input programmatically. It can only become invalid
@@ -144,7 +144,7 @@ describe('validation', () => {
       expect(field.invalid).to.be.true; // Fails here
 
       field.minlength = undefined;
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
   });
@@ -157,23 +157,23 @@ describe('validation', () => {
 
     it('should not validate the field when maxlength is set', async () => {
       field.maxlength = 6;
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
 
     it('should validate the field when invalid after maxlength is changed', async () => {
       field.invalid = true;
-      await nextFrame();
+      await nextUpdate(field);
       const spy = sinon.spy(field, 'validate');
       field.maxlength = 2;
-      await nextFrame();
+      await nextUpdate(field);
       expect(spy.calledOnce).to.be.true;
     });
 
     it.skip('should update "invalid" state when "maxlength" is removed', async () => {
       field.maxlength = 3;
       field.value = 'foobar';
-      await nextFrame();
+      await nextUpdate(field);
 
       // There seems to be no way to make minlength/maxlength trigger invalid
       // state in a native input programmatically. It can only become invalid
@@ -189,7 +189,7 @@ describe('validation', () => {
       expect(field.invalid).to.be.true; // Fails here
 
       field.maxlength = undefined;
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
   });
@@ -203,13 +203,13 @@ describe('validation', () => {
     it('should update "invalid" state when "pattern" is removed', async () => {
       field.value = '123foo';
       field.pattern = '\\d+';
-      await nextFrame();
+      await nextUpdate(field);
 
       field.validate();
       expect(field.invalid).to.be.true;
 
       field.pattern = '';
-      await nextFrame();
+      await nextUpdate(field);
       expect(field.invalid).to.be.false;
     });
   });

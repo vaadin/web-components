@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 describe('text-field', () => {
@@ -15,7 +15,7 @@ describe('text-field', () => {
     describe('native', () => {
       async function assertAttrCanBeSet(prop, value) {
         textField[prop] = value;
-        await nextFrame();
+        await nextUpdate(textField);
 
         const attrValue = input.getAttribute(prop);
 
@@ -31,7 +31,7 @@ describe('text-field', () => {
       ['pattern', 'placeholder', 'value', 'title'].forEach((prop) => {
         it(`should set string property ${prop}`, async () => {
           textField[prop] = 'foo';
-          await nextFrame();
+          await nextUpdate(textField);
           expect(input[prop]).to.be.equal('foo');
         });
       });
@@ -39,11 +39,11 @@ describe('text-field', () => {
       ['disabled'].forEach((prop) => {
         it(`should set boolean property ${prop}`, async () => {
           textField[prop] = true;
-          await nextFrame();
+          await nextUpdate(textField);
           expect(input[prop]).to.be.true;
 
           textField[prop] = false;
-          await nextFrame();
+          await nextUpdate(textField);
           expect(input[prop]).to.be.false;
         });
       });
@@ -82,7 +82,7 @@ describe('text-field', () => {
       it('should clear the value when clear button is clicked', async () => {
         textField.clearButtonVisible = true;
         textField.value = 'Foo';
-        await nextFrame();
+        await nextUpdate(textField);
         textField.$.clearButton.click();
         expect(textField.value).not.to.be.ok;
       });
@@ -90,7 +90,7 @@ describe('text-field', () => {
       it('should clear the native input value when clear button is clicked', async () => {
         textField.clearButtonVisible = true;
         textField.value = 'Foo';
-        await nextFrame();
+        await nextUpdate(textField);
         textField.$.clearButton.click();
         expect(input.value).to.equal('');
       });
@@ -101,7 +101,7 @@ describe('text-field', () => {
 
         textField.clearButtonVisible = true;
         textField.value = 'Foo';
-        await nextFrame();
+        await nextUpdate(textField);
 
         textField.$.clearButton.click();
         expect(inputSpy.calledOnce).to.be.true;
@@ -113,7 +113,7 @@ describe('text-field', () => {
 
         textField.clearButtonVisible = true;
         textField.value = 'Foo';
-        await nextFrame();
+        await nextUpdate(textField);
 
         textField.$.clearButton.click();
         expect(changeSpy.calledOnce).to.be.true;
@@ -139,10 +139,10 @@ describe('text-field', () => {
 
       it('setting value to undefined should clear the native input value', async () => {
         textField.value = 'foo';
-        await nextFrame();
+        await nextUpdate(textField);
 
         textField.value = undefined;
-        await nextFrame();
+        await nextUpdate(textField);
         expect(input.value).to.equal('');
       });
     });
@@ -150,7 +150,7 @@ describe('text-field', () => {
     describe('required', () => {
       beforeEach(async () => {
         textField.required = true;
-        await nextFrame();
+        await nextUpdate(textField);
       });
 
       it('should focus on required indicator click', () => {
@@ -174,7 +174,7 @@ describe('text-field', () => {
       it('should select content on focus when autoselect is true', async () => {
         textField.value = '123';
         textField.autoselect = true;
-        await nextFrame();
+        await nextUpdate(textField);
         input.dispatchEvent(new CustomEvent('focus', { bubbles: false }));
         await aTimeout(1);
         expect(input.selectionEnd - input.selectionStart).to.equal(3);
@@ -185,30 +185,30 @@ describe('text-field', () => {
   describe('has-value attribute', () => {
     it('should toggle the attribute on value change', async () => {
       textField.value = 'foo';
-      await nextFrame();
+      await nextUpdate(textField);
       expect(textField.hasAttribute('has-value')).to.be.true;
 
       textField.value = undefined;
-      await nextFrame();
+      await nextUpdate(textField);
       expect(textField.hasAttribute('has-value')).to.be.false;
     });
 
     it('should not add the attribute when the value is an empty string', async () => {
       textField.value = '';
-      await nextFrame();
+      await nextUpdate(textField);
       expect(textField.hasAttribute('has-value')).to.be.false;
     });
 
     // User could accidentally set a 0 or false value
     it('should add the attribute when the value is a number', async () => {
       textField.value = 0;
-      await nextFrame();
+      await nextUpdate(textField);
       expect(textField.hasAttribute('has-value')).to.be.true;
     });
 
     it('should add the attribute when the value is a boolean', async () => {
       textField.value = false;
-      await nextFrame();
+      await nextUpdate(textField);
       expect(textField.hasAttribute('has-value')).to.be.true;
     });
   });
@@ -222,7 +222,7 @@ describe('text-field', () => {
       input.dispatchEvent(event);
 
       textField.value = 'foo';
-      await nextFrame();
+      await nextUpdate(textField);
       expect(input.value).to.equal('foo');
     });
   });
@@ -243,14 +243,14 @@ describe('text-field', () => {
   describe(`methods`, () => {
     it('should clear the value when clear() is called', async () => {
       textField.value = 'Foo';
-      await nextFrame();
+      await nextUpdate(textField);
       textField.clear();
       expect(textField.value).not.to.be.ok;
     });
 
     it('should clear the value of native input when clear() is called', async () => {
       textField.value = 'Foo';
-      await nextFrame();
+      await nextUpdate(textField);
       textField.clear();
       expect(input.value).to.equal('');
     });
