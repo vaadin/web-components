@@ -267,10 +267,6 @@ export class PasswordField extends TextField {
     // Cancel the following focusout event
     e.preventDefault();
 
-    // By preventing `focusout` event, we also suppress related `change` event.
-    // Set the flag to dispatch `change` event manually when field loses focus.
-    this.__pendingChange = true;
-
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
     this.inputElement.focus();
