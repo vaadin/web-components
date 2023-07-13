@@ -22,7 +22,6 @@ registerStyles('vaadin-context-menu-overlay', [overlayStyles, styles], {
  * @mixes DirMixin
  * @mixes MenuOverlayMixin
  * @mixes OverlayMixin
- * @mixes PositionMixin
  * @mixes ThemableMixin
  * @protected
  */
