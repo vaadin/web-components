@@ -7,8 +7,8 @@ import {
   fixtureSync,
   keyboardEventFor,
   mousedown,
-  nextFrame,
   nextRender,
+  nextUpdate,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
@@ -55,13 +55,13 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should clear the field value on clear button click', async () => {
       clearButton.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.value).to.equal('');
     });
 
     it('should clear the input value on clear button click', async () => {
       clearButton.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
@@ -117,18 +117,18 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should reflect clearButtonVisible property to attribute', async () => {
       element.clearButtonVisible = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.true;
 
       element.clearButtonVisible = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.false;
     });
 
     it('should clear value on Esc when clearButtonVisible is true', async () => {
       element.clearButtonVisible = true;
       escKeyDown(clearButton);
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
@@ -193,14 +193,14 @@ const runTests = (defineHelper, baseMixin) => {
       beforeEach(async () => {
         input.value = 'foo';
         fire(input, 'input');
-        await nextFrame();
+        await nextUpdate(element);
         hasInputValueChangedSpy.resetHistory();
         valueChangedSpy.resetHistory();
       });
 
       it('should fire the event on clear button click', async () => {
         clearButton.click();
-        await nextFrame();
+        await nextUpdate(element);
         expect(hasInputValueChangedSpy.calledOnce).to.be.true;
         expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
       });
@@ -208,7 +208,7 @@ const runTests = (defineHelper, baseMixin) => {
       it('should fire the event on Esc', async () => {
         input.focus();
         await sendKeys({ press: 'Escape' });
-        await nextFrame();
+        await nextUpdate(element);
         expect(hasInputValueChangedSpy.calledOnce).to.be.true;
         expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
       });

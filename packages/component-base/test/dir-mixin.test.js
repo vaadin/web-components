@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { nextFrame } from '@vaadin/testing-helpers';
+import { nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { LitElement } from 'lit';
@@ -31,7 +31,7 @@ const runTests = (baseClass) => {
     beforeEach(async () => {
       element = document.createElement(tag);
       document.body.appendChild(element);
-      await nextFrame();
+      await nextRender();
     });
 
     afterEach(() => {
@@ -45,45 +45,45 @@ const runTests = (baseClass) => {
 
     it('should match native behavior when setting property', async () => {
       element.dir = 'rtl';
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.dir).to.equal('rtl');
       expect(element.getAttribute('dir')).to.equal('rtl');
     });
 
     it('should match native behavior when setting attribute', async () => {
       element.setAttribute('dir', 'rtl');
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.dir).to.equal('rtl');
       expect(element.getAttribute('dir')).to.equal('rtl');
     });
 
     it('should match native behavior when clearing property', async () => {
       element.dir = 'rtl';
-      await nextFrame();
+      await nextUpdate(element);
 
       element.dir = '';
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.dir).to.equal('');
       expect(element.hasAttribute('dir')).to.be.false;
     });
 
     it('should match native behavior when clearing attribute', async () => {
       element.setAttribute('dir', 'rtl');
-      await nextFrame();
+      await nextUpdate(element);
 
       element.removeAttribute('dir');
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.dir).to.equal('');
       expect(element.hasAttribute('dir')).to.be.false;
     });
 
     it('should not call removeAttribute twice when clearing value', async () => {
       element.dir = 'rtl';
-      await nextFrame();
+      await nextUpdate(element);
 
       const spy = sinon.spy(element, 'removeAttribute');
       element.removeAttribute('dir');
-      await nextFrame();
+      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
     });
   });
@@ -93,7 +93,7 @@ const runTests = (baseClass) => {
 
     before(async () => {
       document.body.appendChild(element);
-      await nextFrame();
+      await nextRender();
     });
 
     after(() => {
@@ -105,7 +105,7 @@ const runTests = (baseClass) => {
       // Clean up the dir attribute
       document.documentElement.removeAttribute('dir');
       element.removeAttribute('dir');
-      await nextFrame();
+      await nextUpdate(element);
     });
 
     // Toggle document dir attribute value
@@ -133,62 +133,62 @@ const runTests = (baseClass) => {
 
     it('should preserve direction if was set by the user with setAttribute', async () => {
       element.setAttribute('dir', 'ltr');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', '', 'rtl', null], ['ltr', 'ltr', 'ltr', 'ltr', 'ltr']);
     });
 
     it('should preserve direction if was set by the user with property', async () => {
       element.dir = 'ltr';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', '', 'rtl', null], ['ltr', 'ltr', 'ltr', 'ltr', 'ltr']);
     });
 
     it('should subscribe to the changes if set to equal the document direction using setAttribute', async () => {
       element.setAttribute('dir', 'ltr');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
 
       element.setAttribute('dir', 'rtl');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
     });
 
     it('should subscribe to the changes if set to equal the document direction using property', async () => {
       element.dir = 'ltr';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
 
       element.dir = 'rtl';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
     });
 
     it('should subscribe to the changes if attribute removed', async () => {
       element.setAttribute('dir', 'ltr');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
 
       element.removeAttribute('dir');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
     });
 
     it('should subscribe to the changes if property cleared', async () => {
       element.dir = 'ltr';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['rtl', 'ltr', 'rtl'], ['ltr', 'ltr', 'ltr']);
 
       element.dir = '';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'rtl', null]);
     });
@@ -197,7 +197,7 @@ const runTests = (baseClass) => {
       await expectDirections(['rtl', 'ltr', 'rtl'], ['rtl', 'ltr', 'rtl']);
 
       element.setAttribute('dir', 'ltr');
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'ltr', 'ltr']);
     });
@@ -206,7 +206,7 @@ const runTests = (baseClass) => {
       await expectDirections(['rtl', 'ltr', 'rtl'], ['rtl', 'ltr', 'rtl']);
 
       element.dir = 'ltr';
-      await nextFrame();
+      await nextUpdate(element);
 
       await expectDirections(['ltr', 'rtl', ''], ['ltr', 'ltr', 'ltr']);
     });

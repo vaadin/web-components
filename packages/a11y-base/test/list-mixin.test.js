@@ -10,8 +10,8 @@ import {
   fixtureSync,
   home,
   keyDownChar,
-  nextFrame,
   nextRender,
+  nextUpdate,
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -125,20 +125,20 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should update items when an element is added', async () => {
       list.appendChild(document.createElement(itemTag));
-      await nextFrame();
+      await nextRender();
       expect(list.items.length).to.be.equal(6);
     });
 
     it('should update items when an element is removed', async () => {
       list.removeChild(list.items[0]);
-      await nextFrame();
+      await nextRender();
       expect(list.items.length).to.be.equal(4);
     });
 
     it('should update items when an element is moved', async () => {
       const [e2, e4] = [list.items[2], list.items[4]];
       list.insertBefore(e4, e2);
-      await nextFrame();
+      await nextRender();
       expect(list.items[2]).to.be.equal(e4);
       expect(list.items[3]).to.be.equal(e2);
     });
@@ -147,7 +147,7 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy();
       list.addEventListener('items-changed', spy);
       list.appendChild(document.createElement(itemTag));
-      await nextFrame();
+      await nextRender();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -155,7 +155,7 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy();
       list.addEventListener('items-changed', spy);
       list.removeChild(list.items[0]);
-      await nextFrame();
+      await nextRender();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -200,7 +200,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should move focus to the next element on ArrowRight', async () => {
       list.orientation = 'horizontal';
-      await nextFrame();
+      await nextUpdate(list);
       list.focus();
       arrowRight(list);
       expect(list.items[1].focused).to.be.true;
@@ -228,16 +228,16 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should select an item when `selected` property is set', async () => {
       list.selected = 3;
-      await nextFrame();
+      await nextUpdate(list);
       expect(list.items[3].selected).to.be.true;
     });
 
     it('should clear selection when `selected` property is set to not numeric value', async () => {
       list.selected = 3;
-      await nextFrame();
+      await nextUpdate(list);
 
       list.selected = undefined;
-      await nextFrame();
+      await nextUpdate(list);
       expect(list.items[3].selected).to.be.false;
     });
 
@@ -271,19 +271,19 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should set a not disabled item focusable', async () => {
       list._setFocusable(3);
-      await nextFrame();
+      await nextUpdate(list);
       [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
     it('should not set a disabled item focusable but the next not disabled item instead', async () => {
       list._setFocusable(1);
-      await nextFrame();
+      await nextUpdate(list);
       [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
     it('should call focus() method on the item when setting it focusable', async () => {
       list._setFocusable(3);
-      await nextFrame();
+      await nextUpdate(list);
       const spy = sinon.spy(list.items[3], 'focus');
       list.focus();
       expect(spy.calledOnce).to.be.true;
@@ -327,7 +327,7 @@ const runTests = (defineHelper, baseMixin) => {
     describe('horizontal', () => {
       beforeEach(async () => {
         list.orientation = 'horizontal';
-        await nextFrame();
+        await nextUpdate(list);
       });
 
       describe('LTR mode', () => {
@@ -349,7 +349,7 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should move focus to the last element on End', async () => {
           list._focus(3);
-          await nextFrame();
+          await nextUpdate(list);
 
           end(list);
           expect(list.items[6].focused).to.be.true;
@@ -360,7 +360,7 @@ const runTests = (defineHelper, baseMixin) => {
         beforeEach(async () => {
           list.orientation = 'horizontal';
           list.setAttribute('dir', 'rtl');
-          await nextFrame();
+          await nextUpdate(list);
         });
 
         it('should move focus to the next element on ArrowLeft', () => {
@@ -381,7 +381,7 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should move focus to the last element on End', async () => {
           list._focus(3);
-          await nextFrame();
+          await nextUpdate(list);
           end(list);
           expect(list.items[6].focused).to.be.true;
         });
@@ -391,7 +391,7 @@ const runTests = (defineHelper, baseMixin) => {
     describe('vertical', () => {
       beforeEach(async () => {
         list.orientation = 'vertical';
-        await nextFrame();
+        await nextUpdate(list);
       });
 
       it('should move focus to the next element on ArrowDown', () => {
@@ -407,14 +407,14 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should move focus to the first element on Home', async () => {
         list._focus(3);
-        await nextFrame();
+        await nextUpdate(list);
         home(list);
         expect(list.items[0].focused).to.be.true;
       });
 
       it('should skip disabled items when moving focus on Home', async () => {
         list.items[0].disabled = true;
-        await nextFrame();
+        await nextUpdate(list);
 
         list._focus(3);
         home(list);
@@ -428,7 +428,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should skip disabled items when moving focus on End', async () => {
         list.items[6].disabled = true;
-        await nextFrame();
+        await nextUpdate(list);
         end(list);
         expect(list.items[5].focused).to.be.true;
       });
@@ -550,13 +550,13 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
       list.orientation = 'horizontal';
-      await nextFrame();
+      await nextUpdate(list);
       expect(list.getAttribute('aria-orientation')).to.be.equal('horizontal');
     });
 
     it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
       list.orientation = 'vertical';
-      await nextFrame();
+      await nextUpdate(list);
       expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
     });
 
@@ -568,7 +568,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should have orientation attribute on each item', async () => {
       list.orientation = 'horizontal';
-      await nextFrame();
+      await nextUpdate(list);
       list.querySelectorAll(itemTag).forEach((item) => {
         expect(item.getAttribute('orientation')).to.be.equal('horizontal');
       });
@@ -576,10 +576,10 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should change orientation attribute on each item', async () => {
       list.orientation = 'horizontal';
-      await nextFrame();
+      await nextUpdate(list);
 
       list.orientation = 'vertical';
-      await nextFrame();
+      await nextUpdate(list);
 
       list.querySelectorAll(itemTag).forEach((item) => {
         expect(item.getAttribute('orientation')).to.be.equal('vertical');
@@ -588,19 +588,19 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should have vertical attribute on newly added item', async () => {
       list.orientation = 'vertical';
-      await nextFrame();
+      await nextUpdate(list);
 
       const item = document.createElement(itemTag);
       item.textContent = 'foo';
       list.appendChild(item);
-      await nextFrame();
+      await nextRender();
       expect(item.hasAttribute('orientation')).to.be.true;
     });
 
     it('should have a protected boolean property to check vertical orientation', async () => {
       expect(list._vertical).to.be.true;
       list.orientation = 'horizontal';
-      await nextFrame();
+      await nextUpdate(list);
       expect(list._vertical).to.be.false;
     });
   });
@@ -621,7 +621,7 @@ const runTests = (defineHelper, baseMixin) => {
     describe('basic', () => {
       it('should update scrollLeft when scrolling to item horizontally', async () => {
         list.orientation = 'horizontal';
-        await nextFrame();
+        await nextUpdate(list);
 
         expect(list._scrollerElement.scrollLeft).to.be.equal(0);
 
@@ -631,7 +631,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should update scrollTop when scrolling to item vertically', async () => {
         list.orientation = 'vertical';
-        await nextFrame();
+        await nextUpdate(list);
 
         expect(list._scrollerElement.scrollTop).to.be.equal(0);
 
@@ -643,7 +643,7 @@ const runTests = (defineHelper, baseMixin) => {
     describe('scroll in advance', () => {
       beforeEach(async () => {
         list.orientation = 'horizontal';
-        await nextFrame();
+        await nextUpdate(list);
       });
 
       describe('LTR scroll', () => {
@@ -671,7 +671,7 @@ const runTests = (defineHelper, baseMixin) => {
       describe('RTL scroll', () => {
         beforeEach(async () => {
           list.setAttribute('dir', 'rtl');
-          await nextFrame();
+          await nextUpdate(list);
         });
 
         it('should scroll in advance when reaching left most visible item', () => {
@@ -715,30 +715,30 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should reset previously selected item when listbox and items are disabled', async () => {
       list.selected = 3;
-      await nextFrame();
+      await nextUpdate(list);
       expect(items[3].selected).to.be.true;
 
       list.disabled = true;
       items.forEach((item) => {
         item.disabled = true;
       });
-      await nextFrame();
+      await nextUpdate(list);
 
       expect(items[3].selected).to.be.false;
     });
 
     it('should restore previously selected item when listbox becomes re-enabled', async () => {
       list.selected = 3;
-      await nextFrame();
+      await nextUpdate(list);
 
       list.disabled = true;
       items.forEach((item) => {
         item.disabled = true;
       });
-      await nextFrame();
+      await nextUpdate(list);
 
       list.disabled = false;
-      await nextFrame();
+      await nextUpdate(list);
 
       expect(items[3].selected).to.be.true;
     });

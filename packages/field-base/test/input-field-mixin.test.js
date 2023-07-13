@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -53,19 +53,19 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate autocomplete property to the input', async () => {
       element.autocomplete = 'on';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.autocomplete).to.equal('on');
     });
 
     it('should propagate autocorrect property to the input', async () => {
       element.autocorrect = 'on';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.getAttribute('autocorrect')).to.equal('on');
     });
 
     it('should propagate autocapitalize property to the input', async () => {
       element.autocapitalize = 'none';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.getAttribute('autocapitalize')).to.equal('none');
     });
   });
@@ -171,7 +171,7 @@ const runTests = (defineHelper, baseMixin) => {
     it('should validate on input event', async () => {
       element.required = true;
       element.invalid = true;
-      await nextFrame();
+      await nextUpdate(element);
       const spy = sinon.spy(element, 'validate');
       input.focus();
       await sendKeys({ type: 'f' });
@@ -183,7 +183,7 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy(element, 'validate');
       element.invalid = true;
       element.value = 'foo';
-      await nextFrame();
+      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
     });
 
