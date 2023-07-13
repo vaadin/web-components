@@ -125,7 +125,7 @@ export class PasswordField extends TextField {
     super();
     this._setType('password');
     this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
-    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
+    this.__boundRevealButtonMouseDown = this._onRevealButtonMouseDown.bind(this);
     this.__lastChange = '';
   }
 
@@ -158,7 +158,7 @@ export class PasswordField extends TextField {
         btn.disabled = this.disabled;
 
         btn.addEventListener('click', this.__boundRevealButtonClick);
-        btn.addEventListener('touchend', this.__boundRevealButtonTouchend);
+        btn.addEventListener('mousedown', this.__boundRevealButtonMouseDown);
       },
     });
     this.addController(this._revealButtonController);
@@ -222,6 +222,12 @@ export class PasswordField extends TextField {
 
     if (!focused) {
       this._setPasswordVisible(false);
+
+      // Detect if `focusout` was prevented and if so, dispatch `change` event manually.
+      if (this.__lastChange !== this.inputElement.value) {
+        this.__lastChange = this.inputElement.value;
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      }
     } else {
       const isButtonFocused = this.getRootNode().activeElement === this._revealNode;
       // Remove focus-ring from the field when the reveal button gets focused
@@ -257,20 +263,13 @@ export class PasswordField extends TextField {
   }
 
   /** @private */
-  _onRevealButtonTouchend(e) {
-    // Cancel the following click event
+  _onRevealButtonMouseDown(e) {
+    // Cancel the following focusout event
     e.preventDefault();
-    this._togglePasswordVisibility();
 
     // By preventing `focusout` event, we also suppress related `change` event.
-    // Detect if that was the case and if so, dispatch `change` event manually.
-    if (this.__lastChange !== this.inputElement.value) {
-      this.__lastChange = this.inputElement.value;
-
-      this.validate();
-
-      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-    }
+    // Set the flag to dispatch `change` event manually when field loses focus.
+    this.__pendingChange = true;
 
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.

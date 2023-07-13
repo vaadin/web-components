@@ -46,45 +46,40 @@ describe('password-field', () => {
     expect(input.type).to.equal('text');
   });
 
-  it('should prevent touchend event on reveal button', () => {
-    const event1 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event1.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('text');
-
-    const event2 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event2.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('password');
+  it('should prevent mousedown event on reveal button', () => {
+    const event = fire(revealButton, 'mousedown');
+    expect(event.defaultPrevented).to.be.true;
   });
 
   it('should focus the input on reveal button touchend', () => {
     const spy = sinon.spy(input, 'focus');
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    fire(revealButton, 'mousedown');
 
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should dispatch change event on reveal button touchend', () => {
+  it('should dispatch change event on focusout after changing the value', () => {
     const spy = sinon.spy();
     passwordField.addEventListener('change', spy);
 
     input.value = 'test';
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    focusout(input);
 
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should not dispatch change on reveal button touchend if value is the same', () => {
+  it('should not dispatch change event on focusout if value is the same', () => {
     const spy = sinon.spy();
     passwordField.addEventListener('change', spy);
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    focusout(input);
 
     expect(spy.called).to.be.false;
   });
 
-  it('should not dispatch change on reveal button touchend after native change', () => {
+  it('should not dispatch change event on focusout after native change', () => {
     const spy = sinon.spy();
     passwordField.addEventListener('change', spy);
 
@@ -93,19 +88,9 @@ describe('password-field', () => {
 
     spy.resetHistory();
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    focusout(input);
 
     expect(spy.called).to.be.false;
-  });
-
-  it('should validate on prevented reveal button touchend', () => {
-    const spy = sinon.spy(passwordField, 'validate');
-
-    input.value = 'test';
-
-    makeSoloTouchEvent('touchend', null, revealButton);
-
-    expect(spy.calledOnce).to.be.true;
   });
 
   it('should toggle aria-pressed attribute on reveal button click', () => {
