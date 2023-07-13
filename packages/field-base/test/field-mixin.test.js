@@ -973,7 +973,7 @@ const runTests = (defineHelper, baseMixin) => {
       helper.id = 'helper-component';
       helper.textContent = 'Helper';
       element.appendChild(helper);
-      await nextRender(element);
+      await nextRender();
       expect(input.getAttribute('aria-describedby')).to.include('helper-component');
     });
 
