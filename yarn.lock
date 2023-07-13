@@ -2045,10 +2045,10 @@
     "@typescript-eslint/types" "5.49.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vaadin/testing-helpers@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.4.2.tgz#55c2b3be60b12cb43387d26ace9662945e824e99"
-  integrity sha512-P2vIbHrqAm3uvs7nSILHI6ULw8kC4BBlszO6g0Zztv2AxnpO1K2MoPK8djfq8sJqKA1k3s83CHeLQ4ho8mwV6g==
+"@vaadin/testing-helpers@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.4.3.tgz#3c35eb4c65ba47e6732927c9bb429f2586aaf5ab"
+  integrity sha512-tN5BWlru7Se35DeOP2wbbTgh4y5P6URDOOKxtuhayhQKIPLrLM3tKY8y2bdbAUUptWFKsdGPiRu2gBUYMxMICg==
   dependencies:
     "@esm-bundle/chai" "^4.3.1"
     "@open-wc/semantic-dom-diff" "^0.19.7"
