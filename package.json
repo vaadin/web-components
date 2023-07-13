@@ -32,7 +32,7 @@
     "@esm-bundle/chai": "^4.3.4",
     "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.1",
-    "@vaadin/testing-helpers": "^0.4.2",
+    "@vaadin/testing-helpers": "^0.4.3",
     "@web/dev-server": "^0.2.1",
     "@web/rollup-plugin-html": "^2.0.0",
     "@web/test-runner": "^0.16.1",
@@ -57,8 +57,8 @@
     "postcss-lit": "^1.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-package": "^1.3.0",
-    "puppeteer-core": "19.9.0",
     "puppeteer": "19.9.0",
+    "puppeteer-core": "19.9.0",
     "replace-in-file": "^6.3.5",
     "rimraf": "^5.0.1",
     "rollup": "^3.23.0",
@@ -67,15 +67,15 @@
     "stylelint-config-vaadin": "^1.0.0-alpha.1",
     "typescript": "^4.8.4"
   },
+  "resolutions": {
+    "puppeteer": "19.9.0",
+    "puppeteer-core": "19.9.0"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --fix",
       "prettier --write"
     ]
-  },
-  "resolutions": {
-    "puppeteer-core": "19.9.0",
-    "puppeteer": "19.9.0"
   },
   "workspaces": [
     "integration",

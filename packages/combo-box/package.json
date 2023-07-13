@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.4.2",
+    "@vaadin/testing-helpers": "^0.4.3",
     "@vaadin/text-field": "24.2.0-alpha4",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
