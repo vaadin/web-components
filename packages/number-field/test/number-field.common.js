@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -36,7 +36,7 @@ describe('number-field', () => {
       it('should set value with correct decimal places regardless of step', async () => {
         numberField.step = 2;
         numberField.value = 9.99;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         expect(numberField.value).equal('9.99');
       });
@@ -45,7 +45,7 @@ describe('number-field', () => {
         numberField.step = 3;
         numberField.min = 4;
         numberField.value = 4;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -54,14 +54,14 @@ describe('number-field', () => {
 
       it('should increment value on arrow up', async () => {
         numberField.step = 3;
-        await nextFrame();
+        await nextUpdate(numberField);
         arrowUp(input);
         expect(numberField.value).equal('3');
       });
 
       it('should decrement value on arrow down', async () => {
         numberField.step = 3;
-        await nextFrame();
+        await nextUpdate(numberField);
         arrowDown(input);
         expect(numberField.value).equal('-3');
       });
@@ -69,7 +69,7 @@ describe('number-field', () => {
       it('should not change value on arrow keys when readonly', async () => {
         numberField.readonly = true;
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         arrowUp(input);
         expect(numberField.value).to.be.equal('0');
@@ -82,7 +82,7 @@ describe('number-field', () => {
     describe('value control buttons', () => {
       it('should increase value by 1 on plus button click', async () => {
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -94,7 +94,7 @@ describe('number-field', () => {
         numberField.addEventListener('change', changeSpy);
 
         decreaseButton.click();
-        await nextFrame();
+        await nextUpdate(numberField);
 
         expect(changeSpy.callCount).to.equal(1);
       });
@@ -104,7 +104,7 @@ describe('number-field', () => {
         numberField.addEventListener('change', changeSpy);
 
         increaseButton.click();
-        await nextFrame();
+        await nextUpdate(numberField);
 
         expect(changeSpy.callCount).to.equal(1);
       });
@@ -114,7 +114,7 @@ describe('number-field', () => {
         numberField.addEventListener('value-changed', spy);
 
         decreaseButton.click();
-        await nextFrame();
+        await nextUpdate(numberField);
 
         expect(spy.callCount).to.equal(1);
       });
@@ -124,7 +124,7 @@ describe('number-field', () => {
         numberField.addEventListener('value-changed', spy);
 
         increaseButton.click();
-        await nextFrame();
+        await nextUpdate(numberField);
 
         expect(spy.callCount).to.equal(1);
       });
@@ -138,7 +138,7 @@ describe('number-field', () => {
       it('should increase value by 0.2 when step is 0.2 on plus button click', async () => {
         numberField.step = 0.2;
         numberField.value = 0.6;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -148,7 +148,7 @@ describe('number-field', () => {
       it('should adjust value to exact step on plus button click', async () => {
         numberField.step = 0.2;
         numberField.value = 0.5;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -157,7 +157,7 @@ describe('number-field', () => {
 
       it('should decrease value by 1 on minus button click', async () => {
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -167,7 +167,7 @@ describe('number-field', () => {
       it('should decrease value by 0.2 on minus button click', async () => {
         numberField.value = 0;
         numberField.step = 0.2;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -177,7 +177,7 @@ describe('number-field', () => {
       it('should adjust value to exact step on minus button click', async () => {
         numberField.value = 7;
         numberField.step = 2;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -187,7 +187,7 @@ describe('number-field', () => {
       it('should adjust decimals based on the step value when control button is pressed', async () => {
         numberField.value = 1;
         numberField.step = 0.001;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('1.001');
@@ -197,7 +197,7 @@ describe('number-field', () => {
         numberField.value = 1;
         numberField.step = 0.001;
         numberField.min = 0.0001;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('1.0001');
@@ -206,7 +206,7 @@ describe('number-field', () => {
       it('should not increase value on plus button click when max value is reached', async () => {
         numberField.value = 0;
         numberField.max = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -216,7 +216,7 @@ describe('number-field', () => {
       it('should not decrease value on minus button click when min value is reached', async () => {
         numberField.value = 0;
         numberField.min = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -231,7 +231,7 @@ describe('number-field', () => {
       it('should disable minus button if min limit is reached', async () => {
         numberField.value = 0;
         numberField.min = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
         expect(decreaseButton.hasAttribute('disabled')).to.be.true;
         expect(increaseButton.hasAttribute('disabled')).to.be.false;
       });
@@ -239,7 +239,7 @@ describe('number-field', () => {
       it('should disable plus button if max limit is reached', async () => {
         numberField.value = 1;
         numberField.max = 1;
-        await nextFrame();
+        await nextUpdate(numberField);
         expect(decreaseButton.hasAttribute('disabled')).to.be.false;
         expect(increaseButton.hasAttribute('disabled')).to.be.true;
       });
@@ -247,7 +247,7 @@ describe('number-field', () => {
       it('should not change value when the field is disabled and controls are clicked', async () => {
         numberField.disabled = true;
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('0');
@@ -259,7 +259,7 @@ describe('number-field', () => {
       it('should not change value on minus button click when min limit is reached', async () => {
         numberField.min = -1;
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
         expect(numberField.value).to.be.equal('-1');
@@ -271,7 +271,7 @@ describe('number-field', () => {
       it('should not change value on plus button click when max limit is reached', async () => {
         numberField.max = 1;
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('1');
@@ -285,7 +285,7 @@ describe('number-field', () => {
         numberField.max = 10;
         numberField.step = 6;
         numberField.value = 2;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('8');
@@ -296,7 +296,7 @@ describe('number-field', () => {
 
       it('should prevent touchend event on value control buttons', async () => {
         numberField.value = 0;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         let e = new CustomEvent('touchend', { cancelable: true });
         increaseButton.dispatchEvent(e);
@@ -312,7 +312,7 @@ describe('number-field', () => {
       it('should decrease value to max value on minus button click when value is over max', async () => {
         numberField.value = 50;
         numberField.max = 10;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -323,7 +323,7 @@ describe('number-field', () => {
         numberField.min = -17;
         numberField.value = -8;
         numberField.step = 4;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         decreaseButton.click();
 
@@ -334,7 +334,7 @@ describe('number-field', () => {
         numberField.min = -20;
         numberField.value = -1;
         numberField.step = 4;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         [-4, -8, -12, -16, -20].forEach((step) => {
           decreaseButton.click();
@@ -345,7 +345,7 @@ describe('number-field', () => {
       it('should increase value to min value on plus button click when value is under min', async () => {
         numberField.value = -40;
         numberField.min = -10;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -356,7 +356,7 @@ describe('number-field', () => {
         numberField.min = -17;
         numberField.value = -8;
         numberField.step = 4;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
 
@@ -368,7 +368,7 @@ describe('number-field', () => {
         numberField.max = 18;
         numberField.value = -1;
         numberField.step = 4;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         [1, 5, 9, 13, 17].forEach((step) => {
           increaseButton.click();
@@ -381,7 +381,7 @@ describe('number-field', () => {
         numberField.max = 0.02;
         numberField.value = -0.03;
         numberField.step = 0.01;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         [-0.02, -0.01, 0, 0.01, 0.02].forEach((step) => {
           increaseButton.click();
@@ -392,7 +392,7 @@ describe('number-field', () => {
       it('should correctly calculate the precision with decimal value', async () => {
         numberField.value = 5.1;
         numberField.step = 0.01;
-        await nextFrame();
+        await nextUpdate(numberField);
 
         increaseButton.click();
         expect(numberField.value).to.be.equal('5.11');
@@ -445,7 +445,7 @@ describe('number-field', () => {
           it('should set value to the first positive step value when min < 0 on plus button click', async () => {
             numberField.min = -19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -455,7 +455,7 @@ describe('number-field', () => {
           it('should set value to the first negative step value when min < 0 zero on plus button click', async () => {
             numberField.min = -19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -467,7 +467,7 @@ describe('number-field', () => {
           it('should set value to min when min > 0 on pus button click', async () => {
             numberField.min = 19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -477,7 +477,7 @@ describe('number-field', () => {
           it('should set value to min when min > 0 on minus button click', async () => {
             numberField.min = 19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -489,7 +489,7 @@ describe('number-field', () => {
           it('should set value to the first positive step value when min = 0 on plus button click', async () => {
             numberField.min = 0;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -499,7 +499,7 @@ describe('number-field', () => {
           it('should set value to 0 when min = 0 on minus button click', async () => {
             numberField.min = 0;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -515,7 +515,7 @@ describe('number-field', () => {
             // The closest is -24, cause with the next stepUp it will become -18
             numberField.max = -19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -525,7 +525,7 @@ describe('number-field', () => {
             numberField.value = '';
             numberField.max = -18;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -535,7 +535,7 @@ describe('number-field', () => {
           it('should set value to max when max < 0 on minus button click', async () => {
             numberField.max = -19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -547,7 +547,7 @@ describe('number-field', () => {
           it('should set value to the first positive step value when max > 0 on minus button click', async () => {
             numberField.max = 19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -557,7 +557,7 @@ describe('number-field', () => {
           it('should set value to the first step negative step value when max > 0 on minus button click', async () => {
             numberField.max = 19;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -569,7 +569,7 @@ describe('number-field', () => {
           it('should set value to 0 when max = 0 on plus button click', async () => {
             numberField.max = 0;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             increaseButton.click();
 
@@ -579,7 +579,7 @@ describe('number-field', () => {
           it('should set value to the first negative step value when max = 0 on minus button click', async () => {
             numberField.max = 0;
             numberField.step = 6;
-            await nextFrame();
+            await nextUpdate(numberField);
 
             decreaseButton.click();
 
@@ -593,7 +593,7 @@ describe('number-field', () => {
           numberField.min = -20;
           numberField.max = -3;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -603,7 +603,7 @@ describe('number-field', () => {
           numberField.value = '';
           numberField.min = -24;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -614,7 +614,7 @@ describe('number-field', () => {
           numberField.min = 0;
           numberField.max = 0;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
           expect(numberField.value).to.be.equal('0');
@@ -627,7 +627,7 @@ describe('number-field', () => {
           numberField.min = 3;
           numberField.max = 19;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -638,7 +638,7 @@ describe('number-field', () => {
           numberField.min = 19;
           numberField.max = -3;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -649,7 +649,7 @@ describe('number-field', () => {
           numberField.min = -19;
           numberField.max = 19;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -660,7 +660,7 @@ describe('number-field', () => {
           numberField.min = -19;
           numberField.max = -3;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
 
@@ -671,7 +671,7 @@ describe('number-field', () => {
           numberField.min = 3;
           numberField.max = 19;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
 
@@ -682,7 +682,7 @@ describe('number-field', () => {
           numberField.min = 19;
           numberField.max = -3;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
 
@@ -693,7 +693,7 @@ describe('number-field', () => {
           numberField.min = -19;
           numberField.max = 19;
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
 
@@ -704,7 +704,7 @@ describe('number-field', () => {
       describe('min and max values are undefined', () => {
         it('should set value to the first positive step value on minus button click', async () => {
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           increaseButton.click();
 
@@ -713,7 +713,7 @@ describe('number-field', () => {
 
         it('should set value to the first negative step value on minus button click', async () => {
           numberField.step = 6;
-          await nextFrame();
+          await nextUpdate(numberField);
 
           decreaseButton.click();
 

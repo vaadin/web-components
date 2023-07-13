@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 const validAddresses = [
@@ -43,7 +43,7 @@ describe('email-field', () => {
       validAddresses.forEach((address) => {
         it(`should treat ${address} as valid`, async () => {
           emailField.value = address;
-          await nextFrame();
+          await nextUpdate(emailField);
           emailField.validate();
           expect(emailField.invalid).to.be.false;
         });
@@ -54,7 +54,7 @@ describe('email-field', () => {
       invalidAddresses.forEach((address) => {
         it(`should treat ${address} as invalid`, async () => {
           emailField.value = address;
-          await nextFrame();
+          await nextUpdate(emailField);
           emailField.validate();
           expect(emailField.invalid).to.be.true;
         });
@@ -148,7 +148,7 @@ describe('email-field', () => {
 
     it('should fire a validated event on validation failure', async () => {
       field.required = true;
-      await nextFrame();
+      await nextUpdate(field);
       field.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;

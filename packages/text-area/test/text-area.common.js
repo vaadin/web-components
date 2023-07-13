@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 describe('text-area', () => {
@@ -25,7 +25,7 @@ describe('text-area', () => {
     describe('native', () => {
       async function assertAttrCanBeSet(prop, value) {
         textArea[prop] = value;
-        await nextFrame();
+        await nextUpdate(textArea);
 
         const attrValue = native.getAttribute(prop);
 
@@ -41,7 +41,7 @@ describe('text-area', () => {
       ['placeholder', 'value'].forEach((prop) => {
         it(`should set string property ${prop}`, async () => {
           textArea[prop] = 'foo';
-          await nextFrame();
+          await nextUpdate(textArea);
           expect(native[prop]).to.be.equal('foo');
         });
       });
@@ -49,11 +49,11 @@ describe('text-area', () => {
       ['disabled'].forEach((prop) => {
         it(`should set boolean property ${prop}`, async () => {
           textArea[prop] = true;
-          await nextFrame();
+          await nextUpdate(textArea);
           expect(native[prop]).to.be.true;
 
           textArea[prop] = false;
-          await nextFrame();
+          await nextUpdate(textArea);
           expect(native[prop]).to.be.false;
         });
       });
@@ -96,32 +96,32 @@ describe('text-area', () => {
 
       it('should update has-value attribute when value is set', async () => {
         textArea.value = 'foo';
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
       it('should not update has-value attribute when value is set to undefined', async () => {
         textArea.value = undefined;
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
       it('should not update has-value attribute when value is set to empty string', async () => {
         textArea.value = '';
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(textArea.hasAttribute('has-value')).to.be.false;
       });
 
       // User could accidentally set a 0 or false value
       it('should update has-value attribute when numeric value is set', async () => {
         textArea.value = 0;
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
 
       it('should update has-value attribute when boolean value is set', async () => {
         textArea.value = false;
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
     });
@@ -161,7 +161,7 @@ describe('text-area', () => {
 
       // Make sure there are enough characters to grow the textarea
       textArea.value = Array(400).join('400');
-      await nextFrame();
+      await nextUpdate(textArea);
 
       const newHeight = parseInt(window.getComputedStyle(inputField).height);
       expect(newHeight).to.be.at.least(originalHeight + 10);
@@ -180,7 +180,7 @@ describe('text-area', () => {
         lot
         of
         rows`;
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(parseFloat(window.getComputedStyle(textArea).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(container).height)).to.be.lte(100);
@@ -196,7 +196,7 @@ describe('text-area', () => {
 
       // Check that value modification doesn't break min-height rule
       textArea.value = '1 row';
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
       expect(window.getComputedStyle(container).height).to.be.equal('125px');
@@ -224,7 +224,7 @@ describe('text-area', () => {
         and
         even
         more`;
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
       expect(window.getComputedStyle(container).height).to.be.equal('175px');
@@ -234,29 +234,29 @@ describe('text-area', () => {
     it('should increase input container height', async () => {
       textArea.style.height = '200px';
       textArea.value = 'foo';
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(inputField.clientHeight).to.be.closeTo(200, 10);
     });
 
     it('should maintain scroll top', async () => {
       textArea.style.maxHeight = '100px';
       textArea.value = Array(400).join('400');
-      await nextFrame();
+      await nextUpdate(textArea);
 
       inputField.scrollTop = 200;
       textArea.value += 'foo';
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(inputField.scrollTop).to.equal(200);
     });
 
     it('should decrease height automatically', async () => {
       textArea.value = Array(400).join('400');
-      await nextFrame();
+      await nextUpdate(textArea);
 
       const height = textArea.clientHeight;
       textArea.value = '';
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(textArea.clientHeight).to.be.below(height);
     });
@@ -266,11 +266,11 @@ describe('text-area', () => {
 
       const value = Array(400).join('400');
       setInputValue(textArea, value);
-      await nextFrame();
+      await nextUpdate(textArea);
       const height = textArea.clientHeight;
 
       setInputValue(textArea, value.slice(0, -1));
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(textArea.clientHeight).to.equal(height);
     });
 
@@ -294,10 +294,10 @@ describe('text-area', () => {
       textArea.style.maxHeight = '100px';
 
       textArea.value = Array(400).join('400');
-      await nextFrame();
+      await nextUpdate(textArea);
 
       textArea.value = textArea.value.slice(0, -1);
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(native.clientHeight).to.equal(inputField.scrollHeight);
     });
 
@@ -308,7 +308,7 @@ describe('text-area', () => {
       textArea.style.padding = '0';
 
       textArea.value = 'foo';
-      await nextFrame();
+      await nextUpdate(textArea);
 
       expect(native.clientHeight).to.equal(
         Math.round(
@@ -341,7 +341,7 @@ describe('text-area', () => {
       beforeEach(async () => {
         textArea.style.height = '100px';
         textArea.value = 'a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz';
-        await nextFrame();
+        await nextUpdate(textArea);
       });
 
       it('should be 0 initially', () => {
@@ -376,9 +376,9 @@ describe('text-area', () => {
 
       it('should update value on resize', async () => {
         inputField.scrollTop = 10;
-        await nextFrame();
+        await nextUpdate(textArea);
         textArea.style.height = `${inputField.scrollHeight}px`;
-        await nextFrame();
+        await nextUpdate(textArea);
         expect(getVerticalScrollPosition()).to.equal('0px');
       });
     });
