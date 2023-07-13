@@ -143,7 +143,8 @@ export class PasswordField extends TextField {
     super();
     this._setType('password');
     this.__boundRevealButtonClick = this._onRevealButtonClick.bind(this);
-    this.__boundRevealButtonTouchend = this._onRevealButtonTouchend.bind(this);
+    this.__boundRevealButtonMouseDown = this._onRevealButtonMouseDown.bind(this);
+    this.__lastChange = '';
   }
 
   /** @protected */
@@ -160,7 +161,7 @@ export class PasswordField extends TextField {
         btn.disabled = host.disabled;
 
         btn.addEventListener('click', host.__boundRevealButtonClick);
-        btn.addEventListener('touchend', host.__boundRevealButtonTouchend);
+        btn.addEventListener('mousedown', host.__boundRevealButtonMouseDown);
       },
     );
     this.addController(this._revealButtonController);
@@ -173,6 +174,19 @@ export class PasswordField extends TextField {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
+  }
+
+  /**
+   * Override an event listener inherited from `InputControlMixin`
+   * to store the value at the moment of the native `change` event.
+   * @param {Event} event
+   * @protected
+   * @override
+   */
+  _onChange(event) {
+    super._onChange(event);
+
+    this.__lastChange = this.inputElement.value;
   }
 
   /**
@@ -211,6 +225,12 @@ export class PasswordField extends TextField {
 
     if (!focused) {
       this._setPasswordVisible(false);
+
+      // Detect if `focusout` was prevented and if so, dispatch `change` event manually.
+      if (this.__lastChange !== this.inputElement.value) {
+        this.__lastChange = this.inputElement.value;
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      }
     } else {
       const isButtonFocused = this.getRootNode().activeElement === this._revealNode;
       // Remove focus-ring from the field when the reveal button gets focused
@@ -246,10 +266,10 @@ export class PasswordField extends TextField {
   }
 
   /** @private */
-  _onRevealButtonTouchend(e) {
-    // Cancel the following click event
+  _onRevealButtonMouseDown(e) {
+    // Cancel the following focusout event
     e.preventDefault();
-    this._togglePasswordVisibility();
+
     // Focus the input to avoid problem with password still visible
     // when user clicks the reveal button and then clicks outside.
     this.inputElement.focus();
