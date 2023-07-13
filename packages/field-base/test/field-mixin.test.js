@@ -665,7 +665,7 @@ const runTests = (defineHelper, baseMixin) => {
           helper.setAttribute('slot', 'helper');
           helper.textContent = 'Lazy';
           element.appendChild(helper);
-          await nextUpdate(element);
+          await nextRender();
         });
 
         it('should store a reference to the lazily added helper', () => {
