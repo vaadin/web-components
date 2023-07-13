@@ -142,7 +142,7 @@ const runTests = (defineHelper, baseMixin) => {
       input = document.createElement('input');
       element.appendChild(input);
       element._setInputElement(input);
-      await nextUpdate(element);
+      await nextRender();
     });
 
     afterEach(() => {
@@ -163,7 +163,7 @@ const runTests = (defineHelper, baseMixin) => {
     it('should not call an input event listener when input is unset', async () => {
       element.removeChild(input);
       element._setInputElement(undefined);
-      await nextUpdate(element);
+      await nextRender();
       input.dispatchEvent(new CustomEvent('input'));
       expect(inputSpy.called).to.be.false;
     });
@@ -171,7 +171,7 @@ const runTests = (defineHelper, baseMixin) => {
     it('should not call a change event listener when input is unset', async () => {
       element.removeChild(input);
       element._setInputElement(undefined);
-      await nextUpdate(element);
+      await nextRender();
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
     });
@@ -198,7 +198,7 @@ const runTests = (defineHelper, baseMixin) => {
       input = document.createElement('input');
       element.appendChild(input);
       element._setInputElement(input);
-      await nextUpdate(element);
+      await nextRender();
     });
 
     describe('without user input', () => {
