@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, esc, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, esc, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -48,7 +48,7 @@ describe('vaadin-dialog', () => {
       dialog.renderer = (root) => {
         root.innerHTML = '<div>Simple dialog</div>';
       };
-      await nextFrame();
+      await nextUpdate(dialog);
 
       overlay = dialog.$.overlay;
       backdrop = overlay.$.backdrop;
@@ -66,7 +66,7 @@ describe('vaadin-dialog', () => {
 
       it('overlay should have the `aria-label` attribute (if set)', async () => {
         dialog.ariaLabel = 'accessible';
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
       });
 
@@ -76,25 +76,25 @@ describe('vaadin-dialog', () => {
 
       it('overlay should not have `aria-label` attribute if set to undefined', async () => {
         dialog.ariaLabel = 'accessible';
-        await nextFrame();
+        await nextUpdate(dialog);
         dialog.ariaLabel = undefined;
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
       it('overlay should not have `aria-label` attribute if set to null', async () => {
         dialog.ariaLabel = 'accessible';
-        await nextFrame();
+        await nextUpdate(dialog);
         dialog.ariaLabel = null;
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
       it('overlay should not have `aria-label` attribute if set to empty string', async () => {
         dialog.ariaLabel = 'accessible';
-        await nextFrame();
+        await nextUpdate(dialog);
         dialog.ariaLabel = '';
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
@@ -106,13 +106,13 @@ describe('vaadin-dialog', () => {
     describe('no-close-on-esc', () => {
       it('should close itself on ESC press by default', async () => {
         esc(document.body);
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(dialog.opened).to.be.false;
       });
 
       it('should not close itself on ESC press when no-close-on-esc is true', async () => {
         dialog.noCloseOnEsc = true;
-        await nextFrame();
+        await nextUpdate(dialog);
         esc(document.body);
         expect(dialog.opened).to.be.true;
       });
@@ -121,13 +121,13 @@ describe('vaadin-dialog', () => {
     describe('no-close-on-outside-click', () => {
       it('should close itself on outside click by default', async () => {
         click(backdrop);
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(dialog.opened).to.be.false;
       });
 
       it('should not close itself on outside click when no-close-on-outside-click is true', async () => {
         dialog.noCloseOnOutsideClick = true;
-        await nextFrame();
+        await nextUpdate(dialog);
         click(backdrop);
         expect(dialog.opened).to.be.true;
       });
@@ -181,7 +181,7 @@ describe('vaadin-dialog', () => {
 
       it('should not be modal when modeless is true', async () => {
         dialog.modeless = true;
-        await nextFrame();
+        await nextUpdate(dialog);
         expect(overlay.modeless).to.be.true;
         expect(backdrop.hidden).to.be.true;
       });
@@ -239,15 +239,15 @@ describe('vaadin-dialog', () => {
 
     it('should move focus to the dialog on open', async () => {
       dialog.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await nextRender();
       expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
     it('should restore focus on dialog close', async () => {
       dialog.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await nextRender();
       dialog.opened = false;
-      await aTimeout(0);
+      await nextRender();
       expect(getDeepActiveElement()).to.equal(button);
     });
   });
