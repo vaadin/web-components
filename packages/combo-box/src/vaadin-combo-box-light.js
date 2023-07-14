@@ -199,16 +199,16 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
    * @protected
    * @override
    */
-  _onFocusout(event) {
+  _shouldRemoveFocus(event) {
     const isBlurringControlButtons = event.target === this._toggleElement || event.target === this.clearElement;
     const isFocusingInputElement = event.relatedTarget && event.relatedTarget === this._nativeInput;
 
     // prevent closing the overlay when moving focus from clear or toggle buttons to the internal input
     if (isBlurringControlButtons && isFocusingInputElement) {
-      return;
+      return false;
     }
 
-    super._onFocusout(event);
+    return super._shouldRemoveFocus(event);
   }
 }
 
