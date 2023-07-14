@@ -8,31 +8,25 @@ describe('validation', () => {
   let comboBox, input;
 
   describe('basic', () => {
+    let validateSpy;
+
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
       input = comboBox.inputElement;
+      validateSpy = sinon.spy(comboBox, 'validate');
     });
 
-    it('should pass the validation when the field is valid', () => {
+    it('should pass validation by default', () => {
       expect(comboBox.checkValidity()).to.be.true;
       expect(comboBox.validate()).to.be.true;
       expect(comboBox.invalid).to.be.false;
     });
 
-    it('should not pass the validation when the field is required and has no value', () => {
-      comboBox.required = true;
-      expect(comboBox.checkValidity()).to.be.false;
-      expect(comboBox.validate()).to.be.false;
-      expect(comboBox.invalid).to.be.true;
-    });
-
-    it('should pass the validation when the field is required and has a value', () => {
-      comboBox.required = true;
-      comboBox.value = 'foo';
-      expect(comboBox.checkValidity()).to.be.true;
-      expect(comboBox.validate()).to.be.true;
-      expect(comboBox.invalid).to.be.false;
+    it('should validate on blur', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -66,11 +60,32 @@ describe('validation', () => {
       });
 
       it('should not validate on blur when document does not have focus', () => {
-        const spy = sinon.spy(comboBox, 'validate');
         input.focus();
         input.blur();
-        expect(spy.called).to.be.false;
+        expect(validateSpy.called).to.be.false;
       });
+    });
+  });
+
+  describe('required', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+      comboBox.required = true;
+      input = comboBox.inputElement;
+    });
+
+    it('should fail validation without value', () => {
+      expect(comboBox.checkValidity()).to.be.false;
+      expect(comboBox.validate()).to.be.false;
+      expect(comboBox.invalid).to.be.true;
+    });
+
+    it('should pass validation with a value', () => {
+      comboBox.value = 'foo';
+      expect(comboBox.checkValidity()).to.be.true;
+      expect(comboBox.validate()).to.be.true;
+      expect(comboBox.invalid).to.be.false;
     });
   });
 
