@@ -555,27 +555,3 @@ describe('column - simple grid', () => {
     expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');
   });
 });
-
-describe('column - simple grid with rowHeader', () => {
-  let grid, column;
-
-  beforeEach(async () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column row-header path="value"></vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    column = grid.querySelector('vaadin-grid-column');
-    grid.size = 1;
-    grid.dataProvider = infiniteDataProvider;
-    await nextFrame();
-  });
-
-  it('should look properly in the shadow dom (role=rowheader)', async () => {
-    await nextFrame();
-    const firstCell = grid.shadowRoot.querySelector('tbody tr:first-child td:first-child');
-    expect(firstCell).to.be.ok;
-    expect(firstCell.getAttribute('role')).to.equal('rowheader');
-    expect(column.rowHeader).to.be.true;
-  });
-});

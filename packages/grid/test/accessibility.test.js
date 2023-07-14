@@ -86,25 +86,26 @@ describe('accessibility', () => {
         expect(grid.$.footer.children[0].getAttribute('role')).to.equal('row');
       });
 
-      it('should have role=rowheader for cells marked row-header, and role=gridcell row for other columns not marked with row-header', () => {
-        for (const child of grid.$.items.children) {
-          expect(child.children[0].getAttribute('role')).to.equal('gridcell');
-          expect(child.children[0].tagName.toLowerCase()).to.equal('td');
-          expect(child.children[1].getAttribute('role')).to.equal('gridcell');
-          expect(child.children[1].tagName.toLowerCase()).to.equal('td');
-          expect(child.children[2].getAttribute('role')).to.equal('rowheader');
-          expect(child.children[2].getAttribute('scope')).not.exist;
-          expect(child.children[2].tagName.toLowerCase()).to.equal('td');
-        }
-      });
-
-      it('the last column should have a row-header attribute added', () => {
-        expect(grid.children[2].getAttribute('row-header')).to.exist;
-      });
-
       it('should have role columnheader on header cells', () => {
         expect(grid.$.header.children[0].children[0].getAttribute('role')).to.equal('columnheader');
         expect(grid.$.header.children[0].children[1].getAttribute('role')).to.equal('columnheader');
+      });
+
+      it('should have role gridcell on body cells by default', () => {
+        expect(grid.$.items.children[0].children[0].getAttribute('role')).to.equal('gridcell');
+        expect(grid.$.items.children[0].children[1].getAttribute('role')).to.equal('gridcell');
+      });
+
+      it('should have role rowheader on body cells when `rowHeader` is set to true', () => {
+        expect(grid.$.items.children[0].children[2].getAttribute('role')).to.equal('rowheader');
+        expect(grid.$.items.children[1].children[2].getAttribute('role')).to.equal('rowheader');
+      });
+
+      it('should change role from rowheader to gridcell when `rowHeader` is set to false', () => {
+        const columns = grid.querySelectorAll('vaadin-grid-column');
+        columns[2].rowHeader = false;
+        expect(grid.$.items.children[0].children[2].getAttribute('role')).to.equal('gridcell');
+        expect(grid.$.items.children[1].children[2].getAttribute('role')).to.equal('gridcell');
       });
     });
 
