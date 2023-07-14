@@ -573,7 +573,7 @@ describe('header/footer feature', () => {
     describe('scroll', () => {
       beforeEach(async () => {
         dialog.renderer = createRenderer(Array(100).join('Lorem ipsum dolor sit amet\n'));
-        await nextRender();
+        await nextUpdate(dialog);
       });
 
       it('should set overflow to "bottom" when scrollbar appears after re-render', () => {
