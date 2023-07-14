@@ -129,6 +129,7 @@ describe('vaadin-dialog', () => {
         dialog.noCloseOnOutsideClick = true;
         await nextUpdate(dialog);
         click(backdrop);
+        await nextUpdate(dialog);
         expect(dialog.opened).to.be.true;
       });
     });
