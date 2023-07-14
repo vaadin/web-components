@@ -265,21 +265,6 @@ export const ColumnBaseMixin = (superClass) =>
         .filter((cell) => cell);
     }
 
-    /**
-     * @param rowHeader
-     * @param cells
-     * @private
-     */
-    _rowHeaderChanged(rowHeader, cells) {
-      if (!cells.value) {
-        return;
-      }
-
-      cells.value.forEach((cell) => {
-        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
-      });
-    }
-
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -436,6 +421,17 @@ export const ColumnBaseMixin = (superClass) =>
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._firstFrozenToEnd = firstFrozenToEnd;
       }
+    }
+
+    /** @private */
+    _rowHeaderChanged(rowHeader, cells) {
+      if (!cells.value) {
+        return;
+      }
+
+      cells.value.forEach((cell) => {
+        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
+      });
     }
 
     /**
