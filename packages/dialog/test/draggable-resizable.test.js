@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-area/vaadin-text-area.js';
 import './not-animated-styles.js';
@@ -125,7 +125,7 @@ describe('resizable', () => {
       root.innerHTML = '<div>Resizable dialog</div>';
     };
     dialog.opened = true;
-    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    await nextRender();
     overlayPart = dialog.$.overlay.$.overlay;
     bounds = overlayPart.getBoundingClientRect();
     dx = 30;
@@ -367,7 +367,7 @@ describe('draggable', () => {
     await nextUpdate(dialog);
 
     dialog.opened = true;
-    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    await nextRender();
 
     container = dialog.$.overlay.$.resizerContainer;
     content = dialog.$.overlay.$.content;

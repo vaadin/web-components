@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dialog.js';
 
@@ -52,7 +52,7 @@ describe('vaadin-dialog renderer', () => {
     expect(overlay.textContent).to.equal('foo');
 
     dialog.renderer = null;
-    await nextFrame();
+    await nextUpdate(dialog);
 
     expect(overlay.textContent).to.equal('');
   });

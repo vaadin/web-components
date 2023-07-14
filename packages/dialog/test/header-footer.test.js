@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-dialog.js';
@@ -52,7 +52,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerTitle = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(overlay.querySelector('[slot=title]')).to.not.exist;
     });
 
@@ -62,7 +62,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerTitle = '';
-      await nextRender();
+      await nextUpdate(dialog);
       expect(overlay.querySelector('[slot=title]')).to.not.exist;
     });
 
@@ -86,7 +86,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerTitle = null;
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.hasAttribute('has-title')).to.be.not.ok;
     });
@@ -124,7 +124,7 @@ describe('header/footer feature', () => {
         await nextRender();
 
         dialog.headerTitle = null;
-        await nextRender();
+        await nextUpdate(dialog);
         expect(overlay.hasAttribute('aria-label')).to.be.false;
       });
 
@@ -204,7 +204,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
 
@@ -248,7 +248,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.footerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.not.include(FOOTER_CONTENT);
       expect(overlay.querySelector('div[slot=footer]')).to.not.exist;
@@ -261,7 +261,7 @@ describe('header/footer feature', () => {
 
       const NEW_FOOTER_CONTENT = '__NEW_FOOTER_CONTENT__';
       dialog.footerRenderer = createRenderer(NEW_FOOTER_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.include(NEW_FOOTER_CONTENT);
       expect(overlay.textContent).to.not.include(FOOTER_CONTENT);
@@ -287,7 +287,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.footerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
     });
 
@@ -337,7 +337,7 @@ describe('header/footer feature', () => {
 
       const NEW_BODY_CONTENT = '__NEW_BODY_CONTENT__';
       dialog.renderer = createRenderer(NEW_BODY_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.include(HEADER_CONTENT);
 
@@ -356,11 +356,11 @@ describe('header/footer feature', () => {
 
       const NEW_HEADER_CONTENT = '__NEW_HEADER_CONTENT__';
       dialog.headerRenderer = createRenderer(NEW_HEADER_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       const NEW_FOOTER_CONTENT = '__NEW_FOOTER_CONTENT__';
       dialog.footerRenderer = createRenderer(NEW_FOOTER_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
       expect(overlay.textContent).to.include(NEW_HEADER_CONTENT);
@@ -406,7 +406,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.renderer = createRenderer(NEW_BODY_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.include(HEADER_TITLE);
       expect(overlay.textContent).to.not.include(BODY_CONTENT);
@@ -440,7 +440,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerTitle = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -455,7 +455,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
 
       dialog.headerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(getComputedStyle(headerPart).display).to.not.be.equal('none');
     });
 
@@ -471,7 +471,7 @@ describe('header/footer feature', () => {
 
       dialog.headerTitle = null;
       dialog.headerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
     });
   });
@@ -513,7 +513,7 @@ describe('header/footer feature', () => {
         await nextResize(overlay);
 
         dialog.headerRenderer = null;
-        await nextRender();
+        await nextUpdate(dialog);
 
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
@@ -523,7 +523,7 @@ describe('header/footer feature', () => {
         await nextResize(overlay);
 
         dialog.footerRenderer = null;
-        await nextRender();
+        await nextUpdate(dialog);
 
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
@@ -537,7 +537,7 @@ describe('header/footer feature', () => {
         expect(overlay.hasAttribute('overflow')).to.be.false;
 
         dialog.headerTitle = 'Title';
-        await nextRender();
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
@@ -549,7 +549,7 @@ describe('header/footer feature', () => {
         await nextResize(overlay);
 
         dialog.headerTitle = null;
-        await nextRender();
+        await nextUpdate(dialog);
 
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
@@ -562,7 +562,7 @@ describe('header/footer feature', () => {
         dialog.headerRenderer = null;
         dialog.footerRenderer = null;
         dialog.headerTitle = null;
-        await nextRender();
+        await nextUpdate(dialog);
 
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
