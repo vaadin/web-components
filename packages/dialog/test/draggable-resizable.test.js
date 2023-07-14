@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-area/vaadin-text-area.js';
 import './not-animated-styles.js';
@@ -63,12 +63,12 @@ describe('helper methods', () => {
     dialog1.renderer = (root) => {
       root.innerHTML = '<div>Modeless dialog 1</div>';
     };
-
+    await nextUpdate(dialog1);
     dialog2 = dialogs[1];
     dialog2.renderer = (root) => {
       root.innerHTML = '<div>Modeless dialog 2</div>';
     };
-    await nextFrame();
+    await nextUpdate(dialog2);
     overlay = dialog1.$.overlay;
     overlayPart = overlay.$.overlay;
     container = overlay.$.resizerContainer;
@@ -105,7 +105,7 @@ describe('helper methods', () => {
 
   it('should not move to top if not modeless', async () => {
     dialog1.modeless = false;
-    await nextFrame();
+    await nextUpdate(dialog1);
     const spy = sinon.spy(dialog1.$.overlay, 'bringToFront');
     dispatchMouseEvent(container, 'mousedown');
     expect(spy.called).to.be.false;
@@ -364,7 +364,7 @@ describe('draggable', () => {
         <button>OK</button>
       `;
     };
-    await nextFrame();
+    await nextUpdate(dialog);
 
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
@@ -530,7 +530,7 @@ describe('draggable', () => {
     dialog.modeless = true;
     button.style.marginBottom = '200px';
     dialog.$.overlay.setBounds({ height: '100px' });
-    await nextFrame();
+    await nextUpdate(dialog);
     container.scrollTop = 100;
     expect(container.scrollTop).to.equal(100);
     drag(container);
