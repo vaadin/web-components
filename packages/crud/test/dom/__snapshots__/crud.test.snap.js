@@ -111,6 +111,7 @@ snapshots["vaadin-crud host default"] =
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-13">
       <vaadin-crud-edit
+        aria-label="Edit"
         role="button"
         tabindex="0"
       >
