@@ -47,21 +47,6 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, the cells for this column will be rendered with the `role` attribute
-         * set as `rowheader`, instead of the `gridcell` role value used by default.
-         *
-         * When a column is set as row header, its cells will be announced by screen readers
-         * while navigating to help user identify the current row as uniquely as possible.
-         *
-         * @attr {boolean} row-header
-         * @type {boolean}
-         */
-        rowHeader: {
-          type: Boolean,
-          value: false,
-        },
-
-        /**
          * When true, the column is frozen to end of grid.
          *
          * When a column inside of a column group is frozen to end, all of the sibling columns
@@ -72,6 +57,21 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {boolean}
          */
         frozenToEnd: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * When true, the cells for this column will be rendered with the `role` attribute
+         * set as `rowheader`, instead of the `gridcell` role value used by default.
+         *
+         * When a column is set as row header, its cells will be announced by screen readers
+         * while navigating to help user identify the current row as uniquely as possible.
+         *
+         * @attr {boolean} row-header
+         * @type {boolean}
+         */
+        rowHeader: {
           type: Boolean,
           value: false,
         },

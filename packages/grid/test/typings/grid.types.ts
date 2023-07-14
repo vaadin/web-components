@@ -244,6 +244,7 @@ assertType<boolean | null | undefined>(narrowedColumn.resizable);
 assertType<boolean>(narrowedColumn.frozen);
 assertType<boolean>(narrowedColumn.frozenToEnd);
 assertType<boolean>(narrowedColumn.hidden);
+assertType<boolean>(narrowedColumn.rowHeader);
 assertType<string | null | undefined>(narrowedColumn.header);
 assertType<GridColumnTextAlign | null | undefined>(narrowedColumn.textAlign);
 assertType<string | null | undefined>(narrowedColumn.path);
