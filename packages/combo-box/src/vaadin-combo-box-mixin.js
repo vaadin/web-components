@@ -1227,7 +1227,8 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Override method inherited from `FocusMixin` to validate on blur.
+     * Override method inherited from `FocusMixin`
+     * to close the overlay on blur and commit the value.
      *
      * @param {boolean} focused
      * @protected
@@ -1241,9 +1242,10 @@ export const ComboBoxMixin = (subclass) =>
         // which will result in attempting to commit the same custom value once again.
         if (!this.opened && this.allowCustomValue && this._inputElementValue === this._lastCustomValue) {
           delete this._lastCustomValue;
-        } else {
-          this._closeOrCommit();
+          return;
         }
+
+        this._closeOrCommit();
       }
     }
 
