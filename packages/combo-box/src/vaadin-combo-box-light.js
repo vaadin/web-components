@@ -196,19 +196,35 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   }
 
   /**
+   * Override method inherited from `FocusMixin` to validate on blur.
+   * @param {boolean} focused
    * @protected
    * @override
    */
-  _onFocusout(event) {
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    // Do not validate when focusout is caused by document
+    // losing focus, which happens on browser tab switch.
+    if (!focused && document.hasFocus()) {
+      this.validate();
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _shouldRemoveFocus(event) {
     const isBlurringControlButtons = event.target === this._toggleElement || event.target === this.clearElement;
     const isFocusingInputElement = event.relatedTarget && event.relatedTarget === this._nativeInput;
 
     // prevent closing the overlay when moving focus from clear or toggle buttons to the internal input
     if (isBlurringControlButtons && isFocusingInputElement) {
-      return;
+      return false;
     }
 
-    super._onFocusout(event);
+    return super._shouldRemoveFocus(event);
   }
 }
 

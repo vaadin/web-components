@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -48,12 +49,13 @@ function findItemIndex(items, callback) {
  * @mixes DisabledMixin
  * @mixes InputMixin
  * @mixes KeyboardMixin
+ * @mixes FocusMixin
  * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
   class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))),
+    ControllerMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass))))),
   ) {
     static get properties() {
       return {
@@ -253,7 +255,6 @@ export const ComboBoxMixin = (subclass) =>
 
     constructor() {
       super();
-      this._boundOnFocusout = this._onFocusout.bind(this);
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
@@ -319,8 +320,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this._initOverlay();
       this._initScroller();
-
-      this.addEventListener('focusout', this._boundOnFocusout);
 
       this._lastCommittedValue = this.value;
 
@@ -1227,20 +1226,18 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _onFocusout(event) {
-      // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
-      // Do not focus the input in this case, because it would break announcement for the item.
-      if (event.relatedTarget && event.relatedTarget.localName === `${this._tagNamePrefix}-item`) {
-        return;
-      }
+    /**
+     * Override method inherited from `FocusMixin`
+     * to close the overlay on blur and commit the value.
+     *
+     * @param {boolean} focused
+     * @protected
+     * @override
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
 
-      // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-      if (event.relatedTarget === this._overlayElement) {
-        event.composedPath()[0].focus();
-        return;
-      }
-      if (!this.readonly && !this._closeOnBlurIsPrevented) {
+      if (!focused && !this.readonly && !this._closeOnBlurIsPrevented) {
         // User's logic in `custom-value-set` event listener might cause input to blur,
         // which will result in attempting to commit the same custom value once again.
         if (!this.opened && this.allowCustomValue && this._inputElementValue === this._lastCustomValue) {
@@ -1250,6 +1247,32 @@ export const ComboBoxMixin = (subclass) =>
 
         this._closeOrCommit();
       }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to not remove focused
+     * state when focus moves to the overlay.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
+      // Do not focus the input in this case, because it would break announcement for the item.
+      if (event.relatedTarget && event.relatedTarget.localName === `${this._tagNamePrefix}-item`) {
+        return false;
+      }
+
+      // Do not blur when focus moves to the overlay
+      // Also, fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
+      if (event.relatedTarget === this._overlayElement) {
+        event.composedPath()[0].focus();
+        return false;
+      }
+
+      return true;
     }
 
     /** @private */

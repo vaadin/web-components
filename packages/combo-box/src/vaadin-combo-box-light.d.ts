@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -152,6 +153,7 @@ interface ComboBoxLight<TItem = ComboBoxDefaultItem>
     InputMixinClass,
     DisabledMixinClass,
     ThemableMixinClass,
+    FocusMixinClass,
     ThemePropertyMixinClass,
     ValidateMixinClass {}
 
