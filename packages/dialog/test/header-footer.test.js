@@ -165,7 +165,7 @@ describe('header/footer feature', () => {
       await nextRender();
 
       dialog.headerRenderer = null;
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
       expect(overlay.querySelector('div[slot=header-content]')).to.not.exist;
@@ -178,7 +178,7 @@ describe('header/footer feature', () => {
 
       const NEW_HEADER_CONTENT = '__NEW_HEADER_CONTENT__';
       dialog.headerRenderer = createRenderer(NEW_HEADER_CONTENT);
-      await nextRender();
+      await nextUpdate(dialog);
 
       expect(overlay.textContent).to.include(NEW_HEADER_CONTENT);
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
@@ -531,6 +531,7 @@ describe('header/footer feature', () => {
       it('should set overflow attribute when header title property is set', async () => {
         dialog.headerRenderer = null;
         dialog.footerRenderer = null;
+        await nextUpdate(dialog);
 
         overlay.style.maxHeight = '200px';
         await nextResize(overlay);
@@ -544,6 +545,7 @@ describe('header/footer feature', () => {
       it('should remove overflow attribute when header title is removed', async () => {
         dialog.headerRenderer = null;
         dialog.headerTitle = 'Title';
+        await nextUpdate(dialog);
 
         overlay.style.maxHeight = '300px';
         await nextResize(overlay);
