@@ -280,6 +280,22 @@ class ComboBox extends ComboBoxDataProviderMixin(
       super._onHostClick(event);
     }
   }
+
+  /**
+   * Override method inherited from `FocusMixin` to validate on blur.
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    // Do not validate when focusout is caused by document
+    // losing focus, which happens on browser tab switch.
+    if (!focused && document.hasFocus()) {
+      this.validate();
+    }
+  }
 }
 
 customElements.define(ComboBox.is, ComboBox);

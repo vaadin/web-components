@@ -1245,12 +1245,6 @@ export const ComboBoxMixin = (subclass) =>
           this._closeOrCommit();
         }
       }
-
-      // Do not validate when focusout is caused by document
-      // losing focus, which happens on browser tab switch.
-      if (!focused && document.hasFocus()) {
-        this.validate();
-      }
     }
 
     /**
