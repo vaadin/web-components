@@ -47,10 +47,11 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, then in the shadow DOM, the column cells will be rendered with the `role="rowheader"` attribute.
-         * - This will cause the column will be handled as a rowHeader and read properly by screen readers.
+         * When true, the cells for this column will be rendered with the `role` attribute
+         * set as `rowheader`, instead of the `gridcell` role value used by default.
          *
-         * When false, then in the shadow DOM, the column cells will be rendered with the `role="gridcell"` attribute.
+         * When a column is set as row header, its cells will be announced by screen readers
+         * while navigating to help user identify the current row as uniquely as possible.
          *
          * @attr {boolean} row-header
          * @type {boolean}
