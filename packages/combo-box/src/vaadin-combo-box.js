@@ -271,24 +271,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Override method inherited from `FocusMixin` to not remove focused
-   * state when focus moves to the overlay.
-   * @param {FocusEvent} event
-   * @return {boolean}
-   * @protected
-   * @override
-   */
-  _shouldRemoveFocus(event) {
-    // Do not blur when focus moves to the overlay
-    if (event.relatedTarget === this._overlayElement) {
-      event.composedPath()[0].focus();
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Override the method from `InputControlMixin`
    * to stop event propagation to prevent `ComboBoxMixin`
    * from handling this click event also on its own.

@@ -232,18 +232,20 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   /**
    * Override method inherited from the combo-box
    * to close dropdown on blur when readonly.
-   * @param {FocusEvent} event
+   * @param {boolean} focused
    * @protected
    * @override
    */
-  _onFocusout(event) {
+  _setFocused(focused) {
     // Disable combo-box logic that updates selectedItem
     // based on the overlay focused index on input blur
-    this._ignoreCommitValue = true;
+    if (!focused) {
+      this._ignoreCommitValue = true;
+    }
 
-    super._onFocusout(event);
+    super._setFocused(focused);
 
-    if (this.readonly && !this._closeOnBlurIsPrevented) {
+    if (!focused && this.readonly && !this._closeOnBlurIsPrevented) {
       this.close();
     }
   }

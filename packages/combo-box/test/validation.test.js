@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -86,6 +87,14 @@ describe('validation', () => {
       expect(comboBox.checkValidity()).to.be.true;
       expect(comboBox.validate()).to.be.true;
       expect(comboBox.invalid).to.be.false;
+    });
+
+    it('should be invalid after user input is reverted on blur', async () => {
+      input.focus();
+      await sendKeys({ type: 'custom' });
+      await nextRender();
+      input.blur();
+      expect(comboBox.invalid).to.be.true;
     });
   });
 
