@@ -5,7 +5,7 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 
 describe('vaadin-combo-box-light - validation', () => {
-  let comboBox;
+  let comboBox, input;
 
   describe('basic', () => {
     let validateSpy;
@@ -18,6 +18,7 @@ describe('vaadin-combo-box-light - validation', () => {
       `);
       comboBox.items = ['foo', 'bar', 'baz'];
       await nextRender();
+      input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
     });
 
@@ -28,9 +29,25 @@ describe('vaadin-combo-box-light - validation', () => {
     });
 
     it('should validate on blur', () => {
-      comboBox.inputElement.focus();
-      comboBox.inputElement.blur();
+      input.focus();
+      input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        input.focus();
+        input.blur();
+        expect(validateSpy.called).to.be.false;
+      });
     });
   });
 
