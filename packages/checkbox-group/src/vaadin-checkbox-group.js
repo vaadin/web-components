@@ -90,6 +90,10 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
           width: 100%;
         }
 
+        [part='group-field'] {
+          display: flex;
+        }
+
         :host(:not([has-label])) [part='label'] {
           display: none;
         }
