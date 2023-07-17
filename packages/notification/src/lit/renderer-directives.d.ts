@@ -3,12 +3,12 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive.js';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { Notification } from '../vaadin-notification.js';
 
-export type NotificationLitRenderer = (notification: Notification) => TemplateResult;
+export type NotificationLitRenderer = (notification: Notification) => LitRendererResult;
 
 export class NotificationRendererDirective extends LitRendererDirective<Notification, NotificationLitRenderer> {
   /**

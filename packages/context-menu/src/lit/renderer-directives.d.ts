@@ -3,12 +3,12 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive.js';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { ContextMenu, ContextMenuRendererContext } from '../vaadin-context-menu.js';
 
-export type ContextMenuLitRenderer = (context: ContextMenuRendererContext, menu: ContextMenu) => TemplateResult;
+export type ContextMenuLitRenderer = (context: ContextMenuRendererContext, menu: ContextMenu) => LitRendererResult;
 
 export class ContextMenuRendererDirective extends LitRendererDirective<ContextMenu, ContextMenuLitRenderer> {
   /**
