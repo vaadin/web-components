@@ -9,13 +9,15 @@ describe('validation', () => {
   let comboBox, input;
 
   describe('basic', () => {
-    let validateSpy;
+    let validateSpy, changeSpy;
 
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
       input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
+      changeSpy = sinon.spy();
+      comboBox.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {
@@ -28,6 +30,34 @@ describe('validation', () => {
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on blur', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on Enter', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on clear button click', () => {
+      comboBox.clearButtonVisible = true;
+      comboBox.value = 'foo';
+      validateSpy.resetHistory();
+      comboBox.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {

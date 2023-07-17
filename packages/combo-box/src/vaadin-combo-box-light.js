@@ -180,7 +180,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
    * @return {boolean}
    */
   checkValidity() {
-    if (this.inputElement.validate) {
+    if (this.inputElement && this.inputElement.validate) {
       return this.inputElement.validate();
     }
     return super.checkValidity();
@@ -193,22 +193,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
       (event.type === 'input' && !event.isTrusted) || // Fake input event dispatched by clear button
       event.composedPath()[0].getAttribute('part') === 'clear-button'
     );
-  }
-
-  /**
-   * Override method inherited from `FocusMixin` to validate on blur.
-   * @param {boolean} focused
-   * @protected
-   * @override
-   */
-  _setFocused(focused) {
-    super._setFocused(focused);
-
-    // Do not validate when focusout is caused by document
-    // losing focus, which happens on browser tab switch.
-    if (!focused && document.hasFocus()) {
-      this.validate();
-    }
   }
 
   /**

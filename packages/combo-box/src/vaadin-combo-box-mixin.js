@@ -12,6 +12,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
@@ -46,6 +47,7 @@ function findItemIndex(items, callback) {
 /**
  * @polymerMixin
  * @mixes ControllerMixin
+ * @mixes ValidateMixin
  * @mixes DisabledMixin
  * @mixes InputMixin
  * @mixes KeyboardMixin
@@ -55,7 +57,7 @@ function findItemIndex(items, callback) {
  */
 export const ComboBoxMixin = (subclass) =>
   class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass))))),
+    ControllerMixin(ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))))),
   ) {
     static get properties() {
       return {
@@ -1084,6 +1086,12 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _detectAndDispatchChange() {
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (document.hasFocus()) {
+        this.validate();
+      }
+
       if (this.value !== this._lastCommittedValue) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
         this._lastCommittedValue = this.value;
