@@ -77,6 +77,10 @@ export class LitRendererDirective extends AsyncDirective {
 
   /** @protected */
   renderRenderer(container, ...args) {
+    // Note that a renderer result is not necessarily a `TemplateResult`
+    // instance, as Lit allows returning any value from a renderer. The concrete
+    // list of types we allow as render results is defined in the Typescript
+    // `LitRendererResult` type.
     const templateResult = this.renderer.call(this.host, ...args);
     render(templateResult, container, { host: this.host });
   }
