@@ -8,9 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive';
 import type { GridItemModel } from '@vaadin/grid';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { GridProEditColumn } from '../vaadin-grid-pro-edit-column.js';
 
@@ -18,7 +18,7 @@ export type GridProColumnEditModeLitRenderer<TItem> = (
   item: TItem,
   model: GridItemModel<TItem>,
   column: GridProEditColumn,
-) => TemplateResult;
+) => LitRendererResult;
 
 export declare class GridProColumnEditModeRendererDirective<TItem> extends LitRendererDirective<
   GridProEditColumn,

@@ -4,12 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /* eslint-disable max-classes-per-file */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive.js';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { Dialog } from '../vaadin-dialog.js';
 
-export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
+export type DialogLitRenderer = (dialog: Dialog) => LitRendererResult;
 
 declare abstract class AbstractDialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
   /**

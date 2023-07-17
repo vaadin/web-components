@@ -3,12 +3,16 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { Grid, GridItemModel } from '../vaadin-grid.js';
 
-export type GridRowDetailsLitRenderer<TItem> = (item: TItem, model: GridItemModel<TItem>, grid: Grid) => TemplateResult;
+export type GridRowDetailsLitRenderer<TItem> = (
+  item: TItem,
+  model: GridItemModel<TItem>,
+  grid: Grid,
+) => LitRendererResult;
 
 export declare class GridRowDetailsRendererDirective<TItem> extends LitRendererDirective<
   Grid,
