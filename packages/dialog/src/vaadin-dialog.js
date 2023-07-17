@@ -214,15 +214,6 @@ class Dialog extends DialogDraggableMixin(
     this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    // Restore opened state if overlay was opened when disconnecting
-    if (this.__restoreOpened) {
-      this.opened = true;
-    }
-  }
-
   /** @private */
   _openedChanged(opened) {
     this.$.overlay.opened = opened;

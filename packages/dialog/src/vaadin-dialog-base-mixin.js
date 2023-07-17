@@ -87,7 +87,7 @@ export const DialogBaseMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /** @protected */
     _onOverlayOpened(e) {
       if (e.detail.value === false) {
         this.opened = false;
