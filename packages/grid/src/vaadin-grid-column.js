@@ -62,6 +62,21 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * When true, the cells for this column will be rendered with the `role` attribute
+         * set as `rowheader`, instead of the `gridcell` role value used by default.
+         *
+         * When a column is set as row header, its cells will be announced by screen readers
+         * while navigating to help user identify the current row as uniquely as possible.
+         *
+         * @attr {boolean} row-header
+         * @type {boolean}
+         */
+        rowHeader: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * When set to true, the cells for this column are hidden.
          */
         hidden: {
@@ -222,6 +237,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
+        '_rowHeaderChanged(rowHeader, _cells.*)',
       ];
     }
 
@@ -405,6 +421,17 @@ export const ColumnBaseMixin = (superClass) =>
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._firstFrozenToEnd = firstFrozenToEnd;
       }
+    }
+
+    /** @private */
+    _rowHeaderChanged(rowHeader, cells) {
+      if (!cells.value) {
+        return;
+      }
+
+      cells.value.forEach((cell) => {
+        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
+      });
     }
 
     /**
