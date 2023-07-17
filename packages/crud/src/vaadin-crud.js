@@ -338,6 +338,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-crud-dialog
         id="dialog"
         opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
+        fullscreen="[[_fullscreen]]"
         aria-label="[[__dialogAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
@@ -851,7 +852,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.__ensureChildren();
 
       this.toggleAttribute('fullscreen', fullscreen);
-      this.$.dialog.$.overlay.toggleAttribute('fullscreen', fullscreen);
     }
   }
 
