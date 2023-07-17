@@ -338,7 +338,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-crud-dialog
         id="dialog"
         opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
-        aria-label="[[__editorAriaLabel]]"
+        aria-label="[[__dialogAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
         theme$="[[_theme]]"
@@ -646,7 +646,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       },
 
       /** @private */
-      __editorAriaLabel: String,
+      __dialogAriaLabel: String,
 
       /** @private */
       __isDirty: Boolean,
