@@ -6,6 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
@@ -101,8 +102,8 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Dialog extends OverlayClassMixin(
-  ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(HTMLElement)))),
+declare class Dialog extends DialogDraggableMixin(
+  DialogResizableMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))))),
 ) {
   /**
    * True if the overlay is currently displayed.

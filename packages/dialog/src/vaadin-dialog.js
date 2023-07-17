@@ -9,6 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
@@ -78,12 +79,13 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
+ * @mixes DialogBaseMixin
  * @mixes DialogDraggableMixin
  * @mixes DialogResizableMixin
  * @mixes OverlayClassMixin
  */
-class Dialog extends OverlayClassMixin(
-  ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))),
+class Dialog extends DialogDraggableMixin(
+  DialogResizableMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))))),
 ) {
   static get template() {
     return html`
@@ -115,36 +117,6 @@ class Dialog extends OverlayClassMixin(
 
   static get properties() {
     return {
-      /**
-       * True if the overlay is currently displayed.
-       * @type {boolean}
-       */
-      opened: {
-        type: Boolean,
-        value: false,
-        notify: true,
-      },
-
-      /**
-       * Set to true to disable closing dialog on outside click
-       * @attr {boolean} no-close-on-outside-click
-       * @type {boolean}
-       */
-      noCloseOnOutsideClick: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to true to disable closing dialog on Escape press
-       * @attr {boolean} no-close-on-esc
-       * @type {boolean}
-       */
-      noCloseOnEsc: {
-        type: Boolean,
-        value: false,
-      },
-
       /**
        * Set the `aria-label` attribute for assistive technologies like
        * screen readers. An empty string value for this property (the
@@ -204,15 +176,6 @@ class Dialog extends OverlayClassMixin(
        * @type {DialogRenderer | undefined}
        */
       footerRenderer: Function,
-
-      /**
-       * Set to true to remove backdrop and allow click events on background elements.
-       * @type {boolean}
-       */
-      modeless: {
-        type: Boolean,
-        value: false,
-      },
     };
   }
 
@@ -228,13 +191,7 @@ class Dialog extends OverlayClassMixin(
   ready() {
     super.ready();
 
-    const overlay = this.$.overlay;
-    overlay.setAttribute('role', 'dialog');
-
-    overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
-    overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
-
-    this._overlayElement = overlay;
+    this._overlayElement.setAttribute('role', 'dialog');
 
     processTemplates(this);
   }
@@ -257,29 +214,6 @@ class Dialog extends OverlayClassMixin(
     this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    // Restore opened state if overlay was opened when disconnecting
-    if (this.__restoreOpened) {
-      this.opened = true;
-    }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    // Automatically close the overlay when dialog is removed from DOM
-    // Using a timeout to avoid toggling opened state, and dispatching change
-    // events, when just moving the dialog in the DOM
-    setTimeout(() => {
-      if (!this.isConnected) {
-        this.__restoreOpened = this.opened;
-        this.opened = false;
-      }
-    });
-  }
-
   /** @private */
   _openedChanged(opened) {
     this.$.overlay.opened = opened;
@@ -291,40 +225,6 @@ class Dialog extends OverlayClassMixin(
       this.$.overlay.setAttribute('aria-label', ariaLabel || headerTitle);
     } else {
       this.$.overlay.removeAttribute('aria-label');
-    }
-  }
-
-  /** @private */
-  _onOverlayOpened(e) {
-    if (e.detail.value === false) {
-      this.opened = false;
-    }
-  }
-
-  /**
-   * Close the dialog if `noCloseOnOutsideClick` isn't set to true
-   * @private
-   */
-  _handleOutsideClick(e) {
-    if (this.noCloseOnOutsideClick) {
-      e.preventDefault();
-    }
-  }
-
-  /**
-   * Close the dialog if `noCloseOnEsc` isn't set to true
-   * @private
-   */
-  _handleEscPress(e) {
-    if (this.noCloseOnEsc) {
-      e.preventDefault();
-    }
-  }
-
-  /** @private */
-  _bringOverlayToFront() {
-    if (this.modeless) {
-      this.$.overlay.bringToFront();
     }
   }
 }
