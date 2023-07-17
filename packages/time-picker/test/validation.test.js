@@ -68,16 +68,34 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy;
+    let validateSpy, changeSpy, input;
 
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
       validateSpy = sinon.spy(timePicker, 'validate');
+      changeSpy = sinon.spy();
+      timePicker.addEventListener('change', changeSpy);
+      input = timePicker.inputElement;
     });
 
     it('should pass validation by default', () => {
       expect(timePicker.checkValidity()).to.be.true;
       expect(timePicker.validate()).to.be.true;
+    });
+
+    it('should validate on blur', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on blur', () => {
+      input.focus();
+      setInputValue(timePicker, '12:00');
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should not validate on value input', () => {
