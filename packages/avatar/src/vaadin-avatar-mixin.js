@@ -89,13 +89,13 @@ export const AvatarMixin = (superClass) =>
           observer: '__withTooltipChanged',
         },
 
-        /** @private */
+        /** @protected */
         __imgVisible: Boolean,
 
-        /** @private */
+        /** @protected */
         __iconVisible: Boolean,
 
-        /** @private */
+        /** @protected */
         __abbrVisible: Boolean,
 
         /** @private */
@@ -229,7 +229,7 @@ export const AvatarMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     __onImageLoadError() {
       if (this.img) {
         console.warn(`<vaadin-avatar> The specified image could not be loaded: ${this.img}`);
