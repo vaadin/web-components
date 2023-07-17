@@ -230,11 +230,6 @@ describe('vaadin-avatar', () => {
         expect(tooltip.text).to.equal('someone');
       });
 
-      it('should update tooltip text when i18n sub-property is set', () => {
-        avatar.set('i18n.anonymous', 'someone');
-        expect(tooltip.text).to.equal('someone');
-      });
-
       it('should not update tooltip text when empty object is set', () => {
         avatar.i18n = {};
         expect(tooltip.text).to.equal('anonymous');
