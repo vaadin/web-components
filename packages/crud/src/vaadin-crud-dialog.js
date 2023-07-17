@@ -98,7 +98,7 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerEleme
   }
 }
 
-customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
+customElements.define(CrudDialogOverlay.is, CrudDialogOverlay);
 
 /**
  * An extension of `<vaadin-dialog>` used internally by `<vaadin-crud>`.
@@ -106,6 +106,18 @@ customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
  * @private
  */
 class CrudDialog extends Dialog {
+  static get is() {
+    return 'vaadin-crud-dialog';
+  }
+
+  static get properties() {
+    return {
+      fullscreen: {
+        type: Boolean,
+      },
+    };
+  }
+
   /**
    * Override template to provide custom overlay tag name.
    */
@@ -126,10 +138,11 @@ class CrudDialog extends Dialog {
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        fullscreen$="[[fullscreen]]"
         focus-trap
       ></vaadin-crud-dialog-overlay>
     `;
   }
 }
 
-customElements.define('vaadin-crud-dialog', CrudDialog);
+customElements.define(CrudDialog.is, CrudDialog);
