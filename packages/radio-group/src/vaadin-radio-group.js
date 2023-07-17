@@ -95,6 +95,11 @@ class RadioGroup extends FieldMixin(
           width: 100%;
         }
 
+        [part='group-field'] {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
         :host(:not([has-label])) [part='label'] {
           display: none;
         }
