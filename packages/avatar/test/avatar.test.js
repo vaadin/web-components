@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout, mousedown, nextFrame, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, mousedown, nextUpdate, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-avatar.js';
@@ -8,8 +8,9 @@ import { Tooltip } from '@vaadin/tooltip';
 describe('vaadin-avatar', () => {
   let avatar, imgElement, iconElement, abbrElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     avatar = fixtureSync('<vaadin-avatar></vaadin-avatar>');
+    await nextUpdate(avatar);
   });
 
   describe('custom element definition', () => {
@@ -44,23 +45,27 @@ describe('vaadin-avatar', () => {
         expect(avatar.img).to.be.undefined;
       });
 
-      it('should reflect "img" prop to the attribute', () => {
+      it('should reflect "img" prop to the attribute', async () => {
         avatar.img = validImageSrc;
+        await nextUpdate(avatar);
         expect(avatar.getAttribute('img')).to.equal(validImageSrc);
       });
 
-      it('icon should be hidden when "img" property is provided', () => {
+      it('icon should be hidden when "img" property is provided', async () => {
         expect(iconElement.hasAttribute('hidden')).to.be.false;
 
         avatar.img = validImageSrc;
+        await nextUpdate(avatar);
         expect(iconElement.hasAttribute('hidden')).to.be.true;
       });
 
-      it('abbr should be hidden when "img" property is provided', () => {
+      it('abbr should be hidden when "img" property is provided', async () => {
         avatar.abbr = 'YY';
+        await nextUpdate(avatar);
         expect(abbrElement.hasAttribute('hidden')).to.be.false;
 
         avatar.img = validImageSrc;
+        await nextUpdate(avatar);
         expect(abbrElement.hasAttribute('hidden')).to.be.true;
       });
     });
@@ -70,60 +75,71 @@ describe('vaadin-avatar', () => {
         expect(avatar.abbr).to.be.undefined;
       });
 
-      it('should reflect "abbr" prop to the attribute', () => {
+      it('should reflect "abbr" prop to the attribute', async () => {
         avatar.abbr = 'YY';
+        await nextUpdate(avatar);
         expect(avatar.getAttribute('abbr')).to.equal('YY');
       });
 
-      it('abbr should be visible when "abbr" property is provided', () => {
+      it('abbr should be visible when "abbr" property is provided', async () => {
         expect(abbrElement.hasAttribute('hidden')).to.be.true;
         avatar.abbr = 'YY';
+        await nextUpdate(avatar);
 
         expect(abbrElement.hasAttribute('hidden')).to.be.false;
       });
 
-      it('icon should be hidden when "abbr" property is provided', () => {
+      it('icon should be hidden when "abbr" property is provided', async () => {
         expect(iconElement.hasAttribute('hidden')).to.be.false;
 
         avatar.abbr = 'YY';
+        await nextUpdate(avatar);
         expect(iconElement.hasAttribute('hidden')).to.be.true;
       });
 
-      it('should generate abbreviation from name if none provided', () => {
+      it('should generate abbreviation from name if none provided', async () => {
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('FB');
       });
 
-      it('should not generate abbreviation from name if it is provided', () => {
+      it('should not generate abbreviation from name if it is provided', async () => {
         avatar.abbr = 'BB';
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('BB');
       });
 
-      it('should re-generate abbreviation from name if abbr was unset', () => {
+      it('should re-generate abbreviation from name if abbr was unset', async () => {
         avatar.abbr = 'BB';
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('BB');
 
         avatar.abbr = '';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('FB');
       });
 
-      it('should clean up abbreviation if name and abbr was unset', () => {
+      it('should clean up abbreviation if name and abbr was unset', async () => {
         avatar.abbr = 'BB';
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
 
         avatar.abbr = '';
         avatar.name = '';
+        await nextUpdate(avatar);
 
         expect(avatar.abbr).to.be.undefined;
       });
 
-      it('should re-generate abbreviation from name if it was changed', () => {
+      it('should re-generate abbreviation from name if it was changed', async () => {
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('FB');
 
         avatar.name = 'Bar Baz';
+        await nextUpdate(avatar);
         expect(avatar.abbr).to.equal('BB');
       });
     });
@@ -201,7 +217,7 @@ describe('vaadin-avatar', () => {
 
       beforeEach(async () => {
         avatar.withTooltip = true;
-        await nextFrame();
+        await nextUpdate(avatar);
         tooltip = avatar.querySelector('[slot="tooltip"]');
       });
 
@@ -209,44 +225,52 @@ describe('vaadin-avatar', () => {
         expect(tooltip.text).to.equal('anonymous');
       });
 
-      it('should use "name" property for setting tooltip text', () => {
+      it('should use "name" property for setting tooltip text', async () => {
         avatar.name = 'Foo Bar';
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('Foo Bar');
       });
 
-      it('should use "abbr" property for setting tooltip text', () => {
+      it('should use "abbr" property for setting tooltip text', async () => {
         avatar.abbr = 'FB';
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('FB');
       });
 
-      it('should set tooltip text when both "abbr" and "name" are set', () => {
+      it('should set tooltip text when both "abbr" and "name" are set', async () => {
         avatar.abbr = 'GG';
         avatar.name = 'Well played';
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('Well played (GG)');
       });
 
-      it('should update tooltip text when i18n object is set', () => {
+      it('should update tooltip text when i18n object is set', async () => {
         avatar.i18n = { anonymous: 'someone' };
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('someone');
       });
 
-      it('should not update tooltip text when empty object is set', () => {
+      it('should not update tooltip text when empty object is set', async () => {
         avatar.i18n = {};
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('anonymous');
       });
 
-      it('should not update tooltip text when empty value is set', () => {
+      it('should not update tooltip text when empty value is set', async () => {
         avatar.i18n = null;
+        await nextUpdate(avatar);
         expect(tooltip.text).to.equal('anonymous');
       });
 
-      it('should cleanup tooltip target when withTooltip is set to false', () => {
+      it('should cleanup tooltip target when withTooltip is set to false', async () => {
         avatar.withTooltip = false;
+        await nextUpdate(avatar);
         expect(tooltip.target).to.be.null;
       });
 
-      it('should remove tooltip element when withTooltip is set to false', () => {
+      it('should remove tooltip element when withTooltip is set to false', async () => {
         avatar.withTooltip = false;
+        await nextUpdate(avatar);
         expect(tooltip.parentNode).to.be.null;
       });
 
@@ -301,16 +325,20 @@ describe('vaadin-avatar', () => {
         document.documentElement.style.setProperty('--vaadin-user-color-0', 'red');
       });
 
-      it('should set box-shadow based on color index', () => {
+      it('should set box-shadow based on color index', async () => {
         avatar.colorIndex = 0;
+        await nextUpdate(avatar);
         const { boxShadow } = getComputedStyle(avatar, '::before');
         expect(['rgb(255, 0, 0)', 'red'].some((v) => boxShadow.indexOf(v) > -1)).to.be.true;
       });
 
-      it('should set attribute based on color index', () => {
+      it('should set attribute based on color index', async () => {
         avatar.colorIndex = 0;
+        await nextUpdate(avatar);
         expect(avatar.hasAttribute('has-color-index')).to.be.true;
+
         avatar.colorIndex = null;
+        await nextUpdate(avatar);
         expect(avatar.hasAttribute('has-color-index')).to.be.false;
       });
     });
@@ -324,13 +352,15 @@ describe('vaadin-avatar', () => {
         console.warn.restore();
       });
 
-      it('should not set attribute for invalid index', () => {
+      it('should not set attribute for invalid index', async () => {
         avatar.colorIndex = 99;
+        await nextUpdate(avatar);
         expect(avatar.hasAttribute('has-color-index')).to.be.false;
       });
 
-      it('should warn about invalid css property used', () => {
+      it('should warn about invalid css property used', async () => {
         avatar.colorIndex = 99;
+        await nextUpdate(avatar);
         expect(console.warn.called).to.be.true;
       });
     });
