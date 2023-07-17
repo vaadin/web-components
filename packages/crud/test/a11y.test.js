@@ -291,4 +291,34 @@ describe('a11y', () => {
       });
     });
   });
+
+  describe('dialog aria-label', () => {
+    let newButton, editButtons, dialog;
+
+    beforeEach(async () => {
+      crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+      crud.items = [{ title: 'Item 1' }];
+      await nextRender();
+      newButton = crud.querySelector('[slot=new-button]');
+      editButtons = crud.querySelectorAll('vaadin-crud-edit');
+      dialog = crud.$.dialog;
+    });
+
+    afterEach(async () => {
+      crud.editorOpened = false;
+      await nextRender();
+    });
+
+    it('should set correct aria-label to the new item dialog', async () => {
+      newButton.click();
+      await nextRender();
+      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('New item');
+    });
+
+    it('should set correct aria-label to the edit item dialog', async () => {
+      editButtons[0].click();
+      await nextRender();
+      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('Edit item');
+    });
+  });
 });
