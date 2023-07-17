@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
@@ -8,7 +9,7 @@ describe('vaadin-combo-box-light - validation', () => {
   let comboBox, input;
 
   describe('basic', () => {
-    let validateSpy;
+    let validateSpy, changeSpy;
 
     beforeEach(async () => {
       comboBox = fixtureSync(`
@@ -20,6 +21,8 @@ describe('vaadin-combo-box-light - validation', () => {
       await nextRender();
       input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
+      changeSpy = sinon.spy();
+      comboBox.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {
@@ -32,6 +35,15 @@ describe('vaadin-combo-box-light - validation', () => {
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on blur', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     describe('document losing focus', () => {
