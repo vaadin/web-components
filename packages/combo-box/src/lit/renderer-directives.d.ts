@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive.js';
+import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { ComboBox, ComboBoxItemModel } from '../vaadin-combo-box.js';
 
@@ -12,7 +12,7 @@ export type ComboBoxLitRenderer<TItem> = (
   item: TItem,
   model: ComboBoxItemModel<TItem>,
   comboBox: ComboBox<TItem>,
-) => TemplateResult;
+) => LitRendererResult;
 
 export class ComboBoxRendererDirective<TItem> extends LitRendererDirective<ComboBox, ComboBoxLitRenderer<TItem>> {
   /**

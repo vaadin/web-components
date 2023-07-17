@@ -4,9 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /* eslint-disable max-classes-per-file */
-import type { TemplateResult } from 'lit';
 import type { DirectiveResult } from 'lit/directive';
-import type { LitRenderer } from '@vaadin/lit-renderer';
+import type { LitRenderer, LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { GridItemModel } from '../vaadin-grid.js';
 import type { GridColumn } from '../vaadin-grid-column.js';
@@ -15,10 +14,10 @@ export type GridColumnBodyLitRenderer<TItem> = (
   item: TItem,
   model: GridItemModel<TItem>,
   column: GridColumn,
-) => TemplateResult;
+) => LitRendererResult;
 
-export type GridColumnHeaderLitRenderer = (column: GridColumn) => TemplateResult;
-export type GridColumnFooterLitRenderer = (column: GridColumn) => TemplateResult;
+export type GridColumnHeaderLitRenderer = (column: GridColumn) => LitRendererResult;
+export type GridColumnFooterLitRenderer = (column: GridColumn) => LitRendererResult;
 
 declare abstract class AbstractGridColumnRendererDirective<R extends LitRenderer> extends LitRendererDirective<
   GridColumn,
