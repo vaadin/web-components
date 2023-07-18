@@ -38,6 +38,7 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
     this.addController(this._tooltipController);
   }
 
+  /** @protected */
   render() {
     return html`
       <img ?hidden="${!this.__imgVisible}" src="${this.img}" aria-hidden="true" @error="${this.__onImageLoadError}" />
