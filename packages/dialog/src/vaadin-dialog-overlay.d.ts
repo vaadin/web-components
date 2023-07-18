@@ -3,7 +3,10 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 
 export type DialogOverlayBounds = {
   top: number;
@@ -24,7 +27,7 @@ export type DialogOverlayBoundsParam =
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  */
-export class DialogOverlay extends Overlay {
+export class DialogOverlay extends DialogOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(HTMLElement)))) {
   /**
    * Retrieves the coordinates of the overlay.
    */
