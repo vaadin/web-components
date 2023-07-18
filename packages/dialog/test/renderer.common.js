@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dialog.js';
 
 describe('vaadin-dialog renderer', () => {
   let dialog, overlay;
