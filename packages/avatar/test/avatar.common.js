@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusin, focusout, mousedown, nextUpdate, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/tooltip/vaadin-tooltip.js';
-import '../vaadin-avatar.js';
 import { Tooltip } from '@vaadin/tooltip';
 
 describe('vaadin-avatar', () => {
