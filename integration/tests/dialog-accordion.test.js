@@ -26,10 +26,10 @@ describe('accordion in dialog', () => {
         </vaadin-accordion>
       `;
     };
+    await nextRender();
     dialog.opened = true;
     overlay = dialog.$.overlay;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextRender();
     accordion = overlay.querySelector('vaadin-accordion');
     panels = accordion.items;
   });

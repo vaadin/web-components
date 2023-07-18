@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, nextFrame, touchstart } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextRender, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/combo-box';
@@ -14,8 +14,7 @@ describe('combo-box in dialog', () => {
       root.innerHTML = '<vaadin-combo-box></vaadin-combo-box>';
     };
     dialog.opened = true;
-    dialog.opened = true;
-    await nextFrame();
+    await nextRender();
     comboBox = dialog.$.overlay.querySelector('vaadin-combo-box');
     comboBox.items = ['foo', 'bar'];
     comboBox.inputElement.focus();
