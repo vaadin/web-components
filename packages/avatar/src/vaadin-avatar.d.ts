@@ -6,7 +6,7 @@
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { AvatarMixin } from './vaadin-avatar-mixin';
+import { AvatarMixin } from './vaadin-avatar-mixin.js';
 
 export { AvatarI18n } from './vaadin-avatar-mixin.js';
 
