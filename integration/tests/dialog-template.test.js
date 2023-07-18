@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/dialog';
 
@@ -12,13 +12,13 @@ describe('vaadin-dialog template', () => {
         <template>foo</template>
       </vaadin-dialog>
     `);
-    await nextRender();
+    await nextUpdate(dialog);
     overlay = dialog.$.overlay;
   });
 
   it('should render the template', async () => {
     dialog.opened = true;
-    await nextRender();
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(overlay.textContent).to.equal('foo');
   });
 });
