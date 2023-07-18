@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-dialog.js';
@@ -7,13 +7,14 @@ import { createRenderer } from '../../helpers.js';
 describe('dialog', () => {
   let div, element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.height = '100%';
 
     element = fixtureSync(`<vaadin-dialog></vaadin-dialog>`, div);
     element.renderer = createRenderer('Simple dialog with text');
     element.opened = true;
+    await nextRender();
   });
 
   it('basic', async () => {
@@ -22,33 +23,39 @@ describe('dialog', () => {
 
   it('modeless', async () => {
     element.modeless = true;
+    await nextUpdate(element);
     await visualDiff(div, 'modeless');
   });
 
   it('title', async () => {
     element.headerTitle = 'Title';
+    await nextUpdate(element);
     await visualDiff(div, 'header-title');
   });
 
   it('header renderer', async () => {
     element.headerRenderer = createRenderer('Header');
+    await nextUpdate(element);
     await visualDiff(div, 'header-renderer');
   });
 
   it('title and header renderer', async () => {
     element.headerTitle = 'Title';
     element.headerRenderer = createRenderer('Header');
+    await nextUpdate(element);
     await visualDiff(div, 'header-title-renderer');
   });
 
   it('footer renderer', async () => {
     element.footerRenderer = createRenderer('Footer');
+    await nextUpdate(element);
     await visualDiff(div, 'footer-renderer');
   });
 
   it('header and footer renderer', async () => {
     element.headerRenderer = createRenderer('Header');
     element.footerRenderer = createRenderer('Footer');
+    await nextUpdate(element);
     await visualDiff(div, 'header-footer-renderer');
   });
 
@@ -56,6 +63,7 @@ describe('dialog', () => {
     element.$.overlay.style.maxWidth = '20rem';
     element.headerTitle = 'Long title that wraps in multiple lines';
     element.headerRenderer = createRenderer('Header');
+    await nextUpdate(element);
     await visualDiff(div, 'header-title-multiple-lines');
   });
 
@@ -63,6 +71,7 @@ describe('dialog', () => {
     element.$.overlay.style.maxWidth = '20rem';
     element.headerTitle = 'InternationalizationConfigurationHelper';
     element.headerRenderer = createRenderer('Header');
+    await nextUpdate(element);
     await visualDiff(div, 'header-title-long-single-word');
   });
 });

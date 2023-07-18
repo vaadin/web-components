@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, nextFrame, touchstart } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextUpdate, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/combo-box';
@@ -10,12 +10,12 @@ describe('combo-box in dialog', () => {
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    await nextUpdate(dialog);
     dialog.renderer = (root) => {
       root.innerHTML = '<vaadin-combo-box></vaadin-combo-box>';
     };
     dialog.opened = true;
-    dialog.opened = true;
-    await nextFrame();
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
     comboBox = dialog.$.overlay.querySelector('vaadin-combo-box');
     comboBox.items = ['foo', 'bar'];
     comboBox.inputElement.focus();
@@ -24,7 +24,7 @@ describe('combo-box in dialog', () => {
   describe('opened', () => {
     beforeEach(async () => {
       comboBox.open();
-      await nextFrame();
+      await nextUpdate(comboBox);
     });
 
     it('should not close the dialog when closing time-picker on input element Escape', async () => {
