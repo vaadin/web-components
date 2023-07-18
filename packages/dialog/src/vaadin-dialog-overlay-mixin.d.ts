@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { OverlayMixinClass } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import type { DialogRenderer } from './vaadin-dialog.js';
 
 export declare function DialogOverlayMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<DialogOverlayMixinClass> & T;
+): Constructor<DialogOverlayMixinClass> & Constructor<OverlayMixinClass> & T;
 
 export declare class DialogOverlayMixinClass {
   /**

@@ -3,12 +3,14 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes OverlayMixin
  */
 export const DialogOverlayMixin = (superClass) =>
-  class DialogOverlayMixin extends superClass {
+  class DialogOverlayMixin extends OverlayMixin(superClass) {
     static get properties() {
       return {
         /**

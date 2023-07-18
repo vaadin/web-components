@@ -5,7 +5,6 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
@@ -21,11 +20,10 @@ registerStyles('vaadin-dialog-overlay', [overlayStyles, dialogOverlay, resizable
  * @extends HTMLElement
  * @mixes DialogOverlayMixin
  * @mixes DirMixin
- * @mixes OverlayMixin
  * @mixes ThemableMixin
  * @private
  */
-export class DialogOverlay extends DialogOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+export class DialogOverlay extends DialogOverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-dialog-overlay';
   }
