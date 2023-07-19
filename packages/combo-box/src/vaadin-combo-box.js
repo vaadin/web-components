@@ -255,22 +255,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Override method inherited from `FocusMixin` to validate on blur.
-   * @param {boolean} focused
-   * @protected
-   * @override
-   */
-  _setFocused(focused) {
-    super._setFocused(focused);
-
-    // Do not validate when focusout is caused by document
-    // losing focus, which happens on browser tab switch.
-    if (!focused && document.hasFocus()) {
-      this.validate();
-    }
-  }
-
-  /**
    * Override the method from `InputControlMixin`
    * to stop event propagation to prevent `ComboBoxMixin`
    * from handling this click event also on its own.
