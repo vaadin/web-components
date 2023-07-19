@@ -130,7 +130,7 @@ describe('column resizing', () => {
   it('should not listen to track event on scroller', () => {
     const scroller = grid.$.scroller;
     fire('track', { state: 'start' }, { node: scroller });
-    expect(scroller.getAttribute('column-resizing')).to.be.null;
+    expect(scroller.getAttribute('disable-text-selection')).to.be.null;
   });
 
   it('should be behind the frozen columns', (done) => {

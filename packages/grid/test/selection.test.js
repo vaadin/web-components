@@ -625,16 +625,16 @@ describe('select rows by dragging', () => {
     expect(grid.selectedItems).to.empty;
   });
 
-  it('should toggle text selection on mouse dragging', () => {
+  it('should toggle disable-text-selection attribute on mouse dragging', () => {
     selectionColumn.selectRowsByDragging = true;
 
     const scroller = grid.$.scroller;
     const sourceCell = getCellContent(getRowCells(rows[0])[0]);
 
     fire('track', { state: 'start' }, { node: sourceCell });
-    expect(scroller.hasAttribute('column-resizing')).to.be.true;
+    expect(scroller.hasAttribute('disable-text-selection')).to.be.true;
 
     fire('track', { state: 'end' }, { node: sourceCell });
-    expect(scroller.hasAttribute('column-resizing')).to.be.false;
+    expect(scroller.hasAttribute('disable-text-selection')).to.be.false;
   });
 });
