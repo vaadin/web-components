@@ -83,6 +83,11 @@ describe('validation', () => {
       expect(timePicker.validate()).to.be.true;
     });
 
+    it('should not validate on user input', () => {
+      setInputValue(timePicker, '12:00');
+      expect(validateSpy.called).to.be.false;
+    });
+
     it('should validate on blur', () => {
       input.focus();
       input.blur();
@@ -96,11 +101,6 @@ describe('validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should not validate on user input', () => {
-      setInputValue(timePicker, '12:00');
-      expect(validateSpy.called).to.be.false;
     });
 
     it('should validate before change event on Enter', () => {
