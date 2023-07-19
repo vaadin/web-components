@@ -33,6 +33,13 @@ describe('events', () => {
       expect(changeSpy.called).to.be.true;
     });
 
+    it('should not be fired when trying to commit bad input with Enter', async () => {
+      await sendKeys({ type: 'foo' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.called).to.be.false;
+    });
+
     it('should be fired after the value-changed event', async () => {
       const valueChangedSpy = sinon.spy();
       datePicker.addEventListener('value-changed', valueChangedSpy);
@@ -106,6 +113,20 @@ describe('events', () => {
     it('should not be fired when reverting the user input with Escape', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
+      await sendKeys({ press: 'Escape' });
+      expect(changeSpy.called).to.be.false;
+    });
+
+    it('should not be fired when reverting user input on Escape', async () => {
+      datePicker.autoOpenDisabled = true;
+      await sendKeys({ type: '1/2/2000' });
+      await sendKeys({ press: 'Escape' });
+      expect(changeSpy.called).to.be.false;
+    });
+
+    it('should not be fired when reverting user input on Escape and autoOpenDisabled', async () => {
+      datePicker.autoOpenDisabled = true;
+      await sendKeys({ type: '1/2/2000' });
       await sendKeys({ press: 'Escape' });
       expect(changeSpy.called).to.be.false;
     });

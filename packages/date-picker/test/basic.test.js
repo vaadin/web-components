@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, esc, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -271,11 +271,12 @@ describe('inside flexbox', () => {
 });
 
 describe('clear button', () => {
-  let datePicker, clearButton;
+  let datePicker, clearButton, input;
 
   beforeEach(() => {
     datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
     clearButton = datePicker.shadowRoot.querySelector('[part="clear-button"]');
+    input = datePicker.inputElement;
   });
 
   it('should have clearButtonVisible property', () => {
@@ -285,12 +286,22 @@ describe('clear button', () => {
   it('should clear the value on click', () => {
     datePicker.value = '2000-02-01';
     click(clearButton);
+    expect(input.value).to.equal('');
     expect(datePicker.value).to.equal('');
   });
 
   it('should clear the value on touch tap', () => {
     datePicker.value = '2000-02-01';
     touchTap(clearButton);
+    expect(input.value).to.equal('');
+    expect(datePicker.value).to.equal('');
+  });
+
+  it('should clear the value on Escape', () => {
+    datePicker.value = '2000-02-01';
+    input.focus();
+    esc(input);
+    expect(input.value).to.equal('');
     expect(datePicker.value).to.equal('');
   });
 
