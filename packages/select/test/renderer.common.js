@@ -1,10 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-select.js';
 
 describe('renderer', () => {
   let select;
@@ -31,8 +29,9 @@ describe('renderer', () => {
     };
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
+    await nextRender();
     overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
     rendererContent = document.createElement('vaadin-list-box');
     const rendererItem = document.createElement('vaadin-item');
@@ -41,11 +40,13 @@ describe('renderer', () => {
   });
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       select.renderer = (root) => {
         root.innerHTML = 'Content';
       };
+      await nextUpdate(select);
       select.opened = true;
+      await nextRender();
     });
 
     it('should render content by the renderer', () => {
@@ -53,21 +54,24 @@ describe('renderer', () => {
       expect(overlay.textContent).to.equal('Content');
     });
 
-    it('should clear the content when removing the renderer', () => {
+    it('should clear the content when removing the renderer', async () => {
       select.renderer = null;
+      await nextUpdate(select);
       expect(overlay.childNodes).to.be.empty;
     });
 
-    it('should not override the content on items property change', () => {
+    it('should not override the content on items property change', async () => {
       select.items = [{ label: 'Item 1', value: 'value-1' }];
+      await nextUpdate(select);
       expect(overlay.childNodes).to.have.lengthOf(1);
       expect(overlay.textContent).to.equal('Content');
     });
   });
 
-  it('should pass root, owner arguments to the renderer', () => {
+  it('should pass root, owner arguments to the renderer', async () => {
     const spy = sinon.spy();
     select.renderer = spy;
+    await nextUpdate(select);
     expect(spy.calledOnce).to.be.true;
     expect(spy.firstCall.args[0]).to.equal(select._overlayElement);
     expect(spy.firstCall.args[1]).to.equal(select);
@@ -78,9 +82,10 @@ describe('renderer', () => {
     expect(() => select.requestContentUpdate()).not.to.throw(Error);
   });
 
-  it('should run renderers when requesting content update', () => {
+  it('should run renderers when requesting content update', async () => {
     select.renderer = sinon.spy();
     select.opened = true;
+    await nextUpdate(select);
 
     select.renderer.resetHistory();
     select.requestContentUpdate();
@@ -88,13 +93,14 @@ describe('renderer', () => {
     expect(select.renderer.calledOnce).to.be.true;
   });
 
-  it('should ensure menu element is defined when requesting content update', () => {
+  it('should ensure menu element is defined when requesting content update', async () => {
     let content = rendererContent;
     content.id = 'foo';
     select.renderer = (root) => {
       root.innerHTML = '';
       root.appendChild(content);
     };
+    await nextUpdate(select);
     expect(select._menuElement.id).to.equal(content.id);
 
     // Mimic creating new list-box in Lit render
@@ -107,11 +113,11 @@ describe('renderer', () => {
 
   it('should update selected value after renderer is called', async () => {
     select.renderer = generateRendererWithItems(['foo', 'bar']);
-    await nextFrame();
+    await nextUpdate(select);
     select.value = 'bar';
     select.__testVar = 'baz';
     select.requestContentUpdate();
-    await nextFrame();
+    await nextUpdate(select);
     expect(select._menuElement.selected).to.be.equal(1);
     const valueButton = select.querySelector('vaadin-select-value-button');
     expect(valueButton.textContent.trim()).to.be.equal('barbaz');
@@ -119,10 +125,10 @@ describe('renderer', () => {
 
   it('should update selected value after renderer is reassigned based on the value', async () => {
     select.renderer = generateRendererWithItems(['foo', 'bar']);
-    await nextFrame();
+    await nextUpdate(select);
     select.value = 'bar';
     select.renderer = generateRendererWithItems(['bar', 'foo']);
-    await nextFrame();
+    await nextUpdate(select);
     expect(select.value).to.equal('bar');
     expect(select._menuElement.selected).to.equal(0);
   });
@@ -141,10 +147,10 @@ describe('renderer', () => {
       // Mimic the Flow component behavior
       select.appendChild(rendererContent);
       // Wait for list-box items to be set
-      await nextFrame();
+      await nextUpdate(select);
     });
 
-    it('should work with list-box connected before renderer is set', () => {
+    it('should work with list-box connected before renderer is set', async () => {
       select.renderer = (root) => {
         const listBox = Array.from(select.children).find((el) => el.tagName.toLowerCase() === 'vaadin-list-box');
         if (listBox) {
@@ -154,6 +160,7 @@ describe('renderer', () => {
           root.appendChild(listBox);
         }
       };
+      await nextUpdate(select);
       expect(select._items).to.eql(rendererContent.items);
     });
   });

@@ -10,7 +10,8 @@ import {
   fixtureSync,
   keyboardEventFor,
   keyDownChar,
-  nextFrame,
+  nextRender,
+  nextUpdate,
   oneEvent,
   spaceKeyDown,
   tab,
@@ -18,8 +19,6 @@ import {
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-select.js';
 import { html, render } from 'lit';
 
 describe('vaadin-select', () => {
@@ -28,26 +27,34 @@ describe('vaadin-select', () => {
   describe('empty', () => {
     let select;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       select = fixtureSync(`<vaadin-select></vaadin-select>`);
+      await nextRender();
     });
 
-    it('should not throw an exception if renderer is not set', () => {
+    it('should not throw an exception if renderer is not set', async () => {
       select.opened = true;
+      await nextUpdate(select);
       select.value = 'foo';
+      await nextUpdate(select);
       select.opened = false;
+      await nextUpdate(select);
     });
 
-    it('should not throw an exception if renderer does not create list-box', () => {
+    it('should not throw an exception if renderer does not create list-box', async () => {
       select.renderer = (root) => {
         root.appendChild(document.createElement('div'));
       };
+      await nextUpdate(select);
       select.opened = true;
+      await nextUpdate(select);
       select.value = 'foo';
+      await nextUpdate(select);
       select.opened = false;
+      await nextUpdate(select);
     });
 
-    it('should assign menu element if renderer was set after DOM is ready', () => {
+    it('should assign menu element if renderer was set after DOM is ready', async () => {
       const renderer = (root) => {
         if (root.firstElementChild) {
           return;
@@ -58,10 +65,11 @@ describe('vaadin-select', () => {
         root.appendChild(menu);
       };
       select.renderer = renderer;
+      await nextUpdate(select);
       expect(select._menuElement).to.not.be.undefined;
     });
 
-    it('should assign menu element set using innerHTML after opening', () => {
+    it('should assign menu element set using innerHTML after opening', async () => {
       const renderer = (root) => {
         root.innerHTML = `
           <vaadin-list-box>
@@ -71,6 +79,7 @@ describe('vaadin-select', () => {
       };
       select.renderer = renderer;
       select.opened = true;
+      await nextUpdate(select);
       const listBox = select._menuElement;
       expect(listBox.isConnected).to.be.true;
       expect(listBox.parentNode).to.equal(select._overlayElement);
@@ -80,6 +89,7 @@ describe('vaadin-select', () => {
   describe('with items', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
+      await nextRender();
       select.renderer = (root) => {
         render(
           html`
@@ -98,7 +108,7 @@ describe('vaadin-select', () => {
         );
       };
       valueButton = select.querySelector('vaadin-select-value-button');
-      await nextFrame();
+      await nextUpdate(select);
     });
 
     describe('selection', () => {
@@ -106,21 +116,24 @@ describe('vaadin-select', () => {
 
       beforeEach(async () => {
         select.opened = true;
+        await oneEvent(select._overlayElement, 'vaadin-overlay-open');
         menu = select._menuElement;
-        await nextFrame();
+        await nextRender();
       });
 
       it('should select the first item with an empty value by default', () => {
         expect(menu.selected).to.be.equal(2);
       });
 
-      it('should close the overlay when selecting a new item', () => {
+      it('should close the overlay when selecting a new item', async () => {
         click(select._items[1]);
+        await nextUpdate(select);
         expect(select._overlayElement.opened).to.be.false;
       });
 
-      it('should update selection slot with a clone of the selected item', () => {
+      it('should update selection slot with a clone of the selected item', async () => {
         menu.selected = 2;
+        await nextUpdate(select);
         const itemElement = select._items[menu.selected];
         const valueElement = valueButton.firstChild;
         expect(valueElement).not.to.be.equal(itemElement);
@@ -128,52 +141,61 @@ describe('vaadin-select', () => {
         expect(valueElement.textContent).to.be.equal(itemElement.textContent);
       });
 
-      it('should preserve the selected attribute when selecting the disabled item', () => {
+      it('should preserve the selected attribute when selecting the disabled item', async () => {
         menu.selected = 5;
+        await nextUpdate(select);
         const valueElement = valueButton.firstChild;
         expect(valueElement.selected).to.be.true;
         expect(valueElement.disabled).to.be.true;
       });
 
-      it('should not update value if the selected item does not have a value', () => {
+      it('should not update value if the selected item does not have a value', async () => {
         menu.selected = 2;
+        await nextUpdate(select);
         expect(select.value).to.be.empty;
       });
 
-      it('should update value with the value of the selected item', () => {
+      it('should update value with the value of the selected item', async () => {
         menu.selected = 1;
+        await nextUpdate(select);
         expect(select.value).to.be.equal('v2');
       });
 
-      it('should set empty value if an item without `value` is selected', () => {
+      it('should set empty value if an item without `value` is selected', async () => {
         menu.selected = 1;
+        await nextUpdate(select);
         menu.selected = 3;
+        await nextUpdate(select);
         expect(select.value).to.be.empty;
       });
 
-      it('should remove tabindex when cloning the selected element', () => {
+      it('should remove tabindex when cloning the selected element', async () => {
         menu.selected = 2;
+        await nextUpdate(select);
         const itemElement = select._items[menu.selected];
         const valueElement = valueButton.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('tabindex')).to.be.false;
       });
 
-      it('should remove role when cloning the selected element', () => {
+      it('should remove role when cloning the selected element', async () => {
         menu.selected = 2;
+        await nextUpdate(select);
         const itemElement = select._items[menu.selected];
         const valueElement = valueButton.firstChild;
         expect(itemElement.tabIndex).to.be.equal(0);
         expect(valueElement.hasAttribute('role')).to.be.false;
       });
 
-      it('should update selection slot textContent with the selected item `label` string', () => {
+      it('should update selection slot textContent with the selected item `label` string', async () => {
         menu.selected = 1;
+        await nextUpdate(select);
         expect(valueButton.textContent.trim()).to.be.equal('o2');
       });
 
-      it('should wrap the selected item `label` string in selected vaadin item', () => {
+      it('should wrap the selected item `label` string in selected vaadin item', async () => {
         menu.selected = 1;
+        await nextUpdate(select);
         const item = valueButton.firstElementChild;
         expect(item.localName).to.equal('vaadin-select-item');
         expect(item.textContent).to.equal('o2');
@@ -181,29 +203,35 @@ describe('vaadin-select', () => {
         expect(item.getAttribute('tabindex')).to.be.null;
       });
 
-      it('should update selection slot when value is provided', () => {
+      it('should update selection slot when value is provided', async () => {
         select.value = 'v2';
+        await nextUpdate(select);
         expect(valueButton.textContent.trim()).to.be.equal('o2');
       });
 
-      it('should update overlay selected item when value is provided', () => {
+      it('should update overlay selected item when value is provided', async () => {
         select.value = 'v2';
+        await nextUpdate(select);
         expect(menu.selected).to.be.equal(1);
       });
 
-      it('should not select any item when value is not found in items', () => {
+      it('should not select any item when value is not found in items', async () => {
         select.value = 'v2';
+        await nextUpdate(select);
         select.value = 'foo';
+        await nextUpdate(select);
         expect(menu.selected).to.be.undefined;
       });
 
-      it('should select a numeric value if a matching item is found', () => {
+      it('should select a numeric value if a matching item is found', async () => {
         select.value = 5;
+        await nextUpdate(select);
         expect(menu.selected).to.be.equal(6);
       });
 
-      it('should select a boolean value if a matching item is found', () => {
+      it('should select a boolean value if a matching item is found', async () => {
         select.value = false;
+        await nextUpdate(select);
         expect(menu.selected).to.be.equal(7);
       });
     });
@@ -258,26 +286,38 @@ describe('vaadin-select', () => {
     });
 
     describe('opening the overlay', () => {
-      it('should keep synchronized opened properties in overlay and select', () => {
+      let overlay, menu;
+
+      beforeEach(() => {
+        overlay = select._overlayElement;
+        menu = select._menuElement;
+      });
+
+      it('should keep synchronized opened properties in overlay and select', async () => {
         select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
         expect(select.opened).to.be.true;
-        expect(select._overlayElement.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
 
         select.opened = false;
-        expect(select._overlayElement.opened).to.be.false;
+        await nextUpdate(select);
+        expect(overlay.opened).to.be.false;
         expect(select.opened).to.be.false;
       });
 
-      it('should focus the menu when opening the overlay', () => {
+      it('should focus the menu when opening the overlay', async () => {
         const spy = sinon.spy(select._menuElement, 'focus');
         select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should restore attribute focus-ring if it was initially set before opening', () => {
+      it('should restore attribute focus-ring if it was initially set before opening', async () => {
         select.setAttribute('focus-ring', '');
         select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
         select.opened = false;
+        await nextUpdate(select);
         expect(select.hasAttribute('focus-ring')).to.be.true;
       });
 
@@ -335,30 +375,34 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.true;
       });
 
-      it('should close the overlay on Escape', () => {
+      it('should close the overlay on Escape', async () => {
         select.opened = true;
-        escKeyDown(valueButton);
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        escKeyDown(select._items[0]);
+        await nextUpdate(select);
         expect(select.opened).to.be.false;
       });
 
-      it('should not open the overlay on helper click', () => {
+      it('should not open the overlay on helper click', async () => {
         select.helperText = 'Helper Text';
+        await nextUpdate(select);
         select.querySelector('[slot=helper]').click();
         expect(select.opened).to.be.false;
       });
 
-      it('should not open the overlay on error message click', () => {
+      it('should not open the overlay on error message click', async () => {
         select.errorMessage = 'Error Message';
+        await nextUpdate(select);
         select.querySelector('[slot=error-message]').click();
-        expect(select._overlayElement.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
       });
 
       it('should align the overlay on top left corner by default', async () => {
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
         enterKeyDown(valueButton);
-        await nextFrame();
-        const overlayRect = select._overlayElement.getBoundingClientRect();
+        await nextUpdate(select);
+        const overlayRect = overlay.getBoundingClientRect();
         const inputRect = select._inputContainer.getBoundingClientRect();
         expect(overlayRect.top).to.be.equal(inputRect.top);
         expect(inputRect.left).to.be.equal(inputRect.left);
@@ -369,19 +413,20 @@ describe('vaadin-select', () => {
         // NOTE: avoid setting bottom-aligned because of web-test-runner window size
         select.setAttribute('style', 'position: absolute; top: 10px');
         enterKeyDown(valueButton);
-        await nextFrame();
-        const overlayRect = select._overlayElement.getBoundingClientRect();
+        await nextUpdate(select);
+        const overlayRect = overlay.getBoundingClientRect();
         const inputRect = select._inputContainer.getBoundingClientRect();
         expect(overlayRect.top).to.be.equal(inputRect.top);
         expect(inputRect.right).to.be.equal(inputRect.right);
       });
 
-      it('should store the text-field width in the custom CSS property on overlay opening', () => {
+      it('should store the text-field width in the custom CSS property on overlay opening', async () => {
         valueButton.style.width = '200px';
         select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
         const prop = '--vaadin-select-text-field-width';
         const inputRect = select._inputContainer.getBoundingClientRect();
-        const value = getComputedStyle(select._overlayElement).getPropertyValue(prop);
+        const value = getComputedStyle(overlay).getPropertyValue(prop);
         expect(value).to.be.equal(`${inputRect.width}px`);
       });
     });
@@ -392,48 +437,54 @@ describe('vaadin-select', () => {
       beforeEach(async () => {
         menu = select._menuElement;
         overlay = select._overlayElement;
-        await nextFrame();
+        await nextUpdate(select);
         select.focus();
         enterKeyDown(valueButton);
         await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
-      it('should close the select on selecting the same value', () => {
-        enterKeyDown(valueButton);
+      it('should close the select on selecting the same value', async () => {
         expect(overlay.opened).to.be.true;
         click(select._items[0]);
+        await nextRender();
         expect(overlay.opened).to.be.false;
       });
 
-      it('should focus the input on selecting value and closing the overlay', () => {
+      it('should focus the input on selecting value and closing the overlay', async () => {
         const focusedSpy = sinon.spy(valueButton, 'focus');
         click(select._items[1]);
-        expect(select.value).to.be.equal(select._items[menu.selected].value);
+        await nextRender();
+        expect(select.value).to.be.equal(select._items[1].value);
         expect(overlay.opened).to.be.false;
         expect(focusedSpy.called).to.be.true;
       });
 
-      it('should restore focused state on closing the overlay if phone', () => {
+      it('should restore focused state on closing the overlay if phone', async () => {
         select._phone = true;
+        await nextUpdate(select);
         click(select._items[1]);
         expect(select.hasAttribute('focused')).to.be.true;
       });
 
-      it('should focus the button on closing the overlay if phone', () => {
+      it('should focus the button on closing the overlay if phone', async () => {
         const focusedSpy = sinon.spy(valueButton, 'focus');
         select._phone = true;
+        await nextUpdate(select);
         click(select._items[1]);
+        await nextUpdate(select);
         expect(focusedSpy.called).to.be.true;
       });
 
-      it('should focus the button before moving the focus to next selectable element', () => {
+      it('should focus the button before moving the focus to next selectable element', async () => {
         const focusedSpy = sinon.spy(valueButton, 'focus');
         tab(menu);
+        await nextUpdate(select);
         expect(focusedSpy.called).to.be.true;
       });
 
-      it('should close the overlay when clicking on the overlay', () => {
+      it('should close the overlay when clicking on the overlay', async () => {
         overlay.click();
+        await nextUpdate(select);
         expect(select.opened).to.be.false;
       });
 
@@ -448,9 +499,10 @@ describe('vaadin-select', () => {
     });
 
     describe('placeholder', () => {
-      it('should set placeholder as a value node text content', () => {
+      it('should set placeholder as a value node text content', async () => {
         select.value = null;
         select.placeholder = 'Select an item';
+        await nextUpdate(select);
         expect(valueButton.textContent).to.equal('Select an item');
       });
     });
@@ -460,21 +512,25 @@ describe('vaadin-select', () => {
         expect(select.getAttribute('has-value')).to.be.null;
       });
 
-      it('should set when value is set to not empty', () => {
+      it('should set when value is set to not empty', async () => {
         select.value = 'v2';
+        await nextUpdate(select);
         expect(select.getAttribute('has-value')).to.equal('');
       });
 
-      it('should remove when value is set to empty', () => {
+      it('should remove when value is set to empty', async () => {
         select.value = 'v2';
+        await nextUpdate(select);
         select.value = '';
+        await nextUpdate(select);
         expect(select.getAttribute('has-value')).to.be.null;
       });
     });
 
     describe('disabled', () => {
-      it('should disable the button and disable opening if select is disabled', () => {
+      it('should disable the button and disable opening if select is disabled', async () => {
         select.disabled = true;
+        await nextUpdate(select);
         expect(valueButton.disabled).to.be.true;
 
         enterKeyDown(valueButton);
@@ -486,8 +542,9 @@ describe('vaadin-select', () => {
     });
 
     describe('readonly', () => {
-      it('should disable opening if select is readonly', () => {
+      it('should disable opening if select is readonly', async () => {
         select.readonly = true;
+        await nextUpdate(select);
         enterKeyDown(valueButton);
         expect(select._overlayElement.opened).to.be.false;
 
@@ -527,14 +584,16 @@ describe('vaadin-select', () => {
     });
 
     describe('focus when overlay opened', () => {
-      it('should keep focused state after opening overlay when focused', () => {
+      it('should keep focused state after opening overlay when focused', async () => {
         select.focus();
         select.opened = true;
+        await nextUpdate(select);
         expect(select.hasAttribute('focused')).to.be.true;
       });
 
-      it('should not set focused state after opening overlay if not focused', () => {
+      it('should not set focused state after opening overlay if not focused', async () => {
         select.opened = true;
+        await nextUpdate(select);
         expect(select.hasAttribute('focused')).to.be.false;
       });
     });
@@ -544,27 +603,34 @@ describe('vaadin-select', () => {
 
       beforeEach(async () => {
         menu = select._menuElement;
-        await nextFrame();
+        await nextUpdate(select);
         changeSpy = sinon.spy();
         select.addEventListener('change', changeSpy);
       });
 
-      it('should not fire `change` event when programmatically opened and selected changed', () => {
+      it('should not fire `change` event when programmatically opened and selected changed', async () => {
         select.opened = true;
+        await nextUpdate(select);
         menu.selected = 1;
+        await nextUpdate(menu);
         select.opened = false;
+        await nextUpdate(select);
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should not fire `change` event when programmatically opened and value changed', () => {
+      it('should not fire `change` event when programmatically opened and value changed', async () => {
         select.opened = true;
+        await nextUpdate(select);
         select.value = 'Option 1';
+        await nextUpdate(select);
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should not fire `change` event when committing a value programmatically', () => {
+      it('should not fire `change` event when committing a value programmatically', async () => {
         menu.selected = 1;
+        await nextUpdate(select);
         select.value = 'Option 1';
+        await nextUpdate(select);
         expect(changeSpy.called).to.be.false;
       });
 
@@ -575,19 +641,23 @@ describe('vaadin-select', () => {
         expect(changeSpy.callCount).to.equal(1);
       });
 
-      it('should fire `change` event when value changes by user clicking the item', () => {
+      it('should fire `change` event when value changes by user clicking the item', async () => {
         select.opened = true;
+        await nextUpdate(select);
         menu.firstElementChild.click();
+        await nextUpdate(select);
         expect(changeSpy.callCount).to.equal(1);
       });
 
-      it('should fire `change` event when value changes by user selecting item with keyboard', () => {
+      it('should fire `change` event when value changes by user selecting item with keyboard', async () => {
         select.opened = true;
+        await nextUpdate(select);
         arrowUp(menu);
 
         const secondOption = menu.querySelector('[value="v2"]');
         enterKeyDown(secondOption);
         enterKeyUp(secondOption);
+        await nextUpdate(select);
         expect(changeSpy.callCount).to.equal(1);
       });
     });
@@ -598,6 +668,7 @@ describe('vaadin-select', () => {
 
     beforeEach(async () => {
       select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
+      await nextRender();
       select.renderer = (root) => {
         render(
           html`
@@ -609,9 +680,9 @@ describe('vaadin-select', () => {
           root,
         );
       };
-      menu = select._menuElement;
       valueButton = select.querySelector('vaadin-select-value-button');
-      await nextFrame();
+      await nextUpdate(select);
+      menu = select._menuElement;
     });
 
     it('should be possible to set value declaratively', () => {
@@ -623,12 +694,13 @@ describe('vaadin-select', () => {
   describe('inside flexbox', () => {
     let container;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div style="display: flex; flex-direction: column; width: 500px;">
           <vaadin-select></vaadin-select>
         </div>
       `);
+      await nextRender();
     });
 
     it('should stretch inside a column flex container', () => {
