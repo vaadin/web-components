@@ -125,6 +125,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
+          on-validated="__onComboBoxValidated"
           on-has-input-value-changed="__onComboBoxHasInputValueChanged"
         >
           <vaadin-input-container
@@ -417,19 +418,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     );
   }
 
-  /**
-   * Override method inherited from `FocusMixin` to validate on blur.
-   * @param {boolean} focused
-   * @protected
-   */
-  _setFocused(focused) {
-    super._setFocused(focused);
-
-    if (!focused) {
-      this.validate();
-    }
-  }
-
   /** @private */
   __validDayDivisor(step) {
     // Valid if undefined, or exact divides a day, or has millisecond resolution
@@ -640,9 +628,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __onComboBoxChange(event) {
     event.stopPropagation();
-
-    this.validate();
-
     this.__dispatchChange();
   }
 
@@ -653,6 +638,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    */
   __onComboBoxHasInputValueChanged() {
     this._hasInputValue = this.$.comboBox._hasInputValue;
+  }
+
+  /** @private */
+  __onComboBoxValidated() {
+    this.validate();
   }
 
   /** @private */

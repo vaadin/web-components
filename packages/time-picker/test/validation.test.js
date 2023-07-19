@@ -68,11 +68,14 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy;
+    let validateSpy, changeSpy, input;
 
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
       validateSpy = sinon.spy(timePicker, 'validate');
+      changeSpy = sinon.spy();
+      timePicker.addEventListener('change', changeSpy);
+      input = timePicker.inputElement;
     });
 
     it('should pass validation by default', () => {
@@ -80,25 +83,42 @@ describe('validation', () => {
       expect(timePicker.validate()).to.be.true;
     });
 
-    it('should not validate on value input', () => {
+    it('should not validate on user input', () => {
       setInputValue(timePicker, '12:00');
-      expect(validateSpy.calledOnce).to.be.false;
+      expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on value commit', () => {
+    it('should validate on blur', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on blur', () => {
+      input.focus();
+      setInputValue(timePicker, '12:00');
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on Enter', () => {
       setInputValue(timePicker, '12:00');
       enter(timePicker.inputElement);
+      expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate on input focusout', () => {
-      focusout(timePicker.inputElement);
+    it('should validate before change event on clear button click', () => {
+      timePicker.clearButtonVisible = true;
+      timePicker.value = '12:00';
+      validateSpy.resetHistory();
+      timePicker.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should be possible to force invalid status', () => {
-      timePicker.invalid = true;
-      expect(timePicker.inputElement.hasAttribute('invalid')).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should not validate on min change without value', () => {
