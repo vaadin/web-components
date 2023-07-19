@@ -179,7 +179,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__lassoCurrentY = event.detail.y;
       this.__lassoDy = event.detail.dy;
       if (event.detail.state === 'start') {
-        this._grid.$.scroller.setAttribute('column-resizing', true);
+        this._grid.$.scroller.setAttribute('disable-text-selection', true);
         this.__lassoWasEnabled = true;
         const renderedRows = this._grid._getRenderedRows();
         // Get the row where the drag started
@@ -202,7 +202,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           }
         }
         this.__lassoDragStartIndex = undefined;
-        this._grid.$.scroller.removeAttribute('column-resizing');
+        this._grid.$.scroller.removeAttribute('disable-text-selection');
       }
     }
 
