@@ -1,15 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, click, esc, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-dialog', () => {
   describe('custom element definition', () => {
     let dialog, tagName;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
       tagName = dialog.tagName.toLowerCase();
     });
 

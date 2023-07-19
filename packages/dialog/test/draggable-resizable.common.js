@@ -2,8 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-area/vaadin-text-area.js';
-import './not-animated-styles.js';
-import '../src/vaadin-dialog.js';
 
 customElements.define(
   'internally-draggable',

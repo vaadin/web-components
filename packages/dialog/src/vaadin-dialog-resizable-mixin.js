@@ -24,11 +24,14 @@ export const DialogResizableMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
+    async ready() {
       super.ready();
       this._originalBounds = {};
       this._originalMouseCoords = {};
       this._resizeListeners = { start: {}, resize: {}, stop: {} };
+
+      // Wait for overlay render
+      await new Promise(requestAnimationFrame);
       this._addResizeListeners();
     }
 
