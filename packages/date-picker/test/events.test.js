@@ -110,7 +110,7 @@ describe('events', () => {
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not be fired on Escape by default', async () => {
+    it('should not be fired on Escape when no user input', async () => {
       await sendKeys({ type: 'Escape' });
       expect(changeSpy.called).to.be.false;
     });

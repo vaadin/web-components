@@ -123,18 +123,6 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate before change event on Backspace & Escape', async () => {
-      datePicker.value = '2022-01-01';
-      validateSpy.resetHistory();
-      input.focus();
-      input.select();
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Escape' });
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
     it('should validate before change event on clear button click', () => {
       datePicker.clearButtonVisible = true;
       datePicker.value = '2022-01-01';
@@ -158,7 +146,7 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event on Backspace & Escape', async () => {
+    it('should validate before change event when clearing the value with Backspace & Escape', async () => {
       datePicker.value = '2022-01-01';
       validateSpy.resetHistory();
       input.focus();
@@ -344,23 +332,23 @@ describe('validation', () => {
         expect(validateSpy.calledBefore(changeSpy)).to.be.true;
       });
 
-      it('should validate before change event on Backspace & Escape', async () => {
+      it('should validate before change event on clear button click', () => {
+        datePicker.clearButtonVisible = true;
+        datePicker.value = '2022-01-01';
+        validateSpy.resetHistory();
+        datePicker.$.clearButton.click();
+        expect(changeSpy.calledOnce).to.be.true;
+        expect(validateSpy.calledOnce).to.be.true;
+        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      });
+
+      it('should validate before change event when clearing the value with Backspace & Escape', async () => {
         datePicker.value = '2022-01-01';
         validateSpy.resetHistory();
         input.focus();
         input.select();
         await sendKeys({ press: 'Backspace' });
         await sendKeys({ press: 'Escape' });
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-      });
-
-      it('should validate before change event on clear button click', () => {
-        datePicker.clearButtonVisible = true;
-        datePicker.value = '2022-01-01';
-        validateSpy.resetHistory();
-        datePicker.$.clearButton.click();
         expect(changeSpy.calledOnce).to.be.true;
         expect(validateSpy.calledOnce).to.be.true;
         expect(validateSpy.calledBefore(changeSpy)).to.be.true;
