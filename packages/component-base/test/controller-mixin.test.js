@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { defineLit, definePolymer } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { LitElement } from 'lit';
 import { ControllerMixin } from '../src/controller-mixin.js';
 
 class SpyController {
@@ -78,4 +79,12 @@ describe('ControllerMixin + Polymer', () => {
 
 describe('ControllerMixin + Lit', () => {
   runTests(defineLit, ControllerMixin);
+
+  it('should not apply ControllerMixin to LitElement-based classes', () => {
+    class TestElement extends LitElement {}
+
+    const mixinResult = ControllerMixin(TestElement);
+
+    expect(mixinResult).to.equal(TestElement);
+  });
 });
