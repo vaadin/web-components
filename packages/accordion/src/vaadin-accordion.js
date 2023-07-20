@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { ChildrenObserver } from '@vaadin/component-base/src/children-observer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
@@ -145,12 +146,19 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   ready() {
     super.ready();
 
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this._setItems(this._filterItems(Array.from(this.children)));
+    this._initItems([...this.children]);
 
-      this._filterItems(info.addedNodes).forEach((el) => {
-        el.addEventListener('opened-changed', this._boundUpdateOpened);
-      });
+    this._observer = new ChildrenObserver(this, (info) => {
+      this._initItems([...this.children], this._filterItems(info.addedNodes));
+    });
+  }
+
+  /** @private */
+  _initItems(allItems, newItems = allItems) {
+    this._setItems(allItems);
+
+    newItems.forEach((el) => {
+      el.addEventListener('opened-changed', this._boundUpdateOpened);
     });
   }
 
