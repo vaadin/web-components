@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
-import { close, open, setInputValue, waitForOverlayRender } from './helpers.js';
+import { close, open, setInputValue, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {
@@ -143,6 +143,13 @@ describe('validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate when closing the overlay on Escape', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ press: 'Escape' });
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should not validate when reverting user input on Escape', async () => {

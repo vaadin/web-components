@@ -110,16 +110,15 @@ describe('events', () => {
       expect(changeSpy.called).to.be.false;
     });
 
-    it('should not be fired when reverting the user input with Escape', async () => {
-      await sendKeys({ type: '1/2/2000' });
-      await waitForScrollToFinish(datePicker._overlayContent);
-      await sendKeys({ press: 'Escape' });
+    it('should not be fired when closing the overlay on Escape', async () => {
+      datePicker.inputElement.click();
+      await sendKeys({ type: 'Escape' });
       expect(changeSpy.called).to.be.false;
     });
 
     it('should not be fired when reverting user input on Escape', async () => {
-      datePicker.autoOpenDisabled = true;
       await sendKeys({ type: '1/2/2000' });
+      await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Escape' });
       expect(changeSpy.called).to.be.false;
     });
