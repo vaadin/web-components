@@ -178,6 +178,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         theme$="[[_theme]]"
+        on-vaadin-overlay-open="_onOverlayOpen"
       ></vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
@@ -187,11 +188,37 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
     `;
   }
 
+  static get observers() {
+    return ['_rendererChanged(renderer, _overlayElement)'];
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
     processTemplates(this);
+  }
+
+  /**
+   * @param {SelectRenderer | undefined | null} renderer
+   * @param {SelectOverlay | undefined} overlay
+   * @private
+   */
+  _rendererChanged(renderer, overlay) {
+    if (!overlay) {
+      return;
+    }
+
+    overlay.renderer = renderer || this.__defaultRenderer;
+
+    this.requestContentUpdate();
+  }
+
+  /** @private */
+  _onOverlayOpen() {
+    if (this._menuElement) {
+      this._menuElement.focus();
+    }
   }
 
   /**

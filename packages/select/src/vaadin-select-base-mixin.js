@@ -76,7 +76,9 @@ export const SelectBaseMixin = (superClass) =>
          * - `select` The reference to the `<vaadin-select>` element.
          * @type {!SelectRenderer | undefined}
          */
-        renderer: Function,
+        renderer: {
+          type: Object,
+        },
 
         /**
          * The `value` property of the selected item, or an empty string
@@ -146,11 +148,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_updateAriaExpanded(opened, focusElement)',
-        '_updateSelectedItem(value, _items, placeholder)',
-        '_rendererChanged(renderer, _overlayElement)',
-      ];
+      return ['_updateAriaExpanded(opened, focusElement)', '_updateSelectedItem(value, _items, placeholder)'];
     }
 
     constructor() {
@@ -226,21 +224,6 @@ export const SelectBaseMixin = (superClass) =>
       if (required === false) {
         this.validate();
       }
-    }
-
-    /**
-     * @param {SelectRenderer | undefined | null} renderer
-     * @param {SelectOverlay | undefined} overlay
-     * @private
-     */
-    _rendererChanged(renderer, overlay) {
-      if (!overlay) {
-        return;
-      }
-
-      overlay.renderer = renderer || this.__defaultRenderer;
-
-      this.requestContentUpdate();
     }
 
     /**
@@ -383,8 +366,6 @@ export const SelectBaseMixin = (superClass) =>
         if (hasFocusRing) {
           this.removeAttribute('focus-ring');
         }
-
-        this._menuElement.focus();
       } else if (wasOpened) {
         this.focus();
         if (this._openedWithFocusRing) {

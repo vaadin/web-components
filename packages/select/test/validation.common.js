@@ -1,10 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { enterKeyDown, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { enterKeyDown, escKeyDown, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-select.js';
 import { html, render } from 'lit';
 
 describe('validation', () => {
@@ -13,6 +11,7 @@ describe('validation', () => {
   describe('basic', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
+      await nextRender();
       select.renderer = (root) => {
         render(
           html`
@@ -26,7 +25,6 @@ describe('validation', () => {
         );
       };
       valueButton = select.querySelector('vaadin-select-value-button');
-      await nextRender();
     });
 
     it('should pass the validation when the field is valid', () => {
@@ -35,46 +33,59 @@ describe('validation', () => {
       expect(select.invalid).to.be.false;
     });
 
-    it('should not pass the validation when the field is required and has no value', () => {
+    it('should not pass the validation when the field is required and has no value', async () => {
       select.required = true;
+      await nextUpdate(select);
 
       enterKeyDown(valueButton);
-      escKeyDown(valueButton);
+      await oneEvent(select._overlayElement, 'vaadin-overlay-open');
+
+      escKeyDown(select._items[2]);
+      await nextUpdate(select);
+
       expect(select.checkValidity()).to.be.false;
       expect(select.invalid).to.be.true;
     });
 
-    it('should pass the validation when the field is required and readonly', () => {
+    it('should pass the validation when the field is required and readonly', async () => {
       select.required = true;
       select.readonly = true;
+      await nextUpdate(select);
 
       select.validate();
 
       expect(select.checkValidity()).to.be.true;
     });
 
-    it('should validate when required property is removed', () => {
+    it('should validate when required property is removed', async () => {
       select.required = true;
+      await nextUpdate(select);
 
       const spy = sinon.spy(select, 'validate');
       select.required = false;
+      await nextUpdate(select);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should update invalid state when required property is removed', () => {
+    it('should update invalid state when required property is removed', async () => {
       select.required = true;
+      await nextUpdate(select);
+
       select.validate();
       expect(select.invalid).to.be.true;
 
       select.required = false;
+      await nextUpdate(select);
       expect(select.invalid).to.be.false;
     });
 
-    it('should validate when closing the overlay', () => {
+    it('should validate when closing the overlay', async () => {
       const spy = sinon.spy(select, 'validate');
       select.opened = true;
+      await nextUpdate(select);
 
       select.opened = false;
+      await nextUpdate(select);
       expect(spy.called).to.be.true;
     });
 
@@ -85,12 +96,14 @@ describe('validation', () => {
       expect(spy.called).to.be.true;
     });
 
-    it('should validate when setting value property', () => {
+    it('should validate when setting value property', async () => {
       const spy = sinon.spy(select, 'validate');
       select.value = 'v2';
+      await nextUpdate(select);
       expect(spy.callCount).to.be.equal(1);
 
       select.value = '';
+      await nextUpdate(select);
       expect(spy.callCount).to.be.equal(2);
     });
 
@@ -104,10 +117,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       select.addEventListener('validated', validatedSpy);
       select.required = true;
+      await nextUpdate(select);
       select.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
