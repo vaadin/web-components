@@ -145,6 +145,12 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
+    it('should not validate on Escape by default', async () => {
+      input.focus();
+      await sendKeys({ press: 'Enter' });
+      expect(validateSpy.called).to.be.false;
+    });
+
     it('should validate when closing the overlay on Escape', async () => {
       input.focus();
       input.click();

@@ -110,6 +110,11 @@ describe('events', () => {
       expect(changeSpy.called).to.be.false;
     });
 
+    it('should not be fired on Escape by default', async () => {
+      await sendKeys({ type: 'Escape' });
+      expect(changeSpy.called).to.be.false;
+    });
+
     it('should not be fired when closing the overlay on Escape', async () => {
       datePicker.inputElement.click();
       await sendKeys({ type: 'Escape' });
