@@ -123,11 +123,13 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate before change event on clear button click', () => {
-      datePicker.clearButtonVisible = true;
+    it('should validate before change event when clearing the value with Backspace & Enter', async () => {
       datePicker.value = '2022-01-01';
       validateSpy.resetHistory();
-      datePicker.$.clearButton.click();
+      input.focus();
+      input.select();
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
@@ -146,18 +148,6 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event when clearing the value with Backspace & Enter', async () => {
-      datePicker.value = '2022-01-01';
-      validateSpy.resetHistory();
-      input.focus();
-      input.select();
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
     it('should validate before change event when clearing the value with Backspace & Escape', async () => {
       datePicker.value = '2022-01-01';
       validateSpy.resetHistory();
@@ -174,6 +164,16 @@ describe('validation', () => {
       await sendKeys({ type: '1/1/2022' });
       await sendKeys({ press: 'Escape' });
       expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate before change event on clear button click', () => {
+      datePicker.clearButtonVisible = true;
+      datePicker.value = '2022-01-01';
+      validateSpy.resetHistory();
+      datePicker.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should not validate on input click while opened', async () => {
@@ -344,16 +344,6 @@ describe('validation', () => {
         expect(validateSpy.calledBefore(changeSpy)).to.be.true;
       });
 
-      it('should validate before change event on clear button click', () => {
-        datePicker.clearButtonVisible = true;
-        datePicker.value = '2022-01-01';
-        validateSpy.resetHistory();
-        datePicker.$.clearButton.click();
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-      });
-
       it('should validate before change event when clearing the value with Backspace & Enter', async () => {
         datePicker.value = '2022-01-01';
         validateSpy.resetHistory();
@@ -364,6 +354,12 @@ describe('validation', () => {
         expect(changeSpy.calledOnce).to.be.true;
         expect(validateSpy.calledOnce).to.be.true;
         expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      });
+
+      it('should not validate on Escape by default', async () => {
+        input.focus();
+        await sendKeys({ press: 'Escape' });
+        expect(validateSpy.called).to.be.false;
       });
 
       it('should validate before change event when clearing the value with Backspace & Escape', async () => {
@@ -382,6 +378,16 @@ describe('validation', () => {
         await sendKeys({ type: '1/1/2022' });
         await sendKeys({ press: 'Escape' });
         expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate before change event on clear button click', () => {
+        datePicker.clearButtonVisible = true;
+        datePicker.value = '2022-01-01';
+        validateSpy.resetHistory();
+        datePicker.$.clearButton.click();
+        expect(changeSpy.calledOnce).to.be.true;
+        expect(validateSpy.calledOnce).to.be.true;
+        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
       });
     });
   });
