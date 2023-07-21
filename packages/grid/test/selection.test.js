@@ -10,6 +10,8 @@ import {
   flushGrid,
   getBodyCellContent,
   getCellContent,
+  getFirstVisibleItem,
+  getLastVisibleItem,
   getRowBodyCells,
   getRowCells,
   getRows,
@@ -530,7 +532,7 @@ describe('select rows by dragging', () => {
 
   beforeEach(() => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 150px;">
+      <vaadin-grid style="width: 200px; height: 450px;">
         <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
@@ -546,15 +548,16 @@ describe('select rows by dragging', () => {
     clock = sinon.useFakeTimers({
       shouldClearNativeTimers: true,
     });
+
+    selectionColumn.selectRowsByDragging = true;
   });
 
   afterEach(() => {
     clock.restore();
+    selectionColumn.selectRowsByDragging = false;
   });
 
   it('should select items on mouse drag when selectRowsByDragging is enabled', () => {
-    selectionColumn.selectRowsByDragging = true;
-
     let startCell;
 
     [].slice.call(rows, 1, 4).forEach((row, index) => {
@@ -568,42 +571,40 @@ describe('select rows by dragging', () => {
 
       const currentCell = getCellContent(getRowCells(row)[0]);
       fireTrackEvent(currentCell, startCell, eventState);
-      clock.next();
+      clock.tick(10);
     });
 
     expect(grid.selectedItems).to.eql(grid.items.slice(1, 4));
   });
 
   it('should not select any items on mouse drag when selectRowsByDragging is disabled', () => {
-    const sourceCell = getCellContent(getRowCells(rows[0])[0]);
-    const targetCell = getCellContent(getRowCells(rows[1])[0]);
+    selectionColumn.selectRowsByDragging = false;
+
+    const sourceCell = getBodyCellContent(grid, 0, 0);
+    const targetCell = getBodyCellContent(grid, 1, 0);
 
     fireTrackEvent(sourceCell, sourceCell, 'start');
-    clock.next();
+    clock.tick(10);
     fireTrackEvent(sourceCell, sourceCell, 'track');
-    clock.next();
+    clock.tick(10);
     fireTrackEvent(targetCell, sourceCell, 'end');
 
     expect(grid.selectedItems).to.empty;
   });
 
   it('should select a single row on mouse drag', () => {
-    selectionColumn.selectRowsByDragging = true;
-
-    const cell = getCellContent(getRowCells(rows[1])[0]);
+    const cell = getBodyCellContent(grid, 1, 0);
 
     fireTrackEvent(cell, cell, 'start');
-    clock.next();
+    clock.tick(10);
     fireTrackEvent(cell, cell, 'track');
-    clock.next();
+    clock.tick(10);
     fireTrackEvent(cell, cell, 'end');
 
     expect(grid.selectedItems).to.eql(grid.items.slice(1, 2));
   });
 
   it('should deselect rows on mouse drag', () => {
-    selectionColumn.selectRowsByDragging = true;
-
     grid.selectedItems = [rows[1]._item, rows[3]._item, rows[4]._item];
 
     let startCell;
@@ -619,22 +620,81 @@ describe('select rows by dragging', () => {
 
       const currentCell = getCellContent(getRowCells(row)[0]);
       fireTrackEvent(currentCell, startCell, eventState);
-      clock.next();
+      clock.tick(10);
     });
 
     expect(grid.selectedItems).to.empty;
   });
 
   it('should toggle disable-text-selection attribute on mouse dragging', () => {
-    selectionColumn.selectRowsByDragging = true;
-
     const scroller = grid.$.scroller;
-    const sourceCell = getCellContent(getRowCells(rows[0])[0]);
+    const sourceCell = getBodyCellContent(grid, 0, 0);
 
     fire('track', { state: 'start' }, { node: sourceCell });
+
     expect(scroller.hasAttribute('disable-text-selection')).to.be.true;
 
     fire('track', { state: 'end' }, { node: sourceCell });
+
     expect(scroller.hasAttribute('disable-text-selection')).to.be.false;
+  });
+
+  it('should not scroll when dragging within viewport', () => {
+    grid.items = Array(...new Array(35)).map(() => 'foo');
+
+    let lassoRow = 0;
+    const startCell = getBodyCellContent(grid, lassoRow, 0);
+    fireTrackEvent(startCell, startCell, 'start');
+    clock.tick(10);
+
+    const prevScrollTop = grid.$.table.scrollTop;
+    const firstVisibleIndex = getFirstVisibleItem(grid).index;
+    const lastVisibleIndex = getLastVisibleItem(grid).index;
+    const itemsPerViewport = lastVisibleIndex - firstVisibleIndex;
+
+    lassoRow += itemsPerViewport - 2;
+    const trackCell = getBodyCellContent(grid, lassoRow, 0);
+    fireTrackEvent(trackCell, startCell, 'track');
+    clock.tick(10);
+
+    expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
+  });
+
+  it('should scroll upwards when dragging viewport top', () => {
+    grid.items = Array(...new Array(35)).map(() => 'foo');
+    grid.scrollToIndex(30);
+
+    const lassoRow = grid._getRenderedRows().length - 1;
+    const startCell = getBodyCellContent(grid, lassoRow, 0);
+
+    fireTrackEvent(startCell, startCell, 'start');
+    clock.tick(10);
+
+    const prevScrollTop = grid.$.table.scrollTop;
+    const targetCell = getBodyCellContent(grid, 6, 0);
+
+    fireTrackEvent(targetCell, startCell, 'track');
+    clock.tick(10);
+
+    expect(grid.$.table.scrollTop).to.be.lt(prevScrollTop);
+  });
+
+  it('should scroll downwards when dragging grid bottom region', () => {
+    grid.items = Array(...new Array(35)).map(() => 'foo');
+
+    const startCell = getBodyCellContent(grid, 0, 0);
+    fireTrackEvent(startCell, startCell, 'start');
+    clock.tick(10);
+
+    const prevScrollTop = grid.$.table.scrollTop;
+    const firstVisibleIndex = getFirstVisibleItem(grid).index;
+    const lastVisibleIndex = getLastVisibleItem(grid).index;
+    const itemsPerViewport = lastVisibleIndex - firstVisibleIndex;
+    const targetRow = itemsPerViewport - 1;
+    const targetCell = getBodyCellContent(grid, targetRow, 0);
+    fireTrackEvent(targetCell, startCell, 'track');
+    clock.tick(10);
+
+    expect(grid.$.table.scrollTop).to.be.gt(prevScrollTop);
   });
 });
