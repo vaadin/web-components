@@ -1,23 +1,23 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../src/vaadin-combo-box-overlay.js';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 
 describe('overlay', () => {
   let overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     overlay = fixtureSync(`<vaadin-combo-box-overlay></vaadin-combo-box-overlay>`);
+    await nextRender();
   });
 
-  it('should not show the overlay when closed', () => {
+  it('should not show the overlay when closed', async () => {
     overlay.opened = false;
-
+    await nextUpdate(overlay);
     expect(window.getComputedStyle(overlay).display).to.eql('none');
   });
 
-  it('should show the overlay when opened', () => {
+  it('should show the overlay when opened', async () => {
     overlay.opened = true;
-
+    await nextUpdate(overlay);
     expect(window.getComputedStyle(overlay).display).not.to.eql('none');
   });
 
