@@ -1,0 +1,81 @@
+import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
+import { SlotObserver } from '../src/slot-observer.js';
+
+describe('SlotObserver', () => {
+  let host, slot, observer, spy;
+
+  beforeEach(() => {
+    host = document.createElement('div');
+    host.attachShadow({ mode: 'open' });
+    host.shadowRoot.innerHTML = '<slot></slot>';
+    slot = host.shadowRoot.firstElementChild;
+    document.body.appendChild(host);
+    host.innerHTML = '<div>foo</div> <div>bar</div>';
+  });
+
+  afterEach(() => {
+    host.remove();
+  });
+
+  it('should run callback for initial nodes synchronously', () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    expect(spy.called).to.be.true;
+
+    const addedNodes = spy.firstCall.args[0].addedNodes;
+
+    expect(addedNodes).to.be.an('array');
+    expect(addedNodes.length).to.equal(3);
+    expect(addedNodes[0]).to.eql(host.childNodes[0]);
+    expect(addedNodes[1]).to.eql(host.childNodes[1]);
+    expect(addedNodes[2]).to.eql(host.childNodes[2]);
+  });
+
+  it('should run callback asynchronously after node is added', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    spy.resetHistory();
+
+    const div = document.createElement('div');
+    host.appendChild(div);
+
+    // Wait for microtask
+    await Promise.resolve();
+
+    expect(spy.calledOnce).to.be.true;
+    const addedNodes = spy.firstCall.args[0].addedNodes;
+    expect(addedNodes[0]).to.eql(div);
+  });
+
+  it('should run callback asynchronously after node is removed', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    spy.resetHistory();
+
+    const div = host.firstElementChild;
+    host.removeChild(div);
+
+    // Wait for microtask
+    await Promise.resolve();
+
+    expect(spy.calledOnce).to.be.true;
+    const removedNodes = spy.firstCall.args[0].removedNodes;
+    expect(removedNodes[0]).to.eql(div);
+  });
+
+  it('should run callback synchronously when calling flush()', () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    spy.resetHistory();
+
+    const div = document.createElement('div');
+    host.appendChild(div);
+
+    observer.flush();
+
+    expect(spy.calledOnce).to.be.true;
+    const addedNodes = spy.firstCall.args[0].addedNodes;
+    expect(addedNodes[0]).to.eql(div);
+  });
+});

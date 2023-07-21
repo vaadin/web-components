@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { isEmptyTextNode } from './dom-utils.js';
+import { SlotObserver } from './slot-observer.js';
 import { generateUniqueId } from './unique-id-utils.js';
 
 /**
@@ -199,17 +199,17 @@ export class SlotController extends EventTarget {
     const selector = slotName === '' ? 'slot:not([name])' : `slot[name=${slotName}]`;
     const slot = this.host.shadowRoot.querySelector(selector);
 
-    this.__slotObserver = new FlattenedNodesObserver(slot, (info) => {
+    this.__slotObserver = new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
       const current = this.multiple ? this.nodes : [this.node];
 
       // Calling `slot.assignedNodes()` includes whitespace text nodes in case of default slot:
       // unlike comment nodes, they are not filtered out. So we need to manually ignore them.
-      const newNodes = info.addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
+      const newNodes = addedNodes.filter((node) => !isEmptyTextNode(node) && !current.includes(node));
 
-      if (info.removedNodes.length) {
-        this.nodes = current.filter((node) => !info.removedNodes.includes(node));
+      if (removedNodes.length) {
+        this.nodes = current.filter((node) => !removedNodes.includes(node));
 
-        info.removedNodes.forEach((node) => {
+        removedNodes.forEach((node) => {
           this.teardownNode(node);
         });
       }
