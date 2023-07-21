@@ -17,7 +17,11 @@ registerStyles('vaadin-avatar-group-overlay', [overlayStyles], {
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
+ * @mixes PositionMixin
+ * @mixes OverlayMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  * @private
  */
 class AvatarGroupOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
