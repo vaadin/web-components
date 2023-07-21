@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/avatar-group",
-  "version": "23.3.18",
+  "version": "23.3.19",
   "publishConfig": {
     "access": "public"
   },
@@ -37,14 +37,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/avatar": "~23.3.18",
-    "@vaadin/component-base": "~23.3.18",
-    "@vaadin/item": "~23.3.18",
-    "@vaadin/list-box": "~23.3.18",
-    "@vaadin/overlay": "~23.3.18",
-    "@vaadin/vaadin-lumo-styles": "~23.3.18",
-    "@vaadin/vaadin-material-styles": "~23.3.18",
-    "@vaadin/vaadin-themable-mixin": "~23.3.18"
+    "@vaadin/avatar": "~23.3.19",
+    "@vaadin/component-base": "~23.3.19",
+    "@vaadin/item": "~23.3.19",
+    "@vaadin/list-box": "~23.3.19",
+    "@vaadin/overlay": "~23.3.19",
+    "@vaadin/vaadin-lumo-styles": "~23.3.19",
+    "@vaadin/vaadin-material-styles": "~23.3.19",
+    "@vaadin/vaadin-themable-mixin": "~23.3.19"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
