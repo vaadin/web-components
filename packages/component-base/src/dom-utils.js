@@ -52,7 +52,7 @@ export function getFlattenedElements(node) {
   const result = [];
   let elements;
   if (node.localName === 'slot') {
-    elements = node.assignedElements({ flatten: true });
+    elements = node.assignedElements();
   } else {
     result.push(node);
     elements = [...node.children];
