@@ -3,11 +3,11 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
@@ -145,7 +145,8 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   ready() {
     super.ready();
 
-    this._observer = new FlattenedNodesObserver(this, (info) => {
+    const slot = this.shadowRoot.querySelector('slot');
+    this._observer = new SlotObserver(slot, (info) => {
       this._setItems(this._filterItems(Array.from(this.children)));
 
       this._filterItems(info.addedNodes).forEach((el) => {

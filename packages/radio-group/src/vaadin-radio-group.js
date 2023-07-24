@@ -3,12 +3,12 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -213,7 +213,8 @@ class RadioGroup extends FieldMixin(
 
     this._fieldName = `${this.localName}-${generateUniqueId()}`;
 
-    this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this._observer = new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
       // Registers the added radio buttons in the reverse order
       // in order for the group to take the value of the most recent button.
       this.__filterRadioButtons(addedNodes).reverse().forEach(this.__registerRadioButton);

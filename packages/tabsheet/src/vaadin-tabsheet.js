@@ -4,13 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tabsheet-scroller.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -222,7 +222,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
     // Observe the panels slot for nodes. Set the assigned element nodes as the __panels array.
     const panelSlot = this.shadowRoot.querySelector('#panel-slot');
-    this.__panelsObserver = new FlattenedNodesObserver(panelSlot, () => {
+    this.__panelsObserver = new SlotObserver(panelSlot, () => {
       this.__panels = Array.from(panelSlot.assignedNodes({ flatten: true })).filter(
         (node) => node.nodeType === Node.ELEMENT_NODE,
       );
