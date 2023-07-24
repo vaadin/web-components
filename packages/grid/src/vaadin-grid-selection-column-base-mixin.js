@@ -119,9 +119,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
                 row.index >= hoveredIndex)
             ) {
               if (this.__lassoSelect) {
-                this._grid.selectItem(row._item);
+                this._selectItem(row._item);
               } else {
-                this._grid.deselectItem(row._item);
+                this._deselectItem(row._item);
               }
               this.__lassoDragStartItem = undefined;
             }
@@ -196,9 +196,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // if lasso drag start and end stays within the same item, then toggle its state
         if (this.__lassoDragStartItem) {
           if (this.__lassoSelect) {
-            this._grid.selectItem(this.__lassoDragStartItem);
+            this._selectItem(this.__lassoDragStartItem);
           } else {
-            this._grid.deselectItem(this.__lassoDragStartItem);
+            this._deselectItem(this.__lassoDragStartItem);
           }
         }
         this.__lassoDragStartIndex = undefined;
