@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-details.js';
 
 describe('vaadin-details', () => {
   let details;
