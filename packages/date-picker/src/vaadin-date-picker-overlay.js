@@ -34,7 +34,11 @@ registerStyles('vaadin-date-picker-overlay', [overlayStyles, datePickerOverlaySt
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
+ * @mixes PositionMixin
+ * @mixes OverlayMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  * @private
  */
 class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
