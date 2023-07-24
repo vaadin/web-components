@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../vaadin-radio-group.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-radio-group', () => {
   let group;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     resetUniqueId();
     group = fixtureSync(`
       <vaadin-radio-group>
@@ -14,6 +14,7 @@ describe('vaadin-radio-group', () => {
         <vaadin-radio-button value="2" label="Radio 2"></vaadin-radio-button>
       </vaadin-radio-group>
     `);
+    await nextRender();
   });
 
   describe('host', () => {

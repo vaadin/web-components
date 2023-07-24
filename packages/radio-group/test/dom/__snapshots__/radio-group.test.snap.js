@@ -18,6 +18,7 @@ snapshots["vaadin-radio-group host default"] =
     </label>
     <input
       id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="1"
@@ -38,6 +39,7 @@ snapshots["vaadin-radio-group host default"] =
     </label>
     <input
       id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="2"
@@ -79,6 +81,7 @@ snapshots["vaadin-radio-group host label"] =
     </label>
     <input
       id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="1"
@@ -99,6 +102,7 @@ snapshots["vaadin-radio-group host label"] =
     </label>
     <input
       id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="2"
@@ -144,6 +148,7 @@ snapshots["vaadin-radio-group host disabled"] =
     <input
       disabled=""
       id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
       slot="input"
       tabindex="-1"
       type="radio"
@@ -168,6 +173,7 @@ snapshots["vaadin-radio-group host disabled"] =
     <input
       disabled=""
       id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
       slot="input"
       tabindex="-1"
       type="radio"
@@ -210,6 +216,7 @@ snapshots["vaadin-radio-group host required"] =
     </label>
     <input
       id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="1"
@@ -230,6 +237,7 @@ snapshots["vaadin-radio-group host required"] =
     </label>
     <input
       id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="2"
@@ -271,6 +279,7 @@ snapshots["vaadin-radio-group host helper"] =
     </label>
     <input
       id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="1"
@@ -291,6 +300,7 @@ snapshots["vaadin-radio-group host helper"] =
     </label>
     <input
       id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
       slot="input"
       type="radio"
       value="2"
