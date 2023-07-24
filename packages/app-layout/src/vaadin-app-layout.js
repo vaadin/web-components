@@ -5,7 +5,6 @@
  */
 import './safe-area-inset.js';
 import './detect-ios-navbar.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
@@ -273,11 +272,11 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         }
       </style>
       <div part="navbar" id="navbarTop">
-        <slot name="navbar"></slot>
+        <slot name="navbar" on-slotchange="_updateTouchOptimizedMode"></slot>
       </div>
       <div part="backdrop" on-click="_onBackdropClick" on-touchend="_onBackdropTouchend"></div>
       <div part="drawer" id="drawer">
-        <slot name="drawer" id="drawerSlot"></slot>
+        <slot name="drawer" id="drawerSlot" on-slotchange="_updateDrawerSize"></slot>
       </div>
       <div content>
         <slot></slot>
@@ -285,7 +284,9 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       <div part="navbar" id="navbarBottom" bottom hidden>
         <slot name="navbar-bottom"></slot>
       </div>
-      <div hidden><slot id="touchSlot" name="navbar touch-optimized"></slot></div>
+      <div hidden>
+        <slot id="touchSlot" name="navbar touch-optimized" on-slotchange="_updateTouchOptimizedMode"></slot>
+      </div>
     `;
   }
 
@@ -423,19 +424,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     beforeNextRender(this, this._afterFirstRender);
 
     this._updateTouchOptimizedMode();
-
-    const navbarSlot = this.$.navbarTop.firstElementChild;
-    this._navbarChildObserver = new FlattenedNodesObserver(navbarSlot, () => {
-      this._updateTouchOptimizedMode();
-    });
-
-    this._touchChildObserver = new FlattenedNodesObserver(this.$.touchSlot, () => {
-      this._updateTouchOptimizedMode();
-    });
-
-    this._drawerChildObserver = new FlattenedNodesObserver(this.$.drawerSlot, () => {
-      this._updateDrawerSize();
-    });
     this._updateDrawerSize();
     this._updateOverlayMode();
 
@@ -485,16 +473,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-
-    if (this._navbarChildObserver) {
-      this._navbarChildObserver.disconnect();
-    }
-    if (this._drawerChildObserver) {
-      this._drawerChildObserver.disconnect();
-    }
-    if (this._touchChildObserver) {
-      this._touchChildObserver.disconnect();
-    }
 
     window.removeEventListener('resize', this.__boundResizeListener);
     this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
