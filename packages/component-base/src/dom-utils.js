@@ -41,6 +41,27 @@ export function getAncestorRootNodes(node) {
 }
 
 /**
+ * Returns the list of flattened elements for the given `node`.
+ * This list consists of a node's children and, for any children that are
+ * `<slot>` elements, the expanded flattened list of `assignedElements`.
+ *
+ * @param {Node} node
+ * @return {Element[]}
+ */
+export function getFlattenedElements(node) {
+  const result = [];
+  let elements;
+  if (node.localName === 'slot') {
+    elements = node.assignedElements();
+  } else {
+    result.push(node);
+    elements = [...node.children];
+  }
+  elements.forEach((elem) => result.push(...getFlattenedElements(elem)));
+  return result;
+}
+
+/**
  * Traverses the given node and its parents, including those that are across
  * the shadow root boundaries, until it finds a node that matches the selector.
  *

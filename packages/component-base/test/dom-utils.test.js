@@ -4,6 +4,7 @@ import {
   addValueToAttribute,
   getAncestorRootNodes,
   getClosestElement,
+  getFlattenedElements,
   isEmptyTextNode,
   removeValueFromAttribute,
 } from '../src/dom-utils.js';
@@ -146,6 +147,46 @@ describe('dom-utils', () => {
     it('should return false when node has non-empty text content', () => {
       node.textContent = '0';
       expect(isEmptyTextNode(node)).to.be.false;
+    });
+  });
+
+  describe('getFlattenedElements', () => {
+    let foo, bar, baz;
+
+    beforeEach(() => {
+      foo = document.createElement('div');
+      foo.attachShadow({ mode: 'open' });
+      foo.shadowRoot.innerHTML = '<slot></slot>';
+
+      bar = document.createElement('div');
+      bar.attachShadow({ mode: 'open' });
+      bar.shadowRoot.innerHTML = '<span>A</span><slot></slot><span>B</span>';
+
+      baz = document.createElement('span');
+      baz.textContent = 'C';
+
+      document.body.appendChild(foo);
+      bar.appendChild(baz);
+      foo.appendChild(bar);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(foo);
+    });
+
+    it('should return flattened elements for the element itself', () => {
+      expect(getFlattenedElements(foo)).to.eql([foo, bar, baz]);
+      expect(getFlattenedElements(bar)).to.eql([bar, baz]);
+    });
+
+    it('should return flatted elements for the parent slot element', () => {
+      const slot = foo.shadowRoot.querySelector('slot');
+      expect(getFlattenedElements(slot)).to.eql([bar, baz]);
+    });
+
+    it('should return flatted elements for the child slot element', () => {
+      const slot = bar.shadowRoot.querySelector('slot');
+      expect(getFlattenedElements(slot)).to.eql([baz]);
     });
   });
 });
