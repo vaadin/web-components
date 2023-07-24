@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-details.js';
@@ -33,7 +33,7 @@ describe('vaadin-details', () => {
           <div>Content</div>
         </vaadin-details>
       `);
-      await nextUpdate(details);
+      await nextRender();
       contentPart = details.shadowRoot.querySelector('[part="content"]');
       contentNode = details.querySelector('div');
     });
@@ -102,7 +102,7 @@ describe('vaadin-details', () => {
     describe(`${type} summary`, () => {
       beforeEach(async () => {
         details = fixtureSync(fixtures[type]);
-        await nextUpdate(details);
+        await nextRender();
         summary = details.querySelector('[slot="summary"]');
       });
 
@@ -200,7 +200,7 @@ describe('vaadin-details', () => {
           </vaadin-details>
         </div>
       `);
-      await nextUpdate(details);
+      await nextRender();
       details = container.querySelectorAll('vaadin-details');
     });
 
