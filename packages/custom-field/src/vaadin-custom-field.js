@@ -3,10 +3,10 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -212,24 +212,6 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this.__observer) {
-      this.__observer.connect();
-    }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    if (this.__observer) {
-      this.__observer.disconnect();
-    }
-  }
-
-  /** @protected */
   ready() {
     super.ready();
 
@@ -239,7 +221,7 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
     this.ariaTarget = this;
 
     this.__setInputsFromSlot();
-    this.__observer = new FlattenedNodesObserver(this.$.slot, () => {
+    this.$.slot.addEventListener('slotchange', () => {
       this.__setInputsFromSlot();
     });
 
@@ -344,23 +326,6 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
     this.__settingValue = false;
   }
 
-  /**
-   * Like querySelectorAll('*') but also gets all elements through any nested slots recursively
-   * @private
-   */
-  __queryAllAssignedElements(elem) {
-    const result = [];
-    let elements;
-    if (elem.tagName === 'SLOT') {
-      elements = elem.assignedElements({ flatten: true });
-    } else {
-      result.push(elem);
-      elements = Array.from(elem.children);
-    }
-    elements.forEach((elem) => result.push(...this.__queryAllAssignedElements(elem)));
-    return result;
-  }
-
   /** @private */
   __isInput(node) {
     const isSlottedInput = node.getAttribute('slot') === 'input' || node.getAttribute('slot') === 'textarea';
@@ -369,7 +334,7 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
 
   /** @private */
   __getInputsFromSlot() {
-    return this.__queryAllAssignedElements(this.$.slot).filter((node) => this.__isInput(node));
+    return getFlattenedElements(this.$.slot).filter((node) => this.__isInput(node));
   }
 
   /** @private */

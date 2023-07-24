@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
+import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -135,7 +136,7 @@ export const ListMixin = (superClass) =>
       this.addEventListener('click', (e) => this._onClick(e));
 
       this._observer = new FlattenedNodesObserver(this, () => {
-        this._setItems(this._filterItems(FlattenedNodesObserver.getFlattenedNodes(this)));
+        this._setItems(this._filterItems(getFlattenedElements(this)));
       });
     }
 
