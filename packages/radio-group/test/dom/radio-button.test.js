@@ -4,27 +4,27 @@ import '../../vaadin-radio-button.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-radio-button', () => {
-  let checkbox;
+  let radio;
 
   beforeEach(() => {
     resetUniqueId();
-    checkbox = fixtureSync('<vaadin-radio-button label="Radio button"></vaadin-radio-button>');
+    radio = fixtureSync('<vaadin-radio-button label="Radio button"></vaadin-radio-button>');
   });
 
   describe('host', () => {
     it('default', async () => {
-      await expect(checkbox).dom.to.equalSnapshot();
+      await expect(radio).dom.to.equalSnapshot();
     });
 
     it('disabled', async () => {
-      checkbox.disabled = true;
-      await expect(checkbox).dom.to.equalSnapshot();
+      radio.disabled = true;
+      await expect(radio).dom.to.equalSnapshot();
     });
   });
 
   describe('shadow', () => {
     it('default', async () => {
-      await expect(checkbox).shadowDom.to.equalSnapshot();
+      await expect(radio).shadowDom.to.equalSnapshot();
     });
   });
 });
