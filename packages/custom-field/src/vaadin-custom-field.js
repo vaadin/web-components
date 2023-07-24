@@ -3,7 +3,6 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
@@ -212,24 +211,6 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this.__observer) {
-      this.__observer.connect();
-    }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    if (this.__observer) {
-      this.__observer.disconnect();
-    }
-  }
-
-  /** @protected */
   ready() {
     super.ready();
 
@@ -239,7 +220,7 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
     this.ariaTarget = this;
 
     this.__setInputsFromSlot();
-    this.__observer = new FlattenedNodesObserver(this.$.slot, () => {
+    this.$.slot.addEventListener('slotchange', () => {
       this.__setInputsFromSlot();
     });
 
