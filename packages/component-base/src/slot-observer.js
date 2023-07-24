@@ -37,18 +37,26 @@ export class SlotObserver {
     const currentNodes = this.slot.assignedNodes({ flatten: true });
 
     let addedNodes = [];
-    let removedNodes = [];
+    const removedNodes = [];
+    const movedNodes = [];
 
     if (currentNodes.length) {
       addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
     }
 
     if (this._storedNodes.length) {
-      removedNodes = this._storedNodes.filter((node) => !currentNodes.includes(node));
+      this._storedNodes.forEach((node, index) => {
+        const idx = currentNodes.indexOf(node);
+        if (idx === -1) {
+          removedNodes.push(node);
+        } else if (idx !== index) {
+          movedNodes.push(node);
+        }
+      });
     }
 
-    if (addedNodes.length || removedNodes.length) {
-      this.callback({ addedNodes, removedNodes });
+    if (addedNodes.length || removedNodes.length || movedNodes.length) {
+      this.callback({ addedNodes, movedNodes, removedNodes });
     }
 
     this._storedNodes = currentNodes;

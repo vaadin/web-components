@@ -11,7 +11,7 @@ describe('SlotObserver', () => {
     host.shadowRoot.innerHTML = '<slot></slot>';
     slot = host.shadowRoot.firstElementChild;
     document.body.appendChild(host);
-    host.innerHTML = '<div>foo</div> <div>bar</div>';
+    host.innerHTML = '<div>foo</div><div>bar</div><div>baz</div>';
   });
 
   afterEach(() => {
@@ -45,6 +45,7 @@ describe('SlotObserver', () => {
 
     expect(spy.calledOnce).to.be.true;
     const addedNodes = spy.firstCall.args[0].addedNodes;
+    expect(addedNodes.length).to.equal(1);
     expect(addedNodes[0]).to.eql(div);
   });
 
@@ -61,7 +62,26 @@ describe('SlotObserver', () => {
 
     expect(spy.calledOnce).to.be.true;
     const removedNodes = spy.firstCall.args[0].removedNodes;
+    expect(removedNodes.length).to.equal(1);
     expect(removedNodes[0]).to.eql(div);
+  });
+
+  it('should run callback asynchronously after node is moved', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    spy.resetHistory();
+
+    const nodes = host.children;
+    host.insertBefore(nodes[1], nodes[0]);
+
+    // Wait for microtask
+    await Promise.resolve();
+
+    expect(spy.calledOnce).to.be.true;
+    const movedNodes = spy.firstCall.args[0].movedNodes;
+    expect(movedNodes.length).to.equal(2);
+    expect(movedNodes[0]).to.eql(nodes[1]);
+    expect(movedNodes[1]).to.eql(nodes[0]);
   });
 
   it('should run callback synchronously when calling flush()', () => {

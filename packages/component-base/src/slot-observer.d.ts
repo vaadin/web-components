@@ -8,7 +8,10 @@
  * A helper for observing slot changes.
  */
 export class SlotObserver {
-  constructor(slot: HTMLSlotElement, callback: (info: { addedNodes: Node[]; removedNodes: Node[] }) => void);
+  constructor(
+    slot: HTMLSlotElement,
+    callback: (info: { addedNodes: Node[]; movedNodes: Node[]; removedNodes: Node[] }) => void,
+  );
 
   /**
    * Run the observer callback synchronously.
