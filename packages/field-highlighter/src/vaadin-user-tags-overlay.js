@@ -69,7 +69,7 @@ registerStyles('vaadin-user-tags-overlay', [overlayStyles, userTagsOverlayStyles
  * @mixes ThemableMixin
  * @private
  */
-class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+class UserTagsOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-user-tags-overlay';
   }
@@ -86,4 +86,4 @@ class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixi
   }
 }
 
-customElements.define(DatePickerOverlay.is, DatePickerOverlay);
+customElements.define(UserTagsOverlay.is, UserTagsOverlay);
