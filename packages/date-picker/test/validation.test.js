@@ -136,6 +136,13 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
+    it('should not validate on input click while opened', async () => {
+      await open(datePicker);
+      validateSpy.resetHistory();
+      input.click();
+      expect(validateSpy.called).to.be.false;
+    });
+
     it('should validate before change event on clear button click', async () => {
       datePicker.clearButtonVisible = true;
       datePicker.value = '2022-01-01';
@@ -144,13 +151,6 @@ describe('validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should not validate on input click while opened', async () => {
-      await open(datePicker);
-      validateSpy.resetHistory();
-      input.click();
-      expect(validateSpy.called).to.be.false;
     });
 
     it('should validate on value change', () => {
