@@ -5,6 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
 
 export interface SplitLayoutCustomEventMap {
   'splitter-dragend': Event;
@@ -150,12 +151,7 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  */
-declare class SplitLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
-  /**
-   * The split layout's orientation. Possible values are: `horizontal|vertical`.
-   */
-  orientation: 'horizontal' | 'vertical';
-
+declare class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
