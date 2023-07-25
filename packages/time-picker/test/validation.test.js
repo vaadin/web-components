@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -29,7 +29,7 @@ describe('validation', () => {
 
     it('should not validate without value', async () => {
       document.body.appendChild(timePicker);
-      setInputValue(timePicker, '12:00');
+      await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
@@ -40,28 +40,28 @@ describe('validation', () => {
 
       it('should not validate without constraints', async () => {
         document.body.appendChild(timePicker);
-        setInputValue(timePicker, '12:00');
+        await nextRender();
         expect(validateSpy.called).to.be.false;
       });
 
       it('should not validate without constraints when the field has invalid', async () => {
         timePicker.invalid = true;
         document.body.appendChild(timePicker);
-        setInputValue(timePicker, '12:00');
+        await nextRender();
         expect(validateSpy.called).to.be.false;
       });
 
       it('should validate when the field has min', async () => {
         timePicker.min = '12:00';
         document.body.appendChild(timePicker);
-        setInputValue(timePicker, '12:00');
+        await nextRender();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should validate when the field has max', async () => {
         timePicker.max = '12:00';
         document.body.appendChild(timePicker);
-        setInputValue(timePicker, '12:00');
+        await nextRender();
         expect(validateSpy.calledOnce).to.be.true;
       });
     });
