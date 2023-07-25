@@ -104,8 +104,8 @@ describe('validation', () => {
     });
 
     it('should validate on blur when dirty', () => {
-      input.focus();
       datePicker.dirty = true;
+      input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
