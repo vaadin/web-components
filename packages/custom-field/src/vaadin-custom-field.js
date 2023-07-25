@@ -5,8 +5,11 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
+import { customFieldStyles } from './vaadin-custom-field-styles.js';
+
+registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-custom-field-styles' });
 
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
@@ -63,34 +66,6 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-        }
-
-        :host::before {
-          content: '\\2003';
-          width: 0;
-          display: inline-block;
-          /* Size and position this element on the same vertical position as the input-field element
-           to make vertical align for the host element work as expected */
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        .vaadin-custom-field-container {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .inputs-wrapper {
-          flex: none;
-        }
-      </style>
-
       <div class="vaadin-custom-field-container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
