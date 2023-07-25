@@ -15,3 +15,12 @@ export const getAsyncDataProvider = (allItems) => {
     }, 0);
   };
 };
+
+/**
+ * Returns all the items of the combo box dropdown.
+ */
+export const getAllItems = (comboBox) => {
+  return Array.from(comboBox._scroller.querySelectorAll('vaadin-combo-box-item'))
+    .filter((item) => !item.hidden)
+    .sort((a, b) => a.index - b.index);
+};
