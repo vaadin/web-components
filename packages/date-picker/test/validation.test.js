@@ -82,13 +82,15 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy, input;
+    let validateSpy, changeSpy, input;
 
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       await nextRender();
       input = datePicker.inputElement;
       validateSpy = sinon.spy(datePicker, 'validate');
+      changeSpy = sinon.spy();
+      datePicker.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {
@@ -116,16 +118,14 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on clear button click', async () => {
+    it('should validate before change event on clear button click', async () => {
       datePicker.clearButtonVisible = true;
-      // Set invalid value.
-      setInputValue(datePicker, 'foo');
-      await waitForOverlayRender();
-      enter(input);
+      datePicker.value = '2022-01-01';
       validateSpy.resetHistory();
       datePicker.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
-      expect(datePicker.invalid).to.be.false;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should validate on value change', () => {

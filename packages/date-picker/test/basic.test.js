@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, escKeyDown, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -286,12 +286,21 @@ describe('clear button', () => {
     datePicker.value = '2000-02-01';
     click(clearButton);
     expect(datePicker.value).to.equal('');
+    expect(datePicker.inputElement.value).to.equal('');
   });
 
   it('should clear the value on touch tap', () => {
     datePicker.value = '2000-02-01';
     touchTap(clearButton);
     expect(datePicker.value).to.equal('');
+    expect(datePicker.inputElement.value).to.equal('');
+  });
+
+  it('should clear the value on Escape', () => {
+    datePicker.value = '2000-02-01';
+    escKeyDown(datePicker.inputElement);
+    expect(datePicker.value).to.equal('');
+    expect(datePicker.inputElement.value).to.equal('');
   });
 
   it('should remove has-value attribute on clear', () => {

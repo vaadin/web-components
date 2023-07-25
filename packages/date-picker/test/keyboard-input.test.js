@@ -702,22 +702,6 @@ describe('keyboard', () => {
         datePicker._focus();
       });
 
-      it('should change after validate on clear button click', () => {
-        datePicker.clearButtonVisible = true;
-        datePicker.$.clearButton.click();
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-      });
-
-      it('should change after validate on Esc with clear button', async () => {
-        datePicker.clearButtonVisible = true;
-        await sendKeys({ press: 'Escape' });
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-      });
-
       it('should neither change nor validate on Esc without clear button', async () => {
         await sendKeys({ press: 'Escape' });
         expect(validateSpy.called).to.be.false;
@@ -789,14 +773,6 @@ describe('keyboard', () => {
           validateSpy.resetHistory();
           changeSpy.resetHistory();
           datePicker._focusAndSelect();
-        });
-
-        it('should change after validate on Esc with clear button', async () => {
-          datePicker.clearButtonVisible = true;
-          await sendKeys({ press: 'Escape' });
-          expect(validateSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledAfter(validateSpy)).to.be.true;
         });
 
         it('should neither change nor validate on Esc without clear button', async () => {
