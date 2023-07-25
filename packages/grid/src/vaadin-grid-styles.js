@@ -258,7 +258,7 @@ registerStyles(
       display: none;
     }
 
-    #scroller[disable-text-selection] {
+    #scroller[column-resizing] {
       -ms-user-select: none;
       -moz-user-select: none;
       -webkit-user-select: none;

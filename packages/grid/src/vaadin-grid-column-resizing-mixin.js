@@ -17,10 +17,7 @@ export const ColumnResizingMixin = (superClass) =>
       addListener(scroller, 'track', this._onHeaderTrack.bind(this));
 
       // Disallow scrolling while resizing
-      scroller.addEventListener(
-        'touchmove',
-        (e) => scroller.hasAttribute('disable-text-selection') && e.preventDefault(),
-      );
+      scroller.addEventListener('touchmove', (e) => scroller.hasAttribute('column-resizing') && e.preventDefault());
 
       // Disable contextmenu on any resize separator.
       scroller.addEventListener(
@@ -42,7 +39,7 @@ export const ColumnResizingMixin = (superClass) =>
         const cell = handle.parentElement;
         let column = cell._column;
 
-        this.$.scroller.toggleAttribute('disable-text-selection', true);
+        this.$.scroller.toggleAttribute('column-resizing', true);
 
         // Get the target column to resize
         while (column.localName === 'vaadin-grid-column-group') {
@@ -107,7 +104,7 @@ export const ColumnResizingMixin = (superClass) =>
         }
 
         if (e.detail.state === 'end') {
-          this.$.scroller.toggleAttribute('disable-text-selection', false);
+          this.$.scroller.toggleAttribute('column-resizing', false);
           this.dispatchEvent(
             new CustomEvent('column-resize', {
               detail: { resizedColumn: column },
