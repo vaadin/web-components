@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, mousedown } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
@@ -592,6 +592,43 @@ describe('multi selection column', () => {
       clock.tick(10);
       fireTrackEvent(cell, cell, 'end');
 
+      expect(grid.selectedItems).to.eql(grid.items.slice(1, 2));
+    });
+
+    it('should not toggle checkbox after dragging on a single checkbox', () => {
+      const cell = getBodyCellContent(grid, 1, 0);
+      const checkBox = cell.querySelector('vaadin-checkbox');
+      const input = checkBox.querySelector('input');
+
+      fireTrackEvent(input, input, 'start');
+      clock.tick(10);
+      fireTrackEvent(input, input, 'track');
+      clock.tick(10);
+      fireTrackEvent(input, input, 'end');
+
+      // Click on checkbox which would normally toggle selection state, thus
+      // reverting the selection made on drag end
+      click(input);
+
+      // Verify item is still selected
+      expect(grid.selectedItems).to.eql(grid.items.slice(1, 2));
+    });
+
+    it('should not toggle active item after dragging on a single cell', () => {
+      selectionColumn.autoSelect = true;
+      const cell = getBodyCellContent(grid, 1, 0);
+
+      fireTrackEvent(cell, cell, 'start');
+      clock.tick(10);
+      fireTrackEvent(cell, cell, 'track');
+      clock.tick(10);
+      fireTrackEvent(cell, cell, 'end');
+
+      // Click on cell which would normally change the active item, thus
+      // reverting the selection made on drag end
+      click(cell);
+
+      // Verify item is still selected
       expect(grid.selectedItems).to.eql(grid.items.slice(1, 2));
     });
 
