@@ -514,7 +514,7 @@ describe('multi selection column', () => {
   });
 });
 
-describe('select rows by dragging', () => {
+describe('drag selection', () => {
   let grid;
   let rows;
   let selectionColumn;
@@ -549,15 +549,15 @@ describe('select rows by dragging', () => {
       shouldClearNativeTimers: true,
     });
 
-    selectionColumn.selectRowsByDragging = true;
+    selectionColumn.dragSelect = true;
   });
 
   afterEach(() => {
     clock.restore();
-    selectionColumn.selectRowsByDragging = false;
+    selectionColumn.dragSelect = false;
   });
 
-  it('should select items on mouse drag when selectRowsByDragging is enabled', () => {
+  it('should select items on mouse drag', () => {
     let startCell;
 
     [].slice.call(rows, 1, 4).forEach((row, index) => {
@@ -577,8 +577,8 @@ describe('select rows by dragging', () => {
     expect(grid.selectedItems).to.eql(grid.items.slice(1, 4));
   });
 
-  it('should not select any items on mouse drag when selectRowsByDragging is disabled', () => {
-    selectionColumn.selectRowsByDragging = false;
+  it('should not select any items on mouse drag when dragSelect is disabled', () => {
+    selectionColumn.dragSelect = false;
 
     const sourceCell = getBodyCellContent(grid, 0, 0);
     const targetCell = getBodyCellContent(grid, 1, 0);
