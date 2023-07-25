@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { animationFrame } from './async.js';
 import { Debouncer } from './debounce.js';
 
@@ -55,21 +54,25 @@ export class OverflowController {
 
     this.__resizeObserver.observe(this.host);
 
-    this.__childObserver = new FlattenedNodesObserver(this.host, (info) => {
-      info.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          this.__resizeObserver.observe(node);
-        }
-      });
+    this.__childObserver = new MutationObserver((mutations) => {
+      mutations.forEach(({ addedNodes, removedNodes }) => {
+        addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            this.__resizeObserver.observe(node);
+          }
+        });
 
-      info.removedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          this.__resizeObserver.unobserve(node);
-        }
+        removedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            this.__resizeObserver.unobserve(node);
+          }
+        });
       });
 
       this.__updateOverflow();
     });
+
+    this.__childObserver.observe(this.host, { childList: true });
 
     // Update overflow attribute on scroll
     this.scrollTarget.addEventListener('scroll', this.__boundOnScroll);
