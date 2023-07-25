@@ -18,17 +18,32 @@ export class SlotObserver {
     /** @type {Node[]} */
     this._storedNodes = [];
 
-    this._processNodes();
+    this._scheduled = false;
 
     slot.addEventListener('slotchange', () => {
-      this._processNodes();
+      this._schedule();
     });
+
+    this._schedule();
+  }
+
+  /** @private */
+  _schedule() {
+    if (!this._scheduled) {
+      this._scheduled = true;
+
+      queueMicrotask(() => {
+        this.flush();
+      });
+    }
   }
 
   /**
    * Run the observer callback synchronously.
    */
   flush() {
+    this._scheduled = false;
+
     this._processNodes();
   }
 
