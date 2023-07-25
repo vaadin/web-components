@@ -209,18 +209,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onCheckboxClick(e) {
-      if (!this.selectRowsByDragging) {
-        return;
-      }
-      // ignore checkbox mouse click if start item was already selected or deselected by drag selection
-      if (this.__dragStartItem) {
-        e.preventDefault();
-      }
-      this.__dragStartItem = undefined;
-    }
-
     /**
      * Renders the Select All checkbox to the header cell.
      *
@@ -257,7 +245,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
         checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
-        checkbox.addEventListener('click', this.__onCheckboxClick.bind(this));
         addListener(root, 'track', this.__onSelectionColumnCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onSelectionColumnCellMouseDown.bind(this));
       }
