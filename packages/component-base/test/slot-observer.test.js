@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { SlotObserver } from '../src/slot-observer.js';
 
@@ -24,7 +23,7 @@ describe('SlotObserver', () => {
     observer = new SlotObserver(slot, spy);
     expect(spy.called).to.be.false;
 
-    await aTimeout(0);
+    await Promise.resolve();
 
     const addedNodes = spy.firstCall.args[0].addedNodes;
 
@@ -38,12 +37,16 @@ describe('SlotObserver', () => {
   it('should run callback asynchronously after node is added', async () => {
     spy = sinon.spy();
     observer = new SlotObserver(slot, spy);
-    await aTimeout(0);
+    await Promise.resolve();
     spy.resetHistory();
 
     const div = document.createElement('div');
     host.appendChild(div);
-    await aTimeout(0);
+
+    // Wait for slotchange
+    await Promise.resolve();
+    // Wait for microtask
+    await Promise.resolve();
 
     expect(spy.called).to.be.true;
     const addedNodes = spy.firstCall.args[0].addedNodes;
@@ -54,12 +57,16 @@ describe('SlotObserver', () => {
   it('should run callback asynchronously after node is removed', async () => {
     spy = sinon.spy();
     observer = new SlotObserver(slot, spy);
-    await aTimeout(0);
+    await Promise.resolve();
     spy.resetHistory();
 
     const div = host.firstElementChild;
     host.removeChild(div);
-    await aTimeout(0);
+
+    // Wait for slotchange
+    await Promise.resolve();
+    // Wait for microtask
+    await Promise.resolve();
 
     expect(spy.calledOnce).to.be.true;
     const removedNodes = spy.firstCall.args[0].removedNodes;
@@ -70,12 +77,16 @@ describe('SlotObserver', () => {
   it('should run callback asynchronously after node is moved', async () => {
     spy = sinon.spy();
     observer = new SlotObserver(slot, spy);
-    await aTimeout(0);
+    await Promise.resolve();
     spy.resetHistory();
 
     const nodes = host.children;
     host.insertBefore(nodes[1], nodes[0]);
-    await aTimeout(0);
+
+    // Wait for slotchange
+    await Promise.resolve();
+    // Wait for microtask
+    await Promise.resolve();
 
     expect(spy.calledOnce).to.be.true;
     const movedNodes = spy.firstCall.args[0].movedNodes;
@@ -87,7 +98,7 @@ describe('SlotObserver', () => {
   it('should run callback synchronously when calling flush()', async () => {
     spy = sinon.spy();
     observer = new SlotObserver(slot, spy);
-    await aTimeout(0);
+    await Promise.resolve();
     spy.resetHistory();
 
     const div = document.createElement('div');
