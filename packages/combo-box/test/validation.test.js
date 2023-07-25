@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -30,6 +30,23 @@ describe('validation', () => {
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on outside click', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ type: 'foo' });
+      outsideClick();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should validate before change event on blur', async () => {

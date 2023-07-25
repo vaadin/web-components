@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -29,7 +29,7 @@ describe('validation', () => {
 
     it('should not validate without value', async () => {
       document.body.appendChild(timePicker);
-      await nextRender();
+      setInputValue(timePicker, '12:00');
       expect(validateSpy.called).to.be.false;
     });
 
@@ -40,28 +40,28 @@ describe('validation', () => {
 
       it('should not validate without constraints', async () => {
         document.body.appendChild(timePicker);
-        await nextRender();
+        setInputValue(timePicker, '12:00');
         expect(validateSpy.called).to.be.false;
       });
 
       it('should not validate without constraints when the field has invalid', async () => {
         timePicker.invalid = true;
         document.body.appendChild(timePicker);
-        await nextRender();
+        setInputValue(timePicker, '12:00');
         expect(validateSpy.called).to.be.false;
       });
 
       it('should validate when the field has min', async () => {
         timePicker.min = '12:00';
         document.body.appendChild(timePicker);
-        await nextRender();
+        setInputValue(timePicker, '12:00');
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should validate when the field has max', async () => {
         timePicker.max = '12:00';
         document.body.appendChild(timePicker);
-        await nextRender();
+        setInputValue(timePicker, '12:00');
         expect(validateSpy.calledOnce).to.be.true;
       });
     });
@@ -92,6 +92,23 @@ describe('validation', () => {
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on outside click', async () => {
+      input.focus();
+      input.click();
+      setInputValue(timePicker, '12:00');
+      outsideClick();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should validate before change event on blur', () => {
