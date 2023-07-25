@@ -1,23 +1,21 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-select.js';
-import { html, render } from 'lit';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('dirty state', () => {
   let select, menu, valueButton;
 
   beforeEach(async () => {
-    select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
+    select = fixtureSync('<vaadin-select></vaadin-select>');
     select.items = [
       { label: 'Item 1', value: 'item-1' },
       { label: 'Item 2', value: 'item-2' },
     ];
     menu = select._menuElement;
     valueButton = select.querySelector('vaadin-select-value-button');
-    await nextFrame();
   });
 
   it('should not be dirty by default', () => {
@@ -30,16 +28,17 @@ describe('dirty state', () => {
     expect(select.dirty).to.be.false;
   });
 
-  it('should not be dirty after closing the overlay without change', () => {
+  it('should not be dirty after closing the overlay without change', async () => {
     select.focus();
     select.click();
     outsideClick();
     expect(select.dirty).to.be.false;
   });
 
-  it('should be dirty after selecting a menu item with click', () => {
+  it('should be dirty after selecting a menu item with click', async () => {
     select.focus();
     select.click();
+    await nextRender();
     const menuItem = getDeepActiveElement();
     menuItem.click();
     expect(select.dirty).to.be.true;
@@ -48,6 +47,7 @@ describe('dirty state', () => {
   it('should be dirty after selecting a menu item with Enter', async () => {
     select.focus();
     select.click();
+    await nextRender();
     await sendKeys({ press: 'Enter' });
     expect(select.dirty).to.be.true;
   });

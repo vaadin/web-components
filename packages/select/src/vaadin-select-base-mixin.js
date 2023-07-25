@@ -623,6 +623,7 @@ export const SelectBaseMixin = (superClass) =>
         await this.updateComplete;
       }
 
+      this.dirty = true;
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
