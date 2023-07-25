@@ -197,8 +197,8 @@ export const CustomFieldMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onInputChange(event) {
+    /** @protected */
+    _onInputChange(event) {
       // Stop native change events
       event.stopPropagation();
 

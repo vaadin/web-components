@@ -97,7 +97,7 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" on-change="__onInputChange">
+        <div class="inputs-wrapper" on-change="_onInputChange">
           <slot id="slot"></slot>
         </div>
 
