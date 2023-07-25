@@ -1,20 +1,20 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, track } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-split-layout.js';
 
 const initialSizes = { width: 128, height: 128 };
 
 let splitLayout, first, second;
 
 describe('split layout', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     splitLayout = fixtureSync(`
       <vaadin-split-layout>
         <div id="first">some content</div>
         <div id="second">some content</div>
       </vaadin-split-layout>
     `);
+    await nextRender();
   });
 
   describe('container', () => {
@@ -32,8 +32,7 @@ describe('split layout', () => {
   describe('content elements', () => {
     let splitter;
 
-    beforeEach(async () => {
-      await aTimeout(0);
+    beforeEach(() => {
       first = splitLayout.$.primary.assignedNodes({ flatten: true })[0];
       second = splitLayout.$.secondary.assignedNodes({ flatten: true })[0];
       splitter = splitLayout.$.splitter;
