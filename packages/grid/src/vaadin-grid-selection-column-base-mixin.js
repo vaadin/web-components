@@ -88,22 +88,22 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __lassoAutoScroller() {
-      if (this.__lassoDragStartIndex !== undefined) {
+    __dragAutoScroller() {
+      if (this.__dragStartIndex !== undefined) {
         // Get the row being hovered over
         const renderedRows = this._grid._getRenderedRows();
         const hoveredRow = renderedRows.find((row) => {
           const rowRect = row.getBoundingClientRect();
-          return this.__lassoCurrentY >= rowRect.top && this.__lassoCurrentY <= rowRect.bottom;
+          return this.__dragCurrentY >= rowRect.top && this.__dragCurrentY <= rowRect.bottom;
         });
 
         // Get the index of the row being hovered over or the first/last
         // visible row if hovering outside the grid
         let hoveredIndex = hoveredRow ? hoveredRow.index : undefined;
         const scrollableArea = this.__getScrollableArea();
-        if (this.__lassoCurrentY < scrollableArea.top) {
+        if (this.__dragCurrentY < scrollableArea.top) {
           hoveredIndex = this._grid._firstVisibleIndex;
-        } else if (this.__lassoCurrentY > scrollableArea.bottom) {
+        } else if (this.__dragCurrentY > scrollableArea.bottom) {
           hoveredIndex = this._grid._lastVisibleIndex;
         }
 
@@ -111,19 +111,17 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           // Select all items between the start and the current row
           renderedRows.forEach((row) => {
             if (
-              (hoveredIndex > this.__lassoDragStartIndex &&
-                row.index >= this.__lassoDragStartIndex &&
+              (hoveredIndex > this.__dragStartIndex &&
+                row.index >= this.__dragStartIndex &&
                 row.index <= hoveredIndex) ||
-              (hoveredIndex < this.__lassoDragStartIndex &&
-                row.index <= this.__lassoDragStartIndex &&
-                row.index >= hoveredIndex)
+              (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
             ) {
-              if (this.__lassoSelect) {
+              if (this.__dragSelect) {
                 this._selectItem(row._item);
               } else {
                 this._deselectItem(row._item);
               }
-              this.__lassoDragStartItem = undefined;
+              this.__dragStartItem = undefined;
             }
           });
         }
@@ -133,19 +131,19 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // Maximum number of pixels to scroll per iteration
         const maxScrollAmount = 10;
 
-        if (this.__lassoDy < 0 && this.__lassoCurrentY < scrollableArea.top + scrollTriggerArea) {
-          const dy = scrollableArea.top + scrollTriggerArea - this.__lassoCurrentY;
+        if (this.__dragDy < 0 && this.__dragCurrentY < scrollableArea.top + scrollTriggerArea) {
+          const dy = scrollableArea.top + scrollTriggerArea - this.__dragCurrentY;
           const percentage = Math.min(1, dy / scrollTriggerArea);
           this._grid.$.table.scrollTop -= percentage * maxScrollAmount;
         }
-        if (this.__lassoDy > 0 && this.__lassoCurrentY > scrollableArea.bottom - scrollTriggerArea) {
-          const dy = this.__lassoCurrentY - (scrollableArea.bottom - scrollTriggerArea);
+        if (this.__dragDy > 0 && this.__dragCurrentY > scrollableArea.bottom - scrollTriggerArea) {
+          const dy = this.__dragCurrentY - (scrollableArea.bottom - scrollTriggerArea);
           const percentage = Math.min(1, dy / scrollTriggerArea);
           this._grid.$.table.scrollTop += percentage * maxScrollAmount;
         }
 
         // Schedule the next auto scroll
-        setTimeout(() => this.__lassoAutoScroller(), 10);
+        setTimeout(() => this.__dragAutoScroller(), 10);
       }
     }
 
@@ -176,31 +174,31 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (!this.selectRowsByDragging) {
         return;
       }
-      this.__lassoCurrentY = event.detail.y;
-      this.__lassoDy = event.detail.dy;
+      this.__dragCurrentY = event.detail.y;
+      this.__dragDy = event.detail.dy;
       if (event.detail.state === 'start') {
-        this.__lassoWasEnabled = true;
+        this.__dragWasEnabled = true;
         const renderedRows = this._grid._getRenderedRows();
         // Get the row where the drag started
-        const lassoStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
+        const dragStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
         // Whether to select or deselect the items on drag
-        this.__lassoSelect = !this._grid._isSelected(lassoStartRow._item);
+        this.__dragSelect = !this._grid._isSelected(dragStartRow._item);
         // Store the index of the row where the drag started
-        this.__lassoDragStartIndex = lassoStartRow.index;
+        this.__dragStartIndex = dragStartRow.index;
         // Store the item of the row where the drag started
-        this.__lassoDragStartItem = lassoStartRow._item;
+        this.__dragStartItem = dragStartRow._item;
         // Start the auto scroller
-        this.__lassoAutoScroller();
+        this.__dragAutoScroller();
       } else if (event.detail.state === 'end') {
-        // if lasso drag start and end stays within the same item, then toggle its state
-        if (this.__lassoDragStartItem) {
-          if (this.__lassoSelect) {
-            this._selectItem(this.__lassoDragStartItem);
+        // if drag start and end stays within the same item, then toggle its state
+        if (this.__dragStartItem) {
+          if (this.__dragSelect) {
+            this._selectItem(this.__dragStartItem);
           } else {
-            this._deselectItem(this.__lassoDragStartItem);
+            this._deselectItem(this.__dragStartItem);
           }
         }
-        this.__lassoDragStartIndex = undefined;
+        this.__dragStartIndex = undefined;
       }
     }
 
@@ -216,11 +214,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (!this.selectRowsByDragging) {
         return;
       }
-      // ignore checkbox mouse click if start item was already selected or deselected by lasso selection
-      if (this.__lassoDragStartItem) {
+      // ignore checkbox mouse click if start item was already selected or deselected by drag selection
+      if (this.__dragStartItem) {
         e.preventDefault();
       }
-      this.__lassoDragStartItem = undefined;
+      this.__dragStartItem = undefined;
     }
 
     /**
