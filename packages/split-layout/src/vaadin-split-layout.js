@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
@@ -246,10 +245,18 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   ready() {
     super.ready();
-    this.__observer = new FlattenedNodesObserver(this, (info) => {
-      this._cleanupNodes(info.removedNodes);
+
+    this._processChildren();
+
+    this.__observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        this._cleanupNodes(mutation.removedNodes);
+      });
+
       this._processChildren();
     });
+
+    this.__observer.observe(this, { childList: true });
 
     const splitter = this.$.splitter;
     addListener(splitter, 'track', this._onHandleTrack.bind(this));
