@@ -449,9 +449,7 @@ export const DatePickerMixin = (subclass) =>
       if (!this.opened) {
         this._selectParsedOrFocusedDate();
 
-        // Do not validate when focusout is caused by document
-        // losing focus, which happens on browser tab switch.
-        if (document.hasFocus()) {
+        if (this.dirty) {
           this.validate();
         }
       }
@@ -949,7 +947,7 @@ export const DatePickerMixin = (subclass) =>
       }
       // No need to revalidate the value after `_selectedDateChanged`
       // Needed in case the value was not changed: open and close dropdown.
-      if (!this.value) {
+      if (this.dirty && !this.value) {
         this.validate();
       }
     }

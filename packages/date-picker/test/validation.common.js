@@ -97,8 +97,15 @@ describe('validation', () => {
       expect(datePicker.validate()).to.be.true;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
       input.focus();
+      input.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      input.focus();
+      datePicker.dirty = true;
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
@@ -115,7 +122,17 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate on outside click', async () => {
+    it('should not validate on outside click by default', async () => {
+      input.focus();
+      input.click();
+      await waitForOverlayRender();
+      outsideClick();
+      await nextUpdate(datePicker);
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on outside click when dirty', async () => {
+      datePicker.dirty = true;
       input.focus();
       input.click();
       await waitForOverlayRender();
@@ -274,22 +291,6 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        input.focus();
-        input.blur();
-        expect(validateSpy.called).to.be.false;
-      });
     });
   });
 
