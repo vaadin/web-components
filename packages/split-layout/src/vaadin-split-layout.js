@@ -6,7 +6,10 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { splitLayoutStyles } from './vaadin-split-layout-styles.js';
+
+registerStyles('vaadin-split-layout', splitLayoutStyles, { moduleId: 'vaadin-split-layout-styles' });
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
@@ -153,63 +156,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          overflow: hidden !important;
-          transform: translateZ(0);
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([orientation='vertical']) {
-          flex-direction: column;
-        }
-
-        :host ::slotted(*) {
-          flex: 1 1 auto;
-          overflow: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        [part='splitter'] {
-          flex: none;
-          position: relative;
-          z-index: 1;
-          overflow: visible;
-          min-width: 8px;
-          min-height: 8px;
-        }
-
-        :host(:not([orientation='vertical'])) > [part='splitter'] {
-          cursor: ew-resize;
-        }
-
-        :host([orientation='vertical']) > [part='splitter'] {
-          cursor: ns-resize;
-        }
-
-        [part='handle'] {
-          width: 40px;
-          height: 40px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate3d(-50%, -50%, 0);
-        }
-
-        @media (forced-colors: active) {
-          [part~='splitter'] {
-            outline: 1px solid;
-          }
-          [part~='handle']::after {
-            background-color: AccentColor !important;
-            forced-color-adjust: none;
-          }
-        }
-      </style>
       <slot id="primary" name="primary"></slot>
       <div part="splitter" id="splitter">
         <div part="handle"></div>
