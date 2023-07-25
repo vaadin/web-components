@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
@@ -626,17 +626,14 @@ describe('select rows by dragging', () => {
     expect(grid.selectedItems).to.empty;
   });
 
-  it('should toggle disable-text-selection attribute on mouse dragging', () => {
-    const scroller = grid.$.scroller;
+  it('should prevent text selection on mouse dragging', () => {
+    const spy = sinon.spy();
     const sourceCell = getBodyCellContent(grid, 0, 0);
+    sourceCell.addEventListener('mousedown', spy);
+    mousedown(sourceCell);
 
-    fire('track', { state: 'start' }, { node: sourceCell });
-
-    expect(scroller.hasAttribute('disable-text-selection')).to.be.true;
-
-    fire('track', { state: 'end' }, { node: sourceCell });
-
-    expect(scroller.hasAttribute('disable-text-selection')).to.be.false;
+    expect(spy.called).to.be.true;
+    expect(spy.args[0][0].defaultPrevented).to.be.true;
   });
 
   it('should not scroll when dragging within viewport', () => {

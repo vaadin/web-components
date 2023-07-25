@@ -105,7 +105,7 @@ export const ColumnReorderingMixin = (superClass) =>
           return;
         }
 
-        if (this.$.scroller.hasAttribute('disable-text-selection')) {
+        if (this.$.scroller.hasAttribute('column-resizing')) {
           // Resizing is in progress
           return;
         }

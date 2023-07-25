@@ -267,7 +267,7 @@ registerStyles(
       transition: opacity 0.2s;
     }
 
-    :host(:not([reordering])) *:not([disable-text-selection]) [part~='cell']:hover [part='resize-handle'],
+    :host(:not([reordering])) *:not([column-resizing]) [part~='cell']:hover [part='resize-handle'],
     [part='resize-handle']:active {
       opacity: 1;
       transition-delay: 0.15s;
