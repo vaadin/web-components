@@ -31,7 +31,14 @@ describe('vaadin-combo-box-light - validation', () => {
       expect(comboBox.invalid).to.be.false;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      comboBox.dirty = true;
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
@@ -44,22 +51,6 @@ describe('vaadin-combo-box-light - validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        input.focus();
-        input.blur();
-        expect(validateSpy.called).to.be.false;
-      });
     });
   });
 

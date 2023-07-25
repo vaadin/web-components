@@ -26,13 +26,28 @@ describe('validation', () => {
       expect(comboBox.invalid).to.be.false;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      comboBox.dirty = true;
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on outside click', () => {
+    it('should not validate on outside click by default', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on outside click when dirty', () => {
+      comboBox.dirty = true;
       input.focus();
       input.click();
       outsideClick();
@@ -96,22 +111,6 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        input.focus();
-        input.blur();
-        expect(validateSpy.called).to.be.false;
-      });
     });
   });
 

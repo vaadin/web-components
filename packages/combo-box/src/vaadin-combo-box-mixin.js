@@ -1091,9 +1091,7 @@ export const ComboBoxMixin = (subclass) =>
         this.dirty = true;
       }
 
-      // Do not validate when focusout is caused by document
-      // losing focus, which happens on browser tab switch.
-      if (document.hasFocus()) {
+      if (this.dirty) {
         this.validate();
       }
 
