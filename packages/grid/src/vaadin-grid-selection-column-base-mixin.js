@@ -124,6 +124,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
+        root.addEventListener('click', this.__onCellClick.bind(this));
       }
 
       checkbox.__item = item;
@@ -177,7 +178,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__dragCurrentY = event.detail.y;
       this.__dragDy = event.detail.dy;
       if (event.detail.state === 'start') {
-        this.__dragWasEnabled = true;
         const renderedRows = this._grid._getRenderedRows();
         // Get the row where the drag started
         const dragStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
@@ -198,7 +198,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
             this._deselectItem(this.__dragStartItem);
           }
         }
-        this.__dragStartIndex = undefined;
+        // clear drag state after timeout, which allows preventing the
+        // subsequent click event if drag started and ended on the same item
+        setTimeout(() => {
+          this.__dragStartIndex = undefined;
+        });
       }
     }
 
@@ -206,6 +210,18 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     __onCellMouseDown(e) {
       if (this.dragSelect) {
         // Prevent text selection when starting to drag
+        e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onCellClick(e) {
+      if (this.__dragStartIndex !== undefined) {
+        // Stop the click event if drag was enabled. This click event should
+        // only occur if drag started and stopped on the same item. In that case
+        // the selection state has already been toggled on drag end, and we
+        // don't  want to toggle it again from clicking the checkbox or changing
+        // the active item.
         e.preventDefault();
       }
     }

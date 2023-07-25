@@ -164,13 +164,12 @@ class GridSelectionColumn extends GridSelectionColumnBaseMixin(GridColumn) {
   /** @private */
   __onActiveItemChanged(e) {
     const activeItem = e.detail.value;
-    if (this.autoSelect && !this.__dragWasEnabled) {
+    if (this.autoSelect) {
       const item = activeItem || this.__previousActiveItem;
       if (item) {
         this._grid._toggleItem(item);
       }
     }
-    this.__dragWasEnabled = false;
     this.__previousActiveItem = activeItem;
   }
 
