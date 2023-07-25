@@ -3,11 +3,11 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -135,7 +135,8 @@ export const ListMixin = (superClass) =>
 
       this.addEventListener('click', (e) => this._onClick(e));
 
-      this._observer = new FlattenedNodesObserver(this, () => {
+      const slot = this.shadowRoot.querySelector('slot:not([name])');
+      this._observer = new SlotObserver(slot, () => {
         this._setItems(this._filterItems(getFlattenedElements(this)));
       });
     }

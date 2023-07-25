@@ -48,7 +48,7 @@ describe('SlotObserver', () => {
     // Wait for microtask
     await Promise.resolve();
 
-    expect(spy.called).to.be.true;
+    expect(spy.calledOnce).to.be.true;
     const addedNodes = spy.firstCall.args[0].addedNodes;
     expect(addedNodes.length).to.equal(1);
     expect(addedNodes[0]).to.equal(div);
