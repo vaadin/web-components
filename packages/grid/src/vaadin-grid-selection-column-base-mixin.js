@@ -63,10 +63,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
         /**
          * When true, rows can be selected by dragging mouse cursor over selection column.
-         * @attr {boolean} select-rows-by-dragging
+         * @attr {boolean} drag-select
          * @type {boolean}
          */
-        selectRowsByDragging: {
+        dragSelect: {
           type: Boolean,
           value: false,
           reflectToAttribute: true,
@@ -171,7 +171,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onCellTrack(event) {
-      if (!this.selectRowsByDragging) {
+      if (!this.dragSelect) {
         return;
       }
       this.__dragCurrentY = event.detail.y;
@@ -204,7 +204,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onCellMouseDown(e) {
-      if (this.selectRowsByDragging) {
+      if (this.dragSelect) {
         // Prevent text selection when starting to drag
         e.preventDefault();
       }
