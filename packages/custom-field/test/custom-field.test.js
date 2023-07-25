@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-custom-field.js';
 import { dispatchChange } from './helpers.js';
@@ -7,13 +7,14 @@ import { dispatchChange } from './helpers.js';
 describe('custom field', () => {
   let customField;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     customField = fixtureSync(`
       <vaadin-custom-field>
         <input type="text" />
         <input type="number" />
       </vaadin-custom-field>
     `);
+    await nextRender();
   });
 
   describe('inputs', () => {
@@ -35,7 +36,7 @@ describe('custom field', () => {
       expect(document.activeElement).to.equal(customField.inputs[0]);
     });
 
-    it('should ignore slotted inputs', () => {
+    it('should ignore slotted inputs', async () => {
       customField = fixtureSync(`
         <vaadin-custom-field>
           <div>
@@ -44,6 +45,7 @@ describe('custom field', () => {
           </div>
         </vaadin-custom-field>
       `);
+      await nextRender();
       expect(customField.inputs).to.be.empty;
     });
   });
@@ -61,8 +63,9 @@ describe('custom field', () => {
       expect(customField.value).to.equal('1\t1');
     });
 
-    it('should update input values when set', () => {
+    it('should update input values when set', async () => {
       customField.value = '1\t1';
+      await nextUpdate(customField);
       customField.inputs.forEach((el) => {
         expect(el.value).to.equal('1');
       });
@@ -70,10 +73,13 @@ describe('custom field', () => {
   });
 
   describe('aria-required', () => {
-    it('should toggle aria-required attribute on required property change', () => {
+    it('should toggle aria-required attribute on required property change', async () => {
       customField.required = true;
+      await nextUpdate(customField);
       expect(customField.getAttribute('aria-required')).to.equal('true');
+
       customField.required = false;
+      await nextUpdate(customField);
       expect(customField.hasAttribute('aria-required')).to.be.false;
     });
   });
@@ -163,19 +169,20 @@ describe('custom field', () => {
   });
 
   describe('custom parser and formatter', () => {
-    it('should use custom parser if that exists', () => {
+    it('should use custom parser if that exists', async () => {
       customField.parseValue = (value) => {
         return value.split(' ').map((value) => parseInt(value) + 1);
       };
 
       customField.value = '1 1';
+      await nextUpdate(customField);
 
       customField.inputs.forEach((el) => {
         expect(el.value).to.equal('2');
       });
     });
 
-    it('should use custom formatter if that exists', () => {
+    it('should use custom formatter if that exists', async () => {
       customField.formatValue = (inputValues) => {
         return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
       };
@@ -184,6 +191,8 @@ describe('custom field', () => {
         el.value = '1';
         dispatchChange(el);
       });
+
+      await nextUpdate(customField);
 
       expect(customField.value).to.be.equal('2 2');
     });
@@ -197,10 +206,11 @@ describe('custom field', () => {
         console.warn.restore();
       });
 
-      it('should warn if custom parser has not returned array of values', () => {
+      it('should warn if custom parser has not returned array of values', async () => {
         customField.parseValue = () => '';
 
         customField.value = 'foo';
+        await nextUpdate(customField);
         expect(console.warn.callCount).to.equal(1);
       });
     });
