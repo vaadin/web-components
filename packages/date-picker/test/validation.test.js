@@ -1,9 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
-import { close, open, setInputValue, waitForOverlayRender } from './helpers.js';
+import { close, open, setInputValue, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {
@@ -104,18 +105,35 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on close', async () => {
-      await open(datePicker);
+    it('should validate before change event on blur', async () => {
+      datePicker.value = '2023-01-01';
       validateSpy.resetHistory();
-      await close(datePicker);
+      input.focus();
+      input.select();
+      await sendKeys({ press: 'Backspace' });
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.called).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should not validate on input click while opened', async () => {
-      await open(datePicker);
-      validateSpy.resetHistory();
+    it('should validate before change event on outside click', async () => {
+      input.focus();
       input.click();
-      expect(validateSpy.called).to.be.false;
+      await waitForOverlayRender();
+      await sendKeys({ type: '1/1/2023' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      outsideClick();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should validate before change event on clear button click', async () => {
@@ -126,6 +144,13 @@ describe('validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should not validate on input click while opened', async () => {
+      await open(datePicker);
+      validateSpy.resetHistory();
+      input.click();
+      expect(validateSpy.called).to.be.false;
     });
 
     it('should validate on value change', () => {
@@ -263,6 +288,30 @@ describe('validation', () => {
         expect(validateSpy.called).to.be.false;
       });
     });
+
+    describe('autoOpenDisabled', () => {
+      beforeEach(() => {
+        datePicker.autoOpenDisabled = true;
+      });
+
+      it('should validate on blur', () => {
+        input.focus();
+        input.blur();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate before change event on blur', async () => {
+        datePicker.value = '2023-01-01';
+        validateSpy.resetHistory();
+        input.focus();
+        input.select();
+        await sendKeys({ press: 'Backspace' });
+        input.blur();
+        expect(changeSpy.calledOnce).to.be.true;
+        expect(validateSpy.called).to.be.true;
+        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      });
+    });
   });
 
   describe('input value', () => {
@@ -298,7 +347,7 @@ describe('validation', () => {
       expect(input.value).to.equal('foo');
     });
 
-    describe('auto-open disabled', () => {
+    describe('autoOpenDisabled', () => {
       beforeEach(() => {
         datePicker.autoOpenDisabled = true;
       });
