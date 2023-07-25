@@ -88,13 +88,28 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      timePicker.dirty = true;
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on outside click', () => {
+    it('should not validate on outside click by default', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on outside click when dirty', () => {
+      timePicker.dirty = true;
       input.focus();
       input.click();
       outsideClick();
