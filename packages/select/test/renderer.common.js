@@ -129,6 +129,7 @@ describe('renderer', () => {
     select.value = 'bar';
     select.renderer = generateRendererWithItems(['bar', 'foo']);
     await nextUpdate(select);
+    await nextUpdate(select._menuElement);
     expect(select.value).to.equal('bar');
     expect(select._menuElement.selected).to.equal(0);
   });
