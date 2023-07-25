@@ -1,11 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
 
 describe('validation', () => {
-  let comboBox, validateSpy;
+  let comboBox, validateSpy, changeSpy, input;
 
   describe('initial', () => {
     beforeEach(() => {
@@ -44,7 +45,42 @@ describe('validation', () => {
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
       comboBox.items = ['apple', 'banana'];
+      input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
+      changeSpy = sinon.spy();
+      comboBox.addEventListener('change', changeSpy);
+    });
+
+    it('should validate on blur', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on Enter', async () => {
+      input.focus();
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on clear button click', () => {
+      comboBox.clearButtonVisible = true;
+      comboBox.value = 'apple';
+      validateSpy.resetHistory();
+      comboBox.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should not validate on required change when no items are selected', () => {

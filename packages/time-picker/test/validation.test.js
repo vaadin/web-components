@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -92,6 +92,23 @@ describe('validation', () => {
       input.focus();
       input.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on outside click', async () => {
+      input.focus();
+      input.click();
+      setInputValue(timePicker, '12:00');
+      outsideClick();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should validate before change event on blur', () => {
