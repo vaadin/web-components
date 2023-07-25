@@ -538,7 +538,7 @@ describe('select rows by dragging', () => {
       </vaadin-grid>
     `);
 
-    grid.items = ['foo', 'bar', 'baz', 'qux', 'quux', 'corge'];
+    grid.items = [...new Array(100)].map((_, i) => `${i}`);
 
     flushGrid(grid);
 
@@ -640,61 +640,62 @@ describe('select rows by dragging', () => {
   });
 
   it('should not scroll when dragging within viewport', () => {
-    grid.items = Array(...new Array(35)).map(() => 'foo');
-
-    let lassoRow = 0;
-    const startCell = getBodyCellContent(grid, lassoRow, 0);
-    fireTrackEvent(startCell, startCell, 'start');
-    clock.tick(10);
-
     const prevScrollTop = grid.$.table.scrollTop;
-    const firstVisibleIndex = getFirstVisibleItem(grid).index;
-    const lastVisibleIndex = getLastVisibleItem(grid).index;
-    const itemsPerViewport = lastVisibleIndex - firstVisibleIndex;
-
-    lassoRow += itemsPerViewport - 2;
-    const trackCell = getBodyCellContent(grid, lassoRow, 0);
-    fireTrackEvent(trackCell, startCell, 'track');
+    const centerIndex = Math.floor((getLastVisibleItem(grid).index - getFirstVisibleItem(grid).index) / 2);
+    const centerCell = getBodyCellContent(grid, centerIndex, 0);
+    const nextCenterCell = getBodyCellContent(grid, centerIndex + 1, 0);
+    fireTrackEvent(centerCell, centerCell, 'start');
+    fireTrackEvent(nextCenterCell, centerCell, 'track');
     clock.tick(10);
 
     expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
   });
 
-  it('should scroll upwards when dragging viewport top', () => {
-    grid.items = Array(...new Array(35)).map(() => 'foo');
-    grid.scrollToIndex(30);
-
-    const lassoRow = grid._getRenderedRows().length - 1;
-    const startCell = getBodyCellContent(grid, lassoRow, 0);
-
-    fireTrackEvent(startCell, startCell, 'start');
-    clock.tick(10);
+  it('should scroll upwards when dragging grid top region', () => {
+    grid.scrollToIndex(10);
 
     const prevScrollTop = grid.$.table.scrollTop;
-    const targetCell = getBodyCellContent(grid, 6, 0);
-
-    fireTrackEvent(targetCell, startCell, 'track');
+    const firstVisibleCell = getBodyCellContent(grid, getFirstVisibleItem(grid).index, 0);
+    const lastVisibleCell = getBodyCellContent(grid, getLastVisibleItem(grid).index, 0);
+    fireTrackEvent(lastVisibleCell, lastVisibleCell, 'start');
+    fireTrackEvent(firstVisibleCell, lastVisibleCell, 'track');
     clock.tick(10);
 
     expect(grid.$.table.scrollTop).to.be.lt(prevScrollTop);
   });
 
-  it('should scroll downwards when dragging grid bottom region', () => {
-    grid.items = Array(...new Array(35)).map(() => 'foo');
-
-    const startCell = getBodyCellContent(grid, 0, 0);
-    fireTrackEvent(startCell, startCell, 'start');
-    clock.tick(10);
+  it('should not scroll upwards when dragging down in grid top region', () => {
+    grid.scrollToIndex(10);
 
     const prevScrollTop = grid.$.table.scrollTop;
-    const firstVisibleIndex = getFirstVisibleItem(grid).index;
-    const lastVisibleIndex = getLastVisibleItem(grid).index;
-    const itemsPerViewport = lastVisibleIndex - firstVisibleIndex;
-    const targetRow = itemsPerViewport - 1;
-    const targetCell = getBodyCellContent(grid, targetRow, 0);
-    fireTrackEvent(targetCell, startCell, 'track');
+    const firstVisibleCell = getBodyCellContent(grid, getFirstVisibleItem(grid).index, 0);
+    const secondVisibleCell = getBodyCellContent(grid, getFirstVisibleItem(grid).index + 1, 0);
+    fireTrackEvent(firstVisibleCell, firstVisibleCell, 'start');
+    fireTrackEvent(secondVisibleCell, firstVisibleCell, 'track');
+    clock.tick(10);
+
+    expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
+  });
+
+  it('should scroll downwards when dragging grid bottom region', () => {
+    const prevScrollTop = grid.$.table.scrollTop;
+    const firstVisibleCell = getBodyCellContent(grid, getFirstVisibleItem(grid).index, 0);
+    const lastVisibleCell = getBodyCellContent(grid, getLastVisibleItem(grid).index, 0);
+    fireTrackEvent(firstVisibleCell, firstVisibleCell, 'start');
+    fireTrackEvent(lastVisibleCell, firstVisibleCell, 'track');
     clock.tick(10);
 
     expect(grid.$.table.scrollTop).to.be.gt(prevScrollTop);
+  });
+
+  it('should not scroll downwards when dragging up in grid bottom region', () => {
+    const prevScrollTop = grid.$.table.scrollTop;
+    const lastVisibleCell = getBodyCellContent(grid, getLastVisibleItem(grid).index, 0);
+    const previousVisibleCell = getBodyCellContent(grid, getLastVisibleItem(grid).index - 1, 0);
+    fireTrackEvent(lastVisibleCell, lastVisibleCell, 'start');
+    fireTrackEvent(previousVisibleCell, lastVisibleCell, 'track');
+    clock.tick(10);
+
+    expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
   });
 });
