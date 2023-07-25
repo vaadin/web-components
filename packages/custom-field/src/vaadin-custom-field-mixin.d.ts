@@ -7,6 +7,8 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 
 export type CustomFieldParseValueFn = (value: string) => unknown[];
 
@@ -21,6 +23,8 @@ export declare function CustomFieldMixin<T extends Constructor<HTMLElement>>(
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<KeyboardMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass> &
   T;
 
 export declare class CustomFieldMixinClass {
