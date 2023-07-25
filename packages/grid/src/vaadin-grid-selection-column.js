@@ -58,8 +58,6 @@ class GridSelectionColumn extends GridSelectionColumnBaseMixin(GridColumn) {
     this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
     this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
     this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
-    this.__onSelectionColumnCellTrack = this.__onSelectionColumnCellTrack.bind(this);
-    this.__onSelectionColumnCellMouseDown = this.__onSelectionColumnCellMouseDown.bind(this);
   }
 
   /** @protected */

@@ -262,8 +262,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // Add listener after appending, so we can skip the initial change event
         checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
         checkbox.addEventListener('click', this.__onCheckboxClick.bind(this));
-        addListener(root, 'track', this.__onSelectionColumnCellTrack);
-        root.addEventListener('mousedown', this.__onSelectionColumnCellMouseDown);
+        addListener(root, 'track', this.__onSelectionColumnCellTrack.bind(this));
+        root.addEventListener('mousedown', this.__onSelectionColumnCellMouseDown.bind(this));
       }
 
       checkbox.__item = item;
