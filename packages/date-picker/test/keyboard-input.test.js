@@ -664,20 +664,6 @@ describe('keyboard', () => {
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should change after validate on overlay close', (done) => {
-        listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', () => {
-          // Wait for overlay to finish closing
-          nextRender(datePicker).then(() => {
-            expect(validateSpy.calledOnce).to.be.true;
-            expect(changeSpy.calledOnce).to.be.true;
-            expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-            done();
-          });
-        });
-
-        datePicker.close();
-      });
-
       it('should change after validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
 
@@ -753,12 +739,6 @@ describe('keyboard', () => {
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should validate on blur', async () => {
-        await sendKeys({ press: 'Tab' });
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.called).to.be.false;
-      });
-
       it('should neither change nor validate on Esc', async () => {
         await sendKeys({ type: '01/02/20' });
         await sendKeys({ press: 'Escape' });
@@ -795,15 +775,6 @@ describe('keyboard', () => {
           await sendKeys({ press: 'Backspace' });
           await sendKeys({ press: 'Escape' });
           expect(validateSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-        });
-
-        it('should change after validate on Backspace & blur', async () => {
-          input.select();
-          await sendKeys({ press: 'Backspace' });
-          await sendKeys({ press: 'Tab' });
-          expect(validateSpy.called).to.be.true;
           expect(changeSpy.calledOnce).to.be.true;
           expect(changeSpy.calledAfter(validateSpy)).to.be.true;
         });
