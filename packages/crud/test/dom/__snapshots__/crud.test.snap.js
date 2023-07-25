@@ -21,8 +21,24 @@ snapshots["vaadin-crud host default"] =
     <vaadin-crud-edit-column>
     </vaadin-crud-edit-column>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
+      <vaadin-grid-sorter
+        aria-label="Sort by Name"
+        path="name"
+      >
+        Name
+      </vaadin-grid-sorter>
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-1">
+      <vaadin-grid-sorter
+        aria-label="Sort by Age"
+        path="age"
+      >
+        Age
+      </vaadin-grid-sorter>
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-2">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
       <vaadin-grid-filter
         aria-label="Filter by Name"
         path="name"
@@ -53,7 +69,7 @@ snapshots["vaadin-crud host default"] =
         </vaadin-text-field>
       </vaadin-grid-filter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-2">
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-4">
       <vaadin-grid-filter
         aria-label="Filter by Age"
         path="age"
@@ -84,10 +100,6 @@ snapshots["vaadin-crud host default"] =
         </vaadin-text-field>
       </vaadin-grid-filter>
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-4">
-    </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-5">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-6">
@@ -101,38 +113,26 @@ snapshots["vaadin-crud host default"] =
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-10">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-11">
-      John
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-12">
-      30
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-13">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-14">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-15">
+      John
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-16">
+      30
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-17">
       <vaadin-crud-edit
         aria-label="Edit"
         role="button"
         tabindex="0"
       >
       </vaadin-crud-edit>
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-14">
-      <vaadin-grid-sorter
-        aria-label="Sort by Name"
-        path="name"
-      >
-        Name
-      </vaadin-grid-sorter>
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-15">
-      <vaadin-grid-sorter
-        aria-label="Sort by Age"
-        path="age"
-      >
-        Age
-      </vaadin-grid-sorter>
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-16">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-17">
     </vaadin-grid-cell-content>
   </vaadin-crud-grid>
   <vaadin-crud-form slot="form">
@@ -176,7 +176,7 @@ snapshots["vaadin-crud host default"] =
 `;
 /* end snapshot vaadin-crud host default */
 
-snapshots["vaadin-crud shadow default"] = 
+snapshots["vaadin-crud shadow default"] =
 `<div id="container">
   <div id="main">
     <slot name="grid">
