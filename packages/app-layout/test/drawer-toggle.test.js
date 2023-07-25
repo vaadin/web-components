@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, space } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-drawer-toggle.js';
 
@@ -99,44 +99,44 @@ describe('drawer-toggle', () => {
       expect(icon.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should show fallback icon when adding non-empty element', () => {
+    it('should show fallback icon when adding non-empty element', async () => {
       const div = document.createElement('div');
       toggle.appendChild(div);
-      toggle._observer.flush();
+      await nextFrame();
       expect(icon.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should show fallback icon when adding whitespace text node', () => {
+    it('should show fallback icon when adding whitespace text node', async () => {
       const text = document.createTextNode(' ');
       toggle.appendChild(text);
-      toggle._observer.flush();
+      await nextFrame();
       expect(icon.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should show fallback icon when adding element to non-default slot', () => {
+    it('should show fallback icon when adding element to non-default slot', async () => {
       // Emulate adding element in HTML wrapped with whitespace text nodes
       toggle.innerHTML = ' <vaadin-tooltip slot="tooltip"></vaadin-tooltip> ';
-      toggle._observer.flush();
+      await nextFrame();
       expect(icon.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should hide fallback icon when removing whitespace text node', () => {
+    it('should hide fallback icon when removing whitespace text node', async () => {
       const text = document.createTextNode(' ');
       toggle.appendChild(text);
-      toggle._observer.flush();
+      await nextFrame();
 
       toggle.removeChild(text);
-      toggle._observer.flush();
+      await nextFrame();
       expect(icon.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should hide fallback icon when clearing all slotted content', () => {
+    it('should hide fallback icon when clearing all slotted content', async () => {
       // Emulate adding element in HTML wrapped with whitespace text nodes
       toggle.innerHTML = ' <vaadin-tooltip slot="tooltip"></vaadin-tooltip> ';
-      toggle._observer.flush();
+      await nextFrame();
 
       toggle.innerHTML = '';
-      toggle._observer.flush();
+      await nextFrame();
       expect(icon.hasAttribute('hidden')).to.be.true;
     });
   });

@@ -245,10 +245,10 @@ describe('vaadin-app-layout', () => {
         expect(spy.calledTwice).to.be.true;
       });
 
-      it('should hide drawer if corresponding slot has no content', () => {
+      it('should hide drawer if corresponding slot has no content', async () => {
         const section = layout.querySelector('[slot="drawer"]');
         section.parentNode.removeChild(section);
-        layout._drawerChildObserver.flush();
+        await nextFrame();
         expect(drawer.hasAttribute('hidden')).to.be.true;
       });
 
