@@ -18,13 +18,35 @@ export class SlotObserver {
     /** @type {Node[]} */
     this._storedNodes = [];
 
+    this._connected = false;
     this._scheduled = false;
 
-    slot.addEventListener('slotchange', () => {
+    this._boundSchedule = () => {
       this._schedule();
-    });
+    };
 
+    this.connect();
     this._schedule();
+  }
+
+  /**
+   * Activates an observer. This method is automatically called when
+   * a `SlotObserver` is created. It should only be called to  re-activate
+   * an observer that has been deactivated via the `disconnect` method.
+   */
+  connect() {
+    this.slot.addEventListener('slotchange', this._boundSchedule);
+    this._connected = true;
+  }
+
+  /**
+   * Deactivates the observer. After calling this method the observer callback
+   * will not be called when changes to slotted nodes occur. The `connect` method
+   * may be subsequently called to reactivate the observer.
+   */
+  disconnect() {
+    this.slot.removeEventListener('slotchange', this._boundSchedule);
+    this._connected = false;
   }
 
   /** @private */
@@ -42,6 +64,10 @@ export class SlotObserver {
    * Run the observer callback synchronously.
    */
   flush() {
+    if (!this._connected) {
+      return;
+    }
+
     this._scheduled = false;
 
     this._processNodes();

@@ -110,4 +110,56 @@ describe('SlotObserver', () => {
     const addedNodes = spy.firstCall.args[0].addedNodes;
     expect(addedNodes[0]).to.equal(div);
   });
+
+  it('should not run callback after node is added if disconnected', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    await Promise.resolve();
+    spy.resetHistory();
+
+    observer.disconnect();
+
+    const div = document.createElement('div');
+    host.appendChild(div);
+
+    // Wait for slotchange
+    await Promise.resolve();
+    // Wait for microtask
+    await Promise.resolve();
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not run callback when calling flush() if disconnected', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    await Promise.resolve();
+    spy.resetHistory();
+
+    observer.disconnect();
+
+    const div = document.createElement('div');
+    host.appendChild(div);
+
+    observer.flush();
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should run callback when calling flush() if re-connected', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    await Promise.resolve();
+    spy.resetHistory();
+
+    observer.disconnect();
+    observer.connect();
+
+    const div = document.createElement('div');
+    host.appendChild(div);
+
+    observer.flush();
+
+    expect(spy.calledOnce).to.be.true;
+  });
 });
