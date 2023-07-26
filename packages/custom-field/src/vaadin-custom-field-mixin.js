@@ -117,9 +117,21 @@ export const CustomFieldMixin = (superClass) =>
 
       this.ariaTarget = this;
 
+      this.__childrenObserver = new MutationObserver(() => {
+        this.__setInputsFromSlot();
+      });
+
       this.__setInputsFromSlot();
       this.$.slot.addEventListener('slotchange', () => {
         this.__setInputsFromSlot();
+
+        // Observe changes to any children except inputs
+        // to allow wrapping `<input>` with `<div>` etc.
+        getFlattenedElements(this.$.slot)
+          .filter((el) => !this.__isInput(el))
+          .forEach((el) => {
+            this.__childrenObserver.observe(el, { childList: true });
+          });
       });
 
       this._tooltipController = new TooltipController(this);
