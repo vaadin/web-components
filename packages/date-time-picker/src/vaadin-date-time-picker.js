@@ -323,6 +323,15 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       },
 
       /**
+       * Whether the user has interacted with the field.
+       */
+      dirty: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
+
+      /**
        * The current selected date time.
        * @private
        */
@@ -409,6 +418,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__defaultTimeMaxValue = '23:59:59.999';
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
+    this.__dirtyChangedEventHandler = this.__dirtyChangedEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
   }
 
@@ -517,14 +527,21 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
+  __dirtyChangedEventHandler() {
+    this.dirty = true;
+  }
+
+  /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', this.__changeEventHandler);
+    node.addEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
   }
 
   /** @private */
   __removeInputListeners(node) {
     node.removeEventListener('change', this.__changeEventHandler);
+    node.removeEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
   }
 
