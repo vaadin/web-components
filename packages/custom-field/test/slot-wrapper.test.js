@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-custom-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { dispatchChange } from './helpers.js';
@@ -75,7 +75,7 @@ Object.keys(fixtures).forEach((set) => {
   describe(`slot updates (${set})`, () => {
     let parent, customField, inputElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       // 'parent' is the element to add and remove inputs to/from for testing
       const root = fixtureSync(fixtures[set]);
       if (set === 'nested' || set === 'nested2') {
@@ -89,6 +89,8 @@ Object.keys(fixtures).forEach((set) => {
         customField = root; // <custom-field>
       }
       inputElement = document.createElement('input');
+      // Wait for initial slotchange
+      await nextRender();
     });
 
     it('should add new input to the input list when adding to the DOM', async () => {
