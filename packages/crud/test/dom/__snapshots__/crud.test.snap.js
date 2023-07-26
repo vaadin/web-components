@@ -2,10 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-crud host default"] = 
-`<vaadin-crud
-  editor-position=""
-  fullscreen=""
->
+`<vaadin-crud editor-position="">
   <h3 slot="header">
     Edit item
   </h3>

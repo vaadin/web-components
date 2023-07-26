@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { flushGrid } from './helpers.js';
@@ -10,6 +11,10 @@ describe('crud buttons', () => {
   function edit(item) {
     fire(crud._grid, 'edit', { item });
   }
+
+  before(async () => {
+    await setViewport({ width: 1024, height: 768 });
+  });
 
   ['default', 'slotted'].forEach((mode) => {
     const isDefault = mode === 'default';
