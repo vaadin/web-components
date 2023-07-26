@@ -62,14 +62,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * When true, rows can be selected by dragging mouse cursor over selection column.
+         * When true, rows can be selected by dragging over the selection column.
          * @attr {boolean} drag-select
          * @type {boolean}
          */
         dragSelect: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true,
         },
 
         /** @protected */
