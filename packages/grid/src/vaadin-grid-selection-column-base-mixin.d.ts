@@ -36,6 +36,12 @@ export declare class GridSelectionColumnBaseMixinClass<TItem> {
   autoSelect: boolean;
 
   /**
+   * When true, rows can be selected by dragging over the selection column.
+   * @attr {boolean} drag-select
+   */
+  dragSelect: boolean;
+
+  /**
    * Override to handle the user selecting all items.
    */
   protected _selectAll(): void;
