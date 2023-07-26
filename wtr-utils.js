@@ -169,10 +169,22 @@ const getVisualTestGroups = (packages, theme) => {
 
 const fontRoboto = '<link rel="stylesheet" href="./node_modules/@fontsource/roboto/latin.css">';
 
-const getTestRunnerHtml = (theme) => (testFramework) =>
+const litImportMap = `
+  <script type="importmap">
+    ${JSON.stringify({
+      imports: {
+        '/packages/button/src/vaadin-button.js': '/packages/button/src/vaadin-lit-button.js',
+      },
+    })}
+  </script>
+`;
+
+const getTestRunnerHtml = (theme) => (testFramework, _config, group) =>
   `
   <!DOCTYPE html>
   <html>
+    ${group.name.startsWith('lit-') ? litImportMap : ''}
+
     <body>
       <style>
         html,
@@ -250,7 +262,15 @@ const createUnitTestsConfig = (config) => {
       },
     },
     coverage: hasCoverageParam,
-    groups,
+    groups: [
+      ...groups,
+      ...groups.map(({ name, files }) => {
+        return {
+          name: `lit-${name}`,
+          files,
+        };
+      }),
+    ],
     testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs,
   };
