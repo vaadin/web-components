@@ -70,7 +70,7 @@ describe('dirty state', () => {
     expect(datePicker.dirty).to.be.true;
   });
 
-  it('should be dirty after clicking the clear button', () => {
+  it('should be dirty after clear button click', () => {
     datePicker.clearButtonVisible = true;
     datePicker.value = '2023-01-01';
     datePicker.$.clearButton.click();

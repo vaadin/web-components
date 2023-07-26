@@ -64,7 +64,7 @@ describe('dirty state', () => {
     expect(timePicker.dirty).to.be.true;
   });
 
-  it('should be dirty after clicking the clear button', () => {
+  it('should be dirty after clear button click', () => {
     timePicker.clearButtonVisible = true;
     timePicker.value = '12:00';
     timePicker.$.clearButton.click();

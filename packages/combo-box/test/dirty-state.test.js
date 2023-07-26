@@ -65,7 +65,7 @@ describe('dirty state', () => {
     expect(comboBox.dirty).to.be.true;
   });
 
-  it('should be dirty after clicking the clear button', () => {
+  it('should be dirty after clear button click', () => {
     comboBox.clearButtonVisible = true;
     comboBox.value = 'foo';
     comboBox.$.clearButton.click();
