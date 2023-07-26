@@ -46,13 +46,20 @@ export class OverflowController {
    * @protected
    */
   observe() {
-    this.__resizeObserver = new ResizeObserver(() => {
+    const { host } = this;
+
+    this.__resizeObserver = new ResizeObserver((entries) => {
       this.__debounceOverflow = Debouncer.debounce(this.__debounceOverflow, animationFrame, () => {
         this.__updateOverflow();
       });
     });
 
-    this.__resizeObserver.observe(this.host);
+    this.__resizeObserver.observe(host);
+
+    // Observe initial children
+    [...host.children].forEach((child) => {
+      this.__resizeObserver.observe(child);
+    });
 
     this.__childObserver = new MutationObserver((mutations) => {
       mutations.forEach(({ addedNodes, removedNodes }) => {
@@ -72,7 +79,7 @@ export class OverflowController {
       this.__updateOverflow();
     });
 
-    this.__childObserver.observe(this.host, { childList: true });
+    this.__childObserver.observe(host, { childList: true });
 
     // Update overflow attribute on scroll
     this.scrollTarget.addEventListener('scroll', this.__boundOnScroll);

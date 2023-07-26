@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
@@ -98,7 +98,8 @@ describe('overflow-controller', () => {
             <div>4</div>
           </overflow-element>
         `);
-        await nextFrame();
+        // Wait for initial update
+        await nextRender();
         items = Array.from(element.children);
         controller = new OverflowController(element);
         element.addController(controller);
@@ -163,6 +164,21 @@ describe('overflow-controller', () => {
               items[3].remove();
               await nextFrame();
               expect(element.hasAttribute('overflow')).to.be.false;
+            });
+
+            it(`should update overflow on items adding with ${dir}`, async () => {
+              items[2].remove();
+              items[3].remove();
+              await nextFrame();
+
+              const div = document.createElement('div');
+              div.textContent = '5';
+              element.appendChild(div);
+              await nextFrame();
+
+              div.style.minWidth = '30px';
+              await onceResized(controller);
+              expect(element.hasAttribute('overflow')).to.be.true;
             });
           });
         });
