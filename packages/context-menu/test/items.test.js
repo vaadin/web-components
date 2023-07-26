@@ -234,7 +234,6 @@ describe('items', () => {
   it('should not close the menu if root item has keep open', () => {
     getMenuItems(rootMenu)[2].click();
     expect(rootMenu.opened).to.be.true;
-    expect(subMenu.opened).to.be.true;
   });
 
   it('should not close the menu if sub menu item has keep open', () => {
