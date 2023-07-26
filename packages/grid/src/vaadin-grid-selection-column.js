@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { GridColumn } from './vaadin-grid-column.js';
 
 /**
@@ -72,6 +73,16 @@ class GridSelectionColumn extends GridColumn {
        * @type {boolean}
        */
       autoSelect: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * When true, rows can be selected by dragging over the selection column.
+       * @attr {boolean} drag-select
+       * @type {boolean}
+       */
+      dragSelect: {
         type: Boolean,
         value: false,
       },
@@ -161,6 +172,9 @@ class GridSelectionColumn extends GridColumn {
       checkbox.setAttribute('aria-label', 'Select Row');
       checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
       root.appendChild(checkbox);
+      addListener(root, 'track', this.__onCellTrack.bind(this));
+      root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
+      root.addEventListener('click', this.__onCellClick.bind(this));
     }
 
     checkbox.__item = item;
@@ -234,6 +248,143 @@ class GridSelectionColumn extends GridColumn {
     } else {
       this._grid.deselectItem(e.target.__item);
     }
+  }
+
+  /** @private */
+  __onCellTrack(event) {
+    if (!this.dragSelect) {
+      return;
+    }
+    this.__dragCurrentY = event.detail.y;
+    this.__dragDy = event.detail.dy;
+    if (event.detail.state === 'start') {
+      const visibleRows = this._grid._getVisibleRows();
+      // Get the row where the drag started
+      const dragStartRow = visibleRows.find((row) => row.contains(event.currentTarget.assignedSlot));
+      // Whether to select or deselect the items on drag
+      this.__dragSelect = !this._grid._isSelected(dragStartRow._item);
+      // Store the index of the row where the drag started
+      this.__dragStartIndex = dragStartRow.index;
+      // Store the item of the row where the drag started
+      this.__dragStartItem = dragStartRow._item;
+      // Start the auto scroller
+      this.__dragAutoScroller();
+    } else if (event.detail.state === 'end') {
+      // If drag start and end stays within the same item, then toggle its state
+      if (this.__dragStartItem) {
+        if (this.__dragSelect) {
+          this._grid.selectItem(this.__dragStartItem);
+        } else {
+          this._grid.deselectItem(this.__dragStartItem);
+        }
+      }
+      // Clear drag state after timeout, which allows preventing the
+      // subsequent click event if drag started and ended on the same item
+      setTimeout(() => {
+        this.__dragStartIndex = undefined;
+      });
+    }
+  }
+
+  /** @private */
+  __onCellMouseDown(e) {
+    if (this.dragSelect) {
+      // Prevent text selection when starting to drag
+      e.preventDefault();
+    }
+  }
+
+  /** @private */
+  __onCellClick(e) {
+    if (this.__dragStartIndex !== undefined) {
+      // Stop the click event if drag was enabled. This click event should
+      // only occur if drag started and stopped on the same item. In that case
+      // the selection state has already been toggled on drag end, and we
+      // don't  want to toggle it again from clicking the checkbox or changing
+      // the active item.
+      e.preventDefault();
+    }
+  }
+
+  /** @private */
+  __dragAutoScroller() {
+    if (this.__dragStartIndex === undefined) {
+      return;
+    }
+    // Get the row being hovered over
+    const visibleRows = this._grid._getVisibleRows();
+    const hoveredRow = visibleRows.find((row) => {
+      const rowRect = row.getBoundingClientRect();
+      return this.__dragCurrentY >= rowRect.top && this.__dragCurrentY <= rowRect.bottom;
+    });
+
+    // Get the index of the row being hovered over or the first/last
+    // visible row if hovering outside the grid
+    let hoveredIndex = hoveredRow ? hoveredRow.index : undefined;
+    const scrollableArea = this.__getScrollableArea();
+    if (this.__dragCurrentY < scrollableArea.top) {
+      hoveredIndex = this._grid._firstVisibleIndex;
+    } else if (this.__dragCurrentY > scrollableArea.bottom) {
+      hoveredIndex = this._grid._lastVisibleIndex;
+    }
+
+    if (hoveredIndex !== undefined) {
+      // Select all items between the start and the current row
+      visibleRows.forEach((row) => {
+        if (
+          (hoveredIndex > this.__dragStartIndex && row.index >= this.__dragStartIndex && row.index <= hoveredIndex) ||
+          (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
+        ) {
+          if (this.__dragSelect) {
+            this._grid.selectItem(row._item);
+          } else {
+            this._grid.deselectItem(row._item);
+          }
+          this.__dragStartItem = undefined;
+        }
+      });
+    }
+
+    // Start scrolling in the top/bottom 15% of the scrollable area
+    const scrollTriggerArea = scrollableArea.height * 0.15;
+    // Maximum number of pixels to scroll per iteration
+    const maxScrollAmount = 10;
+
+    if (this.__dragDy < 0 && this.__dragCurrentY < scrollableArea.top + scrollTriggerArea) {
+      const dy = scrollableArea.top + scrollTriggerArea - this.__dragCurrentY;
+      const percentage = Math.min(1, dy / scrollTriggerArea);
+      this._grid.$.table.scrollTop -= percentage * maxScrollAmount;
+    }
+    if (this.__dragDy > 0 && this.__dragCurrentY > scrollableArea.bottom - scrollTriggerArea) {
+      const dy = this.__dragCurrentY - (scrollableArea.bottom - scrollTriggerArea);
+      const percentage = Math.min(1, dy / scrollTriggerArea);
+      this._grid.$.table.scrollTop += percentage * maxScrollAmount;
+    }
+
+    // Schedule the next auto scroll
+    setTimeout(() => this.__dragAutoScroller(), 10);
+  }
+
+  /**
+   * Gets the scrollable area of the grid as a bounding client rect. The
+   * scrollable area is the bounding rect of the grid minus the header and
+   * footer.
+   *
+   * @private
+   */
+  __getScrollableArea() {
+    const gridRect = this._grid.$.table.getBoundingClientRect();
+    const headerRect = this._grid.$.header.getBoundingClientRect();
+    const footerRect = this._grid.$.footer.getBoundingClientRect();
+
+    return {
+      top: gridRect.top + headerRect.height,
+      bottom: gridRect.bottom - footerRect.height,
+      left: gridRect.left,
+      right: gridRect.right,
+      height: gridRect.height - headerRect.height - footerRect.height,
+      width: gridRect.width,
+    };
   }
 
   /**
