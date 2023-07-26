@@ -297,8 +297,15 @@ export const ItemsMixin = (superClass) =>
       });
 
       // Listen to the forwarded event from sub-menu.
-      this.addEventListener('item-selected', () => {
-        this.close();
+      this.addEventListener('item-selected', (e) => {
+        const menu = e.target;
+        const targetItem = e.detail.value;
+
+        if (!!targetItem.keepOpen && menu.items.includes(targetItem)) {
+          menu._overlayElement.requestContentUpdate();
+        } else if (!targetItem.keepOpen) {
+          this.close();
+        }
       });
 
       // Mark parent item as collapsed when closing.
