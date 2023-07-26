@@ -300,11 +300,11 @@ export const ItemsMixin = (superClass) =>
       // Listen to the forwarded event from sub-menu.
       this.addEventListener('item-selected', (e) => {
         const menu = e.target;
-        const targetItem = e.detail.value;
+        const selectedItem = e.detail.value;
 
-        if (!!targetItem.keepOpen && menu.items.includes(targetItem)) {
+        if (!!selectedItem.keepOpen && menu.items.includes(selectedItem)) {
           menu._overlayElement.requestContentUpdate();
-        } else if (!targetItem.keepOpen) {
+        } else if (!selectedItem.keepOpen) {
           this.close();
         }
       });
