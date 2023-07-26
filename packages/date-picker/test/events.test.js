@@ -20,6 +20,11 @@ describe('events', () => {
       datePicker.inputElement.focus();
     });
 
+    it('should not be fired on blur by default', () => {
+      datePicker.inputElement.blur();
+      expect(changeSpy.called).to.be.false;
+    });
+
     it('should not be fired on focused date change', async () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker._overlayContent);
@@ -31,6 +36,14 @@ describe('events', () => {
       await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.called).to.be.true;
+    });
+
+    it('should be fired when clearing the value with Backspace and blur', async () => {
+      datePicker.value = '2000-01-01';
+      datePicker.inputElement.select();
+      await sendKeys({ press: 'Backspace' });
+      datePicker.inputElement.blur();
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should be fired after the value-changed event', async () => {
@@ -108,6 +121,18 @@ describe('events', () => {
       await waitForScrollToFinish(datePicker._overlayContent);
       await sendKeys({ press: 'Escape' });
       expect(changeSpy.called).to.be.false;
+    });
+
+    describe('autoOpenDisabled', () => {
+      beforeEach(() => {
+        datePicker.autoOpenDisabled = true;
+      });
+
+      it('should be fired when committing user input with blur', async () => {
+        await sendKeys({ type: '1/1/2000' });
+        datePicker.inputElement.blur();
+        expect(changeSpy.calledOnce).to.be.true;
+      });
     });
   });
 

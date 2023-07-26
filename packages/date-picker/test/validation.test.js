@@ -288,30 +288,6 @@ describe('validation', () => {
         expect(validateSpy.called).to.be.false;
       });
     });
-
-    describe('autoOpenDisabled', () => {
-      beforeEach(() => {
-        datePicker.autoOpenDisabled = true;
-      });
-
-      it('should validate on blur', () => {
-        input.focus();
-        input.blur();
-        expect(validateSpy.calledOnce).to.be.true;
-      });
-
-      it('should validate before change event on blur', async () => {
-        datePicker.value = '2023-01-01';
-        validateSpy.resetHistory();
-        input.focus();
-        input.select();
-        await sendKeys({ press: 'Backspace' });
-        input.blur();
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(validateSpy.called).to.be.true;
-        expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-      });
-    });
   });
 
   describe('input value', () => {
