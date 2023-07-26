@@ -12,6 +12,7 @@ export interface ContextMenuItem {
   component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;
+  keepOpen?: boolean;
   theme?: string[] | string;
   children?: ContextMenuItem[];
 }
@@ -32,7 +33,7 @@ export declare class ItemsMixinClass {
    * contextMenu.items = [
    *   { text: 'Menu Item 1', theme: 'primary', children:
    *     [
-   *       { text: 'Menu Item 1-1', checked: true },
+   *       { text: 'Menu Item 1-1', checked: true, keepOpen: true },
    *       { text: 'Menu Item 1-2' }
    *     ]
    *   },
