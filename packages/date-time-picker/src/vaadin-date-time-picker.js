@@ -510,8 +510,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     event.stopPropagation();
 
     if (this.__dispatchChangeForValue === this.value) {
-      this.__dispatchChange();
       this.validate();
+      this.__dispatchChange();
     }
     this.__dispatchChangeForValue = undefined;
   }
