@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
@@ -11,6 +12,10 @@ describe('crud', () => {
   function edit(item) {
     fire(crud._grid, 'edit', { item });
   }
+
+  before(async () => {
+    await setViewport({ width: 1024, height: 768 });
+  });
 
   describe('custom element definition', () => {
     let tagName;
