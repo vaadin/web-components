@@ -3,11 +3,11 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
+
+export { CustomFieldFormatValueFn, CustomFieldParseValueFn } from './vaadin-custom-field-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -95,7 +95,7 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
+declare class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof CustomFieldEventMap>(
     type: K,
     listener: (this: CustomField, ev: CustomFieldEventMap[K]) => void,
