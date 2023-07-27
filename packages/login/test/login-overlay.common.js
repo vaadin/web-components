@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-login-overlay.js';
 import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login overlay', () => {
@@ -80,17 +79,6 @@ describe('opened overlay', () => {
     tap(overlay.$.vaadinLoginOverlayWrapper.$.backdrop);
 
     expect(overlay.opened).to.be.true;
-  });
-
-  it('should fire `login` event', () => {
-    const loginSpy = sinon.spy(overlay, '_retargetEvent');
-    const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
-
-    enter(vaadinLoginUsername);
-    expect(loginSpy.called).to.be.true;
-
-    const { type } = loginSpy.args[0][0];
-    expect(type).to.be.equal('login');
   });
 
   it('should be able to listen to `login` event', () => {

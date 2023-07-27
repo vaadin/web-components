@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './login-form-wrapper-styles.js';
-import '../vaadin-login-form.js';
 import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login form with csrf', () => {

@@ -16,10 +16,12 @@ export const LoginFormMixin = (superClass) =>
     }
 
     /** @protected */
-    connectedCallback() {
+    async connectedCallback() {
       super.connectedCallback();
 
       if (!this.noAutofocus) {
+        // Wait for the form to fully render.
+        await new Promise(requestAnimationFrame);
         this.$.vaadinLoginUsername.focus();
       }
     }
