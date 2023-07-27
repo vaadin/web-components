@@ -74,6 +74,31 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('createRenderRoot', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        render() {
+          return html`<div id="foo">Component</div>`;
+        }
+
+        createRenderRoot() {
+          return this;
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should reference elements with id when rendering to light DOM', () => {
+      expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
+    });
+  });
+
   describe('reflectToAttribute', () => {
     let element;
 
