@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
 describe('multiple overlays', () => {

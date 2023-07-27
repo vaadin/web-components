@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './animated-styles.js';
-import '../src/vaadin-overlay.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createOverlay } from './helpers.js';
