@@ -6,8 +6,9 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-export { LoginI18n } from './vaadin-login-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
+
+export { LoginI18n } from './vaadin-login-mixin.js';
 
 /**
  * Fired when the `description` property changes.
