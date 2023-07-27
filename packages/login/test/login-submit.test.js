@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, tabKeyUp } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, tabKeyUp } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
 import '../vaadin-login-form.js';
@@ -50,8 +50,9 @@ describe('login form submit', () => {
   });
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
+      await nextRender();
     });
 
     it('should submit form values from login element', (done) => {
@@ -76,8 +77,9 @@ describe('login form submit', () => {
   describe('overlay', () => {
     let overlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       overlay = fixtureSync('<vaadin-login-overlay action="login-action" opened></vaadin-login-overlay>');
+      await nextRender();
       login = overlay.$.vaadinLoginForm;
     });
 

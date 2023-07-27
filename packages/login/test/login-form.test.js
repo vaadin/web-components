@@ -1,20 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './login-form-wrapper-styles.js';
 import '../vaadin-login-form.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { fillUsernameAndPassword } from './helpers.js';
-
-registerStyles(
-  'vaadin-login-form-wrapper',
-  css`
-    :host([theme='green']) [part='form-title'],
-    :host([theme='green']) [part='error-message-title'],
-    :host([theme='green']) [part='error-message-description'] {
-      color: rgb(0, 128, 0);
-    }
-  `,
-);
 
 describe('login form with csrf', () => {
   let loginForm, submitStub;
@@ -27,11 +16,12 @@ describe('login form with csrf', () => {
     submitStub.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     loginForm = fixtureSync(`<vaadin-login-form action='login-action'></vaadin-login-form>
     <meta name="_csrf_parameter" content="_csrf" />
     <meta name="_csrf_header" content="X-CSRF-TOKEN" />
     <meta name="_csrf" content="28e4c684-fb5e-4c79-b8e2-a2177569edfa" />`);
+    await nextRender();
   });
 
   afterEach(() => {
@@ -59,8 +49,9 @@ describe('login form', () => {
     submitStub.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
+    await nextRender();
     formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
@@ -130,18 +121,20 @@ describe('login form', () => {
     expect(submitStub.called).to.be.true;
   });
 
-  it('should disable button after submitting form', () => {
+  it('should disable button after submitting form', async () => {
     const submit = login.querySelector('vaadin-button');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
     enter(vaadinLoginPassword);
+    await nextUpdate(login);
     expect(submit.disabled).to.be.true;
   });
 
-  it('should prevent submit call when login is disabled', () => {
+  it('should prevent submit call when login is disabled', async () => {
     const submit = login.querySelector('vaadin-button');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
 
     login.setAttribute('disabled', 'disabled');
+    await nextUpdate(login);
     enter(vaadinLoginPassword);
     expect(submitStub.called).to.be.false;
 
@@ -149,23 +142,26 @@ describe('login form', () => {
     expect(submitStub.called).to.be.false;
   });
 
-  it('should not disable button on button click if form is invalid', () => {
+  it('should not disable button on button click if form is invalid', async () => {
     const submit = login.querySelector('vaadin-button');
     expect(submit.disabled).to.not.be.true;
     tap(submit);
+    await nextUpdate(login);
     expect(submit.disabled).to.not.be.true;
   });
 
-  it('should disable button on button click if form is valid', () => {
+  it('should disable button on button click if form is valid', async () => {
     const submit = login.querySelector('vaadin-button');
     fillUsernameAndPassword(login);
     tap(submit);
+    await nextUpdate(login);
     expect(submit.disabled).to.be.true;
   });
 
-  it('should trigger `login` event if no action is defined', () => {
+  it('should trigger `login` event if no action is defined', async () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = fillUsernameAndPassword(login);
     login.action = null;
+    await nextUpdate(login);
 
     const loginEventSpy = sinon.spy();
     login.addEventListener('login', loginEventSpy);
@@ -183,35 +179,44 @@ describe('login form', () => {
     expect(errorPart.offsetHeight).to.equal(0);
   });
 
-  it('should be possible to set error attribute', () => {
+  it('should be possible to set error attribute', async () => {
     expect(login.error).to.be.false;
     login.error = true;
+    await nextUpdate(login);
     const errorPart = formWrapper.shadowRoot.querySelectorAll('div[part="error-message"]')[0];
     expect(errorPart.offsetWidth).not.to.equal(0);
     expect(errorPart.offsetHeight).not.to.equal(0);
   });
 
-  it('should enable button when error is set to true', () => {
+  it('should enable button when error is set to true', async () => {
     expect(login.error).to.be.false;
     login.setAttribute('disabled', 'disabled');
+    await nextUpdate(login);
     expect(login.disabled).to.be.true;
+
     login.error = true;
+    await nextUpdate(login);
     expect(login.disabled).to.be.false;
 
     login.error = false;
+    await nextUpdate(login);
     expect(login.error).to.be.false;
     expect(login.disabled).to.be.false;
   });
 
-  it('should not enable button when error is set to true and _preventAutoEnable', () => {
+  it('should not enable button when error is set to true and _preventAutoEnable', async () => {
     expect(login.error).to.be.false;
     login.disabled = true;
     login._preventAutoEnable = true;
+    await nextUpdate(login);
     expect(login.disabled).to.be.true;
+
     login.error = true;
+    await nextUpdate(login);
     expect(login.disabled).to.be.true;
 
     login.error = false;
+    await nextUpdate(login);
     expect(login.error).to.be.false;
     expect(login.disabled).to.be.true;
   });
@@ -230,9 +235,10 @@ describe('login form', () => {
 describe('no autofocus', () => {
   let activeElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     activeElement = document.activeElement;
     fixtureSync('<vaadin-login-form no-autofocus></vaadin-login-form>');
+    await nextRender();
   });
 
   it('should not focus the username field', () => {
@@ -243,8 +249,9 @@ describe('no autofocus', () => {
 describe('error message', () => {
   let login, formWrapper;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form error></vaadin-login-form>');
+    await nextRender();
     formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
@@ -255,9 +262,10 @@ describe('error message', () => {
     expect(errorPart.offsetHeight).not.to.equal(0);
   });
 
-  it('should be possible to unset the error', () => {
+  it('should be possible to unset the error', async () => {
     expect(login.error).to.be.true;
     login.error = false;
+    await nextUpdate(login);
     const errorPart = formWrapper.shadowRoot.querySelectorAll('div[part="error-message"]')[0];
     expect(errorPart.hidden).to.be.true;
     expect(errorPart.offsetWidth).to.equal(0);
@@ -268,8 +276,9 @@ describe('error message', () => {
 describe('stylable parts', () => {
   let login, formWrapper;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form theme="green"></vaadin-login-form>');
+    await nextRender();
     formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
