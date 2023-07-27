@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
 import { fillUsernameAndPassword } from './helpers.js';
@@ -37,6 +37,7 @@ describe('opened overlay', () => {
   beforeEach(async () => {
     overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
     await nextRender();
+    await nextUpdate(overlay.$.vaadinLoginForm);
   });
 
   afterEach(() => {
@@ -49,15 +50,17 @@ describe('opened overlay', () => {
     expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
 
-  it('should remove form wrapper when closed', () => {
+  it('should remove form wrapper when closed', async () => {
     overlay.opened = false;
+    await nextUpdate(overlay);
     expect(document.querySelector('vaadin-login-form-wrapper')).not.to.exist;
   });
 
-  it('should not remove form wrapper when moved within DOM', () => {
+  it('should not remove form wrapper when moved within DOM', async () => {
     const newParent = document.createElement('div');
     document.body.appendChild(newParent);
     newParent.appendChild(overlay);
+    await nextUpdate(overlay);
 
     expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
@@ -104,8 +107,9 @@ describe('opened overlay', () => {
     expect(type).to.be.equal('login');
   });
 
-  it('should be able to prevent default to `login` event', () => {
+  it('should be able to prevent default to `login` event', async () => {
     overlay.action = 'login';
+    await nextUpdate(overlay);
     overlay.addEventListener('login', (e) => e.preventDefault());
 
     const { vaadinLoginUsername } = fillUsernameAndPassword(overlay.$.vaadinLoginForm);
@@ -159,17 +163,20 @@ describe('title and description', () => {
     expect(descriptionElement.textContent).to.be.equal(overlay.description);
   });
 
-  it('should update title and description when property updated', () => {
+  it('should update title and description when property updated', async () => {
     overlay.title = 'The newest title';
     overlay.description = 'The newest description';
+    await nextUpdate(overlay);
 
     expect(headerElement.textContent).to.be.equal(overlay.title);
     expect(descriptionElement.textContent).to.be.equal(overlay.description);
   });
 
-  it('should update title and description when i18n.header updated', () => {
+  it('should update title and description when i18n.header updated', async () => {
     const i18n = { ...overlay.i18n, header: { title: 'The newest title', description: 'The newest description' } };
     overlay.i18n = i18n;
+    await nextUpdate(overlay);
+    await nextUpdate(overlay.$.vaadinLoginOverlayWrapper);
 
     expect(headerElement.textContent).to.be.equal('The newest title');
     expect(descriptionElement.textContent).to.be.equal('The newest description');
