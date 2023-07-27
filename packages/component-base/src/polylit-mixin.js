@@ -175,7 +175,7 @@ const PolylitMixinImplementation = (superclass) => {
         this.$ = {};
       }
 
-      this.shadowRoot.querySelectorAll('[id]').forEach((node) => {
+      this.renderRoot.querySelectorAll('[id]').forEach((node) => {
         this.$[node.id] = node;
       });
     }
