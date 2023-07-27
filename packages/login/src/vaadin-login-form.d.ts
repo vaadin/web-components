@@ -5,7 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { LoginMixin } from './vaadin-login-mixin.js';
+import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 export { LoginI18n } from './vaadin-login-mixin.js';
 
 /**
@@ -69,9 +69,7 @@ export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomE
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
-declare class LoginForm extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
-  submit(): void;
-
+declare class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof LoginFormEventMap>(
     type: K,
     listener: (this: LoginForm, ev: LoginFormEventMap[K]) => void,
