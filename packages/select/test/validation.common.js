@@ -1,84 +1,29 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  enterKeyDown,
-  escKeyDown,
-  fixtureSync,
-  nextRender,
-  nextUpdate,
-  oneEvent,
-  outsideClick,
-} from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 
 describe('validation', () => {
-  let select, valueButton, validateSpy, changeSpy;
+  let select, validateSpy, changeSpy;
 
   describe('basic', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
       select.items = [
-        { label: 'Option 1', value: '' },
+        { label: 'Option 1', value: 'option-1' },
         { label: 'Option 2', value: 'option-2' },
-        { label: 'Option 3', value: 'option-3' },
       ];
       await nextRender();
-      valueButton = select.querySelector('vaadin-select-value-button');
       validateSpy = sinon.spy(select, 'validate');
       changeSpy = sinon.spy();
       select.addEventListener('change', changeSpy);
     });
 
-    it('should pass the validation when the field is valid', () => {
-      select.validate();
+    it('should pass validation by default', () => {
       expect(select.checkValidity()).to.be.true;
-      expect(select.invalid).to.be.false;
-    });
-
-    it('should not pass the validation when the field is required and has no value', async () => {
-      select.required = true;
-      await nextUpdate(select);
-
-      enterKeyDown(valueButton);
-      await oneEvent(select._overlayElement, 'vaadin-overlay-open');
-
-      escKeyDown(select._items[2]);
-      await nextUpdate(select);
-
-      expect(select.checkValidity()).to.be.false;
-      expect(select.invalid).to.be.true;
-    });
-
-    it('should pass the validation when the field is required and readonly', async () => {
-      select.required = true;
-      select.readonly = true;
-      await nextUpdate(select);
-
-      select.validate();
-
-      expect(select.checkValidity()).to.be.true;
-    });
-
-    it('should validate when required property is removed', async () => {
-      select.required = true;
-      await nextUpdate(select);
-
-      select.required = false;
-      await nextUpdate(select);
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should update invalid state when required property is removed', async () => {
-      select.required = true;
-      await nextUpdate(select);
-
-      select.validate();
-      expect(select.invalid).to.be.true;
-
-      select.required = false;
-      await nextUpdate(select);
+      expect(select.validate()).to.be.true;
       expect(select.invalid).to.be.false;
     });
 
@@ -95,7 +40,7 @@ describe('validation', () => {
 
     it('should validate on outside click', async () => {
       select.focus();
-      valueButton.click();
+      select.click();
       await nextRender();
 
       outsideClick();
@@ -105,7 +50,7 @@ describe('validation', () => {
 
     it('should validate before change event on Enter', async () => {
       select.focus();
-      valueButton.click();
+      select.click();
       await nextRender();
 
       await sendKeys({ press: 'Enter' });
@@ -115,7 +60,7 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate when setting value property', async () => {
+    it('should validate on value change', async () => {
       select.value = 'option-2';
       await nextUpdate(select);
       expect(validateSpy.callCount).to.be.equal(1);
@@ -123,6 +68,16 @@ describe('validation', () => {
       select.value = '';
       await nextUpdate(select);
       expect(validateSpy.callCount).to.be.equal(2);
+    });
+
+    it('should validate when removing required property', async () => {
+      select.required = true;
+      await nextUpdate(select);
+      expect(validateSpy.called).to.be.false;
+
+      select.required = false;
+      await nextUpdate(select);
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -160,6 +115,55 @@ describe('validation', () => {
         select.blur();
         expect(validateSpy.called).to.be.false;
       });
+    });
+  });
+
+  describe('required', () => {
+    beforeEach(async () => {
+      select = fixtureSync('<vaadin-select required></vaadin-select>');
+      select.items = [
+        { label: '', value: '' },
+        { label: 'Option 1', value: 'option-1' },
+      ];
+      await nextRender();
+    });
+
+    it('should fail validation without value', () => {
+      expect(select.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation without value when readonly', async () => {
+      select.readonly = true;
+      await nextUpdate(select);
+      expect(select.checkValidity()).to.be.true;
+    });
+
+    it('should pass validation with a value', async () => {
+      select.value = 'option-2';
+      await nextUpdate(select);
+      expect(select.checkValidity()).to.be.true;
+    });
+
+    it('should be valid when committing a non-empty value', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      await nextUpdate(select);
+      expect(select.invalid).to.be.false;
+    });
+
+    it('should be invalid when committing an empty value', async () => {
+      select.value = 'option-1';
+      await nextUpdate(select);
+      select.focus();
+      select.click();
+      await nextRender();
+      await sendKeys({ press: 'ArrowUp' });
+      await sendKeys({ press: 'Enter' });
+      await nextUpdate(select);
+      expect(select.invalid).to.be.true;
     });
   });
 
