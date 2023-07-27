@@ -634,10 +634,11 @@ describe('vaadin-select', () => {
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should fire `change` event when value changes when alphanumeric keys are pressed', () => {
+      it('should fire `change` event when value changes when alphanumeric keys are pressed', async () => {
         keyDownChar(valueButton, 'o');
         keyDownChar(valueButton, 'p');
         keyDownChar(valueButton, 't');
+        await nextUpdate(select);
         expect(changeSpy.callCount).to.equal(1);
       });
 
