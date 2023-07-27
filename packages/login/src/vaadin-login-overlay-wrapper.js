@@ -7,38 +7,10 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { loginOverlayWrapperStyles } from './vaadin-login-overlay-wrapper-styles.js';
 
-const loginOverlayStyles = css`
-  [part='overlay'] {
-    outline: none;
-  }
-
-  [part='card'] {
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  [part='brand'] {
-    box-sizing: border-box;
-    overflow: hidden;
-    flex-grow: 1;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  [part='brand'] h1 {
-    color: inherit;
-    margin: 0;
-  }
-`;
-
-registerStyles('vaadin-login-overlay-wrapper', [overlayStyles, loginOverlayStyles], {
+registerStyles('vaadin-login-overlay-wrapper', [overlayStyles, loginOverlayWrapperStyles], {
   moduleId: 'vaadin-login-overlay-wrapper-styles',
 });
 

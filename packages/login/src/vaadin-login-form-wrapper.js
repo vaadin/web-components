@@ -4,7 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { loginFormWrapperStyles } from './vaadin-login-form-wrapper-styles.js';
+
+registerStyles('vaadin-login-form-wrapper', loginFormWrapperStyles, {
+  moduleId: 'vaadin-login-form-wrapper-styles',
+});
 
 /**
  * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.
@@ -16,31 +21,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class LoginFormWrapper extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
-      <style>
-        :host {
-          overflow: hidden;
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='form'] {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          box-sizing: border-box;
-        }
-
-        [part='form-title'] {
-          margin: 0;
-        }
-
-        [part='error-message'] {
-          position: relative;
-        }
-      </style>
       <section part="form">
         <h2 part="form-title">[[i18n.form.title]]</h2>
         <div part="error-message" hidden$="[[!error]]">
