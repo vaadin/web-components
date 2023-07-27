@@ -6,7 +6,7 @@ import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 
 describe('validation', () => {
-  let select, validateSpy, changeSpy;
+  let select, validateSpy, valueChangedSpy, changeSpy;
 
   describe('basic', () => {
     beforeEach(async () => {
@@ -19,6 +19,8 @@ describe('validation', () => {
       validateSpy = sinon.spy(select, 'validate');
       changeSpy = sinon.spy();
       select.addEventListener('change', changeSpy);
+      valueChangedSpy = sinon.spy();
+      select.addEventListener('value-changed', valueChangedSpy);
     });
 
     it('should pass validation by default', () => {
@@ -48,15 +50,17 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.true;
     });
 
-    it('should validate before change event on Enter', async () => {
+    it('should validate between value-changed and change events on Enter', async () => {
       select.focus();
       select.click();
       await nextRender();
 
       await sendKeys({ press: 'Enter' });
       await nextUpdate(select);
+      expect(valueChangedSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
       expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.called).to.be.true;
+      expect(validateSpy.calledAfter(valueChangedSpy)).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 

@@ -259,8 +259,7 @@ export const SelectBaseMixin = (superClass) =>
         menuElement.addEventListener(
           'click',
           () => {
-            this.__userInteraction = true;
-            this.opened = false;
+            this.__dispatchChangePending = true;
           },
           true,
         );
@@ -281,8 +280,10 @@ export const SelectBaseMixin = (superClass) =>
     _valueChanged(value, oldValue) {
       this.toggleAttribute('has-value', Boolean(value));
 
-      // Validate only if `value` changes after initialization.
-      if (oldValue !== undefined) {
+      // Skip validation during initialization and when
+      // a change event is scheduled, as validation will be
+      // triggered by `__dispatchChange()` in that case.
+      if (oldValue !== undefined && !this.__dispatchChangePending) {
         this.validate();
       }
     }
@@ -322,7 +323,7 @@ export const SelectBaseMixin = (superClass) =>
           const currentIdx = selected !== undefined ? selected : -1;
           const newIdx = this._menuElement._searchKey(currentIdx, e.key);
           if (newIdx >= 0) {
-            this.__userInteraction = true;
+            this.__dispatchChangePending = true;
 
             // Announce the value selected with the first letter shortcut
             this._updateAriaLive(true);
@@ -371,7 +372,12 @@ export const SelectBaseMixin = (superClass) =>
         if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }
-        this.validate();
+
+        // Skip validation when a change event is scheduled, as validation
+        // will be triggered by `__dispatchChange()` in that case.
+        if (!this.__dispatchChangePending) {
+          this.validate();
+        }
       }
     }
 
@@ -508,10 +514,9 @@ export const SelectBaseMixin = (superClass) =>
         if (!this._valueChanging) {
           this._selectedChanging = true;
           this.value = selected.value || '';
-          if (this.__userInteraction) {
+          if (this.__dispatchChangePending) {
             this.opened = false;
-            this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-            this.__userInteraction = false;
+            this.__dispatchChange();
           }
           delete this._selectedChanging;
         }
@@ -599,5 +604,18 @@ export const SelectBaseMixin = (superClass) =>
       this.items.forEach((item) => {
         listBox.appendChild(this.__createItemElement(item));
       });
+    }
+
+    /** @private */
+    async __dispatchChange() {
+      // Wait for the update complete to guarantee that value-changed is fired
+      // before validated and change events when using the Lit version of the component.
+      if (this.updateComplete) {
+        await this.updateComplete;
+      }
+
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      this.__dispatchChangePending = false;
     }
   };
