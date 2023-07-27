@@ -39,6 +39,7 @@ describe('dirty state', () => {
     await nextRender();
     const menuItem = getDeepActiveElement();
     menuItem.click();
+    await nextUpdate(select._menuElement);
     await nextUpdate(select);
     expect(select.dirty).to.be.true;
   });
@@ -48,6 +49,7 @@ describe('dirty state', () => {
     select.click();
     await nextRender();
     await sendKeys({ press: 'Enter' });
+    await nextUpdate(select._menuElement);
     await nextUpdate(select);
     expect(select.dirty).to.be.true;
   });
