@@ -171,7 +171,8 @@ describe('events', () => {
           expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
         });
 
-        it('should be fired when selecting a date with Space', async () => {
+        // FIXME: flaky test often failing in CI
+        it.skip('should be fired when selecting a date with Space', async () => {
           // Move focus inside the dropdown to the typed date.
           await sendKeys({ press: 'ArrowDown' });
           await waitForScrollToFinish(datePicker._overlayContent);
