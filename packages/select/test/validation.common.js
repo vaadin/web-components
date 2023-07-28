@@ -29,13 +29,31 @@ describe('validation', () => {
       expect(select.invalid).to.be.false;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
+      select.focus();
+      select.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      select.dirty = true;
       select.focus();
       select.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on outside click', async () => {
+    it('should not validate on outside click by default', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+
+      outsideClick();
+      await nextUpdate(select);
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on outside click when dirty', async () => {
+      select.dirty = true;
       select.focus();
       select.click();
       await nextRender();
@@ -99,21 +117,6 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        select.blur();
-        expect(validateSpy.called).to.be.false;
-      });
     });
   });
 

@@ -293,9 +293,10 @@ export const SelectBaseMixin = (superClass) =>
     _valueChanged(value, oldValue) {
       this.toggleAttribute('has-value', Boolean(value));
 
-      // Skip validation during initialization and when
-      // a change event is scheduled, as validation will be
-      // triggered by `__dispatchChange()` in that case.
+      // Validate only when
+      // 1. The component has already initialized.
+      // 2. There is no pending change event, as otherwise
+      // validation is triggered by `__dispatchChange()`.
       if (oldValue !== undefined && !this.__dispatchChangePending) {
         this.validate();
       }
@@ -386,9 +387,11 @@ export const SelectBaseMixin = (superClass) =>
           this.setAttribute('focus-ring', '');
         }
 
-        // Skip validation when a change event is scheduled, as validation
-        // will be triggered by `__dispatchChange()` in that case.
-        if (!this.__dispatchChangePending) {
+        // Validate on close only when
+        // 1. The user has interacted with the field.
+        // 2. There is no pending change event, as otherwise
+        // validation is triggered by `__dispatchChange()`.
+        if (this.dirty && !this.__dispatchChangePending) {
           this.validate();
         }
       }
@@ -579,9 +582,8 @@ export const SelectBaseMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      // Do not validate when focusout is caused by document
-      // losing focus, which happens on browser tab switch.
-      if (!focused && document.hasFocus()) {
+      // Validate on blur only when the user has interacted with the field.
+      if (!focused && this.dirty) {
         this.validate();
       }
     }
