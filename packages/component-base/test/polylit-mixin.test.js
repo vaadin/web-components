@@ -900,4 +900,52 @@ describe('PolylitMixin', () => {
       expect(element.items).to.eql([1, 2, 3]);
     });
   });
+
+  describe('sync', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            disabled: {
+              type: Boolean,
+              sync: true,
+              reflect: true,
+            },
+
+            value: {
+              type: String,
+              value: 'foo',
+              sync: true,
+            },
+          };
+        }
+
+        render() {
+          return html`${this.value}`;
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should re-render immediately when setting sync property', () => {
+      expect(element.shadowRoot.textContent).to.equal('foo');
+
+      element.value = 'bar';
+      expect(element.shadowRoot.textContent).to.equal('bar');
+    });
+
+    it('should reflect immediately when setting sync property', () => {
+      element.disabled = true;
+      expect(element.hasAttribute('disabled')).to.be.true;
+
+      element.disabled = false;
+      expect(element.hasAttribute('disabled')).to.be.false;
+    });
+  });
 });

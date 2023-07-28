@@ -103,6 +103,24 @@ const PolylitMixinImplementation = (superclass) => {
         });
       }
 
+      if (options.sync) {
+        result = {
+          get: defaultDescriptor.get,
+          set(value) {
+            const oldValue = this[name];
+            this[key] = value;
+            this.requestUpdate(name, oldValue, options);
+
+            // Enforce synchronous update
+            if (this.hasUpdated) {
+              this.performUpdate();
+            }
+          },
+          configurable: true,
+          enumerable: true,
+        };
+      }
+
       if (options.readOnly) {
         const setter = defaultDescriptor.set;
 
