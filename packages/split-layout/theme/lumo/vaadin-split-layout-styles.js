@@ -62,15 +62,13 @@ registerStyles(
       border-top: 1px solid var(--lumo-contrast-10pct);
     }
 
-    :host([theme~='small']) > [part='splitter'],
-    :host([theme~='minimal']) > [part='splitter'] {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] {
       min-width: 0;
       min-height: 0;
       background-color: transparent;
     }
 
-    :host([theme~='small']) > [part='splitter']::after,
-    :host([theme~='minimal']) > [part='splitter']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']::after {
       content: '';
       position: absolute;
       top: -4px;
@@ -79,15 +77,12 @@ registerStyles(
       left: -4px;
     }
 
-    :host([theme~='small']) > [part='splitter'] > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter'] > [part='handle']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle']::after {
       opacity: 0;
     }
 
-    :host([theme~='small']) > [part='splitter']:hover > [part='handle']::after,
-    :host([theme~='small']) > [part='splitter']:active > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter']:hover > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter']:active > [part='handle']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:hover > [part='handle']::after,
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:active > [part='handle']::after {
       opacity: 1;
     }
 
