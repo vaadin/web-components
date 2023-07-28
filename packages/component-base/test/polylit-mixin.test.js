@@ -916,6 +916,7 @@ describe('PolylitMixin', () => {
 
             value: {
               type: String,
+              value: 'foo',
               sync: true,
             },
           };
@@ -933,8 +934,10 @@ describe('PolylitMixin', () => {
     });
 
     it('should re-render immediately when setting sync property', () => {
-      element.value = 'foo';
       expect(element.shadowRoot.textContent).to.equal('foo');
+
+      element.value = 'bar';
+      expect(element.shadowRoot.textContent).to.equal('bar');
     });
 
     it('should reflect immediately when setting sync property', () => {

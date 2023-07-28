@@ -112,7 +112,9 @@ const PolylitMixinImplementation = (superclass) => {
             this.requestUpdate(name, oldValue, options);
 
             // Enforce synchronous update
-            this.performUpdate();
+            if (this.hasUpdated) {
+              this.performUpdate();
+            }
           },
           configurable: true,
           enumerable: true,
