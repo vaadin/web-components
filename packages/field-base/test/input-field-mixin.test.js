@@ -155,21 +155,30 @@ const runTests = (defineHelper, baseMixin) => {
       input = element.querySelector('[slot=input]');
     });
 
-    it('should validate on input blur', () => {
+    it('should not validate on input blur by default', () => {
       const spy = sinon.spy(element, 'validate');
+      input.focus();
+      input.blur();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should validate on input blur when dirty', () => {
+      const spy = sinon.spy(element, 'validate');
+      element.dirty = true;
       input.focus();
       input.blur();
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate on programmatic blur', () => {
+    it('should validate on programmatic blur when dirty', () => {
       const spy = sinon.spy(element, 'validate');
+      element.dirty = true;
       element.focus();
       element.blur();
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate on input event', async () => {
+    it('should validate on input event when invalid', async () => {
       element.required = true;
       element.invalid = true;
       await nextUpdate(element);
@@ -199,23 +208,6 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy(input, 'checkValidity');
       element.checkValidity();
       expect(spy.calledOnce).to.be.false;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        const spy = sinon.spy(element, 'validate');
-        input.focus();
-        input.blur();
-        expect(spy.called).to.be.false;
-      });
     });
   });
 
