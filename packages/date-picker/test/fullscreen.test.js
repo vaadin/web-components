@@ -108,20 +108,6 @@ describe('fullscreen mode', () => {
     });
   });
 
-  describe('focused attribute', () => {
-    it('should keep focused attribute after opening overlay', async () => {
-      datePicker.focus();
-      await open(datePicker);
-      expect(datePicker.hasAttribute('focused')).to.be.true;
-    });
-
-    it('should remove focused attribute when closing overlay', async () => {
-      await open(datePicker);
-      await sendKeys({ press: 'Escape' });
-      expect(datePicker.hasAttribute('focused')).to.be.false;
-    });
-  });
-
   describe('buttons', () => {
     let overlayContent;
 

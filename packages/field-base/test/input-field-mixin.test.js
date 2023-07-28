@@ -164,6 +164,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should validate on programmatic blur', () => {
       const spy = sinon.spy(element, 'validate');
+      element.focus();
       element.blur();
       expect(spy.calledOnce).to.be.true;
     });

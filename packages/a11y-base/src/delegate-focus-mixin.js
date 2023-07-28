@@ -82,12 +82,9 @@ export const DelegateFocusMixin = dedupingMixin(
        * @override
        */
       focus() {
-        if (!this.focusElement || this.disabled) {
-          return;
+        if (this.focusElement && !this.disabled) {
+          this.focusElement.focus();
         }
-
-        this.focusElement.focus();
-        this._setFocused(true);
       }
 
       /**
@@ -95,11 +92,9 @@ export const DelegateFocusMixin = dedupingMixin(
        * @override
        */
       blur() {
-        if (!this.focusElement) {
-          return;
+        if (this.focusElement) {
+          this.focusElement.blur();
         }
-        this.focusElement.blur();
-        this._setFocused(false);
       }
 
       /**

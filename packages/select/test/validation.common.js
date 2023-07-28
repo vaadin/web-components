@@ -32,12 +32,7 @@ describe('validation', () => {
     it('should validate on blur', () => {
       select.focus();
       select.blur();
-      expect(validateSpy.called).to.be.true;
-    });
-
-    it('should validate on programmatic blur', () => {
-      select.blur();
-      expect(validateSpy.called).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should validate on outside click', async () => {
@@ -47,7 +42,7 @@ describe('validation', () => {
 
       outsideClick();
       await nextUpdate(select);
-      expect(validateSpy.called).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should validate between value-changed and change events on Enter', async () => {
