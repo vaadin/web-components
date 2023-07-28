@@ -20,12 +20,15 @@ registerStyles(
       justify-content: center;
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
+      left: calc(50% - 0.5px);
+      top: calc(50% - 0.5px);
     }
 
     [part='handle']::after {
       content: '';
       display: block;
-      width: 4px;
+      --_handle-size: 4px;
+      width: var(--_handle-size);
       height: 100%;
       max-width: 100%;
       max-height: 100%;
@@ -36,7 +39,7 @@ registerStyles(
 
     :host([orientation='vertical']) [part='handle']::after {
       width: 100%;
-      height: 4px;
+      height: var(--_handle-size);
     }
 
     /* Hover style */
@@ -74,17 +77,12 @@ registerStyles(
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle']::after {
       opacity: 0;
+      --_handle-size: 5px;
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:hover > [part='handle']::after,
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:active > [part='handle']::after {
       opacity: 1;
-    }
-
-    /* RTL specific styles */
-    :host([theme~='small'][dir='rtl']) > [part='splitter'] {
-      border-left: auto;
-      border-right: 1px solid var(--lumo-contrast-10pct);
     }
   `,
   { moduleId: 'lumo-split-layout' },
