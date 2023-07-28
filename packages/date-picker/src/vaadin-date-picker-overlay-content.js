@@ -131,6 +131,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolylitMixin(LitEl
       },
 
       _originDate: {
+        type: Object,
         value: new Date(),
       },
 
@@ -421,15 +422,13 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolylitMixin(LitEl
   __updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, ignoreTaps, theme) {
     if (calendars && calendars.length) {
       calendars.forEach((calendar) => {
-        calendar.setProperties({
-          i18n,
-          minDate,
-          maxDate,
-          focusedDate,
-          selectedDate,
-          showWeekNumbers,
-          ignoreTaps,
-        });
+        calendar.i18n = i18n;
+        calendar.minDate = minDate;
+        calendar.maxDate = maxDate;
+        calendar.focusedDate = focusedDate;
+        calendar.selectedDate = selectedDate;
+        calendar.showWeekNumbers = showWeekNumbers;
+        calendar.ignoreTaps = ignoreTaps;
 
         if (theme) {
           calendar.setAttribute('theme', theme);
