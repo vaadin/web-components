@@ -366,7 +366,7 @@ export class InfiniteScroller extends HTMLElement {
     itemWrapper.appendChild(itemWrapper.instance);
 
     Object.keys(tmpInstance).forEach((prop) => {
-      itemWrapper.instance.set(prop, tmpInstance[prop]);
+      itemWrapper.instance[prop] = tmpInstance[prop];
     });
   }
 

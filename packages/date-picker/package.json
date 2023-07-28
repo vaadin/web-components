@@ -21,6 +21,7 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-date-picker-overlay-content.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

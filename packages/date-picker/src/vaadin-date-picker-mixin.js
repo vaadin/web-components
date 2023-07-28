@@ -789,15 +789,13 @@ export const DatePickerMixin = (subclass) =>
     // eslint-disable-next-line max-params
     __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers) {
       if (overlayContent) {
-        overlayContent.setProperties({
-          i18n,
-          label,
-          minDate,
-          maxDate,
-          focusedDate,
-          selectedDate,
-          showWeekNumbers,
-        });
+        overlayContent.i18n = i18n;
+        overlayContent.label = label;
+        overlayContent.minDate = minDate;
+        overlayContent.maxDate = maxDate;
+        overlayContent.focusedDate = focusedDate;
+        overlayContent.selectedDate = selectedDate;
+        overlayContent.showWeekNumbers = showWeekNumbers;
       }
     }
 
@@ -828,6 +826,7 @@ export const DatePickerMixin = (subclass) =>
     /** @protected */
     _onOverlayOpened() {
       const content = this._overlayContent;
+      content.reset();
 
       // Detect which date to show
       const initialPosition = this._getInitialPosition();
