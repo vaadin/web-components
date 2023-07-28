@@ -1091,6 +1091,7 @@ export const ComboBoxMixin = (subclass) =>
         this.dirty = true;
       }
 
+      // Validate only when the user has interacted with the field.
       if (this.dirty) {
         this.validate();
       }

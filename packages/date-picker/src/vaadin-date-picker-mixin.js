@@ -449,6 +449,7 @@ export const DatePickerMixin = (subclass) =>
       if (!this.opened) {
         this._selectParsedOrFocusedDate();
 
+        // Validate on blur only when the user has interacted with the field.
         if (this.dirty) {
           this.validate();
         }
