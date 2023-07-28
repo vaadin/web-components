@@ -59,13 +59,27 @@ const fixtures = {
       expect(dateTimePicker.invalid).to.equal(false);
     });
 
-    it('should validate on date-picker blur', () => {
+    it('should not validate on date-picker blur by default', () => {
+      datePicker.focus();
+      datePicker.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate on time-picker blur by default', () => {
+      timePicker.focus();
+      timePicker.blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on date-picker blur when dirty', () => {
+      dateTimePicker.dirty = true;
       datePicker.focus();
       datePicker.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on time-picker blur', () => {
+    it('should validate on date-picker blur when dirty', () => {
+      dateTimePicker.dirty = true;
       timePicker.focus();
       timePicker.blur();
       expect(validateSpy.calledOnce).to.be.true;
@@ -199,28 +213,6 @@ const fixtures = {
       it('should be invalid after validate() if value is not set', () => {
         dateTimePicker.validate();
         expect(dateTimePicker.invalid).to.be.true;
-      });
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on date-picker blur when document does not have focus', () => {
-        datePicker.focus();
-        datePicker.blur();
-        expect(validateSpy.called).to.be.false;
-      });
-
-      it('should not validate on time-picker blur when document does not have focus', () => {
-        timePicker.focus();
-        timePicker.blur();
-        expect(validateSpy.called).to.be.false;
       });
     });
   });
