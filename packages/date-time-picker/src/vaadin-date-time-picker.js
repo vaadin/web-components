@@ -527,8 +527,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  __dirtyChangedEventHandler() {
-    this.dirty = true;
+  __dirtyChangedEventHandler(event) {
+    if (event.detail.value) {
+      this.dirty = true;
+    }
   }
 
   /** @private */
