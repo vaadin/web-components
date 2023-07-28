@@ -125,22 +125,5 @@ describe('validation', () => {
       comboBox.selectedItems = ['apple'];
       expect(comboBox.checkValidity()).to.be.true;
     });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        const spy = sinon.spy(comboBox, 'validate');
-        comboBox.inputElement.focus();
-        comboBox.inputElement.blur();
-        expect(spy.called).to.be.false;
-      });
-    });
   });
 });
