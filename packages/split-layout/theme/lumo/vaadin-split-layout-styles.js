@@ -40,14 +40,9 @@ registerStyles(
     }
 
     /* Hover style */
-    [part='splitter']:hover [part='handle']::after {
-      background-color: var(--lumo-contrast-40pct);
-    }
-
-    /* Disable hover for touch devices */
-    @media (pointer: coarse) {
+    @media (any-hover: hover) {
       [part='splitter']:hover [part='handle']::after {
-        background-color: var(--lumo-contrast-30pct);
+        background-color: var(--lumo-contrast-40pct);
       }
     }
 
