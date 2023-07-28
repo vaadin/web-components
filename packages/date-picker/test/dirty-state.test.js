@@ -5,12 +5,11 @@ import '../src/vaadin-date-picker.js';
 import { getFocusedCell, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('dirty state', () => {
-  let datePicker, input;
+  let datePicker;
 
   beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     await nextRender();
-    input = datePicker.inputElement;
   });
 
   it('should not be dirty by default', () => {
@@ -18,27 +17,27 @@ describe('dirty state', () => {
   });
 
   it('should not be dirty after blur without change', () => {
-    input.focus();
-    input.blur();
+    datePicker.focus();
+    datePicker.blur();
     expect(datePicker.dirty).to.be.false;
   });
 
   it('should not be dirty after outside click without change', async () => {
-    input.focus();
-    input.click();
+    datePicker.focus();
+    datePicker.click();
     outsideClick();
     expect(datePicker.dirty).to.be.false;
   });
 
   it('should not be dirty after pressing Enter without change', async () => {
-    input.focus();
+    datePicker.focus();
     await sendKeys({ press: 'Enter' });
     expect(datePicker.dirty).to.be.false;
   });
 
   it('should not be dirty after cancelling selection and closing the dropdown', async () => {
-    input.focus();
-    input.click();
+    datePicker.focus();
+    datePicker.click();
     await waitForOverlayRender();
     await sendKeys({ press: 'ArrowDown' });
     await waitForScrollToFinish(datePicker._overlayContent);
@@ -46,14 +45,15 @@ describe('dirty state', () => {
     expect(datePicker.dirty).to.be.false;
   });
 
-  it('should be dirty after user input', () => {
-    fire(input, 'input');
+  it('should be dirty after user input', async () => {
+    datePicker.focus();
+    await sendKeys({ type: '1' });
     expect(datePicker.dirty).to.be.true;
   });
 
   it('should be dirty after selecting a dropdown item with click', async () => {
-    input.focus();
-    input.click();
+    datePicker.focus();
+    datePicker.click();
     await waitForOverlayRender();
     const date = getFocusedCell(datePicker._overlayContent);
     tap(date);
@@ -61,8 +61,8 @@ describe('dirty state', () => {
   });
 
   it('should be dirty after selecting a dropdown item with Enter', async () => {
-    input.focus();
-    input.click();
+    datePicker.focus();
+    datePicker.click();
     await waitForOverlayRender();
     await sendKeys({ press: 'ArrowDown' });
     await waitForScrollToFinish(datePicker._overlayContent);

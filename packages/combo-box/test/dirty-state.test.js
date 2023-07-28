@@ -5,12 +5,11 @@ import '../src/vaadin-combo-box.js';
 import { getAllItems } from './helpers.js';
 
 describe('dirty state', () => {
-  let comboBox, input;
+  let comboBox;
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['Item 1', 'Item 2', 'Item 3'];
-    input = comboBox.inputElement;
   });
 
   it('should not be dirty by default', () => {
@@ -18,48 +17,49 @@ describe('dirty state', () => {
   });
 
   it('should not be dirty after blur without change', () => {
-    input.focus();
-    input.blur();
+    comboBox.focus();
+    comboBox.blur();
     expect(comboBox.dirty).to.be.false;
   });
 
   it('should not be dirty after pressing Enter without change', async () => {
-    input.focus();
+    comboBox.focus();
     await sendKeys({ press: 'Enter' });
     expect(comboBox.dirty).to.be.false;
   });
 
   it('should not be dirty after closing the dropdown without change', async () => {
-    input.focus();
-    input.click();
+    comboBox.focus();
+    comboBox.click();
     outsideClick();
     expect(comboBox.dirty).to.be.false;
   });
 
   it('should not be dirty after cancelling selection and closing the dropdown', async () => {
-    input.focus();
-    input.click();
+    comboBox.focus();
+    comboBox.click();
     await sendKeys({ press: 'ArrowDown' });
     await sendKeys({ press: 'Escape' });
     await sendKeys({ press: 'Escape' });
     expect(comboBox.dirty).to.be.false;
   });
 
-  it('should be dirty after user input', () => {
-    fire(input, 'input');
+  it('should be dirty after user input', async () => {
+    comboBox.focus();
+    await sendKeys({ type: 'I' });
     expect(comboBox.dirty).to.be.true;
   });
 
   it('should be dirty after selecting a dropdown item with click', () => {
-    input.focus();
-    input.click();
+    comboBox.focus();
+    comboBox.click();
     getAllItems(comboBox)[0].click();
     expect(comboBox.dirty).to.be.true;
   });
 
   it('should be dirty after selecting a dropdown item with Enter', async () => {
-    input.focus();
-    input.click();
+    comboBox.focus();
+    comboBox.click();
     await sendKeys({ press: 'ArrowDown' });
     await sendKeys({ press: 'Enter' });
     expect(comboBox.dirty).to.be.true;
