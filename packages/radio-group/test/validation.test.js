@@ -70,12 +70,25 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on focusout', async () => {
-      // Focus on the first radio button.
+    it('should not validate on focusout by default', async () => {
+      // Move focus to the first radio button.
+      await sendKeys({ press: 'Tab' });
+
+      // Move focus out of the radio group.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on focusout when dirty', async () => {
+      group.dirty = true;
+
+      // Move focus to the first radio button.
       await sendKeys({ press: 'Tab' });
       expect(validateSpy.called).to.be.false;
 
-      // Move focus out of the group.
+      // Move focus out of the radio group.
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
@@ -101,28 +114,6 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', async () => {
-        // Focus on the first checkbox.
-        await sendKeys({ press: 'Tab' });
-
-        // Move focus out of the checkbox group.
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
-
-        expect(validateSpy.called).to.be.false;
-      });
     });
   });
 

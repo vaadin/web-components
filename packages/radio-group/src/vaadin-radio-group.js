@@ -486,9 +486,8 @@ class RadioGroup extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    // Do not validate when focusout is caused by document
-    // losing focus, which happens on browser tab switch.
-    if (!focused && document.hasFocus()) {
+    // Validate on blur only when the field has been manually marked as dirty.
+    if (!focused && this.dirty) {
       this.validate();
     }
   }
