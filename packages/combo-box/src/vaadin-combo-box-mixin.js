@@ -1091,7 +1091,8 @@ export const ComboBoxMixin = (subclass) =>
         this.dirty = true;
       }
 
-      // Validate on blur only when the user has interacted with the field.
+      // Validate on blur only when the user has interacted with the field
+      // or the field has been initially marked as dirty.
       if (this.dirty) {
         this.validate();
       }
