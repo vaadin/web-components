@@ -21,7 +21,8 @@ describe('vaadin-infinite-scroller', () => {
   let scroller;
 
   beforeEach(async () => {
-    scroller = fixtureSync('<vaadin-infinite-scroller buffer-size="80"></vaadin-infinite-scroller>');
+    scroller = fixtureSync('<vaadin-infinite-scroller></vaadin-infinite-scroller>');
+    scroller.bufferSize = 80;
     scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '30px');
     await activateScroller(scroller);
   });
