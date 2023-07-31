@@ -117,10 +117,12 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate on outside click', () => {
+    it('should validate on outside click', async () => {
       input.focus();
       input.click();
+      await waitForOverlayRender();
       outsideClick();
+      await nextUpdate(datePicker);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
@@ -131,6 +133,7 @@ describe('validation', () => {
       await sendKeys({ type: '1/1/2023' });
       await waitForScrollToFinish(datePicker._overlayContent);
       outsideClick();
+      await nextUpdate(datePicker);
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
@@ -306,6 +309,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2022');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
 
@@ -313,6 +317,7 @@ describe('validation', () => {
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.true;
     });
 
@@ -321,6 +326,7 @@ describe('validation', () => {
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.value).to.equal('');
       expect(input.value).to.equal('foo');
     });
@@ -388,6 +394,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2000');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
 
@@ -399,6 +406,7 @@ describe('validation', () => {
       setInputValue(datePicker, '');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
 
       expect(datePicker.invalid).to.be.true;
     });
@@ -436,6 +444,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2000');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.true;
     });
 
@@ -443,6 +452,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2022');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
 
@@ -450,6 +460,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2022');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
   });
@@ -486,6 +497,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2022');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.true;
     });
 
@@ -493,6 +505,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2000');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
 
@@ -500,6 +513,7 @@ describe('validation', () => {
       setInputValue(datePicker, '1/1/2010');
       await waitForOverlayRender();
       enter(input);
+      await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
     });
   });
