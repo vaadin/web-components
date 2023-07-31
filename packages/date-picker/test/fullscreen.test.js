@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -16,6 +16,7 @@ describe('fullscreen mode', () => {
   beforeEach(async () => {
     await setViewport({ width: 420, height });
     datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    await nextRender();
     input = datePicker.inputElement;
     overlay = datePicker.$.overlay;
   });
@@ -73,8 +74,9 @@ describe('fullscreen mode', () => {
     });
 
     describe('auto open disabled', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         datePicker.autoOpenDisabled = true;
+        await nextUpdate(datePicker);
       });
 
       it('should not open overlay on input tap', () => {

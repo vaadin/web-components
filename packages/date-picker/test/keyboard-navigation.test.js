@@ -19,8 +19,9 @@ describe('keyboard navigation', () => {
     let input;
 
     describe('default', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+        await nextRender();
         input = datePicker.inputElement;
         input.focus();
       });
@@ -54,8 +55,9 @@ describe('keyboard navigation', () => {
     });
 
     describe('value', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         datePicker = fixtureSync('<vaadin-date-picker value="2001-01-01"></vaadin-date-picker>');
+        await nextRender();
         input = datePicker.inputElement;
         input.focus();
       });
@@ -88,8 +90,9 @@ describe('keyboard navigation', () => {
     });
 
     describe('initial position', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         datePicker = fixtureSync('<vaadin-date-picker initial-position="2001-01-01"></vaadin-date-picker>');
+        await nextRender();
         input = datePicker.inputElement;
         input.focus();
       });

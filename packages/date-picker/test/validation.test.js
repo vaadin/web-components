@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -182,8 +182,9 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should be possible to force invalid status', () => {
+    it('should be possible to force invalid status', async () => {
       datePicker.invalid = true;
+      await nextUpdate(datePicker);
       expect(input.hasAttribute('invalid')).to.be.true;
     });
 
@@ -262,10 +263,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       datePicker.addEventListener('validated', validatedSpy);
       datePicker.required = true;
+      await nextUpdate(datePicker);
       datePicker.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -367,8 +369,9 @@ describe('validation', () => {
   describe('required', () => {
     let input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
+      await nextRender();
       input = datePicker.inputElement;
     });
 
@@ -404,8 +407,9 @@ describe('validation', () => {
   describe('min', () => {
     let input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01"></vaadin-date-picker>`);
+      await nextRender();
       input = datePicker.inputElement;
     });
 
@@ -453,8 +457,9 @@ describe('validation', () => {
   describe('max', () => {
     let input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker max="2010-01-01"></vaadin-date-picker>`);
+      await nextRender();
       input = datePicker.inputElement;
     });
 
