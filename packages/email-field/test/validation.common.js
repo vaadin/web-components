@@ -30,10 +30,10 @@ const invalidAddresses = [
   'email@example',
 ];
 
-describe('email-field', () => {
-  describe('default', () => {
-    let emailField;
+describe('validation', () => {
+  let emailField;
 
+  describe('basic', () => {
     beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field></vaadin-email-field>');
       await nextRender();
@@ -60,11 +60,31 @@ describe('email-field', () => {
         });
       });
     });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      emailField.addEventListener('validated', validatedSpy);
+      emailField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', async () => {
+      const validatedSpy = sinon.spy();
+      emailField.addEventListener('validated', validatedSpy);
+      emailField.required = true;
+      await nextUpdate(emailField);
+      emailField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
   });
 
   describe('custom pattern', () => {
-    let emailField;
-
     beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field pattern=".+@example.com"></vaadin-email-field>');
       await nextRender();
@@ -75,85 +95,56 @@ describe('email-field', () => {
     });
   });
 
-  describe('initial validation', () => {
-    let field, validateSpy;
+  describe('initial', () => {
+    let validateSpy;
 
     beforeEach(() => {
-      field = document.createElement('vaadin-email-field');
-      validateSpy = sinon.spy(field, 'validate');
+      emailField = document.createElement('vaadin-email-field');
+      validateSpy = sinon.spy(emailField, 'validate');
     });
 
     afterEach(() => {
-      field.remove();
+      emailField.remove();
     });
 
     it('should not validate without value', async () => {
-      document.body.appendChild(field);
+      document.body.appendChild(emailField);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
     describe('with value', () => {
       beforeEach(() => {
-        field.value = 'foo@example.com';
+        emailField.value = 'foo@example.com';
       });
 
       it('should validate by default', async () => {
-        document.body.appendChild(field);
+        document.body.appendChild(emailField);
         await nextRender();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should validate when using a custom pattern', async () => {
-        field.pattern = '.+@example.com';
-        document.body.appendChild(field);
+        emailField.pattern = '.+@example.com';
+        document.body.appendChild(emailField);
         await nextRender();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should not validate when pattern is unset', async () => {
-        field.pattern = '';
-        document.body.appendChild(field);
+        emailField.pattern = '';
+        document.body.appendChild(emailField);
         await nextRender();
         expect(validateSpy.called).to.be.false;
       });
 
       it('should not validate when pattern is unset and the field has invalid', async () => {
-        field.pattern = '';
-        field.invalid = true;
-        document.body.appendChild(field);
+        emailField.pattern = '';
+        emailField.invalid = true;
+        document.body.appendChild(emailField);
         await nextRender();
         expect(validateSpy.called).to.be.false;
       });
-    });
-  });
-
-  describe('validation', () => {
-    let field, validatedSpy;
-
-    beforeEach(async () => {
-      field = fixtureSync('<vaadin-email-field></vaadin-email-field>');
-      await nextRender();
-      validatedSpy = sinon.spy();
-      field.addEventListener('validated', validatedSpy);
-    });
-
-    it('should fire a validated event on validation success', () => {
-      field.validate();
-
-      expect(validatedSpy.calledOnce).to.be.true;
-      const event = validatedSpy.firstCall.args[0];
-      expect(event.detail.valid).to.be.true;
-    });
-
-    it('should fire a validated event on validation failure', async () => {
-      field.required = true;
-      await nextUpdate(field);
-      field.validate();
-
-      expect(validatedSpy.calledOnce).to.be.true;
-      const event = validatedSpy.firstCall.args[0];
-      expect(event.detail.valid).to.be.false;
     });
   });
 });
