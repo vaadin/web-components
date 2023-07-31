@@ -7,8 +7,13 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
+import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
+
+registerStyles('vaadin-month-calendar', monthCalendarStyles, {
+  moduleId: 'vaadin-month-calendar-styles',
+});
 
 /**
  * @extends HTMLElement
@@ -17,63 +22,6 @@ import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-
 class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        #monthGrid {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        #days-container tr,
-        #weekdays-container tr {
-          display: flex;
-        }
-
-        [part~='date'] {
-          outline: none;
-        }
-
-        [part~='disabled'] {
-          pointer-events: none;
-        }
-
-        [part='week-number'][hidden],
-        [part='weekday'][hidden] {
-          display: none;
-        }
-
-        [part='weekday'],
-        [part~='date'] {
-          width: calc(100% / 7);
-          padding: 0;
-          font-weight: normal;
-        }
-
-        [part='weekday']:empty,
-        [part='week-number'] {
-          width: 12.5%;
-          flex-shrink: 0;
-          padding: 0;
-        }
-
-        :host([week-numbers]) [part='weekday']:not(:empty),
-        :host([week-numbers]) [part~='date'] {
-          width: 12.5%;
-        }
-
-        @media (forced-colors: active) {
-          [part~='date'][part~='focused'] {
-            outline: 1px solid;
-          }
-          [part~='date'][part~='selected'] {
-            outline: 3px solid;
-          }
-        }
-      </style>
-
       <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n)]]</div>
       <table
         id="monthGrid"
