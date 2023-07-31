@@ -74,7 +74,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         }
       </style>
 
-      <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n.monthNames)]]</div>
+      <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n)]]</div>
       <table
         id="monthGrid"
         role="grid"
@@ -84,15 +84,8 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
       >
         <thead id="weekdays-container">
           <tr role="row" part="weekdays">
-            <th
-              part="weekday"
-              aria-hidden="true"
-              hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
-            ></th>
-            <template
-              is="dom-repeat"
-              items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
-            >
+            <th part="weekday" aria-hidden="true" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n)]]"></th>
+            <template is="dom-repeat" items="[[_getWeekDayNames(i18n, showWeekNumbers)]]">
               <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]" aria-hidden="true">
                 [[item.weekDayShort]]
               </th>
@@ -102,11 +95,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         <tbody id="days-container">
           <template is="dom-repeat" items="[[_weeks]]" as="week">
             <tr role="row">
-              <td
-                part="week-number"
-                aria-hidden="true"
-                hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
-              >
+              <td part="week-number" aria-hidden="true" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n)]]">
                 [[__getWeekNumber(week)]]
               </td>
               <template is="dom-repeat" items="[[week]]">
@@ -191,7 +180,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)',
+        computed: '_getDays(month, i18n, minDate, maxDate)',
       },
 
       _weeks: {
@@ -208,10 +197,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return [
-      '_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)',
-      '__focusedDateChanged(focusedDate, _days)',
-    ];
+    return ['_showWeekNumbersChanged(showWeekNumbers, i18n)', '__focusedDateChanged(focusedDate, _days)'];
   }
 
   get focusableDateElement() {
@@ -253,11 +239,11 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return !dateAllowed(firstDate, minDate, maxDate) && !dateAllowed(lastDate, minDate, maxDate);
   }
 
-  _getTitle(month, monthNames) {
-    if (month === undefined || monthNames === undefined) {
+  _getTitle(month, i18n) {
+    if (month === undefined || i18n === undefined) {
       return;
     }
-    return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
+    return i18n.formatTitle(i18n.monthNames[month.getMonth()], month.getFullYear());
   }
 
   _onMonthGridTouchStart() {
@@ -279,25 +265,21 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
   }
 
-  _getWeekDayNames(weekDayNames, weekDayNamesShort, showWeekNumbers, firstDayOfWeek) {
-    if (
-      weekDayNames === undefined ||
-      weekDayNamesShort === undefined ||
-      showWeekNumbers === undefined ||
-      firstDayOfWeek === undefined
-    ) {
-      return;
+  _getWeekDayNames(i18n, showWeekNumbers) {
+    if (i18n === undefined || showWeekNumbers === undefined) {
+      return [];
     }
-    weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
-    weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
-    weekDayNames = weekDayNames.map((day, index) => {
+    const { weekdays, weekdaysShort, firstDayOfWeek } = i18n;
+
+    const weekDayNamesShort = this._applyFirstDayOfWeek(weekdaysShort, firstDayOfWeek);
+    const weekDayNames = this._applyFirstDayOfWeek(weekdays, firstDayOfWeek);
+
+    return weekDayNames.map((day, index) => {
       return {
         weekDay: day,
         weekDayShort: weekDayNamesShort[index],
       };
     });
-
-    return weekDayNames;
   }
 
   __focusedDateChanged(focusedDate, days) {
@@ -312,25 +294,25 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return date ? date.getDate() : '';
   }
 
-  _showWeekNumbersChanged(showWeekNumbers, firstDayOfWeek) {
-    if (showWeekNumbers && firstDayOfWeek === 1) {
+  _showWeekNumbersChanged(showWeekNumbers, i18n) {
+    if (showWeekNumbers && i18n && i18n.firstDayOfWeek === 1) {
       this.setAttribute('week-numbers', '');
     } else {
       this.removeAttribute('week-numbers');
     }
   }
 
-  _showWeekSeparator(showWeekNumbers, firstDayOfWeek) {
+  _showWeekSeparator(showWeekNumbers, i18n) {
     // Currently only supported for locales that start the week on Monday.
-    return showWeekNumbers && firstDayOfWeek === 1;
+    return showWeekNumbers && i18n && i18n.firstDayOfWeek === 1;
   }
 
   _isToday(date) {
     return dateEquals(new Date(), date);
   }
 
-  _getDays(month, firstDayOfWeek) {
-    if (month === undefined || firstDayOfWeek === undefined) {
+  _getDays(month, i18n) {
+    if (month === undefined || i18n === undefined) {
       return;
     }
     // First day of the month (at midnight).
@@ -340,7 +322,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     date.setDate(1);
 
     // Rewind to first day of the week.
-    while (date.getDay() !== firstDayOfWeek) {
+    while (date.getDay() !== i18n.firstDayOfWeek) {
       this._dateAdd(date, -1);
     }
 
