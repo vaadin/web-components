@@ -4,118 +4,118 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
+const template = document.createElement('template');
+template.innerHTML = `
+  <style>
+    :host {
+      display: block;
+      overflow: hidden;
+      height: 500px;
+    }
+
+    #scroller {
+      position: relative;
+      height: 100%;
+      overflow: auto;
+      outline: none;
+      margin-right: -40px;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: hidden;
+    }
+
+    #scroller.notouchscroll {
+      -webkit-overflow-scrolling: auto;
+    }
+
+    #scroller::-webkit-scrollbar {
+      display: none;
+    }
+
+    .buffer {
+      position: absolute;
+      width: var(--vaadin-infinite-scroller-buffer-width, 100%);
+      box-sizing: border-box;
+      padding-right: 40px;
+      top: var(--vaadin-infinite-scroller-buffer-offset, 0);
+      animation: fadein 0.2s;
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+
+  <div id="scroller">
+    <div class="buffer"></div>
+    <div class="buffer"></div>
+    <div id="fullHeight"></div>
+  </div>
+`;
+
 /**
  * @extends HTMLElement
  * @private
  */
-export class InfiniteScroller extends PolymerElement {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          overflow: hidden;
-          height: 500px;
-        }
+export class InfiniteScroller extends HTMLElement {
+  constructor() {
+    super();
 
-        #scroller {
-          position: relative;
-          height: 100%;
-          overflow: auto;
-          outline: none;
-          margin-right: -40px;
-          -webkit-overflow-scrolling: touch;
-          overflow-x: hidden;
-        }
+    const root = this.attachShadow({ mode: 'open' });
+    root.appendChild(template.content.cloneNode(true));
 
-        #scroller.notouchscroll {
-          -webkit-overflow-scrolling: auto;
-        }
+    /**
+     * Count of individual items in each buffer.
+     * The scroller has 2 buffers altogether so bufferSize of 20
+     * will result in 40 buffered DOM items in total.
+     * Changing after initialization not supported.
+     * @type {number}
+     */
+    this.bufferSize = 20;
 
-        #scroller::-webkit-scrollbar {
-          display: none;
-        }
+    /**
+     * The amount of initial scroll top. Needed in order for the
+     * user to be able to scroll backwards.
+     * @type {number}
+     * @private
+     */
+    this._initialScroll = 500000;
 
-        .buffer {
-          position: absolute;
-          width: var(--vaadin-infinite-scroller-buffer-width, 100%);
-          box-sizing: border-box;
-          padding-right: 40px;
-          top: var(--vaadin-infinite-scroller-buffer-offset, 0);
-          animation: fadein 0.2s;
-        }
+    /**
+     * The index/position mapped at _initialScroll point.
+     * @type {number}
+     * @private
+     */
+    this._initialIndex = 0;
 
-        @keyframes fadein {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      </style>
-
-      <div id="scroller" on-scroll="_scroll">
-        <div class="buffer"></div>
-        <div class="buffer"></div>
-        <div id="fullHeight"></div>
-      </div>
-    `;
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this._activated = false;
   }
 
-  static get properties() {
-    return {
-      /**
-       * Count of individual items in each buffer.
-       * The scroller has 2 buffers altogether so bufferSize of 20
-       * will result in 40 buffered DOM items in total.
-       * Changing after initialization not supported.
-       */
-      bufferSize: {
-        type: Number,
-        value: 20,
-      },
+  /**
+   * @return {boolean}
+   */
+  get active() {
+    return this._activated;
+  }
 
-      /**
-       * The amount of initial scroll top. Needed in order for the
-       * user to be able to scroll backwards.
-       * @private
-       */
-      _initialScroll: {
-        value: 500000,
-      },
-
-      /**
-       * The index/position mapped at _initialScroll point.
-       * @private
-       */
-      _initialIndex: {
-        value: 0,
-      },
-
-      /** @private */
-      _buffers: Array,
-
-      /** @private */
-      _preventScrollEvent: Boolean,
-
-      /** @private */
-      _mayHaveMomentum: Boolean,
-
-      /** @private */
-      _initialized: Boolean,
-
-      active: {
-        type: Boolean,
-        observer: '_activated',
-      },
-    };
+  set active(active) {
+    if (active && !this._activated) {
+      this._createPool();
+      this._activated = true;
+    }
   }
 
   /**
@@ -184,17 +184,27 @@ export class InfiniteScroller extends PolymerElement {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    if (!this._ready) {
+      this._ready = true;
 
-    this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
+      this.$ = {};
+      this.shadowRoot.querySelectorAll('[id]').forEach((node) => {
+        this.$[node.id] = node;
+      });
 
-    this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
+      this.$.scroller.addEventListener('scroll', () => this._scroll());
 
-    // Firefox interprets elements with overflow:auto as focusable
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
-    if (isFirefox) {
-      this.$.scroller.tabIndex = -1;
+      /** @private */
+      this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
+
+      this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
+
+      // Firefox interprets elements with overflow:auto as focusable
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
+      if (isFirefox) {
+        this.$.scroller.tabIndex = -1;
+      }
     }
   }
 
@@ -226,14 +236,6 @@ export class InfiniteScroller extends PolymerElement {
    */
   _updateElement(_element, _index) {
     // To be implemented.
-  }
-
-  /** @private */
-  _activated(active) {
-    if (active && !this._initialized) {
-      this._createPool();
-      this._initialized = true;
-    }
   }
 
   /** @private */

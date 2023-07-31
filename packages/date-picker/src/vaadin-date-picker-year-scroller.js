@@ -3,10 +3,10 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { InfiniteScroller } from './vaadin-infinite-scroller.js';
 
-const stylesTemplate = html`
+const stylesTemplate = document.createElement('template');
+stylesTemplate.innerHTML = `
   <style>
     :host {
       --vaadin-infinite-scroller-item-height: 80px;
@@ -48,7 +48,6 @@ let memoizedTemplate;
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
  * @extends InfiniteScroller
- * @mixes ThemableMixin
  * @private
  */
 class DatePickerYearScroller extends InfiniteScroller {
@@ -56,22 +55,11 @@ class DatePickerYearScroller extends InfiniteScroller {
     return 'vaadin-date-picker-year-scroller';
   }
 
-  static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-      memoizedTemplate.content.appendChild(stylesTemplate.content.cloneNode(true));
-    }
+  constructor() {
+    super();
 
-    return memoizedTemplate;
-  }
-
-  static get properties() {
-    return {
-      bufferSize: {
-        type: Number,
-        value: 12,
-      },
-    };
+    this.bufferSize = 12;
+    this.shadowRoot.appendChild(stylesTemplate.content.cloneNode(true));
   }
 
   /**
