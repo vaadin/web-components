@@ -381,8 +381,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
   _setFocused(focused) {
     super._setFocused(focused);
 
-    // Validate on blur only after the user has triggered a `change` event,
-    // or the field has been initially marked as dirty.
+    // Validate on blur only when the field is dirty (the user has triggered
+    // a `change` event once, or the field has been manually marked as dirty).
     if (!focused && this.dirty) {
       this.validate();
     }

@@ -295,8 +295,8 @@ export const SelectBaseMixin = (superClass) =>
 
       // Validate only when
       // 1. The component has already initialized.
-      // 2. There is no pending change event, as otherwise
-      // validation is triggered by `__dispatchChange()`.
+      // 2. There is no pending change event at the moment, as otherwise
+      // validation will be triggered by `__dispatchChange()`.
       if (oldValue !== undefined && !this.__dispatchChangePending) {
         this.validate();
       }
@@ -387,10 +387,9 @@ export const SelectBaseMixin = (superClass) =>
           this.setAttribute('focus-ring', '');
         }
 
-        // Validate on close only when
-        // 1. The user has interacted with the field.
-        // 2. There is no pending change event, as otherwise
-        // validation is triggered by `__dispatchChange()`.
+        // Validate on close only when the field is dirty, and
+        // there is no pending change event at the moment, as
+        // otherwise validation will be triggered by `__dispatchChange()`.
         if (this.dirty && !this.__dispatchChangePending) {
           this.validate();
         }
@@ -582,8 +581,8 @@ export const SelectBaseMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      // Validate on blur only after the user has triggered a `change` event,
-      // or the field has been initially marked as dirty.
+      // Validate on blur only when the field is dirty (the user has triggered
+      // a `change` event once, or the field has been manually marked as dirty).
       if (!focused && this.dirty) {
         this.validate();
       }
