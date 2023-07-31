@@ -220,8 +220,8 @@ const PolylitMixinImplementation = (superclass) => {
       }
 
       if (!this.__isReadyInvoked) {
-        this.ready();
         this.__isReadyInvoked = true;
+        this.ready();
       }
     }
 
