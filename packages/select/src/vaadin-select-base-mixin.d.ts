@@ -97,7 +97,7 @@ export declare class SelectBaseMixinClass {
   readonly: boolean;
 
   /**
-   * Whether the field is dirty.
+   * Whether the field is dirty. When dirty, the field validates on blur.
    *
    * The field is automatically marked as dirty once the user triggers
    * a `change` event. Additionally, the field can be manually marked

@@ -323,7 +323,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       },
 
       /**
-       * Whether the field is dirty.
+       * Whether the field is dirty. When dirty, the field validates on blur.
        *
        * The field is automatically marked as dirty once the user triggers
        * an `input` or `change` event on the child pickers. Additionally, the field
