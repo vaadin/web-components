@@ -169,7 +169,7 @@ class RadioGroup extends FieldMixin(
        *
        * The field is automatically marked as dirty once the user triggers
        * a `change` event. Additionally, the field can be manually marked
-       * as dirty by setting the `dirty` property to `true`.
+       * as dirty by setting the property to `true`.
        */
       dirty: {
         type: Boolean,

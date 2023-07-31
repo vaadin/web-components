@@ -58,7 +58,7 @@ export const InputMixin = dedupingMixin(
            *
            * The field is automatically marked as dirty once the user triggers
            * an `input` or `change` event. Additionally, the field can be manually
-           * marked as dirty by setting the `dirty` property to `true`.
+           * marked as dirty by setting the property to `true`.
            */
           dirty: {
             type: Boolean,
