@@ -26,6 +26,11 @@ export type DatePickerLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 export type DatePickerLightInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type DatePickerLightDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type DatePickerLightValueChangedEvent = CustomEvent<{ value: string }>;
@@ -39,6 +44,8 @@ export interface DatePickerLightCustomEventMap {
   'opened-changed': DatePickerLightOpenedChangedEvent;
 
   'invalid-changed': DatePickerLightInvalidChangedEvent;
+
+  'dirty-changed': DatePickerLightDirtyChangedEvent;
 
   'value-changed': DatePickerLightValueChangedEvent;
 
@@ -80,6 +87,7 @@ export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePicker
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

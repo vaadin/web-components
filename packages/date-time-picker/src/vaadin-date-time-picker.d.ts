@@ -40,6 +40,11 @@ export type DateTimePickerChangeEvent = Event & {
 export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type DateTimePickerDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
@@ -51,6 +56,8 @@ export type DateTimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface DateTimePickerCustomEventMap {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
+
+  'dirty-changed': DateTimePickerDirtyChangedEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
 
@@ -113,6 +120,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

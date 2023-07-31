@@ -15,6 +15,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type CheckboxGroupDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: string[] }>;
@@ -26,6 +31,8 @@ export type CheckboxGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface CheckboxGroupCustomEventMap {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;
+
+  'dirty-changed': CheckboxGroupDirtyChangedEvent;
 
   'value-changed': CheckboxGroupValueChangedEvent;
 
@@ -73,6 +80,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

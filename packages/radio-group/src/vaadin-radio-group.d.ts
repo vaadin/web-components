@@ -16,6 +16,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type RadioGroupDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
@@ -27,6 +32,8 @@ export type RadioGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface RadioGroupCustomEventMap {
   'invalid-changed': RadioGroupInvalidChangedEvent;
+
+  'dirty-changed': RadioGroupDirtyChangedEvent;
 
   'value-changed': RadioGroupValueChangedEvent;
 
@@ -74,6 +81,7 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
