@@ -347,8 +347,8 @@ export const DatePickerMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-        '_focusedDateChanged(_focusedDate, i18n.formatDate)',
+        '_selectedDateChanged(_selectedDate, i18n)',
+        '_focusedDateChanged(_focusedDate, i18n)',
         '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
@@ -718,8 +718,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _selectedDateChanged(selectedDate, formatDate) {
-      if (selectedDate === undefined || formatDate === undefined) {
+    _selectedDateChanged(selectedDate, i18n) {
+      if (selectedDate === undefined || i18n === undefined) {
         return;
       }
       const value = this._formatISO(selectedDate);
@@ -738,8 +738,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _focusedDateChanged(focusedDate, formatDate) {
-      if (focusedDate === undefined || formatDate === undefined) {
+    _focusedDateChanged(focusedDate, i18n) {
+      if (focusedDate === undefined || i18n === undefined) {
         return;
       }
       if (!this._ignoreFocusedDateChange && !this._noInput) {
