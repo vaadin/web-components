@@ -66,6 +66,7 @@ describe('validation', () => {
         expect(validateSpy.called).to.be.false;
       });
 
+      // FIXME: validation called twice
       it('should validate when the field has min', async () => {
         datePicker.min = '2020-01-01';
         document.body.appendChild(datePicker);
@@ -73,6 +74,7 @@ describe('validation', () => {
         expect(validateSpy.calledOnce).to.be.true;
       });
 
+      // FIXME: validation called twice
       it('should validate when the field has max', async () => {
         datePicker.max = '2020-01-01';
         document.body.appendChild(datePicker);
