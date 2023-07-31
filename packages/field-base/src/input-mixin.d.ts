@@ -29,7 +29,11 @@ export declare class InputMixinClass {
   value: string;
 
   /**
-   * Whether the user has interacted with the field.
+   * Whether the field is dirty.
+   *
+   * The field is automatically marked as dirty once the user triggers
+   * an `input` or `change` event. Additionally, the field can be manually
+   * marked as dirty by setting the `dirty` property to `true`.
    */
   dirty: boolean;
 

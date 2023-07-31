@@ -215,6 +215,15 @@ declare class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(Themabl
   autofocus: boolean;
 
   /**
+   * Whether the field is dirty.
+   *
+   * The field is automatically marked as dirty once the user triggers
+   * an `input` or `change` event on the child pickers. Additionally, the field
+   * can be manually marked as dirty by setting the `dirty` property to `true`.
+   */
+  dirty: boolean;
+
+  /**
    * The object used to localize this component.
    * To change the default localization, replace the entire
    * `i18n` object or just the properties you want to modify.
