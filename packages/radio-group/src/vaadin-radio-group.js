@@ -486,7 +486,8 @@ class RadioGroup extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    // Validate on blur only when the field has been manually marked as dirty.
+    // Validate on blur only after the user has triggered a `change` event,
+    // or the field has been initially marked as dirty.
     if (!focused && this.dirty) {
       this.validate();
     }
