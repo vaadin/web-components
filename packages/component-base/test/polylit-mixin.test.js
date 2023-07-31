@@ -919,7 +919,19 @@ describe('PolylitMixin', () => {
               value: 'foo',
               sync: true,
             },
+
+            count: {
+              type: Number,
+              value: 0,
+              sync: true,
+            },
           };
+        }
+
+        ready() {
+          super.ready();
+
+          this.count += 1;
         }
 
         render() {
@@ -946,6 +958,10 @@ describe('PolylitMixin', () => {
 
       element.disabled = false;
       expect(element.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should only call ready callback once during initialization', () => {
+      expect(element.count).to.equal(1);
     });
   });
 });
