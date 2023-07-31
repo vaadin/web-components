@@ -273,8 +273,9 @@ describe('inside flexbox', () => {
 describe('clear button', () => {
   let datePicker, clearButton;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
+    await nextRender();
     clearButton = datePicker.shadowRoot.querySelector('[part="clear-button"]');
   });
 
@@ -383,8 +384,9 @@ describe('wrapped', () => {
 describe('initial value attribute', () => {
   let datePicker, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    await nextRender();
     input = datePicker.inputElement;
   });
 
@@ -396,8 +398,9 @@ describe('initial value attribute', () => {
 describe('auto open disabled', () => {
   let datePicker, input, toggleButton;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    await nextRender();
     input = datePicker.inputElement;
     toggleButton = datePicker.shadowRoot.querySelector('[part="toggle-button"]');
     datePicker.autoOpenDisabled = true;
@@ -428,8 +431,9 @@ describe('auto open disabled', () => {
 describe('ios', () => {
   let datePicker, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    await nextRender();
     input = datePicker.inputElement;
     datePicker._ios = true;
   });
@@ -471,8 +475,9 @@ describe('ios', () => {
 describe('required', () => {
   let datePicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
+    await nextRender();
   });
 
   it('should focus on required indicator click', async () => {

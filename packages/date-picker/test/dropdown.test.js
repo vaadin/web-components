@@ -17,8 +17,9 @@ import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpe
 describe('dropdown', () => {
   let datePicker, input, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    await nextRender();
     input = datePicker.inputElement;
     overlay = datePicker.$.overlay;
   });
