@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enter, fixtureSync, listenOnce, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';

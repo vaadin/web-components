@@ -42,8 +42,6 @@ stylesTemplate.innerHTML = `
   </style>
 `;
 
-let memoizedTemplate;
-
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
