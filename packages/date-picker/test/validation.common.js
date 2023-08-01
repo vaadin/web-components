@@ -2,11 +2,9 @@ import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import { DatePicker } from '../vaadin-date-picker.js';
 import { close, open, setInputValue, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
-class DatePicker2016 extends DatePicker {
+class DatePicker2016 extends customElements.get('vaadin-date-picker') {
   checkValidity() {
     return new Date(this.value).getFullYear() === 2016;
   }

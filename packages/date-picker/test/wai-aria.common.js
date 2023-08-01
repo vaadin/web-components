@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
 import { activateScroller, close, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {

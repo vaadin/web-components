@@ -42,14 +42,18 @@ export const DatePickerMixin = (subclass) =>
          * @protected
          */
         _selectedDate: {
-          type: Date,
+          type: Object,
+          sync: true,
         },
 
         /**
          * @type {Date | undefined}
          * @protected
          */
-        _focusedDate: Date,
+        _focusedDate: {
+          type: Object,
+          sync: true,
+        },
 
         /**
          * Selected date.
@@ -64,6 +68,7 @@ export const DatePickerMixin = (subclass) =>
           type: String,
           notify: true,
           value: '',
+          sync: true,
         },
 
         /**
@@ -82,6 +87,7 @@ export const DatePickerMixin = (subclass) =>
           reflectToAttribute: true,
           notify: true,
           observer: '_openedChanged',
+          sync: true,
         },
 
         /**
@@ -99,6 +105,7 @@ export const DatePickerMixin = (subclass) =>
         showWeekNumbers: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -108,6 +115,7 @@ export const DatePickerMixin = (subclass) =>
         _fullscreen: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -206,6 +214,7 @@ export const DatePickerMixin = (subclass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value: () => {
             return {
               monthNames: [
@@ -276,6 +285,7 @@ export const DatePickerMixin = (subclass) =>
          */
         min: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -289,6 +299,7 @@ export const DatePickerMixin = (subclass) =>
          */
         max: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -299,6 +310,7 @@ export const DatePickerMixin = (subclass) =>
         _minDate: {
           type: Date,
           computed: '__computeMinOrMaxDate(min)',
+          sync: true,
         },
 
         /**
@@ -309,6 +321,7 @@ export const DatePickerMixin = (subclass) =>
         _maxDate: {
           type: Date,
           computed: '__computeMinOrMaxDate(max)',
+          sync: true,
         },
 
         /** @private */
@@ -327,7 +340,10 @@ export const DatePickerMixin = (subclass) =>
         _focusOverlayOnOpen: Boolean,
 
         /** @private */
-        _overlayContent: Object,
+        _overlayContent: {
+          type: Object,
+          sync: true,
+        },
 
         /**
          * In date-picker, unlike other components extending `InputMixin`,
@@ -485,6 +501,22 @@ export const DatePickerMixin = (subclass) =>
       super._propertiesChanged(currentProps, changedProps, oldProps);
 
       if ('value' in changedProps && this.__dispatchChange) {
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+        this.__dispatchChange = false;
+      }
+    }
+
+    /**
+     * Override LitElement lifecycle callback to dispatch `change` event if needed.
+     * This is necessary to ensure `change` is fired after `value-changed`.
+     *
+     * @protected
+     * @override
+     */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('value') && this.__dispatchChange) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
         this.__dispatchChange = false;
       }

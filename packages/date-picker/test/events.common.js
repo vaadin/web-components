@@ -2,8 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
 import { close, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('events', () => {
