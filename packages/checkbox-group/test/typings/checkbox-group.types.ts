@@ -1,5 +1,6 @@
 import '../../vaadin-checkbox-group.js';
 import type {
+  CheckboxGroupDirtyChangedEvent,
   CheckboxGroupInvalidChangedEvent,
   CheckboxGroupValidatedEvent,
   CheckboxGroupValueChangedEvent,
@@ -11,6 +12,11 @@ const group = document.createElement('vaadin-checkbox-group');
 
 group.addEventListener('invalid-changed', (event) => {
   assertType<CheckboxGroupInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+group.addEventListener('dirty-changed', (event) => {
+  assertType<CheckboxGroupDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
