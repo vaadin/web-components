@@ -12,7 +12,6 @@ import {
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
 import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 
 describe('dropdown', () => {

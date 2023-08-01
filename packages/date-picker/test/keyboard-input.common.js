@@ -2,8 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
 import { getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 

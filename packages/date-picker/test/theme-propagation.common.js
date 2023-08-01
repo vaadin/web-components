@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-date-picker.js';
 import { open, waitForScrollToFinish } from './helpers.js';
 
 describe('theme attribute', () => {

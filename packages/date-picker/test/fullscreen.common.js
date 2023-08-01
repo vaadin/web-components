@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
 import { getFocusedCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('fullscreen mode', () => {
