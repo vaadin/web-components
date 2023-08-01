@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -349,7 +348,7 @@ export class InfiniteScroller extends HTMLElement {
       }
     });
 
-    afterNextRender(this, () => {
+    requestAnimationFrame(() => {
       this._finishInit();
     });
   }

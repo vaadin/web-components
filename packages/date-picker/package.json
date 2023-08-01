@@ -22,6 +22,7 @@
   "files": [
     "src",
     "!src/vaadin-lit-date-picker-overlay-content.js",
+    "!src/vaadin-lit-month-calendar.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

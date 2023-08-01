@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
-import './vaadin-month-calendar.js';
+import './vaadin-lit-month-calendar.js';
 import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';

@@ -5,10 +5,9 @@
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
+import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
 
 registerStyles('vaadin-month-calendar', monthCalendarStyles, {
@@ -19,7 +18,7 @@ registerStyles('vaadin-month-calendar', monthCalendarStyles, {
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
+class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n)]]</div>
@@ -72,65 +71,13 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
   static get properties() {
     return {
-      /**
-       * A `Date` object defining the month to be displayed. Only year and
-       * month properties are actually used.
-       */
-      month: {
-        type: Date,
-        value: new Date(),
-      },
-
-      /**
-       * A `Date` object for the currently selected date.
-       */
-      selectedDate: {
-        type: Date,
-        notify: true,
-      },
-
-      /**
-       * A `Date` object for the currently focused date.
-       */
-      focusedDate: Date,
-
-      showWeekNumbers: {
-        type: Boolean,
-        value: false,
-      },
-
-      i18n: {
-        type: Object,
-      },
-
-      /**
-       * Flag stating whether taps on the component should be ignored.
-       */
-      ignoreTaps: Boolean,
-
-      _notTapping: Boolean,
-
-      /**
-       * The earliest date that can be selected. All earlier dates will be disabled.
-       */
-      minDate: {
-        type: Date,
-        value: null,
-      },
-
-      /**
-       * The latest date that can be selected. All later dates will be disabled.
-       */
-      maxDate: {
-        type: Date,
-        value: null,
-      },
-
+      /** @protected */
       _days: {
         type: Array,
         computed: '_getDays(month, i18n, minDate, maxDate)',
       },
 
+      /** @protected */
       _weeks: {
         type: Array,
         computed: '_getWeeks(_days)',
@@ -145,103 +92,10 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['_showWeekNumbersChanged(showWeekNumbers, i18n)', '__focusedDateChanged(focusedDate, _days)'];
+    return ['_showWeekNumbersChanged(showWeekNumbers, i18n)'];
   }
 
-  get focusableDateElement() {
-    return [...this.shadowRoot.querySelectorAll('[part~=date]')].find((datePart) => {
-      return dateEquals(datePart.date, this.focusedDate);
-    });
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-    addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
-  }
-
-  /* Returns true if all the dates in the month are out of the allowed range */
-  _isDisabled(month, minDate, maxDate) {
-    // First day of the month
-    const firstDate = new Date(0, 0);
-    firstDate.setFullYear(month.getFullYear());
-    firstDate.setMonth(month.getMonth());
-    firstDate.setDate(1);
-
-    // Last day of the month
-    const lastDate = new Date(0, 0);
-    lastDate.setFullYear(month.getFullYear());
-    lastDate.setMonth(month.getMonth() + 1);
-    lastDate.setDate(0);
-
-    if (
-      minDate &&
-      maxDate &&
-      minDate.getMonth() === maxDate.getMonth() &&
-      minDate.getMonth() === month.getMonth() &&
-      maxDate.getDate() - minDate.getDate() >= 0
-    ) {
-      return false;
-    }
-
-    return !dateAllowed(firstDate, minDate, maxDate) && !dateAllowed(lastDate, minDate, maxDate);
-  }
-
-  _getTitle(month, i18n) {
-    if (month === undefined || i18n === undefined) {
-      return;
-    }
-    return i18n.formatTitle(i18n.monthNames[month.getMonth()], month.getFullYear());
-  }
-
-  _onMonthGridTouchStart() {
-    this._notTapping = false;
-    setTimeout(() => {
-      this._notTapping = true;
-    }, 300);
-  }
-
-  _dateAdd(date, delta) {
-    date.setDate(date.getDate() + delta);
-  }
-
-  _applyFirstDayOfWeek(weekDayNames, firstDayOfWeek) {
-    if (weekDayNames === undefined || firstDayOfWeek === undefined) {
-      return;
-    }
-
-    return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
-  }
-
-  _getWeekDayNames(i18n, showWeekNumbers) {
-    if (i18n === undefined || showWeekNumbers === undefined) {
-      return [];
-    }
-    const { weekdays, weekdaysShort, firstDayOfWeek } = i18n;
-
-    const weekDayNamesShort = this._applyFirstDayOfWeek(weekdaysShort, firstDayOfWeek);
-    const weekDayNames = this._applyFirstDayOfWeek(weekdays, firstDayOfWeek);
-
-    return weekDayNames.map((day, index) => {
-      return {
-        weekDay: day,
-        weekDayShort: weekDayNamesShort[index],
-      };
-    });
-  }
-
-  __focusedDateChanged(focusedDate, days) {
-    if (days.some((date) => dateEquals(date, focusedDate))) {
-      this.removeAttribute('aria-hidden');
-    } else {
-      this.setAttribute('aria-hidden', 'true');
-    }
-  }
-
-  _getDate(date) {
-    return date ? date.getDate() : '';
-  }
-
+  /** @private */
   _showWeekNumbersChanged(showWeekNumbers, i18n) {
     if (showWeekNumbers && i18n && i18n.firstDayOfWeek === 1) {
       this.setAttribute('week-numbers', '');
@@ -250,65 +104,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
-  _showWeekSeparator(showWeekNumbers, i18n) {
-    // Currently only supported for locales that start the week on Monday.
-    return showWeekNumbers && i18n && i18n.firstDayOfWeek === 1;
-  }
-
-  _isToday(date) {
-    return dateEquals(new Date(), date);
-  }
-
-  _getDays(month, i18n) {
-    if (month === undefined || i18n === undefined) {
-      return;
-    }
-    // First day of the month (at midnight).
-    const date = new Date(0, 0);
-    date.setFullYear(month.getFullYear());
-    date.setMonth(month.getMonth());
-    date.setDate(1);
-
-    // Rewind to first day of the week.
-    while (date.getDay() !== i18n.firstDayOfWeek) {
-      this._dateAdd(date, -1);
-    }
-
-    const days = [];
-    const startMonth = date.getMonth();
-    const targetMonth = month.getMonth();
-    while (date.getMonth() === targetMonth || date.getMonth() === startMonth) {
-      days.push(date.getMonth() === targetMonth ? new Date(date.getTime()) : null);
-
-      // Advance to next day.
-      this._dateAdd(date, 1);
-    }
-    return days;
-  }
-
-  _getWeeks(days) {
-    return days.reduce((acc, day, i) => {
-      if (i % 7 === 0) {
-        acc.push([]);
-      }
-      acc[acc.length - 1].push(day);
-      return acc;
-    }, []);
-  }
-
-  _handleTap(e) {
-    if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
-      this.selectedDate = e.target.date;
-      this.dispatchEvent(
-        new CustomEvent('date-tap', { detail: { date: e.target.date }, bubbles: true, composed: true }),
-      );
-    }
-  }
-
-  _preventDefault(e) {
-    e.preventDefault();
-  }
-
+  /** @private */
   __getDatePart(date, focusedDate, selectedDate, minDate, maxDate) {
     const result = ['date'];
 
@@ -331,32 +127,29 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return result.join(' ');
   }
 
-  __getWeekNumber(days) {
-    const date = days.reduce((acc, d) => {
-      return !acc && d ? d : acc;
-    });
-
-    return getISOWeekNumber(date);
-  }
-
+  /** @private */
   __isDayFocused(date, focusedDate) {
     return dateEquals(date, focusedDate);
   }
 
+  /** @private */
   __isDaySelected(date, selectedDate) {
     return dateEquals(date, selectedDate);
   }
 
+  /** @private */
   __getDayAriaSelected(date, selectedDate) {
     if (this.__isDaySelected(date, selectedDate)) {
       return 'true';
     }
   }
 
+  /** @private */
   __isDayDisabled(date, minDate, maxDate) {
     return !dateAllowed(date, minDate, maxDate);
   }
 
+  /** @private */
   __getDayAriaDisabled(date, min, max) {
     if (date === undefined || min === undefined || max === undefined) {
       return;
@@ -367,22 +160,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
-  __getDayAriaLabel(date) {
-    if (!date) {
-      return '';
-    }
-
-    let ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
-      this.i18n.weekdays[date.getDay()]
-    }`;
-
-    if (this._isToday(date)) {
-      ariaLabel += `, ${this.i18n.today}`;
-    }
-
-    return ariaLabel;
-  }
-
+  /** @private */
   __getDayTabindex(date, focusedDate) {
     if (this.__isDayFocused(date, focusedDate)) {
       return '0';
