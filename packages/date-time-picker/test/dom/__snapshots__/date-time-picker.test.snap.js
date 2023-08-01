@@ -556,27 +556,27 @@ snapshots["vaadin-date-time-picker host overlay class date-picker"] =
     </vaadin-button>
     <vaadin-date-picker-month-scroller slot="months">
       <div slot="vaadin-infinite-scroller-item-content-12">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-13">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-14">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-15">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-16">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-17">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar aria-hidden="true">
         </vaadin-month-calendar>
       </div>
     </vaadin-date-picker-month-scroller>

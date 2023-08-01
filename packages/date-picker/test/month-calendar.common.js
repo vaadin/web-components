@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, makeSoloTouchEvent, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-month-calendar.js';
 import { getDefaultI18n } from './helpers.js';
 
 describe('vaadin-month-calendar', () => {
