@@ -18,8 +18,13 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import { overlayContentStyles } from './vaadin-date-picker-overlay-content-styles.js';
+
+registerStyles('vaadin-date-picker-overlay-content', overlayContentStyles, {
+  moduleId: 'vaadin-date-picker-overlay-content-styles',
+});
 
 /**
  * @extends HTMLElement
@@ -28,68 +33,6 @@ import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from '
 class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 100%;
-          outline: none;
-        }
-
-        [part='overlay-header'] {
-          display: flex;
-          flex-shrink: 0;
-          flex-wrap: nowrap;
-          align-items: center;
-        }
-
-        :host(:not([fullscreen])) [part='overlay-header'] {
-          display: none;
-        }
-
-        [part='label'] {
-          flex-grow: 1;
-        }
-
-        [hidden] {
-          display: none !important;
-        }
-
-        [part='years-toggle-button'] {
-          display: flex;
-        }
-
-        #scrollers {
-          display: flex;
-          height: 100%;
-          width: 100%;
-          position: relative;
-          overflow: hidden;
-        }
-
-        :host([desktop]) ::slotted([slot='months']) {
-          right: 50px;
-          transform: none !important;
-        }
-
-        :host([desktop]) ::slotted([slot='years']) {
-          transform: none !important;
-        }
-
-        :host(.animate) ::slotted([slot='months']),
-        :host(.animate) ::slotted([slot='years']) {
-          transition: all 200ms;
-        }
-
-        [part='toolbar'] {
-          display: flex;
-          justify-content: space-between;
-          z-index: 2;
-          flex-shrink: 0;
-        }
-      </style>
-
       <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
         <div part="clear-button" hidden$="[[!selectedDate]]"></div>
