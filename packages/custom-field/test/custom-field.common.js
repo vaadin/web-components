@@ -148,4 +148,26 @@ describe('custom field', () => {
       });
     });
   });
+
+  describe('dirty state', () => {
+    let input;
+
+    beforeEach(() => {
+      input = customField.querySelector('input');
+    });
+
+    it('should not be dirty by default', () => {
+      expect(customField.dirty).to.be.false;
+    });
+
+    it('should be dirty after sub-field input', async () => {
+      fire(input, 'input');
+      expect(customField.dirty).to.be.true;
+    });
+
+    it('should be dirty after sub-field change', async () => {
+      fire(input, 'change');
+      expect(customField.dirty).to.be.true;
+    });
+  });
 });
