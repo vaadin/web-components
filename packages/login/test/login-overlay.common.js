@@ -110,6 +110,18 @@ describe('opened overlay', () => {
     const usernameElement = overlay.$.vaadinLoginForm.$.vaadinLoginUsername;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
+
+  it('should update disabled property when form disabled changes', async () => {
+    const form = overlay.$.vaadinLoginForm;
+
+    form.disabled = true;
+    await nextUpdate(form);
+    expect(overlay.disabled).to.be.true;
+
+    form.disabled = false;
+    await nextUpdate(form);
+    expect(overlay.disabled).to.be.false;
+  });
 });
 
 describe('no autofocus', () => {

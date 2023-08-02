@@ -52,6 +52,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
           .i18n="${this.i18n}"
           @login="${this._retargetEvent}"
           @forgot-password="${this._retargetEvent}"
+          @disabled-changed="${this._onDisabledChanged}"
         ></vaadin-login-form>
       </vaadin-login-overlay-wrapper>
     `;
@@ -60,6 +61,11 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   _onOpenedChanged(event) {
     this.opened = event.detail.value;
+  }
+
+  /** @private */
+  _onDisabledChanged(event) {
+    this.disabled = event.detail.value;
   }
 }
 
