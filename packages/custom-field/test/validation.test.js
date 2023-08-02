@@ -1,13 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-custom-field.js';
-import { dispatchChange } from './helpers.js';
 
 describe('validation', () => {
   let customField;
 
   describe('basic', () => {
+    let validateSpy;
+
     beforeEach(async () => {
       customField = fixtureSync(`
         <vaadin-custom-field>
@@ -16,19 +17,29 @@ describe('validation', () => {
         </vaadin-custom-field>
       `);
       await nextRender();
+      validateSpy = sinon.spy(customField, 'validate');
     });
 
-    it('should check validity on validate', () => {
-      const spy = sinon.spy(customField, 'checkValidity');
-      customField.validate();
-      expect(spy.called).to.be.true;
+    it('should pass validation by default', () => {
+      expect(customField.validate()).to.be.true;
+      expect(customField.checkValidity()).to.be.true;
     });
 
-    it('should run validation on input change', () => {
-      const spy = sinon.spy(customField, 'checkValidity');
+    it('should validate on blur', () => {
+      customField.inputs[0].focus();
+      customField.inputs[0].blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on input change', () => {
       customField.inputs[0].value = 'foo';
-      dispatchChange(customField.inputs[0]);
-      expect(spy.called).to.be.true;
+      fire(customField.inputs[0], 'change');
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on value change', () => {
+      customField.value = 'foo,1';
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -76,14 +87,14 @@ describe('validation', () => {
 
     it('should become valid after receiving a non-empty value from "change" event', () => {
       customField.inputs[0].value = 'foo';
-      dispatchChange(customField.inputs[0]);
+      fire(customField.inputs[0], 'change');
       expect(customField.invalid).to.be.false;
     });
 
     it('should become invalid after receiving an empty value from "change" event', () => {
       customField.value = 'foo';
       customField.inputs[0].value = '';
-      dispatchChange(customField.inputs[0]);
+      fire(customField.inputs[0], 'change');
       expect(customField.invalid).to.be.true;
     });
   });
