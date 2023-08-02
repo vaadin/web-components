@@ -107,7 +107,7 @@ export const CustomFieldMixin = (superClass) =>
         },
 
         /**
-         * Whether the field is dirty.
+         * Whether the field is dirty. When dirty, the field validates on blur.
          *
          * The field is automatically marked as dirty once the user triggers
          * an `input` or `change` event. Additionally, the field can be manually
@@ -170,7 +170,9 @@ export const CustomFieldMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      if (!focused) {
+      // Validate on blur only when the field is dirty (the user has triggered
+      // an `input` or `change` event once, or the field has been manually marked as dirty).
+      if (!focused && this.dirty) {
         this.validate();
       }
     }

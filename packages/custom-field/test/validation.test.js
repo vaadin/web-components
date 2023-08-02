@@ -25,7 +25,14 @@ describe('validation', () => {
       expect(customField.checkValidity()).to.be.true;
     });
 
-    it('should validate on blur', () => {
+    it('should not validate on blur by default', () => {
+      customField.inputs[0].focus();
+      customField.inputs[0].blur();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on blur when dirty', () => {
+      customField.dirty = true;
       customField.inputs[0].focus();
       customField.inputs[0].blur();
       expect(validateSpy.calledOnce).to.be.true;
