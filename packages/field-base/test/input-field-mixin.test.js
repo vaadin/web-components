@@ -178,7 +178,7 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate on input event when invalid', async () => {
+    it('should validate on input event', async () => {
       element.required = true;
       element.invalid = true;
       await nextUpdate(element);
