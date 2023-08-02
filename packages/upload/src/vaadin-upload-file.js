@@ -7,8 +7,11 @@ import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
+import { uploadFileStyles } from './vaadin-upload-file-styles.js';
+
+registerStyles('vaadin-upload-file', uploadFileStyles, { moduleId: 'vaadin-upload-file-styles' });
 
 /**
  * `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
@@ -53,32 +56,6 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        [hidden] {
-          display: none;
-        }
-
-        [part='row'] {
-          list-style-type: none;
-        }
-
-        button {
-          background: transparent;
-          padding: 0;
-          border: none;
-          box-shadow: none;
-        }
-
-        :host([complete]) ::slotted([slot='progress']),
-        :host([error]) ::slotted([slot='progress']) {
-          display: none !important;
-        }
-      </style>
-
       <div part="row">
         <div part="info">
           <div part="done-icon" hidden$="[[!complete]]" aria-hidden="true"></div>

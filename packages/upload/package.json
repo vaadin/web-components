@@ -21,6 +21,7 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-upload-file.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

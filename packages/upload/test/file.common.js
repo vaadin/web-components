@@ -1,16 +1,23 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '../vaadin-upload.js';
 import { createFile } from './helpers.js';
 
 describe('<vaadin-upload-file> element', () => {
   let fileElement, fileObject;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fileElement = fixtureSync(`<vaadin-upload-file></vaadin-upload-file>`);
+    fileElement.i18n = {
+      file: {
+        start: 'Start',
+        retry: 'Retry',
+        remove: 'Remove',
+      },
+    };
     fileObject = createFile(100000, 'application/unknown');
     fileElement.file = fileObject;
+    await nextRender();
   });
 
   describe('state attributes', () => {
@@ -18,8 +25,9 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('uploading')).to.be.false;
     });
 
-    it('should reflect uploading', () => {
+    it('should reflect uploading', async () => {
       fileElement.uploading = true;
+      await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('uploading')).to.be.true;
     });
 
@@ -27,8 +35,9 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('indeterminate')).to.be.false;
     });
 
-    it('should reflect indeterminate', () => {
+    it('should reflect indeterminate', async () => {
       fileElement.indeterminate = true;
+      await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('indeterminate')).to.be.true;
     });
 
@@ -36,8 +45,9 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('complete')).to.be.false;
     });
 
-    it('should reflect complete', () => {
+    it('should reflect complete', async () => {
       fileElement.complete = true;
+      await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('complete')).to.be.true;
     });
 
@@ -45,16 +55,18 @@ describe('<vaadin-upload-file> element', () => {
       expect(fileElement.hasAttribute('error')).to.be.false;
     });
 
-    it('should reflect error', () => {
+    it('should reflect error', async () => {
       fileElement.errorMessage = 'Server error';
+      await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('error')).to.be.true;
     });
   });
 
   describe('focus', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       // Show the "Start" button
       fileElement.held = true;
+      await nextUpdate(fileElement);
     });
 
     it('should not add focus-ring to the host on programmatic focus', () => {
