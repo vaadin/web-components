@@ -5,6 +5,8 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
+import '@fluidnext-polymer/paper-pagination/paper-pagination.js';
+import '@fluidnext-polymer/paper-pagination/icons/paper-pagination-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
@@ -348,6 +350,19 @@ class Grid extends ElementMixin(
         </table>
 
         <div part="reorder-ghost"></div>
+
+        <div class="pagination-container">
+          <paper-pagination
+            hide-number-element
+            view-page-range="7"
+            id="pagination"
+            total-items="[[_effectiveSize]]"
+            item-per-page="[[pageSize]]"
+            next-icon="paper-pagination:next-arrow"
+            previous-icon="paper-pagination:previous-arrow"
+            on-page-changed="_onPaginationPageChanged"
+          ></paper-pagination>
+        </div>
       </div>
 
       <slot name="tooltip"></slot>
@@ -518,6 +533,16 @@ class Grid extends ElementMixin(
   /** @protected */
   ready() {
     super.ready();
+
+    const paginationStyles = document.createElement('style');
+    paginationStyles.textContent = `
+      paper-dropdown-menu,  
+      paper-input {
+        display: none;
+      }
+    `;
+
+    this.$.pagination.shadowRoot.appendChild(paginationStyles);
 
     this.__virtualizer = new Virtualizer({
       createElements: this._createScrollerRows.bind(this),

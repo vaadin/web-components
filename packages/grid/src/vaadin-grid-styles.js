@@ -337,6 +337,12 @@ registerStyles(
       left: auto;
     }
 
+    .pagination-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
     @media (forced-colors: active) {
       [part~='selected-row'] [part~='first-column-cell']::after {
         content: '';

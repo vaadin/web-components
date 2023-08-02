@@ -230,6 +230,17 @@ export const ScrollMixin = (superClass) =>
           this.__memorizedScrollTop = this._scrollTop;
         }
       }
+
+      this.__handlePaginationPageChange = false;
+      this.$.pagination.page = Math.floor(this._firstVisibleIndex / this.pageSize) + 1;
+      this.__handlePaginationPageChange = true;
+    }
+
+    /** @private */
+    _onPaginationPageChanged(e) {
+      if (this.__handlePaginationPageChange) {
+        this._scrollToFlatIndex((e.detail.value - 1) * this.pageSize);
+      }
     }
 
     /** @private */
