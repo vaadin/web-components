@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, focusin, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { dispatchChange } from './helpers.js';
 
 describe('custom field', () => {
   let customField;
@@ -57,7 +56,7 @@ describe('custom field', () => {
     it('should update value on change event', () => {
       customField.inputs.forEach((el) => {
         el.value = '1';
-        dispatchChange(el);
+        fire(el, 'change');
       });
       expect(customField.value).to.equal('1\t1');
     });
@@ -123,7 +122,7 @@ describe('custom field', () => {
 
       customField.inputs.forEach((el) => {
         el.value = '1';
-        dispatchChange(el);
+        fire(el, 'change');
       });
 
       await nextUpdate(customField);

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { dispatchChange } from './helpers.js';
 
 class XField extends PolymerElement {
   static get template() {
@@ -118,7 +117,7 @@ Object.keys(fixtures).forEach((set) => {
       it('should update value when input is removed', async () => {
         const secondInput = parent.children[1];
         secondInput.value = '1';
-        dispatchChange(secondInput);
+        fire(secondInput, 'change');
         expect(customField.value).to.equal('\t1');
         parent.removeChild(secondInput);
         await nextFrame();
