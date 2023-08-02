@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../vaadin-login-form.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -23,9 +23,10 @@ describe('vaadin-login-form', () => {
     additionalInformation: 'Jos tarvitset lisätietoja käyttäjälle.',
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     resetUniqueId();
     form = fixtureSync('<vaadin-login-form></vaadin-login-form>');
+    await nextRender();
   });
 
   describe('host', () => {
