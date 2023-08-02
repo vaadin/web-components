@@ -1,13 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-custom-field.js';
 
 describe('keyboard navigation', () => {
   let customField;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       customField = fixtureSync(`
         <vaadin-custom-field>
           <input type="text">
@@ -16,6 +15,7 @@ describe('keyboard navigation', () => {
           <input type="number">
         </vaadin-custom-field>
       `);
+      await nextRender();
     });
 
     describe('internal-tab event', () => {

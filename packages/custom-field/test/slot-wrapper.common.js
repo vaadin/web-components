@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-custom-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { dispatchChange } from './helpers.js';
 

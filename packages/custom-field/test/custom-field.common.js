@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusin, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-custom-field.js';
 import { dispatchChange } from './helpers.js';
 
 describe('custom field', () => {

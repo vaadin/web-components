@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-custom-field.d.ts",
+    "!src/vaadin-lit-custom-field.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
