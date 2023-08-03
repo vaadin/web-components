@@ -6,7 +6,9 @@ import type {
   UploadFile,
   UploadFileRejectEvent,
   UploadFilesChangedEvent,
+  UploadI18n,
   UploadMaxFilesReachedChangedEvent,
+  UploadMethod,
   UploadProgressEvent,
   UploadRequestEvent,
   UploadResponseEvent,
@@ -19,6 +21,24 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 
 const upload = document.createElement('vaadin-upload');
 
+// Properties
+assertType<boolean>(upload.nodrop);
+assertType<string>(upload.target);
+assertType<string>(upload.accept);
+assertType<string>(upload.formDataName);
+assertType<UploadFile[]>(upload.files);
+assertType<UploadMethod>(upload.method);
+assertType<object | string | null>(upload.headers);
+assertType<number>(upload.timeout);
+assertType<number>(upload.maxFiles);
+assertType<boolean>(upload.maxFilesReached);
+assertType<number>(upload.maxFileSize);
+assertType<boolean>(upload.noAuto);
+assertType<boolean>(upload.withCredentials);
+assertType<string | null | undefined>(upload.capture);
+assertType<UploadI18n>(upload.i18n);
+
+// Events
 upload.addEventListener('max-files-reached-changed', (event) => {
   assertType<UploadMaxFilesReachedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
