@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-date-picker.js';
 import { getFocusedCell, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
@@ -30,6 +30,7 @@ describe('dirty state', () => {
   it('should not be dirty after outside click without change', async () => {
     datePicker.focus();
     datePicker.click();
+    await waitForOverlayRender();
     outsideClick();
     expect(datePicker.dirty).to.be.false;
   });
@@ -53,6 +54,7 @@ describe('dirty state', () => {
   it('should be dirty after user input', async () => {
     datePicker.focus();
     await sendKeys({ type: '1' });
+    await waitForOverlayRender();
     expect(datePicker.dirty).to.be.true;
   });
 
