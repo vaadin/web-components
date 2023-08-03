@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
