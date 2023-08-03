@@ -46,7 +46,7 @@ export const ValidateMixin = dedupingMixin(
         const isValid = this.checkValidity();
         const oldState = this.invalid;
         this._setInvalid(!isValid);
-        if (!isValid !== oldState) {
+        if (isValid || !isValid !== oldState) {
            this.dispatchEvent(new CustomEvent('validated', { detail: { valid: isValid } }));
         }
         return isValid;
