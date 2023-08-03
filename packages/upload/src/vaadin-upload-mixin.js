@@ -159,6 +159,7 @@ export const UploadMixin = (superClass) =>
           type: Array,
           notify: true,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -170,6 +171,7 @@ export const UploadMixin = (superClass) =>
         maxFiles: {
           type: Number,
           value: Infinity,
+          sync: true,
         },
 
         /**
@@ -183,7 +185,7 @@ export const UploadMixin = (superClass) =>
           notify: true,
           readOnly: true,
           reflectToAttribute: true,
-          computed: '_maxFilesAdded(maxFiles, files.length)',
+          sync: true,
         },
 
         /**
@@ -394,6 +396,7 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
         '__updateDropLabel(_dropLabel, maxFiles, i18n)',
         '__updateFileList(_fileList, files, i18n)',
+        '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
 
@@ -505,8 +508,8 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _maxFilesAdded(maxFiles, numFiles) {
-      return maxFiles >= 0 && numFiles >= maxFiles;
+    __updateMaxFilesReached(maxFiles, files) {
+      this._setMaxFilesReached(maxFiles >= 0 && files.length >= maxFiles);
     }
 
     /** @private */

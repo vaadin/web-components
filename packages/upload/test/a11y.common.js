@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-upload.js';
 import { createFile } from './helpers.js';
 
 const FAKE_FILE = createFile(100000, 'application/uknown');
@@ -10,7 +9,7 @@ describe('a11y', () => {
   describe('<vaadin-upload-file>', () => {
     let uploadFileElement, i18n, button, name;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       uploadFileElement = fixtureSync(`<vaadin-upload-file></vaadin-upload-file>`);
       i18n = {
         file: {
@@ -21,7 +20,7 @@ describe('a11y', () => {
       };
       uploadFileElement.i18n = i18n;
       uploadFileElement.file = FAKE_FILE;
-
+      await nextRender();
       name = uploadFileElement.shadowRoot.querySelector('[part=name]');
     });
 
@@ -75,8 +74,9 @@ describe('a11y', () => {
       announceRegion = document.querySelector('[aria-live]');
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
+      await nextRender();
       clock = sinon.useFakeTimers();
     });
 

@@ -1,17 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-upload.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
   let upload, file;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload.target = 'http://foo.com/bar';
     file = createFile(100000, 'application/unknown');
+    await nextRender();
   });
 
   describe('File upload', () => {
@@ -29,10 +29,11 @@ describe('upload', () => {
         expect(upload.$.fileInput.getAttribute('multiple')).to.be.null;
       });
 
-      it('should apply the capture attribute to the input', () => {
+      it('should apply the capture attribute to the input', async () => {
         const input = upload.$.fileInput;
         const captureType = 'camera';
         upload.capture = captureType;
+        await nextUpdate(upload);
         expect(input.getAttribute('capture')).to.equal(captureType);
       });
     });

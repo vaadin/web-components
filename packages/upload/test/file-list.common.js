@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '../vaadin-upload.js';
 import { createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('file list', () => {
@@ -10,9 +9,10 @@ describe('file list', () => {
     return upload._fileList.querySelectorAll('vaadin-upload-file');
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload._createXhr = xhrCreator();
+    await nextRender();
   });
 
   it('should render files', async () => {
