@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems } from './helpers.js';
@@ -13,6 +13,11 @@ describe('dirty state', () => {
   });
 
   it('should not be dirty by default', () => {
+    expect(comboBox.dirty).to.be.false;
+  });
+
+  it('should not be dirty after programmatic value change', async () => {
+    comboBox.value = ['Item 1'];
     expect(comboBox.dirty).to.be.false;
   });
 

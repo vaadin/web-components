@@ -248,6 +248,11 @@ describe('checkbox', () => {
       expect(checkbox.dirty).to.be.false;
     });
 
+    it('should not be dirty after changing checked state programmatically', () => {
+      checkbox.checked = true;
+      expect(checkbox.dirty).to.be.false;
+    });
+
     it('should be dirty after click', () => {
       input.click();
       expect(checkbox.dirty).to.be.true;

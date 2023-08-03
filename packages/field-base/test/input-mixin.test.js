@@ -128,6 +128,12 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.dirty).to.be.false;
     });
 
+    it('should not be dirty after programmatic value change', async () => {
+      element.value = 'foo';
+      await nextUpdate(element);
+      expect(element.dirty).to.be.false;
+    });
+
     it('should be dirty after user input', () => {
       fire(input, 'input');
       expect(element.dirty).to.be.true;

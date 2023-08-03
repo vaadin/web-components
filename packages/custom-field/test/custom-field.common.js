@@ -160,6 +160,11 @@ describe('custom field', () => {
       expect(customField.dirty).to.be.false;
     });
 
+    it('should not be dirty after programmatic value change', async () => {
+      customField.value = 'foo,1';
+      expect(customField.dirty).to.be.false;
+    });
+
     it('should be dirty after sub-field input', async () => {
       fire(input, 'input');
       expect(customField.dirty).to.be.true;

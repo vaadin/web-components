@@ -16,6 +16,11 @@ describe('dirty state', () => {
     expect(datePicker.dirty).to.be.false;
   });
 
+  it('should not be dirty after programmatic value change', async () => {
+    datePicker.value = '2023-01-01';
+    expect(datePicker.dirty).to.be.false;
+  });
+
   it('should not be dirty after blur without change', () => {
     datePicker.focus();
     datePicker.blur();

@@ -20,6 +20,12 @@ describe('dirty state', () => {
     expect(select.dirty).to.be.false;
   });
 
+  it('should not be dirty after programmatic value change', async () => {
+    select.value = 'item-1';
+    await nextUpdate(select);
+    expect(select.dirty).to.be.false;
+  });
+
   it('should not be dirty after blur without change', () => {
     select.focus();
     select.blur();

@@ -16,6 +16,11 @@ describe('dirty state', () => {
     expect(comboBox.dirty).to.be.false;
   });
 
+  it('should not be dirty after programmatic value change', async () => {
+    comboBox.value = 'Item 1';
+    expect(comboBox.dirty).to.be.false;
+  });
+
   it('should not be dirty after blur without change', () => {
     comboBox.focus();
     comboBox.blur();
