@@ -1,17 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { change, fixtureSync } from '@vaadin/testing-helpers';
+import { change, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './helpers.js';
 
 describe('adding files', () => {
   let upload, files;
   const testFileSize = 512;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     upload = fixtureSync(`<vaadin-upload></vaadin-upload>`);
     upload.target = 'http://foo.com/bar';
     upload._createXhr = xhrCreator({ size: testFileSize, uploadTime: 200, stepTime: 50 });
+    await nextRender();
     files = createFiles(2, testFileSize, 'application/x-octet-stream');
   });
 
@@ -24,10 +24,11 @@ describe('adding files', () => {
       expect(upload.files[1]).to.equal(files[0]);
     });
 
-    it('should notify files property changes', () => {
+    it('should notify files property changes', async () => {
       const spy = sinon.spy();
       upload.addEventListener('files-changed', spy);
       upload.files = files;
+      await nextUpdate(upload);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -55,28 +56,34 @@ describe('adding files', () => {
       return e;
     }
 
-    it('should set dragover property on dragover', () => {
+    it('should set dragover property on dragover', async () => {
       expect(upload._dragover).not.to.be.ok;
       expect(upload.hasAttribute('dragover')).to.be.false;
       upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
       expect(upload._dragover).to.be.ok;
       expect(upload.hasAttribute('dragover')).to.be.true;
     });
 
-    it('should remove dragover property on dragleave', () => {
+    it('should remove dragover property on dragleave', async () => {
       upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
       expect(upload._dragover).to.be.ok;
       expect(upload.hasAttribute('dragover')).to.be.true;
       upload.dispatchEvent(createDndEvent('dragleave'));
+      await nextUpdate(upload);
       expect(upload._dragover).not.to.be.ok;
       expect(upload.hasAttribute('dragover')).to.be.false;
     });
 
-    it('should not have dragover property when max files added', () => {
+    it('should not have dragover property when max files added', async () => {
       upload.maxFiles = 1;
       upload._addFile(createFile(100, 'image/jpeg'));
+      await nextUpdate(upload);
 
       upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+
       expect(upload._dragover).to.be.true;
       expect(upload._dragoverValid).to.be.false;
     });
@@ -90,38 +97,45 @@ describe('adding files', () => {
         dropEvent = createDndEvent('drop');
       });
 
-      it('should fire `files-changed` event when dropping files and drop is enabled', () => {
+      it('should fire `files-changed` event when dropping files and drop is enabled', async () => {
         upload.nodrop = false;
         upload.dispatchEvent(dropEvent);
+        await nextUpdate(upload);
         expect(fileAddSpy.called).to.be.true;
       });
 
-      it('should not fire `files-changed` event when dropping files and drop is disabled', () => {
+      it('should not fire `files-changed` event when dropping files and drop is disabled', async () => {
         upload.nodrop = true;
         upload.dispatchEvent(dropEvent);
+        await nextUpdate(upload);
         expect(fileAddSpy.called).to.be.false;
       });
 
-      it('should not set dragover property on dragover', () => {
+      it('should not set dragover property on dragover', async () => {
         upload.nodrop = true;
+        await nextUpdate(upload);
         expect(upload._dragover).not.to.be.ok;
         expect(upload.hasAttribute('dragover')).to.be.false;
         upload.dispatchEvent(createDndEvent('dragover'));
+        await nextUpdate(upload);
         expect(upload._dragover).not.to.be.ok;
         expect(upload.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should not set dragoverValid property on dragover', () => {
+      it('should not set dragoverValid property on dragover', async () => {
         upload.nodrop = true;
+        await nextUpdate(upload);
         expect(upload._dragoverValid).not.to.be.ok;
         expect(upload.hasAttribute('dragover')).to.be.false;
         upload.dispatchEvent(createDndEvent('dragover'));
+        await nextUpdate(upload);
         expect(upload._dragoverValid).not.to.be.ok;
         expect(upload.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should hide `drop files here` label and icon when drop is disabled', () => {
+      it('should hide `drop files here` label and icon when drop is disabled', async () => {
         upload.nodrop = true;
+        await nextUpdate(upload);
         expect(window.getComputedStyle(upload.$.dropLabelContainer).display).to.equal('none');
       });
     });

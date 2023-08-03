@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, makeSoloTouchEvent, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-upload.js';
 import { createFile } from './helpers.js';
 
 describe('slots', () => {
@@ -47,7 +46,7 @@ describe('slots', () => {
         expect(input.value).to.be.empty;
       });
 
-      it(`should disable the ${type} button when max files added`, () => {
+      it(`should disable the ${type} button when max files added`, async () => {
         // Enabled with default maxFiles value
         expect(addButton.disabled).to.be.false;
 
@@ -55,6 +54,7 @@ describe('slots', () => {
         expect(addButton.disabled).to.be.false;
 
         upload._addFile(createFile(100, 'image/jpeg'));
+        await nextUpdate(upload);
         expect(addButton.disabled).to.be.true;
       });
 
