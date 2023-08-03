@@ -127,6 +127,19 @@ export const SelectBaseMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Whether the field is dirty.
+         *
+         * The field is automatically marked as dirty once the user triggers
+         * a `change` event. Additionally, the field can be manually marked
+         * as dirty by setting the property to `true`.
+         */
+        dirty: {
+          type: Boolean,
+          value: false,
+          notify: true,
+        },
+
         /** @private */
         _phone: Boolean,
 
@@ -614,6 +627,7 @@ export const SelectBaseMixin = (superClass) =>
         await this.updateComplete;
       }
 
+      this.dirty = true;
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;

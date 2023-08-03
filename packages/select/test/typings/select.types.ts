@@ -9,6 +9,7 @@ import type { SelectListBox } from '../../src/vaadin-select-list-box.js';
 import type {
   Select,
   SelectChangeEvent,
+  SelectDirtyChangedEvent,
   SelectInvalidChangedEvent,
   SelectItem as Item,
   SelectOpenedChangedEvent,
@@ -57,6 +58,11 @@ select.addEventListener('opened-changed', (event) => {
 
 select.addEventListener('invalid-changed', (event) => {
   assertType<SelectInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+select.addEventListener('dirty-changed', (event) => {
+  assertType<SelectDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

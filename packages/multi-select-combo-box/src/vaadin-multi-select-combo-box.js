@@ -812,6 +812,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __updateSelection(selectedItems) {
+    this.dirty = true;
     this.selectedItems = selectedItems;
 
     this.validate();

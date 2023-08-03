@@ -72,7 +72,7 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" on-change="_onInputChange">
+        <div class="inputs-wrapper" on-change="_onChange" on-input="_onInput">
           <slot id="slot"></slot>
         </div>
 

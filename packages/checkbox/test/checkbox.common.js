@@ -236,4 +236,26 @@ describe('checkbox', () => {
       expect(input.indeterminate).to.be.false;
     });
   });
+
+  describe('dirty state', () => {
+    beforeEach(async () => {
+      checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      await nextRender();
+      input = checkbox.inputElement;
+    });
+
+    it('should not be dirty by default', () => {
+      expect(checkbox.dirty).to.be.false;
+    });
+
+    it('should not be dirty after changing checked state programmatically', () => {
+      checkbox.checked = true;
+      expect(checkbox.dirty).to.be.false;
+    });
+
+    it('should be dirty after click', () => {
+      input.click();
+      expect(checkbox.dirty).to.be.true;
+    });
+  });
 });
