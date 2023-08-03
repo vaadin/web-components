@@ -492,6 +492,11 @@ describe('radio-group', () => {
       expect(group.dirty).to.be.false;
     });
 
+    it('should not be dirty after programmatic value change', () => {
+      group.value = '1';
+      expect(group.dirty).to.be.false;
+    });
+
     it('should be dirty after selecting a radio button', () => {
       buttons[0].click();
       expect(group.dirty).to.be.true;

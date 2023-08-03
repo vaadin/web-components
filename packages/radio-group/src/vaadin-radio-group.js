@@ -184,6 +184,7 @@ class RadioGroup extends FieldMixin(
 
     this.__registerRadioButton = this.__registerRadioButton.bind(this);
     this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
+    this.__onRadioButtonChange = this.__onRadioButtonChange.bind(this);
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
   }
 
@@ -336,6 +337,7 @@ class RadioGroup extends FieldMixin(
    */
   __registerRadioButton(radioButton) {
     radioButton.name = this._fieldName;
+    radioButton.addEventListener('change', this.__onRadioButtonChange);
     radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (this.disabled || this.readonly) {
@@ -354,6 +356,7 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   __unregisterRadioButton(radioButton) {
+    radioButton.removeEventListener('change', this.__onRadioButtonChange);
     radioButton.removeEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (radioButton.value === this.value) {
@@ -361,13 +364,16 @@ class RadioGroup extends FieldMixin(
     }
   }
 
+  /** @private */
+  __onRadioButtonChange() {
+    this.dirty = true;
+  }
+
   /**
    * @param {!CustomEvent} event
    * @private
    */
   __onRadioButtonCheckedChange(event) {
-    this.dirty = true;
-
     if (event.target.checked) {
       this.__selectRadioButton(event.target);
     }

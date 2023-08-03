@@ -160,6 +160,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
 
     this.__registerCheckbox = this.__registerCheckbox.bind(this);
     this.__unregisterCheckbox = this.__unregisterCheckbox.bind(this);
+    this.__onCheckboxChange = this.__onCheckboxChange.bind(this);
     this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
   }
 
@@ -240,6 +241,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __registerCheckbox(checkbox) {
+    checkbox.addEventListener('change', this.__onCheckboxChange);
     checkbox.addEventListener('checked-changed', this.__onCheckboxCheckedChanged);
 
     if (this.disabled) {
@@ -260,6 +262,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __unregisterCheckbox(checkbox) {
+    checkbox.removeEventListener('change', this.__onCheckboxChange);
     checkbox.removeEventListener('checked-changed', this.__onCheckboxCheckedChanged);
 
     if (checkbox.checked) {
@@ -313,14 +316,18 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     }
   }
 
+  /** @private */
+  __onCheckboxChange() {
+    this.dirty = true;
+  }
+
   /**
    * @param {!CustomEvent} event
    * @private
    */
   __onCheckboxCheckedChanged(event) {
-    this.dirty = true;
-
     const checkbox = event.target;
+
     if (checkbox.checked) {
       this.__addCheckboxToValue(checkbox.value);
     } else {
