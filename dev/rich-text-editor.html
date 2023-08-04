@@ -5,16 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RTE</title>
-    <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/rich-text-editor';
-    </script>
   </head>
 
   <body>
-    <input />
-    <vaadin-rich-text-editor></vaadin-rich-text-editor>
-    <input />
+    <h1>Custom link editor</h1>
+
+    <custom-rich-text-editor></custom-rich-text-editor>
+
+    <script type="module">
+      import { RichTextEditor } from '@vaadin/rich-text-editor';
+      import './custom-confirm-dialog.js';
+
+      let memoizedTemplate;
+
+      customElements.define(
+        'custom-rich-text-editor',
+        class extends RichTextEditor {
+          static get template() {
+            if (!memoizedTemplate) {
+              memoizedTemplate = super.template.cloneNode(true);
+              // Replace the default confirm-dialog with a custom implementation
+              const html = memoizedTemplate.innerHTML.replaceAll(/vaadin-confirm-dialog/g, 'custom-confirm-dialog');
+              memoizedTemplate.innerHTML = html;
+            }
+            return memoizedTemplate;
+          }
+
+          ready() {
+            super.ready();
+            this.$.linkDialog.positionTarget = this.shadowRoot.querySelector('#btn-link');
+          }
+        },
+      );
+    </script>
   </body>
 </html>
