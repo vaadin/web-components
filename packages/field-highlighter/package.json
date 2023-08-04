@@ -53,7 +53,7 @@
     "@vaadin/list-box": "24.2.0-alpha8",
     "@vaadin/radio-group": "24.2.0-alpha8",
     "@vaadin/select": "24.2.0-alpha8",
-    "@vaadin/testing-helpers": "^0.4.3",
+    "@vaadin/testing-helpers": "^0.5.0",
     "@vaadin/text-area": "24.2.0-alpha8",
     "@vaadin/text-field": "24.2.0-alpha8",
     "@vaadin/time-picker": "24.2.0-alpha8",

@@ -2045,15 +2045,16 @@
     "@typescript-eslint/types" "5.49.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vaadin/testing-helpers@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.4.3.tgz#3c35eb4c65ba47e6732927c9bb429f2586aaf5ab"
-  integrity sha512-tN5BWlru7Se35DeOP2wbbTgh4y5P6URDOOKxtuhayhQKIPLrLM3tKY8y2bdbAUUptWFKsdGPiRu2gBUYMxMICg==
+"@vaadin/testing-helpers@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.5.0.tgz#3fd0413fff63c6b79c3bbfab857c3189c31cfac1"
+  integrity sha512-JJlqWzMhH6tEwEpEBhzJgdS1Eujqg5Yt3ZRrTPVKLQqRR+EtnKFiYC4MoyAejQASUjBtbQgOE5KLi7ajbCWFzA==
   dependencies:
     "@esm-bundle/chai" "^4.3.1"
     "@open-wc/semantic-dom-diff" "^0.19.7"
     "@polymer/polymer" "^3.5.1"
     lit "^2.6.1"
+    sinon-chai "3.7.0"
 
 "@vaadin/vaadin-development-mode-detector@^2.0.0":
   version "2.0.5"
@@ -10845,6 +10846,11 @@ signal-exit@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-4.0.2.tgz#ff55bb1d9ff2114c13b400688fa544ac63c36967"
   integrity sha512-MY2/qGx4enyjprQnFaZsHib3Yadh3IXyV2C321GY0pjGfVBu4un0uDJkwgdxqO+Rdx8JMT8IfJIRwbYVz3Ob3Q==
+
+sinon-chai@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-3.7.0.tgz#cfb7dec1c50990ed18c153f1840721cf13139783"
+  integrity sha512-mf5NURdUaSdnatJx3uhoBOrY9dtL19fiOtAdT1Azxg3+lNJFiuN0uzaU3xX1LeAfL17kHQhTAJgpsfhbMJMY2g==
 
 sinon@^13.0.2:
   version "13.0.2"
