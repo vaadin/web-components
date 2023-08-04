@@ -2045,8 +2045,8 @@
     "@typescript-eslint/types" "5.49.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vaadin/testing-helpers@^0.4.3":
-  version "0.4.3"
+"@vaadin/testing-helpers@^0.5.0":
+  version "0.5.0"
   resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.4.3.tgz#3c35eb4c65ba47e6732927c9bb429f2586aaf5ab"
   integrity sha512-tN5BWlru7Se35DeOP2wbbTgh4y5P6URDOOKxtuhayhQKIPLrLM3tKY8y2bdbAUUptWFKsdGPiRu2gBUYMxMICg==
   dependencies:
