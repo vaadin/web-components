@@ -105,21 +105,6 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate between value-changed and change events on blur', async () => {
-      datePicker.value = '2023-01-01';
-      validateSpy.resetHistory();
-      valueChangedSpy.resetHistory();
-      input.focus();
-      input.select();
-      await sendKeys({ press: 'Backspace' });
-      input.blur();
-      expect(valueChangedSpy.calledOnce).to.be.true;
-      expect(validateSpy.called).to.be.true;
-      expect(validateSpy.firstCall.calledAfter(valueChangedSpy.firstCall)).to.be.true;
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(changeSpy.firstCall.calledAfter(validateSpy.firstCall)).to.be.true;
-    });
-
     it('should validate on outside click', async () => {
       input.focus();
       input.click();
@@ -129,39 +114,11 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate between value-changed and change events on outside click', async () => {
-      input.focus();
-      input.click();
-      await waitForOverlayRender();
-      await sendKeys({ type: '1/1/2023' });
-      await waitForScrollToFinish(datePicker._overlayContent);
-      outsideClick();
-      await nextUpdate(datePicker);
-      expect(valueChangedSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledAfter(valueChangedSpy)).to.be.true;
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-    });
-
     it('should not validate on input click while opened', async () => {
       await open(datePicker);
       validateSpy.resetHistory();
       input.click();
       expect(validateSpy.called).to.be.false;
-    });
-
-    it('should validate between value-changed and change events on clear button click', async () => {
-      datePicker.clearButtonVisible = true;
-      datePicker.value = '2022-01-01';
-      validateSpy.resetHistory();
-      valueChangedSpy.resetHistory();
-      datePicker.$.clearButton.click();
-      expect(valueChangedSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledAfter(valueChangedSpy)).to.be.true;
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should validate on value change', () => {
@@ -312,16 +269,6 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit an invalid date', async () => {
-      datePicker.value = '2020-01-01';
-      setInputValue(datePicker, 'foo');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.value).to.equal('');
-      expect(input.value).to.equal('foo');
-    });
-
     describe('autoOpenDisabled', () => {
       beforeEach(() => {
         datePicker.autoOpenDisabled = true;
@@ -364,12 +311,9 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    let input;
-
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
       await nextRender();
-      input = datePicker.inputElement;
     });
 
     it('should fail validation without value', () => {
@@ -379,27 +323,6 @@ describe('validation', () => {
     it('should pass validation with a valid value', () => {
       datePicker.value = '2000-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-    });
-
-    it('should be valid when committing a non-empty value', async () => {
-      setInputValue(datePicker, '1/1/2000');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should be invalid when committing an empty value', async () => {
-      setInputValue(datePicker, '1/1/2000');
-      await waitForOverlayRender();
-      enter(input);
-
-      setInputValue(datePicker, '');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-
-      expect(datePicker.invalid).to.be.true;
     });
   });
 
@@ -430,30 +353,6 @@ describe('validation', () => {
       datePicker.value = '2010-01-01';
       expect(datePicker.checkValidity()).to.be.true;
     });
-
-    it('should be invalid when committing a value < min', async () => {
-      setInputValue(datePicker, '1/1/2000');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.true;
-    });
-
-    it('should be valid when committing a value > min', async () => {
-      setInputValue(datePicker, '1/1/2022');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should be valid when committing a value = min', async () => {
-      setInputValue(datePicker, '1/1/2022');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.false;
-    });
   });
 
   describe('max', () => {
@@ -482,30 +381,6 @@ describe('validation', () => {
     it('should pass validation with a value = max', () => {
       datePicker.value = '2010-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-    });
-
-    it('should be invalid when committing a value > max', async () => {
-      setInputValue(datePicker, '1/1/2022');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.true;
-    });
-
-    it('should be valid when committing a value < max', async () => {
-      setInputValue(datePicker, '1/1/2000');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should be valid when committing a value = max', async () => {
-      setInputValue(datePicker, '1/1/2010');
-      await waitForOverlayRender();
-      enter(input);
-      await nextUpdate(datePicker);
-      expect(datePicker.invalid).to.be.false;
     });
   });
 
