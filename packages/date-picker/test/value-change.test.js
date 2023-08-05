@@ -24,28 +24,28 @@ describe('value change', () => {
   });
 
   describe('default', () => {
-    it('should not change on input blur', () => {
+    it('should not commit on blur', () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.not.called;
       // expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not change on input Enter', async () => {
+    it('should not commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
       // expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not change on input Escape', async () => {
+    it('should not commit on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
       // expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not change on close with outside click', async () => {
+    it('should not commit on close with outside click', async () => {
       datePicker.click();
       await waitForOverlayRender();
       outsideClick();
@@ -54,19 +54,9 @@ describe('value change', () => {
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not change on close with input Escape', async () => {
+    it('should not commit on close with Escape', async () => {
       datePicker.click();
       await waitForOverlayRender();
-      await sendKeys({ press: 'Escape' });
-      expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
-      expect(changeSpy).to.be.not.called;
-    });
-
-    it('should not change on close with overlay Escape', async () => {
-      datePicker.click();
-      await waitForOverlayRender();
-      await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
       // expect(validatedSpy).to.be.not.called;
@@ -81,7 +71,7 @@ describe('value change', () => {
     });
 
     // TODO: This test doesn't work when autoOpenDisabled = false
-    // it('should change on blur', async () => {
+    // it('should commit on blur', async () => {
     //   datePicker.blur();
     //   expect(valueChangedSpy).to.be.calledOnce;
     //   // TODO: Why is value-changed fired after validation?
@@ -93,7 +83,7 @@ describe('value change', () => {
     //   expect(datePicker.value).to.equal('2001-01-01');
     // });
 
-    it('should change on input Enter', async () => {
+    it('should commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
       // TODO: Why is value-changed fired after validation?
@@ -105,7 +95,7 @@ describe('value change', () => {
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
-    it('should change on close with outside click', () => {
+    it('should commit on close with outside click', () => {
       outsideClick();
       expect(valueChangedSpy).to.be.calledOnce;
       // TODO: Why is value-changed fired after validation?
@@ -117,18 +107,7 @@ describe('value change', () => {
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
-    it('should revert on input Escape', async () => {
-      await sendKeys({ press: 'Escape' });
-      expect(valueChangedSpy).to.be.not.called;
-      // TODO: Why is validation triggered on revert?
-      expect(validatedSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
-      expect(datePicker.inputElement.value).to.equal('');
-    });
-
-    it('should revert on overlay Escape', async () => {
-      await sendKeys({ press: 'Tab' });
+    it('should revert on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
       // TODO: Why is validation triggered on revert?
@@ -145,7 +124,7 @@ describe('value change', () => {
       await waitForOverlayRender();
     });
 
-    it('should not change but validate on input Enter', async () => {
+    it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
       // TODO: Why is validation triggered twice?
@@ -155,7 +134,7 @@ describe('value change', () => {
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
 
-    it('should not change but validate on close with outside click', async () => {
+    it('should not commit but validate on close with outside click', async () => {
       outsideClick();
       expect(valueChangedSpy).to.be.not.called;
       expect(validatedSpy).to.be.calledOnce;
@@ -164,18 +143,7 @@ describe('value change', () => {
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
 
-    it('should revert on close with input Escape', async () => {
-      await sendKeys({ press: 'Escape' });
-      expect(valueChangedSpy).to.be.not.called;
-      // TODO: Why is validation triggered on revert?
-      expect(validatedSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
-      expect(datePicker.inputElement.value).to.equal('');
-    });
-
-    it('should revert on close with overlay Escape', async () => {
-      await sendKeys({ press: 'Tab' });
+    it('should revert on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
       // TODO: Why is validation triggered on revert?
@@ -192,7 +160,7 @@ describe('value change', () => {
       await waitForOverlayRender();
     });
 
-    it('should change on selection with click', () => {
+    it('should commit on selection with click', () => {
       const date = getDeepActiveElement();
       tap(date);
       expect(valueChangedSpy).to.be.calledOnce;
@@ -205,7 +173,7 @@ describe('value change', () => {
       expect(datePicker.value).to.equal(TODAY_DATE);
     });
 
-    it('should change on selection with Enter', async () => {
+    it('should commit on selection with Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
       expect(validatedSpy).to.be.calledOnce;
@@ -217,7 +185,7 @@ describe('value change', () => {
       expect(datePicker.value).to.equal(TODAY_DATE);
     });
 
-    it('should change on selection with Space', async () => {
+    it('should commit on selection with Space', async () => {
       await sendKeys({ press: 'Space' });
       expect(valueChangedSpy).to.be.calledOnce;
       expect(validatedSpy).to.be.calledOnce;
@@ -242,28 +210,28 @@ describe('value change', () => {
     });
 
     describe('default', () => {
-      it('should not change on input blur', () => {
+      it('should not commit on blur', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.not.called;
         // expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
-      it('should not change on input Enter', async () => {
+      it('should not commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.not.called;
         // expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
-      it('should not change on input Escape', async () => {
+      it('should not commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
         // expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
-      it('should not change on close with outside click', async () => {
+      it('should not commit on close with outside click', async () => {
         datePicker.click();
         await waitForOverlayRender();
         outsideClick();
@@ -272,19 +240,9 @@ describe('value change', () => {
         expect(changeSpy).to.be.not.called;
       });
 
-      it('should not change on close with input Escape', async () => {
+      it('should not commit on close with Escape', async () => {
         datePicker.click();
         await waitForOverlayRender();
-        await sendKeys({ press: 'Escape' });
-        expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
-        expect(changeSpy).to.be.not.called;
-      });
-
-      it('should not change on close with overlay Escape', async () => {
-        datePicker.click();
-        await waitForOverlayRender();
-        await sendKeys({ press: 'Tab' });
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
         // expect(validatedSpy).to.be.not.called;
@@ -299,7 +257,7 @@ describe('value change', () => {
         await waitForOverlayRender();
       });
 
-      it('should change on input Enter', async () => {
+      it('should commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
@@ -311,7 +269,7 @@ describe('value change', () => {
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
-      it('should change on close with outside click', () => {
+      it('should commit on close with outside click', () => {
         outsideClick();
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
@@ -323,17 +281,7 @@ describe('value change', () => {
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
-      it('should revert on close with input Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.not.called;
-        expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
-        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
-      });
-
-      it('should revert on close with overlay Escape', async () => {
-        await sendKeys({ press: 'Tab' });
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
         expect(validatedSpy).to.be.not.called;
@@ -349,7 +297,7 @@ describe('value change', () => {
         await waitForOverlayRender();
       });
 
-      it('should revert on input Enter', async () => {
+      it('should revert on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.not.called;
         // TODO: Why is validation triggered on revert?
@@ -368,17 +316,7 @@ describe('value change', () => {
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
 
-      it('should revert on close with input Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.not.called;
-        expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
-        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
-      });
-
-      it('should revert on close with overlay Escape', async () => {
-        await sendKeys({ press: 'Tab' });
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
         expect(validatedSpy).to.be.not.called;
@@ -394,7 +332,7 @@ describe('value change', () => {
         await waitForOverlayRender();
       });
 
-      it('should change on unselection with Space', async () => {
+      it('should commit on unselection with Space', async () => {
         await sendKeys({ press: 'Space' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
@@ -413,7 +351,7 @@ describe('value change', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should change on input blur after clearing', () => {
+      it('should commit on blur after clearing', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.calledOnce;
         // TODO: Why is validation triggered twice?
@@ -425,7 +363,7 @@ describe('value change', () => {
         expect(datePicker.value).to.equal('');
       });
 
-      it('should change on input Enter after clearing', async () => {
+      it('should commit on Enter after clearing', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
@@ -437,7 +375,7 @@ describe('value change', () => {
         expect(datePicker.value).to.equal('');
       });
 
-      it('should change on input Escape after clearing', async () => {
+      it('should commit on Escape after clearing', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
@@ -449,7 +387,7 @@ describe('value change', () => {
         expect(datePicker.value).to.equal('');
       });
 
-      it('should change on close with overlay Escape after clearing', async () => {
+      it('should commit on close with Escape after clearing', async () => {
         await sendKeys({ press: 'ArrowDown' });
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
