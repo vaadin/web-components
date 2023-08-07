@@ -7,6 +7,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { updateCellState } from './vaadin-grid-helpers.js';
 
@@ -713,7 +714,7 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      this.__setTextContent(root, this.get(this.path, item));
+      this.__setTextContent(root, get(this.path, item));
     }
 
     /**

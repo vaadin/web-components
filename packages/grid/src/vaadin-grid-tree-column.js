@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-tree-toggle.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { GridColumn } from './vaadin-grid-column.js';
 
 /**
@@ -101,7 +102,7 @@ class GridTreeColumn extends GridColumn {
 
   /** @private */
   __getToggleContent(path, item) {
-    return path && this.get(path, item);
+    return path && get(path, item);
   }
 }
 
