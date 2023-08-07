@@ -1,23 +1,25 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '../src/vaadin-time-picker.js';
+import '../src/vaadin-lit-time-picker.js';
 import { getAllItems } from './helpers.js';
 
 describe('dirty state', () => {
   let timePicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync('<vaadin-time-picker></vaadin-time-picker>');
+    await nextRender();
   });
 
   it('should not be dirty by default', () => {
     expect(timePicker.dirty).to.be.false;
   });
 
-  it('should not be dirty after blur without change', () => {
+  it('should not be dirty after blur without change', async () => {
     timePicker.focus();
     timePicker.blur();
+    await nextUpdate(timePicker);
     expect(timePicker.dirty).to.be.false;
   });
 
