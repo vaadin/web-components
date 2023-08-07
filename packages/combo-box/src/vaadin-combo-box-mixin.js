@@ -10,6 +10,7 @@ import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
@@ -661,7 +662,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemLabel(item) {
-      let label = item && this.itemLabelPath ? this.get(this.itemLabelPath, item) : undefined;
+      let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
       if (label === undefined || label === null) {
         label = item ? item.toString() : '';
       }
@@ -670,7 +671,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemValue(item) {
-      let value = item && this.itemValuePath ? this.get(this.itemValuePath, item) : undefined;
+      let value = item && this.itemValuePath ? get(this.itemValuePath, item) : undefined;
       if (value === undefined) {
         value = item ? item.toString() : '';
       }

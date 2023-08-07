@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { get, set } from './path-utils.js';
 
 const caseMap = {};
 
@@ -272,15 +273,12 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @protected */
     _get(path, object) {
-      return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
+      return get(path, object);
     }
 
     /** @protected */
     _set(path, value, object) {
-      const pathParts = path.split('.');
-      const lastPart = pathParts.pop();
-      const target = pathParts.reduce((target, part) => target[part], object);
-      target[lastPart] = value;
+      set(path, value, object);
     }
   }
 
