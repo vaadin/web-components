@@ -17,6 +17,11 @@ export type CustomFieldChangeEvent = Event & {
 };
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type CustomFieldDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -39,6 +44,8 @@ export type CustomFieldInternalTabEvent = Event & {
 };
 
 export interface CustomFieldCustomEventMap {
+  'dirty-changed': CustomFieldDirtyChangedEvent;
+
   'invalid-changed': CustomFieldInvalidChangedEvent;
 
   'value-changed': CustomFieldValueChangedEvent;
@@ -91,6 +98,7 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
