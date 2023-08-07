@@ -5,6 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
@@ -307,7 +308,7 @@ export const DataProviderMixin = (superClass) =>
      * @return {!GridItem | !unknown}
      */
     getItemId(item) {
-      return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
+      return this.itemIdPath ? get(this.itemIdPath, item) : item;
     }
 
     /**
