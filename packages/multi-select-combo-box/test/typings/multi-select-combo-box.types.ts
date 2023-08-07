@@ -24,6 +24,7 @@ import type {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
   MultiSelectComboBoxCustomValueSetEvent,
+  MultiSelectComboBoxDirtyChangedEvent,
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
@@ -52,6 +53,11 @@ narrowedComboBox.addEventListener('change', (event) => {
 narrowedComboBox.addEventListener('custom-value-set', (event) => {
   assertType<MultiSelectComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);
+});
+
+narrowedComboBox.addEventListener('dirty-changed', (event) => {
+  assertType<MultiSelectComboBoxDirtyChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 narrowedComboBox.addEventListener('filter-changed', (event) => {
