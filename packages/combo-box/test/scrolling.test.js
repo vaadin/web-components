@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isIOS, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getSelectedItem, onceScrolled } from './helpers.js';
 
 describe('scrolling', () => {
   let comboBox, overlay, scroller, input;
@@ -73,18 +72,6 @@ describe('scrolling', () => {
 
       expect(scroller.scrollTop).to.equal(0);
     });
-
-    function expectSelectedItemPositionToBeVisible() {
-      const selectedItem = getSelectedItem(comboBox);
-      expect(selectedItem).to.be.ok;
-
-      const selectedItemRect = selectedItem.getBoundingClientRect();
-      const overlayRect = overlay.getBoundingClientRect();
-      expect(selectedItemRect.left).to.be.at.least(overlayRect.left - 1);
-      expect(selectedItemRect.top).to.be.at.least(overlayRect.top - 1);
-      expect(selectedItemRect.right).to.be.at.most(overlayRect.right + 1);
-      expect(selectedItemRect.bottom).to.be.at.most(overlayRect.bottom + 1);
-    }
 
     it('should not close the items when touching scroll bar', () => {
       comboBox.open();
