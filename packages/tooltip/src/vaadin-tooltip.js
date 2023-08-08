@@ -410,17 +410,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       },
 
       /**
-       * Element used to link with the `aria-describedby`
-       * attribute. When not set, defaults to `target`.
-       * @protected
-       */
-      _ariaTarget: {
-        type: Object,
-        computed: '__computeAriaTarget(ariaTarget, target)',
-        observer: '__ariaTargetChanged',
-      },
-
-      /**
        * Set to true when the overlay is opened using auto-added
        * event listeners: mouseenter and focusin (keyboard only).
        * @protected
@@ -437,6 +426,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       _position: {
         type: String,
         value: 'bottom',
+      },
+
+      /**
+       * Element used to link with the `aria-describedby`
+       * attribute. When not set, defaults to `target`.
+       * @protected
+       */
+      _effectiveAriaTarget: {
+        type: Object,
+        computed: '__computeAriaTarget(ariaTarget, target)',
+        observer: '__ariaTargetChanged',
       },
 
       /** @private */

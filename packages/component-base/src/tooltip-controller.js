@@ -52,8 +52,8 @@ export class TooltipController extends SlotController {
   }
 
   /**
-   * Set an HTML element to link the tooltip to.
-   * When not set, defaults to `target`.
+   * Set an HTML element for linking with the tooltip overlay
+   * via `aria-describedby` attribute used by screen readers.
    * @param {HTMLElement} ariaTarget
    */
   setAriaTarget(ariaTarget) {
