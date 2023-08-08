@@ -152,6 +152,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
         part="label"
         @click="${this._onLabelClick}"
         aria-expanded="${ifDefined(this.collapsible ? !this.collapsed : null)}"
+        aria-hidden="${ifDefined(this.collapsible === false ? true : null)}"
         aria-controls="children"
       >
         <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>

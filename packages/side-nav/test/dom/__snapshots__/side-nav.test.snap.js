@@ -73,6 +73,7 @@ snapshots["vaadin-side-nav host collapsed"] =
 snapshots["vaadin-side-nav shadow default"] = 
 `<button
   aria-controls="children"
+  aria-hidden="true"
   part="label"
 >
   <slot name="label">
