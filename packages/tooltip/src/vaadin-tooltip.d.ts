@@ -79,6 +79,12 @@ declare class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(
   static setDefaultHoverDelay(delay: number): void;
 
   /**
+   * Element used to link with the `aria-describedby`
+   * attribute. When not set, defaults to `target`.
+   */
+  ariaTarget: HTMLElement | undefined;
+
+  /**
    * Object with properties passed to `generator` and
    * `shouldShow` functions for generating tooltip text
    * or detecting whether to show the tooltip or not.

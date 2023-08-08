@@ -282,6 +282,14 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   static get properties() {
     return {
       /**
+       * Element used to link with the `aria-describedby`
+       * attribute. When not set, defaults to `target`.
+       */
+      ariaTarget: {
+        type: Object,
+      },
+
+      /**
        * Object with properties passed to `generator` and
        * `shouldShow` functions for generating tooltip text
        * or detecting whether to show the tooltip or not.
@@ -402,6 +410,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       },
 
       /**
+       * Element used to link with the `aria-describedby`
+       * attribute. When not set, defaults to `target`.
+       * @protected
+       */
+      _ariaTarget: {
+        type: Object,
+        computed: '__computeAriaTarget(ariaTarget, target)',
+        observer: '__ariaTargetChanged',
+      },
+
+      /**
        * Set to true when the overlay is opened using auto-added
        * event listeners: mouseenter and focusin (keyboard only).
        * @protected
@@ -519,6 +538,11 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   }
 
   /** @private */
+  __computeAriaTarget(ariaTarget, target) {
+    return ariaTarget || target;
+  }
+
+  /** @private */
   __computeHorizontalAlign(position) {
     return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
   }
@@ -551,6 +575,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __tooltipRenderer(root) {
     root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+  }
+
+  /** @private */
+  __ariaTargetChanged(ariaTarget, oldAriaTarget) {
+    if (oldAriaTarget) {
+      removeValueFromAttribute(oldAriaTarget, 'aria-describedby', this._uniqueId);
+    }
+
+    if (ariaTarget) {
+      addValueToAttribute(ariaTarget, 'aria-describedby', this._uniqueId);
+    }
   }
 
   /** @private */
@@ -596,8 +631,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       oldTarget.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(oldTarget);
-
-      removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
 
     if (target) {
@@ -611,8 +644,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       requestAnimationFrame(() => {
         this.__targetVisibilityObserver.observe(target);
       });
-
-      addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
   }
 

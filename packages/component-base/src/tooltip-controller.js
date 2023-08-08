@@ -26,6 +26,10 @@ export class TooltipController extends SlotController {
   initCustomNode(tooltipNode) {
     tooltipNode.target = this.target;
 
+    if (this.ariaTarget !== undefined) {
+      tooltipNode.ariaTarget = this.ariaTarget;
+    }
+
     if (this.context !== undefined) {
       tooltipNode.context = this.context;
     }
@@ -44,6 +48,20 @@ export class TooltipController extends SlotController {
 
     if (this.shouldShow !== undefined) {
       tooltipNode.shouldShow = this.shouldShow;
+    }
+  }
+
+  /**
+   * Set an HTML element to link the tooltip to.
+   * When not set, defaults to `target`.
+   * @param {HTMLElement} ariaTarget
+   */
+  setAriaTarget(ariaTarget) {
+    this.ariaTarget = ariaTarget;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.ariaTarget = ariaTarget;
     }
   }
 

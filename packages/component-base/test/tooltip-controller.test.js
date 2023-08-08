@@ -79,6 +79,13 @@ describe('TooltipController', () => {
       controller.setPosition('top-start');
       expect(tooltip.position).to.not.eql('top-start');
     });
+
+    it('should update tooltip ariaTarget using controller setAriaTarget method', () => {
+      const input = document.createElement('input');
+      host.appendChild(input);
+      controller.setAriaTarget(input);
+      expect(tooltip.ariaTarget).to.equal(input);
+    });
   });
 
   describe('slotted tooltip', () => {
