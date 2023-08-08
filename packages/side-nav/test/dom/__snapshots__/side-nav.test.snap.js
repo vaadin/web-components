@@ -87,6 +87,7 @@ snapshots["vaadin-side-nav shadow default"] =
   aria-hidden="false"
   id="children"
   part="children"
+  role="list"
 >
   <slot>
   </slot>
@@ -112,6 +113,7 @@ snapshots["vaadin-side-nav shadow collapsible"] =
   aria-hidden="false"
   id="children"
   part="children"
+  role="list"
 >
   <slot>
   </slot>
@@ -138,6 +140,7 @@ snapshots["vaadin-side-nav shadow collapsed"] =
   hidden=""
   id="children"
   part="children"
+  role="list"
 >
   <slot>
   </slot>

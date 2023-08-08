@@ -157,7 +157,13 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
         <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
         <span part="toggle-button" aria-hidden="true"></span>
       </button>
-      <ul id="children" part="children" ?hidden="${this.collapsed}" aria-hidden="${this.collapsed ? 'true' : 'false'}">
+      <ul
+        id="children"
+        role="list"
+        part="children"
+        ?hidden="${this.collapsed}"
+        aria-hidden="${this.collapsed ? 'true' : 'false'}"
+      >
         <slot></slot>
       </ul>
     `;
