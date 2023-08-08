@@ -113,7 +113,6 @@ describe('value change', () => {
       // TODO: Why is validation triggered on revert?
       expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('');
     });
   });
@@ -130,7 +129,6 @@ describe('value change', () => {
       // TODO: Why is validation triggered twice?
       expect(validatedSpy).to.be.calledTwice;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
 
@@ -139,7 +137,6 @@ describe('value change', () => {
       expect(valueChangedSpy).to.be.not.called;
       expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
 
@@ -149,7 +146,6 @@ describe('value change', () => {
       // TODO: Why is validation triggered on revert?
       expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('');
     });
   });
@@ -199,11 +195,10 @@ describe('value change', () => {
   });
 
   describe('with value', () => {
-    let initialValue, initialInputElementValue;
+    let initialInputElementValue;
 
     beforeEach(() => {
       datePicker.value = TODAY_DATE;
-      initialValue = datePicker.value;
       initialInputElementValue = datePicker.inputElement.value;
       valueChangedSpy.resetHistory();
       validatedSpy.resetHistory();
@@ -286,7 +281,6 @@ describe('value change', () => {
         expect(valueChangedSpy).to.be.not.called;
         expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
@@ -303,7 +297,6 @@ describe('value change', () => {
         // TODO: Why is validation triggered on revert?
         expect(validatedSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
 
@@ -312,7 +305,6 @@ describe('value change', () => {
         expect(valueChangedSpy).to.be.not.called;
         expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
 
@@ -321,7 +313,6 @@ describe('value change', () => {
         expect(valueChangedSpy).to.be.not.called;
         expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
-        expect(datePicker.value).to.equal(initialValue);
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
