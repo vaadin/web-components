@@ -203,6 +203,7 @@ export const SelectBaseMixin = (superClass) =>
 
       this._tooltipController = new TooltipController(this);
       this._tooltipController.setPosition('top');
+      this._tooltipController.setAriaTarget(this.focusElement);
       this.addController(this._tooltipController);
     }
 

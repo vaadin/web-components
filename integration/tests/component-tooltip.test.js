@@ -32,6 +32,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   {
     tagName: ComboBox.is,
     position: 'top',
+    ariaTargetSelector: 'input',
     applyShouldNotShowCondition: (comboBox) => comboBox.click(),
   },
   {
@@ -42,6 +43,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   {
     tagName: DatePicker.is,
     position: 'top',
+    ariaTargetSelector: 'input',
     applyShouldNotShowCondition: (datePicker) => datePicker.click(),
   },
   {
@@ -55,29 +57,31 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
     targetSelector: '[slot="summary"]',
     position: 'bottom-start',
   },
-  { tagName: EmailField.is, position: 'top' },
+  { tagName: EmailField.is, position: 'top', ariaTargetSelector: 'input' },
   { tagName: Icon.is },
-  { tagName: IntegerField.is, position: 'top' },
+  { tagName: IntegerField.is, position: 'top', ariaTargetSelector: 'input' },
   { tagName: ListBox.is },
   { tagName: MessageInput.is },
   {
     tagName: MultiSelectComboBox.is,
     position: 'top',
+    ariaTargetSelector: 'input',
     applyShouldNotShowCondition: (comboBox) => comboBox.click(),
   },
-  { tagName: NumberField.is, position: 'top' },
-  { tagName: PasswordField.is, position: 'top' },
+  { tagName: NumberField.is, position: 'top', ariaTargetSelector: 'input' },
+  { tagName: PasswordField.is, position: 'top', ariaTargetSelector: 'input' },
   { tagName: RadioGroup.is },
-  { tagName: Select.is, position: 'top' },
+  { tagName: Select.is, position: 'top', ariaTargetSelector: 'vaadin-select-value-button' },
   { tagName: Tab.is },
-  { tagName: TextArea.is, position: 'top' },
-  { tagName: TextField.is, position: 'top' },
+  { tagName: TextArea.is, position: 'top', ariaTargetSelector: 'textarea' },
+  { tagName: TextField.is, position: 'top', ariaTargetSelector: 'input' },
   {
     tagName: TimePicker.is,
     position: 'top',
+    ariaTargetSelector: 'input',
     applyShouldNotShowCondition: (timePicker) => timePicker.click(),
   },
-].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, children = '' }) => {
+].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, ariaTargetSelector, children = '' }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
 
@@ -102,6 +106,12 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
       const target = targetSelector ? element.querySelector(targetSelector) : element;
       expect(tooltip.target).to.equal(target);
     });
+
+    if (ariaTargetSelector) {
+      it('should set tooltip ariaTarget', () => {
+        expect(tooltip.ariaTarget).to.equal(element.querySelector(ariaTargetSelector));
+      });
+    }
 
     it('should set tooltip overlay position', () => {
       expect(tooltipOverlay.position).to.equal(position || 'bottom');
