@@ -220,7 +220,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
           aria-labelledby="link i18n"
         ></button>
       </div>
-      <ul part="children" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
+      <ul part="children" role="list" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
         <slot name="children"></slot>
       </ul>
       <div class="sr-only" id="i18n">${this.i18n.toggle}</div>

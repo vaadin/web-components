@@ -202,6 +202,7 @@ snapshots["vaadin-side-nav-item shadow default"] =
   aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -241,6 +242,7 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
 <ul
   aria-hidden="false"
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -281,6 +283,7 @@ snapshots["vaadin-side-nav-item shadow current"] =
 <ul
   aria-hidden="false"
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -322,6 +325,7 @@ snapshots["vaadin-side-nav-item shadow path"] =
   aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -362,6 +366,7 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
   aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
