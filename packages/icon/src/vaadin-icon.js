@@ -108,9 +108,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
        * values provided by the corresponding `vaadin-iconset` element.
        *
        * See also [`name`](#/elements/vaadin-iconset#property-name) property of `vaadin-iconset`.
+       *
+       * @attr {string} icon
+       * @type {string}
        */
       icon: {
         type: String,
+        reflectToAttribute: true,
         observer: '__iconChanged',
       },
 
