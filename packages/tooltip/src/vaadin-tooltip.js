@@ -70,6 +70,14 @@ class TooltipStateController {
   }
 
   /**
+   * Whether closing is currently in progress.
+   * @return {boolean}
+   */
+  get isClosing() {
+    return closing.has(this.host);
+  }
+
+  /**
    * Schedule opening the tooltip.
    * @param {Object} options
    */
@@ -705,14 +713,10 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   }
 
   /** @private */
-  __onOverlayMouseEnter(event) {
-    if (this.manual) {
-      return;
-    }
-
+  __onOverlayMouseEnter() {
     // Retain opened state when moving pointer over the overlay.
     // See https://github.com/vaadin/web-components/issues/6316
-    if (!this.__isTargetHidden && !this.__hoverInside) {
+    if (this._stateController.isClosing) {
       this._stateController.open({ immediate: true });
     }
   }
