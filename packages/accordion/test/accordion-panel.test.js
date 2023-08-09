@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-accordion-panel.js';
@@ -81,6 +81,15 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.true;
 
         toggle.click();
+        expect(panel.opened).to.be.false;
+      });
+
+      it(`should not update opened on ${type} heading button click when disabled`, async () => {
+        panel.disabled = true;
+        await nextUpdate(panel);
+
+        click(toggle);
+        await nextUpdate(panel);
         expect(panel.opened).to.be.false;
       });
 

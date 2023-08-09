@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -111,6 +111,15 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.true;
 
         summary.click();
+        await nextUpdate(details);
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should not update opened on ${type} summary click when disabled`, async () => {
+        details.disabled = true;
+        await nextUpdate(details);
+
+        click(summary);
         await nextUpdate(details);
         expect(details.opened).to.be.false;
       });
