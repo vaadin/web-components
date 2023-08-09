@@ -339,4 +339,36 @@ export const NumberFieldMixin = (superClass) =>
       const target = event.composedPath()[0];
       this._hasInputValue = target.value.length > 0 || target.validity.badInput;
     }
+
+    _setFocused(focused) {
+      if (focused) {
+        this.__prevCommittedValue = this.value;
+        this.__prevHasInputValue = this._hasInputValue;
+      } else {
+        this.__dispatchChange();
+      }
+    }
+
+    _onEnter(event) {
+      super._onEnter(event);
+      this.__dispatchChange();
+    }
+
+    _onChange(event) {
+      event.stopPropagation();
+      this.__dispatchChange();
+    }
+
+    __dispatchChange() {
+      if (this.__prevCommittedValue !== this.value) {
+        this.validate();
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      } else if (this.__prevHasInputValue !== this._hasInputValue) {
+        this.validate();
+        this.dispatchEvent(new CustomEvent('bad-input-change', { bubbles: true }));
+      }
+
+      this.__prevCommittedValue = undefined;
+      this.__prevHasInputValue = undefined;
+    }
   };
