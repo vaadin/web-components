@@ -137,6 +137,16 @@ describe('timers', () => {
       escKeyDown(target);
       expect(overlay.opened).to.be.false;
     });
+
+    it('should not close on overlay mouseenter during hide delay', async () => {
+      mouseenter(target);
+      mouseleave(target, document.body);
+
+      mouseenter(overlay);
+
+      await aTimeout(1);
+      expect(overlay.opened).to.be.true;
+    });
   });
 
   describe('setDefaultHoverDelay', () => {

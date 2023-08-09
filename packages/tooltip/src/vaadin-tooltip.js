@@ -70,6 +70,14 @@ class TooltipStateController {
   }
 
   /**
+   * Whether closing is currently in progress.
+   * @return {boolean}
+   */
+  get isClosing() {
+    return closing.has(this.host);
+  }
+
+  /**
    * Schedule opening the tooltip.
    * @param {Object} options
    */
@@ -273,6 +281,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         no-vertical-overlap$="[[__computeNoVerticalOverlap(__effectivePosition)]]"
         horizontal-align="[[__computeHorizontalAlign(__effectivePosition)]]"
         vertical-align="[[__computeVerticalAlign(__effectivePosition)]]"
+        on-mouseenter="__onOverlayMouseEnter"
         on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
@@ -731,6 +740,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   __onMouseLeave(event) {
     if (event.relatedTarget !== this._overlayElement) {
       this.__handleMouseLeave();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseEnter() {
+    // Retain opened state when moving pointer over the overlay.
+    // Closing can start due to an offset between the target and
+    // the overlay itself. If that's the case, re-open overlay.
+    // See https://github.com/vaadin/web-components/issues/6316
+    if (this._stateController.isClosing) {
+      this._stateController.open({ immediate: true });
     }
   }
 
