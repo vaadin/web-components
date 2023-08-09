@@ -715,6 +715,8 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __onOverlayMouseEnter() {
     // Retain opened state when moving pointer over the overlay.
+    // Closing can start due to an offset between the target and
+    // the overlay itself. If that's the case, re-open overlay.
     // See https://github.com/vaadin/web-components/issues/6316
     if (this._stateController.isClosing) {
       this._stateController.open({ immediate: true });
