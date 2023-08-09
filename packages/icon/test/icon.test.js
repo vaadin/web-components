@@ -146,6 +146,13 @@ describe('vaadin-icon', () => {
         svgElement = icon.shadowRoot.querySelector('svg');
       });
 
+      it('should reflect the icon as an attribute', () => {
+        icons.forEach((svgIcon) => {
+          icon.icon = svgIcon.getAttribute('id');
+          expect(icon.getAttribute('icon')).to.equal(icon.icon);
+        });
+      });
+
       it('should render icon from the iconset', () => {
         icons.forEach((svgIcon) => {
           icon.icon = svgIcon.getAttribute('id');
