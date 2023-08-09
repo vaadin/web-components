@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { click, fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-details.js';
@@ -105,6 +105,12 @@ describe('vaadin-details', () => {
         expect(details.opened).to.be.true;
 
         summary.click();
+        expect(details.opened).to.be.false;
+      });
+
+      it(`should not update opened on ${type} summary click when disabled`, () => {
+        details.disabled = true;
+        click(summary);
         expect(details.opened).to.be.false;
       });
 
