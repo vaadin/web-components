@@ -273,6 +273,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         no-vertical-overlap$="[[__computeNoVerticalOverlap(__effectivePosition)]]"
         horizontal-align="[[__computeHorizontalAlign(__effectivePosition)]]"
         vertical-align="[[__computeVerticalAlign(__effectivePosition)]]"
+        on-mouseenter="__onOverlayMouseEnter"
         on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
@@ -700,6 +701,19 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   __onMouseLeave(event) {
     if (event.relatedTarget !== this._overlayElement) {
       this.__handleMouseLeave();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseEnter(event) {
+    if (this.manual) {
+      return;
+    }
+
+    // Retain opened state when moving pointer over the overlay.
+    // See https://github.com/vaadin/web-components/issues/6316
+    if (!this.__isTargetHidden && !this.__hoverInside) {
+      this._stateController.open({ immediate: true });
     }
   }
 
