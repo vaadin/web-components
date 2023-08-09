@@ -341,34 +341,30 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     _setFocused(focused) {
+      super._setFocused(focused);
+
       if (focused) {
-        this.__prevCommittedValue = this.value;
-        this.__prevHasInputValue = this._hasInputValue;
+        this.__prevBadInputStatus = this.inputElement.validity.badInput;
       } else {
-        this.__dispatchChange();
+        this.__dispatchBadInputChange();
       }
     }
 
     _onEnter(event) {
       super._onEnter(event);
-      this.__dispatchChange();
+      this.__dispatchBadInputChange();
     }
 
     _onChange(event) {
-      event.stopPropagation();
-      this.__dispatchChange();
+      super._onChange(event);
+      this.__dispatchBadInputChange();
     }
 
-    __dispatchChange() {
-      if (this.__prevCommittedValue !== this.value) {
-        this.validate();
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__prevHasInputValue !== this._hasInputValue) {
-        this.validate();
+    __dispatchBadInputChange() {
+      const badInputStatus = this.inputElement.validity.badInput;
+      if (this.__prevBadInputStatus !== badInputStatus) {
         this.dispatchEvent(new CustomEvent('bad-input-change', { bubbles: true }));
       }
-
-      this.__prevCommittedValue = undefined;
-      this.__prevHasInputValue = undefined;
+      this.__prevBadInputStatus = badInputStatus;
     }
   };
