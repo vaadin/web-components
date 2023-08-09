@@ -436,7 +436,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       _effectiveAriaTarget: {
         type: Object,
         computed: '__computeAriaTarget(ariaTarget, target)',
-        observer: '__ariaTargetChanged',
+        observer: '__effectiveAriaTargetChanged',
       },
 
       /** @private */
@@ -578,7 +578,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   }
 
   /** @private */
-  __ariaTargetChanged(ariaTarget, oldAriaTarget) {
+  __effectiveAriaTargetChanged(ariaTarget, oldAriaTarget) {
     if (oldAriaTarget) {
       removeValueFromAttribute(oldAriaTarget, 'aria-describedby', this._uniqueId);
     }
