@@ -527,6 +527,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this._tooltipController.setShouldShow((target) => !target.opened);
 
     this._inputField = this.shadowRoot.querySelector('[part="input-field"]');

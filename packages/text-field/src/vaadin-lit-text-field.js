@@ -78,6 +78,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
   }
 }

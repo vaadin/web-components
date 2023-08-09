@@ -91,6 +91,7 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
   }
 
   /**
