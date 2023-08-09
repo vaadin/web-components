@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
@@ -55,7 +56,7 @@ import { Iconset } from './vaadin-iconset.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) {
+class Icon extends SlotStylesMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -129,6 +130,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         value: 24,
       },
 
+      /**
+       * Link to the external style sheet to be used by this icon.
+       */
+      styleSheet: {
+        type: String,
+        observer: '_styleSheetChanged',
+      },
+
       /** @private */
       __defaultPAR: {
         type: String,
@@ -143,11 +152,22 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
       /** @private */
       __viewBox: String,
+
+      /** @private */
+      __slotStyles: {
+        type: Array,
+        value: [],
+      },
     };
   }
 
   static get observers() {
     return ['__svgChanged(svg, __svgElement)'];
+  }
+
+  /** @protected */
+  get slotStyles() {
+    return this.__slotStyles;
   }
 
   /** @protected */
@@ -190,6 +210,18 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     }
 
     this.svg = svg;
+  }
+
+  /** @private */
+  _styleSheetChanged(styleSheet) {
+    fetch(styleSheet)
+      .then((res) => res.text())
+      .then((text) => {
+        this.__slotStyles = [text];
+
+        // Add styles to the root
+        this._applySlotStyles();
+      });
   }
 
   /** @private */

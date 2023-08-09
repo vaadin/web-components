@@ -57,11 +57,11 @@ export const SlotStylesMixin = dedupingMixin(
       connectedCallback() {
         super.connectedCallback();
 
-        this.__applySlotStyles();
+        this._applySlotStyles();
       }
 
-      /** @private */
-      __applySlotStyles() {
+      /** @protected */
+      _applySlotStyles() {
         const root = this.getRootNode();
         const rootStyles = getRootStyles(root);
 
