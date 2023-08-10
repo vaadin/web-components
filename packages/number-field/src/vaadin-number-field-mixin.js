@@ -102,6 +102,11 @@ export const NumberFieldMixin = (superClass) =>
       return this.$.clearButton;
     }
 
+    /** @private */
+    get __hasBadInput() {
+      return this.inputElement.validity.badInput;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -337,14 +342,14 @@ export const NumberFieldMixin = (superClass) =>
      */
     _setHasInputValue(event) {
       const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || target.validity.badInput;
+      this._hasInputValue = target.value.length > 0 || this.__hasBadInput;
     }
 
     _setFocused(focused) {
       super._setFocused(focused);
 
       if (focused) {
-        this.__prevBadInputStatus = this.inputElement.validity.badInput;
+        this.__prevBadInputStatus = this.__hasBadInput;
       } else {
         this.__dispatchBadInputChange();
       }
@@ -361,10 +366,10 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     __dispatchBadInputChange() {
-      const badInputStatus = this.inputElement.validity.badInput;
-      if (this.__prevBadInputStatus !== badInputStatus) {
-        this.dispatchEvent(new CustomEvent('bad-input-change', { bubbles: true }));
+      const status = this.__hasBadInput;
+      if (this.__prevBadInputStatus !== status) {
+        this.dispatchEvent(new CustomEvent('bad-input-change'));
+        this.__prevBadInputStatus = status;
       }
-      this.__prevBadInputStatus = badInputStatus;
     }
   };
