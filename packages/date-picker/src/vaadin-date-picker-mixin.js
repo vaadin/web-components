@@ -588,6 +588,34 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * @param {string} dateString
+     * @private
+     */
+    __parseDate(dateString) {
+      if (!this.i18n.parseDate) {
+        return;
+      }
+
+      let dateObject = this.i18n.parseDate(dateString);
+      if (dateObject) {
+        dateObject = parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
+      }
+      if (dateObject && !isNaN(dateObject.getTime())) {
+        return dateObject;
+      }
+    }
+
+    /**
+     * @param {Date} dateObject
+     * @private
+     */
+    __formatDate(dateObject) {
+      if (this.i18n.formatDate) {
+        return this.i18n.formatDate(extractDateParts(dateObject));
+      }
+    }
+
+    /**
      * Returns true if the current input value satisfies all constraints (if any)
      *
      * Override the `checkValidity` method for custom validations.
@@ -596,9 +624,7 @@ export const DatePickerMixin = (subclass) =>
      */
     checkValidity() {
       const inputValue = this._inputElementValue;
-      const inputValid =
-        !inputValue ||
-        (!!this._selectedDate && inputValue === this._getFormattedDate(this.i18n.formatDate, this._selectedDate));
+      const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
       let inputValidity = true;
@@ -911,9 +937,9 @@ export const DatePickerMixin = (subclass) =>
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
         const inputValue = this._inputElementValue || '';
-        const parsedDate = this._getParsedDate(inputValue);
+        const parsedDate = this.__parseDate(inputValue);
 
-        if (this._isValidDate(parsedDate)) {
+        if (parsedDate) {
           this._selectDate(parsedDate);
         } else {
           this.__keepInputValue = true;
@@ -976,12 +1002,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _applyInputValue(date) {
-      this._inputElementValue = date ? this._getFormattedDate(this.i18n.formatDate, date) : '';
-    }
-
-    /** @private */
-    _getFormattedDate(formatDate, date) {
-      return formatDate(extractDateParts(date));
+      this._inputElementValue = date ? this.__formatDate(date) : '';
     }
 
     /** @private */
@@ -989,11 +1010,6 @@ export const DatePickerMixin = (subclass) =>
       if (this._nativeInput && this._nativeInput.setSelectionRange) {
         this._nativeInput.setSelectionRange(a, b);
       }
-    }
-
-    /** @private */
-    _isValidDate(d) {
-      return d && !isNaN(d.getTime());
     }
 
     /**
@@ -1156,13 +1172,6 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _getParsedDate(inputValue = this._inputElementValue) {
-      const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
-      const parsedDate = dateObject && parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
-      return parsedDate;
-    }
-
     /** @protected */
     _isClearButton(event) {
       return event.composedPath()[0] === this.clearElement;
@@ -1182,9 +1191,8 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _userInputValueChanged() {
       if (this._inputElementValue) {
-        const parsedDate = this._getParsedDate();
-
-        if (this._isValidDate(parsedDate)) {
+        const parsedDate = this.__parseDate(this._inputElementValue);
+        if (parsedDate) {
           this._ignoreFocusedDateChange = true;
           if (!dateEquals(parsedDate, this._focusedDate)) {
             this._focusedDate = parsedDate;
