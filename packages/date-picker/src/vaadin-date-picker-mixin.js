@@ -1173,14 +1173,10 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _onInput() {
-      if (!this.opened && this.inputElement.value && !this.autoOpenDisabled) {
+      if (!this.opened && this._inputElementValue && !this.autoOpenDisabled) {
         this.open();
       }
-      this._userInputValueChanged();
-    }
 
-    /** @private */
-    _userInputValueChanged() {
       if (this._inputElementValue) {
         const parsedDate = this._getParsedDate();
 
