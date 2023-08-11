@@ -39,8 +39,9 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElemen
     return {
       /**
        * Use property instead of setting an attribute in `ready()`
-       * to ensure that `role` can be removed from the item clone,
-       * which is done synchronously after the clone is attached.
+       * for cloning the selected item attached to the value button:
+       * in this case, `role` attribute is removed synchronously, and
+       * using `ready()` would incorrectly restore the attribute.
        *
        * @protected
        */
