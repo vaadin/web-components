@@ -500,9 +500,8 @@ export const DatePickerMixin = (subclass) =>
     _propertiesChanged(currentProps, changedProps, oldProps) {
       super._propertiesChanged(currentProps, changedProps, oldProps);
 
-      if ('value' in changedProps && this.__dispatchChange) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__dispatchChange = false;
+      if ('value' in changedProps && this.__dispatchChangePending) {
+        this.__dispatchChange();
       }
     }
 
@@ -516,9 +515,8 @@ export const DatePickerMixin = (subclass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('value') && this.__dispatchChange) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__dispatchChange = false;
+      if (props.has('value') && this.__dispatchChangePending) {
+        this.__dispatchChange();
       }
     }
 
@@ -536,6 +534,13 @@ export const DatePickerMixin = (subclass) =>
      */
     close() {
       this.$.overlay.close();
+    }
+
+    /** @private */
+    __dispatchChange() {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      this.__dispatchChangePending = false;
     }
 
     /** @private */
@@ -698,7 +703,7 @@ export const DatePickerMixin = (subclass) =>
       // Only set flag if the value will change.
       if (this.value !== value) {
         this.dirty = true;
-        this.__dispatchChange = true;
+        this.__dispatchChangePending = true;
       }
 
       this._selectedDate = dateToSelect;
@@ -787,10 +792,7 @@ export const DatePickerMixin = (subclass) =>
         this._applyInputValue(selectedDate);
       }
 
-      if (value !== this.value) {
-        this.validate();
-        this.value = value;
-      }
+      this.value = value;
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
