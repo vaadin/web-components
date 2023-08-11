@@ -488,39 +488,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Override Polymer lifecycle callback to dispatch `change` event if needed.
-     * This is necessary to ensure `change` is fired after `value-changed`.
-     *
-     * @param {!Object} currentProps Current accessor values
-     * @param {?Object} changedProps Properties changed since the last call
-     * @param {?Object} oldProps Previous values for each changed property
-     * @protected
-     * @override
-     */
-    _propertiesChanged(currentProps, changedProps, oldProps) {
-      super._propertiesChanged(currentProps, changedProps, oldProps);
-
-      if ('value' in changedProps && this.__dispatchChangePending) {
-        this.__dispatchChange();
-      }
-    }
-
-    /**
-     * Override LitElement lifecycle callback to dispatch `change` event if needed.
-     * This is necessary to ensure `change` is fired after `value-changed`.
-     *
-     * @protected
-     * @override
-     */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('value') && this.__dispatchChangePending) {
-        this.__dispatchChange();
-      }
-    }
-
-    /**
      * Opens the dropdown.
      */
     open() {
@@ -540,7 +507,6 @@ export const DatePickerMixin = (subclass) =>
     __dispatchChange() {
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      this.__dispatchChangePending = false;
     }
 
     /** @private */
@@ -700,13 +666,14 @@ export const DatePickerMixin = (subclass) =>
     _selectDate(dateToSelect) {
       const value = this._formatISO(dateToSelect);
 
-      // Only set flag if the value will change.
-      if (this.value !== value) {
-        this.dirty = true;
-        this.__dispatchChangePending = true;
-      }
+      const shouldDispatchChange = this.value !== value;
 
       this._selectedDate = dateToSelect;
+
+      if (shouldDispatchChange) {
+        this.dirty = true;
+        this.__dispatchChange();
+      }
     }
 
     /** @private */
