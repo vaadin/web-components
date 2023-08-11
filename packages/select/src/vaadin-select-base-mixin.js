@@ -267,7 +267,6 @@ export const SelectBaseMixin = (superClass) =>
         });
 
         menuElement.addEventListener('selected-changed', (event) => {
-          // console.log('selected changed', event);
           this.__updateValueButton();
         });
         // Use capture phase to make it possible for `<vaadin-grid-pro-edit-select>`
