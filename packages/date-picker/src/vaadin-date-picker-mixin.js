@@ -664,13 +664,11 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
-      const value = this._formatISO(dateToSelect);
-
-      const shouldDispatchChange = this.value !== value;
+      const prevValue = this.value;
 
       this._selectedDate = dateToSelect;
 
-      if (shouldDispatchChange) {
+      if (prevValue !== this.value) {
         this.dirty = true;
         this.__dispatchChange();
       }
@@ -753,13 +751,12 @@ export const DatePickerMixin = (subclass) =>
       if (selectedDate === undefined || i18n === undefined) {
         return;
       }
-      const value = this._formatISO(selectedDate);
 
       if (!this.__keepInputValue) {
         this._applyInputValue(selectedDate);
       }
 
-      this.value = value;
+      this.value = this._formatISO(selectedDate);
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
