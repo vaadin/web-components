@@ -1014,16 +1014,12 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * Override an event listener from `InputConstraintsMixin`
-     * to have date-picker fully control when to fire a change event.
+     * to have date-picker fully control when to fire a change event
+     * and trigger validation.
+     *
      * @protected
      */
     _onChange(event) {
-      // For change event on the native <input> blur, after the input is cleared,
-      // we schedule change event to be dispatched on date-picker blur.
-      if (this._inputElementValue === '') {
-        this.__dispatchChange = true;
-      }
-
       event.stopPropagation();
     }
 
