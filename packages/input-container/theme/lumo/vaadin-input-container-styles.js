@@ -45,7 +45,9 @@ registerStyles(
       pointer-events: none;
       background-color: var(--lumo-contrast-50pct);
       opacity: 0;
-      transition: transform 0.15s, opacity 0.2s;
+      transition:
+        transform 0.15s,
+        opacity 0.2s;
       transform-origin: 100% 0;
     }
 

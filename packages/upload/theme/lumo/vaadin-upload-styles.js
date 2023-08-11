@@ -21,7 +21,9 @@ registerStyles(
       border: 1px dashed var(--lumo-contrast-20pct);
       border-radius: var(--lumo-border-radius-l);
       padding: var(--lumo-space-m);
-      transition: background-color 0.6s, border-color 0.6s;
+      transition:
+        background-color 0.6s,
+        border-color 0.6s;
     }
 
     [part='drop-label'] {
@@ -35,7 +37,9 @@ registerStyles(
     :host([dragover-valid]) {
       border-color: var(--lumo-primary-color-50pct);
       background: var(--lumo-primary-color-10pct);
-      transition: background-color 0.1s, border-color 0.1s;
+      transition:
+        background-color 0.1s,
+        border-color 0.1s;
     }
 
     :host([dragover-valid]) [part='drop-label'] {

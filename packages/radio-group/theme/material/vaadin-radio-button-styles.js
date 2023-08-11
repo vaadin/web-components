@@ -26,7 +26,9 @@ registerStyles(
       border: 2px solid;
       border-radius: 50%;
       background-color: transparent;
-      transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
+      transition:
+        transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+        background-color 0.15s;
       will-change: transform;
     }
 
@@ -41,7 +43,9 @@ registerStyles(
       background-color: var(--material-primary-color);
       transform: scale(2.5);
       opacity: 0;
-      transition: transform 0.1s, opacity 0.8s;
+      transition:
+        transform 0.1s,
+        opacity 0.8s;
     }
 
     :host([checked]) [part='radio'] {

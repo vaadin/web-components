@@ -155,7 +155,9 @@ const chartBaseTheme = css`
     cursor: pointer;
     fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
     font-size: 0.7em;
-    transition: fill 250ms, font-size 250ms;
+    transition:
+      fill 250ms,
+      font-size 250ms;
   }
 
   :where([styled-mode]) .highcharts-credits:hover {
@@ -435,14 +437,20 @@ const chartBaseTheme = css`
   :where([styled-mode]) .highcharts-treemap-series .highcharts-point {
     stroke-width: 2px;
     stroke: var(--vaadin-charts-background, #fff);
-    transition: stroke 250ms, fill 250ms, fill-opacity 250ms;
+    transition:
+      stroke 250ms,
+      fill 250ms,
+      fill-opacity 250ms;
   }
 
   :where([styled-mode]) .highcharts-treemap-series .highcharts-point-hover {
     stroke-width: 0px;
     stroke: var(--vaadin-charts-background, #fff);
     fill-opacity: 0.75;
-    transition: stroke 25ms, fill 25ms, fill-opacity 25ms;
+    transition:
+      stroke 25ms,
+      fill 25ms,
+      fill-opacity 25ms;
   }
 
   :where([styled-mode]) .highcharts-treemap-series .highcharts-above-level {
@@ -561,7 +569,9 @@ const chartBaseTheme = css`
     height: 0 !important;
     opacity: 0;
     overflow: hidden;
-    transition: opacity 250ms, height 250ms step-end;
+    transition:
+      opacity 250ms,
+      height 250ms step-end;
   }
 
   :where([styled-mode]) .highcharts-loading-inner {
@@ -629,19 +639,25 @@ const chartBaseTheme = css`
   }
 
   :where([styled-mode]) .highcharts-sankey-series .highcharts-link {
-    transition: fill 250ms, fill-opacity 250ms;
+    transition:
+      fill 250ms,
+      fill-opacity 250ms;
     fill-opacity: 0.5;
   }
 
   :where([styled-mode]) .highcharts-sankey-series .highcharts-point-hover.highcharts-link {
-    transition: fill 50ms, fill-opacity 50ms;
+    transition:
+      fill 50ms,
+      fill-opacity 50ms;
     fill-opacity: 1;
   }
 
   :where([styled-mode]) .highcharts-venn-series .highcharts-point {
     fill-opacity: 0.75;
     stroke: var(--vaadin-charts-background, #fff);
-    transition: stroke 250ms, fill-opacity 250ms;
+    transition:
+      stroke 250ms,
+      fill-opacity 250ms;
   }
 
   :where([styled-mode]) .highcharts-venn-series .highcharts-point-hover {
@@ -848,12 +864,17 @@ const chartBaseTheme = css`
 
   /* Highmaps */
   :where([styled-mode]) .highcharts-map-series .highcharts-point {
-    transition: fill 500ms, fill-opacity 500ms, stroke-width 250ms;
+    transition:
+      fill 500ms,
+      fill-opacity 500ms,
+      stroke-width 250ms;
     stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
   }
 
   :where([styled-mode]) .highcharts-map-series .highcharts-point-hover {
-    transition: fill 0ms, fill-opacity 0ms;
+    transition:
+      fill 0ms,
+      fill-opacity 0ms;
     fill-opacity: 0.5;
     stroke-width: 2px;
   }
@@ -925,7 +946,9 @@ const chartBaseTheme = css`
     background: none;
     color: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
     cursor: pointer;
-    transition: background 250ms, color 250ms;
+    transition:
+      background 250ms,
+      color 250ms;
   }
 
   :where([styled-mode]) .highcharts-menu-item:hover {

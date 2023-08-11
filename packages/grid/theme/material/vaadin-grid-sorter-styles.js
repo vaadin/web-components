@@ -28,7 +28,9 @@ registerStyles(
       font-family: 'material-icons';
       font-size: 18px;
       line-height: 18px;
-      transition: 0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1), 0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
+      transition:
+        0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1),
+        0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
       opacity: 0.5;
     }
 

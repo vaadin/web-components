@@ -63,7 +63,9 @@ registerStyles(
       background-color: var(--material-primary-color);
       opacity: 0;
       transform: translate(-50%, -50%) scale(0);
-      transition: transform 0s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 0.4s linear;
+      transition:
+        transform 0s cubic-bezier(0.075, 0.82, 0.165, 1),
+        opacity 0.4s linear;
       transition-delay: 0.4s, 0s;
     }
 
@@ -210,7 +212,9 @@ registerStyles(
       background-color: var(--material-body-text-color);
       transform: scale(0);
       opacity: 0;
-      transition: transform 0.08s, opacity 0.01s;
+      transition:
+        transform 0.08s,
+        opacity 0.01s;
       will-change: transform, opacity;
     }
 

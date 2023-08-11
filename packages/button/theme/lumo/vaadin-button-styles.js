@@ -74,7 +74,9 @@ const button = css`
   /* Active */
 
   :host::after {
-    transition: opacity 1.4s, transform 0.1s;
+    transition:
+      opacity 1.4s,
+      transform 0.1s;
     filter: blur(8px);
   }
 
@@ -96,7 +98,9 @@ const button = css`
   }
 
   :host([theme~='primary'][focus-ring]) {
-    box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+    box-shadow:
+      0 0 0 1px var(--lumo-base-color),
+      0 0 0 3px var(--lumo-primary-color-50pct);
   }
 
   /* Types (primary, tertiary, tertiary-inline */

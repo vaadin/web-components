@@ -422,17 +422,16 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
     render(
       html`
         ${items.map(
-          (item) =>
-            html`
-              <vaadin-avatar
-                .name="${item.name}"
-                .abbr="${item.abbr}"
-                .img="${item.img}"
-                .colorIndex="${item.colorIndex}"
-                .i18n="${this.i18n}"
-                with-tooltip
-              ></vaadin-avatar>
-            `,
+          (item) => html`
+            <vaadin-avatar
+              .name="${item.name}"
+              .abbr="${item.abbr}"
+              .img="${item.img}"
+              .colorIndex="${item.colorIndex}"
+              .i18n="${this.i18n}"
+              with-tooltip
+            ></vaadin-avatar>
+          `,
         )}
       `,
       this,

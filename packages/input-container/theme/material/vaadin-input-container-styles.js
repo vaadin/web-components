@@ -71,7 +71,9 @@ registerStyles(
       background-color: var(--material-error-color);
       opacity: 1;
       transform: none;
-      transition: transform 0.175s, opacity 0.175s;
+      transition:
+        transform 0.175s,
+        opacity 0.175s;
     }
   `,
   { moduleId: 'material-input-container' },
