@@ -427,6 +427,10 @@ export const DatePickerMixin = (subclass) =>
       return null;
     }
 
+    get __hasBadInput() {
+      return Boolean(this._inputElementValue && !this.__parseDate(this._inputElementValue));
+    }
+
     /**
      * Override an event listener from `DelegateFocusMixin`
      * @protected
@@ -588,8 +592,6 @@ export const DatePickerMixin = (subclass) =>
      * @return {boolean} True if the value is valid
      */
     checkValidity() {
-      const inputValue = this._inputElementValue;
-      const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const minMaxValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
       let inputValidity = true;
@@ -602,7 +604,7 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      return inputValid && minMaxValid && inputValidity;
+      return !this.__hasBadInput && minMaxValid && inputValidity;
     }
 
     /**
@@ -648,6 +650,20 @@ export const DatePickerMixin = (subclass) =>
       super._setFocused(focused);
 
       this._shouldKeepFocusRing = focused && this._keyboardActive;
+
+      if (focused) {
+        this.__prevBadInputStatus = this.__hasBadInput;
+      } else {
+        this.__dispatchBadInputChange();
+      }
+    }
+
+    __dispatchBadInputChange() {
+      const status = this.__hasBadInput;
+      if (this.__prevBadInputStatus !== status) {
+        this.dispatchEvent(new CustomEvent('bad-input-change'));
+        this.__prevBadInputStatus = status;
+      }
     }
 
     /** @private */
@@ -672,6 +688,8 @@ export const DatePickerMixin = (subclass) =>
         this.dirty = true;
         this.__dispatchChange();
       }
+
+      this.__dispatchBadInputChange();
     }
 
     /** @private */
