@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
  * A mixin to store the reference to an input element
@@ -84,6 +86,7 @@ export const InputMixin = dedupingMixin(
 
         this._boundOnInput = this.__onInput.bind(this);
         this._boundOnChange = this._onChange.bind(this);
+        this._boundOnWheel = this._onWheel.bind(this);
       }
 
       /**
@@ -151,6 +154,7 @@ export const InputMixin = dedupingMixin(
       _addInputListeners(input) {
         input.addEventListener('input', this._boundOnInput);
         input.addEventListener('change', this._boundOnChange);
+        input.addEventListener('wheel', this._boundOnWheel, { passive: true });
       }
 
       /**
@@ -161,6 +165,7 @@ export const InputMixin = dedupingMixin(
       _removeInputListeners(input) {
         input.removeEventListener('input', this._boundOnInput);
         input.removeEventListener('change', this._boundOnChange);
+        input.removeEventListener('wheel', this._boundOnWheel);
       }
 
       /**
@@ -214,6 +219,10 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       __onInput(event) {
+        if (this.__wheelActive) {
+          this.inputElement.value = this.value;
+          return;
+        }
         this._setHasInputValue(event);
         this.dirty = true;
         this._onInput(event);
@@ -234,6 +243,23 @@ export const InputMixin = dedupingMixin(
         this.__userInput = event.isTrusted;
         this.value = target.value;
         this.__userInput = false;
+      }
+
+      _onWheel() {
+        if (this.__wheelActive) {
+          return;
+        }
+        this.__wheelActive = true;
+        this.inputElement.style.pointerEvents = 'none';
+        this.inputElement.value = this.value;
+        this.__restorePointerEventsDebouncer = Debouncer.debounce(
+          this.__restorePointerEventsDebouncer,
+          timeOut.after(100),
+          () => {
+            this.__wheelActive = false;
+            this.inputElement.style.pointerEvents = 'initial';
+          },
+        );
       }
 
       /**
