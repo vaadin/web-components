@@ -216,7 +216,9 @@ describe('login form', () => {
     expect(login.disabled).to.be.true;
   });
 
-  it('should focus the username field', () => {
+  it('should focus the username field', async () => {
+    // Apply same delay that is used for auto-focus
+    await new Promise(requestAnimationFrame);
     const usernameElement = login.$.vaadinLoginUsername;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
@@ -230,9 +232,11 @@ describe('login form', () => {
 describe('no autofocus', () => {
   let activeElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     activeElement = document.activeElement;
     fixtureSync('<vaadin-login-form no-autofocus></vaadin-login-form>');
+    // Apply same delay that is used for auto-focus
+    await new Promise(requestAnimationFrame);
   });
 
   it('should not focus the username field', () => {
