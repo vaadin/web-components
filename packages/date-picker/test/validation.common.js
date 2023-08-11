@@ -81,7 +81,7 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy, changeSpy, input;
+    let valueChangedSpy, validateSpy, changeSpy, input;
 
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
@@ -90,6 +90,8 @@ describe('validation', () => {
       validateSpy = sinon.spy(datePicker, 'validate');
       changeSpy = sinon.spy();
       datePicker.addEventListener('change', changeSpy);
+      valueChangedSpy = sinon.spy();
+      datePicker.addEventListener('value-changed', valueChangedSpy);
     });
 
     it('should pass validation by default', () => {
@@ -103,16 +105,19 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event on blur', async () => {
+    it('should validate between value-changed and change events on blur', async () => {
       datePicker.value = '2023-01-01';
       validateSpy.resetHistory();
+      valueChangedSpy.resetHistory();
       input.focus();
       input.select();
       await sendKeys({ press: 'Backspace' });
       input.blur();
-      expect(changeSpy.calledOnce).to.be.true;
+      expect(valueChangedSpy.calledOnce).to.be.true;
       expect(validateSpy.called).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      expect(validateSpy.firstCall.calledAfter(valueChangedSpy.firstCall)).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.firstCall.calledAfter(validateSpy.firstCall)).to.be.true;
     });
 
     it('should validate on outside click', async () => {
@@ -124,7 +129,7 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event on outside click', async () => {
+    it('should validate between value-changed and change events on outside click', async () => {
       input.focus();
       input.click();
       await waitForOverlayRender();
@@ -132,9 +137,11 @@ describe('validation', () => {
       await waitForScrollToFinish(datePicker._overlayContent);
       outsideClick();
       await nextUpdate(datePicker);
-      expect(changeSpy.calledOnce).to.be.true;
+      expect(valueChangedSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      expect(validateSpy.calledAfter(valueChangedSpy)).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should not validate on input click while opened', async () => {
@@ -144,14 +151,17 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate before change event on clear button click', async () => {
+    it('should validate between value-changed and change events on clear button click', async () => {
       datePicker.clearButtonVisible = true;
       datePicker.value = '2022-01-01';
       validateSpy.resetHistory();
+      valueChangedSpy.resetHistory();
       datePicker.$.clearButton.click();
-      expect(changeSpy.calledOnce).to.be.true;
+      expect(valueChangedSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+      expect(validateSpy.calledAfter(valueChangedSpy)).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should validate on value change', () => {
@@ -196,23 +206,6 @@ describe('validation', () => {
       await open(datePicker);
       datePicker.value = '2000-02-01';
       await close(datePicker);
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should set proper validity by the time the value-changed event is fired', async () => {
-      // Set invalid value.
-      setInputValue(datePicker, 'foo');
-      await waitForOverlayRender();
-
-      expect(datePicker.validate()).to.be.false;
-
-      validateSpy.resetHistory();
-
-      setInputValue(datePicker, '01/01/2000');
-      const valueChangeSpy = await waitForValueChange(datePicker, () => datePicker.close());
-
-      expect(valueChangeSpy.calledAfter(validateSpy)).to.be.true;
-      expect(validateSpy.callCount).to.equal(1);
       expect(datePicker.invalid).to.be.false;
     });
 

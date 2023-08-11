@@ -488,41 +488,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Override Polymer lifecycle callback to dispatch `change` event if needed.
-     * This is necessary to ensure `change` is fired after `value-changed`.
-     *
-     * @param {!Object} currentProps Current accessor values
-     * @param {?Object} changedProps Properties changed since the last call
-     * @param {?Object} oldProps Previous values for each changed property
-     * @protected
-     * @override
-     */
-    _propertiesChanged(currentProps, changedProps, oldProps) {
-      super._propertiesChanged(currentProps, changedProps, oldProps);
-
-      if ('value' in changedProps && this.__dispatchChange) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__dispatchChange = false;
-      }
-    }
-
-    /**
-     * Override LitElement lifecycle callback to dispatch `change` event if needed.
-     * This is necessary to ensure `change` is fired after `value-changed`.
-     *
-     * @protected
-     * @override
-     */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('value') && this.__dispatchChange) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__dispatchChange = false;
-      }
-    }
-
-    /**
      * Opens the dropdown.
      */
     open() {
@@ -685,6 +650,12 @@ export const DatePickerMixin = (subclass) =>
       this._shouldKeepFocusRing = focused && this._keyboardActive;
     }
 
+    /** @private */
+    __dispatchChange() {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
+
     /**
      * Select date on user interaction and set the flag
      * to fire change event if necessary.
@@ -693,15 +664,14 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
-      const value = this._formatISO(dateToSelect);
-
-      // Only set flag if the value will change.
-      if (this.value !== value) {
-        this.dirty = true;
-        this.__dispatchChange = true;
-      }
+      const prevValue = this.value;
 
       this._selectedDate = dateToSelect;
+
+      if (prevValue !== this.value) {
+        this.dirty = true;
+        this.__dispatchChange();
+      }
     }
 
     /** @private */
@@ -781,16 +751,12 @@ export const DatePickerMixin = (subclass) =>
       if (selectedDate === undefined || i18n === undefined) {
         return;
       }
-      const value = this._formatISO(selectedDate);
 
       if (!this.__keepInputValue) {
         this._applyInputValue(selectedDate);
       }
 
-      if (value !== this.value) {
-        this.validate();
-        this.value = value;
-      }
+      this.value = this._formatISO(selectedDate);
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
@@ -1056,8 +1022,7 @@ export const DatePickerMixin = (subclass) =>
       this.dirty = true;
       this._inputElementValue = '';
       this.value = '';
-      this.validate();
-      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      this.__dispatchChange();
     }
 
     /**
