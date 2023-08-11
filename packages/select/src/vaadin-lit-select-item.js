@@ -35,6 +35,23 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElemen
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * Use property instead of setting an attribute in `ready()`
+       * to ensure that `role` can be removed from the item clone,
+       * which is done synchronously after the clone is attached.
+       *
+       * @protected
+       */
+      role: {
+        type: String,
+        value: 'option',
+        reflectToAttribute: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`
@@ -43,13 +60,6 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElemen
         <slot></slot>
       </div>
     `;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.setAttribute('role', 'option');
   }
 }
 
