@@ -461,6 +461,9 @@ export const SelectBaseMixin = (superClass) =>
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');
+      itemElement.removeAttribute('focused');
+      itemElement.removeAttribute('focus-ring');
+      itemElement.removeAttribute('active');
       itemElement.setAttribute('id', this._itemId);
     }
 

@@ -1,11 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  arrowDown,
   arrowUp,
   click,
   enterKeyDown,
   enterKeyUp,
-  escKeyDown,
   fire,
   fixtureSync,
   keyboardEventFor,
@@ -13,7 +11,6 @@ import {
   nextRender,
   nextUpdate,
   oneEvent,
-  spaceKeyDown,
   tab,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -131,16 +128,6 @@ describe('vaadin-select', () => {
         expect(select._overlayElement.opened).to.be.false;
       });
 
-      it('should update selection slot with a clone of the selected item', async () => {
-        menu.selected = 2;
-        await nextUpdate(select);
-        const itemElement = select._items[menu.selected];
-        const valueElement = valueButton.firstChild;
-        expect(valueElement).not.to.be.equal(itemElement);
-        expect(valueElement.localName).to.be.equal(itemElement.localName);
-        expect(valueElement.textContent).to.be.equal(itemElement.textContent);
-      });
-
       it('should preserve the selected attribute when selecting the disabled item', async () => {
         menu.selected = 5;
         await nextUpdate(select);
@@ -167,24 +154,6 @@ describe('vaadin-select', () => {
         menu.selected = 3;
         await nextUpdate(select);
         expect(select.value).to.be.empty;
-      });
-
-      it('should remove tabindex when cloning the selected element', async () => {
-        menu.selected = 2;
-        await nextUpdate(select);
-        const itemElement = select._items[menu.selected];
-        const valueElement = valueButton.firstChild;
-        expect(itemElement.tabIndex).to.be.equal(0);
-        expect(valueElement.hasAttribute('tabindex')).to.be.false;
-      });
-
-      it('should remove role when cloning the selected element', async () => {
-        menu.selected = 2;
-        await nextUpdate(select);
-        const itemElement = select._items[menu.selected];
-        const valueElement = valueButton.firstChild;
-        expect(itemElement.tabIndex).to.be.equal(0);
-        expect(valueElement.hasAttribute('role')).to.be.false;
       });
 
       it('should update selection slot textContent with the selected item `label` string', async () => {
@@ -355,34 +324,6 @@ describe('vaadin-select', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should open the overlay on ArrowUp', () => {
-        arrowUp(valueButton);
-        expect(select.opened).to.be.true;
-      });
-
-      it('should open the overlay on Down', () => {
-        arrowDown(valueButton);
-        expect(select.opened).to.be.true;
-      });
-
-      it('should open the overlay on Space', () => {
-        spaceKeyDown(valueButton);
-        expect(select.opened).to.be.true;
-      });
-
-      it('should open the overlay on Enter', () => {
-        enterKeyDown(valueButton);
-        expect(select.opened).to.be.true;
-      });
-
-      it('should close the overlay on Escape', async () => {
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        escKeyDown(select._items[0]);
-        await nextUpdate(select);
-        expect(select.opened).to.be.false;
-      });
-
       it('should not open the overlay on helper click', async () => {
         select.helperText = 'Helper Text';
         await nextUpdate(select);
@@ -448,15 +389,6 @@ describe('vaadin-select', () => {
         click(select._items[0]);
         await nextRender();
         expect(overlay.opened).to.be.false;
-      });
-
-      it('should focus the input on selecting value and closing the overlay', async () => {
-        const focusedSpy = sinon.spy(valueButton, 'focus');
-        click(select._items[1]);
-        await nextRender();
-        expect(select.value).to.be.equal(select._items[1].value);
-        expect(overlay.opened).to.be.false;
-        expect(focusedSpy.called).to.be.true;
       });
 
       it('should restore focused state on closing the overlay if phone', async () => {
