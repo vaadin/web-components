@@ -504,12 +504,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    __dispatchChange() {
-      this.validate();
-      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-    }
-
-    /** @private */
     _overlayRenderer(root) {
       if (root.firstChild) {
         return;
@@ -654,6 +648,12 @@ export const DatePickerMixin = (subclass) =>
       super._setFocused(focused);
 
       this._shouldKeepFocusRing = focused && this._keyboardActive;
+    }
+
+    /** @private */
+    __dispatchChange() {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
     /**
@@ -1025,8 +1025,7 @@ export const DatePickerMixin = (subclass) =>
       this.dirty = true;
       this._inputElementValue = '';
       this.value = '';
-      this.validate();
-      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      this.__dispatchChange();
     }
 
     /**
