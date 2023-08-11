@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextFrame, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
 import { fillUsernameAndPassword } from './helpers.js';
@@ -113,7 +113,7 @@ describe('opened overlay', () => {
 
   it('should focus the username field', async () => {
     // Apply same delay that is used for auto-focus
-    await new Promise(requestAnimationFrame);
+    await nextFrame();
     const usernameElement = overlay.$.vaadinLoginForm.$.vaadinLoginUsername;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
@@ -130,7 +130,7 @@ describe('no autofocus', () => {
     const activeElement = document.activeElement;
     overlay.opened = true;
     // Apply same delay that is used for auto-focus
-    await new Promise(requestAnimationFrame);
+    await nextFrame();
     expect(document.activeElement).to.equal(activeElement);
   });
 });
