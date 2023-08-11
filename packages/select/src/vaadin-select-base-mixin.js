@@ -266,9 +266,7 @@ export const SelectBaseMixin = (superClass) =>
           this.__initMenuItems(menuElement);
         });
 
-        menuElement.addEventListener('selected-changed', (event) => {
-          this.__updateValueButton();
-        });
+        menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
         // Use capture phase to make it possible for `<vaadin-grid-pro-edit-select>`
         // to override and handle the keydown event before the value change happens.
         menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e), true);
