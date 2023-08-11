@@ -120,7 +120,9 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     super.connectedCallback();
 
     if (!this.noAutofocus) {
-      this.$.vaadinLoginUsername.focus();
+      requestAnimationFrame(() => {
+        this.$.vaadinLoginUsername.focus();
+      });
     }
   }
 
