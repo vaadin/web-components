@@ -129,6 +129,16 @@ export const DataProviderMixin = (superClass) =>
         size: {
           type: Number,
           notify: true,
+          sync: true,
+        },
+
+        /**
+         * @type {number}
+         * @protected
+         */
+        _effectiveSize: {
+          type: Number,
+          sync: true,
         },
 
         /**

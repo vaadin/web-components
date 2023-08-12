@@ -980,7 +980,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     _hideTooltip(immediate) {
-      const tooltip = this._tooltipController.node;
+      const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
         tooltip._stateController.close(immediate);
       }
