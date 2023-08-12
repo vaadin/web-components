@@ -1,9 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
-import '../vaadin-grid-filter.js';
-import '../vaadin-grid-sorter.js';
 import { flushGrid, getBodyCellContent, getRows } from './helpers.js';
 
 describe('array data provider', () => {

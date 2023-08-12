@@ -1,9 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
-import '../vaadin-grid-tree-column.js';
 import { flushGrid } from './helpers.js';
 
 describe('column auto-width', () => {
@@ -254,6 +251,7 @@ describe('async recalculateWidth columns', () => {
     grid.dataProvider = (params, cb) => {
       grid._getData = () => cb(params.parentItem ? params.parentItem.children : data, 1);
     };
+    flushGrid(grid);
     grid._getData();
     flushGrid(grid);
     sinon.spy(grid, '_recalculateColumnWidths');

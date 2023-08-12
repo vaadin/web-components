@@ -209,6 +209,7 @@ export const DataProviderMixin = (superClass) =>
         _hasData: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
