@@ -84,7 +84,7 @@ describe('selection', () => {
 
     describe('selectedItems', () => {
       it('should reflect changes', () => {
-        grid.push('selectedItems', cachedItems[1]);
+        grid.selectedItems = [...grid.selectedItems, cachedItems[1]];
         expect(rows[1].hasAttribute('selected')).to.be.true;
       });
 
@@ -254,7 +254,7 @@ describe('multi selection column', () => {
   it('should have bound the body checkbox to selected items', () => {
     const selectCheckbox = firstBodyCheckbox;
 
-    grid.push('selectedItems', cachedItems[0]);
+    grid.selectedItems = [...grid.selectedItems, cachedItems[0]];
 
     expect(selectCheckbox.checked).to.be.true;
   });

@@ -19,6 +19,7 @@ export const SelectionMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -27,13 +28,12 @@ export const SelectionMixin = (superClass) =>
          */
         __selectedKeys: {
           type: Object,
-          computed: '__computeSelectedKeys(itemIdPath, selectedItems.*)',
         },
       };
     }
 
     static get observers() {
-      return ['__selectedItemsChanged(itemIdPath, selectedItems.*)'];
+      return ['__selectedItemsChanged(itemIdPath, selectedItems)'];
     }
 
     /**
@@ -85,14 +85,14 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __selectedItemsChanged() {
+    __selectedItemsChanged(itemIdPath, selectedItems) {
+      this.__selectedKeys = this.__computeSelectedKeys(itemIdPath, selectedItems);
       this.requestContentUpdate();
     }
 
     /** @private */
     __computeSelectedKeys(itemIdPath, selectedItems) {
-      // TODO: Something's not working with PolyLitMixin's computed properties
-      const selected = this.selectedItems || [];
+      const selected = selectedItems || [];
       const selectedKeys = new Set();
       selected.forEach((item) => {
         selectedKeys.add(this.getItemId(item));

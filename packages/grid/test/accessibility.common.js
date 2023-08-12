@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../all-imports.js';
 import { flushGrid } from './helpers.js';
 
 describe('accessibility', () => {

@@ -238,6 +238,7 @@ export const DataProviderMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -245,13 +246,12 @@ export const DataProviderMixin = (superClass) =>
          */
         __expandedKeys: {
           type: Object,
-          computed: '__computeExpandedKeys(itemIdPath, expandedItems.*)',
         },
       };
     }
 
     static get observers() {
-      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems.*)'];
+      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems, itemIdPath)'];
     }
 
     /** @private */
@@ -331,7 +331,8 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    _expandedItemsChanged() {
+    _expandedItemsChanged(expandedItems, itemIdPath) {
+      this.__expandedKeys = this.__computeExpandedKeys(itemIdPath, expandedItems);
       this._cache.updateSize();
       this._effectiveSize = this._cache.effectiveSize;
       this.__updateVisibleRows();
@@ -339,8 +340,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     __computeExpandedKeys(itemIdPath, expandedItems) {
-      // TODO: Something's not working with PolyLitMixin's computed properties
-      const expanded = this.expandedItems || [];
+      const expanded = expandedItems || [];
       const expandedKeys = new Set();
       expanded.forEach((item) => {
         expandedKeys.add(this.getItemId(item));
