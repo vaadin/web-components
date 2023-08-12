@@ -91,7 +91,8 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __computeSelectedKeys(itemIdPath, selectedItems) {
-      const selected = selectedItems.base || [];
+      // TODO: Something's not working with PolyLitMixin's computed properties
+      const selected = this.selectedItems || [];
       const selectedKeys = new Set();
       selected.forEach((item) => {
         selectedKeys.add(this.getItemId(item));

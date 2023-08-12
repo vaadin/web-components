@@ -317,7 +317,7 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _isExpanded(item) {
-      return this.__expandedKeys.has(this.getItemId(item));
+      return this.__expandedKeys && this.__expandedKeys.has(this.getItemId(item));
     }
 
     /** @private */
@@ -329,7 +329,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     __computeExpandedKeys(itemIdPath, expandedItems) {
-      const expanded = expandedItems.base || [];
+      // TODO: Something's not working with PolyLitMixin's computed properties
+      const expanded = this.expandedItems || [];
       const expandedKeys = new Set();
       expanded.forEach((item) => {
         expandedKeys.add(this.getItemId(item));
