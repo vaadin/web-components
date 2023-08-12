@@ -87,7 +87,7 @@ export const GridMixin = (superClass) =>
   ) {
     static get observers() {
       return [
-        '_columnTreeChanged(_columnTree, _columnTree.*)',
+        '_columnTreeChanged(_columnTree)',
         '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)',
       ];
     }

@@ -25,7 +25,7 @@ export const ArrayDataProviderMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, items.*, _filters, _sorters)'];
+      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, _filters, _sorters)'];
     }
 
     /** @private */
