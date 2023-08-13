@@ -3,22 +3,19 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-grid-tree-toggle.js';
-import { GridColumn } from './vaadin-grid-column.js';
+
+import './vaadin-lit-grid-tree-toggle.js';
 import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
+import { GridColumn } from './vaadin-lit-grid-column.js';
 
 /**
- * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
- * that provides default renderer and functionality for toggling tree/hierarchical items.
+ * LitElement based version of `<vaadin-grid-tree-column>` web component.
  *
- * #### Example:
- * ```html
- * <vaadin-grid items="[[items]]">
- *  <vaadin-grid-tree-column path="name.first"></vaadin-grid-tree-column>
+ * ## Disclaimer
  *
- *  <vaadin-grid-column>
- *    ...
- * ```
+ * This component is an experiment not intended for publishing to npm.
+ * There is no ETA regarding specific Vaadin version where it'll land.
+ * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   static get is() {

@@ -3,22 +3,19 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-grid-filter.js';
-import { GridColumn } from './vaadin-grid-column.js';
+
+import './vaadin-lit-grid-filter.js';
 import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
+import { GridColumn } from './vaadin-lit-grid-column.js';
 
 /**
- * `<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`
- * that provides default header renderer and functionality for filtering.
+ * LitElement based version of `<vaadin-grid-filter-column>` web component.
  *
- * #### Example:
- * ```html
- * <vaadin-grid items="[[items]]">
- *  <vaadin-grid-filter-column path="name.first"></vaadin-grid-filter-column>
+ * ## Disclaimer
  *
- *  <vaadin-grid-column>
- *    ...
- * ```
+ * This component is an experiment not intended for publishing to npm.
+ * There is no ETA regarding specific Vaadin version where it'll land.
+ * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class GridFilterColumn extends GridFilterColumnMixin(GridColumn) {
   static get is() {

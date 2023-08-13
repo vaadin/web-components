@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-lit-grid-column.js';
 import { html, LitElement } from 'lit';
 import { isIOS, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -23,10 +24,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)
   static get is() {
     return 'vaadin-grid';
   }
-
-  // static get styles() {
-  //   return gridStyles;
-  // }
 
   /** @protected */
   render() {
