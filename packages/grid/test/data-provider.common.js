@@ -240,8 +240,9 @@ describe('data provider', () => {
       grid.collapseItem(grid._cache.getItemForIndex(index));
     }
 
-    beforeEach(() => {
+    beforeEach(async () => {
       const treeColumn = document.createElement('vaadin-grid-tree-column');
+      await nextFrame();
       treeColumn.path = 'value';
       grid.itemHasChildrenPath = 'value';
       grid.prepend(treeColumn);

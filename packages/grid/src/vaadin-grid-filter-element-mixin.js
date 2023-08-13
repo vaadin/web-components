@@ -7,7 +7,7 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 
 registerStyles(
   'vaadin-grid-filter',
@@ -26,7 +26,7 @@ registerStyles(
 );
 
 export const GridFilterElementMixin = (superClass) =>
-  class extends superClass {
+  class extends ThemableMixin(superClass) {
     static get properties() {
       return {
         /**

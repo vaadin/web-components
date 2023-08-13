@@ -11,7 +11,10 @@ export const GridSortColumnMixin = (superClass) =>
         /**
          * JS Path of the property in the item used for sorting the data.
          */
-        path: String,
+        path: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * How to sort the data.

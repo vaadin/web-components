@@ -128,8 +128,9 @@ function gridFiltersFixture() {
 describe('filtering', () => {
   let grid, filter;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = gridFiltersFixture();
+    await nextFrame();
     flushGrid(grid);
     flushFilters(grid);
     if (grid._observer.flush) {
@@ -261,8 +262,9 @@ describe('filtering', () => {
 describe('array data provider', () => {
   let grid, filterFirst, filterSecond;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = gridFiltersFixture();
+    await nextFrame();
     flushGrid(grid);
 
     flushFilters(grid);

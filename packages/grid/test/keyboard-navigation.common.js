@@ -1463,6 +1463,7 @@ describe('keyboard navigation', () => {
       it('should allow toggling a checkbox with space keypress', async () => {
         // Add a selection column
         grid.appendChild(document.createElement('vaadin-grid-selection-column'));
+        await nextFrame();
         flushGrid(grid);
 
         // Get a reference to a checkbox, focus it and hit space

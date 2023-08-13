@@ -6,7 +6,7 @@
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin';
+import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,

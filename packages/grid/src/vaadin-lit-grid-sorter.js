@@ -24,7 +24,14 @@ class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(Lit
   }
 
   render() {
-    return html`<slot></slot>`;
+    return html`
+      <div part="content">
+        <slot></slot>
+      </div>
+      <div part="indicators">
+        <span part="order">${this._getDisplayOrder(this._order)}</span>
+      </div>
+    `;
   }
 }
 

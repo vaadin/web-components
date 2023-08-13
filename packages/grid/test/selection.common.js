@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, listenOnce, mousedown } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   fire,
@@ -169,7 +169,7 @@ describe('multi selection column', () => {
   let selectionColumn;
   let selectAllCheckbox, firstBodyCheckbox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 200px;">
         <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -182,6 +182,7 @@ describe('multi selection column', () => {
         <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>          
       </vaadin-grid>
     `);
+    await nextFrame();
 
     grid.querySelector('[header="header"]').renderer = (root, _, { item }) => {
       root.textContent = item;
@@ -524,13 +525,14 @@ describe('multi selection column', () => {
       );
     }
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 450px;">
-        <vaadin-grid-selection-column drag-select></vaadin-grid-selection-column>
-        <vaadin-grid-column></vaadin-grid-column>
-      </vaadin-grid>
-    `);
+        <vaadin-grid style="width: 200px; height: 450px;">
+          <vaadin-grid-selection-column drag-select></vaadin-grid-selection-column>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      await nextFrame();
       grid.items = [...new Array(100)].map((_, i) => `${i}`);
       flushGrid(grid);
 

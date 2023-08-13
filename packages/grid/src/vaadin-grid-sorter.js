@@ -6,7 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { GridSorterMixin } from './vaadin-grid-sorter-mixin';
+import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 const template = document.createElement('template');
 

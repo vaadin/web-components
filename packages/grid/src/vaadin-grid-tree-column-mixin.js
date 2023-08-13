@@ -12,7 +12,10 @@ export const GridTreeColumnMixin = (superClass) =>
         /**
          * JS Path of the property in the item used as text content for the tree toggle.
          */
-        path: String,
+        path: {
+          type: String,
+          sync: true,
+        },
       };
     }
 
@@ -45,6 +48,10 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.leaf = this.__isLeafItem(item, this._grid.itemHasChildrenPath);
       toggle.textContent = this.__getToggleContent(this.path, item);
       toggle.level = level;
+
+      if (toggle.performUpdate) {
+        toggle.performUpdate();
+      }
     }
 
     /**

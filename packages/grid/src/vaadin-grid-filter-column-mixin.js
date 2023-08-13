@@ -11,12 +11,18 @@ export const GridFilterColumnMixin = (superClass) =>
         /**
          * JS Path of the property in the item used for filtering the data.
          */
-        path: String,
+        path: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * Text to display as the label of the column filter text-field.
          */
-        header: String,
+        header: {
+          type: String,
+          sync: true,
+        },
       };
     }
 

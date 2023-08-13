@@ -96,6 +96,7 @@ export const GridTreeToggleMixin = (superClass) =>
           type: Number,
           value: 0,
           observer: '_levelChanged',
+          sync: true,
         },
 
         /**
@@ -117,6 +118,7 @@ export const GridTreeToggleMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           notify: true,
+          sync: true,
         },
       };
     }

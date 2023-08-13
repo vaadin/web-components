@@ -99,7 +99,17 @@ export const DynamicColumnsMixin = (superClass) =>
     /** @protected */
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
+
       if (!arrayEquals(columnTree, this._columnTree)) {
+        // Request a synchronoys update for each column
+        columnTree.forEach((columnArray) => {
+          columnArray.forEach((column) => {
+            if (column.performUpdate) {
+              column.performUpdate();
+            }
+          });
+        });
+
         this._columnTree = columnTree;
       }
     }
