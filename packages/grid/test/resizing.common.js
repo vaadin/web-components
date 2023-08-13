@@ -228,8 +228,14 @@ describe('all rows visible', () => {
       grid = wrapper.firstElementChild;
       grid.allRowsVisible = true;
       grid.style.maxHeight = '300px';
-      grid.items = [...Array(100)].map((_, idx) => ({ value: idx }));
-      grid.dataProvider = sinon.spy(grid.dataProvider);
+      const items = [...Array(100)].map((_, idx) => ({ value: idx }));
+      grid.dataProvider = sinon.spy((params, callback) => {
+        callback(
+          items.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize),
+          items.length,
+        );
+      });
+
       flushGrid(grid);
     });
 

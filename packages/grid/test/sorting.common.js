@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, keyUpOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Grid } from '../vaadin-grid.js';
 import {
   buildDataSet,
   flushGrid,
@@ -11,6 +10,8 @@ import {
   getRows,
   shiftClick,
 } from './helpers.js';
+
+const Grid = customElements.get('vaadin-grid');
 
 describe('sorting', () => {
   describe('sorter', () => {

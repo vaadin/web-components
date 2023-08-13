@@ -45,13 +45,19 @@ export const DragAndDropMixin = (superClass) =>
          * @attr {between|on-top|on-top-or-between|on-grid} drop-mode
          * @type {GridDropMode | null | undefined}
          */
-        dropMode: String,
+        dropMode: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * Marks the grid's rows to be available for dragging.
          * @attr {boolean} rows-draggable
          */
-        rowsDraggable: Boolean,
+        rowsDraggable: {
+          type: Boolean,
+          sync: true,
+        },
 
         /**
          * A function that filters dragging of specific grid rows. The return value should be false
@@ -68,7 +74,10 @@ export const DragAndDropMixin = (superClass) =>
          *
          * @type {GridDragAndDropFilter | null | undefined}
          */
-        dragFilter: Function,
+        dragFilter: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * A function that filters dropping on specific grid rows. The return value should be false
@@ -85,7 +94,10 @@ export const DragAndDropMixin = (superClass) =>
          *
          * @type {GridDragAndDropFilter | null | undefined}
          */
-        dropFilter: Function,
+        dropFilter: {
+          type: Function,
+          sync: true,
+        },
 
         /** @private */
         __dndAutoScrollThreshold: {

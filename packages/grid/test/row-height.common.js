@@ -1,16 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
-
-registerStyles(
-  'vaadin-grid',
-  css`
-    [part~='cell'] {
-      border: none !important;
-    }
-  `,
-);
 
 const fixtures = {
   defaultContent: () => {

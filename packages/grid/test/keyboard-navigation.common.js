@@ -213,6 +213,7 @@ describe('keyboard navigation', () => {
       root.innerHTML = `<span>${index} ${item}</span>`;
     };
 
+    flushGrid(grid);
     scroller = grid.$.scroller;
     header = grid.$.header;
     body = grid.$.items;
@@ -1548,6 +1549,7 @@ describe('keyboard navigation', () => {
       grid.querySelector('#column-2').renderer = inputRenderer;
       grid.querySelector('#column-2').footerRenderer = inputRenderer;
 
+      flushGrid(grid);
       scroller = grid.$.scroller;
       header = grid.$.header;
       body = grid.$.items;

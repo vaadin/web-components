@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 import {
   flushGrid,
   getCellContent,
@@ -10,25 +10,22 @@ import {
   infiniteDataProvider,
 } from './helpers.js';
 
-registerStyles(
-  'vaadin-grid',
-  css`
-    :host {
-      font-size: 16px;
-      line-height: 1.5;
-    }
+const styles = css`
+  :host {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 
-    :host(.small) [part~='cell'] {
-      line-height: 10px;
-      padding: 0 !important;
-      min-height: 0 !important;
-    }
+  :host(.small) [part~='cell'] {
+    line-height: 10px;
+    padding: 0 !important;
+    min-height: 0 !important;
+  }
 
-    ::slotted(vaadin-grid-cell-content) {
-      padding: 0 !important;
-    }
-  `,
-);
+  ::slotted(vaadin-grid-cell-content) {
+    padding: 0 !important;
+  }
+`;
 
 describe('dynamic physical count', () => {
   let scroller, grid;
@@ -39,10 +36,17 @@ describe('dynamic physical count', () => {
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+
+    // Inject the test styles
+    const style = document.createElement('style');
+    style.textContent = styles.cssText;
+    grid.shadowRoot.appendChild(style);
+
     grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
       root.textContent = model.index;
     };
     grid.dataProvider = infiniteDataProvider;
+    flushGrid(grid);
     scroller = grid.$.scroller;
     flushGrid(grid);
   });

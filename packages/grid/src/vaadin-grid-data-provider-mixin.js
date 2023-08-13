@@ -150,6 +150,7 @@ export const DataProviderMixin = (superClass) =>
           type: Number,
           value: 50,
           observer: '_pageSizeChanged',
+          sync: true,
         },
 
         /**
@@ -179,6 +180,7 @@ export const DataProviderMixin = (superClass) =>
           type: Object,
           notify: true,
           observer: '_dataProviderChanged',
+          sync: true,
         },
 
         /**
@@ -220,6 +222,7 @@ export const DataProviderMixin = (superClass) =>
           type: String,
           value: 'children',
           observer: '__itemHasChildrenPathChanged',
+          sync: true,
         },
 
         /**
@@ -229,6 +232,7 @@ export const DataProviderMixin = (superClass) =>
         itemIdPath: {
           type: String,
           value: null,
+          sync: true,
         },
 
         /**

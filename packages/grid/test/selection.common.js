@@ -21,6 +21,8 @@ describe('selection', () => {
 
   function configureGrid() {
     grid.dataProvider = infiniteDataProvider;
+    // For some reason sync: true, doesn't work with dataProvider property, need to run update manually
+    flushGrid(grid);
     cachedItems = grid._cache.items;
     grid.selectedItems = [cachedItems[0]];
     flushGrid(grid);
@@ -294,7 +296,7 @@ describe('multi selection column', () => {
   it('should set a copy of items when all items are selected', () => {
     selectionColumn.selectAll = true;
 
-    grid.pop('selectedItems');
+    grid.selectedItems = grid.selectedItems.slice(0, -1);
 
     expect(grid.items).not.to.eql(grid.selectedItems);
   });
@@ -367,7 +369,7 @@ describe('multi selection column', () => {
   });
 
   it('should have indeterminate false if selectedItems contains all items, no matter the order', () => {
-    grid.set('selectedItems', ['baz', 'foo', 'bar', 'hi']);
+    grid.selectedItems = ['baz', 'foo', 'bar', 'hi'];
 
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
@@ -378,7 +380,7 @@ describe('multi selection column', () => {
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
 
-    grid.set('selectedItems', ['baz', 'foo', 'hi']);
+    grid.selectedItems = ['baz', 'foo', 'hi'];
     expect(selectionColumn.selectAll).to.be.false;
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });

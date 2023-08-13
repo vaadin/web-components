@@ -1,2 +1,2 @@
-import '../all-imports.js';
+import '../src/vaadin-grid.js';
 import './missing-imports.common.js';

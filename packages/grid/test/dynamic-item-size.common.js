@@ -1,25 +1,22 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 import { flushGrid, getFirstVisibleItem, infiniteDataProvider } from './helpers.js';
 
-registerStyles(
-  'vaadin-grid',
-  css`
-    [part~='cell']:not([part~='details-cell']) ::slotted(vaadin-grid-cell-content) {
-      padding: 0 !important;
-    }
+const styles = css`
+  [part~='cell']:not([part~='details-cell']) ::slotted(vaadin-grid-cell-content) {
+    padding: 0 !important;
+  }
 
-    [part~='cell'] {
-      padding: 1px;
-      line-height: 18px;
-    }
+  [part~='cell'] {
+    padding: 1px;
+    line-height: 18px;
+  }
 
-    :host(.high) [part~='cell'] {
-      line-height: 100px;
-    }
-  `,
-);
+  :host(.high) [part~='cell'] {
+    line-height: 100px;
+  }
+`;
 
 describe('dynamic item size', () => {
   let grid;
@@ -30,6 +27,11 @@ describe('dynamic item size', () => {
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    // Inject the test styles
+    const style = document.createElement('style');
+    style.textContent = styles.cssText;
+    grid.shadowRoot.appendChild(style);
+
     grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
       root.textContent = model.index;
     };

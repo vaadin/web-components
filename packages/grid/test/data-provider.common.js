@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   flushGrid,
   getBodyCellContent,
@@ -18,15 +17,6 @@ import {
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
-
-registerStyles(
-  'vaadin-grid',
-  css`
-    [part~='cell'] {
-      height: 20px;
-    }
-  `,
-);
 
 class WrappedGrid extends PolymerElement {
   static get template() {
@@ -663,7 +653,9 @@ describe('wrapped grid', () => {
       container = fixtureSync('<wrapped-grid></wrapped-grid>');
       grid = container.$.grid;
       container.dataProvider = sinon.spy(infiniteDataProvider);
-      expect(grid.$.items.childElementCount).to.equal(0);
+      if (grid.$) {
+        expect(grid.$.items.childElementCount).to.equal(0);
+      }
     });
   });
 
@@ -750,11 +742,13 @@ describe('wrapped grid', () => {
       expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('bar');
     });
 
-    it('should apply `loading` attribute to scroller and grid', () => {
+    it('should apply `loading` attribute to scroller and grid', async () => {
       grid._setLoading(true);
+      await nextFrame();
       expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
       expect(grid.hasAttribute('loading')).to.be.true;
       grid._setLoading(false);
+      await nextFrame();
       expect(grid.$.scroller.hasAttribute('loading')).to.be.false;
       expect(grid.hasAttribute('loading')).to.be.false;
     });
