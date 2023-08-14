@@ -440,6 +440,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     return '';
   }
 
+  get __hasBadInput() {
+    return !this.__formattedValue && this.__inputs.some((picker) => picker._hasInputValue);
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -484,6 +488,28 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (!focused && document.hasFocus()) {
       this.validate();
     }
+
+    if (focused) {
+      this.__prevBadInputStatus = this.__hasBadInput;
+    } else {
+      this.__dispatchBadInputChange();
+    }
+  }
+
+  _shouldSetFocus(event) {
+    const { relatedTarget } = event;
+    const overlayContent = this.__datePicker._overlayContent;
+
+    // Focus moves within the field.
+    if (
+      this.__datePicker.contains(relatedTarget) ||
+      this.__timePicker.contains(relatedTarget) ||
+      (overlayContent && overlayContent.contains(relatedTarget))
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -495,13 +521,13 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @override
    */
   _shouldRemoveFocus(event) {
-    const target = event.relatedTarget;
+    const { relatedTarget } = event;
     const overlayContent = this.__datePicker._overlayContent;
 
     if (
-      this.__datePicker.contains(target) ||
-      this.__timePicker.contains(target) ||
-      (overlayContent && overlayContent.contains(target))
+      this.__datePicker.contains(relatedTarget) ||
+      this.__timePicker.contains(relatedTarget) ||
+      (overlayContent && overlayContent.contains(relatedTarget))
     ) {
       return false;
     }
@@ -528,6 +554,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       this.__dispatchChange();
     }
     this.__dispatchChangeForValue = undefined;
+
+    this.__dispatchBadInputChange();
   }
 
   /** @private */
@@ -965,6 +993,14 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __dispatchChange() {
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  }
+
+  __dispatchBadInputChange() {
+    const currentStatus = this.__hasBadInput;
+    if (this.__prevBadInputStatus !== currentStatus) {
+      this.dispatchEvent(new CustomEvent('bad-input-change'));
+      this.__prevBadInputStatus = currentStatus;
+    }
   }
 
   /** @private */
