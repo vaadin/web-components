@@ -59,6 +59,12 @@ export const TextFieldMixin = (superClass) =>
       return this.$.clearButton;
     }
 
+    validate() {
+      if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
+        super.validate();
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();
