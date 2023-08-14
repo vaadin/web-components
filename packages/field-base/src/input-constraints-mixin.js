@@ -53,6 +53,12 @@ export const InputConstraintsMixin = dedupingMixin(
         return !this.invalid;
       }
 
+      validate() {
+        if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
+          super.validate();
+        }
+      }
+
       /**
        * Returns true if some of the provided set of constraints are valid.
        * @param {Array} constraints
