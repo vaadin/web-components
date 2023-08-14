@@ -355,6 +355,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return this.$.clearButton;
   }
 
+  get __hasBadInput() {
+    return Boolean(this._inputElementValue && !this.i18n.parseTime(this._inputElementValue));
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -373,7 +377,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
     this._tooltipController.setPosition('top');
-    this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
   }
 
@@ -416,7 +419,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return !!(
       this.inputElement.checkValidity() &&
       (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
-      (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
+      !this.__hasBadInput
     );
   }
 
@@ -458,17 +461,37 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     // Do nothing, the internal combo-box handles Escape.
   }
 
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (focused) {
+      this.__prevBadInputStatus = this.__hasBadInput;
+    } else {
+      this.__dispatchBadInputChange();
+    }
+  }
+
   /** @private */
   __onArrowPressWithStep(step) {
     const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
     this.__memoValue = objWithStep;
     this.inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
     this.__dispatchChange();
+    this.__dispatchBadInputChange();
   }
 
   /** @private */
   __dispatchChange() {
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  }
+
+  /** @private */
+  __dispatchBadInputChange() {
+    const currentStatus = this.__hasBadInput;
+    if (this.__prevBadInputStatus !== currentStatus) {
+      this.dispatchEvent(new CustomEvent('bad-input-change'));
+      this.__prevBadInputStatus = currentStatus;
+    }
   }
 
   /**
@@ -631,6 +654,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __onComboBoxChange(event) {
     event.stopPropagation();
     this.__dispatchChange();
+    this.__dispatchBadInputChange();
   }
 
   /**
