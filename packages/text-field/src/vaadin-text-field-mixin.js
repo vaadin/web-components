@@ -60,7 +60,7 @@ export const TextFieldMixin = (superClass) =>
     }
 
     validate() {
-      if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
+      if (this.inputElement && (this.required || this._hasValidConstraints(this.constructor.constraints.map((c) => this[c])))) {
         super.validate();
       }
     }
