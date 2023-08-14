@@ -659,10 +659,10 @@ export const DatePickerMixin = (subclass) =>
     }
 
     __dispatchBadInputChange() {
-      const status = this.__hasBadInput;
-      if (this.__prevBadInputStatus !== status) {
+      const currentStatus = this.__hasBadInput;
+      if (this.__prevBadInputStatus !== currentStatus) {
         this.dispatchEvent(new CustomEvent('bad-input-change'));
-        this.__prevBadInputStatus = status;
+        this.__prevBadInputStatus = currentStatus;
       }
     }
 
