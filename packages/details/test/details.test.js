@@ -206,7 +206,7 @@ describe('vaadin-details', () => {
   describe('link', () => {
     let link;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       details = fixtureSync(`
         <vaadin-details>
           <vaadin-details-summary slot="summary">
@@ -216,7 +216,6 @@ describe('vaadin-details', () => {
           <div>Content</div>
         </vaadin-details>
       `);
-      await nextRender();
       link = details.querySelector('a');
     });
 
