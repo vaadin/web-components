@@ -1,6 +1,15 @@
 import '../../vaadin-select.js';
+import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
+import type { TabindexMixinClass } from '@vaadin/a11y-base/src/tabindex-mixin.js';
+import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -36,6 +45,16 @@ assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
 
 // Mixins
+assertType<DelegateFocusMixinClass>(select);
+assertType<DelegateStateMixinClass>(select);
+assertType<DisabledMixinClass>(select);
+assertType<FieldMixinClass>(select);
+assertType<FocusMixinClass>(select);
+assertType<KeyboardMixinClass>(select);
+assertType<LabelMixinClass>(select);
+assertType<OverlayClassMixinClass>(select);
+assertType<TabindexMixinClass>(select);
+assertType<ThemableMixinClass>(select);
 assertType<ValidateMixinClass>(select);
 
 // Item properties
