@@ -68,6 +68,11 @@ export const CollapsibleMixin = (superClass) =>
           return;
         }
 
+        // Do not change opened on link click
+        if (target.localName === 'a') {
+          return;
+        }
+
         const summary = this.focusElement;
 
         if (summary && (target === summary || summary.contains(target))) {
