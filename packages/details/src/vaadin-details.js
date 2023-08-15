@@ -170,7 +170,11 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(ControllerMixi
   }
 
   /** @private */
-  _onToggleClick() {
+  _onToggleClick(event) {
+    if (event.target.localName === 'a') {
+      return;
+    }
+
     this.opened = !this.opened;
   }
 
