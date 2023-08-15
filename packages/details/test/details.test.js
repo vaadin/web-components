@@ -64,6 +64,13 @@ describe('vaadin-details', () => {
       expect(details.opened).to.be.false;
     });
 
+    it('should not toggle opened state on link click', () => {
+      const link = document.createElement('a');
+      details.firstElementChild.appendChild(link);
+      link.click();
+      expect(details.opened).to.be.false;
+    });
+
     it('should update opened on toggle button enter', () => {
       keyDownOn(toggle, 13, [], 'Enter');
       expect(details.opened).to.be.true;
