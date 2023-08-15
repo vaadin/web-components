@@ -202,4 +202,26 @@ describe('vaadin-details', () => {
       expect(detailsId1).to.not.equal(detailsId2);
     });
   });
+
+  describe('link', () => {
+    let link;
+
+    beforeEach(() => {
+      details = fixtureSync(`
+        <vaadin-details>
+          <vaadin-details-summary slot="summary">
+            Toggle
+            <a href="#">Link</a>
+          </vaadin-details-summary>
+          <div>Content</div>
+        </vaadin-details>
+      `);
+      link = details.querySelector('a');
+    });
+
+    it('should not toggle opened state on link click', () => {
+      link.click();
+      expect(details.opened).to.be.false;
+    });
+  });
 });
