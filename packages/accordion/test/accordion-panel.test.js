@@ -143,4 +143,27 @@ describe('vaadin-accordion-panel', () => {
       });
     });
   });
+
+  describe('link', () => {
+    let link;
+
+    beforeEach(async () => {
+      panel = fixtureSync(`
+        <vaadin-accordion-panel>
+          <vaadin-accordion-heading slot="summary">
+            Toggle
+            <a href="#">Link</a>
+          </vaadin-accordion-heading>
+          <div>Content</div>
+        </vaadin-accordion-panel>
+      `);
+      await nextRender();
+      link = panel.querySelector('a');
+    });
+
+    it('should not toggle opened state on link click', () => {
+      link.click();
+      expect(panel.opened).to.be.false;
+    });
+  });
 });
