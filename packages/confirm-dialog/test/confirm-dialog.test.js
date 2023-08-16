@@ -155,6 +155,11 @@ describe('vaadin-confirm-dialog', () => {
         const headerNode = headerSlot.assignedNodes()[0];
         expect(headerNode.textContent.trim()).to.equal('Slotted header');
       });
+
+      it('should set pointer-events on the element to auto', () => {
+        const headerNode = headerSlot.assignedNodes()[0];
+        expect(getComputedStyle(headerNode).pointerEvents).to.equal('auto');
+      });
     });
   });
 
