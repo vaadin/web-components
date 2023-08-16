@@ -652,13 +652,13 @@ describe('keyboard', () => {
         await nextRender(datePicker);
       });
 
-      it('should validate without change on Esc', async () => {
+      it('should not validate without change on Esc', async () => {
         await sendKeys({ press: 'Escape' });
 
         // Wait for overlay to finish closing
         await nextRender(datePicker);
 
-        expect(validateSpy.calledOnce).to.be.true;
+        expect(validateSpy.called).to.be.false;
         expect(changeSpy.called).to.be.false;
       });
 
