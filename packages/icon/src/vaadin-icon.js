@@ -81,7 +81,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           height: 100%;
         }
 
-        :host([font]) #font-icon-wrapper {
+        :host([font]) #fontIconWrapper {
           display: block;
         }
 
@@ -99,7 +99,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         hidden
       ></svg>
 
-      <div id="font-icon-wrapper" hidden style="font-family: '[[__iconFontFamily]]'">[[__iconFontGlyph]]</div>
+      <div id="fontIconWrapper" hidden style="font-family: '[[__iconFontFamily]]'"></div>
       <slot></slot>
 
       <slot name="tooltip"></slot>
@@ -237,7 +237,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     }
     const [fontFamily, glyph] = font.split(':');
     this.__iconFontFamily = fontFamily;
-    this.__iconFontGlyph = glyph;
+    this.$.fontIconWrapper.innerHTML = `&#xf${glyph}`;
   }
 
   /** @protected */
