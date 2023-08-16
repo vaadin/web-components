@@ -389,7 +389,8 @@ export const SelectBaseMixin = (superClass) =>
 
         // Skip validation when a change event is scheduled, as validation
         // will be triggered by `__dispatchChange()` in that case.
-        if (!this.__dispatchChangePending) {
+        // Also, skip validation when closed on Escape or Tab keys.
+        if (!this.__dispatchChangePending && !this._keyboardActive) {
           this.validate();
         }
       }
