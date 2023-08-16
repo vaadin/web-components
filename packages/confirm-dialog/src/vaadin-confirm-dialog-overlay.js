@@ -24,6 +24,10 @@ const confirmDialogOverlay = css`
     height: var(--_vaadin-confirm-dialog-content-height);
   }
 
+  ::slotted([slot='header']) {
+    pointer-events: auto;
+  }
+
   /* Make buttons clickable */
   [part='footer'] > * {
     pointer-events: all;
