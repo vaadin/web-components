@@ -81,7 +81,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           height: 100%;
         }
 
-        :host([char]) #fontIconWrapper {
+        :host([has-font-icon]) #fontIconWrapper {
           display: block;
         }
 
@@ -167,6 +167,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         type: String,
       },
 
+      ligature: {
+        type: String,
+      },
+
       /** @private */
       __defaultPAR: {
         type: String,
@@ -185,7 +189,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)', '__fontChanged(font, fontFamily, char)'];
+    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)', '__fontChanged(font, fontFamily, char, ligature)'];
   }
 
   /** @protected */
@@ -243,7 +247,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   /** @private */
-  __fontChanged(font, fontFamily, char) {
+  __fontChanged(font, fontFamily, char, ligature) {
     this.classList.remove(...(this.addedClasses || []));
     if (font) {
       this.addedClasses = font.split(' ');
@@ -252,7 +256,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
     this.__fontIconWrapperStyle = fontFamily ? `font-family: "${fontFamily}"` : '';
 
-    this.__fontIconWrapperContent = isNaN(Number(char)) ? char : `&#xf${char}`;
+    if (ligature) {
+      this.__fontIconWrapperContent = ligature;
+    } else {
+      this.__fontIconWrapperContent = char ? `&#xf${char}` : '';
+    }
+
+    this.toggleAttribute('has-font-icon', this.__fontIconWrapperContent);
   }
 
   /** @protected */
