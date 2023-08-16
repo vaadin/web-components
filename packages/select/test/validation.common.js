@@ -45,7 +45,7 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should not validate on Escape press', async () => {
+    it('should not validate on close with Escape', async () => {
       select.focus();
       select.click();
       await nextRender();
@@ -55,7 +55,7 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate once on Tab press', async () => {
+    it('should validate once on close with Tab', async () => {
       select.focus();
       select.click();
       await nextRender();
