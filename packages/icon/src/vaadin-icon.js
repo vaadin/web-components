@@ -105,7 +105,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         style="[[__fontIconWrapperStyle]]"
         inner-H-T-M-L="[[__fontIconWrapperContent]]"
       ></div>
-      <slot></slot>
 
       <slot name="tooltip"></slot>
     `;
@@ -258,8 +257,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
     if (ligature) {
       this.__fontIconWrapperContent = ligature;
+    } else if (char) {
+      this.__fontIconWrapperContent = `&#xf${char}`;
     } else {
-      this.__fontIconWrapperContent = char ? `&#xf${char}` : '';
+      this.__fontIconWrapperContent = '';
     }
 
     this.toggleAttribute('has-font-icon', this.__fontIconWrapperContent);
