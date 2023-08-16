@@ -867,7 +867,7 @@ export const ComboBoxMixin = (subclass) =>
       this._revertInputValueToValue();
       // In the next _detectAndDispatchChange() call, the change detection should not pass
       this._lastCommittedValue = this.value;
-      this._closeOrCommit();
+      this.close();
     }
 
     /** @private */
