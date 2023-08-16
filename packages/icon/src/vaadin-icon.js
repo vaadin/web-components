@@ -81,7 +81,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           height: 100%;
         }
 
-        :host([font]) #fontIconWrapper {
+        :host([char]) #fontIconWrapper {
           display: block;
         }
 
@@ -99,7 +99,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         hidden
       ></svg>
 
-      <div id="fontIconWrapper" hidden style="font-family: '[[__iconFontFamily]]'"></div>
+      <div
+        id="fontIconWrapper"
+        hidden
+        style="[[__fontIconWrapperStyle]]"
+        inner-H-T-M-L="[[__fontIconWrapperContent]]"
+      ></div>
       <slot></slot>
 
       <slot name="tooltip"></slot>
@@ -152,7 +157,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
       font: {
         type: String,
-        reflectToAttribute: true,
+      },
+
+      fontFamily: {
+        type: String,
+      },
+
+      char: {
+        type: String,
       },
 
       /** @private */
@@ -173,7 +185,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)', '__fontChanged(font)'];
+    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)', '__fontChanged(font, fontFamily, char)'];
   }
 
   /** @protected */
@@ -231,13 +243,16 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   /** @private */
-  __fontChanged(font) {
-    if (!font) {
-      return;
+  __fontChanged(font, fontFamily, char) {
+    this.classList.remove(...(this.addedClasses || []));
+    if (font) {
+      this.addedClasses = font.split(' ');
+      this.classList.add(...this.addedClasses);
     }
-    const [fontFamily, glyph] = font.split(':');
-    this.__iconFontFamily = fontFamily;
-    this.$.fontIconWrapper.innerHTML = `&#xf${glyph}`;
+
+    this.__fontIconWrapperStyle = fontFamily ? `font-family: "${fontFamily}"` : '';
+
+    this.__fontIconWrapperContent = isNaN(Number(char)) ? char : `&#xf${char}`;
   }
 
   /** @protected */
