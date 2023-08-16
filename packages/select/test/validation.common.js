@@ -45,6 +45,26 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
+    it('should not validate on Escape press', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+
+      await sendKeys({ press: 'Escape' });
+      await nextUpdate(select);
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate once on Tab press', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+
+      await sendKeys({ press: 'Tab' });
+      await nextUpdate(select);
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
     it('should validate between value-changed and change events on Enter', async () => {
       select.focus();
       select.click();
