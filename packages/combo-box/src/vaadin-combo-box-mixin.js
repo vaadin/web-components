@@ -822,6 +822,7 @@ export const ComboBoxMixin = (subclass) =>
           this._revertInputValue();
         } else {
           // No item is focused, cancel the change and close the overlay
+          this.__escPressed = true;
           this.cancel();
         }
       } else if (this.clearButtonVisible && !!this.value) {
@@ -1092,9 +1093,12 @@ export const ComboBoxMixin = (subclass) =>
         this.dirty = true;
       }
 
-      // Do not validate when focusout is caused by document
-      // losing focus, which happens on browser tab switch.
-      if (document.hasFocus()) {
+      // Do not validate when closing overlay on Escape.
+      if (this.__escPressed) {
+        this.__escPressed = null;
+      } else if (document.hasFocus()) {
+        // Do not validate when focusout is caused by document
+        // losing focus, which happens on browser tab switch.
         this.validate();
       }
 

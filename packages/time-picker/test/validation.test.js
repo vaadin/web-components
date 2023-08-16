@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -98,6 +99,20 @@ describe('validation', () => {
       input.focus();
       input.click();
       outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should not validate on close with Escape', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ press: 'Escape' });
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate once on close with Tab', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ press: 'Tab' });
       expect(validateSpy.calledOnce).to.be.true;
     });
 

@@ -39,6 +39,20 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
+    it('should not validate on close with Escape', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ press: 'Escape' });
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate once on close with Tab', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ press: 'Tab' });
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
     it('should validate before change event on outside click', async () => {
       input.focus();
       input.click();
