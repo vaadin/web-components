@@ -49,21 +49,24 @@ export function ensureSvgLiteral(source) {
 }
 
 /**
- * Render a given SVG literal to the container.
- *
- * @param {unknown} source
- * @param {SVGElement} container
- */
-export function renderSvg(source, container) {
-  const result = ensureSvgLiteral(source);
-  render(result, container);
-}
-
-/**
  * Create an SVG literal from source string.
  *
  * @param {string} source
  */
 export function unsafeSvgLiteral(source) {
   return svg`${unsafeSVG(source)}`;
+}
+
+/**
+ * Render a given SVG literal to the container.
+ *
+ * @param {unknown} source
+ * @param {SVGElement} container
+ */
+export function renderSvg(source, container) {
+  if (typeof source === 'string') {
+    source = unsafeSvgLiteral(source);
+  }
+  const result = ensureSvgLiteral(source);
+  render(result, container);
 }

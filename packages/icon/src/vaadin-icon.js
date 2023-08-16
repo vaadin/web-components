@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { svg } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
+import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
 /**
@@ -75,9 +76,17 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         }
 
         svg {
-          display: block;
+          display: none;
           width: 100%;
           height: 100%;
+        }
+
+        :host([font]) #font-icon-wrapper {
+          display: block;
+        }
+
+        :host([has-svg]) svg {
+          display: block;
         }
       </style>
       <svg
@@ -87,7 +96,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
         aria-hidden="true"
+        hidden
       ></svg>
+
+      <div id="font-icon-wrapper" hidden style="font-family: '[[__iconFontFamily]]'">[[__iconFontGlyph]]</div>
+      <slot></slot>
 
       <slot name="tooltip"></slot>
     `;
@@ -118,6 +131,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         observer: '__iconChanged',
       },
 
+      src: {
+        type: String,
+      },
+
       /**
        * The SVG icon wrapped in a Lit template literal.
        */
@@ -131,6 +148,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
       size: {
         type: Number,
         value: 24,
+      },
+
+      font: {
+        type: String,
+        reflectToAttribute: true,
       },
 
       /** @private */
@@ -151,7 +173,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)'];
+    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)', '__fontChanged(font)'];
   }
 
   /** @protected */
@@ -175,6 +197,47 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     super.disconnectedCallback();
 
     Iconset.attachedIcons.delete(this);
+  }
+
+  /** @private */
+  async __srcChanged(src) {
+    if (!src) {
+      return;
+    }
+
+    const [url, symbol] = src.split('#');
+
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      if (!response.ok) {
+        throw Error('Error loading icon');
+      }
+      const responseText = await response.text();
+
+      const template = document.createElement('template');
+      template.innerHTML = responseText;
+      const svgElement = template.content.querySelector('svg');
+
+      if (symbol) {
+        this.svg = svg`<use href="${url}#${symbol}"></use>`;
+      } else {
+        this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+        this.__viewBox = svgElement.getAttribute('viewBox');
+      }
+    } catch (e) {
+      console.error(e);
+      this.svg = null;
+    }
+  }
+
+  /** @private */
+  __fontChanged(font) {
+    if (!font) {
+      return;
+    }
+    const [fontFamily, glyph] = font.split(':');
+    this.__iconFontFamily = fontFamily;
+    this.__iconFontGlyph = glyph;
   }
 
   /** @protected */
@@ -212,6 +275,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     }
 
     renderSvg(svg, svgElement);
+    this.toggleAttribute('has-svg', !!svg);
   }
 
   /** @private */
