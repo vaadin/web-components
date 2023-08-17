@@ -54,7 +54,7 @@ describe('readonly', () => {
 
     it('should not clear on Esc when readonly and clear button visible', async () => {
       comboBox.clearButtonVisible = true;
-      await sendKeys({ down: 'Escape' });
+      await sendKeys({ press: 'Escape' });
       expect(comboBox.selectedItems).to.eql(['apple', 'orange']);
     });
 
