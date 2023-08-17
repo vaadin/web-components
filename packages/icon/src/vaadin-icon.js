@@ -220,28 +220,26 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
       return;
     }
 
-    const [url, symbol] = src.split('#');
+    if (src.includes('#')) {
+      this.svg = svg`<use href="${src}"></use>`;
+    } else {
+      try {
+        const response = await fetch(src, { mode: 'cors' });
+        if (!response.ok) {
+          throw Error('Error loading icon');
+        }
+        const responseText = await response.text();
 
-    try {
-      const response = await fetch(url, { mode: 'cors' });
-      if (!response.ok) {
-        throw Error('Error loading icon');
-      }
-      const responseText = await response.text();
+        const template = document.createElement('template');
+        template.innerHTML = responseText;
+        const svgElement = template.content.querySelector('svg');
 
-      const template = document.createElement('template');
-      template.innerHTML = responseText;
-      const svgElement = template.content.querySelector('svg');
-
-      if (symbol) {
-        this.svg = svg`<use href="${url}#${symbol}"></use>`;
-      } else {
         this.svg = unsafeSvgLiteral(svgElement.innerHTML);
         this.__viewBox = svgElement.getAttribute('viewBox');
+      } catch (e) {
+        console.error(e);
+        this.svg = null;
       }
-    } catch (e) {
-      console.error(e);
-      this.svg = null;
     }
   }
 
