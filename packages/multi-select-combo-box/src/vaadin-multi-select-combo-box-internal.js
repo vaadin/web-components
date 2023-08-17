@@ -160,33 +160,22 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _onEnter(event) {
-    this.__enterPressed = true;
+    if (this.opened) {
+      // Do not submit the surrounding form.
+      event.preventDefault();
+      // Do not trigger global listeners.
+      event.stopPropagation();
+
+      if (!this.readonly) {
+        // Keep selected item focused after committing on Enter.
+        const focusedItem = this.filteredItems[this._focusedIndex];
+        this._commitValue();
+        this._focusedIndex = this.filteredItems.indexOf(focusedItem);
+        return;
+      }
+    }
 
     super._onEnter(event);
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _closeOrCommit() {
-    if (this.readonly) {
-      this.close();
-      return;
-    }
-
-    if (this.__enterPressed) {
-      this.__enterPressed = null;
-
-      // Keep selected item focused after committing on Enter.
-      const focusedItem = this.filteredItems[this._focusedIndex];
-      this._commitValue();
-      this._focusedIndex = this.filteredItems.indexOf(focusedItem);
-
-      return;
-    }
-
-    super._closeOrCommit();
   }
 
   /**
