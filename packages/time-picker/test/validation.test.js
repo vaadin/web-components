@@ -101,7 +101,7 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event on outside click', async () => {
+    it('should validate before change event on outside click', () => {
       input.focus();
       input.click();
       setInputValue(timePicker, '12:00');
@@ -109,6 +109,15 @@ describe('validation', () => {
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate without change event on bad input', () => {
+      input.focus();
+      input.click();
+      setInputValue(timePicker, 'foo');
+      outsideClick();
+      expect(changeSpy.called).to.be.false;
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should validate before change event on blur', () => {

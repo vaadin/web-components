@@ -125,6 +125,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           overlay-class="[[overlayClass]]"
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
+          on-custom-value-set="__onComboBoxCustomValueSet"
           on-change="__onComboBoxChange"
           on-validated="__onComboBoxValidated"
           on-has-input-value-changed="__onComboBoxHasInputValueChanged"
@@ -628,9 +629,23 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /** @private */
+  __onComboBoxCustomValueSet(event) {
+    const value = event.detail;
+    const parsedObj = this.i18n.parseTime(value);
+    if (!parsedObj) {
+      this.__ignoreBadInput = true;
+    }
+  }
+
+  /** @private */
   __onComboBoxChange(event) {
     event.stopPropagation();
-    this.__dispatchChange();
+    // Do not fire change for bad input.
+    if (this.__ignoreBadInput) {
+      this.__ignoreBadInput = null;
+    } else {
+      this.__dispatchChange();
+    }
   }
 
   /**
