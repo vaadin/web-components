@@ -20,7 +20,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal('1');
+      expect(numberField.value).to.equal('1');
     });
 
     it('should dispatch change event on minus button click', async () => {
@@ -87,7 +87,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal('0.8');
+      expect(numberField.value).to.equal('0.8');
     });
 
     it('should adjust value to exact step on plus button click', async () => {
@@ -97,7 +97,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal('0.6');
+      expect(numberField.value).to.equal('0.6');
     });
 
     it('should decrease value by 1 on minus button click', async () => {
@@ -106,7 +106,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal('-1');
+      expect(numberField.value).to.equal('-1');
     });
 
     it('should decrease value by 0.2 on minus button click', async () => {
@@ -116,7 +116,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal('-0.2');
+      expect(numberField.value).to.equal('-0.2');
     });
 
     it('should adjust value to exact step on minus button click', async () => {
@@ -126,7 +126,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal('6');
+      expect(numberField.value).to.equal('6');
     });
 
     it('should adjust decimals based on the step value when control button is pressed', async () => {
@@ -135,7 +135,7 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('1.001');
+      expect(numberField.value).to.equal('1.001');
     });
 
     it('should adjust decimals based on the min value when control button is pressed', async () => {
@@ -145,7 +145,7 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('1.0001');
+      expect(numberField.value).to.equal('1.0001');
     });
 
     it('should not increase value on plus button click when max value is reached', async () => {
@@ -155,7 +155,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal('0');
+      expect(numberField.value).to.equal('0');
     });
 
     it('should not decrease value on minus button click when min value is reached', async () => {
@@ -165,7 +165,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal('0');
+      expect(numberField.value).to.equal('0');
     });
 
     it('should not disable buttons if there are no limits set', () => {
@@ -195,10 +195,10 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('0');
+      expect(numberField.value).to.equal('0');
 
       decreaseButton.click();
-      expect(numberField.value).to.be.equal('0');
+      expect(numberField.value).to.equal('0');
     });
 
     it('should not change value on minus button click when min limit is reached', async () => {
@@ -207,10 +207,10 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       decreaseButton.click();
-      expect(numberField.value).to.be.equal('-1');
+      expect(numberField.value).to.equal('-1');
 
       decreaseButton.click();
-      expect(numberField.value).to.be.equal('-1');
+      expect(numberField.value).to.equal('-1');
     });
 
     it('should not change value on plus button click when max limit is reached', async () => {
@@ -219,10 +219,10 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('1');
+      expect(numberField.value).to.equal('1');
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('1');
+      expect(numberField.value).to.equal('1');
     });
 
     it('should not change value on plus button click when max limit will be reached with the next step', async () => {
@@ -233,10 +233,10 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('8');
+      expect(numberField.value).to.equal('8');
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('8');
+      expect(numberField.value).to.equal('8');
     });
 
     it('should prevent touchend event on value control buttons', async () => {
@@ -261,7 +261,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal(String(numberField.max));
+      expect(numberField.value).to.equal(String(numberField.max));
     });
 
     it('should decrease value to the closest step value on minus button click', async () => {
@@ -272,7 +272,7 @@ describe('value control buttons', () => {
 
       decreaseButton.click();
 
-      expect(numberField.value).to.be.equal('-9');
+      expect(numberField.value).to.equal('-9');
     });
 
     it('should correctly decrease value on minus button click', async () => {
@@ -283,7 +283,7 @@ describe('value control buttons', () => {
 
       [-4, -8, -12, -16, -20].forEach((step) => {
         decreaseButton.click();
-        expect(numberField.value).to.be.equal(String(step));
+        expect(numberField.value).to.equal(String(step));
       });
     });
 
@@ -294,7 +294,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal(String(numberField.min));
+      expect(numberField.value).to.equal(String(numberField.min));
     });
 
     it('should increase value to the closest step value on plus button click', async () => {
@@ -305,7 +305,7 @@ describe('value control buttons', () => {
 
       increaseButton.click();
 
-      expect(numberField.value).to.be.equal('-5');
+      expect(numberField.value).to.equal('-5');
     });
 
     it('should correctly increase value on plus button click', async () => {
@@ -317,7 +317,7 @@ describe('value control buttons', () => {
 
       [1, 5, 9, 13, 17].forEach((step) => {
         increaseButton.click();
-        expect(numberField.value).to.be.equal(String(step));
+        expect(numberField.value).to.equal(String(step));
       });
     });
 
@@ -330,7 +330,7 @@ describe('value control buttons', () => {
 
       [-0.02, -0.01, 0, 0.01, 0.02].forEach((step) => {
         increaseButton.click();
-        expect(numberField.value).to.be.equal(String(step));
+        expect(numberField.value).to.equal(String(step));
       });
     });
 
@@ -340,7 +340,7 @@ describe('value control buttons', () => {
       await nextUpdate(numberField);
 
       increaseButton.click();
-      expect(numberField.value).to.be.equal('5.11');
+      expect(numberField.value).to.equal('5.11');
     });
 
     describe('problematic values', () => {
@@ -361,7 +361,7 @@ describe('value control buttons', () => {
         configs.forEach(({ props, expectedValue }) => {
           Object.assign(numberField, reset, props);
           increaseButton.click();
-          expect(numberField.value).to.be.equal(expectedValue);
+          expect(numberField.value).to.equal(expectedValue);
         });
       });
 
@@ -378,7 +378,7 @@ describe('value control buttons', () => {
         configs.forEach(({ props, expectedValue }) => {
           Object.assign(numberField, reset, props);
           decreaseButton.click();
-          expect(numberField.value).to.be.equal(expectedValue);
+          expect(numberField.value).to.equal(expectedValue);
         });
       });
     });
@@ -394,7 +394,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('5');
+          expect(numberField.value).to.equal('5');
         });
 
         it('should set value to the first negative step value when min < 0 zero on plus button click', async () => {
@@ -404,7 +404,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('-1');
+          expect(numberField.value).to.equal('-1');
         });
       });
 
@@ -416,7 +416,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('19');
+          expect(numberField.value).to.equal('19');
         });
 
         it('should set value to min when min > 0 on minus button click', async () => {
@@ -426,7 +426,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('19');
+          expect(numberField.value).to.equal('19');
         });
       });
 
@@ -438,7 +438,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('6');
+          expect(numberField.value).to.equal('6');
         });
 
         it('should set value to 0 when min = 0 on minus button click', async () => {
@@ -448,7 +448,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('0');
+          expect(numberField.value).to.equal('0');
         });
       });
     });
@@ -464,7 +464,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('-24');
+          expect(numberField.value).to.equal('-24');
 
           // Check with max that can be equally divided
           numberField.value = '';
@@ -474,7 +474,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('-18');
+          expect(numberField.value).to.equal('-18');
         });
 
         it('should set value to max when max < 0 on minus button click', async () => {
@@ -484,7 +484,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('-19');
+          expect(numberField.value).to.equal('-19');
         });
       });
 
@@ -496,7 +496,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('6');
+          expect(numberField.value).to.equal('6');
         });
 
         it('should set value to the first step negative step value when max > 0 on minus button click', async () => {
@@ -506,7 +506,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('-6');
+          expect(numberField.value).to.equal('-6');
         });
       });
 
@@ -518,7 +518,7 @@ describe('value control buttons', () => {
 
           increaseButton.click();
 
-          expect(numberField.value).to.be.equal('0');
+          expect(numberField.value).to.equal('0');
         });
 
         it('should set value to the first negative step value when max = 0 on minus button click', async () => {
@@ -528,7 +528,7 @@ describe('value control buttons', () => {
 
           decreaseButton.click();
 
-          expect(numberField.value).to.be.equal('-6');
+          expect(numberField.value).to.equal('-6');
         });
       });
     });
@@ -542,7 +542,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('-8');
+        expect(numberField.value).to.equal('-8');
 
         // Check with max that can be equally divided
         numberField.value = '';
@@ -552,7 +552,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('-6');
+        expect(numberField.value).to.equal('-6');
       });
 
       it('should set value to 0 when max = 0 and min = 0 on minus button or plus button click', async () => {
@@ -562,10 +562,10 @@ describe('value control buttons', () => {
         await nextUpdate(numberField);
 
         decreaseButton.click();
-        expect(numberField.value).to.be.equal('0');
+        expect(numberField.value).to.equal('0');
 
         increaseButton.click();
-        expect(numberField.value).to.be.equal('0');
+        expect(numberField.value).to.equal('0');
       });
 
       it('should set value to min when min > 0 and max > 0 on plus button click', async () => {
@@ -576,7 +576,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('3');
+        expect(numberField.value).to.equal('3');
       });
 
       it('should set value to min when min > 0 and max < 0 on plus button click', async () => {
@@ -587,7 +587,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('19');
+        expect(numberField.value).to.equal('19');
       });
 
       it('should set value to the first positive step value when min < 0 and max is > 0 on plus button click', async () => {
@@ -598,7 +598,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('5');
+        expect(numberField.value).to.equal('5');
       });
 
       it('should set value to max when min < 0 and max < 0 on minus button click', async () => {
@@ -609,7 +609,7 @@ describe('value control buttons', () => {
 
         decreaseButton.click();
 
-        expect(numberField.value).to.be.equal('-3');
+        expect(numberField.value).to.equal('-3');
       });
 
       it('should set value to min when min > 0 and max > 0 on minus button click', async () => {
@@ -620,7 +620,7 @@ describe('value control buttons', () => {
 
         decreaseButton.click();
 
-        expect(numberField.value).to.be.equal('3');
+        expect(numberField.value).to.equal('3');
       });
 
       it('should set value to max when min > 0 and max < 0 on minus button click', async () => {
@@ -631,7 +631,7 @@ describe('value control buttons', () => {
 
         decreaseButton.click();
 
-        expect(numberField.value).to.be.equal('-3');
+        expect(numberField.value).to.equal('-3');
       });
 
       it('should set value to the first negative step value when min < 0 and max > 0 on minus button click', async () => {
@@ -642,7 +642,7 @@ describe('value control buttons', () => {
 
         decreaseButton.click();
 
-        expect(numberField.value).to.be.equal('-1');
+        expect(numberField.value).to.equal('-1');
       });
     });
 
@@ -653,7 +653,7 @@ describe('value control buttons', () => {
 
         increaseButton.click();
 
-        expect(numberField.value).to.be.equal('6');
+        expect(numberField.value).to.equal('6');
       });
 
       it('should set value to the first negative step value on minus button click', async () => {
@@ -662,7 +662,7 @@ describe('value control buttons', () => {
 
         decreaseButton.click();
 
-        expect(numberField.value).to.be.equal('-6');
+        expect(numberField.value).to.equal('-6');
       });
     });
   });
