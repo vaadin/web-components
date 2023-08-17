@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -31,7 +31,7 @@ describe('internal filtering', () => {
     });
 
     it('should open the popup if closed', () => {
-      comboBox.close();
+      expect(comboBox.opened).to.equal(false);
 
       setInputValue(comboBox, 'foo');
 
@@ -40,7 +40,6 @@ describe('internal filtering', () => {
 
     it('should not open the popup if closed and autoOpenDisabled is true', () => {
       comboBox.autoOpenDisabled = true;
-      comboBox.close();
 
       setInputValue(comboBox, 'foo');
 
@@ -49,7 +48,6 @@ describe('internal filtering', () => {
 
     it('should filter items when filter is changed regardless of autoOpenDisabled', () => {
       comboBox.autoOpenDisabled = true;
-      comboBox.close();
 
       comboBox.value = 'foo';
       comboBox.open();
@@ -60,7 +58,6 @@ describe('internal filtering', () => {
 
     it('should open the popup when the value of the input field is set to none', () => {
       comboBox.value = 'foo';
-      comboBox.close();
       expect(comboBox.opened).to.equal(false);
 
       setInputValue(comboBox, '');
@@ -71,7 +68,6 @@ describe('internal filtering', () => {
     it('should not open the popup when the value of the input field is set to none and autoOpenDisabled is true', () => {
       comboBox.autoOpenDisabled = true;
       comboBox.value = 'foo';
-      comboBox.close();
       expect(comboBox.opened).to.equal(false);
 
       setInputValue(comboBox, '');
@@ -89,7 +85,7 @@ describe('internal filtering', () => {
       comboBox.value = 'foo';
       setInputValue(comboBox, 'bar');
 
-      comboBox.close();
+      outsideClick();
 
       expect(comboBox.value).to.equal('bar');
     });
@@ -98,7 +94,7 @@ describe('internal filtering', () => {
       comboBox.value = 'foo';
       setInputValue(comboBox, 'BAR');
 
-      comboBox.close();
+      outsideClick();
 
       expect(comboBox.value).to.equal('bar');
     });
@@ -116,7 +112,8 @@ describe('internal filtering', () => {
       comboBox.value = 'foo';
 
       setInputValue(comboBox, 'FOO');
-      comboBox.close();
+
+      outsideClick();
 
       expect(comboBox.inputElement.value).to.equal('foo');
     });
@@ -194,7 +191,7 @@ describe('internal filtering', () => {
     it('should be reset after closing the dropdown', () => {
       setInputValue(comboBox, 'foo');
 
-      comboBox.close();
+      outsideClick();
 
       expect(comboBox.filter).to.be.empty;
     });

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fire, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -171,13 +171,13 @@ describe('selecting items', () => {
 
       comboBox.open();
       comboBox.value = 'foo';
-      comboBox.close();
+      outsideClick();
     });
 
     it('should fire exactly one `change` event', () => {
       comboBox.open();
       comboBox.value = 'foo';
-      comboBox.close();
+      outsideClick();
 
       expect(changeSpy.callCount).to.equal(1);
     });
@@ -215,7 +215,7 @@ describe('selecting items', () => {
       comboBox.value = 'foo';
 
       comboBox.open();
-      comboBox.close();
+      outsideClick();
 
       expect(changeSpy.callCount).to.equal(0);
     });
@@ -234,7 +234,7 @@ describe('selecting items', () => {
 
       comboBox.open();
       comboBox.value = 'foo';
-      comboBox.close();
+      clickItem(comboBox, 0);
     });
 
     it('should fire when selecting an item via click', () => {
@@ -319,7 +319,7 @@ describe('selecting a custom value', () => {
   it('should select a value when closing when having a single exact match', () => {
     setInputValue(comboBox, 'barbar');
 
-    comboBox.close();
+    outsideClick();
 
     expect(comboBox.value).to.eql('barbar');
   });
@@ -327,7 +327,7 @@ describe('selecting a custom value', () => {
   it('should select a value when closing when having multiple matches', () => {
     setInputValue(comboBox, 'BAR');
 
-    comboBox.close();
+    outsideClick();
 
     expect(comboBox.value).to.eql('bar');
   });
@@ -337,7 +337,7 @@ describe('selecting a custom value', () => {
 
     setInputValue(comboBox, '');
 
-    comboBox.close();
+    outsideClick();
 
     expect(comboBox.value).to.be.empty;
     expect(comboBox.selectedItem).to.be.null;
@@ -347,7 +347,7 @@ describe('selecting a custom value', () => {
   it('should select a custom value', () => {
     comboBox.value = 'foobar';
 
-    comboBox.close();
+    outsideClick();
 
     expect(comboBox.value).to.eql('foobar');
     expect(comboBox.selectedItem).to.be.null;
@@ -360,7 +360,7 @@ describe('selecting a custom value', () => {
 
     setInputValue(comboBox, '');
 
-    comboBox.close();
+    outsideClick();
 
     expect(comboBox.value).to.be.empty;
     expect(comboBox.selectedItem).to.be.null;
@@ -369,7 +369,7 @@ describe('selecting a custom value', () => {
   it('should allow changing value to existing item when custom value is set', () => {
     comboBox.value = 'foobar';
 
-    comboBox.close();
+    outsideClick();
 
     comboBox.value = 'foo';
     expect(comboBox.value).to.eql('foo');
