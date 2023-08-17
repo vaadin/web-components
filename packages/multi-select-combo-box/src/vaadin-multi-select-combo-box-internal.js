@@ -190,6 +190,25 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override Escape handler to not clear
+   * selected items when readonly.
+   * @param {!Event} event
+   * @protected
+   * @override
+   */
+  _onEscape(event) {
+    if (this.readonly) {
+      event.stopPropagation();
+      if (this.opened) {
+        this.close();
+      }
+      return;
+    }
+
+    super._onEscape(event);
+  }
+
+  /**
    * @protected
    * @override
    */
