@@ -234,7 +234,7 @@ describe('selecting items', () => {
 
       comboBox.open();
       comboBox.value = 'foo';
-      clickItem(comboBox, 0);
+      outsideClick();
     });
 
     it('should fire when selecting an item via click', () => {
