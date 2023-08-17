@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import {
+  arrowDownKeyDown,
+  aTimeout,
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  nextFrame,
+  nextRender,
+  outsideClick,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
@@ -254,7 +263,7 @@ describe('lazy loading', () => {
         it('should clear filter on opened change', () => {
           comboBox.dataProvider = dataProvider;
           setInputValue(comboBox, 'item 1');
-          comboBox.opened = false;
+          outsideClick();
           expect(comboBox.filter).to.equal('');
         });
 

@@ -544,11 +544,8 @@ export const ComboBoxMixin = (subclass) =>
         }
 
         this._overlayElement.restoreFocusOnClose = true;
-      } else {
-        this._onClosed();
-        if (this._openedWithFocusRing && this._isInputFocused()) {
-          this.setAttribute('focus-ring', '');
-        }
+      } else if (this._openedWithFocusRing && this._isInputFocused()) {
+        this.setAttribute('focus-ring', '');
       }
 
       const input = this._nativeInput;
@@ -744,7 +741,7 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _closeOrCommit() {
       if (!this.opened && !this.loading) {
         this._commitValue();
@@ -783,9 +780,11 @@ export const ComboBoxMixin = (subclass) =>
         e.preventDefault();
         // Do not trigger global listeners
         e.stopPropagation();
+
+        this.close();
       }
 
-      this._closeOrCommit();
+      this._commitValue();
     }
 
     /**
@@ -866,20 +865,14 @@ export const ComboBoxMixin = (subclass) =>
       this._revertInputValueToValue();
       // In the next _detectAndDispatchChange() call, the change detection should not pass
       this._lastCommittedValue = this.value;
-      this._closeOrCommit();
+      this.close();
+      this._commitValue();
     }
 
     /** @private */
     _onOpened() {
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
-    }
-
-    /** @private */
-    _onClosed() {
-      if (!this.loading || this.allowCustomValue) {
-        this._commitValue();
-      }
     }
 
     /** @private */
@@ -1237,6 +1230,7 @@ export const ComboBoxMixin = (subclass) =>
       if (this.opened) {
         this._focusedIndex = this.filteredItems.indexOf(e.detail.item);
         this.close();
+        this._commitValue();
       }
     }
 
@@ -1259,7 +1253,13 @@ export const ComboBoxMixin = (subclass) =>
           return;
         }
 
-        this._closeOrCommit();
+        if (this.opened) {
+          this.close();
+        }
+
+        if (!this.loading || this.allowCustomValue) {
+          this._commitValue();
+        }
       }
     }
 
