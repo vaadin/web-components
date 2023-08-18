@@ -4,12 +4,23 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
+
+const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
+const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
+// ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
+// or buggy Container Queries support for pseudo elements (Safari 16)
+const fallbackResizeObserver = new ResizeObserver((entries) => {
+  setTimeout(() => {
+    entries.forEach((entry) => entry.target._onResize());
+  });
+});
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -74,7 +85,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
         :host::after,
         :host::before {
           line-height: 1;
-          font-size: 100cqw;
+          font-size: var(--_vaadin-font-icon-size, 100cqw);
           position: absolute;
         }
 
@@ -162,6 +173,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     return ['__svgChanged(svg, __svgElement)'];
   }
 
+  constructor() {
+    super();
+
+    if (needsFontIconSizingFallback) {
+      this._onResize();
+    }
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -176,6 +195,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     super.connectedCallback();
 
     Iconset.attachedIcons.add(this);
+
+    if (needsFontIconSizingFallback) {
+      fallbackResizeObserver.observe(this);
+    }
   }
 
   /** @protected */
@@ -183,6 +206,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     super.disconnectedCallback();
 
     Iconset.attachedIcons.delete(this);
+
+    if (needsFontIconSizingFallback) {
+      fallbackResizeObserver.unobserve(this);
+    }
   }
 
   /** @protected */
@@ -230,6 +257,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   /** @private */
   __computeViewBox(size, viewBox) {
     return viewBox || `0 0 ${size} ${size}`;
+  }
+
+  /**
+   * @protected
+   */
+  _onResize() {
+    this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetWidth}px`);
   }
 }
 
