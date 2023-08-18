@@ -68,6 +68,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           width: 24px;
           height: 24px;
           fill: currentColor;
+          container-type: inline-size;
+        }
+
+        :host::after,
+        :host::before {
+          line-height: 1;
+          font-size: 100cqw;
+          position: absolute;
         }
 
         :host([hidden]) {
