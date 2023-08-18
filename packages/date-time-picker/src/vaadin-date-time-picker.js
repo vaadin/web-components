@@ -422,6 +422,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__defaultTimeMaxValue = '23:59:59.999';
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
+    this.__unparseableChangeEventHandler = this.__unparseableChangeEventHandler.bind(this);
     this.__dirtyChangedEventHandler = this.__dirtyChangedEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
   }
@@ -441,7 +442,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   get __hasBadInput() {
-    return !this.__formattedValue && this.__inputs.some((picker) => picker._hasInputValue);
+    return this.__inputs.some((picker) => !picker.value && picker._hasInputValue);
   }
 
   /** @protected */
@@ -487,12 +488,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
       this.validate();
-    }
-
-    if (focused) {
-      this.__prevBadInputStatus = this.__hasBadInput;
-    } else {
-      this.__dispatchBadInputChange();
+      this.__commitPendingValue();
     }
   }
 
@@ -521,13 +517,13 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @override
    */
   _shouldRemoveFocus(event) {
-    const { relatedTarget } = event;
+    const target = event.relatedTarget;
     const overlayContent = this.__datePicker._overlayContent;
 
     if (
-      this.__datePicker.contains(relatedTarget) ||
-      this.__timePicker.contains(relatedTarget) ||
-      (overlayContent && overlayContent.contains(relatedTarget))
+      this.__datePicker.contains(target) ||
+      this.__timePicker.contains(target) ||
+      (overlayContent && overlayContent.contains(target))
     ) {
       return false;
     }
@@ -548,14 +544,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
+    this.__commitPendingValue();
+  }
 
-    if (this.__dispatchChangeForValue === this.value) {
-      this.validate();
-      this.__dispatchChange();
-    }
-    this.__dispatchChangeForValue = undefined;
-
-    this.__dispatchBadInputChange();
+  __unparseableChangeEventHandler(event) {
+    event.stopPropagation();
+    this.__commitPendingValue();
   }
 
   /** @private */
@@ -568,6 +562,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', this.__changeEventHandler);
+    node.addEventListener('unparseable-change', this.__unparseableChangeEventHandler);
     node.addEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
   }
@@ -575,6 +570,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __removeInputListeners(node) {
     node.removeEventListener('change', this.__changeEventHandler);
+    node.removeEventListener('unparseable-change', this.__unparseableChangeEventHandler);
     node.removeEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
   }
@@ -982,8 +978,9 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __valueChanged(value, oldValue) {
     this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-    if (oldValue !== undefined) {
-      this.__dispatchChangeForValue = value;
+    if (!this.__skipCommittedValueUpdate) {
+      this.__committedValue = value;
+      this.__committedBadInputStatus = false;
     }
 
     this.toggleAttribute('has-value', !!value);
@@ -991,16 +988,19 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  __dispatchChange() {
-    this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-  }
+  __commitPendingValue() {
+    const currentValue = this.value;
+    const currentBadInputStatus = this.__hasBadInput;
 
-  __dispatchBadInputChange() {
-    const currentStatus = this.__hasBadInput;
-    if (this.__prevBadInputStatus !== currentStatus) {
-      this.dispatchEvent(new CustomEvent('bad-input-change'));
-      this.__prevBadInputStatus = currentStatus;
+    if (this.__committedValue !== currentValue) {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    } else if (this.__committedBadInputStatus !== currentBadInputStatus) {
+      this.dispatchEvent(new CustomEvent('unparseable-change'));
     }
+
+    this.__committedValue = currentValue;
+    this.__committedBadInputStatus = currentBadInputStatus;
   }
 
   /** @private */
@@ -1066,6 +1066,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__ignoreInputValueChange = true;
     this.__updateTimePickerMinMax();
 
+    this.__skipCommittedValueUpdate = true;
     if (date && time) {
       if (value !== this.value) {
         this.value = value;
@@ -1073,6 +1074,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     } else {
       this.value = '';
     }
+    this.__skipCommittedValueUpdate = false;
 
     this.__ignoreInputValueChange = false;
   }

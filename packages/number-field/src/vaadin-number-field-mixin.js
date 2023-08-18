@@ -354,6 +354,11 @@ export const NumberFieldMixin = (superClass) =>
       }
 
       super._valueChanged(this.value, oldVal);
+
+      if (!this.__skipCommittedValueUpdate) {
+        this.__committedValue = this.value;
+        this.__committedBadInputStatus = false;
+      }
     }
 
     /**
@@ -394,28 +399,39 @@ export const NumberFieldMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      if (focused) {
-        this.__prevBadInputStatus = this.__hasBadInput;
-      } else {
-        this.__dispatchBadInputChange();
+      if (!focused) {
+        this.__commitPendingValue();
       }
     }
 
     _onEnter(event) {
       super._onEnter(event);
-      this.__dispatchBadInputChange();
+      this.__commitPendingValue();
+    }
+
+    _onInput(event) {
+      this.__skipCommittedValueUpdate = true;
+      super._onInput(event);
+      this.__skipCommittedValueUpdate = false;
     }
 
     _onChange(event) {
-      super._onChange(event);
-      this.__dispatchBadInputChange();
+      event.stopPropagation();
+      this.__commitPendingValue();
     }
 
-    __dispatchBadInputChange() {
-      const currentStatus = this.__hasBadInput;
-      if (this.__prevBadInputStatus !== currentStatus) {
-        this.dispatchEvent(new CustomEvent('bad-input-change'));
-        this.__prevBadInputStatus = currentStatus;
+    __commitPendingValue() {
+      const currentValue = this.value;
+      const currentBadInputStatus = this.__hasBadInput;
+
+      if (this.__committedValue !== currentValue) {
+        this.validate();
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      } else if (this.__committedBadInputStatus !== currentBadInputStatus) {
+        this.dispatchEvent(new CustomEvent('unparseable-change'));
       }
+
+      this.__committedValue = currentValue;
+      this.__committedBadInputStatus = currentBadInputStatus;
     }
   };

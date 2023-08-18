@@ -464,10 +464,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   _setFocused(focused) {
     super._setFocused(focused);
 
-    if (focused) {
-      this.__prevBadInputStatus = this.__hasBadInput;
-    } else {
-      this.__dispatchBadInputChange();
+    if (!focused) {
+      this.__commitPendingValue();
     }
   }
 
@@ -487,26 +485,23 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this.__commitPendingValue();
   }
 
-  /** @private */
   __commitPendingValue() {
-    if (this.__committedValue !== this.value) {
+    const currentValue = this.value;
+    const currentBadInputStatus = this.__hasBadInput;
+
+    if (this.__committedValue !== currentValue) {
       this.__dispatchChange();
-      this.__committedValue = this.value;
+    } else if (this.__committedBadInputStatus !== currentBadInputStatus) {
+      this.dispatchEvent(new CustomEvent('unparseable-change'));
     }
+
+    this.__committedValue = currentValue;
+    this.__committedBadInputStatus = currentBadInputStatus;
   }
 
   /** @private */
   __dispatchChange() {
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-  }
-
-  /** @private */
-  __dispatchBadInputChange() {
-    const currentStatus = this.__hasBadInput;
-    if (this.__prevBadInputStatus !== currentStatus) {
-      this.dispatchEvent(new CustomEvent('bad-input-change'));
-      this.__prevBadInputStatus = currentStatus;
-    }
   }
 
   /**
@@ -641,6 +636,16 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       this.__updateInputValue(parsedObj);
     }
 
+<<<<<<< HEAD
+=======
+    // Mark value set programmatically by the user
+    // as committed for the change event detection.
+    if (!this.__skipCommittedValueUpdate) {
+      this.__committedValue = this.value;
+      this.__committedBadInputStatus = this.__hasBadInput;
+    }
+
+>>>>>>> 2c51adb13a (add unparseable-change event)
     this._toggleHasValue(this._hasValue);
   }
 

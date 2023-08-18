@@ -650,24 +650,26 @@ export const DatePickerMixin = (subclass) =>
       super._setFocused(focused);
 
       this._shouldKeepFocusRing = focused && this._keyboardActive;
-
-      if (focused) {
-        this.__prevBadInputStatus = this.__hasBadInput;
-      } else {
-        this.__dispatchBadInputChange();
-      }
     }
 
-    __dispatchBadInputChange() {
-      const currentStatus = this.__hasBadInput;
-      if (this.__prevBadInputStatus !== currentStatus) {
-        this.dispatchEvent(new CustomEvent('bad-input-change'));
-        this.__prevBadInputStatus = currentStatus;
+    /** @private */
+    __commitPendingValue() {
+      const currentValue = this.value;
+      const currentBadInputStatus = this.__hasBadInput;
+
+      if (this.__committedValue !== currentValue) {
+        this.__dispatchChange();
+      } else if (this.__committedBadInputStatus !== currentBadInputStatus) {
+        this.dispatchEvent(new CustomEvent('unparseable-change'));
       }
+
+      this.__committedValue = currentValue;
+      this.__committedBadInputStatus = currentBadInputStatus;
     }
 
     /** @private */
     __dispatchChange() {
+      this.dirty = true;
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
@@ -680,16 +682,10 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
-      const prevValue = this.value;
-
+      this.__skipCommittedValueUpdate = true;
       this._selectedDate = dateToSelect;
-
-      if (prevValue !== this.value) {
-        this.dirty = true;
-        this.__dispatchChange();
-      }
-
-      this.__dispatchBadInputChange();
+      this.__skipCommittedValueUpdate = false;
+      this.__commitPendingValue();
     }
 
     /** @private */
@@ -823,6 +819,11 @@ export const DatePickerMixin = (subclass) =>
         }
       } else {
         this._selectedDate = null;
+      }
+
+      if (!this.__skipCommittedValueUpdate) {
+        this.__committedValue = this.value;
+        this.__committedBadInputStatus = false;
       }
 
       this._toggleHasValue(this._hasValue);
@@ -1038,7 +1039,6 @@ export const DatePickerMixin = (subclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.dirty = true;
       this._inputElementValue = '';
       this.value = '';
       this.__dispatchChange();
