@@ -10,6 +10,10 @@ export const iconFontCss = css`
     src: url(data:font/woff2;charset=utf-8;base64,${unsafeCSS(iconFontBase64)}) format('woff2');
   }
 
+  .custom-line-height {
+    line-height: 1.5;
+  }
+
   .icon-before::before {
     font-family: 'My icons';
     content: '\\e900';

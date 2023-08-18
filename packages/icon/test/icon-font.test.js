@@ -61,12 +61,18 @@ describe('vaadin-icon - icon fonts', () => {
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
     });
 
-    it('should not overflow host', async () => {
+    it('should not overflow host - wider icon', async () => {
       icon.style.width = '150px';
       icon.style.height = '100px';
       await onceResized(icon);
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
+    });
+
+    it('should not overflow host - line height', async () => {
+      icon.classList.add('custom-line-height');
+      const fontIconStyle = getComputedStyle(icon, ':before');
+      expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
     });
   });
 });
