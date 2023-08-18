@@ -89,6 +89,11 @@ describe('vaadin-cookie-consent', () => {
       expect(link.textContent).to.be.equal('Learn more');
       expect(link.href).to.be.equal('https://cookiesandyou.com/');
     });
+
+    it('learn more link should not have role', () => {
+      const link = ccWindow.querySelector('.cc-link');
+      expect(link.hasAttribute('role')).to.be.false;
+    });
   });
 
   describe('custom texts', () => {
