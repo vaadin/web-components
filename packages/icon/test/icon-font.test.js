@@ -60,5 +60,13 @@ describe('vaadin-icon - icon fonts', () => {
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
     });
+
+    it('should not overflow host', async () => {
+      icon.style.width = '150px';
+      icon.style.height = '100px';
+      await onceResized(icon);
+      const fontIconStyle = getComputedStyle(icon, ':before');
+      expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
+    });
   });
 });

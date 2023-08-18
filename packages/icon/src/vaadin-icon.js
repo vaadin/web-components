@@ -79,13 +79,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           width: 24px;
           height: 24px;
           fill: currentColor;
-          container-type: inline-size;
+          container-type: size;
         }
 
         :host::after,
         :host::before {
           line-height: 1;
-          font-size: var(--_vaadin-font-icon-size, 100cqw);
+          font-size: var(--_vaadin-font-icon-size, 100cqh);
           position: absolute;
         }
 
@@ -263,7 +263,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
    * @protected
    */
   _onResize() {
-    this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetWidth}px`);
+    this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
   }
 }
 
