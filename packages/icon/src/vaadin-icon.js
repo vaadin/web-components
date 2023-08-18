@@ -173,14 +173,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     return ['__svgChanged(svg, __svgElement)'];
   }
 
-  constructor() {
-    super();
-
-    if (needsFontIconSizingFallback) {
-      this._onResize();
-    }
-  }
-
   /** @protected */
   ready() {
     super.ready();
@@ -188,6 +180,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+
+    if (needsFontIconSizingFallback) {
+      // Call once initially to avoid a fouc
+      this._onResize();
+    }
   }
 
   /** @protected */
