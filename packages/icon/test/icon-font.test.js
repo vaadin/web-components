@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-icon.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
@@ -21,7 +21,7 @@ function onceInvoked(object, functionName) {
 }
 
 /**
- * Resolves once the ResizeObserver has processed a resize.
+ * Resolves once the icon resize is complete.
  */
 async function onceResized(icon) {
   if (usesFontIconSizingFallback) {
