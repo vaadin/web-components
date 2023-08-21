@@ -68,7 +68,6 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     it('should not overflow host - line height', async () => {
-      icon.classList.add('custom-line-height');
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
     });

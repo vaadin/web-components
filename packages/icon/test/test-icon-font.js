@@ -14,12 +14,12 @@ export const iconFontCss = css`
     src: url(data:font/woff2;charset=utf-8;base64,${unsafeCSS(iconFontBase64)}) format('woff2');
   }
 
-  .custom-line-height {
-    line-height: 1.5;
-  }
-
   .my-icon-font {
     font-family: '${unsafeCSS(iconFontFamily)}';
+    /* Some font icon libraries set CSS properties such as line-height and display to the element with the class names applied */
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: top;
   }
 
   .icon-before::before {

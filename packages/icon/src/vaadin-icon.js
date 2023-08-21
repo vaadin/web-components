@@ -8,6 +8,7 @@ import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
@@ -62,8 +63,11 @@ const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? Re
  * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes SlotStylesMixin
  */
-class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeMixin(PolymerElement)))) {
+class Icon extends ThemableMixin(
+  ElementMixin(ControllerMixin(SlotStylesMixin(ConditionalResizeMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>
@@ -179,6 +183,19 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
 
   static get observers() {
     return ['__svgChanged(svg, __svgElement)', '__fontChanged(font)'];
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+        ${tag}[font] {
+          display: inline-flex;
+          vertical-align: middle;
+        }
+      `,
+    ];
   }
 
   /** @protected */
