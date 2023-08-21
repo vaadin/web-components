@@ -630,7 +630,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __onComboBoxChange(event) {
     event.stopPropagation();
-    this.__dispatchChange();
+
+    const { value } = event.target;
+    // Do not fire change for bad input.
+    if (value === '' || this.i18n.parseTime(value)) {
+      this.__dispatchChange();
+    }
   }
 
   /**
