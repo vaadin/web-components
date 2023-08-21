@@ -34,16 +34,16 @@ describe('keyboard navigation', () => {
       timePicker.step = 720;
     });
 
-    it('should not change the value on arrow up', () => {
+    it('should update the value on arrow up', () => {
       timePicker.value = '00:00';
       arrowUp(inputElement);
-      expect(timePicker.value).to.be.equal('00:00');
+      expect(timePicker.value).to.be.equal('00:12');
     });
 
-    it('should not change the value on arrow down', () => {
+    it('should update the value on arrow down', () => {
       timePicker.value = '00:00';
       arrowDown(inputElement);
-      expect(timePicker.value).to.be.equal('00:00');
+      expect(timePicker.value).to.be.equal('23:48');
     });
 
     it('on arrow up should update the input value to 00:12', () => {
@@ -220,14 +220,6 @@ describe('keyboard navigation', () => {
       timePicker.step = 0.5;
       arrowUp(inputElement);
       expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
-    });
-
-    it('should not change value on escape', () => {
-      timePicker.step = 0.5;
-      arrowUp(inputElement);
-      expect(inputElement.value).to.be.equal('00:00:00.500');
-      esc(inputElement);
-      expect(inputElement.value).to.be.equal('');
     });
   });
 });
