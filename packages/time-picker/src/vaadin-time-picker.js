@@ -462,7 +462,15 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __onArrowPressWithStep(step) {
     const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
     this.__memoValue = objWithStep;
-    this.inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
+
+    // Setting `value` property triggers the synchronous observer
+    // that in turn updates `_comboBoxValue` (actual input value)
+    // with its own observer where the value can be parsed again,
+    // so we set this flag to ensure it does not alter the value.
+    this.__useMemo = true;
+    this.value = this.__formatISO(objWithStep);
+    this.__useMemo = false;
+
     this.__dispatchChange();
   }
 
@@ -606,7 +614,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       return;
     }
 
-    const parsedObj = this.i18n.parseTime(value);
+    const parsedObj = this.__useMemo ? this.__memoValue : this.i18n.parseTime(value);
     const newValue = this.i18n.formatTime(parsedObj) || '';
 
     if (parsedObj) {
@@ -630,7 +638,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __onComboBoxChange(event) {
     event.stopPropagation();
-    this.__dispatchChange();
+
+    const { value } = event.target;
+    // Do not fire change for bad input.
+    if (value === '' || this.i18n.parseTime(value)) {
+      this.__dispatchChange();
+    }
   }
 
   /**

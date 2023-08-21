@@ -10,12 +10,12 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from './clear-button-mixin.js';
 import type { FieldMixinClass } from './field-mixin.js';
 import type { InputConstraintsMixinClass } from './input-constraints-mixin.js';
 import type { InputMixinClass } from './input-mixin.js';
 import type { LabelMixinClass } from './label-mixin.js';
-import type { SlotStylesMixinClass } from './slot-styles-mixin.js';
 import type { ValidateMixinClass } from './validate-mixin.js';
 
 /**
