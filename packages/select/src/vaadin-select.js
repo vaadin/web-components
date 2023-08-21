@@ -139,6 +139,10 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
   static get template() {
     return html`
       <style>
+        :host {
+          position: relative;
+        }
+
         ::slotted([slot='value']) {
           flex-grow: 1;
         }
