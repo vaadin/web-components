@@ -83,7 +83,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
         :host::before {
           line-height: 1;
           font-size: var(--_vaadin-font-icon-size, 100cqh);
-          position: absolute;
         }
 
         :host([hidden]) {
@@ -94,6 +93,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
           display: block;
           width: 100%;
           height: 100%;
+        }
+
+        :host([font]) svg {
+          display: none;
         }
       </style>
       <svg
@@ -142,6 +145,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
       },
 
       /**
+       * Class names defining an icon font and/or a specific glyph inside an icon font.
+       */
+      font: {
+        type: String,
+        reflectToAttribute: true,
+      },
+
+      /**
        * The size of an icon, used to set the `viewBox` attribute.
        */
       size: {
@@ -167,7 +178,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font)'];
   }
 
   /** @protected */
@@ -243,6 +254,21 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
   /** @private */
   __computeViewBox(size, viewBox) {
     return viewBox || `0 0 ${size} ${size}`;
+  }
+
+  /** @private */
+  __fontChanged(font) {
+    this.classList.remove(...(this.__addedClasses || []));
+    if (font) {
+      this.__addedClasses = font.split(' ');
+      this.classList.add(...this.__addedClasses);
+    }
+
+    // Need to have the "icon" attribute set on the host also when using font icons
+    // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
+    if (font && !this.icon) {
+      this.icon = '';
+    }
   }
 
   /**

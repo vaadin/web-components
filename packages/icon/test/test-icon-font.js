@@ -18,18 +18,19 @@ export const iconFontCss = css`
     line-height: 1.5;
   }
 
-  .icon-before::before {
+  .my-icon-font {
     font-family: '${unsafeCSS(iconFontFamily)}';
+  }
+
+  .icon-before::before {
     content: '${unsafeCSS(iconCodePoint)}';
   }
 
   .icon-after::after {
-    font-family: '${unsafeCSS(iconFontFamily)}';
     content: '${unsafeCSS(iconCodePoint)}';
   }
 
   .icon-ligature::before {
-    font-family: '${unsafeCSS(iconFontFamily)}';
     content: '${unsafeCSS(iconLigature)}';
   }
 `;

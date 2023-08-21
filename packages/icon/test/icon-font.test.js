@@ -42,9 +42,7 @@ describe('vaadin-icon - icon fonts', () => {
     let icon;
 
     beforeEach(async () => {
-      // Applying an icon font class name to the vaadin-icon element isn't
-      // officially supported but it's used here for testing purposes.
-      icon = fixtureSync('<vaadin-icon class="icon-before"></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon font="my-icon-font icon-before"></vaadin-icon>');
       await onceResized(icon);
     });
 
@@ -73,6 +71,61 @@ describe('vaadin-icon - icon fonts', () => {
       icon.classList.add('custom-line-height');
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
+    });
+  });
+
+  describe('font', () => {
+    let icon;
+
+    it('should add the font to element class list', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font icon-before"></vaadin-icon>');
+      expect(icon.classList.contains('my-icon-font')).to.be.true;
+      expect(icon.classList.contains('icon-before')).to.be.true;
+    });
+
+    it('should not overwrite existing classes', () => {
+      icon = fixtureSync('<vaadin-icon class="foo"></vaadin-icon>');
+      icon.font = 'my-icon-font icon-before';
+      expect(icon.classList.contains('foo')).to.be.true;
+    });
+
+    it('should change font classes', () => {
+      icon = fixtureSync('<vaadin-icon class="foo" font="my-icon-font icon-before"></vaadin-icon>');
+      icon.font = 'my-icon-font icon-after';
+      expect(icon.classList.contains('icon-before')).to.be.false;
+      expect(icon.classList.contains('icon-after')).to.be.true;
+    });
+
+    it('should remove all font classes', () => {
+      icon = fixtureSync('<vaadin-icon class="foo" font="my-icon-font icon-before"></vaadin-icon>');
+      icon.font = '';
+      expect(icon.classList.contains('my-icon-font')).to.be.false;
+      expect(icon.classList.contains('icon-before')).to.be.false;
+      expect(icon.classList.contains('foo')).to.be.true;
+    });
+
+    it('should reflect font as an attribute', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.font = 'my-icon-font icon-before';
+      expect(icon.getAttribute('font')).to.equal('my-icon-font icon-before');
+    });
+
+    it('should add icon attribute if font is set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.font = 'my-icon-font icon-before';
+      expect(icon.hasAttribute('icon')).to.be.true;
+    });
+
+    it('should not add icon attribute if font is not set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.font = null;
+      expect(icon.hasAttribute('icon')).to.be.false;
+    });
+
+    it('should not override existing icon', () => {
+      icon = fixtureSync('<vaadin-icon icon="foo:bar"></vaadin-icon>');
+      icon.font = 'my-icon-font icon-before';
+      expect(icon.icon).to.equal('foo:bar');
     });
   });
 });

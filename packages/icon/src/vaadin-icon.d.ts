@@ -68,6 +68,11 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElemen
   svg: IconSvgLiteral | null;
 
   /**
+   * Class names defining an icon font and/or a specific glyph inside an icon font.
+   */
+  font: string | null;
+
+  /**
    * The size of an icon, used to set the `viewBox` attribute.
    */
   size: number;

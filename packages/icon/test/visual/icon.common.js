@@ -3,7 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import { iconFontCss } from '../test-icon-font.js';
 
 describe('icon', () => {
-  let div, element;
+  let div;
 
   beforeEach(() => {
     div = document.createElement('div');
@@ -17,7 +17,7 @@ describe('icon', () => {
         <style>
           ${iconFontCss}
 
-          vaadin-icon {
+          vaadin-icon[icon] {
             outline: 1px solid #bbc9dc;
             width: 100px;
             height: 100px;
@@ -27,9 +27,9 @@ describe('icon', () => {
 
       fixtureSync(
         `
-        <vaadin-icon class="icon-before"></vaadin-icon>
-        <vaadin-icon class="icon-after"></vaadin-icon>
-        <vaadin-icon class="icon-ligature"></vaadin-icon>
+        <vaadin-icon font="my-icon-font icon-before"></vaadin-icon>
+        <vaadin-icon font="my-icon-font icon-after"></vaadin-icon>
+        <vaadin-icon font="my-icon-font icon-ligature"></vaadin-icon>
         `,
         div,
       );
