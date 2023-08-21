@@ -98,6 +98,38 @@ describe('vaadin-icon', () => {
     });
   });
 
+  describe('src property', () => {
+    beforeEach(() => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      svgElement = icon.shadowRoot.querySelector('svg');
+    });
+
+    it('should render SVG when path is provided', async () => {
+      const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
+      const fakeFetch = () => Promise.resolve(svgSrc);
+      icon.__fetchSVG = fakeFetch;
+      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      await fakeFetch();
+      expectIcon(ANGLE_DOWN);
+    });
+
+    it('should fail if SVG is not found', async () => {
+      sinon.stub(console, 'error');
+      icon.src = 'not-found.svg';
+
+      await nextRender();
+      expect(console.error.called).to.be.true;
+      console.error.restore();
+    });
+
+    it('should render <use> tag when path with id selector is given', () => {
+      icon.src = 'icon.svg#symbol-id';
+      // We expect a 404 error log from this test, but the test is simply to check
+      // that the <use> element is added when the source provided has the file#id pattern
+      expectIcon(`<use href="${icon.src}"></use>`);
+    });
+  });
+
   describe('size property', () => {
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
