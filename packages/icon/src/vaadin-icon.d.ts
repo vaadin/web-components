@@ -68,6 +68,16 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElemen
   svg: IconSvgLiteral | null;
 
   /**
+   * The SVG source to be loaded as the icon. It can be:
+   * - an URL to a file containing the icon
+   * - an URL in the format "/path/to/file.svg#objectID", where the "objectID" refers to an ID attribute contained
+   *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
+   * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
+   *   function for the SVG content passed
+   */
+  src: string | null;
+
+  /**
    * The size of an icon, used to set the `viewBox` attribute.
    */
   size: number;
