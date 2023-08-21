@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
@@ -16,11 +17,7 @@ const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
 const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
 // ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
 // or buggy Container Queries support for pseudo elements (Safari 16)
-const fallbackResizeObserver = new ResizeObserver((entries) => {
-  setTimeout(() => {
-    entries.forEach((entry) => entry.target._onResize());
-  });
-});
+const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -66,7 +63,7 @@ const fallbackResizeObserver = new ResizeObserver((entries) => {
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) {
+class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -192,10 +189,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     super.connectedCallback();
 
     Iconset.attachedIcons.add(this);
-
-    if (needsFontIconSizingFallback) {
-      fallbackResizeObserver.observe(this);
-    }
   }
 
   /** @protected */
@@ -203,10 +196,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     super.disconnectedCallback();
 
     Iconset.attachedIcons.delete(this);
-
-    if (needsFontIconSizingFallback) {
-      fallbackResizeObserver.unobserve(this);
-    }
   }
 
   /** @protected */
@@ -258,6 +247,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
   /**
    * @protected
+   * @override
    */
   _onResize() {
     this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
