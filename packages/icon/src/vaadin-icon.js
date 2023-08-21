@@ -4,12 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { svg } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
+import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
+
+let parser;
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -126,6 +129,18 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
       },
 
       /**
+       * The SVG source to be loaded as the icon. It can be:
+       * - an URL to a file containing the icon
+       * - an URL in the format "/path/to/file.svg#objectID", where the "objectID" refers to an ID attribute contained
+       *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
+       * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
+       *   function for the SVG content passed
+       */
+      src: {
+        type: String,
+      },
+
+      /**
        * The size of an icon, used to set the `viewBox` attribute.
        */
       size: {
@@ -151,7 +166,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)'];
+    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)'];
   }
 
   /** @protected */
@@ -203,6 +218,46 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
     } else {
       this.svg = ensureSvgLiteral(null);
     }
+  }
+
+  async __srcChanged(src) {
+    if (!src) {
+      return;
+    }
+
+    if (src.includes('#')) {
+      this.svg = svg`<use href="${src}"/>`;
+    } else {
+      try {
+        const svgData = await this.__fetchSVG(src);
+        if (!parser) {
+          parser = new DOMParser();
+        }
+        const parsedResponse = parser.parseFromString(svgData, 'text/html');
+
+        const svgElement = parsedResponse.querySelector('svg');
+        if (!svgElement) {
+          throw new Error(`SVG element not found on path: ${src}`);
+        }
+
+        if (svgElement.hasAttribute('viewBox')) {
+          this.__viewBox = svgElement.getAttribute('viewBox');
+        }
+        this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+      } catch (e) {
+        console.error(e);
+        this.svg = null;
+      }
+    }
+  }
+
+  async __fetchSVG(path) {
+    const data = await fetch(path, { mode: 'cors' });
+    if (!data.ok) {
+      return Promise.reject('Error loading icon');
+    }
+
+    return data.text();
   }
 
   /** @private */
