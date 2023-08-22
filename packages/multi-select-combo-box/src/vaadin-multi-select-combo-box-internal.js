@@ -166,13 +166,16 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       // Do not trigger global listeners.
       event.stopPropagation();
 
-      if (!this.readonly) {
+      if (this.readonly) {
+        this.close();
+      } else {
         // Keep selected item focused after committing on Enter.
         const focusedItem = this.filteredItems[this._focusedIndex];
         this._commitValue();
         this._focusedIndex = this.filteredItems.indexOf(focusedItem);
-        return;
       }
+
+      return;
     }
 
     super._onEnter(event);
