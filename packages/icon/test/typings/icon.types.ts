@@ -8,3 +8,5 @@ assertType<Icon>(icon);
 assertType<ControllerMixinClass>(icon);
 
 assertType<IconSvgLiteral | null>(icon.svg);
+
+assertType<string | null>(icon.src);
