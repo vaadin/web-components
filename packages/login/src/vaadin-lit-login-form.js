@@ -74,11 +74,16 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           >
             <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
           </vaadin-password-field>
-
-          <vaadin-button theme="primary contained submit" @click="${this.submit}" .disabled="${this.disabled}">
-            ${this.i18n.form.submit}
-          </vaadin-button>
         </form>
+
+        <vaadin-button
+          slot="submit"
+          theme="primary contained submit"
+          @click="${this.submit}"
+          .disabled="${this.disabled}"
+        >
+          ${this.i18n.form.submit}
+        </vaadin-button>
 
         <vaadin-button
           slot="forgot-password"

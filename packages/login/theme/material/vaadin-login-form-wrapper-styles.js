@@ -22,6 +22,19 @@ const loginFormWrapper = css`
     font-size: var(--material-h5-font-size);
   }
 
+  ::slotted([slot='submit']) {
+    margin-top: 3em;
+    margin-bottom: 2em;
+    flex-grow: 0;
+  }
+
+  @media only screen and (max-width: 1023px) {
+    ::slotted([slot='submit']) {
+      margin-top: 2.5em;
+      margin-bottom: 1em;
+    }
+  }
+
   ::slotted([slot='forgot-password']) {
     margin: 0.5rem auto;
     padding-bottom: 12px;
