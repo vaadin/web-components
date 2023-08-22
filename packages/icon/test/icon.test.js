@@ -166,6 +166,7 @@ describe('vaadin-icon', () => {
         await promise;
       } catch (e) {}
       expect(console.error.called).to.be.true;
+      expect(icon.svg).to.be.null;
       console.error.restore();
     });
 
