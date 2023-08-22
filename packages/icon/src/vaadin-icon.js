@@ -14,7 +14,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
-let parser;
 const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
 const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
 // ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
@@ -242,18 +241,23 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
 
   async __srcChanged(src) {
     if (!src) {
+      this.svg = null;
       return;
     }
+
+    // Need to add the "icon" attribute to avoid issues as described in
+    // https://github.com/vaadin/web-components/issues/6301
+    this.icon = '';
 
     if (src.includes('#')) {
       this.svg = svg`<use href="${src}"/>`;
     } else {
       try {
         const svgData = await this.__fetchSVG(src);
-        if (!parser) {
-          parser = new DOMParser();
+        if (!Icon.__domParser) {
+          Icon.__domParser = new DOMParser();
         }
-        const parsedResponse = parser.parseFromString(svgData, 'text/html');
+        const parsedResponse = Icon.__domParser.parseFromString(svgData, 'text/html');
 
         const svgElement = parsedResponse.querySelector('svg');
         if (!svgElement) {
