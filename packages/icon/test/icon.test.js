@@ -99,25 +99,89 @@ describe('vaadin-icon', () => {
   });
 
   describe('src property', () => {
+    let fetchSVGFunction;
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      fetchSVGFunction = icon.__fetchSVG;
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
-    it('should render SVG when path is provided', async () => {
+    afterEach(() => {
+      icon.__fetchSVG = fetchSVGFunction;
+    });
+
+    it('should render svg when path is provided', async () => {
       const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      const fakeFetch = () => Promise.resolve(svgSrc);
-      icon.__fetchSVG = fakeFetch;
+      let promise;
+      const fakefetch = () => {
+        promise = Promise.resolve(svgSrc);
+        return promise;
+      };
+      icon.__fetchSVG = fakefetch;
       icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
-      await fakeFetch();
+      await promise;
       expectIcon(ANGLE_DOWN);
+    });
+
+    it('should remove SVG content if src is set to null', async () => {
+      const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
+      let promise;
+      const fakefetch = () => {
+        promise = Promise.resolve(svgSrc);
+        return promise;
+      };
+      icon.__fetchSVG = fakefetch;
+      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      await promise;
+      icon.src = null;
+      expectIcon('');
+    });
+
+    it('should set viewBox attribute if one is returned from SVG', async () => {
+      const svgsrc = `<svg viewBox="0 0 100 100">${ANGLE_DOWN}</svg>`;
+      let promise;
+      const fakefetch = () => {
+        promise = Promise.resolve(svgsrc);
+        return promise;
+      };
+      icon.__fetchSVG = fakefetch;
+      icon.src = `data:image/svg+xml,${encodeURIComponent(svgsrc)}`;
+      await promise;
+      expect(svgElement.getAttribute('viewBox')).to.be.equal('0 0 100 100');
     });
 
     it('should fail if SVG is not found', async () => {
       sinon.stub(console, 'error');
+
+      let promise;
+      const fakeFetch = () => {
+        promise = Promise.reject('Not found');
+        return promise;
+      };
+      icon.__fetchSVG = fakeFetch;
       icon.src = 'not-found.svg';
 
-      await nextRender();
+      try {
+        // surround the promise with a try/catch since it rejects
+        await promise;
+      } catch (e) {}
+      expect(console.error.called).to.be.true;
+      console.error.restore();
+    });
+
+    it('shoud fail if data returned does not contain valid SVG', async () => {
+      sinon.stub(console, 'error');
+
+      const svgSrc = '<div>not valid SVG</div>';
+      let promise;
+      const fakeFetch = () => {
+        promise = Promise.resolve(svgSrc);
+        return promise;
+      };
+      icon.__fetchSVG = fakeFetch;
+      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      await promise;
+
       expect(console.error.called).to.be.true;
       console.error.restore();
     });
