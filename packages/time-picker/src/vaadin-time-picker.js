@@ -476,7 +476,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __dispatchChange() {
-    this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    if (this.value !== this._lastCommittedValue) {
+      this._lastCommittedValue = this.value;
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
   }
 
   /**

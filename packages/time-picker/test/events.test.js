@@ -105,6 +105,28 @@ describe('events', () => {
       inputElement.blur();
       expect(changeSpy.callCount).to.equal(1);
     });
+
+    it('should not be fired again on Enter if the value has not changed', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '10:00' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy).to.be.calledOnce;
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy).to.be.calledOnce;
+    });
+
+    it('should not be fired again on blur if the value has not changed', async () => {
+      timePicker.step = 0.5;
+      inputElement.focus();
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(changeSpy).to.be.calledOnce;
+
+      inputElement.blur();
+      expect(changeSpy).to.be.calledOnce;
+    });
   });
 
   describe('has-input-value-changed event', () => {
