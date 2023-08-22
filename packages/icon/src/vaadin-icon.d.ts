@@ -84,6 +84,11 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStyles
   char: string | null;
 
   /**
+   * The font family to use for the font icon.
+   */
+  fontFamily: string | null;
+
+  /**
    * The size of an icon, used to set the `viewBox` attribute.
    */
   size: number;

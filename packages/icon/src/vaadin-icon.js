@@ -176,6 +176,16 @@ class Icon extends ThemableMixin(
       },
 
       /**
+       * The font family to use for the font icon.
+       *
+       * @type {string}
+       */
+      fontFamily: {
+        type: String,
+        observer: '__fontFamilyChanged',
+      },
+
+      /**
        * The size of an icon, used to set the `viewBox` attribute.
        */
       size: {
@@ -305,6 +315,11 @@ class Icon extends ThemableMixin(
     if ((font || char) && !this.icon) {
       this.icon = '';
     }
+  }
+
+  /** @private */
+  __fontFamilyChanged(fontFamily) {
+    this.style.fontFamily = fontFamily;
   }
 
   /**
