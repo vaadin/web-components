@@ -275,13 +275,13 @@ class Icon extends ThemableMixin(
 
   /** @private */
   __fontChanged(font) {
-    this.classList.remove(...(this.__addedClasses || []));
+    this.classList.remove(...(this.__addedFontClasses || []));
     if (font) {
-      this.__addedClasses = font.split(' ');
-      this.classList.add(...this.__addedClasses);
+      this.__addedFontClasses = font.split(' ');
+      this.classList.add(...this.__addedFontClasses);
     }
 
-    // Need to have the "icon" attribute set on the host also when using font icons
+    // The "icon" attribute needs to be set on the host also when using font icons
     // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
     if (font && !this.icon) {
       this.icon = '';

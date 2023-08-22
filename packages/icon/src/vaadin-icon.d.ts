@@ -5,6 +5,7 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 
@@ -47,7 +48,7 @@ import type { IconSvgLiteral } from './vaadin-icon-svg.js';
  * }
  * ```
  */
-declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))) {
+declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(HTMLElement)))) {
   /**
    * The name of the icon to use. The name should be of the form:
    * `iconset_name:icon_name`. When using `vaadin-icons` it is possible

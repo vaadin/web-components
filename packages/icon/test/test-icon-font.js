@@ -16,7 +16,9 @@ export const iconFontCss = css`
 
   .my-icon-font {
     font-family: '${unsafeCSS(iconFontFamily)}';
-    /* Some font icon libraries set CSS properties such as line-height and display to the element with the class names applied */
+
+    /* Some popular icon libraries set CSS properties such as line-height and display to the
+    element with the class names applied. We'll replicate that here for testing purposes. */
     line-height: 1.5;
     display: inline-block;
     vertical-align: top;
