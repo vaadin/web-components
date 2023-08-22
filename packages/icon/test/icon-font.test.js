@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-icon.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
@@ -167,6 +167,56 @@ describe('vaadin-icon - icon fonts', () => {
       icon.fontFamily = 'My icons';
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(['"My icons"', 'My icons']).to.include(fontIconStyle.fontFamily);
+    });
+  });
+
+  // These tests make sure that the heavy container query fallback is only used
+  // when font icons are used.
+  (usesFontIconSizingFallback ? describe : describe.skip)('container query fallback', () => {
+    let icon;
+
+    it('should have the custom property (font)', async () => {
+      icon = fixtureSync('<vaadin-icon font="foo"></vaadin-icon>');
+      await nextFrame();
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
+    });
+
+    it('should have the custom property (char)', async () => {
+      icon = fixtureSync('<vaadin-icon char="foo"></vaadin-icon>');
+      await nextFrame();
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
+    });
+
+    it('should not have the custom property', async () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
+    });
+
+    it('should set the custom property', async () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
+      icon.font = 'foo';
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
+    });
+
+    it('should update the custom property', async () => {
+      icon = fixtureSync('<vaadin-icon font="foo"></vaadin-icon>');
+      await nextFrame();
+      icon.style.width = '100px';
+      icon.style.height = '100px';
+      await onceResized(icon);
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('100px');
+    });
+
+    it('should not update the custom property', async () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
+      icon.style.width = '100px';
+      icon.style.height = '100px';
+      await nextFrame(icon);
+      await nextFrame(icon);
+      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
     });
   });
 });
