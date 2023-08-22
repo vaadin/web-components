@@ -475,6 +475,14 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /** @private */
+  __commitPendingValue() {
+    if (this.__committedValue !== this.value) {
+      this.__dispatchChange();
+      this.__committedValue = this.value;
+    }
+  }
+
+  /** @private */
   __dispatchChange() {
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
   }
@@ -605,6 +613,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       this.__updateInputValue(parsedObj);
     }
 
+    // Mark value set programmatically by the user
+    // as committed for the change event detection.
+    if (!this.__skipCommittedValueUpdate) {
+      this.__committedValue = this.value;
+    }
+
     this._toggleHasValue(this._hasValue);
   }
 
@@ -621,7 +635,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       if (value !== newValue) {
         this._comboBoxValue = newValue;
       } else {
+        this.__skipCommittedValueUpdate = true;
         this.__updateValue(parsedObj);
+        this.__skipCommittedValueUpdate = false;
       }
     } else {
       // If the user input can not be parsed, set a flag
@@ -631,7 +647,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         this.__keepInvalidInput = true;
       }
 
+      this.__skipCommittedValueUpdate = true;
       this.value = '';
+      this.__skipCommittedValueUpdate = false;
     }
   }
 
@@ -642,7 +660,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const { value } = event.target;
     // Do not fire change for bad input.
     if (value === '' || this.i18n.parseTime(value)) {
-      this.__dispatchChange();
+      this.__commitPendingValue();
     }
   }
 
