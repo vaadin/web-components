@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -130,6 +130,35 @@ describe('selecting items', () => {
       await sendKeys({ type: 'orange' });
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['orange']);
+    });
+  });
+
+  describe('enter key propagation', () => {
+    const verifyEnterKeyPropagation = (allowPropagation) => {
+      const enterEvent = keyboardEventFor('keydown', 13, [], 'Enter');
+      const stopPropagationSpy = sinon.spy(enterEvent, 'stopPropagation');
+      inputElement.dispatchEvent(enterEvent);
+      expect(stopPropagationSpy.called).to.equal(!allowPropagation);
+    };
+
+    beforeEach(async () => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    it('should stop propagation of the keyboard Enter event when dropdown is opened', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      verifyEnterKeyPropagation(false);
+    });
+
+    it('should stop propagation of the keyboard Enter event when input value is invalid', async () => {
+      await sendKeys({ type: 'lime' });
+      verifyEnterKeyPropagation(false);
+    });
+
+    it('should stop propagation of the keyboard Enter event when input is invalid and not opened', async () => {
+      comboBox.autoOpenDisabled = true;
+      await sendKeys({ type: 'lime' });
+      verifyEnterKeyPropagation(false);
     });
   });
 });
