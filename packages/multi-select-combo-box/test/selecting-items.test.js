@@ -28,6 +28,13 @@ describe('selecting items', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
+    it('should update selectedItems on Enter when auto open is disabled', async () => {
+      comboBox.autoOpenDisabled = true;
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ press: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
     it('should update selectedItems when selecting an item on click', async () => {
       await sendKeys({ down: 'ArrowDown' });
       const item = document.querySelector('vaadin-multi-select-combo-box-item');
