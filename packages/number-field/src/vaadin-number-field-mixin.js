@@ -104,8 +104,16 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /** @private */
-    get __hasBadInput() {
+    get __hasUnparsableValue() {
       return this.inputElement.validity.badInput;
+    }
+
+    get __isValueCommitted() {
+      return this.__committedValue === this.value;
+    }
+
+    get __isUnparsableValueCommitted() {
+      return this.__committedUnparsableValueStatus === this.__hasUnparsableValue;
     }
 
     /** @protected */
@@ -355,9 +363,9 @@ export const NumberFieldMixin = (superClass) =>
 
       super._valueChanged(this.value, oldVal);
 
-      if (!this.__skipCommittedValueUpdate) {
+      if (!this.__preserveCommittedValue) {
         this.__committedValue = this.value;
-        this.__committedBadInputStatus = false;
+        this.__committedUnparsableValueStatus = false;
       }
     }
 
@@ -393,45 +401,42 @@ export const NumberFieldMixin = (superClass) =>
      */
     _setHasInputValue(event) {
       const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || this.__hasBadInput;
+      this._hasInputValue = target.value.length > 0 || this.__hasUnparsableValue;
     }
 
     _setFocused(focused) {
       super._setFocused(focused);
 
       if (!focused) {
-        this.__commitPendingValue();
+        this.__commitValueChange();
       }
     }
 
     _onEnter(event) {
       super._onEnter(event);
-      this.__commitPendingValue();
+      this.__commitValueChange();
     }
 
     _onInput(event) {
-      this.__skipCommittedValueUpdate = true;
+      this.__preserveCommittedValue = true;
       super._onInput(event);
-      this.__skipCommittedValueUpdate = false;
+      this.__preserveCommittedValue = false;
     }
 
     _onChange(event) {
       event.stopPropagation();
-      this.__commitPendingValue();
+      this.__commitValueChange();
     }
 
-    __commitPendingValue() {
-      const currentValue = this.value;
-      const currentBadInputStatus = this.__hasBadInput;
-
-      if (this.__committedValue !== currentValue) {
+    __commitValueChange() {
+      if (!this.__isValueCommitted) {
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedBadInputStatus !== currentBadInputStatus) {
+      } else if (!this.__isUnparsableValueCommitted) {
         this.dispatchEvent(new CustomEvent('unparseable-change'));
       }
 
-      this.__committedValue = currentValue;
-      this.__committedBadInputStatus = currentBadInputStatus;
+      this.__committedValue = this.value;
+      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
     }
   };
