@@ -127,6 +127,15 @@ describe('events', () => {
       inputElement.blur();
       expect(changeSpy).to.be.calledOnce;
     });
+
+    it('should not be fired on Enter after value set programmatically', async () => {
+      timePicker.value = '10:00';
+      inputElement.focus();
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.called).to.be.false;
+    });
   });
 
   describe('has-input-value-changed event', () => {
