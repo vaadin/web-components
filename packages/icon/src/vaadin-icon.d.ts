@@ -77,7 +77,7 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStyles
    *   function for the SVG content passed
    */
   src: string | null;
-  
+
   /**
    * Class names defining an icon font and/or a specific glyph inside an icon font.
    */

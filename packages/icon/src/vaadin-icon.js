@@ -160,7 +160,7 @@ class Icon extends ThemableMixin(
       src: {
         type: String,
       },
-      
+
       /**
        * Class names defining an icon font and/or a specific glyph inside an icon font.
        */
@@ -202,7 +202,6 @@ class Icon extends ThemableMixin(
     super();
 
     this.__fetch = fetch.bind(window);
-    
   }
 
   /** @protected */
