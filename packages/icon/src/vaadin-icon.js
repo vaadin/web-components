@@ -183,6 +183,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
     return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)'];
   }
 
+  constructor() {
+    super();
+
+    this.__fetch = fetch.bind(window);
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -264,9 +270,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
           throw new Error(`SVG element not found on path: ${src}`);
         }
 
-        if (svgElement.hasAttribute('viewBox')) {
-          this.__viewBox = svgElement.getAttribute('viewBox');
-        }
+        this.__viewBox = svgElement.getAttribute('viewBox');
         this.svg = unsafeSvgLiteral(svgElement.innerHTML);
       } catch (e) {
         console.error(e);
@@ -276,7 +280,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
   }
 
   async __fetchSVG(path) {
-    const data = await fetch(path, { mode: 'cors' });
+    const data = await this.__fetch(path, { mode: 'cors' });
     if (!data.ok) {
       return Promise.reject('Error loading icon');
     }
