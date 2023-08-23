@@ -157,6 +157,7 @@ describe('vaadin-icon', () => {
       await nextRender();
 
       expect(console.error.called).to.be.true;
+      expect(console.error.firstCall.firstArg.message).to.contain('SVG element not found');
       console.error.restore();
     });
 
