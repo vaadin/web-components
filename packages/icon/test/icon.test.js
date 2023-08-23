@@ -99,74 +99,52 @@ describe('vaadin-icon', () => {
   });
 
   describe('src property', () => {
-    let fetchSVGFunction;
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
-      fetchSVGFunction = icon.__fetchSVG;
       svgElement = icon.shadowRoot.querySelector('svg');
-    });
-
-    afterEach(() => {
-      icon.__fetchSVG = fetchSVGFunction;
     });
 
     it('should render svg when path is provided', async () => {
       const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      let promise;
-      const fakefetch = () => {
-        promise = Promise.resolve(svgSrc);
-        return promise;
-      };
-      icon.__fetchSVG = fakefetch;
+
+      icon.__fetch = () => Promise.resolve({ ok: true, text: () => Promise.resolve(svgSrc) });
       icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
-      await promise;
+      await nextRender();
+
       expectIcon(ANGLE_DOWN);
     });
 
     it('should remove SVG content if src is set to null', async () => {
       const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
-      let promise;
-      const fakefetch = () => {
-        promise = Promise.resolve(svgSrc);
-        return promise;
-      };
-      icon.__fetchSVG = fakefetch;
+
+      icon.__fetch = () => Promise.resolve({ ok: true, text: () => Promise.resolve(svgSrc) });
       icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
-      await promise;
+      await nextRender();
+
       icon.src = null;
       expectIcon('');
     });
 
     it('should set viewBox attribute if one is returned from SVG', async () => {
-      const svgsrc = `<svg viewBox="0 0 100 100">${ANGLE_DOWN}</svg>`;
-      let promise;
-      const fakefetch = () => {
-        promise = Promise.resolve(svgsrc);
-        return promise;
-      };
-      icon.__fetchSVG = fakefetch;
-      icon.src = `data:image/svg+xml,${encodeURIComponent(svgsrc)}`;
-      await promise;
+      const svgSrc = `<svg viewBox="0 0 100 100">${ANGLE_DOWN}</svg>`;
+
+      icon.__fetch = () => Promise.resolve({ ok: true, text: () => Promise.resolve(svgSrc) });
+      icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
+      await nextRender();
+
       expect(svgElement.getAttribute('viewBox')).to.be.equal('0 0 100 100');
     });
 
     it('should fail if SVG is not found', async () => {
       sinon.stub(console, 'error');
 
-      let promise;
-      const fakeFetch = () => {
-        promise = Promise.reject('Not found');
-        return promise;
-      };
-      icon.__fetchSVG = fakeFetch;
+      icon.__fetch = () => Promise.resolve({ ok: false });
       icon.src = 'not-found.svg';
+      await nextRender();
 
-      try {
-        // surround the promise with a try/catch since it rejects
-        await promise;
-      } catch (e) {}
       expect(console.error.called).to.be.true;
       expect(icon.svg).to.be.null;
+
       console.error.restore();
     });
 
@@ -174,14 +152,9 @@ describe('vaadin-icon', () => {
       sinon.stub(console, 'error');
 
       const svgSrc = '<div>not valid SVG</div>';
-      let promise;
-      const fakeFetch = () => {
-        promise = Promise.resolve(svgSrc);
-        return promise;
-      };
-      icon.__fetchSVG = fakeFetch;
+      icon.__fetch = () => Promise.resolve({ ok: true, text: () => Promise.resolve(svgSrc) });
       icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
-      await promise;
+      await nextRender();
 
       expect(console.error.called).to.be.true;
       console.error.restore();
