@@ -535,7 +535,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   _shouldRemoveFocus(event) {
     const target = event.relatedTarget;
-    const overlayContent = this.__datePicker._overlayContent;
 
     if (
       this.__datePicker.contains(target) ||
@@ -562,14 +561,16 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
-    if (!this.__isValueCommitted || this.__inputs.every((picker) => picker.value || picker._hasInputValue)) {
+
+    const oppositePicker = this.__inputs.find((picker) => picker !== event.target);
+    if (oppositePicker.value || oppositePicker._hasInputValue) {
       this.__commitValueChange();
     }
   }
 
   __unparsableChangeEventHandler(event) {
-    event.stopPropagation();
-    if (this.__inputs.every((picker) => picker.value || picker._hasInputValue)) {
+    const oppositePicker = this.__inputs.find((picker) => picker !== event.target);
+    if (oppositePicker.value || oppositePicker._hasInputValue) {
       this.__commitValueChange();
     }
   }
