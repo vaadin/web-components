@@ -89,6 +89,12 @@ snapshots["vaadin-login-form host default"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
+    <div
+      id="vaadinLoginCustomFields"
+      slot="custom-fields"
+      style="display: contents;"
+    >
+    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -105,6 +111,12 @@ snapshots["vaadin-login-form host default"] =
     >
       Forgot password
     </vaadin-button>
+    <div
+      id="vaadinLoginFormFooter"
+      slot="footer"
+      style="display: contents;"
+    >
+    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -207,6 +219,12 @@ snapshots["vaadin-login-form host required"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
+    <div
+      id="vaadinLoginCustomFields"
+      slot="custom-fields"
+      style="display: contents;"
+    >
+    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -223,6 +241,12 @@ snapshots["vaadin-login-form host required"] =
     >
       Forgot password
     </vaadin-button>
+    <div
+      id="vaadinLoginFormFooter"
+      slot="footer"
+      style="display: contents;"
+    >
+    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -316,6 +340,12 @@ snapshots["vaadin-login-form host i18n"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
+    <div
+      id="vaadinLoginCustomFields"
+      slot="custom-fields"
+      style="display: contents;"
+    >
+    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -332,6 +362,12 @@ snapshots["vaadin-login-form host i18n"] =
     >
       Unohtuiko salasana?
     </vaadin-button>
+    <div
+      id="vaadinLoginFormFooter"
+      slot="footer"
+      style="display: contents;"
+    >
+    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -434,6 +470,12 @@ snapshots["vaadin-login-form host i18n-required"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
+    <div
+      id="vaadinLoginCustomFields"
+      slot="custom-fields"
+      style="display: contents;"
+    >
+    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -450,6 +492,12 @@ snapshots["vaadin-login-form host i18n-required"] =
     >
       Unohtuiko salasana?
     </vaadin-button>
+    <div
+      id="vaadinLoginFormFooter"
+      slot="footer"
+      style="display: contents;"
+    >
+    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -543,6 +591,12 @@ snapshots["vaadin-login-form host noForgotPassword"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
+    <div
+      id="vaadinLoginCustomFields"
+      slot="custom-fields"
+      style="display: contents;"
+    >
+    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -560,6 +614,12 @@ snapshots["vaadin-login-form host noForgotPassword"] =
     >
       Forgot password
     </vaadin-button>
+    <div
+      id="vaadinLoginFormFooter"
+      slot="footer"
+      style="display: contents;"
+    >
+    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -583,9 +643,13 @@ snapshots["vaadin-login-form shadow default"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>
@@ -610,9 +674,13 @@ snapshots["vaadin-login-form shadow error"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>
@@ -640,9 +708,13 @@ snapshots["vaadin-login-form shadow i18n"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>

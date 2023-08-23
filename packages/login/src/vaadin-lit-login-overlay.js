@@ -39,6 +39,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
         theme="${ifDefined(this._theme)}"
         @vaadin-overlay-escape-press="${this._preventClosingLogin}"
         @vaadin-overlay-outside-click="${this._preventClosingLogin}"
+        @vaadin-overlay-open="${this._onOverlayOpened}"
         @opened-changed="${this._onOpenedChanged}"
       >
         <vaadin-login-form
@@ -55,6 +56,10 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
           @disabled-changed="${this._onDisabledChanged}"
         ></vaadin-login-form>
       </vaadin-login-overlay-wrapper>
+
+      <div hidden>
+        <slot id="fields" name="custom-fields"></slot>
+      </div>
     `;
   }
 

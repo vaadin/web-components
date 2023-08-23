@@ -76,6 +76,8 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           </vaadin-password-field>
         </form>
 
+        <div id="vaadinLoginCustomFields" slot="custom-fields" style="display: contents;"></div>
+
         <vaadin-button
           slot="submit"
           theme="primary contained submit"
@@ -93,6 +95,8 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         >
           ${this.i18n.form.forgotPassword}
         </vaadin-button>
+
+        <div id="vaadinLoginFormFooter" slot="footer" style="display: contents;"></div>
       </vaadin-login-form-wrapper>
     `;
   }
