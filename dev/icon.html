@@ -10,6 +10,7 @@
     <script type="module">
       import '@vaadin/icon';
       import '@vaadin/icons/vaadin-iconset.js';
+      import '@vaadin/vaadin-lumo-styles/font-icons.js';
       import '@vaadin/tooltip';
       import { Iconset } from '@vaadin/icon/vaadin-iconset.js';
 
@@ -34,13 +35,33 @@
 
       Iconset.register('my-icons-iconset', 32, template);
     </script>
+
+    <style>
+      /* To be replaced by font-family and char later */
+      .lumo-icon {
+        font-family: 'lumo-icons', sans-serif;
+      }
+      /* To be replaced by font-family and char later */
+      .calendar::before {
+        content: var(--lumo-icons-calendar);
+      }
+
+      h6 {
+        margin-top: var(--lumo-space-m);
+      }
+    </style>
   </head>
 
   <body>
+    <h6>Vaadin iconset icon with a tooltip</h6>
     <vaadin-icon icon="vaadin:phone">
       <vaadin-tooltip slot="tooltip" text="Icon tooltip text"></vaadin-tooltip>
     </vaadin-icon>
 
+    <h6>Custom iconset icon</h6>
     <vaadin-icon icon="my-icons-iconset:logo"></vaadin-icon>
+
+    <h6>Font icon (font property)</h6>
+    <vaadin-icon font="lumo-icon calendar"></vaadin-icon>
   </body>
 </html>

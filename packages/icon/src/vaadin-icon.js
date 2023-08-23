@@ -9,6 +9,7 @@ import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
@@ -63,8 +64,11 @@ const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? Re
  * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes SlotStylesMixin
  */
-class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeMixin(PolymerElement)))) {
+class Icon extends ThemableMixin(
+  ElementMixin(ControllerMixin(SlotStylesMixin(ConditionalResizeMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>
@@ -84,7 +88,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
         :host::before {
           line-height: 1;
           font-size: var(--_vaadin-font-icon-size, 100cqh);
-          position: absolute;
         }
 
         :host([hidden]) {
@@ -95,6 +98,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
           display: block;
           width: 100%;
           height: 100%;
+        }
+
+        :host([font]) svg {
+          display: none;
         }
       </style>
       <svg
@@ -153,6 +160,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
       src: {
         type: String,
       },
+      
+      /**
+       * Class names defining an icon font and/or a specific glyph inside an icon font.
+       */
+      font: {
+        type: String,
+        reflectToAttribute: true,
+      },
 
       /**
        * The size of an icon, used to set the `viewBox` attribute.
@@ -180,13 +195,27 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font)', '__srcChanged(src)'];
   }
 
   constructor() {
     super();
 
     this.__fetch = fetch.bind(window);
+    
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+        ${tag}[font] {
+          display: inline-flex;
+          vertical-align: middle;
+        }
+      `,
+    ];
   }
 
   /** @protected */
@@ -305,6 +334,21 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(ConditionalResizeM
   /** @private */
   __computeViewBox(size, viewBox) {
     return viewBox || `0 0 ${size} ${size}`;
+  }
+
+  /** @private */
+  __fontChanged(font) {
+    this.classList.remove(...(this.__addedFontClasses || []));
+    if (font) {
+      this.__addedFontClasses = font.split(' ');
+      this.classList.add(...this.__addedFontClasses);
+    }
+
+    // The "icon" attribute needs to be set on the host also when using font icons
+    // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
+    if (font && !this.icon) {
+      this.icon = '';
+    }
   }
 
   /**

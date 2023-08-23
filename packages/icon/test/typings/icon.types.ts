@@ -9,4 +9,6 @@ assertType<ControllerMixinClass>(icon);
 
 assertType<IconSvgLiteral | null>(icon.svg);
 
+assertType<string | null>(icon.font);
+
 assertType<string | null>(icon.src);

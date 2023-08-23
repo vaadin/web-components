@@ -14,22 +14,25 @@ export const iconFontCss = css`
     src: url(data:font/woff2;charset=utf-8;base64,${unsafeCSS(iconFontBase64)}) format('woff2');
   }
 
-  .custom-line-height {
+  .my-icon-font {
+    font-family: '${unsafeCSS(iconFontFamily)}';
+
+    /* Some popular icon libraries set CSS properties such as line-height and display to the
+    element with the class names applied. We'll replicate that here for testing purposes. */
     line-height: 1.5;
+    display: inline-block;
+    vertical-align: top;
   }
 
   .icon-before::before {
-    font-family: '${unsafeCSS(iconFontFamily)}';
     content: '${unsafeCSS(iconCodePoint)}';
   }
 
   .icon-after::after {
-    font-family: '${unsafeCSS(iconFontFamily)}';
     content: '${unsafeCSS(iconCodePoint)}';
   }
 
   .icon-ligature::before {
-    font-family: '${unsafeCSS(iconFontFamily)}';
     content: '${unsafeCSS(iconLigature)}';
   }
 `;
