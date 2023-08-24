@@ -213,7 +213,7 @@ describe('validation', () => {
       datePicker.value = '2020-01-01';
       setInputValue(datePicker, 'foo');
       await waitForOverlayRender();
-      await waitForValueChange(datePicker, () => datePicker.close());
+      outsideClick();
       expect(input.value).to.equal('foo');
     });
 

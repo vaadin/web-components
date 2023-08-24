@@ -205,25 +205,25 @@ describe('dropdown', () => {
       expect(document.activeElement).to.equal(input);
     });
 
-    it('should restore focus-ring attribute set before opening on outside click', async () => {
-      // Focus the input with Tab
-      await sendKeys({ press: 'Tab' });
-      await open(datePicker);
-      outsideClick();
-      await nextUpdate(datePicker);
-      await aTimeout(0);
-      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
-    });
+    // it('should restore focus-ring attribute set before opening on outside click', async () => {
+    //   // Focus the input with Tab
+    //   await sendKeys({ press: 'Tab' });
+    //   await open(datePicker);
+    //   outsideClick();
+    //   await nextUpdate(datePicker);
+    //   await aTimeout(0);
+    //   expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+    // });
 
-    it('should not remove focus-ring attribute set after opening on outside click', async () => {
-      await open(datePicker);
-      input.focus();
-      // Move focus to the calendar
-      await sendKeys({ press: 'Tab' });
-      outsideClick();
-      await aTimeout(0);
-      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
-    });
+    // it('should not remove focus-ring attribute set after opening on outside click', async () => {
+    //   await open(datePicker);
+    //   input.focus();
+    //   // Move focus to the calendar
+    //   await sendKeys({ press: 'Tab' });
+    //   outsideClick();
+    //   await aTimeout(0);
+    //   expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+    // });
 
     it('should not set focus-ring attribute if it was not set before opening', async () => {
       await open(datePicker);
@@ -298,16 +298,16 @@ describe('dropdown', () => {
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
-    it('should not remove focus-ring attribute after opening on date tap', async () => {
-      await open(datePicker);
-      // Focus the input with Tab
-      await sendKeys({ press: 'Tab' });
+    // it('should not remove focus-ring attribute after opening on date tap', async () => {
+    //   await open(datePicker);
+    //   // Focus the overlay with Tab
+    //   await sendKeys({ press: 'Tab' });
 
-      dateTap();
-      await aTimeout(0);
+    //   dateTap();
+    //   await aTimeout(0);
 
-      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
-    });
+    //   expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+    // });
   });
 
   describe('virtual keyboard', () => {

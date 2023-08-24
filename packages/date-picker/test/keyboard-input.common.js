@@ -678,7 +678,7 @@ describe('keyboard', () => {
       beforeEach(async () => {
         await open(datePicker);
         await sendKeys({ type: '01/02/20' });
-        await close(datePicker);
+        await sendKeys({ press: 'Enter' });
         validateSpy.resetHistory();
         changeSpy.resetHistory();
         // Wait for overlay to finish closing

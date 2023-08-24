@@ -439,24 +439,6 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /**
-     * Override an event listener from `DelegateFocusMixin`
-     * @protected
-     */
-    _onBlur(event) {
-      super._onBlur(event);
-
-      if (!this.opened) {
-        this._selectParsedOrFocusedDate();
-
-        // Do not validate when focusout is caused by document
-        // losing focus, which happens on browser tab switch.
-        if (document.hasFocus()) {
-          this.validate();
-        }
-      }
-    }
-
     /** @protected */
     ready() {
       super.ready();
@@ -523,8 +505,6 @@ export const DatePickerMixin = (subclass) =>
 
       // User confirmed selected date by clicking the calendar.
       content.addEventListener('date-tap', (e) => {
-        this.__userConfirmedDate = true;
-
         this._selectDate(e.detail.date);
 
         this._close();
@@ -532,17 +512,20 @@ export const DatePickerMixin = (subclass) =>
 
       // User confirmed selected date by pressing Enter, Space, or Today.
       content.addEventListener('date-selected', (e) => {
-        // Reset if a date is deselected.
-        this.__userConfirmedDate = !!e.detail.date;
-
         this._selectDate(e.detail.date);
       });
 
       // Set focus-ring attribute when moving focus to the overlay
       // by pressing Tab or arrow key, after opening it on click.
-      content.addEventListener('focusin', () => {
-        if (this._keyboardActive) {
+      content.addEventListener('focusin', (event) => {
+        if (this._shouldSetFocus(event)) {
           this._setFocused(true);
+        }
+      });
+
+      content.addEventListener('focusout', (event) => {
+        if (this._shouldRemoveFocus(event)) {
+          this._setFocused(false);
         }
       });
 
@@ -616,8 +599,18 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      * @override
      */
-    _shouldSetFocus(_event) {
-      return !this._shouldKeepFocusRing;
+    _shouldSetFocus(event) {
+      const overlayContent = this._overlayContent;
+
+      if (
+        event.relatedTarget === this.inputElement ||
+        (overlayContent && overlayContent.contains(event.relatedTarget))
+      ) {
+        // Focus moves within the field.
+        return false;
+      }
+
+      return true;
     }
 
     /**
@@ -631,8 +624,18 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      * @override
      */
-    _shouldRemoveFocus(_event) {
-      return !this.opened;
+    _shouldRemoveFocus(event) {
+      const overlayContent = this._overlayContent;
+
+      if (
+        event.relatedTarget === this.inputElement ||
+        (overlayContent && overlayContent.contains(event.relatedTarget))
+      ) {
+        // Focus moves within the field.
+        return false;
+      }
+
+      return true;
     }
 
     /**
@@ -648,6 +651,16 @@ export const DatePickerMixin = (subclass) =>
       super._setFocused(focused);
 
       this._shouldKeepFocusRing = focused && this._keyboardActive;
+
+      if (!focused) {
+        this._selectParsedOrFocusedDate();
+
+        // Do not validate when focusout is caused by document
+        // losing focus, which happens on browser tab switch.
+        if (!this.value && document.hasFocus()) {
+          this.validate();
+        }
+      }
     }
 
     /** @private */
@@ -845,6 +858,7 @@ export const DatePickerMixin = (subclass) =>
     /** @protected */
     _onOverlayEscapePress() {
       this._focusedDate = this._selectedDate;
+      this._selectParsedOrFocusedDate();
       this._close();
     }
 
@@ -927,24 +941,11 @@ export const DatePickerMixin = (subclass) =>
         this.__showOthers = null;
       }
 
-      window.removeEventListener('scroll', this._boundOnScroll, true);
-
-      // No need to select date on close if it was confirmed by the user.
-      if (this.__userConfirmedDate) {
-        this.__userConfirmedDate = false;
-      } else {
-        this._selectParsedOrFocusedDate();
-      }
-
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
-      // No need to revalidate the value after `_selectedDateChanged`
-      // Needed in case the value was not changed: open and close dropdown,
-      // especially on outside click. On Esc key press, do not validate.
-      if (!this.value && !this._keyboardActive) {
-        this.validate();
-      }
+
+      window.removeEventListener('scroll', this._boundOnScroll, true);
     }
 
     /** @private */
@@ -1088,12 +1089,10 @@ export const DatePickerMixin = (subclass) =>
      */
     _onEnter(_event) {
       const oldValue = this.value;
-      if (this.opened) {
-        // Closing will implicitly select parsed or focused date
-        this.close();
-      } else {
-        this._selectParsedOrFocusedDate();
-      }
+
+      this.close();
+      this._selectParsedOrFocusedDate();
+
       if (oldValue === this.value) {
         this.validate();
       }
