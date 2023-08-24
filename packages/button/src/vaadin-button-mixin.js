@@ -56,6 +56,10 @@ export const ButtonMixin = (superClass) =>
       }
     }
 
+    __modifierKey(event) {
+      return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+    }
+
     /**
      * Since the button component is designed on the base of the `[role=button]` attribute,
      * and doesn't have a native <button> inside, in order to be fully accessible from the keyboard,
@@ -81,10 +85,6 @@ export const ButtonMixin = (superClass) =>
         // so that it doesn't fire the `click` event when the element is disabled.
         this.click();
       }
-    }
-
-    __modifierKey(event) {
-      return (event.altKey || event.shiftKey || event.ctrlKey || event.metaKey);
     }
 
   };
