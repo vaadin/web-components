@@ -75,7 +75,7 @@ describe('vaadin-button', () => {
         expect(spy.called).to.be.false;
       });
 
-      ['Shift', 'Meta', 'Ctrl', 'Alt'].forEach((modifier) => {
+      ['Shift', 'Meta', 'Control', 'Alt'].forEach((modifier) => {
         it(`should not fire click event on ${key} when using modifier ${modifier}`, async () => {
           const spy = sinon.spy();
           button.addEventListener('click', spy);
