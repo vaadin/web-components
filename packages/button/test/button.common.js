@@ -85,7 +85,7 @@ describe('vaadin-button', () => {
 
           expect(spy.called).to.be.false;
         });
-      }
+      };
 
       it(`should prevent default behavior for keydown event on ${key}`, async () => {
         const spy = sinon.spy();
