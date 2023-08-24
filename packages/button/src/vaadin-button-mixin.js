@@ -78,7 +78,7 @@ export const ButtonMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      if (this._activeKeys.includes(event.key) && !__modifierKey(event)) {
+      if (this._activeKeys.includes(event.key) && !this.__modifierKey(event)) {
         event.preventDefault();
 
         // `DisabledMixin` overrides the standard `click()` method
