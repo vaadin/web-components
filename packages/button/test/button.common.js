@@ -84,6 +84,7 @@ describe('vaadin-button', () => {
           await sendKeys({ down: key });
 
           expect(spy.called).to.be.false;
+          await sendKeys({ up: modifier });
         });
       });
 
