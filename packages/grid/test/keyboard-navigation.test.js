@@ -1118,6 +1118,34 @@ describe('keyboard navigation', () => {
         left();
         expect(grid.$.table.scrollLeft).to.equal(0);
       });
+
+      it('should not scroll to the start when tabbed from header to body', () => {
+        tabToHeader();
+        end();
+        tab();
+        expect(grid.$.table.scrollLeft).to.be.at.least(100);
+      });
+
+      it('should not scroll to the start when shift-tabbed from footer to body', () => {
+        shiftTabToFooter();
+        end();
+        shiftTab();
+        expect(grid.$.table.scrollLeft).to.be.at.least(100);
+      });
+
+      it('should not scroll to the start when tabbed from body to footer', () => {
+        tabToBody();
+        end();
+        tab();
+        expect(grid.$.table.scrollLeft).to.be.at.least(100);
+      });
+
+      it('should not scroll to the start when shift-tabbed from body to header', () => {
+        tabToBody();
+        end();
+        shiftTab();
+        expect(grid.$.table.scrollLeft).to.be.at.least(100);
+      });
     });
 
     describe('vertical scrolling', () => {
