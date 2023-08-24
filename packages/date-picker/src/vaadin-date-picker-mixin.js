@@ -650,8 +650,6 @@ export const DatePickerMixin = (subclass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      this._shouldKeepFocusRing = focused && this._keyboardActive;
-
       if (!focused) {
         this._selectParsedOrFocusedDate();
 
