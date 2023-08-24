@@ -68,9 +68,47 @@ snapshots["vaadin-side-nav-item item expanded"] =
 `;
 /* end snapshot vaadin-side-nav-item item expanded */
 
+snapshots["vaadin-side-nav-item item disabled"] = 
+`<vaadin-side-nav-item
+  aria-disabled="true"
+  disabled=""
+  has-children=""
+  role="listitem"
+>
+  <vaadin-icon
+    icon="vaadin:chart"
+    slot="prefix"
+  >
+  </vaadin-icon>
+  Item
+  <span
+    slot="suffix"
+    theme="badge primary"
+  >
+    2
+  </span>
+  <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
+    role="listitem"
+    slot="children"
+  >
+    Child item 1
+  </vaadin-side-nav-item>
+  <vaadin-side-nav-item
+    aria-disabled="true"
+    disabled=""
+    role="listitem"
+    slot="children"
+  >
+    Child item 2
+  </vaadin-side-nav-item>
+</vaadin-side-nav-item>
+`;
+/* end snapshot vaadin-side-nav-item item disabled */
+
 snapshots["vaadin-side-nav-item item current"] = 
 `<vaadin-side-nav-item
-  child-current=""
   current=""
   expanded=""
   has-children=""
@@ -143,6 +181,7 @@ snapshots["vaadin-side-nav-item shadow default"] =
     aria-current="false"
     id="link"
     part="link"
+    tabindex="-1"
   >
     <slot name="prefix">
     </slot>
@@ -160,8 +199,10 @@ snapshots["vaadin-side-nav-item shadow default"] =
   </button>
 </div>
 <ul
+  aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -181,6 +222,7 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
     aria-current="false"
     id="link"
     part="link"
+    tabindex="-1"
   >
     <slot name="prefix">
     </slot>
@@ -197,7 +239,11 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
   >
   </button>
 </div>
-<ul part="children">
+<ul
+  aria-hidden="false"
+  part="children"
+  role="list"
+>
   <slot name="children">
   </slot>
 </ul>
@@ -217,6 +263,7 @@ snapshots["vaadin-side-nav-item shadow current"] =
     href=""
     id="link"
     part="link"
+    tabindex="-1"
   >
     <slot name="prefix">
     </slot>
@@ -233,7 +280,11 @@ snapshots["vaadin-side-nav-item shadow current"] =
   >
   </button>
 </div>
-<ul part="children">
+<ul
+  aria-hidden="false"
+  part="children"
+  role="list"
+>
   <slot name="children">
   </slot>
 </ul>
@@ -253,6 +304,7 @@ snapshots["vaadin-side-nav-item shadow path"] =
     href="path"
     id="link"
     part="link"
+    tabindex="0"
   >
     <slot name="prefix">
     </slot>
@@ -270,8 +322,10 @@ snapshots["vaadin-side-nav-item shadow path"] =
   </button>
 </div>
 <ul
+  aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>
@@ -291,6 +345,7 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
     aria-current="false"
     id="link"
     part="link"
+    tabindex="-1"
   >
     <slot name="prefix">
     </slot>
@@ -308,8 +363,10 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
   </button>
 </div>
 <ul
+  aria-hidden="true"
   hidden=""
   part="children"
+  role="list"
 >
   <slot name="children">
   </slot>

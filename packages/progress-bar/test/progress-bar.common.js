@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 
 describe('progress bar', () => {
   let progress;
@@ -32,13 +32,13 @@ describe('progress bar', () => {
 
     it('should have proper scale', async () => {
       progress.value = 0.1;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.002);
     });
 
     it('should set progress-value custom variable properly', async () => {
       progress.value = 0.1;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.equal('0.1');
     });
 
@@ -46,7 +46,7 @@ describe('progress bar', () => {
       progress.max = 20;
       progress.min = 10;
       progress.value = 15;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.5, 0.002);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.equal('0.5');
     });
@@ -55,7 +55,7 @@ describe('progress bar', () => {
       progress.value = 10;
       progress.max = 12;
       progress.min = 13;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('1');
     });
 
@@ -63,57 +63,57 @@ describe('progress bar', () => {
       progress.value = 10;
       progress.max = 10;
       progress.min = 10;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('1');
     });
 
     it('should set normalized value to 0 if the value is undefined', async () => {
       progress.value = undefined;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('0');
     });
 
     it('should set normalized value to 0.5 if the value is 0 and min is -1', async () => {
       progress.min = -1;
       progress.value = 0;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('0.5');
     });
 
     it('should clamp normalized value between 0 and 1', async () => {
       progress.value = -1;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('0');
 
       progress.value = 2;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(getComputedStyle(progress).getPropertyValue('--vaadin-progress-value')).to.be.equal('1');
     });
 
     it('should set proper aria-valuenow on value change', async () => {
       progress.max = 100;
       progress.value = 50;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(progress.getAttribute('aria-valuenow')).to.equal('50');
     });
 
     it('should set proper aria-valuemin on min change', async () => {
       progress.max = 100;
       progress.min = 10;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(progress.getAttribute('aria-valuemin')).to.equal('10');
     });
 
     it('should set proper aria-valuemax on max change', async () => {
       progress.max = 100;
       progress.min = 10;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(progress.getAttribute('aria-valuemax')).to.equal('100');
     });
 
     it('should set indeterminate attribute', async () => {
       progress.indeterminate = true;
-      await nextFrame();
+      await nextUpdate(progress);
       expect(progress.hasAttribute('indeterminate')).to.be.true;
     });
   });

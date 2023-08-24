@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -70,6 +71,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * Attribute      | Description
  * ---------------|-------------
+ * `disabled`     | Set when the element is disabled.
  * `expanded`     | Set when the element is expanded.
  * `has-children` | Set when the element has child items.
  *
@@ -77,18 +79,18 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
-declare class SideNavItem extends SideNavChildrenMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+declare class SideNavItem extends SideNavChildrenMixin(
+  DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
+) {
   /**
    * The path to navigate to
    */
   path: string | null | undefined;
 
   /**
-   * A comma-separated list of alternative paths matching this item.
-   *
-   * @attr {string} path-aliases
+   * The list of alternative paths matching this item
    */
-  pathAliases: string | null | undefined;
+  pathAliases: string[];
 
   /**
    * Whether to show the child items or not

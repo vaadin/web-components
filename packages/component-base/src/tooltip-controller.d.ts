@@ -24,6 +24,13 @@ type TooltipPosition =
  */
 export class TooltipController extends SlotController {
   /**
+   * An HTML element for linking with the tooltip overlay
+   * via `aria-describedby` attribute used by screen readers.
+   * When not set, defaults to `target`.
+   */
+  ariaTarget: HTMLElement;
+
+  /**
    * Object with properties passed to `generator`
    * function to be used for generating tooltip text.
    */
@@ -50,6 +57,12 @@ export class TooltipController extends SlotController {
    * An HTML element to attach the tooltip to.
    */
   target: HTMLElement;
+
+  /**
+   * Set an HTML element for linking with the tooltip overlay
+   * via `aria-describedby` attribute used by screen readers.
+   */
+  setAriaTarget(ariaTarget: HTMLElement): void;
 
   /**
    * Set a context object to be used by generator.

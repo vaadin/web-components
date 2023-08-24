@@ -3,10 +3,16 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { ElementPart, nothing, RenderOptions, TemplateResult } from 'lit';
+import type { ElementPart, noChange, nothing, RenderOptions, TemplateResult } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
 
-export type LitRenderer = (...args: any[]) => TemplateResult;
+// Opinionated union of types allowed to be returned from Lit renderers.
+// Theoretically Lit allows to render pretty much everything, but in practice
+// these seem the mose useful ones, without allowing developers to return things
+// like objects or dates that probably don't render the way they expect.
+export type LitRendererResult = TemplateResult | string | typeof noChange | typeof nothing | null;
+
+export type LitRenderer = (...args: any[]) => LitRendererResult;
 
 export abstract class LitRendererDirective<E extends Element, R extends LitRenderer> extends AsyncDirective {
   protected host: RenderOptions['host'];

@@ -23,6 +23,10 @@ export const sideNavItemStyles = css`
     cursor: pointer;
   }
 
+  :host([disabled]) [part='link'] {
+    color: var(--lumo-disabled-text-color);
+  }
+
   [part='toggle-button'] {
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
     width: var(--lumo-size-s);
@@ -53,6 +57,10 @@ export const sideNavItemStyles = css`
     transition: transform 140ms;
   }
 
+  :host([dir='rtl']) [part='toggle-button']::before {
+    transform: rotate(90deg);
+  }
+
   :host([expanded]) [part='toggle-button']::before {
     transform: none;
   }
@@ -80,7 +88,12 @@ export const sideNavItemStyles = css`
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
     padding: 0.1em;
+    flex-shrink: 0;
     color: var(--lumo-contrast-60pct);
+  }
+
+  :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--lumo-disabled-text-color);
   }
 
   :host([current]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {

@@ -6,7 +6,12 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles('vaadin-user-tags-overlay', [overlay], {
+  moduleId: 'material-user-tags-overlay',
+});
 
 registerStyles(
   'vaadin-user-tag',

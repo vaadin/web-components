@@ -1,18 +1,8 @@
 import { expect } from '@esm-bundle/chai';
+import { defineLit, definePolymer } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { ControllerMixin } from '../src/controller-mixin.js';
-
-class ControllerHost extends ControllerMixin(PolymerElement) {
-  static get is() {
-    return 'controller-host';
-  }
-
-  static get template() {
-    return html`Content`;
-  }
-}
-customElements.define(ControllerHost.is, ControllerHost);
 
 class SpyController {
   constructor(host) {
@@ -28,11 +18,13 @@ class SpyController {
   }
 }
 
-describe('controller-mixin', () => {
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper('controller-mixin', 'Content', (Base) => class extends baseMixin(Base) {});
+
   let element, controller;
 
   beforeEach(() => {
-    element = document.createElement('controller-host');
+    element = document.createElement(tag);
     controller = new SpyController(element);
     sinon.stub(controller, 'hostConnected');
     sinon.stub(controller, 'hostDisconnected');
@@ -78,5 +70,21 @@ describe('controller-mixin', () => {
       document.body.appendChild(element);
       expect(controller.hostConnected.calledTwice).to.be.true;
     });
+  });
+};
+
+describe('ControllerMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('ControllerMixin + Lit', () => {
+  runTests(defineLit, ControllerMixin);
+
+  it('should not apply ControllerMixin to LitElement-based classes', () => {
+    class TestElement extends LitElement {}
+
+    const mixinResult = ControllerMixin(TestElement);
+
+    expect(mixinResult).to.equal(TestElement);
   });
 });

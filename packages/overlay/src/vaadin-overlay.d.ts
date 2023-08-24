@@ -5,10 +5,9 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
-import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
+import { OverlayMixin } from './vaadin-overlay-mixin.js';
 
-export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: object) => void;
+export { OverlayRenderer } from './vaadin-overlay-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -120,59 +119,7 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayCustomEventMap;
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  */
-declare class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(DirMixin(HTMLElement)))) {
-  /**
-   * When true, the overlay is visible and attached to body.
-   */
-  opened: boolean | null | undefined;
-
-  /**
-   * Owner element passed with renderer function
-   */
-  owner: HTMLElement | null;
-
-  /**
-   * Custom function for rendering the content of the overlay.
-   * Receives three arguments:
-   *
-   * - `root` The root container DOM element. Append your content to it.
-   * - `owner` The host element of the renderer function.
-   * - `model` The object with the properties related with rendering.
-   */
-  renderer: OverlayRenderer | null | undefined;
-
-  /**
-   * When true the overlay has backdrop on top of content when opened.
-   */
-  withBackdrop: boolean;
-
-  /**
-   * Object with properties that is passed to `renderer` function
-   */
-  model: object | null | undefined;
-
-  /**
-   * When true the overlay won't disable the main content, showing
-   * it doesn't change the functionality of the user interface.
-   */
-  modeless: boolean;
-
-  /**
-   * When set to true, the overlay is hidden. This also closes the overlay
-   * immediately in case there is a closing animation in progress.
-   */
-  hidden: boolean;
-
-  close(sourceEvent?: Event | null): void;
-
-  /**
-   * Requests an update for the content of the overlay.
-   * While performing the update, it invokes the renderer passed in the `renderer` property.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
-
+declare class Overlay extends OverlayMixin(ThemableMixin(DirMixin(HTMLElement))) {
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,
     listener: (this: Overlay, ev: OverlayEventMap[K]) => void,
@@ -184,14 +131,6 @@ declare class Overlay extends OverlayStackMixin(OverlayFocusMixin(ThemableMixin(
     listener: (this: Overlay, ev: OverlayEventMap[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
-
-  protected _flushAnimation(type: 'closing' | 'opening'): void;
-
-  /**
-   * Whether to close the overlay on outside click or not.
-   * Override this method to customize the closing logic.
-   */
-  protected _shouldCloseOnOutsideClick(event: Event): boolean;
 }
 
 declare global {

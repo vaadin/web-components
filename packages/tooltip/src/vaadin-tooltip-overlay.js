@@ -3,69 +3,75 @@
  * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-tooltip-overlay',
-  css`
+const tooltipOverlayStyles = css`
+  :host {
+    z-index: 1100;
+  }
+
+  [part='overlay'] {
+    max-width: 40ch;
+  }
+
+  :host([position^='top'][top-aligned]) [part='overlay'],
+  :host([position^='bottom'][top-aligned]) [part='overlay'] {
+    margin-top: var(--vaadin-tooltip-offset-top, 0);
+  }
+
+  :host([position^='top'][bottom-aligned]) [part='overlay'],
+  :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
+    margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
+  }
+
+  :host([position^='start'][start-aligned]) [part='overlay'],
+  :host([position^='end'][start-aligned]) [part='overlay'] {
+    margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
+  }
+
+  :host([position^='start'][end-aligned]) [part='overlay'],
+  :host([position^='end'][end-aligned]) [part='overlay'] {
+    margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
+  }
+
+  @media (forced-colors: active) {
     [part='overlay'] {
-      max-width: 40ch;
+      outline: 1px dashed;
     }
+  }
+`;
 
-    :host([position^='top'][top-aligned]) [part='overlay'],
-    :host([position^='bottom'][top-aligned]) [part='overlay'] {
-      margin-top: var(--vaadin-tooltip-offset-top, 0);
-    }
-
-    :host([position^='top'][bottom-aligned]) [part='overlay'],
-    :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-      margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
-    }
-
-    :host([position^='start'][start-aligned]) [part='overlay'],
-    :host([position^='end'][start-aligned]) [part='overlay'] {
-      margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
-    }
-
-    :host([position^='start'][end-aligned]) [part='overlay'],
-    :host([position^='end'][end-aligned]) [part='overlay'] {
-      margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
-    }
-
-    @media (forced-colors: active) {
-      [part='overlay'] {
-        outline: 1px dashed;
-      }
-    }
-  `,
-  { moduleId: 'vaadin-tooltip-overlay-styles' },
-);
-
-let memoizedTemplate;
+registerStyles('vaadin-tooltip-overlay', [overlayStyles, tooltipOverlayStyles], {
+  moduleId: 'vaadin-tooltip-overlay-styles',
+});
 
 /**
  * An element used internally by `<vaadin-tooltip>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes PositionMixin
+ * @mixes ThemableMixin
  * @private
  */
-class TooltipOverlay extends PositionMixin(Overlay) {
+class TooltipOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-tooltip-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-      memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
-
-      // Remove whitespace text nodes around the content slot to allow "white-space: pre"
-      memoizedTemplate.content.querySelector('[part~="content"]').innerHTML = '<slot></slot>';
-    }
-
-    return memoizedTemplate;
+    return html`
+      <div id="backdrop" part="backdrop" hidden></div>
+      <div part="overlay" id="overlay">
+        <div part="content" id="content"><slot></slot></div>
+      </div>
+    `;
   }
 
   static get properties() {

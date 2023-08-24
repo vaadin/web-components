@@ -276,6 +276,13 @@ export const MenuBarMixin = (superClass) =>
         }
         const items = buttons.filter((_, idx) => idx >= i).map((b) => b.item);
         this.__updateOverflow(items);
+
+        const remaining = buttons.slice(0, i);
+        // Ensure there is at least one button with tabindex set to 0
+        // so that menu-bar is not skipped when navigating with Tab
+        if (i > 0 && !remaining.some((btn) => btn.getAttribute('tabindex') === '0')) {
+          this._setTabindex(remaining[i - 1], true);
+        }
       }
     }
 

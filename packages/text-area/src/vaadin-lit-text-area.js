@@ -73,6 +73,7 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMi
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
   }
 }

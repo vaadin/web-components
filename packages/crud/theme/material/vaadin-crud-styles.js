@@ -1,5 +1,7 @@
 import '@vaadin/vaadin-material-styles/typography.js';
 import '@vaadin/vaadin-material-styles/color.js';
+import { dialogOverlay } from '@vaadin/dialog/theme/material/vaadin-dialog-styles.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -72,6 +74,17 @@ registerStyles(
         background: var(--material-background-color);
       }
 
+      [part='editor'] {
+        position: relative;
+      }
+
+      [part='editor']:focus::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      }
+
       [part='toolbar'] {
         padding: 8px;
         background-color: var(--material-secondary-background-color);
@@ -105,8 +118,15 @@ registerStyles(
 registerStyles(
   'vaadin-crud-dialog-overlay',
   [
+    overlay,
+    dialogOverlay,
     editorStyles,
     css`
+      [part='overlay'] {
+        max-width: 54em;
+        min-width: 20em;
+      }
+
       @keyframes material-overlay-dummy-animation {
         0% {
           opacity: 1;

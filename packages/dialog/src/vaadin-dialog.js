@@ -9,7 +9,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
+import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
 export { DialogOverlay } from './vaadin-dialog-overlay.js';
@@ -78,12 +80,16 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
+ * @mixes DialogBaseMixin
  * @mixes DialogDraggableMixin
+ * @mixes DialogRendererMixin
  * @mixes DialogResizableMixin
  * @mixes OverlayClassMixin
  */
-class Dialog extends OverlayClassMixin(
-  ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))),
+class Dialog extends DialogDraggableMixin(
+  DialogResizableMixin(
+    DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))))),
+  ),
 ) {
   static get template() {
     return html`
@@ -116,36 +122,6 @@ class Dialog extends OverlayClassMixin(
   static get properties() {
     return {
       /**
-       * True if the overlay is currently displayed.
-       * @type {boolean}
-       */
-      opened: {
-        type: Boolean,
-        value: false,
-        notify: true,
-      },
-
-      /**
-       * Set to true to disable closing dialog on outside click
-       * @attr {boolean} no-close-on-outside-click
-       * @type {boolean}
-       */
-      noCloseOnOutsideClick: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
-       * Set to true to disable closing dialog on Escape press
-       * @attr {boolean} no-close-on-esc
-       * @type {boolean}
-       */
-      noCloseOnEsc: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
        * Set the `aria-label` attribute for assistive technologies like
        * screen readers. An empty string value for this property (the
        * default) means that the `aria-label` attribute is not present.
@@ -153,65 +129,6 @@ class Dialog extends OverlayClassMixin(
       ariaLabel: {
         type: String,
         value: '',
-      },
-
-      /**
-       * Custom function for rendering the content of the dialog.
-       * Receives two arguments:
-       *
-       * - `root` The root container DOM element. Append your content to it.
-       * - `dialog` The reference to the `<vaadin-dialog>` element.
-       * @type {DialogRenderer | undefined}
-       */
-      renderer: Function,
-
-      /**
-       * String used for rendering a dialog title.
-       *
-       * If both `headerTitle` and `headerRenderer` are defined, the title
-       * and the elements created by the renderer will be placed next to
-       * each other, with the title coming first.
-       *
-       * When `headerTitle` is set, the attribute `has-title` is added to the overlay element.
-       * @attr {string} header-title
-       */
-      headerTitle: String,
-
-      /**
-       * Custom function for rendering the dialog header.
-       * Receives two arguments:
-       *
-       * - `root` The root container DOM element. Append your content to it.
-       * - `dialog` The reference to the `<vaadin-dialog>` element.
-       *
-       * If both `headerTitle` and `headerRenderer` are defined, the title
-       * and the elements created by the renderer will be placed next to
-       * each other, with the title coming first.
-       *
-       * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
-       * @type {DialogRenderer | undefined}
-       */
-      headerRenderer: Function,
-
-      /**
-       * Custom function for rendering the dialog footer.
-       * Receives two arguments:
-       *
-       * - `root` The root container DOM element. Append your content to it.
-       * - `dialog` The reference to the `<vaadin-dialog>` element.
-       *
-       * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
-       * @type {DialogRenderer | undefined}
-       */
-      footerRenderer: Function,
-
-      /**
-       * Set to true to remove backdrop and allow click events on background elements.
-       * @type {boolean}
-       */
-      modeless: {
-        type: Boolean,
-        value: false,
       },
     };
   }
@@ -228,56 +145,14 @@ class Dialog extends OverlayClassMixin(
   ready() {
     super.ready();
 
-    const overlay = this.$.overlay;
-    overlay.setAttribute('role', 'dialog');
-
-    overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
-    overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
-
-    this._overlayElement = overlay;
+    this._overlayElement.setAttribute('role', 'dialog');
 
     processTemplates(this);
-  }
-
-  /**
-   * Requests an update for the content of the dialog.
-   * While performing the update, it invokes the renderer passed in the `renderer` property,
-   * as well as `headerRender` and `footerRenderer` properties, if these are defined.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate() {
-    if (this.$) {
-      this.$.overlay.requestContentUpdate();
-    }
   }
 
   /** @private */
   _rendererChanged(renderer, headerRenderer, footerRenderer) {
     this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    // Restore opened state if overlay was opened when disconnecting
-    if (this.__restoreOpened) {
-      this.opened = true;
-    }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    // Automatically close the overlay when dialog is removed from DOM
-    // Using a timeout to avoid toggling opened state, and dispatching change
-    // events, when just moving the dialog in the DOM
-    setTimeout(() => {
-      if (!this.isConnected) {
-        this.__restoreOpened = this.opened;
-        this.opened = false;
-      }
-    });
   }
 
   /** @private */
@@ -291,40 +166,6 @@ class Dialog extends OverlayClassMixin(
       this.$.overlay.setAttribute('aria-label', ariaLabel || headerTitle);
     } else {
       this.$.overlay.removeAttribute('aria-label');
-    }
-  }
-
-  /** @private */
-  _onOverlayOpened(e) {
-    if (e.detail.value === false) {
-      this.opened = false;
-    }
-  }
-
-  /**
-   * Close the dialog if `noCloseOnOutsideClick` isn't set to true
-   * @private
-   */
-  _handleOutsideClick(e) {
-    if (this.noCloseOnOutsideClick) {
-      e.preventDefault();
-    }
-  }
-
-  /**
-   * Close the dialog if `noCloseOnEsc` isn't set to true
-   * @private
-   */
-  _handleEscPress(e) {
-    if (this.noCloseOnEsc) {
-      e.preventDefault();
-    }
-  }
-
-  /** @private */
-  _bringOverlayToFront() {
-    if (this.modeless) {
-      this.$.overlay.bringToFront();
     }
   }
 }

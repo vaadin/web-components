@@ -98,10 +98,12 @@ const selectOverlay = css`
 
   /* Small viewport adjustment */
   :host([phone]) {
+    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
     top: 0 !important;
     right: 0 !important;
     bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
     left: 0 !important;
+    /* stylelint-enable declaration-block-no-redundant-longhand-properties */
     align-items: stretch;
     justify-content: flex-end;
   }

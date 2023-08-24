@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -106,30 +106,30 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not validate on setting a constraint', async () => {
         element.required = true;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.called).to.be.false;
       });
 
       it('should not validate on removing a non-final constraint when the field is valid', async () => {
         element.pattern = '\\d*';
         element.minlength = 2;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.invalid).to.be.false;
         validateSpy.resetHistory();
         element.minlength = 2;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.called).to.be.false;
       });
 
       it('should validate on removing a non-final constraint when the field is invalid', async () => {
         element.required = true;
         element.pattern = '\\d*';
-        await nextFrame();
+        await nextUpdate(element);
         element.validate();
         expect(element.invalid).to.be.true;
         validateSpy.resetHistory();
         element.required = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
     });
@@ -145,72 +145,72 @@ const runTests = (defineHelper, baseMixin) => {
       it('should call checkValidity on the input on setting a constraint', async () => {
         const spy = sinon.spy(input, 'checkValidity');
         element.minlength = 2;
-        await nextFrame();
+        await nextUpdate(element);
         expect(spy.calledOnce).to.be.true;
       });
 
       it('should validate on setting a boolean constraint', async () => {
         element.required = true;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should reset invalid on removing a boolean constraint', async () => {
         element.required = true;
         element.invalid = true;
-        await nextFrame();
+        await nextUpdate(element);
 
         element.required = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.invalid).to.be.false;
       });
 
       it('should validate on setting a number constraint', async () => {
         element.minlength = 2;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should validate on setting a number constraint to 0', async () => {
         element.minlength = 0;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should reset invalid on removing a number constraint', async () => {
         element.minlength = 50;
         element.invalid = true;
-        await nextFrame();
+        await nextUpdate(element);
 
         element.minlength = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.invalid).to.be.false;
       });
 
       it('should validate on setting a string constraint', async () => {
         element.pattern = '[-+\\d]';
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
 
       it('should reset invalid on removing a string constraint', async () => {
         element.pattern = '[-+\\d]';
         element.invalid = true;
-        await nextFrame();
+        await nextUpdate(element);
 
         element.pattern = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.invalid).to.be.false;
       });
 
       it('should validate on removing a non-final constraint', async () => {
         element.required = true;
         element.minlength = 2;
-        await nextFrame();
+        await nextUpdate(element);
         validateSpy.resetHistory();
 
         element.minlength = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(validateSpy.calledOnce).to.be.true;
       });
     });

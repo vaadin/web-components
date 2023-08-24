@@ -6,11 +6,13 @@ import {
   fire,
   fixtureSync,
   keyboardEventFor,
-  nextFrame,
+  mousedown,
   nextRender,
+  nextUpdate,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
@@ -53,20 +55,44 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should clear the field value on clear button click', async () => {
       clearButton.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.value).to.equal('');
     });
 
     it('should clear the input value on clear button click', async () => {
       clearButton.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
-      const spy = sinon.spy(input, 'focus');
+    it('should mark the field as dirty on clear button click', async () => {
       clearButton.click();
+      await nextUpdate(element);
+      expect(element.dirty).to.be.true;
+    });
+
+    (!isTouch ? it : it.skip)('should focus the input on clear button mousedown', () => {
+      const spy = sinon.spy(input, 'focus');
+      mousedown(clearButton);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should prevent default on clear button mousedown', () => {
+      const event = new CustomEvent('mousedown', { cancelable: true });
+      clearButton.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    (isTouch ? it : it.skip)('should not focus the input on clear button touch', () => {
+      const spy = sinon.spy(input, 'focus');
+      mousedown(clearButton);
+      expect(spy.called).to.be.false;
+    });
+
+    (isTouch ? it : it.skip)('should keep focus at the input on clear button touch', () => {
+      input.focus();
+      mousedown(clearButton);
+      expect(document.activeElement).to.be.equal(input);
     });
 
     it('should dispatch input event on clear button click', () => {
@@ -97,18 +123,18 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should reflect clearButtonVisible property to attribute', async () => {
       element.clearButtonVisible = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.true;
 
       element.clearButtonVisible = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.false;
     });
 
     it('should clear value on Esc when clearButtonVisible is true', async () => {
       element.clearButtonVisible = true;
       escKeyDown(clearButton);
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
@@ -173,14 +199,14 @@ const runTests = (defineHelper, baseMixin) => {
       beforeEach(async () => {
         input.value = 'foo';
         fire(input, 'input');
-        await nextFrame();
+        await nextUpdate(element);
         hasInputValueChangedSpy.resetHistory();
         valueChangedSpy.resetHistory();
       });
 
       it('should fire the event on clear button click', async () => {
         clearButton.click();
-        await nextFrame();
+        await nextUpdate(element);
         expect(hasInputValueChangedSpy.calledOnce).to.be.true;
         expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
       });
@@ -188,7 +214,7 @@ const runTests = (defineHelper, baseMixin) => {
       it('should fire the event on Esc', async () => {
         input.focus();
         await sendKeys({ press: 'Escape' });
-        await nextFrame();
+        await nextUpdate(element);
         expect(hasInputValueChangedSpy.calledOnce).to.be.true;
         expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
       });

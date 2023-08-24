@@ -25,6 +25,7 @@ import type { DragAndDropMixinClass } from '../../src/vaadin-grid-drag-and-drop-
 import type { EventContextMixinClass } from '../../src/vaadin-grid-event-context-mixin';
 import type { RowDetailsMixinClass } from '../../src/vaadin-grid-row-details-mixin';
 import type { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
+import type { GridSelectionColumnBaseMixinClass } from '../../src/vaadin-grid-selection-column-base-mixin';
 import type { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
 import type { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
 import type { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
@@ -244,6 +245,7 @@ assertType<boolean | null | undefined>(narrowedColumn.resizable);
 assertType<boolean>(narrowedColumn.frozen);
 assertType<boolean>(narrowedColumn.frozenToEnd);
 assertType<boolean>(narrowedColumn.hidden);
+assertType<boolean>(narrowedColumn.rowHeader);
 assertType<string | null | undefined>(narrowedColumn.header);
 assertType<GridColumnTextAlign | null | undefined>(narrowedColumn.textAlign);
 assertType<string | null | undefined>(narrowedColumn.path);
@@ -284,6 +286,7 @@ assertType<GridSelectionColumn>(genericSelectionColumn);
 
 const narrowedSelectionColumn = genericSelectionColumn as GridSelectionColumn<TestGridItem>;
 assertType<GridColumn<TestGridItem>>(narrowedSelectionColumn);
+assertType<GridSelectionColumnBaseMixinClass<TestGridItem>>(narrowedSelectionColumn);
 
 narrowedSelectionColumn.addEventListener('select-all-changed', (event) => {
   assertType<GridSelectionColumnSelectAllChangedEvent>(event);

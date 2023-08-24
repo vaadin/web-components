@@ -14,7 +14,6 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
@@ -23,53 +22,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ButtonSlotController, FormSlotController, GridSlotController } from './vaadin-crud-controllers.js';
 import { getProperty, setProperty } from './vaadin-crud-helpers.js';
-
-/**
- * A controller for initializing slotted button.
- * @private
- */
-class ButtonSlotController extends SlotController {
-  constructor(host, type, theme) {
-    super(host, `${type}-button`, 'vaadin-button');
-
-    this.type = type;
-    this.theme = theme;
-  }
-
-  /**
-   * Override method inherited from `SlotController`
-   * to mark custom slotted button as the default.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initNode(node) {
-    // Needed by Flow counterpart to apply i18n to custom button
-    if (node._isDefault) {
-      this.defaultNode = node;
-    }
-
-    if (node === this.defaultNode) {
-      node.setAttribute('theme', this.theme);
-    }
-
-    const { host, type } = this;
-    const property = `_${type}Button`;
-    const listener = `__${type}`;
-
-    // TODO: restore default button when a corresponding slotted button is removed.
-    // This would require us to detect where to insert a button after teleporting it,
-    // which happens after opening a dialog and closing it (default editor position).
-    if (host[property] && host[property] !== node) {
-      host[property].remove();
-    }
-
-    node.addEventListener('click', host[listener]);
-    host[property] = node;
-  }
-}
 
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
@@ -273,6 +227,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           display: flex;
           flex-direction: column;
           height: 100%;
+          outline: none;
         }
 
         :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
@@ -312,8 +267,14 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           </div>
         </div>
 
-        <div id="editor" part="editor" hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]">
-          <div part="scroller" id="scroller" role="group" aria-labelledby="header">
+        <div
+          part="editor"
+          id="editor"
+          role="group"
+          aria-labelledby="header"
+          hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]"
+        >
+          <div part="scroller" id="scroller">
             <div part="header" id="header">
               <slot name="header"></slot>
             </div>
@@ -331,7 +292,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-crud-dialog
         id="dialog"
         opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
-        aria-label="[[__editorAriaLabel]]"
+        fullscreen="[[_fullscreen]]"
+        aria-label="[[__dialogAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
         theme$="[[_theme]]"
@@ -639,7 +601,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       },
 
       /** @private */
-      __editorAriaLabel: String,
+      __dialogAriaLabel: String,
 
       /** @private */
       __isDirty: Boolean,
@@ -703,10 +665,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error');
 
     this.__focusRestorationController = new FocusRestorationController();
-
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      this.__onDomChange(info.addedNodes);
-    });
   }
 
   /** @protected */
@@ -740,10 +698,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     });
     this.addController(this._headerController);
 
-    this._gridController = new SlotController(this, 'grid', 'vaadin-crud-grid');
+    this._gridController = new GridSlotController(this);
     this.addController(this._gridController);
 
-    this.addController(new SlotController(this, 'form', 'vaadin-crud-form'));
+    this.addController(new FormSlotController(this));
 
     this.addController(this._newButtonController);
 
@@ -819,6 +777,15 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
     if (opened) {
       this.__ensureChildren();
+
+      // When using bottom / aside editor position,
+      // auto-focus the editor element on open.
+      if (this._form.parentElement === this) {
+        this.$.editor.setAttribute('tabindex', '0');
+        this.$.editor.focus();
+      } else {
+        this.$.editor.removeAttribute('tabindex');
+      }
     }
 
     this.__toggleToolbar();
@@ -835,7 +802,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       this.__ensureChildren();
 
       this.toggleAttribute('fullscreen', fullscreen);
-      this.$.dialog.$.overlay.toggleAttribute('fullscreen', fullscreen);
     }
   }
 
@@ -901,31 +867,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   /** @private */
   __onDialogOpened(event) {
     this.editorOpened = event.detail.value;
-  }
-
-  /** @private */
-  __onDomChange(addedNodes) {
-    addedNodes
-      .filter((node) => node.nodeType === Node.ELEMENT_NODE)
-      .forEach((node) => {
-        const slotAttributeValue = node.getAttribute('slot');
-        if (!slotAttributeValue) {
-          return;
-        }
-
-        if (slotAttributeValue === 'grid') {
-          // Force to remove listener on previous grid first
-          this.__editOnClickChanged(false, this._grid);
-          this._grid = node;
-          this.__editOnClickChanged(this.editOnClick, this._grid);
-        } else if (slotAttributeValue === 'form') {
-          this._form = node;
-        }
-      });
-
-    if (this.editorOpened) {
-      this.__ensureChildren();
-    }
   }
 
   /** @private */

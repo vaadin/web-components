@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
@@ -46,22 +46,51 @@ describe('password-field', () => {
     expect(input.type).to.equal('text');
   });
 
-  it('should prevent touchend event on reveal button', () => {
-    const event1 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event1.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('text');
-
-    const event2 = makeSoloTouchEvent('touchend', null, revealButton);
-    expect(event2.defaultPrevented).to.be.true;
-    expect(input.type).to.equal('password');
+  it('should prevent mousedown event on reveal button', () => {
+    const event = fire(revealButton, 'mousedown');
+    expect(event.defaultPrevented).to.be.true;
   });
 
-  it('should focus the input on reveal button touchend', () => {
+  it('should focus the input on reveal button mousedown', () => {
     const spy = sinon.spy(input, 'focus');
 
-    makeSoloTouchEvent('touchend', null, revealButton);
+    fire(revealButton, 'mousedown');
 
     expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should dispatch change event on focusout after changing the value', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+
+    focusout(input);
+
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should not dispatch change event on focusout if value is the same', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    focusout(input);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not dispatch change event on focusout after native change', () => {
+    const spy = sinon.spy();
+    passwordField.addEventListener('change', spy);
+
+    input.value = 'test';
+    fire(input, 'change');
+
+    spy.resetHistory();
+
+    focusout(input);
+
+    expect(spy.called).to.be.false;
   });
 
   it('should toggle aria-pressed attribute on reveal button click', () => {
@@ -178,87 +207,6 @@ describe('password-field', () => {
       passwordField.revealButtonHidden = false;
       expect(revealButton.hasAttribute('aria-hidden')).to.be.false;
     });
-  });
-
-  describe('initial validation', () => {
-    let validateSpy;
-
-    beforeEach(() => {
-      passwordField = document.createElement('vaadin-password-field');
-      validateSpy = sinon.spy(passwordField, 'validate');
-    });
-
-    afterEach(() => {
-      passwordField.remove();
-    });
-
-    it('should not validate by default', async () => {
-      document.body.appendChild(passwordField);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initial value', async () => {
-      passwordField.value = 'Initial Value';
-      document.body.appendChild(passwordField);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initial value and invalid', async () => {
-      passwordField.value = 'Initial Value';
-      passwordField.invalid = true;
-      document.body.appendChild(passwordField);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-  });
-
-  describe('validation', () => {
-    it('should fire a validated event on validation success', () => {
-      const validatedSpy = sinon.spy();
-      passwordField.addEventListener('validated', validatedSpy);
-      passwordField.validate();
-
-      expect(validatedSpy.calledOnce).to.be.true;
-      const event = validatedSpy.firstCall.args[0];
-      expect(event.detail.valid).to.be.true;
-    });
-
-    it('should fire a validated event on validation failure', () => {
-      const validatedSpy = sinon.spy();
-      passwordField.addEventListener('validated', validatedSpy);
-      passwordField.required = true;
-      passwordField.validate();
-
-      expect(validatedSpy.calledOnce).to.be.true;
-      const event = validatedSpy.firstCall.args[0];
-      expect(event.detail.valid).to.be.false;
-    });
-  });
-});
-
-describe('invalid', () => {
-  let field;
-
-  beforeEach(() => {
-    field = fixtureSync('<vaadin-password-field invalid></vaadin-password-field>');
-  });
-
-  it('should not remove "invalid" state when ready', () => {
-    expect(field.invalid).to.be.true;
-  });
-});
-
-describe('invalid with value', () => {
-  let field;
-
-  beforeEach(() => {
-    field = fixtureSync('<vaadin-password-field invalid value="123456"></vaadin-password-field>');
-  });
-
-  it('should not remove "invalid" state when ready', () => {
-    expect(field.invalid).to.be.true;
   });
 });
 

@@ -16,13 +16,13 @@ import type { ControllerMixinClass } from '@vaadin/component-base/src/controller
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -54,6 +54,11 @@ export type MultiSelectComboBoxChangeEvent<TItem> = Event & {
 export type MultiSelectComboBoxCustomValueSetEvent = CustomEvent<string>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type MultiSelectComboBoxDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `filter` property changes.
  */
 export type MultiSelectComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
@@ -77,6 +82,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   change: MultiSelectComboBoxChangeEvent<TItem>;
 
   'custom-value-set': MultiSelectComboBoxCustomValueSetEvent;
+
+  'dirty-changed': MultiSelectComboBoxDirtyChangedEvent;
 
   'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 
@@ -159,6 +166,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

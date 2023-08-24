@@ -5,6 +5,7 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 
 /**
  * @polymerMixin
@@ -266,7 +267,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     __isRowExpandable(row) {
       if (this.itemHasChildrenPath) {
         const item = row._item;
-        return item && this.get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
+        return item && get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
       }
     }
 

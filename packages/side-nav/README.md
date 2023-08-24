@@ -49,8 +49,13 @@ import '@vaadin/side-nav';
 ## Themes
 
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-This component currently does not support Material theme.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/side-nav/vaadin-side-nav.js) of the package uses the Lumo theme.
+
+To use the Material theme, import the component from the `theme/material` folder:
+
+```js
+import '@vaadin/side-nav/theme/material/vaadin-side-nav.js';
+```
 
 You can also import the Lumo version of the component explicitly:
 

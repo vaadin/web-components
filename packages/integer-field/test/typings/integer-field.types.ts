@@ -2,6 +2,7 @@ import '../../vaadin-integer-field.js';
 import type {
   IntegerField,
   IntegerFieldChangeEvent,
+  IntegerFieldDirtyChangedEvent,
   IntegerFieldInvalidChangedEvent,
   IntegerFieldValidatedEvent,
   IntegerFieldValueChangedEvent,
@@ -18,6 +19,11 @@ field.addEventListener('change', (event) => {
 
 field.addEventListener('invalid-changed', (event) => {
   assertType<IntegerFieldInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+field.addEventListener('dirty-changed', (event) => {
+  assertType<IntegerFieldDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

@@ -12,7 +12,7 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
-import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';
+import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {
   let comboBox, input;

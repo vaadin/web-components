@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -41,6 +42,11 @@ export type ComboBoxLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 export type ComboBoxLightInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `dirty` property changes.
+ */
+export type ComboBoxLightDirtyChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type ComboBoxLightValueChangedEvent = CustomEvent<{ value: string }>;
@@ -70,6 +76,8 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
   'filter-changed': ComboBoxLightFilterChangedEvent;
 
   'invalid-changed': ComboBoxLightInvalidChangedEvent;
+
+  'dirty-changed': ComboBoxLightDirtyChangedEvent;
 
   'value-changed': ComboBoxLightValueChangedEvent;
 
@@ -121,6 +129,7 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
@@ -152,6 +161,7 @@ interface ComboBoxLight<TItem = ComboBoxDefaultItem>
     InputMixinClass,
     DisabledMixinClass,
     ThemableMixinClass,
+    FocusMixinClass,
     ThemePropertyMixinClass,
     ValidateMixinClass {}
 

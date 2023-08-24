@@ -3,91 +3,86 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
-import { DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
+import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
-registerStyles(
-  'vaadin-confirm-dialog-overlay',
-  css`
-    :host {
-      --_vaadin-confirm-dialog-content-width: auto;
-      --_vaadin-confirm-dialog-content-height: auto;
-    }
+const confirmDialogOverlay = css`
+  :host {
+    --_vaadin-confirm-dialog-content-width: auto;
+    --_vaadin-confirm-dialog-content-height: auto;
+  }
 
-    [part='overlay'] {
-      width: var(--_vaadin-confirm-dialog-content-width);
-      height: var(--_vaadin-confirm-dialog-content-height);
-    }
+  [part='overlay'] {
+    width: var(--_vaadin-confirm-dialog-content-width);
+    height: var(--_vaadin-confirm-dialog-content-height);
+  }
 
-    /* Make buttons clickable */
-    [part='footer'] > * {
-      pointer-events: all;
-    }
-  `,
-  { moduleId: 'vaadin-confirm-dialog-overlay-styles' },
-);
+  ::slotted([slot='header']) {
+    pointer-events: auto;
+  }
 
-let memoizedTemplate;
-
-const footerTemplate = html`
-  <div part="cancel-button">
-    <slot name="cancel-button"></slot>
-  </div>
-  <div part="reject-button">
-    <slot name="reject-button"></slot>
-  </div>
-  <div part="confirm-button">
-    <slot name="confirm-button"></slot>
-  </div>
+  /* Make buttons clickable */
+  [part='footer'] > * {
+    pointer-events: all;
+  }
 `;
 
+registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, confirmDialogOverlay], {
+  moduleId: 'vaadin-confirm-dialog-overlay-styles',
+});
+
 /**
- * An extension of `<vaadin-dialog-overlay>` used internally by `<vaadin-confirm-dialog>`.
- * Not intended to be used separately.
+ * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
+ *
+ * @extends HTMLElement
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends DialogOverlay {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-
-      // Replace two header slots with a single one
-      const headerPart = memoizedTemplate.content.querySelector('[part="header"]');
-      headerPart.innerHTML = '';
-      const headerSlot = document.createElement('slot');
-      headerSlot.setAttribute('name', 'header');
-      headerPart.appendChild(headerSlot);
-
-      // Place default slot inside a "message" part
-      const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
-      const defaultSlot = contentPart.querySelector('slot:not([name])');
-      const messagePart = document.createElement('div');
-      messagePart.setAttribute('part', 'message');
-      contentPart.appendChild(messagePart);
-      messagePart.appendChild(defaultSlot);
-
-      // Replace footer slot with button named slots
-      const footerPart = memoizedTemplate.content.querySelector('[part="footer"]');
-      footerPart.setAttribute('role', 'toolbar');
-      const footerSlot = footerPart.querySelector('slot');
-      footerPart.removeChild(footerSlot);
-      footerPart.appendChild(footerTemplate.content.cloneNode(true));
-    }
-    return memoizedTemplate;
+    return html`
+      <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div part="overlay" id="overlay" tabindex="0">
+        <section id="resizerContainer" class="resizer-container">
+          <header part="header"><slot name="header"></slot></header>
+          <div part="content" id="content">
+            <div part="message"><slot></slot></div>
+          </div>
+          <footer part="footer" role="toolbar">
+            <div part="cancel-button">
+              <slot name="cancel-button"></slot>
+            </div>
+            <div part="reject-button">
+              <slot name="reject-button"></slot>
+            </div>
+            <div part="confirm-button">
+              <slot name="confirm-button"></slot>
+            </div>
+          </footer>
+        </section>
+      </div>
+    `;
   }
 
   /**
    * @protected
    * @override
    */
-  _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
-    super._headerFooterRendererChange(headerRenderer, footerRenderer, opened);
+  ready() {
+    super.ready();
 
     // ConfirmDialog has header and footer but does not use renderers
     this.setAttribute('has-header', '');
@@ -98,18 +93,14 @@ class ConfirmDialogOverlay extends DialogOverlay {
 customElements.define(ConfirmDialogOverlay.is, ConfirmDialogOverlay);
 
 /**
- * An extension of `<vaadin-dialog>` used internally by `<vaadin-confirm-dialog>`.
- * Not intended to be used separately.
+ * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends Dialog {
+class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
 
-  /**
-   * Override template to provide custom overlay tag name.
-   */
   static get template() {
     return html`
       <style>
@@ -120,6 +111,7 @@ class ConfirmDialogDialog extends Dialog {
 
       <vaadin-confirm-dialog-overlay
         id="overlay"
+        opened="[[opened]]"
         on-opened-changed="_onOverlayOpened"
         on-mousedown="_bringOverlayToFront"
         on-touchstart="_bringOverlayToFront"
@@ -127,6 +119,7 @@ class ConfirmDialogDialog extends Dialog {
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        aria-label$="[[ariaLabel]]"
         restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>
@@ -135,6 +128,16 @@ class ConfirmDialogDialog extends Dialog {
 
   static get properties() {
     return {
+      /**
+       * Set the `aria-label` attribute for assistive technologies like
+       * screen readers. An empty string value for this property (the
+       * default) means that the `aria-label` attribute is not present.
+       */
+      ariaLabel: {
+        type: String,
+        value: '',
+      },
+
       /**
        * Height to be set on the overlay content.
        */
@@ -148,11 +151,6 @@ class ConfirmDialogDialog extends Dialog {
       contentWidth: {
         type: String,
       },
-
-      /** @private */
-      _overlayElement: {
-        type: Object,
-      },
     };
   }
 
@@ -161,13 +159,6 @@ class ConfirmDialogDialog extends Dialog {
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
     ];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement = this.$.overlay;
   }
 
   /** @private */

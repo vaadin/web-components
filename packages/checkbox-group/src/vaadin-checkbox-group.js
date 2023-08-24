@@ -3,12 +3,12 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -90,6 +90,11 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
           width: 100%;
         }
 
+        [part='group-field'] {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
         :host(:not([has-label])) [part='label'] {
           display: none;
         }
@@ -134,6 +139,19 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
         notify: true,
         observer: '__valueChanged',
       },
+
+      /**
+       * Whether the field is dirty.
+       *
+       * The field is automatically marked as dirty once the user triggers
+       * a `change` event. Additionally, the field can be manually marked
+       * as dirty by setting the property to `true`.
+       */
+      dirty: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
     };
   }
 
@@ -142,6 +160,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
 
     this.__registerCheckbox = this.__registerCheckbox.bind(this);
     this.__unregisterCheckbox = this.__unregisterCheckbox.bind(this);
+    this.__onCheckboxChange = this.__onCheckboxChange.bind(this);
     this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
   }
 
@@ -164,7 +183,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'group');
 
-    this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this._observer = new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
       const addedCheckboxes = this.__filterCheckboxes(addedNodes);
       const removedCheckboxes = this.__filterCheckboxes(removedNodes);
 
@@ -221,6 +241,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __registerCheckbox(checkbox) {
+    checkbox.addEventListener('change', this.__onCheckboxChange);
     checkbox.addEventListener('checked-changed', this.__onCheckboxCheckedChanged);
 
     if (this.disabled) {
@@ -241,6 +262,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __unregisterCheckbox(checkbox) {
+    checkbox.removeEventListener('change', this.__onCheckboxChange);
     checkbox.removeEventListener('checked-changed', this.__onCheckboxCheckedChanged);
 
     if (checkbox.checked) {
@@ -292,6 +314,11 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     if (this.value.includes(value)) {
       this.value = this.value.filter((v) => v !== value);
     }
+  }
+
+  /** @private */
+  __onCheckboxChange() {
+    this.dirty = true;
   }
 
   /**
@@ -354,7 +381,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
   _setFocused(focused) {
     super._setFocused(focused);
 
-    if (!focused) {
+    // Do not validate when focusout is caused by document
+    // losing focus, which happens on browser tab switch.
+    if (!focused && document.hasFocus()) {
       this.validate();
     }
   }

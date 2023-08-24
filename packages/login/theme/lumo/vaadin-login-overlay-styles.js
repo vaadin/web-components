@@ -1,6 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import './vaadin-login-form-wrapper-styles.js';
 import { color } from '@vaadin/vaadin-lumo-styles/color.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -169,8 +170,8 @@ const loginOverlayWrapper = css`
   }
 `;
 
-registerStyles('vaadin-login-overlay-wrapper', [color, typography, loginOverlayWrapper], {
-  moduleId: 'vaadin-login-overlay-wrapper-lumo-styles',
+registerStyles('vaadin-login-overlay-wrapper', [color, typography, overlay, loginOverlayWrapper], {
+  moduleId: 'lumo-login-overlay-wrapper',
 });
 
 const loginFormWrapper = css`

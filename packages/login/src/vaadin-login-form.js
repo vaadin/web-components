@@ -10,7 +10,7 @@ import './vaadin-login-form-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { LoginMixin } from './vaadin-login-mixin.js';
+import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 
 /**
  * `<vaadin-login-form>` is a Web Component providing an easy way to require users
@@ -49,9 +49,9 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes LoginMixin
+ * @mixes LoginFormMixin
  */
-class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -111,19 +111,6 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     return 'vaadin-login-form';
   }
 
-  static get observers() {
-    return ['_errorChanged(error)'];
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (!this.noAutofocus) {
-      this.$.vaadinLoginUsername.focus();
-    }
-  }
-
   /**
    * @param {StampedTemplate} dom
    * @return {null}
@@ -131,74 +118,6 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    */
   _attachDom(dom) {
     this.appendChild(dom);
-  }
-
-  /** @private */
-  _errorChanged() {
-    if (this.error && !this._preventAutoEnable) {
-      this.disabled = false;
-    }
-  }
-
-  submit() {
-    const userName = this.$.vaadinLoginUsername;
-    const password = this.$.vaadinLoginPassword;
-
-    if (this.disabled || !(userName.validate() && password.validate())) {
-      return;
-    }
-
-    this.error = false;
-    this.disabled = true;
-
-    const loginEventDetails = {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        username: userName.value,
-        password: password.value,
-      },
-    };
-
-    const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));
-    if (this.action && firedEvent) {
-      const csrfMetaName = document.querySelector('meta[name=_csrf_parameter]');
-      const csrfMetaValue = document.querySelector('meta[name=_csrf]');
-      if (csrfMetaName && csrfMetaValue) {
-        this.$.csrf.name = csrfMetaName.content;
-        this.$.csrf.value = csrfMetaValue.content;
-      }
-      this.querySelector('form').submit();
-    }
-  }
-
-  /** @private */
-  _handleInputKeydown(e) {
-    if (e.key === 'Enter') {
-      const { currentTarget: inputActive } = e;
-      const nextInput =
-        inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
-      if (inputActive.validate()) {
-        if (nextInput.checkValidity()) {
-          this.submit();
-        } else {
-          nextInput.focus();
-        }
-      }
-    }
-  }
-
-  /** @private */
-  _handleInputKeyup(e) {
-    const input = e.currentTarget;
-    if (e.key === 'Tab' && input instanceof HTMLInputElement) {
-      input.select();
-    }
-  }
-
-  /** @private */
-  _onForgotPasswordClick() {
-    this.dispatchEvent(new CustomEvent('forgot-password'));
   }
 }
 

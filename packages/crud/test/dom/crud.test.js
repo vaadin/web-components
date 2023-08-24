@@ -1,10 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import '../../vaadin-crud.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-crud', () => {
   let crud;
+
+  before(async () => {
+    await setViewport({ width: 1024, height: 768 });
+  });
 
   beforeEach(async () => {
     resetUniqueId();
@@ -15,7 +20,7 @@ describe('vaadin-crud', () => {
         age: 30,
       },
     ];
-    await nextFrame();
+    await nextRender();
   });
 
   describe('host', () => {

@@ -4,12 +4,21 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
+
+const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
+const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
+// ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
+// or buggy Container Queries support for pseudo elements (Safari 16)
+const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -54,8 +63,11 @@ import { Iconset } from './vaadin-iconset.js';
  * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes SlotStylesMixin
  */
-class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) {
+class Icon extends ThemableMixin(
+  ElementMixin(ControllerMixin(SlotStylesMixin(ConditionalResizeMixin(PolymerElement)))),
+) {
   static get template() {
     return html`
       <style>
@@ -68,6 +80,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           width: 24px;
           height: 24px;
           fill: currentColor;
+          container-type: size;
+        }
+
+        :host::after,
+        :host::before {
+          line-height: 1;
+          font-size: var(--_vaadin-font-icon-size, 100cqh);
         }
 
         :host([hidden]) {
@@ -78,6 +97,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
           display: block;
           width: 100%;
           height: 100%;
+        }
+
+        :host([font]) svg {
+          display: none;
         }
       </style>
       <svg
@@ -108,9 +131,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
        * values provided by the corresponding `vaadin-iconset` element.
        *
        * See also [`name`](#/elements/vaadin-iconset#property-name) property of `vaadin-iconset`.
+       *
+       * @attr {string} icon
+       * @type {string}
        */
       icon: {
         type: String,
+        reflectToAttribute: true,
         observer: '__iconChanged',
       },
 
@@ -119,6 +146,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
        */
       svg: {
         type: Object,
+      },
+
+      /**
+       * Class names defining an icon font and/or a specific glyph inside an icon font.
+       */
+      font: {
+        type: String,
+        reflectToAttribute: true,
       },
 
       /**
@@ -147,7 +182,20 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font)'];
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+        ${tag}[font] {
+          display: inline-flex;
+          vertical-align: middle;
+        }
+      `,
+    ];
   }
 
   /** @protected */
@@ -157,6 +205,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+
+    if (needsFontIconSizingFallback) {
+      // Call once initially to avoid a fouc
+      this._onResize();
+    }
   }
 
   /** @protected */
@@ -218,6 +271,29 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) 
   /** @private */
   __computeViewBox(size, viewBox) {
     return viewBox || `0 0 ${size} ${size}`;
+  }
+
+  /** @private */
+  __fontChanged(font) {
+    this.classList.remove(...(this.__addedFontClasses || []));
+    if (font) {
+      this.__addedFontClasses = font.split(' ');
+      this.classList.add(...this.__addedFontClasses);
+    }
+
+    // The "icon" attribute needs to be set on the host also when using font icons
+    // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
+    if (font && !this.icon) {
+      this.icon = '';
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
   }
 }
 

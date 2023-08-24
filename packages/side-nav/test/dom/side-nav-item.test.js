@@ -33,6 +33,12 @@ describe('vaadin-side-nav-item', () => {
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
+    it('disabled', async () => {
+      sideNavItem.disabled = true;
+      await nextRender(sideNavItem);
+      await expect(sideNavItem).dom.to.equalSnapshot();
+    });
+
     it('current', async () => {
       sideNavItem.path = '';
       await nextRender(sideNavItem);

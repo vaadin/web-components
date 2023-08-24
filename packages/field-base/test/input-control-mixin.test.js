@@ -6,10 +6,12 @@ import {
   fixtureSync,
   keyboardEventFor,
   keyDownOn,
-  nextFrame,
+  mousedown,
   nextRender,
+  nextUpdate,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
@@ -64,19 +66,19 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should clear the field value on clear button click', async () => {
       button.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.value).to.equal('');
     });
 
     it('should clear the input value on clear button click', async () => {
       button.click();
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
-    it('should focus the input on clear button click', () => {
+    (!isTouch ? it : it.skip)('should focus the input on clear clearButton mousedown', () => {
       const spy = sinon.spy(input, 'focus');
-      button.click();
+      mousedown(button);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -108,18 +110,18 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should reflect clearButtonVisible property to attribute', async () => {
       element.clearButtonVisible = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.true;
 
       element.clearButtonVisible = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('clear-button-visible')).to.be.false;
     });
 
     it('should clear value on Esc when clearButtonVisible is true', async () => {
       element.clearButtonVisible = true;
       escKeyDown(button);
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.value).to.equal('');
     });
 
@@ -179,7 +181,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate name property to the input', async () => {
       element.name = 'bar';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.getAttribute('name')).to.equal('bar');
     });
   });
@@ -197,7 +199,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate title property to the input', async () => {
       element.title = 'bar';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.getAttribute('title')).to.equal('bar');
     });
   });
@@ -215,7 +217,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate placeholder property to the input', async () => {
       element.placeholder = 'bar';
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.placeholder).to.equal('bar');
     });
   });
@@ -233,7 +235,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate readonly property to the input', async () => {
       element.readonly = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.readOnly).to.be.false;
     });
   });
@@ -251,7 +253,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should propagate required property to the input', async () => {
       element.required = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.required).to.be.false;
     });
   });
@@ -277,13 +279,13 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should remove invalid attribute when valid', async () => {
       element.invalid = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.hasAttribute('invalid')).to.be.false;
     });
 
     it('should remove aria-invalid attribute when valid', async () => {
       element.invalid = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(input.hasAttribute('aria-invalid')).to.be.false;
     });
   });

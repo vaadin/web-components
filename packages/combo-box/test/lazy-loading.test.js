@@ -1029,7 +1029,7 @@ describe('lazy loading', () => {
         let returnedItems;
 
         const bluringDataProvider = (params, callback) => {
-          comboBox.blur();
+          comboBox.inputElement.blur();
           callback(returnedItems, returnedItems.length);
         };
 

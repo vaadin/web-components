@@ -115,6 +115,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         <vaadin-time-picker-combo-box
           id="comboBox"
           filtered-items="[[__dropdownItems]]"
+          dirty="{{dirty}}"
           value="{{_comboBoxValue}}"
           opened="{{opened}}"
           disabled="[[disabled]]"
@@ -125,6 +126,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
+          on-validated="__onComboBoxValidated"
           on-has-input-value-changed="__onComboBoxHasInputValueChanged"
         >
           <vaadin-input-container
@@ -371,6 +373,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
   }
 
@@ -417,19 +420,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     );
   }
 
-  /**
-   * Override method inherited from `FocusMixin` to validate on blur.
-   * @param {boolean} focused
-   * @protected
-   */
-  _setFocused(focused) {
-    super._setFocused(focused);
-
-    if (!focused) {
-      this.validate();
-    }
-  }
-
   /** @private */
   __validDayDivisor(step) {
     // Valid if undefined, or exact divides a day, or has millisecond resolution
@@ -472,8 +462,24 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __onArrowPressWithStep(step) {
     const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
     this.__memoValue = objWithStep;
-    this.inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
+
+    // Setting `value` property triggers the synchronous observer
+    // that in turn updates `_comboBoxValue` (actual input value)
+    // with its own observer where the value can be parsed again,
+    // so we set this flag to ensure it does not alter the value.
+    this.__useMemo = true;
+    this.value = this.__formatISO(objWithStep);
+    this.__useMemo = false;
+
     this.__dispatchChange();
+  }
+
+  /** @private */
+  __commitPendingValue() {
+    if (this.__committedValue !== this.value) {
+      this.__dispatchChange();
+      this.__committedValue = this.value;
+    }
   }
 
   /** @private */
@@ -607,6 +613,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       this.__updateInputValue(parsedObj);
     }
 
+    // Mark value set programmatically by the user
+    // as committed for the change event detection.
+    if (!this.__skipCommittedValueUpdate) {
+      this.__committedValue = this.value;
+    }
+
     this._toggleHasValue(this._hasValue);
   }
 
@@ -616,14 +628,16 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       return;
     }
 
-    const parsedObj = this.i18n.parseTime(value);
+    const parsedObj = this.__useMemo ? this.__memoValue : this.i18n.parseTime(value);
     const newValue = this.i18n.formatTime(parsedObj) || '';
 
     if (parsedObj) {
       if (value !== newValue) {
         this._comboBoxValue = newValue;
       } else {
+        this.__skipCommittedValueUpdate = true;
         this.__updateValue(parsedObj);
+        this.__skipCommittedValueUpdate = false;
       }
     } else {
       // If the user input can not be parsed, set a flag
@@ -633,7 +647,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         this.__keepInvalidInput = true;
       }
 
+      this.__skipCommittedValueUpdate = true;
       this.value = '';
+      this.__skipCommittedValueUpdate = false;
     }
   }
 
@@ -641,9 +657,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __onComboBoxChange(event) {
     event.stopPropagation();
 
-    this.validate();
-
-    this.__dispatchChange();
+    const { value } = event.target;
+    // Do not fire change for bad input.
+    if (value === '' || this.i18n.parseTime(value)) {
+      this.__commitPendingValue();
+    }
   }
 
   /**
@@ -653,6 +671,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    */
   __onComboBoxHasInputValueChanged() {
     this._hasInputValue = this.$.comboBox._hasInputValue;
+  }
+
+  /** @private */
+  __onComboBoxValidated() {
+    this.validate();
   }
 
   /** @private */

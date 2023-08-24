@@ -66,6 +66,7 @@ export const NumberFieldMixin = (superClass) =>
     constructor() {
       super();
       this._setType('number');
+      this.__onWheel = this.__onWheel.bind(this);
     }
 
     /** @protected */
@@ -132,6 +133,50 @@ export const NumberFieldMixin = (superClass) =>
       }
 
       return !this.invalid;
+    }
+
+    /**
+     * Override the method from `InputMixin` to add
+     * a wheel event listener to the input element.
+     *
+     * @param {HTMLElement} input
+     * @override
+     * @protected
+     */
+    _addInputListeners(input) {
+      super._addInputListeners(input);
+      input.addEventListener('wheel', this.__onWheel);
+    }
+
+    /**
+     * Override the method from `InputMixin` to remove
+     * the wheel event listener from the input element.
+     *
+     * @param {HTMLElement} input
+     * @override
+     * @protected
+     */
+    _removeInputListeners(input) {
+      super._removeInputListeners(input);
+      input.removeEventListener('wheel', this.__onWheel);
+    }
+
+    /**
+     * Prevents default browser behavior for wheel events on the input element
+     * when it's focused. More precisely, this prevents the browser from attempting
+     * to increment or decrement the value when the mouse wheel is used within
+     * the input element.
+     *
+     * CAVEAT: As a side-effect, this also prevents page scrolling when
+     * the pointer is positioned over the field and the field is focused.
+     *
+     * @param {WheelEvent} event
+     * @private
+     */
+    __onWheel(event) {
+      if (this.hasAttribute('focused')) {
+        event.preventDefault();
+      }
     }
 
     /** @protected */

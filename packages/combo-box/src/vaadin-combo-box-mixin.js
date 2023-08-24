@@ -4,13 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
@@ -45,15 +48,17 @@ function findItemIndex(items, callback) {
 /**
  * @polymerMixin
  * @mixes ControllerMixin
+ * @mixes ValidateMixin
  * @mixes DisabledMixin
  * @mixes InputMixin
  * @mixes KeyboardMixin
+ * @mixes FocusMixin
  * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
   class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))),
+    ControllerMixin(ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))))),
   ) {
     static get properties() {
       return {
@@ -253,7 +258,6 @@ export const ComboBoxMixin = (subclass) =>
 
     constructor() {
       super();
-      this._boundOnFocusout = this._onFocusout.bind(this);
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
@@ -319,8 +323,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this._initOverlay();
       this._initScroller();
-
-      this.addEventListener('focusout', this._boundOnFocusout);
 
       this._lastCommittedValue = this.value;
 
@@ -660,7 +662,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemLabel(item) {
-      let label = item && this.itemLabelPath ? this.get(this.itemLabelPath, item) : undefined;
+      let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
       if (label === undefined || label === null) {
         label = item ? item.toString() : '';
       }
@@ -669,7 +671,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemValue(item) {
-      let value = item && this.itemValuePath ? this.get(this.itemValuePath, item) : undefined;
+      let value = item && this.itemValuePath ? get(this.itemValuePath, item) : undefined;
       if (value === undefined) {
         value = item ? item.toString() : '';
       }
@@ -1085,7 +1087,18 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _detectAndDispatchChange() {
-      if (this.value !== this._lastCommittedValue) {
+      const isValueChanged = this.value !== this._lastCommittedValue;
+      if (isValueChanged) {
+        this.dirty = true;
+      }
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (document.hasFocus()) {
+        this.validate();
+      }
+
+      if (isValueChanged) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
         this._lastCommittedValue = this.value;
       }
@@ -1227,20 +1240,18 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _onFocusout(event) {
-      // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
-      // Do not focus the input in this case, because it would break announcement for the item.
-      if (event.relatedTarget && event.relatedTarget.localName === `${this._tagNamePrefix}-item`) {
-        return;
-      }
+    /**
+     * Override method inherited from `FocusMixin`
+     * to close the overlay on blur and commit the value.
+     *
+     * @param {boolean} focused
+     * @protected
+     * @override
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
 
-      // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-      if (event.relatedTarget === this._overlayElement) {
-        event.composedPath()[0].focus();
-        return;
-      }
-      if (!this.readonly && !this._closeOnBlurIsPrevented) {
+      if (!focused && !this.readonly && !this._closeOnBlurIsPrevented) {
         // User's logic in `custom-value-set` event listener might cause input to blur,
         // which will result in attempting to commit the same custom value once again.
         if (!this.opened && this.allowCustomValue && this._inputElementValue === this._lastCustomValue) {
@@ -1250,6 +1261,32 @@ export const ComboBoxMixin = (subclass) =>
 
         this._closeOrCommit();
       }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to not remove focused
+     * state when focus moves to the overlay.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
+      // Do not focus the input in this case, because it would break announcement for the item.
+      if (event.relatedTarget && event.relatedTarget.localName === `${this._tagNamePrefix}-item`) {
+        return false;
+      }
+
+      // Do not blur when focus moves to the overlay
+      // Also, fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
+      if (event.relatedTarget === this._overlayElement) {
+        event.composedPath()[0].focus();
+        return false;
+      }
+
+      return true;
     }
 
     /** @private */

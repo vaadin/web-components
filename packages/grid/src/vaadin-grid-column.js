@@ -7,6 +7,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { updateCellState } from './vaadin-grid-helpers.js';
 
@@ -57,6 +58,21 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {boolean}
          */
         frozenToEnd: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * When true, the cells for this column will be rendered with the `role` attribute
+         * set as `rowheader`, instead of the `gridcell` role value used by default.
+         *
+         * When a column is set as row header, its cells will be announced by screen readers
+         * while navigating to help user identify the current row as uniquely as possible.
+         *
+         * @attr {boolean} row-header
+         * @type {boolean}
+         */
+        rowHeader: {
           type: Boolean,
           value: false,
         },
@@ -222,6 +238,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
+        '_rowHeaderChanged(rowHeader, _cells.*)',
       ];
     }
 
@@ -405,6 +422,17 @@ export const ColumnBaseMixin = (superClass) =>
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._firstFrozenToEnd = firstFrozenToEnd;
       }
+    }
+
+    /** @private */
+    _rowHeaderChanged(rowHeader, cells) {
+      if (!cells.value) {
+        return;
+      }
+
+      cells.value.forEach((cell) => {
+        cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
+      });
     }
 
     /**
@@ -686,7 +714,7 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      this.__setTextContent(root, this.get(this.path, item));
+      this.__setTextContent(root, get(this.path, item));
     }
 
     /**

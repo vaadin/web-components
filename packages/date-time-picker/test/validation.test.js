@@ -25,11 +25,13 @@ const fixtures = {
 
 ['default', 'slotted'].forEach((set) => {
   describe(`Validation (${set})`, () => {
-    let dateTimePicker, validateSpy, datePicker, timePicker;
+    let dateTimePicker, validateSpy, changeSpy, datePicker, timePicker;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
       validateSpy = sinon.spy(dateTimePicker, 'validate');
+      changeSpy = sinon.spy();
+      dateTimePicker.addEventListener('change', changeSpy);
       datePicker = dateTimePicker.querySelector('[slot=date-picker]');
       timePicker = dateTimePicker.querySelector('[slot=time-picker]');
     });
@@ -67,6 +69,26 @@ const fixtures = {
       timePicker.focus();
       timePicker.blur();
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on date-picker change', async () => {
+      timePicker.value = '12:00';
+      datePicker.focus();
+      await sendKeys({ type: '1/1/2023' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on time-picker change', async () => {
+      datePicker.value = '2023-01-01';
+      timePicker.focus();
+      await sendKeys({ type: '12:00' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should not validate when moving focus between pickers', async () => {
@@ -177,6 +199,28 @@ const fixtures = {
       it('should be invalid after validate() if value is not set', () => {
         dateTimePicker.validate();
         expect(dateTimePicker.invalid).to.be.true;
+      });
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on date-picker blur when document does not have focus', () => {
+        datePicker.focus();
+        datePicker.blur();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate on time-picker blur when document does not have focus', () => {
+        timePicker.focus();
+        timePicker.blur();
+        expect(validateSpy.called).to.be.false;
       });
     });
   });

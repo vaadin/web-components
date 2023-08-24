@@ -11,6 +11,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/overlay/vaadin-overlay.js';
 import './not-animated-styles.js';
 import { html, render } from 'lit';
 import { Tooltip } from '../vaadin-tooltip.js';
@@ -154,6 +155,40 @@ describe('vaadin-tooltip', () => {
 
       tooltip.target = null;
       expect(target.getAttribute('aria-describedby')).to.equal('foo');
+    });
+  });
+
+  describe('ariaTarget', () => {
+    let target, ariaTarget;
+
+    beforeEach(() => {
+      target = document.createElement('div');
+      target.textContent = 'Target';
+      document.body.appendChild(target);
+
+      ariaTarget = document.createElement('input');
+      target.appendChild(ariaTarget);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(target);
+    });
+
+    it('should set aria-describedby on the ariaTarget element', () => {
+      tooltip.target = target;
+      tooltip.ariaTarget = ariaTarget;
+
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(overlay.id);
+    });
+
+    it('should remove aria-describedby when the ariaTarget is cleared', () => {
+      tooltip.target = target;
+      tooltip.ariaTarget = ariaTarget;
+
+      tooltip.ariaTarget = null;
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
     });
   });
 

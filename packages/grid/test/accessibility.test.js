@@ -10,6 +10,8 @@ describe('accessibility', () => {
     grid = fixtureSync('<vaadin-grid></vaadin-grid>');
     const col1 = document.createElement('vaadin-grid-column');
     const col2 = document.createElement('vaadin-grid-column');
+    const col3 = document.createElement('vaadin-grid-column');
+    col3.setAttribute('row-header', '');
     if (grouped) {
       const grp = document.createElement('vaadin-grid-column-group');
       grp.headerRenderer = (root) => {
@@ -20,10 +22,12 @@ describe('accessibility', () => {
       };
       grp.appendChild(col1);
       grp.appendChild(col2);
+      grp.appendChild(col3);
       grid.appendChild(grp);
     } else {
       grid.appendChild(col1);
       grid.appendChild(col2);
+      grid.appendChild(col3);
     }
 
     col1.headerRenderer = col2.headerRenderer = (root) => {
@@ -87,9 +91,21 @@ describe('accessibility', () => {
         expect(grid.$.header.children[0].children[1].getAttribute('role')).to.equal('columnheader');
       });
 
-      it('should have role gridcell on body cells', () => {
+      it('should have role gridcell on body cells by default', () => {
         expect(grid.$.items.children[0].children[0].getAttribute('role')).to.equal('gridcell');
         expect(grid.$.items.children[0].children[1].getAttribute('role')).to.equal('gridcell');
+      });
+
+      it('should have role rowheader on body cells when `rowHeader` is set to true', () => {
+        expect(grid.$.items.children[0].children[2].getAttribute('role')).to.equal('rowheader');
+        expect(grid.$.items.children[1].children[2].getAttribute('role')).to.equal('rowheader');
+      });
+
+      it('should change role from rowheader to gridcell when `rowHeader` is set to false', () => {
+        const columns = grid.querySelectorAll('vaadin-grid-column');
+        columns[2].rowHeader = false;
+        expect(grid.$.items.children[0].children[2].getAttribute('role')).to.equal('gridcell');
+        expect(grid.$.items.children[1].children[2].getAttribute('role')).to.equal('gridcell');
       });
     });
 
@@ -210,7 +226,7 @@ describe('accessibility', () => {
 
     describe('column count', () => {
       it('should have aria-colcount on the table', () => {
-        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('2');
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
       });
 
       it('should update aria-colcount when column is added', async () => {
@@ -220,7 +236,7 @@ describe('accessibility', () => {
         };
         grid.appendChild(column);
         await nextFrame();
-        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
+        expect(grid.$.table.getAttribute('aria-colcount')).to.equal('4');
       });
     });
 
@@ -324,7 +340,7 @@ describe('accessibility', () => {
 
     describe('column groups', () => {
       it('should have aria-colspan on group header cell', () => {
-        expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
+        expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('3');
       });
     });
   });

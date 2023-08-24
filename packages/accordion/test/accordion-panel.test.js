@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-accordion-panel.js';
@@ -84,6 +84,15 @@ describe('vaadin-accordion-panel', () => {
         expect(panel.opened).to.be.false;
       });
 
+      it(`should not update opened on ${type} heading button click when disabled`, async () => {
+        panel.disabled = true;
+        await nextUpdate(panel);
+
+        click(toggle);
+        await nextUpdate(panel);
+        expect(panel.opened).to.be.false;
+      });
+
       it(`should toggle opened on ${type} heading button Enter`, async () => {
         toggle.focus();
 
@@ -132,6 +141,29 @@ describe('vaadin-accordion-panel', () => {
         panel.disabled = false;
         expect(heading.hasAttribute('disabled')).to.be.false;
       });
+    });
+  });
+
+  describe('link', () => {
+    let link;
+
+    beforeEach(async () => {
+      panel = fixtureSync(`
+        <vaadin-accordion-panel>
+          <vaadin-accordion-heading slot="summary">
+            Toggle
+            <a href="#">Link</a>
+          </vaadin-accordion-heading>
+          <div>Content</div>
+        </vaadin-accordion-panel>
+      `);
+      await nextRender();
+      link = panel.querySelector('a');
+    });
+
+    it('should not toggle opened state on link click', () => {
+      link.click();
+      expect(panel.opened).to.be.false;
     });
   });
 });

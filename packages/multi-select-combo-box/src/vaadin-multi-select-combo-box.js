@@ -527,6 +527,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this._tooltipController.setShouldShow((target) => !target.opened);
 
     this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
@@ -616,7 +617,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   _setFocused(focused) {
     super._setFocused(focused);
 
-    if (!focused) {
+    // Do not validate when focusout is caused by document
+    // losing focus, which happens on browser tab switch.
+    if (!focused && document.hasFocus()) {
       this._focusedChipIndex = -1;
       this.validate();
     }
@@ -810,6 +813,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __updateSelection(selectedItems) {
+    this.dirty = true;
     this.selectedItems = selectedItems;
 
     this.validate();

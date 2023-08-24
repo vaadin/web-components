@@ -160,33 +160,44 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _onEnter(event) {
-    this.__enterPressed = true;
+    if (this.opened) {
+      // Do not submit the surrounding form.
+      event.preventDefault();
+      // Do not trigger global listeners.
+      event.stopPropagation();
+
+      if (this.readonly) {
+        this.close();
+      } else {
+        // Keep selected item focused after committing on Enter.
+        const focusedItem = this.filteredItems[this._focusedIndex];
+        this._commitValue();
+        this._focusedIndex = this.filteredItems.indexOf(focusedItem);
+      }
+
+      return;
+    }
 
     super._onEnter(event);
   }
 
   /**
+   * Override Escape handler to not clear
+   * selected items when readonly.
+   * @param {!Event} event
    * @protected
    * @override
    */
-  _closeOrCommit() {
+  _onEscape(event) {
     if (this.readonly) {
-      this.close();
+      event.stopPropagation();
+      if (this.opened) {
+        this.close();
+      }
       return;
     }
 
-    if (this.__enterPressed) {
-      this.__enterPressed = null;
-
-      // Keep selected item focused after committing on Enter.
-      const focusedItem = this.filteredItems[this._focusedIndex];
-      this._commitValue();
-      this._focusedIndex = this.filteredItems.indexOf(focusedItem);
-
-      return;
-    }
-
-    super._closeOrCommit();
+    super._onEscape(event);
   }
 
   /**
@@ -232,18 +243,20 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   /**
    * Override method inherited from the combo-box
    * to close dropdown on blur when readonly.
-   * @param {FocusEvent} event
+   * @param {boolean} focused
    * @protected
    * @override
    */
-  _onFocusout(event) {
+  _setFocused(focused) {
     // Disable combo-box logic that updates selectedItem
     // based on the overlay focused index on input blur
-    this._ignoreCommitValue = true;
+    if (!focused) {
+      this._ignoreCommitValue = true;
+    }
 
-    super._onFocusout(event);
+    super._setFocused(focused);
 
-    if (this.readonly && !this._closeOnBlurIsPrevented) {
+    if (!focused && this.readonly && !this._closeOnBlurIsPrevented) {
       this.close();
     }
   }

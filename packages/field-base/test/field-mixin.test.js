@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { aTimeout, defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
@@ -88,22 +87,22 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should update error message content on attribute change', async () => {
         element.setAttribute('error-message', 'This field is required');
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.textContent).to.equal('This field is required');
       });
 
       it('should update error message content on property change', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.textContent).to.equal('This field is required');
       });
 
       it('should clear error message content when field is valid', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
 
         element.invalid = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.textContent).to.equal('');
       });
 
@@ -113,34 +112,34 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not set has-error-message attribute when the property is an empty string', async () => {
         element.errorMessage = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
 
       it('should not set has-error-message attribute when the property is null', async () => {
         element.errorMessage = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
 
       it('should set has-error-message attribute when attribute is set', async () => {
         element.setAttribute('error-message', 'This field is required');
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.true;
       });
 
       it('should set has-error-message attribute when property is set', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.true;
       });
 
       it('should remove has-error-message attribute when field is valid', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
 
         element.invalid = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
 
@@ -150,22 +149,22 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should set alert role when attribute is set', async () => {
         element.setAttribute('error-message', 'This field is required');
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.getAttribute('role')).to.equal('alert');
       });
 
       it('should set alert role when property is set', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.getAttribute('role')).to.equal('alert');
       });
 
       it('should remove alert role when field is valid', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
 
         element.invalid = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.hasAttribute('role')).to.be.false;
       });
     });
@@ -235,7 +234,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should update slotted error message content on property change', async () => {
         element.errorMessage = 'This field is required';
-        await nextFrame();
+        await nextUpdate(element);
         expect(error.textContent).to.equal('This field is required');
       });
     });
@@ -259,14 +258,14 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should add a helper when helperText property is set', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         helper = element.querySelector('[slot=helper]');
         expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
 
       it('should add a helper when helper-text attribute is set', async () => {
         element.setAttribute('helper-text', '3 digits');
-        await nextFrame();
+        await nextUpdate(element);
         helper = element.querySelector('[slot=helper]');
         expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
@@ -277,45 +276,45 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should set has-helper attribute when attribute is set', async () => {
         element.setAttribute('helper-text', '3 digits');
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
 
       it('should set has-helper attribute when property is set', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
 
       it('should not add a helper when helperText is whitespace string', async () => {
         element.helperText = ' ';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.querySelector('[slot=helper]')).to.be.not.ok;
       });
 
       it('should not set has-helper when helperText is whitespace string', async () => {
         element.helperText = ' ';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
 
       it('should clear helper when helperText is set to empty string', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         helper = element.querySelector('[slot=helper]');
 
         element.helperText = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(helper.textContent).to.equal('');
       });
 
       it('should remove has-helper attribute when helperText is cleared', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         helper = element.querySelector('[slot=helper]');
 
         element.helperText = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
@@ -356,25 +355,25 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should update helper content on attribute change', async () => {
         element.setAttribute('helper-text', '3 digits');
-        await nextFrame();
+        await nextUpdate(element);
         expect(helper.textContent).to.equal('3 digits');
       });
 
       it('should update helper content on property change', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         expect(helper.textContent).to.equal('3 digits');
       });
 
       it('should remove has-helper attribute when property is unset', async () => {
         element.helperText = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
 
       it('should remove has-helper attribute when property is null', async () => {
         element.helperText = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
@@ -392,7 +391,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should remove has-helper attribute when attribute is removed', async () => {
         element.removeAttribute('helper-text');
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
@@ -422,13 +421,13 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not update slotted helper content on property change', async () => {
         element.helperText = '3 digits';
-        await nextFrame();
+        await nextUpdate(element);
         expect(helper.textContent).to.not.equal('3 digits');
       });
 
       it('should remove has-helper attribute when slotted helper is removed', async () => {
         element.removeChild(helper);
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
@@ -496,120 +495,120 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should handle lazy helper added using appendChild', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(helper);
         });
 
         it('should handle lazy helper added using insertBefore', async () => {
           element.insertBefore(helper, defaultHelper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(helper);
         });
 
         it('should handle lazy helper added using replaceChild', async () => {
           element.replaceChild(helper, defaultHelper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(helper);
         });
 
         it('should remove the default helper from the element when using appendChild', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(defaultHelper.parentNode).to.be.null;
         });
 
         it('should remove the default helper from the element when using insertBefore', async () => {
           element.insertBefore(helper, defaultHelper);
-          await nextFrame();
+          await nextRender();
           expect(defaultHelper.parentNode).to.be.null;
         });
 
         it('should support replacing lazy helper with a new one using appendChild', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           const div = document.createElement('div');
           div.setAttribute('slot', 'helper');
           div.textContent = 'New';
           element.appendChild(div);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using insertBefore', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           const div = document.createElement('div');
           div.setAttribute('slot', 'helper');
           div.textContent = 'New';
           element.insertBefore(div, helper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using replaceChild', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           const div = document.createElement('div');
           div.setAttribute('slot', 'helper');
           div.textContent = 'New';
           element.replaceChild(div, helper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(div);
         });
 
         it('should support adding lazy helper after removing the default one', async () => {
           element.removeChild(defaultHelper);
-          await nextFrame();
+          await nextRender();
 
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           expect(element._helperNode).to.equal(helper);
         });
 
         it('should restore the default helper when helperText property is set', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           element.removeChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(defaultHelper);
         });
 
         it('should restore the default helper when helperText property is restored', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           element.helperText = '';
 
           element.removeChild(helper);
-          await nextFrame();
+          await nextRender();
 
           element.helperText = 'Helper';
-          await nextFrame();
+          await nextRender();
           expect(element._helperNode).to.equal(defaultHelper);
         });
 
         it('should keep has-helper attribute when the default helper is restored', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           element.removeChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(element.hasAttribute('has-helper')).to.be.true;
         });
 
         it('should remove has-helper attribute when helperText is set to empty', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
 
           element.helperText = '';
 
           element.removeChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(element.hasAttribute('has-helper')).to.be.false;
         });
       });
@@ -626,32 +625,32 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should set id on the lazily added helper element', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(helper.getAttribute('id')).to.match(ID_REGEX);
         });
 
         it('should not override custom id on the lazily added helper', async () => {
           helper.id = 'helper-component';
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           expect(helper.getAttribute('id')).to.equal('helper-component');
         });
 
         it('should restore default id if the custom helper id is removed', async () => {
           helper.id = 'helper-component';
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           helper.removeAttribute('id');
-          await nextFrame();
+          await nextRender();
           expect(helper.getAttribute('id')).to.match(ID_REGEX);
         });
 
         it('should apply helper text if the custom helper is removed', async () => {
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
           element.helperText = 'Default';
           element.removeChild(helper);
-          await nextFrame();
+          await nextRender();
           const defaultHelper = element.querySelector('[slot="helper"]');
           expect(defaultHelper.textContent).to.equal('Default');
         });
@@ -666,7 +665,7 @@ const runTests = (defineHelper, baseMixin) => {
           helper.setAttribute('slot', 'helper');
           helper.textContent = 'Lazy';
           element.appendChild(helper);
-          await nextFrame();
+          await nextRender();
         });
 
         it('should store a reference to the lazily added helper', () => {
@@ -704,7 +703,7 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should only contain label id when the field is invalid', async () => {
           element.invalid = true;
-          await nextFrame();
+          await nextUpdate(element);
           const aria = input.getAttribute('aria-labelledby');
           expect(aria).to.equal(label.id);
         });
@@ -718,7 +717,7 @@ const runTests = (defineHelper, baseMixin) => {
 
         it('should add error id asynchronously after the field becomes invalid', async () => {
           element.invalid = true;
-          await nextFrame();
+          await nextUpdate(element);
           await aTimeout(0);
           const aria = input.getAttribute('aria-describedby');
           expect(aria).to.include(helper.id);
@@ -745,30 +744,30 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should set aria-label when accessible-name is defined', async () => {
         element.accessibleName = 'accessible name';
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-label')).to.be.equal('accessible name');
       });
 
       it('should remove aria-labelledby by if no accessible name is defined', async () => {
         element.accessibleName = 'accessible name';
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.hasAttribute('aria-labelledby')).to.be.false;
       });
 
       it('should remove aria-label when accessible name is cleared', async () => {
         element.accessibleName = 'accessible name';
-        await nextFrame();
+        await nextUpdate(element);
         element.accessibleName = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.hasAttribute('aria-label')).to.be.false;
       });
 
       it('should restore aria-labelledby value if accessible-name is cleared', async () => {
         const ariaLabelledby = input.getAttribute('aria-labelledby');
         element.accessibleName = 'accessible name';
-        await nextFrame();
+        await nextUpdate(element);
         element.accessibleName = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal(ariaLabelledby);
       });
     });
@@ -809,15 +808,15 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should set aria-labelledby when accessible-name-ref is defined', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
       it('should change aria-labelledby if accessible-name-ref is changed', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextFrame();
+        await nextUpdate(element);
         element.accessibleNameRef = 'accessible-name-ref-1';
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-1');
       });
 
@@ -825,25 +824,25 @@ const runTests = (defineHelper, baseMixin) => {
         const previousAriaLabelledBy = input.getAttribute('aria-labelledby');
         expect(previousAriaLabelledBy).to.not.be.empty;
         element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextFrame();
+        await nextUpdate(element);
         element.accessibleNameRef = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal(previousAriaLabelledBy);
       });
 
       it('should not remove aria-labelledby if accessible-name-ref is defined and label is cleared', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextFrame();
+        await nextUpdate(element);
         element.label = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
       it('should not change aria-labelledby if accessible-name-ref is defined and label is changed', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextFrame();
+        await nextUpdate(element);
         element.label = 'Another label';
-        await nextFrame();
+        await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
     });
@@ -871,7 +870,7 @@ const runTests = (defineHelper, baseMixin) => {
   describe('slotted label', () => {
     beforeEach(async () => {
       element = fixtureSync(`
-        <${tag}>
+        <${tag} label="Default">
           <label slot="label">Label</label>
           <input slot="input">
         </${tag}>
@@ -885,6 +884,15 @@ const runTests = (defineHelper, baseMixin) => {
       const aria = input.getAttribute('aria-labelledby');
       expect(aria).to.be.ok;
       expect(aria).to.equal(label.id);
+    });
+
+    it('should restore aria-labelledby when removing slotted label', async () => {
+      label.remove();
+      await nextRender();
+      const defaultLabel = element.querySelector('[slot=label]');
+      const aria = input.getAttribute('aria-labelledby');
+      expect(aria).to.be.ok;
+      expect(aria).to.equal(defaultLabel.id);
     });
   });
 
@@ -901,7 +909,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not set aria-required attribute on required property change', async () => {
         element.required = true;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('aria-required')).to.be.false;
       });
     });
@@ -929,11 +937,11 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should toggle aria-required attribute on required property change', async () => {
         element.required = true;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.getAttribute('aria-required')).to.equal('true');
 
         element.required = false;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('aria-required')).to.be.false;
       });
     });
@@ -965,7 +973,7 @@ const runTests = (defineHelper, baseMixin) => {
       helper.id = 'helper-component';
       helper.textContent = 'Helper';
       element.appendChild(helper);
-      await nextFrame();
+      await nextRender();
       expect(input.getAttribute('aria-describedby')).to.include('helper-component');
     });
 
@@ -975,7 +983,7 @@ const runTests = (defineHelper, baseMixin) => {
       helper.id = 'helper-component';
       helper.textContent = 'Helper';
       element.appendChild(helper);
-      await nextFrame();
+      await nextRender();
       helper.removeAttribute('id');
       expect(input.getAttribute('aria-describedby')).to.include(helper.id);
     });

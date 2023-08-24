@@ -1,13 +1,14 @@
 import '../../vaadin-number-field.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
-import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   NumberField,
   NumberFieldChangeEvent,
+  NumberFieldDirtyChangedEvent,
   NumberFieldInvalidChangedEvent,
   NumberFieldValidatedEvent,
   NumberFieldValueChangedEvent,
@@ -33,6 +34,11 @@ field.addEventListener('change', (event) => {
 
 field.addEventListener('invalid-changed', (event) => {
   assertType<NumberFieldInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+field.addEventListener('dirty-changed', (event) => {
+  assertType<NumberFieldDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

@@ -248,42 +248,11 @@ class ComboBox extends ComboBoxDataProviderMixin(
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
     this._tooltipController.setPosition('top');
+    this._tooltipController.setAriaTarget(this.inputElement);
     this._tooltipController.setShouldShow((target) => !target.opened);
 
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
-  }
-
-  /**
-   * Override method inherited from `FocusMixin` to validate on blur.
-   * @param {boolean} focused
-   * @protected
-   * @override
-   */
-  _setFocused(focused) {
-    super._setFocused(focused);
-
-    if (!focused) {
-      this.validate();
-    }
-  }
-
-  /**
-   * Override method inherited from `FocusMixin` to not remove focused
-   * state when focus moves to the overlay.
-   * @param {FocusEvent} event
-   * @return {boolean}
-   * @protected
-   * @override
-   */
-  _shouldRemoveFocus(event) {
-    // Do not blur when focus moves to the overlay
-    if (event.relatedTarget === this._overlayElement) {
-      event.composedPath()[0].focus();
-      return false;
-    }
-
-    return true;
   }
 
   /**

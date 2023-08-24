@@ -5,6 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
@@ -25,8 +26,8 @@ export const ItemCache = class ItemCache {
     this.parentItem = parentItem;
     /** @type {object} */
     this.itemCaches = {};
-    /** @type {object} */
-    this.items = {};
+    /** @type {object[]} */
+    this.items = [];
     /** @type {number} */
     this.effectiveSize = 0;
     /** @type {number} */
@@ -307,7 +308,7 @@ export const DataProviderMixin = (superClass) =>
      * @return {!GridItem | !unknown}
      */
     getItemId(item) {
-      return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
+      return this.itemIdPath ? get(this.itemIdPath, item) : item;
     }
 
     /**

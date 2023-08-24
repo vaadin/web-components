@@ -3,6 +3,7 @@
  * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -202,7 +203,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
       if (item instanceof ComboBoxPlaceholder) {
         return false;
       } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
-        return this.get(itemIdPath, item) === this.get(itemIdPath, selectedItem);
+        return get(itemIdPath, item) === get(itemIdPath, selectedItem);
       }
       return item === selectedItem;
     }

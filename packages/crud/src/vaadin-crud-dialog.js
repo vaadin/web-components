@@ -8,97 +8,91 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
-import { DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
+import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
-registerStyles(
-  'vaadin-crud-dialog-overlay',
-  css`
-    [part='overlay'] {
-      max-width: 54em;
-      min-width: 20em;
-    }
+const crudDialogOverlay = css`
+  [part='overlay'] {
+    max-width: 54em;
+    min-width: 20em;
+  }
 
-    [part='footer'] {
-      justify-content: flex-start;
-      flex-direction: row-reverse;
-    }
+  [part='footer'] {
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+  }
 
-    /* Make buttons clickable */
-    [part='footer'] ::slotted(:not([disabled])) {
-      pointer-events: all;
-    }
+  /* Make buttons clickable */
+  [part='footer'] ::slotted(:not([disabled])) {
+    pointer-events: all;
+  }
 
-    :host([fullscreen]) {
-      inset: 0;
-      padding: 0;
-    }
+  :host([fullscreen]) {
+    inset: 0;
+    padding: 0;
+  }
 
-    :host([fullscreen]) [part='overlay'] {
-      height: 100vh;
-      width: 100vw;
-      border-radius: 0 !important;
-    }
+  :host([fullscreen]) [part='overlay'] {
+    height: 100vh;
+    width: 100vw;
+    border-radius: 0 !important;
+  }
 
-    :host([fullscreen]) [part='content'] {
-      flex: 1;
-    }
-  `,
-  { moduleId: 'vaadin-crud-dialog-overlay-styles' },
-);
-
-let memoizedTemplate;
-
-const footerTemplate = html`
-  <slot name="save-button"></slot>
-  <slot name="cancel-button"></slot>
-  <slot name="delete-button"></slot>
+  :host([fullscreen]) [part='content'] {
+    flex: 1;
+  }
 `;
 
+registerStyles('vaadin-crud-dialog-overlay', [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlay], {
+  moduleId: 'vaadin-crud-dialog-overlay-styles',
+});
+
 /**
- * An extension of `<vaadin-dialog-overlay>` used internally by `<vaadin-crud>`.
- * Not intended to be used separately.
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
+ *
+ * @extends HTMLElement
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
-class CrudDialogOverlay extends DialogOverlay {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-
-      // Replace two header slots with a single one
-      const headerPart = memoizedTemplate.content.querySelector('[part="header"]');
-      headerPart.innerHTML = '';
-      const headerSlot = document.createElement('slot');
-      headerSlot.setAttribute('name', 'header');
-      headerPart.appendChild(headerSlot);
-
-      // Replace default slot with "form" named slot
-      const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
-      const defaultSlot = contentPart.querySelector('slot:not([name])');
-      defaultSlot.setAttribute('name', 'form');
-
-      // Replace footer slot with button named slots
-      const footerPart = memoizedTemplate.content.querySelector('[part="footer"]');
-      footerPart.setAttribute('role', 'toolbar');
-      const footerSlot = footerPart.querySelector('slot');
-      footerPart.removeChild(footerSlot);
-      footerPart.appendChild(footerTemplate.content.cloneNode(true));
-    }
-    return memoizedTemplate;
+    return html`
+      <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div part="overlay" id="overlay" tabindex="0">
+        <section id="resizerContainer" class="resizer-container">
+          <header part="header"><slot name="header"></slot></header>
+          <div part="content" id="content">
+            <slot name="form"></slot>
+          </div>
+          <footer part="footer" role="toolbar">
+            <slot name="save-button"></slot>
+            <slot name="cancel-button"></slot>
+            <slot name="delete-button"></slot>
+          </footer>
+        </section>
+      </div>
+    `;
   }
 
   /**
    * @protected
    * @override
    */
-  _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
-    super._headerFooterRendererChange(headerRenderer, footerRenderer, opened);
+  ready() {
+    super.ready();
 
     // CRUD has header and footer but does not use renderers
     this.setAttribute('has-header', '');
@@ -106,17 +100,29 @@ class CrudDialogOverlay extends DialogOverlay {
   }
 }
 
-customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
+customElements.define(CrudDialogOverlay.is, CrudDialogOverlay);
 
 /**
- * An extension of `<vaadin-dialog>` used internally by `<vaadin-crud>`.
- * Not intended to be used separately.
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  * @private
  */
-class CrudDialog extends Dialog {
-  /**
-   * Override template to provide custom overlay tag name.
-   */
+class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))) {
+  static get is() {
+    return 'vaadin-crud-dialog';
+  }
+
+  static get properties() {
+    return {
+      ariaLabel: {
+        type: String,
+      },
+
+      fullscreen: {
+        type: Boolean,
+      },
+    };
+  }
+
   static get template() {
     return html`
       <style>
@@ -127,6 +133,8 @@ class CrudDialog extends Dialog {
 
       <vaadin-crud-dialog-overlay
         id="overlay"
+        opened="[[opened]]"
+        aria-label$="[[ariaLabel]]"
         on-opened-changed="_onOverlayOpened"
         on-mousedown="_bringOverlayToFront"
         on-touchstart="_bringOverlayToFront"
@@ -134,10 +142,11 @@ class CrudDialog extends Dialog {
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        fullscreen$="[[fullscreen]]"
         focus-trap
       ></vaadin-crud-dialog-overlay>
     `;
   }
 }
 
-customElements.define('vaadin-crud-dialog', CrudDialog);
+customElements.define(CrudDialog.is, CrudDialog);

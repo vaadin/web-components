@@ -55,14 +55,19 @@ export const sideNavStyles = css`
 
   [part='toggle-button']::before {
     content: var(--lumo-icons-angle-right);
+    transition: transform 140ms;
   }
 
   :host(:not([collapsible])) [part='toggle-button'] {
     display: none !important;
   }
 
-  :host(:not([collapsed])) [part='toggle-button'] {
+  :host(:not([collapsed])) [part='toggle-button']::before {
     transform: rotate(90deg);
+  }
+
+  :host([collapsed][dir='rtl']) [part='toggle-button']::before {
+    transform: rotate(180deg);
   }
 
   @media (any-hover: hover) {

@@ -10,13 +10,13 @@ import type { ControllerMixinClass } from '@vaadin/component-base/src/controller
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { MultiSelectComboBoxItem } from '../../src/vaadin-multi-select-combo-box-item.js';
@@ -24,6 +24,7 @@ import type {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
   MultiSelectComboBoxCustomValueSetEvent,
+  MultiSelectComboBoxDirtyChangedEvent,
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
@@ -52,6 +53,11 @@ narrowedComboBox.addEventListener('change', (event) => {
 narrowedComboBox.addEventListener('custom-value-set', (event) => {
   assertType<MultiSelectComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);
+});
+
+narrowedComboBox.addEventListener('dirty-changed', (event) => {
+  assertType<MultiSelectComboBoxDirtyChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
 });
 
 narrowedComboBox.addEventListener('filter-changed', (event) => {

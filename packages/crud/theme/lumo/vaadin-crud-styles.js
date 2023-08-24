@@ -2,6 +2,8 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import { dialogOverlay } from '@vaadin/dialog/theme/lumo/vaadin-dialog-styles.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -96,6 +98,14 @@ registerStyles(
       [part='editor'] {
         background: var(--lumo-base-color);
         box-sizing: border-box;
+        position: relative;
+      }
+
+      [part='editor']:focus::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
@@ -125,6 +135,8 @@ registerStyles(
 registerStyles(
   'vaadin-crud-dialog-overlay',
   [
+    overlay,
+    dialogOverlay,
     editorStyles,
     css`
       [part='header'] ::slotted(h3) {

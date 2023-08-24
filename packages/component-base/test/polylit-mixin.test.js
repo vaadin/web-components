@@ -74,6 +74,31 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('createRenderRoot', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        render() {
+          return html`<div id="foo">Component</div>`;
+        }
+
+        createRenderRoot() {
+          return this;
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should reference elements with id when rendering to light DOM', () => {
+      expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
+    });
+  });
+
   describe('reflectToAttribute', () => {
     let element;
 
@@ -873,6 +898,70 @@ describe('PolylitMixin', () => {
       const element = fixtureSync(`<${tag} items="[1,2,3]"></${tag}>`);
       await element.updateComplete;
       expect(element.items).to.eql([1, 2, 3]);
+    });
+  });
+
+  describe('sync', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            disabled: {
+              type: Boolean,
+              sync: true,
+              reflect: true,
+            },
+
+            value: {
+              type: String,
+              value: 'foo',
+              sync: true,
+            },
+
+            count: {
+              type: Number,
+              value: 0,
+              sync: true,
+            },
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          this.count += 1;
+        }
+
+        render() {
+          return html`${this.value}`;
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should re-render immediately when setting sync property', () => {
+      expect(element.shadowRoot.textContent).to.equal('foo');
+
+      element.value = 'bar';
+      expect(element.shadowRoot.textContent).to.equal('bar');
+    });
+
+    it('should reflect immediately when setting sync property', () => {
+      element.disabled = true;
+      expect(element.hasAttribute('disabled')).to.be.true;
+
+      element.disabled = false;
+      expect(element.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should only call ready callback once during initialization', () => {
+      expect(element.count).to.equal(1);
     });
   });
 });

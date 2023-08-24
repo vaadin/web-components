@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { LoginMixin } from './vaadin-login-mixin.js';
+import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
+
 export { LoginI18n } from './vaadin-login-mixin.js';
 
 /**
@@ -76,22 +76,7 @@ export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayC
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
-declare class LoginOverlay extends LoginMixin(OverlayClassMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
-  /**
-   * Defines the application description
-   */
-  description: string;
-
-  /**
-   * True if the overlay is currently displayed.
-   */
-  opened: boolean;
-
-  /**
-   * Defines the application title
-   */
-  title: string;
-
+declare class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof LoginOverlayEventMap>(
     type: K,
     listener: (this: LoginOverlay, ev: LoginOverlayEventMap[K]) => void,

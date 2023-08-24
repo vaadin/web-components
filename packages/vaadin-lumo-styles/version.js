@@ -12,7 +12,7 @@
  */
 class Lumo extends HTMLElement {
   static get version() {
-    return '24.2.0-alpha1';
+    return '24.2.0-alpha10';
   }
 }
 

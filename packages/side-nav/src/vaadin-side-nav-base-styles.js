@@ -15,6 +15,10 @@ export const sideNavItemBaseStyles = css`
     display: none !important;
   }
 
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
   [part='content'] {
     display: flex;
     align-items: center;
@@ -49,15 +53,6 @@ export const sideNavItemBaseStyles = css`
 
   :host(:not([has-children])) button {
     display: none !important;
-  }
-
-  :host(:not([path])) button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
   }
 
   slot[name='prefix'],

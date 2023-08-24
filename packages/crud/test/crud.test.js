@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
@@ -11,6 +12,10 @@ describe('crud', () => {
   function edit(item) {
     fire(crud._grid, 'edit', { item });
   }
+
+  before(async () => {
+    await setViewport({ width: 1024, height: 768 });
+  });
 
   describe('custom element definition', () => {
     let tagName;
@@ -274,7 +279,7 @@ describe('crud', () => {
 
     it('should not customize the grid without a proper slot', async () => {
       crud.appendChild(grid);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [1, 2];
       await nextRender(crud);
       flushGrid(grid);
@@ -284,7 +289,7 @@ describe('crud', () => {
     it('should be able to provide a custom grid', async () => {
       grid.setAttribute('slot', 'grid');
       crud.appendChild(grid);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [1, 2];
       await nextRender(crud);
       flushGrid(grid);
@@ -295,7 +300,7 @@ describe('crud', () => {
 
     it('should not customize the form without a proper slot', async () => {
       crud.appendChild(form);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [{ foo: 1 }];
       await nextRender(crud);
       edit(crud.items[0]);
@@ -306,7 +311,7 @@ describe('crud', () => {
     it('should be able to provide a custom form', async () => {
       form.setAttribute('slot', 'form');
       crud.appendChild(form);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [{ foo: 'bar' }];
       await nextRender();
       edit(crud.items[0]);
@@ -328,7 +333,7 @@ describe('crud', () => {
     it('should not highlight the edited item', async () => {
       grid.setAttribute('slot', 'grid');
       crud.appendChild(grid);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [{ foo: 'bar' }];
       edit(crud.items[0]);
       await nextRender();
@@ -338,7 +343,7 @@ describe('crud', () => {
     it('should not clear selection of a custom grid', async () => {
       grid.setAttribute('slot', 'grid');
       crud.appendChild(grid);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [{ foo: 'bar' }];
       grid.selectedItems = [crud.items[0]];
 
@@ -370,7 +375,7 @@ describe('crud', () => {
       `);
       form.setAttribute('slot', 'form');
       crud.appendChild(form);
-      crud._observer.flush();
+      await nextRender();
       crud.items = [{ foo: 1, bar: 2 }];
       await nextRender(crud);
     });

@@ -3,15 +3,11 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
 
-export type CustomFieldParseValueFn = (value: string) => unknown[];
-
-export type CustomFieldFormatValueFn = (inputValues: unknown[]) => string;
+export { CustomFieldFormatValueFn, CustomFieldParseValueFn } from './vaadin-custom-field-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -19,6 +15,11 @@ export type CustomFieldFormatValueFn = (inputValues: unknown[]) => string;
 export type CustomFieldChangeEvent = Event & {
   target: CustomField;
 };
+
+/**
+ * Fired when the `dirty` property changes.
+ */
+export type CustomFieldDirtyChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
  * Fired when the `invalid` property changes.
@@ -43,6 +44,8 @@ export type CustomFieldInternalTabEvent = Event & {
 };
 
 export interface CustomFieldCustomEventMap {
+  'dirty-changed': CustomFieldDirtyChangedEvent;
+
   'invalid-changed': CustomFieldInvalidChangedEvent;
 
   'value-changed': CustomFieldValueChangedEvent;
@@ -95,64 +98,12 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
-  /**
-   * Array of available input nodes
-   */
-  readonly inputs: HTMLElement[] | undefined;
-
-  /**
-   * A function to format the values of the individual fields contained by
-   * the custom field into a single component value. The function receives
-   * an array of all values of the individual fields in the order of their
-   * presence in the DOM, and must return a single component value.
-   * This function is called each time a value of an internal field is
-   * changed.
-   *
-   * Example:
-   * ```js
-   * customField.formatValue = (fieldValues) => {
-   *   return fieldValues.join("-");
-   * }
-   * ```
-   */
-  formatValue: CustomFieldFormatValueFn | undefined;
-
-  /**
-   * A function to parse the component value into values for the individual
-   * fields contained by the custom field. The function receives the
-   * component value, and must return an array of values for the individual
-   * fields in the order of their presence in the DOM.
-   * The function is called each time the value of the component changes.
-   *
-   * Example:
-   * ```js
-   * customField.parseValue = (componentValue) => {
-   *   return componentValue.split("-");
-   * }
-   * ```
-   */
-  parseValue: CustomFieldParseValueFn | undefined;
-
-  /**
-   * The name of the control, which is submitted with the form data.
-   */
-  name: string | null | undefined;
-
-  /**
-   * The value of the field. When wrapping several inputs, it will contain `\t`
-   * (Tab character) as a delimiter indicating parts intended to be used as the
-   * corresponding inputs values.
-   * Use the [`formatValue`](#/elements/vaadin-custom-field#property-formatValue)
-   * and [`parseValue`](#/elements/vaadin-custom-field#property-parseValue)
-   * properties to customize this behavior.
-   */
-  value: string | null | undefined;
-
+declare class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof CustomFieldEventMap>(
     type: K,
     listener: (this: CustomField, ev: CustomFieldEventMap[K]) => void,

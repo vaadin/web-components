@@ -44,6 +44,17 @@ export declare class ColumnBaseMixinClass<TItem> {
   frozenToEnd: boolean;
 
   /**
+   * When true, the cells for this column will be rendered with the `role` attribute
+   * set as `rowheader`, instead of the `gridcell` role value used by default.
+   *
+   * When a column is set as row header, its cells will be announced by screen readers
+   * while navigating to help user identify the current row as uniquely as possible.
+   *
+   * @attr {boolean} row-header
+   */
+  rowHeader: boolean;
+
+  /**
    * When set to true, the cells for this column are hidden.
    */
   hidden: boolean;

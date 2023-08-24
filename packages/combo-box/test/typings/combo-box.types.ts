@@ -24,6 +24,7 @@ import type {
   ComboBox,
   ComboBoxChangeEvent,
   ComboBoxCustomValueSetEvent,
+  ComboBoxDirtyChangedEvent,
   ComboBoxFilterChangedEvent,
   ComboBoxInvalidChangedEvent,
   ComboBoxOpenedChangedEvent,
@@ -36,6 +37,7 @@ import type {
   ComboBoxLight,
   ComboBoxLightChangeEvent,
   ComboBoxLightCustomValueSetEvent,
+  ComboBoxLightDirtyChangedEvent,
   ComboBoxLightFilterChangedEvent,
   ComboBoxLightInvalidChangedEvent,
   ComboBoxLightOpenedChangedEvent,
@@ -73,6 +75,11 @@ narrowedComboBox.addEventListener('opened-changed', (event) => {
 
 narrowedComboBox.addEventListener('invalid-changed', (event) => {
   assertType<ComboBoxInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+narrowedComboBox.addEventListener('dirty-changed', (event) => {
+  assertType<ComboBoxDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
@@ -175,6 +182,11 @@ narrowedComboBoxLight.addEventListener('opened-changed', (event) => {
 
 narrowedComboBoxLight.addEventListener('invalid-changed', (event) => {
   assertType<ComboBoxLightInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+narrowedComboBoxLight.addEventListener('dirty-changed', (event) => {
+  assertType<ComboBoxLightDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

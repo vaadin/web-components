@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
@@ -37,17 +37,17 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should reflect label attribute to the property', async () => {
         element.setAttribute('label', 'Email');
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.label).to.equal('Email');
 
         element.removeAttribute('label');
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.label).to.equal(null);
       });
 
       it('should update label content on property change', async () => {
         element.label = 'Email';
-        await nextFrame();
+        await nextUpdate(element);
         expect(label.textContent).to.equal('Email');
       });
     });
@@ -59,23 +59,23 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should toggle the attribute on label property change', async () => {
         element.label = 'Email';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.true;
 
         element.label = null;
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
       it('should not set the attribute when label is only whitespaces', async () => {
         element.label = ' ';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
       it('should not set the attribute when label is empty', async () => {
         element.label = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.false;
       });
     });
@@ -117,7 +117,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not update slotted label content on property change', async () => {
         element.label = 'Email';
-        await nextFrame();
+        await nextUpdate(element);
         expect(label.textContent).to.equal('Custom');
       });
 
@@ -127,20 +127,20 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should remove has-label attribute when label content is whitespace string', async () => {
         label.textContent = ' ';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
       it('should remove has-label attribute when label content is empty', async () => {
         label.textContent = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
       it('should attach default label when removing the custom label', async () => {
         element.label = 'Fallback';
         element.removeChild(label);
-        await nextFrame();
+        await nextUpdate(element);
         expect(element._labelNode.textContent).to.equal('Fallback');
       });
     });
@@ -162,7 +162,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should add has-label attribute when mutating a child text node', async () => {
         label.childNodes[0].textContent = 'Label';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.true;
       });
     });
@@ -184,7 +184,7 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should not remove has-label attribute when label children are empty', async () => {
         label.firstChild.textContent = '';
-        await nextFrame();
+        await nextUpdate(element);
         expect(element.hasAttribute('has-label')).to.be.true;
       });
     });
@@ -214,7 +214,7 @@ const runTests = (defineHelper, baseMixin) => {
         element = fixtureSync(`<${tag}></${tag}>`);
         await nextRender();
         element.label = 'Default label';
-        await nextFrame();
+        await nextUpdate(element);
         label = element._labelNode;
         lazyLabel = document.createElement('label');
         lazyLabel.setAttribute('slot', 'label');
@@ -223,109 +223,109 @@ const runTests = (defineHelper, baseMixin) => {
 
       it('should handle lazy label added using appendChild', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(lazyLabel);
       });
 
       it('should handle lazy label added using insertBefore', async () => {
         element.insertBefore(lazyLabel, label);
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(lazyLabel);
       });
 
       it('should handle lazy label added using replaceChild', async () => {
         element.replaceChild(lazyLabel, label);
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(lazyLabel);
       });
 
       it('should remove the default label from the element when using appendChild', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
         expect(label.parentNode).to.be.null;
       });
 
       it('should remove the default label from the element when using insertBefore', async () => {
         element.insertBefore(lazyLabel, label);
-        await nextFrame();
+        await nextRender();
         expect(label.parentNode).to.be.null;
       });
 
       it('should support replacing lazy label with a new one using appendChild', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         const newLabel = document.createElement('label');
         newLabel.setAttribute('slot', 'label');
         newLabel.textContent = 'New';
         element.appendChild(newLabel);
 
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(newLabel);
       });
 
       it('should support replacing lazy label with a new one using insertBefore', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         const newLabel = document.createElement('label');
         newLabel.setAttribute('slot', 'label');
         newLabel.textContent = 'New';
         element.insertBefore(newLabel, lazyLabel);
 
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(newLabel);
       });
 
       it('should support replacing lazy label with a new one using replaceChild', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         const newLabel = document.createElement('label');
         newLabel.setAttribute('slot', 'label');
         newLabel.textContent = 'New';
         element.replaceChild(newLabel, lazyLabel);
 
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(newLabel);
       });
 
       it('should support adding lazy label after removing the default one', async () => {
         element.removeChild(label);
-        await nextFrame();
+        await nextRender();
 
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         expect(element._labelNode).to.equal(lazyLabel);
       });
 
       it('should restore the default label when removing the lazy label', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         element.removeChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
         expect(element._labelNode).to.equal(label);
       });
 
       it('should keep has-label attribute when the default label is restored', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         element.removeChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
         expect(element.hasAttribute('has-label')).to.be.true;
       });
 
       it('should remove has-label attribute when label is set to empty', async () => {
         element.appendChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         element.label = '';
 
         element.removeChild(lazyLabel);
-        await nextFrame();
+        await nextRender();
 
         expect(element.hasAttribute('has-label')).to.be.false;
       });

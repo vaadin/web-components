@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -296,9 +295,20 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
       });
     });
 
-    this.__childObserver = new FlattenedNodesObserver(this, (info) => {
-      const addedNodes = this._getObservableNodes(info.addedNodes);
-      const removedNodes = this._getObservableNodes(info.removedNodes);
+    // Observe changes to initial children
+    [...this.children].forEach((child) => {
+      this.__mutationObserver.observe(child, mutationObserverConfig);
+    });
+
+    // Observe changes to lazily added nodes
+    this.__childObserver = new MutationObserver((mutations) => {
+      const addedNodes = [];
+      const removedNodes = [];
+
+      mutations.forEach((mutation) => {
+        addedNodes.push(...this._getObservableNodes(mutation.addedNodes));
+        removedNodes.push(...this._getObservableNodes(mutation.removedNodes));
+      });
 
       addedNodes.forEach((child) => {
         this.__mutationObserver.observe(child, mutationObserverConfig);
@@ -308,6 +318,8 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
         this._updateLayout();
       }
     });
+
+    this.__childObserver.observe(this, { childList: true });
   }
 
   /** @private */

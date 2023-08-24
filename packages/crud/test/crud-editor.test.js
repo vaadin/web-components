@@ -1,10 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import '../vaadin-crud.js';
 import { flushGrid } from './helpers.js';
 
 describe('crud editor', () => {
   let crud;
+
+  before(async () => {
+    await setViewport({ width: 1024, height: 768 });
+  });
 
   describe('header', () => {
     let header;
@@ -51,7 +56,6 @@ describe('crud editor', () => {
           `);
         }
         crud.editOnClick = true;
-        crud._fullscreen = false;
         await nextRender(crud);
         flushGrid(crud._grid);
 

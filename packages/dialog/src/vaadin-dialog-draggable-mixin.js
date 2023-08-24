@@ -45,13 +45,16 @@ export const DialogDraggableMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
+    async ready() {
       super.ready();
       this._originalBounds = {};
       this._originalMouseCoords = {};
       this._startDrag = this._startDrag.bind(this);
       this._drag = this._drag.bind(this);
       this._stopDrag = this._stopDrag.bind(this);
+
+      // Wait for overlay render
+      await new Promise(requestAnimationFrame);
       this.$.overlay.$.overlay.addEventListener('mousedown', this._startDrag);
       this.$.overlay.$.overlay.addEventListener('touchstart', this._startDrag);
     }

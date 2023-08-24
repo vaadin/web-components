@@ -1,37 +1,80 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('validation', () => {
-  let comboBox;
+  let comboBox, input;
 
   describe('basic', () => {
+    let validateSpy, changeSpy;
+
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
+      input = comboBox.inputElement;
+      validateSpy = sinon.spy(comboBox, 'validate');
+      changeSpy = sinon.spy();
+      comboBox.addEventListener('change', changeSpy);
     });
 
-    it('should pass the validation when the field is valid', () => {
+    it('should pass validation by default', () => {
       expect(comboBox.checkValidity()).to.be.true;
       expect(comboBox.validate()).to.be.true;
       expect(comboBox.invalid).to.be.false;
     });
 
-    it('should not pass the validation when the field is required and has no value', () => {
-      comboBox.required = true;
-      expect(comboBox.checkValidity()).to.be.false;
-      expect(comboBox.validate()).to.be.false;
-      expect(comboBox.invalid).to.be.true;
+    it('should validate on blur', () => {
+      input.focus();
+      input.blur();
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should pass the validation when the field is required and has a value', () => {
-      comboBox.required = true;
+    it('should validate on outside click', () => {
+      input.focus();
+      input.click();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate before change event on outside click', async () => {
+      input.focus();
+      input.click();
+      await sendKeys({ type: 'foo' });
+      outsideClick();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on blur', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      input.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on Enter', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on clear button click', () => {
+      comboBox.clearButtonVisible = true;
       comboBox.value = 'foo';
-      expect(comboBox.checkValidity()).to.be.true;
-      expect(comboBox.validate()).to.be.true;
-      expect(comboBox.invalid).to.be.false;
+      validateSpy.resetHistory();
+      comboBox.$.clearButton.click();
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -53,6 +96,52 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        input.focus();
+        input.blur();
+        expect(validateSpy.called).to.be.false;
+      });
+    });
+  });
+
+  describe('required', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+      comboBox.required = true;
+      input = comboBox.inputElement;
+    });
+
+    it('should fail validation without value', () => {
+      expect(comboBox.checkValidity()).to.be.false;
+      expect(comboBox.validate()).to.be.false;
+      expect(comboBox.invalid).to.be.true;
+    });
+
+    it('should pass validation with a value', () => {
+      comboBox.value = 'foo';
+      expect(comboBox.checkValidity()).to.be.true;
+      expect(comboBox.validate()).to.be.true;
+      expect(comboBox.invalid).to.be.false;
+    });
+
+    it('should be invalid after user input is reverted on blur', async () => {
+      input.focus();
+      await sendKeys({ type: 'custom' });
+      await nextRender();
+      input.blur();
+      expect(comboBox.invalid).to.be.true;
     });
   });
 

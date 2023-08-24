@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { DelegateStateMixin } from '../src/delegate-state-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
@@ -59,7 +59,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.hasAttribute('title')).to.be.false;
 
         element.setAttribute('title', 'foo');
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.getAttribute('title')).to.equal('foo');
       });
     });
@@ -75,7 +75,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.getAttribute('title')).to.equal('foo');
 
         element.removeAttribute('title');
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.hasAttribute('title')).to.be.false;
       });
     });
@@ -93,7 +93,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.hasAttribute('invalid')).to.be.false;
 
         element.toggleAttribute('invalid', true);
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.hasAttribute('invalid')).to.be.true;
       });
 
@@ -101,7 +101,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.hasAttribute('aria-invalid')).to.be.false;
 
         element.toggleAttribute('invalid', true);
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.hasAttribute('aria-invalid')).to.be.true;
       });
     });
@@ -117,7 +117,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.hasAttribute('invalid')).to.be.true;
 
         element.removeAttribute('invalid');
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.hasAttribute('invalid')).to.be.false;
       });
 
@@ -125,7 +125,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(target.hasAttribute('aria-invalid')).to.be.true;
 
         element.removeAttribute('invalid');
-        await nextFrame();
+        await nextUpdate(element);
         expect(target.hasAttribute('aria-invalid')).to.be.false;
       });
     });
@@ -142,7 +142,7 @@ const runTests = (defineHelper, baseMixin) => {
       expect(target.indeterminate).to.be.true;
 
       target.indeterminate = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(target.indeterminate).to.be.false;
     });
   });

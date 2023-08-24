@@ -19,10 +19,7 @@ registerStyles(
     :host::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       box-shadow: 0 0 0 2px var(--_active-user-color);
       border-radius: var(--lumo-border-radius-s);
       transition: box-shadow 0.3s;

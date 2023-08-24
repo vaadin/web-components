@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -20,7 +20,7 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.hasAttribute('required')).to.be.false;
 
       element.required = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('required')).to.be.true;
     });
 
@@ -28,7 +28,7 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.hasAttribute('invalid')).to.be.false;
 
       element.invalid = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(element.hasAttribute('invalid')).to.be.true;
     });
 
@@ -36,12 +36,12 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy();
       element.addEventListener('invalid-changed', spy);
       element.invalid = true;
-      await nextFrame();
+      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
 
       spy.resetHistory();
       element.invalid = false;
-      await nextFrame();
+      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
     });
   });

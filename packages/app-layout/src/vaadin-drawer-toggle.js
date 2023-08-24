@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
@@ -108,7 +107,9 @@ class DrawerToggle extends Button {
   ready() {
     super.ready();
 
-    this._observer = new FlattenedNodesObserver(this, () => {
+    this._toggleFallbackIcon();
+
+    this.$.slot.addEventListener('slotchange', () => {
       this._toggleFallbackIcon();
     });
   }

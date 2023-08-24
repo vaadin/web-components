@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 describe('validation', () => {
@@ -75,7 +75,7 @@ describe('validation', () => {
 
     it('should fire a validated event on validation failure', async () => {
       textArea.required = true;
-      await nextFrame();
+      await nextUpdate(textArea);
       textArea.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -92,16 +92,16 @@ describe('validation', () => {
 
     it('should not validate the field when minlength is set', async () => {
       textArea.minlength = 2;
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(textArea.invalid).to.be.false;
     });
 
     it('should validate the field when invalid after minlength is changed', async () => {
       textArea.invalid = true;
-      await nextFrame();
+      await nextUpdate(textArea);
       const spy = sinon.spy(textArea, 'validate');
       textArea.minlength = 2;
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(spy.calledOnce).to.be.true;
     });
   });
@@ -114,16 +114,16 @@ describe('validation', () => {
 
     it('should not validate the field when maxlength is set', async () => {
       textArea.maxlength = 6;
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(textArea.invalid).to.be.false;
     });
 
     it('should validate the field when invalid after maxlength is changed', async () => {
       textArea.invalid = true;
-      await nextFrame();
+      await nextUpdate(textArea);
       const spy = sinon.spy(textArea, 'validate');
       textArea.maxlength = 6;
-      await nextFrame();
+      await nextUpdate(textArea);
       expect(spy.calledOnce).to.be.true;
     });
   });

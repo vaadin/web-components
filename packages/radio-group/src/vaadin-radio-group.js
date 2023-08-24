@@ -3,12 +3,12 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -95,6 +95,11 @@ class RadioGroup extends FieldMixin(
           width: 100%;
         }
 
+        [part='group-field'] {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
         :host(:not([has-label])) [part='label'] {
           display: none;
         }
@@ -158,6 +163,19 @@ class RadioGroup extends FieldMixin(
       _fieldName: {
         type: String,
       },
+
+      /**
+       * Whether the field is dirty.
+       *
+       * The field is automatically marked as dirty once the user triggers
+       * a `change` event. Additionally, the field can be manually marked
+       * as dirty by setting the property to `true`.
+       */
+      dirty: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
     };
   }
 
@@ -166,6 +184,7 @@ class RadioGroup extends FieldMixin(
 
     this.__registerRadioButton = this.__registerRadioButton.bind(this);
     this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
+    this.__onRadioButtonChange = this.__onRadioButtonChange.bind(this);
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
   }
 
@@ -208,7 +227,8 @@ class RadioGroup extends FieldMixin(
 
     this._fieldName = `${this.localName}-${generateUniqueId()}`;
 
-    this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this._observer = new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
       // Registers the added radio buttons in the reverse order
       // in order for the group to take the value of the most recent button.
       this.__filterRadioButtons(addedNodes).reverse().forEach(this.__registerRadioButton);
@@ -317,6 +337,7 @@ class RadioGroup extends FieldMixin(
    */
   __registerRadioButton(radioButton) {
     radioButton.name = this._fieldName;
+    radioButton.addEventListener('change', this.__onRadioButtonChange);
     radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (this.disabled || this.readonly) {
@@ -335,11 +356,17 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   __unregisterRadioButton(radioButton) {
+    radioButton.removeEventListener('change', this.__onRadioButtonChange);
     radioButton.removeEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (radioButton.value === this.value) {
       this.__selectRadioButton(null);
     }
+  }
+
+  /** @private */
+  __onRadioButtonChange() {
+    this.dirty = true;
   }
 
   /**
@@ -459,7 +486,9 @@ class RadioGroup extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    if (!focused) {
+    // Do not validate when focusout is caused by document
+    // losing focus, which happens on browser tab switch.
+    if (!focused && document.hasFocus()) {
       this.validate();
     }
   }

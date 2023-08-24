@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { OverlayClassMixin } from '../src/overlay-class-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
@@ -33,7 +33,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should forward class names set using property', async () => {
       element.overlayClass = 'foo bar';
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.true;
@@ -41,7 +41,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should forward class names set using attribute', async () => {
       element.setAttribute('overlay-class', 'foo bar');
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.true;
@@ -49,10 +49,10 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should update class names when property changes', async () => {
       element.overlayClass = 'foo bar';
-      await nextFrame();
+      await nextUpdate(element);
 
       element.overlayClass = 'foo';
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.false;
@@ -60,10 +60,10 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should update class names when attribute changes', async () => {
       element.setAttribute('overlay-class', 'foo bar');
-      await nextFrame();
+      await nextUpdate(element);
 
       element.setAttribute('overlay-class', 'foo');
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.false;
@@ -83,7 +83,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should not override custom static class using property', async () => {
       element.overlayClass = 'foo bar';
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.true;
@@ -92,7 +92,7 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should not override custom static class using attribute', async () => {
       element.setAttribute('overlay-class', 'foo bar');
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('foo')).to.be.true;
       expect(overlay.classList.contains('bar')).to.be.true;
@@ -101,10 +101,10 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should not remove custom static class when clearing property', async () => {
       element.overlayClass = 'baz qux';
-      await nextFrame();
+      await nextUpdate(element);
 
       element.overlayClass = null;
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('baz')).to.be.false;
       expect(overlay.classList.contains('qux')).to.be.true;
@@ -112,10 +112,10 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should not remove custom static class when removing attribute', async () => {
       element.setAttribute('overlay-class', 'baz qux');
-      await nextFrame();
+      await nextUpdate(element);
 
       element.removeAttribute('overlay-class');
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('baz')).to.be.false;
       expect(overlay.classList.contains('qux')).to.be.true;
@@ -125,10 +125,10 @@ const runTests = (defineHelper, baseMixin) => {
       overlay.classList.add('xyz');
 
       element.overlayClass = 'abc xyz';
-      await nextFrame();
+      await nextUpdate(element);
 
       element.overlayClass = null;
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('abc')).to.be.false;
       expect(overlay.classList.contains('xyz')).to.be.true;
@@ -138,10 +138,10 @@ const runTests = (defineHelper, baseMixin) => {
       overlay.classList.add('xyz');
 
       element.setAttribute('overlay-class', 'abc xyz');
-      await nextFrame();
+      await nextUpdate(element);
 
       element.removeAttribute('overlay-class');
-      await nextFrame();
+      await nextUpdate(element);
 
       expect(overlay.classList.contains('abc')).to.be.false;
       expect(overlay.classList.contains('xyz')).to.be.true;

@@ -47,6 +47,16 @@ describe('events', () => {
       expect(changeSpy.calledTwice).to.be.true;
     });
 
+    it('should be fired after value-changed event on arrow keys', () => {
+      timePicker.step = 0.5;
+      const valueChangedSpy = sinon.spy();
+      timePicker.addEventListener('value-changed', valueChangedSpy);
+      arrowDown(inputElement);
+      expect(valueChangedSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(valueChangedSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
     it('should not be fired on focused time change', async () => {
       inputElement.focus();
       await sendKeys({ type: '00:00' });
@@ -94,6 +104,37 @@ describe('events', () => {
       enter(inputElement);
       inputElement.blur();
       expect(changeSpy.callCount).to.equal(1);
+    });
+
+    it('should not be fired again on Enter if the value has not changed', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '10:00' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy).to.be.calledOnce;
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy).to.be.calledOnce;
+    });
+
+    it('should not be fired again on blur if the value has not changed', async () => {
+      timePicker.step = 0.5;
+      inputElement.focus();
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(changeSpy).to.be.calledOnce;
+
+      inputElement.blur();
+      expect(changeSpy).to.be.calledOnce;
+    });
+
+    it('should not be fired on Enter after value set programmatically', async () => {
+      timePicker.value = '10:00';
+      inputElement.focus();
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.called).to.be.false;
     });
   });
 

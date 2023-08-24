@@ -70,6 +70,14 @@ class TooltipStateController {
   }
 
   /**
+   * Whether closing is currently in progress.
+   * @return {boolean}
+   */
+  get isClosing() {
+    return closing.has(this.host);
+  }
+
+  /**
    * Schedule opening the tooltip.
    * @param {Object} options
    */
@@ -273,6 +281,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         no-vertical-overlap$="[[__computeNoVerticalOverlap(__effectivePosition)]]"
         horizontal-align="[[__computeHorizontalAlign(__effectivePosition)]]"
         vertical-align="[[__computeVerticalAlign(__effectivePosition)]]"
+        on-mouseenter="__onOverlayMouseEnter"
         on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
@@ -281,6 +290,14 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
 
   static get properties() {
     return {
+      /**
+       * Element used to link with the `aria-describedby`
+       * attribute. When not set, defaults to `target`.
+       */
+      ariaTarget: {
+        type: Object,
+      },
+
       /**
        * Object with properties passed to `generator` and
        * `shouldShow` functions for generating tooltip text
@@ -420,6 +437,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         value: 'bottom',
       },
 
+      /**
+       * Element used to link with the `aria-describedby`
+       * attribute. When not set, defaults to `target`.
+       * @protected
+       */
+      _effectiveAriaTarget: {
+        type: Object,
+        computed: '__computeAriaTarget(ariaTarget, target)',
+        observer: '__effectiveAriaTargetChanged',
+      },
+
       /** @private */
       __effectivePosition: {
         type: String,
@@ -519,6 +547,11 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   }
 
   /** @private */
+  __computeAriaTarget(ariaTarget, target) {
+    return ariaTarget || target;
+  }
+
+  /** @private */
   __computeHorizontalAlign(position) {
     return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
   }
@@ -551,6 +584,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __tooltipRenderer(root) {
     root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+  }
+
+  /** @private */
+  __effectiveAriaTargetChanged(ariaTarget, oldAriaTarget) {
+    if (oldAriaTarget) {
+      removeValueFromAttribute(oldAriaTarget, 'aria-describedby', this._uniqueId);
+    }
+
+    if (ariaTarget) {
+      addValueToAttribute(ariaTarget, 'aria-describedby', this._uniqueId);
+    }
   }
 
   /** @private */
@@ -596,8 +640,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       oldTarget.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(oldTarget);
-
-      removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
 
     if (target) {
@@ -611,8 +653,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       requestAnimationFrame(() => {
         this.__targetVisibilityObserver.observe(target);
       });
-
-      addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
   }
 
@@ -700,6 +740,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   __onMouseLeave(event) {
     if (event.relatedTarget !== this._overlayElement) {
       this.__handleMouseLeave();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseEnter() {
+    // Retain opened state when moving pointer over the overlay.
+    // Closing can start due to an offset between the target and
+    // the overlay itself. If that's the case, re-open overlay.
+    // See https://github.com/vaadin/web-components/issues/6316
+    if (this._stateController.isClosing) {
+      this._stateController.open({ immediate: true });
     }
   }
 
