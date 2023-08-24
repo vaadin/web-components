@@ -517,8 +517,8 @@ export const DatePickerMixin = (subclass) =>
 
       // Set focus-ring attribute when moving focus to the overlay
       // by pressing Tab or arrow key, after opening it on click.
-      content.addEventListener('focusin', (event) => {
-        if (this._shouldSetFocus(event)) {
+      content.addEventListener('focusin', () => {
+        if (this._keyboardActive) {
           this._setFocused(true);
         }
       });

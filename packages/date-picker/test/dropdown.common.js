@@ -298,16 +298,16 @@ describe('dropdown', () => {
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
-    // it('should not remove focus-ring attribute after opening on date tap', async () => {
-    //   await open(datePicker);
-    //   // Focus the overlay with Tab
-    //   await sendKeys({ press: 'Tab' });
+    it('should not remove focus-ring attribute after opening on date tap', async () => {
+      await open(datePicker);
+      // Focus the overlay with Tab
+      await sendKeys({ press: 'Tab' });
 
-    //   dateTap();
-    //   await aTimeout(0);
+      dateTap();
+      await aTimeout(0);
 
-    //   expect(datePicker.hasAttribute('focus-ring')).to.be.true;
-    // });
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+    });
   });
 
   describe('virtual keyboard', () => {
