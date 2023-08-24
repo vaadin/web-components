@@ -86,5 +86,4 @@ export const ButtonMixin = (superClass) =>
         this.click();
       }
     }
-
   };
