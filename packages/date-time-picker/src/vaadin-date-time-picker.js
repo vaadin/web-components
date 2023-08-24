@@ -125,6 +125,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   static get template() {
     return html`
       <style>
+        :host([opened]) {
+          pointer-events: auto;
+        }
+
         .vaadin-date-time-picker-container {
           --vaadin-field-default-width: auto;
         }
@@ -325,6 +329,13 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
         type: Boolean,
       },
 
+      opened: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true,
+      },
+
       /**
        * The current selected date time.
        * @private
@@ -413,6 +424,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
+    this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
   }
 
   /** @private */
@@ -477,6 +489,21 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
   }
 
+  _shouldSetFocus(event) {
+    const target = event.relatedTarget;
+    const overlayContent = this.__datePicker._overlayContent;
+
+    if (
+      this.__datePicker.contains(target) ||
+      this.__timePicker.contains(target) ||
+      (overlayContent && overlayContent.contains(target))
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * Override method inherited from `FocusMixin` to not remove focused
    * state when focus moves between pickers or to the overlay.
@@ -521,16 +548,22 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__dispatchChangeForValue = undefined;
   }
 
+  __openedChangedEventHandler() {
+    this.opened = this.__datePicker.opened || this.__timePicker.opened;
+  }
+
   /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', this.__changeEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
+    node.addEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
   __removeInputListeners(node) {
     node.removeEventListener('change', this.__changeEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
+    node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
