@@ -56,10 +56,6 @@ export const ButtonMixin = (superClass) =>
       }
     }
 
-    __modifierKey(event) {
-      return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
-    }
-
     /**
      * Since the button component is designed on the base of the `[role=button]` attribute,
      * and doesn't have a native <button> inside, in order to be fully accessible from the keyboard,
@@ -78,7 +74,12 @@ export const ButtonMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      if (this._activeKeys.includes(event.key) && !this.__modifierKey(event)) {
+      // Analogous to native button, we should trigger click event when modifier key pressed.
+      if (event.altKey || event.shiftKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+
+      if (this._activeKeys.includes(event.key)) {
         event.preventDefault();
 
         // `DisabledMixin` overrides the standard `click()` method
