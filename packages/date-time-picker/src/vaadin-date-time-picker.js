@@ -123,6 +123,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   static get template() {
     return html`
       <style>
+        :host([opened]) {
+          pointer-events: auto;
+        }
+
         .vaadin-date-time-picker-container {
           --vaadin-field-default-width: auto;
         }
@@ -335,6 +339,13 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
         notify: true,
       },
 
+      opened: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true,
+      },
+
       /**
        * The current selected date time.
        * @private
@@ -425,6 +436,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__unparsableChangeEventHandler = this.__unparsableChangeEventHandler.bind(this);
     this.__dirtyChangedEventHandler = this.__dirtyChangedEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
+    this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
   }
 
   /** @private */
@@ -509,15 +521,13 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   _shouldSetFocus(event) {
-    const { relatedTarget } = event;
+    const target = event.relatedTarget;
     const overlayContent = this.__datePicker._overlayContent;
 
-    // Focus moves within the field.
     if (
-      this.__datePicker.contains(relatedTarget) ||
-      this.__timePicker.contains(relatedTarget) ||
-      this.__datePicker.opened ||
-      this.__timePicker.opened
+      this.__datePicker.contains(target) ||
+      this.__timePicker.contains(target) ||
+      (overlayContent && overlayContent.contains(target))
     ) {
       return false;
     }
@@ -535,12 +545,14 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   _shouldRemoveFocus(event) {
     const target = event.relatedTarget;
+    const overlayContent = this.__datePicker._overlayContent;
+
+    console.warn('_shouldRemoveFocus', target);
 
     if (
       this.__datePicker.contains(target) ||
       this.__timePicker.contains(target) ||
-      this.__datePicker.opened ||
-      this.__timePicker.opened
+      (overlayContent && overlayContent.contains(target))
     ) {
       return false;
     }
@@ -575,6 +587,11 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
   }
 
+  __openedChangedEventHandler(event) {
+    this.opened = this.__datePicker.opened || this.__timePicker.opened;
+    console.warn('__openedChangedEventHandler');
+  }
+
   /** @private */
   __dirtyChangedEventHandler(event) {
     if (event.detail.value) {
@@ -588,6 +605,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     node.addEventListener('unparseable-change', this.__unparsableChangeEventHandler);
     node.addEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
+    node.addEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
@@ -596,6 +614,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     node.removeEventListener('unparseable-change', this.__unparsableChangeEventHandler);
     node.removeEventListener('dirty-changed', this.__dirtyChangedEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
+    node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
