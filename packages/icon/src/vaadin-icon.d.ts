@@ -70,8 +70,18 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStyles
 
   /**
    * Class names defining an icon font and/or a specific glyph inside an icon font.
+   *
+   * @attr {string} font
    */
   font: string | null;
+
+  /**
+   * The specific glyph from a font to use as an icon.
+   * Can be a code point or a ligature name.
+   *
+   * @attr {string} char
+   */
+  char: string | null;
 
   /**
    * The size of an icon, used to set the `viewBox` attribute.

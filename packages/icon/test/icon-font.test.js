@@ -127,4 +127,35 @@ describe('vaadin-icon - icon fonts', () => {
       expect(icon.icon).to.equal('foo:bar');
     });
   });
+
+  describe('char', () => {
+    let icon;
+
+    it('should reflect char as an attribute', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
+      icon.char = '\ue900';
+      expect(icon.getAttribute('char')).to.equal('\ue900');
+    });
+
+    it('should add icon attribute if char is set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.char = '\ue900';
+      icon.style.fontFamily = 'My icons';
+      expect(icon.hasAttribute('icon')).to.be.true;
+    });
+
+    it('should not add icon attribute if font is not set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.char = null;
+      icon.style.fontFamily = 'My icons';
+      expect(icon.hasAttribute('icon')).to.be.false;
+    });
+
+    it('should not override existing icon', () => {
+      icon = fixtureSync('<vaadin-icon icon="foo:bar"></vaadin-icon>');
+      icon.char = '\ue900';
+      icon.style.fontFamily = 'My icons';
+      expect(icon.icon).to.equal('foo:bar');
+    });
+  });
 });

@@ -41,10 +41,6 @@
       .lumo-icon {
         font-family: 'lumo-icons', sans-serif;
       }
-      /* To be replaced by font-family and char later */
-      .calendar::before {
-        content: var(--lumo-icons-calendar);
-      }
 
       h6 {
         margin-top: var(--lumo-space-m);
@@ -61,7 +57,7 @@
     <h6>Custom iconset icon</h6>
     <vaadin-icon icon="my-icons-iconset:logo"></vaadin-icon>
 
-    <h6>Font icon (font property)</h6>
-    <vaadin-icon font="lumo-icon calendar"></vaadin-icon>
+    <h6>Font icon</h6>
+    <vaadin-icon font="lumo-icon" char="&#xea0e;"></vaadin-icon>
   </body>
 </html>
