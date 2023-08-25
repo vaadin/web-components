@@ -36,6 +36,10 @@ describe('icon', () => {
         <vaadin-icon font="my-icon-font" char="\ue900"></vaadin-icon>
         <vaadin-icon font="my-icon-font" char="figma"></vaadin-icon>
         <vaadin-icon style="font-family: 'My icons'" char="\ue900"></vaadin-icon>
+
+        <!-- Font icons using fontFamily -->
+        <vaadin-icon font-family="My icons" char="\ue900"></vaadin-icon>
+        <vaadin-icon font-family="My icons" char="figma"></vaadin-icon>
         `,
         div,
       );

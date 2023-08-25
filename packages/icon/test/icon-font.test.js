@@ -158,4 +158,15 @@ describe('vaadin-icon - icon fonts', () => {
       expect(icon.icon).to.equal('foo:bar');
     });
   });
+
+  describe('fontFamily', () => {
+    let icon;
+
+    it('should set font-family for the icon element', () => {
+      icon = fixtureSync('<vaadin-icon char="\\e900"></vaadin-icon>');
+      icon.fontFamily = 'My icons';
+      const fontIconStyle = getComputedStyle(icon, ':before');
+      expect(['"My icons"', 'My icons']).to.include(fontIconStyle.fontFamily);
+    });
+  });
 });
