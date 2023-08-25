@@ -104,9 +104,7 @@ const PolylitMixinImplementation = (superclass) => {
         });
       }
 
-      // TODO: Temporarily set to true to focus on issues that can't be fixed with sync: true
-      // if (options.sync) {
-      if (true) {
+      if (options.sync) {
         result = {
           get: defaultDescriptor.get,
           set(value) {

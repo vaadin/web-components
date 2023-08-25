@@ -25,6 +25,7 @@ export const GridSortColumnMixin = (superClass) =>
         direction: {
           type: String,
           notify: true,
+          sync: true,
         },
       };
     }

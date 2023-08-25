@@ -28,6 +28,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         width: {
           type: String,
           value: '58px',
+          sync: true,
         },
 
         /**
@@ -38,6 +39,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         flexGrow: {
           type: Number,
           value: 0,
+          sync: true,
         },
 
         /**
@@ -49,6 +51,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -59,6 +62,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         autoSelect: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -69,10 +73,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         dragSelect: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /** @protected */
-        _indeterminate: Boolean,
+        _indeterminate: {
+          type: Boolean,
+          sync: true,
+        },
 
         /** @protected */
         _selectAllHidden: Boolean,
