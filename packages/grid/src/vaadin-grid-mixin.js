@@ -510,11 +510,7 @@ export const GridMixin = (superClass) =>
       if (this._columnTree) {
         this._columnTree[this._columnTree.length - 1].forEach((c) => {
           if (c.isConnected) {
-            if (c.notifyPath) {
-              c.notifyPath('_cells.*', c._cells);
-            } else {
-              c._cells = [...c._cells];
-            }
+            c._cells = [...c._cells];
           }
         });
       }
@@ -682,11 +678,7 @@ export const GridMixin = (superClass) =>
             }
 
             if (!noNotify) {
-              if (column.notifyPath) {
-                column.notifyPath('_cells.*', column._cells);
-              } else {
-                column._cells = [...column._cells];
-              }
+              column._cells = [...column._cells];
             }
           } else {
             // Header & footer
