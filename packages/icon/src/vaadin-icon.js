@@ -254,10 +254,8 @@ class Icon extends ThemableMixin(
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
 
-    if (needsFontIconSizingFallback) {
-      // Call once initially to avoid a fouc
-      this._onResize();
-    }
+    // Call once initially to avoid a fouc
+    this._onResize();
   }
 
   /** @protected */
@@ -370,10 +368,13 @@ class Icon extends ThemableMixin(
       this.classList.add(...this.__addedFontClasses);
     }
 
-    // The "icon" attribute needs to be set on the host also when using font icons
-    // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
-    if ((font || char) && !this.icon) {
-      this.icon = '';
+    if (font || char) {
+      if (!this.icon) {
+        // The "icon" attribute needs to be set on the host also when using font icons
+        // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
+        this.icon = '';
+      }
+      this._onResize();
     }
   }
 
@@ -387,7 +388,9 @@ class Icon extends ThemableMixin(
    * @override
    */
   _onResize() {
-    this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
+    if (needsFontIconSizingFallback && (this.char || this.font)) {
+      this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
+    }
   }
 }
 
