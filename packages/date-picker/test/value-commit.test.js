@@ -8,7 +8,7 @@ import { waitForOverlayRender } from './helpers.js';
 
 const TODAY_DATE = new Date().toISOString().split('T')[0];
 
-describe('value change', () => {
+describe('value commit', () => {
   let datePicker, valueChangedSpy, validatedSpy, changeSpy;
 
   beforeEach(async () => {
@@ -70,24 +70,11 @@ describe('value change', () => {
       await waitForOverlayRender();
     });
 
-    // TODO: This test doesn't work when autoOpenDisabled = false
-    // it('should commit on blur', async () => {
-    //   datePicker.blur();
-    //   expect(valueChangedSpy).to.be.calledOnce;
-    //   // TODO: Why is value-changed fired after validation?
-    //   // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
-    //   expect(validatedSpy).to.be.calledOnce;
-    //   expect(changeSpy).to.be.calledOnce;
-    //   expect(changeSpy).to.be.calledAfter(validatedSpy);
-    //   expect(changeSpy).to.be.calledAfter(valueChangedSpy);
-    //   expect(datePicker.value).to.equal('2001-01-01');
-    // });
-
     it('should commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
-      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(validatedSpy).to.be.calledOnce;
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
       expect(datePicker.value).to.equal('2001-01-01');
@@ -96,8 +83,8 @@ describe('value change', () => {
     it('should commit on close with outside click', () => {
       outsideClick();
       expect(valueChangedSpy).to.be.calledOnce;
-      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(validatedSpy).to.be.calledOnce;
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
       expect(datePicker.value).to.equal('2001-01-01');
@@ -325,6 +312,7 @@ describe('value change', () => {
       it('should commit on blur after clearing', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.calledOnce;
+        // TODO: Optimize
         expect(validatedSpy).to.be.calledTwice;
         expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
