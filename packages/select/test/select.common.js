@@ -81,6 +81,10 @@ describe('vaadin-select', () => {
       expect(listBox.isConnected).to.be.true;
       expect(listBox.parentNode).to.equal(select._overlayElement);
     });
+
+    it('should have position set to relative', async () => {
+      expect(getComputedStyle(select).position).to.equal('relative');
+    });
   });
 
   describe('with items', () => {

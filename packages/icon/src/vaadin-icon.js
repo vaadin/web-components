@@ -100,8 +100,12 @@ class Icon extends ThemableMixin(
           height: 100%;
         }
 
-        :host([font]) svg {
+        :host(:is([font], [char])) svg {
           display: none;
+        }
+
+        :host([char])::before {
+          content: attr(char);
         }
       </style>
       <svg
@@ -163,8 +167,23 @@ class Icon extends ThemableMixin(
 
       /**
        * Class names defining an icon font and/or a specific glyph inside an icon font.
+       *
+       * @attr {string} font
+       * @type {string}
        */
       font: {
+        type: String,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * The specific glyph from a font to use as an icon.
+       * Can be a code point or a ligature name.
+       *
+       * @attr {string} char
+       * @type {string}
+       */
+      char: {
         type: String,
         reflectToAttribute: true,
       },
@@ -195,7 +214,7 @@ class Icon extends ThemableMixin(
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)', '__srcChanged(src)'];
   }
 
   constructor() {
@@ -334,7 +353,7 @@ class Icon extends ThemableMixin(
   }
 
   /** @private */
-  __fontChanged(font) {
+  __fontChanged(font, char) {
     this.classList.remove(...(this.__addedFontClasses || []));
     if (font) {
       this.__addedFontClasses = font.split(' ');
@@ -343,7 +362,7 @@ class Icon extends ThemableMixin(
 
     // The "icon" attribute needs to be set on the host also when using font icons
     // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
-    if (font && !this.icon) {
+    if ((font || char) && !this.icon) {
       this.icon = '';
     }
   }
