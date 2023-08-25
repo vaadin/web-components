@@ -2,7 +2,6 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../../../enable.js';
 import '../../../theme/material/vaadin-side-nav.js';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
 import '@vaadin/icons';

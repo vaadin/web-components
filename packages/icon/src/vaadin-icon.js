@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { svg } from 'lit';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -11,7 +12,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
+import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
 const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
@@ -153,6 +154,18 @@ class Icon extends ThemableMixin(
       },
 
       /**
+       * The SVG source to be loaded as the icon. It can be:
+       * - an URL to a file containing the icon
+       * - an URL in the format "/path/to/file.svg#objectID", where the "objectID" refers to an ID attribute contained
+       *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
+       * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
+       *   function for the SVG content passed
+       */
+      src: {
+        type: String,
+      },
+
+      /**
        * Class names defining an icon font and/or a specific glyph inside an icon font.
        *
        * @attr {string} font
@@ -211,7 +224,13 @@ class Icon extends ThemableMixin(
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)', '__srcChanged(src)'];
+  }
+
+  constructor() {
+    super();
+
+    this.__fetch = fetch.bind(window);
   }
 
   /** @protected */
@@ -280,6 +299,47 @@ class Icon extends ThemableMixin(
       this._applyIcon();
     } else {
       this.svg = ensureSvgLiteral(null);
+    }
+  }
+
+  /** @private */
+  async __srcChanged(src) {
+    if (!src) {
+      this.svg = null;
+      return;
+    }
+
+    // Need to add the "icon" attribute to avoid issues as described in
+    // https://github.com/vaadin/web-components/issues/6301
+    this.icon = '';
+
+    if (src.includes('#')) {
+      this.svg = svg`<use href="${src}"/>`;
+    } else {
+      try {
+        const data = await this.__fetch(src, { mode: 'cors' });
+        if (!data.ok) {
+          throw new Error('Error loading icon');
+        }
+
+        const svgData = await data.text();
+
+        if (!Icon.__domParser) {
+          Icon.__domParser = new DOMParser();
+        }
+        const parsedResponse = Icon.__domParser.parseFromString(svgData, 'text/html');
+
+        const svgElement = parsedResponse.querySelector('svg');
+        if (!svgElement) {
+          throw new Error(`SVG element not found on path: ${src}`);
+        }
+
+        this.__viewBox = svgElement.getAttribute('viewBox');
+        this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+      } catch (e) {
+        console.error(e);
+        this.svg = null;
+      }
     }
   }
 

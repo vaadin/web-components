@@ -12,3 +12,4 @@ assertType<IconSvgLiteral | null>(icon.svg);
 assertType<string | null>(icon.font);
 assertType<string | null>(icon.char);
 assertType<string | null>(icon.fontFamily);
+assertType<string | null>(icon.src);
