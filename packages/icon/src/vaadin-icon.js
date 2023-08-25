@@ -273,6 +273,7 @@ class Icon extends ThemableMixin(
     }
   }
 
+  /** @private */
   async __srcChanged(src) {
     if (!src) {
       this.svg = null;
@@ -287,7 +288,13 @@ class Icon extends ThemableMixin(
       this.svg = svg`<use href="${src}"/>`;
     } else {
       try {
-        const svgData = await this.__fetchSVG(src);
+        const data = await this.__fetch(src, { mode: 'cors' });
+        if (!data.ok) {
+          throw new Error('Error loading icon');
+        }
+
+        const svgData = await data.text();
+
         if (!Icon.__domParser) {
           Icon.__domParser = new DOMParser();
         }
@@ -305,15 +312,6 @@ class Icon extends ThemableMixin(
         this.svg = null;
       }
     }
-  }
-
-  async __fetchSVG(path) {
-    const data = await this.__fetch(path, { mode: 'cors' });
-    if (!data.ok) {
-      return Promise.reject('Error loading icon');
-    }
-
-    return data.text();
   }
 
   /** @private */
