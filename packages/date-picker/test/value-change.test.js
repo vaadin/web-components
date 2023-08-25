@@ -24,33 +24,33 @@ describe('value change', () => {
   });
 
   describe('default', () => {
-    it('should not commit on blur', () => {
+    it('should not commit but validate on blur', () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
+      expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not commit on Enter', async () => {
+    it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
+      expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
     it('should not commit on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
+      expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
 
-    it('should not commit on close with outside click', async () => {
+    it('should not commit but validate on close with outside click', async () => {
       datePicker.click();
       await waitForOverlayRender();
       outsideClick();
       expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
+      expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
@@ -59,7 +59,7 @@ describe('value change', () => {
       await waitForOverlayRender();
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      // expect(validatedSpy).to.be.not.called;
+      expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
   });
@@ -86,32 +86,27 @@ describe('value change', () => {
     it('should commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
-      // TODO: Why is value-changed fired after validation?
-      // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
     it('should commit on close with outside click', () => {
       outsideClick();
       expect(valueChangedSpy).to.be.calledOnce;
-      // TODO: Why is value-changed fired after validation?
-      // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
     it('should revert on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      // TODO: Why is validation triggered on revert?
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
       expect(datePicker.inputElement.value).to.equal('');
     });
@@ -126,8 +121,7 @@ describe('value change', () => {
     it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
-      // TODO: Why is validation triggered twice?
-      expect(validatedSpy).to.be.calledTwice;
+      expect(validatedSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
@@ -143,8 +137,7 @@ describe('value change', () => {
     it('should revert on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      // TODO: Why is validation triggered on revert?
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validatedSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
       expect(datePicker.inputElement.value).to.equal('');
     });
@@ -161,11 +154,9 @@ describe('value change', () => {
       tap(date);
       expect(valueChangedSpy).to.be.calledOnce;
       expect(validatedSpy).to.be.calledOnce;
-      // TODO: Why is value-changed fired after validation?
-      // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
       expect(datePicker.value).to.equal(TODAY_DATE);
     });
 
@@ -173,11 +164,9 @@ describe('value change', () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
       expect(validatedSpy).to.be.calledOnce;
-      // TODO: Why is value-changed fired after validation?
-      // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
       expect(datePicker.value).to.equal(TODAY_DATE);
     });
 
@@ -185,11 +174,9 @@ describe('value change', () => {
       await sendKeys({ press: 'Space' });
       expect(valueChangedSpy).to.be.calledOnce;
       expect(validatedSpy).to.be.calledOnce;
-      // TODO: Why is value-changed fired after validation?
-      // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validatedSpy);
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
       expect(datePicker.value).to.equal(TODAY_DATE);
     });
   });
@@ -205,24 +192,24 @@ describe('value change', () => {
     });
 
     describe('default', () => {
-      it('should not commit on blur', () => {
+      it('should not commit but validate on blur', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
+        expect(validatedSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
       });
 
-      it('should not commit on Enter', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
+        expect(validatedSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
       });
 
       it('should not commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
+        expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
@@ -231,7 +218,7 @@ describe('value change', () => {
         await waitForOverlayRender();
         outsideClick();
         expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
+        expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
@@ -240,7 +227,7 @@ describe('value change', () => {
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
-        // expect(validatedSpy).to.be.not.called;
+        expect(validatedSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
     });
@@ -256,11 +243,9 @@ describe('value change', () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        // TODO: Why is value-changed fired after validation?
-        // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
@@ -268,11 +253,9 @@ describe('value change', () => {
         outsideClick();
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        // TODO: Why is value-changed fired after validation?
-        // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
@@ -294,7 +277,6 @@ describe('value change', () => {
       it('should revert on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.not.called;
-        // TODO: Why is validation triggered on revert?
         expect(validatedSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
@@ -327,11 +309,9 @@ describe('value change', () => {
         await sendKeys({ press: 'Space' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        // TODO: Why is value-changed fired after validation?
-        // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('');
       });
     });
@@ -345,12 +325,10 @@ describe('value change', () => {
       it('should commit on blur after clearing', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.calledOnce;
-        // TODO: Why is validation triggered twice?
         expect(validatedSpy).to.be.calledTwice;
         expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('');
       });
 
@@ -358,11 +336,9 @@ describe('value change', () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        // TODO: Why is value-changed fired after validation?
-        // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('');
       });
 
@@ -370,11 +346,9 @@ describe('value change', () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        // TODO: Why is value-changed fired after validation?
-        // expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('');
       });
 
@@ -383,11 +357,10 @@ describe('value change', () => {
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.calledOnce;
-        // TODO: Why is validation triggered twice?
-        expect(validatedSpy).to.be.calledTwice;
+        expect(validatedSpy).to.be.calledOnce;
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
         expect(changeSpy).to.be.calledAfter(validatedSpy);
-        expect(changeSpy).to.be.calledAfter(valueChangedSpy);
         expect(datePicker.value).to.equal('');
       });
     });
