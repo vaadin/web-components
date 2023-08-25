@@ -18,6 +18,13 @@ import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaa
 const MIN_ALLOWED_TIME = '00:00:00.000';
 const MAX_ALLOWED_TIME = '23:59:59.999';
 
+const TEST_TIME_OBJ = {
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+  milliseconds: 0,
+};
+
 registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-picker-styles' });
 
 /**
@@ -228,6 +235,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       step: {
         type: Number,
+        observer: '__stepChanged',
       },
 
       /**
@@ -460,18 +468,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __onArrowPressWithStep(step) {
-    const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
-    this.__memoValue = objWithStep;
-
-    // Setting `value` property triggers the synchronous observer
-    // that in turn updates `_comboBoxValue` (actual input value)
-    // with its own observer where the value can be parsed again,
-    // so we set this flag to ensure it does not alter the value.
-    this.__useMemo = true;
-    this.value = this.__formatISO(objWithStep);
-    this.__useMemo = false;
-
-    this.__dispatchChange();
+    const parsedObj = this.i18n.parseTime(this._comboBoxValue);
+    const objWithStep = this.__addStep(this.__getMsec(parsedObj), step, true);
+    this._comboBoxValue = this.i18n.formatTime(objWithStep);
+    this.__commitPendingValue();
   }
 
   /** @private */
@@ -596,7 +596,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    * @override
    */
   _valueChanged(value, oldValue) {
-    const parsedObj = (this.__memoValue = this.__parseISO(value));
+    const parsedObj = this.__parseISO(value);
     const newValue = this.__formatISO(parsedObj) || '';
 
     if (value !== '' && value !== null && !parsedObj) {
@@ -628,7 +628,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       return;
     }
 
-    const parsedObj = this.__useMemo ? this.__memoValue : this.i18n.parseTime(value);
+    const parsedObj = this.i18n.parseTime(value);
     const newValue = this.i18n.formatTime(parsedObj) || '';
 
     if (parsedObj) {
@@ -676,6 +676,24 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   /** @private */
   __onComboBoxValidated() {
     this.validate();
+  }
+
+  __stepChanged(step) {
+    if (step === undefined) {
+      return;
+    }
+
+    const parsedObj = this.i18n.parseTime(this.i18n.formatTime(TEST_TIME_OBJ));
+    if (
+      (step % 1 !== 0 && !parsedObj.milliseconds) ||
+      (step % 60 !== 0 && !parsedObj.seconds) ||
+      (step % (60 * 60) !== 0 && !parsedObj.minutes)
+    ) {
+      console.warn(
+        `<vaadin-time-picker> The step ${step} seconds is not compatible with the provided time formatter, so it has been unset.`,
+      );
+      this.step = undefined;
+    }
   }
 
   /** @private */

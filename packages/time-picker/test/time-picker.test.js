@@ -445,6 +445,61 @@ describe('time-picker', () => {
       timePicker.value = '12:12:12.100';
       expect(timePicker.value).to.be.equal('12:12:12.100');
     });
+
+    describe('with custom formatter', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
+      });
+
+      afterEach(() => {
+        console.warn.restore();
+      });
+
+      it('should unset and warn when step is not compatible with the formatter (milliseconds)', () => {
+        timePicker.i18n.formatTime = ({ hours, minutes, seconds }) => `${hours}:${minutes}:${seconds}`;
+
+        [0.5, 1.5, 60.5, 3600.5].forEach((step) => {
+          console.warn.resetHistory();
+          timePicker.step = step;
+
+          expect(timePicker.step).to.be.undefined;
+          expect(console.warn).to.be.calledOnce;
+          expect(console.warn.args[0][0]).to.include(
+            `<vaadin-time-picker> The step ${step} seconds is not compatible with the provided time formatter, so it has been unset`,
+          );
+        });
+      });
+
+      it('should unset and warn when step is not compatible with the formatter (seconds)', () => {
+        timePicker.i18n.formatTime = ({ hours, minutes }) => `${hours}:${minutes}`;
+
+        [1, 61, 3601].forEach((step) => {
+          console.warn.resetHistory();
+          timePicker.step = step;
+
+          expect(timePicker.step).to.be.undefined;
+          expect(console.warn).to.be.calledOnce;
+          expect(console.warn.args[0][0]).to.include(
+            `<vaadin-time-picker> The step ${step} seconds is not compatible with the provided time formatter, so it has been unset`,
+          );
+        });
+      });
+
+      it('should unset and warn when step is not compatible with the formatter (minutes)', () => {
+        timePicker.i18n.formatTime = ({ hours }) => `${hours}`;
+
+        [60, 3660].forEach((step) => {
+          console.warn.resetHistory();
+          timePicker.step = step;
+
+          expect(timePicker.step).to.be.undefined;
+          expect(console.warn).to.be.calledOnce;
+          expect(console.warn.args[0][0]).to.include(
+            `<vaadin-time-picker> The step ${step} seconds is not compatible with the provided time formatter, so it has been unset`,
+          );
+        });
+      });
+    });
   });
 
   describe('custom functions', () => {
