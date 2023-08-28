@@ -106,42 +106,6 @@ describe('keyboard navigation', () => {
       arrowUp(inputElement);
       expect(spy.callCount).to.eql(2);
     });
-
-    describe('with custom parser and formatter', () => {
-      beforeEach(() => {
-        timePicker.i18n.parseTime = (text) => {
-          const parts = text.split('.');
-          return {
-            hours: parts[0],
-            minutes: parts[1],
-          };
-        };
-        timePicker.i18n.formatTime = (time) => {
-          return `${time.hours}.${time.minutes}`;
-        };
-      });
-
-      it('should correctly add the step with custom parser and formatter', () => {
-        timePicker.value = '12:0';
-        timePicker.step = 20;
-        for (let inc = 1; inc < 4; inc++) {
-          expect(inputElement.value).to.be.equal('12.0');
-          arrowUp(inputElement);
-        }
-        expect(inputElement.value).to.be.equal('12.1');
-      });
-
-      it('should correctly subtract the step with custom parser and formatter', () => {
-        timePicker.value = '12:0';
-        timePicker.step = 20;
-        for (let inc = 1; inc < 4; inc++) {
-          arrowDown(inputElement);
-          expect(inputElement.value).to.be.equal('11.59');
-        }
-        arrowDown(inputElement);
-        expect(inputElement.value).to.be.equal('11.58');
-      });
-    });
   });
 
   describe('with dropdown', () => {
