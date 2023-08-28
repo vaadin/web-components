@@ -24,12 +24,6 @@ let markerMap = {};
 let lockCount = 0;
 
 /**
- * @param {Element | ShadowRoot} node
- * @return {Element | null}
- */
-const unwrapHost = (node) => (node ? node.host || unwrapHost(node.parentNode) : null);
-
-/**
  * @param {?Node} node
  * @return {boolean}
  */
