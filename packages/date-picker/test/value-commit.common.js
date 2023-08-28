@@ -112,7 +112,7 @@ describe('value commit', () => {
       expect(datePicker.inputElement.value).to.equal('INVALID');
     });
 
-    it('should not commit but validate on close with outside click', async () => {
+    it('should not commit but validate on close with outside click', () => {
       outsideClick();
       expectValidationOnly();
       expect(datePicker.inputElement.value).to.equal('INVALID');
@@ -126,6 +126,10 @@ describe('value commit', () => {
 
     describe('clearing input with Backspace', () => {
       beforeEach(async () => {
+        await sendKeys({ press: 'Enter' });
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+
         datePicker.inputElement.select();
         await sendKeys({ press: 'Backspace' });
       });
@@ -135,7 +139,7 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on outside click after clearing', async () => {
+      it('should not commit but validate on outside click after clearing', () => {
         outsideClick();
         expectValidationOnly();
       });
@@ -243,7 +247,7 @@ describe('value commit', () => {
         expect(datePicker.inputElement.value).to.equal('INVALID');
       });
 
-      it('should commit an empty value on close with outside click', async () => {
+      it('should commit an empty value on close with outside click', () => {
         outsideClick();
         expectValueCommit('');
         expect(datePicker.inputElement.value).to.equal('INVALID');

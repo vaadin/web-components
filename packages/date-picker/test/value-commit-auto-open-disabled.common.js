@@ -55,7 +55,7 @@ describe('value commit - autoOpenDisabled', () => {
       expectValidationOnly();
     });
 
-    it('should not commit but validate on outside click', async () => {
+    it('should not commit but validate on outside click', () => {
       outsideClick();
       expectValidationOnly();
     });
@@ -71,7 +71,7 @@ describe('value commit - autoOpenDisabled', () => {
       await sendKeys({ type: '1/1/2001' });
     });
 
-    it('should commit on blur', async () => {
+    it('should commit on blur', () => {
       datePicker.blur();
       expectValueCommit('2001-01-01');
     });
@@ -98,7 +98,7 @@ describe('value commit - autoOpenDisabled', () => {
       await sendKeys({ type: 'foobar' });
     });
 
-    it('should not commit but validate on blur', async () => {
+    it('should not commit but validate on blur', () => {
       datePicker.blur();
       expectValidationOnly();
       expect(datePicker.inputElement.value).to.equal('foobar');
@@ -110,7 +110,7 @@ describe('value commit - autoOpenDisabled', () => {
       expect(datePicker.inputElement.value).to.equal('foobar');
     });
 
-    it('should not commit but validate on outside click', async () => {
+    it('should not commit but validate on outside click', () => {
       outsideClick();
       expectValidationOnly();
       expect(datePicker.inputElement.value).to.equal('foobar');
@@ -124,11 +124,15 @@ describe('value commit - autoOpenDisabled', () => {
 
     describe('clearing input with Backspace', () => {
       beforeEach(async () => {
+        await sendKeys({ press: 'Enter' });
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+
         datePicker.inputElement.select();
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on blur after clearing', async () => {
+      it('should not commit but validate on blur after clearing', () => {
         datePicker.blur();
         expectValidationOnly();
       });
@@ -138,7 +142,7 @@ describe('value commit - autoOpenDisabled', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on outside click after clearing', async () => {
+      it('should not commit but validate on outside click after clearing', () => {
         outsideClick();
         expectValidationOnly();
       });
@@ -171,7 +175,7 @@ describe('value commit - autoOpenDisabled', () => {
         expectNoValueCommit();
       });
 
-      it('should not commit but validate on outside click', async () => {
+      it('should not commit but validate on outside click', () => {
         outsideClick();
         expectValidationOnly();
       });
@@ -213,7 +217,7 @@ describe('value commit - autoOpenDisabled', () => {
         expect(datePicker.inputElement.value).to.equal('foobar');
       });
 
-      it('should commit an empty value on outside click', async () => {
+      it('should commit an empty value on outside click', () => {
         outsideClick();
         expectValueCommit('');
         expect(datePicker.value).to.equal('');
