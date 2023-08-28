@@ -214,10 +214,12 @@ describe('aria-hidden', () => {
 
         it(`should set ${attr} attribute on elements except the one in deep shadow DOM`, () => {
           const deepRoot = nested.attachShadow({ mode: 'open' });
-          const deep = document.createElement('div');
-          deepRoot.appendChild(deep);
+          const deep1 = document.createElement('div');
+          const deep2 = document.createElement('div');
+          deepRoot.appendChild(deep1);
+          deepRoot.appendChild(deep2);
 
-          const unhide = hideFunc(deep, parent);
+          const unhide = hideFunc(deep1, parent);
           callbacks.add(unhide);
 
           // All the elements are hidden
@@ -226,6 +228,9 @@ describe('aria-hidden', () => {
 
           // Shadow root host isn't hidden
           expect(sibling.hasAttribute(attr)).to.be.false;
+
+          // Sibling in shadow root is hidden
+          expect(deep2.hasAttribute(attr)).to.be.true;
         });
 
         it(`should remove ${attr} attribute from elements outside the shadow DOM`, () => {

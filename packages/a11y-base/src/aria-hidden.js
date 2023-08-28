@@ -60,13 +60,12 @@ const correctTargets = (parent, targets) => {
         return null;
       }
 
-      while (target) {
-        if (parent.contains(target)) {
+      let node = target;
+      while (node && node !== parent) {
+        if (parent.contains(node)) {
           return target;
         }
-
-        // Unwrap nested shadow roots
-        target = unwrapHost(target);
+        node = node.parentNode || node.host;
       }
 
       logError(target, 'is not contained inside', parent);
@@ -110,7 +109,7 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
     }
 
     elementsToKeep.add(el);
-    keep(el.parentNode);
+    keep(el.parentNode || el.host);
   };
 
   targets.forEach(keep);
@@ -123,7 +122,9 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
       return;
     }
 
-    [...parent.children].forEach((node) => {
+    const root = parent.shadowRoot;
+    const children = root ? [...parent.children, ...root.children] : [...parent.children];
+    children.forEach((node) => {
       // Skip elements that don't need to be hidden
       if (['template', 'script', 'style'].includes(node.localName)) {
         return;
