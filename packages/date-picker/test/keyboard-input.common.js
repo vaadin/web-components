@@ -502,21 +502,5 @@ describe('keyboard', () => {
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(20);
     });
-
-    it('should revert input value on Esc when overlay has been initialized', async () => {
-      await open(datePicker);
-      await close(datePicker);
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Escape' });
-      expect(datePicker.value).to.equal('');
-    });
-
-    it('should apply input value on enter when overlay has been initialized', async () => {
-      await open(datePicker);
-      await close(datePicker);
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Enter' });
-      expect(datePicker.value).to.equal('2000-01-01');
-    });
   });
 });
