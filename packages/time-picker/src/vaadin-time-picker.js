@@ -678,6 +678,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this.validate();
   }
 
+  /** @private */
   __stepChanged(step) {
     if (step == null) {
       return;
