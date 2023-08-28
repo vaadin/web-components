@@ -24,7 +24,7 @@ let markerMap = {};
 let lockCount = 0;
 
 /**
- * @param {Element | Shadow} node
+ * @param {Element | ShadowRoot} node
  * @return {Element | null}
  */
 const unwrapHost = (node) => (node ? node.host || unwrapHost(node.parentNode) : null);
@@ -60,13 +60,13 @@ const correctTargets = (parent, targets) => {
         return null;
       }
 
-      if (parent.contains(target)) {
-        return target;
-      }
+      while (target) {
+        if (parent.contains(target)) {
+          return target;
+        }
 
-      const correctedTarget = unwrapHost(target);
-      if (correctedTarget && parent.contains(correctedTarget)) {
-        return correctedTarget;
+        // Unwrap nested shadow roots
+        target = unwrapHost(target);
       }
 
       logError(target, 'is not contained inside', parent);
