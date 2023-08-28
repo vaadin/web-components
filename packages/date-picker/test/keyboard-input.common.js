@@ -503,19 +503,6 @@ describe('keyboard', () => {
       expect(focusedDate().getDate()).to.equal(20);
     });
 
-    it('should set datePicker value on blur', async () => {
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Tab' });
-      expect(datePicker.value).to.equal('2000-01-01');
-    });
-
-    it('should revert input value on Esc when overlay not initialized', async () => {
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Escape' });
-      expect(input.value).to.equal('');
-      expect(datePicker.value).to.equal('');
-    });
-
     it('should revert input value on Esc when overlay has been initialized', async () => {
       await open(datePicker);
       await close(datePicker);
@@ -524,106 +511,12 @@ describe('keyboard', () => {
       expect(datePicker.value).to.equal('');
     });
 
-    it('should not revert input value on esc after selected value is removed', async () => {
-      await open(datePicker);
-      await sendKeys({ type: '1/1/2000' });
-      await close(datePicker);
-      input.value = '';
-      await sendKeys({ press: 'Escape' });
-      expect(datePicker.value).to.equal('');
-    });
-
-    it('should apply the input value on enter when overlay not initialized', async () => {
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Enter' });
-      expect(datePicker.value).to.equal('2000-01-01');
-    });
-
     it('should apply input value on enter when overlay has been initialized', async () => {
       await open(datePicker);
       await close(datePicker);
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Enter' });
       expect(datePicker.value).to.equal('2000-01-01');
-    });
-  });
-
-  describe('change and validate sequence', () => {
-    let validateSpy;
-    let changeSpy;
-
-    beforeEach(() => {
-      validateSpy = sinon.spy(datePicker, 'validate');
-      changeSpy = sinon.spy();
-      datePicker.addEventListener('change', changeSpy);
-    });
-
-    describe('autoOpenDisabled true', () => {
-      beforeEach(() => {
-        datePicker.autoOpenDisabled = true;
-      });
-
-      it('should change after validate on Enter', async () => {
-        await sendKeys({ type: '01/02/20' });
-        await sendKeys({ press: 'Enter' });
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledOnce).to.be.true;
-        expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-      });
-
-      it('should validate on Enter when value is the same', async () => {
-        await sendKeys({ press: 'Enter' });
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.called).to.be.false;
-      });
-
-      it('should validate on Enter when invalid', async () => {
-        await sendKeys({ type: 'foo' });
-        await sendKeys({ press: 'Enter' });
-        expect(validateSpy.calledOnce).to.be.true;
-        expect(changeSpy.called).to.be.false;
-      });
-
-      it('should neither change nor validate on Esc', async () => {
-        await sendKeys({ type: '01/02/20' });
-        await sendKeys({ press: 'Escape' });
-        expect(validateSpy.called).to.be.false;
-        expect(changeSpy.called).to.be.false;
-      });
-
-      describe('value is set', () => {
-        beforeEach(async () => {
-          await sendKeys({ type: '01/02/20' });
-          await sendKeys({ press: 'Enter' });
-          validateSpy.resetHistory();
-          changeSpy.resetHistory();
-          datePicker._focusAndSelect();
-        });
-
-        it('should neither change nor validate on Esc without clear button', async () => {
-          await sendKeys({ press: 'Escape' });
-          expect(validateSpy.called).to.be.false;
-          expect(changeSpy.called).to.be.false;
-        });
-
-        it('should change after validate on Backspace & Enter', async () => {
-          input.select();
-          await sendKeys({ press: 'Backspace' });
-          await sendKeys({ press: 'Enter' });
-          expect(validateSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-        });
-
-        it('should change after validate on Backspace & Esc', async () => {
-          input.select();
-          await sendKeys({ press: 'Backspace' });
-          await sendKeys({ press: 'Escape' });
-          expect(validateSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledOnce).to.be.true;
-          expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-        });
-      });
     });
   });
 });

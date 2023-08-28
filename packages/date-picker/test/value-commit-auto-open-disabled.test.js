@@ -3,7 +3,6 @@ import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-help
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { waitForOverlayRender } from './helpers.js';
 
 const TODAY_DATE = new Date().toISOString().split('T')[0];
 
@@ -60,7 +59,7 @@ describe('value commit - autoOpenDisabled', () => {
     it('should commit on blur', async () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.calledOnce;
-      // TODO: Optimize
+      // TODO: Optimize the number of validation runs.
       expect(validatedSpy).to.be.calledTwice;
       expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
       expect(changeSpy).to.be.calledOnce;
@@ -81,7 +80,7 @@ describe('value commit - autoOpenDisabled', () => {
     it('should commit on outside click', () => {
       outsideClick();
       expect(valueChangedSpy).to.be.calledOnce;
-      // TODO: Optimize
+      // TODO: Optimize the number of validation runs.
       expect(validatedSpy).to.be.calledTwice;
       expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
       expect(changeSpy).to.be.calledOnce;
@@ -195,7 +194,7 @@ describe('value commit - autoOpenDisabled', () => {
       it('should commit on outside click', () => {
         outsideClick();
         expect(valueChangedSpy).to.be.calledOnce;
-        // TODO: Optimize
+        // TODO: Optimize the number of validation runs.
         expect(validatedSpy).to.be.calledTwice;
         expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
         expect(changeSpy).to.be.calledOnce;
@@ -214,24 +213,31 @@ describe('value commit - autoOpenDisabled', () => {
 
     describe('bad input', () => {
       beforeEach(async () => {
+        datePicker.inputElement.select();
         await sendKeys({ type: 'INVALID' });
       });
 
-      it('should revert on Enter', async () => {
+      it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expect(valueChangedSpy).to.be.not.called;
+        expect(valueChangedSpy).to.be.calledOnce;
         expect(validatedSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.not.called;
-        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
+        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(changeSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.calledAfter(validatedSpy);
+        expect(datePicker.value).to.equal('');
+        expect(datePicker.inputElement.value).to.equal('INVALID');
       });
 
-      it('should revert on outside click', async () => {
+      it('should commit an empty value on outside click', async () => {
         outsideClick();
-        expect(valueChangedSpy).to.be.not.called;
-        // TODO: Optimize
-        expect(validatedSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.not.called;
-        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
+        expect(valueChangedSpy).to.be.calledOnce;
+        // TODO: Optimize the number of validation runs.
+        expect(validatedSpy).to.be.calledTwice;
+        expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+        expect(changeSpy).to.be.calledOnce;
+        expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+        expect(datePicker.value).to.equal('');
+        expect(datePicker.inputElement.value).to.equal('INVALID');
       });
 
       it('should revert on Escape', async () => {
@@ -252,7 +258,7 @@ describe('value commit - autoOpenDisabled', () => {
       it('should commit on blur after clearing', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.calledOnce;
-        // TODO: Optimize
+        // TODO: Optimize the number of validation runs.
         expect(validatedSpy).to.be.calledTwice;
         expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
         expect(changeSpy).to.be.calledOnce;

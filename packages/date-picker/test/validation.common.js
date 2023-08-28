@@ -99,21 +99,6 @@ describe('validation', () => {
       expect(datePicker.validate()).to.be.true;
     });
 
-    it('should validate on blur', () => {
-      input.focus();
-      input.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate on outside click', async () => {
-      input.focus();
-      input.click();
-      await waitForOverlayRender();
-      outsideClick();
-      await nextUpdate(datePicker);
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
     it('should not validate on input click while opened', async () => {
       await open(datePicker);
       validateSpy.resetHistory();
@@ -164,14 +149,6 @@ describe('validation', () => {
       datePicker.value = '2000-02-01';
       await close(datePicker);
       expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should keep invalid input value when closing overlay', async () => {
-      datePicker.value = '2020-01-01';
-      setInputValue(datePicker, 'foo');
-      await waitForOverlayRender();
-      await waitForValueChange(datePicker, () => datePicker.close());
-      expect(input.value).to.equal('foo');
     });
 
     it('should change invalid state only once', async () => {
@@ -274,26 +251,6 @@ describe('validation', () => {
         datePicker.autoOpenDisabled = true;
       });
 
-      it('should set an empty value when trying to commit an invalid date with enter', () => {
-        datePicker.autoOpenDisabled = true;
-        datePicker.value = '2020-01-01';
-        setInputValue(datePicker, 'foo');
-        enter(input);
-        expect(datePicker.value).to.equal('');
-        expect(input.value).to.equal('foo');
-        expect(datePicker.invalid).to.be.true;
-      });
-
-      it('should set an empty value when trying to commit an invalid date with blur', () => {
-        datePicker.autoOpenDisabled = true;
-        datePicker.value = '2020-01-01';
-        setInputValue(datePicker, 'foo');
-        input.blur();
-        expect(datePicker.value).to.equal('');
-        expect(input.value).to.equal('foo');
-        expect(datePicker.invalid).to.be.true;
-      });
-
       it('should be valid on blur after entering a valid date', () => {
         datePicker.autoOpenDisabled = true;
         setInputValue(datePicker, '1/1/2022');
@@ -327,12 +284,9 @@ describe('validation', () => {
   });
 
   describe('min', () => {
-    let input;
-
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01"></vaadin-date-picker>`);
       await nextRender();
-      input = datePicker.inputElement;
     });
 
     it('should pass validation without value', () => {
@@ -356,12 +310,9 @@ describe('validation', () => {
   });
 
   describe('max', () => {
-    let input;
-
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker max="2010-01-01"></vaadin-date-picker>`);
       await nextRender();
-      input = datePicker.inputElement;
     });
 
     it('should pass validation without value', () => {
