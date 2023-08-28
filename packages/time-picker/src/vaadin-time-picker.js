@@ -679,7 +679,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   __stepChanged(step) {
-    if (step === undefined) {
+    if (step == null) {
       return;
     }
 
@@ -690,10 +690,13 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       (step % (60 * 60) !== 0 && !parsedObj.minutes)
     ) {
       console.warn(
-        `<vaadin-time-picker> The step ${step} seconds is not compatible with the provided time formatter, so it has been unset.`,
+        `<vaadin-time-picker> The step ${step} seconds has been rejected because it's not compatible with the provided time formatter.`,
       );
-      this.step = undefined;
+      this.step = this.__previousStep;
+      return;
     }
+
+    this.__previousStep = step;
   }
 
   /** @private */
