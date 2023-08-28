@@ -103,6 +103,12 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
     }
 
     elementsToKeep.add(el);
+
+    const slot = el.assignedSlot;
+    if (slot) {
+      keep(slot);
+    }
+
     keep(el.parentNode || el.host);
   };
 

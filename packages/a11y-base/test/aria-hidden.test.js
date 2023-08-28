@@ -222,15 +222,30 @@ describe('aria-hidden', () => {
           const unhide = hideFunc(deep1, parent);
           callbacks.add(unhide);
 
-          // All the elements are hidden
-          expect(target1.getAttribute(attr)).to.equal('true');
-          expect(target2.parentNode.getAttribute(attr)).to.equal('true');
-
           // Shadow root host isn't hidden
           expect(sibling.hasAttribute(attr)).to.be.false;
+          expect(nested.hasAttribute(attr)).to.be.false;
 
           // Sibling in shadow root is hidden
           expect(deep2.hasAttribute(attr)).to.be.true;
+        });
+
+        it(`should not set ${attr} attribute on assigned slot elements of target`, () => {
+          const deepRoot = nested.attachShadow({ mode: 'open' });
+          deepRoot.innerHTML = '<slot></slot><span></span>';
+          const [slot, span] = deepRoot.children;
+
+          const deep = document.createElement('div');
+          nested.appendChild(deep);
+
+          const unhide = hideFunc(deep, parent);
+          callbacks.add(unhide);
+
+          // Slot in the shadow root isn't hidden
+          expect(slot.hasAttribute(attr)).to.be.false;
+
+          // Sibling in the shadow root is hidden
+          expect(span.hasAttribute(attr)).to.be.true;
         });
 
         it(`should remove ${attr} attribute from elements outside the shadow DOM`, () => {
