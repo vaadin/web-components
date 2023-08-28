@@ -1,23 +1,24 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
 
 const TODAY_DATE = new Date().toISOString().split('T')[0];
 
 describe('value commit - autoOpenDisabled', () => {
-  let datePicker, valueChangedSpy, validatedSpy, changeSpy;
+  let datePicker, valueChangedSpy, validateSpy, changeSpy;
 
   beforeEach(async () => {
     datePicker = fixtureSync(`<vaadin-date-picker auto-open-disabled></vaadin-date-picker>`);
     await nextRender();
+    validateSpy = sinon.spy(datePicker, 'validate').named('validateSpy');
+
     valueChangedSpy = sinon.spy().named('valueChangedSpy');
-    validatedSpy = sinon.spy().named('validatedSpy');
-    changeSpy = sinon.spy().named('changeSpy');
     datePicker.addEventListener('value-changed', valueChangedSpy);
-    datePicker.addEventListener('validated', validatedSpy);
+
+    changeSpy = sinon.spy().named('changeSpy');
     datePicker.addEventListener('change', changeSpy);
+
     datePicker.focus();
   });
 
@@ -25,33 +26,33 @@ describe('value commit - autoOpenDisabled', () => {
     it('should not commit but validate on blur', () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
     it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
     it('should not commit but validate on outside click', async () => {
       outsideClick();
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
     });
 
     it('should not commit on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.not.called;
+      expect(validateSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
     });
   });
 
-  describe('user input', () => {
+  describe('entering parsable input', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1/1/2001' });
     });
@@ -60,20 +61,20 @@ describe('value commit - autoOpenDisabled', () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.calledOnce;
       // TODO: Optimize the number of validation runs.
-      expect(validatedSpy).to.be.calledTwice;
-      expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+      expect(validateSpy).to.be.calledTwice;
+      expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
       expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+      expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
     it('should commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.calledOnce;
-      expect(validatedSpy).to.be.calledOnce;
-      expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+      expect(validateSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledAfter(valueChangedSpy);
       expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(validatedSpy);
+      expect(changeSpy).to.be.calledAfter(validateSpy);
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
@@ -81,57 +82,85 @@ describe('value commit - autoOpenDisabled', () => {
       outsideClick();
       expect(valueChangedSpy).to.be.calledOnce;
       // TODO: Optimize the number of validation runs.
-      expect(validatedSpy).to.be.calledTwice;
-      expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+      expect(validateSpy).to.be.calledTwice;
+      expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
       expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+      expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
       expect(datePicker.value).to.equal('2001-01-01');
     });
 
     it('should revert on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.not.called;
+      expect(validateSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
       expect(datePicker.inputElement.value).to.equal('');
     });
   });
 
-  describe('bad input', () => {
+  describe('entering unparsable input', () => {
     beforeEach(async () => {
-      await sendKeys({ type: 'INVALID' });
+      await sendKeys({ type: 'foobar' });
     });
 
     it('should not commit but validate on blur', async () => {
       datePicker.blur();
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.inputElement.value).to.equal('INVALID');
+      expect(datePicker.inputElement.value).to.equal('foobar');
     });
 
     it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.inputElement.value).to.equal('INVALID');
+      expect(datePicker.inputElement.value).to.equal('foobar');
     });
 
     it('should not commit but validate on outside click', async () => {
       outsideClick();
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.calledOnce;
+      expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.not.called;
-      expect(datePicker.inputElement.value).to.equal('INVALID');
+      expect(datePicker.inputElement.value).to.equal('foobar');
     });
 
     it('should revert on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expect(valueChangedSpy).to.be.not.called;
-      expect(validatedSpy).to.be.not.called;
+      expect(validateSpy).to.be.not.called;
       expect(changeSpy).to.be.not.called;
       expect(datePicker.inputElement.value).to.equal('');
+    });
+
+    describe('clearing input with Backspace', () => {
+      beforeEach(async () => {
+        datePicker.inputElement.select();
+        await sendKeys({ press: 'Backspace' });
+      });
+
+      it('should not commit but validate on blur after clearing', async () => {
+        datePicker.blur();
+        expect(valueChangedSpy).to.be.not.called;
+        expect(validateSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.not.called;
+      });
+
+      it('should not commit but validate on Enter after clearing', async () => {
+        await sendKeys({ press: 'Enter' });
+        expect(valueChangedSpy).to.be.not.called;
+        expect(validateSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.not.called;
+      });
+
+      it('should not commit but validate on outside click after clearing', async () => {
+        outsideClick();
+        expect(valueChangedSpy).to.be.not.called;
+        expect(validateSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.not.called;
+      });
     });
   });
 
@@ -142,40 +171,40 @@ describe('value commit - autoOpenDisabled', () => {
       datePicker.value = TODAY_DATE;
       initialInputElementValue = datePicker.inputElement.value;
       valueChangedSpy.resetHistory();
-      validatedSpy.resetHistory();
+      validateSpy.resetHistory();
     });
 
     describe('default', () => {
       it('should not commit but validate on blur', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
       });
 
       it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
       });
 
       it('should not commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.not.called;
+        expect(validateSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
       });
 
       it('should not commit but validate on outside click', async () => {
         outsideClick();
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledOnce;
         expect(changeSpy).to.be.not.called;
       });
     });
 
-    describe('user input', () => {
+    describe('entering parsable input', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
         await sendKeys({ type: '1/1/2001' });
@@ -184,10 +213,10 @@ describe('value commit - autoOpenDisabled', () => {
       it('should commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validatedSpy);
+        expect(changeSpy).to.be.calledAfter(validateSpy);
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
@@ -195,61 +224,61 @@ describe('value commit - autoOpenDisabled', () => {
         outsideClick();
         expect(valueChangedSpy).to.be.calledOnce;
         // TODO: Optimize the number of validation runs.
-        expect(validatedSpy).to.be.calledTwice;
-        expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+        expect(validateSpy).to.be.calledTwice;
+        expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+        expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
         expect(datePicker.value).to.equal('2001-01-01');
       });
 
       it('should revert on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.not.called;
+        expect(validateSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
 
-    describe('bad input', () => {
+    describe('entering unparsable input', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
-        await sendKeys({ type: 'INVALID' });
+        await sendKeys({ type: 'foobar' });
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validatedSpy);
+        expect(changeSpy).to.be.calledAfter(validateSpy);
         expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('INVALID');
+        expect(datePicker.inputElement.value).to.equal('foobar');
       });
 
       it('should commit an empty value on outside click', async () => {
         outsideClick();
         expect(valueChangedSpy).to.be.calledOnce;
         // TODO: Optimize the number of validation runs.
-        expect(validatedSpy).to.be.calledTwice;
-        expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+        expect(validateSpy).to.be.calledTwice;
+        expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+        expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
         expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('INVALID');
+        expect(datePicker.inputElement.value).to.equal('foobar');
       });
 
       it('should revert on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.not.called;
-        expect(validatedSpy).to.be.not.called;
+        expect(validateSpy).to.be.not.called;
         expect(changeSpy).to.be.not.called;
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
 
-    describe('clearing with Backspace', () => {
+    describe('clearing input with Backspace', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
         await sendKeys({ press: 'Backspace' });
@@ -259,30 +288,30 @@ describe('value commit - autoOpenDisabled', () => {
         datePicker.blur();
         expect(valueChangedSpy).to.be.calledOnce;
         // TODO: Optimize the number of validation runs.
-        expect(validatedSpy).to.be.calledTwice;
-        expect(validatedSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+        expect(validateSpy).to.be.calledTwice;
+        expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy.firstCall).to.be.calledAfter(validatedSpy.firstCall);
+        expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
         expect(datePicker.value).to.equal('');
       });
 
       it('should commit on Enter after clearing', async () => {
         await sendKeys({ press: 'Enter' });
         expect(valueChangedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validatedSpy);
+        expect(changeSpy).to.be.calledAfter(validateSpy);
         expect(datePicker.value).to.equal('');
       });
 
       it('should commit on Escape after clearing', async () => {
         await sendKeys({ press: 'Escape' });
         expect(valueChangedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledOnce;
-        expect(validatedSpy).to.be.calledAfter(valueChangedSpy);
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
         expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validatedSpy);
+        expect(changeSpy).to.be.calledAfter(validateSpy);
         expect(datePicker.value).to.equal('');
       });
     });
