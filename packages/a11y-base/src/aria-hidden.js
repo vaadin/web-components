@@ -59,7 +59,7 @@ const correctTargets = (parent, targets) => {
         if (parent.contains(node)) {
           return target;
         }
-        node = node.parentNode || node.host;
+        node = node.getRootNode().host;
       }
 
       logError(target, 'is not contained inside', parent);
