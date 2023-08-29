@@ -241,6 +241,7 @@ class Icon extends ThemableMixin(
         ${tag}[font] {
           display: inline-flex;
           vertical-align: middle;
+          font-size: inherit;
         }
       `,
     ];
