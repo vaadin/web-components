@@ -278,13 +278,6 @@ describe('time-picker', () => {
       timePicker.clearButtonVisible = false;
       expect(comboBox.clearButtonVisible).to.be.false;
     });
-
-    it('should clear value on Escape if clear button is visible', async () => {
-      timePicker.value = '00:00';
-      inputElement.focus();
-      await sendKeys({ press: 'Escape' });
-      expect(timePicker.value).to.equal('');
-    });
   });
 
   describe('toggle button', () => {

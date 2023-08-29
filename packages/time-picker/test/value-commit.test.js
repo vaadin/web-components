@@ -355,20 +355,12 @@ describe('value commit', () => {
 
     it('should commit on ArrowDown', async () => {
       await sendKeys({ press: 'ArrowUp' });
-      // TODO: Fix validation
-      // expectValueCommit('00:00:01');
-      expect(valueChangedSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
+      expectValueCommit('00:00:01');
     });
 
     it('should commit on ArrowUp', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      // TODO: Fix validation
-      // expectValueCommit('23:59:59');
-      expect(valueChangedSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
+      expectValueCommit('23:59:59');
     });
 
     describe('with value committed using an arrow key', () => {

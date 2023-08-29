@@ -86,70 +86,6 @@ describe('validation', () => {
       expect(timePicker.validate()).to.be.true;
     });
 
-    it('should not validate on user input', () => {
-      setInputValue(timePicker, '12:00');
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should validate on blur', () => {
-      input.focus();
-      input.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate on outside click', () => {
-      input.focus();
-      input.click();
-      outsideClick();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate before change event on outside click', () => {
-      input.focus();
-      input.click();
-      setInputValue(timePicker, '12:00');
-      outsideClick();
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should validate without change event on bad input', () => {
-      input.focus();
-      input.click();
-      setInputValue(timePicker, 'foo');
-      outsideClick();
-      expect(changeSpy.called).to.be.false;
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate before change event on blur', () => {
-      input.focus();
-      setInputValue(timePicker, '12:00');
-      input.blur();
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should validate before change event on Enter', () => {
-      setInputValue(timePicker, '12:00');
-      enter(timePicker.inputElement);
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should validate before change event on clear button click', () => {
-      timePicker.clearButtonVisible = true;
-      timePicker.value = '12:00';
-      validateSpy.resetHistory();
-      timePicker.$.clearButton.click();
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
     it('should not validate on min change without value', () => {
       timePicker.min = '12:00';
       expect(validateSpy.called).to.be.false;
@@ -194,32 +130,6 @@ describe('validation', () => {
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
     });
-
-    describe('with step', () => {
-      beforeEach(() => {
-        timePicker.step = 1;
-      });
-
-      it('should validate between value-changed and change events on ArrowDown', async () => {
-        input.focus();
-        await sendKeys({ press: 'ArrowDown' });
-        expect(valueChangedSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
-        expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validateSpy);
-      });
-
-      it('should validate between value-changed and change events on ArrowUp', async () => {
-        input.focus();
-        await sendKeys({ press: 'ArrowUp' });
-        expect(valueChangedSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
-        expect(changeSpy).to.be.calledOnce;
-        expect(changeSpy).to.be.calledAfter(validateSpy);
-      });
-    });
   });
 
   describe('input value', () => {
@@ -260,20 +170,6 @@ describe('validation', () => {
       timePicker.value = '12:00';
       expect(timePicker.checkValidity()).to.be.true;
     });
-
-    it('should be valid when committing a non-empty value', () => {
-      setInputValue(timePicker, '12:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
-    });
-
-    it('should be invalid when committing an empty value', () => {
-      setInputValue(timePicker, '12:00');
-      enter(timePicker.inputElement);
-      setInputValue(timePicker, '');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.true;
-    });
   });
 
   describe('min', () => {
@@ -298,24 +194,6 @@ describe('validation', () => {
     it('should pass validation with a value = min', () => {
       timePicker.value = '10:00';
       expect(timePicker.checkValidity()).to.be.true;
-    });
-
-    it('should be invalid when committing a value < min', () => {
-      setInputValue(timePicker, '08:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.true;
-    });
-
-    it('should be valid when committing a value > min', () => {
-      setInputValue(timePicker, '12:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
-    });
-
-    it('should be valid when committing a value = min', () => {
-      setInputValue(timePicker, '10:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
     });
   });
 
@@ -342,24 +220,6 @@ describe('validation', () => {
       timePicker.value = '10:00';
       expect(timePicker.checkValidity()).to.be.true;
     });
-
-    it('should be invalid when committing a value > max', () => {
-      setInputValue(timePicker, '12:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.true;
-    });
-
-    it('should be valid when committing a value < max', () => {
-      setInputValue(timePicker, '08:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
-    });
-
-    it('should be valid when committing a value = max', () => {
-      setInputValue(timePicker, '10:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
-    });
   });
 
   describe('pattern', () => {
@@ -379,18 +239,6 @@ describe('validation', () => {
     it('should pass validation with a value matching the pattern', () => {
       timePicker.value = '10:00';
       expect(timePicker.checkValidity()).to.be.true;
-    });
-
-    it('should be invalid when committing a value not matching the pattern', () => {
-      setInputValue(timePicker, '20:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.true;
-    });
-
-    it('should be valid when committing a value matching the pattern', () => {
-      setInputValue(timePicker, '10:00');
-      enter(timePicker.inputElement);
-      expect(timePicker.invalid).to.be.false;
     });
   });
 
