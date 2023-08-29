@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
