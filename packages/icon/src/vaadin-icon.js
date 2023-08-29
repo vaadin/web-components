@@ -390,7 +390,9 @@ class Icon extends ThemableMixin(
    */
   _onResize() {
     if (needsFontIconSizingFallback && (this.char || this.font)) {
-      this.style.setProperty('--_vaadin-font-icon-size', `${this.offsetHeight}px`);
+      const { paddingTop, paddingBottom, height } = getComputedStyle(this);
+      const fontIconSize = parseFloat(height) - parseFloat(paddingTop) - parseFloat(paddingBottom);
+      this.style.setProperty('--_vaadin-font-icon-size', `${fontIconSize}px`);
     }
   }
 }

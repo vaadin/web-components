@@ -71,6 +71,16 @@ describe('vaadin-icon - icon fonts', () => {
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
     });
+
+    it('should subtract vertical padding from height', async () => {
+      icon.style.padding = '5px';
+      await onceResized(icon);
+      expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(14, 1);
+
+      icon.style.padding = '7px';
+      await onceResized(icon);
+      expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(10, 1);
+    });
   });
 
   describe('font', () => {
