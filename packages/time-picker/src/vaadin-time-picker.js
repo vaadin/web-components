@@ -471,6 +471,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const parsedObj = this.i18n.parseTime(this._comboBoxValue);
     const objWithStep = this.__addStep(this.__getMsec(parsedObj), step, true);
     this._comboBoxValue = this.i18n.formatTime(objWithStep);
+    this.validate();
     this.__commitPendingValue();
   }
 
