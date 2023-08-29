@@ -599,6 +599,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const parsedObj = this.__parseISO(value);
     const newValue = this.__formatISO(parsedObj) || '';
 
+    // Mark value set programmatically by the user
+    // as committed for the change event detection.
+    if (!this.__skipCommittedValueUpdate) {
+      this.__committedValue = value;
+    }
+
     if (value !== '' && value !== null && !parsedObj) {
       // Value can not be parsed, reset to the old one.
       this.value = oldValue === undefined ? '' : oldValue;
@@ -611,12 +617,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       delete this.__keepInvalidInput;
     } else {
       this.__updateInputValue(parsedObj);
-    }
-
-    // Mark value set programmatically by the user
-    // as committed for the change event detection.
-    if (!this.__skipCommittedValueUpdate) {
-      this.__committedValue = this.value;
     }
 
     this._toggleHasValue(this._hasValue);
