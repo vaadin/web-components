@@ -22,6 +22,7 @@ export const iconFontCss = css`
     line-height: 1.5;
     display: inline-block;
     vertical-align: top;
+    font-size: 24px;
   }
 
   .icon-before::before {
