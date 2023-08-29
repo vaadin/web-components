@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -190,6 +191,28 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+
+    describe('with step', () => {
+      beforeEach(() => {
+        timePicker.step = 1;
+      });
+
+      it('should validate before change event on ArrowDown', async () => {
+        input.focus();
+        await sendKeys({ press: 'ArrowDown' });
+        expect(changeSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledBefore(changeSpy);
+      });
+
+      it('should validate before change event on ArrowUp', async () => {
+        input.focus();
+        await sendKeys({ press: 'ArrowUp' });
+        expect(changeSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledOnce;
+        expect(validateSpy).to.be.calledBefore(changeSpy);
+      });
     });
   });
 
