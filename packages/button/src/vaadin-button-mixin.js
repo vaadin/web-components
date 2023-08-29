@@ -72,6 +72,10 @@ export const ButtonMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
+      if (event.altKey || event.shiftKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+
       if (this._activeKeys.includes(event.key)) {
         event.preventDefault();
 
