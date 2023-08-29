@@ -40,7 +40,7 @@ describe('events', () => {
     });
 
     it('should be fired on arrow keys when no dropdown opens', () => {
-      timePicker.step = 0.5;
+      timePicker.step = 1;
       arrowDown(inputElement);
       expect(changeSpy.calledOnce).to.be.true;
       arrowUp(inputElement);
