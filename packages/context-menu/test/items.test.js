@@ -201,10 +201,22 @@ describe('items', () => {
     expect(getMenuItems(rootMenu)[2].hasAttribute('menu-item-checked')).to.be.true;
   });
 
+  it('should have a focused root item after click if keep open', () => {
+    rootMenu.items[2].checked = true;
+    getMenuItems(rootMenu)[2].click();
+    expect(getMenuItems(rootMenu)[2].hasAttribute('focused')).to.be.true;
+  });
+
   it('should have a checked sub menu item after click if keep open', () => {
     subMenu.items[3].checked = true;
     getMenuItems(subMenu)[3].click();
     expect(getMenuItems(subMenu)[3].hasAttribute('menu-item-checked')).to.be.true;
+  });
+
+  it('should have a focused sub menu item after click if keep open', () => {
+    subMenu.items[3].checked = true;
+    getMenuItems(subMenu)[3].click();
+    expect(getMenuItems(subMenu)[3].hasAttribute('focused')).to.be.true;
   });
 
   it('should not have a checked item', async () => {

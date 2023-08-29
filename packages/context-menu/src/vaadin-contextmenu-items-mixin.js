@@ -215,10 +215,12 @@ export const ItemsMixin = (superClass) =>
         const { value } = event.detail;
         if (typeof value === 'number') {
           const item = listBox.items[value]._item;
+          // Reset selected before dispatching the event to prevent
+          // checkmark icon flashing when `keepOpen` is set to true.
+          listBox.selected = null;
           if (!item.children) {
             this.dispatchEvent(new CustomEvent('item-selected', { detail: { value: item } }));
           }
-          listBox.selected = null;
         }
       });
 
@@ -301,9 +303,15 @@ export const ItemsMixin = (superClass) =>
       this.addEventListener('item-selected', (e) => {
         const menu = e.target;
         const selectedItem = e.detail.value;
-
-        if (!!selectedItem.keepOpen && menu.items.includes(selectedItem)) {
+        const index = menu.items.indexOf(selectedItem);
+        if (!!selectedItem.keepOpen && index > -1) {
           menu._overlayElement.requestContentUpdate();
+
+          // Initialize items synchronously
+          menu._listBox._observer.flush();
+
+          const newItem = menu._listBox.items[index];
+          newItem.focus();
         } else if (!selectedItem.keepOpen) {
           this.close();
         }
