@@ -110,11 +110,11 @@ describe('events', () => {
       inputElement.focus();
       await sendKeys({ type: '10:00' });
       await sendKeys({ press: 'Enter' });
-      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy.calledOnce).to.be.true;
 
       await sendKeys({ press: 'Backspace' });
       await sendKeys({ press: 'Enter' });
-      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should not be fired again on blur if the value has not changed', async () => {
@@ -122,10 +122,10 @@ describe('events', () => {
       inputElement.focus();
 
       await sendKeys({ press: 'ArrowDown' });
-      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy.calledOnce).to.be.true;
 
       inputElement.blur();
-      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy.calledOnce).to.be.true;
     });
 
     it('should not be fired on Enter after value set programmatically', async () => {
