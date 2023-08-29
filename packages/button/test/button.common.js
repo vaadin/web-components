@@ -75,7 +75,12 @@ describe('vaadin-button', () => {
         expect(spy.called).to.be.false;
       });
 
-      ['Shift', 'Meta', 'Control', 'Alt'].forEach((modifier) => {
+      const modifiers = ['Shift', 'Control', 'Alt'];
+      if (navigator.platform === 'MacIntel') {
+        modifiers.push('Meta');
+      }
+
+      modifiers.forEach((modifier) => {
         it(`should not fire click event on ${key} when using modifier ${modifier}`, async () => {
           const spy = sinon.spy();
           button.addEventListener('click', spy);
