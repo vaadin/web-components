@@ -74,7 +74,6 @@ export const ButtonMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      // Analogous to native button, we should trigger click event when modifier key pressed.
       if (event.altKey || event.shiftKey || event.ctrlKey || event.metaKey) {
         return;
       }
