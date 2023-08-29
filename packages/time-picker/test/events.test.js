@@ -105,6 +105,46 @@ describe('events', () => {
       inputElement.blur();
       expect(changeSpy.callCount).to.equal(1);
     });
+
+    it('should not be fired again on Enter if the value has not changed', async () => {
+      inputElement.focus();
+      await sendKeys({ type: '10:00' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+    });
+
+    it('should not be fired again on blur if the value has not changed', async () => {
+      timePicker.step = 0.5;
+      inputElement.focus();
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(changeSpy.calledOnce).to.be.true;
+
+      inputElement.blur();
+      expect(changeSpy.calledOnce).to.be.true;
+    });
+
+    it('should not be fired on Enter after value set programmatically', async () => {
+      timePicker.value = '10:00';
+      inputElement.focus();
+
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.called).to.be.false;
+    });
+
+    it('should be fired on Enter when trying to commit bad input and field has value', async () => {
+      timePicker.value = '10:00';
+      inputElement.focus();
+      inputElement.select();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+    });
   });
 
   describe('has-input-value-changed event', () => {
