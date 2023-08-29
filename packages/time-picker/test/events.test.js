@@ -18,51 +18,6 @@ describe('events', () => {
       timePicker.addEventListener('change', changeSpy);
     });
 
-    it('should be fired when committing user input with Enter', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy.calledOnce).to.be.true;
-    });
-
-    it('should be fired when selecting a time with arrows and committing with Enter', () => {
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
-      expect(changeSpy.calledOnce).to.be.true;
-    });
-
-    it('should be fired on clear button click', () => {
-      timePicker.clearButtonVisible = true;
-      timePicker.value = '00:00';
-      timePicker.$.clearButton.click();
-      expect(changeSpy.calledOnce).to.be.true;
-    });
-
-    it('should be fired on arrow keys when no dropdown opens', () => {
-      timePicker.step = 1;
-      arrowDown(inputElement);
-      expect(changeSpy.calledOnce).to.be.true;
-      arrowUp(inputElement);
-      expect(changeSpy.calledTwice).to.be.true;
-    });
-
-    it('should be fired after value-changed event on arrow keys', () => {
-      timePicker.step = 0.5;
-      const valueChangedSpy = sinon.spy();
-      timePicker.addEventListener('value-changed', valueChangedSpy);
-      arrowDown(inputElement);
-      expect(valueChangedSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(valueChangedSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should not be fired on focused time change', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      expect(changeSpy.called).to.be.false;
-    });
-
     it('should not be fired on programmatic value change', () => {
       timePicker.value = '01:00';
       expect(changeSpy.called).to.be.false;
@@ -80,30 +35,6 @@ describe('events', () => {
       document.body.click();
       timePicker.value = '02:00';
       expect(changeSpy.calledOnce).to.be.true;
-    });
-
-    it('should not be fired on Enter if the value has not changed', () => {
-      timePicker.value = '01:00';
-      timePicker.open();
-      enter(inputElement);
-      expect(changeSpy.called).to.be.false;
-    });
-
-    it('should not be fired on revert', () => {
-      timePicker.open();
-      timePicker.value = '01:00';
-      esc(inputElement);
-      esc(inputElement);
-      expect(changeSpy.called).to.be.false;
-    });
-
-    it('should be fired only once', async () => {
-      timePicker.focus();
-      timePicker.open();
-      await sendKeys({ type: '0' });
-      enter(inputElement);
-      inputElement.blur();
-      expect(changeSpy.callCount).to.equal(1);
     });
 
     it('should not be fired again on Enter if the value has not changed', async () => {
@@ -126,24 +57,6 @@ describe('events', () => {
 
       inputElement.blur();
       expect(changeSpy).to.be.calledOnce;
-    });
-
-    it('should not be fired on Enter after value set programmatically', async () => {
-      timePicker.value = '10:00';
-      inputElement.focus();
-
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy.called).to.be.false;
-    });
-
-    it('should be fired on Enter when trying to commit bad input and field has value', async () => {
-      timePicker.value = '10:00';
-      inputElement.focus();
-      inputElement.select();
-      await sendKeys({ type: 'foo' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy.calledOnce).to.be.true;
     });
   });
 

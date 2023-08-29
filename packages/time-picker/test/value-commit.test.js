@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-time-picker.js';
@@ -70,11 +70,31 @@ describe('value commit', () => {
       await sendKeys({ press: 'Escape' });
       expectValidationOnly();
     });
+
+    it('should not commit on ArrowDown', async () => {
+      // Open the dropdown
+      await sendKeys({ press: 'ArrowDown' });
+      // Focus an item
+      await sendKeys({ press: 'ArrowDown' });
+      expectNoValueCommit();
+    });
+
+    it('should not commit on ArrowUp', async () => {
+      // Open the dropdown
+      await sendKeys({ press: 'ArrowDown' });
+      // Focus an item
+      await sendKeys({ press: 'ArrowDown' });
+      expectNoValueCommit();
+    });
   });
 
   describe('entering parsable input', () => {
     beforeEach(async () => {
       await sendKeys({ type: '12:00' });
+    });
+
+    it('should not commit by default', () => {
+      expectNoValueCommit();
     });
 
     it('should commit on blur', () => {
@@ -103,6 +123,10 @@ describe('value commit', () => {
   describe('entering unparsable input', () => {
     beforeEach(async () => {
       await sendKeys({ type: 'INVALID' });
+    });
+
+    it('should not commit by default', () => {
+      expectNoValueCommit();
     });
 
     it('should not commit but validate on blur', () => {
@@ -320,6 +344,55 @@ describe('value commit', () => {
       it('should clear on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValueCommit('');
+      });
+    });
+  });
+
+  describe('with step', () => {
+    beforeEach(() => {
+      timePicker.step = 1;
+    });
+
+    it('should commit on ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      // TODO: Fix validation
+      // expectValueCommit('00:00:01');
+      expect(valueChangedSpy).to.be.calledOnce;
+      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
+    });
+
+    it('should commit on ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      // TODO: Fix validation
+      // expectValueCommit('23:59:59');
+      expect(valueChangedSpy).to.be.calledOnce;
+      expect(changeSpy).to.be.calledOnce;
+      expect(changeSpy).to.be.calledAfter(valueChangedSpy);
+    });
+
+    describe('with value committed using an arrow key', () => {
+      beforeEach(async () => {
+        await sendKeys({ press: 'ArrowDown' });
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+        changeSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        timePicker.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit but validate on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectValidationOnly();
+      });
+
+      // TODO: Why does it validate on Escape?
+      it('should not commit but validate on Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+        expectValidationOnly();
       });
     });
   });
