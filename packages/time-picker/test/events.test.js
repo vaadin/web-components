@@ -136,6 +136,15 @@ describe('events', () => {
       await sendKeys({ press: 'Enter' });
       expect(changeSpy.called).to.be.false;
     });
+
+    it('should be fired on Enter when trying to commit bad input and field has value', async () => {
+      timePicker.value = '10:00';
+      inputElement.focus();
+      inputElement.select();
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      expect(changeSpy.calledOnce).to.be.true;
+    });
   });
 
   describe('has-input-value-changed event', () => {
