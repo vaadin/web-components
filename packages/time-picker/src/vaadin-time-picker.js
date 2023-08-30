@@ -682,9 +682,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
     const parsedObj = this.i18n.parseTime(this.i18n.formatTime(TEST_TIME_OBJ));
     if (
-      (step % 1 !== 0 && !parsedObj.milliseconds) ||
-      (step % 60 !== 0 && !parsedObj.seconds) ||
-      (step % (60 * 60) !== 0 && !parsedObj.minutes)
+      (step % 1 !== 0 && parsedObj.milliseconds == null) ||
+      (step % 60 !== 0 && parsedObj.seconds == null) ||
+      (step % (60 * 60) !== 0 && parsedObj.minutes == null)
     ) {
       console.warn(
         `<vaadin-time-picker> The step ${step} seconds has been rejected because it's not compatible with the provided time formatter.`,
