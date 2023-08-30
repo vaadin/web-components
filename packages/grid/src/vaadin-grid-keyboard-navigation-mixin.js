@@ -689,12 +689,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         // Assume frozen columns to always be inside the viewport
         return true;
       }
-      const allCells = column._allCells;
-      if (!allCells) {
-        return false;
-      }
-      const firstCell = allCells.at(0);
+      const firstCell = column._allCells[0];
       return (
+        firstCell &&
         firstCell.offsetLeft + firstCell.offsetWidth >= this._scrollLeft &&
         firstCell.offsetLeft <= this._scrollLeft + this.clientWidth
       );
