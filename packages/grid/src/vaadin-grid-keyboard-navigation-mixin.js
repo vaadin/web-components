@@ -679,6 +679,23 @@ export const KeyboardNavigationMixin = (superClass) =>
       return focusStepTarget;
     }
 
+    /**
+     * Returns true if the given column is horizontally inside the viewport.
+     * @private
+     */
+    __isColumnInViewport(column) {
+      if (column.frozen || column.frozenToEnd) {
+        // Assume frozen columns to always be inside the viewport
+        return true;
+      }
+      const firstCell = column._allCells.at(0);
+      return (
+        firstCell &&
+        firstCell.offsetLeft + firstCell.offsetWidth >= this._scrollLeft &&
+        firstCell.offsetLeft <= this._scrollLeft + this.clientWidth
+      );
+    }
+
     /** @private */
     _onTabKeyDown(e) {
       const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
