@@ -164,22 +164,22 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on blur after clearing', () => {
+      it('should not commit but validate on blur', () => {
         timePicker.blur();
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter after clearing', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValidationOnly();
       });
 
-      it('should not commit but validate on close with outside click after clearing', () => {
+      it('should not commit but validate on close with outside click', () => {
         outsideClick();
         expectValidationOnly();
       });
 
-      it('should revert and validate on close with Escape after clearing', async () => {
+      it('should revert and validate on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
         expect(timePicker.inputElement.value).to.equal('INVALID');
@@ -309,22 +309,22 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should commit on blur after clearing', () => {
+      it('should commit on blur', () => {
         timePicker.blur();
         expectValueCommit('');
       });
 
-      it('should commit on Enter after clearing', async () => {
+      it('should commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
       });
 
-      it('should commit on outside click after clearing', () => {
+      it('should commit on outside click', () => {
         outsideClick();
         expectValueCommit('');
       });
 
-      it('should revert and validate on close with Escape after clearing', async () => {
+      it('should revert and validate on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
         expect(timePicker.inputElement.value).to.equal(initialInputElementValue);
