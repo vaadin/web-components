@@ -1,5 +1,4 @@
 import '@vaadin/vaadin-material-styles/color.js';
-import './vaadin-login-form-styles.js';
 import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-material-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -338,9 +337,7 @@ const loginFormWrapper = css`
     }
 
     :host([theme~='with-overlay']) [part='form'] ::slotted(form) {
-      justify-content: space-around;
-      margin-top: 20px;
-      min-height: 250px;
+      margin-top: 15px;
     }
   }
 

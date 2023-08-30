@@ -97,14 +97,15 @@ snapshots["vaadin-login-overlay host default"] =
           >
           </vaadin-password-field-button>
         </vaadin-password-field>
-        <vaadin-button
-          role="button"
-          tabindex="0"
-          theme="primary contained submit"
-        >
-          Log in
-        </vaadin-button>
       </form>
+      <vaadin-button
+        role="button"
+        slot="submit"
+        tabindex="0"
+        theme="primary contained submit"
+      >
+        Log in
+      </vaadin-button>
       <vaadin-button
         role="button"
         slot="forgot-password"
@@ -215,14 +216,15 @@ snapshots["vaadin-login-overlay host i18n"] =
           >
           </vaadin-password-field-button>
         </vaadin-password-field>
-        <vaadin-button
-          role="button"
-          tabindex="0"
-          theme="primary contained submit"
-        >
-          Kirjaudu sisään
-        </vaadin-button>
       </form>
+      <vaadin-button
+        role="button"
+        slot="submit"
+        tabindex="0"
+        theme="primary contained submit"
+      >
+        Kirjaudu sisään
+      </vaadin-button>
       <vaadin-button
         role="button"
         slot="forgot-password"
@@ -334,14 +336,15 @@ snapshots["vaadin-login-overlay host overlay class"] =
           >
           </vaadin-password-field-button>
         </vaadin-password-field>
-        <vaadin-button
-          role="button"
-          tabindex="0"
-          theme="primary contained submit"
-        >
-          Log in
-        </vaadin-button>
       </form>
+      <vaadin-button
+        role="button"
+        slot="submit"
+        tabindex="0"
+        theme="primary contained submit"
+      >
+        Log in
+      </vaadin-button>
       <vaadin-button
         role="button"
         slot="forgot-password"

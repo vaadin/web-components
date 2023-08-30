@@ -17,6 +17,11 @@ const loginFormWrapper = css`
     margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
   }
 
+  ::slotted([slot='submit']) {
+    margin-top: var(--lumo-space-l);
+    margin-bottom: var(--lumo-space-s);
+  }
+
   ::slotted([slot='forgot-password']) {
     margin: var(--lumo-space-s) auto;
   }

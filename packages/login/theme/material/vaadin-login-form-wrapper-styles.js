@@ -5,7 +5,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const loginFormWrapper = css`
   :host {
     background: var(--material-background-color) linear-gradient(hsla(0, 0%, 100%, 0.3), hsla(0, 0%, 100%, 0.3));
-    min-height: 250px;
   }
 
   [part='form'] {
@@ -20,6 +19,19 @@ const loginFormWrapper = css`
   [part='form-title'] {
     margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
     font-size: var(--material-h5-font-size);
+  }
+
+  ::slotted([slot='submit']) {
+    margin-top: 3em;
+    margin-bottom: 2em;
+    flex-grow: 0;
+  }
+
+  @media only screen and (max-width: 1023px) {
+    ::slotted([slot='submit']) {
+      margin-top: 2.5em;
+      margin-bottom: 1em;
+    }
   }
 
   ::slotted([slot='forgot-password']) {

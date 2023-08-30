@@ -30,6 +30,8 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
 
         <slot name="form"></slot>
 
+        <slot name="submit"></slot>
+
         <slot name="forgot-password"></slot>
 
         <div part="footer">
