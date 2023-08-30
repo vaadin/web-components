@@ -24,12 +24,6 @@ let markerMap = {};
 let lockCount = 0;
 
 /**
- * @param {Element | Shadow} node
- * @return {Element | null}
- */
-const unwrapHost = (node) => (node ? node.host || unwrapHost(node.parentNode) : null);
-
-/**
  * @param {?Node} node
  * @return {boolean}
  */
@@ -60,13 +54,12 @@ const correctTargets = (parent, targets) => {
         return null;
       }
 
-      if (parent.contains(target)) {
-        return target;
-      }
-
-      const correctedTarget = unwrapHost(target);
-      if (correctedTarget && parent.contains(correctedTarget)) {
-        return correctedTarget;
+      let node = target;
+      while (node && node !== parent) {
+        if (parent.contains(node)) {
+          return target;
+        }
+        node = node.getRootNode().host;
       }
 
       logError(target, 'is not contained inside', parent);
@@ -110,7 +103,13 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
     }
 
     elementsToKeep.add(el);
-    keep(el.parentNode);
+
+    const slot = el.assignedSlot;
+    if (slot) {
+      keep(slot);
+    }
+
+    keep(el.parentNode || el.host);
   };
 
   targets.forEach(keep);
@@ -123,7 +122,9 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
       return;
     }
 
-    [...parent.children].forEach((node) => {
+    const root = parent.shadowRoot;
+    const children = root ? [...parent.children, ...root.children] : [...parent.children];
+    children.forEach((node) => {
       // Skip elements that don't need to be hidden
       if (['template', 'script', 'style'].includes(node.localName)) {
         return;
