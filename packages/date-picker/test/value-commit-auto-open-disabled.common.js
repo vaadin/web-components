@@ -132,17 +132,17 @@ describe('value commit - autoOpenDisabled', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on blur after clearing', () => {
+      it('should not commit but validate on blur', () => {
         datePicker.blur();
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter after clearing', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValidationOnly();
       });
 
-      it('should not commit but validate on outside click after clearing', () => {
+      it('should not commit but validate on outside click', () => {
         outsideClick();
         expectValidationOnly();
       });
@@ -237,19 +237,19 @@ describe('value commit - autoOpenDisabled', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should commit on blur after clearing', () => {
+      it('should commit on blur', () => {
         datePicker.blur();
         expectValueCommit('');
         expect(datePicker.value).to.equal('');
       });
 
-      it('should commit on Enter after clearing', async () => {
+      it('should commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
         expect(datePicker.value).to.equal('');
       });
 
-      it('should commit on Escape after clearing', async () => {
+      it('should commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValueCommit('');
         expect(datePicker.value).to.equal('');

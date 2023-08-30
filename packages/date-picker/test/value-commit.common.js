@@ -134,12 +134,12 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on Enter after clearing', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValidationOnly();
       });
 
-      it('should not commit but validate on outside click after clearing', () => {
+      it('should not commit but validate on outside click', () => {
         outsideClick();
         expectValidationOnly();
       });
@@ -278,22 +278,22 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should commit on blur after clearing', () => {
+      it('should commit on blur', () => {
         datePicker.blur();
         expectValueCommit('');
       });
 
-      it('should commit on Enter after clearing', async () => {
+      it('should commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
       });
 
-      it('should commit on Escape after clearing', async () => {
+      it('should commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValueCommit('');
       });
 
-      it('should commit on close with Escape after clearing', async () => {
+      it('should commit on close with Escape', async () => {
         await sendKeys({ press: 'ArrowDown' });
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
