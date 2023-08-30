@@ -5,7 +5,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const loginFormWrapper = css`
   :host {
     background: var(--material-background-color) linear-gradient(hsla(0, 0%, 100%, 0.3), hsla(0, 0%, 100%, 0.3));
-    min-height: 150px;
   }
 
   [part='form'] {

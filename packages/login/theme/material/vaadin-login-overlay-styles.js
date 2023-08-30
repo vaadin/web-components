@@ -337,9 +337,7 @@ const loginFormWrapper = css`
     }
 
     :host([theme~='with-overlay']) [part='form'] ::slotted(form) {
-      justify-content: space-evenly;
       margin-top: 15px;
-      min-height: 150px;
     }
   }
 
