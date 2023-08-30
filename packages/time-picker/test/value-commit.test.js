@@ -81,9 +81,9 @@ describe('value commit', () => {
 
     it('should not commit on ArrowUp', async () => {
       // Open the dropdown
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowUp' });
       // Focus an item
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowUp' });
       expectNoValueCommit();
     });
   });
@@ -230,7 +230,7 @@ describe('value commit', () => {
         expectNoValueCommit();
       });
 
-      it('should not commit but validate on close with outside click', async () => {
+      it('should not commit but validate on close with outside click', () => {
         timePicker.click();
         outsideClick();
         expectValidationOnly();
@@ -249,7 +249,7 @@ describe('value commit', () => {
         await sendKeys({ type: '12:00' });
       });
 
-      it('should commit on blur', async () => {
+      it('should commit on blur', () => {
         timePicker.blur();
         expectValueCommit('12:00');
       });
@@ -278,7 +278,7 @@ describe('value commit', () => {
         await sendKeys({ type: 'INVALID' });
       });
 
-      it('should commit an empty value on blur', async () => {
+      it('should commit an empty value on blur', () => {
         timePicker.blur();
         expectValueCommit('');
         expect(timePicker.inputElement.value).to.equal('INVALID');
@@ -319,7 +319,7 @@ describe('value commit', () => {
         expectValueCommit('');
       });
 
-      it('should commit on outside click after clearing', async () => {
+      it('should commit on outside click after clearing', () => {
         outsideClick();
         expectValueCommit('');
       });
@@ -353,12 +353,12 @@ describe('value commit', () => {
       timePicker.step = 1;
     });
 
-    it('should commit on ArrowDown', async () => {
+    it('should commit on ArrowUp', async () => {
       await sendKeys({ press: 'ArrowUp' });
       expectValueCommit('00:00:01');
     });
 
-    it('should commit on ArrowUp', async () => {
+    it('should commit on ArrowDown', async () => {
       await sendKeys({ press: 'ArrowDown' });
       expectValueCommit('23:59:59');
     });
