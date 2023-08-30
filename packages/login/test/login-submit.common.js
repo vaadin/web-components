@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, tabKeyUp } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, tabKeyUp } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { fillUsernameAndPassword } from './helpers.js';
 
@@ -83,6 +83,36 @@ describe('login form submit', () => {
 
     it('should submit form values from overlay element', (done) => {
       testFormSubmitValues(false, true, done);
+    });
+  });
+
+  describe('custom fields', () => {
+    let overlay;
+
+    beforeEach(async () => {
+      overlay = fixtureSync(`
+        <vaadin-login-overlay opened>
+          <input name="foo" value="bar" slot="custom-fields">
+          <vaadin-text-field name="code" value="1234" slot="custom-fields"></vaadin-text-field>
+        </vaadin-login-overlay>
+      `);
+      await nextRender();
+      login = overlay.$.vaadinLoginForm;
+    });
+
+    it('should add custom fields values to the login event detail', () => {
+      const loginSpy = sinon.spy();
+
+      overlay.addEventListener('login', loginSpy);
+
+      const { vaadinLoginUsername } = fillUsernameAndPassword(login);
+
+      enter(vaadinLoginUsername);
+      expect(loginSpy.called).to.be.true;
+
+      const { detail } = loginSpy.firstCall.args[0];
+      expect(detail.custom.foo).to.be.equal('bar');
+      expect(detail.custom.code).to.be.equal('1234');
     });
   });
 });

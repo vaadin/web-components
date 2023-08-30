@@ -11,6 +11,16 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  */
 export const LoginFormMixin = (superClass) =>
   class LoginFormMixin extends LoginMixin(superClass) {
+    static get properties() {
+      return {
+        /** @private */
+        _customFields: {
+          type: Array,
+          value: () => [],
+        },
+      };
+    }
+
     static get observers() {
       return ['_errorChanged(error)'];
     }
@@ -24,6 +34,19 @@ export const LoginFormMixin = (superClass) =>
         await new Promise(requestAnimationFrame);
         this.$.vaadinLoginUsername.focus();
       }
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.__setCustomFields();
+
+      this.__observer = new MutationObserver(() => {
+        this.__setCustomFields();
+      });
+
+      this.__observer.observe(this.$.vaadinLoginFormWrapper, { childList: true });
     }
 
     /** @private */
@@ -47,13 +70,23 @@ export const LoginFormMixin = (superClass) =>
       this.error = false;
       this.disabled = true;
 
+      const detail = {
+        username: userName.value,
+        password: password.value,
+      };
+
+      if (this._customFields.length) {
+        detail.custom = {};
+
+        this._customFields.forEach((field) => {
+          detail.custom[field.name] = field.value;
+        });
+      }
+
       const loginEventDetails = {
         bubbles: true,
         cancelable: true,
-        detail: {
-          username: userName.value,
-          password: password.value,
-        },
+        detail,
       };
 
       const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));
@@ -95,5 +128,12 @@ export const LoginFormMixin = (superClass) =>
     /** @protected */
     _onForgotPasswordClick() {
       this.dispatchEvent(new CustomEvent('forgot-password'));
+    }
+
+    /** @private */
+    __setCustomFields() {
+      this._customFields = [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
+        return node.getAttribute('slot') === 'custom-fields' && node.hasAttribute('name');
+      });
     }
   };

@@ -24,6 +24,7 @@ overlay.addEventListener('login', (event) => {
   assertType<LoginOverlayLoginEvent>(event);
   assertType<string>(event.detail.username);
   assertType<string>(event.detail.password);
+  assertType<Record<string, unknown> | undefined>(event.detail.custom);
 });
 
 overlay.addEventListener('error-changed', (event) => {
