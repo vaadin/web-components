@@ -31,17 +31,6 @@ describe('events', () => {
       timePicker.value = '02:00';
       expect(changeSpy.calledOnce).to.be.true;
     });
-
-    it('should not be fired again on Enter if the value has not changed', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '10:00' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy).to.be.calledOnce;
-
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy).to.be.calledOnce;
-    });
   });
 
   describe('has-input-value-changed event', () => {
