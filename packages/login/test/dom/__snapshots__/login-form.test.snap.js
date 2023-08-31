@@ -3,7 +3,7 @@ export const snapshots = {};
 
 snapshots["vaadin-login-form host default"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -112,7 +112,7 @@ snapshots["vaadin-login-form host default"] =
 
 snapshots["vaadin-login-form host required"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -230,7 +230,7 @@ snapshots["vaadin-login-form host required"] =
 
 snapshots["vaadin-login-form host i18n"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -339,7 +339,7 @@ snapshots["vaadin-login-form host i18n"] =
 
 snapshots["vaadin-login-form host i18n-required"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -457,7 +457,7 @@ snapshots["vaadin-login-form host i18n-required"] =
 
 snapshots["vaadin-login-form host noForgotPassword"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -583,9 +583,13 @@ snapshots["vaadin-login-form shadow default"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>
@@ -610,9 +614,13 @@ snapshots["vaadin-login-form shadow error"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>
@@ -640,9 +648,13 @@ snapshots["vaadin-login-form shadow i18n"] =
   </div>
   <slot name="form">
   </slot>
+  <slot name="custom-fields">
+  </slot>
   <slot name="submit">
   </slot>
   <slot name="forgot-password">
+  </slot>
+  <slot name="footer">
   </slot>
   <div part="footer">
     <p>

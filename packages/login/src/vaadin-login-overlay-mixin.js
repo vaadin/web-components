@@ -108,21 +108,39 @@ export const LoginOverlayMixin = (superClass) =>
 
     /** @private */
     async _onOpenedChange() {
-      if (!this.opened) {
-        // Wait for initial render on overlay initialization
-        if (!this.$.vaadinLoginForm.$ && this.updateComplete) {
-          await this.updateComplete;
-        }
+      const form = this.$.vaadinLoginForm;
 
-        this.$.vaadinLoginForm.$.vaadinLoginUsername.value = '';
-        this.$.vaadinLoginForm.$.vaadinLoginPassword.value = '';
+      // Wait for initial render on overlay initialization
+      if (!form.$ && this.updateComplete) {
+        await this.updateComplete;
+      }
+
+      if (!this.opened) {
+        form.$.vaadinLoginUsername.value = '';
+        form.$.vaadinLoginPassword.value = '';
         this.disabled = false;
 
-        if (this._undoTeleport) {
-          this._undoTeleport();
+        if (this._undoTitleTeleport) {
+          this._undoTitleTeleport();
+        }
+
+        if (this._undoFieldsTeleport) {
+          this._undoFieldsTeleport();
+        }
+
+        if (this._undoFooterTeleport) {
+          this._undoFooterTeleport();
         }
       } else {
-        this._undoTeleport = this._teleport(this._getElementsToTeleport());
+        this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
+
+        this._undoFieldsTeleport = this._teleport(
+          'custom-fields',
+          form.$.vaadinLoginFormWrapper,
+          form.querySelector('vaadin-button'),
+        );
+
+        this._undoFooterTeleport = this._teleport('footer', form.$.vaadinLoginFormWrapper);
 
         // Overlay sets pointerEvents on body to `none`, which breaks LastPass popup
         // Reverting it back to the previous state
@@ -132,20 +150,18 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     /** @private */
-    _teleport(elements) {
-      const teleported = Array.from(elements).map((e) => {
-        return this.$.vaadinLoginOverlayWrapper.appendChild(e);
+    _teleport(slot, target, refNode) {
+      const teleported = [...this.querySelectorAll(`[slot="${slot}"]`)].map((el) => {
+        if (refNode) {
+          target.insertBefore(el, refNode);
+        } else {
+          target.appendChild(el);
+        }
+        return el;
       });
       // Function to undo the teleport
       return () => {
-        while (teleported.length > 0) {
-          this.appendChild(teleported.shift());
-        }
+        this.append(...teleported);
       };
-    }
-
-    /** @private */
-    _getElementsToTeleport() {
-      return this.querySelectorAll('[slot=title]');
     }
   };

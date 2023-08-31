@@ -55,6 +55,11 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
           @disabled-changed="${this._onDisabledChanged}"
         ></vaadin-login-form>
       </vaadin-login-overlay-wrapper>
+
+      <div hidden>
+        <slot name="custom-fields"></slot>
+        <slot name="footer"></slot>
+      </div>
     `;
   }
 

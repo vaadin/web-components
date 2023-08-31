@@ -75,6 +75,11 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
           on-forgot-password="_retargetEvent"
         ></vaadin-login-form>
       </vaadin-login-overlay-wrapper>
+
+      <div hidden>
+        <slot name="custom-fields"></slot>
+        <slot name="footer"></slot>
+      </div>
     `;
   }
 

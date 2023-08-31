@@ -186,7 +186,7 @@ describe('title and description', () => {
   });
 });
 
-describe('title component', () => {
+describe('title slot', () => {
   let overlay, overlayWrapper;
 
   beforeEach(async () => {
@@ -218,5 +218,71 @@ describe('title component', () => {
     titleElements = overlayWrapper.querySelectorAll('[slot=title]');
     expect(titleElements.length).to.be.equal(1);
     expect(titleElements[0].textContent).to.be.equal('Teleported title');
+  });
+});
+
+describe('custom-fields slot', () => {
+  let overlay, inputs, form;
+
+  beforeEach(async () => {
+    overlay = fixtureSync(`
+      <vaadin-login-overlay>
+        <input id="one" slot="custom-fields" />
+        <input id="two" slot="custom-fields" />
+      </vaadin-login-overlay>
+    `);
+    await nextRender();
+    form = overlay.$.vaadinLoginForm;
+    inputs = overlay.querySelectorAll('input');
+  });
+
+  it('should teleport custom field components to the login form', async () => {
+    overlay.opened = true;
+    await nextRender();
+
+    const wrapper = form.querySelector('vaadin-login-form-wrapper');
+    expect(inputs[0].parentElement).to.equal(wrapper);
+    expect(inputs[1].parentElement).to.equal(wrapper);
+
+    const button = wrapper.querySelector('vaadin-button');
+    expect(inputs[0].nextElementSibling).to.equal(inputs[1]);
+    expect(inputs[1].nextElementSibling).to.equal(button);
+
+    overlay.opened = false;
+    await nextRender();
+
+    expect(inputs[0].parentElement).to.equal(overlay);
+    expect(inputs[1].parentElement).to.equal(overlay);
+  });
+});
+
+describe('footer slot', () => {
+  let overlay, divs, form;
+
+  beforeEach(async () => {
+    overlay = fixtureSync(`
+      <vaadin-login-overlay>
+        <div id="foo" slot="footer">Foo</div>
+        <div id="bar" slot="footer">Bar</div>
+      </vaadin-login-overlay>
+    `);
+    await nextRender();
+    form = overlay.$.vaadinLoginForm;
+    divs = overlay.querySelectorAll('[slot="footer"]');
+  });
+
+  it('should teleport custom field components to the login form', async () => {
+    overlay.opened = true;
+    await nextRender();
+
+    const wrapper = form.querySelector('vaadin-login-form-wrapper');
+    expect(divs[0].parentElement).to.equal(wrapper);
+    expect(divs[1].parentElement).to.equal(wrapper);
+
+    overlay.opened = false;
+    await nextRender();
+
+    expect(divs[0].parentElement).to.equal(overlay);
+    expect(divs[1].parentElement).to.equal(overlay);
   });
 });

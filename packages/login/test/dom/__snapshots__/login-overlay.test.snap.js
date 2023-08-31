@@ -12,7 +12,10 @@ snapshots["vaadin-login-overlay host default"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
@@ -131,7 +134,10 @@ snapshots["vaadin-login-overlay host i18n"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
@@ -251,7 +257,10 @@ snapshots["vaadin-login-overlay host overlay class"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
