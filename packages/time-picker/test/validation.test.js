@@ -69,13 +69,15 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy, changeSpy, input;
+    let validateSpy, changeSpy, valueChangedSpy, input;
 
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
       validateSpy = sinon.spy(timePicker, 'validate');
       changeSpy = sinon.spy();
       timePicker.addEventListener('change', changeSpy);
+      valueChangedSpy = sinon.spy();
+      timePicker.addEventListener('value-changed', valueChangedSpy);
       input = timePicker.inputElement;
     });
 
@@ -198,20 +200,24 @@ describe('validation', () => {
         timePicker.step = 1;
       });
 
-      it('should validate before change event on ArrowDown', async () => {
+      it('should validate between value-changed and change events on ArrowDown', async () => {
         input.focus();
         await sendKeys({ press: 'ArrowDown' });
-        expect(changeSpy).to.be.calledOnce;
+        expect(valueChangedSpy).to.be.calledOnce;
         expect(validateSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledBefore(changeSpy);
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
+        expect(changeSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.calledAfter(validateSpy);
       });
 
-      it('should validate before change event on ArrowUp', async () => {
+      it('should validate between value-changed and change events on ArrowUp', async () => {
         input.focus();
         await sendKeys({ press: 'ArrowUp' });
-        expect(changeSpy).to.be.calledOnce;
+        expect(valueChangedSpy).to.be.calledOnce;
         expect(validateSpy).to.be.calledOnce;
-        expect(validateSpy).to.be.calledBefore(changeSpy);
+        expect(validateSpy).to.be.calledAfter(valueChangedSpy);
+        expect(changeSpy).to.be.calledOnce;
+        expect(changeSpy).to.be.calledAfter(validateSpy);
       });
     });
   });
