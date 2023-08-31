@@ -108,17 +108,17 @@ export const LoginOverlayMixin = (superClass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      this._undoTitleTeleport = this._teleport(this._getElementsFromSlot('title'), this.$.vaadinLoginOverlayWrapper);
+      const form = this.$.vaadinLoginForm;
+
+      this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
 
       this._undoFieldsTeleport = this._teleport(
-        this._getElementsFromSlot('custom-fields'),
-        this.$.vaadinLoginForm.$.vaadinLoginCustomFields,
+        'custom-fields',
+        form.$.vaadinLoginFormWrapper,
+        form.querySelector('vaadin-button'),
       );
 
-      this._undoFooterTeleport = this._teleport(
-        this._getElementsFromSlot('footer'),
-        this.$.vaadinLoginForm.$.vaadinLoginFormFooter,
-      );
+      this._undoFooterTeleport = this._teleport('footer', form.$.vaadinLoginFormWrapper);
     }
 
     /** @private */
@@ -153,9 +153,14 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     /** @private */
-    _teleport(elements, target) {
-      const teleported = elements.map((e) => {
-        return target.appendChild(e);
+    _teleport(slot, target, refNode) {
+      const teleported = [...this.querySelectorAll(`[slot="${slot}"]`)].map((el) => {
+        if (refNode) {
+          target.insertBefore(el, refNode);
+        } else {
+          target.appendChild(el);
+        }
+        return el;
       });
       // Function to undo the teleport
       return () => {
@@ -163,10 +168,5 @@ export const LoginOverlayMixin = (superClass) =>
           this.appendChild(teleported.shift());
         }
       };
-    }
-
-    /** @private */
-    _getElementsFromSlot(slot) {
-      return [...this.querySelectorAll(`[slot="${slot}"]`)];
     }
   };

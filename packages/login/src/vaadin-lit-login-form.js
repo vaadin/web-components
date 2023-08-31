@@ -44,7 +44,12 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           width: 100%;
         }
       </style>
-      <vaadin-login-form-wrapper theme="${ifDefined(this._theme)}" .error="${this.error}" .i18n="${this.i18n}">
+      <vaadin-login-form-wrapper
+        id="vaadinLoginFormWrapper"
+        theme="${ifDefined(this._theme)}"
+        .error="${this.error}"
+        .i18n="${this.i18n}"
+      >
         <form method="POST" action="${this.action}" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
@@ -76,8 +81,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           </vaadin-password-field>
         </form>
 
-        <div id="vaadinLoginCustomFields" slot="custom-fields" style="display: contents;"></div>
-
         <vaadin-button
           slot="submit"
           theme="primary contained submit"
@@ -95,8 +98,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         >
           ${this.i18n.form.forgotPassword}
         </vaadin-button>
-
-        <div id="vaadinLoginFormFooter" slot="footer" style="display: contents;"></div>
       </vaadin-login-form-wrapper>
     `;
   }

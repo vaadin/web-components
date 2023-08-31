@@ -12,7 +12,10 @@ snapshots["vaadin-login-overlay host default"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
@@ -98,12 +101,6 @@ snapshots["vaadin-login-overlay host default"] =
           </vaadin-password-field-button>
         </vaadin-password-field>
       </form>
-      <div
-        id="vaadinLoginCustomFields"
-        slot="custom-fields"
-        style="display: contents;"
-      >
-      </div>
       <vaadin-button
         role="button"
         slot="submit"
@@ -120,12 +117,6 @@ snapshots["vaadin-login-overlay host default"] =
       >
         Forgot password
       </vaadin-button>
-      <div
-        id="vaadinLoginFormFooter"
-        slot="footer"
-        style="display: contents;"
-      >
-      </div>
     </vaadin-login-form-wrapper>
   </vaadin-login-form>
 </vaadin-login-overlay-wrapper>
@@ -143,7 +134,10 @@ snapshots["vaadin-login-overlay host i18n"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
@@ -229,12 +223,6 @@ snapshots["vaadin-login-overlay host i18n"] =
           </vaadin-password-field-button>
         </vaadin-password-field>
       </form>
-      <div
-        id="vaadinLoginCustomFields"
-        slot="custom-fields"
-        style="display: contents;"
-      >
-      </div>
       <vaadin-button
         role="button"
         slot="submit"
@@ -251,12 +239,6 @@ snapshots["vaadin-login-overlay host i18n"] =
       >
         Unohtuiko salasana?
       </vaadin-button>
-      <div
-        id="vaadinLoginFormFooter"
-        slot="footer"
-        style="display: contents;"
-      >
-      </div>
     </vaadin-login-form-wrapper>
   </vaadin-login-form>
 </vaadin-login-overlay-wrapper>
@@ -275,7 +257,10 @@ snapshots["vaadin-login-overlay host overlay class"] =
     id="vaadinLoginForm"
     theme="with-overlay"
   >
-    <vaadin-login-form-wrapper theme="with-overlay">
+    <vaadin-login-form-wrapper
+      id="vaadinLoginFormWrapper"
+      theme="with-overlay"
+    >
       <form
         method="POST"
         slot="form"
@@ -361,12 +346,6 @@ snapshots["vaadin-login-overlay host overlay class"] =
           </vaadin-password-field-button>
         </vaadin-password-field>
       </form>
-      <div
-        id="vaadinLoginCustomFields"
-        slot="custom-fields"
-        style="display: contents;"
-      >
-      </div>
       <vaadin-button
         role="button"
         slot="submit"
@@ -383,12 +362,6 @@ snapshots["vaadin-login-overlay host overlay class"] =
       >
         Forgot password
       </vaadin-button>
-      <div
-        id="vaadinLoginFormFooter"
-        slot="footer"
-        style="display: contents;"
-      >
-      </div>
     </vaadin-login-form-wrapper>
   </vaadin-login-form>
 </vaadin-login-overlay-wrapper>

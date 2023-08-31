@@ -241,8 +241,8 @@ describe('custom-fields slot', () => {
     await nextRender();
 
     const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(inputs[0].parentElement.parentElement).to.equal(wrapper);
-    expect(inputs[1].parentElement.parentElement).to.equal(wrapper);
+    expect(inputs[0].parentElement).to.equal(wrapper);
+    expect(inputs[1].parentElement).to.equal(wrapper);
 
     overlay.opened = false;
     await nextRender();
@@ -272,8 +272,8 @@ describe('footer slot', () => {
     await nextRender();
 
     const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(divs[0].parentElement.parentElement).to.equal(wrapper);
-    expect(divs[1].parentElement.parentElement).to.equal(wrapper);
+    expect(divs[0].parentElement).to.equal(wrapper);
+    expect(divs[1].parentElement).to.equal(wrapper);
 
     overlay.opened = false;
     await nextRender();

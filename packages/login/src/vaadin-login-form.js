@@ -59,7 +59,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
           width: 100%;
         }
       </style>
-      <vaadin-login-form-wrapper theme$="[[_theme]]" error="[[error]]" i18n="[[i18n]]">
+      <vaadin-login-form-wrapper id="vaadinLoginFormWrapper" theme$="[[_theme]]" error="[[error]]" i18n="[[i18n]]">
         <form method="POST" action$="[[action]]" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
@@ -91,8 +91,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
           </vaadin-password-field>
         </form>
 
-        <div id="vaadinLoginCustomFields" slot="custom-fields" style="display: contents;"></div>
-
         <vaadin-button slot="submit" theme="primary contained submit" on-click="submit" disabled$="[[disabled]]">
           [[i18n.form.submit]]
         </vaadin-button>
@@ -105,8 +103,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
         >
           [[i18n.form.forgotPassword]]
         </vaadin-button>
-
-        <div id="vaadinLoginFormFooter" slot="footer" style="display: contents;"></div>
       </vaadin-login-form-wrapper>
     `;
   }

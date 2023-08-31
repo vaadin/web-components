@@ -3,7 +3,7 @@ export const snapshots = {};
 
 snapshots["vaadin-login-form host default"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -89,12 +89,6 @@ snapshots["vaadin-login-form host default"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
-    <div
-      id="vaadinLoginCustomFields"
-      slot="custom-fields"
-      style="display: contents;"
-    >
-    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -111,12 +105,6 @@ snapshots["vaadin-login-form host default"] =
     >
       Forgot password
     </vaadin-button>
-    <div
-      id="vaadinLoginFormFooter"
-      slot="footer"
-      style="display: contents;"
-    >
-    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -124,7 +112,7 @@ snapshots["vaadin-login-form host default"] =
 
 snapshots["vaadin-login-form host required"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -219,12 +207,6 @@ snapshots["vaadin-login-form host required"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
-    <div
-      id="vaadinLoginCustomFields"
-      slot="custom-fields"
-      style="display: contents;"
-    >
-    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -241,12 +223,6 @@ snapshots["vaadin-login-form host required"] =
     >
       Forgot password
     </vaadin-button>
-    <div
-      id="vaadinLoginFormFooter"
-      slot="footer"
-      style="display: contents;"
-    >
-    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -254,7 +230,7 @@ snapshots["vaadin-login-form host required"] =
 
 snapshots["vaadin-login-form host i18n"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -340,12 +316,6 @@ snapshots["vaadin-login-form host i18n"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
-    <div
-      id="vaadinLoginCustomFields"
-      slot="custom-fields"
-      style="display: contents;"
-    >
-    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -362,12 +332,6 @@ snapshots["vaadin-login-form host i18n"] =
     >
       Unohtuiko salasana?
     </vaadin-button>
-    <div
-      id="vaadinLoginFormFooter"
-      slot="footer"
-      style="display: contents;"
-    >
-    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -375,7 +339,7 @@ snapshots["vaadin-login-form host i18n"] =
 
 snapshots["vaadin-login-form host i18n-required"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -470,12 +434,6 @@ snapshots["vaadin-login-form host i18n-required"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
-    <div
-      id="vaadinLoginCustomFields"
-      slot="custom-fields"
-      style="display: contents;"
-    >
-    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -492,12 +450,6 @@ snapshots["vaadin-login-form host i18n-required"] =
     >
       Unohtuiko salasana?
     </vaadin-button>
-    <div
-      id="vaadinLoginFormFooter"
-      slot="footer"
-      style="display: contents;"
-    >
-    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
@@ -505,7 +457,7 @@ snapshots["vaadin-login-form host i18n-required"] =
 
 snapshots["vaadin-login-form host noForgotPassword"] = 
 `<vaadin-login-form>
-  <vaadin-login-form-wrapper>
+  <vaadin-login-form-wrapper id="vaadinLoginFormWrapper">
     <form
       method="POST"
       slot="form"
@@ -591,12 +543,6 @@ snapshots["vaadin-login-form host noForgotPassword"] =
         </vaadin-password-field-button>
       </vaadin-password-field>
     </form>
-    <div
-      id="vaadinLoginCustomFields"
-      slot="custom-fields"
-      style="display: contents;"
-    >
-    </div>
     <vaadin-button
       role="button"
       slot="submit"
@@ -614,12 +560,6 @@ snapshots["vaadin-login-form host noForgotPassword"] =
     >
       Forgot password
     </vaadin-button>
-    <div
-      id="vaadinLoginFormFooter"
-      slot="footer"
-      style="display: contents;"
-    >
-    </div>
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
