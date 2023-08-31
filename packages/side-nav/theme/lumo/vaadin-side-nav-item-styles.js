@@ -108,9 +108,10 @@ export const sideNavItemStyles = css`
     --_child-indent-2: var(--_child-indent);
   }
 
-  :host([current]) [part='link'] {
-    color: var(--lumo-primary-text-color);
+  :host([current]) [part='content'] {
     background-color: var(--lumo-primary-color-10pct);
+    color: var(--lumo-primary-text-color);
+    border-radius: var(--lumo-border-radius-m);
   }
 `;
 

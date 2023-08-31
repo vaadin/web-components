@@ -5,8 +5,11 @@ import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
-  [part='link'] {
+  [part='content'] {
     position: relative;
+  }
+
+  [part='link'] {
     width: 100%;
     min-height: 32px;
     margin: 4px 0;
@@ -35,10 +38,10 @@ export const sideNavItemStyles = css`
     color: var(--material-disabled-text-color);
   }
 
-  :host([current]) [part='link']::before {
+  :host([current]) [part='content']::before {
     position: absolute;
     content: '';
-    inset: 0;
+    inset: 4px 0;
     background-color: var(--material-primary-color);
     opacity: 0.12;
     border-radius: 4px;

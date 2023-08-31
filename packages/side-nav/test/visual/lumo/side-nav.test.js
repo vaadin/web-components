@@ -56,6 +56,15 @@ describe('side-nav', () => {
       await visualDiff(div, 'current-item');
     });
 
+    it('current collapsed item', async () => {
+      const item = document.querySelector('vaadin-side-nav-item');
+      item.setAttribute('current', '');
+      const child = document.createElement('vaadin-side-nav-item');
+      child.setAttribute('slot', 'children');
+      item.appendChild(child);
+      await visualDiff(div, 'current-collapsed-item');
+    });
+
     it('disabled item', async () => {
       const item = document.querySelector('vaadin-side-nav-item');
       item.disabled = true;
