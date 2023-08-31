@@ -18,11 +18,6 @@ describe('events', () => {
       timePicker.addEventListener('change', changeSpy);
     });
 
-    it('should not be fired on programmatic value change', () => {
-      timePicker.value = '01:00';
-      expect(changeSpy.called).to.be.false;
-    });
-
     it('should not be fired on programmatic value change after manual one', () => {
       timePicker.value = '00:00';
       timePicker.open();
@@ -45,17 +40,6 @@ describe('events', () => {
 
       await sendKeys({ press: 'Backspace' });
       await sendKeys({ press: 'Enter' });
-      expect(changeSpy).to.be.calledOnce;
-    });
-
-    it('should not be fired again on blur if the value has not changed', async () => {
-      timePicker.step = 0.5;
-      inputElement.focus();
-
-      await sendKeys({ press: 'ArrowDown' });
-      expect(changeSpy).to.be.calledOnce;
-
-      inputElement.blur();
       expect(changeSpy).to.be.calledOnce;
     });
   });

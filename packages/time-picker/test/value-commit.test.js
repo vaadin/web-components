@@ -88,7 +88,7 @@ describe('value commit', () => {
     });
   });
 
-  describe('entering parsable input', () => {
+  describe('parsable input entered', () => {
     beforeEach(async () => {
       await sendKeys({ type: '12:00' });
     });
@@ -122,9 +122,47 @@ describe('value commit', () => {
     });
   });
 
-  describe('entering unparsable input', () => {
+  describe('parsable input committed', () => {
     beforeEach(async () => {
-      await sendKeys({ type: 'INVALID' });
+      await sendKeys({ type: '12:00' });
+      await sendKeys({ press: 'Enter' });
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
+
+    describe('input cleared with Backspace', () => {
+      beforeEach(async () => {
+        timePicker.inputElement.select();
+        await sendKeys({ press: 'Backspace' });
+      });
+
+      it('should commit on blur', () => {
+        timePicker.blur();
+        expectValueCommit('');
+      });
+
+      it('should commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectValueCommit('');
+      });
+
+      it('should commit on outside click', () => {
+        outsideClick();
+        expectValueCommit('');
+      });
+
+      it('should revert and validate on close with Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+        expectValidationOnly();
+        expect(timePicker.inputElement.value).to.equal('12:00');
+      });
+    });
+  });
+
+  describe('unparsable input entered', () => {
+    beforeEach(async () => {
+      await sendKeys({ type: 'foo' });
     });
 
     it('should not commit by default', () => {
@@ -134,19 +172,19 @@ describe('value commit', () => {
     it('should not commit but validate on blur', () => {
       timePicker.blur();
       expectValidationOnly();
-      expect(timePicker.inputElement.value).to.equal('INVALID');
+      expect(timePicker.inputElement.value).to.equal('foo');
     });
 
     it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectValidationOnly();
-      expect(timePicker.inputElement.value).to.equal('INVALID');
+      expect(timePicker.inputElement.value).to.equal('foo');
     });
 
     it('should not commit but validate on close with outside click', () => {
       outsideClick();
       expectValidationOnly();
-      expect(timePicker.inputElement.value).to.equal('INVALID');
+      expect(timePicker.inputElement.value).to.equal('foo');
     });
 
     it('should revert and validate on close with Escape', async () => {
@@ -154,13 +192,17 @@ describe('value commit', () => {
       expectValidationOnly();
       expect(timePicker.inputElement.value).to.equal('');
     });
+  });
 
-    describe('clearing input with Backspace', () => {
+  describe('unparsable input committed', () => {
+    beforeEach(async () => {
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      validateSpy.resetHistory();
+    });
+
+    describe('input cleared with Backspace', () => {
       beforeEach(async () => {
-        await sendKeys({ press: 'Enter' });
-        valueChangedSpy.resetHistory();
-        validateSpy.resetHistory();
-
         timePicker.inputElement.select();
         await sendKeys({ press: 'Backspace' });
       });
@@ -183,7 +225,7 @@ describe('value commit', () => {
       it('should revert and validate on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
-        expect(timePicker.inputElement.value).to.equal('INVALID');
+        expect(timePicker.inputElement.value).to.equal('foo');
       });
     });
   });
@@ -194,28 +236,28 @@ describe('value commit', () => {
       await sendKeys({ press: 'ArrowDown' });
     });
 
-    it('should commit on selection with click', () => {
+    it('should commit on item selection with click', () => {
       getAllItems(timePicker)[0].click();
       expectValueCommit('00:00');
     });
 
-    it('should commit on selection with Enter', async () => {
+    it('should commit on item selection with Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectValueCommit('00:00');
     });
   });
 
-  describe('with value', () => {
-    let initialInputElementValue;
-
+  describe('value set programmatically', () => {
     beforeEach(() => {
       timePicker.value = '00:00';
-      initialInputElementValue = timePicker.inputElement.value;
       valueChangedSpy.resetHistory();
-      validateSpy.resetHistory();
     });
 
     describe('default', () => {
+      it('should not commit by default', () => {
+        expectNoValueCommit();
+      });
+
       it('should not commit but validate on blur', () => {
         timePicker.blur();
         expectValidationOnly();
@@ -244,7 +286,7 @@ describe('value commit', () => {
       });
     });
 
-    describe('entering parsable input', () => {
+    describe('parsable input entered', () => {
       beforeEach(async () => {
         timePicker.inputElement.select();
         await sendKeys({ type: '12:00' });
@@ -271,83 +313,57 @@ describe('value commit', () => {
         // Close the dropdown.
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
-        expect(timePicker.inputElement.value).to.equal(initialInputElementValue);
+        expect(timePicker.inputElement.value).to.equal('00:00');
       });
     });
 
-    describe('entering unparsable input', () => {
+    describe('unparsable input entered', () => {
       beforeEach(async () => {
         timePicker.inputElement.select();
-        await sendKeys({ type: 'INVALID' });
+        await sendKeys({ type: 'foo' });
       });
 
       it('should commit an empty value on blur', () => {
         timePicker.blur();
         expectValueCommit('');
-        expect(timePicker.inputElement.value).to.equal('INVALID');
+        expect(timePicker.inputElement.value).to.equal('foo');
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
-        expect(timePicker.inputElement.value).to.equal('INVALID');
+        expect(timePicker.inputElement.value).to.equal('foo');
       });
 
       it('should commit an empty value on close with outside click', () => {
         outsideClick();
         expectValueCommit('');
-        expect(timePicker.inputElement.value).to.equal('INVALID');
+        expect(timePicker.inputElement.value).to.equal('foo');
       });
 
       it('should revert and validate on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
-        expect(timePicker.inputElement.value).to.equal(initialInputElementValue);
+        expect(timePicker.inputElement.value).to.equal('00:00');
       });
     });
+  });
 
-    describe('clearing input with Backspace', () => {
-      beforeEach(async () => {
-        timePicker.inputElement.select();
-        await sendKeys({ press: 'Backspace' });
-      });
-
-      it('should commit on blur', () => {
-        timePicker.blur();
-        expectValueCommit('');
-      });
-
-      it('should commit on Enter', async () => {
-        await sendKeys({ press: 'Enter' });
-        expectValueCommit('');
-      });
-
-      it('should commit on outside click', () => {
-        outsideClick();
-        expectValueCommit('');
-      });
-
-      it('should revert and validate on close with Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
-        expect(timePicker.inputElement.value).to.equal(initialInputElementValue);
-      });
+  describe('with clear button', () => {
+    beforeEach(() => {
+      timePicker.value = '00:00';
+      timePicker.clearButtonVisible = true;
+      valueChangedSpy.resetHistory();
     });
 
-    describe('with clear button', () => {
-      beforeEach(() => {
-        timePicker.clearButtonVisible = true;
-      });
+    it('should clear on clear button click', () => {
+      timePicker.$.clearButton.click();
+      expectValueCommit('');
+    });
 
-      it('should clear on clear button click', () => {
-        timePicker.$.clearButton.click();
-        expectValueCommit('');
-      });
-
-      it('should clear on Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
-      });
+    it('should clear on Escape', async () => {
+      await sendKeys({ press: 'Escape' });
+      expectValueCommit('');
     });
   });
 
@@ -366,7 +382,7 @@ describe('value commit', () => {
       expectValueCommit('23:59:59');
     });
 
-    describe('with value committed using an arrow key', () => {
+    describe('with arrow key committed', () => {
       beforeEach(async () => {
         await sendKeys({ press: 'ArrowDown' });
         valueChangedSpy.resetHistory();
