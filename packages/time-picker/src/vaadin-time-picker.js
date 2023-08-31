@@ -463,14 +463,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
     this.__memoValue = objWithStep;
 
-    // Setting `value` property triggers the synchronous observer
-    // that in turn updates `_comboBoxValue` (actual input value)
-    // with its own observer where the value can be parsed again,
-    // so we set this flag to ensure it does not alter the value.
+    // Setting `_comboBoxValue` property triggers the synchronous
+    // observer where the value can be parsed again, so we set
+    // this flag to ensure it does not alter the value.
     this.__useMemo = true;
-    this.__skipCommittedValueUpdate = true;
-    this.value = this.__formatISO(objWithStep);
-    this.__skipCommittedValueUpdate = false;
+    this._comboBoxValue = this.i18n.formatTime(objWithStep);
     this.__useMemo = false;
 
     this.validate();
