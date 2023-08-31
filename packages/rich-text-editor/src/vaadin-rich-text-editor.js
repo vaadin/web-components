@@ -935,6 +935,8 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     // Remove Quill classes, e.g. ql-syntax, except for align
     content = content.replace(/\s*ql-(?!align)[\w-]*\s*/gu, '');
+    // Remove meta spans, e.g. cursor which are empty after Quill classes removed
+    content = content.replace(/<\/?span[^>]*>/gu, '');
 
     // Replace Quill align classes with inline styles
     [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {

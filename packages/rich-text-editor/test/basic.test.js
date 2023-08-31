@@ -681,6 +681,15 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
     });
 
+    it('should filter out empty span elements from the resulting htmlValue', () => {
+      rte.dangerouslySetHtmlValue(
+        '<p><strong>Hello </strong></p><p><strong><span class="ql-cursor"></span>world</strong></p>',
+      );
+      flushValueDebouncer();
+      // Empty span should be stripped
+      expect(rte.htmlValue).to.equal('<p><strong>Hello </strong></p><p><strong>world</strong></p>');
+    });
+
     it('should return the quill editor innerHTML', () => {
       expect(rte.htmlValue).to.equal('<p><br></p>');
     });
