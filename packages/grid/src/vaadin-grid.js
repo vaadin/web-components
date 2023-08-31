@@ -847,6 +847,10 @@ class Grid extends ElementMixin(
           cell.setAttribute('part', 'cell body-cell');
           row.appendChild(cell);
 
+          if (row === this.$.sizer) {
+            column._sizerCell = cell;
+          }
+
           if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
             if (!this._detailsCells) {
