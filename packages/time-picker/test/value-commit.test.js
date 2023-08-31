@@ -149,7 +149,6 @@ describe('value commit', () => {
 
     it('should revert and validate on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ press: 'Escape' });
       expectValidationOnly();
       expect(timePicker.inputElement.value).to.equal('');
     });
