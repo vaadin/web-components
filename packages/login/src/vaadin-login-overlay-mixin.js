@@ -164,9 +164,7 @@ export const LoginOverlayMixin = (superClass) =>
       });
       // Function to undo the teleport
       return () => {
-        while (teleported.length > 0) {
-          this.appendChild(teleported.shift());
-        }
+        this.append(...teleported);
       };
     }
   };
