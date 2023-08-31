@@ -113,7 +113,9 @@ describe('value commit', () => {
     });
 
     it('should revert and validate on close with Escape', async () => {
+      // Remove focus from the item.
       await sendKeys({ press: 'Escape' });
+      // Close the dropdown.
       await sendKeys({ press: 'Escape' });
       expectValidationOnly();
       expect(timePicker.inputElement.value).to.equal('');
@@ -264,7 +266,9 @@ describe('value commit', () => {
       });
 
       it('should revert and validate on close with Escape', async () => {
+        // Remove focus from the item.
         await sendKeys({ press: 'Escape' });
+        // Close the dropdown.
         await sendKeys({ press: 'Escape' });
         expectValidationOnly();
         expect(timePicker.inputElement.value).to.equal(initialInputElementValue);
