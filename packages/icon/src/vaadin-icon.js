@@ -15,11 +15,50 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
-const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
-const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
-// ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
-// or buggy Container Queries support for pseudo elements (Safari 16)
-const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
+// Checks if the browser supports CSS Container Query units for pseudo elements.
+// i.e. if the fix for https://bugs.webkit.org/show_bug.cgi?id=253939 is available.
+// Export for testing purposes.
+export function __supportsCQUnitsForPseudoElements() {
+  const testStyle = document.createElement('style');
+  testStyle.textContent = `
+    .vaadin-icon-test-element {
+      container-type: size;
+      height: 2px;
+      visibility: hidden;
+      position: fixed;
+    }
+
+    .vaadin-icon-test-element::before {
+      content: '';
+      display: block;
+      height: 100cqh;
+    `;
+  const testElement = document.createElement('div');
+  testElement.classList.add('vaadin-icon-test-element');
+
+  document.body.append(testStyle, testElement);
+  const { height } = getComputedStyle(testElement, '::before');
+  testStyle.remove();
+  testElement.remove();
+  return height === '2px';
+}
+
+// Check if the browser needs a fallback for sizing font icons instead of relying on CSS Container Queries.
+// Export for testing purposes.
+export const __needsFontIconSizingFallback = (() => {
+  if (!CSS.supports('container-type: inline-size')) {
+    // The browser does not support CSS Container Queries at all.
+    return true;
+  }
+  if (!isSafari) {
+    // Browsers other than Safari support CSS Container Queries as expected.
+    return false;
+  }
+  // Check if the browser does not support CSS Container Query units for pseudo elements.
+  return !__supportsCQUnitsForPseudoElements();
+})();
+
+const ConditionalResizeMixin = (superClass) => (__needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -389,7 +428,8 @@ class Icon extends ThemableMixin(
    * @override
    */
   _onResize() {
-    if (needsFontIconSizingFallback && (this.char || this.font)) {
+    if (__needsFontIconSizingFallback && (this.char || this.font)) {
+      // ResizeObserver-based fallback for sizing font icons.
       const { paddingTop, paddingBottom, height } = getComputedStyle(this);
       const fontIconSize = parseFloat(height) - parseFloat(paddingTop) - parseFloat(paddingBottom);
       this.style.setProperty('--_vaadin-font-icon-size', `${fontIconSize}px`);

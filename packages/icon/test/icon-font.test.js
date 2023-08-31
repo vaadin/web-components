@@ -1,11 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-icon.js';
-import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
+import { __needsFontIconSizingFallback, __supportsCQUnitsForPseudoElements } from '../vaadin-icon.js';
 import { iconFontCss } from './test-icon-font.js';
-
-const usesFontIconSizingFallback = !CSS.supports('container-type: inline-size') || isSafari;
 
 /**
  * Resolves once the function is invoked on the given object.
@@ -24,7 +21,7 @@ function onceInvoked(object, functionName) {
  * Resolves once the icon resize is complete.
  */
 async function onceResized(icon) {
-  if (usesFontIconSizingFallback) {
+  if (__needsFontIconSizingFallback) {
     await onceInvoked(icon, '_onResize');
   }
 }
@@ -182,35 +179,52 @@ describe('vaadin-icon - icon fonts', () => {
 
   // These tests make sure that the heavy container query fallback is only used
   // when font icons are used.
-  (usesFontIconSizingFallback ? describe : describe.skip)('container query fallback', () => {
+  describe('container query fallback', () => {
+    // Tests for browsers that require the fallback
+    const fallBackIt = __needsFontIconSizingFallback ? it : it.skip;
+    // Tests for browsers that we know for sure not to require the fallback
+    const supportedIt = isFirefox || isChrome ? it : it.skip;
+
     let icon;
 
-    it('should have the custom property (font)', async () => {
+    supportedIt('should support CQ width units on pseudo elements', async () => {
+      expect(__supportsCQUnitsForPseudoElements()).to.be.true;
+    });
+
+    supportedIt('should not need the fallback', async () => {
+      expect(__needsFontIconSizingFallback).to.be.false;
+    });
+
+    fallBackIt('should not support CQ width units on pseudo elements', async () => {
+      expect(__supportsCQUnitsForPseudoElements()).to.be.false;
+    });
+
+    fallBackIt('should have the custom property (font)', async () => {
       icon = fixtureSync('<vaadin-icon font="foo"></vaadin-icon>');
       await nextFrame();
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
     });
 
-    it('should have the custom property (char)', async () => {
+    fallBackIt('should have the custom property (char)', async () => {
       icon = fixtureSync('<vaadin-icon char="foo"></vaadin-icon>');
       await nextFrame();
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
     });
 
-    it('should not have the custom property', async () => {
+    fallBackIt('should not have the custom property', async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       await nextFrame();
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
     });
 
-    it('should set the custom property', async () => {
+    fallBackIt('should set the custom property', async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       await nextFrame();
       icon.font = 'foo';
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
     });
 
-    it('should update the custom property', async () => {
+    fallBackIt('should update the custom property', async () => {
       icon = fixtureSync('<vaadin-icon font="foo"></vaadin-icon>');
       await nextFrame();
       icon.style.width = '100px';
@@ -219,7 +233,7 @@ describe('vaadin-icon - icon fonts', () => {
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('100px');
     });
 
-    it('should not update the custom property', async () => {
+    fallBackIt('should not update the custom property', async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       await nextFrame();
       icon.style.width = '100px';
