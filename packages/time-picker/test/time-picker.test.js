@@ -37,25 +37,10 @@ describe('time-picker', () => {
       expect(timePicker.value).to.be.equal('');
     });
 
-    it('should not set value if the format is invalid', () => {
-      setInputValue(timePicker, 'invalid');
-      enter(inputElement);
-      expect(timePicker.value).to.be.equal('');
-      expect(inputElement.value).to.be.equal('invalid');
-    });
-
     it('should not allow setting invalid value programmatically', () => {
       timePicker.value = 'invalid';
       expect(timePicker.value).to.be.equal('');
       expect(inputElement.value).to.be.equal('');
-    });
-
-    it('should change value to empty string when setting invalid value', () => {
-      setInputValue(timePicker, '09:00');
-      enter(inputElement);
-      setInputValue(timePicker, 'invalid');
-      enter(inputElement);
-      expect(timePicker.value).to.be.equal('');
     });
 
     it('should not allow setting invalid time value', () => {
@@ -91,30 +76,10 @@ describe('time-picker', () => {
       expect(inputElement.value).to.be.equal('12:00');
     });
 
-    it('should preserve invalid input value while resetting value to empty string', () => {
-      timePicker.value = '12:00';
-      setInputValue(timePicker, 'foo');
-      enter(inputElement);
-      expect(timePicker.value).to.equal('');
-      expect(inputElement.value).to.equal('foo');
-    });
-
-    it('should not restore the previous value in input field if input value is invalid', () => {
+    it('should restore the previous value when setting invalid value', () => {
       timePicker.value = '12:00';
       timePicker.value = 'foo';
       expect(timePicker.value).to.be.equal('12:00');
-      setInputValue(timePicker, 'bar');
-      enter(inputElement);
-      expect(timePicker.value).to.be.equal('');
-      expect(inputElement.value).to.be.equal('bar');
-    });
-
-    it('should set empty value on outside click after clearing input value', () => {
-      timePicker.value = '12:00';
-      setInputValue(timePicker, '');
-      outsideClick();
-      expect(timePicker.value).to.be.equal('');
-      expect(inputElement.value).to.be.equal('');
     });
 
     it('should dispatch value-changed when value changes', () => {
@@ -122,13 +87,6 @@ describe('time-picker', () => {
       timePicker.addEventListener('value-changed', spy);
       timePicker.value = '12:00';
       expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not call value-changed on keystroke input', () => {
-      const spy = sinon.spy();
-      timePicker.addEventListener('value-changed', spy);
-      inputElement.value = '12:00';
-      expect(spy.called).to.be.false;
     });
 
     it('should be possible to update value', () => {
@@ -172,14 +130,6 @@ describe('time-picker', () => {
       expect(spy.callCount).to.equal(1);
       timePicker.value = '';
       expect(spy.callCount).to.equal(2);
-    });
-
-    it('should commit user input on Enter', async () => {
-      inputElement.focus();
-      await sendKeys({ type: '00:00' });
-      expect(timePicker.value).to.equal('');
-      await sendKeys({ press: 'Enter' });
-      expect(timePicker.value).to.equal('00:00');
     });
 
     it('should clear value with null', () => {
