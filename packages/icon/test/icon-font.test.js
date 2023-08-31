@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isChrome, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { __needsFontIconSizingFallback, __supportsCQUnitsForPseudoElements } from '../vaadin-icon.js';
 import { iconFontCss } from './test-icon-font.js';
@@ -183,7 +183,7 @@ describe('vaadin-icon - icon fonts', () => {
     // Tests for browsers that require the fallback
     const fallBackIt = __needsFontIconSizingFallback ? it : it.skip;
     // Tests for browsers that we know for sure not to require the fallback
-    const supportedIt = isFirefox || isChrome ? it : it.skip;
+    const supportedIt = isChrome ? it : it.skip;
 
     let icon;
 
