@@ -60,7 +60,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
         }
       </style>
       <vaadin-login-form-wrapper id="vaadinLoginFormWrapper" theme$="[[_theme]]" error="[[error]]" i18n="[[i18n]]">
-        <form method="POST" action$="[[action]]" slot="form">
+        <form method="POST" action$="[[action]]" on-formdata="_onFormData" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"

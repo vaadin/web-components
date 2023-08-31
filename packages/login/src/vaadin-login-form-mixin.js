@@ -102,6 +102,17 @@ export const LoginFormMixin = (superClass) =>
     }
 
     /** @protected */
+    _onFormData(event) {
+      const { formData } = event;
+
+      if (this._customFields.length) {
+        this._customFields.forEach((field) => {
+          formData.append(field.name, field.value);
+        });
+      }
+    }
+
+    /** @protected */
     _handleInputKeydown(e) {
       if (e.key === 'Enter') {
         const { currentTarget: inputActive } = e;

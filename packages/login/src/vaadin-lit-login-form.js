@@ -50,7 +50,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         .error="${this.error}"
         .i18n="${this.i18n}"
       >
-        <form method="POST" action="${this.action}" slot="form">
+        <form method="POST" action="${this.action}" @formdata="${this._onFormData}" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"

@@ -6,8 +6,14 @@ import { fillUsernameAndPassword } from './helpers.js';
 describe('login form submit', () => {
   let login, iframe;
 
-  function testFormSubmitValues(preventDefault, expectation, done) {
+  function testFormSubmitValues(preventDefault, expectation, done, data = {}) {
     fillUsernameAndPassword(login);
+
+    const formData = { username: 'username', password: 'password', ...data };
+
+    const urlParams = Object.entries(formData)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
 
     const loginForm = login.querySelector('form');
     loginForm.setAttribute('method', 'GET');
@@ -19,7 +25,7 @@ describe('login form submit', () => {
     }
 
     iframe.onload = () => {
-      expect(iframe.contentWindow.location.href).to.include('login-action?username=username&password=password');
+      expect(iframe.contentWindow.location.href).to.include(`login-action?${urlParams}`);
       done();
     };
 
@@ -113,6 +119,17 @@ describe('login form submit', () => {
       const { detail } = loginSpy.firstCall.args[0];
       expect(detail.custom.foo).to.be.equal('bar');
       expect(detail.custom.code).to.be.equal('1234');
+    });
+
+    describe('form submit', () => {
+      beforeEach(async () => {
+        overlay.action = 'login-action';
+        await nextRender();
+      });
+
+      it('should submit custom fields values to the native form', (done) => {
+        testFormSubmitValues(false, true, done, { foo: 'bar', code: '1234' });
+      });
     });
   });
 });
