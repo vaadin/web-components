@@ -106,31 +106,18 @@ export const LoginOverlayMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    _onOverlayOpened() {
-      const form = this.$.vaadinLoginForm;
-
-      this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
-
-      this._undoFieldsTeleport = this._teleport(
-        'custom-fields',
-        form.$.vaadinLoginFormWrapper,
-        form.querySelector('vaadin-button'),
-      );
-
-      this._undoFooterTeleport = this._teleport('footer', form.$.vaadinLoginFormWrapper);
-    }
-
     /** @private */
     async _onOpenedChange() {
-      if (!this.opened) {
-        // Wait for initial render on overlay initialization
-        if (!this.$.vaadinLoginForm.$ && this.updateComplete) {
-          await this.updateComplete;
-        }
+      const form = this.$.vaadinLoginForm;
 
-        this.$.vaadinLoginForm.$.vaadinLoginUsername.value = '';
-        this.$.vaadinLoginForm.$.vaadinLoginPassword.value = '';
+      // Wait for initial render on overlay initialization
+      if (!form.$ && this.updateComplete) {
+        await this.updateComplete;
+      }
+
+      if (!this.opened) {
+        form.$.vaadinLoginUsername.value = '';
+        form.$.vaadinLoginPassword.value = '';
         this.disabled = false;
 
         if (this._undoTitleTeleport) {
@@ -145,6 +132,16 @@ export const LoginOverlayMixin = (superClass) =>
           this._undoFooterTeleport();
         }
       } else {
+        this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
+
+        this._undoFieldsTeleport = this._teleport(
+          'custom-fields',
+          form.$.vaadinLoginFormWrapper,
+          form.querySelector('vaadin-button'),
+        );
+
+        this._undoFooterTeleport = this._teleport('footer', form.$.vaadinLoginFormWrapper);
+
         // Overlay sets pointerEvents on body to `none`, which breaks LastPass popup
         // Reverting it back to the previous state
         // https://github.com/vaadin/vaadin-overlay/blob/041cde4481b6262eac68d3a699f700216d897373/src/vaadin-overlay.html#L660

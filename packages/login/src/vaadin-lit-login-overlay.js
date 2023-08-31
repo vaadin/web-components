@@ -39,7 +39,6 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
         theme="${ifDefined(this._theme)}"
         @vaadin-overlay-escape-press="${this._preventClosingLogin}"
         @vaadin-overlay-outside-click="${this._preventClosingLogin}"
-        @vaadin-overlay-open="${this._onOverlayOpened}"
         @opened-changed="${this._onOpenedChanged}"
       >
         <vaadin-login-form
