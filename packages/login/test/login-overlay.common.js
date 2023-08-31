@@ -244,6 +244,10 @@ describe('custom-fields slot', () => {
     expect(inputs[0].parentElement).to.equal(wrapper);
     expect(inputs[1].parentElement).to.equal(wrapper);
 
+    const button = wrapper.querySelector('vaadin-button');
+    expect(inputs[0].nextElementSibling).to.equal(inputs[1]);
+    expect(inputs[1].nextElementSibling).to.equal(button);
+
     overlay.opened = false;
     await nextRender();
 
