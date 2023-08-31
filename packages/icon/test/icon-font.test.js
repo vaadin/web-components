@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, isChrome, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { __needsFontIconSizingFallback, __supportsCQUnitsForPseudoElements } from '../vaadin-icon.js';
+import '../vaadin-icon.js';
+import { needsFontIconSizingFallback, supportsCQUnitsForPseudoElements } from '../src/vaadin-icon-helpers.js';
 import { iconFontCss } from './test-icon-font.js';
 
 /**
@@ -21,7 +22,7 @@ function onceInvoked(object, functionName) {
  * Resolves once the icon resize is complete.
  */
 async function onceResized(icon) {
-  if (__needsFontIconSizingFallback) {
+  if (needsFontIconSizingFallback) {
     await onceInvoked(icon, '_onResize');
   }
 }
@@ -181,22 +182,22 @@ describe('vaadin-icon - icon fonts', () => {
   // when font icons are used.
   describe('container query fallback', () => {
     // Tests for browsers that require the fallback
-    const fallBackIt = __needsFontIconSizingFallback ? it : it.skip;
+    const fallBackIt = needsFontIconSizingFallback ? it : it.skip;
     // Tests for browsers that we know for sure not to require the fallback
     const supportedIt = isChrome ? it : it.skip;
 
     let icon;
 
     supportedIt('should support CQ width units on pseudo elements', async () => {
-      expect(__supportsCQUnitsForPseudoElements()).to.be.true;
+      expect(supportsCQUnitsForPseudoElements()).to.be.true;
     });
 
     supportedIt('should not need the fallback', async () => {
-      expect(__needsFontIconSizingFallback).to.be.false;
+      expect(needsFontIconSizingFallback).to.be.false;
     });
 
     fallBackIt('should not support CQ width units on pseudo elements', async () => {
-      expect(__supportsCQUnitsForPseudoElements()).to.be.false;
+      expect(supportsCQUnitsForPseudoElements()).to.be.false;
     });
 
     fallBackIt('should have the custom property (font)', async () => {
