@@ -612,7 +612,41 @@ export const KeyboardNavigationMixin = (superClass) =>
         }
       }
 
-      return tabOrder[index];
+      let focusStepTarget = tabOrder[index];
+
+      // If the target focusable is tied to a column that is not visible,
+      // find the first visible column and update the target in order to
+      // prevent scrolling to the start of the row.
+      if (focusStepTarget && focusStepTarget._column && !this.__isColumnInViewport(focusStepTarget._column)) {
+        const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
+        if (firstVisibleColumn) {
+          if (focusStepTarget === this._headerFocusable) {
+            focusStepTarget = firstVisibleColumn._headerCell;
+          } else if (focusStepTarget === this._itemsFocusable) {
+            const rowIndex = focusStepTarget._column._cells.indexOf(focusStepTarget);
+            focusStepTarget = firstVisibleColumn._cells[rowIndex];
+          } else if (focusStepTarget === this._footerFocusable) {
+            focusStepTarget = firstVisibleColumn._footerCell;
+          }
+        }
+      }
+
+      return focusStepTarget;
+    }
+
+    /**
+     * Returns true if the given column is horizontally inside the viewport.
+     * @private
+     */
+    __isColumnInViewport(column) {
+      if (column.frozen || column.frozenToEnd) {
+        // Assume frozen columns to always be inside the viewport
+        return true;
+      }
+      return (
+        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth >= this._scrollLeft &&
+        column._sizerCell.offsetLeft <= this._scrollLeft + this.clientWidth
+      );
     }
 
     /** @private */
