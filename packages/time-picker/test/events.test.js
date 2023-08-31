@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, enter, esc, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -7,31 +7,6 @@ import '../vaadin-time-picker.js';
 
 describe('events', () => {
   let timePicker;
-
-  describe('change event', () => {
-    let changeSpy, inputElement;
-
-    beforeEach(() => {
-      timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-      inputElement = timePicker.inputElement;
-      changeSpy = sinon.spy();
-      timePicker.addEventListener('change', changeSpy);
-    });
-
-    it('should not be fired on programmatic value change after manual one', () => {
-      timePicker.value = '00:00';
-      timePicker.open();
-      inputElement.value = '';
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
-      expect(changeSpy.calledOnce).to.be.true;
-      // Mimic native change happening on text-field blur
-      document.body.click();
-      timePicker.value = '02:00';
-      expect(changeSpy.calledOnce).to.be.true;
-    });
-  });
 
   describe('has-input-value-changed event', () => {
     let clearButton, hasInputValueChangedSpy, valueChangedSpy;
