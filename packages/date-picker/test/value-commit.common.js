@@ -266,7 +266,7 @@ describe('value commit', () => {
         await waitForScrollToFinish(datePicker._overlayContent);
       });
 
-      it('should commit on focused date selection with click', async () => {
+      it('should commit on focused date selection with click', () => {
         const date = getDeepActiveElement();
         tap(date);
         expectValueCommit(YESTERDAY_DATE);
