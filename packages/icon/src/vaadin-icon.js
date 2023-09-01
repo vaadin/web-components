@@ -15,7 +15,8 @@ import { needsFontIconSizingFallback } from './vaadin-icon-helpers.js';
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
-const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
+const usesFontIconSizingFallback = needsFontIconSizingFallback();
+const ConditionalResizeMixin = (superClass) => (usesFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -385,7 +386,7 @@ class Icon extends ThemableMixin(
    * @override
    */
   _onResize() {
-    if (needsFontIconSizingFallback && (this.char || this.font)) {
+    if (usesFontIconSizingFallback && (this.char || this.font)) {
       // ResizeObserver-based fallback for sizing font icons.
       const { paddingTop, paddingBottom, height } = getComputedStyle(this);
       const fontIconSize = parseFloat(height) - parseFloat(paddingTop) - parseFloat(paddingBottom);

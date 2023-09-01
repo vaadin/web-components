@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-import { isSafari } from '@vaadin/component-base/src/browser-utils';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 
 /**
  * Checks if the current browser supports CSS Container Query units for pseudo elements.
@@ -36,9 +36,9 @@ export function supportsCQUnitsForPseudoElements() {
 }
 
 /**
- * Check if the current browser needs a fallback for sizing font icons instead of relying on CSS Container Queries.
+ * Checks if the current browser needs a fallback for sizing font icons instead of relying on CSS Container Queries.
  */
-export const needsFontIconSizingFallback = (() => {
+export function needsFontIconSizingFallback() {
   if (!CSS.supports('container-type: inline-size')) {
     // The browser does not support CSS Container Queries at all.
     return true;
@@ -49,4 +49,4 @@ export const needsFontIconSizingFallback = (() => {
   }
   // Check if the browser does not support CSS Container Query units for pseudo elements.
   return !supportsCQUnitsForPseudoElements();
-})();
+}

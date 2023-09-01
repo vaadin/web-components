@@ -22,7 +22,7 @@ function onceInvoked(object, functionName) {
  * Resolves once the icon resize is complete.
  */
 async function onceResized(icon) {
-  if (needsFontIconSizingFallback) {
+  if (needsFontIconSizingFallback()) {
     await onceInvoked(icon, '_onResize');
   }
 }
@@ -182,7 +182,7 @@ describe('vaadin-icon - icon fonts', () => {
   // when font icons are used.
   describe('container query fallback', () => {
     // Tests for browsers that require the fallback
-    const fallBackIt = needsFontIconSizingFallback ? it : it.skip;
+    const fallBackIt = needsFontIconSizingFallback() ? it : it.skip;
     // Tests for browsers that we know for sure not to require the fallback
     const supportedIt = isChrome ? it : it.skip;
 
@@ -193,7 +193,7 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     supportedIt('should not need the fallback', async () => {
-      expect(needsFontIconSizingFallback).to.be.false;
+      expect(needsFontIconSizingFallback()).to.be.false;
     });
 
     fallBackIt('should not support CQ width units on pseudo elements', async () => {
