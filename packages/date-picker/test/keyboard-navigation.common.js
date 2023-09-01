@@ -203,19 +203,6 @@ describe('keyboard navigation', () => {
       expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 1, 1);
     });
 
-    it('should select a date with space', async () => {
-      await sendKeys({ press: 'ArrowRight' });
-      await sendKeys({ press: 'Space' });
-      await waitForScrollToFinish(overlay);
-      const cell = getFocusedCell(overlay);
-      expect(cell.date).to.eql(new Date(2000, 0, 2));
-    });
-
-    it('should deselect selected date with space', async () => {
-      await sendKeys({ press: 'Space' });
-      expect(overlay.selectedDate).to.be.empty;
-    });
-
     it('should focus first day of the month with home', async () => {
       await sendKeys({ press: 'ArrowLeft' });
       await sendKeys({ press: 'Home' });

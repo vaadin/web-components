@@ -18,17 +18,6 @@ describe('events', () => {
       datePicker.inputElement.focus();
     });
 
-    it('should not be fired on focused date change', async () => {
-      await sendKeys({ type: '1/2/2000' });
-      await waitForScrollToFinish(datePicker._overlayContent);
-      expect(changeSpy.called).to.be.false;
-    });
-
-    it('should not be fired on programmatic value change', () => {
-      datePicker.value = '2000-01-01';
-      expect(changeSpy.called).to.be.false;
-    });
-
     it('should not be fired on programmatic value change when opened', async () => {
       await open(datePicker);
       datePicker.value = '2000-01-01';
@@ -42,18 +31,6 @@ describe('events', () => {
       datePicker.value = '2000-01-01';
       await close(datePicker);
       expect(changeSpy.called).to.be.false;
-    });
-
-    describe('autoOpenDisabled', () => {
-      beforeEach(() => {
-        datePicker.autoOpenDisabled = true;
-      });
-
-      it('should be fired when committing user input with blur', async () => {
-        await sendKeys({ type: '1/1/2000' });
-        datePicker.inputElement.blur();
-        expect(changeSpy.calledOnce).to.be.true;
-      });
     });
   });
 

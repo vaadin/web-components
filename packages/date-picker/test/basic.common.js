@@ -296,13 +296,6 @@ describe('clear button', () => {
     expect(datePicker.inputElement.value).to.equal('');
   });
 
-  it('should clear the value on Escape', () => {
-    datePicker.value = '2000-02-01';
-    escKeyDown(datePicker.inputElement);
-    expect(datePicker.value).to.equal('');
-    expect(datePicker.inputElement.value).to.equal('');
-  });
-
   it('should remove has-value attribute on clear', () => {
     datePicker.value = '2000-02-01';
     click(clearButton);

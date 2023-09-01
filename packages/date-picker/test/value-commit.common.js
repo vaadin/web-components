@@ -1,11 +1,16 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { waitForOverlayRender } from './helpers.js';
+import { waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
-const TODAY_DATE = new Date().toISOString().split('T')[0];
+function formatDateISO(date) {
+  return date.toISOString().split('T')[0];
+}
+
+const TODAY_DATE = formatDateISO(new Date());
+const YESTERDAY_DATE = formatDateISO(new Date(Date.now() - 3600 * 1000 * 24));
 
 describe('value commit', () => {
   let datePicker, valueChangedSpy, validateSpy, changeSpy;
@@ -191,26 +196,91 @@ describe('value commit', () => {
     });
   });
 
-  describe('overlay', () => {
+  describe('overlay date focused', () => {
     beforeEach(async () => {
+      // Open the dropdown.
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
+      // Focus yesterday's date.
+      await sendKeys({ press: 'ArrowLeft' });
+      await waitForScrollToFinish(datePicker._overlayContent);
     });
 
-    it('should commit on date selection with click', () => {
+    it('should commit on focused date selection with click', async () => {
       const date = getDeepActiveElement();
       tap(date);
-      expectValueCommit(TODAY_DATE);
+      expectValueCommit(YESTERDAY_DATE);
     });
 
-    it('should commit on date selection with Enter', async () => {
+    it('should commit on focused date selection with Enter', async () => {
       await sendKeys({ press: 'Enter' });
+      expectValueCommit(YESTERDAY_DATE);
+    });
+
+    it('should commit on focused date selection with Space', async () => {
+      await sendKeys({ press: 'Space' });
+      expectValueCommit(YESTERDAY_DATE);
+    });
+
+    it('should commit focused date on close with outside click', () => {
+      outsideClick();
+      expectValueCommit(YESTERDAY_DATE);
+    });
+
+    it('should revert on close with Escape', async () => {
+      await sendKeys({ press: 'Escape' });
+      expectNoValueCommit();
+    });
+  });
+
+  describe('overlay date committed', () => {
+    beforeEach(async () => {
+      // Open the dropdown.
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
+      // Select today's date.
+      await sendKeys({ press: 'Space' });
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
+
+    it('should commit an empty value on current date deselection with Space', async () => {
+      await sendKeys({ press: 'Space' });
+      expectValueCommit('');
+    });
+
+    it('should commit the deselected date again on close with outside click', async () => {
+      await sendKeys({ press: 'Space' });
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+      outsideClick();
       expectValueCommit(TODAY_DATE);
     });
 
-    it('should commit on date selection with Space', async () => {
-      await sendKeys({ press: 'Space' });
-      expectValueCommit(TODAY_DATE);
+    describe('another date focused', () => {
+      beforeEach(async () => {
+        // Focus yesterday's date.
+        await sendKeys({ press: 'ArrowLeft' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+      });
+
+      it('should commit on focused date selection with click', async () => {
+        const date = getDeepActiveElement();
+        tap(date);
+        expectValueCommit(YESTERDAY_DATE);
+      });
+
+      it('should commit on focused date selection with Space', async () => {
+        await sendKeys({ press: 'Space' });
+        expectValueCommit(YESTERDAY_DATE);
+      });
+
+      it('should commit on focused date selection with Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectValueCommit(YESTERDAY_DATE);
+      });
     });
   });
 
@@ -302,18 +372,6 @@ describe('value commit', () => {
         await sendKeys({ press: 'Escape' });
         expectValueCommit('');
         expect(datePicker.inputElement.value).to.equal('foo');
-      });
-    });
-
-    describe('overlay', () => {
-      beforeEach(async () => {
-        await sendKeys({ press: 'ArrowDown' });
-        await waitForOverlayRender();
-      });
-
-      it('should commit on unselection with Space', async () => {
-        await sendKeys({ press: 'Space' });
-        expectValueCommit('');
       });
     });
   });
