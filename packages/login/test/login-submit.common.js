@@ -1,13 +1,19 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, tabKeyUp } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender, tabKeyUp } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login form submit', () => {
   let login, iframe;
 
-  function testFormSubmitValues(preventDefault, expectation, done) {
+  function testFormSubmitValues(preventDefault, expectation, done, data = {}) {
     fillUsernameAndPassword(login);
+
+    const formData = { username: 'username', password: 'password', ...data };
+
+    const urlParams = Object.entries(formData)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
 
     const loginForm = login.querySelector('form');
     loginForm.setAttribute('method', 'GET');
@@ -19,7 +25,7 @@ describe('login form submit', () => {
     }
 
     iframe.onload = () => {
-      expect(iframe.contentWindow.location.href).to.include('login-action?username=username&password=password');
+      expect(iframe.contentWindow.location.href).to.include(`login-action?${urlParams}`);
       done();
     };
 
@@ -83,6 +89,47 @@ describe('login form submit', () => {
 
     it('should submit form values from overlay element', (done) => {
       testFormSubmitValues(false, true, done);
+    });
+  });
+
+  describe('custom fields', () => {
+    let overlay;
+
+    beforeEach(async () => {
+      overlay = fixtureSync(`
+        <vaadin-login-overlay opened>
+          <input name="foo" value="bar" slot="custom-fields">
+          <vaadin-text-field name="code" value="1234" slot="custom-fields"></vaadin-text-field>
+        </vaadin-login-overlay>
+      `);
+      await nextRender();
+      login = overlay.$.vaadinLoginForm;
+    });
+
+    it('should add custom fields values to the login event detail', () => {
+      const loginSpy = sinon.spy();
+
+      overlay.addEventListener('login', loginSpy);
+
+      const { vaadinLoginUsername } = fillUsernameAndPassword(login);
+
+      enter(vaadinLoginUsername);
+      expect(loginSpy.called).to.be.true;
+
+      const { detail } = loginSpy.firstCall.args[0];
+      expect(detail.custom.foo).to.be.equal('bar');
+      expect(detail.custom.code).to.be.equal('1234');
+    });
+
+    describe('form submit', () => {
+      beforeEach(async () => {
+        overlay.action = 'login-action';
+        await nextRender();
+      });
+
+      it('should submit custom fields values to the native form', (done) => {
+        testFormSubmitValues(false, true, done, { foo: 'bar', code: '1234' });
+      });
     });
   });
 });

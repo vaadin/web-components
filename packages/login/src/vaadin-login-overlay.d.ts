@@ -27,7 +27,11 @@ export type LoginOverlayErrorChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired when a user submits the login.
  */
-export type LoginOverlayLoginEvent = CustomEvent<{ username: string; password: string }>;
+export type LoginOverlayLoginEvent = CustomEvent<{
+  username: string;
+  password: string;
+  custom?: Record<string, unknown>;
+}>;
 
 export interface LoginOverlayCustomEventMap {
   'description-changed': LoginOverlayDescriptionChangedEvent;

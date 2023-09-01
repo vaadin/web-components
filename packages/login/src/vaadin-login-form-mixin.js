@@ -15,6 +15,12 @@ export const LoginFormMixin = (superClass) =>
       return ['_errorChanged(error)'];
     }
 
+    get _customFields() {
+      return [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
+        return node.getAttribute('slot') === 'custom-fields' && node.hasAttribute('name');
+      });
+    }
+
     /** @protected */
     async connectedCallback() {
       super.connectedCallback();
@@ -47,13 +53,24 @@ export const LoginFormMixin = (superClass) =>
       this.error = false;
       this.disabled = true;
 
+      const detail = {
+        username: userName.value,
+        password: password.value,
+      };
+
+      const fields = this._customFields;
+      if (fields.length) {
+        detail.custom = {};
+
+        fields.forEach((field) => {
+          detail.custom[field.name] = field.value;
+        });
+      }
+
       const loginEventDetails = {
         bubbles: true,
         cancelable: true,
-        detail: {
-          username: userName.value,
-          password: password.value,
-        },
+        detail,
       };
 
       const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));
@@ -65,6 +82,17 @@ export const LoginFormMixin = (superClass) =>
           this.$.csrf.value = csrfMetaValue.content;
         }
         this.querySelector('form').submit();
+      }
+    }
+
+    /** @protected */
+    _onFormData(event) {
+      const { formData } = event;
+
+      if (this._customFields.length) {
+        this._customFields.forEach((field) => {
+          formData.append(field.name, field.value);
+        });
       }
     }
 
