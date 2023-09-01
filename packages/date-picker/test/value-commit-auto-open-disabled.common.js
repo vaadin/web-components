@@ -66,7 +66,7 @@ describe('value commit - autoOpenDisabled', () => {
     });
   });
 
-  describe('entering parsable input', () => {
+  describe('parsable input entered', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1/1/2001' });
     });
@@ -93,27 +93,59 @@ describe('value commit - autoOpenDisabled', () => {
     });
   });
 
-  describe('entering unparsable input', () => {
+  describe('parsable input committed', () => {
     beforeEach(async () => {
-      await sendKeys({ type: 'foobar' });
+      await sendKeys({ type: '1/1/2001' });
+      await sendKeys({ press: 'Enter' });
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
+
+    describe('input cleared with Backspace', () => {
+      beforeEach(async () => {
+        datePicker.inputElement.select();
+        await sendKeys({ press: 'Backspace' });
+      });
+
+      it('should commit on blur', () => {
+        datePicker.blur();
+        expectValueCommit('');
+      });
+
+      it('should commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectValueCommit('');
+      });
+
+      it('should commit on Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+        expectValueCommit('');
+      });
+    });
+  });
+
+  describe('unparsable input entered', () => {
+    beforeEach(async () => {
+      await sendKeys({ type: 'foo' });
     });
 
     it('should not commit but validate on blur', () => {
       datePicker.blur();
       expectValidationOnly();
-      expect(datePicker.inputElement.value).to.equal('foobar');
+      expect(datePicker.inputElement.value).to.equal('foo');
     });
 
     it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectValidationOnly();
-      expect(datePicker.inputElement.value).to.equal('foobar');
+      expect(datePicker.inputElement.value).to.equal('foo');
     });
 
     it('should not commit but validate on outside click', () => {
       outsideClick();
       expectValidationOnly();
-      expect(datePicker.inputElement.value).to.equal('foobar');
+      expect(datePicker.inputElement.value).to.equal('foo');
     });
 
     it('should revert on Escape', async () => {
@@ -121,13 +153,17 @@ describe('value commit - autoOpenDisabled', () => {
       expectNoValueCommit();
       expect(datePicker.inputElement.value).to.equal('');
     });
+  });
 
-    describe('clearing input with Backspace', () => {
+  describe('unparsable input committed', () => {
+    beforeEach(async () => {
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Enter' });
+      validateSpy.resetHistory();
+    });
+
+    describe('input cleared with Backspace', () => {
       beforeEach(async () => {
-        await sendKeys({ press: 'Enter' });
-        valueChangedSpy.resetHistory();
-        validateSpy.resetHistory();
-
         datePicker.inputElement.select();
         await sendKeys({ press: 'Backspace' });
       });
@@ -149,7 +185,7 @@ describe('value commit - autoOpenDisabled', () => {
     });
   });
 
-  describe('with value', () => {
+  describe('value set programmatically', () => {
     let initialInputElementValue;
 
     beforeEach(() => {
@@ -181,7 +217,7 @@ describe('value commit - autoOpenDisabled', () => {
       });
     });
 
-    describe('entering parsable input', () => {
+    describe('parsable input entered', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
         await sendKeys({ type: '1/1/2001' });
@@ -204,55 +240,28 @@ describe('value commit - autoOpenDisabled', () => {
       });
     });
 
-    describe('entering unparsable input', () => {
+    describe('unparsable input entered', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
-        await sendKeys({ type: 'foobar' });
+        await sendKeys({ type: 'foo' });
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
-        expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('foobar');
+        expect(datePicker.inputElement.value).to.equal('foo');
       });
 
       it('should commit an empty value on outside click', () => {
         outsideClick();
         expectValueCommit('');
-        expect(datePicker.value).to.equal('');
-        expect(datePicker.inputElement.value).to.equal('foobar');
+        expect(datePicker.inputElement.value).to.equal('foo');
       });
 
       it('should revert on Escape', async () => {
         await sendKeys({ press: 'Escape' });
         expectNoValueCommit();
         expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
-      });
-    });
-
-    describe('clearing input with Backspace', () => {
-      beforeEach(async () => {
-        datePicker.inputElement.select();
-        await sendKeys({ press: 'Backspace' });
-      });
-
-      it('should commit on blur', () => {
-        datePicker.blur();
-        expectValueCommit('');
-        expect(datePicker.value).to.equal('');
-      });
-
-      it('should commit on Enter', async () => {
-        await sendKeys({ press: 'Enter' });
-        expectValueCommit('');
-        expect(datePicker.value).to.equal('');
-      });
-
-      it('should commit on Escape', async () => {
-        await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
-        expect(datePicker.value).to.equal('');
       });
     });
   });
