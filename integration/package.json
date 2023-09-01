@@ -13,6 +13,7 @@
     "@vaadin/checkbox": "24.2.0-alpha13",
     "@vaadin/checkbox-group": "24.2.0-alpha13",
     "@vaadin/combo-box": "24.2.0-alpha13",
+    "@vaadin/confirm-dialog": "24.2.0-alpha13",
     "@vaadin/context-menu": "24.2.0-alpha13",
     "@vaadin/custom-field": "24.2.0-alpha13",
     "@vaadin/date-picker": "24.2.0-alpha13",
