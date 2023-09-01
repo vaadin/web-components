@@ -5,21 +5,18 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { svg } from 'lit';
-import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { needsFontIconSizingFallback } from './vaadin-icon-helpers.js';
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
-const supportsCSSContainerQueries = CSS.supports('container-type: inline-size');
-const needsFontIconSizingFallback = !supportsCSSContainerQueries || isSafari;
-// ResizeObserver-based fallback for browsers without CSS Container Queries support (Safari 15)
-// or buggy Container Queries support for pseudo elements (Safari 16)
-const ConditionalResizeMixin = (superClass) => (needsFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
+const usesFontIconSizingFallback = needsFontIconSizingFallback();
+const ConditionalResizeMixin = (superClass) => (usesFontIconSizingFallback ? ResizeMixin(superClass) : superClass);
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -389,7 +386,8 @@ class Icon extends ThemableMixin(
    * @override
    */
   _onResize() {
-    if (needsFontIconSizingFallback && (this.char || this.font)) {
+    if (usesFontIconSizingFallback && (this.char || this.font)) {
+      // ResizeObserver-based fallback for sizing font icons.
       const { paddingTop, paddingBottom, height } = getComputedStyle(this);
       const fontIconSize = parseFloat(height) - parseFloat(paddingTop) - parseFloat(paddingBottom);
       this.style.setProperty('--_vaadin-font-icon-size', `${fontIconSize}px`);
