@@ -11,18 +11,14 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  */
 export const LoginFormMixin = (superClass) =>
   class LoginFormMixin extends LoginMixin(superClass) {
-    static get properties() {
-      return {
-        /** @private */
-        _customFields: {
-          type: Array,
-          value: () => [],
-        },
-      };
-    }
-
     static get observers() {
       return ['_errorChanged(error)'];
+    }
+
+    get _customFields() {
+      return [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
+        return node.getAttribute('slot') === 'custom-fields' && node.hasAttribute('name');
+      });
     }
 
     /** @protected */
@@ -34,19 +30,6 @@ export const LoginFormMixin = (superClass) =>
         await new Promise(requestAnimationFrame);
         this.$.vaadinLoginUsername.focus();
       }
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this.__setCustomFields();
-
-      this.__observer = new MutationObserver(() => {
-        this.__setCustomFields();
-      });
-
-      this.__observer.observe(this.$.vaadinLoginFormWrapper, { childList: true });
     }
 
     /** @private */
@@ -75,10 +58,11 @@ export const LoginFormMixin = (superClass) =>
         password: password.value,
       };
 
-      if (this._customFields.length) {
+      const fields = this._customFields;
+      if (fields.length) {
         detail.custom = {};
 
-        this._customFields.forEach((field) => {
+        fields.forEach((field) => {
           detail.custom[field.name] = field.value;
         });
       }
@@ -139,12 +123,5 @@ export const LoginFormMixin = (superClass) =>
     /** @protected */
     _onForgotPasswordClick() {
       this.dispatchEvent(new CustomEvent('forgot-password'));
-    }
-
-    /** @private */
-    __setCustomFields() {
-      this._customFields = [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
-        return node.getAttribute('slot') === 'custom-fields' && node.hasAttribute('name');
-      });
     }
   };
