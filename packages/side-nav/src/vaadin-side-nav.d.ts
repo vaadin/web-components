@@ -6,7 +6,7 @@
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { type SideNavI18n, SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+import { SideNavChildrenMixin, type SideNavI18n } from './vaadin-side-nav-children-mixin.js';
 
 export type { SideNavI18n };
 
