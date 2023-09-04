@@ -243,6 +243,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     ];
   }
 
+  /** @private */
+  get __fontClasses() {
+    return this.font ? this.font.split(' ') : [];
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -358,7 +363,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   __fontChanged(font, char) {
     this.classList.remove(...(this.__addedFontClasses || []));
     if (font) {
-      this.__addedFontClasses = font.split(' ');
+      this.__addedFontClasses = [...this.__fontClasses];
       this.classList.add(...this.__addedFontClasses);
     }
 
@@ -374,9 +379,8 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     super.attributeChangedCallback(name, oldValue, newValue);
 
     // Make sure class list always contains all the font class names
-    const fontClassNames = this.font ? this.font.split(' ') : [];
-    if (name === 'class' && fontClassNames.some((className) => !this.classList.contains(className))) {
-      this.classList.add(...fontClassNames);
+    if (name === 'class' && this.__fontClasses.some((className) => !this.classList.contains(className))) {
+      this.classList.add(...this.__fontClasses);
     }
   }
 
