@@ -374,12 +374,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     super.attributeChangedCallback(name, oldValue, newValue);
 
     // Make sure class list always contains all the font class names
-    if (
-      name === 'class' &&
-      this.font &&
-      this.font.split(' ').some((className) => !this.classList.contains(className))
-    ) {
-      this.__fontChanged(this.font, this.char);
+    const fontClassNames = this.font ? this.font.split(' ') : [];
+    if (name === 'class' && fontClassNames.some((className) => !this.classList.contains(className))) {
+      this.classList.add(...fontClassNames);
     }
   }
 
