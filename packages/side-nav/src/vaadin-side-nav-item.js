@@ -72,8 +72,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
- * @extends LitElement
- * @mixes PolylitMixin
+ * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DisabledMixin
  * @mixes ElementMixin
