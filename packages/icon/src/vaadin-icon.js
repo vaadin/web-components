@@ -219,6 +219,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)', '__srcChanged(src)'];
   }
 
+  static get observedAttributes() {
+    return [...super.observedAttributes, 'class'];
+  }
+
   constructor() {
     super();
 
@@ -362,6 +366,20 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       // The "icon" attribute needs to be set on the host also when using font icons
       // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
+    }
+  }
+
+  /** @protected */
+  attributeChangedCallback(name, oldValue, newValue) {
+    super.attributeChangedCallback(name, oldValue, newValue);
+
+    // Make sure class list always contains all the font class names
+    if (
+      name === 'class' &&
+      this.font &&
+      this.font.split(' ').some((className) => !this.classList.contains(className))
+    ) {
+      this.__fontChanged(this.font, this.char);
     }
   }
 

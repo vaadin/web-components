@@ -111,6 +111,28 @@ describe('vaadin-icon - icon fonts', () => {
       expect(icon.classList.contains('foo')).to.be.true;
     });
 
+    it('should restore the font to element class list', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font icon-before"></vaadin-icon>');
+      icon.className = 'foo';
+      expect(icon.classList.contains('my-icon-font')).to.be.true;
+      expect(icon.classList.contains('icon-before')).to.be.true;
+      expect(icon.classList.contains('foo')).to.be.true;
+    });
+
+    it('should restore the missing font to element class list', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font icon-before"></vaadin-icon>');
+      icon.className = 'my-icon-font';
+      expect(icon.classList.contains('my-icon-font')).to.be.true;
+      expect(icon.classList.contains('icon-before')).to.be.true;
+    });
+
+    it('should restore the removed font to element class list', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font icon-before"></vaadin-icon>');
+      icon.classList.remove('my-icon-font');
+      expect(icon.classList.contains('my-icon-font')).to.be.true;
+      expect(icon.classList.contains('icon-before')).to.be.true;
+    });
+
     it('should reflect font as an attribute', () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       icon.font = 'my-icon-font icon-before';
