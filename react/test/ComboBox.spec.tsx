@@ -27,6 +27,7 @@ describe('ComboBox', () => {
         ref={ref}
         items={items}
         opened
+        itemLabelPath="value"
         renderer={({ item }) => <>{item.value}</>}
         onSelectedItemChanged={(event) => {
           expect(event.detail.value?.value).to.equal('bar');
