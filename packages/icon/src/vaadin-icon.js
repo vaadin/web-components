@@ -219,6 +219,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)', '__srcChanged(src)'];
   }
 
+  static get observedAttributes() {
+    return [...super.observedAttributes, 'class'];
+  }
+
   constructor() {
     super();
 
@@ -237,6 +241,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         }
       `,
     ];
+  }
+
+  /** @private */
+  get __fontClasses() {
+    return this.font ? this.font.split(' ') : [];
   }
 
   /** @protected */
@@ -354,7 +363,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   __fontChanged(font, char) {
     this.classList.remove(...(this.__addedFontClasses || []));
     if (font) {
-      this.__addedFontClasses = font.split(' ');
+      this.__addedFontClasses = [...this.__fontClasses];
       this.classList.add(...this.__addedFontClasses);
     }
 
@@ -362,6 +371,16 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       // The "icon" attribute needs to be set on the host also when using font icons
       // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
+    }
+  }
+
+  /** @protected */
+  attributeChangedCallback(name, oldValue, newValue) {
+    super.attributeChangedCallback(name, oldValue, newValue);
+
+    // Make sure class list always contains all the font class names
+    if (name === 'class' && this.__fontClasses.some((className) => !this.classList.contains(className))) {
+      this.classList.add(...this.__fontClasses);
     }
   }
 
