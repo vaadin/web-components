@@ -20,8 +20,6 @@ registerStyles(
       justify-content: center;
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
-      left: calc(50% - 0.5px);
-      top: calc(50% - 0.5px);
     }
 
     [part='handle']::after {
@@ -73,6 +71,11 @@ registerStyles(
       right: -4px;
       bottom: -4px;
       left: -4px;
+    }
+
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle'] {
+      left: calc(50% - 0.5px);
+      top: calc(50% - 0.5px);
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle']::after {
