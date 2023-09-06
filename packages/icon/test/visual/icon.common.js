@@ -32,14 +32,14 @@ describe('icon', () => {
         <vaadin-icon font="my-icon-font icon-after"></vaadin-icon>
         <vaadin-icon font="my-icon-font icon-ligature"></vaadin-icon>
 
-        <!-- Font icons using char -->
-        <vaadin-icon font="my-icon-font" char="\ue900"></vaadin-icon>
-        <vaadin-icon font="my-icon-font" char="figma"></vaadin-icon>
-        <vaadin-icon style="font-family: 'My icons'" char="\ue900"></vaadin-icon>
+        <!-- Font icons using char and ligature -->
+        <vaadin-icon font="my-icon-font" char="e900"></vaadin-icon>
+        <vaadin-icon font="my-icon-font" ligature="figma"></vaadin-icon>
+        <vaadin-icon style="font-family: 'My icons'" char="e900"></vaadin-icon>
 
         <!-- Font icons using fontFamily -->
         <vaadin-icon font-family="My icons" char="\ue900"></vaadin-icon>
-        <vaadin-icon font-family="My icons" char="figma"></vaadin-icon>
+        <vaadin-icon font-family="My icons" ligature="figma"></vaadin-icon>
         `,
         div,
       );

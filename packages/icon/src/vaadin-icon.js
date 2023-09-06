@@ -92,12 +92,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           height: 100%;
         }
 
-        :host(:is([font], [char])) svg {
+        :host(:is([font], [font-icon-content])) svg {
           display: none;
         }
 
-        :host([char])::before {
-          content: attr(char);
+        :host([font-icon-content])::before {
+          content: attr(font-icon-content);
         }
       </style>
       <svg
@@ -169,15 +169,25 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       },
 
       /**
-       * The specific glyph from a font to use as an icon.
-       * Can be a code point or a ligature name.
+       * A hexadecimal code point that specifies a glyph from an icon font.
        *
-       * @attr {string} char
+       * Example: "e001"
+       *
        * @type {string}
        */
       char: {
         type: String,
-        reflectToAttribute: true,
+      },
+
+      /**
+       * A ligature name that specifies an icon from an icon font with support for ligatures.
+       *
+       * Example: "home".
+       *
+       * @type {string}
+       */
+      ligature: {
+        type: String,
       },
 
       /**
@@ -216,7 +226,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char, ligature)', '__srcChanged(src)'];
   }
 
   static get observedAttributes() {
@@ -360,14 +370,22 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  __fontChanged(font, char) {
+  __fontChanged(font, char, ligature) {
     this.classList.remove(...(this.__addedFontClasses || []));
     if (font) {
       this.__addedFontClasses = [...this.__fontClasses];
       this.classList.add(...this.__addedFontClasses);
     }
 
-    if ((font || char) && !this.icon) {
+    if (char) {
+      this.setAttribute('font-icon-content', char.length > 1 ? String.fromCodePoint(parseInt(char, 16)) : char);
+    } else if (ligature) {
+      this.setAttribute('font-icon-content', ligature);
+    } else {
+      this.removeAttribute('font-icon-content');
+    }
+
+    if ((font || char || ligature) && !this.icon) {
       // The "icon" attribute needs to be set on the host also when using font icons
       // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
       this.icon = '';

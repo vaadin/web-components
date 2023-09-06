@@ -89,12 +89,18 @@ declare class Icon extends ThemableMixin(
   font: string | null;
 
   /**
-   * The specific glyph from a font to use as an icon.
-   * Can be a code point or a ligature name.
+   * A hexadecimal code point that specifies a glyph from an icon font.
    *
-   * @attr {string} char
+   * Example: "e001"
    */
   char: string | null;
+
+  /**
+   * A ligature name that specifies an icon from an icon font with support for ligatures.
+   *
+   * Example: "home".
+   */
+  ligature: string | null;
 
   /**
    * The font family to use for the font icon.

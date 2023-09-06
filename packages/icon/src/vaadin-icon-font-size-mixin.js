@@ -34,7 +34,7 @@ export const IconFontSizeMixin = dedupingMixin((superclass) =>
     ? superclass
     : class extends ResizeMixin(superclass) {
         static get observers() {
-          return ['__iconFontSizeMixinfontChanged(font, char)'];
+          return ['__iconFontSizeMixinfontChanged(font, char, ligature)'];
         }
 
         /** @protected */
@@ -46,7 +46,7 @@ export const IconFontSizeMixin = dedupingMixin((superclass) =>
         }
 
         /** @private */
-        __iconFontSizeMixinfontChanged(font, char) {
+        __iconFontSizeMixinfontChanged(_font, _char, _ligature) {
           // Update when font or char changes
           this.__updateFontIconSize();
         }
@@ -66,7 +66,7 @@ export const IconFontSizeMixin = dedupingMixin((superclass) =>
          * @private
          */
         __updateFontIconSize() {
-          if (this.char || this.font) {
+          if (this.char || this.font || this.ligature) {
             const { paddingTop, paddingBottom, height } = getComputedStyle(this);
             const fontIconSize = parseFloat(height) - parseFloat(paddingTop) - parseFloat(paddingBottom);
             this.style.setProperty('--_vaadin-font-icon-size', `${fontIconSize}px`);

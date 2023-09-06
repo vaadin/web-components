@@ -161,10 +161,23 @@ describe('vaadin-icon - icon fonts', () => {
   describe('char', () => {
     let icon;
 
-    it('should reflect char as an attribute', () => {
+    it('should reflect unprefixed char as font-icon-content attribute', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
+      icon.char = 'e900';
+      expect(icon.getAttribute('font-icon-content')).to.equal('\ue900');
+    });
+
+    it('should reflect prefixed char as font-icon-content attribute', () => {
       icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
       icon.char = '\ue900';
-      expect(icon.getAttribute('char')).to.equal('\ue900');
+      expect(icon.getAttribute('font-icon-content')).to.equal('\ue900');
+    });
+
+    it('should remove font-icon-content attribute', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
+      icon.char = 'e900';
+      icon.char = null;
+      expect(icon.hasAttribute('font-icon-content')).to.be.false;
     });
 
     it('should add icon attribute if char is set', () => {
@@ -174,7 +187,7 @@ describe('vaadin-icon - icon fonts', () => {
       expect(icon.hasAttribute('icon')).to.be.true;
     });
 
-    it('should not add icon attribute if font is not set', () => {
+    it('should not add icon attribute if char is not set', () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       icon.char = null;
       icon.style.fontFamily = 'My icons';
@@ -189,11 +202,49 @@ describe('vaadin-icon - icon fonts', () => {
     });
   });
 
+  describe('ligature', () => {
+    let icon;
+
+    it('should reflect ligature as font-icon-content attribute', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
+      icon.ligature = 'foo';
+      expect(icon.getAttribute('font-icon-content')).to.equal('foo');
+    });
+
+    it('should remove font-icon-content attribute', () => {
+      icon = fixtureSync('<vaadin-icon font="my-icon-font"></vaadin-icon>');
+      icon.ligature = 'foo';
+      icon.ligature = null;
+      expect(icon.hasAttribute('font-icon-content')).to.be.false;
+    });
+
+    it('should add icon attribute if ligature is set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.ligature = '\ue900';
+      icon.style.fontFamily = 'My icons';
+      expect(icon.hasAttribute('icon')).to.be.true;
+    });
+
+    it('should not add icon attribute if ligature is not set', () => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      icon.ligature = null;
+      icon.style.fontFamily = 'My icons';
+      expect(icon.hasAttribute('icon')).to.be.false;
+    });
+
+    it('should not override existing icon', () => {
+      icon = fixtureSync('<vaadin-icon icon="foo:bar"></vaadin-icon>');
+      icon.ligature = 'foo';
+      icon.style.fontFamily = 'My icons';
+      expect(icon.icon).to.equal('foo:bar');
+    });
+  });
+
   describe('fontFamily', () => {
     let icon;
 
     it('should set font-family for the icon element', () => {
-      icon = fixtureSync('<vaadin-icon char="\\e900"></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon char="e900"></vaadin-icon>');
       icon.fontFamily = 'My icons';
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(['"My icons"', 'My icons']).to.include(fontIconStyle.fontFamily);
