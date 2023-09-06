@@ -112,7 +112,7 @@ export const DynamicColumnsMixin = (superClass) =>
         if (hasColumnElements(info.addedNodes) || hasColumnElements(info.removedNodes)) {
           const allRemovedCells = info.removedNodes.flatMap((c) => c._allCells);
           const filterNotConnected = (element) =>
-            allRemovedCells.filter((cell) => cell._content.contains(element)).length;
+            allRemovedCells.filter((cell) => cell && cell._content.contains(element)).length;
 
           this.__removeSorters(this._sorters.filter(filterNotConnected));
           this.__removeFilters(this._filters.filter(filterNotConnected));
