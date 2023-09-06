@@ -386,7 +386,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
 
   /** @private */
   __fontFamilyChanged(fontFamily) {
-    this.style.fontFamily = fontFamily;
+    this.style.fontFamily = `'${fontFamily}'`;
   }
 }
 
