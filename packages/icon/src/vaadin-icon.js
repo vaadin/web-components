@@ -169,7 +169,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       },
 
       /**
-       * A character code that specifies an icon from an icon font.
+       * A hexadecimal code point that specifies a glyph from an icon font.
        *
        * Example: "e001"
        *

@@ -89,7 +89,7 @@ declare class Icon extends ThemableMixin(
   font: string | null;
 
   /**
-   * A character code that specifies an icon from an icon font.
+   * A hexadecimal code point that specifies a glyph from an icon font.
    *
    * Example: "e001"
    */
