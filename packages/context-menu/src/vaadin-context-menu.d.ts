@@ -54,12 +54,13 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  *
  * When an item is selected, `<vaadin-context-menu>` dispatches an "item-selected" event
  * with the selected item as `event.detail.value` property.
+ * If item does not have `keepOpen` property the menu will be closed.
  *
  * ```javascript
  * contextMenu.items = [
  *   { text: 'Menu Item 1', theme: 'primary', children:
  *     [
- *       { text: 'Menu Item 1-1', checked: true },
+ *       { text: 'Menu Item 1-1', checked: true, keepOpen: true },
  *       { text: 'Menu Item 1-2' }
  *     ]
  *   },

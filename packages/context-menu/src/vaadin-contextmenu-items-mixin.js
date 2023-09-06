@@ -22,6 +22,7 @@ export const ItemsMixin = (superClass) =>
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
          * @property {boolean} checked - If true, the item shows a checkmark next to it
+         * @property {boolean} keepOpen - If true, the menu will not be closed on item selection
          * @property {union: string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
          * @property {MenuItem[]} children - Array of child menu items
          */
@@ -39,7 +40,7 @@ export const ItemsMixin = (superClass) =>
          * contextMenu.items = [
          *   { text: 'Menu Item 1', theme: 'primary', children:
          *     [
-         *       { text: 'Menu Item 1-1', checked: true },
+         *       { text: 'Menu Item 1-1', checked: true, keepOpen: true },
          *       { text: 'Menu Item 1-2' }
          *     ]
          *   },
@@ -214,10 +215,12 @@ export const ItemsMixin = (superClass) =>
         const { value } = event.detail;
         if (typeof value === 'number') {
           const item = listBox.items[value]._item;
+          // Reset selected before dispatching the event to prevent
+          // checkmark icon flashing when `keepOpen` is set to true.
+          listBox.selected = null;
           if (!item.children) {
             this.dispatchEvent(new CustomEvent('item-selected', { detail: { value: item } }));
           }
-          listBox.selected = null;
         }
       });
 
@@ -297,8 +300,21 @@ export const ItemsMixin = (superClass) =>
       });
 
       // Listen to the forwarded event from sub-menu.
-      this.addEventListener('item-selected', () => {
-        this.close();
+      this.addEventListener('item-selected', (e) => {
+        const menu = e.target;
+        const selectedItem = e.detail.value;
+        const index = menu.items.indexOf(selectedItem);
+        if (!!selectedItem.keepOpen && index > -1) {
+          menu._overlayElement.requestContentUpdate();
+
+          // Initialize items synchronously
+          menu._listBox._observer.flush();
+
+          const newItem = menu._listBox.items[index];
+          newItem.focus();
+        } else if (!selectedItem.keepOpen) {
+          this.close();
+        }
       });
 
       // Mark parent item as collapsed when closing.

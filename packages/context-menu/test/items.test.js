@@ -39,9 +39,11 @@ describe('items', () => {
           { text: 'foo-0-0', checked: true },
           { text: 'foo-0-1', disabled: true },
           { text: 'foo-0-2', children: [{ text: 'foo-0-2-0' }] },
+          { text: 'foo-0-3', keepOpen: true },
         ],
       },
       { text: 'foo-1' },
+      { text: 'foo-2', keepOpen: true },
     ];
     await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
@@ -193,6 +195,30 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
   });
 
+  it('should have a checked root item after click if keep open', () => {
+    rootMenu.items[2].checked = true;
+    getMenuItems(rootMenu)[2].click();
+    expect(getMenuItems(rootMenu)[2].hasAttribute('menu-item-checked')).to.be.true;
+  });
+
+  it('should have a focused root item after click if keep open', () => {
+    rootMenu.items[2].checked = true;
+    getMenuItems(rootMenu)[2].click();
+    expect(getMenuItems(rootMenu)[2].hasAttribute('focused')).to.be.true;
+  });
+
+  it('should have a checked sub menu item after click if keep open', () => {
+    subMenu.items[3].checked = true;
+    getMenuItems(subMenu)[3].click();
+    expect(getMenuItems(subMenu)[3].hasAttribute('menu-item-checked')).to.be.true;
+  });
+
+  it('should have a focused sub menu item after click if keep open', () => {
+    subMenu.items[3].checked = true;
+    getMenuItems(subMenu)[3].click();
+    expect(getMenuItems(subMenu)[3].hasAttribute('focused')).to.be.true;
+  });
+
   it('should not have a checked item', async () => {
     rootMenu.items[0].children[0].checked = false;
     subMenu.close();
@@ -217,10 +243,15 @@ describe('items', () => {
     expect(focusSpy.called).to.be.true;
   });
 
-  it('should close the menu', () => {
-    getMenuItems(rootMenu)[1].click();
-    expect(rootMenu.opened).to.be.false;
-    expect(subMenu.opened).to.be.false;
+  it('should not close the menu if root item has keep open', () => {
+    getMenuItems(rootMenu)[2].click();
+    expect(rootMenu.opened).to.be.true;
+  });
+
+  it('should not close the menu if sub menu item has keep open', () => {
+    getMenuItems(subMenu)[3].click();
+    expect(rootMenu.opened).to.be.true;
+    expect(subMenu.opened).to.be.true;
   });
 
   it('should close the submenu on left arrow', () => {

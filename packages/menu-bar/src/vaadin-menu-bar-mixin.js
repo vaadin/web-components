@@ -732,7 +732,6 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __onItemSelected(e) {
       e.stopPropagation();
-      this._close();
       this.__fireItemSelected(e.detail.value);
     }
 
