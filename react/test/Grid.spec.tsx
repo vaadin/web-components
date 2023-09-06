@@ -9,6 +9,7 @@ import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
 import { GridSortColumn } from '../src/GridSortColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
 import catchRender from './utils/catchRender.js';
+import { GridColumnGroup } from '../src/GridColumnGroup.js';
 
 useChaiPlugin(chaiDom);
 
@@ -19,6 +20,14 @@ describe('Grid', () => {
     { name: 'John', surname: 'Lennon', role: 'singer' },
     { name: 'Ringo', surname: 'Starr', role: 'drums' },
   ];
+
+  function HeaderGroupRenderer() {
+    return <>Group header</>;
+  }
+
+  function FooterGroupRenderer() {
+    return <>Group footer</>;
+  }
 
   function DefaultHeaderRenderer() {
     return <>Name</>;
@@ -63,12 +72,16 @@ describe('Grid', () => {
     it('should render correctly', async () => {
       render(
         <Grid<Item> items={items}>
-          <GridColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
-            {DefaultBodyRenderer}
-          </GridColumn>
-          <GridColumn<Item> headerRenderer={() => <>Surname</>} footerRenderer={() => <>Surname Footer</>}>
-            {({ item }) => <>{item.surname}</>}
-          </GridColumn>
+          <GridColumnGroup headerRenderer={HeaderGroupRenderer} footerRenderer={FooterGroupRenderer}>
+            <GridColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
+              {DefaultBodyRenderer}
+            </GridColumn>
+          </GridColumnGroup>
+          <GridColumnGroup header="Header using header">
+            <GridColumn<Item> headerRenderer={() => <>Surname</>} footerRenderer={() => <>Surname Footer</>}>
+              {({ item }) => <>{item.surname}</>}
+            </GridColumn>
+          </GridColumnGroup>
           <GridColumn<Item> headerRenderer={() => <>Role</>} footerRenderer={() => <>Role Footer</>}>
             {({ item }) => <>{item.role}</>}
           </GridColumn>
@@ -78,17 +91,23 @@ describe('Grid', () => {
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column');
 
       expect(columns).to.have.length(3);
-      expect(cells).to.have.length(12);
+      expect(cells).to.have.length(15);
 
-      const [nameHeaderCell, surnameHeaderCell, roleHeaderCell] = cells.slice(0, 3);
-      const [nameFooterCell, surnameFooterCell, roleFooterCell] = cells.slice(3, 6);
-      const [nameBodyCell1, surnameBodyCell1, roleBodyCell1] = cells.slice(6, 9);
-      const [nameBodyCell2, surnameBodyCell2, roleBodyCell2] = cells.slice(9, 12);
+      const [headerRendererCell, headerInlineCell, nameHeaderCell, surnameHeaderCell, roleHeaderCell] = cells.slice(
+        0,
+        5,
+      );
+      const [nameFooterCell, surnameFooterCell, roleFooterCell, groupFooterCell] = cells.slice(5, 9);
+      const [nameBodyCell1, surnameBodyCell1, roleBodyCell1] = cells.slice(9, 12);
+      const [nameBodyCell2, surnameBodyCell2, roleBodyCell2] = cells.slice(12, 15);
 
+      expect(headerRendererCell).to.have.text('Group header');
+      expect(headerInlineCell).to.have.text('Header using header');
       expect(nameHeaderCell).to.have.text('Name');
       expect(surnameHeaderCell).to.have.text('Surname');
       expect(roleHeaderCell).to.have.text('Role');
 
+      expect(groupFooterCell).to.have.text('Group footer');
       expect(nameFooterCell).to.have.text('Name Footer');
       expect(surnameFooterCell).to.have.text('Surname Footer');
       expect(roleFooterCell).to.have.text('Role Footer');
