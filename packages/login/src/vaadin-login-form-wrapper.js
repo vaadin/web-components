@@ -36,9 +36,8 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
 
         <slot name="forgot-password"></slot>
 
-        <slot name="footer"></slot>
-
         <div part="footer">
+          <slot name="footer"></slot>
           <p>[[i18n.additionalInformation]]</p>
         </div>
       </section>
