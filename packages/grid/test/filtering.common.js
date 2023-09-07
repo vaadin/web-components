@@ -244,8 +244,9 @@ describe('filtering', () => {
       expect(filterTextField.label).to.equal('Last');
     });
 
-    it('should apply the input fields value to the filter', () => {
+    it('should apply the input fields value to the filter', async () => {
       filterTextField.value = 'foo';
+      await nextFrame();
       expect(filter.value).to.equal('foo');
     });
 
@@ -333,8 +334,9 @@ describe('array data provider', () => {
     expect(Object.keys(grid._cache.items).length).to.equal(3);
   });
 
-  it('should sort filtered items', () => {
+  it('should sort filtered items', async () => {
     grid._filters[1].value = 'r';
+    await nextFrame();
     grid.querySelector('vaadin-grid-sorter').direction = 'asc';
     expect(grid.size).to.equal(2);
     expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');

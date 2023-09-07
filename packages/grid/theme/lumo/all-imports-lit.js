@@ -1,4 +1,5 @@
 import '@vaadin/text-field/theme/lumo/vaadin-text-field-styles.js';
+import '@vaadin/input-container/theme/lumo/vaadin-input-container.js';
 import '@vaadin/checkbox/theme/lumo/vaadin-checkbox-styles.js';
 import './vaadin-grid-sorter-styles.js';
 import './vaadin-grid-tree-toggle-styles.js';

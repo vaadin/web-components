@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { html, LitElement } from 'lit';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';

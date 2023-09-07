@@ -89,6 +89,7 @@ export const GridSorterMixin = (superClass) =>
           reflectToAttribute: true,
           notify: true,
           value: null,
+          sync: true,
         },
 
         /**
@@ -98,6 +99,7 @@ export const GridSorterMixin = (superClass) =>
         _order: {
           type: Number,
           value: null,
+          sync: true,
         },
 
         /** @private */

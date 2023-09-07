@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/text-field/src/vaadin-text-field.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -40,11 +39,13 @@ export const GridFilterElementMixin = (superClass) =>
         value: {
           type: String,
           notify: true,
+          sync: true,
         },
 
         /** @private */
         _textField: {
           type: Object,
+          sync: true,
         },
       };
     }
