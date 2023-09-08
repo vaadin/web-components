@@ -589,9 +589,9 @@ snapshots["vaadin-login-form shadow default"] =
   </slot>
   <slot name="forgot-password">
   </slot>
-  <slot name="footer">
-  </slot>
   <div part="footer">
+    <slot name="footer">
+    </slot>
     <p>
     </p>
   </div>
@@ -620,9 +620,9 @@ snapshots["vaadin-login-form shadow error"] =
   </slot>
   <slot name="forgot-password">
   </slot>
-  <slot name="footer">
-  </slot>
   <div part="footer">
+    <slot name="footer">
+    </slot>
     <p>
     </p>
   </div>
@@ -654,9 +654,9 @@ snapshots["vaadin-login-form shadow i18n"] =
   </slot>
   <slot name="forgot-password">
   </slot>
-  <slot name="footer">
-  </slot>
   <div part="footer">
+    <slot name="footer">
+    </slot>
     <p>
       Jos tarvitset lisätietoja käyttäjälle.
     </p>

@@ -64,9 +64,8 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
 
         <slot name="forgot-password"></slot>
 
-        <slot name="footer"></slot>
-
         <div part="footer">
+          <slot name="footer"></slot>
           <p>${this.i18n.additionalInformation}</p>
         </div>
       </section>
