@@ -251,7 +251,7 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     it('should set font-family with numbers for the icon element', () => {
-      icon = fixtureSync('<vaadin-icon char="\\e900"></vaadin-icon>');
+      icon = fixtureSync('<vaadin-icon char="e900"></vaadin-icon>');
       icon.fontFamily = 'My icons 6';
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(['"My icons 6"', 'My icons 6']).to.include(fontIconStyle.fontFamily);
