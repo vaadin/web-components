@@ -185,7 +185,6 @@ export const UploadMixin = (superClass) =>
           notify: true,
           readOnly: true,
           reflectToAttribute: true,
-          sync: true,
         },
 
         /**
