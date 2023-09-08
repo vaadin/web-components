@@ -60,6 +60,13 @@ export const ComboBoxBaseMixin = (subclass) =>
         },
 
         /** @protected */
+        _focusedIndex: {
+          type: Number,
+          observer: '_focusedIndexChanged',
+          value: -1,
+        },
+
+        /** @protected */
         _scroller: {
           type: Object,
         },
@@ -80,6 +87,12 @@ export const ComboBoxBaseMixin = (subclass) =>
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
+    }
+
+    /** @protected */
+    get _focusedItem() {
+      const items = this._getItems();
+      return Array.isArray(items) ? items[this._focusedIndex] : undefined;
     }
 
     /**
@@ -255,6 +268,14 @@ export const ComboBoxBaseMixin = (subclass) =>
     }
 
     /** @private */
+    _focusedIndexChanged(index, oldIndex) {
+      if (oldIndex === undefined) {
+        return;
+      }
+      this._updateActiveDescendant(index);
+    }
+
+    /** @private */
     _toggleElementChanged(toggleElement) {
       if (toggleElement) {
         // Don't blur the input on toggle mousedown
@@ -266,6 +287,16 @@ export const ComboBoxBaseMixin = (subclass) =>
           }
         });
       }
+    }
+
+    /** @protected */
+    _getItems() {
+      return [];
+    }
+
+    /** @private */
+    _getItemElements() {
+      return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
     }
 
     /** @protected */
@@ -291,6 +322,62 @@ export const ComboBoxBaseMixin = (subclass) =>
     __onClearButtonMouseDown(event) {
       event.preventDefault(); // Prevent native focusout event
       this.inputElement.focus();
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     *
+     * @param {KeyboardEvent} e
+     * @protected
+     * @override
+     */
+    _onKeyDown(e) {
+      super._onKeyDown(e);
+
+      if (e.key === 'Tab') {
+        this._overlayElement.restoreFocusOnClose = false;
+      } else if (e.key === 'ArrowDown') {
+        this._onArrowDown();
+
+        // Prevent caret from moving
+        e.preventDefault();
+      } else if (e.key === 'ArrowUp') {
+        this._onArrowUp();
+
+        // Prevent caret from moving
+        e.preventDefault();
+      }
+    }
+
+    /** @private */
+    _onArrowDown() {
+      if (this.opened) {
+        const items = this._getItems();
+        if (items) {
+          this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
+          this._prefillFocusedItemLabel();
+        }
+      } else {
+        this.open();
+      }
+    }
+
+    /** @private */
+    _onArrowUp() {
+      if (this.opened) {
+        if (this._focusedIndex > -1) {
+          this._focusedIndex = Math.max(0, this._focusedIndex - 1);
+        } else {
+          const items = this._getItems();
+          if (items) {
+            this._focusedIndex = items.length - 1;
+          }
+        }
+
+        this._prefillFocusedItemLabel();
+      } else {
+        this.open();
+      }
     }
 
     /**
@@ -348,5 +435,54 @@ export const ComboBoxBaseMixin = (subclass) =>
 
       event.preventDefault();
       this._onClearAction();
+    }
+
+    /** @private */
+    _prefillFocusedItemLabel() {
+      if (this._focusedIndex > -1) {
+        this._inputElementValue = this._getItemLabel(this._focusedItem);
+        this._markAllSelectionRange();
+      }
+    }
+
+    /** @private */
+    _setSelectionRange(start, end) {
+      // Setting selection range focuses and/or moves the caret in some browsers,
+      // and there's no need to modify the selection range if the input isn't focused anyway.
+      // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
+      // the next focusable element instead of the combo-box itself.
+      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
+        this.inputElement.setSelectionRange(start, end);
+      }
+    }
+
+    /** @private */
+    _markAllSelectionRange() {
+      if (this._inputElementValue !== undefined) {
+        this._setSelectionRange(0, this._inputElementValue.length);
+      }
+    }
+
+    /** @private */
+    _clearSelectionRange() {
+      if (this._inputElementValue !== undefined) {
+        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
+        this._setSelectionRange(pos, pos);
+      }
+    }
+
+    /** @private */
+    _updateActiveDescendant(index) {
+      const input = this._nativeInput;
+      if (!input) {
+        return;
+      }
+
+      const item = this._getItemElements().find((el) => el.index === index);
+      if (item) {
+        input.setAttribute('aria-activedescendant', item.id);
+      } else {
+        input.removeAttribute('aria-activedescendant');
+      }
     }
   };
