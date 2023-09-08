@@ -112,16 +112,6 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /**
-         * @type {number}
-         * @protected
-         */
-        _focusedIndex: {
-          type: Number,
-          observer: '_focusedIndexChanged',
-          value: -1,
-        },
-
-        /**
          * Filtering string the user has typed into the input field.
          * @type {string}
          */
@@ -303,6 +293,14 @@ export const ComboBoxMixin = (subclass) =>
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this._dropdownItems;
+    }
+
     /** @private */
     // eslint-disable-next-line max-params
     _updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
@@ -345,29 +343,6 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _focusedIndexChanged(index, oldIndex) {
-      if (oldIndex === undefined) {
-        return;
-      }
-      this._updateActiveDescendant(index);
-    }
-
-    /** @private */
-    _updateActiveDescendant(index) {
-      const input = this._nativeInput;
-      if (!input) {
-        return;
-      }
-
-      const item = this._getItemElements().find((el) => el.index === index);
-      if (item) {
-        input.setAttribute('aria-activedescendant', item.id);
-      } else {
-        input.removeAttribute('aria-activedescendant');
-      }
-    }
-
     /**
      * @protected
      * @override
@@ -403,31 +378,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Override an event listener from `KeyboardMixin`.
-     *
-     * @param {KeyboardEvent} e
-     * @protected
-     * @override
-     */
-    _onKeyDown(e) {
-      super._onKeyDown(e);
-
-      if (e.key === 'Tab') {
-        this._overlayElement.restoreFocusOnClose = false;
-      } else if (e.key === 'ArrowDown') {
-        this._onArrowDown();
-
-        // Prevent caret from moving
-        e.preventDefault();
-      } else if (e.key === 'ArrowUp') {
-        this._onArrowUp();
-
-        // Prevent caret from moving
-        e.preventDefault();
-      }
-    }
-
-    /**
      * @protected
      * @override
      */
@@ -442,72 +392,6 @@ export const ComboBoxMixin = (subclass) =>
         value = item ? item.toString() : '';
       }
       return value;
-    }
-
-    /** @private */
-    _onArrowDown() {
-      if (this.opened) {
-        const items = this._dropdownItems;
-        if (items) {
-          this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
-          this._prefillFocusedItemLabel();
-        }
-      } else {
-        this.open();
-      }
-    }
-
-    /** @private */
-    _onArrowUp() {
-      if (this.opened) {
-        if (this._focusedIndex > -1) {
-          this._focusedIndex = Math.max(0, this._focusedIndex - 1);
-        } else {
-          const items = this._dropdownItems;
-          if (items) {
-            this._focusedIndex = items.length - 1;
-          }
-        }
-
-        this._prefillFocusedItemLabel();
-      } else {
-        this.open();
-      }
-    }
-
-    /** @private */
-    _prefillFocusedItemLabel() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this._inputElementValue = this._getItemLabel(focusedItem);
-        this._markAllSelectionRange();
-      }
-    }
-
-    /** @private */
-    _setSelectionRange(start, end) {
-      // Setting selection range focuses and/or moves the caret in some browsers,
-      // and there's no need to modify the selection range if the input isn't focused anyway.
-      // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
-      // the next focusable element instead of the combo-box itself.
-      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(start, end);
-      }
-    }
-
-    /** @private */
-    _markAllSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        this._setSelectionRange(0, this._inputElementValue.length);
-      }
-    }
-
-    /** @private */
-    _clearSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
-        this._setSelectionRange(pos, pos);
-      }
     }
 
     /** @private */
@@ -938,11 +822,6 @@ export const ComboBoxMixin = (subclass) =>
         // set the focused index to the item that matches the filter query.
         this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
       }
-    }
-
-    /** @private */
-    _getItemElements() {
-      return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
     }
 
     /** @private */
