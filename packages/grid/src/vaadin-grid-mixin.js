@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-grid-styles.js';
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
