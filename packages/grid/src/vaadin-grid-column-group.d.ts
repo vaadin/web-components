@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
-import type { ColumnBaseMixinClass } from './vaadin-grid-column.js';
+import type { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
+export * from './vaadin-grid-column-group-mixin.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
@@ -35,20 +36,9 @@ import type { ColumnBaseMixinClass } from './vaadin-grid-column.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  */
-declare class GridColumnGroup extends HTMLElement {
-  /**
-   * Flex grow ratio for the column group as the sum of the ratios of its child columns.
-   * @attr {number} flex-grow
-   */
-  readonly flexGrow: number | null | undefined;
+declare class GridColumnGroup extends HTMLElement {}
 
-  /**
-   * Width of the column group as the sum of the widths of its child columns.
-   */
-  readonly width: string | null | undefined;
-}
-
-interface GridColumnGroup<TItem = GridDefaultItem> extends ColumnBaseMixinClass<TItem> {}
+interface GridColumnGroup<TItem = GridDefaultItem> extends GridColumnGroupMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
