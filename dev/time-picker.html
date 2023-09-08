@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Time picker</title>
     <script type="module" src="./common.js"></script>
-    <script type="module">
-      import '@vaadin/time-picker';
-      import '@vaadin/tooltip';
-    </script>
   </head>
   <body>
-    <vaadin-time-picker value="15:00" clear-button-visible>
-      <vaadin-tooltip slot="tooltip" text="Evening times are preferred"></vaadin-tooltip>
-    </vaadin-time-picker>
+    <vaadin-time-picker label="Meeting time"></vaadin-time-picker>
+
+    <script type="module">
+      import '@vaadin/input-container/theme/lumo/vaadin-input-container.js';
+      import '@vaadin/time-picker/theme/lumo/vaadin-time-picker-styles.js';
+      import '@vaadin/time-picker/src/vaadin-lit-time-picker.js';
+    </script>
   </body>
 </html>
