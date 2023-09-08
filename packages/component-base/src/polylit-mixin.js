@@ -93,17 +93,6 @@ const PolylitMixinImplementation = (superclass) => {
 
       let result = defaultDescriptor;
 
-      if ('value' in options) {
-        // Set the default value
-        this.addCheckedInitializer((instance) => {
-          if (typeof options.value === 'function') {
-            instance[name] = options.value.call(instance);
-          } else {
-            instance[name] = options.value;
-          }
-        });
-      }
-
       if (options.sync) {
         result = {
           get: defaultDescriptor.get,
@@ -144,6 +133,19 @@ const PolylitMixinImplementation = (superclass) => {
           configurable: true,
           enumerable: true,
         };
+      }
+
+      if ('value' in options) {
+        // Set the default value
+        this.addCheckedInitializer((instance) => {
+          const value = typeof options.value === 'function' ? options.value.call(instance) : options.value;
+
+          if (options.readOnly) {
+            instance[`_set${upper(name)}`](value);
+          } else {
+            instance[name] = value;
+          }
+        });
       }
 
       if (options.observer) {
