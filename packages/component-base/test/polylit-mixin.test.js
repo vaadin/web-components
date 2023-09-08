@@ -925,6 +925,19 @@ describe('PolylitMixin', () => {
               value: 0,
               sync: true,
             },
+
+            opened: {
+              type: Boolean,
+              readOnly: true,
+              sync: true,
+              reflect: true,
+            },
+
+            helper: {
+              type: String,
+              readOnly: true,
+              reflect: true,
+            },
           };
         }
 
@@ -958,6 +971,22 @@ describe('PolylitMixin', () => {
 
       element.disabled = false;
       expect(element.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should reflect immediately when setting a read-only sync property', () => {
+      element._setOpened(true);
+      expect(element.hasAttribute('opened')).to.be.true;
+
+      element._setOpened(false);
+      expect(element.hasAttribute('opened')).to.be.false;
+    });
+
+    it('should not reflect immediately when setting a read-only non-sync property', () => {
+      element._setHelper('foo');
+      expect(element.hasAttribute('helper')).to.be.false;
+
+      element.performUpdate();
+      expect(element.hasAttribute('helper')).to.be.true;
     });
 
     it('should only call ready callback once during initialization', () => {

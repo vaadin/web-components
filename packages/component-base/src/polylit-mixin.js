@@ -129,6 +129,10 @@ const PolylitMixinImplementation = (superclass) => {
           // This is run during construction of the element
           instance[`_set${upper(name)}`] = function (value) {
             setter.call(instance, value);
+
+            if (options.sync) {
+              this.performUpdate();
+            }
           };
         });
 
