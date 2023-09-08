@@ -509,7 +509,7 @@ export const GridMixin = (superClass) =>
 
       if (this._columnTree) {
         this._columnTree[this._columnTree.length - 1].forEach((c) => {
-          if (c.isConnected) {
+          if (c.isConnected && c._cells) {
             c._cells = [...c._cells];
           }
         });

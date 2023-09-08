@@ -21,8 +21,6 @@ describe('selection', () => {
 
   function configureGrid() {
     grid.dataProvider = infiniteDataProvider;
-    // For some reason sync: true, doesn't work with dataProvider property, need to run update manually
-    flushGrid(grid);
     cachedItems = grid._cache.items;
     grid.selectedItems = [cachedItems[0]];
     flushGrid(grid);
@@ -30,7 +28,7 @@ describe('selection', () => {
   }
 
   describe('with renderer', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;" size="10">
           <vaadin-grid-column></vaadin-grid-column>
@@ -45,6 +43,7 @@ describe('selection', () => {
       cols[1].renderer = (root) => {
         root.textContent = 'bar';
       };
+      await nextFrame();
       configureGrid();
     });
 
@@ -115,7 +114,7 @@ describe('selection', () => {
   });
 
   describe('renderer cells', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;" size="10">
           <vaadin-grid-column></vaadin-grid-column>
@@ -131,6 +130,7 @@ describe('selection', () => {
         root.textContent = 'bar';
       };
 
+      await nextFrame();
       configureGrid();
     });
 

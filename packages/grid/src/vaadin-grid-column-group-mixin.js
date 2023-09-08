@@ -31,6 +31,7 @@ export const GridColumnGroupMixin = (superClass) =>
         flexGrow: {
           type: Number,
           readOnly: true,
+          sync: true,
         },
 
         /**
@@ -205,10 +206,6 @@ export const GridColumnGroupMixin = (superClass) =>
       this._setFlexGrow(
         Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => prev + curr.flexGrow, 0),
       );
-      // TODO: Polylit-mixin doesn't seem to invoke performUpdate() on sync readOnly properties change, call manually for now
-      if (this.performUpdate) {
-        this.performUpdate();
-      }
     }
 
     /**
