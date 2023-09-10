@@ -5,23 +5,25 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { GridItemModel } from './vaadin-grid.js';
-import type { GridColumn } from './vaadin-grid-column.js';
 
-export type GridBodyRenderer<TItem> = (
+export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> = (
   root: HTMLElement,
-  column: GridColumn<TItem>,
+  column: Column,
   model: GridItemModel<TItem>,
 ) => void;
 
 export type GridColumnTextAlign = 'center' | 'end' | 'start' | null;
 
-export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
+export type GridHeaderFooterRenderer<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> = (
+  root: HTMLElement,
+  column: Column,
+) => void;
 
 export declare function ColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ColumnBaseMixinClass<TItem>> & T;
 
-export declare class ColumnBaseMixinClass<TItem> {
+export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> {
   /**
    * When set to true, the column is user-resizable.
    */
@@ -79,7 +81,7 @@ export declare class ColumnBaseMixinClass<TItem> {
    * - `root` The header cell content DOM element. Append your content to it.
    * - `column` The `<vaadin-grid-column>` element.
    */
-  headerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
+  headerRenderer: GridHeaderFooterRenderer<TItem, Column> | null | undefined;
 
   /**
    * Custom function for rendering the footer content.
@@ -88,12 +90,13 @@ export declare class ColumnBaseMixinClass<TItem> {
    * - `root` The footer cell content DOM element. Append your content to it.
    * - `column` The `<vaadin-grid-column>` element.
    */
-  footerRenderer: GridHeaderFooterRenderer<TItem> | null | undefined;
+  footerRenderer: GridHeaderFooterRenderer<TItem, Column> | null | undefined;
 }
 
 export interface GridColumnMixin<TItem> extends ColumnBaseMixinClass<TItem>, GridColumnMixinClass<TItem> {}
 
-export interface GridColumnMixinClass<TItem> extends ColumnBaseMixinClass<TItem> {
+export interface GridColumnMixinClass<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>>
+  extends ColumnBaseMixinClass<TItem, Column> {
   /**
    * Width of the cells for this column.
    */
@@ -120,7 +123,7 @@ export interface GridColumnMixinClass<TItem> extends ColumnBaseMixinClass<TItem>
    *   - `model.selected` Selected state.
    *   - `model.detailsOpened` Details opened state.
    */
-  renderer: GridBodyRenderer<TItem> | null | undefined;
+  renderer: GridBodyRenderer<TItem, Column> | null | undefined;
 
   /**
    * Path to an item sub-property whose value gets displayed in the column body cells.
