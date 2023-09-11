@@ -92,21 +92,21 @@ describe('login form submit', () => {
     });
   });
 
-  describe('custom fields', () => {
+  describe('custom form area', () => {
     let overlay;
 
     beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-login-overlay opened>
-          <input name="foo" value="bar" slot="custom-fields">
-          <vaadin-text-field name="code" value="1234" slot="custom-fields"></vaadin-text-field>
+          <input name="foo" value="bar" slot="custom-form-area">
+          <vaadin-text-field name="code" value="1234" slot="custom-form-area"></vaadin-text-field>
         </vaadin-login-overlay>
       `);
       await nextRender();
       login = overlay.$.vaadinLoginForm;
     });
 
-    it('should add custom fields values to the login event detail', () => {
+    it('should add values of fields in the custom form area to the login event detail', () => {
       const loginSpy = sinon.spy();
 
       overlay.addEventListener('login', loginSpy);
@@ -127,7 +127,7 @@ describe('login form submit', () => {
         await nextRender();
       });
 
-      it('should submit custom fields values to the native form', (done) => {
+      it('should submit values of fields in the custom form area to the native form', (done) => {
         testFormSubmitValues(false, true, done, { foo: 'bar', code: '1234' });
       });
     });

@@ -17,7 +17,7 @@ export const LoginFormMixin = (superClass) =>
 
     get _customFields() {
       return [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
-        return node.getAttribute('slot') === 'custom-fields' && node.hasAttribute('name');
+        return node.getAttribute('slot') === 'custom-form-area' && node.hasAttribute('name');
       });
     }
 

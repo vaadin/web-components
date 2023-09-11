@@ -583,7 +583,7 @@ snapshots["vaadin-login-form shadow default"] =
   </div>
   <slot name="form">
   </slot>
-  <slot name="custom-fields">
+  <slot name="custom-form-area">
   </slot>
   <slot name="submit">
   </slot>
@@ -614,7 +614,7 @@ snapshots["vaadin-login-form shadow error"] =
   </div>
   <slot name="form">
   </slot>
-  <slot name="custom-fields">
+  <slot name="custom-form-area">
   </slot>
   <slot name="submit">
   </slot>
@@ -648,7 +648,7 @@ snapshots["vaadin-login-form shadow i18n"] =
   </div>
   <slot name="form">
   </slot>
-  <slot name="custom-fields">
+  <slot name="custom-form-area">
   </slot>
   <slot name="submit">
   </slot>

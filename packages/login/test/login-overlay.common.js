@@ -221,14 +221,14 @@ describe('title slot', () => {
   });
 });
 
-describe('custom-fields slot', () => {
+describe('custom-form-area slot', () => {
   let overlay, inputs, form;
 
   beforeEach(async () => {
     overlay = fixtureSync(`
       <vaadin-login-overlay>
-        <input id="one" slot="custom-fields" />
-        <input id="two" slot="custom-fields" />
+        <input id="one" slot="custom-form-area" />
+        <input id="two" slot="custom-form-area" />
       </vaadin-login-overlay>
     `);
     await nextRender();
