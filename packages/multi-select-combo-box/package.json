@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/multi-select-combo-box",
-  "version": "24.2.0-alpha14",
+  "version": "24.2.0-alpha15",
   "publishConfig": {
     "access": "public"
   },
@@ -37,17 +37,17 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "24.2.0-alpha14",
-    "@vaadin/combo-box": "24.2.0-alpha14",
-    "@vaadin/component-base": "24.2.0-alpha14",
-    "@vaadin/field-base": "24.2.0-alpha14",
-    "@vaadin/input-container": "24.2.0-alpha14",
-    "@vaadin/item": "24.2.0-alpha14",
-    "@vaadin/lit-renderer": "24.2.0-alpha14",
-    "@vaadin/overlay": "24.2.0-alpha14",
-    "@vaadin/vaadin-lumo-styles": "24.2.0-alpha14",
-    "@vaadin/vaadin-material-styles": "24.2.0-alpha14",
-    "@vaadin/vaadin-themable-mixin": "24.2.0-alpha14"
+    "@vaadin/a11y-base": "24.2.0-alpha15",
+    "@vaadin/combo-box": "24.2.0-alpha15",
+    "@vaadin/component-base": "24.2.0-alpha15",
+    "@vaadin/field-base": "24.2.0-alpha15",
+    "@vaadin/input-container": "24.2.0-alpha15",
+    "@vaadin/item": "24.2.0-alpha15",
+    "@vaadin/lit-renderer": "24.2.0-alpha15",
+    "@vaadin/overlay": "24.2.0-alpha15",
+    "@vaadin/vaadin-lumo-styles": "24.2.0-alpha15",
+    "@vaadin/vaadin-material-styles": "24.2.0-alpha15",
+    "@vaadin/vaadin-themable-mixin": "24.2.0-alpha15"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

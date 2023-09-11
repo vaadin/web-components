@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/date-time-picker",
-  "version": "24.2.0-alpha14",
+  "version": "24.2.0-alpha15",
   "publishConfig": {
     "access": "public"
   },
@@ -36,15 +36,15 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "24.2.0-alpha14",
-    "@vaadin/component-base": "24.2.0-alpha14",
-    "@vaadin/custom-field": "24.2.0-alpha14",
-    "@vaadin/date-picker": "24.2.0-alpha14",
-    "@vaadin/field-base": "24.2.0-alpha14",
-    "@vaadin/time-picker": "24.2.0-alpha14",
-    "@vaadin/vaadin-lumo-styles": "24.2.0-alpha14",
-    "@vaadin/vaadin-material-styles": "24.2.0-alpha14",
-    "@vaadin/vaadin-themable-mixin": "24.2.0-alpha14"
+    "@vaadin/a11y-base": "24.2.0-alpha15",
+    "@vaadin/component-base": "24.2.0-alpha15",
+    "@vaadin/custom-field": "24.2.0-alpha15",
+    "@vaadin/date-picker": "24.2.0-alpha15",
+    "@vaadin/field-base": "24.2.0-alpha15",
+    "@vaadin/time-picker": "24.2.0-alpha15",
+    "@vaadin/vaadin-lumo-styles": "24.2.0-alpha15",
+    "@vaadin/vaadin-material-styles": "24.2.0-alpha15",
+    "@vaadin/vaadin-themable-mixin": "24.2.0-alpha15"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
