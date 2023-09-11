@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { TooltipController } from '../src/tooltip-controller.js';
@@ -169,6 +170,25 @@ describe('TooltipController', () => {
       await nextFrame();
 
       expect(tooltip._position).to.eql('top-start');
+    });
+
+    it('should fire tooltip-changed event on the host when the tooltip is added', async () => {
+      const spy = sinon.spy();
+      controller.addEventListener('tooltip-changed', spy);
+      host.appendChild(tooltip);
+      await nextFrame();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire tooltip-changed event on the host when the tooltip is removed', async () => {
+      const spy = sinon.spy();
+      controller.addEventListener('tooltip-changed', spy);
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      host.removeChild(tooltip);
+      await nextFrame();
+      expect(spy).to.be.calledTwice;
     });
   });
 });
