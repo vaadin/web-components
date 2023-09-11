@@ -92,7 +92,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           height: 100%;
         }
 
-        :host(:is([font], [font-icon-content])) svg {
+        :host(:is([icon-class], [font-icon-content])) svg {
           display: none;
         }
 
@@ -160,10 +160,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       /**
        * Class names defining an icon font and/or a specific glyph inside an icon font.
        *
-       * @attr {string} font
+       * Example: "fa-solid fa-user"
+       *
+       * @attr {string} icon-class
        * @type {string}
        */
-      font: {
+      iconClass: {
         type: String,
         reflectToAttribute: true,
       },
@@ -226,7 +228,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char, ligature)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(iconClass, char, ligature)', '__srcChanged(src)'];
   }
 
   static get observedAttributes() {
@@ -244,7 +246,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     const tag = this.localName;
     return [
       `
-        ${tag}[font] {
+        ${tag}[icon-class] {
           display: inline-flex;
           vertical-align: middle;
           font-size: inherit;
@@ -254,8 +256,8 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  get __fontClasses() {
-    return this.font ? this.font.split(' ') : [];
+  get __iconClasses() {
+    return this.iconClass ? this.iconClass.split(' ') : [];
   }
 
   /** @protected */
@@ -370,11 +372,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  __fontChanged(font, char, ligature) {
-    this.classList.remove(...(this.__addedFontClasses || []));
-    if (font) {
-      this.__addedFontClasses = [...this.__fontClasses];
-      this.classList.add(...this.__addedFontClasses);
+  __fontChanged(iconClass, char, ligature) {
+    this.classList.remove(...(this.__addedIconClasses || []));
+    if (iconClass) {
+      this.__addedIconClasses = [...this.__iconClasses];
+      this.classList.add(...this.__addedIconClasses);
     }
 
     if (char) {
@@ -385,7 +387,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       this.removeAttribute('font-icon-content');
     }
 
-    if ((font || char || ligature) && !this.icon) {
+    if ((iconClass || char || ligature) && !this.icon) {
       // The "icon" attribute needs to be set on the host also when using font icons
       // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
@@ -397,8 +399,8 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     super.attributeChangedCallback(name, oldValue, newValue);
 
     // Make sure class list always contains all the font class names
-    if (name === 'class' && this.__fontClasses.some((className) => !this.classList.contains(className))) {
-      this.classList.add(...this.__fontClasses);
+    if (name === 'class' && this.__iconClasses.some((className) => !this.classList.contains(className))) {
+      this.classList.add(...this.__iconClasses);
     }
   }
 
