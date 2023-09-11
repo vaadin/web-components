@@ -57,7 +57,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
       </vaadin-login-overlay-wrapper>
 
       <div hidden>
-        <slot name="custom-fields"></slot>
+        <slot name="custom-form-area"></slot>
         <slot name="footer"></slot>
       </div>
     `;

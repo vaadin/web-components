@@ -92,14 +92,14 @@ describe('login form submit', () => {
     });
   });
 
-  describe('custom fields', () => {
+  describe('custom form area', () => {
     let overlay;
 
     beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-login-overlay opened>
-          <input name="foo" value="bar" slot="custom-fields">
-          <vaadin-text-field name="code" value="1234" slot="custom-fields"></vaadin-text-field>
+          <input name="foo" value="bar" slot="custom-form-area">
+          <vaadin-text-field name="code" value="1234" slot="custom-form-area"></vaadin-text-field>
         </vaadin-login-overlay>
       `);
       await nextRender();

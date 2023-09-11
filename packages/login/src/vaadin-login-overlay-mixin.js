@@ -135,7 +135,7 @@ export const LoginOverlayMixin = (superClass) =>
         this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
 
         this._undoFieldsTeleport = this._teleport(
-          'custom-fields',
+          'custom-form-area',
           form.$.vaadinLoginFormWrapper,
           form.querySelector('vaadin-button'),
         );

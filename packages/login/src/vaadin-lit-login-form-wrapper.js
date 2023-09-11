@@ -58,7 +58,7 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
 
         <slot name="form"></slot>
 
-        <slot name="custom-fields"></slot>
+        <slot name="custom-form-area"></slot>
 
         <slot name="submit"></slot>
 

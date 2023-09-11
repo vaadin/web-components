@@ -25,7 +25,7 @@ describe('login-overlay', () => {
 
   it('additional field', async () => {
     const field = document.createElement('vaadin-text-field');
-    field.setAttribute('slot', 'custom-fields');
+    field.setAttribute('slot', 'custom-form-area');
     field.label = 'One-time code';
     element.appendChild(field);
     element.opened = true;
