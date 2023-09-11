@@ -80,6 +80,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         :host::before {
           line-height: 1;
           font-size: 100cqh;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         :host([hidden]) {
