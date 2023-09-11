@@ -106,7 +106,7 @@ describe('login form submit', () => {
       login = overlay.$.vaadinLoginForm;
     });
 
-    it('should add custom fields values to the login event detail', () => {
+    it('should add values of fields in the custom form area to the login event detail', () => {
       const loginSpy = sinon.spy();
 
       overlay.addEventListener('login', loginSpy);
@@ -127,7 +127,7 @@ describe('login form submit', () => {
         await nextRender();
       });
 
-      it('should submit custom fields values to the native form', (done) => {
+      it('should submit values of fields in the custom form area to the native form', (done) => {
         testFormSubmitValues(false, true, done, { foo: 'bar', code: '1234' });
       });
     });
