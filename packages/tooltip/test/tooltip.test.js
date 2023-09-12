@@ -190,6 +190,31 @@ describe('vaadin-tooltip', () => {
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
       expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
     });
+
+    it('should set aria-describedby when providing multiple elements', () => {
+      const ariaTarget2 = document.createElement('button');
+      target.appendChild(ariaTarget2);
+
+      tooltip.target = target;
+      tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(overlay.id);
+      expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(overlay.id);
+    });
+
+    it('should clear aria-describedby when providing empty array', () => {
+      const ariaTarget2 = document.createElement('button');
+      target.appendChild(ariaTarget2);
+
+      tooltip.target = target;
+      tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+
+      tooltip.ariaTarget = [];
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(ariaTarget2.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
+    });
   });
 
   describe('for', () => {
