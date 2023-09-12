@@ -186,6 +186,19 @@ class RadioGroup extends FieldMixin(
     this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
     this.__onRadioButtonChange = this.__onRadioButtonChange.bind(this);
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const tooltip = event.detail.node;
+      if (tooltip && tooltip.isConnected) {
+        // Tooltip element has been added to the DOM
+        const inputs = this.__radioButtons.map((checkbox) => checkbox.inputElement);
+        this._tooltipController.setAriaTarget(inputs);
+      } else {
+        // Tooltip element is no longer connected
+        this._tooltipController.setAriaTarget([]);
+      }
+    });
   }
 
   /**
@@ -235,9 +248,11 @@ class RadioGroup extends FieldMixin(
 
       // Unregisters the removed radio buttons.
       this.__filterRadioButtons(removedNodes).forEach(this.__unregisterRadioButton);
+
+      const inputs = this.__radioButtons.map((checkbox) => checkbox.inputElement);
+      this._tooltipController.setAriaTarget(inputs);
     });
 
-    this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
 
