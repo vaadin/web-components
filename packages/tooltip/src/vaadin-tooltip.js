@@ -592,15 +592,13 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __effectiveAriaTargetChanged(ariaTarget, oldAriaTarget) {
     if (oldAriaTarget) {
-      const targets = Array.isArray(oldAriaTarget) ? oldAriaTarget : [oldAriaTarget];
-      targets.forEach((target) => {
+      [oldAriaTarget].flat().forEach((target) => {
         removeValueFromAttribute(target, 'aria-describedby', this._uniqueId);
       });
     }
 
     if (ariaTarget) {
-      const targets = Array.isArray(ariaTarget) ? ariaTarget : [ariaTarget];
-      targets.forEach((target) => {
+      [ariaTarget].flat().forEach((target) => {
         addValueToAttribute(target, 'aria-describedby', this._uniqueId);
       });
     }
