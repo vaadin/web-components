@@ -292,7 +292,8 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
     return {
       /**
        * Element used to link with the `aria-describedby`
-       * attribute. When not set, defaults to `target`.
+       * attribute. Supports array of multiple elements.
+       * When not set, defaults to `target`.
        */
       ariaTarget: {
         type: Object,
@@ -548,7 +549,9 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
 
   /** @private */
   __computeAriaTarget(ariaTarget, target) {
-    return ariaTarget || target;
+    const isElementNode = (el) => el && el.nodeType === Node.ELEMENT_NODE;
+    const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
+    return isAriaTargetSet ? ariaTarget : target;
   }
 
   /** @private */
@@ -589,11 +592,17 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __effectiveAriaTargetChanged(ariaTarget, oldAriaTarget) {
     if (oldAriaTarget) {
-      removeValueFromAttribute(oldAriaTarget, 'aria-describedby', this._uniqueId);
+      const targets = Array.isArray(oldAriaTarget) ? oldAriaTarget : [oldAriaTarget];
+      targets.forEach((target) => {
+        removeValueFromAttribute(target, 'aria-describedby', this._uniqueId);
+      });
     }
 
     if (ariaTarget) {
-      addValueToAttribute(ariaTarget, 'aria-describedby', this._uniqueId);
+      const targets = Array.isArray(ariaTarget) ? ariaTarget : [ariaTarget];
+      targets.forEach((target) => {
+        addValueToAttribute(target, 'aria-describedby', this._uniqueId);
+      });
     }
   }
 

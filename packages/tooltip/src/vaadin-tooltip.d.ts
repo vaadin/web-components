@@ -80,9 +80,10 @@ declare class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(
 
   /**
    * Element used to link with the `aria-describedby`
-   * attribute. When not set, defaults to `target`.
+   * attribute. Supports array of multiple elements.
+   * When not set, defaults to `target`.
    */
-  ariaTarget: HTMLElement | undefined;
+  ariaTarget: HTMLElement | HTMLElement[] | undefined;
 
   /**
    * Object with properties passed to `generator` and
