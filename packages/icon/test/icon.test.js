@@ -15,7 +15,12 @@ describe('vaadin-icon', () => {
   let icon, svgElement;
 
   function expectIcon(content) {
-    expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/gu, '')).to.equal(content);
+    expect(
+      svgElement
+        .querySelector('#svg-group')
+        .innerHTML.trim()
+        .replace(/<!--[^>]*-->/gu, ''),
+    ).to.equal(content);
   }
 
   describe('custom element definition', () => {
@@ -161,6 +166,31 @@ describe('vaadin-icon', () => {
       icon.__fetch.restore();
     });
 
+    it('should append value from symbol property to src', () => {
+      icon.src = './icon.svg';
+      icon.symbol = 'symbol-id';
+
+      expect(svgElement.querySelector(`use[href="${icon.src}#${icon.symbol}"]`)).to.exist;
+    });
+
+    it('should use value from symbol when src path has a hash value', () => {
+      icon.src = './icon.svg#id-0';
+      icon.symbol = 'id-1';
+
+      expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`));
+    });
+
+    it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
+      icon.src = `data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgc3R5bGU9InBvc2l0aW9uOiBhYnNvbHV0ZTsgd2lkdGg6IDA7IGhlaWdodDogMDsgb3ZlcmZsb3c6IGhpZGRlbjsiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+DQo8ZGVmcz4NCjxzeW1ib2wgaWQ9Imljb24taG9tZSIgdmlld2JveD0iMCAwIDMyIDMyIj4NCjxwYXRoIGQ9Im0zMiAxOWwtNi02di05aC00djVsLTYtNi0xNiAxNnYxaDR2MTBoMTB2LTZoNHY2aDEwdi0xMGg0eiI+PC9wYXRoPg0KPC9zeW1ib2w+DQo8c3ltYm9sIGlkPSJpY29uLXVzZXIiIHZpZXdib3g9IjAgMCAzMiAzMiI+DQo8cGF0aCBkPSJtMTggMjIuMDgydi0xLjY0OWMyLjIwMy0xLjI0MSA0LTQuMzM3IDQtNy40MzIgMC00Ljk3MSAwLTktNi05cy02IDQuMDI5LTYgOWMwIDMuMDk2IDEuNzk3IDYuMTkxIDQgNy40MzJ2MS42NDljLTYuNzg0IDAuNTU1LTEyIDMuODg4LTEyIDcuOTE4aDI4YzAtNC4wMzAtNS4yMTYtNy4zNjQtMTItNy45MTh6Ij48L3BhdGg+DQo8L3N5bWJvbD4NCjxzeW1ib2wgaWQ9Imljb24tY29nIiB2aWV3Ym94PSIwIDAgMzIgMzIiPg0KPHBhdGggZD0ibTI5LjE4MSAxOS4wNzBjLTEuNjc5LTIuOTA4LTAuNjY5LTYuNjM0IDIuMjU1LTguMzI4bC0zLjE0NS01LjQ0N2MtMC44OTggMC41MjctMS45NDMgMC44MjktMy4wNTggMC44MjktMy4zNjEgMC02LjA4NS0yLjc0Mi02LjA4NS02LjEyNWgtNi4yODljMC4wMDggMS4wNDQtMC4yNTIgMi4xMDMtMC44MTEgMy4wNzAtMS42NzkgMi45MDgtNS40MTEgMy44OTctOC4zMzkgMi4yMTFsLTMuMTQ0IDUuNDQ3YzAuOTA1IDAuNTE1IDEuNjg5IDEuMjY4IDIuMjQ2IDIuMjM0IDEuNjc2IDIuOTAzIDAuNjcyIDYuNjIzLTIuMjQxIDguMzE5bDMuMTQ1IDUuNDQ3YzAuODk1LTAuNTIyIDEuOTM1LTAuODIgMy4wNDQtMC44MiAzLjM1IDAgNi4wNjcgMi43MjUgNi4wODQgNi4wOTJoNi4yODljLTAuMDAzLTEuMDM0IDAuMjU5LTIuMDgwIDAuODExLTMuMDM4IDEuNjc2LTIuOTAzIDUuMzk5LTMuODk0IDguMzI1LTIuMjE5bDMuMTQ1LTUuNDQ3Yy0wLjg5OS0wLjUxNS0xLjY3OC0xLjI2Ni0yLjIzMi0yLjIyNnptMTYgMjIuNDc5Yy0zLjU3OCAwLTYuNDc5LTIuOTAxLTYuNDc5LTYuNDc5czIuOTAxLTYuNDc5IDYuNDc5LTYuNDc5YzMuNTc4IDAgNi40NzkgMi45MDEgNi40NzkgNi40NzlzLTIuOTAxIDYuNDc5LTYuNDc5IDYuNDc5eiI+PC9wYXRoPg0KPC9zeW1ib2w+DQo8L2RlZnM+DQo8L3N2Zz4=`;
+      icon.symbol = 'icon-cog';
+
+      await nextRender();
+
+      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(3);
+      expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
+      expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
+    });
+
     it('should fail if SVG is not found', async () => {
       sinon.stub(console, 'error');
       sinon.stub(icon, '__fetch').resolves({ ok: false });
@@ -195,7 +225,7 @@ describe('vaadin-icon', () => {
       icon.src = 'icon.svg#symbol-id';
       // We expect a 404 error log from this test, but the test is simply to check
       // that the <use> element is added when the source provided has the file#id pattern
-      expectIcon(`<use href="${icon.src}"></use>`);
+      expect(svgElement.querySelector(`use[href="${icon.src}"]`)).to.exist;
     });
   });
 
@@ -288,7 +318,7 @@ describe('vaadin-icon', () => {
 
       it('should support rendering custom svg element inside the icon', () => {
         icon.icon = 'vaadin:minus';
-        const child = svgElement.firstElementChild;
+        const child = svgElement.querySelector('#svg-group').firstElementChild;
         expect(child.getAttribute('fill')).to.equal('red');
       });
 
