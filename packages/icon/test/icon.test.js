@@ -246,6 +246,16 @@ describe('vaadin-icon', () => {
       // We expect a 404 error log from this test, but the test is simply to check
       // that the <use> element is added when the source provided has the file#id pattern
       expect(svgElement.querySelector(`use[href="${icon.src}"]`)).to.exist;
+      expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('visible');
+    });
+
+    it('should set use group visibility to hidden when src is a standalone SVG', () => {
+      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(`<svg></svg>`) });
+
+      icon.src = 'icon.svg';
+      expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('hidden');
+
+      icon.__fetch.restore();
     });
   });
 

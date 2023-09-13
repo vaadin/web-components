@@ -111,7 +111,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         aria-hidden="true"
       >
         <g id="svg-group"></g>
-        <g id="use-group" hidden="[[!__useRef]]">
+        <g id="use-group" visibility$="[[__computeVisibility(__useRef, svg)]]">
           <use href$="[[__useRef]]" />
         </g>
       </svg>
@@ -392,6 +392,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   /** @private */
   __computePAR(defaultPAR, preserveAspectRatio) {
     return preserveAspectRatio || defaultPAR;
+  }
+
+  /** @private */
+  __computeVisibility(__useRef) {
+    return __useRef ? 'visible' : 'hidden';
   }
 
   /** @private */
