@@ -21,7 +21,7 @@ describe('dirty state', () => {
     expect(timePicker.dirty).to.be.false;
   });
 
-  it('should not be dirty after outside click without change', async () => {
+  it('should not be dirty after outside click without change', () => {
     timePicker.focus();
     timePicker.click();
     outsideClick();

@@ -11,7 +11,7 @@ describe('events', () => {
   describe('has-input-value-changed event', () => {
     let clearButton, hasInputValueChangedSpy, valueChangedSpy;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       hasInputValueChangedSpy = sinon.spy();
       valueChangedSpy = sinon.spy();
       timePicker = fixtureSync('<vaadin-time-picker clear-button-visible></vaadin-time-picker>');
@@ -43,7 +43,7 @@ describe('events', () => {
         });
       });
 
-      describe('with bad user input', async () => {
+      describe('with bad user input', () => {
         beforeEach(async () => {
           await sendKeys({ type: 'foo' });
           hasInputValueChangedSpy.resetHistory();

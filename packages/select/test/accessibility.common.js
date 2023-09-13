@@ -57,7 +57,7 @@ describe('accessibility', () => {
     expect(valueButton.getAttribute('aria-labelledby').split(' ')).to.have.members([select._itemId, labelId]);
   });
 
-  describe('accessible-name', async () => {
+  describe('accessible-name', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select label="label"></vaadin-select>');
       await nextRender();
@@ -191,7 +191,7 @@ describe('accessibility', () => {
     });
   });
 
-  describe('accessible-name-ref', async () => {
+  describe('accessible-name-ref', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select label="label"></vaadin-select>');
       await nextRender();

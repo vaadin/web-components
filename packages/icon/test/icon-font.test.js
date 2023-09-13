@@ -65,7 +65,7 @@ describe('vaadin-icon - icon fonts', () => {
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
     });
 
-    it('should not overflow host - line height', async () => {
+    it('should not overflow host - line height', () => {
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(24, 1);
     });
@@ -268,15 +268,15 @@ describe('vaadin-icon - icon fonts', () => {
 
     let icon;
 
-    supportedIt('should support CQ width units on pseudo elements', async () => {
+    supportedIt('should support CQ width units on pseudo elements', () => {
       expect(supportsCQUnitsForPseudoElements()).to.be.true;
     });
 
-    supportedIt('should not need the fallback', async () => {
+    supportedIt('should not need the fallback', () => {
       expect(needsFontIconSizingFallback()).to.be.false;
     });
 
-    fallBackIt('should not support CQ width units on pseudo elements', async () => {
+    fallBackIt('should not support CQ width units on pseudo elements', () => {
       expect(supportsCQUnitsForPseudoElements()).to.be.false;
     });
 

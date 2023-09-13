@@ -854,7 +854,7 @@ const runTests = (defineHelper, baseMixin) => {
         input = element.querySelector('[slot=input]');
       });
 
-      it('should contain accessibleNameRef in aria-labelledby', async () => {
+      it('should contain accessibleNameRef in aria-labelledby', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 

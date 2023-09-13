@@ -7,7 +7,7 @@ describe('a11y', () => {
   describe('focus restoration', () => {
     let menuBar, overlay, buttons;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       menuBar = fixtureSync(`<vaadin-menu-bar></vaadin-menu-bar>`);
       menuBar.items = [
         {

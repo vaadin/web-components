@@ -80,7 +80,7 @@ describe('scrollable tabs', () => {
           await nextFrame();
         });
 
-        it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
+        it('should have displayed all the items fully when scrolled forward to the end via button', () => {
           const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
 
           expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.equal(0);
@@ -92,7 +92,7 @@ describe('scrollable tabs', () => {
           expect(-tabs.__direction * tabs._scrollerElement.scrollLeft).to.be.approximately(537, 10);
         });
 
-        it('should have displayed all the items fully when scrolled back to the start via button', async () => {
+        it('should have displayed all the items fully when scrolled back to the start via button', () => {
           // Initially scroll to the end
           tabs._scrollToItem(items.length - 1);
 
@@ -107,7 +107,7 @@ describe('scrollable tabs', () => {
           expect(tabs._scrollerElement.scrollLeft).to.equal(0);
         });
 
-        it('should not get stuck with wide tabs when scrolled forward to the end via button', async () => {
+        it('should not get stuck with wide tabs when scrolled forward to the end via button', () => {
           tabs.style.width = '100px';
 
           const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
@@ -125,7 +125,7 @@ describe('scrollable tabs', () => {
           expect(scrollerEndPosition).to.be.approximately(tabs._scrollerElement.scrollWidth, 1);
         });
 
-        it('should not get stuck with wide tabs when scrolled back to the start via button', async () => {
+        it('should not get stuck with wide tabs when scrolled back to the start via button', () => {
           tabs.style.width = '100px';
 
           // Initially scroll to the end
