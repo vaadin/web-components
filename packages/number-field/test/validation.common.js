@@ -45,18 +45,18 @@ describe('validation', () => {
       field.focus();
       await sendKeys({ press: 'ArrowDown' });
       await nextFrame();
-      expect(validateSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(validateSpy);
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should validate before change event on ArrowUp', async () => {
       field.focus();
       await sendKeys({ press: 'ArrowUp' });
       await nextFrame();
-      expect(validateSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(validateSpy);
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should be valid with numeric values', async () => {
