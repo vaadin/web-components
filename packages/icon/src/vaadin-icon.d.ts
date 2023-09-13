@@ -82,7 +82,7 @@ declare class Icon extends ThemableMixin(
   src: string | null;
 
   /**
-   * The symbol identifier that references to an ID of an element contained in the SVG element assigned to the
+   * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
    * `src` property
    */
   symbol: string | null;

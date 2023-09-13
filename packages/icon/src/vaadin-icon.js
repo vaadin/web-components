@@ -112,7 +112,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         aria-hidden="true"
       >
         <g id="svg-group"></g>
-        <g id="use-group"></g>
+        <g id="use-group" hidden="[[!__useRef]]">
+          <use href$="[[__useRef]]" />
+        </g>
       </svg>
 
       <slot name="tooltip"></slot>
@@ -166,7 +168,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       },
 
       /**
-       * The symbol identifier that references to an ID of an element contained in the SVG element assigned to the
+       * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
        * `src` property
        *
        * @type {string}
@@ -244,7 +246,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       __useRef: Object,
 
       /** @private */
-      __svgElement: Object,
+      __svgElement: String,
 
       /** @private */
       __viewBox: String,
@@ -252,12 +254,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   static get observers() {
-    return [
-      '__svgChanged(svg, __svgElement)',
-      '__fontChanged(iconClass, char, ligature)',
-      '__srcChanged(src, symbol)',
-      '__useRefChanged(__useRef, __useGroupElement)',
-    ];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(iconClass, char, ligature)', '__srcChanged(src, symbol)'];
   }
 
   static get observedAttributes() {
@@ -293,7 +290,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   ready() {
     super.ready();
     this.__svgElement = this.shadowRoot.querySelector('#svg-group');
-    this.__useGroupElement = this.shadowRoot.querySelector('#use-group');
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
@@ -352,11 +348,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     // https://github.com/vaadin/web-components/issues/6301
     this.icon = '';
 
-    if (src.includes('.svg') && (symbol || src.includes('#'))) {
+    if (!src.startsWith('data:') && (symbol || src.includes('#'))) {
       const [path, iconId] = src.split('#');
-      const symbolSrc = `${path}#${symbol ? symbol : iconId}`;
-
-      this.__useRef = svg`<use href="${symbolSrc}"/>`;
+      this.__useRef = `${path}#${symbol || iconId}`;
     } else {
       try {
         const data = await this.__fetch(src, { mode: 'cors' });
@@ -377,8 +371,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         }
 
         this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+
         if (symbol) {
-          this.__useRef = svg`<use href="#${symbol}"/>`;
+          this.__useRef = `#${symbol}`;
         }
 
         this.__viewBox = svgElement.getAttribute('viewBox');
@@ -396,15 +391,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     }
 
     renderSvg(svg, svgElement);
-  }
-
-  /** @private */
-  __useRefChanged(useRef, useGroupElement) {
-    if (!useGroupElement) {
-      return;
-    }
-
-    renderSvg(useRef, useGroupElement);
   }
 
   /** @private */
