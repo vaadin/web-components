@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { svg } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
@@ -110,7 +109,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
         aria-hidden="true"
-      ></svg>
+      >
+        <g id="svg-group"></g>
+        <g id="use-group" visibility$="[[__computeVisibility(__useRef, svg)]]">
+          <use href$="[[__useRef]]" />
+        </g>
+      </svg>
 
       <slot name="tooltip"></slot>
     `;
@@ -155,8 +159,20 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
        *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
        * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
        *   function for the SVG content passed
+       *
+       * @type {string}
        */
       src: {
+        type: String,
+      },
+
+      /**
+       * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
+       * `src` property
+       *
+       * @type {string}
+       */
+      symbol: {
         type: String,
       },
 
@@ -223,7 +239,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       __preserveAspectRatio: String,
 
       /** @private */
-      __svgElement: Object,
+      __useRef: Object,
+
+      /** @private */
+      __svgElement: String,
 
       /** @private */
       __viewBox: String,
@@ -231,7 +250,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(iconClass, char, ligature)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(iconClass, char, ligature)', '__srcChanged(src, symbol)'];
   }
 
   static get observedAttributes() {
@@ -266,7 +285,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   /** @protected */
   ready() {
     super.ready();
-    this.__svgElement = this.shadowRoot.querySelector('svg');
+    this.__svgElement = this.shadowRoot.querySelector('#svg-group');
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
@@ -315,7 +334,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  async __srcChanged(src) {
+  async __srcChanged(src, symbol) {
     if (!src) {
       this.svg = null;
       return;
@@ -325,8 +344,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     // https://github.com/vaadin/web-components/issues/6301
     this.icon = '';
 
-    if (src.includes('#')) {
-      this.svg = svg`<use href="${src}"/>`;
+    if (!src.startsWith('data:') && (symbol || src.includes('#'))) {
+      const [path, iconId] = src.split('#');
+      this.__useRef = `${path}#${symbol || iconId}`;
     } else {
       try {
         const data = await this.__fetch(src, { mode: 'cors' });
@@ -346,8 +366,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           throw new Error(`SVG element not found on path: ${src}`);
         }
 
-        this.__viewBox = svgElement.getAttribute('viewBox');
         this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+
+        if (symbol) {
+          this.__useRef = `#${symbol}`;
+        }
+
+        this.__viewBox = svgElement.getAttribute('viewBox');
       } catch (e) {
         console.error(e);
         this.svg = null;
@@ -367,6 +392,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   /** @private */
   __computePAR(defaultPAR, preserveAspectRatio) {
     return preserveAspectRatio || defaultPAR;
+  }
+
+  /** @private */
+  __computeVisibility(__useRef) {
+    return __useRef ? 'visible' : 'hidden';
   }
 
   /** @private */
