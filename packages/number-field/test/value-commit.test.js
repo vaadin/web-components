@@ -283,7 +283,7 @@ describe('value commit', () => {
     });
 
     describe('click committed', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         increaseButton.click();
         valueChangedSpy.resetHistory();
         validateSpy.resetHistory();
