@@ -192,7 +192,7 @@ class RadioGroup extends FieldMixin(
       const tooltip = event.detail.node;
       if (tooltip && tooltip.isConnected) {
         // Tooltip element has been added to the DOM
-        const inputs = this.__radioButtons.map((checkbox) => checkbox.inputElement);
+        const inputs = this.__radioButtons.map((radio) => radio.inputElement);
         this._tooltipController.setAriaTarget(inputs);
       } else {
         // Tooltip element is no longer connected
@@ -249,7 +249,7 @@ class RadioGroup extends FieldMixin(
       // Unregisters the removed radio buttons.
       this.__filterRadioButtons(removedNodes).forEach(this.__unregisterRadioButton);
 
-      const inputs = this.__radioButtons.map((checkbox) => checkbox.inputElement);
+      const inputs = this.__radioButtons.map((radio) => radio.inputElement);
       this._tooltipController.setAriaTarget(inputs);
     });
 
