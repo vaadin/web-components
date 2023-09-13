@@ -181,8 +181,7 @@ describe('vaadin-icon', () => {
     });
 
     it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
-      const svgSpriteBase64 = btoa(`
-        <svg xmlns="http://www.w3.org/2000/svg">
+      const svgSprite = `<svg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <symbol id="icon-cog" viewBox="0 0 32 32">
               <path
@@ -193,7 +192,12 @@ describe('vaadin-icon', () => {
               <path d="m18 22.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
             </symbol>
           </defs>
-        </svg>`);
+        </svg>`;
+      const svgSpriteBase64 = btoa(svgSprite);
+      sinon.stub(icon, '__fetch').resolves({
+        ok: true,
+        text: () => Promise.resolve(svgSprite),
+      });
 
       icon.src = `data:image/svg+xml;base64,${svgSpriteBase64}`;
       icon.symbol = 'icon-cog';
@@ -203,6 +207,8 @@ describe('vaadin-icon', () => {
       expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
       expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
       expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
+
+      icon.__fetch.restore();
     });
 
     it('should fail if SVG is not found', async () => {
