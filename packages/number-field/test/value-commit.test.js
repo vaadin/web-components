@@ -264,7 +264,7 @@ describe('value commit', () => {
     });
   });
 
-  describe('spinner buttons', () => {
+  describe('value control buttons', () => {
     let increaseButton, decreaseButton;
 
     beforeEach(() => {
