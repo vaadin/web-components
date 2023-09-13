@@ -10,7 +10,7 @@ describe('validation', () => {
   describe('basic', () => {
     let validateSpy, changeSpy;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
       input = field.inputElement;
       validateSpy = sinon.spy(field, 'validate');
@@ -55,7 +55,7 @@ describe('validation', () => {
       expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
-    it('should be valid with numeric values', async () => {
+    it('should be valid with numeric values', () => {
       field.value = '1';
       expect(input.value).to.be.equal('1');
       expect(field.validate()).to.be.true;
@@ -117,7 +117,7 @@ describe('validation', () => {
       expect(field.validate(), 'value should not be greater than max').to.be.false;
     });
 
-    it('should dispatch change event after validation', async () => {
+    it('should dispatch change event after validation', () => {
       field.required = true;
       field.addEventListener('change', changeSpy);
       field.value = '123';
