@@ -177,7 +177,7 @@ describe('vaadin-icon', () => {
       icon.src = './icon.svg#id-0';
       icon.symbol = 'id-1';
 
-      expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`));
+      expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`)).to.exist;
     });
 
     it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
