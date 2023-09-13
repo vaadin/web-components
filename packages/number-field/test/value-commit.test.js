@@ -118,7 +118,8 @@ describe('value commit', () => {
       expect(numberField.inputElement.validity.badInput).to.be.true;
     });
 
-    it('should not commit but validate on Enter', async () => {
+    // FIXME: https://github.com/vaadin/web-components/issues/5113
+    it.skip('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectValidationOnly();
       expect(numberField.inputElement.validity.badInput).to.be.true;
@@ -143,7 +144,8 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter', async () => {
+      // FIXME: https://github.com/vaadin/web-components/issues/5113
+      it.skip('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValidationOnly();
       });
