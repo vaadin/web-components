@@ -383,7 +383,7 @@ describe('slot-controller', () => {
         expect(nodes[0]).to.equal(controller.defaultNode);
       });
 
-      it('should remove default node from nodes array when adding new element', async () => {
+      it('should remove default node from nodes array when adding new element', () => {
         const nodes = controller.nodes;
         expect(nodes).to.be.instanceOf(Array);
         expect(nodes.length).to.equal(1);

@@ -129,7 +129,7 @@ describe('checked-mixin', () => {
   });
 
   describe('dirty state', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<checked-mixin-element></checked-mixin-element>`);
       input = element.querySelector('[slot=input]');
     });

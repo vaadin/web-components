@@ -160,17 +160,17 @@ describe('custom field', () => {
       expect(customField.dirty).to.be.false;
     });
 
-    it('should not be dirty after programmatic value change', async () => {
+    it('should not be dirty after programmatic value change', () => {
       customField.value = 'foo,1';
       expect(customField.dirty).to.be.false;
     });
 
-    it('should be dirty after sub-field input', async () => {
+    it('should be dirty after sub-field input', () => {
       fire(input, 'input');
       expect(customField.dirty).to.be.true;
     });
 
-    it('should be dirty after sub-field change', async () => {
+    it('should be dirty after sub-field change', () => {
       fire(input, 'change');
       expect(customField.dirty).to.be.true;
     });

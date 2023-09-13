@@ -141,7 +141,7 @@ describe('selecting items', () => {
       expect(stopPropagationSpy.called).to.equal(!allowPropagation);
     };
 
-    beforeEach(async () => {
+    beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     });
 

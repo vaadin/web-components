@@ -422,7 +422,7 @@ describe('light dom observing', () => {
             await nextFrame();
           });
 
-          it('should provide initial state', async () => {
+          it('should provide initial state', () => {
             expect(getHeaderCellContent(grid, inGroup ? 2 : 1, 0).textContent).to.equal('first foo header');
             expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('first foo body foo0');
             expect(getFooterCellContent(grid, 0, 0).textContent).to.equal('first foo footer');

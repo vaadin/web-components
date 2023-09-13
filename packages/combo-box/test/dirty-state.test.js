@@ -16,7 +16,7 @@ describe('dirty state', () => {
     expect(comboBox.dirty).to.be.false;
   });
 
-  it('should not be dirty after programmatic value change', async () => {
+  it('should not be dirty after programmatic value change', () => {
     comboBox.value = 'Item 1';
     expect(comboBox.dirty).to.be.false;
   });
@@ -33,7 +33,7 @@ describe('dirty state', () => {
     expect(comboBox.dirty).to.be.false;
   });
 
-  it('should not be dirty after closing the dropdown without change', async () => {
+  it('should not be dirty after closing the dropdown without change', () => {
     comboBox.focus();
     comboBox.click();
     outsideClick();
