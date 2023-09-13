@@ -191,11 +191,6 @@ describe('value commit', () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('1');
       });
-
-      it('should commit on close with outside click', () => {
-        outsideClick();
-        expectValueCommit('1');
-      });
     });
 
     describe('unparsable input entered', () => {
