@@ -347,45 +347,44 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     // https://github.com/vaadin/web-components/issues/6301
     this.icon = '';
 
-    if (!src.startsWith('data:') && (symbol || src.includes('#'))) {
-      const [path, iconId] = src.split('#');
-      this.__useRef = `${path}#${symbol || iconId}`;
-    } else {
-      try {
-        if (!srcCache.has(src)) {
-          srcCache.set(
-            src,
-            this.__fetch(src, { mode: 'cors' }).then((data) => {
-              if (!data.ok) {
-                throw new Error('Error loading icon');
-              }
-              return data.text();
-            }),
-          );
-        }
-        const svgData = await srcCache.get(src);
+    if (src.includes('#')) {
+      [src, symbol] = src.split('#');
+    }
 
-        if (!Icon.__domParser) {
-          Icon.__domParser = new DOMParser();
-        }
-        const parsedResponse = Icon.__domParser.parseFromString(svgData, 'text/html');
-
-        const svgElement = parsedResponse.querySelector('svg');
-        if (!svgElement) {
-          throw new Error(`SVG element not found on path: ${src}`);
-        }
-
-        this.svg = unsafeSvgLiteral(svgElement.innerHTML);
-
-        if (symbol) {
-          this.__useRef = `#${symbol}`;
-        }
-
-        this.__viewBox = svgElement.getAttribute('viewBox');
-      } catch (e) {
-        console.error(e);
-        this.svg = null;
+    try {
+      if (!srcCache.has(src)) {
+        srcCache.set(
+          src,
+          this.__fetch(src, { mode: 'cors' }).then((data) => {
+            if (!data.ok) {
+              throw new Error('Error loading icon');
+            }
+            return data.text();
+          }),
+        );
       }
+      const svgData = await srcCache.get(src);
+
+      if (!Icon.__domParser) {
+        Icon.__domParser = new DOMParser();
+      }
+      const parsedResponse = Icon.__domParser.parseFromString(svgData, 'text/html');
+
+      const svgElement = parsedResponse.querySelector('svg');
+      if (!svgElement) {
+        throw new Error(`SVG element not found on path: ${src}`);
+      }
+
+      this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+
+      if (symbol) {
+        this.__useRef = `#${symbol}`;
+      }
+
+      this.__viewBox = svgElement.getAttribute('viewBox');
+    } catch (e) {
+      console.error(e);
+      this.svg = null;
     }
   }
 
