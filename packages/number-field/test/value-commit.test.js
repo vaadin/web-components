@@ -129,14 +129,16 @@ describe('value commit', () => {
   describe('unparsable input committed', () => {
     beforeEach(async () => {
       await sendKeys({ type: '-' });
-      await sendKeys({ type: 'Enter' });
+      numberField.blur();
       validateSpy.resetHistory();
     });
 
     describe('input cleared with Backspace', () => {
       beforeEach(async () => {
+        numberField.focus();
         numberField.inputElement.select();
         await sendKeys({ press: 'Backspace' });
+        validateSpy.resetHistory();
       });
 
       it('should not commit but validate on blur', () => {
