@@ -181,12 +181,26 @@ describe('vaadin-icon', () => {
     });
 
     it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
-      icon.src = `data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgc3R5bGU9InBvc2l0aW9uOiBhYnNvbHV0ZTsgd2lkdGg6IDA7IGhlaWdodDogMDsgb3ZlcmZsb3c6IGhpZGRlbjsiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+DQo8ZGVmcz4NCjxzeW1ib2wgaWQ9Imljb24taG9tZSIgdmlld2JveD0iMCAwIDMyIDMyIj4NCjxwYXRoIGQ9Im0zMiAxOWwtNi02di05aC00djVsLTYtNi0xNiAxNnYxaDR2MTBoMTB2LTZoNHY2aDEwdi0xMGg0eiI+PC9wYXRoPg0KPC9zeW1ib2w+DQo8c3ltYm9sIGlkPSJpY29uLXVzZXIiIHZpZXdib3g9IjAgMCAzMiAzMiI+DQo8cGF0aCBkPSJtMTggMjIuMDgydi0xLjY0OWMyLjIwMy0xLjI0MSA0LTQuMzM3IDQtNy40MzIgMC00Ljk3MSAwLTktNi05cy02IDQuMDI5LTYgOWMwIDMuMDk2IDEuNzk3IDYuMTkxIDQgNy40MzJ2MS42NDljLTYuNzg0IDAuNTU1LTEyIDMuODg4LTEyIDcuOTE4aDI4YzAtNC4wMzAtNS4yMTYtNy4zNjQtMTItNy45MTh6Ij48L3BhdGg+DQo8L3N5bWJvbD4NCjxzeW1ib2wgaWQ9Imljb24tY29nIiB2aWV3Ym94PSIwIDAgMzIgMzIiPg0KPHBhdGggZD0ibTI5LjE4MSAxOS4wNzBjLTEuNjc5LTIuOTA4LTAuNjY5LTYuNjM0IDIuMjU1LTguMzI4bC0zLjE0NS01LjQ0N2MtMC44OTggMC41MjctMS45NDMgMC44MjktMy4wNTggMC44MjktMy4zNjEgMC02LjA4NS0yLjc0Mi02LjA4NS02LjEyNWgtNi4yODljMC4wMDggMS4wNDQtMC4yNTIgMi4xMDMtMC44MTEgMy4wNzAtMS42NzkgMi45MDgtNS40MTEgMy44OTctOC4zMzkgMi4yMTFsLTMuMTQ0IDUuNDQ3YzAuOTA1IDAuNTE1IDEuNjg5IDEuMjY4IDIuMjQ2IDIuMjM0IDEuNjc2IDIuOTAzIDAuNjcyIDYuNjIzLTIuMjQxIDguMzE5bDMuMTQ1IDUuNDQ3YzAuODk1LTAuNTIyIDEuOTM1LTAuODIgMy4wNDQtMC44MiAzLjM1IDAgNi4wNjcgMi43MjUgNi4wODQgNi4wOTJoNi4yODljLTAuMDAzLTEuMDM0IDAuMjU5LTIuMDgwIDAuODExLTMuMDM4IDEuNjc2LTIuOTAzIDUuMzk5LTMuODk0IDguMzI1LTIuMjE5bDMuMTQ1LTUuNDQ3Yy0wLjg5OS0wLjUxNS0xLjY3OC0xLjI2Ni0yLjIzMi0yLjIyNnptMTYgMjIuNDc5Yy0zLjU3OCAwLTYuNDc5LTIuOTAxLTYuNDc5LTYuNDc5czIuOTAxLTYuNDc5IDYuNDc5LTYuNDc5YzMuNTc4IDAgNi40NzkgMi45MDEgNi40NzkgNi40NzlzLTIuOTAxIDYuNDc5LTYuNDc5IDYuNDc5eiI+PC9wYXRoPg0KPC9zeW1ib2w+DQo8L2RlZnM+DQo8L3N2Zz4=`;
+      const svgSpriteBase64 = btoa(`
+        <svg xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <symbol id="icon-cog" viewBox="0 0 32 32">
+              <path
+                d="m29.181 19.070c-1.679-2.908-0.669-6.634 2.255-8.328l-3.145-5.447c-0.898 0.527-1.943 0.829-3.058 0.829-3.361 0-6.085-2.742-6.085-6.125h-6.289c0.008 1.044-0.252 2.103-0.811 3.070-1.679 2.908-5.411 3.897-8.339 2.211l-3.144 5.447c0.905 0.515 1.689 1.268 2.246 2.234 1.676 2.903 0.672 6.623-2.241 8.319l3.145 5.447c0.895-0.522 1.935-0.82 3.044-0.82 3.35 0 6.067 2.725 6.084 6.092h6.289c-0.003-1.034 0.259-2.080 0.811-3.038 1.676-2.903 5.399-3.894 8.325-2.219l3.145-5.447c-0.899-0.515-1.678-1.266-2.232-2.226zm16 22.479c-3.578 0-6.479-2.901-6.479-6.479s2.901-6.479 6.479-6.479c3.578 0 6.479 2.901 6.479 6.479s-2.901 6.479-6.479 6.479z"
+              ></path>
+            </symbol>
+            <symbol id="icon-user" viewbox="0 0 32 32">
+              <path d="m18 22.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
+            </symbol>
+          </defs>
+        </svg>`);
+
+      icon.src = `data:image/svg+xml;base64,${svgSpriteBase64}`;
       icon.symbol = 'icon-cog';
 
       await nextRender();
 
-      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(3);
+      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
       expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
       expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
     });
