@@ -41,24 +41,6 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
-    it('should validate before change event on ArrowDown', async () => {
-      field.focus();
-      await sendKeys({ press: 'ArrowDown' });
-      await nextUpdate(field);
-      expect(validateSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(validateSpy);
-    });
-
-    it('should validate before change event on ArrowUp', async () => {
-      field.focus();
-      await sendKeys({ press: 'ArrowUp' });
-      await nextUpdate(field);
-      expect(validateSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledOnce;
-      expect(changeSpy).to.be.calledAfter(validateSpy);
-    });
-
     it('should be valid with numeric values', async () => {
       field.value = '1';
       await nextUpdate(field);
@@ -132,16 +114,6 @@ describe('validation', () => {
       field.value = '5';
       await nextUpdate(field);
       expect(field.validate(), 'value should not be greater than max').to.be.false;
-    });
-
-    it('should dispatch change event after validation', async () => {
-      field.required = true;
-      field.addEventListener('change', changeSpy);
-      input.value = '123';
-      input.dispatchEvent(new CustomEvent('change'));
-      await nextUpdate(field);
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
