@@ -217,6 +217,7 @@ export const NumberFieldMixin = (superClass) =>
     /** @private */
     _setValue(value) {
       this.value = this.inputElement.value = String(parseFloat(value));
+      this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
