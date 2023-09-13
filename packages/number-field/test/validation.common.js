@@ -44,7 +44,7 @@ describe('validation', () => {
     it('should validate before change event on ArrowDown', async () => {
       field.focus();
       await sendKeys({ press: 'ArrowDown' });
-      await nextUpdate(field);
+      await nextFrame();
       expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validateSpy);
@@ -53,7 +53,7 @@ describe('validation', () => {
     it('should validate before change event on ArrowUp', async () => {
       field.focus();
       await sendKeys({ press: 'ArrowUp' });
-      await nextUpdate(field);
+      await nextFrame();
       expect(validateSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledOnce;
       expect(changeSpy).to.be.calledAfter(validateSpy);
