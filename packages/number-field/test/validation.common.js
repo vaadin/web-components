@@ -7,10 +7,15 @@ describe('validation', () => {
   let field, input;
 
   describe('basic', () => {
+    let validateSpy, changeSpy;
+
     beforeEach(async () => {
       field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
       await nextRender();
       input = field.inputElement;
+      validateSpy = sinon.spy(field, 'validate');
+      changeSpy = sinon.spy().named('changeSpy');
+      field.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {
@@ -34,6 +39,24 @@ describe('validation', () => {
       expect(field.checkValidity()).to.be.true;
       expect(field.validate()).to.be.true;
       expect(field.invalid).to.be.false;
+    });
+
+    it('should validate before change event on ArrowDown', async () => {
+      field.focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await nextFrame();
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
+    });
+
+    it('should validate before change event on ArrowUp', async () => {
+      field.focus();
+      await sendKeys({ press: 'ArrowUp' });
+      await nextFrame();
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
     it('should be valid with numeric values', async () => {
@@ -112,8 +135,6 @@ describe('validation', () => {
     });
 
     it('should dispatch change event after validation', async () => {
-      const validateSpy = sinon.spy(field, 'validate');
-      const changeSpy = sinon.spy();
       field.required = true;
       field.addEventListener('change', changeSpy);
       input.value = '123';
