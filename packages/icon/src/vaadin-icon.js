@@ -240,9 +240,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       __preserveAspectRatio: String,
 
       /** @private */
-      __useGroupElement: Object,
-
-      /** @private */
       __useRef: Object,
 
       /** @private */
