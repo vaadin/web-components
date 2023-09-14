@@ -1122,6 +1122,13 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._editor.emitter.removeAllListeners();
+    this._editor.emitter.listeners = {};
+  }
+
   /**
    * Fired when the user commits a value change.
    *

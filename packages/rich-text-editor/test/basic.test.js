@@ -928,4 +928,19 @@ describe('rich text editor', () => {
       );
     });
   });
+
+  describe('listener clean up', () => {
+    it('should not have active listeners once detached', () => {
+      expect(editor.emitter).to.not.equal(null);
+      expect(editor.emitter._events).to.not.be.empty;
+      expect(editor.emitter._eventsCount).to.greaterThan(0);
+      expect(editor.emitter.listeners).to.not.be.empty;
+
+      rte.parentNode.removeChild(rte);
+
+      expect(editor.emitter._events).to.be.empty;
+      expect(editor.emitter._eventsCount).to.be.equal(0);
+      expect(editor.emitter.listeners).to.be.empty;
+    });
+  });
 });
