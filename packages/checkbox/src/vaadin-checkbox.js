@@ -70,6 +70,7 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolymerEl
     super.ready();
 
     this._tooltipController = new TooltipController(this);
+    this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
   }
 }
