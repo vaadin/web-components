@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -154,17 +154,15 @@ describe('value commit', () => {
   });
 
   describe('value set programmatically', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       numberField.value = '1234';
-      await nextUpdate(numberField);
       valueChangedSpy.resetHistory();
       validateSpy.resetHistory();
     });
 
     describe('default', () => {
-      it('should not commit but validate on blur', async () => {
+      it('should not commit but validate on blur', () => {
         numberField.blur();
-        await nextUpdate(numberField);
         expectValidationOnly();
       });
 
@@ -217,14 +215,13 @@ describe('value commit', () => {
   });
 
   describe('with clear button', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       numberField.value = '1';
       numberField.clearButtonVisible = true;
-      await nextUpdate(numberField);
       valueChangedSpy.resetHistory();
     });
 
-    it('should clear on clear button click', async () => {
+    it('should clear on clear button click', () => {
       numberField.$.clearButton.click();
       expectValueCommit('');
     });
