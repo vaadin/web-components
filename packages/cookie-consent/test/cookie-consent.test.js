@@ -33,7 +33,7 @@ describe('vaadin-cookie-consent', () => {
     });
   });
 
-  describe('cooke consent window', () => {
+  describe('cookie consent window', () => {
     let consent, ccWindow;
 
     beforeEach(async () => {
@@ -124,6 +124,38 @@ describe('vaadin-cookie-consent', () => {
       expect(dismiss.textContent).to.be.equal('custom-dismiss');
       expect(link.textContent).to.be.equal('custom-learn-more');
       expect(link.href).to.be.equal('https://example.com/');
+    });
+  });
+
+  describe('accessibility', () => {
+    let consent, ccWindow;
+
+    beforeEach(async () => {
+      consent = fixtureSync('<vaadin-cookie-consent></vaadin-cookie-consent>');
+
+      // Force cookie consent to appear.
+      consent._show();
+
+      // By default the cookie consent dialog has a 20 ms delay after it
+      // is initialized and before it starts the fade-in animation.
+      await aTimeout(50);
+
+      ccWindow = document.querySelector('.cc-window');
+    });
+
+    it('learn more link should not have role', () => {
+      const link = ccWindow.querySelector('.cc-link');
+      expect(link.hasAttribute('role')).to.be.false;
+    });
+
+    it('learn more link should not have aria-label', () => {
+      const link = ccWindow.querySelector('.cc-link');
+      expect(link.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('dismiss link should not have aria-label', () => {
+      const link = ccWindow.querySelector('.cc-dismiss');
+      expect(link.hasAttribute('aria-label')).to.be.false;
     });
   });
 });
