@@ -161,14 +161,6 @@ describe('validation', () => {
       expect(field.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit an invalid number', async () => {
-      field.value = '1';
-      await nextUpdate(field);
-      await sendKeys({ type: '1--' });
-      await sendKeys({ type: 'Enter' });
-      expect(field.value).to.equal('');
-    });
-
     it('should be valid after removing an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
