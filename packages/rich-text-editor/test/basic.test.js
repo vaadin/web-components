@@ -949,13 +949,11 @@ describe('rich text editor', () => {
       parent.removeChild(rte);
       parent.appendChild(rte);
 
-      const __rte = document.querySelector('vaadin-rich-text-editor');
-      const __editor = __rte._editor;
-
-      expect(__editor.emitter).to.not.equal(null);
-      expect(__editor.emitter._events).to.not.be.empty;
-      expect(__editor.emitter._eventsCount).to.greaterThan(0);
-      expect(__editor.emitter.listeners).to.not.be.empty;
+      // previous `editor` reference is now stale as a new editor is created in the connectedCallback
+      expect(rte._editor.emitter).to.not.equal(null);
+      expect(rte._editor.emitter._events).to.not.be.empty;
+      expect(rte._editor.emitter._eventsCount).to.greaterThan(0);
+      expect(rte._editor.emitter.listeners).to.not.be.empty;
     });
   });
 });
