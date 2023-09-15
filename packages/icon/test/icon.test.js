@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-icon.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
@@ -256,6 +256,18 @@ describe('vaadin-icon', () => {
       expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('hidden');
 
       icon.__fetch.restore();
+    });
+
+    it('should fetch the same src only once', async () => {
+      icon.src = `data:image/svg+xml,${encodeURIComponent('<svg></svg')}`;
+
+      const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
+      sinon.stub(icon2, '__fetch').resolves({ ok: true, text: () => Promise.resolve('<svg></svg>') });
+      icon2.src = icon.src;
+
+      await nextFrame();
+
+      expect(icon2.__fetch.called).to.be.false;
     });
   });
 

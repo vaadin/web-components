@@ -13,6 +13,8 @@ import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
 
+const srcCache = new Map();
+
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
  *
@@ -349,12 +351,18 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       this.__useRef = `${path}#${symbol || iconId}`;
     } else {
       try {
-        const data = await this.__fetch(src, { mode: 'cors' });
-        if (!data.ok) {
-          throw new Error('Error loading icon');
+        if (!srcCache.has(src)) {
+          srcCache.set(
+            src,
+            this.__fetch(src, { mode: 'cors' }).then((data) => {
+              if (!data.ok) {
+                throw new Error('Error loading icon');
+              }
+              return data.text();
+            }),
+          );
         }
-
-        const svgData = await data.text();
+        const svgData = await srcCache.get(src);
 
         if (!Icon.__domParser) {
           Icon.__domParser = new DOMParser();
