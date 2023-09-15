@@ -561,8 +561,8 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
     const editor = this.shadowRoot.querySelector('[part="content"]');
     const toolbarConfig = this._prepareToolbar();

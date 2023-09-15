@@ -942,5 +942,20 @@ describe('rich text editor', () => {
       expect(editor.emitter._eventsCount).to.be.equal(0);
       expect(editor.emitter.listeners).to.be.empty;
     });
+
+    it('should have the listeners when removed and added back again', () => {
+      const parent = rte.parentNode;
+
+      parent.removeChild(rte);
+      parent.appendChild(rte);
+
+      const __rte = document.querySelector('vaadin-rich-text-editor');
+      const __editor = __rte._editor;
+
+      expect(__editor.emitter).to.not.equal(null);
+      expect(__editor.emitter._events).to.not.be.empty;
+      expect(__editor.emitter._eventsCount).to.greaterThan(0);
+      expect(__editor.emitter.listeners).to.not.be.empty;
+    });
   });
 });
