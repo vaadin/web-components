@@ -69,6 +69,11 @@ export type MultiSelectComboBoxFilterChangedEvent = CustomEvent<{ value: string 
 export type MultiSelectComboBoxInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type MultiSelectComboBoxOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `selectedItems` property changes.
  */
 export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
@@ -88,6 +93,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 
   'invalid-changed': MultiSelectComboBoxInvalidChangedEvent;
+
+  'opened-changed': MultiSelectComboBoxOpenedChangedEvent;
 
   'selected-items-changed': MultiSelectComboBoxSelectedItemsChangedEvent<TItem>;
 
