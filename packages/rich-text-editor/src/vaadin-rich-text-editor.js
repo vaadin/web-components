@@ -533,6 +533,13 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._editor.emitter.removeAllListeners();
+    this._editor.emitter.listeners = {};
+  }
+
   /** @private */
   __setDirection(dir) {
     // Needed for proper `ql-align` class to be set and activate the toolbar align button
@@ -1120,13 +1127,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       // Value changed from outside
       this.__lastCommittedChange = this.value;
     }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._editor.emitter.removeAllListeners();
-    this._editor.emitter.listeners = {};
   }
 
   /**
