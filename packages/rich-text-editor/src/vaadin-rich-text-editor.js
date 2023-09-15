@@ -565,14 +565,10 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.connectedCallback();
 
     const editor = this.shadowRoot.querySelector('[part="content"]');
-    const toolbarConfig = this._prepareToolbar();
-    this._toolbar = toolbarConfig.container;
-
-    this._addToolbarListeners();
 
     this._editor = new Quill(editor, {
       modules: {
-        toolbar: toolbarConfig,
+        toolbar: this._toolbarConfig,
       },
     });
 
@@ -583,10 +579,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (isFirefox) {
       this.__patchFirefoxFocus();
     }
-
-    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      this.$.linkUrl.focus();
-    });
 
     const editorContent = editor.querySelector('.ql-editor');
 
@@ -637,6 +629,20 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     this._editor.on('selection-change', this.__announceFormatting.bind(this));
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._toolbarConfig = this._prepareToolbar();
+    this._toolbar = this._toolbarConfig.container;
+
+    this._addToolbarListeners();
+
+    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+      this.$.linkUrl.focus();
+    });
   }
 
   /** @private */
