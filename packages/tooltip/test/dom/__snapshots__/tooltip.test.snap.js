@@ -1,6 +1,18 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-tooltip host"] = 
+`<vaadin-tooltip>
+  <div
+    id="vaadin-tooltip-0"
+    role="tooltip"
+    slot="sr-label"
+  >
+  </div>
+</vaadin-tooltip>
+`;
+/* end snapshot vaadin-tooltip host */
+
 snapshots["vaadin-tooltip default"] = 
 `<vaadin-tooltip-overlay
   hidden=""

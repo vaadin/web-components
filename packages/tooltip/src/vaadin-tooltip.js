@@ -570,6 +570,7 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Controll
     this._srLabelController = new SlotController(this, 'sr-label', 'div', {
       initializer: (element) => {
         element.id = this._uniqueId;
+        element.setAttribute('role', 'tooltip');
         this._srLabel = element;
       },
     });
