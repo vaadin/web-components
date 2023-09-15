@@ -4,7 +4,7 @@ import '@vaadin/radio-group';
 import '@vaadin/tooltip';
 
 describe('radio-group with tooltip', () => {
-  let group, tooltip, radio1, radio2, overlay;
+  let group, tooltip, radio1, radio2, label;
 
   beforeEach(async () => {
     group = document.createElement('vaadin-radio-group');
@@ -27,7 +27,7 @@ describe('radio-group with tooltip', () => {
     group.appendChild(tooltip);
 
     await nextRender();
-    overlay = tooltip._overlayElement;
+    label = tooltip.querySelector('[slot="sr-label"]');
   });
 
   afterEach(() => {
@@ -35,8 +35,8 @@ describe('radio-group with tooltip', () => {
   });
 
   it('should link tooltip with input elements using aria-describedby', () => {
-    expect(radio1.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
-    expect(radio2.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
+    expect(radio1.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
+    expect(radio2.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
   });
 
   it('should set aria-describedby on the newly added radio button input', async () => {
@@ -44,7 +44,7 @@ describe('radio-group with tooltip', () => {
     radio.value = 'xl';
     group.appendChild(radio);
     await nextRender();
-    expect(radio.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
+    expect(radio.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
   });
 
   it('should remove aria-describedby from the removed radio button input', async () => {

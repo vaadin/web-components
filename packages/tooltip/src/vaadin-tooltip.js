@@ -7,10 +7,12 @@ import './vaadin-tooltip-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -253,11 +255,12 @@ class TooltipStateController {
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
-class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerElement))) {
+class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(ControllerMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-tooltip';
   }
@@ -270,8 +273,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         }
       </style>
       <vaadin-tooltip-overlay
-        id="[[_uniqueId]]"
-        role="tooltip"
         renderer="[[_renderer]]"
         theme$="[[_theme]]"
         opened="[[__computeOpened(manual, opened, _autoOpened, _isConnected)]]"
@@ -285,6 +286,8 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
         on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
+
+      <slot name="sr-label"></slot>
     `;
   }
 
@@ -465,11 +468,24 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
       _isConnected: {
         type: Boolean,
       },
+
+      /** @private */
+      _srLabel: {
+        type: Object,
+      },
+
+      /** @private */
+      _overlayContent: {
+        type: String,
+      },
     };
   }
 
   static get observers() {
-    return ['__generatorChanged(_overlayElement, generator, context)'];
+    return [
+      '__generatorChanged(_overlayElement, generator, context)',
+      '__updateSrLabelText(_srLabel, _overlayContent)',
+    ];
   }
 
   /**
@@ -547,6 +563,19 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
     document.body.removeEventListener('vaadin-overlay-open', this.__onOverlayOpen);
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._srLabelController = new SlotController(this, 'sr-label', 'div', {
+      initializer: (element) => {
+        element.id = this._uniqueId;
+        this._srLabel = element;
+      },
+    });
+    this.addController(this._srLabelController);
+  }
+
   /** @private */
   __computeAriaTarget(ariaTarget, target) {
     const isElementNode = (el) => el && el.nodeType === Node.ELEMENT_NODE;
@@ -587,6 +616,9 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
   /** @private */
   __tooltipRenderer(root) {
     root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
+
+    // Update the sr-only label text content
+    this._overlayContent = root.textContent;
   }
 
   /** @private */
@@ -835,6 +867,13 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolymerE
 
       this.__oldTextGenerator = generator;
       this.__oldContext = context;
+    }
+  }
+
+  /** @private */
+  __updateSrLabelText(srLabel, textContent) {
+    if (srLabel) {
+      srLabel.textContent = textContent;
     }
   }
 }
