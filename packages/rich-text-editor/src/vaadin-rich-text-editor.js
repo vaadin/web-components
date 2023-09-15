@@ -159,7 +159,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       <div class="vaadin-rich-text-editor-container">
         <!-- Create toolbar container -->
-        <div part="toolbar">
+        <div part="toolbar" role="toolbar">
           <span part="toolbar-group toolbar-group-history">
             <!-- Undo and Redo -->
             <button id="btn-undo" type="button" part="toolbar-button toolbar-button-undo" on-click="_undo"></button>
