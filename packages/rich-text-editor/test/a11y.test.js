@@ -78,6 +78,11 @@ describe('accessibility', () => {
       });
       editor.setSelection(5, 1);
     });
+
+    it('should have role toolbar on the toolbar', () => {
+      const toolbar = rte.shadowRoot.querySelector('[part=toolbar]');
+      expect(toolbar.getAttribute('role')).to.be.equal('toolbar');
+    });
   });
 
   describe('keyboard navigation', () => {
