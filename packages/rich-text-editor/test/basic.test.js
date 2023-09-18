@@ -929,7 +929,7 @@ describe('rich text editor', () => {
     });
   });
 
-  describe('listener clean up', () => {
+  describe('detach and re-attach', () => {
     it('should not have active listeners once detached', () => {
       expect(editor.emitter).to.not.equal(null);
       expect(editor.emitter._events).to.not.be.empty;
@@ -954,6 +954,16 @@ describe('rich text editor', () => {
       expect(rte._editor.emitter._events).to.not.be.empty;
       expect(rte._editor.emitter._eventsCount).to.greaterThan(0);
       expect(rte._editor.emitter.listeners).to.not.be.empty;
+    });
+
+    it('should keep htmlValue when detached and immediately re-attached', () => {
+      rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
+
+      const parent = rte.parentNode;
+      parent.removeChild(rte);
+      parent.appendChild(rte);
+
+      expect(rte.htmlValue).to.equal('<h1>Foo</h1>');
     });
   });
 });

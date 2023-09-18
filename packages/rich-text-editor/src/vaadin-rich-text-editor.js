@@ -536,6 +536,13 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    // Ensure that htmlValue property set before attach
+    // gets applied in case of detach and re-attach.
+    if (this.__debounceSetValue && this.__debounceSetValue.isActive()) {
+      this.__debounceSetValue.flush();
+    }
+
     this._editor.emitter.removeAllListeners();
     this._editor.emitter.listeners = {};
   }
