@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-dialog",
-  "version": "23.3.22",
+  "version": "23.3.23",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/dialog": "~23.3.22"
+    "@vaadin/dialog": "~23.3.23"
   }
 }

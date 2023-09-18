@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icon",
-  "version": "23.3.22",
+  "version": "23.3.23",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/icon": "~23.3.22"
+    "@vaadin/icon": "~23.3.23"
   }
 }
