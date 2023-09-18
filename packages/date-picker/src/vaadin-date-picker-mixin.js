@@ -427,16 +427,12 @@ export const DatePickerMixin = (subclass) =>
       return null;
     }
 
-    get __hasUnparsableValue() {
-      return Boolean(this._inputElementValue && !this.__parseDate(this._inputElementValue));
-    }
+    get _unparsableValue() {
+      if (this._inputElementValue && !this.__parseDate(this._inputElementValue)) {
+        return this._inputElementValue;
+      }
 
-    get __isValueCommitted() {
-      return this.__committedValue === this.value;
-    }
-
-    get __isUnparsableValueCommitted() {
-      return this.__committedUnparsableValueStatus === this.__hasUnparsableValue;
+      return '';
     }
 
     /**
@@ -612,7 +608,7 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      return !this.__hasUnparsableValue && minMaxValid && inputValidity;
+      return !this._unparsableValue && minMaxValid && inputValidity;
     }
 
     /**
@@ -662,14 +658,14 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     __commitValueChange() {
-      if (!this.__isValueCommitted) {
+      if (this.__committedValue !== this.value) {
         this.__dispatchChange();
-      } else if (!this.__isUnparsableValueCommitted) {
+      } else if (this.__committedUnparsableValue !== this._unparsableValue) {
         this.dispatchEvent(new CustomEvent('unparseable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
+      this.__committedUnparsableValue = this._unparsableValue;
     }
 
     /** @private */
@@ -828,7 +824,7 @@ export const DatePickerMixin = (subclass) =>
 
       if (!this.__preserveCommittedValue) {
         this.__committedValue = this.value;
-        this.__committedUnparsableValueStatus = false;
+        this.__committedUnparsableValue = '';
       }
 
       this._toggleHasValue(this._hasValue);

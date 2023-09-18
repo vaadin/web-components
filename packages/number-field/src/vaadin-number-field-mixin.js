@@ -108,14 +108,6 @@ export const NumberFieldMixin = (superClass) =>
       return this.inputElement.validity.badInput;
     }
 
-    get __isValueCommitted() {
-      return this.__committedValue === this.value;
-    }
-
-    get __isUnparsableValueCommitted() {
-      return this.__committedUnparsableValueStatus === this.__hasUnparsableValue;
-    }
-
     /** @protected */
     ready() {
       super.ready();
@@ -429,10 +421,10 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     __commitValueChange() {
-      if (!this.__isValueCommitted) {
+      if (this.__committedValue !== this.value) {
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (!this.__isUnparsableValueCommitted) {
+      } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
         this.dispatchEvent(new CustomEvent('unparseable-change'));
       }
 

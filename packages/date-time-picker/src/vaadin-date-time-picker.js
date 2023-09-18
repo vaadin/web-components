@@ -457,20 +457,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     return this.__inputs.filter((picker) => !!picker.value).length === 1;
   }
 
-  get __hasUnparsableValue() {
-    return this.__inputs.some((picker) => !picker.value && picker._hasInputValue);
-  }
-
-  get __isValueCommitted() {
-    return this.__committedValue === this.value;
-  }
-
-  get __isIncompleteValueCommitted() {
-    return this.__committedIncompleteValueStatus === this.__hasIncompleteValue;
-  }
-
-  get __isUnparsableValueCommitted() {
-    return this.__committedUnparsableValueStatus === this.__hasUnparsableValue;
+  get _unparsableValue() {
+    return [this.__datePicker._unparsableValue, this.__timePicker._unparsableValue].filter(Boolean).join('T');
   }
 
   /** @protected */
@@ -1022,8 +1010,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     if (!this.__preserveCommittedValue) {
       this.__committedValue = value;
+      this.__committedUnparsableValue = '';
       this.__committedIncompleteValueStatus = false;
-      this.__committedUnparsableValueStatus = false;
     }
 
     this.toggleAttribute('has-value', !!value);
@@ -1032,18 +1020,18 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
   /** @private */
   __commitValueChange() {
-    if (!this.__isValueCommitted) {
+    if (this.__committedValue !== this.value) {
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-    } else if (!this.__isIncompleteValueCommitted) {
-      this.dispatchEvent(new CustomEvent('incomplete-change'));
-    } else if (!this.__isUnparsableValueCommitted) {
+    } else if (this.__committedUnparsableValue !== this._unparsableValue) {
       this.dispatchEvent(new CustomEvent('unparseable-change'));
+    } else if (this.__committedIncompleteValueStatus !== this.__hasIncompleteValue) {
+      this.dispatchEvent(new CustomEvent('incomplete-change'));
     }
 
     this.__committedValue = this.value;
+    this.__committedUnparsableValue = this._unparsableValue;
     this.__committedIncompleteValueStatus = this.__hasIncompleteValue;
-    this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
   }
 
   /** @private */
