@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/select",
-  "version": "23.3.23",
+  "version": "23.3.24",
   "publishConfig": {
     "access": "public"
   },
@@ -38,22 +38,22 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.2.0",
-    "@vaadin/button": "~23.3.23",
-    "@vaadin/component-base": "~23.3.23",
-    "@vaadin/field-base": "~23.3.23",
-    "@vaadin/input-container": "~23.3.23",
-    "@vaadin/item": "~23.3.23",
-    "@vaadin/list-box": "~23.3.23",
-    "@vaadin/lit-renderer": "~23.3.23",
-    "@vaadin/overlay": "~23.3.23",
-    "@vaadin/vaadin-list-mixin": "~23.3.23",
-    "@vaadin/vaadin-lumo-styles": "~23.3.23",
-    "@vaadin/vaadin-material-styles": "~23.3.23",
-    "@vaadin/vaadin-themable-mixin": "~23.3.23"
+    "@vaadin/button": "~23.3.24",
+    "@vaadin/component-base": "~23.3.24",
+    "@vaadin/field-base": "~23.3.24",
+    "@vaadin/input-container": "~23.3.24",
+    "@vaadin/item": "~23.3.24",
+    "@vaadin/list-box": "~23.3.24",
+    "@vaadin/lit-renderer": "~23.3.24",
+    "@vaadin/overlay": "~23.3.24",
+    "@vaadin/vaadin-list-mixin": "~23.3.24",
+    "@vaadin/vaadin-lumo-styles": "~23.3.24",
+    "@vaadin/vaadin-material-styles": "~23.3.24",
+    "@vaadin/vaadin-themable-mixin": "~23.3.24"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/polymer-legacy-adapter": "~23.3.23",
+    "@vaadin/polymer-legacy-adapter": "~23.3.24",
     "@vaadin/testing-helpers": "^0.3.2",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
