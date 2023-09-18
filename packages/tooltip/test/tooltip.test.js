@@ -24,11 +24,12 @@ describe('vaadin-tooltip', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  let tooltip, overlay;
+  let tooltip, overlay, srLabel;
 
   beforeEach(() => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    srLabel = tooltip.querySelector('[slot="sr-label"]');
   });
 
   describe('custom element definition', () => {
@@ -68,6 +69,11 @@ describe('vaadin-tooltip', () => {
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
+    it('should use text property as screen reader label content', () => {
+      tooltip.text = 'Foo';
+      expect(srLabel.textContent.trim()).to.equal('Foo');
+    });
+
     it('should clear overlay content when text is set to null', () => {
       tooltip.text = 'Foo';
       tooltip.text = null;
@@ -87,6 +93,11 @@ describe('vaadin-tooltip', () => {
     it('should use generator property to generate text content', () => {
       tooltip.generator = () => 'Foo';
       expect(overlay.textContent.trim()).to.equal('Foo');
+    });
+
+    it('should set screen reader label content using generator', () => {
+      tooltip.generator = () => 'Foo';
+      expect(srLabel.textContent.trim()).to.equal('Foo');
     });
 
     it('should override text property when generator is set', () => {
@@ -119,14 +130,12 @@ describe('vaadin-tooltip', () => {
   });
 
   describe('target', () => {
-    let target, srLabel;
+    let target;
 
     beforeEach(() => {
       target = document.createElement('div');
       target.textContent = 'Target';
       document.body.appendChild(target);
-
-      srLabel = tooltip.querySelector('[slot="sr-label"]');
     });
 
     afterEach(() => {
@@ -161,7 +170,7 @@ describe('vaadin-tooltip', () => {
   });
 
   describe('ariaTarget', () => {
-    let target, ariaTarget, srLabel;
+    let target, ariaTarget;
 
     beforeEach(() => {
       target = document.createElement('div');
@@ -170,8 +179,6 @@ describe('vaadin-tooltip', () => {
 
       ariaTarget = document.createElement('input');
       target.appendChild(ariaTarget);
-
-      srLabel = tooltip.querySelector('[slot="sr-label"]');
     });
 
     afterEach(() => {
