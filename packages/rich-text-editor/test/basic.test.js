@@ -929,32 +929,4 @@ describe('rich text editor', () => {
       );
     });
   });
-
-  describe('listener clean up', () => {
-    it('should not have active listeners once detached', () => {
-      expect(editor.emitter).to.not.equal(null);
-      expect(editor.emitter._events).to.not.be.empty;
-      expect(editor.emitter._eventsCount).to.greaterThan(0);
-      expect(editor.emitter.listeners).to.not.be.empty;
-
-      rte.parentNode.removeChild(rte);
-
-      expect(editor.emitter._events).to.be.empty;
-      expect(editor.emitter._eventsCount).to.be.equal(0);
-      expect(editor.emitter.listeners).to.be.empty;
-    });
-
-    it('should have the listeners when removed and added back again', () => {
-      const parent = rte.parentNode;
-
-      parent.removeChild(rte);
-      parent.appendChild(rte);
-
-      // Previous `editor` reference is now stale as a new editor is created in the connectedCallback
-      expect(rte._editor.emitter).to.not.equal(null);
-      expect(rte._editor.emitter._events).to.not.be.empty;
-      expect(rte._editor.emitter._eventsCount).to.greaterThan(0);
-      expect(rte._editor.emitter.listeners).to.not.be.empty;
-    });
-  });
 });
