@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
@@ -168,6 +169,6 @@ class AccordionPanel extends CollapsibleMixin(
   }
 }
 
-customElements.define(AccordionPanel.is, AccordionPanel);
+defineCustomElement(AccordionPanel);
 
 export { AccordionPanel };

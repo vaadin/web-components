@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -41,4 +42,4 @@ class AvatarGroupOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMix
   }
 }
 
-customElements.define(AvatarGroupOverlay.is, AvatarGroupOverlay);
+defineCustomElement(AvatarGroupOverlay);

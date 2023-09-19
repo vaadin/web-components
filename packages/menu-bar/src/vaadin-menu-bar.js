@@ -7,7 +7,7 @@ import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
@@ -271,6 +271,6 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
    */
 }
 
-customElements.define(MenuBar.is, MenuBar);
+defineCustomElement(MenuBar);
 
 export { MenuBar };

@@ -5,6 +5,7 @@
  */
 import { html } from '@polymer/polymer/polymer-element.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.
@@ -33,4 +34,4 @@ class PasswordFieldButton extends Button {
   }
 }
 
-customElements.define(PasswordFieldButton.is, PasswordFieldButton);
+defineCustomElement(PasswordFieldButton);

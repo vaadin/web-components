@@ -10,7 +10,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -801,6 +801,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
    */
 }
 
-customElements.define(AppLayout.is, AppLayout);
+defineCustomElement(AppLayout);
 
 export { AppLayout };

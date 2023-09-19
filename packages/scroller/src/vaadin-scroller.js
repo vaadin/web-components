@@ -6,7 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -110,6 +110,6 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
   }
 }
 
-customElements.define(Scroller.is, Scroller);
+defineCustomElement(Scroller);
 
 export { Scroller };

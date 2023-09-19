@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { InputContainer } from '@vaadin/input-container/src/vaadin-input-container.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -49,4 +50,4 @@ class MultiSelectComboBoxContainer extends InputContainer {
   }
 }
 
-customElements.define(MultiSelectComboBoxContainer.is, MultiSelectComboBoxContainer);
+defineCustomElement(MultiSelectComboBoxContainer);

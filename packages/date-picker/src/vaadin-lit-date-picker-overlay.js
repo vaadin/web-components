@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
@@ -60,4 +61,4 @@ class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixi
   }
 }
 
-customElements.define(DatePickerOverlay.is, DatePickerOverlay);
+defineCustomElement(DatePickerOverlay);

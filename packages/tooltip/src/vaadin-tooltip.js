@@ -10,7 +10,7 @@ import { microTask } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -879,6 +879,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Controll
   }
 }
 
-customElements.define(Tooltip.is, Tooltip);
+defineCustomElement(Tooltip);
 
 export { Tooltip };

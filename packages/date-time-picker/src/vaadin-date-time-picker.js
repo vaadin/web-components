@@ -6,7 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DatePicker } from '@vaadin/date-picker/src/vaadin-date-picker.js';
@@ -1110,6 +1110,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
 }
 
-customElements.define(DateTimePicker.is, DateTimePicker);
+defineCustomElement(DateTimePicker);
 
 export { DateTimePicker };

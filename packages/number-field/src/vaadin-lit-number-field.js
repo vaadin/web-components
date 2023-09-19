@@ -5,7 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, LitElement } from 'lit';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -109,6 +109,6 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
   }
 }
 
-customElements.define(NumberField.is, NumberField);
+defineCustomElement(NumberField);
 
 export { NumberField };

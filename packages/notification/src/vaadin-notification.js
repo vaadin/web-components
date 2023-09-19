@@ -7,7 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -565,8 +565,8 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
   }
 }
 
-customElements.define(NotificationContainer.is, NotificationContainer);
-customElements.define(NotificationCard.is, NotificationCard);
-customElements.define(Notification.is, Notification);
+defineCustomElement(NotificationContainer);
+defineCustomElement(NotificationCard);
+defineCustomElement(Notification);
 
 export { Notification };

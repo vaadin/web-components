@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -76,6 +77,6 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Po
   }
 }
 
-customElements.define(MenuBarListBox.is, MenuBarListBox);
+defineCustomElement(MenuBarListBox);
 
 export { MenuBarListBox };

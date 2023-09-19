@@ -8,7 +8,7 @@ import './vaadin-lit-date-picker-overlay.js';
 import './vaadin-lit-date-picker-overlay-content.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -156,6 +156,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   }
 }
 
-customElements.define(DatePicker.is, DatePicker);
+defineCustomElement(DatePicker);
 
 export { DatePicker };

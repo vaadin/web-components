@@ -5,6 +5,7 @@
  */
 import { css, html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -64,6 +65,6 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElemen
   }
 }
 
-customElements.define(SelectItem.is, SelectItem);
+defineCustomElement(SelectItem);
 
 export { SelectItem };

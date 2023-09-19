@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals } from './vaadin-date-picker-helper.js';
@@ -113,4 +114,4 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
   }
 }
 
-customElements.define(MonthCalendar.is, MonthCalendar);
+defineCustomElement(MonthCalendar);

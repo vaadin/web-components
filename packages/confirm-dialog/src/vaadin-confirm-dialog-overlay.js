@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
 import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
@@ -90,7 +91,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerEl
   }
 }
 
-customElements.define(ConfirmDialogOverlay.is, ConfirmDialogOverlay);
+defineCustomElement(ConfirmDialogOverlay);
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
@@ -187,4 +188,4 @@ class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropert
   }
 }
 
-customElements.define(ConfirmDialogDialog.is, ConfirmDialogDialog);
+defineCustomElement(ConfirmDialogDialog);

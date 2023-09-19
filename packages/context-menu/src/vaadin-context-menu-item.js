@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -48,6 +49,6 @@ class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement)))
   }
 }
 
-customElements.define(ContextMenuItem.is, ContextMenuItem);
+defineCustomElement(ContextMenuItem);
 
 export { ContextMenuItem };

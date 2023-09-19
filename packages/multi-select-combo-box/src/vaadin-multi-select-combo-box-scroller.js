@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
@@ -86,4 +87,4 @@ export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolymerEl
   }
 }
 
-customElements.define(MultiSelectComboBoxScroller.is, MultiSelectComboBoxScroller);
+defineCustomElement(MultiSelectComboBoxScroller);

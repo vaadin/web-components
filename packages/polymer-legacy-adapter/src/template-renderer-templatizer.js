@@ -5,6 +5,7 @@
  */
 import { PolymerElement } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 
 export class Templatizer extends PolymerElement {
   static get is() {
@@ -142,4 +143,4 @@ export class Templatizer extends PolymerElement {
   }
 }
 
-customElements.define(Templatizer.is, Templatizer);
+defineCustomElement(Templatizer);

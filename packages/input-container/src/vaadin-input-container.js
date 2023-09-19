@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
@@ -138,4 +139,4 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(InputContainer.is, InputContainer);
+defineCustomElement(InputContainer);

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridSelectionColumnBaseMixin } from './vaadin-grid-selection-column-base-mixin.js';
 
@@ -220,6 +221,6 @@ class GridSelectionColumn extends GridSelectionColumnBaseMixin(GridColumn) {
   }
 }
 
-customElements.define(GridSelectionColumn.is, GridSelectionColumn);
+defineCustomElement(GridSelectionColumn);
 
 export { GridSelectionColumn };

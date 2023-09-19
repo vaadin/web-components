@@ -6,7 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
@@ -219,6 +219,6 @@ class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(Polyme
   }
 }
 
-customElements.define(Accordion.is, Accordion);
+defineCustomElement(Accordion);
 
 export { Accordion };

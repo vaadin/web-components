@@ -7,7 +7,7 @@ import './vaadin-confirm-dialog-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -535,6 +535,6 @@ class ConfirmDialog extends ElementMixin(ThemePropertyMixin(ControllerMixin(Poly
    */
 }
 
-customElements.define(ConfirmDialog.is, ConfirmDialog);
+defineCustomElement(ConfirmDialog);
 
 export { ConfirmDialog };

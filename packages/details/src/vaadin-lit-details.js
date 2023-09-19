@@ -5,7 +5,7 @@
  */
 import './vaadin-lit-details-summary.js';
 import { css, html, LitElement } from 'lit';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
@@ -58,6 +58,6 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 }
 
-customElements.define(Details.is, Details);
+defineCustomElement(Details);
 
 export { Details };

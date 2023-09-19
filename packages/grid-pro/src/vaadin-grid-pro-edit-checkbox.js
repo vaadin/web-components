@@ -9,6 +9,7 @@
  * license.
  */
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
@@ -22,4 +23,4 @@ class GridProEditCheckbox extends Checkbox {
   }
 }
 
-customElements.define(GridProEditCheckbox.is, GridProEditCheckbox);
+defineCustomElement(GridProEditCheckbox);

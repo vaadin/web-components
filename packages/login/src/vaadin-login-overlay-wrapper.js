@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -65,4 +66,4 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolymerEle
   }
 }
 
-customElements.define(LoginOverlayWrapper.is, LoginOverlayWrapper);
+defineCustomElement(LoginOverlayWrapper);

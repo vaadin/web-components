@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -121,4 +122,4 @@ export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(UserTag.is, UserTag);
+defineCustomElement(UserTag);

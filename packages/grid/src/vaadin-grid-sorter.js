@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const template = document.createElement('template');
@@ -245,6 +246,6 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(GridSorter.is, GridSorter);
+defineCustomElement(GridSorter);
 
 export { GridSorter };

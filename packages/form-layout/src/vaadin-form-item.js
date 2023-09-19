@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -329,6 +330,6 @@ Please wrap fields with a <vaadin-custom-field> instead.`,
   }
 }
 
-customElements.define(FormItem.is, FormItem);
+defineCustomElement(FormItem);
 
 export { FormItem };

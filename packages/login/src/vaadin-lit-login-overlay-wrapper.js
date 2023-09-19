@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -67,4 +68,4 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMix
   }
 }
 
-customElements.define(LoginOverlayWrapper.is, LoginOverlayWrapper);
+defineCustomElement(LoginOverlayWrapper);

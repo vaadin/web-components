@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
 
@@ -58,4 +59,4 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polym
   }
 }
 
-customElements.define(ComboBoxItem.is, ComboBoxItem);
+defineCustomElement(ComboBoxItem);

@@ -7,7 +7,7 @@ import '@vaadin/avatar/src/vaadin-avatar.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -205,6 +205,6 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   }
 }
 
-customElements.define(Message.is, Message);
+defineCustomElement(Message);
 
 export { Message };

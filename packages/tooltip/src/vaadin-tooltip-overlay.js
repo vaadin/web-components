@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -155,4 +156,4 @@ class TooltipOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(P
   }
 }
 
-customElements.define(TooltipOverlay.is, TooltipOverlay);
+defineCustomElement(TooltipOverlay);

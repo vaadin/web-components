@@ -9,7 +9,7 @@ import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-lit-login-form-wrapper.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginFormMixin } from './vaadin-login-form-mixin.js';
@@ -103,6 +103,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 }
 
-customElements.define(LoginForm.is, LoginForm);
+defineCustomElement(LoginForm);
 
 export { LoginForm };

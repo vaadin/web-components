@@ -6,6 +6,7 @@
 import { css, html, LitElement } from 'lit';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -79,4 +80,4 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEle
   }
 }
 
-customElements.define(SelectListBox.is, SelectListBox);
+defineCustomElement(SelectListBox);

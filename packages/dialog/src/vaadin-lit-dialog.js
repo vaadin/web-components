@@ -6,7 +6,7 @@
 import './vaadin-lit-dialog-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -99,6 +99,6 @@ class Dialog extends DialogDraggableMixin(
   }
 }
 
-customElements.define(Dialog.is, Dialog);
+defineCustomElement(Dialog);
 
 export { Dialog };

@@ -5,6 +5,7 @@
  */
 import { css, html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
@@ -81,4 +82,4 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
   }
 }
 
-customElements.define(SelectOverlay.is, SelectOverlay);
+defineCustomElement(SelectOverlay);

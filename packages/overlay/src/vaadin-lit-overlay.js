@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
@@ -41,6 +42,6 @@ class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElemen
   }
 }
 
-customElements.define(Overlay.is, Overlay);
+defineCustomElement(Overlay);
 
 export { Overlay };
