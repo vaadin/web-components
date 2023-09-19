@@ -25,7 +25,8 @@ registerStyles(
     [part='handle']::after {
       content: '';
       display: block;
-      width: 4px;
+      --_handle-size: 4px;
+      width: var(--_handle-size);
       height: 100%;
       max-width: 100%;
       max-height: 100%;
@@ -36,18 +37,13 @@ registerStyles(
 
     :host([orientation='vertical']) [part='handle']::after {
       width: 100%;
-      height: 4px;
+      height: var(--_handle-size);
     }
 
     /* Hover style */
-    [part='splitter']:hover [part='handle']::after {
-      background-color: var(--lumo-contrast-40pct);
-    }
-
-    /* Disable hover for touch devices */
-    @media (pointer: coarse) {
+    @media (any-hover: hover) {
       [part='splitter']:hover [part='handle']::after {
-        background-color: var(--lumo-contrast-30pct);
+        background-color: var(--lumo-contrast-40pct);
       }
     }
 
@@ -62,36 +58,31 @@ registerStyles(
       border-top: 1px solid var(--lumo-contrast-10pct);
     }
 
-    :host([theme~='small']) > [part='splitter'],
-    :host([theme~='minimal']) > [part='splitter'] {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] {
       min-width: 0;
       min-height: 0;
       background-color: transparent;
     }
 
-    :host([theme~='small']) > [part='splitter']::after,
-    :host([theme~='minimal']) > [part='splitter']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']::after {
       content: '';
       position: absolute;
       inset: -4px;
     }
 
-    :host([theme~='small']) > [part='splitter'] > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter'] > [part='handle']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle'] {
+      left: calc(50% - 0.5px);
+      top: calc(50% - 0.5px);
+    }
+
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle']::after {
       opacity: 0;
+      --_handle-size: 5px;
     }
 
-    :host([theme~='small']) > [part='splitter']:hover > [part='handle']::after,
-    :host([theme~='small']) > [part='splitter']:active > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter']:hover > [part='handle']::after,
-    :host([theme~='minimal']) > [part='splitter']:active > [part='handle']::after {
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:hover > [part='handle']::after,
+    :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']:active > [part='handle']::after {
       opacity: 1;
-    }
-
-    /* RTL specific styles */
-    :host([theme~='small'][dir='rtl']) > [part='splitter'] {
-      border-left: auto;
-      border-right: 1px solid var(--lumo-contrast-10pct);
     }
   `,
   { moduleId: 'lumo-split-layout' },
