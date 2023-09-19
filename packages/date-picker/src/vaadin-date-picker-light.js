@@ -7,7 +7,7 @@ import './vaadin-date-picker-overlay-content.js';
 import './vaadin-date-picker-overlay.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';

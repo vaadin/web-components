@@ -10,7 +10,8 @@
  */
 import './vaadin-board-row.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { BoardRow } from './vaadin-board-row.js';
 
 /**

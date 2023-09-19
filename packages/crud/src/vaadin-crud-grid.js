@@ -13,7 +13,7 @@ import '@vaadin/grid/src/vaadin-grid-column.js';
 import '@vaadin/grid/src/vaadin-grid-filter.js';
 import '@vaadin/grid/src/vaadin-grid-sorter.js';
 import './vaadin-crud-edit-column.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { capitalize, getProperty } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';

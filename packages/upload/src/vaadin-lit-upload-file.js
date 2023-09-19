@@ -6,7 +6,7 @@
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
 import { html, LitElement } from 'lit';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileMixin } from './vaadin-upload-file-mixin.js';

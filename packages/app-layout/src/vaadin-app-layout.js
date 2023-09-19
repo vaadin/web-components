@@ -3,8 +3,8 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './safe-area-inset.js';
 import './detect-ios-navbar.js';
+import './safe-area-inset.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';

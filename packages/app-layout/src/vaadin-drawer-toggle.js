@@ -5,8 +5,8 @@
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**

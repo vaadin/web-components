@@ -78,7 +78,3 @@ export const ElementMixin = (superClass) =>
       }
     }
   };
-
-export function defineCustomElement(CustomElement) {
-  customElements.define(CustomElement.is, CustomElement);
-}

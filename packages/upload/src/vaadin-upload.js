@@ -9,7 +9,8 @@ import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadMixin } from './vaadin-upload-mixin.js';
 

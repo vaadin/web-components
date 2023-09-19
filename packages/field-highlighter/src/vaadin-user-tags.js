@@ -9,7 +9,7 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 
 const listenOnce = (elem, type) => {
   return new Promise((resolve) => {

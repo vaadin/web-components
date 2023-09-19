@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 

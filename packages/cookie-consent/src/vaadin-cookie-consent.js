@@ -10,7 +10,8 @@
  */
 import 'cookieconsent/build/cookieconsent.min.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first

@@ -9,7 +9,7 @@
  * license.
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Chart, deepMerge } from './vaadin-chart.js';
 
 /**

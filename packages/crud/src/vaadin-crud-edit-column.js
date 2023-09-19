@@ -9,7 +9,7 @@
  * license.
  */
 import './vaadin-crud-edit.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**

@@ -5,7 +5,7 @@
  */
 import './vaadin-lit-upload-file.js';
 import { css, html, LitElement } from 'lit';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';

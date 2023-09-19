@@ -5,7 +5,7 @@
  */
 import './vaadin-upload-file.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 

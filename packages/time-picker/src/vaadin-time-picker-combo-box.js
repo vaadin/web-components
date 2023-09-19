@@ -8,7 +8,7 @@ import './vaadin-time-picker-overlay.js';
 import './vaadin-time-picker-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**

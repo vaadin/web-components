@@ -6,8 +6,9 @@
 import './vaadin-tabsheet-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';

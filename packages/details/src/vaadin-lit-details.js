@@ -5,7 +5,8 @@
  */
 import './vaadin-lit-details-summary.js';
 import { css, html, LitElement } from 'lit';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';

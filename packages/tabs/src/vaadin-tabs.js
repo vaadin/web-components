@@ -7,8 +7,9 @@ import './vaadin-tab.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import { defineCustomElement, ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 

@@ -21,5 +21,3 @@ export declare class ElementMixinClass {
 
   protected static finalize(): void;
 }
-
-export declare function defineCustomElement(CustomElement: ElementMixinClass): void;

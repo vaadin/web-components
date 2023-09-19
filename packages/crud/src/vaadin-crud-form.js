@@ -9,7 +9,7 @@
  * license.
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 import { capitalize } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';

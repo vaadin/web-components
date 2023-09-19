@@ -12,8 +12,8 @@ import './vaadin-grid-pro-edit-checkbox.js';
 import './vaadin-grid-pro-edit-select.js';
 import './vaadin-grid-pro-edit-text-field.js';
 import { get, set } from '@polymer/polymer/lib/utils/path.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**
