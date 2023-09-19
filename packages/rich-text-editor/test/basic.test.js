@@ -950,7 +950,7 @@ describe('rich text editor', () => {
       parent.removeChild(rte);
       parent.appendChild(rte);
 
-      // previous `editor` reference is now stale as a new editor is created in the connectedCallback
+      // Previous `editor` reference is now stale as a new editor is created in the connectedCallback
       expect(rte._editor.emitter).to.not.equal(null);
       expect(rte._editor.emitter._events).to.not.be.empty;
       expect(rte._editor.emitter._eventsCount).to.greaterThan(0);
