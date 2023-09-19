@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/element-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { emailFieldStyles } from './vaadin-email-field-styles.js';
 
@@ -40,4 +41,4 @@ export class EmailField extends TextField {
   }
 }
 
-customElements.define('vaadin-email-field', EmailField);
+defineCustomElement(EmailField);
