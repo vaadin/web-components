@@ -48,6 +48,7 @@ async function main() {
       'packages/**/version.{js,ts}',
       'packages/component-base/src/*.{js,ts}',
       'packages/field-highlighter/src/vaadin-field-highlighter.js',
+      'packages/polymer-legacy-adapter/src/template-renderer-templatizer.js',
     ],
     from: fromRegex,
     to: newVersion,
