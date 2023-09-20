@@ -14,6 +14,11 @@ registerStyles(
       display: flex;
       width: 100%;
     }
+
+    :host([all-chips-visible]) #wrapper {
+      flex-wrap: wrap;
+      align-items: center;
+    }
   `,
   {
     moduleId: 'vaadin-multi-select-combo-box-container-styles',
@@ -48,6 +53,20 @@ class MultiSelectComboBoxContainer extends InputContainer {
       wrapper.appendChild(slots[1]);
     }
     return memoizedTemplate;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Set true to not collapse selected items chips into the overflow
+       * chip and instead always show them, causing input field to grow.
+       * @attr {boolean} all-chips-visible
+       */
+      allChipsVisible: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+    };
   }
 }
 
