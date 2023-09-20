@@ -5,6 +5,7 @@
  */
 import './vaadin-password-field-button.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
@@ -317,4 +318,4 @@ export class PasswordField extends TextField {
   }
 }
 
-customElements.define(PasswordField.is, PasswordField);
+defineCustomElement(PasswordField);

@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -187,6 +188,6 @@ class RadioButton extends LabelMixin(
   }
 }
 
-customElements.define(RadioButton.is, RadioButton);
+defineCustomElement(RadioButton);
 
 export { RadioButton };

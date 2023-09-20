@@ -10,6 +10,7 @@
  */
 import './vaadin-board-row.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { BoardRow } from './vaadin-board-row.js';
 
@@ -67,6 +68,6 @@ class Board extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(Board.is, Board);
+defineCustomElement(Board);
 
 export { Board };

@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -65,6 +66,6 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   }
 }
 
-customElements.define(Button.is, Button);
+defineCustomElement(Button);
 
 export { Button };

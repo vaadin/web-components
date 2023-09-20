@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -67,6 +68,6 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(HorizontalLayout.is, HorizontalLayout);
+defineCustomElement(HorizontalLayout);
 
 export { HorizontalLayout };

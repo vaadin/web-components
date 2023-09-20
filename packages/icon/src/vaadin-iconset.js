@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { cloneSvgNode } from './vaadin-icon-svg.js';
 
@@ -184,6 +185,6 @@ class Iconset extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(Iconset.is, Iconset);
+defineCustomElement(Iconset);
 
 export { Iconset };

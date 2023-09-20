@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -80,4 +81,4 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))
   }
 }
 
-customElements.define(DetailsSummary.is, DetailsSummary);
+defineCustomElement(DetailsSummary);

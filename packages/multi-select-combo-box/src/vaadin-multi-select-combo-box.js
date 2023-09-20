@@ -8,6 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-internal.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -1148,6 +1149,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 }
 
-customElements.define(MultiSelectComboBox.is, MultiSelectComboBox);
+defineCustomElement(MultiSelectComboBox);
 
 export { MultiSelectComboBox };

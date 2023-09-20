@@ -6,6 +6,7 @@
 import './vaadin-tabsheet-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
@@ -288,6 +289,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
   }
 }
 
-customElements.define(TabSheet.is, TabSheet);
+defineCustomElement(TabSheet);
 
 export { TabSheet };

@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
@@ -396,6 +397,6 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 }
 
-customElements.define(GridColumnGroup.is, GridColumnGroup);
+defineCustomElement(GridColumnGroup);
 
 export { GridColumnGroup };

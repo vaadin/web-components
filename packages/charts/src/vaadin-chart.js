@@ -30,6 +30,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -1788,6 +1789,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 }
 
-customElements.define(Chart.is, Chart);
+defineCustomElement(Chart);
 
 export { Chart };

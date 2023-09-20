@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -201,6 +202,6 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 }
 
-customElements.define(SideNav.is, SideNav);
+defineCustomElement(SideNav);
 
 export { SideNav };

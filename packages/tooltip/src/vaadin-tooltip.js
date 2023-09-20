@@ -9,6 +9,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -879,6 +880,6 @@ class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Controll
   }
 }
 
-customElements.define(Tooltip.is, Tooltip);
+defineCustomElement(Tooltip);
 
 export { Tooltip };

@@ -7,6 +7,7 @@ import './vaadin-lit-login-form.js';
 import './vaadin-lit-login-overlay-wrapper.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -74,6 +75,6 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
   }
 }
 
-customElements.define(LoginOverlay.is, LoginOverlay);
+defineCustomElement(LoginOverlay);
 
 export { LoginOverlay };

@@ -10,6 +10,7 @@
  */
 import 'cookieconsent/build/cookieconsent.min.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
@@ -233,6 +234,6 @@ class CookieConsent extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(CookieConsent.is, CookieConsent);
+defineCustomElement(CookieConsent);
 
 export { CookieConsent };

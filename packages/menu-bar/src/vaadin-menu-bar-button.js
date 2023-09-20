@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -37,4 +38,4 @@ class MenuBarButton extends Button {
   }
 }
 
-customElements.define(MenuBarButton.is, MenuBarButton);
+defineCustomElement(MenuBarButton);

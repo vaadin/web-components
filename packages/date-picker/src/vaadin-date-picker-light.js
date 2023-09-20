@@ -3,10 +3,11 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
+import './vaadin-date-picker-overlay.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
@@ -126,6 +127,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
   }
 }
 
-customElements.define(DatePickerLight.is, DatePickerLight);
+defineCustomElement(DatePickerLight);
 
 export { DatePickerLight };

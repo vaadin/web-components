@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -76,6 +77,6 @@ class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(P
   }
 }
 
-customElements.define(AvatarGroupMenu.is, AvatarGroupMenu);
+defineCustomElement(AvatarGroupMenu);
 
 export { AvatarGroupMenu };

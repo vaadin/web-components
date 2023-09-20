@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
@@ -60,4 +61,4 @@ class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixi
   }
 }
 
-customElements.define(DatePickerOverlay.is, DatePickerOverlay);
+defineCustomElement(DatePickerOverlay);

@@ -6,6 +6,7 @@
 import './vaadin-login-form.js';
 import './vaadin-login-overlay-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
@@ -88,6 +89,6 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
   }
 }
 
-customElements.define(LoginOverlay.is, LoginOverlay);
+defineCustomElement(LoginOverlay);
 
 export { LoginOverlay };

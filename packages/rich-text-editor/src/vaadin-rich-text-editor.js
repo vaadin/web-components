@@ -18,6 +18,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
@@ -1178,6 +1179,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
 }
 
-customElements.define(RichTextEditor.is, RichTextEditor);
+defineCustomElement(RichTextEditor);
 
 export { RichTextEditor };
