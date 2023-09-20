@@ -6,6 +6,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -895,6 +896,6 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(GridColumn.is, GridColumn);
+defineCustomElement(GridColumn);
 
 export { GridColumn };

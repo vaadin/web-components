@@ -5,6 +5,8 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
@@ -49,4 +51,4 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolymerElement) {
   }
 }
 
-customElements.define(TimePickerScroller.is, TimePickerScroller);
+defineCustomElement(TimePickerScroller);

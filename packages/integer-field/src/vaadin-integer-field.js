@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
 
 /**
@@ -93,4 +94,4 @@ export class IntegerField extends NumberField {
   }
 }
 
-customElements.define(IntegerField.is, IntegerField);
+defineCustomElement(IntegerField);

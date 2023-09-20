@@ -7,6 +7,7 @@ import './vaadin-menu-bar-item.js';
 import './vaadin-menu-bar-list-box.js';
 import './vaadin-menu-bar-overlay.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
 
 /**
@@ -82,4 +83,4 @@ class MenuBarSubmenu extends ContextMenu {
   }
 }
 
-customElements.define(MenuBarSubmenu.is, MenuBarSubmenu);
+defineCustomElement(MenuBarSubmenu);

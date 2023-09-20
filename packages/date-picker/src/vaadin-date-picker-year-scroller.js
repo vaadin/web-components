@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { InfiniteScroller } from './vaadin-infinite-scroller.js';
 
 const stylesTemplate = document.createElement('template');
@@ -87,4 +88,4 @@ class DatePickerYearScroller extends InfiniteScroller {
   }
 }
 
-customElements.define(DatePickerYearScroller.is, DatePickerYearScroller);
+defineCustomElement(DatePickerYearScroller);

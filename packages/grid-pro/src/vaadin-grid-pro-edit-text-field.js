@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
 /**
@@ -27,4 +28,4 @@ class GridProEditText extends TextField {
   }
 }
 
-customElements.define(GridProEditText.is, GridProEditText);
+defineCustomElement(GridProEditText);

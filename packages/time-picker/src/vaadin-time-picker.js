@@ -6,6 +6,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -769,6 +770,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    */
 }
 
-customElements.define(TimePicker.is, TimePicker);
+defineCustomElement(TimePicker);
 
 export { TimePicker };

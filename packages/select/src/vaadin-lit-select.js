@@ -10,6 +10,7 @@ import './vaadin-lit-select-overlay.js';
 import './vaadin-lit-select-value-button.js';
 import { css, html, LitElement } from 'lit';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
@@ -113,6 +114,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
   }
 }
 
-customElements.define(Select.is, Select);
+defineCustomElement(Select);
 
 export { Select };

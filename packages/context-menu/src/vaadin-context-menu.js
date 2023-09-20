@@ -8,6 +8,7 @@ import './vaadin-context-menu-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -727,5 +728,5 @@ class ContextMenu extends OverlayClassMixin(
    */
 }
 
-customElements.define(ContextMenu.is, ContextMenu);
+defineCustomElement(ContextMenu);
 export { ContextMenu };

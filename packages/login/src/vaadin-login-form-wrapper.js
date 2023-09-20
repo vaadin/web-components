@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { loginFormWrapperStyles } from './vaadin-login-form-wrapper-styles.js';
 
@@ -71,6 +72,6 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
   }
 }
 
-customElements.define(LoginFormWrapper.is, LoginFormWrapper);
+defineCustomElement(LoginFormWrapper);
 
 export { LoginFormWrapper };

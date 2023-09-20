@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -42,4 +43,4 @@ export class ContextMenuOverlay extends MenuOverlayMixin(OverlayMixin(DirMixin(T
   }
 }
 
-customElements.define(ContextMenuOverlay.is, ContextMenuOverlay);
+defineCustomElement(ContextMenuOverlay);

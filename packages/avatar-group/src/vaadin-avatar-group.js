@@ -13,6 +13,7 @@ import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-ele
 import { html, render } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -667,6 +668,6 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   }
 }
 
-customElements.define(AvatarGroup.is, AvatarGroup);
+defineCustomElement(AvatarGroup);
 
 export { AvatarGroup };

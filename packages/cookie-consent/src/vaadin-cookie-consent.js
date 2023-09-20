@@ -10,6 +10,7 @@
  */
 import 'cookieconsent/build/cookieconsent.min.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
@@ -178,7 +179,8 @@ class CookieConsent extends ElementMixin(PolymerElement) {
       },
       position: this.position,
       elements: {
-        messagelink: `<span id="cookieconsent:desc" class="cc-message">${this.message} <a aria-label="learn more about cookies" tabindex="0" class="cc-link" href="${this.learnMoreLink}" target="_blank" rel="noopener noreferrer nofollow">${this.learnMore}</a></span>`,
+        messagelink: `<span id="cookieconsent:desc" class="cc-message">${this.message} <a tabindex="0" class="cc-link" href="${this.learnMoreLink}" target="_blank" rel="noopener noreferrer nofollow">${this.learnMore}</a></span>`,
+        dismiss: `<a tabindex="0" class="cc-btn cc-dismiss">${this.dismiss}</a>`,
       },
     });
 
@@ -232,6 +234,6 @@ class CookieConsent extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(CookieConsent.is, CookieConsent);
+defineCustomElement(CookieConsent);
 
 export { CookieConsent };

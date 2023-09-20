@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
@@ -64,6 +65,6 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElemen
   }
 }
 
-customElements.define(SelectItem.is, SelectItem);
+defineCustomElement(SelectItem);
 
 export { SelectItem };

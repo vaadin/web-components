@@ -7,6 +7,7 @@ import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-ele
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Message } from './vaadin-message.js';
@@ -205,6 +206,6 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
   }
 }
 
-customElements.define(MessageList.is, MessageList);
+defineCustomElement(MessageList);
 
 export { MessageList };

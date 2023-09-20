@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
@@ -99,6 +100,6 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerEl
   }
 }
 
-customElements.define(Tab.is, Tab);
+defineCustomElement(Tab);
 
 export { Tab };

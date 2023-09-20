@@ -4,7 +4,7 @@ import '@vaadin/checkbox-group';
 import '@vaadin/tooltip';
 
 describe('checkbox-group with tooltip', () => {
-  let group, tooltip, checkbox1, checkbox2, overlay;
+  let group, tooltip, checkbox1, checkbox2, label;
 
   beforeEach(async () => {
     group = document.createElement('vaadin-checkbox-group');
@@ -27,7 +27,7 @@ describe('checkbox-group with tooltip', () => {
     group.appendChild(tooltip);
 
     await nextRender();
-    overlay = tooltip._overlayElement;
+    label = tooltip.querySelector('[slot="sr-label"]');
   });
 
   afterEach(() => {
@@ -35,8 +35,8 @@ describe('checkbox-group with tooltip', () => {
   });
 
   it('should link tooltip with input elements using aria-describedby', () => {
-    expect(checkbox1.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
-    expect(checkbox2.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
+    expect(checkbox1.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
+    expect(checkbox2.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
   });
 
   it('should set aria-describedby on the newly added checkbox input', async () => {
@@ -44,7 +44,7 @@ describe('checkbox-group with tooltip', () => {
     checkbox.value = 'de';
     group.appendChild(checkbox);
     await nextRender();
-    expect(checkbox.inputElement.getAttribute('aria-describedby')).to.equal(overlay.id);
+    expect(checkbox.inputElement.getAttribute('aria-describedby')).to.equal(label.id);
   });
 
   it('should remove aria-describedby from the removed checkbox input', async () => {

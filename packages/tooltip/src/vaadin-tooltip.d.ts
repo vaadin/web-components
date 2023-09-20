@@ -3,6 +3,7 @@
  * Copyright (c) 2022 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -59,7 +60,7 @@ export type TooltipPosition =
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
+declare class Tooltip extends OverlayClassMixin(ThemePropertyMixin(ControllerMixin(ElementMixin(HTMLElement)))) {
   /**
    * Sets the default focus delay to be used by all tooltip instances,
    * except for those that have focus delay configured using property.

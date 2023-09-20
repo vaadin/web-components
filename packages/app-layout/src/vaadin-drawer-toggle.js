@@ -5,6 +5,7 @@
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -123,6 +124,6 @@ class DrawerToggle extends Button {
   }
 }
 
-customElements.define(DrawerToggle.is, DrawerToggle);
+defineCustomElement(DrawerToggle);
 
 export { DrawerToggle };

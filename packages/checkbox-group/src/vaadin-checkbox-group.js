@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -404,6 +405,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
   }
 }
 
-customElements.define(CheckboxGroup.is, CheckboxGroup);
+defineCustomElement(CheckboxGroup);
 
 export { CheckboxGroup };

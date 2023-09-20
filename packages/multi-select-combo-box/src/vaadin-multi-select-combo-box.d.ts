@@ -69,6 +69,11 @@ export type MultiSelectComboBoxFilterChangedEvent = CustomEvent<{ value: string 
 export type MultiSelectComboBoxInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type MultiSelectComboBoxOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `selectedItems` property changes.
  */
 export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
@@ -88,6 +93,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 
   'invalid-changed': MultiSelectComboBoxInvalidChangedEvent;
+
+  'opened-changed': MultiSelectComboBoxOpenedChangedEvent;
 
   'selected-items-changed': MultiSelectComboBoxSelectedItemsChangedEvent<TItem>;
 
@@ -164,9 +171,10 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.
+ * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
