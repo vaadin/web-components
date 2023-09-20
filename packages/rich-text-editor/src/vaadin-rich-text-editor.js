@@ -27,6 +27,35 @@ registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaa
 
 const Quill = window.Quill;
 
+// Workaround for text disappearing when accepting spellcheck suggestion
+// See https://github.com/quilljs/quill/issues/2096#issuecomment-399576957
+const Inline = Quill.import('blots/inline');
+
+class CustomColor extends Inline {
+  constructor(domNode, value) {
+    super(domNode, value);
+
+    // Map <font> properties
+    domNode.style.color = domNode.color;
+
+    const span = this.replaceWith(new Inline(Inline.create()));
+
+    span.children.forEach((child) => {
+      if (child.attributes) child.attributes.copy(span);
+      if (child.unwrap) child.unwrap();
+    });
+
+    this.remove();
+
+    return span; // eslint-disable-line no-constructor-return
+  }
+}
+
+CustomColor.blotName = 'customColor';
+CustomColor.tagName = 'FONT';
+
+Quill.register(CustomColor, true);
+
 const HANDLERS = [
   'bold',
   'italic',
@@ -534,6 +563,20 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    // Ensure that htmlValue property set before attach
+    // gets applied in case of detach and re-attach.
+    if (this.__debounceSetValue && this.__debounceSetValue.isActive()) {
+      this.__debounceSetValue.flush();
+    }
+
+    this._editor.emitter.removeAllListeners();
+    this._editor.emitter.listeners = {};
+  }
+
   /** @private */
   __setDirection(dir) {
     // Needed for proper `ql-align` class to be set and activate the toolbar align button
@@ -555,18 +598,14 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
     const editor = this.shadowRoot.querySelector('[part="content"]');
-    const toolbarConfig = this._prepareToolbar();
-    this._toolbar = toolbarConfig.container;
-
-    this._addToolbarListeners();
 
     this._editor = new Quill(editor, {
       modules: {
-        toolbar: toolbarConfig,
+        toolbar: this._toolbarConfig,
       },
     });
 
@@ -577,10 +616,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (isFirefox) {
       this.__patchFirefoxFocus();
     }
-
-    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      this.$.linkUrl.focus();
-    });
 
     const editorContent = editor.querySelector('.ql-editor');
 
@@ -631,6 +666,20 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     this._editor.on('selection-change', this.__announceFormatting.bind(this));
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._toolbarConfig = this._prepareToolbar();
+    this._toolbar = this._toolbarConfig.container;
+
+    this._addToolbarListeners();
+
+    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+      this.$.linkUrl.focus();
+    });
   }
 
   /** @private */
