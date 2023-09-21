@@ -30,7 +30,7 @@ describe('define', () => {
       console.error.restore();
     });
 
-    it('should log an error when component with same version is loaded twice', () => {
+    it('should log an error when two components with different versions are loaded', () => {
       defineCustomElement({ is: 'vaadin-button', version: '0.0.1' });
       expect(console.error.calledOnce).to.be.true;
       expect(console.error.firstCall.args[0]).to.equal(
