@@ -96,8 +96,7 @@ export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<
 }
 
 export interface GridColumnMixin<TItem, Column extends GridColumnMixinClass<TItem, Column>>
-  extends ColumnBaseMixinClass<TItem, Column>,
-    GridColumnMixinClass<TItem, Column> {}
+  extends GridColumnMixinClass<TItem, Column> {}
 
 export interface GridColumnMixinClass<TItem, Column extends GridColumnMixinClass<TItem, Column>>
   extends ColumnBaseMixinClass<TItem, Column> {
