@@ -26,6 +26,39 @@ registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaa
 
 const Quill = window.Quill;
 
+// Workaround for text disappearing when accepting spellcheck suggestion
+// See https://github.com/quilljs/quill/issues/2096#issuecomment-399576957
+const Inline = Quill.import('blots/inline');
+
+class CustomColor extends Inline {
+  constructor(domNode, value) {
+    super(domNode, value);
+
+    // Map <font> properties
+    domNode.style.color = domNode.color;
+
+    const span = this.replaceWith(new Inline(Inline.create()));
+
+    span.children.forEach((child) => {
+      if (child.attributes) {
+        child.attributes.copy(span);
+      }
+      if (child.unwrap) {
+        child.unwrap();
+      }
+    });
+
+    this.remove();
+
+    return span; // eslint-disable-line no-constructor-return
+  }
+}
+
+CustomColor.blotName = 'customColor';
+CustomColor.tagName = 'FONT';
+
+Quill.register(CustomColor, true);
+
 const HANDLERS = [
   'bold',
   'italic',
