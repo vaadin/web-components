@@ -257,7 +257,12 @@ assertType<GridColumnGroup>(genericColumnGroup);
 
 const narrowedColumnGroup = genericColumnGroup as GridColumnGroup<TestGridItem>;
 assertType<HTMLElement>(narrowedColumnGroup);
-assertType<ColumnBaseMixinClass<TestGridItem, GridColumn>>(narrowedColumnGroup);
+assertType<ColumnBaseMixinClass<TestGridItem, GridColumnGroup>>(narrowedColumnGroup);
+
+narrowedColumnGroup.headerRenderer = (root, column) => {
+  assertType<HTMLElement>(root);
+  assertType<GridColumnGroup<TestGridItem>>(column);
+};
 
 /* GridFilter */
 const filter = document.createElement('vaadin-grid-filter');

@@ -14,7 +14,7 @@ export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem, Column
 
 export type GridColumnTextAlign = 'center' | 'end' | 'start' | null;
 
-export type GridHeaderFooterRenderer<TItem, Column extends GridColumnMixin<TItem, Column>> = (
+export type GridHeaderFooterRenderer<TItem, Column extends ColumnBaseMixinClass<TItem, Column>> = (
   root: HTMLElement,
   column: Column,
 ) => void;
@@ -25,7 +25,7 @@ export declare function ColumnBaseMixin<
   T extends Constructor<HTMLElement>,
 >(base: T): Constructor<ColumnBaseMixinClass<TItem, Column>> & T;
 
-export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<TItem, Column>> {
+export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinClass<TItem, Column>> {
   /**
    * When set to true, the column is user-resizable.
    */

@@ -3,9 +3,9 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { ColumnBaseMixinClass, GridColumnMixin } from './vaadin-grid-column.js';
+import type { ColumnBaseMixinClass, GridColumnMixin, GridColumnMixinClass } from './vaadin-grid-column.js';
 
-export interface GridColumnGroupMixin<TItem, Column extends GridColumnMixin<TItem, Column>>
+export interface GridColumnGroupMixin<TItem, Column extends ColumnBaseMixinClass<TItem, Column>>
   extends ColumnBaseMixinClass<TItem, Column> {
   /**
    * Flex grow ratio for the column group as the sum of the ratios of its child columns.
