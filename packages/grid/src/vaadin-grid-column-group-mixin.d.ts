@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { ColumnBaseMixinClass, GridColumnMixin, GridColumnMixinClass } from './vaadin-grid-column.js';
+import type { ColumnBaseMixinClass } from './vaadin-grid-column.js';
 
 export interface GridColumnGroupMixin<TItem, Column extends ColumnBaseMixinClass<TItem, Column>>
   extends ColumnBaseMixinClass<TItem, Column> {

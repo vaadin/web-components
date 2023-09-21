@@ -5,7 +5,7 @@
  */
 
 import type { GridDefaultItem } from './vaadin-grid.js';
-import type { GridColumnMixin, GridColumnMixinClass } from './vaadin-grid-column-mixin.js';
+import type { GridColumnMixin } from './vaadin-grid-column-mixin.js';
 import type { GridBodyRenderer as GridMixinBodyRenderer } from './vaadin-grid-column-mixin.js';
 import type { GridHeaderFooterRenderer as GridMixinHeaderFooterRenderer } from './vaadin-grid-column-mixin.js';
 
