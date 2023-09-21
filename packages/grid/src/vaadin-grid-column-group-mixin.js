@@ -139,7 +139,7 @@ export const GridColumnGroupMixin = (superClass) =>
         // [1110] | [1120] | [1210] | [1220]
 
         // Trailing zeros are counted so we know the level on which we're working on.
-        const trailingZeros = /(0+)$/u.exec(order).pop().length;
+        const trailingZeros = /(0+)$/u.exec(order).pop().length; // NOSONAR
 
         // In an unlikely situation where a group has more than 9 child columns,
         // the child scope must have 1 digit less...

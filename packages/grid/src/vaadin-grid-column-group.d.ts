@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
-import type { GridColumn } from './vaadin-grid-column.js';
 import type { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
 export * from './vaadin-grid-column-group-mixin.js';
 
