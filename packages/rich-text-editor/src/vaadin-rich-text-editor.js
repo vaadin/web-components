@@ -40,8 +40,12 @@ class CustomColor extends Inline {
     const span = this.replaceWith(new Inline(Inline.create()));
 
     span.children.forEach((child) => {
-      if (child.attributes) child.attributes.copy(span);
-      if (child.unwrap) child.unwrap();
+      if (child.attributes) {
+        child.attributes.copy(span);
+      }
+      if (child.unwrap) {
+        child.unwrap();
+      }
     });
 
     this.remove();
