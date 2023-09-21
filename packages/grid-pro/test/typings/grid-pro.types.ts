@@ -12,7 +12,7 @@ import type {
   GridLoadingChangedEvent,
   GridSelectedItemsChangedEvent,
 } from '@vaadin/grid';
-import type { GridColumn } from '@vaadin/grid/vaadin-grid-column';
+import type { GridColumn, GridColumnMixinClass } from '@vaadin/grid/vaadin-grid-column';
 import type { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';
 import type { GridPro } from '../../vaadin-grid-pro';
 import type { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
@@ -95,4 +95,4 @@ const genericEditColumn = document.createElement('vaadin-grid-pro-edit-column');
 assertType<GridProEditColumn>(genericEditColumn);
 
 const narrowedEditColumn = genericEditColumn as GridProEditColumn<TestGridItem>;
-assertType<GridColumn<TestGridItem>>(narrowedEditColumn);
+assertType<GridColumnMixinClass<TestGridItem, GridProEditColumn<TestGridItem>>>(narrowedEditColumn);

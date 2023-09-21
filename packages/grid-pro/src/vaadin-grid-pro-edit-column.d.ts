@@ -9,7 +9,7 @@
  * license.
  */
 import type { GridBodyRenderer, GridDefaultItem, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
-import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridColumnMixinClass } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 export type GridProEditorType = 'checkbox' | 'custom' | 'select' | 'text';
 
@@ -28,7 +28,7 @@ export type GridProEditorType = 'checkbox' | 'custom' | 'select' | 'text';
  *    ...
  * ```
  */
-declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
+declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumnMixinClass<TItem, GridProEditColumn<TItem>> {
   /**
    * JS Path of the property in the item used for the editable content.
    */
