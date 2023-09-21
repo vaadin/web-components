@@ -39,7 +39,7 @@ export * from './vaadin-grid-column-group-mixin.js';
  */
 declare class GridColumnGroup extends HTMLElement {}
 
-interface GridColumnGroup<TItem = GridDefaultItem> extends GridColumnGroupMixin<TItem, GridColumn<TItem>> {}
+interface GridColumnGroup<TItem = GridDefaultItem> extends GridColumnGroupMixin<TItem, GridColumnGroup<TItem>> {}
 
 declare global {
   interface HTMLElementTagNameMap {
