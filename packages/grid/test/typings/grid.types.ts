@@ -237,7 +237,7 @@ genericColumn.footerRenderer = (root, column) => {
 
 const narrowedColumn = genericColumn as GridColumn<TestGridItem>;
 assertType<HTMLElement>(narrowedColumn);
-assertType<ColumnBaseMixinClass<TestGridItem>>(narrowedColumn);
+assertType<ColumnBaseMixinClass<TestGridItem, GridColumn>>(narrowedColumn);
 
 assertType<number | null | undefined>(narrowedColumn.flexGrow);
 assertType<string | null | undefined>(narrowedColumn.width);
@@ -257,7 +257,7 @@ assertType<GridColumnGroup>(genericColumnGroup);
 
 const narrowedColumnGroup = genericColumnGroup as GridColumnGroup<TestGridItem>;
 assertType<HTMLElement>(narrowedColumnGroup);
-assertType<ColumnBaseMixinClass<TestGridItem>>(narrowedColumnGroup);
+assertType<ColumnBaseMixinClass<TestGridItem, GridColumn>>(narrowedColumnGroup);
 
 /* GridFilter */
 const filter = document.createElement('vaadin-grid-filter');

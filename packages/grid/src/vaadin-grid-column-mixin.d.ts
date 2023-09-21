@@ -6,7 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { GridItemModel } from './vaadin-grid.js';
 
-export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> = (
+export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem, Column>> = (
   root: HTMLElement,
   column: Column,
   model: GridItemModel<TItem>,
@@ -14,16 +14,18 @@ export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem> = Grid
 
 export type GridColumnTextAlign = 'center' | 'end' | 'start' | null;
 
-export type GridHeaderFooterRenderer<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> = (
+export type GridHeaderFooterRenderer<TItem, Column extends GridColumnMixin<TItem, Column>> = (
   root: HTMLElement,
   column: Column,
 ) => void;
 
-export declare function ColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T,
-): Constructor<ColumnBaseMixinClass<TItem>> & T;
+export declare function ColumnBaseMixin<
+  TItem,
+  Column extends GridColumnMixin<TItem, Column>,
+  T extends Constructor<HTMLElement>,
+>(base: T): Constructor<ColumnBaseMixinClass<TItem, Column>> & T;
 
-export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>> {
+export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<TItem, Column>> {
   /**
    * When set to true, the column is user-resizable.
    */
@@ -93,9 +95,11 @@ export declare class ColumnBaseMixinClass<TItem, Column extends GridColumnMixin<
   footerRenderer: GridHeaderFooterRenderer<TItem, Column> | null | undefined;
 }
 
-export interface GridColumnMixin<TItem> extends ColumnBaseMixinClass<TItem>, GridColumnMixinClass<TItem> {}
+export interface GridColumnMixin<TItem, Column extends GridColumnMixinClass<TItem, Column>>
+  extends ColumnBaseMixinClass<TItem, Column>,
+    GridColumnMixinClass<TItem, Column> {}
 
-export interface GridColumnMixinClass<TItem, Column extends GridColumnMixin<TItem> = GridColumnMixin<TItem>>
+export interface GridColumnMixinClass<TItem, Column extends GridColumnMixinClass<TItem, Column>>
   extends ColumnBaseMixinClass<TItem, Column> {
   /**
    * Width of the cells for this column.

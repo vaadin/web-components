@@ -5,7 +5,7 @@
  */
 
 import type { GridDefaultItem } from './vaadin-grid.js';
-import type { GridColumnMixinClass } from './vaadin-grid-column-mixin.js';
+import type { GridColumnMixin, GridColumnMixinClass } from './vaadin-grid-column-mixin.js';
 import type { GridBodyRenderer as GridMixinBodyRenderer } from './vaadin-grid-column-mixin.js';
 import type { GridHeaderFooterRenderer as GridMixinHeaderFooterRenderer } from './vaadin-grid-column-mixin.js';
 
@@ -22,8 +22,7 @@ export type GridHeaderFooterRenderer<TItem = GridDefaultItem> = GridMixinHeaderF
  */
 declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
-// TODO: No any
-interface GridColumn<TItem = GridDefaultItem> extends GridColumnMixinClass<TItem, any>, HTMLElement {}
+interface GridColumn<TItem = GridDefaultItem> extends GridColumnMixin<TItem, GridColumn<TItem>>, HTMLElement {}
 
 declare global {
   interface HTMLElementTagNameMap {
