@@ -59,11 +59,12 @@ export function dateEquals(date1, date2) {
  * @param {!Date} date The date to check
  * @param {Date} min Range start
  * @param {Date} max Range end
+ * @param {function(!Date): boolean} isDateDisabled Callback to check if the date is disabled
  * @return {boolean} True if the date is in the range
  */
-export function dateAllowed(date, min, max, isDateAvailable) {
-  const dateIsAvailable = isDateAvailable && typeof isDateAvailable === 'function' ? isDateAvailable(date) : true;
-  return (!min || date >= min) && (!max || date <= max) && dateIsAvailable;
+export function dateAllowed(date, min, max, isDateDisabled) {
+  const dateIsDisabled = typeof isDateDisabled === 'function' ? isDateDisabled(date) : false;
+  return (!min || date >= min) && (!max || date <= max) && !dateIsDisabled;
 }
 
 /**

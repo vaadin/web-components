@@ -61,7 +61,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                 ${week.map((date) => {
                   const isFocused = dateEquals(date, this.focusedDate);
                   const isSelected = dateEquals(date, this.selectedDate);
-                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate);
+                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
 
                   const parts = [
                     'date',
@@ -102,8 +102,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
       this._weeks = this._getWeeks(this._days);
     }
 
-    if (props.has('month') || props.has('minDate') || props.has('maxDate')) {
-      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate);
+    if (props.has('month') || props.has('minDate') || props.has('maxDate') || props.has('isDateDisabled')) {
+      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate, this.isDateDisabled);
     }
 
     if (props.has('showWeekNumbers') || props.has('i18n')) {

@@ -181,12 +181,12 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.true;
     });
 
-    it('should reflect correct invalid value on value-changed eventListener when using isDateAvailable', (done) => {
-      datePicker.isDateAvailable = (date) => {
+    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', (done) => {
+      datePicker.isDateDisabled = (date) => {
         if (!date) {
-          return true;
+          return false;
         }
-        return date.toISOString().split('T')[0] !== '2017-01-02';
+        return date.toISOString().split('T')[0] === '2017-01-02';
       };
       datePicker.value = '2016-01-01'; // Valid
 

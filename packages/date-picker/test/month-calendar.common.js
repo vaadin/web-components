@@ -135,11 +135,11 @@ describe('vaadin-month-calendar', () => {
     tap(date10);
     expect(monthCalendar.selectedDate).to.be.undefined;
 
-    monthCalendar.isDateAvailable = (date) => {
+    monthCalendar.isDateDisabled = (date) => {
       if (!date) {
-        return false;
+        return true;
       }
-      return date.toISOString().split('T')[0] !== '2016-02-09';
+      return date.toISOString().split('T')[0] === '2016-02-09';
     };
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 9) {

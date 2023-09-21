@@ -108,6 +108,15 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         },
 
         /**
+         * A function that is used to determine if a date should be disabled.
+         * 
+         * @type {function(Date): boolean | undefined}
+         */
+        isDateDisabled: {
+          type: Function,
+        },
+
+        /**
          * Input label
          */
         label: String,
@@ -134,9 +143,9 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate)',
+        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
         '__updateYears(years, selectedDate, _theme)',
       ];
     }
@@ -303,10 +312,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    __updateTodayButton(todayButton, i18n, minDate, maxDate) {
+    __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
       if (todayButton) {
         todayButton.textContent = i18n && i18n.today;
-        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate);
+        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
       }
     }
 
@@ -321,12 +330,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       showWeekNumbers,
       ignoreTaps,
       theme,
+      isDateDisabled,
     ) {
       if (calendars && calendars.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
+          calendar.isDateDisabled = isDateDisabled;
           calendar.focusedDate = focusedDate;
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
@@ -1009,18 +1020,18 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _dateAllowed(date, min = this.minDate, max = this.maxDate) {
-      return (!min || date >= min) && (!max || date <= max);
+    _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
+      return (!min || date >= min) && (!max || date <= max) && (!isDateDisabled || !isDateDisabled(date));
     }
 
     /** @private */
-    _isTodayAllowed(min, max) {
+    _isTodayAllowed(min, max, isDateDisabled) {
       const today = new Date();
       const todayMidnight = new Date(0, 0);
       todayMidnight.setFullYear(today.getFullYear());
       todayMidnight.setMonth(today.getMonth());
       todayMidnight.setDate(today.getDate());
-      return this._dateAllowed(todayMidnight, min, max);
+      return this._dateAllowed(todayMidnight, min, max, isDateDisabled);
     }
 
     /**

@@ -80,6 +80,17 @@ export const MonthCalendarMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * A function to be used to determine whether the user can select a given date.
+         * Receives a `Date` object of the date to be selected and should return a
+         * boolean.
+         * @type {Function | undefined}
+         */
+        isDateDisabled: {
+          type: Function,
+          value: () => false,
+        },
+
         disabled: {
           type: Boolean,
           reflectToAttribute: true,
@@ -122,7 +133,7 @@ export const MonthCalendarMixin = (superClass) =>
      * Returns true if all the dates in the month are out of the allowed range
      * @protected
      */
-    _isDisabled(month, minDate, maxDate) {
+    _isDisabled(month, minDate, maxDate, isDateDisabled) {
       // First day of the month
       const firstDate = new Date(0, 0);
       firstDate.setFullYear(month.getFullYear());
@@ -145,7 +156,7 @@ export const MonthCalendarMixin = (superClass) =>
         return false;
       }
 
-      return !dateAllowed(firstDate, minDate, maxDate) && !dateAllowed(lastDate, minDate, maxDate);
+      return !dateAllowed(firstDate, minDate, maxDate, isDateDisabled) && !dateAllowed(lastDate, minDate, maxDate, isDateDisabled);
     }
 
     /** @protected */

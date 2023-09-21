@@ -69,7 +69,7 @@ assertType<() => void>(datePicker.close);
 assertType<() => void>(datePicker.open);
 assertType<string | undefined>(datePicker.max);
 assertType<string | undefined>(datePicker.min);
-assertType<(date: Date) => boolean | undefined>(datePicker.isDateAvailable);
+assertType<(date: Date) => boolean | undefined>(datePicker.isDateDisabled);
 assertType<boolean | null | undefined>(datePicker.showWeekNumbers);
 assertType<boolean | null | undefined>(datePicker.autoOpenDisabled);
 assertType<boolean | null | undefined>(datePicker.opened);

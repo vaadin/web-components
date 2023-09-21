@@ -238,9 +238,9 @@ export declare class DatePickerMixinClass {
   max: string | undefined;
 
   /**
-   * Function to override the default function for determining if a date is available.
+   * A function that is used to determine if a date should be disabled.
    */
-  isDateAvailable: (date: Date) => boolean;
+  isDateDisabled: (date: Date) => boolean;
 
   /**
    * Opens the dropdown.
