@@ -43,8 +43,8 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
  * Each index in the array points to a sub-item of the previous index.
  * Using `Infinity` as an index will point to the last item on the level.
  *
- * @param {!ItemCache} cache
- * @param {!Array<number>} indexes
+ * @param {Cache} cache
+ * @param {number[]} path
  * @param {number} flatIndex
  * @return {number}
  */
