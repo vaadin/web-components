@@ -33,31 +33,6 @@ export type GridDataProvider<TItem> = (
   callback: GridDataProviderCallback<TItem>,
 ) => void;
 
-export declare class ItemCache<TItem> {
-  grid: HTMLElement;
-  parentCache: ItemCache<TItem> | undefined;
-  parentItem: TItem | undefined;
-  itemCaches: object | null;
-  items: object | null;
-  effectiveSize: number;
-  size: number;
-  pendingRequests: object | null;
-
-  constructor(grid: HTMLElement, parentCache: ItemCache<TItem> | undefined, parentItem: TItem | undefined);
-
-  isLoading(): boolean;
-
-  getItemForIndex(index: number): TItem | undefined;
-
-  updateSize(): void;
-
-  ensureSubCacheForScaledIndex(scaledIndex: number): void;
-
-  getCacheAndIndex(index: number): { cache: ItemCache<TItem>; scaledIndex: number };
-
-  getFlatIndex(scaledIndex: number): number;
-}
-
 export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<DataProviderMixinClass<TItem>> & T;

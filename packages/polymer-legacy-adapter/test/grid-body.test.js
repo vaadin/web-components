@@ -173,8 +173,8 @@ describe('grid body template', () => {
     });
 
     it('should expand the item when checking', () => {
-      expect(grid._isExpanded(grid._cache.items[0])).to.be.true;
-      expect(grid._isExpanded(grid._cache.items[1])).to.be.false;
+      expect(grid._isExpanded(grid._dataProviderController.rootCache.items[0])).to.be.true;
+      expect(grid._isExpanded(grid._dataProviderController.rootCache.items[1])).to.be.false;
     });
 
     it('should re-render the row when checking', () => {
@@ -185,8 +185,8 @@ describe('grid body template', () => {
     it('should collapse the item when unchecking', () => {
       checkbox.checked = false;
 
-      expect(grid._isExpanded(grid._cache.items[0])).to.be.false;
-      expect(grid._isExpanded(grid._cache.items[1])).to.be.false;
+      expect(grid._isExpanded(grid._dataProviderController.rootCache.items[0])).to.be.false;
+      expect(grid._isExpanded(grid._dataProviderController.rootCache.items[1])).to.be.false;
     });
 
     it('should re-render the row when unchecking', () => {

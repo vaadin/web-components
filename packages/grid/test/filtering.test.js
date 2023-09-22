@@ -328,11 +328,11 @@ describe('array data provider', () => {
     grid.removeChild(grid.firstElementChild);
     flushGrid(grid);
 
-    expect(Object.keys(grid._cache.items).length).to.equal(1);
+    expect(Object.keys(grid._dataProviderController.rootCache.items).length).to.equal(1);
 
     parentNode.appendChild(grid);
 
-    expect(Object.keys(grid._cache.items).length).to.equal(3);
+    expect(Object.keys(grid._dataProviderController.rootCache.items).length).to.equal(3);
   });
 
   it('should sort filtered items', () => {

@@ -210,7 +210,7 @@ describe('column', () => {
         grid.rowDetailsRenderer = (root) => {
           root.textContent = 'row-details';
         };
-        grid.detailsOpenedItems = [grid._cache.items[0]];
+        grid.detailsOpenedItems = [grid._dataProviderController.rootCache.items[0]];
         column.hidden = true;
         flushGrid(grid);
         const details = grid.shadowRoot.querySelector('#items [part~="details-cell"]')._content;
