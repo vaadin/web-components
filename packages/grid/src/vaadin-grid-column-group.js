@@ -40,6 +40,7 @@ import { updateColumnOrders } from './vaadin-grid-helpers.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */

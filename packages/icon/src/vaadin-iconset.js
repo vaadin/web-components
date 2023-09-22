@@ -38,6 +38,7 @@ function initIconsMap(iconset, name) {
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  */

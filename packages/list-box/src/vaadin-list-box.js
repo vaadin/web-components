@@ -37,6 +37,7 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes MultiSelectListMixin
  * @mixes ThemableMixin

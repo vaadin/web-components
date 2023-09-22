@@ -56,6 +56,7 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes CustomFieldMixin
  * @mixes ElementMixin

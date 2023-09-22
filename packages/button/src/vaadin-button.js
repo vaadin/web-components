@@ -42,6 +42,7 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ButtonMixin
  * @mixes ControllerMixin

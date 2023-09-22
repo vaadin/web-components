@@ -9,6 +9,7 @@ import { Scroller } from '@vaadin/scroller/src/vaadin-scroller.js';
 /**
  * An element used internally by `<vaadin-tabsheet>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends Scroller
  * @private
  */

@@ -58,6 +58,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DisabledMixin

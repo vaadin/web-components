@@ -65,6 +65,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

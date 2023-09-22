@@ -49,6 +49,7 @@ let memoizedTemplate;
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends TextField
  */
 export class PasswordField extends TextField {

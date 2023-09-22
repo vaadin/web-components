@@ -152,6 +152,8 @@ export class FieldHighlighterController {
  * by configuring a reactive controller for a field instance.
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
+ *
+ * @customElement
  */
 export class FieldHighlighter extends HTMLElement {
   static get is() {

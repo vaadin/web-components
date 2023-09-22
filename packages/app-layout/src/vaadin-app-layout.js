@@ -105,6 +105,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

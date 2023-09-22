@@ -248,6 +248,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes GridMixin
  * @mixes ThemableMixin

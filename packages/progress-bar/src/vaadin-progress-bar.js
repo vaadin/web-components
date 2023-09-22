@@ -43,6 +43,7 @@ registerStyles('vaadin-progress-bar', progressBarStyles, { moduleId: 'vaadin-pro
  * ----------------|-------------|------------
  * `indeterminate` | Set to an indeterminate progress bar | :host
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ProgressMixin
  * @mixes ThemableMixin

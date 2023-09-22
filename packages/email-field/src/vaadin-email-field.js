@@ -30,6 +30,7 @@ registerStyles('vaadin-email-field', emailFieldStyles, { moduleId: 'vaadin-email
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends TextField
  */
 export class EmailField extends TextField {

@@ -39,6 +39,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `cc-btn`        | Dismiss cookie button
  * `cc-link`       | Learn more link element
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  */

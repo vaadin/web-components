@@ -19,6 +19,9 @@ import { GridColumn } from './vaadin-grid-column.js';
  *  <vaadin-grid-column>
  *    ...
  * ```
+ *
+ * @customElement
+ * @extends GridColumn
  */
 class GridFilterColumn extends GridColumn {
   static get is() {

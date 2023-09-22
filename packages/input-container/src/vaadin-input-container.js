@@ -8,6 +8,12 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+/**
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
+ * @mixes DirMixin
+ */
 export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-input-container';

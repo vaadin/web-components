@@ -10,6 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends Button
  * @private
  */

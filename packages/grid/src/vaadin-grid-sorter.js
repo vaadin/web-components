@@ -62,6 +62,7 @@ document.head.appendChild(template.content);
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  */
 class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {

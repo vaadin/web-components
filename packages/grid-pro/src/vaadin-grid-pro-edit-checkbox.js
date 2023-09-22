@@ -14,6 +14,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends Checkbox
  * @private
  */

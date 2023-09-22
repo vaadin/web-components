@@ -61,6 +61,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin

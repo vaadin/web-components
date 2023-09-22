@@ -36,6 +36,7 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  */
 class GridFilter extends ControllerMixin(PolymerElement) {

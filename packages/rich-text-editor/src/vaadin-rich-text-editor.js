@@ -151,6 +151,7 @@ const TAB_KEY = 9;
  * @fires {CustomEvent} html-value-changed - Fired when the `htmlValue` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

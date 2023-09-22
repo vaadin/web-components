@@ -21,6 +21,9 @@ import { GridColumn } from './vaadin-grid-column.js';
  * ```
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
+ *
+ * @customElement
+ * @extends GridColumn
  */
 class GridSortColumn extends GridColumn {
   static get is() {

@@ -41,6 +41,7 @@ registerStyles('vaadin-avatar', avatarStyles, { moduleId: 'vaadin-avatar-styles'
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes AvatarMixin
  * @mixes ControllerMixin

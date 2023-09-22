@@ -56,6 +56,7 @@ import { AccordionPanel } from './vaadin-accordion-panel.js';
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes KeyboardDirectionMixin

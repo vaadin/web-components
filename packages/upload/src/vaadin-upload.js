@@ -56,6 +56,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
  * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ThemableMixin

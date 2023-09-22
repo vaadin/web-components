@@ -17,6 +17,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -167,6 +168,7 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @private
@@ -256,6 +258,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
