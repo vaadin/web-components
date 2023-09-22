@@ -4,6 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/**
+ * A class that stores items with their associated sub-caches.
+ */
 export class Cache {
   /**
    * @type {{ isExpanded: (item: unknown) => boolean }}

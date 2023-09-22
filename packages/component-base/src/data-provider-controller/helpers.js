@@ -5,7 +5,7 @@
  */
 
 /**
- * Retreives information for the given flattened index, including:
+ * Returns context for the given flattened index, including:
  * - the corresponding cache
  * - the associated item (if loaded)
  * - the corresponding index in the cache's items array.
