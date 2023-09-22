@@ -49,12 +49,12 @@ describe('row details', () => {
   let bodyRows;
 
   function openRowDetails(index) {
-    grid.openItemDetails(grid._cache.items[index]);
+    grid.openItemDetails(grid._dataProviderController.rootCache.items[index]);
     flushGrid(grid);
   }
 
   function closeRowDetails(index) {
-    grid.closeItemDetails(grid._cache.items[index]);
+    grid.closeItemDetails(grid._dataProviderController.rootCache.items[index]);
     flushGrid(grid);
   }
 
