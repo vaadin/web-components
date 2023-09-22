@@ -30,6 +30,7 @@ registerStyles('vaadin-combo-box-overlay', [overlayStyles, comboBoxOverlayStyles
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxOverlayMixin
  * @mixes DirMixin

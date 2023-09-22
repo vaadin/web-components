@@ -45,6 +45,7 @@ registerStyles('vaadin-checkbox', checkboxStyles, { moduleId: 'vaadin-checkbox-s
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes CheckboxMixin
  * @mixes ThemableMixin

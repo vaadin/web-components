@@ -16,6 +16,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin

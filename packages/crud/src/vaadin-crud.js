@@ -168,6 +168,7 @@ import { getProperty, setProperty } from './vaadin-crud-helpers.js';
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin

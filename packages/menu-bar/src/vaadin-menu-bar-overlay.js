@@ -19,6 +19,7 @@ registerStyles('vaadin-menu-bar-overlay', [overlayStyles, styles], {
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes MenuOverlayMixin

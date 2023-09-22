@@ -54,6 +54,7 @@ const CLASSES = {
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ResizeMixin

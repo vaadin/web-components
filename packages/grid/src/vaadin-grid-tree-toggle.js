@@ -72,6 +72,7 @@ document.head.appendChild(template.content);
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  */

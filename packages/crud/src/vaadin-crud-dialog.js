@@ -58,6 +58,7 @@ registerStyles('vaadin-crud-dialog-overlay', [overlayStyles, dialogOverlay, resi
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes OverlayMixin

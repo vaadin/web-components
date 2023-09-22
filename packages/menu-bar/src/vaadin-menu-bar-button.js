@@ -29,6 +29,7 @@ registerStyles(
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends Button
  * @private
  */

@@ -55,6 +55,7 @@ const srcCache = new Map();
  * }
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ThemableMixin

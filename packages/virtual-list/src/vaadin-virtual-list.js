@@ -35,6 +35,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin

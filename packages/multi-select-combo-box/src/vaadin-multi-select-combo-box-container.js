@@ -25,6 +25,7 @@ let memoizedTemplate;
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends InputContainer
  * @private
  */

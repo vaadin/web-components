@@ -99,6 +99,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

@@ -150,6 +150,7 @@ registerStyles('vaadin-split-layout', splitLayoutStyles, { moduleId: 'vaadin-spl
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes SplitLayoutMixin

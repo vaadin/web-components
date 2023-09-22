@@ -49,6 +49,7 @@ registerStyles('vaadin-upload-file', uploadFileStyles, { moduleId: 'vaadin-uploa
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes UploadFileMixin

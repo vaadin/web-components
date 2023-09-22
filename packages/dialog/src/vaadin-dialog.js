@@ -78,6 +78,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin

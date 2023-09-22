@@ -21,6 +21,7 @@ registerStyles('vaadin-date-picker-overlay-content', overlayContentStyles, {
 });
 
 /**
+ * @customElement
  * @extends HTMLElement
  * @private
  */

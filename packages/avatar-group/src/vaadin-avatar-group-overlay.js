@@ -18,6 +18,7 @@ registerStyles('vaadin-avatar-group-overlay', [overlayStyles], {
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes PositionMixin
  * @mixes OverlayMixin

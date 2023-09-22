@@ -62,6 +62,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin

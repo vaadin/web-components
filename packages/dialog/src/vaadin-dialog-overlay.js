@@ -18,6 +18,7 @@ registerStyles('vaadin-dialog-overlay', [overlayStyles, dialogOverlay, resizable
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes DialogOverlayMixin
  * @mixes DirMixin

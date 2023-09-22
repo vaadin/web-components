@@ -42,6 +42,7 @@ registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, c
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes OverlayMixin

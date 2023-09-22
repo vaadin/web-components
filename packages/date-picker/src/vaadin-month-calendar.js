@@ -16,6 +16,7 @@ registerStyles('vaadin-month-calendar', monthCalendarStyles, {
 });
 
 /**
+ * @customElement
  * @extends HTMLElement
  * @private
  */

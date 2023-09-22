@@ -38,6 +38,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes CollapsibleMixin
  * @mixes ControllerMixin

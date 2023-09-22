@@ -31,6 +31,7 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
  *    ...
  * ```
  *
+ * @customElement
  * @extends GridColumn
  */
 class GridProEditColumn extends GridColumn {

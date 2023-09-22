@@ -31,6 +31,7 @@ registerStyles('vaadin-select-overlay', [overlayStyles, selectOverlayStyles], {
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes OverlayMixin

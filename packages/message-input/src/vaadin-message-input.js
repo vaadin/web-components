@@ -25,6 +25,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ThemableMixin

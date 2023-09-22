@@ -47,6 +47,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ItemMixin
  * @mixes ThemableMixin

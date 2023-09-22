@@ -55,6 +55,7 @@ import { Chart, deepMerge } from './vaadin-chart.js';
  *  chart.removeChild(seriesToBeRemoved);
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  */
 class ChartSeries extends PolymerElement {

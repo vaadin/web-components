@@ -128,6 +128,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

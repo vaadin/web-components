@@ -24,6 +24,7 @@ const listenOnce = (elem, type) => {
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @private
  */

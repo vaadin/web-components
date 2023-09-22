@@ -45,6 +45,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes DetailsBaseMixin

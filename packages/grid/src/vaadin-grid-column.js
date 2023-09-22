@@ -785,6 +785,7 @@ export const ColumnBaseMixin = (superClass) =>
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */

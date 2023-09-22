@@ -20,6 +20,8 @@ import { GridColumn } from './vaadin-grid-column.js';
  *  <vaadin-grid-column>
  *    ...
  * ```
+ * @customElement
+ * @extends GridColumn
  */
 class GridTreeColumn extends GridColumn {
   static get is() {

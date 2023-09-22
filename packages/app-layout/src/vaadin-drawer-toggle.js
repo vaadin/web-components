@@ -63,6 +63,7 @@ registerStyles(
  * </vaadin-app-layout>
  * ```
  *
+ * @customElement
  * @extends Button
  */
 class DrawerToggle extends Button {

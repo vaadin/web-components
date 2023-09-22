@@ -113,6 +113,7 @@ class PickerSlotController extends SlotController {
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin

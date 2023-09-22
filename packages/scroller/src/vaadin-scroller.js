@@ -27,6 +27,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focused`    | Set when the element is focused.
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ControllerMixin

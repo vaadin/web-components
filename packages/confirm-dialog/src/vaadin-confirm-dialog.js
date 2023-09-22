@@ -61,6 +61,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * @fires {Event} reject - Fired when Reject button was pressed.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin

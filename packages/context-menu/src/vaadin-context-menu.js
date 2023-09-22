@@ -199,6 +199,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ControllerMixin

@@ -25,6 +25,7 @@ stylesTemplate.innerHTML = `
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends InfiniteScroller
  * @private
  */

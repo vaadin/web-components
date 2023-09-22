@@ -72,6 +72,7 @@ registerStyles('vaadin-overlay', overlayStyles, { moduleId: 'vaadin-overlay-styl
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin

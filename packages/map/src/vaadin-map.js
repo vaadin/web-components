@@ -51,6 +51,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *   });
  * </script>
  * ```
+ *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin

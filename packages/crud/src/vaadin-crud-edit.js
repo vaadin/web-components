@@ -35,6 +35,7 @@ registerStyles(
  * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
  * a `<vaadin-crud>` to enable editing.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  */

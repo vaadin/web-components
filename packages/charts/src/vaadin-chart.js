@@ -228,6 +228,7 @@ Highcharts.setOptions({ lang: { noData: '' } });
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ResizeMixin
  * @mixes ThemableMixin
