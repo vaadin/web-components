@@ -14,9 +14,30 @@ export class DataProviderController extends EventTarget {
    * A callback that returns data based on the passed params such as
    * `page`, `pageSize`, `parentItem`, etc.
    *
-   * @type {Function}
+   * @type {(params: object, callback: Function) => void}
    */
   dataProvider;
+
+  /**
+   * A number of items in the root cache.
+   *
+   * @type {number}
+   */
+  size;
+
+  /**
+   * A number of items to display per page.
+   *
+   * @type {number}
+   */
+  pageSize;
+
+  /**
+   * A function that determines when an item is expanded.
+   *
+   * @type {(item: unknown) => boolean}
+   */
+  isExpanded;
 
   constructor(host, { size, pageSize, isExpanded, dataProvider, dataProviderParams }) {
     super();
@@ -151,7 +172,7 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Loads the first page for the root cache.
+   * Loads the first page into the root cache.
    */
   loadFirstPage() {
     this.__loadCachePage(this.rootCache, 0);
