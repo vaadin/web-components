@@ -9,43 +9,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-const tooltipOverlayStyles = css`
-  :host {
-    z-index: 1100;
-  }
-
-  [part='overlay'] {
-    max-width: 40ch;
-  }
-
-  :host([position^='top'][top-aligned]) [part='overlay'],
-  :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-tooltip-offset-top, 0);
-  }
-
-  :host([position^='top'][bottom-aligned]) [part='overlay'],
-  :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
-  }
-
-  :host([position^='start'][start-aligned]) [part='overlay'],
-  :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
-  }
-
-  :host([position^='start'][end-aligned]) [part='overlay'],
-  :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
-  }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 1px dashed;
-    }
-  }
-`;
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { tooltipOverlayStyles } from './vaadin-tooltip-overlay-styles.js';
 
 registerStyles('vaadin-tooltip-overlay', [overlayStyles, tooltipOverlayStyles], {
   moduleId: 'vaadin-tooltip-overlay-styles',
