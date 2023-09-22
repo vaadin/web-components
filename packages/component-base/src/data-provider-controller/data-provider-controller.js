@@ -7,16 +7,27 @@ import { Cache } from './cache.js';
 import { getFlatIndexByPath, getFlatIndexContext } from './helpers.js';
 
 /**
- * A controller that stores and manages items loaded with a data provider callback.
+ * A controller that stores and manages items loaded with a data provider.
  */
 export class DataProviderController extends EventTarget {
   /**
+   * The controller host element.
+   *
+   * @param {HTMLElement}
+   */
+  host;
+
+  /**
    * A callback that returns data based on the passed params such as
    * `page`, `pageSize`, `parentItem`, etc.
-   *
-   * @type {(params: object, callback: Function) => void}
    */
   dataProvider;
+
+  /**
+   * A callback that returns additional params that need to be passed
+   * to the data provider callback with every request.
+   */
+  dataProviderParams;
 
   /**
    * A number of items in the root cache.
@@ -33,11 +44,18 @@ export class DataProviderController extends EventTarget {
   pageSize;
 
   /**
-   * A function that determines when an item is expanded.
+   * A callback that returns whether the given item is expanded.
    *
    * @type {(item: unknown) => boolean}
    */
   isExpanded;
+
+  /**
+   * A reference to the root cache instance.
+   *
+   * @param {Cache}
+   */
+  rootCache;
 
   constructor(host, { size, pageSize, isExpanded, dataProvider, dataProviderParams }) {
     super();
@@ -142,8 +160,8 @@ export class DataProviderController extends EventTarget {
 
   /**
    * Requests the data provider to load the page with the item corresponding
-   * to the given flattened index into the corresponding cache.
-   * If the item is already loaded, the method returns immediatelly.
+   * to the given flattened index. If the item is already loaded, the method
+   * returns immediatelly.
    *
    * @param {number} flatIndex
    */
