@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 const template = document.createElement('template');
 
@@ -64,50 +65,11 @@ document.head.appendChild(template.content);
  *
  * @customElement
  * @extends HTMLElement
+ * @mixes GridSorterMixin
  */
-class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
+class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          cursor: pointer;
-          max-width: 100%;
-        }
-
-        [part='content'] {
-          flex: 1 1 auto;
-        }
-
-        [part='indicators'] {
-          position: relative;
-          align-self: center;
-          flex: none;
-        }
-
-        [part='order'] {
-          display: inline;
-          vertical-align: super;
-        }
-
-        [part='indicators']::before {
-          font-family: 'vaadin-grid-sorter-icons';
-          display: inline-block;
-        }
-
-        :host(:not([direction])) [part='indicators']::before {
-          content: '\\e901';
-        }
-
-        :host([direction='asc']) [part='indicators']::before {
-          content: '\\e900';
-        }
-
-        :host([direction='desc']) [part='indicators']::before {
-          content: '\\e902';
-        }
-      </style>
-
       <div part="content">
         <slot></slot>
       </div>
@@ -119,131 +81,6 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
 
   static get is() {
     return 'vaadin-grid-sorter';
-  }
-
-  static get properties() {
-    return {
-      /**
-       * JS Path of the property in the item used for sorting the data.
-       */
-      path: String,
-
-      /**
-       * How to sort the data.
-       * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
-       * descending direction, or `null` for not sorting the data.
-       * @type {GridSorterDirection | undefined}
-       */
-      direction: {
-        type: String,
-        reflectToAttribute: true,
-        notify: true,
-        value: null,
-      },
-
-      /**
-       * @type {number | null}
-       * @protected
-       */
-      _order: {
-        type: Number,
-        value: null,
-      },
-
-      /** @private */
-      _isConnected: {
-        type: Boolean,
-        observer: '__isConnectedChanged',
-      },
-    };
-  }
-
-  static get observers() {
-    return ['_pathOrDirectionChanged(path, direction)'];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-    this.addEventListener('click', this._onClick.bind(this));
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._isConnected = true;
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._isConnected = false;
-
-    if (!this.parentNode && this._grid) {
-      this._grid.__removeSorters([this]);
-    }
-  }
-
-  /** @private */
-  _pathOrDirectionChanged() {
-    this.__dispatchSorterChangedEvenIfPossible();
-  }
-
-  /** @private */
-  __isConnectedChanged(newValue, oldValue) {
-    if (oldValue === false) {
-      return;
-    }
-
-    this.__dispatchSorterChangedEvenIfPossible();
-  }
-
-  /** @private */
-  __dispatchSorterChangedEvenIfPossible() {
-    if (this.path === undefined || this.direction === undefined || !this._isConnected) {
-      return;
-    }
-
-    this.dispatchEvent(
-      new CustomEvent('sorter-changed', {
-        detail: { shiftClick: Boolean(this._shiftClick), fromSorterClick: Boolean(this._fromSorterClick) },
-        bubbles: true,
-        composed: true,
-      }),
-    );
-    // Cleaning up as a programatically sorting can be done after some user interaction
-    this._fromSorterClick = false;
-    this._shiftClick = false;
-  }
-
-  /** @private */
-  _getDisplayOrder(order) {
-    return order === null ? '' : order + 1;
-  }
-
-  /** @private */
-  _onClick(e) {
-    if (e.defaultPrevented) {
-      // Something else has already handled the click event, do nothing.
-      return;
-    }
-
-    const activeElement = this.getRootNode().activeElement;
-    if (this !== activeElement && this.contains(activeElement)) {
-      // Some focusable content inside the sorter was clicked, do nothing.
-      return;
-    }
-
-    e.preventDefault();
-    this._shiftClick = e.shiftKey;
-    this._fromSorterClick = true;
-    if (this.direction === 'asc') {
-      this.direction = 'desc';
-    } else if (this.direction === 'desc') {
-      this.direction = null;
-    } else {
-      this.direction = 'asc';
-    }
   }
 }
 
