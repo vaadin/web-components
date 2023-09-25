@@ -29,6 +29,20 @@ const dataProviderController = new DataProviderController<MyDataProviderParams>(
   dataProviderParams: () => ({ foo: 'bar' }),
 });
 
+// Constructor
+assertType<
+  new <DataProviderParams extends Record<string, unknown>>(
+    host: HTMLElement,
+    config: {
+      size: number | undefined;
+      pageSize: number;
+      isExpanded(item: unknown): boolean;
+      dataProvider: DataProvider<DataProviderParams>;
+      dataProviderParams(): DataProviderParams;
+    },
+  ) => void
+>(DataProviderController);
+
 // Properties
 assertType<HTMLElement>(dataProviderController.host);
 assertType<Cache>(dataProviderController.rootCache);

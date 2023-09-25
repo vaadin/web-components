@@ -22,7 +22,7 @@ export type DataProvider<DataProviderParams extends Record<string, unknown>> = (
 /**
  * A controller that stores and manages items loaded with a data provider.
  */
-export class DataProviderController<DataProviderParams> implements ReactiveController {
+export class DataProviderController<DataProviderParams extends Record<string, unknown>> implements ReactiveController {
   /**
    * The controller host element.
    */
