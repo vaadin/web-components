@@ -3,10 +3,9 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { Cache } from './cache.js';
-import type { DataProviderCallback, DataProviderController } from './data-provider-controller.js';
+import type { DataProviderCallback } from './data-provider-controller.js';
 
-type CacheContext = { isExpanded: DataProviderController['isExpanded'] };
+type CacheContext = { isExpanded(item: unknown): boolean };
 
 /**
  * A class that stores items with their associated sub-caches.
@@ -65,7 +64,7 @@ export class Cache {
     size: number,
     parentCache: Cache | undefined,
     parentCacheIndex: number | undefined,
-  ): void;
+  );
 
   /**
    * Recalculates the effective size for the cache and its descendant caches recursively.

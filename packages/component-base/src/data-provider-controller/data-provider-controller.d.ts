@@ -6,21 +6,23 @@
 import type { ReactiveController } from 'lit';
 import type { Cache } from './cache.js';
 
-type DataProviderParams = {
+type DataProviderDefaultParams = {
   page: number;
   pageSize: number;
   parentItem?: unknown;
-  [key: string]: unknown;
 };
 
-type DataProviderCallback = (items: unknown[], size?: number) => void;
+export type DataProviderCallback = (items: unknown[], size?: number) => void;
 
-type DataProvider = (params: DataProviderParams, callback: DataProviderCallback) => void;
+export type DataProvider<DataProviderParams> = (
+  params: DataProviderDefaultParams & DataProviderParams,
+  callback: DataProviderCallback,
+) => void;
 
 /**
  * A controller that stores and manages items loaded with a data provider.
  */
-export class DataProviderController implements ReactiveController {
+export class DataProviderController<DataProviderParams> implements ReactiveController {
   /**
    * The controller host element.
    */
@@ -30,13 +32,13 @@ export class DataProviderController implements ReactiveController {
    * A callback that returns data based on the passed params such as
    * `page`, `pageSize`, `parentItem`, etc.
    */
-  dataProvider: DataProvider;
+  dataProvider: DataProvider<DataProviderParams>;
 
   /**
    * A callback that returns additional params that need to be passed
    * to the data provider callback with every request.
    */
-  dataProviderParams: () => Record<string, unknown>;
+  dataProviderParams: () => DataProviderParams;
 
   /**
    * A number of items in the root cache.
@@ -59,20 +61,24 @@ export class DataProviderController implements ReactiveController {
   rootCache: Cache;
 
   constructor(
-    host: DataProviderController['host'],
-    params: {
-      size: DataProviderController['size'];
-      pageSize: DataProviderController['pageSize'];
-      isExpanded: DataProviderController['isExpanded'];
-      dataProvider: DataProviderController['dataProvider'];
-      dataProviderParams: DataProviderController['dataProviderParams'];
+    host: HTMLElement,
+    config: {
+      size?: number;
+      pageSize: number;
+      isExpanded(item: unknown): boolean;
+      dataProvider: DataProvider<DataProviderParams>;
+      dataProviderParams(): DataProviderParams;
     },
-  ): void;
+  );
 
   /**
    * The total number of items, including items from expanded sub-caches.
    */
   get effectiveSize(): number;
+
+  hostConnected(): void;
+
+  hostDisconnected(): void;
 
   /**
    * Whether the root cache or any of its decendant caches have pending requests.
@@ -92,7 +98,7 @@ export class DataProviderController implements ReactiveController {
   /**
    * Sets the data provider callback and clears the cache.
    */
-  setDataProvider(dataProvider: DataProvider): void;
+  setDataProvider(dataProvider: DataProvider<DataProviderParams>): void;
 
   /**
    * Recalculates the effective size.
