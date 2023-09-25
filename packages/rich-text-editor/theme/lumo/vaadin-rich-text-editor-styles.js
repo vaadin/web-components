@@ -173,6 +173,8 @@ const richTextEditor = css`
   /* No border */
   :host(:not([theme~='no-border'])) {
     border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: var(--lumo-border-radius-l);
+    overflow: hidden;
   }
 
   :host(:not([theme~='no-border']):not([readonly])) [part='content'] {
