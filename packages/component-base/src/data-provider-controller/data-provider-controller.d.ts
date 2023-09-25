@@ -14,7 +14,7 @@ type DataProviderDefaultParams = {
 
 export type DataProviderCallback = (items: unknown[], size?: number) => void;
 
-export type DataProvider<DataProviderParams> = (
+export type DataProvider<DataProviderParams extends Record<string, unknown>> = (
   params: DataProviderDefaultParams & DataProviderParams,
   callback: DataProviderCallback,
 ) => void;

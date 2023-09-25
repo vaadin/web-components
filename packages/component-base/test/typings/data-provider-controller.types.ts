@@ -12,10 +12,11 @@ type MyDataProviderParams = {
 };
 
 const dataProvider: DataProvider<MyDataProviderParams> = (params, callback) => {
+  assertType<MyDataProviderParams>(params);
   assertType<number>(params.page);
   assertType<number>(params.pageSize);
   assertType<unknown>(params.parentItem);
-  assertType<MyDataProviderParams>(params);
+  assertType<string>(params.foo);
   assertType<DataProviderCallback>(callback);
 };
 
