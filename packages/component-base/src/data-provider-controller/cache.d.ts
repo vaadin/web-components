@@ -5,16 +5,16 @@
  */
 import type { DataProviderCallback } from './data-provider-controller.js';
 
-export type CacheContext = { isExpanded(item: unknown): boolean };
+export type CacheContext<TItem> = { isExpanded(item: TItem): boolean };
 
 /**
  * A class that stores items with their associated sub-caches.
  */
-export class Cache {
+export class Cache<TItem> {
   /**
    * A context object.
    */
-  context: CacheContext;
+  context: CacheContext<TItem>;
 
   /**
    * The number of items.
@@ -29,24 +29,24 @@ export class Cache {
   /**
    * An array of cached items.
    */
-  items: unknown[];
+  items: TItem[];
 
   /**
    * A map where the key is a requested page and the value is a callback
    * that will be called with data once the request is complete.
    */
-  pendingRequests: Map<number, DataProviderCallback>;
+  pendingRequests: Map<number, DataProviderCallback<TItem>>;
 
   /**
    * An item in the parent cache that the current cache is associated with.
    */
-  get parentItem(): unknown | undefined;
+  get parentItem(): TItem | undefined;
 
   /**
    * An array of sub-caches sorted in the same order as their associated items
    * appear in the `items` array.
    */
-  get subCaches(): Cache[];
+  get subCaches(): Array<Cache<TItem>>;
 
   /**
    * Whether the cache or any of its descendant caches have pending requests.
@@ -58,7 +58,13 @@ export class Cache {
    */
   get effectiveSize(): number;
 
-  constructor(context: CacheContext, pageSize: number, size: number, parentCache?: Cache, parentCacheIndex?: number);
+  constructor(
+    context: CacheContext<TItem>,
+    pageSize: number,
+    size: number,
+    parentCache?: Cache<TItem>,
+    parentCacheIndex?: number,
+  );
 
   /**
    * Recalculates the effective size for the cache and its descendant caches recursively.
@@ -75,7 +81,7 @@ export class Cache {
    * Retrieves the sub-cache associated with the item at the given index
    * in the `items` array.
    */
-  getSubCache(index: number): Cache | undefined;
+  getSubCache(index: number): Cache<TItem> | undefined;
 
   /**
    * Removes the sub-cache associated with the item at the given index
@@ -92,7 +98,7 @@ export class Cache {
    * Creates and associates a sub-cache for the item at the given index
    * in the `items` array.
    */
-  createSubCache(index: number): Cache;
+  createSubCache(index: number): Cache<TItem>;
 
   /**
    * Retrieves the flattened index corresponding to the given index

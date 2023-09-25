@@ -12,17 +12,19 @@ type DataProviderDefaultParams = {
   parentItem?: unknown;
 };
 
-export type DataProviderCallback = (items: unknown[], size?: number) => void;
+export type DataProviderCallback<TItem> = (items: TItem[], size?: number) => void;
 
-export type DataProvider<DataProviderParams extends Record<string, unknown>> = (
-  params: DataProviderDefaultParams & DataProviderParams,
-  callback: DataProviderCallback,
+export type DataProvider<TItem, TDataProviderParams extends Record<string, unknown>> = (
+  params: DataProviderDefaultParams & TDataProviderParams,
+  callback: DataProviderCallback<TItem>,
 ) => void;
 
 /**
  * A controller that stores and manages items loaded with a data provider.
  */
-export class DataProviderController<DataProviderParams extends Record<string, unknown>> implements ReactiveController {
+export class DataProviderController<TItem, TDataProviderParams extends Record<string, unknown>>
+  implements ReactiveController
+{
   /**
    * The controller host element.
    */
@@ -32,13 +34,13 @@ export class DataProviderController<DataProviderParams extends Record<string, un
    * A callback that returns data based on the passed params such as
    * `page`, `pageSize`, `parentItem`, etc.
    */
-  dataProvider: DataProvider<DataProviderParams>;
+  dataProvider: DataProvider<TItem, TDataProviderParams>;
 
   /**
    * A callback that returns additional params that need to be passed
    * to the data provider callback with every request.
    */
-  dataProviderParams: () => DataProviderParams;
+  dataProviderParams: () => TDataProviderParams;
 
   /**
    * A number of items in the root cache.
@@ -53,21 +55,21 @@ export class DataProviderController<DataProviderParams extends Record<string, un
   /**
    * A callback that returns whether the given item is expanded.
    */
-  isExpanded: (item: unknown) => boolean;
+  isExpanded: (item: TItem) => boolean;
 
   /**
    * A reference to the root cache instance.
    */
-  rootCache: Cache;
+  rootCache: Cache<TItem>;
 
   constructor(
     host: HTMLElement,
     config: {
       size?: number;
       pageSize: number;
-      isExpanded(item: unknown): boolean;
-      dataProvider: DataProvider<DataProviderParams>;
-      dataProviderParams(): DataProviderParams;
+      isExpanded(item: TItem): boolean;
+      dataProvider: DataProvider<TItem, TDataProviderParams>;
+      dataProviderParams(): TDataProviderParams;
     },
   );
 
@@ -98,7 +100,7 @@ export class DataProviderController<DataProviderParams extends Record<string, un
   /**
    * Sets the data provider callback and clears the cache.
    */
-  setDataProvider(dataProvider: DataProvider<DataProviderParams>): void;
+  setDataProvider(dataProvider: DataProvider<TItem, TDataProviderParams>): void;
 
   /**
    * Recalculates the effective size.
@@ -119,8 +121,8 @@ export class DataProviderController<DataProviderParams extends Record<string, un
    * - the cache level
    */
   getFlatIndexContext(flatIndex: number): {
-    cache: Cache;
-    item: unknown | undefined;
+    cache: Cache<TItem>;
+    item: TItem | undefined;
     index: number;
     page: number;
     level: number;

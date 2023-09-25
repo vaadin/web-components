@@ -7,26 +7,30 @@ import {
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-type MyDataProviderParams = {
+interface TestItem {
   foo: string;
+}
+
+type TestDataProviderParams = {
+  bar: string;
 };
 
-const dataProvider: DataProvider<MyDataProviderParams> = (params, callback) => {
-  assertType<MyDataProviderParams>(params);
+const dataProvider: DataProvider<TestItem, TestDataProviderParams> = (params, callback) => {
+  assertType<TestDataProviderParams>(params);
   assertType<number>(params.page);
   assertType<number>(params.pageSize);
   assertType<unknown>(params.parentItem);
-  assertType<string>(params.foo);
-  assertType<DataProviderCallback>(callback);
+  assertType<string>(params.bar);
+  assertType<DataProviderCallback<TestItem>>(callback);
 };
 
 const host = document.createElement('div');
-const dataProviderController = new DataProviderController<MyDataProviderParams>(host, {
+const dataProviderController = new DataProviderController<TestItem, TestDataProviderParams>(host, {
   size: 1000,
   pageSize: 50,
   isExpanded: (_item) => true,
   dataProvider,
-  dataProviderParams: () => ({ foo: 'bar' }),
+  dataProviderParams: () => ({ bar: 'bar' }),
 });
 
 // Constructor
@@ -37,7 +41,7 @@ assertType<
       size: number | undefined;
       pageSize: number;
       isExpanded(item: unknown): boolean;
-      dataProvider: DataProvider<DataProviderParams>;
+      dataProvider: DataProvider<TestItem, DataProviderParams>;
       dataProviderParams(): DataProviderParams;
     },
   ) => void
@@ -45,12 +49,12 @@ assertType<
 
 // Properties
 assertType<HTMLElement>(dataProviderController.host);
-assertType<Cache>(dataProviderController.rootCache);
+assertType<Cache<TestItem>>(dataProviderController.rootCache);
 assertType<number | undefined>(dataProviderController.size);
 assertType<number>(dataProviderController.pageSize);
-assertType<(item: unknown) => boolean>(dataProviderController.isExpanded);
-assertType<() => MyDataProviderParams>(dataProviderController.dataProviderParams);
-assertType<DataProvider<MyDataProviderParams>>(dataProviderController.dataProvider);
+assertType<(item: TestItem) => boolean>(dataProviderController.isExpanded);
+assertType<() => TestDataProviderParams>(dataProviderController.dataProviderParams);
+assertType<DataProvider<TestItem, TestDataProviderParams>>(dataProviderController.dataProvider);
 assertType<number>(dataProviderController.effectiveSize);
 
 // Methods
@@ -60,7 +64,7 @@ assertType<(flatIndex: number) => void>(dataProviderController.ensureFlatIndexLo
 assertType<(flatIndex: number) => void>(dataProviderController.ensureFlatIndexHierarchy);
 assertType<
   (flatIndex: number) => {
-    cache: Cache;
+    cache: Cache<TestItem>;
     item: unknown | undefined;
     index: number;
     page: number;
@@ -72,4 +76,6 @@ assertType<() => void>(dataProviderController.loadFirstPage);
 assertType<() => boolean>(dataProviderController.isLoading);
 assertType<(size: number) => void>(dataProviderController.setSize);
 assertType<(pageSize: number) => void>(dataProviderController.setPageSize);
-assertType<(dataProvider: DataProvider<MyDataProviderParams>) => void>(dataProviderController.setDataProvider);
+assertType<(dataProvider: DataProvider<TestItem, TestDataProviderParams>) => void>(
+  dataProviderController.setDataProvider,
+);
