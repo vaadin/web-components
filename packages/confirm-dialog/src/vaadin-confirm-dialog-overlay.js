@@ -13,6 +13,7 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
 import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js';
 
 registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, confirmDialogOverlay], {
@@ -78,7 +79,9 @@ defineCustomElement(ConfirmDialogOverlay);
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))) {
+class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
+  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))),
+) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
@@ -106,66 +109,6 @@ class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropert
         focus-trap
       ></vaadin-confirm-dialog-overlay>
     `;
-  }
-
-  static get properties() {
-    return {
-      /**
-       * Set the `aria-label` attribute for assistive technologies like
-       * screen readers. An empty string value for this property (the
-       * default) means that the `aria-label` attribute is not present.
-       */
-      ariaLabel: {
-        type: String,
-        value: '',
-      },
-
-      /**
-       * Height to be set on the overlay content.
-       */
-      contentHeight: {
-        type: String,
-      },
-
-      /**
-       * Width to be set on the overlay content.
-       */
-      contentWidth: {
-        type: String,
-      },
-    };
-  }
-
-  static get observers() {
-    return [
-      '__updateContentHeight(contentHeight, _overlayElement)',
-      '__updateContentWidth(contentWidth, _overlayElement)',
-    ];
-  }
-
-  /** @private */
-  __updateDimension(overlay, dimension, value) {
-    const prop = `--_vaadin-confirm-dialog-content-${dimension}`;
-
-    if (value) {
-      overlay.style.setProperty(prop, value);
-    } else {
-      overlay.style.removeProperty(prop);
-    }
-  }
-
-  /** @private */
-  __updateContentHeight(height, overlay) {
-    if (overlay) {
-      this.__updateDimension(overlay, 'height', height);
-    }
-  }
-
-  /** @private */
-  __updateContentWidth(width, overlay) {
-    if (overlay) {
-      this.__updateDimension(overlay, 'width', width);
-    }
   }
 }
 
