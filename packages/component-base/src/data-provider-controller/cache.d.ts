@@ -5,7 +5,7 @@
  */
 import type { DataProviderCallback } from './data-provider-controller.js';
 
-type CacheContext = { isExpanded(item: unknown): boolean };
+export type CacheContext = { isExpanded(item: unknown): boolean };
 
 /**
  * A class that stores items with their associated sub-caches.
@@ -58,13 +58,7 @@ export class Cache {
    */
   get effectiveSize(): number;
 
-  constructor(
-    context: CacheContext,
-    pageSize: number,
-    size: number,
-    parentCache: Cache | undefined,
-    parentCacheIndex: number | undefined,
-  );
+  constructor(context: CacheContext, pageSize: number, size: number, parentCache?: Cache, parentCacheIndex?: number);
 
   /**
    * Recalculates the effective size for the cache and its descendant caches recursively.

@@ -1,9 +1,9 @@
-import type { Cache } from '../../src/data-provider-controller/cache.js';
+import type { Cache } from '../../../src/data-provider-controller/cache.js';
 import {
   type DataProvider,
   type DataProviderCallback,
   DataProviderController,
-} from '../../src/data-provider-controller/data-provider-controller.js';
+} from '../../../src/data-provider-controller/data-provider-controller.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
