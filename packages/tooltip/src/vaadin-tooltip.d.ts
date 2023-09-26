@@ -5,7 +5,6 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { TooltipMixin } from './vaadin-tooltip-mixin.js';
 
@@ -49,9 +48,7 @@ export { TooltipPosition } from './vaadin-tooltip-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Tooltip extends TooltipMixin(
-  OverlayClassMixin(ThemePropertyMixin(ControllerMixin(ElementMixin(HTMLElement)))),
-) {}
+declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ControllerMixin(ElementMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
