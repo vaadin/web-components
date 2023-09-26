@@ -381,11 +381,6 @@ class RadioGroup extends FieldMixin(
     }
   }
 
-  /** @private */
-  __onRadioButtonChange() {
-    this.dirty = true;
-  }
-
   /**
    * @param {!CustomEvent} event
    * @private
@@ -394,6 +389,29 @@ class RadioGroup extends FieldMixin(
     if (event.target.checked) {
       this.__selectRadioButton(event.target);
     }
+  }
+
+  /** @private */
+  __onRadioButtonChange() {
+    this.dirty = true;
+
+    // Normally, the validation is triggered on `checked-changed` (in the value property observer).
+    // However, it can be disabled, in which case we need to trigger it manually here.
+    if (!this.__shouldValidateOnProgrammaticValueChange()) {
+      this.validate();
+    }
+  }
+
+  /**
+   * Override this method to define whether the component should validate on
+   * programmatic value property change.
+   *
+   * WARNING: Do not rely on this method because it will be removed later.
+   *
+   * @private
+   */
+  __shouldValidateOnProgrammaticValueChange() {
+    return true;
   }
 
   /**
@@ -428,7 +446,7 @@ class RadioGroup extends FieldMixin(
       this.removeAttribute('has-value');
     }
 
-    if (oldValue !== undefined) {
+    if (oldValue !== undefined && this.__shouldValidateOnProgrammaticValueChange()) {
       this.validate();
     }
   }

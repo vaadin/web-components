@@ -79,7 +79,7 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate on value change', async () => {
+    it('should validate on programmatic value change', async () => {
       select.value = 'option-2';
       await nextUpdate(select);
       expect(validateSpy.callCount).to.be.equal(1);
@@ -133,6 +133,28 @@ describe('validation', () => {
       it('should not validate on blur when document does not have focus', () => {
         select.blur();
         expect(validateSpy.called).to.be.false;
+      });
+    });
+
+    describe('validation on programmatic value change is disabled', () => {
+      beforeEach(() => {
+        select.__shouldValidateOnProgrammaticValueChange = () => false;
+      });
+
+      it('should not validate on programmatic value change', async () => {
+        select.value = 'option-2';
+        await nextUpdate(select);
+        expect(validateSpy).to.be.not.called;
+      });
+
+      it('should validate on Enter', async () => {
+        select.focus();
+        select.click();
+        await nextRender();
+
+        await sendKeys({ press: 'Enter' });
+        await nextUpdate(select);
+        expect(validateSpy).to.be.calledOnce;
       });
     });
   });

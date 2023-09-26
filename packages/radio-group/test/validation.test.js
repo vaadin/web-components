@@ -65,7 +65,7 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on value change', () => {
+    it('should validate on programmatic value change', () => {
       group.value = '1';
       expect(validateSpy.calledOnce).to.be.true;
     });
@@ -122,6 +122,22 @@ describe('validation', () => {
         await sendKeys({ up: 'Shift' });
 
         expect(validateSpy.called).to.be.false;
+      });
+    });
+
+    describe('validation on programmatic value change is disabled', () => {
+      beforeEach(() => {
+        group.__shouldValidateOnProgrammaticValueChange = () => false;
+      });
+
+      it('should not validate on programmatic value change', () => {
+        group.value = '1';
+        expect(validateSpy).to.be.not.called;
+      });
+
+      it('should validate on radio button click', () => {
+        group.querySelector('vaadin-radio-button').click();
+        expect(validateSpy).to.be.calledOnce;
       });
     });
   });

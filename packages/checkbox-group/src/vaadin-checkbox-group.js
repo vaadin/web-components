@@ -333,11 +333,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     }
   }
 
-  /** @private */
-  __onCheckboxChange() {
-    this.dirty = true;
-  }
-
   /**
    * @param {!CustomEvent} event
    * @private
@@ -350,6 +345,29 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     } else {
       this.__removeCheckboxFromValue(checkbox.value);
     }
+  }
+
+  /** @private */
+  __onCheckboxChange() {
+    this.dirty = true;
+
+    // Normally, the validation is triggered on `checked-changed` (in the value property observer).
+    // However, it can be disabled, in which case we need to trigger it manually here.
+    if (!this.__shouldValidateOnProgrammaticValueChange()) {
+      this.validate();
+    }
+  }
+
+  /**
+   * Override this method to define whether the component should validate on
+   * programmatic value property change.
+   *
+   * WARNING: Do not rely on this method because it will be removed later.
+   *
+   * @private
+   */
+  __shouldValidateOnProgrammaticValueChange() {
+    return true;
   }
 
   /**
@@ -369,7 +387,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
       checkbox.checked = value.includes(checkbox.value);
     });
 
-    if (oldValue !== undefined) {
+    if (oldValue !== undefined && this.__shouldValidateOnProgrammaticValueChange()) {
       this.validate();
     }
   }

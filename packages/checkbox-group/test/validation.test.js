@@ -56,12 +56,12 @@ describe('validation', () => {
       expect(group.checkValidity()).to.be.true;
     });
 
-    it('should validate when adding a value', () => {
+    it('should validate when adding a value programmatically', () => {
       group.value = ['en', 'fr'];
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate when removing a value', () => {
+    it('should validate when removing a value programmatically', () => {
       group.value = ['en', 'fr'];
       validateSpy.resetHistory();
       group.value = ['en'];
@@ -128,6 +128,22 @@ describe('validation', () => {
         await sendKeys({ up: 'Shift' });
 
         expect(validateSpy.called).to.be.false;
+      });
+    });
+
+    describe('validation on programmatic value change is disabled', () => {
+      beforeEach(() => {
+        group.__shouldValidateOnProgrammaticValueChange = () => false;
+      });
+
+      it('should not validate on programmatic value change', () => {
+        group.value = '1';
+        expect(validateSpy).to.be.not.called;
+      });
+
+      it('should validate on checkbox click', () => {
+        group.querySelector('vaadin-checkbox').click();
+        expect(validateSpy).to.be.calledOnce;
       });
     });
   });

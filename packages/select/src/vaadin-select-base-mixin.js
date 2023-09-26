@@ -290,6 +290,18 @@ export const SelectBaseMixin = (superClass) =>
       }
     }
 
+    /**
+     * Override this method to define whether the component should validate on
+     * programmatic value property change.
+     *
+     * WARNING: Do not rely on this method because it will be removed later.
+     *
+     * @private
+     */
+    __shouldValidateOnProgrammaticValueChange() {
+      return true;
+    }
+
     /** @private */
     _valueChanged(value, oldValue) {
       this.toggleAttribute('has-value', Boolean(value));
@@ -297,7 +309,7 @@ export const SelectBaseMixin = (superClass) =>
       // Skip validation during initialization and when
       // a change event is scheduled, as validation will be
       // triggered by `__dispatchChange()` in that case.
-      if (oldValue !== undefined && !this.__dispatchChangePending) {
+      if (oldValue !== undefined && !this.__dispatchChangePending && this.__shouldValidateOnProgrammaticValueChange()) {
         this.validate();
       }
     }
