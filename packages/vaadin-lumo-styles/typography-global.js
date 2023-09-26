@@ -10,4 +10,4 @@ import { typography } from './typography.js';
 const typographyWithoutHost = css`
   ${unsafeCSS(typography.cssText.replace(/,\s*:host/su, ''))}
 `;
-addLumoGlobalStyles('typography', typographyWithoutHost, false);
+addLumoGlobalStyles('typography', typographyWithoutHost);
