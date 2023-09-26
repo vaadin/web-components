@@ -9,6 +9,9 @@
     <script type="module">
       import '@vaadin/date-picker';
       import '@vaadin/tooltip';
+      const isDateDisabled = (date) => date.getDay() === 0;
+      const picker = document.querySelector('vaadin-date-picker');
+      picker.isDateDisabled = isDateDisabled;
     </script>
   </head>
   <body>
