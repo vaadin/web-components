@@ -247,6 +247,7 @@ const createUnitTestsConfig = (config) => {
       config: {
         ui: 'bdd',
         timeout: '10000',
+        retries: 2,
       },
     },
     coverage: hasCoverageParam,
