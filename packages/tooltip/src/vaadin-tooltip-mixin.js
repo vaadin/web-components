@@ -297,6 +297,7 @@ export const TooltipMixin = (superClass) =>
         manual: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -306,6 +307,7 @@ export const TooltipMixin = (superClass) =>
         opened: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -358,6 +360,7 @@ export const TooltipMixin = (superClass) =>
         _autoOpened: {
           type: Boolean,
           observer: '__autoOpenedChanged',
+          sync: true,
         },
 
         /**
@@ -386,6 +389,7 @@ export const TooltipMixin = (superClass) =>
         /** @private */
         _isConnected: {
           type: Boolean,
+          sync: true,
         },
 
         /**
