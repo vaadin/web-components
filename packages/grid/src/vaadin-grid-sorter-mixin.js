@@ -71,10 +71,6 @@ registerStyles(
  */
 export const GridSorterMixin = (superClass) =>
   class GridSorterMixinClass extends superClass {
-    static get is() {
-      return 'vaadin-grid-sorter';
-    }
-
     static get properties() {
       return {
         /**
@@ -93,7 +89,6 @@ export const GridSorterMixin = (superClass) =>
           reflectToAttribute: true,
           notify: true,
           value: null,
-          sync: true,
         },
 
         /**
@@ -103,7 +98,6 @@ export const GridSorterMixin = (superClass) =>
         _order: {
           type: Number,
           value: null,
-          sync: true,
         },
 
         /** @private */
