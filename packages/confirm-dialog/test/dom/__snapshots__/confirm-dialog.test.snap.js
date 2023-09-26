@@ -22,20 +22,27 @@ snapshots["vaadin-confirm-dialog overlay"] =
   </div>
   <vaadin-button
     hidden=""
+    role="button"
     slot="cancel-button"
+    tabindex="0"
     theme="tertiary"
   >
     Cancel
   </vaadin-button>
   <vaadin-button
+    focused=""
+    role="button"
     slot="confirm-button"
+    tabindex="0"
     theme="primary"
   >
     Confirm
   </vaadin-button>
   <vaadin-button
     hidden=""
+    role="button"
     slot="reject-button"
+    tabindex="0"
     theme="error tertiary"
   >
     Reject
@@ -66,20 +73,27 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
   </div>
   <vaadin-button
     hidden=""
+    role="button"
     slot="cancel-button"
+    tabindex="0"
     theme="tertiary"
   >
     Cancel
   </vaadin-button>
   <vaadin-button
+    focused=""
+    role="button"
     slot="confirm-button"
+    tabindex="0"
     theme="primary"
   >
     Confirm
   </vaadin-button>
   <vaadin-button
     hidden=""
+    role="button"
     slot="reject-button"
+    tabindex="0"
     theme="error tertiary"
   >
     Reject
@@ -110,20 +124,27 @@ snapshots["vaadin-confirm-dialog overlay class"] =
   </div>
   <vaadin-button
     hidden=""
+    role="button"
     slot="cancel-button"
+    tabindex="0"
     theme="tertiary"
   >
     Cancel
   </vaadin-button>
   <vaadin-button
+    focused=""
+    role="button"
     slot="confirm-button"
+    tabindex="0"
     theme="primary"
   >
     Confirm
   </vaadin-button>
   <vaadin-button
     hidden=""
+    role="button"
     slot="reject-button"
+    tabindex="0"
     theme="error tertiary"
   >
     Reject
