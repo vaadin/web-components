@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { Tooltip } from '../src/vaadin-tooltip.js';
 
 describe('offset', () => {
@@ -11,10 +11,11 @@ describe('offset', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
     target = fixtureSync('<div style="width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>');
     tooltip.target = target;
+    await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
   });
 
@@ -25,8 +26,9 @@ describe('offset', () => {
 
   ['top-start', 'top', 'top-end'].forEach((position) => {
     describe(`${position} offset`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         tooltip.position = position;
+        await nextUpdate(tooltip);
         tooltip.style.setProperty('--vaadin-tooltip-offset-bottom', '10px');
         tooltip.style.setProperty('--vaadin-tooltip-offset-top', '10px');
       });
@@ -48,8 +50,9 @@ describe('offset', () => {
 
   ['bottom-start', 'bottom', 'bottom-end'].forEach((position) => {
     describe(`${position} offset`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         tooltip.position = position;
+        await nextUpdate(tooltip);
         tooltip.style.setProperty('--vaadin-tooltip-offset-bottom', '10px');
         tooltip.style.setProperty('--vaadin-tooltip-offset-top', '10px');
       });
@@ -73,8 +76,9 @@ describe('offset', () => {
 
   ['start-top', 'start', 'start-bottom'].forEach((position) => {
     describe(`${position} offset`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         tooltip.position = position;
+        await nextUpdate(tooltip);
         tooltip.style.setProperty('--vaadin-tooltip-offset-end', '10px');
         tooltip.style.setProperty('--vaadin-tooltip-offset-start', '10px');
       });
@@ -96,8 +100,9 @@ describe('offset', () => {
 
   ['end-top', 'end', 'end-bottom'].forEach((position) => {
     describe(`${position} offset`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         tooltip.position = position;
+        await nextUpdate(tooltip);
         tooltip.style.setProperty('--vaadin-tooltip-offset-start', '10px');
         tooltip.style.setProperty('--vaadin-tooltip-offset-end', '10px');
       });

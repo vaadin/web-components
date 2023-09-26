@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Tooltip } from '../src/vaadin-tooltip.js';
 
@@ -22,10 +22,11 @@ describe('position', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
     target = fixtureSync('<div style="width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>');
     tooltip.target = target;
+    await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
   });
 
@@ -101,8 +102,9 @@ describe('position', () => {
   });
 
   describe('top-start', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'top-start';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -125,8 +127,9 @@ describe('position', () => {
   });
 
   describe('top', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'top';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -149,8 +152,9 @@ describe('position', () => {
   });
 
   describe('top-end', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'top-end';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -173,8 +177,9 @@ describe('position', () => {
   });
 
   describe('bottom-start', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'bottom-start';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -197,8 +202,9 @@ describe('position', () => {
   });
 
   describe('bottom', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'bottom';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -221,8 +227,9 @@ describe('position', () => {
   });
 
   describe('bottom-end', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'bottom-end';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -245,8 +252,9 @@ describe('position', () => {
   });
 
   describe('start-top', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'start-top';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -269,8 +277,9 @@ describe('position', () => {
   });
 
   describe('start', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'start';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -293,8 +302,9 @@ describe('position', () => {
   });
 
   describe('start-bottom', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'start-bottom';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -317,8 +327,9 @@ describe('position', () => {
   });
 
   describe('end-top', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'end-top';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -341,8 +352,9 @@ describe('position', () => {
   });
 
   describe('end', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'end';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
@@ -365,8 +377,9 @@ describe('position', () => {
   });
 
   describe('end-bottom', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip.position = 'end-bottom';
+      await nextUpdate(tooltip);
     });
 
     ['ltr', 'rtl'].forEach((dir) => {

@@ -11,29 +11,9 @@ import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js'
 import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-
-const confirmDialogOverlay = css`
-  :host {
-    --_vaadin-confirm-dialog-content-width: auto;
-    --_vaadin-confirm-dialog-content-height: auto;
-  }
-
-  [part='overlay'] {
-    width: var(--_vaadin-confirm-dialog-content-width);
-    height: var(--_vaadin-confirm-dialog-content-height);
-  }
-
-  ::slotted([slot='header']) {
-    pointer-events: auto;
-  }
-
-  /* Make buttons clickable */
-  [part='footer'] > * {
-    pointer-events: all;
-  }
-`;
+import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js';
 
 registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, confirmDialogOverlay], {
   moduleId: 'vaadin-confirm-dialog-overlay-styles',
