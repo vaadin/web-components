@@ -473,6 +473,8 @@ describe('lazy loading', () => {
           await aTimeout(0);
 
           comboBox._scrollIntoView(0);
+          // Wait for the async data provider to respond
+          await aTimeout(100);
           expect(getFocusedItemIndex(comboBox)).to.equal(0);
         });
 
