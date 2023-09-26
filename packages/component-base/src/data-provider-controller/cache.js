@@ -9,6 +9,8 @@
  */
 export class Cache {
   /**
+   * A context object.
+   *
    * @type {{ isExpanded: (item: unknown) => boolean }}
    */
   context;
