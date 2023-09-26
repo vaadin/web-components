@@ -372,6 +372,12 @@ export const TooltipMixin = (superClass) =>
         },
 
         /** @private */
+        __effectivePosition: {
+          type: String,
+          computed: '__computePosition(position, _position)',
+        },
+
+        /** @private */
         __isTargetHidden: {
           type: Boolean,
           value: false,
@@ -380,6 +386,15 @@ export const TooltipMixin = (superClass) =>
         /** @private */
         _isConnected: {
           type: Boolean,
+        },
+
+        /**
+         * Default value used when `position` property is not set.
+         * @protected
+         */
+        _position: {
+          type: String,
+          value: 'bottom',
         },
 
         /** @private */
@@ -488,6 +503,36 @@ export const TooltipMixin = (superClass) =>
         },
       });
       this.addController(this._srLabelController);
+    }
+
+    /** @private */
+    __computeHorizontalAlign(position) {
+      return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
+    }
+
+    /** @private */
+    __computeNoHorizontalOverlap(position) {
+      return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
+    }
+
+    /** @private */
+    __computeNoVerticalOverlap(position) {
+      return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
+    }
+
+    /** @private */
+    __computeVerticalAlign(position) {
+      return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
+    }
+
+    /** @private */
+    __computeOpened(manual, opened, autoOpened, connected) {
+      return connected && (manual ? opened : autoOpened);
+    }
+
+    /** @private */
+    __computePosition(position, defaultPosition) {
+      return position || defaultPosition;
     }
 
     /** @private */
