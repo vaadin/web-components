@@ -4,6 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type {
+  DataProvider,
+  DataProviderCallback,
+} from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { GridSorterDirection } from './vaadin-grid-sorter.js';
 
 export { GridSorterDirection };
@@ -18,7 +22,7 @@ export interface GridSorterDefinition {
   direction: GridSorterDirection;
 }
 
-export type GridDataProviderCallback<TItem> = (items: TItem[], size?: number) => void;
+export type GridDataProviderCallback<TItem> = DataProviderCallback<TItem>;
 
 export type GridDataProviderParams<TItem> = {
   page: number;
@@ -28,10 +32,7 @@ export type GridDataProviderParams<TItem> = {
   parentItem?: TItem;
 };
 
-export type GridDataProvider<TItem> = (
-  params: GridDataProviderParams<TItem>,
-  callback: GridDataProviderCallback<TItem>,
-) => void;
+export type GridDataProvider<TItem> = DataProvider<TItem, GridDataProviderParams<TItem>>;
 
 export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
