@@ -5,26 +5,9 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { type GridSorterEventMap, GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
-export type GridSorterDirection = 'asc' | 'desc' | null;
-
-/**
- * Fired when the `path` or `direction` property changes.
- */
-export type GridSorterChangedEvent = CustomEvent<{ shiftClick: boolean; fromSorterClick: boolean }>;
-
-/**
- * Fired when the `direction` property changes.
- */
-export type GridSorterDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
-
-export interface GridSorterCustomEventMap {
-  'sorter-changed': GridSorterChangedEvent;
-
-  'direction-changed': GridSorterDirectionChangedEvent;
-}
-
-export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterCustomEventMap {}
+export * from './vaadin-grid-sorter-mixin.js';
 
 /**
  * `<vaadin-grid-sorter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -65,19 +48,7 @@ export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterCusto
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  */
-declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
-  /**
-   * JS Path of the property in the item used for sorting the data.
-   */
-  path: string | null | undefined;
-
-  /**
-   * How to sort the data.
-   * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
-   * descending direction, or `null` for not sorting the data.
-   */
-  direction: GridSorterDirection | null | undefined;
-
+declare class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(HTMLElement))) {
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,
     listener: (this: GridSorter, ev: GridSorterEventMap[K]) => void,
