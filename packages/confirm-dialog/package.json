@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-confirm-dialog-overlay.js",
+    "!src/vaadin-lit-confirm-dialog.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, esc, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, esc, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-confirm-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('vaadin-confirm-dialog', () => {
@@ -183,6 +181,7 @@ describe('vaadin-confirm-dialog', () => {
         await nextRender();
         overlay = confirm.$.dialog.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
+        await nextUpdate(overlay);
       });
 
       it('should set the message text content using message property', () => {
