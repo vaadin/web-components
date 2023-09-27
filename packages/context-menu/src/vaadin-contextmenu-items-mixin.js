@@ -71,18 +71,8 @@ export const ItemsMixin = (superClass) =>
       };
     }
 
-    /**
-     * Tag name prefix used by overlay, list-box and items.
-     * @protected
-     * @return {string}
-     */
-    get _tagNamePrefix() {
-      return 'vaadin-context-menu';
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
+    constructor() {
+      super();
 
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
@@ -91,7 +81,18 @@ export const ItemsMixin = (superClass) =>
           this.dispatchEvent(new CustomEvent('items-outside-click'));
         }
       };
-      this.addEventListener('items-outside-click', () => this.items && this.close());
+      this.addEventListener('items-outside-click', () => {
+        this.items && this.close();
+      });
+    }
+
+    /**
+     * Tag name prefix used by overlay, list-box and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-context-menu';
     }
 
     /** @protected */
