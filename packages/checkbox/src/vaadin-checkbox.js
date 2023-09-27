@@ -115,6 +115,8 @@ class Checkbox extends LabelMixin(
           margin: 0;
           align-self: stretch;
           -webkit-appearance: none;
+          width: initial;
+          height: initial;
         }
       </style>
       <div class="vaadin-checkbox-container">
