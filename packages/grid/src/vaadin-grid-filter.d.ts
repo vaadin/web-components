@@ -3,18 +3,11 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 
-/**
- * Fired when the `value` property changes.
- */
-export type GridFilterValueChangedEvent = CustomEvent<{ value: string }>;
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { GridFilterElementMixin, type GridFilterEventMap } from './vaadin-grid-filter-element-mixin.js';
 
-export interface GridFilterCustomEventMap {
-  'value-changed': GridFilterValueChangedEvent;
-}
-
-export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCustomEventMap {}
+export * from './vaadin-grid-filter-element-mixin.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -41,17 +34,7 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCusto
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class GridFilter extends ControllerMixin(HTMLElement) {
-  /**
-   * JS Path of the property in the item used for filtering the data.
-   */
-  path: string | null | undefined;
-
-  /**
-   * Current filter value.
-   */
-  value: string | null | undefined;
-
+declare class GridFilter extends GridFilterElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof GridFilterEventMap>(
     type: K,
     listener: (this: GridFilter, ev: GridFilterEventMap[K]) => void,
