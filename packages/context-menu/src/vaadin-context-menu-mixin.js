@@ -1,0 +1,492 @@
+/**
+ * @license
+ * Copyright (c) 2016 - 2023 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+
+/**
+ * @polymerMixin
+ */
+export const ContextMenuMixin = (superClass) =>
+  class ContextMenuMixinClass extends superClass {
+    static get properties() {
+      return {
+        /**
+         * CSS selector that can be used to target any child element
+         * of the context menu to listen for `openOn` events.
+         */
+        selector: {
+          type: String,
+        },
+
+        /**
+         * True if the overlay is currently displayed.
+         * @type {boolean}
+         */
+        opened: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          readOnly: true,
+        },
+
+        /**
+         * Event name to listen for opening the context menu.
+         * @attr {string} open-on
+         * @type {string}
+         */
+        openOn: {
+          type: String,
+          value: 'vaadin-contextmenu',
+        },
+
+        /**
+         * The target element that's listened to for context menu opening events.
+         * By default the vaadin-context-menu listens to the target's `vaadin-contextmenu`
+         * events.
+         * @type {!HTMLElement}
+         * @default self
+         */
+        listenOn: {
+          type: Object,
+          value() {
+            return this;
+          },
+        },
+
+        /**
+         * Event name to listen for closing the context menu.
+         * @attr {string} close-on
+         * @type {string}
+         */
+        closeOn: {
+          type: String,
+          value: 'click',
+          observer: '_closeOnChanged',
+        },
+
+        /**
+         * Custom function for rendering the content of the menu overlay.
+         * Receives three arguments:
+         *
+         * - `root` The root container DOM element. Append your content to it.
+         * - `contextMenu` The reference to the `<vaadin-context-menu>` element.
+         * - `context` The object with the menu context, contains:
+         *   - `context.target`  the target of the menu opening event,
+         *   - `context.detail` the menu opening event detail.
+         * @type {ContextMenuRenderer | undefined}
+         */
+        renderer: {
+          type: Function,
+        },
+
+        /**
+         * When true, the menu overlay is modeless.
+         * @protected
+         */
+        _modeless: {
+          type: Boolean,
+        },
+
+        /** @private */
+        _context: Object,
+
+        /** @private */
+        _phone: {
+          type: Boolean,
+        },
+
+        /** @private */
+        _touch: {
+          type: Boolean,
+          value: isTouch,
+        },
+
+        /** @private */
+        _wide: {
+          type: Boolean,
+        },
+
+        /** @private */
+        _wideMediaQuery: {
+          type: String,
+          value: '(min-device-width: 750px)',
+        },
+      };
+    }
+
+    static get observers() {
+      return [
+        '_openedChanged(opened)',
+        '_targetOrOpenOnChanged(listenOn, openOn)',
+        '_rendererChanged(renderer, items)',
+        '_touchOrWideChanged(_touch, _wide)',
+      ];
+    }
+
+    constructor() {
+      super();
+      this._boundOpen = this.open.bind(this);
+      this._boundClose = this.close.bind(this);
+      this._boundPreventDefault = this._preventDefault.bind(this);
+      this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.__boundOnScroll = this.__onScroll.bind(this);
+      window.addEventListener('scroll', this.__boundOnScroll, true);
+
+      // Restore opened state if overlay was opened when disconnecting
+      if (this.__restoreOpened) {
+        this._setOpened(true);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      window.removeEventListener('scroll', this.__boundOnScroll, true);
+
+      // Close overlay and memorize opened state
+      this.__restoreOpened = this.opened;
+      this.close();
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._overlayElement = this.$.overlay;
+      this._overlayElement.owner = this;
+
+      this.addController(
+        new MediaQueryController(this._wideMediaQuery, (matches) => {
+          this._wide = matches;
+        }),
+      );
+    }
+
+    /**
+     * Runs before overlay is fully rendered
+     * @private
+     */
+    _onOverlayOpened(e) {
+      this._setOpened(e.detail.value);
+      this.__alignOverlayPosition();
+    }
+
+    /**
+     * Runs after overlay is fully rendered
+     * @private
+     */
+    _onVaadinOverlayOpen() {
+      this.__alignOverlayPosition();
+      this.$.overlay.style.opacity = '';
+      this.__forwardFocus();
+    }
+
+    /** @private */
+    _targetOrOpenOnChanged(listenOn, openOn) {
+      if (this._oldListenOn && this._oldOpenOn) {
+        this._unlisten(this._oldListenOn, this._oldOpenOn, this._boundOpen);
+
+        this._oldListenOn.style.webkitTouchCallout = '';
+        this._oldListenOn.style.webkitUserSelect = '';
+        this._oldListenOn.style.userSelect = '';
+
+        this._oldListenOn = null;
+        this._oldOpenOn = null;
+      }
+
+      if (listenOn && openOn) {
+        this._listen(listenOn, openOn, this._boundOpen);
+
+        this._oldListenOn = listenOn;
+        this._oldOpenOn = openOn;
+      }
+    }
+
+    /** @private */
+    _touchOrWideChanged(touch, wide) {
+      this._phone = !wide && touch;
+    }
+
+    /** @private */
+    _setListenOnUserSelect(value) {
+      // Note: these styles don't seem to work in Firefox on iOS.
+      this.listenOn.style.webkitTouchCallout = value;
+      this.listenOn.style.webkitUserSelect = value; // Chrome, Safari, Firefox
+      this.listenOn.style.userSelect = value;
+
+      // Note: because user-selection is disabled on the overlay
+      // before opening the menu the text could be already selected
+      // so we need to clear that selection
+      document.getSelection().removeAllRanges();
+    }
+
+    /** @private */
+    _closeOnChanged(closeOn, oldCloseOn) {
+      // Outside click event from overlay
+      const evtOverlay = 'vaadin-overlay-outside-click';
+
+      const overlay = this.$.overlay;
+
+      if (oldCloseOn) {
+        this._unlisten(overlay, oldCloseOn, this._boundClose);
+      }
+      if (closeOn) {
+        this._listen(overlay, closeOn, this._boundClose);
+        overlay.removeEventListener(evtOverlay, this._boundPreventDefault);
+      } else {
+        overlay.addEventListener(evtOverlay, this._boundPreventDefault);
+      }
+    }
+
+    /** @private */
+    _preventDefault(e) {
+      e.preventDefault();
+    }
+
+    /** @private */
+    _openedChanged(opened) {
+      if (opened) {
+        document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
+        this._setListenOnUserSelect('none');
+      } else {
+        document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
+        this._setListenOnUserSelect('');
+      }
+
+      // Has to be set after instance has been created
+      this.$.overlay.opened = opened;
+    }
+
+    /**
+     * Requests an update for the content of the menu overlay.
+     * While performing the update, it invokes the renderer passed in the `renderer` property.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     */
+    requestContentUpdate() {
+      if (!this._overlayElement || !this.renderer) {
+        return;
+      }
+
+      this._overlayElement.requestContentUpdate();
+    }
+
+    /** @private */
+    _rendererChanged(renderer, items) {
+      if (items) {
+        if (renderer) {
+          throw new Error('The items API cannot be used together with a renderer');
+        }
+
+        if (this.closeOn === 'click') {
+          this.closeOn = '';
+        }
+
+        renderer = this.__itemsRenderer;
+      }
+
+      this.$.overlay.renderer = renderer;
+    }
+
+    /**
+     * Closes the overlay.
+     */
+    close() {
+      this._setOpened(false);
+    }
+
+    /** @private */
+    _contextTarget(e) {
+      if (this.selector) {
+        const targets = this.listenOn.querySelectorAll(this.selector);
+
+        return Array.prototype.filter.call(targets, (el) => {
+          return e.composedPath().indexOf(el) > -1;
+        })[0];
+      }
+      return e.target;
+    }
+
+    /**
+     * Opens the overlay.
+     * @param {!Event | undefined} e used as the context for the menu. Overlay coordinates are taken from this event.
+     */
+    open(e) {
+      if (e && !this.opened) {
+        this._context = {
+          detail: e.detail,
+          target: this._contextTarget(e),
+        };
+
+        if (this._context.target) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Used in alignment which is delayed until overlay is rendered
+          this.__x = this._getEventCoordinate(e, 'x');
+          this.__pageXOffset = window.pageXOffset;
+
+          this.__y = this._getEventCoordinate(e, 'y');
+          this.__pageYOffset = window.pageYOffset;
+
+          this.$.overlay.style.opacity = '0';
+          this._setOpened(true);
+        }
+      }
+    }
+
+    /** @private */
+    __onScroll() {
+      if (!this.opened) {
+        return;
+      }
+
+      const yDiff = window.pageYOffset - this.__pageYOffset;
+      const xDiff = window.pageXOffset - this.__pageXOffset;
+
+      this.__adjustPosition('left', -xDiff);
+      this.__adjustPosition('right', xDiff);
+
+      this.__adjustPosition('top', -yDiff);
+      this.__adjustPosition('bottom', yDiff);
+
+      this.__pageYOffset += yDiff;
+      this.__pageXOffset += xDiff;
+    }
+
+    /** @private */
+    __adjustPosition(coord, diff) {
+      const overlay = this.$.overlay;
+      const style = overlay.style;
+
+      style[coord] = `${(parseInt(style[coord]) || 0) + diff}px`;
+    }
+
+    /** @private */
+    __alignOverlayPosition() {
+      const overlay = this.$.overlay;
+
+      if (overlay.positionTarget) {
+        // The overlay is positioned relative to another node, for example, a
+        // menu item in a nested submenu structure where this overlay lists
+        // the items for another submenu.
+        // It means that the overlay positioning is controlled by
+        // vaadin-overlay-position-mixin so no manual alignment is needed.
+        return;
+      }
+
+      const style = overlay.style;
+
+      // Reset all properties before measuring
+      ['top', 'right', 'bottom', 'left'].forEach((prop) => style.removeProperty(prop));
+      ['right-aligned', 'end-aligned', 'bottom-aligned'].forEach((attr) => overlay.removeAttribute(attr));
+
+      // Maximum x and y values are imposed by content size and overlay limits.
+      const { xMax, xMin, yMax } = overlay.getBoundaries();
+      // Reuse saved x and y event values, in order to this method be used async
+      // in the `vaadin-overlay-change` which guarantees that overlay is ready.
+      // The valus represent an anchor position on the page where the contextmenu
+      // event took place.
+      const x = this.__x;
+      const y = this.__y;
+
+      // Select one overlay corner and move to the event x/y position.
+      // Then set styling attrs for flex-aligning the content appropriately.
+      const wdthVport = document.documentElement.clientWidth;
+      const hghtVport = document.documentElement.clientHeight;
+
+      if (!this.__isRTL) {
+        if (x < wdthVport / 2 || x < xMax) {
+          // Menu is displayed in the right side of the anchor
+          style.left = `${x}px`;
+        } else {
+          // Menu is displayed in the left side of the anchor
+          style.right = `${Math.max(0, wdthVport - x)}px`;
+          this._setEndAligned(overlay);
+        }
+      } else if (x > wdthVport / 2 || x > xMin) {
+        // Menu is displayed in the right side of the anchor
+        style.right = `${Math.max(0, wdthVport - x)}px`;
+      } else {
+        // Menu is displayed in the left side of the anchor
+        style.left = `${x}px`;
+        this._setEndAligned(overlay);
+      }
+
+      if (y < hghtVport / 2 || y < yMax) {
+        style.top = `${y}px`;
+      } else {
+        style.bottom = `${Math.max(0, hghtVport - y)}px`;
+        overlay.setAttribute('bottom-aligned', '');
+      }
+    }
+
+    /** @private */
+    _setEndAligned(element) {
+      element.setAttribute('end-aligned', '');
+      if (!this.__isRTL) {
+        element.setAttribute('right-aligned', '');
+      }
+    }
+
+    /** @private */
+    _getEventCoordinate(event, coord) {
+      if (event.detail instanceof Object) {
+        if (event.detail[coord]) {
+          // Polymer gesture events, get coordinate from detail
+          return event.detail[coord];
+        } else if (event.detail.sourceEvent) {
+          // Unwrap detailed event
+          return this._getEventCoordinate(event.detail.sourceEvent, coord);
+        }
+      } else {
+        const prop = `client${coord.toUpperCase()}`;
+        const position = event.changedTouches ? event.changedTouches[0][prop] : event[prop];
+
+        if (position === 0) {
+          // Native keyboard event
+          const rect = event.target.getBoundingClientRect();
+          return coord === 'x' ? rect.left : rect.top + rect.height;
+        }
+        // Native mouse or touch event
+        return position;
+      }
+    }
+
+    /** @private */
+    _listen(node, evType, handler) {
+      if (gestures[evType]) {
+        addListener(node, evType, handler);
+      } else {
+        node.addEventListener(evType, handler);
+      }
+    }
+
+    /** @private */
+    _unlisten(node, evType, handler) {
+      if (gestures[evType]) {
+        removeListener(node, evType, handler);
+      } else {
+        node.removeEventListener(evType, handler);
+      }
+    }
+
+    /** @private */
+    _onGlobalContextMenu(e) {
+      if (!e.shiftKey) {
+        e.preventDefault();
+        this.close();
+      }
+    }
+  };
