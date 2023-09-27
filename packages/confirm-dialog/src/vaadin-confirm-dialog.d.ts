@@ -6,24 +6,14 @@
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
+import {
+  type ConfirmDialogCustomEventMap,
+  type ConfirmDialogEventMap,
+  ConfirmDialogMixin,
+  type ConfirmDialogOpenedChangedEvent,
+} from './vaadin-confirm-dialog-mixin.js';
 
-/**
- * Fired when the `opened` property changes.
- */
-export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
-
-export interface ConfirmDialogCustomEventMap {
-  'opened-changed': ConfirmDialogOpenedChangedEvent;
-
-  confirm: Event;
-
-  cancel: Event;
-
-  reject: Event;
-}
-
-export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEventMap;
+export { ConfirmDialogCustomEventMap, ConfirmDialogEventMap, ConfirmDialogOpenedChangedEvent };
 
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.

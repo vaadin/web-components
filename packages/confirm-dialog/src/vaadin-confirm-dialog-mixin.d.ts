@@ -5,6 +5,23 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
+/*
+ * Fired when the `opened` property changes.
+ */
+export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+export interface ConfirmDialogCustomEventMap {
+  'opened-changed': ConfirmDialogOpenedChangedEvent;
+
+  confirm: Event;
+
+  cancel: Event;
+
+  reject: Event;
+}
+
+export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEventMap;
+
 export declare function ConfirmDialogMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ConfirmDialogMixinClass> & T;
