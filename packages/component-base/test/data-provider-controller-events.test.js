@@ -37,14 +37,16 @@ describe('DataProviderController - events', () => {
     expect(pageRequestedSpy).to.be.calledOnce;
   });
 
-  it('should fire page-received event when page items is received', async () => {
+  it('should fire page-received event when page items are received', async () => {
     controller.loadFirstPage();
+    expect(pageReceivedSpy).to.be.not.called;
     await aTimeout(0);
     expect(pageReceivedSpy).to.be.calledOnce;
   });
 
   it('should fire page-loaded event when a page request is completed', async () => {
     controller.loadFirstPage();
+    expect(pageLoadedSpy).to.be.not.called;
     await aTimeout(0);
     expect(pageLoadedSpy).to.be.calledOnce;
   });
