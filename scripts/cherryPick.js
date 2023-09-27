@@ -15,15 +15,14 @@
 const axios = require('axios');
 const https = require('https');
 const exec = require('util').promisify(require('child_process').exec);
-const { exe } = require('child_process');
 
-let arrPR = [];
-let arrTitle = [];
-let arrURL = [];
-let arrSHA = [];
-let arrBranch = [];
-let arrUser = [];
-let arrMergedBy = [];
+const arrPR = [];
+const arrTitle = [];
+const arrURL = [];
+const arrSHA = [];
+const arrBranch = [];
+const arrUser = [];
+const arrMergedBy = [];
 
 const repo = 'vaadin/web-components';
 const token = process.env['GITHUB_TOKEN'];
@@ -36,12 +35,11 @@ async function getAllCommits() {
   const url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
   try {
     const options = {
-      headers:
-      {
+      headers: {
         'User-Agent': 'Vaadin Cherry Pick',
-        'Authorization': `token ${token}`,
+        Authorization: `token ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
     };
 
     const res = await axios.get(url, options);
@@ -59,19 +57,18 @@ async function getAllCommits() {
   }
 }
 
-async function getCommit(commitURL){
+async function getCommit(commitURL) {
   try {
     const options = {
-      headers:
-      {
+      headers: {
         'User-Agent': 'Vaadin Cherry Pick',
-        'Authorization': `token ${token}`,
+        Authorization: `token ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
     };
-    
-    res = await axios.get(commitURL, options);
-    data = res.data;
+
+    const res = await axios.get(commitURL, options);
+    const data = res.data;
 
     return data;
   } catch (error) {
@@ -80,62 +77,132 @@ async function getCommit(commitURL){
   }
 }
 
-async function filterCommits(commits){
-  for (let commit of commits) {
-    for (let label of commit.labels){
+async function filterCommits(commits) {
+  for (const commit of commits) {
+    for (const label of commit.labels) {
       let target = false;
       let picked = false;
       let branch;
       let mergedLabel;
       let manualLabel;
 
-      if(label.name.includes("target/")){
+      if (label.name.includes('target/')) {
         target = true;
-        branch = /target\/(.*)/.exec(label.name);
+        branch = /target\/(.*)/u.exec(label.name);
         mergedLabel = `cherry-picked-${branch[1]}`;
         manualLabel = `need to pick manually ${branch[1]}`;
 
-		commit.labels.forEach(la => {
-          if(la.name === mergedLabel || la.name === manualLabel){
+        commit.labels.forEach((la) => {
+          if (la.name === mergedLabel || la.name === manualLabel) {
             picked = true;
           }
-		});
+        });
       }
 
-      if(target === true && picked === false){
-        let singleCommit = await getCommit(commit.url);    
+      if (target === true && picked === false) {
+        const singleCommit = await getCommit(commit.url);
 
-        console.log(commit.number, commit.user.login, commit.url, commit.merge_commit_sha, branch[1], singleCommit.merged_by.login);
+        console.log(
+          commit.number,
+          commit.user.login,
+          commit.url,
+          commit.merge_commit_sha,
+          branch[1],
+          singleCommit.merged_by.login,
+        );
         arrPR.push(commit.number);
         arrSHA.push(commit.merge_commit_sha);
         arrURL.push(commit.url);
         arrBranch.push(branch[1]);
         arrTitle.push(`${commit.title} (#${commit.number}) (CP: ${branch[1]})`);
         arrUser.push(`@${commit.user.login}`);
-        arrMergedBy.push(`@${singleCommit.merged_by.login}`);  
+        arrMergedBy.push(`@${singleCommit.merged_by.login}`);
       }
     }
   }
 }
 
-async function cherryPickCommits(){
-  for(let i=arrPR.length-1; i>=0; i--){
-    let branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
+async function labelCommit(url, label) {
+  const issueURL = `${url.replace('pulls', 'issues')}/labels`;
+  const options = {
+    headers: {
+      'User-Agent': 'Vaadin Cherry Pick',
+      Authorization: `token ${token}`,
+    },
+  };
+
+  await axios.post(issueURL, { labels: [label] }, options);
+}
+
+async function postComment(url, userName, mergedBy, branch, message) {
+  const issueURL = `${url.replace('pulls', 'issues')}/comments`;
+  const options = {
+    headers: {
+      'User-Agent': 'Vaadin Cherry Pick',
+      Authorization: `token ${token}`,
+    },
+  };
+
+  await axios.post(
+    issueURL,
+    {
+      body: `Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`,
+    },
+    options,
+  );
+}
+
+function createPR(title, head, base) {
+  return new Promise((resolve) => {
+    const content = JSON.stringify({ title, head, base }, null, 1);
+    const req = https.request(
+      {
+        method: 'POST',
+        hostname: 'api.github.com',
+        path: `/repos/${repo}/pulls`,
+        headers: {
+          Authorization: `token ${token}`,
+          'User-Agent': 'Vaadin Cherry Pick',
+          'Content-Type': 'application/json',
+          'Content-Length': content.length,
+        },
+        body: content,
+      },
+      (res) => {
+        let body = '';
+        res.on('data', (data) => {
+          body += data;
+        });
+        res.on('end', () => {
+          resolve(body);
+        });
+      },
+    );
+    req.write(content);
+  }).then((body) => {
+    const resp = JSON.parse(body);
+    console.log(`Created PR '${title}' ${resp.url}`);
+  });
+}
+
+async function cherryPickCommits() {
+  for (let i = arrPR.length - 1; i >= 0; i--) {
+    const branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
 
     await exec('git checkout main');
     await exec('git pull');
     await exec(`git checkout ${arrBranch[i]}`);
     await exec(`git reset --hard origin/${arrBranch[i]}`);
 
-    try{
+    try {
       await exec(`git checkout -b ${branchName}`);
     } catch (err) {
       console.error(`Cannot Create Branch, error : ${err}`);
       process.exit(1);
     }
 
-    try{
-      let {stdout, stderr} = await exec(`git cherry-pick ${arrSHA[i]}`);
+    try {
+      const { stdout, stderr } = await exec(`git cherry-pick ${arrSHA[i]}`);
     } catch (err) {
       console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
       await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
@@ -146,83 +213,25 @@ async function cherryPickCommits(){
       continue;
     }
     await exec(`git push origin HEAD:${branchName}`);
-    try{
-        await createPR(arrTitle[i], branchName, arrBranch[i]);	    
+    try {
+      await createPR(arrTitle[i], branchName, arrBranch[i]);
     } catch (err) {
-        console.error(`Cannot create PR from ${branchName}, error : ${err}`);
-        await labelCommit(arrURL[i], `cannot create PR from ${branchName}`);
-        await postComment(arrURL[i], arrUser[i], arrMergedBy[i], arrBranch[i], err);
-        continue;
+      console.error(`Cannot create PR from ${branchName}, error : ${err}`);
+      await labelCommit(arrURL[i], `cannot create PR from ${branchName}`);
+      await postComment(arrURL[i], arrUser[i], arrMergedBy[i], arrBranch[i], err);
+      continue;
     }
-    
+
     await exec(`git checkout main`);
     await exec(`git branch -D ${branchName}`);
     await labelCommit(arrURL[i], `cherry-picked-${arrBranch[i]}`);
   }
 }
 
-async function labelCommit(url, label){
-  let issueURL = url.replace("pulls", "issues") + "/labels";
-  const options = {
-    headers:{
-      'User-Agent': 'Vaadin Cherry Pick',
-      'Authorization': `token ${token}`,
-    }
-  };
-  
-  await axios.post(issueURL, {"labels":[label]}, options);
-}
-
-async function postComment(url, userName, mergedBy, branch, message){
-  let issueURL = url.replace("pulls", "issues") + "/comments";
-  const options = {
-    headers:{
-      'User-Agent': 'Vaadin Cherry Pick',
-      'Authorization': `token ${token}`,
-    }
-  };
-
-  await axios.post(issueURL, {"body":`Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`}, options);
-}
-
-
-async function createPR(title, head, base){
-  const payload = {title, head, base};
-  
-  return new Promise(resolve => {
-    const content = JSON.stringify({ title, head, base }, null, 1)
-    const req = https.request({
-      method: 'POST',
-      hostname: 'api.github.com',
-      path: `/repos/${repo}/pulls`,
-      headers: {
-        'Authorization': `token ${token}`,
-        'User-Agent': 'Vaadin Cherry Pick',
-        'Content-Type': 'application/json',
-        'Content-Length': content.length,
-      },
-      body: content
-    }, res => {
-      let body = "";
-      res.on("data", data => {
-        body += data;
-      });
-      res.on("end", () => {
-        resolve(body);
-      });
-    });
-    req.write(content)
-  }).then(body => {
-    const resp = JSON.parse(body);
-    console.log(`Created PR '${title}' ${resp.url}`);
-  });
-}
-
-async function main(){
-  let allCommits = await getAllCommits();
+async function main() {
+  const allCommits = await getAllCommits();
   await filterCommits(allCommits);
   await cherryPickCommits();
-
 }
 
 main();
