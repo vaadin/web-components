@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-contextmenu-event.js';
+import './vaadin-context-menu-item.js';
+import './vaadin-context-menu-list-box.js';
 import './vaadin-context-menu-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
