@@ -202,7 +202,7 @@ async function cherryPickCommits() {
     }
 
     try {
-      const { stdout, stderr } = await exec(`git cherry-pick ${arrSHA[i]}`);
+      await exec(`git cherry-pick ${arrSHA[i]}`);
     } catch (err) {
       console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
       await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
