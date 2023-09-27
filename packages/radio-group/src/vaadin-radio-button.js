@@ -116,6 +116,8 @@ class RadioButton extends LabelMixin(
           margin: 0;
           align-self: stretch;
           -webkit-appearance: none;
+          width: initial;
+          height: initial;
         }
       </style>
       <div class="vaadin-radio-button-container">
