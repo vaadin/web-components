@@ -5,6 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -45,6 +46,7 @@ registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes NumberFieldMixin
  * @mixes ElementMixin
@@ -118,4 +120,4 @@ export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(Pol
   }
 }
 
-customElements.define(NumberField.is, NumberField);
+defineCustomElement(NumberField);

@@ -145,21 +145,21 @@ describe('row details template', () => {
       });
 
       it('should expand the item when checking the checkbox', () => {
-        expect(grid._isExpanded(grid._cache.items[0])).to.be.true;
-        expect(grid._isExpanded(grid._cache.items[1])).to.be.false;
+        expect(grid._isExpanded(grid._dataProviderController.rootCache.items[0])).to.be.true;
+        expect(grid._isExpanded(grid._dataProviderController.rootCache.items[1])).to.be.false;
       });
 
       it('should collapse the item when unchecking the checkbox', () => {
         checkbox.checked = false;
 
-        expect(grid._isExpanded(grid._cache.items[0])).to.be.false;
-        expect(grid._isExpanded(grid._cache.items[1])).to.be.false;
+        expect(grid._isExpanded(grid._dataProviderController.rootCache.items[0])).to.be.false;
+        expect(grid._isExpanded(grid._dataProviderController.rootCache.items[1])).to.be.false;
       });
     });
 
     describe('downwards', () => {
       beforeEach(() => {
-        grid.expandItem(grid._cache.items[0]);
+        grid.expandItem(grid._dataProviderController.rootCache.items[0]);
       });
 
       it('should check the checkbox when expanding the item', () => {
@@ -167,7 +167,7 @@ describe('row details template', () => {
       });
 
       it('should uncheck the checkbox when collapsing the item', () => {
-        grid.collapseItem(grid._cache.items[0]);
+        grid.collapseItem(grid._dataProviderController.rootCache.items[0]);
 
         expect(checkbox.checked).to.equal(false);
       });

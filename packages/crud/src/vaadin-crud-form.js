@@ -9,6 +9,7 @@
  * license.
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 import { capitalize } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
@@ -16,6 +17,7 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends FormLayout
  * @mixes IncludedMixin
  * @private
@@ -90,6 +92,6 @@ class CrudForm extends IncludedMixin(FormLayout) {
   }
 }
 
-customElements.define(CrudForm.is, CrudForm);
+defineCustomElement(CrudForm);
 
 export { CrudForm };

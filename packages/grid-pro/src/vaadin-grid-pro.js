@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
@@ -44,6 +45,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  *
+ * @customElement
  * @extends Grid
  * @mixes InlineEditingMixin
  */
@@ -57,6 +59,6 @@ class GridPro extends InlineEditingMixin(Grid) {
   }
 }
 
-customElements.define(GridPro.is, GridPro);
+defineCustomElement(GridPro);
 
 export { GridPro };

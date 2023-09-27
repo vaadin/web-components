@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -41,6 +42,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ActiveMixin
  * @mixes DirMixin
@@ -129,6 +131,6 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
   }
 }
 
-customElements.define(AccordionHeading.is, AccordionHeading);
+defineCustomElement(AccordionHeading);
 
 export { AccordionHeading };

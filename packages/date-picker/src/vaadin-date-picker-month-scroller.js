@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { dateAfterXMonths } from './vaadin-date-picker-helper.js';
 import { InfiniteScroller } from './vaadin-infinite-scroller.js';
 
@@ -24,6 +25,7 @@ stylesTemplate.innerHTML = `
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends InfiniteScroller
  * @private
  */
@@ -58,4 +60,4 @@ class DatePickerMonthScroller extends InfiniteScroller {
   }
 }
 
-customElements.define(DatePickerMonthScroller.is, DatePickerMonthScroller);
+defineCustomElement(DatePickerMonthScroller);

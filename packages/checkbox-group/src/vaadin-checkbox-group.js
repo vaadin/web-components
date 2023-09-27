@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -55,6 +56,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DisabledMixin
@@ -162,6 +164,19 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     this.__unregisterCheckbox = this.__unregisterCheckbox.bind(this);
     this.__onCheckboxChange = this.__onCheckboxChange.bind(this);
     this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const tooltip = event.detail.node;
+      if (tooltip && tooltip.isConnected) {
+        // Tooltip element has been added to the DOM
+        const inputs = this.__checkboxes.map((checkbox) => checkbox.inputElement);
+        this._tooltipController.setAriaTarget(inputs);
+      } else {
+        // Tooltip element is no longer connected
+        this._tooltipController.setAriaTarget([]);
+      }
+    });
   }
 
   /**
@@ -191,10 +206,12 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
       addedCheckboxes.forEach(this.__registerCheckbox);
       removedCheckboxes.forEach(this.__unregisterCheckbox);
 
+      const inputs = this.__checkboxes.map((checkbox) => checkbox.inputElement);
+      this._tooltipController.setAriaTarget(inputs);
+
       this.__warnOfCheckboxesWithoutValue(addedCheckboxes);
     });
 
-    this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
 
@@ -389,6 +406,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
   }
 }
 
-customElements.define(CheckboxGroup.is, CheckboxGroup);
+defineCustomElement(CheckboxGroup);
 
 export { CheckboxGroup };

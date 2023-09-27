@@ -23,46 +23,6 @@ describe('value control buttons', () => {
       expect(numberField.value).to.equal('1');
     });
 
-    it('should dispatch change event on minus button click', async () => {
-      const changeSpy = sinon.spy();
-      numberField.addEventListener('change', changeSpy);
-
-      decreaseButton.click();
-      await nextUpdate(numberField);
-
-      expect(changeSpy).to.be.calledOnce;
-    });
-
-    it('should dispatch change event on plus button click', async () => {
-      const changeSpy = sinon.spy();
-      numberField.addEventListener('change', changeSpy);
-
-      increaseButton.click();
-      await nextUpdate(numberField);
-
-      expect(changeSpy).to.be.calledOnce;
-    });
-
-    it('should dispatch single value-changed event on minus button click', async () => {
-      const spy = sinon.spy();
-      numberField.addEventListener('value-changed', spy);
-
-      decreaseButton.click();
-      await nextUpdate(numberField);
-
-      expect(spy).to.be.calledOnce;
-    });
-
-    it('should dispatch single value-changed event on plus button click', async () => {
-      const spy = sinon.spy();
-      numberField.addEventListener('value-changed', spy);
-
-      increaseButton.click();
-      await nextUpdate(numberField);
-
-      expect(spy).to.be.calledOnce;
-    });
-
     it('should not focus input when a button is clicked', () => {
       const spy = sinon.spy(input, 'focus');
       increaseButton.click();

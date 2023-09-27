@@ -114,13 +114,6 @@ describe('validation', () => {
       expect(integerField.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit an invalid number', async () => {
-      integerField.value = '1';
-      await sendKeys({ type: '1--' });
-      await sendKeys({ type: 'Enter' });
-      expect(integerField.value).to.equal('');
-    });
-
     it('should be valid after removing an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();

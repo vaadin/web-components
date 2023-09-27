@@ -5,6 +5,7 @@
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals } from './vaadin-date-picker-helper.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
@@ -15,6 +16,7 @@ registerStyles('vaadin-month-calendar', monthCalendarStyles, {
 });
 
 /**
+ * @customElement
  * @extends HTMLElement
  * @private
  */
@@ -170,4 +172,4 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(MonthCalendar.is, MonthCalendar);
+defineCustomElement(MonthCalendar);

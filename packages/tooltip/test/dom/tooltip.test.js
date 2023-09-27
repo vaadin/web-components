@@ -11,6 +11,10 @@ describe('vaadin-tooltip', () => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
   });
 
+  it('host', async () => {
+    await expect(tooltip).dom.to.equalSnapshot();
+  });
+
   it('default', async () => {
     await expect(tooltip).shadowDom.to.equalSnapshot();
   });

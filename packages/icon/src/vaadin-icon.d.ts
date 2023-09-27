@@ -82,11 +82,19 @@ declare class Icon extends ThemableMixin(
   src: string | null;
 
   /**
+   * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
+   * `src` property
+   */
+  symbol: string | null;
+
+  /**
    * Class names defining an icon font and/or a specific glyph inside an icon font.
    *
-   * @attr {string} font
+   * Example: "fa-solid fa-user"
+   *
+   * @attr {string} icon-class
    */
-  font: string | null;
+  iconClass: string | null;
 
   /**
    * A hexadecimal code point that specifies a glyph from an icon font.

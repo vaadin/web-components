@@ -4,15 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-time-picker-item.js';
-import './vaadin-time-picker-scroller.js';
 import './vaadin-time-picker-overlay.js';
+import './vaadin-time-picker-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxMixin
  * @mixes ThemableMixin
@@ -104,4 +106,4 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(TimePickerComboBox.is, TimePickerComboBox);
+defineCustomElement(TimePickerComboBox);

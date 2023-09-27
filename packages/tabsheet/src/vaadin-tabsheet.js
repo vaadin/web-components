@@ -6,6 +6,7 @@
 import './vaadin-tabsheet-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
@@ -100,11 +101,12 @@ class TabsSlotController extends SlotController {
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes ControllerMixin
- * @mises DelegateStateMixin
+ * @mixes DelegateStateMixin
  */
 class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
@@ -288,6 +290,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
   }
 }
 
-customElements.define(TabSheet.is, TabSheet);
+defineCustomElement(TabSheet);
 
 export { TabSheet };

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-icon.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
@@ -15,7 +15,12 @@ describe('vaadin-icon', () => {
   let icon, svgElement;
 
   function expectIcon(content) {
-    expect(svgElement.innerHTML.trim().replace(/<!--[^>]*-->/gu, '')).to.equal(content);
+    expect(
+      svgElement
+        .querySelector('#svg-group')
+        .innerHTML.trim()
+        .replace(/<!--[^>]*-->/gu, ''),
+    ).to.equal(content);
   }
 
   describe('custom element definition', () => {
@@ -161,6 +166,51 @@ describe('vaadin-icon', () => {
       icon.__fetch.restore();
     });
 
+    it('should append value from symbol property to src', () => {
+      icon.src = './icon.svg';
+      icon.symbol = 'symbol-id';
+
+      expect(svgElement.querySelector(`use[href="${icon.src}#${icon.symbol}"]`)).to.exist;
+    });
+
+    it('should use value from symbol when src path has a hash value', () => {
+      icon.src = './icon.svg#id-0';
+      icon.symbol = 'id-1';
+
+      expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`)).to.exist;
+    });
+
+    it('should render SVG content and <use> if src is given in data format with symbol prop defined', async () => {
+      const svgSprite = `<svg xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <symbol id="icon-cog" viewBox="0 0 32 32">
+              <path
+                d="m29.181 19.070c-1.679-2.908-0.669-6.634 2.255-8.328l-3.145-5.447c-0.898 0.527-1.943 0.829-3.058 0.829-3.361 0-6.085-2.742-6.085-6.125h-6.289c0.008 1.044-0.252 2.103-0.811 3.070-1.679 2.908-5.411 3.897-8.339 2.211l-3.144 5.447c0.905 0.515 1.689 1.268 2.246 2.234 1.676 2.903 0.672 6.623-2.241 8.319l3.145 5.447c0.895-0.522 1.935-0.82 3.044-0.82 3.35 0 6.067 2.725 6.084 6.092h6.289c-0.003-1.034 0.259-2.080 0.811-3.038 1.676-2.903 5.399-3.894 8.325-2.219l3.145-5.447c-0.899-0.515-1.678-1.266-2.232-2.226zm16 22.479c-3.578 0-6.479-2.901-6.479-6.479s2.901-6.479 6.479-6.479c3.578 0 6.479 2.901 6.479 6.479s-2.901 6.479-6.479 6.479z"
+              ></path>
+            </symbol>
+            <symbol id="icon-user" viewbox="0 0 32 32">
+              <path d="m18 22.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
+            </symbol>
+          </defs>
+        </svg>`;
+      const svgSpriteBase64 = btoa(svgSprite);
+      sinon.stub(icon, '__fetch').resolves({
+        ok: true,
+        text: () => Promise.resolve(svgSprite),
+      });
+
+      icon.src = `data:image/svg+xml;base64,${svgSpriteBase64}`;
+      icon.symbol = 'icon-cog';
+
+      await nextRender();
+
+      expect(svgElement.querySelectorAll('symbol')).to.have.lengthOf(2);
+      expect(svgElement.querySelectorAll('#icon-cog')).to.exist;
+      expect(svgElement.querySelector('use[href="#icon-cog"]')).to.exist;
+
+      icon.__fetch.restore();
+    });
+
     it('should fail if SVG is not found', async () => {
       sinon.stub(console, 'error');
       sinon.stub(icon, '__fetch').resolves({ ok: false });
@@ -195,7 +245,29 @@ describe('vaadin-icon', () => {
       icon.src = 'icon.svg#symbol-id';
       // We expect a 404 error log from this test, but the test is simply to check
       // that the <use> element is added when the source provided has the file#id pattern
-      expectIcon(`<use href="${icon.src}"></use>`);
+      expect(svgElement.querySelector(`use[href="${icon.src}"]`)).to.exist;
+      expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('visible');
+    });
+
+    it('should set use group visibility to hidden when src is a standalone SVG', () => {
+      sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(`<svg></svg>`) });
+
+      icon.src = 'icon.svg';
+      expect(svgElement.querySelector('#use-group').getAttribute('visibility')).to.be.equal('hidden');
+
+      icon.__fetch.restore();
+    });
+
+    it('should fetch the same src only once', async () => {
+      icon.src = `data:image/svg+xml,${encodeURIComponent('<svg></svg')}`;
+
+      const icon2 = fixtureSync('<vaadin-icon></vaadin-icon>');
+      sinon.stub(icon2, '__fetch').resolves({ ok: true, text: () => Promise.resolve('<svg></svg>') });
+      icon2.src = icon.src;
+
+      await nextFrame();
+
+      expect(icon2.__fetch.called).to.be.false;
     });
   });
 
@@ -288,7 +360,7 @@ describe('vaadin-icon', () => {
 
       it('should support rendering custom svg element inside the icon', () => {
         icon.icon = 'vaadin:minus';
-        const child = svgElement.firstElementChild;
+        const child = svgElement.querySelector('#svg-group').firstElementChild;
         expect(child.getAttribute('fill')).to.equal('red');
       });
 

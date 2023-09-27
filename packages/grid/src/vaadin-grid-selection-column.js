@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.js';
 
@@ -29,6 +30,8 @@ import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.j
  *
  * __The default content can also be overridden__
  *
+ * @customElement
+ * @extends GridColumn
  * @mixes GridSelectionColumnMixin
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
@@ -38,6 +41,6 @@ class GridSelectionColumn extends GridSelectionColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridSelectionColumn.is, GridSelectionColumn);
+defineCustomElement(GridSelectionColumn);
 
 export { GridSelectionColumn };

@@ -92,7 +92,7 @@ describe('column groups', () => {
     describe('header', () => {
       let emptyGroup;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         emptyGroup = grid.querySelector('vaadin-grid-column-group');
         emptyGroup.header = 'Header';
       });

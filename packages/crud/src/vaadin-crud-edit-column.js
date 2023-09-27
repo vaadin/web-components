@@ -9,6 +9,7 @@
  * license.
  */
 import './vaadin-crud-edit.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**
@@ -26,6 +27,7 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
  *    ...
  * ```
  *
+ * @customElement
  * @extends GridColumn
  */
 class CrudEditColumn extends GridColumn {
@@ -85,6 +87,6 @@ class CrudEditColumn extends GridColumn {
   }
 }
 
-customElements.define(CrudEditColumn.is, CrudEditColumn);
+defineCustomElement(CrudEditColumn);
 
 export { CrudEditColumn };

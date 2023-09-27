@@ -18,6 +18,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
@@ -25,6 +26,35 @@ import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaadin-rich-text-editor-styles' });
 
 const Quill = window.Quill;
+
+// Workaround for text disappearing when accepting spellcheck suggestion
+// See https://github.com/quilljs/quill/issues/2096#issuecomment-399576957
+const Inline = Quill.import('blots/inline');
+
+class CustomColor extends Inline {
+  constructor(domNode, value) {
+    super(domNode, value);
+
+    // Map <font> properties
+    domNode.style.color = domNode.color;
+
+    const span = this.replaceWith(new Inline(Inline.create()));
+
+    span.children.forEach((child) => {
+      if (child.attributes) child.attributes.copy(span);
+      if (child.unwrap) child.unwrap();
+    });
+
+    this.remove();
+
+    return span; // eslint-disable-line no-constructor-return
+  }
+}
+
+CustomColor.blotName = 'customColor';
+CustomColor.tagName = 'FONT';
+
+Quill.register(CustomColor, true);
 
 const HANDLERS = [
   'bold',
@@ -121,6 +151,7 @@ const TAB_KEY = 9;
  * @fires {CustomEvent} html-value-changed - Fired when the `htmlValue` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -159,7 +190,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       <div class="vaadin-rich-text-editor-container">
         <!-- Create toolbar container -->
-        <div part="toolbar">
+        <div part="toolbar" role="toolbar">
           <span part="toolbar-group toolbar-group-history">
             <!-- Undo and Redo -->
             <button id="btn-undo" type="button" part="toolbar-button toolbar-button-undo" on-click="_undo"></button>
@@ -533,6 +564,20 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    // Ensure that htmlValue property set before attach
+    // gets applied in case of detach and re-attach.
+    if (this.__debounceSetValue && this.__debounceSetValue.isActive()) {
+      this.__debounceSetValue.flush();
+    }
+
+    this._editor.emitter.removeAllListeners();
+    this._editor.emitter.listeners = {};
+  }
+
   /** @private */
   __setDirection(dir) {
     // Needed for proper `ql-align` class to be set and activate the toolbar align button
@@ -554,18 +599,14 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
     const editor = this.shadowRoot.querySelector('[part="content"]');
-    const toolbarConfig = this._prepareToolbar();
-    this._toolbar = toolbarConfig.container;
-
-    this._addToolbarListeners();
 
     this._editor = new Quill(editor, {
       modules: {
-        toolbar: toolbarConfig,
+        toolbar: this._toolbarConfig,
       },
     });
 
@@ -576,10 +617,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (isFirefox) {
       this.__patchFirefoxFocus();
     }
-
-    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      this.$.linkUrl.focus();
-    });
 
     const editorContent = editor.querySelector('.ql-editor');
 
@@ -630,6 +667,20 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     this._editor.on('selection-change', this.__announceFormatting.bind(this));
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._toolbarConfig = this._prepareToolbar();
+    this._toolbar = this._toolbarConfig.container;
+
+    this._addToolbarListeners();
+
+    this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+      this.$.linkUrl.focus();
+    });
   }
 
   /** @private */
@@ -1129,6 +1180,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
 }
 
-customElements.define(RichTextEditor.is, RichTextEditor);
+defineCustomElement(RichTextEditor);
 
 export { RichTextEditor };

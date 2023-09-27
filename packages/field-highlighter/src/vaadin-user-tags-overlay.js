@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
@@ -62,6 +63,7 @@ registerStyles('vaadin-user-tags-overlay', [overlayStyles, userTagsOverlayStyles
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes PositionMixin
  * @mixes OverlayMixin
@@ -86,4 +88,4 @@ class UserTagsOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(
   }
 }
 
-customElements.define(UserTagsOverlay.is, UserTagsOverlay);
+defineCustomElement(UserTagsOverlay);

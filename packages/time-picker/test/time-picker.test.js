@@ -238,7 +238,7 @@ describe('time-picker', () => {
     });
 
     // WebKit returns true for isTouch in the test envirnoment. This test fails when isTouch == true, which is a correct behavior
-    (isTouch ? it.skip : it)('should focus input element on toggle button click', async () => {
+    (isTouch ? it.skip : it)('should focus input element on toggle button click', () => {
       toggleButton.click();
       expect(comboBox.opened).to.be.true;
       expect(document.activeElement).to.equal(inputElement);

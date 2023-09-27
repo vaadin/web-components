@@ -41,24 +41,29 @@ describe('checkbox', () => {
       expect(getComputedStyle(checkbox).display).to.equal('none');
     });
 
-    it('should toggle checked property on input click', () => {
+    it('should toggle checked property on input click', async () => {
       input.click();
+      await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.true;
 
       input.click();
+      await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.false;
     });
 
-    it('should toggle checked property on label click', () => {
+    it('should toggle checked property on label click', async () => {
       label.click();
+      await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.true;
 
       label.click();
+      await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.false;
     });
 
-    it('should not toggle checked property on label link click', () => {
+    it('should not toggle checked property on label link click', async () => {
       link.click();
+      await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.false;
     });
 

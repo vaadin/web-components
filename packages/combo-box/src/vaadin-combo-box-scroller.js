@@ -4,11 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
 
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxScrollerMixin
  * @private
@@ -50,4 +52,4 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolymerElement) {
   }
 }
 
-customElements.define(ComboBoxScroller.is, ComboBoxScroller);
+defineCustomElement(ComboBoxScroller);

@@ -9,6 +9,7 @@ import './vaadin-combo-box-scroller.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
@@ -60,6 +61,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
@@ -212,6 +214,6 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   }
 }
 
-customElements.define(ComboBoxLight.is, ComboBoxLight);
+defineCustomElement(ComboBoxLight);
 
 export { ComboBoxLight };

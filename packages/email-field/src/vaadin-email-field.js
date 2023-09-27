@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { emailFieldStyles } from './vaadin-email-field-styles.js';
@@ -29,6 +30,7 @@ registerStyles('vaadin-email-field', emailFieldStyles, { moduleId: 'vaadin-email
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends TextField
  */
 export class EmailField extends TextField {
@@ -52,4 +54,4 @@ export class EmailField extends TextField {
   }
 }
 
-customElements.define('vaadin-email-field', EmailField);
+defineCustomElement(EmailField);

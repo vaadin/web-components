@@ -28,7 +28,7 @@ export class TooltipController extends SlotController {
    * via `aria-describedby` attribute used by screen readers.
    * When not set, defaults to `target`.
    */
-  ariaTarget: HTMLElement;
+  ariaTarget: HTMLElement | HTMLElement[];
 
   /**
    * Object with properties passed to `generator`
@@ -62,7 +62,7 @@ export class TooltipController extends SlotController {
    * Set an HTML element for linking with the tooltip overlay
    * via `aria-describedby` attribute used by screen readers.
    */
-  setAriaTarget(ariaTarget: HTMLElement): void;
+  setAriaTarget(ariaTarget: HTMLElement | HTMLElement[]): void;
 
   /**
    * Set a context object to be used by generator.

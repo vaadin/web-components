@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
@@ -55,6 +56,7 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes CustomFieldMixin
  * @mixes ElementMixin
@@ -97,6 +99,6 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
    */
 }
 
-customElements.define(CustomField.is, CustomField);
+defineCustomElement(CustomField);
 
 export { CustomField };

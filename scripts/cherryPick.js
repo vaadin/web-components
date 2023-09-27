@@ -2,13 +2,14 @@
 /**
  * This script is used for cherry-pick commits for web-components repo.
  * To run this script:
- * 1.collect committed-PRs marked with target/<branch-name> labels
+ * 1.collect committed-PRs marked with target/<branch-name>  labels
  * 2.cherry-pick the commit to the target branches
  * 3.label the original commit PR with cherry-picked-<branch-name>
  * Exception handling:
  * - works for closed and merged PRs
  * - Commit PR labelled with {cherry-picked} or {need to pick manually} will be ignored.
  * - if cherry-pick cannot be done, the original PR will be labelled with need to pick manually
+ *
  */
 
 const axios = require('axios');
@@ -21,6 +22,7 @@ const arrURL = [];
 const arrSHA = [];
 const arrBranch = [];
 const arrUser = [];
+const arrMergedBy = [];
 
 const repo = 'vaadin/web-components';
 const token = process.env['GITHUB_TOKEN'];
@@ -55,31 +57,67 @@ async function getAllCommits() {
   }
 }
 
-function filterCommits(commits) {
+async function getCommit(commitURL) {
+  try {
+    const options = {
+      headers: {
+        'User-Agent': 'Vaadin Cherry Pick',
+        Authorization: `token ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const res = await axios.get(commitURL, options);
+    const data = res.data;
+
+    return data;
+  } catch (error) {
+    console.error(`Cannot get the commit. ${error}`);
+    process.exit(1);
+  }
+}
+
+async function filterCommits(commits) {
   for (const commit of commits) {
-    let target = false;
-    let picked = false;
     for (const label of commit.labels) {
+      let target = false;
+      let picked = false;
+      let branch;
+      let mergedLabel;
+      let manualLabel;
+
       if (label.name.includes('target/')) {
         target = true;
+        branch = /target\/(.*)/u.exec(label.name);
+        mergedLabel = `cherry-picked-${branch[1]}`;
+        manualLabel = `need to pick manually ${branch[1]}`;
+
+        commit.labels.forEach((la) => {
+          if (la.name === mergedLabel || la.name === manualLabel) {
+            picked = true;
+          }
+        });
       }
-      if (label.name.includes('cherry-picked') || label.name.includes('need to pick manually')) {
-        picked = true;
+
+      if (target === true && picked === false) {
+        const singleCommit = await getCommit(commit.url);
+
+        console.log(
+          commit.number,
+          commit.user.login,
+          commit.url,
+          commit.merge_commit_sha,
+          branch[1],
+          singleCommit.merged_by.login,
+        );
+        arrPR.push(commit.number);
+        arrSHA.push(commit.merge_commit_sha);
+        arrURL.push(commit.url);
+        arrBranch.push(branch[1]);
+        arrTitle.push(`${commit.title} (#${commit.number}) (CP: ${branch[1]})`);
+        arrUser.push(`@${commit.user.login}`);
+        arrMergedBy.push(`@${singleCommit.merged_by.login}`);
       }
-    }
-    if (target === true && picked === false) {
-      commit.labels.forEach((label) => {
-        const branch = /target\/(.*)/u.exec(label.name);
-        if (branch) {
-          console.log(commit.number, commit.user.login, commit.url, commit.merge_commit_sha, branch[1]);
-          arrPR.push(commit.number);
-          arrSHA.push(commit.merge_commit_sha);
-          arrURL.push(commit.url);
-          arrBranch.push(branch[1]);
-          arrTitle.push(`${commit.title} (#${commit.number}) (CP: ${branch[1]})`);
-          arrUser.push(`@${commit.user.login}`);
-        }
-      });
     }
   }
 }
@@ -96,7 +134,7 @@ async function labelCommit(url, label) {
   await axios.post(issueURL, { labels: [label] }, options);
 }
 
-async function postComment(url, userName, branch, message) {
+async function postComment(url, userName, mergedBy, branch, message) {
   const issueURL = `${url.replace('pulls', 'issues')}/comments`;
   const options = {
     headers: {
@@ -108,7 +146,7 @@ async function postComment(url, userName, branch, message) {
   await axios.post(
     issueURL,
     {
-      body: `Hi ${userName} , this commit cannot be picked to ${branch} by this bot, can you take a look and pick it manually?\n Error Message: ${message}`,
+      body: `Hi ${userName} and ${mergedBy}, when i performed cherry-pick to this commit to ${branch}, i have encountered the following issue. Can you take a look and pick it manually?\n Error Message:\n ${message}`,
     },
     options,
   );
@@ -168,15 +206,22 @@ async function cherryPickCommits() {
     } catch (err) {
       console.error(`Cannot Pick the Commit:${arrSHA[i]} to ${arrBranch[i]}, error :${err}`);
       await labelCommit(arrURL[i], `need to pick manually ${arrBranch[i]}`);
-      await postComment(arrURL[i], arrUser[i], arrBranch[i], err);
+      await postComment(arrURL[i], arrUser[i], arrMergedBy[i], arrBranch[i], err);
       await exec(`git cherry-pick --abort`);
       await exec(`git checkout main`);
       await exec(`git branch -D ${branchName}`);
       continue;
     }
     await exec(`git push origin HEAD:${branchName}`);
+    try {
+      await createPR(arrTitle[i], branchName, arrBranch[i]);
+    } catch (err) {
+      console.error(`Cannot create PR from ${branchName}, error : ${err}`);
+      await labelCommit(arrURL[i], `cannot create PR from ${branchName}`);
+      await postComment(arrURL[i], arrUser[i], arrMergedBy[i], arrBranch[i], err);
+      continue;
+    }
 
-    await createPR(arrTitle[i], branchName, arrBranch[i]);
     await exec(`git checkout main`);
     await exec(`git branch -D ${branchName}`);
     await labelCommit(arrURL[i], `cherry-picked-${arrBranch[i]}`);
@@ -185,7 +230,7 @@ async function cherryPickCommits() {
 
 async function main() {
   const allCommits = await getAllCommits();
-  filterCommits(allCommits);
+  await filterCommits(allCommits);
   await cherryPickCommits();
 }
 

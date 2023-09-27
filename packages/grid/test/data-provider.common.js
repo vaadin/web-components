@@ -112,6 +112,11 @@ function simulateScrollToEnd(grid) {
 describe('data provider', () => {
   let grid;
 
+  function getItemForIndex(index) {
+    const { item } = grid._dataProviderController.getFlatIndexContext(index);
+    return item;
+  }
+
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
@@ -229,15 +234,15 @@ describe('data provider', () => {
     }
 
     function isIndexExpanded(grid, index) {
-      return grid._isExpanded(grid._cache.getItemForIndex(index));
+      return grid._isExpanded(getItemForIndex(index));
     }
 
     function expandIndex(grid, index) {
-      grid.expandItem(grid._cache.getItemForIndex(index));
+      grid.expandItem(getItemForIndex(index));
     }
 
     function collapseIndex(grid, index) {
-      grid.collapseItem(grid._cache.getItemForIndex(index));
+      grid.collapseItem(getItemForIndex(index));
     }
 
     beforeEach(async () => {
@@ -286,7 +291,7 @@ describe('data provider', () => {
 
       it('should have first level items in cache', () => {
         for (let i = 0; i < grid._effectiveSize; i++) {
-          expect(grid._cache.getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
+          expect(getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
         }
       });
     });
@@ -432,7 +437,7 @@ describe('data provider', () => {
         it('should have first level items in cache', () => {
           expandIndex(grid, 7);
           for (let i = 0; i < grid._effectiveSize; i++) {
-            expect(grid._cache.getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
+            expect(getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
           }
         });
 
@@ -494,9 +499,9 @@ describe('data provider', () => {
 
       it('should have first and second level items in cache', () => {
         expandIndex(grid, 7);
-        expect(grid._cache.getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
-        expect(grid._cache.getItemForIndex(8)).to.deep.equal({ level: 1, value: 'foo0' });
-        expect(grid._cache.getItemForIndex(18)).to.deep.equal({ level: 0, value: 'foo8' });
+        expect(getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
+        expect(getItemForIndex(8)).to.deep.equal({ level: 1, value: 'foo0' });
+        expect(getItemForIndex(18)).to.deep.equal({ level: 0, value: 'foo8' });
       });
     });
 
@@ -523,8 +528,8 @@ describe('data provider', () => {
 
       it('should have first level items in cache', () => {
         collapseIndex(grid, 7);
-        expect(grid._cache.getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
-        expect(grid._cache.getItemForIndex(8)).to.deep.equal({ level: 0, value: 'foo8' });
+        expect(getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
+        expect(getItemForIndex(8)).to.deep.equal({ level: 0, value: 'foo8' });
       });
     });
 
@@ -547,9 +552,9 @@ describe('data provider', () => {
 
       it('should have first and second level items in cache', () => {
         expandIndex(grid, 7);
-        expect(grid._cache.getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
-        expect(grid._cache.getItemForIndex(8)).to.deep.equal({ level: 1, value: 'foo0' });
-        expect(grid._cache.getItemForIndex(18)).to.deep.equal({ level: 0, value: 'foo8' });
+        expect(getItemForIndex(7)).to.deep.equal({ level: 0, value: 'foo7' });
+        expect(getItemForIndex(8)).to.deep.equal({ level: 1, value: 'foo0' });
+        expect(getItemForIndex(18)).to.deep.equal({ level: 0, value: 'foo8' });
       });
     });
 
@@ -663,6 +668,11 @@ describe('wrapped grid', () => {
   describe('data-provider', () => {
     const loadDebounceTime = 100;
 
+    function getItemForIndex(index) {
+      const { item } = grid._dataProviderController.getFlatIndexContext(index);
+      return item;
+    }
+
     beforeEach(() => {
       container = fixtureSync('<wrapped-grid></wrapped-grid>');
       grid = container.$.grid;
@@ -723,14 +733,14 @@ describe('wrapped grid', () => {
       container.dataProvider = sinon.spy(infiniteDataProvider);
       await aTimeout(loadDebounceTime * 2);
       expect(container.dataProvider.called).to.be.true;
-      const oldFirstItem = grid._cache.getItemForIndex(0);
+      const oldFirstItem = getItemForIndex(0);
       expect(oldFirstItem).to.be.ok;
       container.dataProvider.resetHistory();
       grid.clearCache();
       await aTimeout(loadDebounceTime * 2);
       expect(container.dataProvider.called).to.be.true;
-      expect(grid._cache.getItemForIndex(0)).to.be.ok;
-      expect(grid._cache.getItemForIndex(0)).not.to.equal(oldFirstItem);
+      expect(getItemForIndex(0)).to.be.ok;
+      expect(getItemForIndex(0)).not.to.equal(oldFirstItem);
     });
 
     it('should update sub properties on clearCache', () => {

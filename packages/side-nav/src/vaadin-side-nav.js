@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -64,6 +65,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
@@ -201,6 +203,6 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 }
 
-customElements.define(SideNav.is, SideNav);
+defineCustomElement(SideNav);
 
 export { SideNav };

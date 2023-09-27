@@ -176,6 +176,12 @@ describe('PolylitMixin', () => {
               type: String,
               readOnly: true,
             },
+
+            opened: {
+              type: Boolean,
+              value: false,
+              readOnly: true,
+            },
           };
         }
 
@@ -209,6 +215,10 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
       expect(element.helper).to.equal('bar');
       expect(element.shadowRoot.textContent).to.equal('bar');
+    });
+
+    it('should set initial value for the property marked as readOnly', () => {
+      expect(element.opened).to.equal(false);
     });
   });
 

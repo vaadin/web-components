@@ -13,6 +13,7 @@ import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-ele
 import { html, render } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -61,6 +62,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin
@@ -667,6 +669,6 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   }
 }
 
-customElements.define(AvatarGroup.is, AvatarGroup);
+defineCustomElement(AvatarGroup);
 
 export { AvatarGroup };

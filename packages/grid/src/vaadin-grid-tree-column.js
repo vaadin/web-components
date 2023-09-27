@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-tree-toggle.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
 
@@ -19,6 +20,8 @@ import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
  *  <vaadin-grid-column>
  *    ...
  * ```
+ * @customElement
+ * @extends GridColumn
  */
 class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   static get is() {
@@ -26,6 +29,6 @@ class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridTreeColumn.is, GridTreeColumn);
+defineCustomElement(GridTreeColumn);
 
 export { GridTreeColumn };

@@ -3,8 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const template = document.createElement('template');
 
@@ -65,12 +64,13 @@ registerStyles(
   { moduleId: 'vaadin-grid-sorter-styles' },
 );
 
+/**
+ * A mixin providing common sorter functionality.
+ *
+ * @polymerMixin
+ */
 export const GridSorterMixin = (superClass) =>
-  class extends ThemableMixin(DirMixin(superClass)) {
-    static get is() {
-      return 'vaadin-grid-sorter';
-    }
-
+  class GridSorterMixinClass extends superClass {
     static get properties() {
       return {
         /**

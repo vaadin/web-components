@@ -203,7 +203,7 @@ describe('redraw', () => {
       expect(first.className).to.equal('large');
     });
 
-    it('should not recalculate flex basis for a directly hidden row', async () => {
+    it('should not recalculate flex basis for a directly hidden row', () => {
       first.style.display = 'none';
       container.style.width = '100px';
       first._onResize();
@@ -211,7 +211,7 @@ describe('redraw', () => {
       expect(first.className).to.equal('large');
     });
 
-    it('should not recalculate flex basis for a row hidden through an ancestor', async () => {
+    it('should not recalculate flex basis for a row hidden through an ancestor', () => {
       container.style.display = 'none';
       container.style.width = '100px';
       first._onResize();

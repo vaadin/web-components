@@ -27,7 +27,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 [
   { tagName: Button.is },
-  { tagName: Checkbox.is },
+  { tagName: Checkbox.is, ariaTargetSelector: 'input' },
   { tagName: CheckboxGroup.is },
   {
     tagName: ComboBox.is,

@@ -10,11 +10,13 @@
  */
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
 
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends Select
  * @private
  */
@@ -136,4 +138,4 @@ class GridProEditSelect extends Select {
   }
 }
 
-customElements.define(GridProEditSelect.is, GridProEditSelect);
+defineCustomElement(GridProEditSelect);

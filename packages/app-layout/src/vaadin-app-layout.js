@@ -3,13 +3,14 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './safe-area-inset.js';
 import './detect-ios-navbar.js';
+import './safe-area-inset.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -104,6 +105,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -801,6 +803,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
    */
 }
 
-customElements.define(AppLayout.is, AppLayout);
+defineCustomElement(AppLayout);
 
 export { AppLayout };

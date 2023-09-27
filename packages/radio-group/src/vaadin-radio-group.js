@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -57,6 +58,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DisabledMixin
@@ -186,6 +188,19 @@ class RadioGroup extends FieldMixin(
     this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
     this.__onRadioButtonChange = this.__onRadioButtonChange.bind(this);
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.addEventListener('tooltip-changed', (event) => {
+      const tooltip = event.detail.node;
+      if (tooltip && tooltip.isConnected) {
+        // Tooltip element has been added to the DOM
+        const inputs = this.__radioButtons.map((radio) => radio.inputElement);
+        this._tooltipController.setAriaTarget(inputs);
+      } else {
+        // Tooltip element is no longer connected
+        this._tooltipController.setAriaTarget([]);
+      }
+    });
   }
 
   /**
@@ -235,9 +250,11 @@ class RadioGroup extends FieldMixin(
 
       // Unregisters the removed radio buttons.
       this.__filterRadioButtons(removedNodes).forEach(this.__unregisterRadioButton);
+
+      const inputs = this.__radioButtons.map((radio) => radio.inputElement);
+      this._tooltipController.setAriaTarget(inputs);
     });
 
-    this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
 
@@ -532,6 +549,6 @@ class RadioGroup extends FieldMixin(
   }
 }
 
-customElements.define(RadioGroup.is, RadioGroup);
+defineCustomElement(RadioGroup);
 
 export { RadioGroup };

@@ -9,6 +9,7 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 
 const listenOnce = (elem, type) => {
   return new Promise((resolve) => {
@@ -23,6 +24,7 @@ const listenOnce = (elem, type) => {
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @private
  */
@@ -450,4 +452,4 @@ export class UserTags extends PolymerElement {
   }
 }
 
-customElements.define(UserTags.is, UserTags);
+defineCustomElement(UserTags);

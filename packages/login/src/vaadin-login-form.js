@@ -8,6 +8,7 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-login-form-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginFormMixin } from './vaadin-login-form-mixin.js';
@@ -46,6 +47,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -121,6 +123,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
   }
 }
 
-customElements.define(LoginForm.is, LoginForm);
+defineCustomElement(LoginForm);
 
 export { LoginForm };

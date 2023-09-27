@@ -10,6 +10,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
@@ -53,6 +54,7 @@ const CLASSES = {
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ResizeMixin
@@ -289,6 +291,6 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   }
 }
 
-customElements.define(BoardRow.is, BoardRow);
+defineCustomElement(BoardRow);
 
 export { BoardRow };

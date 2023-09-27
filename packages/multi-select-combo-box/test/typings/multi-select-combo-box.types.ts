@@ -28,6 +28,7 @@ import type {
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
+  MultiSelectComboBoxOpenedChangedEvent,
   MultiSelectComboBoxRenderer,
   MultiSelectComboBoxSelectedItemsChangedEvent,
   MultiSelectComboBoxValidatedEvent,
@@ -67,6 +68,11 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 
 narrowedComboBox.addEventListener('invalid-changed', (event) => {
   assertType<MultiSelectComboBoxInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+narrowedComboBox.addEventListener('opened-changed', (event) => {
+  assertType<MultiSelectComboBoxOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

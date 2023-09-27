@@ -286,7 +286,7 @@ describe('side-nav-item', () => {
       expect(anchor.getAttribute('href')).to.be.ok;
     });
 
-    it('should not trigger navigation when toggle button is clicked', async () => {
+    it('should not trigger navigation when toggle button is clicked', () => {
       const spy = sinon.spy();
       anchor.addEventListener('click', spy);
       toggle.click();

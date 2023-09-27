@@ -5,12 +5,14 @@
  */
 import './vaadin-upload-file.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
 /**
  * An element used internally by `<vaadin-upload>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes UploadFileListMixin
@@ -45,6 +47,6 @@ class UploadFileList extends UploadFileListMixin(ThemableMixin(PolymerElement)) 
   }
 }
 
-customElements.define(UploadFileList.is, UploadFileList);
+defineCustomElement(UploadFileList);
 
 export { UploadFileList };

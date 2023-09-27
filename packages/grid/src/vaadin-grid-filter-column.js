@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-filter.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
 
@@ -19,6 +20,9 @@ import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
  *  <vaadin-grid-column>
  *    ...
  * ```
+ *
+ * @customElement
+ * @extends GridColumn
  */
 class GridFilterColumn extends GridFilterColumnMixin(GridColumn) {
   static get is() {
@@ -26,6 +30,6 @@ class GridFilterColumn extends GridFilterColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridFilterColumn.is, GridFilterColumn);
+defineCustomElement(GridFilterColumn);
 
 export { GridFilterColumn };

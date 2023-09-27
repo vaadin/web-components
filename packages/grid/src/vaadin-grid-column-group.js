@@ -5,6 +5,7 @@
  */
 
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
 
 /**
@@ -36,6 +37,7 @@ import { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes GridColumnGroupMixin
  */
@@ -45,6 +47,6 @@ class GridColumnGroup extends GridColumnGroupMixin(PolymerElement) {
   }
 }
 
-customElements.define(GridColumnGroup.is, GridColumnGroup);
+defineCustomElement(GridColumnGroup);
 
 export { GridColumnGroup };

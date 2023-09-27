@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
@@ -32,6 +33,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin
@@ -99,6 +101,6 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerEl
   }
 }
 
-customElements.define(Tab.is, Tab);
+defineCustomElement(Tab);
 
 export { Tab };

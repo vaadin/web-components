@@ -7,10 +7,15 @@ describe('validation', () => {
   let field, input;
 
   describe('basic', () => {
+    let validateSpy, changeSpy;
+
     beforeEach(async () => {
       field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
       await nextRender();
       input = field.inputElement;
+      validateSpy = sinon.spy(field, 'validate');
+      changeSpy = sinon.spy().named('changeSpy');
+      field.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {
@@ -111,18 +116,6 @@ describe('validation', () => {
       expect(field.validate(), 'value should not be greater than max').to.be.false;
     });
 
-    it('should dispatch change event after validation', async () => {
-      const validateSpy = sinon.spy(field, 'validate');
-      const changeSpy = sinon.spy();
-      field.required = true;
-      field.addEventListener('change', changeSpy);
-      input.value = '123';
-      input.dispatchEvent(new CustomEvent('change'));
-      await nextUpdate(field);
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-    });
-
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       field.addEventListener('validated', validatedSpy);
@@ -166,14 +159,6 @@ describe('validation', () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(field.invalid).to.be.true;
-    });
-
-    it('should set an empty value when trying to commit an invalid number', async () => {
-      field.value = '1';
-      await nextUpdate(field);
-      await sendKeys({ type: '1--' });
-      await sendKeys({ type: 'Enter' });
-      expect(field.value).to.equal('');
     });
 
     it('should be valid after removing an invalid number', async () => {

@@ -31,7 +31,7 @@ describe('dirty state', () => {
         expect(dateTimePicker.dirty).to.be.false;
       });
 
-      it('should not be dirty after programmatic value change', async () => {
+      it('should not be dirty after programmatic value change', () => {
         dateTimePicker.value = '2023-01-01T00:00';
         expect(dateTimePicker.dirty).to.be.false;
       });

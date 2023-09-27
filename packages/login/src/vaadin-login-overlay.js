@@ -6,6 +6,7 @@
 import './vaadin-login-form.js';
 import './vaadin-login-overlay-wrapper.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
@@ -43,6 +44,7 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -77,7 +79,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
       </vaadin-login-overlay-wrapper>
 
       <div hidden>
-        <slot name="custom-fields"></slot>
+        <slot name="custom-form-area"></slot>
         <slot name="footer"></slot>
       </div>
     `;
@@ -88,6 +90,6 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
   }
 }
 
-customElements.define(LoginOverlay.is, LoginOverlay);
+defineCustomElement(LoginOverlay);
 
 export { LoginOverlay };

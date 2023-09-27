@@ -5,6 +5,7 @@
  */
 import './vaadin-dialog-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -77,6 +78,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
@@ -170,6 +172,6 @@ class Dialog extends DialogDraggableMixin(
   }
 }
 
-customElements.define(Dialog.is, Dialog);
+defineCustomElement(Dialog);
 
 export { Dialog };

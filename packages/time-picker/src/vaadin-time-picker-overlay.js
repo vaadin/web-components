@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-overlay-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -53,4 +54,4 @@ export class TimePickerOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixi
   }
 }
 
-customElements.define(TimePickerOverlay.is, TimePickerOverlay);
+defineCustomElement(TimePickerOverlay);

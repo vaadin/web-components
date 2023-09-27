@@ -39,11 +39,11 @@ export declare function TextFieldMixin<T extends Constructor<HTMLElement>>(
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
   Constructor<SlotStylesMixinClass> &
-  Constructor<TexFieldMixinClass> &
+  Constructor<TextFieldMixinClass> &
   Constructor<ValidateMixinClass> &
   T;
 
-export declare class TexFieldMixinClass {
+export declare class TextFieldMixinClass {
   /**
    * Maximum number of characters (in Unicode code points) that the user can enter.
    */

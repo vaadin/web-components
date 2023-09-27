@@ -27,14 +27,14 @@ describe('icon', () => {
 
       fixtureSync(
         `
-        <!-- Font icons using class names -->
-        <vaadin-icon font="my-icon-font icon-before"></vaadin-icon>
-        <vaadin-icon font="my-icon-font icon-after"></vaadin-icon>
-        <vaadin-icon font="my-icon-font icon-ligature"></vaadin-icon>
+        <!-- Font icons using icon class -->
+        <vaadin-icon icon-class="my-icon-font icon-before"></vaadin-icon>
+        <vaadin-icon icon-class="my-icon-font icon-after"></vaadin-icon>
+        <vaadin-icon icon-class="my-icon-font icon-ligature"></vaadin-icon>
 
         <!-- Font icons using char and ligature -->
-        <vaadin-icon font="my-icon-font" char="e900"></vaadin-icon>
-        <vaadin-icon font="my-icon-font" ligature="figma"></vaadin-icon>
+        <vaadin-icon icon-class="my-icon-font" char="e900"></vaadin-icon>
+        <vaadin-icon icon-class="my-icon-font" ligature="figma"></vaadin-icon>
         <vaadin-icon style="font-family: 'My icons'" char="e900"></vaadin-icon>
 
         <!-- Font icons using fontFamily -->

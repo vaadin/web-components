@@ -11,7 +11,8 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import { resetGlobalTooltipState, Tooltip } from '../vaadin-tooltip.js';
+import { resetGlobalTooltipState } from '../src/vaadin-tooltip-mixin.js';
+import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('timers', () => {
@@ -41,7 +42,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -71,7 +72,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -101,7 +102,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 
@@ -438,7 +439,7 @@ describe('timers', () => {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetGlobalTooltipState();
     });
 

@@ -49,6 +49,19 @@ export class TooltipController extends SlotController {
     if (this.shouldShow !== undefined) {
       tooltipNode.shouldShow = this.shouldShow;
     }
+
+    this.__notifyChange();
+  }
+
+  /**
+   * Override to notify the host when the tooltip is removed.
+   *
+   * @param {Node} tooltipNode
+   * @protected
+   * @override
+   */
+  teardownNode() {
+    this.__notifyChange();
   }
 
   /**
@@ -144,5 +157,10 @@ export class TooltipController extends SlotController {
     if (tooltipNode) {
       tooltipNode.target = target;
     }
+  }
+
+  /** @private */
+  __notifyChange() {
+    this.dispatchEvent(new CustomEvent('tooltip-changed', { detail: { node: this.node } }));
   }
 }

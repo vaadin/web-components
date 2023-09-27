@@ -10,11 +10,13 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
@@ -342,4 +344,4 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 }
 
-customElements.define(MultiSelectComboBoxInternal.is, MultiSelectComboBoxInternal);
+defineCustomElement(MultiSelectComboBoxInternal);

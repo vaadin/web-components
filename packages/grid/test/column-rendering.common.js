@@ -306,7 +306,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         expectCellsDomOrderToMatchColumnOrder();
       });
 
-      it('should visually position the rendered cells correctly', async () => {
+      it('should visually position the rendered cells correctly', () => {
         expectCellsVisualOrderToMatchColumnOrder();
       });
 

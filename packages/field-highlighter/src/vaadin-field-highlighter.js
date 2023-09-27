@@ -6,6 +6,7 @@
 import './vaadin-field-outline.js';
 import './vaadin-user-tags.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { CheckboxGroupObserver } from './fields/vaadin-checkbox-group-observer.js';
 import { DatePickerObserver } from './fields/vaadin-date-picker-observer.js';
 import { DateTimePickerObserver } from './fields/vaadin-date-time-picker-observer.js';
@@ -151,8 +152,18 @@ export class FieldHighlighterController {
  * by configuring a reactive controller for a field instance.
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
+ *
+ * @customElement
  */
 export class FieldHighlighter extends HTMLElement {
+  static get is() {
+    return 'vaadin-field-highlighter';
+  }
+
+  static get version() {
+    return '24.3.0-alpha1';
+  }
+
   static init(field) {
     if (!field._highlighterController) {
       // Create instance
@@ -186,4 +197,4 @@ export class FieldHighlighter extends HTMLElement {
   }
 }
 
-customElements.define('vaadin-field-highlighter', FieldHighlighter);
+defineCustomElement(FieldHighlighter);

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
@@ -149,6 +150,7 @@ registerStyles('vaadin-split-layout', splitLayoutStyles, { moduleId: 'vaadin-spl
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes SplitLayoutMixin
@@ -176,6 +178,6 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolymerEle
    */
 }
 
-customElements.define(SplitLayout.is, SplitLayout);
+defineCustomElement(SplitLayout);
 
 export { SplitLayout };

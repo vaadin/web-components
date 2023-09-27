@@ -6,6 +6,7 @@
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
@@ -33,6 +34,7 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  */
 class GridFilter extends GridFilterElementMixin(ControllerMixin(PolymerElement)) {
@@ -45,6 +47,6 @@ class GridFilter extends GridFilterElementMixin(ControllerMixin(PolymerElement))
   }
 }
 
-customElements.define(GridFilter.is, GridFilter);
+defineCustomElement(GridFilter);
 
 export { GridFilter };

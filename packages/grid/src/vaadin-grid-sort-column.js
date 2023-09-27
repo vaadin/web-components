@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-sorter.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
 
@@ -21,6 +22,9 @@ import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
  * ```
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
+ *
+ * @customElement
+ * @extends GridColumn
  */
 class GridSortColumn extends GridSortColumnMixin(GridColumn) {
   static get is() {
@@ -28,6 +32,6 @@ class GridSortColumn extends GridSortColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridSortColumn.is, GridSortColumn);
+defineCustomElement(GridSortColumn);
 
 export { GridSortColumn };

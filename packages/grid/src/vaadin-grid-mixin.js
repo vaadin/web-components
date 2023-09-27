@@ -58,8 +58,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes DragAndDropMixin
  */
 export const GridMixin = (superClass) =>
-  class extends DataProviderMixin(
-    ArrayDataProviderMixin(
+  class extends ArrayDataProviderMixin(
+    DataProviderMixin(
       DynamicColumnsMixin(
         ActiveItemMixin(
           ScrollMixin(
@@ -463,7 +463,7 @@ export const GridMixin = (superClass) =>
       if (!this._columnTree) {
         return; // No columns
       }
-      if (isElementHidden(this) || this._cache.isLoading()) {
+      if (isElementHidden(this) || this._dataProviderController.isLoading()) {
         this.__pendingRecalculateColumnWidths = true;
         return;
       }
@@ -476,7 +476,7 @@ export const GridMixin = (superClass) =>
       if (
         this.__pendingRecalculateColumnWidths &&
         !isElementHidden(this) &&
-        !this._cache.isLoading() &&
+        !this._dataProviderController.isLoading() &&
         this.__hasRowsWithClientHeight()
       ) {
         this.__pendingRecalculateColumnWidths = false;

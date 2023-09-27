@@ -67,7 +67,7 @@ describe('lit', () => {
       selector = comboBox._scroller.shadowRoot.children.selector;
     });
 
-    it('should not show horizontal scrollbar when placed in slotted container', async () => {
+    it('should not show horizontal scrollbar when placed in slotted container', () => {
       comboBox.open();
 
       expect(getComputedStyle(selector).position).to.equal('relative');

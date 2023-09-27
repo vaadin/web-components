@@ -24,11 +24,12 @@ describe('vaadin-tooltip', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  let tooltip, overlay;
+  let tooltip, overlay, srLabel;
 
   beforeEach(() => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    srLabel = tooltip.querySelector('[slot="sr-label"]');
   });
 
   describe('custom element definition', () => {
@@ -68,6 +69,11 @@ describe('vaadin-tooltip', () => {
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
+    it('should use text property as screen reader label content', () => {
+      tooltip.text = 'Foo';
+      expect(srLabel.textContent.trim()).to.equal('Foo');
+    });
+
     it('should clear overlay content when text is set to null', () => {
       tooltip.text = 'Foo';
       tooltip.text = null;
@@ -87,6 +93,11 @@ describe('vaadin-tooltip', () => {
     it('should use generator property to generate text content', () => {
       tooltip.generator = () => 'Foo';
       expect(overlay.textContent.trim()).to.equal('Foo');
+    });
+
+    it('should set screen reader label content using generator', () => {
+      tooltip.generator = () => 'Foo';
+      expect(srLabel.textContent.trim()).to.equal('Foo');
     });
 
     it('should override text property when generator is set', () => {
@@ -138,7 +149,7 @@ describe('vaadin-tooltip', () => {
 
     it('should set aria-describedby on the target element', () => {
       tooltip.target = target;
-      expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
+      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
     it('should retain existing aria-describedby attribute', () => {
@@ -146,7 +157,7 @@ describe('vaadin-tooltip', () => {
       tooltip.target = target;
 
       expect(target.getAttribute('aria-describedby')).to.contain('foo');
-      expect(target.getAttribute('aria-describedby')).to.contain(overlay.id);
+      expect(target.getAttribute('aria-describedby')).to.contain(srLabel.id);
     });
 
     it('should restore aria-describedby when clearing target', () => {
@@ -178,7 +189,7 @@ describe('vaadin-tooltip', () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
 
-      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(overlay.id);
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
     it('should remove aria-describedby when the ariaTarget is cleared', () => {
@@ -188,7 +199,32 @@ describe('vaadin-tooltip', () => {
       tooltip.ariaTarget = null;
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
-      expect(target.getAttribute('aria-describedby')).to.equal(overlay.id);
+      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
+    });
+
+    it('should set aria-describedby when providing multiple elements', () => {
+      const ariaTarget2 = document.createElement('button');
+      target.appendChild(ariaTarget2);
+
+      tooltip.target = target;
+      tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
+      expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(srLabel.id);
+    });
+
+    it('should clear aria-describedby when providing empty array', () => {
+      const ariaTarget2 = document.createElement('button');
+      target.appendChild(ariaTarget2);
+
+      tooltip.target = target;
+      tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+
+      tooltip.ariaTarget = [];
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(ariaTarget2.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
   });
 

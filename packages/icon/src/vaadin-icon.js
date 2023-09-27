@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { svg } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -13,6 +13,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
+
+const srcCache = new Map();
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -53,6 +55,7 @@ import { Iconset } from './vaadin-iconset.js';
  * }
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ThemableMixin
@@ -80,6 +83,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         :host::before {
           line-height: 1;
           font-size: 100cqh;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         :host([hidden]) {
@@ -92,7 +98,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           height: 100%;
         }
 
-        :host(:is([font], [font-icon-content])) svg {
+        :host(:is([icon-class], [font-icon-content])) svg {
           display: none;
         }
 
@@ -107,7 +113,12 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
         aria-hidden="true"
-      ></svg>
+      >
+        <g id="svg-group"></g>
+        <g id="use-group" visibility$="[[__computeVisibility(__useRef, svg)]]">
+          <use href$="[[__useRef]]" />
+        </g>
+      </svg>
 
       <slot name="tooltip"></slot>
     `;
@@ -152,18 +163,32 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
        *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
        * - a string in the format "data:image/svg+xml,<svg>...</svg>". You may need to use the "encodeURIComponent"
        *   function for the SVG content passed
+       *
+       * @type {string}
        */
       src: {
         type: String,
       },
 
       /**
-       * Class names defining an icon font and/or a specific glyph inside an icon font.
+       * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
+       * `src` property
        *
-       * @attr {string} font
        * @type {string}
        */
-      font: {
+      symbol: {
+        type: String,
+      },
+
+      /**
+       * Class names defining an icon font and/or a specific glyph inside an icon font.
+       *
+       * Example: "fa-solid fa-user"
+       *
+       * @attr {string} icon-class
+       * @type {string}
+       */
+      iconClass: {
         type: String,
         reflectToAttribute: true,
       },
@@ -218,7 +243,10 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       __preserveAspectRatio: String,
 
       /** @private */
-      __svgElement: Object,
+      __useRef: Object,
+
+      /** @private */
+      __svgElement: String,
 
       /** @private */
       __viewBox: String,
@@ -226,7 +254,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   static get observers() {
-    return ['__svgChanged(svg, __svgElement)', '__fontChanged(font, char, ligature)', '__srcChanged(src)'];
+    return ['__svgChanged(svg, __svgElement)', '__fontChanged(iconClass, char, ligature)', '__srcChanged(src, symbol)'];
   }
 
   static get observedAttributes() {
@@ -244,7 +272,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     const tag = this.localName;
     return [
       `
-        ${tag}[font] {
+        ${tag}[icon-class] {
           display: inline-flex;
           vertical-align: middle;
           font-size: inherit;
@@ -254,14 +282,14 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  get __fontClasses() {
-    return this.font ? this.font.split(' ') : [];
+  get __iconClasses() {
+    return this.iconClass ? this.iconClass.split(' ') : [];
   }
 
   /** @protected */
   ready() {
     super.ready();
-    this.__svgElement = this.shadowRoot.querySelector('svg');
+    this.__svgElement = this.shadowRoot.querySelector('#svg-group');
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
@@ -310,7 +338,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
-  async __srcChanged(src) {
+  async __srcChanged(src, symbol) {
     if (!src) {
       this.svg = null;
       return;
@@ -320,16 +348,23 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     // https://github.com/vaadin/web-components/issues/6301
     this.icon = '';
 
-    if (src.includes('#')) {
-      this.svg = svg`<use href="${src}"/>`;
+    if (!src.startsWith('data:') && (symbol || src.includes('#'))) {
+      const [path, iconId] = src.split('#');
+      this.__useRef = `${path}#${symbol || iconId}`;
     } else {
       try {
-        const data = await this.__fetch(src, { mode: 'cors' });
-        if (!data.ok) {
-          throw new Error('Error loading icon');
+        if (!srcCache.has(src)) {
+          srcCache.set(
+            src,
+            this.__fetch(src, { mode: 'cors' }).then((data) => {
+              if (!data.ok) {
+                throw new Error('Error loading icon');
+              }
+              return data.text();
+            }),
+          );
         }
-
-        const svgData = await data.text();
+        const svgData = await srcCache.get(src);
 
         if (!Icon.__domParser) {
           Icon.__domParser = new DOMParser();
@@ -341,8 +376,13 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           throw new Error(`SVG element not found on path: ${src}`);
         }
 
-        this.__viewBox = svgElement.getAttribute('viewBox');
         this.svg = unsafeSvgLiteral(svgElement.innerHTML);
+
+        if (symbol) {
+          this.__useRef = `#${symbol}`;
+        }
+
+        this.__viewBox = svgElement.getAttribute('viewBox');
       } catch (e) {
         console.error(e);
         this.svg = null;
@@ -365,16 +405,21 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 
   /** @private */
+  __computeVisibility(__useRef) {
+    return __useRef ? 'visible' : 'hidden';
+  }
+
+  /** @private */
   __computeViewBox(size, viewBox) {
     return viewBox || `0 0 ${size} ${size}`;
   }
 
   /** @private */
-  __fontChanged(font, char, ligature) {
-    this.classList.remove(...(this.__addedFontClasses || []));
-    if (font) {
-      this.__addedFontClasses = [...this.__fontClasses];
-      this.classList.add(...this.__addedFontClasses);
+  __fontChanged(iconClass, char, ligature) {
+    this.classList.remove(...(this.__addedIconClasses || []));
+    if (iconClass) {
+      this.__addedIconClasses = [...this.__iconClasses];
+      this.classList.add(...this.__addedIconClasses);
     }
 
     if (char) {
@@ -385,7 +430,7 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
       this.removeAttribute('font-icon-content');
     }
 
-    if ((font || char || ligature) && !this.icon) {
+    if ((iconClass || char || ligature) && !this.icon) {
       // The "icon" attribute needs to be set on the host also when using font icons
       // to avoid issues such as https://github.com/vaadin/web-components/issues/6301
       this.icon = '';
@@ -397,8 +442,8 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
     super.attributeChangedCallback(name, oldValue, newValue);
 
     // Make sure class list always contains all the font class names
-    if (name === 'class' && this.__fontClasses.some((className) => !this.classList.contains(className))) {
-      this.classList.add(...this.__fontClasses);
+    if (name === 'class' && this.__iconClasses.some((className) => !this.classList.contains(className))) {
+      this.classList.add(...this.__iconClasses);
     }
   }
 
@@ -408,6 +453,6 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
   }
 }
 
-customElements.define(Icon.is, Icon);
+defineCustomElement(Icon);
 
 export { Icon };

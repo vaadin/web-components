@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
@@ -29,6 +30,7 @@ registerStyles('vaadin-combo-box-overlay', [overlayStyles, comboBoxOverlayStyles
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ComboBoxOverlayMixin
  * @mixes DirMixin
@@ -52,4 +54,4 @@ export class ComboBoxOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(
   }
 }
 
-customElements.define(ComboBoxOverlay.is, ComboBoxOverlay);
+defineCustomElement(ComboBoxOverlay);

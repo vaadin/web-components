@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -36,6 +37,7 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes MultiSelectListMixin
  * @mixes ThemableMixin
@@ -125,6 +127,6 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
   }
 }
 
-customElements.define(ListBox.is, ListBox);
+defineCustomElement(ListBox);
 
 export { ListBox };

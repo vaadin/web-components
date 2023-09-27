@@ -10,6 +10,7 @@
  */
 import { html } from '@polymer/polymer/polymer-element.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -34,6 +35,7 @@ registerStyles(
  * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
  * a `<vaadin-crud>` to enable editing.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
@@ -73,4 +75,4 @@ class CrudEdit extends Button {
    */
 }
 
-customElements.define(CrudEdit.is, CrudEdit);
+defineCustomElement(CrudEdit);

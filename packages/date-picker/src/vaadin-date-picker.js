@@ -7,6 +7,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -123,6 +124,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -242,6 +244,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   }
 }
 
-customElements.define(DatePicker.is, DatePicker);
+defineCustomElement(DatePicker);
 
 export { DatePicker };

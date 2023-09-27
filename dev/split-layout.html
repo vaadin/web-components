@@ -10,15 +10,49 @@
     <script type="module">
       import '@vaadin/split-layout';
 
-      document.querySelector('#first').textContent = new Array(1000).fill('a').join(' ');
-      document.querySelector('#second').textContent = new Array(1000).fill('b').join(' ');
+      document.querySelectorAll('.first').forEach(el => {el.textContent = new Array(1000).fill('a').join(' ');});
+      document.querySelectorAll('.second').forEach(el => {el.textContent = new Array(1000).fill('b').join(' ');});
     </script>
+
+    <style>
+      vaadin-split-layout {
+        display: inline-flex;
+        margin: 0 1rem 2rem 0;
+        /* Force the natural width of both containers to be equal */
+        font-family: monospace;
+      }
+    </style>
   </head>
 
   <body>
+    <h2>Default</h2>
     <vaadin-split-layout style="width: 400px; height: 200px">
-      <div id="first"></div>
-      <div id="second"></div>
+      <div class="first"></div>
+      <div class="second"></div>
+    </vaadin-split-layout>
+    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+      <div class="first"></div>
+      <div class="second"></div>
+    </vaadin-split-layout>
+
+    <h2>Small</h2>
+    <vaadin-split-layout style="width: 400px; height: 200px" theme="small">
+      <div class="first"></div>
+      <div class="second"></div>
+    </vaadin-split-layout>
+    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="small">
+      <div class="first"></div>
+      <div class="second"></div>
+    </vaadin-split-layout>
+
+    <h2>Minimal</h2>
+    <vaadin-split-layout style="width: 400px; height: 200px" theme="minimal">
+      <div class="first"></div>
+      <div class="second"></div>
+    </vaadin-split-layout>
+    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="minimal">
+      <div class="first"></div>
+      <div class="second"></div>
     </vaadin-split-layout>
   </body>
 </html>

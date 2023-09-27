@@ -4,12 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
-import './vaadin-month-calendar.js';
 import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
+import './vaadin-month-calendar.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
@@ -20,6 +21,7 @@ registerStyles('vaadin-date-picker-overlay-content', overlayContentStyles, {
 });
 
 /**
+ * @customElement
  * @extends HTMLElement
  * @private
  */
@@ -65,4 +67,4 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   }
 }
 
-customElements.define(DatePickerOverlayContent.is, DatePickerOverlayContent);
+defineCustomElement(DatePickerOverlayContent);

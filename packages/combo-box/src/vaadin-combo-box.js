@@ -8,6 +8,7 @@ import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -146,6 +147,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -283,6 +285,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 }
 
-customElements.define(ComboBox.is, ComboBox);
+defineCustomElement(ComboBox);
 
 export { ComboBox };

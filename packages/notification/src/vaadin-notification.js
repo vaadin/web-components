@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -16,6 +17,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
@@ -166,6 +168,7 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @private
@@ -255,6 +258,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
@@ -565,8 +569,8 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
   }
 }
 
-customElements.define(NotificationContainer.is, NotificationContainer);
-customElements.define(NotificationCard.is, NotificationCard);
-customElements.define(Notification.is, Notification);
+defineCustomElement(NotificationContainer);
+defineCustomElement(NotificationCard);
+defineCustomElement(Notification);
 
 export { Notification };

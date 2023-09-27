@@ -237,7 +237,7 @@ describe('focus-utils', () => {
         `);
       });
 
-      it('should handle document level elements', async () => {
+      it('should handle document level elements', () => {
         [...element.children].forEach((el) => {
           el.focus();
           expect(getDeepActiveElement()).to.eql(el);

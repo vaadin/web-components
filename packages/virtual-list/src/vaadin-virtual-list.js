@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -34,6 +35,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes ElementMixin
@@ -205,6 +207,6 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
   }
 }
 
-customElements.define(VirtualList.is, VirtualList);
+defineCustomElement(VirtualList);
 
 export { VirtualList };

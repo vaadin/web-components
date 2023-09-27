@@ -32,7 +32,7 @@ describe('dirty state', () => {
     expect(select.dirty).to.be.false;
   });
 
-  it('should not be dirty after outside click without change', async () => {
+  it('should not be dirty after outside click without change', () => {
     select.focus();
     select.click();
     outsideClick();

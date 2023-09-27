@@ -48,7 +48,7 @@ describe('hidden grid', () => {
       grid.dataProvider.resetHistory();
     });
 
-    it('should keep scroll position when hiding while triggering a scroll event', async () => {
+    it('should keep scroll position when hiding while triggering a scroll event', () => {
       // Scroll grid
       grid.$.table.scrollTop = 300;
       flushGrid(grid);

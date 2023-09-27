@@ -9,6 +9,7 @@
  * license.
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Chart, deepMerge } from './vaadin-chart.js';
 
 /**
@@ -54,6 +55,7 @@ import { Chart, deepMerge } from './vaadin-chart.js';
  *  chart.removeChild(seriesToBeRemoved);
  * ```
  *
+ * @customElement
  * @extends HTMLElement
  */
 class ChartSeries extends PolymerElement {
@@ -443,6 +445,6 @@ class ChartSeries extends PolymerElement {
   }
 }
 
-customElements.define(ChartSeries.is, ChartSeries);
+defineCustomElement(ChartSeries);
 
 export { ChartSeries };

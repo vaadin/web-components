@@ -6,6 +6,7 @@
 import './vaadin-details-summary.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
@@ -44,6 +45,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @customElement
  * @extends HTMLElement
  * @mixes ControllerMixin
  * @mixes DetailsBaseMixin
@@ -86,6 +88,6 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(ControllerMixi
   }
 }
 
-customElements.define(Details.is, Details);
+defineCustomElement(Details);
 
 export { Details };
