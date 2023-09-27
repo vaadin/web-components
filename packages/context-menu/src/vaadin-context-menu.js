@@ -15,7 +15,6 @@ import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixi
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
-import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
@@ -206,10 +205,9 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ControllerMixin
  * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
- * @mixes ItemsMixin
  */
 class ContextMenu extends ContextMenuMixin(
-  ItemsMixin(OverlayClassMixin(ControllerMixin(ElementMixin(ThemePropertyMixin(PolymerElement))))),
+  OverlayClassMixin(ControllerMixin(ElementMixin(ThemePropertyMixin(PolymerElement)))),
 ) {
   static get template() {
     return html`

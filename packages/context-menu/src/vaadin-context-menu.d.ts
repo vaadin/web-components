@@ -7,7 +7,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
-import { ContextMenuItem, ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
+import { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
 export { ContextMenuItem };
 
@@ -226,9 +226,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  */
-declare class ContextMenu extends ContextMenuMixin(
-  ItemsMixin(OverlayClassMixin(ElementMixin(ThemePropertyMixin(HTMLElement)))),
-) {
+declare class ContextMenu extends ContextMenuMixin(OverlayClassMixin(ElementMixin(ThemePropertyMixin(HTMLElement)))) {
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,

@@ -5,10 +5,11 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ContextMenuRenderer } from './vaadin-context-menu.js';
+import type { ItemsMixinClass } from './vaadin-contextmenu-items-mixin.js';
 
 export declare function ContextMenuMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ContextMenuMixinClass> & T;
+): Constructor<ContextMenuMixinClass> & Constructor<ItemsMixinClass> & T;
 
 export declare class ContextMenuMixinClass {
   /**

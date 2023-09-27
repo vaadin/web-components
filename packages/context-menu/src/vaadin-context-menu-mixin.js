@@ -6,12 +6,14 @@
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes ItemsMixin
  */
 export const ContextMenuMixin = (superClass) =>
-  class ContextMenuMixinClass extends superClass {
+  class ContextMenuMixinClass extends ItemsMixin(superClass) {
     static get properties() {
       return {
         /**
