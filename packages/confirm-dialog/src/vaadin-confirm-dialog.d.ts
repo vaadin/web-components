@@ -6,14 +6,9 @@
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import {
-  type ConfirmDialogCustomEventMap,
-  type ConfirmDialogEventMap,
-  ConfirmDialogMixin,
-  type ConfirmDialogOpenedChangedEvent,
-} from './vaadin-confirm-dialog-mixin.js';
+import { type ConfirmDialogEventMap, ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
 
-export { ConfirmDialogCustomEventMap, ConfirmDialogEventMap, ConfirmDialogOpenedChangedEvent };
+export * from './vaadin-confirm-dialog-mixin.js';
 
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
