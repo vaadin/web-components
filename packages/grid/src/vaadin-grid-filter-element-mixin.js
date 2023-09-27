@@ -29,7 +29,6 @@ registerStyles(
  * @polymerMixin
  *
  * @mixes ControllerMixin
- * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 export const GridFilterElementMixin = (superClass) =>
   class extends ControllerMixin(superClass) {
