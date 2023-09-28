@@ -28,7 +28,7 @@ assertType<unknown[]>(cache.items);
 assertType<boolean>(cache.isLoading);
 assertType<unknown | undefined>(cache.parentItem);
 assertType<Array<Cache<TestItem>>>(cache.subCaches);
-assertType<Map<number, DataProviderCallback<TestItem>>>(cache.pendingRequests);
+assertType<Record<number, DataProviderCallback<TestItem>>>(cache.pendingRequests);
 
 // Methods
 assertType<(page: number, items: unknown[]) => void>(cache.setPage);
