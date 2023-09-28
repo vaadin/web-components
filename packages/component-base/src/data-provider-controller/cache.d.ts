@@ -58,6 +58,14 @@ export class Cache<TItem> {
    */
   get flatSize(): number;
 
+  /**
+   * The total number of items, including items from expanded sub-caches.
+   *
+   * @protected
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get effectiveSize(): number;
+
   constructor(
     context: CacheContext<TItem>,
     pageSize: number,
