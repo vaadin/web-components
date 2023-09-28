@@ -5,11 +5,9 @@
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -38,92 +36,15 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  *
  * @customElement
  * @extends HTMLElement
+ * @mixes GridFilterElementMixin
  */
-class GridFilter extends ControllerMixin(PolymerElement) {
+class GridFilter extends GridFilterElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-flex;
-          max-width: 100%;
-        }
-
-        ::slotted(*) {
-          width: 100%;
-          box-sizing: border-box;
-        }
-      </style>
-      <slot></slot>
-    `;
+    return html`<slot></slot>`;
   }
 
   static get is() {
     return 'vaadin-grid-filter';
-  }
-
-  static get properties() {
-    return {
-      /**
-       * JS Path of the property in the item used for filtering the data.
-       */
-      path: String,
-
-      /**
-       * Current filter value.
-       */
-      value: {
-        type: String,
-        notify: true,
-      },
-
-      /** @private */
-      _textField: {
-        type: Object,
-      },
-    };
-  }
-
-  static get observers() {
-    return ['_filterChanged(path, value, _textField)'];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._filterController = new SlotController(this, '', 'vaadin-text-field', {
-      initializer: (field) => {
-        field.addEventListener('value-changed', (e) => {
-          this.value = e.detail.value;
-        });
-
-        this._textField = field;
-      },
-    });
-    this.addController(this._filterController);
-  }
-
-  /** @private */
-  _filterChanged(path, value, textField) {
-    if (path === undefined || value === undefined || !textField) {
-      return;
-    }
-    if (this._previousValue === undefined && value === '') {
-      return;
-    }
-
-    textField.value = value;
-    this._previousValue = value;
-
-    this._debouncerFilterChanged = Debouncer.debounce(this._debouncerFilterChanged, timeOut.after(200), () => {
-      this.dispatchEvent(new CustomEvent('filter-changed', { bubbles: true }));
-    });
-  }
-
-  focus() {
-    if (this._textField) {
-      this._textField.focus();
-    }
   }
 }
 

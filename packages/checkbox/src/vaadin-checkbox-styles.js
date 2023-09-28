@@ -57,6 +57,8 @@ export const checkboxStyles = css`
     margin: 0;
     align-self: stretch;
     -webkit-appearance: none;
+    width: initial;
+    height: initial;
   }
 
   @media (forced-colors: active) {

@@ -77,7 +77,11 @@ export class DataProviderController extends EventTarget {
 
   /** @private */
   get __cacheContext() {
-    return { isExpanded: this.isExpanded };
+    return {
+      isExpanded: this.isExpanded,
+      // The controller instance is needed to ensure deprecated cache methods work.
+      __controller: this,
+    };
   }
 
   /**
@@ -203,7 +207,7 @@ export class DataProviderController extends EventTarget {
 
   /** @private */
   __loadCachePage(cache, page) {
-    if (!this.dataProvider || cache.pendingRequests.has(page)) {
+    if (!this.dataProvider || cache.pendingRequests[page]) {
       return;
     }
 
@@ -227,12 +231,12 @@ export class DataProviderController extends EventTarget {
 
       this.dispatchEvent(new CustomEvent('page-received'));
 
-      cache.pendingRequests.delete(page);
+      delete cache.pendingRequests[page];
 
       this.dispatchEvent(new CustomEvent('page-loaded'));
     };
 
-    cache.pendingRequests.set(page, callback);
+    cache.pendingRequests[page] = callback;
 
     this.dispatchEvent(new CustomEvent('page-requested'));
 
