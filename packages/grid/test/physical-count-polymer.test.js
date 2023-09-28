@@ -1,2 +1,2 @@
-import '../all-imports.js';
+import '../vaadin-grid.js';
 import './physical-count.common.js';

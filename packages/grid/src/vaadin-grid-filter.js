@@ -5,8 +5,8 @@
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
@@ -36,8 +36,9 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
+ * @mixes GridFilterElementMixin
  */
-class GridFilter extends GridFilterElementMixin(ControllerMixin(PolymerElement)) {
+class GridFilter extends GridFilterElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`<slot></slot>`;
   }

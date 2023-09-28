@@ -4,9 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
 
 registerStyles(
   'vaadin-grid-filter',
@@ -24,14 +25,22 @@ registerStyles(
   { moduleId: 'vaadin-grid-filter-styles' },
 );
 
+/**
+ * @polymerMixin
+ *
+ * @mixes ControllerMixin
+ */
 export const GridFilterElementMixin = (superClass) =>
-  class extends ThemableMixin(superClass) {
+  class extends ControllerMixin(superClass) {
     static get properties() {
       return {
         /**
          * JS Path of the property in the item used for filtering the data.
          */
-        path: String,
+        path: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * Current filter value.
@@ -61,6 +70,10 @@ export const GridFilterElementMixin = (superClass) =>
       this._filterController = new SlotController(this, '', 'vaadin-text-field', {
         initializer: (field) => {
           field.addEventListener('value-changed', (e) => {
+            if (field.__previousValue === undefined && e.detail.value === '') {
+              field.__previousValue = e.detail.value;
+              return;
+            }
             this.value = e.detail.value;
           });
 

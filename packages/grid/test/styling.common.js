@@ -44,7 +44,7 @@ describe('styling', () => {
 
     it(`should remove old generated ${entries}`, () => {
       grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = () => 'bar';
+      grid[generatorFn] = () => 'bar'; // NOSONAR
       assertCallback(['bar']);
     });
 
@@ -79,13 +79,13 @@ describe('styling', () => {
 
     it(`should clear generated ${entries} with falsy return value`, () => {
       grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = () => {};
+      grid[generatorFn] = () => {}; // NOSONAR
       assertCallback([]);
     });
 
     it(`should clear generated ${entries} with falsy property value`, () => {
       grid[generatorFn] = () => 'foo';
-      grid[generatorFn] = undefined;
+      grid[generatorFn] = undefined; // NOSONAR
       assertCallback([]);
     });
 

@@ -6,6 +6,7 @@
 import '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { html, LitElement } from 'lit';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
@@ -17,7 +18,7 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class GridFilter extends GridFilterElementMixin(PolylitMixin(LitElement)) {
+class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-grid-filter';
   }

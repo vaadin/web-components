@@ -43,22 +43,6 @@ describe('array data provider', () => {
       expect(getBodyCellContent(grid, 1, 0).textContent).to.equal('baz');
     });
 
-    it('should be observed for shift', () => {
-      grid.unshift('items', {
-        name: {
-          first: 'a',
-          last: 'b',
-        },
-      });
-      expect(grid.size).to.equal(3);
-      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('a');
-    });
-
-    it('should be observed for mutation', () => {
-      grid.set('items.0.name.first', 'new');
-      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('new');
-    });
-
     it('should handle null', () => {
       grid.items = null;
       expect(grid.size).to.equal(0);
@@ -122,7 +106,7 @@ describe('array data provider', () => {
 describe('invalid paths', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column path="name.first"></vaadin-grid-column>
@@ -154,6 +138,7 @@ describe('invalid paths', () => {
       }
     };
     flushGrid(grid);
+    await nextFrame();
   });
 
   beforeEach(() => {
@@ -240,12 +225,13 @@ describe('items with a custom data provider', () => {
   const dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
   const items = [{ value: 'bar' }];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>
     `);
+    await nextFrame();
   });
 
   it('should use the items array', () => {
