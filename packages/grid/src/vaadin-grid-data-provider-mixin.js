@@ -271,6 +271,17 @@ export const DataProviderMixin = (superClass) =>
       return level;
     }
 
+    /**
+     * @param {number} page
+     * @param {ItemCache} cache
+     * @protected
+     * @deprecated since 24.3 and will be removed in Vaadin 25.
+     */
+    _loadPage(page, cache) {
+      console.warn('<vaadin-grid> The `_loadPage` method is deprecated and will be removed in Vaadin 25');
+      this._dataProviderController.__loadCachePage(cache, page);
+    }
+
     /** @protected */
     _onDataProviderPageRequested() {
       this._setLoading(true);

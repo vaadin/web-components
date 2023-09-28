@@ -35,7 +35,7 @@ export class Cache<TItem> {
    * A map where the key is a requested page and the value is a callback
    * that will be called with data once the request is complete.
    */
-  pendingRequests: Map<number, DataProviderCallback<TItem>>;
+  pendingRequests: Record<number, DataProviderCallback<TItem>>;
 
   /**
    * An item in the parent cache that the current cache is associated with.
@@ -105,4 +105,34 @@ export class Cache<TItem> {
    * of an item in the `items` array.
    */
   getFlatIndex(index: number): number;
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  getItemForIndex(index: number): TItem | undefined;
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  getCacheAndIndex(index: number): { cache: Cache<TItem>; scaledIndex: number };
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  updateSize(): void;
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  ensureSubCacheForScaledIndex(scaledIndex: number): void;
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get grid(): HTMLElement;
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get itemCaches(): object;
 }
