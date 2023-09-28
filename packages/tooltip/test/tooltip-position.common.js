@@ -1,20 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { Tooltip } from '../src/vaadin-tooltip.js';
-
-registerStyles(
-  'vaadin-tooltip-overlay',
-  css`
-    [part='overlay'] {
-      width: 50px;
-      border: 1px solid blue;
-    }
-  `,
-);
 
 describe('position', () => {
   let tooltip, target, overlay;
+
+  const Tooltip = customElements.get('vaadin-tooltip');
 
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
@@ -24,9 +14,9 @@ describe('position', () => {
 
   beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
+    await nextRender();
     target = fixtureSync('<div style="width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>');
     tooltip.target = target;
-    await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
   });
 
