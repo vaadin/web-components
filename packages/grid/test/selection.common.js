@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, listenOnce, mousedown, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, mousedown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   fire,

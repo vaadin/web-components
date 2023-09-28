@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
