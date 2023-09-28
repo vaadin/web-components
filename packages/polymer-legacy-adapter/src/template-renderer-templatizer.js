@@ -12,10 +12,6 @@ export class Templatizer extends PolymerElement {
     return 'vaadin-template-renderer-templatizer';
   }
 
-  static get version() {
-    return '24.3.0-alpha1';
-  }
-
   static create(component, template) {
     const templatizer = new this();
     templatizer.__template = template;

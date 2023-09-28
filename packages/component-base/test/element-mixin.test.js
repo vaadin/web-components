@@ -40,18 +40,6 @@ describe('ElementMixin', () => {
     });
   });
 
-  describe('version', () => {
-    let XElement;
-
-    before(() => {
-      XElement = defineCE('x-element');
-    });
-
-    it('should have a valid version number', () => {
-      expect(XElement.version).to.match(/^(\d+\.)?(\d+\.)?(\d+)(-(alpha|beta|rc)\d+)?$/u);
-    });
-  });
-
   describe('registrations', () => {
     let ElementFoo;
 

@@ -160,10 +160,6 @@ export class FieldHighlighter extends HTMLElement {
     return 'vaadin-field-highlighter';
   }
 
-  static get version() {
-    return '24.3.0-alpha1';
-  }
-
   static init(field) {
     if (!field._highlighterController) {
       // Create instance
