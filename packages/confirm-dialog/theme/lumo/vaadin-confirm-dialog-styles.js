@@ -1,3 +1,4 @@
+import '@vaadin/button/theme/lumo/vaadin-button-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import { dialogOverlay } from '@vaadin/dialog/theme/lumo/vaadin-dialog-styles.js';
