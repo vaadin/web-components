@@ -21,7 +21,7 @@ body:
     id: reproduction
     attributes:
       label: Minimal reproducible example
-      description: "A code snippet, demo project, or link that reproduces the issue."
+      description: "A code snippet with irrelevant parts and dependencies already removed, providing a concise representation of the issue. While demo projects are accepted, please keep them as minimal as possible to speed up the triaging process. Otherwise, processing of the issue could be severely prolonged."
       placeholder: "Example:\n```html\n<vaadin-button><vaadin-icon icon=\"vaadin:phone\"></vaadin-icon> Call<vaadin-button>\n<script>\n  document.querySelector(\"vaadin-button\").addEventListener(\"click\", () => console.log(\"Clicked\"));\n</script>\n```"
     validations:
       required: true
