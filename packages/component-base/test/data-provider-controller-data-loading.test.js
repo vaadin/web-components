@@ -67,9 +67,36 @@ describe('DataProviderController - data loading', () => {
       await aTimeout(0);
       expect(controller.isLoading()).to.be.false;
     });
+
+    it('should not request the first page if it is already loading', () => {
+      controller.loadFirstPage();
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+    });
+
+    it('should request the first page again even if it is already loaded', async () => {
+      controller.loadFirstPage();
+      await aTimeout(0);
+      dataProviderSpy.resetHistory();
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+    });
   });
 
-  describe('ensureFlatIndexLoaded', () => {});
+  describe('ensureFlatIndexLoaded', () => {
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        pageSize: 2,
+        dataProvider: createDataProvider({ size: 10 }),
+      });
+
+      dataProviderSpy = sinon.spy(controller, 'dataProvider');
+    });
+
+    describe('root cache index', () => {});
+
+    it('should request a root index', () => {});
+  });
 
   describe('ensureFlatIndexHierarchy', () => {});
 });
