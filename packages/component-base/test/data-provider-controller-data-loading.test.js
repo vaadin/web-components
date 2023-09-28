@@ -5,9 +5,8 @@ import '@vaadin/testing-helpers';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
 
 function createDataProvider({ size }) {
-  const items = Array.from({ length: size }, (_, i) => `Item ${i}`);
-
-  return ({ page, pageSize }, callback) => {
+  return ({ page, pageSize, parentItem }, callback) => {
+    const items = Array.from({ length: size }, (_, i) => `${parentItem ?? 'Item'}-${i}`);
     const startIndex = page * pageSize;
     const pageItems = items.splice(startIndex, pageSize);
     setTimeout(() => callback(pageItems, size));
@@ -16,6 +15,11 @@ function createDataProvider({ size }) {
 
 describe('DataProviderController - data loading', () => {
   let host, controller, dataProviderSpy;
+  const expandedItems = [];
+
+  function isExpanded(item) {
+    return expandedItems.includes(item);
+  }
 
   beforeEach(() => {
     host = document.createElement('div');
@@ -47,7 +51,7 @@ describe('DataProviderController - data loading', () => {
       controller.loadFirstPage();
       await aTimeout(0);
       expect(controller.rootCache.items).to.have.lengthOf(2);
-      expect(controller.rootCache.items).to.eql(['Item 0', 'Item 1']);
+      expect(controller.rootCache.items).to.eql(['Item-0', 'Item-1']);
     });
 
     it('should update size for the cache when page is received', async () => {
@@ -74,7 +78,7 @@ describe('DataProviderController - data loading', () => {
       expect(dataProviderSpy).to.be.calledOnce;
     });
 
-    it('should request the first page again even if it is already loaded', async () => {
+    it('should request the first page again even if it has been already loaded', async () => {
       controller.loadFirstPage();
       await aTimeout(0);
       dataProviderSpy.resetHistory();
@@ -87,15 +91,49 @@ describe('DataProviderController - data loading', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 2,
-        dataProvider: createDataProvider({ size: 10 }),
+        isExpanded,
+        dataProvider: createDataProvider({ size: 50 }),
       });
 
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
     });
 
-    describe('root cache index', () => {});
+    describe('basic', () => {
+      it('should request page 0 when called with index 0', () => {
+        controller.ensureFlatIndexLoaded(0);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
+      });
 
-    it('should request a root index', () => {});
+      it('should request page 0 when called with index 1', () => {
+        controller.ensureFlatIndexLoaded(1);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
+      });
+
+      it('should request page 1 when called with index 2', () => {
+        controller.ensureFlatIndexLoaded(2);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: undefined });
+      });
+
+      it('should not request index if the corresponding page is already loading', () => {
+        controller.ensureFlatIndexLoaded(0);
+        controller.ensureFlatIndexLoaded(0);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
+      });
+
+      it('should not request index if the corresponding item has been already loaded', async () => {
+        controller.ensureFlatIndexLoaded(0);
+        await aTimeout(0);
+        dataProviderSpy.resetHistory();
+        controller.ensureFlatIndexLoaded(0);
+        expect(dataProviderSpy).to.be.not.called;
+      });
+    });
+
+    describe('hierarchical', () => {});
   });
 
   describe('ensureFlatIndexHierarchy', () => {});

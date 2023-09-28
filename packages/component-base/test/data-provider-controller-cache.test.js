@@ -166,32 +166,32 @@ describe('DataProviderController - Cache', () => {
     });
 
     it('should return true when the cache has pending requests', () => {
-      cache.pendingRequests.set(0, (_items, _size) => {});
+      cache.pendingRequests[0] = (_items, _size) => {};
       expect(cache.isLoading).to.be.true;
     });
 
     it('should return true when one of the sub-caches has pending requests', () => {
-      subCache.pendingRequests.set(0, (_items, _size) => {});
+      subCache.pendingRequests[0] = (_items, _size) => {};
       expect(cache.isLoading).to.be.true;
     });
 
     it('should return true if not all the pending requests has been resolved', () => {
-      cache.pendingRequests.set(0, (_items, _size) => {});
-      subCache.pendingRequests.set(0, (_items, _size) => {});
-      cache.pendingRequests.delete(0);
+      cache.pendingRequests[0] = (_items, _size) => {};
+      subCache.pendingRequests[0] = (_items, _size) => {};
+      delete cache.pendingRequests[0];
       expect(cache.isLoading).to.be.true;
     });
 
     it('should return false after all the pending requests have been resolved', () => {
-      cache.pendingRequests.set(0, (_items, _size) => {});
-      subCache.pendingRequests.set(0, (_items, _size) => {});
-      cache.pendingRequests.delete(0);
-      subCache.pendingRequests.delete(0);
+      cache.pendingRequests[0] = (_items, _size) => {};
+      subCache.pendingRequests[0] = (_items, _size) => {};
+      delete cache.pendingRequests[0];
+      delete subCache.pendingRequests[0];
       expect(cache.isLoading).to.be.false;
     });
 
     it('should return false if the sub-cache with pending requests has been removed', () => {
-      subCache.pendingRequests.set(0, (_items, _size) => {});
+      subCache.pendingRequests[0] = (_items, _size) => {};
       cache.removeSubCache(0);
       expect(cache.isLoading).to.be.false;
     });
