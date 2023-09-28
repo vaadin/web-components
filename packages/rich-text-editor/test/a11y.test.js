@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { down, fixtureSync, focusin, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
+import { down, fixtureSync, focusin, isFirefox, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
@@ -15,8 +15,9 @@ describe('accessibility', () => {
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+    await nextRender();
     editor = rte._editor;
     buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
     content = rte.shadowRoot.querySelector('[contenteditable]');
@@ -32,7 +33,7 @@ describe('accessibility', () => {
       });
     });
 
-    it('should localize tooltips for the buttons', () => {
+    it('should localize tooltips for the buttons', async () => {
       const defaultI18n = rte.i18n;
 
       const localized = {};
@@ -40,6 +41,7 @@ describe('accessibility', () => {
         localized[key] = `${defaultI18n[key]} localized`;
       });
       rte.i18n = localized;
+      await nextUpdate(rte);
 
       buttons.forEach((button, index) => {
         const expectedLabel = `${defaultI18n[Object.keys(defaultI18n)[index]]} localized`;
@@ -172,6 +174,7 @@ describe('accessibility', () => {
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
         <button>button</button>
       </div>`);
+      await nextRender();
       const [rte, button] = wrapper.children;
       editor = rte._editor;
       editor.focus();
@@ -194,6 +197,7 @@ describe('accessibility', () => {
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
         <button>button</button>
       </div>`);
+      await nextRender();
       const [rte, button] = wrapper.children;
       editor = rte._editor;
       editor.focus();
