@@ -23,10 +23,10 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
     const index = subCache.parentCacheIndex;
     if (levelIndex <= index) {
       break;
-    } else if (levelIndex <= index + subCache.effectiveSize) {
+    } else if (levelIndex <= index + subCache.flatSize) {
       return getFlatIndexContext(subCache, levelIndex - index - 1, level + 1);
     }
-    levelIndex -= subCache.effectiveSize;
+    levelIndex -= subCache.flatSize;
   }
 
   return {
@@ -56,7 +56,7 @@ export function getFlatIndexByPath(cache, [levelIndex, ...subIndexes], flatIndex
 
   const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
   const subCache = cache.getSubCache(levelIndex);
-  if (subCache && subCache.effectiveSize > 0 && subIndexes.length) {
+  if (subCache && subCache.flatSize > 0 && subIndexes.length) {
     return getFlatIndexByPath(subCache, subIndexes, flatIndex + flatIndexOnLevel + 1);
   }
   return flatIndex + flatIndexOnLevel;

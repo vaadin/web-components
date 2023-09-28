@@ -55,11 +55,11 @@ assertType<number>(dataProviderController.pageSize);
 assertType<(item: TestItem) => boolean>(dataProviderController.isExpanded);
 assertType<() => TestDataProviderParams>(dataProviderController.dataProviderParams);
 assertType<DataProvider<TestItem, TestDataProviderParams>>(dataProviderController.dataProvider);
-assertType<number>(dataProviderController.effectiveSize);
+assertType<number>(dataProviderController.flatSize);
 
 // Methods
 assertType<() => void>(dataProviderController.clearCache);
-assertType<() => void>(dataProviderController.recalculateEffectiveSize);
+assertType<() => void>(dataProviderController.recalculateFlatSize);
 assertType<(flatIndex: number) => void>(dataProviderController.ensureFlatIndexLoaded);
 assertType<(flatIndex: number) => void>(dataProviderController.ensureFlatIndexHierarchy);
 assertType<

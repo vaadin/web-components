@@ -211,7 +211,7 @@ export const DragAndDropMixin = (superClass) =>
 
         let row = e.composedPath().find((node) => node.localName === 'tr');
 
-        if (!this._effectiveSize || this.dropMode === DropMode.ON_GRID) {
+        if (!this._flatSize || this.dropMode === DropMode.ON_GRID) {
           // The grid is empty or "on-grid" drop mode was used, always default to "empty"
           this._dropLocation = DropLocation.EMPTY;
         } else if (!row || row.parentNode !== this.$.items) {

@@ -257,7 +257,7 @@ describe('data provider', () => {
 
     describe('first level', () => {
       it('should have collapsed items by default', () => {
-        for (let i = 0; i < grid._effectiveSize; i++) {
+        for (let i = 0; i < grid._flatSize; i++) {
           expect(isIndexExpanded(grid, i)).to.be.false;
         }
       });
@@ -285,11 +285,11 @@ describe('data provider', () => {
       });
 
       it('should have full size set to first level size provided by data provider', () => {
-        expect(grid._effectiveSize).to.equal(10);
+        expect(grid._flatSize).to.equal(10);
       });
 
       it('should have first level items in cache', () => {
-        for (let i = 0; i < grid._effectiveSize; i++) {
+        for (let i = 0; i < grid._flatSize; i++) {
           expect(getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
         }
       });
@@ -319,7 +319,7 @@ describe('data provider', () => {
         expandIndex(grid, 0);
 
         grid.dataProvider.resetHistory();
-        const renderSpy = sinon.spy(grid, '_effectiveSizeChanged');
+        const renderSpy = sinon.spy(grid, '_flatSizeChanged');
         const updateItemSpy = sinon.spy(grid, '_updateItem');
         grid.clearCache();
 
@@ -430,12 +430,12 @@ describe('data provider', () => {
 
         it('should not increase size', () => {
           expandIndex(grid, 7);
-          expect(grid._effectiveSize).to.equal(10);
+          expect(grid._flatSize).to.equal(10);
         });
 
         it('should have first level items in cache', () => {
           expandIndex(grid, 7);
-          for (let i = 0; i < grid._effectiveSize; i++) {
+          for (let i = 0; i < grid._flatSize; i++) {
             expect(getItemForIndex(i)).to.deep.equal({ level: 0, value: `foo${i}` });
           }
         });
@@ -480,7 +480,7 @@ describe('data provider', () => {
                 // The root-level items (10) and the first child item children (10), 20 in total,
                 // should be rendered at this point even though the data request for the second expanded
                 // item hasn't still been resolved
-                expect(grid._effectiveSize).to.equal(20);
+                expect(grid._flatSize).to.equal(20);
                 done();
               }, 0);
             }
@@ -493,7 +493,7 @@ describe('data provider', () => {
 
       it('should increase full size', () => {
         expandIndex(grid, 0);
-        expect(grid._effectiveSize).to.equal(20);
+        expect(grid._flatSize).to.equal(20);
       });
 
       it('should have first and second level items in cache', () => {
@@ -522,7 +522,7 @@ describe('data provider', () => {
 
       it('should decrease full size', () => {
         collapseIndex(grid, 7);
-        expect(grid._effectiveSize).to.equal(10);
+        expect(grid._flatSize).to.equal(10);
       });
 
       it('should have first level items in cache', () => {
@@ -546,7 +546,7 @@ describe('data provider', () => {
 
       it('should increase full size', () => {
         expandIndex(grid, 7);
-        expect(grid._effectiveSize).to.equal(20);
+        expect(grid._flatSize).to.equal(20);
       });
 
       it('should have first and second level items in cache', () => {
