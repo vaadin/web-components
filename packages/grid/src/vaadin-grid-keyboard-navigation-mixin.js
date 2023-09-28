@@ -443,7 +443,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     __navigateRows(dy, activeRow, activeCell) {
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
       const activeRowGroup = activeRow.parentNode;
-      const maxRowIndex = (activeRowGroup === this.$.items ? this._effectiveSize : activeRowGroup.children.length) - 1;
+      const maxRowIndex = (activeRowGroup === this.$.items ? this._flatSize : activeRowGroup.children.length) - 1;
 
       // Index of the destination row
       let dstRowIndex = Math.max(0, Math.min(currentRowIndex + dy, maxRowIndex));

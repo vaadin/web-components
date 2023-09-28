@@ -56,7 +56,7 @@ export class Cache<TItem> {
   /**
    * The total number of items, including items from expanded sub-caches.
    */
-  get effectiveSize(): number;
+  get flatSize(): number;
 
   constructor(
     context: CacheContext<TItem>,
@@ -67,9 +67,9 @@ export class Cache<TItem> {
   );
 
   /**
-   * Recalculates the effective size for the cache and its descendant caches recursively.
+   * Recalculates the flat size for the cache and its descendant caches recursively.
    */
-  recalculateEffectiveSize(): void;
+  recalculateFlatSize(): void;
 
   /**
    * Adds an array of items corresponding to the given page

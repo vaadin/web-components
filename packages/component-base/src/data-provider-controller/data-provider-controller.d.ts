@@ -76,7 +76,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   /**
    * The total number of items, including items from expanded sub-caches.
    */
-  get effectiveSize(): number;
+  get flatSize(): number;
 
   hostConnected(): void;
 
@@ -88,7 +88,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   isLoading(): boolean;
 
   /**
-   * Sets the size for the root cache and recalculates the effective size.
+   * Sets the size for the root cache and recalculates the flat size.
    */
   setSize(size: number): void;
 
@@ -103,9 +103,9 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   setDataProvider(dataProvider: DataProvider<TItem, TDataProviderParams>): void;
 
   /**
-   * Recalculates the effective size.
+   * Recalculates the flat size.
    */
-  recalculateEffectiveSize(): void;
+  recalculateFlatSize(): void;
 
   /**
    * Clears the cache.

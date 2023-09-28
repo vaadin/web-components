@@ -64,7 +64,7 @@ export class Cache {
    * @type {number}
    * @private
    */
-  __effectiveSize = 0;
+  __flatSize = 0;
 
   /**
    * @param {Cache['context']} context
@@ -79,7 +79,7 @@ export class Cache {
     this.size = size || 0;
     this.parentCache = parentCache;
     this.parentCacheIndex = parentCacheIndex;
-    this.__effectiveSize = size || 0;
+    this.__flatSize = size || 0;
   }
 
   /**
@@ -119,20 +119,20 @@ export class Cache {
    *
    * @return {number}
    */
-  get effectiveSize() {
-    return this.__effectiveSize;
+  get flatSize() {
+    return this.__flatSize;
   }
 
   /**
-   * Recalculates the effective size for the cache and its descendant caches recursively.
+   * Recalculates the flat size for the cache and its descendant caches recursively.
    */
-  recalculateEffectiveSize() {
-    this.__effectiveSize =
+  recalculateFlatSize() {
+    this.__flatSize =
       !this.parentItem || this.context.isExpanded(this.parentItem)
         ? this.size +
           this.subCaches.reduce((total, subCache) => {
-            subCache.recalculateEffectiveSize();
-            return total + subCache.effectiveSize;
+            subCache.recalculateFlatSize();
+            return total + subCache.flatSize;
           }, 0)
         : 0;
   }
@@ -204,7 +204,7 @@ export class Cache {
 
     return this.subCaches.reduce((prev, subCache) => {
       const index = subCache.parentCacheIndex;
-      return clampedIndex > index ? prev + subCache.effectiveSize : prev;
+      return clampedIndex > index ? prev + subCache.flatSize : prev;
     }, clampedIndex);
   }
 

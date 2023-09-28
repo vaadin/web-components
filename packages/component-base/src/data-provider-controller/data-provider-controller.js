@@ -71,8 +71,8 @@ export class DataProviderController extends EventTarget {
   /**
    * The total number of items, including items from expanded sub-caches.
    */
-  get effectiveSize() {
-    return this.rootCache.effectiveSize;
+  get flatSize() {
+    return this.rootCache.flatSize;
   }
 
   /** @private */
@@ -94,14 +94,14 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Sets the size for the root cache and recalculates the effective size.
+   * Sets the size for the root cache and recalculates the flat size.
    *
    * @param {number} size
    */
   setSize(size) {
     this.size = size;
     this.rootCache.size = size;
-    this.recalculateEffectiveSize();
+    this.recalculateFlatSize();
   }
 
   /**
@@ -125,10 +125,10 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Recalculates the effective size.
+   * Recalculates the flat size.
    */
-  recalculateEffectiveSize() {
-    this.rootCache.recalculateEffectiveSize();
+  recalculateFlatSize() {
+    this.rootCache.recalculateFlatSize();
   }
 
   /**
@@ -227,7 +227,7 @@ export class DataProviderController extends EventTarget {
 
       cache.setPage(page, items);
 
-      this.recalculateEffectiveSize();
+      this.recalculateFlatSize();
 
       this.dispatchEvent(new CustomEvent('page-received'));
 

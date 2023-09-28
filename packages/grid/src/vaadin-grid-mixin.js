@@ -88,7 +88,7 @@ export const GridMixin = (superClass) =>
     static get observers() {
       return [
         '_columnTreeChanged(_columnTree, _columnTree.*)',
-        '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)',
+        '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)',
       ];
     }
 
@@ -294,20 +294,20 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _effectiveSizeChanged(effectiveSize, virtualizer, hasData, columnTree) {
+    _flatSizeChanged(flatSize, virtualizer, hasData, columnTree) {
       if (virtualizer && hasData && columnTree) {
         // Changing the virtualizer size may result in the row with focus getting hidden
         const cell = this.shadowRoot.activeElement;
         const cellCoordinates = this.__getBodyCellCoordinates(cell);
 
         const previousSize = virtualizer.size || 0;
-        virtualizer.size = effectiveSize;
+        virtualizer.size = flatSize;
 
         // Request an update for the previous last row to have the "last" state removed
         virtualizer.update(previousSize - 1, previousSize - 1);
-        if (effectiveSize < previousSize) {
+        if (flatSize < previousSize) {
           // Size was decreased, so the new last row requires an explicit update
-          virtualizer.update(effectiveSize - 1, effectiveSize - 1);
+          virtualizer.update(flatSize - 1, flatSize - 1);
         }
 
         // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
@@ -801,7 +801,7 @@ export const GridMixin = (superClass) =>
     _updateRowOrderParts(row, index = row.index) {
       updateBooleanRowStates(row, {
         first: index === 0,
-        last: index === this._effectiveSize - 1,
+        last: index === this._flatSize - 1,
         odd: index % 2 !== 0,
         even: index % 2 === 0,
       });

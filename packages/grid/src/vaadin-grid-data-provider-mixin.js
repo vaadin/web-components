@@ -161,7 +161,7 @@ export const DataProviderMixin = (superClass) =>
     /** @private */
     _sizeChanged(size) {
       this._dataProviderController.setSize(size);
-      this._effectiveSize = this._dataProviderController.effectiveSize;
+      this._flatSize = this._dataProviderController.flatSize;
     }
 
     /** @private */
@@ -179,7 +179,7 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _getItem(index, el) {
-      if (index >= this._effectiveSize) {
+      if (index >= this._flatSize) {
         return;
       }
 
@@ -234,8 +234,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _expandedItemsChanged() {
-      this._dataProviderController.recalculateEffectiveSize();
-      this._effectiveSize = this._dataProviderController.effectiveSize;
+      this._dataProviderController.recalculateFlatSize();
+      this._flatSize = this._dataProviderController.flatSize;
       this.__updateVisibleRows();
     }
 
@@ -299,7 +299,7 @@ export const DataProviderMixin = (superClass) =>
     /** @protected */
     _onDataProviderPageReceived() {
       // With the new items added, update the cache size and the grid's effective size
-      this._effectiveSize = this._dataProviderController.effectiveSize;
+      this._flatSize = this._dataProviderController.flatSize;
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
       this._getRenderedRows().forEach((row) => {
@@ -339,7 +339,7 @@ export const DataProviderMixin = (superClass) =>
       this._hasData = false;
       this.__updateVisibleRows();
 
-      if (!this._effectiveSize) {
+      if (!this._flatSize) {
         this._dataProviderController.loadFirstPage();
       }
     }
@@ -355,7 +355,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _checkSize() {
-      if (this.size === undefined && this._effectiveSize === 0) {
+      if (this.size === undefined && this._flatSize === 0) {
         console.warn(
           'The <vaadin-grid> needs the total number of items in' +
             ' order to display rows, which you can specify either by setting' +
