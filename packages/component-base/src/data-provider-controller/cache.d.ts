@@ -75,7 +75,7 @@ export class Cache<TItem> {
   );
 
   /**
-   * Recalculates the flat size for the cache and its descendant caches recursively.
+   * Recalculates the flattened size for the cache and its descendant caches recursively.
    */
   recalculateFlatSize(): void;
 

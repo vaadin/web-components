@@ -88,7 +88,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   isLoading(): boolean;
 
   /**
-   * Sets the size for the root cache and recalculates the flat size.
+   * Sets the size for the root cache and recalculates the flattened size.
    */
   setSize(size: number): void;
 
@@ -103,7 +103,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   setDataProvider(dataProvider: DataProvider<TItem, TDataProviderParams>): void;
 
   /**
-   * Recalculates the flat size.
+   * Recalculates the flattened size.
    */
   recalculateFlatSize(): void;
 

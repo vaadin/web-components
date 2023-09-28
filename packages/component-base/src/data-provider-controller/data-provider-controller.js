@@ -94,7 +94,7 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Sets the size for the root cache and recalculates the flat size.
+   * Sets the size for the root cache and recalculates the flattened size.
    *
    * @param {number} size
    */
@@ -125,7 +125,7 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Recalculates the flat size.
+   * Recalculates the flattened size.
    */
   recalculateFlatSize() {
     this.rootCache.recalculateFlatSize();

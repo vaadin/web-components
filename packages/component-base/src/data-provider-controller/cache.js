@@ -137,7 +137,7 @@ export class Cache {
   }
 
   /**
-   * Recalculates the flat size for the cache and its descendant caches recursively.
+   * Recalculates the flattened size for the cache and its descendant caches recursively.
    */
   recalculateFlatSize() {
     this.__flatSize =
