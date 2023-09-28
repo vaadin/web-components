@@ -15,7 +15,7 @@ function createDataProvider({ size }) {
 
 describe('DataProviderController - data loading', () => {
   let host, controller, dataProviderSpy;
-  const expandedItems = [];
+  let expandedItems = [];
 
   function isExpanded(item) {
     return expandedItems.includes(item);
@@ -72,13 +72,13 @@ describe('DataProviderController - data loading', () => {
       expect(controller.isLoading()).to.be.false;
     });
 
-    it('should not request the first page if it is already loading', () => {
+    it('should not request if the first page is already loading', () => {
       controller.loadFirstPage();
       controller.loadFirstPage();
       expect(dataProviderSpy).to.be.calledOnce;
     });
 
-    it('should request the first page again even if it has been already loaded', async () => {
+    it('should request again even if the first page is already loaded', async () => {
       controller.loadFirstPage();
       await aTimeout(0);
       dataProviderSpy.resetHistory();
@@ -117,14 +117,14 @@ describe('DataProviderController - data loading', () => {
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: undefined });
       });
 
-      it('should not request index if the corresponding page is already loading', () => {
+      it('should not request if the corresponding page is already loading', () => {
         controller.ensureFlatIndexLoaded(0);
         controller.ensureFlatIndexLoaded(0);
         expect(dataProviderSpy).to.be.calledOnce;
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
       });
 
-      it('should not request index if the corresponding item has been already loaded', async () => {
+      it('should not request if the corresponding item is already loaded', async () => {
         controller.ensureFlatIndexLoaded(0);
         await aTimeout(0);
         dataProviderSpy.resetHistory();
@@ -136,5 +136,68 @@ describe('DataProviderController - data loading', () => {
     describe('hierarchical', () => {});
   });
 
-  describe('ensureFlatIndexHierarchy', () => {});
+  describe('ensureFlatIndexHierarchy', () => {
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        pageSize: 2,
+        isExpanded,
+        dataProvider: createDataProvider({ size: 10 }),
+      });
+
+      dataProviderSpy = sinon.spy(controller, 'dataProvider');
+    });
+
+    describe('index is not loaded', () => {
+      it('should not create a sub-cache', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        expect(controller.rootCache.subCaches).to.have.lengthOf(0);
+      });
+
+      it('should not request data', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        expect(dataProviderSpy).to.be.not.called;
+      });
+    });
+
+    describe('index is loaded but not expanded', () => {
+      beforeEach(async () => {
+        controller.ensureFlatIndexLoaded(0);
+        await aTimeout(0);
+        dataProviderSpy.resetHistory();
+      });
+
+      it('should not create a sub-cache', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        expect(controller.rootCache.subCaches).to.have.lengthOf(0);
+      });
+
+      it('should not request data', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        expect(dataProviderSpy).to.be.not.called;
+      });
+    });
+
+    describe('index is loaded and expanded', () => {
+      beforeEach(async () => {
+        expandedItems = ['Item-0'];
+        controller.ensureFlatIndexLoaded(0);
+        await aTimeout(0);
+        dataProviderSpy.resetHistory();
+      });
+
+      it('should create a sub-cache', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        const subCache = controller.rootCache.getSubCache(0);
+        expect(subCache).to.exist;
+        expect(subCache.parentItem).to.equal('Item-0');
+        expect(subCache.parentCache).to.equal(controller.rootCache);
+      });
+
+      it('should request the first page for the created sub-cache', () => {
+        controller.ensureFlatIndexHierarchy(0);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: 'Item-0' });
+      });
+    });
+  });
 });
