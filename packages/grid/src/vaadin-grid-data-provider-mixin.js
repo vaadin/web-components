@@ -158,6 +158,15 @@ export const DataProviderMixin = (superClass) =>
       return this._dataProviderController.rootCache;
     }
 
+    /**
+     * @protected
+     * @deprecated since 24.3 and will be removed in Vaadin 25.
+     */
+    get _effectiveSize() {
+      console.warn('<vaadin-grid> The `_effectiveSize` property is deprecated and will be removed in Vaadin 25.');
+      return this._flatSize;
+    }
+
     /** @private */
     _sizeChanged(size) {
       this._dataProviderController.setSize(size);

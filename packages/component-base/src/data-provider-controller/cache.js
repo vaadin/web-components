@@ -124,6 +124,17 @@ export class Cache {
   }
 
   /**
+   * @protected
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get effectiveSize() {
+    console.warn(
+      '<vaadin-grid> The `effectiveSize` property of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+    return this.flatSize;
+  }
+
+  /**
    * Recalculates the flat size for the cache and its descendant caches recursively.
    */
   recalculateFlatSize() {
@@ -235,7 +246,7 @@ export class Cache {
    */
   updateSize() {
     console.warn('<vaadin-grid> The `updateSize` method of ItemCache is deprecated and will be removed in Vaadin 25.');
-    this.recalculateEffectiveSize();
+    this.recalculateFlatSize();
   }
 
   /**

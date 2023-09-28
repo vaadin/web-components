@@ -47,6 +47,20 @@ describe('deprecated API', () => {
     });
   });
 
+  describe('_effectiveSize', () => {
+    it('should return the flattened size', () => {
+      expect(grid._effectiveSize).to.equal(4);
+    });
+
+    it('should warn about the property being deprecated', () => {
+      const result = grid._effectiveSize;
+      expect(console.warn).to.be.calledOnce;
+      expect(console.warn).to.be.calledWith(
+        '<vaadin-grid> The `_effectiveSize` property is deprecated and will be removed in Vaadin 25.',
+      );
+    });
+  });
+
   describe('_cache', () => {
     it('should return the root cache', () => {
       expect(grid._cache).to.equal(grid._dataProviderController.rootCache);
@@ -57,6 +71,20 @@ describe('deprecated API', () => {
       expect(console.warn).to.be.calledOnce;
       expect(console.warn).to.be.calledWith(
         '<vaadin-grid> The `_cache` property is deprecated and will be removed in Vaadin 25.',
+      );
+    });
+  });
+
+  describe('_cache effectiveSize', () => {
+    it('should return the flattened size', () => {
+      expect(grid._cache.effectiveSize).to.equal(4);
+    });
+
+    it('should warn about the property being deprecated', () => {
+      const result = grid._cache.effectiveSize;
+      expect(console.warn).to.be.calledTwice;
+      expect(console.warn.lastCall).to.be.calledWith(
+        '<vaadin-grid> The `effectiveSize` property of ItemCache is deprecated and will be removed in Vaadin 25.',
       );
     });
   });
@@ -76,8 +104,8 @@ describe('deprecated API', () => {
   });
 
   describe('_cache updateSize', () => {
-    it('should call recalculateEffectiveSize', () => {
-      const spy = sinon.spy(grid._cache, 'recalculateEffectiveSize');
+    it('should call recalculateFlatSize', () => {
+      const spy = sinon.spy(grid._cache, 'recalculateFlatSize');
       grid._cache.updateSize();
       expect(spy).to.be.calledOnce;
     });
