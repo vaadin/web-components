@@ -22,6 +22,7 @@
   "files": [
     "src",
     "!src/vaadin-lit-confirm-dialog-overlay.js",
+    "!src/vaadin-lit-confirm-dialog.d.ts",
     "!src/vaadin-lit-confirm-dialog.js",
     "theme",
     "vaadin-*.d.ts",
