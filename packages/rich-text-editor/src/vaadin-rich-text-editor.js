@@ -159,35 +159,6 @@ const TAB_KEY = 9;
 class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          flex-direction: column;
-          box-sizing: border-box;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        .announcer {
-          position: fixed;
-          clip: rect(0, 0, 0, 0);
-        }
-
-        input[type='file'] {
-          display: none;
-        }
-
-        .vaadin-rich-text-editor-container {
-          display: flex;
-          flex-direction: column;
-          min-height: inherit;
-          max-height: inherit;
-          flex: auto;
-        }
-      </style>
-
       <div class="vaadin-rich-text-editor-container">
         <!-- Create toolbar container -->
         <div part="toolbar" role="toolbar">
