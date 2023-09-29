@@ -211,12 +211,15 @@ export class DataProviderController extends EventTarget {
       return;
     }
 
-    const params = {
+    let params = {
       page,
       pageSize: this.pageSize,
       parentItem: cache.parentItem,
-      ...this.dataProviderParams(),
     };
+
+    if (this.dataProviderParams) {
+      params = { ...params, ...this.dataProviderParams() };
+    }
 
     const callback = (items, size) => {
       if (size !== undefined) {
