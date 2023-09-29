@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/input-container/theme/lumo/vaadin-input-container-styles.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import { comboBoxItem } from '@vaadin/combo-box/theme/lumo/vaadin-combo-box-item-styles.js';
 import { comboBoxOverlay } from '@vaadin/combo-box/theme/lumo/vaadin-combo-box-overlay-styles.js';
