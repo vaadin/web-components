@@ -16,97 +16,95 @@ describe('DataProviderController', () => {
     host = document.createElement('div');
   });
 
-  describe('constructor', () => {
-    let dataProvider, dataProviderParams;
+  describe('default', () => {
+    let dataProvider;
 
     beforeEach(() => {
       dataProvider = (_params, callback) => callback([], 0);
-    });
 
-    describe('basic', () => {
-      beforeEach(() => {
-        controller = new DataProviderController(host, {
-          pageSize: 50,
-          isExpanded,
-          dataProvider,
-        });
-      });
-
-      it('should not have size', () => {
-        expect(controller.size).to.be.undefined;
-      });
-
-      it('should have pageSize', () => {
-        expect(controller.pageSize).to.equal(50);
-      });
-
-      it('should have dataProvider', () => {
-        expect(controller.dataProvider).to.equal(dataProvider);
-      });
-
-      it('should have effectiveSize', () => {
-        expect(controller.effectiveSize).to.equal(0);
-      });
-
-      it('should have rootCache', () => {
-        expect(controller.rootCache).to.be.instanceOf(Cache);
-      });
-
-      it('should have rootCache size', () => {
-        expect(controller.rootCache.size).to.equal(0);
-      });
-
-      it('should have rootCache pageSize', () => {
-        expect(controller.rootCache.pageSize).to.equal(50);
-      });
-
-      it('should not have rootCache parentCache', () => {
-        expect(controller.rootCache.parentCache).to.be.undefined;
-      });
-
-      it('should not have rootCache parentCacheIndex', () => {
-        expect(controller.rootCache.parentCacheIndex).to.be.undefined;
-      });
-
-      it('should not be in loading state', () => {
-        expect(controller.isLoading()).to.be.false;
+      controller = new DataProviderController(host, {
+        pageSize: 50,
+        isExpanded,
+        dataProvider,
       });
     });
 
-    describe('with size', () => {
-      beforeEach(() => {
-        controller = new DataProviderController(host, {
-          size: 500,
-          pageSize: 50,
-          isExpanded,
-          dataProvider,
-        });
-      });
+    it('should not have size', () => {
+      expect(controller.size).to.be.undefined;
+    });
 
-      it('should have size', () => {
-        expect(controller.size).to.equal(500);
-      });
+    it('should have pageSize', () => {
+      expect(controller.pageSize).to.equal(50);
+    });
 
-      it('should have rootCache size', () => {
-        expect(controller.rootCache.size).to.equal(500);
+    it('should have dataProvider', () => {
+      expect(controller.dataProvider).to.equal(dataProvider);
+    });
+
+    it('should have effectiveSize', () => {
+      expect(controller.effectiveSize).to.equal(0);
+    });
+
+    it('should have rootCache', () => {
+      expect(controller.rootCache).to.be.instanceOf(Cache);
+    });
+
+    it('should have rootCache size', () => {
+      expect(controller.rootCache.size).to.equal(0);
+    });
+
+    it('should have rootCache pageSize', () => {
+      expect(controller.rootCache.pageSize).to.equal(50);
+    });
+
+    it('should not have rootCache parentCache', () => {
+      expect(controller.rootCache.parentCache).to.be.undefined;
+    });
+
+    it('should not have rootCache parentCacheIndex', () => {
+      expect(controller.rootCache.parentCacheIndex).to.be.undefined;
+    });
+
+    it('should not be in loading state', () => {
+      expect(controller.isLoading()).to.be.false;
+    });
+  });
+
+  describe('with size', () => {
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        size: 500,
+        pageSize: 50,
+        isExpanded,
+        dataProvider: (_params, callback) => callback([], 0),
       });
     });
 
-    describe('with dataProviderParams', () => {
-      beforeEach(() => {
-        dataProviderParams = () => ({ filter: 'bar' });
+    it('should have size', () => {
+      expect(controller.size).to.equal(500);
+    });
 
-        controller = new DataProviderController(host, {
-          pageSize: 50,
-          isExpanded,
-          dataProvider,
-          dataProviderParams,
-        });
-      });
+    it('should have rootCache size', () => {
+      expect(controller.rootCache.size).to.equal(500);
+    });
+  });
 
-      it('should have dataProviderParams', () => {
-        expect(controller.dataProviderParams).to.equal(dataProviderParams);
+  describe('with dataProviderParams', () => {
+    let dataProviderParams;
+
+    beforeEach(() => {
+      dataProviderParams = () => ({ filter: 'bar' });
+
+      controller = new DataProviderController(host, {
+        pageSize: 50,
+        isExpanded,
+        dataProvider: (_params, callback) => callback([], 0),
+        dataProviderParams,
       });
+    });
+
+    it('should have dataProviderParams', () => {
+      expect(controller.dataProviderParams).to.equal(dataProviderParams);
     });
   });
 

@@ -265,4 +265,23 @@ describe('DataProviderController - data loading', () => {
       });
     });
   });
+
+  describe('dataProviderParams', () => {
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        pageSize: 2,
+        isExpanded,
+        dataProvider: (_params, callback) => callback([], 0),
+        dataProviderParams: () => ({ filter: 'bar' }),
+      });
+
+      dataProviderSpy = sinon.spy(controller, 'dataProvider');
+    });
+
+    it('should pass dataProviderParams to dataProvider', () => {
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined, filter: 'bar' });
+    });
+  });
 });
