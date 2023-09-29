@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getFlatIndexContext } from './helpers.js';
 
 /**
  * A class that stores items with their associated sub-caches.
@@ -40,9 +41,9 @@ export class Cache {
    * A map where the key is a requested page and the value is a callback
    * that will be called with data once the request is complete.
    *
-   * @type {Map<number, Function>}
+   * @type {Record<number, Function>}
    */
-  pendingRequests = new Map();
+  pendingRequests = {};
 
   /**
    * A map where the key is the index of an item in the `items` array
@@ -63,7 +64,7 @@ export class Cache {
    * @type {number}
    * @private
    */
-  __effectiveSize = 0;
+  __flatSize = 0;
 
   /**
    * @param {Cache['context']} context
@@ -78,7 +79,7 @@ export class Cache {
     this.size = size || 0;
     this.parentCache = parentCache;
     this.parentCacheIndex = parentCacheIndex;
-    this.__effectiveSize = size || 0;
+    this.__flatSize = size || 0;
   }
 
   /**
@@ -106,7 +107,7 @@ export class Cache {
    * @return {boolean}
    */
   get isLoading() {
-    if (this.pendingRequests.size > 0) {
+    if (Object.keys(this.pendingRequests).length > 0) {
       return true;
     }
 
@@ -118,20 +119,33 @@ export class Cache {
    *
    * @return {number}
    */
-  get effectiveSize() {
-    return this.__effectiveSize;
+  get flatSize() {
+    return this.__flatSize;
   }
 
   /**
-   * Recalculates the effective size for the cache and its descendant caches recursively.
+   * The total number of items, including items from expanded sub-caches.
+   *
+   * @protected
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
    */
-  recalculateEffectiveSize() {
-    this.__effectiveSize =
+  get effectiveSize() {
+    console.warn(
+      '<vaadin-grid> The `effectiveSize` property of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+    return this.flatSize;
+  }
+
+  /**
+   * Recalculates the flattened size for the cache and its descendant caches recursively.
+   */
+  recalculateFlatSize() {
+    this.__flatSize =
       !this.parentItem || this.context.isExpanded(this.parentItem)
         ? this.size +
           this.subCaches.reduce((total, subCache) => {
-            subCache.recalculateEffectiveSize();
-            return total + subCache.effectiveSize;
+            subCache.recalculateFlatSize();
+            return total + subCache.flatSize;
           }, 0)
         : 0;
   }
@@ -203,7 +217,69 @@ export class Cache {
 
     return this.subCaches.reduce((prev, subCache) => {
       const index = subCache.parentCacheIndex;
-      return clampedIndex > index ? prev + subCache.effectiveSize : prev;
+      return clampedIndex > index ? prev + subCache.flatSize : prev;
     }, clampedIndex);
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  getItemForIndex(index) {
+    console.warn(
+      '<vaadin-grid> The `getItemForIndex` method of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+    const { item } = getFlatIndexContext(this, index);
+    return item;
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  getCacheAndIndex(index) {
+    console.warn(
+      '<vaadin-grid> The `getCacheAndIndex` method of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+    const { cache, index: scaledIndex } = getFlatIndexContext(this, index);
+    return { cache, scaledIndex };
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  updateSize() {
+    console.warn('<vaadin-grid> The `updateSize` method of ItemCache is deprecated and will be removed in Vaadin 25.');
+    this.recalculateFlatSize();
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  ensureSubCacheForScaledIndex(scaledIndex) {
+    console.warn(
+      '<vaadin-grid> The `ensureSubCacheForScaledIndex` method of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+
+    if (!this.getSubCache(scaledIndex)) {
+      const subCache = this.createSubCache(scaledIndex);
+      this.context.__controller.__loadCachePage(subCache, 0);
+    }
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get grid() {
+    console.warn('<vaadin-grid> The `grid` property of ItemCache is deprecated and will be removed in Vaadin 25.');
+    return this.context.__controller.host;
+  }
+
+  /**
+   * @deprecated since 24.3 and will be removed in Vaadin 25.
+   */
+  get itemCaches() {
+    console.warn(
+      '<vaadin-grid> The `itemCaches` property of ItemCache is deprecated and will be removed in Vaadin 25.',
+    );
+    return this.__subCacheByIndex;
   }
 }

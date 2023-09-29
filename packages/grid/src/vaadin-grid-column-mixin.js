@@ -800,12 +800,13 @@ export const ColumnBaseMixin = (superClass) =>
     }
   };
 
+/**
+ * @polymerMixin
+ * @mixes ColumnBaseMixin
+ * @mixes DirMixin
+ */
 export const GridColumnMixin = (superClass) =>
   class extends ColumnBaseMixin(DirMixin(superClass)) {
-    static get is() {
-      return 'vaadin-grid-column';
-    }
-
     static get properties() {
       return {
         /**

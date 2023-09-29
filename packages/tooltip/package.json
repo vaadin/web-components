@@ -21,6 +21,9 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-tooltip-overlay.js",
+    "!src/vaadin-lit-tooltip.d.ts",
+    "!src/vaadin-lit-tooltip.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

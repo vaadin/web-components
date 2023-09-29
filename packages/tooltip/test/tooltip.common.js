@@ -8,16 +8,17 @@ import {
   mousedown,
   nextFrame,
   nextRender,
+  nextUpdate,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/overlay/vaadin-overlay.js';
-import './not-animated-styles.js';
 import { html, render } from 'lit';
-import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
 describe('vaadin-tooltip', () => {
+  const Tooltip = customElements.get('vaadin-tooltip');
+
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
     Tooltip.setDefaultHoverDelay(0);
@@ -26,8 +27,9 @@ describe('vaadin-tooltip', () => {
 
   let tooltip, overlay, srLabel;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+    await nextRender();
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     srLabel = tooltip.querySelector('[slot="sr-label"]');
   });
@@ -57,74 +59,92 @@ describe('vaadin-tooltip', () => {
       expect(overlay.$.overlay.hasAttribute('tabindex')).to.be.false;
     });
 
-    it('should propagate theme attribute to overlay', () => {
+    it('should propagate theme attribute to overlay', async () => {
       tooltip.setAttribute('theme', 'foo');
+      await nextUpdate(tooltip);
       expect(overlay.getAttribute('theme')).to.equal('foo');
     });
   });
 
   describe('text', () => {
-    it('should use text property as overlay text content', () => {
+    it('should use text property as overlay text content', async () => {
       tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
-    it('should use text property as screen reader label content', () => {
+    it('should use text property as screen reader label content', async () => {
       tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
       expect(srLabel.textContent.trim()).to.equal('Foo');
     });
 
-    it('should clear overlay content when text is set to null', () => {
+    it('should clear overlay content when text is set to null', async () => {
       tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
+
       tooltip.text = null;
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('');
     });
 
-    it('should set hidden on the overlay when text is cleared', () => {
+    it('should set hidden on the overlay when text is cleared', async () => {
       tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.false;
 
       tooltip.text = null;
+      await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
   });
 
   describe('generator', () => {
-    it('should use generator property to generate text content', () => {
+    it('should use generator property to generate text content', async () => {
       tooltip.generator = () => 'Foo';
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
-    it('should set screen reader label content using generator', () => {
+    it('should set screen reader label content using generator', async () => {
       tooltip.generator = () => 'Foo';
+      await nextUpdate(tooltip);
       expect(srLabel.textContent.trim()).to.equal('Foo');
     });
 
-    it('should override text property when generator is set', () => {
+    it('should override text property when generator is set', async () => {
       tooltip.text = 'Foo';
+      await nextUpdate(tooltip);
+
       tooltip.generator = () => 'Bar';
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('Bar');
     });
 
-    it('should use context property in generator when provided', () => {
+    it('should use context property in generator when provided', async () => {
       tooltip.context = { text: 'Foo' };
       tooltip.generator = (context) => context.text;
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
-    it('should update text content when context property changes', () => {
+    it('should update text content when context property changes', async () => {
       tooltip.context = { text: 'Foo' };
       tooltip.generator = (context) => context.text;
+      await nextUpdate(tooltip);
 
       tooltip.context = { text: 'Bar' };
+      await nextUpdate(tooltip);
       expect(overlay.textContent.trim()).to.equal('Bar');
     });
 
-    it('should set hidden on the overlay when generator clears text', () => {
+    it('should set hidden on the overlay when generator clears text', async () => {
       tooltip.generator = () => 'Bar';
+      await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.false;
 
       tooltip.generator = () => '';
+      await nextUpdate(tooltip);
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
   });
@@ -142,29 +162,34 @@ describe('vaadin-tooltip', () => {
       document.body.removeChild(target);
     });
 
-    it('should set target as overlay positionTarget', () => {
+    it('should set target as overlay positionTarget', async () => {
       tooltip.target = target;
+      await nextUpdate(tooltip);
       expect(overlay.positionTarget).to.eql(target);
     });
 
-    it('should set aria-describedby on the target element', () => {
+    it('should set aria-describedby on the target element', async () => {
       tooltip.target = target;
+      await nextUpdate(tooltip);
       expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
-    it('should retain existing aria-describedby attribute', () => {
+    it('should retain existing aria-describedby attribute', async () => {
       target.setAttribute('aria-describedby', 'foo');
       tooltip.target = target;
+      await nextUpdate(tooltip);
 
       expect(target.getAttribute('aria-describedby')).to.contain('foo');
       expect(target.getAttribute('aria-describedby')).to.contain(srLabel.id);
     });
 
-    it('should restore aria-describedby when clearing target', () => {
+    it('should restore aria-describedby when clearing target', async () => {
       target.setAttribute('aria-describedby', 'foo');
       tooltip.target = target;
+      await nextUpdate(tooltip);
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
       expect(target.getAttribute('aria-describedby')).to.equal('foo');
     });
   });
@@ -185,42 +210,48 @@ describe('vaadin-tooltip', () => {
       document.body.removeChild(target);
     });
 
-    it('should set aria-describedby on the ariaTarget element', () => {
+    it('should set aria-describedby on the ariaTarget element', async () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
+      await nextUpdate(tooltip);
 
       expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
-    it('should remove aria-describedby when the ariaTarget is cleared', () => {
+    it('should remove aria-describedby when the ariaTarget is cleared', async () => {
       tooltip.target = target;
       tooltip.ariaTarget = ariaTarget;
+      await nextUpdate(tooltip);
 
       tooltip.ariaTarget = null;
+      await nextUpdate(tooltip);
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
       expect(target.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
-    it('should set aria-describedby when providing multiple elements', () => {
+    it('should set aria-describedby when providing multiple elements', async () => {
       const ariaTarget2 = document.createElement('button');
       target.appendChild(ariaTarget2);
 
       tooltip.target = target;
       tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+      await nextUpdate(tooltip);
 
       expect(ariaTarget.getAttribute('aria-describedby')).to.equal(srLabel.id);
       expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(srLabel.id);
     });
 
-    it('should clear aria-describedby when providing empty array', () => {
+    it('should clear aria-describedby when providing empty array', async () => {
       const ariaTarget2 = document.createElement('button');
       target.appendChild(ariaTarget2);
 
       tooltip.target = target;
       tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+      await nextUpdate(tooltip);
 
       tooltip.ariaTarget = [];
+      await nextUpdate(tooltip);
 
       expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
       expect(ariaTarget2.hasAttribute('aria-describedby')).to.be.false;
@@ -300,9 +331,10 @@ describe('vaadin-tooltip', () => {
   describe('auto open', () => {
     let target;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       target = fixtureSync('<div tabindex="0"></div>');
       tooltip.target = target;
+      await nextUpdate(tooltip);
     });
 
     it('should open overlay on target keyboard focus', () => {
@@ -415,13 +447,15 @@ describe('vaadin-tooltip', () => {
       expect(spy.called).to.be.false;
     });
 
-    it('should close both opened tooltips on Esc keydown', () => {
+    it('should close both opened tooltips on Esc keydown', async () => {
       tabKeyDown(target);
       target.focus();
 
       const tooltip2 = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
       tooltip2.target = target;
+      await nextRender();
+      const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
       mouseenter(target);
 
       escKeyDown(document.body);
@@ -429,46 +463,56 @@ describe('vaadin-tooltip', () => {
       expect(overlay2.opened).to.be.false;
     });
 
-    it('should not open overlay on mouseenter when target is reset', () => {
+    it('should not open overlay on mouseenter when target is reset', async () => {
       mouseenter(target);
       mouseleave(target);
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
+
       mouseenter(target);
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close overlay on mouseleave when target is reset', () => {
+    it('should not close overlay on mouseleave when target is reset', async () => {
       mouseenter(target);
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
+
       mouseleave(target);
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not open overlay on keyboard focus when target is reset', () => {
+    it('should not open overlay on keyboard focus when target is reset', async () => {
       mouseenter(target);
       mouseleave(target);
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
+
       tabKeyDown(target);
       target.focus();
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close overlay on mousedown when target is reset', () => {
+    it('should not close overlay on mousedown when target is reset', async () => {
       mouseenter(target);
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
+
       mousedown(target);
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not close overlay on focusout when target is reset', () => {
+    it('should not close overlay on focusout when target is reset', async () => {
       tabKeyDown(target);
       target.focus();
 
       tooltip.target = null;
+      await nextUpdate(tooltip);
+
       focusout(target);
       expect(overlay.opened).to.be.true;
     });
@@ -527,6 +571,8 @@ describe('vaadin-tooltip', () => {
     it('should close overlay when another overlay opens', async () => {
       tabKeyDown(target);
       target.focus();
+      await nextUpdate(tooltip);
+
       expect(overlay.opened).to.be.true;
 
       const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
@@ -560,6 +606,7 @@ describe('vaadin-tooltip', () => {
       // Partially visible
       tabKeyDown(target);
       target.focus();
+      await nextUpdate(tooltip);
       expect(overlay.opened).to.be.true;
 
       // Fully visible
@@ -576,6 +623,7 @@ describe('vaadin-tooltip', () => {
     it('should open overlay when hovered target is fully visible and hide otherwise', async () => {
       // Partially visible
       mouseenter(target);
+      await nextUpdate(tooltip);
       expect(overlay.opened).to.be.true;
 
       // Fully visible
@@ -598,48 +646,58 @@ describe('vaadin-tooltip', () => {
       tooltip.target = target;
     });
 
-    it('should pass tooltip target as a first parameter to shouldShow on mouseenter', () => {
+    it('should pass tooltip target as a first parameter to shouldShow on mouseenter', async () => {
       const spy = sinon.spy();
       tooltip.shouldShow = spy;
+      await nextUpdate(tooltip);
 
       mouseenter(target);
       expect(spy.firstCall.args[0]).to.equal(target);
     });
 
-    it('should pass tooltip context as a second parameter to shouldShow on mouseenter', () => {
+    it('should pass tooltip context as a second parameter to shouldShow on mouseenter', async () => {
       const context = { foo: 'bar ' };
       tooltip.context = context;
+      await nextUpdate(tooltip);
 
       const spy = sinon.spy();
       tooltip.shouldShow = spy;
+      await nextUpdate(tooltip);
+
       mouseenter(target);
 
       expect(spy.firstCall.args[1]).to.equal(context);
     });
 
-    it('should pass tooltip target as a first parameter to shouldShow on keyboard focus', () => {
+    it('should pass tooltip target as a first parameter to shouldShow on keyboard focus', async () => {
       const spy = sinon.spy();
       tooltip.shouldShow = spy;
+      await nextUpdate(tooltip);
 
       tabKeyDown(target);
       target.focus();
+
       expect(spy.firstCall.args[0]).to.equal(target);
     });
 
-    it('should pass tooltip context as a second parameter to shouldShow on keyboard focus', () => {
+    it('should pass tooltip context as a second parameter to shouldShow on keyboard focus', async () => {
       const context = { foo: 'bar ' };
       tooltip.context = context;
+      await nextUpdate(tooltip);
 
       const spy = sinon.spy();
       tooltip.shouldShow = spy;
+      await nextUpdate(tooltip);
+
       tabKeyDown(target);
       target.focus();
 
       expect(spy.firstCall.args[1]).to.equal(context);
     });
 
-    it('should not open overlay on mouseenter when shouldShow returns false', () => {
+    it('should not open overlay on mouseenter when shouldShow returns false', async () => {
       tooltip.shouldShow = (target) => !target.readOnly;
+      await nextUpdate(tooltip);
       target.readOnly = true;
 
       mouseenter(target);
@@ -647,8 +705,9 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.not.ok;
     });
 
-    it('should not open overlay on keyboard focus when shouldShow returns false', () => {
+    it('should not open overlay on keyboard focus when shouldShow returns false', async () => {
       tooltip.shouldShow = (target) => !target.readOnly;
+      await nextUpdate(tooltip);
       target.readOnly = true;
 
       tabKeyDown(target);
@@ -657,8 +716,10 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.not.ok;
     });
 
-    it('should open overlay on mouseenter when shouldShow returns true', () => {
+    it('should open overlay on mouseenter when shouldShow returns true', async () => {
       tooltip.shouldShow = (target) => target.readOnly;
+      await nextUpdate(tooltip);
+
       target.readOnly = true;
 
       mouseenter(target);
@@ -666,8 +727,10 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should open overlay on keyboard focus when shouldShow returns true', () => {
+    it('should open overlay on keyboard focus when shouldShow returns true', async () => {
       tooltip.shouldShow = (target) => target.readOnly;
+      await nextUpdate(tooltip);
+
       target.readOnly = true;
 
       tabKeyDown(target);
@@ -676,16 +739,18 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should open overlay on mouseenter when shouldShow is set to null', () => {
+    it('should open overlay on mouseenter when shouldShow is set to null', async () => {
       tooltip.shouldShow = null;
+      await nextUpdate(tooltip);
 
       mouseenter(target);
 
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not open overlay on keyboard focus when shouldShow is set to null', () => {
+    it('should not open overlay on keyboard focus when shouldShow is set to null', async () => {
       tooltip.shouldShow = null;
+      await nextUpdate(tooltip);
 
       tabKeyDown(target);
       target.focus();
@@ -697,10 +762,11 @@ describe('vaadin-tooltip', () => {
   describe('manual', () => {
     let target;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       target = fixtureSync('<input>');
       tooltip.target = target;
       tooltip.manual = true;
+      await nextUpdate(tooltip);
     });
 
     it('should not open overlay on target keyboard focus', () => {
@@ -779,11 +845,11 @@ describe('vaadin-tooltip', () => {
 
     beforeEach(async () => {
       container = fixtureSync(`
-          <div>
-              <div id="first">First</div>
-              <div id="second">Second</div>
-          </div>
-        `);
+        <div>
+          <div id="first">First</div>
+          <div id="second">Second</div>
+        </div>
+      `);
       target = container.querySelector('#second');
       tooltip.target = target;
       await nextFrame();
@@ -794,6 +860,7 @@ describe('vaadin-tooltip', () => {
       firstElement.before(target);
       await waitForIntersectionObserver();
       mouseenter(target);
+      await nextUpdate(tooltip);
       expect(overlay.opened).to.be.true;
     });
   });
@@ -802,8 +869,9 @@ describe('vaadin-tooltip', () => {
 describe('manual opened', () => {
   let tooltip, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tooltip = fixtureSync('<vaadin-tooltip text="Test" manual opened></vaadin-tooltip>');
+    await nextRender();
     overlay = tooltip._overlayElement;
   });
 

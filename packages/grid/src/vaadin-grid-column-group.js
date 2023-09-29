@@ -7,6 +7,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
+export * from './vaadin-grid-column-group-mixin.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and

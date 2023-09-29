@@ -28,11 +28,11 @@ assertType<unknown[]>(cache.items);
 assertType<boolean>(cache.isLoading);
 assertType<unknown | undefined>(cache.parentItem);
 assertType<Array<Cache<TestItem>>>(cache.subCaches);
-assertType<Map<number, DataProviderCallback<TestItem>>>(cache.pendingRequests);
+assertType<Record<number, DataProviderCallback<TestItem>>>(cache.pendingRequests);
 
 // Methods
 assertType<(page: number, items: unknown[]) => void>(cache.setPage);
-assertType<() => void>(cache.recalculateEffectiveSize);
+assertType<() => void>(cache.recalculateFlatSize);
 assertType<(index: number) => number>(cache.getFlatIndex);
 assertType<(index: number) => Cache<TestItem> | undefined>(cache.getSubCache);
 assertType<(index: number) => void>(cache.removeSubCache);

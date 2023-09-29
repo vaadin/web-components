@@ -71,13 +71,17 @@ export class DataProviderController extends EventTarget {
   /**
    * The total number of items, including items from expanded sub-caches.
    */
-  get effectiveSize() {
-    return this.rootCache.effectiveSize;
+  get flatSize() {
+    return this.rootCache.flatSize;
   }
 
   /** @private */
   get __cacheContext() {
-    return { isExpanded: this.isExpanded };
+    return {
+      isExpanded: this.isExpanded,
+      // The controller instance is needed to ensure deprecated cache methods work.
+      __controller: this,
+    };
   }
 
   /**
@@ -90,14 +94,14 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Sets the size for the root cache and recalculates the effective size.
+   * Sets the size for the root cache and recalculates the flattened size.
    *
    * @param {number} size
    */
   setSize(size) {
     this.size = size;
     this.rootCache.size = size;
-    this.recalculateEffectiveSize();
+    this.recalculateFlatSize();
   }
 
   /**
@@ -121,10 +125,10 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Recalculates the effective size.
+   * Recalculates the flattened size.
    */
-  recalculateEffectiveSize() {
-    this.rootCache.recalculateEffectiveSize();
+  recalculateFlatSize() {
+    this.rootCache.recalculateFlatSize();
   }
 
   /**
@@ -203,7 +207,7 @@ export class DataProviderController extends EventTarget {
 
   /** @private */
   __loadCachePage(cache, page) {
-    if (!this.dataProvider || cache.pendingRequests.has(page)) {
+    if (!this.dataProvider || cache.pendingRequests[page]) {
       return;
     }
 
@@ -223,16 +227,16 @@ export class DataProviderController extends EventTarget {
 
       cache.setPage(page, items);
 
-      this.recalculateEffectiveSize();
+      this.recalculateFlatSize();
 
       this.dispatchEvent(new CustomEvent('page-received'));
 
-      cache.pendingRequests.delete(page);
+      delete cache.pendingRequests[page];
 
       this.dispatchEvent(new CustomEvent('page-loaded'));
     };
 
-    cache.pendingRequests.set(page, callback);
+    cache.pendingRequests[page] = callback;
 
     this.dispatchEvent(new CustomEvent('page-requested'));
 

@@ -59,7 +59,7 @@ export const ArrayDataProviderMixin = (superClass) =>
         } else if (this._arrayDataProvider.__items === items) {
           // The items array was modified
           this.clearCache();
-          this.size = this._effectiveSize;
+          this.size = this._flatSize;
         } else {
           // The items array was replaced
           this.__setArrayDataProvider(items);

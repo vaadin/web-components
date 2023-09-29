@@ -16,7 +16,7 @@ import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ColumnBaseMixin
+ * @mixes GridColumnMixin
  */
 class GridColumn extends GridColumnMixin(PolymerElement) {
   static get is() {
