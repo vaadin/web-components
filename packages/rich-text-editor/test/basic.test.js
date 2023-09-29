@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
 import { createImage } from './helpers.js';
@@ -12,8 +12,9 @@ describe('rich text editor', () => {
 
   const getButton = (fmt) => rte.shadowRoot.querySelector(`[part~="toolbar-button-${fmt}"]`);
 
-  beforeEach(() => {
+  beforeEach(async () => {
     rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+    await nextRender();
     editor = rte._editor;
   });
 
@@ -278,8 +279,9 @@ describe('rich text editor', () => {
       });
 
       describe('dialog', () => {
-        it('should not open the confirm dialog when the editor does not have focus', () => {
+        it('should not open the confirm dialog when the editor does not have focus', async () => {
           btn.click();
+          await nextUpdate(rte);
           expect(dialog.opened).to.be.false;
         });
 
@@ -314,11 +316,12 @@ describe('rich text editor', () => {
       });
 
       describe('selected text', () => {
-        it('should open the confirm dialog when the editor has focus and text is selected', () => {
+        it('should open the confirm dialog when the editor has focus and text is selected', async () => {
           rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
+          await nextUpdate(rte);
           expect(dialog.opened).to.be.true;
         });
 
@@ -359,9 +362,10 @@ describe('rich text editor', () => {
       });
 
       describe('no text selected', () => {
-        it('should open the confirm dialog when the editor has focus and no text selected', () => {
+        it('should open the confirm dialog when the editor has focus and no text selected', async () => {
           editor.focus();
           btn.click();
+          await nextUpdate(rte);
           expect(dialog.opened).to.be.true;
         });
 
@@ -810,31 +814,39 @@ describe('rich text editor', () => {
       expect(rte.disabled).to.be.false;
     });
 
-    it('should reflect to attribute', () => {
+    it('should reflect to attribute', async () => {
       rte.disabled = true;
+      await nextUpdate(rte);
       expect(rte.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should invoke the editor methods', () => {
+    it('should invoke the editor methods', async () => {
       const spy = sinon.spy(editor, 'enable');
       rte.disabled = true;
+      await nextUpdate(rte);
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.equal(false);
+
       rte.disabled = false;
+      await nextUpdate(rte);
       expect(spy.calledTwice).to.be.true;
       expect(spy.secondCall.args).to.have.length(0);
     });
 
-    it('should disallow interactions with the editor', () => {
+    it('should disallow interactions with the editor', async () => {
       rte.disabled = true;
+      await nextUpdate(rte);
       expect(getComputedStyle(rte).pointerEvents).to.equal('none');
     });
 
-    it('should disable the toolbar buttons', () => {
+    it('should disable the toolbar buttons', async () => {
       const buttons = Array.from(rte.shadowRoot.querySelectorAll('[part~="toolbar-button"]'));
       rte.disabled = true;
+      await nextUpdate(rte);
       expect(buttons.every((btn) => btn.hasAttribute('disabled'))).to.be.true;
+
       rte.disabled = false;
+      await nextUpdate(rte);
       expect(buttons.every((btn) => btn.hasAttribute('disabled'))).to.be.false;
     });
   });
@@ -844,13 +856,15 @@ describe('rich text editor', () => {
       expect(rte.readonly).to.be.false;
     });
 
-    it('should reflect to attribute', () => {
+    it('should reflect to attribute', async () => {
       rte.readonly = true;
+      await nextUpdate(rte);
       expect(rte.hasAttribute('readonly')).to.be.true;
     });
 
-    it('should update value on API call', () => {
+    it('should update value on API call', async () => {
       rte.readonly = true;
+      await nextUpdate(rte);
       rte.dangerouslySetHtmlValue('<h3><i>Foo</i>Bar</h3>');
       flushValueDebouncer();
       const delta =
@@ -860,18 +874,22 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
     });
 
-    it('should invoke the editor methods', () => {
+    it('should invoke the editor methods', async () => {
       const spy = sinon.spy(editor, 'enable');
       rte.readonly = true;
+      await nextUpdate(rte);
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.equal(false);
+
       rte.readonly = false;
+      await nextUpdate(rte);
       expect(spy.calledTwice).to.be.true;
       expect(spy.secondCall.args).to.have.length(0);
     });
 
-    it('should hide the toolbar', () => {
+    it('should hide the toolbar', async () => {
       rte.readonly = true;
+      await nextUpdate(rte);
       expect(getComputedStyle(rte.shadowRoot.querySelector('[part="toolbar"]')).display).to.equal('none');
     });
   });
@@ -943,11 +961,12 @@ describe('rich text editor', () => {
       expect(editor.emitter.listeners).to.be.empty;
     });
 
-    it('should have the listeners when removed and added back again', () => {
+    it('should have the listeners when removed and added back again', async () => {
       const parent = rte.parentNode;
 
       parent.removeChild(rte);
       parent.appendChild(rte);
+      await nextUpdate(rte);
 
       // previous `editor` reference is now stale as a new editor is created in the connectedCallback
       expect(rte._editor.emitter).to.not.equal(null);

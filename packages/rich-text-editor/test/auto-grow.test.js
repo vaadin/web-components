@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-rich-text-editor.js';
 
 describe('rich text editor', () => {
@@ -40,8 +40,9 @@ describe('rich text editor', () => {
   const conditionValues = ['equal', 'equal or greater than', 'below'];
   ['height', 'min-height', 'max-height'].forEach((definedValue, key) => {
     describe(`defined ${definedValue}`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         rte = fixtureSync(`<vaadin-rich-text-editor style="${definedValue}: 500px"></vaadin-rich-text-editor>`);
+        await nextRender();
         editorContainer = rte.shadowRoot.querySelector('.vaadin-rich-text-editor-container');
         editorContentContainer = rte.shadowRoot.querySelector('.ql-container');
         editorContent = rte.shadowRoot.querySelector('.ql-editor');
