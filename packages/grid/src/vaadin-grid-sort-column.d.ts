@@ -4,19 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
-import { GridColumn } from './vaadin-grid-column.js';
-import type { GridSorterDirection } from './vaadin-grid-sorter.js';
+import type { GridColumn, GridColumnMixin } from './vaadin-grid-column.js';
+import type { GridSortColumnEventMap, GridSortColumnMixinClass } from './vaadin-grid-sort-column-mixin.js';
 
-/**
- * Fired when the `direction` property changes.
- */
-export type GridSortColumnDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
-
-export interface GridSortColumnCustomEventMap {
-  'direction-changed': GridSortColumnDirectionChangedEvent;
-}
-
-export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnCustomEventMap {}
+export * from './vaadin-grid-sort-column-mixin.js';
 
 /**
  * `<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`
@@ -30,22 +21,13 @@ export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortCol
  *  <vaadin-grid-column>
  *    ...
  * ```
- *
- * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
-declare class GridSortColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
-  /**
-   * JS Path of the property in the item used for sorting the data.
-   */
-  path: string | null | undefined;
+declare class GridSortColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
-  /**
-   * How to sort the data.
-   * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
-   * descending direction, or `null` for not sorting the data.
-   */
-  direction: GridSorterDirection | null | undefined;
-
+interface GridSortColumn<TItem = GridDefaultItem>
+  extends GridSortColumnMixinClass,
+    GridColumnMixin<TItem, GridColumn<TItem>>,
+    GridColumn<TItem> {
   addEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
     listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,

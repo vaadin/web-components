@@ -25,7 +25,7 @@ declare class GridTreeColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridTreeColumn<TItem = GridDefaultItem>
   extends GridTreeColumnMixinClass<TItem>,
-    GridColumnMixin<TItem, GridTreeColumn<TItem>>,
+    GridColumnMixin<TItem, GridColumn<TItem>>,
     GridColumn<TItem> {}
 
 declare global {
