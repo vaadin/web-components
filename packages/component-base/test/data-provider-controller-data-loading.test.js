@@ -256,12 +256,23 @@ describe('DataProviderController - data loading', () => {
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: 'Item-0' });
       });
 
+      it('should set loading state to true when page is requested', () => {
+        controller.ensureFlatIndexLoaded(3);
+        expect(controller.isLoading()).to.be.true;
+      });
+
       it('should add items to the sub-cache when page is received', async () => {
         controller.ensureFlatIndexLoaded(3);
         await aTimeout(0);
         const subCache = controller.rootCache.getSubCache(0);
         expect(subCache.items).to.have.lengthOf(4);
         expect(subCache.items).to.eql(['Item-0-0', 'Item-0-1', 'Item-0-2', 'Item-0-3']);
+      });
+
+      it('should set loading state to false when page is received', async () => {
+        controller.ensureFlatIndexLoaded(3);
+        await aTimeout(0);
+        expect(controller.isLoading()).to.be.false;
       });
     });
   });
