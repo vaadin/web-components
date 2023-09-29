@@ -65,9 +65,9 @@ describe('DataProviderController - events', () => {
     controller.loadFirstPage();
   });
 
-  it('should have effectiveSize recalculated when page-received event is fired', async () => {
+  it('should have flatSize recalculated when page-received event is fired', async () => {
     controller.addEventListener('page-received', () => {
-      expect(controller.effectiveSize).to.equal(10);
+      expect(controller.flatSize).to.equal(10);
     });
 
     controller.loadFirstPage();

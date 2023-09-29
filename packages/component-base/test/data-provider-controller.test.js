@@ -41,8 +41,8 @@ describe('DataProviderController', () => {
       expect(controller.dataProvider).to.equal(dataProvider);
     });
 
-    it('should have effectiveSize', () => {
-      expect(controller.effectiveSize).to.equal(0);
+    it('should have flatSize', () => {
+      expect(controller.flatSize).to.equal(0);
     });
 
     it('should have rootCache', () => {
@@ -154,9 +154,9 @@ describe('DataProviderController', () => {
       expect(controller.rootCache.size).to.equal(100);
     });
 
-    it('should recalculate effectiveSize', () => {
+    it('should recalculate flatSize', () => {
       controller.setSize(100);
-      expect(controller.effectiveSize).to.equal(100);
+      expect(controller.flatSize).to.equal(100);
     });
   });
 
@@ -208,7 +208,7 @@ describe('DataProviderController', () => {
     });
   });
 
-  describe('recalculateEffectiveSize', () => {
+  describe('recalculateFlatSize', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 50,
@@ -218,8 +218,8 @@ describe('DataProviderController', () => {
     });
 
     it('should delegate the call to rootCache', () => {
-      const spy = sinon.spy(controller.rootCache, 'recalculateEffectiveSize');
-      controller.recalculateEffectiveSize();
+      const spy = sinon.spy(controller.rootCache, 'recalculateFlatSize');
+      controller.recalculateFlatSize();
       expect(spy.calledOnce).to.be.true;
     });
   });

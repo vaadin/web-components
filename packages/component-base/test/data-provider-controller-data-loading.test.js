@@ -60,10 +60,10 @@ describe('DataProviderController - data loading', () => {
       expect(controller.rootCache.size).to.equal(10);
     });
 
-    it('should recalculate effectiveSize when page is received', async () => {
+    it('should recalculate flatSize when page is received', async () => {
       controller.loadFirstPage();
       await aTimeout(0);
-      expect(controller.effectiveSize).to.equal(10);
+      expect(controller.flatSize).to.equal(10);
     });
 
     it('should set loading state to false when page is received', async () => {

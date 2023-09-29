@@ -22,8 +22,8 @@ describe('DataProviderController - Cache', () => {
       expect(cache.pageSize).to.equal(50);
     });
 
-    it('should have effectiveSize', () => {
-      expect(cache.effectiveSize).to.equal(500);
+    it('should have flatSize', () => {
+      expect(cache.flatSize).to.equal(500);
     });
 
     it('should have empty items', () => {
@@ -81,7 +81,7 @@ describe('DataProviderController - Cache', () => {
       const subCache = cache.createSubCache(0);
       expect(subCache.size).to.equal(0);
       expect(subCache.pageSize).to.equal(50);
-      expect(subCache.effectiveSize).to.equal(0);
+      expect(subCache.flatSize).to.equal(0);
       expect(subCache.parentItem).to.equal('Item 0');
       expect(subCache.parentCache).to.equal(cache);
       expect(subCache.parentCacheIndex).to.equal(0);
@@ -197,7 +197,7 @@ describe('DataProviderController - Cache', () => {
     });
   });
 
-  describe('effectiveSize', () => {
+  describe('flatSize', () => {
     beforeEach(() => {
       cache = new Cache({ isExpanded }, 50, 500);
       cache.setPage(0, ['Item 0', 'Item 1']);
@@ -212,14 +212,14 @@ describe('DataProviderController - Cache', () => {
 
     it('should include expanded sub-caches after recalculation', () => {
       expandedItems = ['Item 0', 'Item 1', 'Item 1-0'];
-      cache.recalculateEffectiveSize();
-      expect(cache.effectiveSize).to.equal(850);
+      cache.recalculateFlatSize();
+      expect(cache.flatSize).to.equal(850);
     });
 
     it('should exclude collapsed sub-caches after recalculation', () => {
       expandedItems = ['Item 0'];
-      cache.recalculateEffectiveSize();
-      expect(cache.effectiveSize).to.equal(550);
+      cache.recalculateFlatSize();
+      expect(cache.flatSize).to.equal(550);
     });
   });
 
@@ -234,7 +234,7 @@ describe('DataProviderController - Cache', () => {
       subCache1 = cache.createSubCache(1);
       subCache1.size = 200;
       expandedItems = ['Item 0'];
-      cache.recalculateEffectiveSize();
+      cache.recalculateFlatSize();
     });
 
     it('should include expanded sub-caches that precede the given index', () => {
