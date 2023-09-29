@@ -35,7 +35,7 @@ describe('DataProviderController - data loading', () => {
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
     });
 
-    it('should request the first page', () => {
+    it('should request first page', () => {
       controller.loadFirstPage();
       expect(dataProviderSpy).to.be.calledOnce;
       expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
@@ -72,13 +72,13 @@ describe('DataProviderController - data loading', () => {
       expect(controller.isLoading()).to.be.false;
     });
 
-    it('should not request if the first page is already loading', () => {
+    it('should not request first page if it is already loading', () => {
       controller.loadFirstPage();
       controller.loadFirstPage();
       expect(dataProviderSpy).to.be.calledOnce;
     });
 
-    it('should request again even if the first page is already loaded', async () => {
+    it('should request first page again even if it is already loaded', async () => {
       controller.loadFirstPage();
       await aTimeout(0);
       dataProviderSpy.resetHistory();
@@ -92,48 +92,58 @@ describe('DataProviderController - data loading', () => {
       controller = new DataProviderController(host, {
         pageSize: 2,
         isExpanded,
-        dataProvider: createDataProvider({ size: 50 }),
+        dataProvider: createDataProvider({ size: 10 }),
       });
 
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
     });
 
-    describe('basic', () => {
-      it('should request page 0 when called with index 0', () => {
-        controller.ensureFlatIndexLoaded(0);
-        expect(dataProviderSpy).to.be.calledOnce;
-        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
-      });
-
-      it('should request page 0 when called with index 1', () => {
-        controller.ensureFlatIndexLoaded(1);
-        expect(dataProviderSpy).to.be.calledOnce;
-        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
-      });
-
-      it('should request page 1 when called with index 2', () => {
-        controller.ensureFlatIndexLoaded(2);
-        expect(dataProviderSpy).to.be.calledOnce;
-        expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: undefined });
-      });
-
-      it('should not request if the corresponding page is already loading', () => {
-        controller.ensureFlatIndexLoaded(0);
-        controller.ensureFlatIndexLoaded(0);
-        expect(dataProviderSpy).to.be.calledOnce;
-        expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
-      });
-
-      it('should not request if the corresponding item is already loaded', async () => {
-        controller.ensureFlatIndexLoaded(0);
-        await aTimeout(0);
-        dataProviderSpy.resetHistory();
-        controller.ensureFlatIndexLoaded(0);
-        expect(dataProviderSpy).to.be.not.called;
-      });
+    it('should request page 0 when called with index 0', () => {
+      controller.ensureFlatIndexLoaded(0);
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
     });
 
-    describe('hierarchical', () => {});
+    it('should request page 0 when called with index 1', () => {
+      controller.ensureFlatIndexLoaded(1);
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
+    });
+
+    it('should request page 1 when called with index 2', () => {
+      controller.ensureFlatIndexLoaded(2);
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: undefined });
+    });
+
+    it('should not request page if it is already loading', () => {
+      controller.ensureFlatIndexLoaded(0);
+      controller.ensureFlatIndexLoaded(1);
+      controller.ensureFlatIndexLoaded(0);
+      controller.ensureFlatIndexLoaded(1);
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined });
+    });
+
+    it('should not request page if the corresponding item is already loaded', async () => {
+      controller.ensureFlatIndexLoaded(0);
+      await aTimeout(0);
+      dataProviderSpy.resetHistory();
+      controller.ensureFlatIndexLoaded(0);
+      expect(dataProviderSpy).to.be.not.called;
+    });
+
+    it('should add items to the root cache when page is received', async () => {
+      controller.ensureFlatIndexLoaded(0);
+      await aTimeout(0);
+      expect(controller.rootCache.items).eql(['Item-0', 'Item-1']);
+    });
+
+    it('should update size for the root cache when page is received', async () => {
+      controller.ensureFlatIndexLoaded(0);
+      await aTimeout(0);
+      expect(controller.rootCache.size).to.equal(10);
+    });
   });
 
   describe('ensureFlatIndexHierarchy', () => {
@@ -193,10 +203,65 @@ describe('DataProviderController - data loading', () => {
         expect(subCache.parentCache).to.equal(controller.rootCache);
       });
 
-      it('should request the first page for the created sub-cache', () => {
+      it('should request first page for the sub-cache', () => {
         controller.ensureFlatIndexHierarchy(0);
         expect(dataProviderSpy).to.be.calledOnce;
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: 'Item-0' });
+      });
+
+      it('should add items to the sub-cache when first page is received', async () => {
+        controller.ensureFlatIndexHierarchy(0);
+        await aTimeout(0);
+        const subCache = controller.rootCache.getSubCache(0);
+        expect(subCache.items).to.have.lengthOf(2);
+        expect(subCache.items).to.eql(['Item-0-0', 'Item-0-1']);
+      });
+
+      it('should update size for the sub-cache when first page is received', async () => {
+        controller.ensureFlatIndexHierarchy(0);
+        await aTimeout(0);
+        const subCache = controller.rootCache.getSubCache(0);
+        expect(subCache.size).to.equal(10);
+      });
+    });
+
+    describe('ensureFlatIndexLoaded', () => {
+      /**
+       * 0: Item-0
+       * 1: Item-0-0
+       * 2: Item-0-1
+       * 3: not loaded
+       * ...
+       * 11: Item-1
+       */
+      beforeEach(async () => {
+        expandedItems = ['Item-0'];
+        controller.ensureFlatIndexLoaded(0);
+        await aTimeout(0);
+        controller.ensureFlatIndexHierarchy(0);
+        await aTimeout(0);
+        dataProviderSpy.resetHistory();
+      });
+
+      it('should not request data when called with indexes 0, 1, 2', () => {
+        controller.ensureFlatIndexLoaded(0);
+        controller.ensureFlatIndexLoaded(1);
+        controller.ensureFlatIndexLoaded(2);
+        expect(dataProviderSpy).to.be.not.called;
+      });
+
+      it('should request page 1 for the sub-level when called with index 3', () => {
+        controller.ensureFlatIndexLoaded(3);
+        expect(dataProviderSpy).to.be.calledOnce;
+        expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: 'Item-0' });
+      });
+
+      it('should add items to the sub-cache when page is received', async () => {
+        controller.ensureFlatIndexLoaded(3);
+        await aTimeout(0);
+        const subCache = controller.rootCache.getSubCache(0);
+        expect(subCache.items).to.have.lengthOf(4);
+        expect(subCache.items).to.eql(['Item-0-0', 'Item-0-1', 'Item-0-2', 'Item-0-3']);
       });
     });
   });
