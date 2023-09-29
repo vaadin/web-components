@@ -2,16 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
-
-function createDataProvider({ size }) {
-  const items = Array.from({ length: size }, (_, i) => `Item ${i}`);
-
-  return ({ page, pageSize }, callback) => {
-    const startIndex = page * pageSize;
-    const pageItems = items.splice(startIndex, pageSize);
-    setTimeout(() => callback(pageItems, size));
-  };
-}
+import { createDataProvider } from './data-provider-controller-helpers.js';
 
 describe('DataProviderController - events', () => {
   let host, controller, pageRequestedSpy, pageReceivedSpy, pageLoadedSpy;
@@ -21,7 +12,7 @@ describe('DataProviderController - events', () => {
 
     controller = new DataProviderController(host, {
       pageSize: 2,
-      dataProvider: createDataProvider({ size: 10 }),
+      dataProvider: createDataProvider({ size: 10, async: true }),
     });
 
     pageRequestedSpy = sinon.spy();

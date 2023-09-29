@@ -2,11 +2,12 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { Cache } from '../src/data-provider-controller/cache.js';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
+import { createDataProvider } from './data-provider-controller-helpers.js';
 
 describe('DataProviderController', () => {
   let host, controller;
 
-  const expandedItems = [];
+  let expandedItems = [];
 
   function isExpanded(item) {
     return expandedItems.includes(item);
@@ -211,16 +212,38 @@ describe('DataProviderController', () => {
   describe('recalculateFlatSize', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
-        pageSize: 50,
+        pageSize: 2,
         isExpanded,
-        dataProvider: (_params, callback) => callback([], 0),
+        dataProvider: createDataProvider({ size: 10 }),
       });
+
+      expandedItems = ['Item-0', 'Item-0-0'];
+
+      controller.ensureFlatIndexLoaded(0);
+      controller.ensureFlatIndexHierarchy(0);
+      controller.ensureFlatIndexHierarchy(1);
+
+      /**
+       * 0: Item-0
+       * 1: Item-0-0
+       * 2: Item-0-0-0
+       * 3: Item-0-0-1
+       * ...
+       */
     });
 
-    it('should delegate the call to rootCache', () => {
-      const spy = sinon.spy(controller.rootCache, 'recalculateFlatSize');
+    it('should exclude collapsed sub-caches from flatSize', () => {
+      expandedItems = [];
       controller.recalculateFlatSize();
-      expect(spy.calledOnce).to.be.true;
+      expect(controller.flatSize).to.equal(10);
+    });
+
+    it('should include expanded sub-caches in flatSize', () => {
+      expandedItems = [];
+      controller.recalculateFlatSize();
+      expandedItems = ['Item-0', 'Item-0-0'];
+      controller.recalculateFlatSize();
+      expect(controller.flatSize).to.equal(30);
     });
   });
 });
