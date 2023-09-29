@@ -1,18 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-input-container.js';
 
 describe('vaadin-input-container', () => {
   let container;
   let input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = fixtureSync(`
       <vaadin-input-container>
         <input>
       </vaadin-input-container>
     `);
+    await nextRender();
     input = container.firstElementChild;
   });
 
@@ -22,27 +22,33 @@ describe('vaadin-input-container', () => {
     return event;
   }
 
-  it('should reflect readonly property to attribute', () => {
+  it('should reflect readonly property to attribute', async () => {
     container.readonly = true;
+    await nextUpdate(container);
     expect(container.hasAttribute('readonly')).to.be.true;
 
     container.readonly = false;
+    await nextUpdate(container);
     expect(container.hasAttribute('readonly')).to.be.false;
   });
 
-  it('should reflect disabled property to attribute', () => {
+  it('should reflect disabled property to attribute', async () => {
     container.disabled = true;
+    await nextUpdate(container);
     expect(container.hasAttribute('disabled')).to.be.true;
 
     container.disabled = false;
+    await nextUpdate(container);
     expect(container.hasAttribute('disabled')).to.be.false;
   });
 
-  it('should reflect invalid property to attribute', () => {
+  it('should reflect invalid property to attribute', async () => {
     container.invalid = true;
+    await nextUpdate(container);
     expect(container.hasAttribute('invalid')).to.be.true;
 
     container.invalid = false;
+    await nextUpdate(container);
     expect(container.hasAttribute('invalid')).to.be.false;
   });
 
