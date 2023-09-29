@@ -3,15 +3,7 @@ import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/testing-helpers';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
-
-function createDataProvider({ size }) {
-  return ({ page, pageSize, parentItem }, callback) => {
-    const items = Array.from({ length: size }, (_, i) => `${parentItem ?? 'Item'}-${i}`);
-    const startIndex = page * pageSize;
-    const pageItems = items.splice(startIndex, pageSize);
-    setTimeout(() => callback(pageItems, size));
-  };
-}
+import { createDataProvider } from './data-provider-controller-helpers.js';
 
 describe('DataProviderController - data loading', () => {
   let host, controller, dataProviderSpy;
@@ -29,7 +21,7 @@ describe('DataProviderController - data loading', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 2,
-        dataProvider: createDataProvider({ size: 10 }),
+        dataProvider: createDataProvider({ size: 10, async: true }),
       });
 
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
@@ -92,7 +84,7 @@ describe('DataProviderController - data loading', () => {
       controller = new DataProviderController(host, {
         pageSize: 2,
         isExpanded,
-        dataProvider: createDataProvider({ size: 10 }),
+        dataProvider: createDataProvider({ size: 10, async: true }),
       });
 
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
@@ -151,7 +143,7 @@ describe('DataProviderController - data loading', () => {
       controller = new DataProviderController(host, {
         pageSize: 2,
         isExpanded,
-        dataProvider: createDataProvider({ size: 10 }),
+        dataProvider: createDataProvider({ size: 10, async: true }),
       });
 
       dataProviderSpy = sinon.spy(controller, 'dataProvider');
@@ -226,14 +218,6 @@ describe('DataProviderController - data loading', () => {
     });
 
     describe('ensureFlatIndexLoaded', () => {
-      /**
-       * 0: Item-0
-       * 1: Item-0-0
-       * 2: Item-0-1
-       * 3: not loaded
-       * ...
-       * 11: Item-1
-       */
       beforeEach(async () => {
         expandedItems = ['Item-0'];
         controller.ensureFlatIndexLoaded(0);
@@ -241,6 +225,15 @@ describe('DataProviderController - data loading', () => {
         controller.ensureFlatIndexHierarchy(0);
         await aTimeout(0);
         dataProviderSpy.resetHistory();
+
+        /**
+         * 0: Item-0
+         * 1: Item-0-0
+         * 2: Item-0-1
+         * 3: not loaded
+         * ...
+         * 11: Item-1
+         */
       });
 
       it('should not request data when called with indexes 0, 1, 2', () => {
