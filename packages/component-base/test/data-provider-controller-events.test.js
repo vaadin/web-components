@@ -68,7 +68,7 @@ describe('DataProviderController - events', () => {
   it('should have page items added when page-received event is fired', async () => {
     controller.addEventListener('page-received', () => {
       expect(controller.rootCache.items).to.have.lengthOf(2);
-      expect(controller.rootCache.items).to.eql(['Item 0', 'Item 1']);
+      expect(controller.rootCache.items).to.eql(['Item-0', 'Item-1']);
     });
 
     controller.loadFirstPage();

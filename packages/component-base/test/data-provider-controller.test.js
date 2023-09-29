@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
+import '@vaadin/testing-helpers';
 import { Cache } from '../src/data-provider-controller/cache.js';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
 import { createDataProvider } from './data-provider-controller-helpers.js';
@@ -109,7 +110,7 @@ describe('DataProviderController', () => {
     });
   });
 
-  describe('clearCache', () => {
+  describe('clearing cache', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         size: 500,
@@ -136,7 +137,7 @@ describe('DataProviderController', () => {
     });
   });
 
-  describe('setSize', () => {
+  describe('changing size', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 50,
@@ -145,12 +146,12 @@ describe('DataProviderController', () => {
       });
     });
 
-    it('should update size', () => {
+    it('should set the new size', () => {
       controller.setSize(100);
       expect(controller.size).to.equal(100);
     });
 
-    it('should update rootCache size', () => {
+    it('should set the new rootCache size', () => {
       controller.setSize(100);
       expect(controller.rootCache.size).to.equal(100);
     });
@@ -161,7 +162,7 @@ describe('DataProviderController', () => {
     });
   });
 
-  describe('setPageSize', () => {
+  describe('changing pageSize', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 50,
@@ -170,12 +171,12 @@ describe('DataProviderController', () => {
       });
     });
 
-    it('should update pageSize', () => {
+    it('should set the new pageSize', () => {
       controller.setPageSize(10);
       expect(controller.pageSize).to.equal(10);
     });
 
-    it('should update rootCache pageSize', () => {
+    it('should set the new rootCache pageSize', () => {
       controller.setPageSize(10);
       expect(controller.rootCache.pageSize).to.equal(10);
     });
@@ -185,9 +186,17 @@ describe('DataProviderController', () => {
       controller.setPageSize(10);
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should pass the new pageSize to dataProvider when requesting data', () => {
+      const dataProviderSpy = sinon.spy(controller, 'dataProvider');
+      controller.setPageSize(10);
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 10, parentItem: undefined });
+    });
   });
 
-  describe('setDataProvider', () => {
+  describe('changing dataProvider', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 50,
@@ -196,7 +205,7 @@ describe('DataProviderController', () => {
       });
     });
 
-    it('should update dataProvider', () => {
+    it('should set the new dataProvider', () => {
       const dataProvider = (_params, callback) => callback([], 0);
       controller.setDataProvider(dataProvider);
       expect(controller.dataProvider).to.equal(dataProvider);
@@ -207,9 +216,16 @@ describe('DataProviderController', () => {
       controller.setDataProvider((_params, callback) => callback([], 0));
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should request data using the new dataProvider', () => {
+      controller.setDataProvider((_params, callback) => callback([], 0));
+      const dataProviderSpy = sinon.spy(controller, 'dataProvider');
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+    });
   });
 
-  describe('recalculateFlatSize', () => {
+  describe('recalculating flatSize', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
         pageSize: 2,
