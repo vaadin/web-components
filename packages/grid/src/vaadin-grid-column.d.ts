@@ -5,9 +5,11 @@
  */
 
 import type { GridDefaultItem } from './vaadin-grid.js';
-import type { GridColumnMixin } from './vaadin-grid-column-mixin.js';
-import type { GridBodyRenderer as GridMixinBodyRenderer } from './vaadin-grid-column-mixin.js';
-import type { GridHeaderFooterRenderer as GridMixinHeaderFooterRenderer } from './vaadin-grid-column-mixin.js';
+import type {
+  GridBodyRenderer as GridMixinBodyRenderer,
+  GridColumnMixin,
+  GridHeaderFooterRenderer as GridMixinHeaderFooterRenderer,
+} from './vaadin-grid-column-mixin.js';
 
 export * from './vaadin-grid-column-mixin.js';
 export type GridBodyRenderer<TItem = GridDefaultItem> = GridMixinBodyRenderer<TItem, GridColumn<TItem>>;
