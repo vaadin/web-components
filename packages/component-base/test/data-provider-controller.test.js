@@ -108,6 +108,13 @@ describe('DataProviderController', () => {
     it('should have dataProviderParams', () => {
       expect(controller.dataProviderParams).to.equal(dataProviderParams);
     });
+
+    it('should pass dataProviderParams to dataProvider', () => {
+      const dataProviderSpy = sinon.spy(controller, 'dataProvider');
+      controller.loadFirstPage();
+      expect(dataProviderSpy).to.be.calledOnce;
+      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 50, parentItem: undefined, filter: 'bar' });
+    });
   });
 
   describe('clearing cache', () => {
@@ -240,11 +247,12 @@ describe('DataProviderController', () => {
       controller.ensureFlatIndexHierarchy(1);
 
       /**
+       * .....................
        * 0: Item-0
-       * 1: Item-0-0
-       * 2: Item-0-0-0
-       * 3: Item-0-0-1
-       * ...
+       * 1:     Item-0-0
+       * 2:        Item-0-0-0
+       * 3:        Item-0-0-1
+       * .....................
        */
     });
 

@@ -227,12 +227,14 @@ describe('DataProviderController - data loading', () => {
         dataProviderSpy.resetHistory();
 
         /**
+         * .....................
          * 0: Item-0
-         * 1: Item-0-0
-         * 2: Item-0-1
-         * 3: not loaded
-         * ...
+         * 1:     Item-0-0
+         * 2:     Item-0-1
+         * 3:     not loaded
+         * .....................
          * 11: Item-1
+         * .....................
          */
       });
 
@@ -267,25 +269,6 @@ describe('DataProviderController - data loading', () => {
         await aTimeout(0);
         expect(controller.isLoading()).to.be.false;
       });
-    });
-  });
-
-  describe('dataProviderParams', () => {
-    beforeEach(() => {
-      controller = new DataProviderController(host, {
-        pageSize: 2,
-        isExpanded,
-        dataProvider: (_params, callback) => callback([], 0),
-        dataProviderParams: () => ({ filter: 'bar' }),
-      });
-
-      dataProviderSpy = sinon.spy(controller, 'dataProvider');
-    });
-
-    it('should pass dataProviderParams to dataProvider', () => {
-      controller.loadFirstPage();
-      expect(dataProviderSpy).to.be.calledOnce;
-      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined, filter: 'bar' });
     });
   });
 });
