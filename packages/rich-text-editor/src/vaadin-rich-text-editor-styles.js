@@ -12,6 +12,35 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { contentStyles } from './vaadin-rich-text-editor-content-styles.js';
 import { toolbarStyles } from './vaadin-rich-text-editor-toolbar-styles.js';
 
+export const baseStyles = css`
+  :host {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  .announcer {
+    position: fixed;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  .vaadin-rich-text-editor-container {
+    display: flex;
+    flex-direction: column;
+    min-height: inherit;
+    max-height: inherit;
+    flex: auto;
+  }
+`;
+
 export const statesStyles = css`
   :host([readonly]) [part='toolbar'] {
     display: none;
@@ -30,4 +59,4 @@ export const statesStyles = css`
   }
 `;
 
-export const richTextEditorStyles = [contentStyles, toolbarStyles, statesStyles];
+export const richTextEditorStyles = [baseStyles, contentStyles, toolbarStyles, statesStyles];
