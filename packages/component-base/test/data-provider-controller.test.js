@@ -277,7 +277,7 @@ describe('DataProviderController', () => {
       controller = new DataProviderController(host, {
         pageSize: 2,
         isExpanded,
-        dataProvider: createDataProvider({ size: 10 }),
+        dataProvider: createDataProvider({ size: 4 }),
       });
 
       expandedItems = ['Item-0', 'Item-0-0'];
@@ -287,17 +287,17 @@ describe('DataProviderController', () => {
       controller.ensureFlatIndexHierarchy(1);
       /**
        * .....................
-       * 0: Item-0
+       * 0:  Item-0
        * 1:     Item-0-0
        * 2:         Item-0-0-0
        * 3:         Item-0-0-1
        * 4:         not loaded
-       * .....................
-       * 12:    Item-0-1
-       * 13:    not loaded
-       * .....................
-       * 21: Item-1
-       * 22: not loaded
+       * 5:         not loaded
+       * 6:     Item-0-1
+       * 7:     not loaded
+       * 8:     not loaded
+       * 9:  Item-1
+       * 10: not loaded
        * .....................
        */
 
@@ -327,22 +327,22 @@ describe('DataProviderController', () => {
     });
 
     it('should return context for flat index corresponding to index 1 at level 1', () => {
-      const context = controller.getFlatIndexContext(12);
+      const context = controller.getFlatIndexContext(6);
       expect(context).to.include({ level: 1, index: 1, page: 0, item: 'Item-0-1', cache: subCache });
     });
 
     it('should return context for flat index corresponding to index 2 at level 1 (not loaded)', () => {
-      const context = controller.getFlatIndexContext(13);
+      const context = controller.getFlatIndexContext(7);
       expect(context).to.include({ level: 1, index: 2, page: 1, item: undefined, cache: subCache });
     });
 
     it('should return context for flat index corresponding to index 1 at level 0', () => {
-      const context = controller.getFlatIndexContext(21);
+      const context = controller.getFlatIndexContext(9);
       expect(context).to.include({ level: 0, index: 1, page: 0, item: 'Item-1', cache: rootCache });
     });
 
     it('should return context for flat index corresponding to index 2 at level 0 (not loaded)', () => {
-      const context = controller.getFlatIndexContext(22);
+      const context = controller.getFlatIndexContext(10);
       expect(context).to.include({ level: 0, index: 2, page: 1, item: undefined, cache: rootCache });
     });
   });
@@ -350,67 +350,89 @@ describe('DataProviderController', () => {
   describe('getFlatIndexByPath', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {
-        pageSize: 2,
+        pageSize: 3,
         isExpanded,
-        dataProvider: createDataProvider({ size: 10 }),
+        dataProvider: createDataProvider({ size: 3 }),
       });
 
-      expandedItems = ['Item-0', 'Item-0-0'];
+      expandedItems = ['Item-0', 'Item-0-0', 'Item-0-2', 'Item-2', 'Item-2-0'];
 
       controller.ensureFlatIndexLoaded(0);
       controller.ensureFlatIndexHierarchy(0);
       controller.ensureFlatIndexHierarchy(1);
+      controller.ensureFlatIndexHierarchy(6);
+      controller.ensureFlatIndexHierarchy(11);
+      controller.ensureFlatIndexHierarchy(12);
       /**
        * .....................
-       * 0: Item-0
+       * 0:  Item-0
        * 1:     Item-0-0
        * 2:         Item-0-0-0
        * 3:         Item-0-0-1
-       * 4:         not loaded
-       * .....................
-       * 12:    Item-0-1
-       * 13:    not loaded
-       * .....................
-       * 21: Item-1
-       * 22: not loaded
+       * 4:         Item-0-0-2
+       * 5:     Item-0-1
+       * 6:     Item-0-2
+       * 7:         Item-0-2-0
+       * 8:         Item-0-2-1
+       * 9:         Item-0-2-2
+       * 10: Item-1
+       * 11: Item-2
+       * 12:    Item-2-0
+       * 13:        Item-2-0-0
+       * 14:        Item-2-0-1
+       * 15:        Item-2-0-2
+       * 16:    Item-2-1
+       * 17:    Item-2-2
        * .....................
        */
     });
 
-    it('should return flat index corresponding to first index at level 0', () => {
+    it('should return flat index for path [0]', () => {
       expect(controller.getFlatIndexByPath([0])).to.equal(0);
     });
 
-    it('should return flat index corresponding to a middle index at level 0', () => {
-      expect(controller.getFlatIndexByPath([5])).to.equal(25);
+    it('should return flat index for path [1]', () => {
+      expect(controller.getFlatIndexByPath([1])).to.equal(10);
     });
 
-    it('should return flat index corresponding to last index at level 0', () => {
-      expect(controller.getFlatIndexByPath([Infinity])).to.equal(29);
-    });
-
-    it('should return flat index corresponding to first index at level 1', () => {
+    it('should return flat index for path [0, 0]', () => {
       expect(controller.getFlatIndexByPath([0, 0])).to.equal(1);
     });
 
-    it('should return flat index corresponding to a middle index at level 1', () => {
-      expect(controller.getFlatIndexByPath([0, 5])).to.equal(16);
+    it('should return flat index for path [0, 1]', () => {
+      expect(controller.getFlatIndexByPath([0, 1])).to.equal(5);
     });
 
-    it('should return flat index corresponding to last index at level 1', () => {
-      expect(controller.getFlatIndexByPath([0, Infinity])).to.equal(20);
-    });
-
-    it('should return flat index corresponding to first index at level 2', () => {
+    it('should return flat index for path [0, 0, 0]', () => {
       expect(controller.getFlatIndexByPath([0, 0, 0])).to.equal(2);
     });
 
-    it('should return flat index corresponding to a middle index at level 2', () => {
-      expect(controller.getFlatIndexByPath([0, 0, 5])).to.equal(7);
+    it('should return flat index for path [0, 0, 1]', () => {
+      expect(controller.getFlatIndexByPath([0, 0, 1])).to.equal(3);
     });
 
-    it('should return flat index corresponding to last index at level 2', () => {
-      expect(controller.getFlatIndexByPath([0, 0, Infinity])).to.equal(11);
+    it('should return flat index for path [Infinity]', () => {
+      expect(controller.getFlatIndexByPath([Infinity])).to.equal(11);
+    });
+
+    it('should return flat index for path [Infinity, 0]', () => {
+      expect(controller.getFlatIndexByPath([Infinity, 0])).to.equal(12);
+    });
+
+    it('should return flat index for path [0, Infinity]', () => {
+      expect(controller.getFlatIndexByPath([0, Infinity])).to.equal(6);
+    });
+
+    it('should return flat index for path [Infinity, 0, 0]', () => {
+      expect(controller.getFlatIndexByPath([Infinity, 0, 0])).to.equal(13);
+    });
+
+    it('should return flat index for path [0, Infinity, 0]', () => {
+      expect(controller.getFlatIndexByPath([0, Infinity, 0])).to.equal(7);
+    });
+
+    it('should return flat index for path [0, 0, Infinity]', () => {
+      expect(controller.getFlatIndexByPath([0, 0, Infinity])).to.equal(4);
     });
   });
 });
