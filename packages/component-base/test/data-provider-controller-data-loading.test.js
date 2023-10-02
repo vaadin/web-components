@@ -227,23 +227,24 @@ describe('DataProviderController - data loading', () => {
         dataProviderSpy.resetHistory();
 
         /**
+         * .....................
          * 0: Item-0
-         * 1: Item-0-0
-         * 2: Item-0-1
-         * 3: not loaded
-         * ...
+         * 1:     Item-0-0
+         * 2:     Item-0-1
+         * 3:     not loaded
+         * .....................
          * 11: Item-1
+         * .....................
          */
       });
 
-      it('should not request data when called with indexes 0, 1, 2', () => {
-        controller.ensureFlatIndexLoaded(0);
+      it('should not request page for sub-level indexes that are already loaded', () => {
         controller.ensureFlatIndexLoaded(1);
         controller.ensureFlatIndexLoaded(2);
         expect(dataProviderSpy).to.be.not.called;
       });
 
-      it('should request page 1 for the sub-level when called with index 3', () => {
+      it('should request page for sub-level index that is not yet loaded', () => {
         controller.ensureFlatIndexLoaded(3);
         expect(dataProviderSpy).to.be.calledOnce;
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: 'Item-0' });
@@ -267,25 +268,6 @@ describe('DataProviderController - data loading', () => {
         await aTimeout(0);
         expect(controller.isLoading()).to.be.false;
       });
-    });
-  });
-
-  describe('dataProviderParams', () => {
-    beforeEach(() => {
-      controller = new DataProviderController(host, {
-        pageSize: 2,
-        isExpanded,
-        dataProvider: (_params, callback) => callback([], 0),
-        dataProviderParams: () => ({ filter: 'bar' }),
-      });
-
-      dataProviderSpy = sinon.spy(controller, 'dataProvider');
-    });
-
-    it('should pass dataProviderParams to dataProvider', () => {
-      controller.loadFirstPage();
-      expect(dataProviderSpy).to.be.calledOnce;
-      expect(dataProviderSpy.args[0][0]).to.eql({ page: 0, pageSize: 2, parentItem: undefined, filter: 'bar' });
     });
   });
 });
