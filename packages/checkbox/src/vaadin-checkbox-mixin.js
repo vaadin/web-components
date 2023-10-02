@@ -104,6 +104,18 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /**
+     * Override to mark the field as dirty on change.
+     *
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onChange(event) {
+      this.dirty = true;
+      super._onChange(event);
+    }
+
+    /**
      * Override method inherited from `CheckedMixin` to reset
      * `indeterminate` state checkbox is toggled by the user.
      *
