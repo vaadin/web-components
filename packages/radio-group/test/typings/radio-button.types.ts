@@ -10,7 +10,7 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { RadioButtonCheckedChangedEvent, RadioButtonDirtyChangedEvent } from '../../vaadin-radio-button.js';
+import type { RadioButtonCheckedChangedEvent } from '../../vaadin-radio-button.js';
 import type {
   RadioGroupDirtyChangedEvent,
   RadioGroupInvalidChangedEvent,
@@ -45,11 +45,6 @@ assertType<ThemableMixinClass>(radio);
 // Radio events
 radio.addEventListener('checked-changed', (event) => {
   assertType<RadioButtonCheckedChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-radio.addEventListener('dirty-changed', (event) => {
-  assertType<RadioButtonDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

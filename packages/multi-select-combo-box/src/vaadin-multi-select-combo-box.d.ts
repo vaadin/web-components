@@ -54,11 +54,6 @@ export type MultiSelectComboBoxChangeEvent<TItem> = Event & {
 export type MultiSelectComboBoxCustomValueSetEvent = CustomEvent<string>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type MultiSelectComboBoxDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `filter` property changes.
  */
 export type MultiSelectComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
@@ -87,8 +82,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   change: MultiSelectComboBoxChangeEvent<TItem>;
 
   'custom-value-set': MultiSelectComboBoxCustomValueSetEvent;
-
-  'dirty-changed': MultiSelectComboBoxDirtyChangedEvent;
 
   'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 

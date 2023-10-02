@@ -16,15 +16,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type RadioButtonCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 
-/**
- * Fired when the `dirty` property changes.
- */
-export type RadioButtonDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
 export interface RadioButtonCustomEventMap {
   'checked-changed': RadioButtonCheckedChangedEvent;
-
-  'dirty-changed': RadioButtonDirtyChangedEvent;
 }
 
 export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCustomEventMap {}
@@ -63,7 +56,6 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  */
 declare class RadioButton extends LabelMixin(
   CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))))),
