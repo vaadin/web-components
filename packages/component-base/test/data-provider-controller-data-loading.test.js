@@ -238,14 +238,13 @@ describe('DataProviderController - data loading', () => {
          */
       });
 
-      it('should not request data when called with indexes 0, 1, 2', () => {
-        controller.ensureFlatIndexLoaded(0);
+      it('should not request page for sub-level indexes that are already loaded', () => {
         controller.ensureFlatIndexLoaded(1);
         controller.ensureFlatIndexLoaded(2);
         expect(dataProviderSpy).to.be.not.called;
       });
 
-      it('should request page 1 for the sub-level when called with index 3', () => {
+      it('should request page for sub-level index that is not yet loaded', () => {
         controller.ensureFlatIndexLoaded(3);
         expect(dataProviderSpy).to.be.calledOnce;
         expect(dataProviderSpy.args[0][0]).to.eql({ page: 1, pageSize: 2, parentItem: 'Item-0' });
