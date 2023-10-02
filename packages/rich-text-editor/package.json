@@ -24,6 +24,8 @@
   },
   "files": [
     "src",
+    "!src/vaadin-lit-rich-text-editor.d.ts",
+    "!src/vaadin-lit-rich-text-editor.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

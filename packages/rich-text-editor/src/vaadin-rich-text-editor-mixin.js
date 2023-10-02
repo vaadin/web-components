@@ -97,6 +97,7 @@ export const RichTextEditorMixin = (superClass) =>
           type: String,
           notify: true,
           value: '',
+          sync: true,
         },
 
         /**
@@ -188,6 +189,7 @@ export const RichTextEditorMixin = (superClass) =>
         /** @private */
         _linkEditing: {
           type: Boolean,
+          value: false,
         },
 
         /** @private */
@@ -271,8 +273,12 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @protected */
-    connectedCallback() {
+    async connectedCallback() {
       super.connectedCallback();
+
+      if (!this.$ && this.updateComplete) {
+        await this.updateComplete;
+      }
 
       const editor = this.shadowRoot.querySelector('[part="content"]');
 
@@ -350,8 +356,10 @@ export const RichTextEditorMixin = (superClass) =>
 
       this._addToolbarListeners();
 
-      this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-        this.$.linkUrl.focus();
+      requestAnimationFrame(() => {
+        this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+          this.$.linkUrl.focus();
+        });
       });
     }
 
