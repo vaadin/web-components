@@ -12,11 +12,6 @@ import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type CheckboxDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `checked` property changes.
  */
 export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -27,8 +22,6 @@ export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 export type CheckboxIndeterminateChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface CheckboxCustomEventMap {
-  'dirty-changed': CheckboxDirtyChangedEvent;
-
   'checked-changed': CheckboxCheckedChangedEvent;
 
   'indeterminate-changed': CheckboxIndeterminateChangedEvent;
@@ -65,7 +58,6 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */

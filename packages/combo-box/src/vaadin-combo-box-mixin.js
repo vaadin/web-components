@@ -1087,18 +1087,13 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _detectAndDispatchChange() {
-      const isValueChanged = this.value !== this._lastCommittedValue;
-      if (isValueChanged) {
-        this.dirty = true;
-      }
-
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (document.hasFocus()) {
         this.validate();
       }
 
-      if (isValueChanged) {
+      if (this.value !== this._lastCommittedValue) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
         this._lastCommittedValue = this.value;
       }

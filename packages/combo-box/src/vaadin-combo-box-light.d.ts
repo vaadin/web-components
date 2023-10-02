@@ -42,11 +42,6 @@ export type ComboBoxLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 export type ComboBoxLightInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type ComboBoxLightDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type ComboBoxLightValueChangedEvent = CustomEvent<{ value: string }>;
@@ -76,8 +71,6 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
   'filter-changed': ComboBoxLightFilterChangedEvent;
 
   'invalid-changed': ComboBoxLightInvalidChangedEvent;
-
-  'dirty-changed': ComboBoxLightDirtyChangedEvent;
 
   'value-changed': ComboBoxLightValueChangedEvent;
 
@@ -129,7 +122,6 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

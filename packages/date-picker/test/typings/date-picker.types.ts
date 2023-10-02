@@ -17,7 +17,6 @@ import type { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js
 import type {
   DatePicker,
   DatePickerChangeEvent,
-  DatePickerDirtyChangedEvent,
   DatePickerInvalidChangedEvent,
   DatePickerOpenedChangedEvent,
   DatePickerValidatedEvent,
@@ -26,7 +25,6 @@ import type {
 import type {
   DatePickerLight,
   DatePickerLightChangeEvent,
-  DatePickerLightDirtyChangedEvent,
   DatePickerLightInvalidChangedEvent,
   DatePickerLightOpenedChangedEvent,
   DatePickerLightValidatedEvent,
@@ -46,11 +44,6 @@ datePicker.addEventListener('opened-changed', (event) => {
 
 datePicker.addEventListener('invalid-changed', (event) => {
   assertType<DatePickerInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-datePicker.addEventListener('dirty-changed', (event) => {
-  assertType<DatePickerDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
@@ -131,11 +124,6 @@ datePickerLight.addEventListener('invalid-changed', (event) => {
 datePickerLight.addEventListener('value-changed', (event) => {
   assertType<DatePickerLightValueChangedEvent>(event);
   assertType<string>(event.detail.value);
-});
-
-datePickerLight.addEventListener('dirty-changed', (event) => {
-  assertType<DatePickerLightDirtyChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
 });
 
 datePickerLight.addEventListener('change', (event) => {

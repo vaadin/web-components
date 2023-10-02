@@ -113,41 +113,6 @@ const runTests = (defineHelper, baseMixin) => {
     });
   });
 
-  describe('dirty state', () => {
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag}></${tag}>`);
-      await nextRender();
-      input = document.createElement('input');
-      input.setAttribute('slot', 'input');
-      element.appendChild(input);
-      element._setInputElement(input);
-      await nextUpdate();
-    });
-
-    it('should not be dirty by default', () => {
-      expect(element.dirty).to.be.false;
-    });
-
-    it('should not be dirty after programmatic value change', async () => {
-      element.value = 'foo';
-      await nextUpdate(element);
-      expect(element.dirty).to.be.false;
-    });
-
-    it('should be dirty after user input', () => {
-      fire(input, 'input');
-      expect(element.dirty).to.be.true;
-    });
-
-    it('should fire dirty-changed event when the state changes', async () => {
-      const spy = sinon.spy();
-      element.addEventListener('dirty-changed', spy);
-      element.dirty = true;
-      await nextUpdate();
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
   describe('events', () => {
     let eventsTag, inputSpy, changeSpy;
 

@@ -10,13 +10,3 @@ export function setInputValue(timePicker, value) {
   timePicker.inputElement.value = value;
   fire(timePicker.inputElement, 'input');
 }
-
-/**
- * Returns all the items of the time-picker dropdown.
- */
-export const getAllItems = (timePicker) => {
-  const { comboBox } = timePicker.$;
-  return Array.from(comboBox._scroller.querySelectorAll('vaadin-time-picker-item'))
-    .filter((item) => !item.hidden)
-    .sort((a, b) => a.index - b.index);
-};
