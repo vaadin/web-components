@@ -82,10 +82,16 @@ export class IronListAdapter {
     return this.lastVisibleIndex + this._vidxOffset;
   }
 
+  __hasPlaceholders() {
+    return this.__getVisibleElements().some((el) => el.__placeholder);
+  }
+
   scrollToIndex(index) {
     if (typeof index !== 'number' || isNaN(index) || this.size === 0 || !this.scrollTarget.offsetHeight) {
       return;
     }
+    delete this.__pendingScrollToIndex;
+
     index = this._clamp(index, 0, this.size - 1);
 
     const visibleElementCount = this.__getVisibleElements().length;
@@ -113,6 +119,12 @@ export class IronListAdapter {
       this._scrollTop -= this.__getIndexScrollOffset(index) || 0;
     }
     this._scrollHandler();
+
+    if (this.__hasPlaceholders()) {
+      // After rendering synchronously, there are still placeholders in the DOM.
+      // Try again after the next elements update.
+      this.__pendingScrollToIndex = index;
+    }
   }
 
   flush() {
@@ -199,8 +211,9 @@ export class IronListAdapter {
 
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
-    if (el.style.paddingTop) {
+    if (el.__placeholder) {
       el.style.paddingTop = '';
+      el.__placeholder = false;
     }
 
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
@@ -224,6 +237,7 @@ export class IronListAdapter {
         // Assign a temporary placeholder sizing to elements that would otherwise end up having
         // no height.
         el.style.paddingTop = `${this.__placeholderHeight}px`;
+        el.__placeholder = true;
 
         // Manually schedule the resize handler to make sure the placeholder padding is
         // cleared in case the resize observer never triggers.
@@ -241,6 +255,10 @@ export class IronListAdapter {
         this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
       }
     });
+
+    if (this.__pendingScrollToIndex !== undefined && !this.__hasPlaceholders()) {
+      this.scrollToIndex(this.__pendingScrollToIndex);
+    }
   }
 
   __getIndexScrollOffset(index) {
