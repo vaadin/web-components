@@ -447,7 +447,7 @@ export const DatePickerMixin = (subclass) =>
       super._onBlur(event);
 
       if (!this.opened) {
-        this._selectParsedOrFocusedDate();
+        this.__commitParsedOrFocusedDate();
 
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
@@ -523,14 +523,14 @@ export const DatePickerMixin = (subclass) =>
 
       // User confirmed selected date by clicking the calendar.
       content.addEventListener('date-tap', (e) => {
-        this._selectDate(e.detail.date);
+        this.__commitDate(e.detail.date);
 
         this._close();
       });
 
       // User confirmed selected date by pressing Enter, Space, or Today.
       content.addEventListener('date-selected', (e) => {
-        this._selectDate(e.detail.date);
+        this.__commitDate(e.detail.date);
       });
 
       // Set focus-ring attribute when moving focus to the overlay
@@ -652,16 +652,16 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Select date on user interaction and set the flag
-     * to fire change event if necessary.
+     * Sets the given date as the value and fires a change event
+     * if the value has changed.
      *
-     * @param {Date} dateToSelect
-     * @protected
+     * @param {Date} date
+     * @private
      */
-    _selectDate(dateToSelect) {
+    __commitDate(date) {
       const prevValue = this.value;
 
-      this._selectedDate = dateToSelect;
+      this._selectedDate = date;
 
       if (prevValue !== this.value) {
         this.dirty = true;
@@ -892,8 +892,15 @@ export const DatePickerMixin = (subclass) =>
         : getClosestDate(initialPosition, [this._minDate, this._maxDate]);
     }
 
-    /** @private */
-    _selectParsedOrFocusedDate() {
+    /**
+     * Tries to parse the input element's value as a date. When succeeds,
+     * sets the resulting date as the value and fires a change event
+     * (if the value has changed). If no i18n parser is provided, sets
+     * the focused date as the value.
+     *
+     * @private
+     */
+    __commitParsedOrFocusedDate() {
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
@@ -901,15 +908,15 @@ export const DatePickerMixin = (subclass) =>
         const parsedDate = this.__parseDate(inputValue);
 
         if (parsedDate) {
-          this._selectDate(parsedDate);
+          this.__commitDate(parsedDate);
         } else {
           this.__keepInputValue = true;
-          this._selectDate(null);
+          this.__commitDate(null);
           this._selectedDate = null;
           this.__keepInputValue = false;
         }
       } else if (this._focusedDate) {
-        this._selectDate(this._focusedDate);
+        this.__commitDate(this._focusedDate);
       }
       this._ignoreFocusedDateChange = false;
     }
@@ -924,7 +931,7 @@ export const DatePickerMixin = (subclass) =>
 
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      this._selectParsedOrFocusedDate();
+      this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -1011,9 +1018,7 @@ export const DatePickerMixin = (subclass) =>
     _onClearButtonClick(event) {
       event.preventDefault();
       this.dirty = true;
-      this._inputElementValue = '';
-      this.value = '';
-      this.__dispatchChange();
+      this.__commitDate(null);
     }
 
     /**
@@ -1082,7 +1087,7 @@ export const DatePickerMixin = (subclass) =>
         // Closing will implicitly select parsed or focused date
         this.close();
       } else {
-        this._selectParsedOrFocusedDate();
+        this.__commitParsedOrFocusedDate();
       }
       if (oldValue === this.value) {
         this.validate();
@@ -1114,7 +1119,7 @@ export const DatePickerMixin = (subclass) =>
 
       if (this.inputElement.value === '') {
         // Do not restore selected date if Esc was pressed after clearing input field
-        this._selectDate(null);
+        this.__commitDate(null);
       } else {
         this._applyInputValue(this._selectedDate);
       }
