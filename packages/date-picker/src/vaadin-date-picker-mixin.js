@@ -523,8 +523,6 @@ export const DatePickerMixin = (subclass) =>
 
       // User confirmed selected date by clicking the calendar.
       content.addEventListener('date-tap', (e) => {
-        this.__userConfirmedDate = true;
-
         this._selectDate(e.detail.date);
 
         this._close();
@@ -532,9 +530,6 @@ export const DatePickerMixin = (subclass) =>
 
       // User confirmed selected date by pressing Enter, Space, or Today.
       content.addEventListener('date-selected', (e) => {
-        // Reset if a date is deselected.
-        this.__userConfirmedDate = !!e.detail.date;
-
         this._selectDate(e.detail.date);
       });
 
@@ -929,12 +924,7 @@ export const DatePickerMixin = (subclass) =>
 
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      // No need to select date on close if it was confirmed by the user.
-      if (this.__userConfirmedDate) {
-        this.__userConfirmedDate = false;
-      } else {
-        this._selectParsedOrFocusedDate();
-      }
+      this._selectParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -1122,15 +1112,11 @@ export const DatePickerMixin = (subclass) =>
         return;
       }
 
-      if (this.autoOpenDisabled) {
+      if (this.inputElement.value === '') {
         // Do not restore selected date if Esc was pressed after clearing input field
-        if (this.inputElement.value === '') {
-          this._selectDate(null);
-        }
-        this._applyInputValue(this._selectedDate);
+        this._selectDate(null);
       } else {
-        this._focusedDate = this._selectedDate;
-        this._selectParsedOrFocusedDate();
+        this._applyInputValue(this._selectedDate);
       }
     }
 
