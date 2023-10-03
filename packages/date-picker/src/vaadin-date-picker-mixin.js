@@ -657,17 +657,29 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Executes one of the following branches depending on the first match:
+     * Depending on the type of value change that has taken place
+     * since the last commit attempt, triggers validation and fires
+     * an event:
      *
-     * 1. If the parsable value has changed since the last commit attempt,
-     *    triggers validation and fires a change event.
-     * 2. If the unparsable value has changed since the last commit attempt,
-     *    triggers validation.
+     * ```text
+     * +------------------------+--------+
+     * | Type of change         | Event  |
+     * +------------------------+--------+
+     * | empty => parsable      | change |
+     * | empty => unparsable    |        |
+     * | parsable => empty      | change |
+     * | parsable => unparsable | change |
+     * | unparsable => empty    |        |
+     * | unparsable => parsable |        |
+     * +------------------------+--------+
+     * ```
      *
-     * Finally, updates the last committed parsable and unparsable values.
+     * If no value change is detected, the method returns false.
+     *
+     * (the above table has been generated with ChatGPT)
      *
      * @private
-     * @return {boolean} whether an actual commit occurred.
+     * @return {boolean} whether a change has been detected and committed.
      */
     __commitValueChangeIfPending() {
       let result = false;
