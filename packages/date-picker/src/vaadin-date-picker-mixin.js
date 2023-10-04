@@ -657,7 +657,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Based on the type of value change that has occurred since
+     * Depending on the type of value change that has occurred since
      * the last commit attempt, triggers validation and fires an event:
      *
      * ```text
