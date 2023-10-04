@@ -657,21 +657,20 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Depending on the type of value change that has taken place
-     * since the last commit attempt, triggers validation and fires
-     * an event:
+     * Based on the type of value change that has occurred since
+     * the last commit attempt, triggers validation and fires an event:
      *
      * ```text
      * +--------------------------+-------------------+
      * | Type of value change     | Event             |
      * +--------------------------+-------------------+
      * | empty => parsable        | change            |
+     * | empty => unparsable      | unparsable-change |
      * | parsable => empty        | change            |
      * | parsable => parsable     | change            |
      * | parsable => unparsable   | change            |
-     * | empty => unparsable      | unparsable-change |
      * | unparsable => empty      | unparsable-change |
-     * | unparsable => parsable   | unparsable-change |
+     * | unparsable => parsable   | change            |
      * | unparsable => unparsable | unparsable-change |
      * +--------------------------+-------------------+
      * ```
