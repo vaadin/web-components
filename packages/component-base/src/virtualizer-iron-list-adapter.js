@@ -83,7 +83,7 @@ export class IronListAdapter {
   }
 
   __hasPlaceholders() {
-    return this.__getVisibleElements().some((el) => el.__placeholder);
+    return this.__getVisibleElements().some((el) => el.__virtualizerPlaceholder);
   }
 
   scrollToIndex(index) {
@@ -219,9 +219,9 @@ export class IronListAdapter {
 
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
-    if (el.__placeholder) {
+    if (el.__virtualizerPlaceholder) {
       el.style.paddingTop = '';
-      el.__placeholder = false;
+      el.__virtualizerPlaceholder = false;
     }
 
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
@@ -245,7 +245,7 @@ export class IronListAdapter {
         // Assign a temporary placeholder sizing to elements that would otherwise end up having
         // no height.
         el.style.paddingTop = `${this.__placeholderHeight}px`;
-        el.__placeholder = true;
+        el.__virtualizerPlaceholder = true;
 
         // Manually schedule the resize handler to make sure the placeholder padding is
         // cleared in case the resize observer never triggers.
