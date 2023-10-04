@@ -62,13 +62,13 @@ describe('virtualizer - item height', () => {
   it('should resize the elements once the content updates', async () => {
     const firstItem = elementsContainer.querySelector(`#item-0`);
     // Wait for the content to update
-    await contentUpdate();
+    await aTimeout(100);
     expect(firstItem.offsetHeight).to.equal(EVEN_ITEM_HEIGHT);
   });
 
   it('should adjust the placeholder height', async () => {
     // Wait for the content to update
-    await contentUpdate();
+    await aTimeout(100);
     // Scroll down
     virtualizer.scrollToIndex(100);
 
@@ -96,7 +96,7 @@ describe('virtualizer - item height', () => {
     firstItem.style.height = `${firstItemHeight}px`;
 
     // Give some time for the resize observer to fire
-    await contentUpdate();
+    await aTimeout(100);
 
     // The padding should have been be cleared and the item should have its original height.
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
