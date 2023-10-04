@@ -103,15 +103,6 @@ export declare class SelectBaseMixinClass {
   readonly: boolean;
 
   /**
-   * Whether the field is dirty.
-   *
-   * The field is automatically marked as dirty once the user triggers
-   * a `change` event. Additionally, the field can be manually marked
-   * as dirty by setting the property to `true`.
-   */
-  dirty: boolean;
-
-  /**
    * Requests an update for the content of the select.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *

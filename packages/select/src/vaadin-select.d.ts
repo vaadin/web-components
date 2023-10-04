@@ -42,11 +42,6 @@ export type SelectOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 export type SelectInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type SelectDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type SelectValueChangedEvent = CustomEvent<{ value: string }>;
@@ -60,8 +55,6 @@ export interface SelectCustomEventMap {
   'opened-changed': SelectOpenedChangedEvent;
 
   'invalid-changed': SelectInvalidChangedEvent;
-
-  'dirty-changed': SelectDirtyChangedEvent;
 
   'value-changed': SelectValueChangedEvent;
 
@@ -174,7 +167,6 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

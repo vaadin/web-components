@@ -51,7 +51,6 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
@@ -75,7 +74,7 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" on-change="_onChange" on-input="_onInput">
+        <div class="inputs-wrapper" on-change="_onInputChange">
           <slot id="slot"></slot>
         </div>
 

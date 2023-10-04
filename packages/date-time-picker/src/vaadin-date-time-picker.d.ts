@@ -40,11 +40,6 @@ export type DateTimePickerChangeEvent = Event & {
 export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type DateTimePickerDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
@@ -56,8 +51,6 @@ export type DateTimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface DateTimePickerCustomEventMap {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
-
-  'dirty-changed': DateTimePickerDirtyChangedEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
 
@@ -120,7 +113,6 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
@@ -221,15 +213,6 @@ declare class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(Themabl
    * Specify that this control should have input focus when the page loads.
    */
   autofocus: boolean;
-
-  /**
-   * Whether the field is dirty.
-   *
-   * The field is automatically marked as dirty once the user triggers
-   * an `input` or `change` event on the child pickers. Additionally, the field
-   * can be manually marked as dirty by setting the property to `true`.
-   */
-  dirty: boolean;
 
   /**
    * The object used to localize this component.

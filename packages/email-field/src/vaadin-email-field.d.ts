@@ -18,11 +18,6 @@ export type EmailFieldChangeEvent = Event & {
 export type EmailFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type EmailFieldDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type EmailFieldValueChangedEvent = CustomEvent<{ value: string }>;
@@ -34,8 +29,6 @@ export type EmailFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface EmailFieldCustomEventMap {
   'invalid-changed': EmailFieldInvalidChangedEvent;
-
-  'dirty-changed': EmailFieldDirtyChangedEvent;
 
   'value-changed': EmailFieldValueChangedEvent;
 
@@ -63,7 +56,6 @@ export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCusto
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

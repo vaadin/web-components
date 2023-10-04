@@ -105,19 +105,6 @@ export const CustomFieldMixin = (superClass) =>
         parseValue: {
           type: Function,
         },
-
-        /**
-         * Whether the field is dirty.
-         *
-         * The field is automatically marked as dirty once the user triggers
-         * an `input` or `change` event. Additionally, the field can be manually
-         * marked as dirty by setting the property to `true`.
-         */
-        dirty: {
-          type: Boolean,
-          value: false,
-          notify: true,
-        },
       };
     }
 
@@ -223,15 +210,9 @@ export const CustomFieldMixin = (superClass) =>
     }
 
     /** @protected */
-    _onInput() {
-      this.dirty = true;
-    }
-
-    /** @protected */
-    _onChange(event) {
+    _onInputChange(event) {
       // Stop native change events
       event.stopPropagation();
-      this.dirty = true;
 
       this.__setValue();
       this.validate();

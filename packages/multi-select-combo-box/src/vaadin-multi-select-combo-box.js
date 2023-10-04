@@ -121,7 +121,6 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
@@ -817,7 +816,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __updateSelection(selectedItems) {
-    this.dirty = true;
     this.selectedItems = selectedItems;
 
     this.validate();
