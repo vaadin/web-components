@@ -428,14 +428,17 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * The input element's value if the component has been unable to parse it, an empty string otherwise.
+     * The input element's value if it is unparsable as a date, and an empty string otherwise.
+     *
+     * @return {string}
+     * @private
      */
-    get _unparsableValue() {
-      if (this._inputElementValue && !this.__parseDate(this._inputElementValue)) {
-        return this._inputElementValue;
+    get __unparsableValue() {
+      if (!this._inputElementValue || this.__parseDate(this._inputElementValue)) {
+        return '';
       }
 
-      return '';
+      return this._inputElementValue;
     }
 
     /**
@@ -687,14 +690,14 @@ export const DatePickerMixin = (subclass) =>
         result = true;
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedUnparsableValue !== this._unparsableValue) {
+      } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
         result = true;
         this.validate();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValue = this._unparsableValue;
+      this.__committedUnparsableValue = this.__unparsableValue;
 
       return result;
     }
@@ -950,8 +953,8 @@ export const DatePickerMixin = (subclass) =>
      * an empty string as the value. If no i18n parser is provided, commits
      * the focused date as the value.
      *
-     * @private
      * @return {boolean} whether there was an actual value change to commit.
+     * @private
      */
     __commitParsedOrFocusedDate() {
       let result = false;
