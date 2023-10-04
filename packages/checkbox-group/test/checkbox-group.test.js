@@ -302,39 +302,6 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
-  describe('dirty state', () => {
-    beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-checkbox-group>
-          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
-        </vaadin-checkbox-group>
-      `);
-      await nextFrame();
-      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
-    });
-
-    it('should not be dirty by default', () => {
-      expect(group.dirty).to.be.false;
-    });
-
-    it('should not be dirty after programmatic value change', () => {
-      group.value = ['1'];
-      expect(group.dirty).to.be.false;
-    });
-
-    it('should be dirty after selecting a checkbox', () => {
-      checkboxes[0].click();
-      expect(group.dirty).to.be.true;
-    });
-
-    it('should fire dirty-changed event when the state changes', () => {
-      const spy = sinon.spy();
-      group.addEventListener('dirty-changed', spy);
-      group.dirty = true;
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
   describe('wrapping', () => {
     beforeEach(async () => {
       group = fixtureSync(`

@@ -15,11 +15,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type CheckboxGroupDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: string[] }>;
@@ -31,8 +26,6 @@ export type CheckboxGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface CheckboxGroupCustomEventMap {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;
-
-  'dirty-changed': CheckboxGroupDirtyChangedEvent;
 
   'value-changed': CheckboxGroupValueChangedEvent;
 
@@ -80,7 +73,6 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
@@ -92,15 +84,6 @@ declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementM
    * creating a new array.
    */
   value: string[];
-
-  /**
-   * Whether the field is dirty.
-   *
-   * The field is automatically marked as dirty once the user triggers
-   * a `change` event. Additionally, the field can be manually marked
-   * as dirty by setting the property to `true`.
-   */
-  dirty: boolean;
 
   addEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,

@@ -127,25 +127,4 @@ describe('checked-mixin', () => {
       expect(document.activeElement).to.eql(input);
     });
   });
-
-  describe('dirty state', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<checked-mixin-element></checked-mixin-element>`);
-      input = element.querySelector('[slot=input]');
-    });
-
-    it('should not be dirty by default', () => {
-      expect(element.dirty).to.be.false;
-    });
-
-    it('should not be dirty after changing checked state programmatically', () => {
-      element.checked = true;
-      expect(element.dirty).to.be.false;
-    });
-
-    it('should be dirty after click', () => {
-      input.click();
-      expect(element.dirty).to.be.true;
-    });
-  });
 });

@@ -2,7 +2,6 @@ import '../../vaadin-password-field.js';
 import type {
   PasswordField,
   PasswordFieldChangeEvent,
-  PasswordFieldDirtyChangedEvent,
   PasswordFieldInvalidChangedEvent,
   PasswordFieldValidatedEvent,
   PasswordFieldValueChangedEvent,
@@ -19,11 +18,6 @@ field.addEventListener('change', (event) => {
 
 field.addEventListener('invalid-changed', (event) => {
   assertType<PasswordFieldInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-field.addEventListener('dirty-changed', (event) => {
-  assertType<PasswordFieldDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

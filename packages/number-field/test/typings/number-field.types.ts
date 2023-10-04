@@ -8,7 +8,6 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type {
   NumberField,
   NumberFieldChangeEvent,
-  NumberFieldDirtyChangedEvent,
   NumberFieldInvalidChangedEvent,
   NumberFieldValidatedEvent,
   NumberFieldValueChangedEvent,
@@ -34,11 +33,6 @@ field.addEventListener('change', (event) => {
 
 field.addEventListener('invalid-changed', (event) => {
   assertType<NumberFieldInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-field.addEventListener('dirty-changed', (event) => {
-  assertType<NumberFieldDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

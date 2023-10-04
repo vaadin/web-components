@@ -65,12 +65,6 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('');
     });
 
-    it('should mark the field as dirty on clear button click', async () => {
-      clearButton.click();
-      await nextUpdate(element);
-      expect(element.dirty).to.be.true;
-    });
-
     (!isTouch ? it : it.skip)('should focus the input on clear button mousedown', () => {
       const spy = sinon.spy(input, 'focus');
       mousedown(clearButton);

@@ -8,7 +8,6 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type {
   TextArea,
   TextAreaChangeEvent,
-  TextAreaDirtyChangedEvent,
   TextAreaInvalidChangedEvent,
   TextAreaValidatedEvent,
   TextAreaValueChangedEvent,
@@ -34,11 +33,6 @@ area.addEventListener('change', (event) => {
 
 area.addEventListener('invalid-changed', (event) => {
   assertType<TextAreaInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-area.addEventListener('dirty-changed', (event) => {
-  assertType<TextAreaDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
