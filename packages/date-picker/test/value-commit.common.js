@@ -57,9 +57,9 @@ describe('value commit', () => {
       expectValidationOnly();
     });
 
-    it('should not commit on Enter', async () => {
+    it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectNoValueCommit();
+      expectValidationOnly();
     });
 
     it('should not commit on Escape', async () => {
@@ -300,9 +300,9 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit on Enter', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectNoValueCommit();
+        expectValidationOnly();
       });
 
       it('should not commit on Escape', async () => {

@@ -458,11 +458,11 @@ export const DatePickerMixin = (subclass) =>
       super._onBlur(event);
 
       if (!this.opened) {
-        const didValueCommitOccur = this.__commitParsedOrFocusedDate();
+        this.__commitParsedOrFocusedDate();
 
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
-        if (!didValueCommitOccur && document.hasFocus()) {
+        if (document.hasFocus()) {
           this.validate();
         }
       }
@@ -662,49 +662,39 @@ export const DatePickerMixin = (subclass) =>
      * an event:
      *
      * ```text
-     * +------------------------+--------+
-     * | Type of change         | Event  |
-     * +------------------------+--------+
-     * | empty => parsable      | change |
-     * | empty => unparsable    |        |
-     * | parsable => empty      | change |
-     * | parsable => unparsable | change |
-     * | unparsable => empty    |        |
-     * | unparsable => parsable |        |
-     * +------------------------+--------+
+     * +------------------------+-------------------+
+     * | Value change type      | Event             |
+     * +------------------------+-------------------+
+     * | empty => parsable      | change            |
+     * | empty => unparsable    | unparsable-change |
+     * | parsable => empty      | change            |
+     * | parsable => unparsable | change            |
+     * | unparsable => empty    | unparsable-change |
+     * | unparsable => parsable | unparsable-change |
+     * +------------------------+-------------------+
      * ```
      *
-     * If no value change is detected, the method returns false.
-     *
-     * (the above table has been generated with ChatGPT)
+     * If no value change is detected, the method returns.
      *
      * @private
      * @return {boolean} whether a change has been detected and committed.
      */
     __commitValueChange() {
-      let result = false;
-
       if (this.__committedValue !== this.value) {
-        this.dirty = true;
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        result = true;
       } else if (this.__committedUnparsableValue !== this._unparsableValue) {
-        this.validate();
-        result = true;
+        this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
       this.__committedUnparsableValue = this._unparsableValue;
-
-      return result;
     }
 
     /**
-     * Sets the given date as the value and tries to commit it.
+     * Sets the given date as the value and commits it.
      *
      * @param {Date} date
-     * @return {boolean} whether an actual commit occurred.
      * @private
      */
     __commitDate(date) {
@@ -714,7 +704,7 @@ export const DatePickerMixin = (subclass) =>
       this.__keepCommittedValue = true;
       this._selectedDate = date;
       this.__keepCommittedValue = false;
-      return this.__commitValueChange();
+      this.__commitValueChange();
     }
 
     /** @private */
@@ -946,17 +936,14 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Tries to parse the input element's value as a date. When succeeds,
-     * sets the resulting date as the value and tries to commit it. When fails,
-     * resets the value to an empty string and tries to commit it.
-     * If no i18n parser is provided, sets the focused date as the value.
+     * Tries to parse the input element's value as a date. If the input value
+     * is parsable, commits the resulting date as the value. Otherwise, commits
+     * an empty string as the value. If no i18n parser is provided, commits
+     * the focused date as the value.
      *
      * @private
-     * @return {boolean} whether an actual commit occurred.
      */
     __commitParsedOrFocusedDate() {
-      let result = false;
-
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
@@ -964,18 +951,16 @@ export const DatePickerMixin = (subclass) =>
         const parsedDate = this.__parseDate(inputValue);
 
         if (parsedDate) {
-          result = this.__commitDate(parsedDate);
+          this.__commitDate(parsedDate);
         } else {
           this.__keepInputValue = true;
-          result = this.__commitDate(null);
+          this.__commitDate(null);
           this.__keepInputValue = false;
         }
       } else if (this._focusedDate) {
-        result = this.__commitDate(this._focusedDate);
+        this.__commitDate(this._focusedDate);
       }
       this._ignoreFocusedDateChange = false;
-
-      return result;
     }
 
     /** @protected */
@@ -987,7 +972,7 @@ export const DatePickerMixin = (subclass) =>
       }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      const didValueCommitOccur = this.__commitParsedOrFocusedDate();
+      this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -995,7 +980,7 @@ export const DatePickerMixin = (subclass) =>
       // No need to revalidate the value after it has been just committed.
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
-      if (!didValueCommitOccur && !this.value && !this._keyboardActive) {
+      if (!this.value && !this._keyboardActive) {
         this.validate();
       }
     }
@@ -1137,11 +1122,15 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _onEnter(_event) {
+      const oldValue = this.value;
       if (this.opened) {
         // Closing will implicitly select parsed or focused date
         this.close();
       } else {
         this.__commitParsedOrFocusedDate();
+      }
+      if (oldValue === this.value) {
+        this.validate();
       }
     }
 

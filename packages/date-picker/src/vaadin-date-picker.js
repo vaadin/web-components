@@ -119,6 +119,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change Fired when the user commits an unparsable value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
