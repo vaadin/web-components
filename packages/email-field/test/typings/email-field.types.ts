@@ -2,7 +2,6 @@ import '../../vaadin-email-field.js';
 import type {
   EmailField,
   EmailFieldChangeEvent,
-  EmailFieldDirtyChangedEvent,
   EmailFieldInvalidChangedEvent,
   EmailFieldValidatedEvent,
   EmailFieldValueChangedEvent,
@@ -19,11 +18,6 @@ field.addEventListener('change', (event) => {
 
 field.addEventListener('invalid-changed', (event) => {
   assertType<EmailFieldInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-field.addEventListener('dirty-changed', (event) => {
-  assertType<EmailFieldDirtyChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 

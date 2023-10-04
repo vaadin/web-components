@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-radio-group.js';
@@ -473,40 +473,6 @@ describe('radio-group', () => {
       await nextFrame();
 
       expect(group.value).to.equal('value2');
-    });
-  });
-
-  describe('dirty state', () => {
-    beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-radio-group>
-          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
-          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
-        </vaadin-radio-group>
-      `);
-      await nextRender();
-      buttons = [...group.querySelectorAll('vaadin-radio-button')];
-    });
-
-    it('should not be dirty by default', () => {
-      expect(group.dirty).to.be.false;
-    });
-
-    it('should not be dirty after programmatic value change', () => {
-      group.value = '1';
-      expect(group.dirty).to.be.false;
-    });
-
-    it('should be dirty after selecting a radio button', () => {
-      buttons[0].click();
-      expect(group.dirty).to.be.true;
-    });
-
-    it('should fire dirty-changed event when the state changes', () => {
-      const spy = sinon.spy();
-      group.addEventListener('dirty-changed', spy);
-      group.dirty = true;
-      expect(spy.calledOnce).to.be.true;
     });
   });
 

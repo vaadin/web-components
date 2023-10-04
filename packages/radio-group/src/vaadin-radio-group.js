@@ -165,19 +165,6 @@ class RadioGroup extends FieldMixin(
       _fieldName: {
         type: String,
       },
-
-      /**
-       * Whether the field is dirty.
-       *
-       * The field is automatically marked as dirty once the user triggers
-       * a `change` event. Additionally, the field can be manually marked
-       * as dirty by setting the property to `true`.
-       */
-      dirty: {
-        type: Boolean,
-        value: false,
-        notify: true,
-      },
     };
   }
 
@@ -186,7 +173,6 @@ class RadioGroup extends FieldMixin(
 
     this.__registerRadioButton = this.__registerRadioButton.bind(this);
     this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
-    this.__onRadioButtonChange = this.__onRadioButtonChange.bind(this);
     this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
 
     this._tooltipController = new TooltipController(this);
@@ -354,7 +340,6 @@ class RadioGroup extends FieldMixin(
    */
   __registerRadioButton(radioButton) {
     radioButton.name = this._fieldName;
-    radioButton.addEventListener('change', this.__onRadioButtonChange);
     radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (this.disabled || this.readonly) {
@@ -373,17 +358,11 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   __unregisterRadioButton(radioButton) {
-    radioButton.removeEventListener('change', this.__onRadioButtonChange);
     radioButton.removeEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
     if (radioButton.value === this.value) {
       this.__selectRadioButton(null);
     }
-  }
-
-  /** @private */
-  __onRadioButtonChange() {
-    this.dirty = true;
   }
 
   /**

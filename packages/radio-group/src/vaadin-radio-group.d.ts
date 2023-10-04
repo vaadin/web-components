@@ -16,11 +16,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type RadioGroupDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
@@ -32,8 +27,6 @@ export type RadioGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface RadioGroupCustomEventMap {
   'invalid-changed': RadioGroupInvalidChangedEvent;
-
-  'dirty-changed': RadioGroupDirtyChangedEvent;
 
   'value-changed': RadioGroupValueChangedEvent;
 
@@ -81,7 +74,6 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
@@ -100,15 +92,6 @@ declare class RadioGroup extends FieldMixin(
    * the `readonly` property disables only unchecked ones.
    */
   readonly: boolean;
-
-  /**
-   * Whether the field is dirty.
-   *
-   * The field is automatically marked as dirty once the user triggers
-   * a `change` event. Additionally, the field can be manually marked
-   * as dirty by setting the property to `true`.
-   */
-  dirty: boolean;
 
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,

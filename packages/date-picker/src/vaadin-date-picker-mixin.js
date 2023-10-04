@@ -669,7 +669,6 @@ export const DatePickerMixin = (subclass) =>
       this._selectedDate = dateToSelect;
 
       if (prevValue !== this.value) {
-        this.dirty = true;
         this.__dispatchChange();
       }
     }
@@ -1020,7 +1019,6 @@ export const DatePickerMixin = (subclass) =>
      */
     _onClearButtonClick(event) {
       event.preventDefault();
-      this.dirty = true;
       this._inputElementValue = '';
       this.value = '';
       this.__dispatchChange();

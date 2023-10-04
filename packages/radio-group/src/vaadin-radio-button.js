@@ -49,7 +49,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  *
  * @customElement
  * @extends HTMLElement
