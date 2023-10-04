@@ -458,11 +458,11 @@ export const DatePickerMixin = (subclass) =>
       super._onBlur(event);
 
       if (!this.opened) {
-        const valueCommitResult = this.__commitParsedOrFocusedDate();
+        const didValueCommitOccur = this.__commitParsedOrFocusedDate();
 
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
-        if (!valueCommitResult && document.hasFocus()) {
+        if (!didValueCommitOccur && document.hasFocus()) {
           this.validate();
         }
       }
@@ -681,7 +681,7 @@ export const DatePickerMixin = (subclass) =>
      * @private
      * @return {boolean} whether a change has been detected and committed.
      */
-    __commitValueChangeIfPending() {
+    __commitValueChange() {
       let result = false;
 
       if (this.__committedValue !== this.value) {
@@ -714,7 +714,7 @@ export const DatePickerMixin = (subclass) =>
       this.__keepCommittedValue = true;
       this._selectedDate = date;
       this.__keepCommittedValue = false;
-      return this.__commitValueChangeIfPending();
+      return this.__commitValueChange();
     }
 
     /** @private */
@@ -947,7 +947,8 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * Tries to parse the input element's value as a date. When succeeds,
-     * sets the resulting date as the value and tries to commit it.
+     * sets the resulting date as the value and tries to commit it. When fails,
+     * resets the value to an empty string and tries to commit it.
      * If no i18n parser is provided, sets the focused date as the value.
      *
      * @private
@@ -986,7 +987,7 @@ export const DatePickerMixin = (subclass) =>
       }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      const valueCommitResult = this.__commitParsedOrFocusedDate();
+      const didValueCommitOccur = this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -994,7 +995,7 @@ export const DatePickerMixin = (subclass) =>
       // No need to revalidate the value after it has been just committed.
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
-      if (!valueCommitResult && !this.value && !this._keyboardActive) {
+      if (!didValueCommitOccur && !this.value && !this._keyboardActive) {
         this.validate();
       }
     }
