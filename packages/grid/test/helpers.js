@@ -134,8 +134,10 @@ export const getHeaderCellContent = (grid, row, col) => {
 };
 
 export const getBodyCellContent = (grid, row, col) => {
-  const container = grid.$.items;
-  return getContainerCellContent(container, row, col);
+  const physicalItems = getPhysicalItems(grid);
+  const physicalRow = physicalItems.find((item) => item.index === row);
+  const cells = getRowCells(physicalRow);
+  return getCellContent(cells[col]);
 };
 
 export const getContainerCellContent = (container, row, col) => {

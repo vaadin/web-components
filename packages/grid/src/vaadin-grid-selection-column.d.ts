@@ -54,6 +54,12 @@ declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TI
    */
   autoSelect: boolean;
 
+  /**
+   * When true, rows can be selected by dragging over the selection column.
+   * @attr {boolean} drag-select
+   */
+  dragSelect: boolean;
+
   addEventListener<K extends keyof GridSelectionColumnEventMap>(
     type: K,
     listener: (this: GridSelectionColumn<TItem>, ev: GridSelectionColumnEventMap[K]) => void,
