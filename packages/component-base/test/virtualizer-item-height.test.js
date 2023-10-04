@@ -319,16 +319,17 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
         expect(virtualizer.firstVisibleIndex).to.equal(0);
       });
 
-      it('should not try to scroll to undefined', async () => {
-        const scrollToIndexSpy = sinon.spy(virtualizer.__adapter, 'scrollToIndex');
+      it('should not scroll to pending index when there are no placeholders', async () => {
         virtualizer.scrollToIndex(500);
 
         renderPlaceholders = false;
         virtualizer.scrollToIndex(0);
+
+        const scrollToIndexSpy = sinon.spy(virtualizer.__adapter, 'scrollToIndex');
         await aTimeout(200);
 
-        // Expect spy to not have been called with undefined
-        expect(scrollToIndexSpy.args.every((args) => args[0] !== undefined)).to.be.true;
+        // Expect spy to not have been called
+        expect(scrollToIndexSpy).to.not.have.been.called;
       });
 
       it('should not scroll away from manually scrolled position', async () => {
