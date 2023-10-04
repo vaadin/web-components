@@ -92,6 +92,14 @@ export class IronListAdapter {
     }
     delete this.__pendingScrollToIndex;
 
+    if (this._physicalCount === 3 /* iron-list-core.DEFAULT_PHYSICAL_COUNT */) {
+      // The condition here is a perfoemance improvement to avoid an unnecessary
+      // re-render when the physical item pool is already covered.
+
+      // Finish rendering at the current scroll position before scrolling
+      this.flush();
+    }
+
     index = this._clamp(index, 0, this.size - 1);
 
     const visibleElementCount = this.__getVisibleElements().length;

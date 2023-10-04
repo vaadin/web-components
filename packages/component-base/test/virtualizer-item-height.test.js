@@ -260,6 +260,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
     virtualizer = new Virtualizer({
       createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
       updateElement: (el, index) => {
+        el.dataset.index = index;
         el.style.width = '100%';
         el.textContent = renderPlaceholders ? '' : `Item ${index}`;
       },
@@ -361,6 +362,27 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
         // Expect the scroll position to be the same as before
         expect(scrollTarget.scrollTop).to.equal(scrollTop);
       });
+    });
+
+    it('should scroll to end', async () => {
+      renderPlaceholders = false;
+      virtualizer.update();
+      virtualizer.scrollToIndex(Infinity);
+      await aTimeout(200);
+
+      expect(virtualizer.lastVisibleIndex).to.equal(999);
+
+      const { top, bottom, left } = scrollTarget.getBoundingClientRect();
+
+      // Expect the first visible item to be at the top of the viewport
+      const topMostItem = document.elementFromPoint(left, top);
+      const firstVisibleItem = document.querySelector(`[data-index="${virtualizer.firstVisibleIndex}"]`);
+      expect(topMostItem).to.equal(firstVisibleItem);
+
+      // Expect the last visible item to be at the bottom of the viewport
+      const bottomMostItem = document.elementFromPoint(left, bottom - 1);
+      const lastVisibleItem = document.querySelector(`[data-index="${virtualizer.lastVisibleIndex}"]`);
+      expect(bottomMostItem).to.equal(lastVisibleItem);
     });
   });
 });
