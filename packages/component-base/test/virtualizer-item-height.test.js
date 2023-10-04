@@ -3,6 +3,11 @@ import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
+async function contentUpdate() {
+  // Wait for the content to update (and resize observer to fire)
+  await aTimeout(200);
+}
+
 describe('virtualizer - item height', () => {
   let elementsContainer;
   let virtualizer;
@@ -57,13 +62,13 @@ describe('virtualizer - item height', () => {
   it('should resize the elements once the content updates', async () => {
     const firstItem = elementsContainer.querySelector(`#item-0`);
     // Wait for the content to update
-    await aTimeout(100);
+    await contentUpdate();
     expect(firstItem.offsetHeight).to.equal(EVEN_ITEM_HEIGHT);
   });
 
   it('should adjust the placeholder height', async () => {
     // Wait for the content to update
-    await aTimeout(100);
+    await contentUpdate();
     // Scroll down
     virtualizer.scrollToIndex(100);
 
@@ -76,7 +81,7 @@ describe('virtualizer - item height', () => {
 
   it('should clear the temporary placeholder padding from the item', async () => {
     // Wait for the content to update (and resize observer to fire)
-    await aTimeout(200);
+    await contentUpdate();
 
     // Cache the height of the first item
     const firstItem = elementsContainer.querySelector(`#item-0`);
@@ -91,7 +96,7 @@ describe('virtualizer - item height', () => {
     firstItem.style.height = `${firstItemHeight}px`;
 
     // Give some time for the resize observer to fire
-    await aTimeout(100);
+    await contentUpdate();
 
     // The padding should have been be cleared and the item should have its original height.
     expect(firstItem.offsetHeight).to.equal(firstItemHeight);
@@ -278,7 +283,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
           // Setup where the virtualizer has initially rendered all the items once
           renderPlaceholders = false;
           virtualizer.update();
-          await aTimeout(200);
+          await contentUpdate();
           renderPlaceholders = true;
         }
       });
@@ -292,7 +297,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
         renderPlaceholders = false;
         virtualizer.update();
         // Wait for the content to update (and resize observer to fire)
-        await aTimeout(200);
+        await contentUpdate();
 
         // The first visible index should be correct
         expect(virtualizer.firstVisibleIndex).to.equal(500);
@@ -304,7 +309,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
 
         renderPlaceholders = false;
         virtualizer.update();
-        await aTimeout(200);
+        await contentUpdate();
 
         expect(virtualizer.firstVisibleIndex).to.equal(600);
       });
@@ -314,7 +319,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
 
         renderPlaceholders = false;
         virtualizer.scrollToIndex(0);
-        await aTimeout(200);
+        await contentUpdate();
 
         expect(virtualizer.firstVisibleIndex).to.equal(0);
       });
@@ -326,7 +331,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
         virtualizer.scrollToIndex(0);
 
         const scrollToIndexSpy = sinon.spy(virtualizer.__adapter, 'scrollToIndex');
-        await aTimeout(200);
+        await contentUpdate();
 
         // Expect spy to not have been called
         expect(scrollToIndexSpy).to.not.have.been.called;
@@ -334,12 +339,12 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
 
       it('should not scroll away from manually scrolled position', async () => {
         virtualizer.scrollToIndex(500);
-        await aTimeout(200);
+        await contentUpdate();
         renderPlaceholders = false;
         virtualizer.update();
-        await aTimeout(200);
+        await contentUpdate();
         scrollTarget.scrollTop += 500;
-        await aTimeout(200);
+        await contentUpdate();
 
         expect(virtualizer.firstVisibleIndex).not.to.equal(500);
       });
@@ -347,7 +352,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
       it('should not change scroll position after item height change', async () => {
         renderPlaceholders = false;
         virtualizer.scrollToIndex(1);
-        await aTimeout(200);
+        await contentUpdate();
         const scrollTop = scrollTarget.scrollTop;
 
         // Increase item height
@@ -358,7 +363,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
             }
           </style>
         `);
-        await aTimeout(200);
+        await contentUpdate();
 
         // Expect the scroll position to be the same as before
         expect(scrollTarget.scrollTop).to.equal(scrollTop);
@@ -369,7 +374,7 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
       renderPlaceholders = false;
       virtualizer.update();
       virtualizer.scrollToIndex(Infinity);
-      await aTimeout(200);
+      await contentUpdate();
 
       expect(virtualizer.lastVisibleIndex).to.equal(999);
 
