@@ -93,7 +93,7 @@ export class IronListAdapter {
     delete this.__pendingScrollToIndex;
 
     if (this._physicalCount === 3 /* iron-list-core.DEFAULT_PHYSICAL_COUNT */) {
-      // The condition here is a perfoemance improvement to avoid an unnecessary
+      // The condition here is a performance improvement to avoid an unnecessary
       // re-render when the physical item pool is already covered.
 
       // Finish rendering at the current scroll position before scrolling
