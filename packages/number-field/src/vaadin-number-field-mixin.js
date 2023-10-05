@@ -428,7 +428,7 @@ export const NumberFieldMixin = (superClass) =>
 
     /**
      * Override this method from `ClearButtonMixin`
-     * to properly commit the empty value given that
+     * to properly commit the empty value since
      * the change handler doesn't do that anymore.
      *
      * @param {MouseEvent} event
