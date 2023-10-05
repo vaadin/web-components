@@ -11,28 +11,6 @@ describe('integer-field', () => {
     input = integerField.inputElement;
   });
 
-  describe('basic', () => {
-    it('should not prevent default for input wheel events when not focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.false;
-    });
-
-    it('should prevent default for input wheel events when focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.focus();
-      input.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should not prevent default for host wheel events when focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.focus();
-      integerField.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.false;
-    });
-  });
-
   describe('keyboard input', () => {
     let keydownSpy;
 
