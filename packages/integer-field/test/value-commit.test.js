@@ -115,14 +115,13 @@ describe('value commit', () => {
     it('should not commit but validate on blur', () => {
       integerField.blur();
       expectValidationOnly();
-      expect(integerField.inputElement.validity.badInput).to.be.true;
+      expect(integerField._validity.badInput).to.be.true;
     });
 
-    // FIXME: https://github.com/vaadin/web-components/issues/5113
-    it.skip('should not commit but validate on Enter', async () => {
+    it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectValidationOnly();
-      expect(integerField.inputElement.validity.badInput).to.be.true;
+      expect(integerField._validity.badInput).to.be.true;
     });
   });
 
@@ -204,13 +203,13 @@ describe('value commit', () => {
       it('should commit an empty value on blur', () => {
         integerField.blur();
         expectValueCommit('');
-        expect(integerField.inputElement.validity.badInput).to.be.true;
+        expect(integerField._validity.badInput).to.be.true;
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
-        expect(integerField.inputElement.validity.badInput).to.be.true;
+        expect(integerField._validity.badInput).to.be.true;
       });
     });
   });

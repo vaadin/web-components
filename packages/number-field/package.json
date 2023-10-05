@@ -36,6 +36,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@internationalized/number": "3.2.1",
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/a11y-base": "24.3.0-alpha1",

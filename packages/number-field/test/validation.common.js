@@ -55,14 +55,6 @@ describe('validation', () => {
       expect(field.validate()).to.be.true;
     });
 
-    it('should align checkValidity with the native input element', async () => {
-      field.value = -1;
-      field.min = 0;
-      await nextUpdate(field);
-
-      expect(field.checkValidity()).to.equal(input.checkValidity());
-    });
-
     it('should allow setting decimals', async () => {
       field.value = 7.6;
       await nextUpdate(field);

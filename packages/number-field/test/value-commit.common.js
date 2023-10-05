@@ -127,15 +127,14 @@ describe('value commit', () => {
       numberField.blur();
       await nextUpdate(numberField);
       expectValidationOnly();
-      expect(numberField.inputElement.validity.badInput).to.be.true;
+      expect(numberField._validity.badInput).to.be.true;
     });
 
-    // FIXME: https://github.com/vaadin/web-components/issues/5113
-    it.skip('should not commit but validate on Enter', async () => {
+    it('should not commit but validate on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       await nextUpdate(numberField);
       expectValidationOnly();
-      expect(numberField.inputElement.validity.badInput).to.be.true;
+      expect(numberField._validity.badInput).to.be.true;
     });
   });
 
@@ -162,8 +161,7 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      // FIXME: https://github.com/vaadin/web-components/issues/5113
-      it.skip('should not commit but validate on Enter', async () => {
+      it('should not commit but validate on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         await nextUpdate(numberField);
         expectValidationOnly();
@@ -230,14 +228,14 @@ describe('value commit', () => {
         numberField.blur();
         await nextUpdate(numberField);
         expectValueCommit('');
-        expect(numberField.inputElement.validity.badInput).to.be.true;
+        expect(numberField._validity.badInput).to.be.true;
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         await nextUpdate(numberField);
         expectValueCommit('');
-        expect(numberField.inputElement.validity.badInput).to.be.true;
+        expect(numberField._validity.badInput).to.be.true;
       });
     });
   });

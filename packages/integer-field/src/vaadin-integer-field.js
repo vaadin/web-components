@@ -41,6 +41,10 @@ export class IntegerField extends NumberField {
     return 'vaadin-integer-field';
   }
 
+  static get observers() {
+    return ['_stepChanged(step)'];
+  }
+
   constructor() {
     super();
 
@@ -65,23 +69,16 @@ export class IntegerField extends NumberField {
   }
 
   /**
-   * Override an observer from `NumberField` to reset the step
-   * property when an invalid step is set.
    * @param {number} newVal
-   * @param {HTMLElement | undefined} inputElement
    * @protected
-   * @override
    */
-  _stepChanged(step, inputElement) {
+  _stepChanged(step) {
     if (step != null && !this.__hasOnlyDigits(step)) {
       console.warn(
         `<vaadin-integer-field> The \`step\` property must be a positive integer but \`${step}\` was provided, so the property was reset to \`null\`.`,
       );
       this.step = null;
-      return;
     }
-
-    super._stepChanged(step, inputElement);
   }
 
   /** @private */

@@ -3,6 +3,8 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { NumberParser } from '@internationalized/number';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -51,22 +53,33 @@ export const NumberFieldMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['_stepChanged(step, inputElement)'];
-    }
-
-    static get delegateProps() {
-      return [...super.delegateProps, 'min', 'max'];
-    }
-
     static get constraints() {
       return [...super.constraints, 'min', 'max', 'step'];
     }
 
     constructor() {
       super();
-      this._setType('number');
+
       this.__onWheel = this.__onWheel.bind(this);
+
+      this._lastCommittedValue = '';
+
+      this._validity = {
+        badInput: false,
+        rangeOverflow: false,
+        rangeUnderflow: false,
+        stepMismatch: false,
+        valueMissing: false,
+        valid: true,
+      };
+    }
+
+    /** @protected */
+    get numberParser() {
+      if (!this._numberParser) {
+        this._numberParser = new NumberParser(navigator.language, {});
+      }
+      return this._numberParser;
     }
 
     /** @protected */
@@ -129,10 +142,26 @@ export const NumberFieldMixin = (superClass) =>
      */
     checkValidity() {
       if (this.inputElement) {
-        return this.inputElement.checkValidity();
+        return this._checkInputValidity();
       }
 
       return !this.invalid;
+    }
+
+    /**
+     * Override the method from `ClearButtonMixin`
+     * to set last committed value to old value.
+     *
+     * @override
+     */
+    _onClearAction() {
+      this._lastCommittedValue = this.value;
+
+      // Do not forward clearing the input value
+      // because it's done by the clear() method.
+      this.__skipForwarding = true;
+      super._onClearAction();
+      this.__skipForwarding = false;
     }
 
     /**
@@ -159,6 +188,46 @@ export const NumberFieldMixin = (superClass) =>
     _removeInputListeners(input) {
       super._removeInputListeners(input);
       input.removeEventListener('wheel', this.__onWheel);
+    }
+
+    /** @private */
+    _checkInputValidity() {
+      const inputValue = this._inputElementValue;
+      const isEmpty = inputValue == null || inputValue === '';
+
+      const value = this.numberParser.parse(inputValue);
+
+      // Set to `true` if the value can not be parsed.
+      const badInput = !isEmpty && isNaN(value);
+
+      // Set to `true` if the value is less than `min` property.
+      const rangeUnderflow = typeof this.min !== 'undefined' ? value < this.min : false;
+
+      // Set to `true` if the value is bigger than `min` property.
+      const rangeOverflow = typeof this.max !== 'undefined' ? value > this.max : false;
+
+      // Set to `true` if the value does not match the `step`.
+      let stepMismatch = false;
+      if (this.step) {
+        const min = typeof this.min !== 'undefined' ? this.min : 0;
+        const remainder = (value - min) % this.step;
+        stepMismatch = remainder !== 0;
+      }
+
+      const valueMissing = this.required ? isEmpty : false;
+
+      const valid = !(valueMissing || badInput || rangeUnderflow || rangeOverflow || stepMismatch);
+
+      this._validity = {
+        badInput,
+        rangeOverflow,
+        rangeUnderflow,
+        stepMismatch,
+        valueMissing,
+        valid,
+      };
+
+      return valid;
     }
 
     /**
@@ -262,6 +331,7 @@ export const NumberFieldMixin = (superClass) =>
     /** @private */
     _setValue(value) {
       this.value = this.inputElement.value = String(parseFloat(value));
+      this._lastCommittedValue = this.value;
       this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
@@ -324,17 +394,6 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * @param {number} step
-     * @param {HTMLElement | undefined} inputElement
-     * @protected
-     */
-    _stepChanged(step, inputElement) {
-      if (inputElement) {
-        inputElement.step = step || 'any';
-      }
-    }
-
-    /**
      * @param {unknown} newVal
      * @param {unknown} oldVal
      * @protected
@@ -349,6 +408,73 @@ export const NumberFieldMixin = (superClass) =>
       }
 
       super._valueChanged(this.value, oldVal);
+    }
+
+    /**
+     * Override method from `InputMixin`
+     * @param {string} value
+     * @protected
+     * @override
+     */
+    _forwardInputValue(value) {
+      // When the `<input>` value can not be parsed, set the `value`
+      // property to empty string, but keep the input value as is.
+      if (this.__skipForwarding) {
+        return;
+      }
+
+      this._lastCommittedValue = value;
+
+      super._forwardInputValue(value);
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onInput(event) {
+      // Update internal validity state on each input event.
+      this._checkInputValidity();
+
+      // Native [type=number] inputs don't update their value
+      // when entering input that the browser is unable to parse.
+      // Mimic this behavior to ensure `value` does not contain
+      // unparsable input committed e.g. a single `-` character.
+      if (!this._validity.badInput) {
+        super._onInput(event);
+      } else {
+        // Set value to empty string in case of unparsable input.
+        this.__skipForwarding = true;
+        this.value = '';
+        this.__skipForwarding = false;
+      }
+    }
+
+    /**
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onChange(event) {
+      event.stopPropagation();
+
+      const { badInput } = this._validity;
+
+      // Fire change event in the following cases:
+      // 1. Valid value -> unparsable input value,
+      // 2. Valid value -> another valid value.
+      if ((badInput && this._lastCommittedValue !== '') || (!badInput && this.value !== this._lastCommittedValue)) {
+        super._onChange(event);
+        this._lastCommittedValue = this.value;
+        return;
+      }
+
+      // Only validate if the `<input>` has focus, which
+      // is the case when pressing Enter to commit value.
+      if (isElementFocused(this.inputElement)) {
+        this.validate();
+      }
     }
 
     /**
@@ -368,21 +494,5 @@ export const NumberFieldMixin = (superClass) =>
       }
 
       super._onKeyDown(event);
-    }
-
-    /**
-     * Native [type=number] inputs don't update their value
-     * when you are entering input that the browser is unable to parse
-     * e.g. "--5", hence we have to override this method from `InputMixin`
-     * so that, when value is empty, it would additionally check
-     * for bad input based on the native `validity.badInput` property.
-     *
-     * @param {InputEvent} event
-     * @protected
-     * @override
-     */
-    _setHasInputValue(event) {
-      const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || target.validity.badInput;
     }
   };
