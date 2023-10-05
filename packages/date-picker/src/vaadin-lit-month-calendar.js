@@ -103,7 +103,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
     }
 
     if (props.has('month') || props.has('minDate') || props.has('maxDate') || props.has('isDateDisabled')) {
-      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate, this.isDateDisabled);
+      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate);
     }
 
     if (props.has('showWeekNumbers') || props.has('i18n')) {

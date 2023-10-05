@@ -88,7 +88,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate, isDateDisabled)',
+        computed: '_isDisabled(month, minDate, maxDate)',
       },
     };
   }
