@@ -247,7 +247,7 @@ describe('virtualizer - item height - initial render', () => {
   });
 });
 
-describe('virtualizer - item height - lazy rendering - scroll to index', () => {
+describe('virtualizer - item height - lazy rendering', () => {
   let virtualizer;
   let renderPlaceholders;
   let scrollTarget;
@@ -276,8 +276,28 @@ describe('virtualizer - item height - lazy rendering - scroll to index', () => {
     virtualizer.size = 1000;
   });
 
+  describe('placeholders', () => {
+    it('should have placeholders visually hidden', () => {
+      const item = document.querySelector('[data-index="0"]');
+
+      expect(getComputedStyle(item).visibility).to.equal('hidden');
+      // They should still have height (not hidden with display: none)
+      expect(item.offsetHeight).to.be.above(0);
+    });
+
+    it('should visually unhide items once no longer placeholders', async () => {
+      const item = document.querySelector('[data-index="0"]');
+
+      renderPlaceholders = false;
+      virtualizer.update();
+      await contentUpdate();
+
+      expect(getComputedStyle(item).visibility).to.equal('visible');
+    });
+  });
+
   [false, true].forEach((initiallyRendered) => {
-    describe(`initially rendered: ${initiallyRendered}`, () => {
+    describe(`scroll to index - initially rendered: ${initiallyRendered}`, () => {
       beforeEach(async () => {
         if (initiallyRendered) {
           // Setup where the virtualizer has initially rendered all the items once
