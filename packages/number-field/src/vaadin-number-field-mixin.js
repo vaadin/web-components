@@ -490,11 +490,9 @@ export const NumberFieldMixin = (superClass) =>
      * +--------------------------+-------------------+
      * ```
      *
-     * If no value change is detected, the method returns false.
-     *
      * Note, there is currently no way to detect unparsable => unparsable changes
-     * because native [type=number] inputs don't provide access to their value
-     * when it has an invalid format.
+     * because the browser doesn't provide access to unparsable values of native
+     * [type=number] inputs.
      *
      * @private
      */
