@@ -428,7 +428,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * The input element's value if it is unparsable as a date, and an empty string otherwise.
+     * The input element's value when it cannot be parsed as a date, and an empty string otherwise.
      *
      * @return {string}
      * @private
@@ -461,11 +461,11 @@ export const DatePickerMixin = (subclass) =>
       super._onBlur(event);
 
       if (!this.opened) {
-        const didValueCommitOccur = this.__commitParsedOrFocusedDate();
+        this.__commitParsedOrFocusedDate();
 
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
-        if (!didValueCommitOccur && document.hasFocus()) {
+        if (document.hasFocus()) {
           this.validate();
         }
       }
@@ -678,35 +678,25 @@ export const DatePickerMixin = (subclass) =>
      * +--------------------------+-------------------+
      * ```
      *
-     * If no value change is detected, the method returns false.
-     *
      * @private
-     * @return {boolean} whether a change was detected and committed.
      */
     __commitValueChange() {
-      let result = false;
-
       if (this.__committedValue !== this.value) {
-        result = true;
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
-        result = true;
         this.validate();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
       this.__committedUnparsableValue = this.__unparsableValue;
-
-      return result;
     }
 
     /**
      * Sets the given date as the value and commits it.
      *
      * @param {Date} date
-     * @return {boolean} whether there was an actual value change to commit.
      * @private
      */
     __commitDate(date) {
@@ -716,7 +706,7 @@ export const DatePickerMixin = (subclass) =>
       this.__keepCommittedValue = true;
       this._selectedDate = date;
       this.__keepCommittedValue = false;
-      return this.__commitValueChange();
+      this.__commitValueChange();
     }
 
     /** @private */
@@ -953,12 +943,9 @@ export const DatePickerMixin = (subclass) =>
      * an empty string as the value. If no i18n parser is provided, commits
      * the focused date as the value.
      *
-     * @return {boolean} whether there was an actual value change to commit.
      * @private
      */
     __commitParsedOrFocusedDate() {
-      let result = false;
-
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
@@ -966,18 +953,16 @@ export const DatePickerMixin = (subclass) =>
         const parsedDate = this.__parseDate(inputValue);
 
         if (parsedDate) {
-          result = this.__commitDate(parsedDate);
+          this.__commitDate(parsedDate);
         } else {
           this.__keepInputValue = true;
-          result = this.__commitDate(null);
+          this.__commitDate(null);
           this.__keepInputValue = false;
         }
       } else if (this._focusedDate) {
-        result = this.__commitDate(this._focusedDate);
+        this.__commitDate(this._focusedDate);
       }
       this._ignoreFocusedDateChange = false;
-
-      return result;
     }
 
     /** @protected */
@@ -989,7 +974,7 @@ export const DatePickerMixin = (subclass) =>
       }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
-      const didValueCommitOccur = this.__commitParsedOrFocusedDate();
+      this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -997,7 +982,7 @@ export const DatePickerMixin = (subclass) =>
       // No need to revalidate the value after it has been just committed.
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
-      if (!didValueCommitOccur && !this.value && !this._keyboardActive) {
+      if (!this.value && !this._keyboardActive) {
         this.validate();
       }
     }
