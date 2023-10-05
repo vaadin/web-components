@@ -280,7 +280,7 @@ describe('virtualizer - item height - lazy rendering', () => {
     it('should have placeholders visually hidden', () => {
       const item = document.querySelector('[data-index="0"]');
 
-      expect(getComputedStyle(item).visibility).to.equal('hidden');
+      expect(getComputedStyle(item).opacity).to.equal('0');
       // They should still have height (not hidden with display: none)
       expect(item.offsetHeight).to.be.above(0);
     });
@@ -292,7 +292,7 @@ describe('virtualizer - item height - lazy rendering', () => {
       virtualizer.update();
       await contentUpdate();
 
-      expect(getComputedStyle(item).visibility).to.equal('visible');
+      expect(getComputedStyle(item).opacity).to.equal('1');
     });
   });
 

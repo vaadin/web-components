@@ -234,7 +234,7 @@ export class IronListAdapter {
     // Clean up temporary placeholder sizing
     if (el.__virtualizerPlaceholder) {
       el.style.paddingTop = '';
-      el.style.visibility = '';
+      el.style.opacity = '';
       el.__virtualizerPlaceholder = false;
     }
 
@@ -259,7 +259,7 @@ export class IronListAdapter {
         // Assign a temporary placeholder sizing to elements that would otherwise end up having
         // no height.
         el.style.paddingTop = `${this.__placeholderHeight}px`;
-        el.style.visibility = 'hidden';
+        el.style.opacity = '0';
         el.__virtualizerPlaceholder = true;
 
         // Manually schedule the resize handler to make sure the placeholder padding is
