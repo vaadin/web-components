@@ -3,9 +3,16 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+
 export function defineCustomElement(CustomElement) {
   const defined = customElements.get(CustomElement.is);
   if (!defined) {
+    Object.defineProperty(CustomElement, 'version', {
+      get() {
+        return '24.3.0-alpha1';
+      },
+    });
+
     customElements.define(CustomElement.is, CustomElement);
   } else {
     const definedVersion = defined.version;

@@ -44,12 +44,7 @@ async function main() {
   const fromRegex = new RegExp(`'${oldVersion.split('.').join('\\.')}'`, 'gu');
   const newVersion = `'${version.replace(/^v/u, '')}'`;
   const results = await replace({
-    files: [
-      'packages/**/version.{js,ts}',
-      'packages/component-base/src/*.{js,ts}',
-      'packages/field-highlighter/src/vaadin-field-highlighter.js',
-      'packages/polymer-legacy-adapter/src/template-renderer-templatizer.js',
-    ],
+    files: ['packages/component-base/src/define.js'],
     from: fromRegex,
     to: newVersion,
   });
