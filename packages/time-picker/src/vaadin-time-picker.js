@@ -127,7 +127,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
-          on-validated="__onComboBoxValidated"
           on-has-input-value-changed="__onComboBoxHasInputValueChanged"
         >
           <vaadin-input-container
@@ -356,6 +355,20 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return this.$.clearButton;
   }
 
+  /**
+   * The input element's value when it cannot be parsed as a time, and an empty string otherwise.
+   *
+   * @private
+   * @return {string}
+   */
+  get __unparsableValue() {
+    if (this._inputElementValue && !this.i18n.parseTime(this._inputElementValue)) {
+      return this._inputElementValue;
+    }
+
+    return '';
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -421,6 +434,25 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     );
   }
 
+  /**
+   * @param {boolean} focused
+   * @override
+   * @protected
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.__commitValueChange();
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (document.hasFocus()) {
+        this.validate();
+      }
+    }
+  }
+
   /** @private */
   __validDayDivisor(step) {
     // Valid if undefined, or exact divides a day, or has millisecond resolution
@@ -471,21 +503,41 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this._comboBoxValue = this.i18n.formatTime(objWithStep);
     this.__useMemo = false;
 
-    this.validate();
-    this.__commitPendingValue();
+    this.__commitValueChange();
   }
 
-  /** @private */
-  __commitPendingValue() {
+  /**
+   * Depending on the type of value change that has occurred since
+   * the last commit attempt, triggers validation and fires an event:
+   *
+   * ```text
+   * +--------------------------+-------------------+
+   * | Type of value change     | Event             |
+   * +--------------------------+-------------------+
+   * | empty => parsable        | change            |
+   * | empty => unparsable      | unparsable-change |
+   * | parsable => empty        | change            |
+   * | parsable => parsable     | change            |
+   * | parsable => unparsable   | change            |
+   * | unparsable => empty      | unparsable-change |
+   * | unparsable => parsable   | change            |
+   * | unparsable => unparsable | unparsable-change |
+   * +--------------------------+-------------------+
+   * ```
+   *
+   * @private
+   */
+  __commitValueChange() {
     if (this.__committedValue !== this.value) {
-      this.__dispatchChange();
-      this.__committedValue = this.value;
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('unparsable-change'));
     }
-  }
 
-  /** @private */
-  __dispatchChange() {
-    this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    this.__committedValue = this.value;
+    this.__committedUnparsableValue = this.__unparsableValue;
   }
 
   /**
@@ -602,8 +654,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
     // Mark value set programmatically by the user
     // as committed for the change event detection.
-    if (!this.__skipCommittedValueUpdate) {
+    if (!this.__keepCommittedValue) {
       this.__committedValue = value;
+      this.__committedUnparsableValue = '';
     }
 
     if (value !== '' && value !== null && !parsedObj) {
@@ -636,9 +689,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       if (value !== newValue) {
         this._comboBoxValue = newValue;
       } else {
-        this.__skipCommittedValueUpdate = true;
+        this.__keepCommittedValue = true;
         this.__updateValue(parsedObj);
-        this.__skipCommittedValueUpdate = false;
+        this.__keepCommittedValue = false;
       }
     } else {
       // If the user input can not be parsed, set a flag
@@ -648,16 +701,16 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         this.__keepInvalidInput = true;
       }
 
-      this.__skipCommittedValueUpdate = true;
+      this.__keepCommittedValue = true;
       this.value = '';
-      this.__skipCommittedValueUpdate = false;
+      this.__keepCommittedValue = false;
     }
   }
 
   /** @private */
   __onComboBoxChange(event) {
     event.stopPropagation();
-    this.__commitPendingValue();
+    this.__commitValueChange();
   }
 
   /**
@@ -667,11 +720,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    */
   __onComboBoxHasInputValueChanged() {
     this._hasInputValue = this.$.comboBox._hasInputValue;
-  }
-
-  /** @private */
-  __onComboBoxValidated() {
-    this.validate();
   }
 
   /** @private */

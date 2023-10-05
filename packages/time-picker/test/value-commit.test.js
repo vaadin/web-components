@@ -6,7 +6,7 @@ import '../src/vaadin-time-picker.js';
 import { getAllItems } from './helpers.js';
 
 describe('value commit', () => {
-  let timePicker, valueChangedSpy, validateSpy, changeSpy;
+  let timePicker, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy;
 
   function expectNoValueCommit() {
     expect(valueChangedSpy).to.be.not.called;
@@ -16,16 +16,28 @@ describe('value commit', () => {
 
   function expectValueCommit(value) {
     expect(valueChangedSpy).to.be.calledOnce;
-    expect(validateSpy).to.be.calledOnce;
-    expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
+    expect(validateSpy).to.be.calledAfter(valueChangedSpy);
     expect(changeSpy).to.be.calledOnce;
     expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
+    expect(unparsableChangeSpy).to.be.not.called;
     expect(timePicker.value).to.equal(value);
+  }
+
+  function expectUnparsableValueCommit() {
+    expect(valueChangedSpy).to.be.not.called;
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.calledOnce;
+    expect(unparsableChangeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
   }
 
   function expectValidationOnly() {
     expect(valueChangedSpy).to.be.not.called;
-    expect(validateSpy).to.be.calledOnce;
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
     expect(changeSpy).to.be.not.called;
   }
 
@@ -40,6 +52,9 @@ describe('value commit', () => {
     changeSpy = sinon.spy().named('changeSpy');
     timePicker.addEventListener('change', changeSpy);
 
+    unparsableChangeSpy = sinon.spy().named('unparsableChangeSpy');
+    timePicker.addEventListener('unparsable-change', unparsableChangeSpy);
+
     timePicker.focus();
   });
 
@@ -49,9 +64,9 @@ describe('value commit', () => {
       expectValidationOnly();
     });
 
-    it('should not commit but validate on Enter', async () => {
+    it('should not commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValidationOnly();
+      expectNoValueCommit();
     });
 
     it('should not commit on Escape', async () => {
@@ -65,10 +80,10 @@ describe('value commit', () => {
       expectValidationOnly();
     });
 
-    it('should not commit but validate on close with Escape', async () => {
+    it('should not commit on close with Escape', async () => {
       timePicker.click();
       await sendKeys({ press: 'Escape' });
-      expectValidationOnly();
+      expectNoValueCommit();
     });
 
     it('should not commit on ArrowDown', async () => {
@@ -112,12 +127,12 @@ describe('value commit', () => {
       expectValueCommit('12:00');
     });
 
-    it('should revert and validate on close with Escape', async () => {
+    it('should revert on close with Escape', async () => {
       // Remove focus from the item.
       await sendKeys({ press: 'Escape' });
       // Close the dropdown.
       await sendKeys({ press: 'Escape' });
-      expectValidationOnly();
+      expectNoValueCommit();
       expect(timePicker.inputElement.value).to.equal('');
     });
   });
@@ -152,9 +167,9 @@ describe('value commit', () => {
         expectValueCommit('');
       });
 
-      it('should revert and validate on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
         expect(timePicker.inputElement.value).to.equal('12:00');
       });
     });
@@ -169,27 +184,27 @@ describe('value commit', () => {
       expectNoValueCommit();
     });
 
-    it('should not commit but validate on blur', () => {
+    it('should commit as unparsable value change on blur', () => {
       timePicker.blur();
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(timePicker.inputElement.value).to.equal('foo');
     });
 
-    it('should not commit but validate on Enter', async () => {
+    it('should commit as unparsable value change on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(timePicker.inputElement.value).to.equal('foo');
     });
 
-    it('should not commit but validate on close with outside click', () => {
+    it('should commit as unparsable value change on close with outside click', () => {
       outsideClick();
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(timePicker.inputElement.value).to.equal('foo');
     });
 
-    it('should revert and validate on close with Escape', async () => {
+    it('should revert on close with Escape', async () => {
       await sendKeys({ press: 'Escape' });
-      expectValidationOnly();
+      expectNoValueCommit();
       expect(timePicker.inputElement.value).to.equal('');
     });
   });
@@ -199,6 +214,7 @@ describe('value commit', () => {
       await sendKeys({ type: 'foo' });
       await sendKeys({ press: 'Enter' });
       validateSpy.resetHistory();
+      unparsableChangeSpy.resetHistory();
     });
 
     describe('input cleared with Backspace', () => {
@@ -207,24 +223,55 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on blur', () => {
+      it('should commit as unparsable value change on blur', () => {
         timePicker.blur();
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
 
-      it('should not commit but validate on Enter', async () => {
+      it('should commit as unparsable value change on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
 
-      it('should not commit but validate on close with outside click', () => {
+      it('should commit as unparsable value change on close with outside click', () => {
         outsideClick();
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
 
-      it('should revert and validate on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
+        expect(timePicker.inputElement.value).to.equal('foo');
+      });
+    });
+
+    describe('unparsable input changed', () => {
+      beforeEach(async () => {
+        timePicker.inputElement.select();
+        await sendKeys({ type: 'bar' });
+      });
+
+      it('should commit as unparsable value change on blur', () => {
+        timePicker.blur();
+        expectUnparsableValueCommit();
+        expect(timePicker.inputElement.value).to.equal('bar');
+      });
+
+      it('should commit as unparsable value change on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectUnparsableValueCommit();
+        expect(timePicker.inputElement.value).to.equal('bar');
+      });
+
+      it('should commit as unparsable value change on close with outside click', () => {
+        outsideClick();
+        expectUnparsableValueCommit();
+        expect(timePicker.inputElement.value).to.equal('bar');
+      });
+
+      it('should revert on close with Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+        expectNoValueCommit();
         expect(timePicker.inputElement.value).to.equal('foo');
       });
     });
@@ -263,9 +310,9 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter', async () => {
+      it('should not commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectNoValueCommit();
       });
 
       it('should not commit on Escape', async () => {
@@ -279,10 +326,10 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on close with Escape', async () => {
+      it('should not commit on close with Escape', async () => {
         timePicker.click();
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
       });
     });
 
@@ -307,12 +354,12 @@ describe('value commit', () => {
         expectValueCommit('12:00');
       });
 
-      it('should revert and validate on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         // Remove focus from the item.
         await sendKeys({ press: 'Escape' });
         // Close the dropdown.
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
         expect(timePicker.inputElement.value).to.equal('00:00');
       });
     });
@@ -341,9 +388,9 @@ describe('value commit', () => {
         expect(timePicker.inputElement.value).to.equal('foo');
       });
 
-      it('should revert and validate on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
         expect(timePicker.inputElement.value).to.equal('00:00');
       });
     });
@@ -395,15 +442,14 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter', async () => {
+      it('should not commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectNoValueCommit();
       });
 
-      // TODO: Why does it validate on Escape?
-      it('should not commit but validate on Escape', async () => {
+      it('should not commit on Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValidationOnly();
+        expectNoValueCommit();
       });
     });
   });
