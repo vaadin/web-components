@@ -3,8 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { isFocusable } from './vaadin-grid-active-item-mixin.js';
 
 const template = document.createElement('template');
@@ -83,8 +82,11 @@ registerStyles(
   { moduleId: 'vaadin-grid-tree-toggle-styles' },
 );
 
+/**
+ * @polymerMixin
+ */
 export const GridTreeToggleMixin = (superClass) =>
-  class extends ThemableMixin(DirMixin(superClass)) {
+  class extends superClass {
     static get properties() {
       return {
         /**

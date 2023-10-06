@@ -6,8 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { isFocusable } from './vaadin-grid-active-item-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
 /**
@@ -61,8 +60,10 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
+ * @mixes DirMixin
+ * @mixes GridTreeToggleMixin
  */
-class GridTreeToggle extends GridTreeToggleMixin(PolymerElement) {
+class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-grid-tree-toggle';
   }
