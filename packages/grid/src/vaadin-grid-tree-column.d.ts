@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
-import { GridColumn } from './vaadin-grid-column.js';
+import type { GridColumn, GridColumnMixin } from './vaadin-grid-column.js';
+import type { GridTreeColumnMixinClass } from './vaadin-grid-tree-column-mixin.js';
 
 /**
  * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
@@ -19,12 +20,13 @@ import { GridColumn } from './vaadin-grid-column.js';
  *    ...
  * ```
  */
-declare class GridTreeColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
-  /**
-   * JS Path of the property in the item used as text content for the tree toggle.
-   */
-  path: string | null | undefined;
-}
+
+declare class GridTreeColumn<TItem = GridDefaultItem> extends HTMLElement {}
+
+interface GridTreeColumn<TItem = GridDefaultItem>
+  extends GridTreeColumnMixinClass<TItem>,
+    GridColumnMixin<TItem, GridTreeColumn<TItem>>,
+    GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
