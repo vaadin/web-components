@@ -5,17 +5,10 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { GridTreeToggleEventMap } from './vaadin-grid-tree-toggle-mixin.js';
+import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
-/**
- * Fired when the `expanded` property changes.
- */
-export type GridTreeToggleExpandedChangedEvent = CustomEvent<{ value: boolean }>;
-
-export interface GridTreeToggleCustomEventMap {
-  'expanded-changed': GridTreeToggleExpandedChangedEvent;
-}
-
-export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeToggleCustomEventMap {}
+export * from './vaadin-grid-tree-toggle-mixin.js';
 
 /**
  * `<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`
@@ -65,23 +58,7 @@ export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeTog
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
-declare class GridTreeToggle extends ThemableMixin(DirMixin(HTMLElement)) {
-  /**
-   * Current level of the tree represented with a horizontal offset
-   * of the toggle button.
-   */
-  level: number;
-
-  /**
-   * Hides the toggle icon and disables toggling a tree sublevel.
-   */
-  leaf: boolean;
-
-  /**
-   * Sublevel toggle state.
-   */
-  expanded: boolean;
-
+declare class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(HTMLElement))) {
   addEventListener<K extends keyof GridTreeToggleEventMap>(
     type: K,
     listener: (this: GridTreeToggle, ev: GridTreeToggleEventMap[K]) => void,
