@@ -51,6 +51,8 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
  * - the item's sub-cache (if exists).
  * - the page containing the item.
  *
+ * If no item with the given id is found, the method returns undefined.
+ *
  * @param {Cache} cache
  * @param {{ getItemId: (item: unknown) => unknown}} context
  * @param {Cache} cache

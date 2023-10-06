@@ -31,6 +31,8 @@ export function getFlatIndexContext(
  * - the corresponding index in the cache's items array.
  * - the page containing the index.
  * - the cache level
+ *
+ * If no item with the given id is found, the method returns undefined.
  */
 export function getItemContext(
   context: { itemId(id: unknown): boolean },
@@ -38,15 +40,17 @@ export function getItemContext(
   itemId: number,
   level: number,
   levelFlatIndex: number,
-): {
-  level: number;
-  item: unknown | undefined;
-  index: number;
-  page: number;
-  flatIndex: number;
-  cache: Cache;
-  subCache: Cache | undefined;
-};
+):
+  | {
+      level: number;
+      item: unknown | undefined;
+      index: number;
+      page: number;
+      flatIndex: number;
+      cache: Cache;
+      subCache: Cache | undefined;
+    }
+  | undefined;
 
 /**
  * Recursively returns the globally flat index of the item the given indexes point to.

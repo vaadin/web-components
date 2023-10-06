@@ -144,16 +144,20 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
    * - the item's flattened index.
    * - the item's sub-cache (if exists).
    * - the page containing the item.
+   *
+   * If no item with the given id is found, the method returns undefined.
    */
-  getItemContext(itemId: unknown): {
-    level: number;
-    item: TItem | undefined;
-    index: number;
-    page: number;
-    flatIndex: number;
-    cache: Cache<TItem>;
-    subCache: Cache<TItem> | undefined;
-  };
+  getItemContext(itemId: unknown):
+    | {
+        level: number;
+        item: TItem | undefined;
+        index: number;
+        page: number;
+        flatIndex: number;
+        cache: Cache<TItem>;
+        subCache: Cache<TItem> | undefined;
+      }
+    | undefined;
 
   /**
    * Returns the flattened index for the item that the given indexes point to.

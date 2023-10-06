@@ -165,11 +165,13 @@ export class DataProviderController extends EventTarget {
    * Returns context for the given item id, including
    * - the cache containing the item.
    * - the cache level.
-   * - the item (if loaded).
+   * - the item.
    * - the item's index in the cache's items array.
    * - the item's flattened index.
    * - the item's sub-cache (if exists).
    * - the page containing the item.
+   *
+   * If no item with the given id is found, the method returns undefined.
    *
    * @param {unknown} itemId
    */
