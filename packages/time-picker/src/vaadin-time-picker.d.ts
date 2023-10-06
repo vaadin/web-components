@@ -38,11 +38,6 @@ export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 export type TimePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
- * Fired when the `dirty` property changes.
- */
-export type TimePickerDirtyChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
  * Fired when the `value` property changes.
  */
 export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
@@ -56,8 +51,6 @@ export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
 
   'opened-changed': TimePickerOpenedChangedEvent;
-
-  'dirty-changed': TimePickerDirtyChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
 
@@ -122,7 +115,6 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
- * @fires {CustomEvent} dirty-changed - Fired when the `dirty` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */

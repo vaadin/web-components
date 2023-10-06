@@ -47,8 +47,6 @@ export const CheckedMixin = dedupingMixin(
       _onChange(event) {
         const input = event.target;
 
-        this.dirty = true;
-
         this._toggleChecked(input.checked);
 
         // Clicking the checkbox or radio-button in Safari

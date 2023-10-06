@@ -15,10 +15,6 @@ class Lumo extends HTMLElement {
   static get is() {
     return 'vaadin-lumo-styles';
   }
-
-  static get version() {
-    return '24.3.0-alpha1';
-  }
 }
 
 defineCustomElement(Lumo);

@@ -22,6 +22,7 @@ import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
  * ```
  * @customElement
  * @extends GridColumn
+ * @mixes GridTreeColumnMixin
  */
 class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   static get is() {
