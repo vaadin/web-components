@@ -28,6 +28,7 @@ const host = document.createElement('div');
 const dataProviderController = new DataProviderController<TestItem, TestDataProviderParams>(host, {
   size: 1000,
   pageSize: 50,
+  getItemId: (item) => item,
   isExpanded: (_item) => true,
   dataProvider,
   dataProviderParams: () => ({ bar: 'bar' }),
@@ -35,12 +36,13 @@ const dataProviderController = new DataProviderController<TestItem, TestDataProv
 
 // Constructor
 assertType<
-  new <DataProviderParams extends Record<string, unknown>>(
+  new <TestItem, DataProviderParams extends Record<string, unknown>>(
     host: HTMLElement,
     config: {
       size: number | undefined;
       pageSize: number;
-      isExpanded(item: unknown): boolean;
+      getItemId(item: TestItem): unknown;
+      isExpanded(item: TestItem): boolean;
       dataProvider: DataProvider<TestItem, DataProviderParams>;
       dataProviderParams(): DataProviderParams;
     },
@@ -52,6 +54,7 @@ assertType<HTMLElement>(dataProviderController.host);
 assertType<Cache<TestItem>>(dataProviderController.rootCache);
 assertType<number | undefined>(dataProviderController.size);
 assertType<number>(dataProviderController.pageSize);
+assertType<(item: TestItem) => unknown>(dataProviderController.getItemId);
 assertType<(item: TestItem) => boolean>(dataProviderController.isExpanded);
 assertType<() => TestDataProviderParams>(dataProviderController.dataProviderParams);
 assertType<DataProvider<TestItem, TestDataProviderParams>>(dataProviderController.dataProvider);
