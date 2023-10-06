@@ -74,6 +74,19 @@ assertType<
     level: number;
   }
 >(dataProviderController.getFlatIndexContext);
+assertType<
+  (itemId: unknown) =>
+    | {
+        cache: Cache<TestItem>;
+        subCache: Cache<TestItem> | undefined;
+        item: unknown | undefined;
+        index: number;
+        page: number;
+        level: number;
+        flatIndex: number;
+      }
+    | undefined
+>(dataProviderController.getItemContext);
 assertType<(path: number[]) => number>(dataProviderController.getFlatIndexByPath);
 assertType<() => void>(dataProviderController.loadFirstPage);
 assertType<() => boolean>(dataProviderController.isLoading);
