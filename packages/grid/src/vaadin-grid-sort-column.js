@@ -25,6 +25,7 @@ import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
  *
  * @customElement
  * @extends GridColumn
+ * @mixes GridSortColumnMixin
  */
 class GridSortColumn extends GridSortColumnMixin(GridColumn) {
   static get is() {

@@ -4,6 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/**
+ * @polymerMixin
+ */
 export const GridFilterColumnMixin = (superClass) =>
   class extends superClass {
     static get properties() {
