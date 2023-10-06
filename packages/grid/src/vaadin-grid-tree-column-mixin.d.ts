@@ -5,9 +5,8 @@
  */
 
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { GridColumn } from './vaadin-grid-column.js';
 
-export declare function GridTreeColumnMixin<TItem, T extends Constructor<GridColumn>>(
+export declare function GridTreeColumnMixin<TItem, T extends Constructor<HTMLElement>>(
   superclass: T,
 ): Constructor<GridTreeColumnMixinClass<TItem>> & T;
 

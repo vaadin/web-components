@@ -4,7 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { GridDefaultItem } from './vaadin-grid.js';
-import { GridColumn } from './vaadin-grid-column.js';
+import type { GridColumn, GridColumnMixin } from './vaadin-grid-column.js';
+import type { GridFilterColumnMixinClass } from './vaadin-grid-filter-column-mixin.js';
+
+export * from './vaadin-grid-filter-column-mixin.js';
 
 /**
  * `<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`
@@ -19,17 +22,12 @@ import { GridColumn } from './vaadin-grid-column.js';
  *    ...
  * ```
  */
-declare class GridFilterColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
-  /**
-   * Text to display as the label of the column filter text-field.
-   */
-  header: string | null | undefined;
+declare class GridFilterColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
-  /**
-   * JS Path of the property in the item used for filtering the data.
-   */
-  path: string | null | undefined;
-}
+interface GridFilterColumn<TItem = GridDefaultItem>
+  extends GridFilterColumnMixinClass,
+    GridColumnMixin<TItem, GridColumn<TItem>>,
+    GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
