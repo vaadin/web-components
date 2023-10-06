@@ -12,7 +12,10 @@ import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mi
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from '@vaadin/details/src/collapsible-mixin.js';
 import { SummaryController } from '@vaadin/details/src/summary-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { accordionPanel } from './vaadin-accordion-panel-styles.js';
+
+registerStyles('vaadin-accordion-panel', accordionPanel, { moduleId: 'vaadin-accordion-panel-styles' });
 
 /**
  * The accordion panel element.
@@ -55,26 +58,6 @@ class AccordionPanel extends CollapsibleMixin(
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='content'] {
-          display: none;
-          overflow: hidden;
-        }
-
-        :host([opened]) [part='content'] {
-          display: block;
-          overflow: visible;
-        }
-      </style>
-
       <slot name="summary"></slot>
 
       <div part="content">

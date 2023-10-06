@@ -7,7 +7,10 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { accordionHeading } from './vaadin-accordion-heading-styles.js';
+
+registerStyles('vaadin-accordion-heading', accordionHeading, { moduleId: 'vaadin-accordion-heading-styles' });
 
 /**
  * The accordion heading element.
@@ -55,34 +58,6 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-          outline: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        button {
-          display: flex;
-          align-items: center;
-          justify-content: inherit;
-          width: 100%;
-          margin: 0;
-          padding: 0;
-          background-color: initial;
-          color: inherit;
-          border: initial;
-          outline: none;
-          font: inherit;
-          text-align: inherit;
-        }
-      </style>
       <button id="button" part="content" disabled$="[[disabled]]" aria-expanded$="[[__updateAriaExpanded(opened)]]">
         <span part="toggle" aria-hidden="true"></span>
         <slot></slot>
