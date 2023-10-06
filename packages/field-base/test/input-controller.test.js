@@ -1,5 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { InputController } from '../src/input-controller.js';
@@ -70,6 +72,21 @@ describe('input-controller', () => {
       element.addController(new InputController(element));
       input = element.querySelector('[slot=input]');
       expect(input.value).to.equal('foo');
+    });
+
+    it('should dispatch change event when clearing input', async () => {
+      element.addController(new InputController(element));
+      input = element.querySelector('[slot=input]');
+
+      const spy = sinon.spy();
+      input.addEventListener('change', spy);
+
+      input.focus();
+      input.select();
+      await sendKeys({ press: 'Backspace' });
+      input.blur();
+
+      expect(spy.calledOnce).to.be.true;
     });
   });
 
