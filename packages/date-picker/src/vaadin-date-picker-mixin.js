@@ -979,7 +979,7 @@ export const DatePickerMixin = (subclass) =>
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
-      // No need to revalidate the value after it has been just committed.
+      // No need to revalidate the value after `_selectedDateChanged`
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
       if (!this.value && !this._keyboardActive) {
