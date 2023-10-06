@@ -17,7 +17,7 @@ export interface GridSortColumnCustomEventMap {
 
 export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnCustomEventMap {}
 
-export declare function GridSortColumnMixinClass<T extends Constructor<HTMLElement>>(
+export declare function GridSortColumnMixin<T extends Constructor<HTMLElement>>(
   superclass: T,
 ): Constructor<GridSortColumnMixinClass> & T;
 
