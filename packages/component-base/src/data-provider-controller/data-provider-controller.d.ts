@@ -58,6 +58,12 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   isExpanded: (item: TItem) => boolean;
 
   /**
+   * A callback that returns the id for the given item and that
+   * is used when checking object items for equality.
+   */
+  getItemId: (item: TItem) => unknown;
+
+  /**
    * A reference to the root cache instance.
    */
   rootCache: Cache<TItem>;
@@ -67,6 +73,7 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
     config: {
       size?: number;
       pageSize: number;
+      getItemId(item: TItem): unknown;
       isExpanded(item: TItem): boolean;
       dataProvider: DataProvider<TItem, TDataProviderParams>;
       dataProviderParams(): TDataProviderParams;
@@ -114,11 +121,11 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
 
   /**
    * Returns context for the given flattened index, including:
-   * - the corresponding cache
-   * - the associated item (if loaded)
-   * - the corresponding index in the cache's items array.
-   * - the page containing the index.
-   * - the cache level
+   * - the corresponding cache.
+   * - the cache level.
+   * - the corresponding item (if loaded).
+   * - the item's index in the cache's items array.
+   * - the page containing the item.
    */
   getFlatIndexContext(flatIndex: number): {
     cache: Cache<TItem>;
@@ -126,6 +133,26 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
     index: number;
     page: number;
     level: number;
+  };
+
+  /**
+   * Returns context for the given item id, including
+   * - the cache containing the item.
+   * - the cache level.
+   * - the item (if loaded).
+   * - the item's index in the cache's items array.
+   * - the item's flattened index.
+   * - the item's sub-cache (if exists).
+   * - the page containing the item.
+   */
+  getItemContext(itemId: unknown): {
+    level: number;
+    item: TItem | undefined;
+    index: number;
+    page: number;
+    flatIndex: number;
+    cache: Cache<TItem>;
+    subCache: Cache<TItem> | undefined;
   };
 
   /**

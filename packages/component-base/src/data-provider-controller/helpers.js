@@ -5,16 +5,19 @@
  */
 
 /**
+ * @typedef {import('./cache.js').Cache} Cache
+ */
+
+/**
  * Returns context for the given flattened index, including:
- * - the corresponding cache
- * - the associated item (if loaded)
- * - the corresponding index in the cache's items array.
- * - the page containing the index.
- * - the cache level
+ * - the corresponding cache.
+ * - the cache level.
+ * - the corresponding item (if loaded).
+ * - the item's index in the cache's items array.
+ * - the page containing the item.
  *
- * @param {import('./cache.js').Cache} cache
+ * @param {Cache} cache
  * @param {number} flatIndex
- * @return {{ cache: Cache, item: object | undefined, index: number, page: number, level: number }}
  */
 export function getFlatIndexContext(cache, flatIndex, level = 0) {
   let levelIndex = flatIndex;
@@ -36,6 +39,51 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
     page: Math.floor(levelIndex / cache.pageSize),
     level,
   };
+}
+
+/**
+ * Returns context for the given item id, including
+ * - the cache containing the item.
+ * - the cache level.
+ * - the item (if loaded).
+ * - the item's index in the cache's items array.
+ * - the item's flattened index.
+ * - the item's sub-cache (if exists).
+ * - the page containing the item.
+ *
+ * @param {Cache} cache
+ * @param {{ getItemId: (item: unknown) => unknown}} context
+ * @param {Cache} cache
+ * @param {unknown} itemId
+ * @param {number} level
+ * @param {number} levelFlatIndex
+ */
+export function getItemContext({ getItemId }, cache, itemId, level = 0, levelFlatIndex = 0) {
+  // Start looking in this cache
+  for (let index = 0; index < cache.items.length; index++) {
+    const item = cache.items[index];
+
+    if (getItemId(item) === itemId) {
+      return {
+        cache,
+        level,
+        item,
+        index,
+        page: Math.floor(index / cache.pageSize),
+        subCache: cache.getSubCache(index),
+        flatIndex: levelFlatIndex + cache.getFlatIndex(index),
+      };
+    }
+  }
+
+  // Look through sub-caches
+  for (const subCache of cache.subCaches) {
+    const parentItemFlatIndex = levelFlatIndex + cache.getFlatIndex(subCache.parentCacheIndex);
+    const result = getItemContext({ getItemId }, subCache, itemId, level + 1, parentItemFlatIndex + 1);
+    if (result) {
+      return result;
+    }
+  }
 }
 
 /**

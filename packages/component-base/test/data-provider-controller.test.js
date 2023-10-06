@@ -347,6 +347,142 @@ describe('DataProviderController', () => {
     });
   });
 
+  describe('getItemContext', () => {
+    let rootCache, subCache, subCacheSubCache;
+
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        pageSize: 2,
+        isExpanded,
+        getItemId: (item) => item,
+        dataProvider: createDataProvider({ size: 5 }),
+      });
+
+      expandedItems = ['Item-0', 'Item-0-0'];
+
+      controller.ensureFlatIndexLoaded(0);
+      controller.ensureFlatIndexHierarchy(0);
+      controller.ensureFlatIndexHierarchy(1);
+      controller.ensureFlatIndexLoaded(4);
+      /**
+       * .....................
+       * 0:  Item-0
+       * 1:     Item-0-0
+       * 2:         Item-0-0-0
+       * 3:         Item-0-0-1
+       * 4:         Item-0-0-2
+       * 5:         Item-0-0-3
+       * 6:         not loaded
+       * 7:     Item-0-1
+       * 8:     not loaded
+       * 9:     not loaded
+       * 10:    not loaded
+       * 11: Item-1
+       * 12: not loaded
+       * 13: not loaded
+       * 14: not loaded
+       * .....................
+       */
+
+      rootCache = controller.rootCache;
+      subCache = rootCache.getSubCache(0);
+      subCacheSubCache = subCache.getSubCache(0);
+    });
+
+    it('should return context for item with index 0 at level 0', () => {
+      const context = controller.getItemContext('Item-0');
+      expect(context).to.include({
+        level: 0,
+        index: 0,
+        page: 0,
+        item: 'Item-0',
+        flatIndex: 0,
+        cache: rootCache,
+        subCache,
+      });
+    });
+
+    it('should return context for item with index 0 at level 1', () => {
+      const context = controller.getItemContext('Item-0-0');
+      expect(context).to.include({
+        level: 1,
+        index: 0,
+        page: 0,
+        item: 'Item-0-0',
+        flatIndex: 1,
+        cache: subCache,
+        subCache: subCacheSubCache,
+      });
+    });
+
+    it('should return context for item with index 0 at level 2', () => {
+      const context = controller.getItemContext('Item-0-0-0');
+      expect(context).to.include({
+        level: 2,
+        index: 0,
+        page: 0,
+        item: 'Item-0-0-0',
+        flatIndex: 2,
+        cache: subCacheSubCache,
+        subCache: undefined,
+      });
+    });
+
+    it('should return context for item with index 2 at level 2', () => {
+      const context = controller.getItemContext('Item-0-0-2');
+      expect(context).to.include({
+        level: 2,
+        index: 2,
+        page: 1,
+        item: 'Item-0-0-2',
+        flatIndex: 4,
+        cache: subCacheSubCache,
+        subCache: undefined,
+      });
+    });
+
+    it('should return undefined for item with index 4 at level 2 (not loaded)', () => {
+      const context = controller.getItemContext('Item-0-0-4');
+      expect(context).to.be.undefined;
+    });
+
+    it('should return context for item with index 1 at level 1', () => {
+      const context = controller.getItemContext('Item-0-1');
+      expect(context).to.include({
+        level: 1,
+        index: 1,
+        page: 0,
+        item: 'Item-0-1',
+        flatIndex: 7,
+        cache: subCache,
+        subCache: undefined,
+      });
+    });
+
+    it('should return undefined for item with index 2 at level 1 (not loaded)', () => {
+      const context = controller.getItemContext('Item-0-2');
+      expect(context).to.be.undefined;
+    });
+
+    it('should return context for item with index 1 at level 0', () => {
+      const context = controller.getItemContext('Item-1');
+      expect(context).to.include({
+        level: 0,
+        index: 1,
+        page: 0,
+        item: 'Item-1',
+        flatIndex: 11,
+        cache: rootCache,
+        subCache: undefined,
+      });
+    });
+
+    it('should return undefined for item with index 2 at level 0 (not loaded)', () => {
+      const context = controller.getItemContext('Item-2');
+      expect(context).to.be.undefined;
+    });
+  });
+
   describe('getFlatIndexByPath', () => {
     beforeEach(() => {
       controller = new DataProviderController(host, {

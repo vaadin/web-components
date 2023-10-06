@@ -134,6 +134,7 @@ export const DataProviderMixin = (superClass) =>
       this._dataProviderController = new DataProviderController(this, {
         size: this.size,
         pageSize: this.pageSize,
+        getItemId: this.getItemId.bind(this),
         isExpanded: this._isExpanded.bind(this),
         dataProvider: this.dataProvider ? this.dataProvider.bind(this) : null,
         dataProviderParams: () => {
