@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/notification",
-  "version": "24.3.0-alpha2",
+  "version": "24.2.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -38,16 +38,16 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.3.0-alpha2",
-    "@vaadin/lit-renderer": "24.3.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "24.3.0-alpha2",
-    "@vaadin/vaadin-material-styles": "24.3.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "24.3.0-alpha2",
+    "@vaadin/component-base": "24.2.0-beta3",
+    "@vaadin/lit-renderer": "24.2.0-beta3",
+    "@vaadin/vaadin-lumo-styles": "24.2.0-beta3",
+    "@vaadin/vaadin-material-styles": "24.2.0-beta3",
+    "@vaadin/vaadin-themable-mixin": "24.2.0-beta3",
     "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/button": "24.3.0-alpha2",
+    "@vaadin/button": "24.2.0-beta3",
     "@vaadin/testing-helpers": "^0.5.0",
     "sinon": "^13.0.2"
   },
