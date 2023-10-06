@@ -86,7 +86,7 @@ describe('input-controller', () => {
       await sendKeys({ press: 'Backspace' });
       input.blur();
 
-      expect(spy).to.be.calledOnce;
+      expect(spy.calledOnce).to.be.true;
     });
   });
 
