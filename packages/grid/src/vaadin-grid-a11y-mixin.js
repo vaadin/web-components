@@ -11,7 +11,7 @@ import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
     static get observers() {
-      return ['_a11yUpdateGridSize(size, _columnTree, _columnTree.*)'];
+      return ['_a11yUpdateGridSize(size, _columnTree)'];
     }
 
     /** @private */

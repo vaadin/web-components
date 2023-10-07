@@ -223,21 +223,21 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
-        '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
-        '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
-        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
-        '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
+        '_widthChanged(width, _headerCell, _footerCell, _cells)',
+        '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
+        '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
+        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
+        '_textAlignChanged(textAlign, _cells, _headerCell, _footerCell)',
+        '_orderChanged(_order, _headerCell, _footerCell, _cells)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, _cells.*, path)',
+        '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
-        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
-        '_rowHeaderChanged(rowHeader, _cells.*)',
+        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
+        '_rowHeaderChanged(rowHeader, _cells)',
       ];
     }
 
@@ -425,11 +425,11 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _rowHeaderChanged(rowHeader, cells) {
-      if (!cells.value) {
+      if (!cells) {
         return;
       }
 
-      cells.value.forEach((cell) => {
+      cells.forEach((cell) => {
         cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
       });
     }

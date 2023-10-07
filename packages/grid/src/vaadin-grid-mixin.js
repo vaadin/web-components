@@ -86,10 +86,7 @@ export const GridMixin = (superClass) =>
     ),
   ) {
     static get observers() {
-      return [
-        '_columnTreeChanged(_columnTree, _columnTree.*)',
-        '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)',
-      ];
+      return ['_columnTreeChanged(_columnTree)', '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)'];
     }
 
     static get properties() {
@@ -508,9 +505,11 @@ export const GridMixin = (superClass) =>
       }
 
       if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach(
-          (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells),
-        );
+        this._columnTree[this._columnTree.length - 1].forEach((c) => {
+          if (c.isConnected && c._cells) {
+            c._cells = [...c._cells];
+          }
+        });
       }
 
       this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
@@ -675,8 +674,8 @@ export const GridMixin = (superClass) =>
               detailsCell._vacant = false;
             }
 
-            if (column.notifyPath && !noNotify) {
-              column.notifyPath('_cells.*', column._cells);
+            if (!noNotify) {
+              column._cells = [...column._cells];
             }
           } else {
             // Header & footer
