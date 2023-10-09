@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/confirm-dialog",
-  "version": "24.1.10",
+  "version": "24.1.11",
   "publishConfig": {
     "access": "public"
   },
@@ -36,17 +36,17 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "~24.1.10",
-    "@vaadin/component-base": "~24.1.10",
-    "@vaadin/dialog": "~24.1.10",
-    "@vaadin/overlay": "~24.1.10",
-    "@vaadin/vaadin-lumo-styles": "~24.1.10",
-    "@vaadin/vaadin-material-styles": "~24.1.10",
-    "@vaadin/vaadin-themable-mixin": "~24.1.10"
+    "@vaadin/button": "~24.1.11",
+    "@vaadin/component-base": "~24.1.11",
+    "@vaadin/dialog": "~24.1.11",
+    "@vaadin/overlay": "~24.1.11",
+    "@vaadin/vaadin-lumo-styles": "~24.1.11",
+    "@vaadin/vaadin-material-styles": "~24.1.11",
+    "@vaadin/vaadin-themable-mixin": "~24.1.11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/a11y-base": "~24.1.10",
+    "@vaadin/a11y-base": "~24.1.11",
     "@vaadin/testing-helpers": "^0.4.2",
     "sinon": "^13.0.2"
   },
