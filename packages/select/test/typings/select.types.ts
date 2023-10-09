@@ -62,6 +62,7 @@ assertType<string | undefined>(item.label);
 assertType<string | undefined>(item.value);
 assertType<boolean | undefined>(item.disabled);
 assertType<string | undefined>(item.component);
+assertType<string | undefined>(item.className);
 
 // Events
 select.addEventListener('change', (event) => {
