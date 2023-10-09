@@ -339,7 +339,10 @@ export const GridMixin = (superClass) =>
         return 0;
       }
 
-      const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
+      const columnWidth = Math.max(
+        this.__getIntrinsicWidth(col),
+        this.__getDistributedWidth((col.assignedSlot || col).parentElement, col),
+      );
 
       // We're processing a regular grid-column and not a grid-column-group
       if (!innerColumn) {
