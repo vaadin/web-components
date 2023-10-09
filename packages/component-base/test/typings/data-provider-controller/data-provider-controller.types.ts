@@ -68,18 +68,18 @@ assertType<(flatIndex: number) => void>(dataProviderController.ensureFlatIndexHi
 assertType<
   (flatIndex: number) => {
     cache: Cache<TestItem>;
-    item: unknown | undefined;
+    item: TestItem | undefined;
     index: number;
     page: number;
     level: number;
   }
 >(dataProviderController.getFlatIndexContext);
 assertType<
-  (itemId: unknown) =>
+  (item: TestItem) =>
     | {
         cache: Cache<TestItem>;
         subCache: Cache<TestItem> | undefined;
-        item: unknown | undefined;
+        item: TestItem;
         index: number;
         page: number;
         level: number;

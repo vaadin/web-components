@@ -149,11 +149,11 @@ export class DataProviderController extends EventTarget {
 
   /**
    * Returns context for the given flattened index, including:
-   * - the corresponding cache.
-   * - the cache level.
-   * - the corresponding item (if loaded).
-   * - the item's index in the cache's items array.
-   * - the page containing the item.
+   * - the corresponding cache
+   * - the cache level
+   * - the corresponding item (if loaded)
+   * - the item's index in the cache's items array
+   * - the page containing the item
    *
    * @param {number} flatIndex
    */
@@ -162,21 +162,19 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Returns context for the given item id, including
-   * - the cache containing the item.
-   * - the cache level.
-   * - the item.
-   * - the item's index in the cache's items array.
-   * - the item's flattened index.
-   * - the item's sub-cache (if exists).
-   * - the page containing the item.
+   * Returns context for the given item, including:
+   * - the cache containing the item
+   * - the cache level
+   * - the item
+   * - the item's index in the cache's items array
+   * - the item's flattened index
+   * - the item's sub-cache (if exists)
+   * - the page containing the item
    *
-   * If no item with the given id is found, the method returns undefined.
-   *
-   * @param {unknown} itemId
+   * If the item isn't found, the method returns undefined.
    */
-  getItemContext(itemId) {
-    return getItemContext({ getItemId: this.getItemId }, this.rootCache, itemId);
+  getItemContext(item) {
+    return getItemContext({ getItemId: this.getItemId }, this.rootCache, item);
   }
 
   /**

@@ -5,6 +5,7 @@
  */
 import type { ReactiveController } from 'lit';
 import type { Cache } from './cache.js';
+import type { getFlatIndexByPath, getFlatIndexContext, getItemContext } from './helpers.js';
 
 type DataProviderDefaultParams = {
   page: number;
@@ -121,50 +122,34 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
 
   /**
    * Returns context for the given flattened index, including:
-   * - the corresponding cache.
-   * - the cache level.
-   * - the corresponding item (if loaded).
-   * - the item's index in the cache's items array.
-   * - the page containing the item.
+   * - the corresponding cache
+   * - the cache level
+   * - the corresponding item (if loaded)
+   * - the item's index in the cache's items array
+   * - the page containing the item
    */
-  getFlatIndexContext(flatIndex: number): {
-    cache: Cache<TItem>;
-    item: TItem | undefined;
-    index: number;
-    page: number;
-    level: number;
-  };
+  getFlatIndexContext(flatIndex: number): ReturnType<typeof getFlatIndexContext<TItem>>;
 
   /**
-   * Returns context for the given item id, including
-   * - the cache containing the item.
-   * - the cache level.
-   * - the item (if loaded).
-   * - the item's index in the cache's items array.
-   * - the item's flattened index.
-   * - the item's sub-cache (if exists).
-   * - the page containing the item.
+   * Returns context for the given item, including:
+   * - the cache containing the item
+   * - the cache level
+   * - the item
+   * - the item's index in the cache's items array
+   * - the item's flattened index
+   * - the item's sub-cache (if exists)
+   * - the page containing the item
    *
-   * If no item with the given id is found, the method returns undefined.
+   * If the item isn't found, the method returns undefined.
    */
-  getItemContext(itemId: unknown):
-    | {
-        level: number;
-        item: TItem | undefined;
-        index: number;
-        page: number;
-        flatIndex: number;
-        cache: Cache<TItem>;
-        subCache: Cache<TItem> | undefined;
-      }
-    | undefined;
+  getItemContext(item: TItem): ReturnType<typeof getItemContext<TItem>>;
 
   /**
    * Returns the flattened index for the item that the given indexes point to.
    * Each index in the path array points to a sub-item of the previous index.
    * Using `Infinity` as an index will point to the last item on the level.
    */
-  getFlatIndexByPath(path: number[]): number;
+  getFlatIndexByPath(path: number[]): ReturnType<typeof getFlatIndexByPath<TItem>>;
 
   /**
    * Requests the data provider to load the page with the item corresponding

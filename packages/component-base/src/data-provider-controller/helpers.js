@@ -10,11 +10,11 @@
 
 /**
  * Returns context for the given flattened index, including:
- * - the corresponding cache.
- * - the cache level.
- * - the corresponding item (if loaded).
- * - the item's index in the cache's items array.
- * - the page containing the item.
+ * - the corresponding cache
+ * - the cache level
+ * - the corresponding item (if loaded)
+ * - the item's index in the cache's items array
+ * - the page containing the item
  *
  * @param {Cache} cache
  * @param {number} flatIndex
@@ -42,30 +42,30 @@ export function getFlatIndexContext(cache, flatIndex, level = 0) {
 }
 
 /**
- * Returns context for the given item id, including
- * - the cache containing the item.
- * - the cache level.
- * - the item (if loaded).
- * - the item's index in the cache's items array.
- * - the item's flattened index.
- * - the item's sub-cache (if exists).
- * - the page containing the item.
+ * Returns context for the given item, including:
+ * - the cache containing the item
+ * - the cache level
+ * - the item
+ * - the item's index in the cache's items array
+ * - the item's flattened index
+ * - the item's sub-cache (if exists)
+ * - the page containing the item
  *
- * If no item with the given id is found, the method returns undefined.
+ * If the item isn't found, the method returns undefined.
  *
  * @param {Cache} cache
  * @param {{ getItemId: (item: unknown) => unknown}} context
  * @param {Cache} cache
- * @param {unknown} itemId
+ * @param {unknown} targetItem
  * @param {number} level
  * @param {number} levelFlatIndex
  */
-export function getItemContext({ getItemId }, cache, itemId, level = 0, levelFlatIndex = 0) {
+export function getItemContext({ getItemId }, cache, targetItem, level = 0, levelFlatIndex = 0) {
   // Start looking in this cache
   for (let index = 0; index < cache.items.length; index++) {
     const item = cache.items[index];
 
-    if (getItemId(item) === itemId) {
+    if (getItemId(item) === getItemId(targetItem)) {
       return {
         cache,
         level,
@@ -81,7 +81,7 @@ export function getItemContext({ getItemId }, cache, itemId, level = 0, levelFla
   // Look through sub-caches
   for (const subCache of cache.subCaches) {
     const parentItemFlatIndex = levelFlatIndex + cache.getFlatIndex(subCache.parentCacheIndex);
-    const result = getItemContext({ getItemId }, subCache, itemId, level + 1, parentItemFlatIndex + 1);
+    const result = getItemContext({ getItemId }, subCache, targetItem, level + 1, parentItemFlatIndex + 1);
     if (result) {
       return result;
     }
