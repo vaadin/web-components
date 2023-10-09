@@ -2441,7 +2441,8 @@ describe('lazy data provider', () => {
     // Keyboard navigate to the last row cell
     ctrlEnd();
     // Blur grid
-    grid.blur();
+    focusable = fixtureSync('<input>');
+    focusable.focus();
 
     cellFocusSpy.resetHistory();
     flushDataProvider();
