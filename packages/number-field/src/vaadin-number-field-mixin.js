@@ -472,23 +472,19 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Depending on the type of value change that has occurred since
+     * Depending on the nature of the value change that has occurred since
      * the last commit attempt, triggers validation and fires an event:
      *
-     * ```text
-     * +--------------------------+-------------------+
-     * | Type of value change     | Event             |
-     * +--------------------------+-------------------+
-     * | empty => parsable        | change            |
-     * | empty => unparsable      | unparsable-change |
-     * | parsable => empty        | change            |
-     * | parsable => parsable     | change            |
-     * | parsable => unparsable   | change            |
-     * | unparsable => empty      | unparsable-change |
-     * | unparsable => parsable   | change            |
-     * | unparsable => unparsable | -                 |
-     * +--------------------------+-------------------+
-     * ```
+     * Value change             | Event
+     * :------------------------|:------------------
+     * empty => parsable        | change
+     * empty => unparsable      | unparsable-change
+     * parsable => empty        | change
+     * parsable => parsable     | change
+     * parsable => unparsable   | change
+     * unparsable => empty      | unparsable-change
+     * unparsable => parsable   | change
+     * unparsable => unparsable | -
      *
      * Note, there is currently no way to detect unparsable => unparsable changes
      * because the browser doesn't provide access to unparsable values of native
