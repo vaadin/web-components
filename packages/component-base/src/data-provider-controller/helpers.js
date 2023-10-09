@@ -64,8 +64,7 @@ export function getItemContext({ getItemId }, cache, targetItem, level = 0, leve
   // Start looking in this cache
   for (let index = 0; index < cache.items.length; index++) {
     const item = cache.items[index];
-
-    if (getItemId(item) === getItemId(targetItem)) {
+    if (!!item && getItemId(item) === getItemId(targetItem)) {
       return {
         cache,
         level,

@@ -348,137 +348,158 @@ describe('DataProviderController', () => {
   });
 
   describe('getItemContext', () => {
-    let rootCache, subCache, subCacheSubCache;
+    let rootCache, subCache0, subCache0SubCache0, subCache0SubCache1;
 
     beforeEach(() => {
       controller = new DataProviderController(host, {
-        pageSize: 2,
-        isExpanded,
-        getItemId: (item) => item,
-        dataProvider: createDataProvider({ size: 5 }),
+        pageSize: 1,
+        isExpanded: ({ id }) => {
+          return !!expandedItems.find((item) => item.id === id);
+        },
+        getItemId: ({ id }) => id,
+        dataProvider: createDataProvider({
+          size: 3,
+          generator: (parentItem, i) => {
+            return { id: `${parentItem?.id ?? 'Item'}-${i}` };
+          },
+        }),
       });
 
-      expandedItems = ['Item-0', 'Item-0-0'];
+      expandedItems = [{ id: 'Item-0' }, { id: 'Item-0-0' }, { id: 'Item-0-1' }];
 
       controller.ensureFlatIndexLoaded(0);
       controller.ensureFlatIndexHierarchy(0);
       controller.ensureFlatIndexHierarchy(1);
-      controller.ensureFlatIndexLoaded(4);
+      controller.ensureFlatIndexLoaded(3);
+      controller.ensureFlatIndexLoaded(5);
+      controller.ensureFlatIndexHierarchy(5);
+      controller.ensureFlatIndexLoaded(10);
       /**
        * .....................
        * 0:  Item-0
        * 1:     Item-0-0
        * 2:         Item-0-0-0
        * 3:         Item-0-0-1
-       * 4:         Item-0-0-2
-       * 5:         Item-0-0-3
-       * 6:         not loaded
-       * 7:     Item-0-1
-       * 8:     not loaded
+       * 4:         not loaded
+       * 5:     Item-0-1
+       * 6:         Item-0-1-0
+       * 7:         not loaded
+       * 8:         not loaded
        * 9:     not loaded
-       * 10:    not loaded
-       * 11: Item-1
-       * 12: not loaded
-       * 13: not loaded
-       * 14: not loaded
+       * 10: Item-1
+       * 11: not loaded
        * .....................
        */
 
       rootCache = controller.rootCache;
-      subCache = rootCache.getSubCache(0);
-      subCacheSubCache = subCache.getSubCache(0);
+      subCache0 = rootCache.getSubCache(0);
+      subCache0SubCache0 = subCache0.getSubCache(0);
+      subCache0SubCache1 = subCache0.getSubCache(1);
     });
 
-    it('should return context for item with index 0 at level 0', () => {
-      const context = controller.getItemContext('Item-0');
-      expect(context).to.include({
+    it('should return context for item with flat index 0 (level 0)', () => {
+      const context = controller.getItemContext({ id: 'Item-0' });
+      expect(context).to.eql({
         level: 0,
         index: 0,
         page: 0,
-        item: 'Item-0',
+        item: { id: 'Item-0' },
         flatIndex: 0,
         cache: rootCache,
-        subCache,
+        subCache: subCache0,
       });
     });
 
-    it('should return context for item with index 0 at level 1', () => {
-      const context = controller.getItemContext('Item-0-0');
-      expect(context).to.include({
+    it('should return context for item with flat index 1 (level 1)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-0' });
+      expect(context).to.eql({
         level: 1,
         index: 0,
         page: 0,
-        item: 'Item-0-0',
+        item: { id: 'Item-0-0' },
         flatIndex: 1,
-        cache: subCache,
-        subCache: subCacheSubCache,
+        cache: subCache0,
+        subCache: subCache0SubCache0,
       });
     });
 
-    it('should return context for item with index 0 at level 2', () => {
-      const context = controller.getItemContext('Item-0-0-0');
-      expect(context).to.include({
+    it('should return context for item with flat index 2 (level 2)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-0-0' });
+      expect(context).to.eql({
         level: 2,
         index: 0,
         page: 0,
-        item: 'Item-0-0-0',
+        item: { id: 'Item-0-0-0' },
         flatIndex: 2,
-        cache: subCacheSubCache,
+        cache: subCache0SubCache0,
         subCache: undefined,
       });
     });
 
-    it('should return context for item with index 2 at level 2', () => {
-      const context = controller.getItemContext('Item-0-0-2');
-      expect(context).to.include({
+    it('should return context for item with flat index 3 (level 2)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-0-1' });
+      expect(context).to.eql({
         level: 2,
-        index: 2,
+        index: 1,
         page: 1,
-        item: 'Item-0-0-2',
-        flatIndex: 4,
-        cache: subCacheSubCache,
+        item: { id: 'Item-0-0-1' },
+        flatIndex: 3,
+        cache: subCache0SubCache0,
         subCache: undefined,
       });
     });
 
-    it('should return undefined for item with index 4 at level 2 (not loaded)', () => {
-      const context = controller.getItemContext('Item-0-0-4');
+    it('should return undefined for not loaded item with flat index 4 (level 2)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-0-2' });
       expect(context).to.be.undefined;
     });
 
-    it('should return context for item with index 1 at level 1', () => {
-      const context = controller.getItemContext('Item-0-1');
-      expect(context).to.include({
+    it('should return context for item with flat index 5 (level 1)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-1' });
+      expect(context).to.eql({
         level: 1,
         index: 1,
+        page: 1,
+        item: { id: 'Item-0-1' },
+        flatIndex: 5,
+        cache: subCache0,
+        subCache: subCache0SubCache1,
+      });
+    });
+
+    it('should return context for item with flat index 6 (level 2)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-1-0' });
+      expect(context).to.eql({
+        level: 2,
+        index: 0,
         page: 0,
-        item: 'Item-0-1',
-        flatIndex: 7,
-        cache: subCache,
+        item: { id: 'Item-0-1-0' },
+        flatIndex: 6,
+        cache: subCache0SubCache1,
         subCache: undefined,
       });
     });
 
-    it('should return undefined for item with index 2 at level 1 (not loaded)', () => {
-      const context = controller.getItemContext('Item-0-2');
+    it('should return undefined for not loaded item with flat index 9 (level 1)', () => {
+      const context = controller.getItemContext({ id: 'Item-0-2' });
       expect(context).to.be.undefined;
     });
 
-    it('should return context for item with index 1 at level 0', () => {
-      const context = controller.getItemContext('Item-1');
-      expect(context).to.include({
+    it('should return context for item with flat index 10 (level 0)', () => {
+      const context = controller.getItemContext({ id: 'Item-1' });
+      expect(context).to.eql({
         level: 0,
         index: 1,
-        page: 0,
-        item: 'Item-1',
-        flatIndex: 11,
+        page: 1,
+        item: { id: 'Item-1' },
+        flatIndex: 10,
         cache: rootCache,
         subCache: undefined,
       });
     });
 
-    it('should return undefined for item with index 2 at level 0 (not loaded)', () => {
-      const context = controller.getItemContext('Item-2');
+    it('should return undefined for not loaded item with flat index 11 (level 0)', () => {
+      const context = controller.getItemContext({ id: 'Item-2' });
       expect(context).to.be.undefined;
     });
   });
