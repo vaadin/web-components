@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { flushGrid, getBodyCellContent } from './helpers';
+import { flushGrid, getBodyCellContent } from './helpers.js';
 
 class GridWrapper extends HTMLElement {
   constructor() {
