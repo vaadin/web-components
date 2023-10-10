@@ -22,6 +22,7 @@ assertType<string | undefined>(item.userAbbr);
 assertType<string | undefined>(item.userImg);
 assertType<number | undefined>(item.userColorIndex);
 assertType<string | undefined>(item.theme);
+assertType<string | undefined>(item.className);
 
 // Mixins
 assertType<ElementMixinClass>(list);
