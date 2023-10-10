@@ -93,6 +93,16 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
    * - `column` The `<vaadin-grid-column>` element.
    */
   footerRenderer: GridHeaderFooterRenderer<TItem, Column> | null | undefined;
+
+  /**
+   * Custom part name for the column header cell.
+   */
+  headerPartName: string | null | undefined;
+
+  /**
+   * Custom part name for the column footer cell.
+   */
+  footerPartName: string | null | undefined;
 }
 
 export interface GridColumnMixin<TItem, Column extends GridColumnMixinClass<TItem, Column>>

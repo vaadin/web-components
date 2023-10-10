@@ -250,6 +250,8 @@ assertType<string | null | undefined>(narrowedColumn.header);
 assertType<GridColumnTextAlign | null | undefined>(narrowedColumn.textAlign);
 assertType<string | null | undefined>(narrowedColumn.path);
 assertType<boolean>(narrowedColumn.autoWidth);
+assertType<string | null | undefined>(narrowedColumn.headerPartName);
+assertType<string | null | undefined>(narrowedColumn.footerPartName);
 
 /* GridColumnGroup */
 const genericColumnGroup = document.createElement('vaadin-grid-column-group');
@@ -258,6 +260,8 @@ assertType<GridColumnGroup>(genericColumnGroup);
 const narrowedColumnGroup = genericColumnGroup as GridColumnGroup<TestGridItem>;
 assertType<HTMLElement>(narrowedColumnGroup);
 assertType<ColumnBaseMixinClass<TestGridItem, GridColumnGroup>>(narrowedColumnGroup);
+assertType<string | null | undefined>(narrowedColumnGroup.headerPartName);
+assertType<string | null | undefined>(narrowedColumnGroup.footerPartName);
 
 narrowedColumnGroup.headerRenderer = (root, column) => {
   assertType<HTMLElement>(root);

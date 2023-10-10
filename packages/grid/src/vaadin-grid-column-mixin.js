@@ -102,6 +102,20 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * Custom part name for the column header cell.
+         */
+        headerPartName: {
+          type: String,
+        },
+
+        /**
+         * Custom part name for the column footer cell.
+         */
+        footerPartName: {
+          type: String,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -238,6 +252,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
         '_rowHeaderChanged(rowHeader, _cells.*)',
+        '__headerFooterPartNameChanged(_headerCell, _footerCell, headerPartName, footerPartName)',
       ];
     }
 
@@ -629,6 +644,22 @@ export const ColumnBaseMixin = (superClass) =>
     /** @protected */
     _onHeaderRendererOrBindingChanged(headerRenderer, headerCell, ..._bindings) {
       this._renderHeaderCellContent(headerRenderer, headerCell);
+    }
+
+    /** @private */
+    __headerFooterPartNameChanged(headerCell, footerCell, headerPartName, footerPartName) {
+      [
+        { cell: headerCell, partName: headerPartName, currentName: '__currentHeaderPartName' },
+        { cell: footerCell, partName: footerPartName, currentName: '__currentFooterPartName' },
+      ].forEach(({ cell, partName, currentName }) => {
+        if (cell) {
+          const currentPartNames = cell[currentName] || [];
+          cell.part.remove(...currentPartNames);
+
+          cell[currentName] = partName ? partName.trim().split(' ') : [];
+          cell.part.add(...cell[currentName]);
+        }
+      });
     }
 
     /**
