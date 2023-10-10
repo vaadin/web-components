@@ -445,6 +445,39 @@ describe('avatar-group', () => {
     });
   });
 
+  describe('className', () => {
+    let overlay, overflow;
+
+    beforeEach(async () => {
+      group.items = [
+        { abbr: 'PM', className: 'foo' },
+        { name: 'Yuriy Yevstihnyeyev', className: 'bar' },
+        { name: 'Serhii Kulykov', className: 'baz' },
+      ];
+      await nextRender(group);
+      overlay = group.$.overlay;
+      overflow = group._overflow;
+    });
+
+    it('should pass color index to avatars', () => {
+      const items = group.querySelectorAll('vaadin-avatar');
+      expect(items[0].getAttribute('class')).to.equal('foo');
+      expect(items[1].getAttribute('class')).to.equal('bar');
+      expect(items[2].getAttribute('class')).to.equal('baz');
+    });
+
+    it('should pass color index to overlay avatars', async () => {
+      group.maxItemsVisible = 1;
+
+      overflow.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const avatars = overlay.querySelectorAll('vaadin-avatar');
+      expect(avatars[0].getAttribute('class')).to.equal(group.items[1].className);
+      expect(avatars[1].getAttribute('class')).to.equal(group.items[2].className);
+    });
+  });
+
   describe('i18n property', () => {
     let overlay, overflow;
 

@@ -26,6 +26,7 @@ export interface AvatarGroupItem {
   abbr?: string;
   img?: string;
   colorIndex?: number;
+  className?: string;
 }
 
 /**
@@ -79,7 +80,7 @@ declare class AvatarGroup extends ResizeMixin(
    * The items objects allow to configure [`name`](#/elements/vaadin-avatar#property-name),
    * [`abbr`](#/elements/vaadin-avatar#property-abbr), [`img`](#/elements/vaadin-avatar#property-img)
    * and [`colorIndex`](#/elements/vaadin-avatar#property-colorIndex) properties on the
-   * stamped avatars.
+   * stamped avatars, and set `className` to provide CSS class names.
    *
    * #### Example
    *
@@ -87,11 +88,13 @@ declare class AvatarGroup extends ResizeMixin(
    * group.items = [
    *   {
    *     name: 'User name',
-   *     img: 'url-to-image.png'
+   *     img: 'url-to-image.png',
+   *     className: 'even'
    *   },
    *   {
    *     abbr: 'JD',
-   *     colorIndex: 1
+   *     colorIndex: 1,
+   *     className: 'odd'
    *   },
    * ];
    * ```
