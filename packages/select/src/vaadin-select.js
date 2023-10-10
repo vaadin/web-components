@@ -11,6 +11,7 @@ import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -134,10 +135,13 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes FieldMixin
+ * @mixes KeyboardMixin
  * @mixes DelegateFocusMixin
  * @mixes DelegateStateMixin
  */
-class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Select extends DelegateFocusMixin(
+  DelegateStateMixin(KeyboardMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))),
+) {
   static get is() {
     return 'vaadin-select';
   }
@@ -330,8 +334,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     super();
 
     this._fieldId = `${this.localName}-${generateUniqueId()}`;
-
-    this._boundOnKeyDown = this._onKeyDown.bind(this);
   }
 
   /** @protected */
@@ -362,8 +364,6 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         addValueToAttribute(btn, 'aria-labelledby', this._fieldId);
 
         this._updateAriaExpanded(host.opened);
-
-        btn.addEventListener('keydown', this._boundOnKeyDown);
       },
     );
     this.addController(this._valueButtonController);
@@ -515,7 +515,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    * @protected
    */
   _onKeyDown(e) {
-    if (!this.readonly && !this.opened) {
+    if (e.target === this._valueButton && !this.readonly && !this.opened) {
       if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
         e.preventDefault();
         this.opened = true;
