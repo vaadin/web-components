@@ -437,7 +437,7 @@ export const SelectBaseMixin = (superClass) =>
         itemElement.disabled = item.disabled;
       }
       if (item.className) {
-        itemElement.setAttribute('class', item.className);
+        itemElement.className = item.className;
       }
       return itemElement;
     }
