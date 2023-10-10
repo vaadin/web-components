@@ -459,14 +459,14 @@ describe('avatar-group', () => {
       overflow = group._overflow;
     });
 
-    it('should pass color index to avatars', () => {
+    it('should pass class name to avatars', () => {
       const items = group.querySelectorAll('vaadin-avatar');
       expect(items[0].getAttribute('class')).to.equal('foo');
       expect(items[1].getAttribute('class')).to.equal('bar');
       expect(items[2].getAttribute('class')).to.equal('baz');
     });
 
-    it('should pass color index to overlay avatars', async () => {
+    it('should pass class name to overlay avatars', async () => {
       group.maxItemsVisible = 1;
 
       overflow.click();
