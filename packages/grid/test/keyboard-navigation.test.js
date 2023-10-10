@@ -155,6 +155,10 @@ function focusFirstFooterCell() {
   focusWithMouse(grid.$.footer.children[0].children[0]);
 }
 
+function focusFirstBodyCell() {
+  focusWithMouse(grid.$.items.children[0].children[0]);
+}
+
 function tabToHeader() {
   grid._headerFocusable.focus();
 }
@@ -2319,5 +2323,134 @@ describe('hierarchical data', () => {
     await sendKeys({ press: 'ArrowRight' });
     // Expect the focus to not have changed
     expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
+  });
+});
+
+describe('lazy data provider', () => {
+  let dataProviderCallbacks;
+  let cellFocusSpy;
+
+  function flushDataProvider() {
+    dataProviderCallbacks.forEach((cb) => cb());
+    dataProviderCallbacks = [];
+  }
+
+  function lazyDataProvider({ page, pageSize }, callback) {
+    const items = [...Array(pageSize).keys()].map((i) => {
+      return {
+        name: `name-${page * pageSize + i}`,
+      };
+    });
+
+    dataProviderCallbacks.push(() => callback(items, 1000));
+  }
+
+  beforeEach(() => {
+    dataProviderCallbacks = [];
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    cellFocusSpy = sinon.spy();
+    grid.addEventListener('cell-focus', cellFocusSpy);
+
+    grid.dataProvider = lazyDataProvider;
+    flushGrid(grid);
+    flushDataProvider();
+    focusFirstBodyCell();
+    cellFocusSpy.resetHistory();
+  });
+
+  it('should dispatch cell-focused event for lazily loaded item', async () => {
+    const expectedContext = {
+      column: grid.querySelector('vaadin-grid-column'),
+      detailsOpened: false,
+      expanded: false,
+      index: 999,
+      item: { name: 'name-999' },
+      level: 0,
+      section: 'body',
+      selected: false,
+    };
+
+    // Keyboard navigate to the last row cell
+    ctrlEnd();
+
+    flushDataProvider();
+    await nextFrame();
+
+    expect(cellFocusSpy.calledOnce).to.be.true;
+    const e = cellFocusSpy.firstCall.args[0];
+    expect(e.detail.context).to.be.deep.equal(expectedContext);
+  });
+
+  it('should not dispatch cell-focused event on scroll', async () => {
+    grid.scrollToIndex(Infinity);
+
+    flushDataProvider();
+    await nextFrame();
+
+    expect(cellFocusSpy.called).to.be.false;
+  });
+
+  it('should not dispatch an additional cell-focused event when navigating in body', async () => {
+    // Keyboard navigate to the last row cell
+    ctrlEnd();
+    // Keyboard navigate back to the first row cell
+    ctrlHome();
+
+    flushDataProvider();
+    await nextFrame();
+
+    expect(cellFocusSpy.calledOnce).to.be.true;
+    const e = cellFocusSpy.firstCall.args[0];
+    expect(e.detail.context.item).to.be.deep.equal({ name: 'name-0' });
+  });
+
+  it('should not dispatch an additional cell-focused event when navigating to head', async () => {
+    // Keyboard navigate to the last row cell
+    ctrlEnd();
+    // Keyboard navigate to header
+    shiftTab();
+
+    flushDataProvider();
+    await nextFrame();
+
+    expect(cellFocusSpy.calledOnce).to.be.true;
+    const e = cellFocusSpy.firstCall.args[0];
+    expect(e.detail.context.section).to.be.equal('header');
+  });
+
+  it('should not dispatch an additional cell-focused event when navigating back from head', async () => {
+    // Scroll half way down to get grid in loading state
+    grid.scrollToIndex(500);
+    down();
+
+    // Keyboard navigate to header
+    shiftTab();
+    flushDataProvider();
+    // Keyboard navigate back to body
+    tab();
+    cellFocusSpy.resetHistory();
+    // Scroll to bottom
+    grid.scrollToIndex(Infinity);
+
+    flushDataProvider();
+    await nextFrame();
+    expect(cellFocusSpy.called).to.be.false;
+  });
+
+  it('should not dispatch a cell-focus event when grid has no focus', () => {
+    // Keyboard navigate to the last row cell
+    ctrlEnd();
+    // Blur grid
+    focusable = fixtureSync('<input>');
+    focusable.focus();
+
+    cellFocusSpy.resetHistory();
+    flushDataProvider();
+
+    expect(cellFocusSpy.called).to.be.false;
   });
 });

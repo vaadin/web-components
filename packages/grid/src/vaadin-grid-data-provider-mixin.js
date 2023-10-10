@@ -434,6 +434,7 @@ export const DataProviderMixin = (superClass) =>
             });
 
             this.__scrollToPendingIndexes();
+            this.__dispatchPendingBodyCellFocus();
           });
 
           // If the grid is not loading anything, flush the debouncer immediately
