@@ -102,14 +102,14 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * Custom part name for the column header cell.
+         * Custom part name for the header cell.
          */
         headerPartName: {
           type: String,
         },
 
         /**
-         * Custom part name for the column footer cell.
+         * Custom part name for the footer cell.
          */
         footerPartName: {
           type: String,

@@ -95,12 +95,12 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
   footerRenderer: GridHeaderFooterRenderer<TItem, Column> | null | undefined;
 
   /**
-   * Custom part name for the column header cell.
+   * Custom part name for the header cell.
    */
   headerPartName: string | null | undefined;
 
   /**
-   * Custom part name for the column footer cell.
+   * Custom part name for the footer cell.
    */
   footerPartName: string | null | undefined;
 }
