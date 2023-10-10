@@ -389,6 +389,7 @@ export const DataProviderMixin = (superClass) =>
               });
 
             this.__scrollToPendingIndex();
+            this.__dispatchPendingBodyCellFocus();
           });
 
           if (!this._cache.isLoading()) {
