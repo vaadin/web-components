@@ -437,7 +437,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _textAlignChanged(textAlign) {
-      if (textAlign === undefined) {
+      if (textAlign === undefined || this._grid === undefined) {
         return;
       }
       if (['start', 'end', 'center'].indexOf(textAlign) === -1) {
