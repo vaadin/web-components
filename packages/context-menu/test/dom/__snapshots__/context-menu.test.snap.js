@@ -14,6 +14,7 @@ snapshots["context-menu items"] =
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="first"
       focus-ring=""
       focused=""
       role="menuitem"
@@ -41,6 +42,18 @@ snapshots["context-menu items"] =
     >
       Menu Item 3
     </vaadin-context-menu-item>
+    <div
+      aria-haspopup="false"
+      class="custom"
+    >
+      Menu Item 4
+    </div>
+    <div
+      aria-haspopup="false"
+      class="last"
+    >
+      Menu Item 5
+    </div>
   </vaadin-context-menu-list-box>
   <vaadin-context-menu hidden="">
   </vaadin-context-menu>
@@ -65,6 +78,7 @@ snapshots["context-menu items nested"] =
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="first"
       role="menuitem"
       tabindex="0"
     >
@@ -74,6 +88,7 @@ snapshots["context-menu items nested"] =
       aria-expanded="true"
       aria-haspopup="true"
       aria-selected="false"
+      class="last"
       expanded=""
       role="menuitem"
       tabindex="-1"
@@ -101,6 +116,7 @@ snapshots["context-menu items overlay class"] =
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="first"
       focus-ring=""
       focused=""
       role="menuitem"
@@ -128,6 +144,18 @@ snapshots["context-menu items overlay class"] =
     >
       Menu Item 3
     </vaadin-context-menu-item>
+    <div
+      aria-haspopup="false"
+      class="custom"
+    >
+      Menu Item 4
+    </div>
+    <div
+      aria-haspopup="false"
+      class="last"
+    >
+      Menu Item 5
+    </div>
   </vaadin-context-menu-list-box>
   <vaadin-context-menu hidden="">
   </vaadin-context-menu>
@@ -153,6 +181,7 @@ snapshots["context-menu items overlay class nested"] =
     <vaadin-context-menu-item
       aria-haspopup="false"
       aria-selected="false"
+      class="first"
       role="menuitem"
       tabindex="0"
     >
@@ -162,6 +191,7 @@ snapshots["context-menu items overlay class nested"] =
       aria-expanded="true"
       aria-haspopup="true"
       aria-selected="false"
+      class="last"
       expanded=""
       role="menuitem"
       tabindex="-1"
