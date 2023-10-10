@@ -841,9 +841,12 @@ export const KeyboardNavigationMixin = (superClass) =>
         }
 
         if (cell) {
-          // Fire a public event for cell.
           const context = this.getEventContext(e);
-          cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
+          this.__pendingBodyCellFocus = this.loading && context.section === 'body';
+          if (!this.__pendingBodyCellFocus) {
+            // Fire a cell-focus event for the cell
+            cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
+          }
           this._focusedCell = cell._focusButton || cell;
 
           if (isKeyboardActive() && e.target === cell) {
@@ -855,6 +858,16 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       this._detectFocusedItemIndex(e);
+    }
+
+    /**
+     * @private
+     */
+    __dispatchPendingBodyCellFocus() {
+      // If the body cell focus was pending, dispatch the event once loading is done
+      if (this.__pendingBodyCellFocus && this.shadowRoot.activeElement === this._itemsFocusable) {
+        this._itemsFocusable.dispatchEvent(new Event('focusin', { bubbles: true, composed: true }));
+      }
     }
 
     /**
