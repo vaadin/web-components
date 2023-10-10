@@ -103,6 +103,8 @@ export const ColumnBaseMixin = (superClass) =>
 
         /**
          * Custom part name for the header cell.
+         *
+         * @attr {string} header-part-name
          */
         headerPartName: {
           type: String,
@@ -110,6 +112,8 @@ export const ColumnBaseMixin = (superClass) =>
 
         /**
          * Custom part name for the footer cell.
+         *
+         * @attr {string} footer-part-name
          */
         footerPartName: {
           type: String,

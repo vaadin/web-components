@@ -96,11 +96,15 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
 
   /**
    * Custom part name for the header cell.
+   *
+   * @attr {string} header-part-name
    */
   headerPartName: string | null | undefined;
 
   /**
    * Custom part name for the footer cell.
+   *
+   * @attr {string} footer-part-name
    */
   footerPartName: string | null | undefined;
 }
