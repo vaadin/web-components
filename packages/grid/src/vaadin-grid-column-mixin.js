@@ -653,10 +653,11 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     __headerFooterPartNameChanged(headerCell, footerCell, headerPartName, footerPartName) {
       [
-        { cell: headerCell, partName: headerPartName, currentName: '__currentHeaderPartName' },
-        { cell: footerCell, partName: footerPartName, currentName: '__currentFooterPartName' },
-      ].forEach(({ cell, partName, currentName }) => {
+        { cell: headerCell, partName: headerPartName },
+        { cell: footerCell, partName: footerPartName },
+      ].forEach(({ cell, partName }) => {
         if (cell) {
+          const currentName = '__currentPartName';
           const currentPartNames = cell[currentName] || [];
           cell.part.remove(...currentPartNames);
 
