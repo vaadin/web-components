@@ -700,7 +700,7 @@ export const GridMixin = (superClass) =>
                 column._emptyCells.push(cell);
               }
             }
-            cell.setAttribute('part', `cell ${section}-cell`);
+            cell.part.add('cell', `${section}-cell`);
           }
 
           if (!cell._content.parentElement) {
