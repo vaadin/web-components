@@ -48,7 +48,7 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMix
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" ?hidden$="${!this.withBackdrop}"></div>
+      <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
           <section part="card">
