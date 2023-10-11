@@ -283,5 +283,21 @@ describe('styling', () => {
       expect(headerCell.getAttribute('part')).to.not.contain('foobar');
       expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
     });
+
+    it('should not override custom part names', () => {
+      const newColumn = document.createElement('vaadin-grid-column');
+      newColumn.path = 'value';
+      newColumn.headerPartName = 'foobar';
+      newColumn.footerPartName = 'bazqux';
+      grid.appendChild(newColumn);
+
+      flushGrid(grid);
+
+      const newHeaderCell = getContainerCell(grid.$.header, 0, 2);
+      const newFooterCell = getContainerCell(grid.$.footer, 0, 2);
+
+      expect(newHeaderCell.getAttribute('part')).to.contain('foobar');
+      expect(newFooterCell.getAttribute('part')).to.contain('bazqux');
+    });
   });
 });
