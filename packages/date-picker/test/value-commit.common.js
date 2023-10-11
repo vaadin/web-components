@@ -157,6 +157,24 @@ describe('value commit', () => {
         expectValueCommit('');
       });
     });
+
+    describe('value set programmatically', () => {
+      beforeEach(() => {
+        datePicker.value = TODAY_DATE;
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        datePicker.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectNoValueCommit();
+      });
+    });
   });
 
   describe('unparsable input entered', () => {
