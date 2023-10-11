@@ -173,6 +173,23 @@ describe('value commit', () => {
         expect(timePicker.inputElement.value).to.equal('12:00');
       });
     });
+
+    describe('value set programmatically', () => {
+      beforeEach(() => {
+        timePicker.value = '00:00';
+        valueChangedSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        timePicker.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectNoValueCommit();
+      });
+    });
   });
 
   describe('unparsable input entered', () => {
@@ -273,6 +290,23 @@ describe('value commit', () => {
         await sendKeys({ press: 'Escape' });
         expectNoValueCommit();
         expect(timePicker.inputElement.value).to.equal('foo');
+      });
+    });
+
+    describe('value set programmatically', () => {
+      beforeEach(() => {
+        timePicker.value = '00:00';
+        valueChangedSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        timePicker.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectNoValueCommit();
       });
     });
   });
