@@ -436,9 +436,7 @@ export const NumberFieldMixin = (superClass) =>
      * @protected
      */
     _onClearAction(event) {
-      this.__keepCommittedValue = true;
       super._onClearAction(event);
-      this.__keepCommittedValue = false;
       this.__commitValueChange();
     }
 

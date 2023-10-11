@@ -122,6 +122,25 @@ describe('value commit', () => {
         expectValueCommit('');
       });
     });
+
+    describe('value set programmatically', () => {
+      beforeEach(async () => {
+        numberField.value = '1234';
+        await nextUpdate(numberField);
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        numberField.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectNoValueCommit();
+      });
+    });
   });
 
   describe('unparsable input entered', () => {
@@ -284,27 +303,27 @@ describe('value commit', () => {
       await nextUpdate(numberField);
       expectValueCommit('-1');
     });
+  });
 
-    describe('arrow key committed', () => {
-      beforeEach(async () => {
-        await sendKeys({ press: 'ArrowUp' });
-        await nextUpdate(numberField);
-        valueChangedSpy.resetHistory();
-        validateSpy.resetHistory();
-        changeSpy.resetHistory();
-      });
+  describe('keyboard stepping committed', () => {
+    beforeEach(async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      await nextUpdate(numberField);
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
 
-      it('should not commit but validate on blur', async () => {
-        numberField.blur();
-        await nextUpdate(numberField);
-        expectValidationOnly();
-      });
+    it('should not commit but validate on blur', async () => {
+      numberField.blur();
+      await nextUpdate(numberField);
+      expectValidationOnly();
+    });
 
-      it('should not commit on Enter', async () => {
-        await sendKeys({ press: 'Enter' });
-        await nextUpdate(numberField);
-        expectNoValueCommit();
-      });
+    it('should not commit on Enter', async () => {
+      await sendKeys({ press: 'Enter' });
+      await nextUpdate(numberField);
+      expectNoValueCommit();
     });
   });
 
@@ -327,25 +346,44 @@ describe('value commit', () => {
       await nextUpdate(numberField);
       expectValueCommit('-1');
     });
+  });
 
-    describe('click committed', () => {
+  describe('value control button click committed', () => {
+    beforeEach(async () => {
+      numberField.shadowRoot.querySelector('[part=increase-button]').click();
+      await nextUpdate(numberField);
+      valueChangedSpy.resetHistory();
+      validateSpy.resetHistory();
+      changeSpy.resetHistory();
+    });
+
+    it('should not commit but validate on blur', async () => {
+      numberField.blur();
+      await nextUpdate(numberField);
+      expectValidationOnly();
+    });
+
+    it('should not commit on Enter', async () => {
+      await sendKeys({ press: 'Enter' });
+      await nextUpdate(numberField);
+      expectNoValueCommit();
+    });
+
+    describe('value set programmatically', () => {
       beforeEach(async () => {
-        increaseButton.click();
+        numberField.value = '1234';
         await nextUpdate(numberField);
         valueChangedSpy.resetHistory();
         validateSpy.resetHistory();
-        changeSpy.resetHistory();
       });
 
-      it('should not commit but validate on blur', async () => {
+      it('should not commit but validate on blur', () => {
         numberField.blur();
-        await nextUpdate(numberField);
         expectValidationOnly();
       });
 
       it('should not commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        await nextUpdate(numberField);
         expectNoValueCommit();
       });
     });
