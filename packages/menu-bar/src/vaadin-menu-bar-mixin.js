@@ -334,7 +334,7 @@ export const MenuBarMixin = (superClass) =>
       }
 
       if (item.className) {
-        button.setAttribute('class', item.className);
+        button.className = item.className;
       }
 
       return button;
