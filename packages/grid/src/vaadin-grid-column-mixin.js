@@ -657,12 +657,11 @@ export const ColumnBaseMixin = (superClass) =>
         { cell: footerCell, partName: footerPartName },
       ].forEach(({ cell, partName }) => {
         if (cell) {
-          const currentName = '__currentPartName';
-          const currentPartNames = cell[currentName] || [];
-          cell.part.remove(...currentPartNames);
+          const customParts = cell.__customParts || [];
+          cell.part.remove(...customParts);
 
-          cell[currentName] = partName ? partName.trim().split(' ') : [];
-          cell.part.add(...cell[currentName]);
+          cell.__customParts = partName ? partName.trim().split(' ') : [];
+          cell.part.add(...cell.__customParts);
         }
       });
     }
