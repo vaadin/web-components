@@ -30,7 +30,7 @@ registerStyles(
     }
 
     :host([focus-ring]) {
-      border-color: var(--lumo-primary-color-50pct);
+      border-color: var(--_focus-ring-color);
     }
 
     [part='icon'],

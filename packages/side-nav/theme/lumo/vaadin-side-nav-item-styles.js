@@ -74,7 +74,7 @@ export const sideNavItemStyles = css`
     [part='link']:focus-visible,
     [part='toggle-button']:focus-visible {
       border-radius: var(--lumo-border-radius-m);
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
   }
 

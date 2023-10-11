@@ -21,7 +21,7 @@ registerStyles(
     }
 
     :host([focus-ring]) {
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     [part='header'] {

@@ -98,7 +98,7 @@ registerStyles(
     }
 
     [part~='date'][part~='focused']::before {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
     }
 
     :host(:not([focused])) [part~='date'][part~='focused']::before {
@@ -107,7 +107,7 @@ registerStyles(
 
     @keyframes vaadin-date-picker-month-calendar-focus-date {
       50% {
-        box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px transparent;
+        box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) transparent;
       }
     }
 
@@ -157,7 +157,7 @@ template.innerHTML = `
   <style>
     @keyframes vaadin-date-picker-month-calendar-focus-date {
       50% {
-        box-shadow: 0 0 0 2px transparent;
+        box-shadow: 0 0 0 var(--_focus-ring-width) transparent;
       }
     }
   </style>

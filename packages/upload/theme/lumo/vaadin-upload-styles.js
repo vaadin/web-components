@@ -81,7 +81,7 @@ const uploadFile = css`
 
   :host([focus-ring]) [part='row'] {
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part='row'] {
@@ -141,7 +141,7 @@ const uploadFile = css`
   [part$='button']:focus {
     outline: none;
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part$='icon']::before,

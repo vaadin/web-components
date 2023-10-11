@@ -23,6 +23,10 @@ const style = css`
 
     /* Clickable element cursor */
     --lumo-clickable-cursor: default;
+
+    /* Focus */
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   }
 `;
 

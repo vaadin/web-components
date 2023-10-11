@@ -48,7 +48,7 @@ registerStyles(
     }
 
     :host([focus-ring]) {
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     .ol-control,
@@ -106,13 +106,13 @@ registerStyles(
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
         outline: none;
-        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+        box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       }
     }
 
     .ol-control button:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     .ol-zoom {

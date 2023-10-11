@@ -69,7 +69,7 @@ const item = css`
     }
 
     :host([focus-ring]:not([disabled])) {
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
   }
 
