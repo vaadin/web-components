@@ -333,6 +333,10 @@ export const MenuBarMixin = (superClass) =>
         button.textContent = item.text;
       }
 
+      if (item.className) {
+        button.setAttribute('class', item.className);
+      }
+
       return button;
     }
 
