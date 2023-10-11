@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["menu-bar basic"] = 
 `<vaadin-menu-bar role="menubar">
   <vaadin-menu-bar-button
+    class="home"
     role="menuitem"
     tabindex="0"
   >
@@ -26,6 +27,7 @@ snapshots["menu-bar basic"] =
     Dashboard
   </vaadin-menu-bar-button>
   <vaadin-menu-bar-button
+    class="help"
     role="menuitem"
     tabindex="0"
   >
@@ -76,6 +78,7 @@ snapshots["menu-bar overlay"] =
     <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
+      class="generate reports"
       role="menuitem"
       tabindex="-1"
     >
@@ -113,6 +116,7 @@ snapshots["menu-bar overlay class"] =
     <vaadin-menu-bar-item
       aria-haspopup="false"
       aria-selected="false"
+      class="generate reports"
       role="menuitem"
       tabindex="-1"
     >
