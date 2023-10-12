@@ -660,7 +660,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Depending on the nature of value change that has occurred since
+     * Depending on the nature of the value change that has occurred since
      * the last commit attempt, triggers validation and fires an event:
      *
      * Value change             | Event
