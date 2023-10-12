@@ -10,6 +10,15 @@ import '../typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const requiredField = css`
+  :host {
+    /* Label properties */
+    --_label-color-default: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+    --_label-color-focused: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
+    --_label-color-hovered: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+    --_label-font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
+    --_label-font-weight: var(--vaadin-input-field-label-font-weight, 500);
+  }
+
   [part='label'] {
     align-self: flex-start;
     color: var(--_label-color-default);
@@ -30,12 +39,6 @@ const requiredField = css`
     position: relative;
     max-width: 100%;
     box-sizing: border-box;
-    /* Label properties */
-    --_label-color-default: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
-    --_label-color-focused: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
-    --_label-color-hovered: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
-    --_label-font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
-    --_label-font-weight: var(--vaadin-input-field-label-font-weight, 500);
   }
 
   :host([focused]:not([readonly])) [part='label'] {
