@@ -677,16 +677,18 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     __commitValueChange() {
+      const unparsableValue = this.__unparsableValue;
+
       if (this.__committedValue !== this.value) {
         this.validate();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
+      } else if (this.__committedUnparsableValue !== unparsableValue) {
         this.validate();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValue = this.__unparsableValue;
+      this.__committedUnparsableValue = unparsableValue;
     }
 
     /**
