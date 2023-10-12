@@ -11,19 +11,31 @@ export const border = css`
     border: none;
   }
   .border {
-    border: 1px solid;
+    border: 1px var(--border-style, solid);
   }
   .border-b {
-    border-bottom: 1px solid;
+    border-bottom: 1px var(--border-style, solid);
+  }
+  .border-e {
+    border-inline-end: 1px var(--border-style, solid);
   }
   .border-l {
-    border-left: 1px solid;
+    border-left: 1px var(--border-style, solid);
   }
   .border-r {
-    border-right: 1px solid;
+    border-right: 1px var(--border-style, solid);
+  }
+  .border-s {
+    border-inline-start: 1px var(--border-style, solid);
   }
   .border-t {
-    border-top: 1px solid;
+    border-top: 1px var(--border-style, solid);
+  }
+  .border-dashed {
+    --border-style: dashed;
+  }
+  .border-dotted {
+    --border-style: dotted;
   }
 
   /* === Border color === */
@@ -113,5 +125,8 @@ export const border = css`
   }
   .rounded-l {
     border-radius: var(--lumo-border-radius-l);
+  }
+  .rounded-full {
+    border-radius: 9999px;
   }
 `;
