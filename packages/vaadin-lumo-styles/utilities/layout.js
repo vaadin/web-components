@@ -10,7 +10,7 @@ export const layout = css`
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
-  
+
   /* === Box sizing === */
   .box-border {
     box-sizing: border-box;
@@ -72,7 +72,7 @@ export const layout = css`
   .relative {
     position: relative;
   }
-  
+
   /* === Top, end, bottom, start === */
   .-bottom-xs {
     bottom: calc(var(--lumo-space-xs) / -1);
@@ -202,7 +202,7 @@ export const layout = css`
   .start-full {
     inset-inline-start: 100%;
   }
-  
+
   .-top-xs {
     top: calc(var(--lumo-space-xs) / -1);
   }
@@ -245,7 +245,7 @@ export const layout = css`
   .top-full {
     top: 100%;
   }
-  
+
   /* === Visibility === */
   .invisible {
     visibility: hidden;
@@ -253,7 +253,7 @@ export const layout = css`
   .visible {
     visibility: visible;
   }
-  
+
   /* === Z-index === */
   .z-10 {
     z-index: 10;

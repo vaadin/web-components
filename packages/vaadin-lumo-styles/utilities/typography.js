@@ -62,7 +62,7 @@ export const typography = css`
   }
 
   /* === Line clamp === */
-  [class*="line-clamp-"] {
+  [class*='line-clamp-'] {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
@@ -159,7 +159,7 @@ export const typography = css`
   .text-warning-contrast {
     color: var(--lumo-warning-contrast-color);
   }
-  
+
   /* == Text decoration === */
   .line-through {
     text-decoration-line: line-through;
