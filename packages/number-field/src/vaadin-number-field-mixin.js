@@ -457,7 +457,7 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Override this method from `FocusMixin`
+     * Override this method from `KeyboardMixin`
      * to commit a possible pending value change on Enter.
      *
      * @param {KeyboardEvent} event
