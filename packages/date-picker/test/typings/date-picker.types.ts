@@ -13,7 +13,7 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
+import type { DatePickerDate, DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 import type {
   DatePicker,
   DatePickerChangeEvent,
@@ -69,7 +69,7 @@ assertType<() => void>(datePicker.close);
 assertType<() => void>(datePicker.open);
 assertType<string | undefined>(datePicker.max);
 assertType<string | undefined>(datePicker.min);
-assertType<(date: Date) => boolean | undefined>(datePicker.isDateDisabled);
+assertType<(date: DatePickerDate) => boolean | undefined>(datePicker.isDateDisabled);
 assertType<boolean | null | undefined>(datePicker.showWeekNumbers);
 assertType<boolean | null | undefined>(datePicker.autoOpenDisabled);
 assertType<boolean | null | undefined>(datePicker.opened);

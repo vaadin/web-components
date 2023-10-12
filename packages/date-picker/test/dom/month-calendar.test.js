@@ -38,7 +38,7 @@ describe('vaadin-month-calendar', () => {
       await expect(monthCalendar).shadowDom.to.equalSnapshot();
     });
 
-    it.only('disabled dates', async () => {
+    it('disabled dates', async () => {
       monthCalendar.isDateDisabled = (date) => {
         return !!(date?.getDate() % 2) ?? false;
       };

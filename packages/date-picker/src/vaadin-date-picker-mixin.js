@@ -303,9 +303,11 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * A function that is used to determine if a date should be disabled.
+         * A function to be used to determine whether the user can select a given date.
+         * Receives a `DatePickerDate` object of the date to be selected and should return a
+         * boolean.
          * 
-         * @type {function(Date): boolean | undefined}
+         * @type {function(DatePickerDate): boolean | undefined}
          */
         isDateDisabled: {
           type: Function,

@@ -238,9 +238,11 @@ export declare class DatePickerMixinClass {
   max: string | undefined;
 
   /**
-   * A function that is used to determine if a date should be disabled.
+   * A function to be used to determine whether the user can select a given date.
+   * Receives a `DatePickerDate` object of the date to be selected and should return a
+   * boolean.
    */
-  isDateDisabled: (date: Date) => boolean;
+  isDateDisabled: (date: DatePickerDate) => boolean;
 
   /**
    * Opens the dropdown.

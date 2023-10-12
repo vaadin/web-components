@@ -82,7 +82,7 @@ export const MonthCalendarMixin = (superClass) =>
 
         /**
          * A function to be used to determine whether the user can select a given date.
-         * Receives a `Date` object of the date to be selected and should return a
+         * Receives a `DatePickerDate` object of the date to be selected and should return a
          * boolean.
          * @type {Function | undefined}
          */
