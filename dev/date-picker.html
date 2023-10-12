@@ -9,7 +9,14 @@
     <script type="module">
       import '@vaadin/date-picker';
       import '@vaadin/tooltip';
-      const isDateDisabled = (date) => !!(date?.getDay() === 0);
+      const isDateDisabled = (date) => {
+        // Exclude weekends example:
+        const checkDate = new Date(0, 0);
+        checkDate.setFullYear(date.year);
+        checkDate.setMonth(date.month);
+        checkDate.setDate(date.day);
+        return checkDate.getDay() === 0 || checkDate.getDay() === 6;
+      }
       const picker = document.querySelector('vaadin-date-picker');
       picker.isDateDisabled = isDateDisabled;
     </script>

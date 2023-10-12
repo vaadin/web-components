@@ -64,8 +64,8 @@ export function dateEquals(date1, date2) {
  */
 export function dateAllowed(date, min, max, isDateDisabled) {
   let dateIsDisabled = false;
-  if (typeof isDateDisabled === 'function') {
-    const dateToCheck = parseDate(date.toISOString().split('T')[0]); 
+  if (typeof isDateDisabled === 'function' && !!date) {
+    const dateToCheck = extractDateParts(date);
     dateIsDisabled = isDateDisabled(dateToCheck);
   }
 

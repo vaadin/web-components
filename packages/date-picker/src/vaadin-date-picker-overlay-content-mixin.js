@@ -1024,8 +1024,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
       let dateIsDisabled = false;
-      if (typeof isDateDisabled === 'function') {
-        const dateToCheck = parseDate(date.toISOString().split('T')[0]); 
+      if (typeof isDateDisabled === 'function' && !!date) {
+        const dateToCheck = extractDateParts(date);
         dateIsDisabled = isDateDisabled(dateToCheck);
       }
       return (!min || date >= min) && (!max || date <= max) && (!dateIsDisabled);
