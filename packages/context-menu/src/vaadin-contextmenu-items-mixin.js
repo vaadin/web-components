@@ -214,10 +214,12 @@ export const ItemsMixin = (superClass) =>
         const { value } = event.detail;
         if (typeof value === 'number') {
           const item = listBox.items[value]._item;
+          // Reset selected before dispatching the event to prevent
+          // checkmark icon flashing before the overlay is closed.
+          listBox.selected = null;
           if (!item.children) {
             this.dispatchEvent(new CustomEvent('item-selected', { detail: { value: item } }));
           }
-          listBox.selected = null;
         }
       });
 
