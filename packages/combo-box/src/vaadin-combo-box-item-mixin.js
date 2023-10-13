@@ -63,6 +63,21 @@ export const ComboBoxItemMixin = (superClass) =>
       return ['__rendererOrItemChanged(renderer, index, item.*, selected, focused)', '__updateLabel(label, renderer)'];
     }
 
+    static get observedAttributes() {
+      return [...super.observedAttributes, 'hidden'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (name === 'hidden' && newValue !== null) {
+        // The element is being hidden (by virtualizer). Mark one of the __rendererOrItemChanged
+        // dependencies as undefined to make sure it's called when the element is shown again
+        // and assigned properties with possibly identical values as before hiding.
+        this.index = undefined;
+      } else {
+        super.attributeChangedCallback(name, oldValue, newValue);
+      }
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
