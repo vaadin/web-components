@@ -166,8 +166,8 @@ describe('vaadin-icon', () => {
       icon.__fetch.restore();
     });
 
-    it('should set fill, stroke and stroke-color attributes if they are defined source SVG', async () => {
-      const svgSrc = `<svg fill="none" stroke="currentColor" stroke-width="2">${ANGLE_DOWN}</svg>`;
+    it('should set fill and stroke attributes if they are defined source SVG', async () => {
+      const svgSrc = `<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="bevel">${ANGLE_DOWN}</svg>`;
       sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
 
       icon.src = `data:image/svg+xml,${encodeURIComponent(svgSrc)}`;
@@ -176,6 +176,8 @@ describe('vaadin-icon', () => {
       expect(svgElement.getAttribute('fill')).to.be.equal('none');
       expect(svgElement.getAttribute('stroke')).to.be.equal('currentColor');
       expect(svgElement.getAttribute('stroke-width')).to.be.equal('2');
+      expect(svgElement.getAttribute('stroke-linecap')).to.be.equal('round');
+      expect(svgElement.getAttribute('stroke-linejoin')).to.be.equal('bevel');
 
       icon.__fetch.restore();
     });
@@ -190,6 +192,8 @@ describe('vaadin-icon', () => {
       expect(svgElement.hasAttribute('fill')).to.be.false;
       expect(svgElement.hasAttribute('stroke')).to.be.false;
       expect(svgElement.hasAttribute('stroke-width')).to.be.false;
+      expect(svgElement.hasAttribute('stroke-linecap')).to.be.false;
+      expect(svgElement.hasAttribute('stroke-linejoin')).to.be.false;
 
       icon.__fetch.restore();
     });
