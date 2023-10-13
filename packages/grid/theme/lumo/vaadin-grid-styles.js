@@ -187,14 +187,14 @@ registerStyles(
 
     /* Headers and footers */
 
-    [part~='header-cell'] ::slotted(vaadin-grid-cell-content),
-    [part~='footer-cell'] ::slotted(vaadin-grid-cell-content),
+    [part~='header-cell'],
+    [part~='footer-cell'],
     [part~='reorder-ghost'] {
       font-size: var(--lumo-font-size-s);
       font-weight: 500;
     }
 
-    [part~='footer-cell'] ::slotted(vaadin-grid-cell-content) {
+    [part~='footer-cell'] {
       font-weight: 400;
     }
 
