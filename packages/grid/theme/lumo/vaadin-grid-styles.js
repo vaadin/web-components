@@ -46,9 +46,13 @@ registerStyles(
       background-color: var(--lumo-base-color);
     }
 
+    [part~='cell'],
+    [part~='cell'] > [tabindex] {
+      padding: var(--lumo-space-xs) var(--lumo-space-m);
+    }
+
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
       cursor: default;
-      padding: var(--lumo-space-xs) var(--lumo-space-m);
     }
 
     /* Apply row borders by default and introduce the "no-row-borders" variant */
@@ -337,7 +341,8 @@ registerStyles(
       min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
     }
 
-    :host([theme~='compact']) [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+    :host([theme~='compact']) [part~='cell'],
+    :host([theme~='compact']) [part~='cell'] > [tabindex] {
       padding: var(--lumo-space-xs) var(--lumo-space-s);
     }
 

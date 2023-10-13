@@ -22,11 +22,11 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+    [part~='cell'] {
       padding: 8px 16px;
     }
 
-    [part~='details-cell'] ::slotted(vaadin-grid-cell-content) {
+    [part~='details-cell'] {
       padding: 14px 16px;
     }
 

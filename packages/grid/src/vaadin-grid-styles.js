@@ -142,7 +142,6 @@ registerStyles(
       width: 100%;
       position: relative;
       align-items: center;
-      padding: 0;
       white-space: nowrap;
     }
 
