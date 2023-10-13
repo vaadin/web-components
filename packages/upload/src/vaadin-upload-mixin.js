@@ -387,6 +387,11 @@ export const UploadMixin = (superClass) =>
         _files: {
           type: Array,
         },
+
+        directory: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -558,12 +563,35 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _onDrop(event) {
+    async _onDrop(event) {
       if (!this.nodrop) {
         event.preventDefault();
         this._dragover = this._dragoverValid = false;
-        this._addFiles(event.dataTransfer.files);
+
+        const items = [...event.dataTransfer.items];
+        const itemEntries = [...event.dataTransfer.items].map((item) => item.webkitGetAsEntry());
+        this._addFiles(await this.__readEntries(itemEntries));
       }
+    }
+
+    /** @private */
+    async __readEntries(entries) {
+      const files = [];
+      for (const entry of entries) {
+        if (entry.isFile) {
+          const file = await new Promise((resolve) => {
+            entry.file((file) => resolve(file));
+          });
+          files.push(file);
+        } else if (entry.isDirectory) {
+          const reader = entry.createReader();
+          const directoryEntries = await new Promise((resolve) => {
+            reader.readEntries((entries) => resolve(entries));
+          });
+          files.push(...(await this.__readEntries(directoryEntries)));
+        }
+      }
+      return files;
     }
 
     /** @private */

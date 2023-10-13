@@ -99,6 +99,8 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
         accept$="{{accept}}"
         multiple$="[[_isMultiple(maxFiles)]]"
         capture$="[[capture]]"
+        webkitdirectory="[[directory]]"
+        directory="[[directory]]"
       />
     `;
   }
