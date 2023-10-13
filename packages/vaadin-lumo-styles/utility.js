@@ -9,7 +9,7 @@ import { background } from './utilities/background.js';
 import { border } from './utilities/border.js';
 import { flexboxAndGrid } from './utilities/flexbox-grid.js';
 import { layout } from './utilities/layout.js';
-import { shadow } from './utilities/shadow.js';
+import { shadows } from './utilities/shadows.js';
 import { sizing } from './utilities/sizing.js';
 import { spacing } from './utilities/spacing.js';
 import { transition } from './utilities/transition.js';
@@ -22,7 +22,7 @@ ${background}
 ${border}
 ${flexboxAndGrid}
 ${layout}
-${shadow}
+${shadows}
 ${sizing}
 ${spacing}
 ${transition}

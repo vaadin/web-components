@@ -5,7 +5,7 @@
  */
 import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
-export const shadow = css`
+export const shadows = css`
   /* === Box shadow === */
   .shadow-xs {
     box-shadow: var(--lumo-box-shadow-xs);
