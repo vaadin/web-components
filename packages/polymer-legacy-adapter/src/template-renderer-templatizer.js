@@ -13,7 +13,7 @@ export class Templatizer extends PolymerElement {
   }
 
   static get version() {
-    return '24.2.0-rc1';
+    return '24.2.0';
   }
 
   static create(component, template) {
