@@ -3,7 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getFirstItem } from './helpers.js';
+import { getAllItems, getFirstItem, setInputValue } from './helpers.js';
 
 describe('item renderer', () => {
   let comboBox;
@@ -95,5 +95,19 @@ describe('item renderer', () => {
     comboBox.opened = true;
     comboBox.renderer = () => {};
     expect(getFirstItem(comboBox).textContent).to.equal('');
+  });
+
+  it('should restore filtered item content', () => {
+    const contentNodes = comboBox.items.map((item) => document.createTextNode(item));
+
+    comboBox.renderer = (root, _, { item }) => {
+      root.textContent = '';
+      root.append(contentNodes[comboBox.items.indexOf(item)]);
+    };
+
+    comboBox.opened = true;
+    setInputValue(comboBox, 'r');
+    setInputValue(comboBox, '');
+    expect(getAllItems(comboBox)[1].textContent).to.equal('bar');
   });
 });
