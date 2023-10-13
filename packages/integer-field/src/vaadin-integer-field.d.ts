@@ -13,6 +13,11 @@ export type IntegerFieldChangeEvent = Event & {
 };
 
 /**
+ * Fired when the user commits an unparsable value change and there is no change event.
+ */
+export type IntegerFieldUnparsableChangeEvent = CustomEvent;
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type IntegerFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -28,6 +33,8 @@ export type IntegerFieldValueChangedEvent = CustomEvent<{ value: string }>;
 export type IntegerFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface IntegerFieldCustomEventMap {
+  'unparsable-change': IntegerFieldUnparsableChangeEvent;
+
   'invalid-changed': IntegerFieldInvalidChangedEvent;
 
   'value-changed': IntegerFieldValueChangedEvent;
@@ -60,8 +67,28 @@ export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldC
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * ### Change events
+ *
+ * Depending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,
+ * the component can fire either a `change` event or an `unparsable-change` event:
+ *
+ * Value change             | Event
+ * :------------------------|:------------------
+ * empty => parsable        | change
+ * empty => unparsable      | unparsable-change
+ * parsable => empty        | change
+ * parsable => parsable     | change
+ * parsable => unparsable   | change
+ * unparsable => empty      | unparsable-change
+ * unparsable => parsable   | change
+ * unparsable => unparsable | -
+ *
+ * Note, there is currently no way to detect unparsable => unparsable changes because the browser
+ * doesn't provide access to unparsable values of native [type=number] inputs.
+ *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.

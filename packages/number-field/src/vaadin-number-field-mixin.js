@@ -103,6 +103,15 @@ export const NumberFieldMixin = (superClass) =>
       return this.$.clearButton;
     }
 
+    /**
+     * Whether the input element's value is unparsable.
+     *
+     * @private
+     */
+    get __hasUnparsableValue() {
+      return this.inputElement.validity.badInput;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -255,15 +264,11 @@ export const NumberFieldMixin = (superClass) =>
 
       const newValue = this._getIncrement(incr, value);
       if (!this.value || incr === 0 || this._incrementIsInsideTheLimits(incr, value)) {
-        this._setValue(newValue);
+        this.__keepCommittedValue = true;
+        this.value = this.inputElement.value = String(parseFloat(newValue));
+        this.__keepCommittedValue = false;
+        this.__commitValueChange();
       }
-    }
-
-    /** @private */
-    _setValue(value) {
-      this.value = this.inputElement.value = String(parseFloat(value));
-      this.validate();
-      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
     /** @private */
@@ -349,6 +354,11 @@ export const NumberFieldMixin = (superClass) =>
       }
 
       super._valueChanged(this.value, oldVal);
+
+      if (!this.__keepCommittedValue) {
+        this.__committedValue = this.value;
+        this.__committedUnparsableValueStatus = false;
+      }
     }
 
     /**
@@ -383,6 +393,113 @@ export const NumberFieldMixin = (superClass) =>
      */
     _setHasInputValue(event) {
       const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || target.validity.badInput;
+      this._hasInputValue = target.value.length > 0 || this.__hasUnparsableValue;
+    }
+
+    /**
+     * Override this method from `InputMixin` to prevent
+     * the value change caused by user input from being treated
+     * as initiated programmatically by the developer and therefore
+     * from getting silently committed by the value observer without
+     * any change event. The value change will be committed later
+     * on blur or Enter.
+     *
+     * @param {InputEvent} event
+     * @override
+     * @protected
+     */
+    _onInput(event) {
+      this.__keepCommittedValue = true;
+      super._onInput(event);
+      this.__keepCommittedValue = false;
+    }
+
+    /**
+     * Override this method from `InputControlMixin`
+     * to stop propagation of the native change event.
+     *
+     * @param {Event}
+     * @override
+     * @protected
+     */
+    _onChange(event) {
+      event.stopPropagation();
+    }
+
+    /**
+     * Override this method from `ClearButtonMixin`
+     * to properly commit the empty value since
+     * the change handler doesn't do that anymore.
+     *
+     * @param {MouseEvent} event
+     * @override
+     * @protected
+     */
+    _onClearAction(event) {
+      super._onClearAction(event);
+      this.__commitValueChange();
+    }
+
+    /**
+     * Override this method from `FocusMixin`
+     * to commit a possible pending value change on blur.
+     *
+     * @param {boolean} focused
+     * @override
+     * @protected
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
+
+      if (!focused) {
+        this.__commitValueChange();
+      }
+    }
+
+    /**
+     * Override this method from `KeyboardMixin`
+     * to commit a possible pending value change on Enter.
+     *
+     * @param {KeyboardEvent} event
+     * @override
+     * @protected
+     */
+    _onEnter(event) {
+      super._onEnter(event);
+      this.__commitValueChange();
+    }
+
+    /**
+     * Depending on the nature of the value change that has occurred since
+     * the last commit attempt, triggers validation and fires an event:
+     *
+     * Value change             | Event
+     * :------------------------|:------------------
+     * empty => parsable        | change
+     * empty => unparsable      | unparsable-change
+     * parsable => empty        | change
+     * parsable => parsable     | change
+     * parsable => unparsable   | change
+     * unparsable => empty      | unparsable-change
+     * unparsable => parsable   | change
+     * unparsable => unparsable | -
+     *
+     * Note, there is currently no way to detect unparsable => unparsable changes
+     * because the browser doesn't provide access to unparsable values of native
+     * [type=number] inputs.
+     *
+     * @private
+     */
+    __commitValueChange() {
+      if (this.__committedValue !== this.value) {
+        this.validate();
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
+        this.validate();
+        this.dispatchEvent(new CustomEvent('unparsable-change'));
+      }
+
+      this.__committedValue = this.value;
+      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
     }
   };
