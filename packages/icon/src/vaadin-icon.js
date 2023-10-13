@@ -112,6 +112,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
+        fill$="[[__fill]]"
+        stroke$="[[__stroke]]"
+        stroke-width$="[[__strokeWidth]]"
         aria-hidden="true"
       >
         <g id="svg-group"></g>
@@ -250,6 +253,15 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
 
       /** @private */
       __viewBox: String,
+
+      /** @private */
+      __fill: String,
+
+      /** @private */
+      __stroke: String,
+
+      /** @private */
+      __strokeWidth: String,
     };
   }
 
@@ -383,6 +395,9 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         }
 
         this.__viewBox = svgElement.getAttribute('viewBox');
+        this.__fill = svgElement.getAttribute('fill');
+        this.__stroke = svgElement.getAttribute('stroke');
+        this.__strokeWidth = svgElement.getAttribute('stroke-width');
       } catch (e) {
         console.error(e);
         this.svg = null;
