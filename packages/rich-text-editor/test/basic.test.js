@@ -697,11 +697,18 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal(htmlWithLeadingTab);
     });
 
-    it('should not lose extra stpace characters from the resulting htmlValue', () => {
+    it('should not lose extra space characters from the resulting htmlValue', () => {
       const htmlWithExtraSpaces = '<p>Extra   spaces</p>';
       rte.dangerouslySetHtmlValue(htmlWithExtraSpaces);
       flushValueDebouncer();
       expect(rte.htmlValue).to.equal(htmlWithExtraSpaces);
+    });
+
+    it('should not break code block attributes', () => {
+      const htmlWithCodeBlock = `<pre spellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(htmlWithCodeBlock);
     });
 
     it('should return the quill editor innerHTML', () => {
