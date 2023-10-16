@@ -8,7 +8,7 @@ registerStyles(
   'vaadin-input-container',
   css`
     :host {
-      background-color: var(--lumo-contrast-10pct);
+      background: var(--_background);
       padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
       font-weight: 500;
       line-height: 1;
@@ -23,8 +23,14 @@ registerStyles(
         var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
       /* Fallback */
       --_input-container-radius: var(--vaadin-input-field-border-radius, var(--lumo-border-radius-m));
-      /* Default field border color */
+      /* Default values */
+      --_background: var(--vaadin-input-field-background, var(--lumo-contrast-10pct));
+      --_hover-highlight: var(--vaadin-input-field-hover-highlight, var(--lumo-contrast-50pct));
       --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
+      --_icon-color: var(--vaadin-input-field-icon-color, var(--lumo-contrast-60pct));
+      --_icon-size: var(--vaadin-input-field-icon-size, var(--lumo-icon-size-m));
+      --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
+      --_invalid-hover-highlight: var(--vaadin-input-field-invalid-hover-highlight, var(--lumo-error-color-50pct));
     }
 
     :host([dir='rtl']) {
@@ -43,7 +49,7 @@ registerStyles(
       inset: 0;
       border-radius: inherit;
       pointer-events: none;
-      background-color: var(--lumo-contrast-50pct);
+      background: var(--_hover-highlight);
       opacity: 0;
       transition: transform 0.15s, opacity 0.2s;
       transform-origin: 100% 0;
@@ -83,18 +89,18 @@ registerStyles(
 
     /* Invalid */
     :host([invalid]) {
-      background-color: var(--lumo-error-color-10pct);
+      background: var(--_invalid-background);
     }
 
     :host([invalid])::after {
-      background-color: var(--lumo-error-color-50pct);
+      background: var(--_invalid-hover-highlight);
     }
 
     /* Slotted icons */
     ::slotted(vaadin-icon) {
-      color: var(--lumo-contrast-60pct);
-      width: var(--lumo-icon-size-m);
-      height: var(--lumo-icon-size-m);
+      color: var(--_icon-color);
+      width: var(--_icon-size);
+      height: var(--_icon-size);
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */

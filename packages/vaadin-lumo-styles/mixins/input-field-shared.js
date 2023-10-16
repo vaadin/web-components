@@ -48,7 +48,7 @@ const inputField = css`
 
   /* Hover */
   :host(:hover:not([readonly]):not([focused])) [part='input-field']::after {
-    opacity: 0.1;
+    opacity: var(--vaadin-input-field-hover-highlight-opacity, 0.1);
   }
 
   /* Touch device adjustment */
