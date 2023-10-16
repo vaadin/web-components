@@ -37,7 +37,7 @@
     "@vaadin/radio-group": "24.3.0-alpha4",
     "@vaadin/select": "24.3.0-alpha4",
     "@vaadin/tabs": "24.3.0-alpha4",
-    "@vaadin/testing-helpers": "^0.5.0",
+    "@vaadin/testing-helpers": "^0.6.0",
     "@vaadin/text-area": "24.3.0-alpha4",
     "@vaadin/text-field": "24.3.0-alpha4",
     "@vaadin/time-picker": "24.3.0-alpha4",

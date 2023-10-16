@@ -23,8 +23,8 @@
     "src",
     "!src/vaadin-lit-date-picker-overlay-content.js",
     "!src/vaadin-lit-date-picker-overlay.js",
-    "!src/vaadin-lit-month-calendar.js",
     "!src/vaadin-lit-date-picker.js",
+    "!src/vaadin-lit-month-calendar.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.5.0",
+    "@vaadin/testing-helpers": "^0.6.0",
     "sinon": "^13.0.2"
   },
   "web-types": [
