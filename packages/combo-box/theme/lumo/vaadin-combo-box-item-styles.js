@@ -9,6 +9,8 @@ const comboBoxItem = css`
     transition: background-color 100ms;
     overflow: hidden;
     --_lumo-item-selected-icon-display: block;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   @media (any-hover: hover) {

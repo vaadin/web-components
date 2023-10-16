@@ -30,6 +30,8 @@ registerStyles(
       --vaadin-map-icon-overview-map-expand: var(--lumo-icons-angle-up);
       --vaadin-map-icon-close: var(--lumo-icons-cross);
       --vaadin-map-icon-attribution-collapse: var(--lumo-icons-angle-right);
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host(:not([theme~='borderless'])) {

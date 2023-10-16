@@ -5,6 +5,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const scroller = css`
   :host {
     outline: none;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   :host([focus-ring]) {

@@ -31,6 +31,8 @@ registerStyles(
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host(:not([orientation='vertical'])) {

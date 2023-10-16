@@ -60,6 +60,8 @@ registerStyles(
     css`
       :host {
         font-family: var(--lumo-font-family);
+        --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+        --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       }
 
       [part='scroller'] {

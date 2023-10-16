@@ -16,7 +16,7 @@ export const avatarStyles = css`
     border: var(--vaadin-avatar-outline-width) solid transparent;
     margin: calc(var(--vaadin-avatar-outline-width) * -1);
     background-clip: content-box;
-    --vaadin-avatar-outline-width: var(--_focus-ring-width, 2px);
+    --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   img {

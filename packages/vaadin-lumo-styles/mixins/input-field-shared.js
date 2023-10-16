@@ -24,6 +24,8 @@ const inputField = css`
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     padding: var(--lumo-space-xs) 0;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   :host::before {

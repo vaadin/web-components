@@ -22,6 +22,8 @@ registerStyles(
       cursor: default;
       outline: none;
       --_radio-button-size: var(--vaadin-radio-button-size, calc(var(--lumo-size-m) / 2));
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host([has-label]) ::slotted(label) {

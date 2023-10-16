@@ -8,6 +8,11 @@ import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
+  :host {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
   [part='link'] {
     width: 100%;
     gap: var(--lumo-space-xs);

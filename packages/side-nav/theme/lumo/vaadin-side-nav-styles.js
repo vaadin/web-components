@@ -14,6 +14,8 @@ export const sideNavStyles = css`
     line-height: var(--lumo-line-height-xs);
     color: var(--lumo-body-text-color);
     -webkit-tap-highlight-color: transparent;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   [part='label'] {

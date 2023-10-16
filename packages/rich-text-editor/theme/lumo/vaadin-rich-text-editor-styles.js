@@ -9,6 +9,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const richTextEditor = css`
   :host {
     min-height: calc(var(--lumo-size-m) * 8);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   [part='toolbar'] {

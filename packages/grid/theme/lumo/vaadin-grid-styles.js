@@ -21,7 +21,8 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       /* For internal use only */
       --_lumo-grid-border-color: var(--lumo-contrast-20pct);
       --_lumo-grid-secondary-border-color: var(--lumo-contrast-10pct);

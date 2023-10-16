@@ -18,6 +18,8 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host([focus-ring]) {
