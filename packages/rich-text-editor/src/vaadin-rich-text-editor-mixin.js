@@ -693,7 +693,26 @@ export const RichTextEditorMixin = (superClass) =>
      * @param {string} htmlValue
      */
     dangerouslySetHtmlValue(htmlValue) {
+      const whitespaceCharacters = {
+        '\t': '__VAADIN_RICH_TEXT_EDITOR_TAB',
+        ' ': '__VAADIN_RICH_TEXT_EDITOR_SPACE',
+      };
+      // Replace whitespace characters with placeholders before the Delta conversion to prevent Quill from trimming them
+      Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
+        htmlValue = htmlValue.replace(new RegExp(character, 'gu'), replacement);
+      });
+
       const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
+
+      // Restore whitespace characters after the conversion
+      Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
+        deltaFromHtml.ops.forEach((op) => {
+          if (typeof op.insert === 'string') {
+            op.insert = op.insert.replace(new RegExp(replacement, 'gu'), character);
+          }
+        });
+      });
+
       this._editor.setContents(deltaFromHtml, SOURCE.API);
     }
 
