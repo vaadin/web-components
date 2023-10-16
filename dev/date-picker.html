@@ -15,10 +15,12 @@
         checkDate.setFullYear(date.year);
         checkDate.setMonth(date.month);
         checkDate.setDate(date.day);
-        return checkDate.getDay() === 0 || checkDate.getDay() === 6;
+        return checkDate.getDay() === 0 || checkDate.getDay() === 6 || checkDate.getDate() === 16;
+        // return checkDate.getDay() === 0 || checkDate.getDay() === 6;
       }
       const picker = document.querySelector('vaadin-date-picker');
       picker.isDateDisabled = isDateDisabled;
+      picker.min = '2023-11-01';
     </script>
   </head>
   <body>

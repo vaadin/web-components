@@ -374,10 +374,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
+      if (!this._dateAllowed(this.focusedDate)) {
+        return false;
+      }
       this.selectedDate = dateToSelect;
       this.dispatchEvent(
         new CustomEvent('date-selected', { detail: { date: dateToSelect }, bubbles: true, composed: true }),
       );
+      return true;
     }
 
     /** @private */
@@ -788,9 +792,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           handled = true;
           break;
         case 'Enter':
-          this._selectDate(this.focusedDate);
-          this._close();
-          handled = true;
+          if (this._selectDate(this.focusedDate)) {
+            this._close();
+            handled = true;
+          }
           break;
         case ' ':
           this.__toggleDate(this.focusedDate);
@@ -944,21 +949,21 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
-      if (this._dateAllowed(dateToFocus)) {
+      // if (this._dateAllowed(dateToFocus)) {
         this.focusDate(dateToFocus, keepMonth);
-      } else if (this._dateAllowed(this.focusedDate)) {
-        // Move to min or max date
-        if (diff > 0) {
-          // Down, Right or Page Down key
-          this.focusDate(this.maxDate);
-        } else {
-          // Up, Left or Page Up key
-          this.focusDate(this.minDate);
-        }
-      } else {
-        // Move to closest allowed date
-        this._focusClosestDate(this.focusedDate);
-      }
+      // } else if (this._dateAllowed(this.focusedDate)) {
+      //   // Move to min or max date
+      //   if (diff > 0) {
+      //     // Down, Right or Page Down key
+      //     this.focusDate(this.maxDate);
+      //   } else {
+      //     // Up, Left or Page Up key
+      //     this.focusDate(this.minDate);
+      //   }
+      // } else {
+      //   // Move to closest allowed date
+      //   this._focusClosestDate(this.focusedDate);
+      // }
     }
 
     /** @private */

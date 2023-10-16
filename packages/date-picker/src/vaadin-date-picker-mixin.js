@@ -900,7 +900,7 @@ export const DatePickerMixin = (subclass) =>
 
       return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate, this.isDateDisabled)
         ? initialPosition
-        : getClosestDate(initialPosition, [this._minDate, this._maxDate]);
+        : ((this._minDate || this._maxDate) ? getClosestDate(initialPosition, [this._minDate, this._maxDate]) : new Date());
     }
 
     /**
