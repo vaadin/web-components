@@ -31,6 +31,8 @@ registerStyles(
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host(:not([orientation='vertical'])) {
@@ -198,7 +200,7 @@ registerStyles(
     /* Focus-ring */
 
     :host([focus-ring]) {
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       border-radius: var(--lumo-border-radius-m);
     }
 

@@ -23,6 +23,8 @@ registerStyles(
       cursor: default;
       outline: none;
       --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host([has-label]) ::slotted(label) {
@@ -87,7 +89,7 @@ registerStyles(
 
     /* Focus ring */
     :host([focus-ring]) [part='checkbox'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct),
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 

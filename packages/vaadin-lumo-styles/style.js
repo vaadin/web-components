@@ -34,6 +34,8 @@ const globals = css`
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
     --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
+    --vaadin-focus-ring-color: var(--lumo-primary-color-50pct);
+    --vaadin-focus-ring-width: 2px;
   }
 `;
 

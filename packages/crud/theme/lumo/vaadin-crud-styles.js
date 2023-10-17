@@ -60,6 +60,8 @@ registerStyles(
     css`
       :host {
         font-family: var(--lumo-font-family);
+        --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+        --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       }
 
       [part='scroller'] {
@@ -105,7 +107,7 @@ registerStyles(
         position: absolute;
         inset: 0;
         content: '';
-        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+        box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
