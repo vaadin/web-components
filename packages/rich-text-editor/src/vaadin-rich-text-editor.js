@@ -1011,7 +1011,26 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
    * @param {string} htmlValue
    */
   dangerouslySetHtmlValue(htmlValue) {
+    const whitespaceCharacters = {
+      '\t': '__VAADIN_RICH_TEXT_EDITOR_TAB',
+      '  ': '__VAADIN_RICH_TEXT_EDITOR_DOUBLE_SPACE',
+    };
+    // Replace whitespace characters with placeholders before the Delta conversion to prevent Quill from trimming them
+    Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
+      htmlValue = htmlValue.replaceAll(/>[^<]*</gu, (match) => match.replaceAll(character, replacement)); // NOSONAR
+    });
+
     const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
+
+    // Restore whitespace characters after the conversion
+    Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
+      deltaFromHtml.ops.forEach((op) => {
+        if (typeof op.insert === 'string') {
+          op.insert = op.insert.replaceAll(replacement, character);
+        }
+      });
+    });
+
     this._editor.setContents(deltaFromHtml, SOURCE.API);
   }
 
