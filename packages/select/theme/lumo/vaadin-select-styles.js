@@ -31,7 +31,7 @@ const select = css`
   }
 
   [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
-    color: var(--lumo-body-text-color);
+    color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
   }
 
   :host([readonly]) [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
@@ -40,7 +40,7 @@ const select = css`
 
   /* placeholder styles */
   [part='input-field'] ::slotted([slot='value'][placeholder]) {
-    color: var(--lumo-secondary-text-color);
+    color: var(--vaadin-text-input-field-placeholder-color, var(--lumo-secondary-text-color));
   }
 
   :host(:is([readonly], [disabled])) ::slotted([slot='value'][placeholder]) {
