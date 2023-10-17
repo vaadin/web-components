@@ -711,6 +711,20 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal(htmlWithCodeBlock);
     });
 
+    it('should support double spaces inside html tags', () => {
+      const htmlWithCodeBlock = `<pre  spellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(`<pre spellcheck="false">code\n</pre>`);
+    });
+
+    it('should support tabs inside html tags', () => {
+      const htmlWithCodeBlock = `<pre\tspellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(`<pre spellcheck="false">code\n</pre>`);
+    });
+
     it('should return the quill editor innerHTML', () => {
       expect(rte.htmlValue).to.equal('<p><br></p>');
     });

@@ -1017,7 +1017,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     };
     // Replace whitespace characters with placeholders before the Delta conversion to prevent Quill from trimming them
     Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
-      htmlValue = htmlValue.replaceAll(character, replacement);
+      htmlValue = htmlValue.replaceAll(/>[^<]*</gu, (match) => match.replaceAll(character, replacement)); // NOSONAR
     });
 
     const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
