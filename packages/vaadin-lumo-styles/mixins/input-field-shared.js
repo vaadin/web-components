@@ -17,9 +17,9 @@ import { requiredField } from './required-field.js';
 const inputField = css`
   :host {
     --lumo-text-field-size: var(--lumo-size-m);
-    color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
-    font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
-    font-weight: var(--vaadin-input-field-value-font-weight, 400);
+    color: var(--vaadin-text-input-field-value-color, var(--lumo-body-text-color));
+    font-size: var(--vaadin-text-input-field-value-font-size, var(--lumo-font-size-m));
+    font-weight: var(--vaadin-text-input-field-value-font-weight, 400);
     font-family: var(--lumo-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
