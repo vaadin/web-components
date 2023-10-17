@@ -11,9 +11,6 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const helper = css`
   :host {
-    --_helper-color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
-    --_helper-font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
-    --_helper-font-weight: var(--vaadin-input-field-helper-font-weight, 400);
     --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.4em);
   }
 
@@ -25,10 +22,10 @@ export const helper = css`
 
   [part='helper-text'] {
     display: block;
-    color: var(--_helper-color);
-    font-size: var(--_helper-font-size);
+    color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
     line-height: var(--lumo-line-height-xs);
-    font-weight: var(--_helper-font-weight);
+    font-weight: var(--vaadin-input-field-helper-font-weight, 400);
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
   }
