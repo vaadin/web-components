@@ -21,7 +21,8 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       /* For internal use only */
       --_lumo-grid-border-color: var(--lumo-contrast-20pct);
       --_lumo-grid-secondary-border-color: var(--lumo-contrast-10pct);
@@ -82,7 +83,7 @@ registerStyles(
       position: absolute;
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     :host([navigating]) [part~='row']:focus::before {
@@ -97,7 +98,7 @@ registerStyles(
       z-index: 100;
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     [part~='row'][dragover] {

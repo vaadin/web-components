@@ -24,6 +24,8 @@ const inputField = css`
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     padding: var(--lumo-space-xs) 0;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   :host::before {
@@ -78,7 +80,7 @@ const inputField = css`
 
   /* Focus-ring */
   :host([focus-ring]) [part='input-field'] {
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   /* Read-only and disabled */
