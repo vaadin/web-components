@@ -1005,6 +1005,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateFooterRows();
     this.__updateFooterPositioning();
     this.generateCellClassNames();
+    this.__updateHeaderAndFooter();
   }
 
   /** @private */
@@ -1128,19 +1129,22 @@ class Grid extends ElementMixin(
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    if (this._columnTree) {
-      // Header and footer renderers
-      this._columnTree.forEach((level) => {
-        level.forEach((column) => {
-          if (column._renderHeaderAndFooter) {
-            column._renderHeaderAndFooter();
-          }
-        });
-      });
+    // Header and footer renderers
+    this.__updateHeaderAndFooter();
 
-      // Body and row details renderers
-      this.__updateVisibleRows();
-    }
+    // Body and row details renderers
+    this.__updateVisibleRows();
+  }
+
+  /** @private */
+  __updateHeaderAndFooter() {
+    (this._columnTree || []).forEach((level) => {
+      level.forEach((column) => {
+        if (column._renderHeaderAndFooter) {
+          column._renderHeaderAndFooter();
+        }
+      });
+    });
   }
 
   /** @protected */
