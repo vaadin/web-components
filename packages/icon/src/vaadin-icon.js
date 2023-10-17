@@ -112,6 +112,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="[[__computePAR(__defaultPAR, __preserveAspectRatio)]]"
+        fill$="[[__fill]]"
+        stroke$="[[__stroke]]"
+        stroke-width$="[[__strokeWidth]]"
+        stroke-linecap$="[[__strokeLinecap]]"
+        stroke-linejoin$="[[__strokeLinejoin]]"
         aria-hidden="true"
       >
         <g id="svg-group"></g>
@@ -250,6 +255,21 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
 
       /** @private */
       __viewBox: String,
+
+      /** @private */
+      __fill: String,
+
+      /** @private */
+      __stroke: String,
+
+      /** @private */
+      __strokeWidth: String,
+
+      /** @private */
+      __strokeLinecap: String,
+
+      /** @private */
+      __strokeLinejoin: String,
     };
   }
 
@@ -383,6 +403,11 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
         }
 
         this.__viewBox = svgElement.getAttribute('viewBox');
+        this.__fill = svgElement.getAttribute('fill');
+        this.__stroke = svgElement.getAttribute('stroke');
+        this.__strokeWidth = svgElement.getAttribute('stroke-width');
+        this.__strokeLinecap = svgElement.getAttribute('stroke-linecap');
+        this.__strokeLinejoin = svgElement.getAttribute('stroke-linejoin');
       } catch (e) {
         console.error(e);
         this.svg = null;
