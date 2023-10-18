@@ -35,6 +35,11 @@ export interface MenuBarItem {
    * Array of submenu items.
    */
   children?: SubMenuItem[];
+
+  /**
+   * Class/classes to be set to the class attribute of the button.
+   */
+  className?: string;
 }
 
 export interface SubMenuItem {
@@ -43,6 +48,7 @@ export interface SubMenuItem {
   disabled?: boolean;
   theme?: string[] | string;
   checked?: boolean;
+  className?: string;
   children?: SubMenuItem[];
 }
 
@@ -119,8 +125,9 @@ declare class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMi
    * menubar.items = [
    *   {
    *     text: 'File',
+   *     className: 'file',
    *     children: [
-   *       {text: 'Open'}
+   *       {text: 'Open', className: 'file open'}
    *       {text: 'Auto Save', checked: true},
    *     ]
    *   },

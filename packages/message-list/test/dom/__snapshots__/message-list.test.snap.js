@@ -74,3 +74,28 @@ snapshots["vaadin-message-list theme"] =
 `;
 /* end snapshot vaadin-message-list theme */
 
+snapshots["vaadin-message-list className"] = 
+`<vaadin-message-list
+  aria-relevant="additions"
+  role="log"
+>
+  <vaadin-message
+    class="pinned"
+    role="listitem"
+    tabindex="0"
+  >
+    Where to start
+    <vaadin-avatar
+      abbr="A"
+      aria-hidden="true"
+      name="Admin"
+      role="button"
+      slot="avatar"
+      tabindex="-1"
+    >
+    </vaadin-avatar>
+  </vaadin-message>
+</vaadin-message-list>
+`;
+/* end snapshot vaadin-message-list className */
+

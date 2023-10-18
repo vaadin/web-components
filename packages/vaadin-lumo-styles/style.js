@@ -34,6 +34,14 @@ const globals = css`
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
     --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
+    --vaadin-focus-ring-color: var(--lumo-primary-color-50pct);
+    --vaadin-focus-ring-width: 2px;
+    --vaadin-text-input-field-height: var(--lumo-size-m);
+    --vaadin-text-input-field-placeholder-color: var(--lumo-secondary-text-color);
+    --vaadin-text-input-field-readonly-border: 1px dashed var(--lumo-contrast-30pct);
+    --vaadin-text-input-field-value-color: var(--lumo-body-text-color);
+    --vaadin-text-input-field-value-font-size: var(--lumo-font-size-m);
+    --vaadin-text-input-field-value-font-weight: 400;
   }
 `;
 

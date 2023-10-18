@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Cache } from './cache.js';
-import { getFlatIndexByPath, getFlatIndexContext } from './helpers.js';
+import { getFlatIndexByPath, getFlatIndexContext, getItemContext } from './helpers.js';
 
 /**
  * A controller that stores and manages items loaded with a data provider.
@@ -51,17 +51,26 @@ export class DataProviderController extends EventTarget {
   isExpanded;
 
   /**
+   * A callback that returns the id for the given item and that
+   * is used when checking object items for equality.
+   *
+   * @type { (item: unknown) => unknown}
+   */
+  getItemId;
+
+  /**
    * A reference to the root cache instance.
    *
    * @param {Cache}
    */
   rootCache;
 
-  constructor(host, { size, pageSize, isExpanded, dataProvider, dataProviderParams }) {
+  constructor(host, { size, pageSize, isExpanded, getItemId, dataProvider, dataProviderParams }) {
     super();
     this.host = host;
     this.size = size;
     this.pageSize = pageSize;
+    this.getItemId = getItemId;
     this.isExpanded = isExpanded;
     this.dataProvider = dataProvider;
     this.dataProviderParams = dataProviderParams;
@@ -141,13 +150,31 @@ export class DataProviderController extends EventTarget {
   /**
    * Returns context for the given flattened index, including:
    * - the corresponding cache
-   * - the associated item (if loaded)
-   * - the corresponding index in the cache's items array.
-   * - the page containing the index.
    * - the cache level
+   * - the corresponding item (if loaded)
+   * - the item's index in the cache's items array
+   * - the page containing the item
+   *
+   * @param {number} flatIndex
    */
   getFlatIndexContext(flatIndex) {
     return getFlatIndexContext(this.rootCache, flatIndex);
+  }
+
+  /**
+   * Returns context for the given item, including:
+   * - the cache containing the item
+   * - the cache level
+   * - the item
+   * - the item's index in the cache's items array
+   * - the item's flattened index
+   * - the item's sub-cache (if exists)
+   * - the page containing the item
+   *
+   * If the item isn't found, the method returns undefined.
+   */
+  getItemContext(item) {
+    return getItemContext({ getItemId: this.getItemId }, this.rootCache, item);
   }
 
   /**

@@ -16,6 +16,14 @@ assertType<number | null | undefined>(group.maxItemsVisible);
 assertType<AvatarGroupI18n>(group.i18n);
 assertType<string>(group.overlayClass);
 
+// Item properties
+const item: AvatarGroupItem = group.items ? group.items[0] : {};
+assertType<string | undefined>(item.abbr);
+assertType<string | undefined>(item.img);
+assertType<string | undefined>(item.name);
+assertType<number | undefined>(item.colorIndex);
+assertType<string | undefined>(item.className);
+
 // Mixins
 assertType<ControllerMixinClass>(group);
 assertType<ElementMixinClass>(group);

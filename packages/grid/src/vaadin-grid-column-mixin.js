@@ -102,6 +102,24 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * Custom part name for the header cell.
+         *
+         * @attr {string} header-part-name
+         */
+        headerPartName: {
+          type: String,
+        },
+
+        /**
+         * Custom part name for the footer cell.
+         *
+         * @attr {string} footer-part-name
+         */
+        footerPartName: {
+          type: String,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -238,6 +256,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
         '_rowHeaderChanged(rowHeader, _cells.*)',
+        '__headerFooterPartNameChanged(_headerCell, _footerCell, headerPartName, footerPartName)',
       ];
     }
 
@@ -487,7 +506,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _textAlignChanged(textAlign) {
-      if (textAlign === undefined) {
+      if (textAlign === undefined || this._grid === undefined) {
         return;
       }
       if (['start', 'end', 'center'].indexOf(textAlign) === -1) {
@@ -629,6 +648,22 @@ export const ColumnBaseMixin = (superClass) =>
     /** @protected */
     _onHeaderRendererOrBindingChanged(headerRenderer, headerCell, ..._bindings) {
       this._renderHeaderCellContent(headerRenderer, headerCell);
+    }
+
+    /** @private */
+    __headerFooterPartNameChanged(headerCell, footerCell, headerPartName, footerPartName) {
+      [
+        { cell: headerCell, partName: headerPartName },
+        { cell: footerCell, partName: footerPartName },
+      ].forEach(({ cell, partName }) => {
+        if (cell) {
+          const customParts = cell.__customParts || [];
+          cell.part.remove(...customParts);
+
+          cell.__customParts = partName ? partName.trim().split(' ') : [];
+          cell.part.add(...cell.__customParts);
+        }
+      });
     }
 
     /**

@@ -70,6 +70,13 @@ describe('items', () => {
     expect(listBox.childNodes[0].disabled).to.be.true;
   });
 
+  it('should set class name on the rendered item', async () => {
+    select.items = [{ label: 'Option 1', value: 'value-1', className: 'red' }];
+    await nextUpdate(select);
+    expect(listBox.childNodes).to.have.lengthOf(1);
+    expect(listBox.childNodes[0].getAttribute('class')).to.equal('red');
+  });
+
   describe('renderer', () => {
     beforeEach(async () => {
       select.renderer = (root) => {

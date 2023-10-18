@@ -14,6 +14,7 @@ export interface ContextMenuItem {
   checked?: boolean;
   keepOpen?: boolean;
   theme?: string[] | string;
+  className?: string;
   children?: ContextMenuItem[];
 }
 
@@ -31,7 +32,7 @@ export declare class ItemsMixinClass {
    *
    * ```javascript
    * contextMenu.items = [
-   *   { text: 'Menu Item 1', theme: 'primary', children:
+   *   { text: 'Menu Item 1', theme: 'primary', className: 'first', children:
    *     [
    *       { text: 'Menu Item 1-1', checked: true, keepOpen: true },
    *       { text: 'Menu Item 1-2' }
@@ -44,7 +45,7 @@ export declare class ItemsMixinClass {
    *       { text: 'Menu Item 2-2', disabled: true }
    *     ]
    *   },
-   *   { text: 'Menu Item 3', disabled: true }
+   *   { text: 'Menu Item 3', disabled: true, className: 'last' }
    * ];
    * ```
    */

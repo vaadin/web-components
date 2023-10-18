@@ -138,8 +138,9 @@ class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
        * menubar.items = [
        *   {
        *     text: 'File',
+       *     className: 'file',
        *     children: [
-       *       {text: 'Open'}
+       *       {text: 'Open', className: 'file open'}
        *       {text: 'Auto Save', checked: true},
        *     ]
        *   },

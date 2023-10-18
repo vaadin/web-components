@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "24.3.0-alpha1",
+  "version": "24.3.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -39,12 +39,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "24.3.0-alpha1",
-    "@vaadin/component-base": "24.3.0-alpha1"
+    "@vaadin/a11y-base": "24.3.0-alpha5",
+    "@vaadin/component-base": "24.3.0-alpha5"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.5.0",
+    "@vaadin/testing-helpers": "^0.6.0",
     "sinon": "^13.0.2"
   },
   "cvdlName": "vaadin-board",

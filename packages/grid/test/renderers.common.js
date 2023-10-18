@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isIOS, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
 
@@ -247,6 +247,53 @@ describe('renderers', () => {
       column.headerRenderer = (_root, _column) => {};
 
       expect(headerCell._content.textContent).to.be.empty;
+    });
+
+    it('should apply an update to hidden column header', async () => {
+      // Hide the column
+      column.hidden = true;
+      // Change the renderer
+      column.headerRenderer = (root) => {
+        root.textContent = 'foo';
+      };
+      await nextFrame();
+      // Unhide the column
+      column.hidden = false;
+      await nextFrame();
+
+      // Expect the header to be updated
+      expect(headerCell._content.textContent).to.eql('foo');
+    });
+
+    it('should apply updates to hidden column headers', async () => {
+      // Add another column
+      const newColumn = document.createElement('vaadin-grid-column');
+      newColumn.headerRenderer = (root) => {
+        root.textContent = 'header2';
+      };
+      grid.appendChild(newColumn);
+
+      // Hide both columns
+      column.hidden = true;
+      newColumn.hidden = true;
+
+      // Change the renderer of both columns
+      column.headerRenderer = (root) => {
+        root.textContent = 'foo';
+      };
+      newColumn.headerRenderer = (root) => {
+        root.textContent = 'bar';
+      };
+      await nextFrame();
+
+      // Unhide both columns
+      column.hidden = false;
+      newColumn.hidden = false;
+      await nextFrame();
+
+      // Expect both headers to be updated
+      expect(headerCell._content.textContent).to.eql('foo');
+      expect(getHeaderCell(grid, 1)._content.textContent).to.eql('bar');
     });
   });
 

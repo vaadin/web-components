@@ -13,7 +13,7 @@ const TODAY_DATE = formatDateISO(new Date());
 const YESTERDAY_DATE = formatDateISO(new Date(Date.now() - 3600 * 1000 * 24));
 
 describe('value commit', () => {
-  let datePicker, valueChangedSpy, validateSpy, changeSpy;
+  let datePicker, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy;
 
   function expectNoValueCommit() {
     expect(valueChangedSpy).to.be.not.called;
@@ -26,14 +26,25 @@ describe('value commit', () => {
     // TODO: Optimize the number of validation runs.
     expect(validateSpy).to.be.called;
     expect(validateSpy.firstCall).to.be.calledAfter(valueChangedSpy.firstCall);
+    expect(unparsableChangeSpy).to.be.not.called;
     expect(changeSpy).to.be.calledOnce;
     expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
     expect(datePicker.value).to.equal(value);
   }
 
+  function expectUnparsableValueCommit() {
+    expect(valueChangedSpy).to.be.not.called;
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.calledOnce;
+    expect(unparsableChangeSpy).to.be.calledAfter(validateSpy);
+  }
+
   function expectValidationOnly() {
     expect(valueChangedSpy).to.be.not.called;
-    expect(validateSpy).to.be.calledOnce;
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
     expect(changeSpy).to.be.not.called;
   }
 
@@ -48,6 +59,9 @@ describe('value commit', () => {
     changeSpy = sinon.spy().named('changeSpy');
     datePicker.addEventListener('change', changeSpy);
 
+    unparsableChangeSpy = sinon.spy().named('unparsableChangeSpy');
+    datePicker.addEventListener('unparsable-change', unparsableChangeSpy);
+
     datePicker.focus();
   });
 
@@ -57,9 +71,9 @@ describe('value commit', () => {
       expectValidationOnly();
     });
 
-    it('should not commit but validate on Enter', async () => {
+    it('should not commit on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValidationOnly();
+      expectNoValueCommit();
     });
 
     it('should not commit on Escape', async () => {
@@ -143,6 +157,24 @@ describe('value commit', () => {
         expectValueCommit('');
       });
     });
+
+    describe('value set programmatically', () => {
+      beforeEach(() => {
+        datePicker.value = TODAY_DATE;
+        valueChangedSpy.resetHistory();
+        validateSpy.resetHistory();
+      });
+
+      it('should not commit but validate on blur', () => {
+        datePicker.blur();
+        expectValidationOnly();
+      });
+
+      it('should not commit on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectNoValueCommit();
+      });
+    });
   });
 
   describe('unparsable input entered', () => {
@@ -151,15 +183,15 @@ describe('value commit', () => {
       await waitForOverlayRender();
     });
 
-    it('should not commit but validate on Enter', async () => {
+    it('should commit as unparsable value change on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(datePicker.inputElement.value).to.equal('foo');
     });
 
-    it('should not commit but validate on close with outside click', () => {
+    it('should commit as unparsable value change on close with outside click', () => {
       outsideClick();
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(datePicker.inputElement.value).to.equal('foo');
     });
 
@@ -176,6 +208,7 @@ describe('value commit', () => {
       await sendKeys({ press: 'Enter' });
       await waitForOverlayRender();
       validateSpy.resetHistory();
+      unparsableChangeSpy.resetHistory();
     });
 
     describe('input cleared with Backspace', () => {
@@ -184,14 +217,37 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should not commit but validate on Enter', async () => {
+      it('should commit as unparsable value change on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
 
-      it('should not commit but validate on outside click', () => {
+      it('should commit as unparsable value change on outside click', () => {
         outsideClick();
-        expectValidationOnly();
+        expectUnparsableValueCommit();
+      });
+    });
+
+    describe('unparsable input changed', () => {
+      beforeEach(async () => {
+        await sendKeys({ type: 'bar' });
+        await waitForOverlayRender();
+      });
+
+      it('should commit as unparsable value change on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        expectUnparsableValueCommit();
+      });
+
+      it('should commit as unparsable value change on close with outside click', () => {
+        outsideClick();
+        expectUnparsableValueCommit();
+      });
+
+      it('should clear and commit as unparsable value change on close with Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+        expectUnparsableValueCommit();
+        expect(datePicker.inputElement.value).to.equal('');
       });
     });
   });
@@ -300,9 +356,9 @@ describe('value commit', () => {
         expectValidationOnly();
       });
 
-      it('should not commit but validate on Enter', async () => {
+      it('should not commit on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectNoValueCommit();
       });
 
       it('should not commit on Escape', async () => {

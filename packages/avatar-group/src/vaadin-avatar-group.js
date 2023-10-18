@@ -11,6 +11,7 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -145,7 +146,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
        * The items objects allow to configure [`name`](#/elements/vaadin-avatar#property-name),
        * [`abbr`](#/elements/vaadin-avatar#property-abbr), [`img`](#/elements/vaadin-avatar#property-img)
        * and [`colorIndex`](#/elements/vaadin-avatar#property-colorIndex) properties on the
-       * stamped avatars.
+       * stamped avatars, and set `className` to provide CSS class names.
        *
        * #### Example
        *
@@ -153,11 +154,13 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
        * group.items = [
        *   {
        *     name: 'User name',
-       *     img: 'url-to-image.png'
+       *     img: 'url-to-image.png',
+       *     className: 'even'
        *   },
        *   {
        *     abbr: 'JD',
-       *     colorIndex: 1
+       *     colorIndex: 1,
+       *     className: 'odd'
        *   },
        * ];
        * ```
@@ -368,6 +371,9 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
     avatar.abbr = item.abbr;
     avatar.img = item.img;
     avatar.colorIndex = item.colorIndex;
+    if (item.className) {
+      avatar.className = item.className;
+    }
 
     if (item.name) {
       const text = document.createTextNode(item.name);
@@ -432,6 +438,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
                 .img="${item.img}"
                 .colorIndex="${item.colorIndex}"
                 .i18n="${this.i18n}"
+                class="${ifDefined(item.className)}"
                 with-tooltip
               ></vaadin-avatar>
             `,

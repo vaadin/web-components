@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
 
 describe('value commit', () => {
-  let integerField, valueChangedSpy, validateSpy, changeSpy;
+  let integerField, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy;
 
   function expectNoValueCommit() {
     expect(valueChangedSpy).to.be.not.called;
@@ -21,6 +21,15 @@ describe('value commit', () => {
     expect(changeSpy).to.be.calledOnce;
     expect(changeSpy.firstCall).to.be.calledAfter(validateSpy.firstCall);
     expect(integerField.value).to.equal(value);
+  }
+
+  function expectUnparsableValueCommit() {
+    expect(valueChangedSpy).to.be.not.called;
+    // TODO: Optimize the number of validation runs.
+    expect(validateSpy).to.be.called;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.calledOnce;
+    expect(unparsableChangeSpy).to.be.calledAfter(validateSpy);
   }
 
   function expectValidationOnly() {
@@ -39,6 +48,9 @@ describe('value commit', () => {
 
     changeSpy = sinon.spy().named('changeSpy');
     integerField.addEventListener('change', changeSpy);
+
+    unparsableChangeSpy = sinon.spy().named('unparsableChangeSpy');
+    integerField.addEventListener('unparsable-change', unparsableChangeSpy);
 
     integerField.focus();
   });
@@ -112,16 +124,15 @@ describe('value commit', () => {
       expectNoValueCommit();
     });
 
-    it('should not commit but validate on blur', () => {
+    it('should commit as unparsable value change on blur', () => {
       integerField.blur();
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(integerField.inputElement.validity.badInput).to.be.true;
     });
 
-    // FIXME: https://github.com/vaadin/web-components/issues/5113
-    it.skip('should not commit but validate on Enter', async () => {
+    it('should commit as unparsable value change on Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValidationOnly();
+      expectUnparsableValueCommit();
       expect(integerField.inputElement.validity.badInput).to.be.true;
     });
   });
@@ -129,27 +140,25 @@ describe('value commit', () => {
   describe('unparsable input committed', () => {
     beforeEach(async () => {
       await sendKeys({ type: '-' });
-      integerField.blur();
+      await sendKeys({ press: 'Enter' });
       validateSpy.resetHistory();
+      unparsableChangeSpy.resetHistory();
     });
 
     describe('input cleared with Backspace', () => {
       beforeEach(async () => {
-        integerField.focus();
-        integerField.inputElement.select();
         await sendKeys({ press: 'Backspace' });
         validateSpy.resetHistory();
       });
 
-      it('should not commit but validate on blur', () => {
+      it('should commit as unparsable value change on blur', () => {
         integerField.blur();
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
 
-      // FIXME: https://github.com/vaadin/web-components/issues/5113
-      it.skip('should not commit but validate on Enter', async () => {
+      it('should commit as unparsable value change on Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValidationOnly();
+        expectUnparsableValueCommit();
       });
     });
   });
