@@ -77,7 +77,7 @@ const multiSelectComboBox = css`
   }
 
   ::slotted([slot='chip'][focused]) {
-    background-color: var(--lumo-primary-color);
+    background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     color: var(--lumo-primary-contrast-color);
   }
 

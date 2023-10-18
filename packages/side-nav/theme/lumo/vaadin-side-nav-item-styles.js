@@ -115,7 +115,7 @@ export const sideNavItemStyles = css`
 
   :host([current]) [part='content'] {
     background-color: var(--lumo-primary-color-10pct);
-    color: var(--lumo-primary-text-color);
+    color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     border-radius: var(--lumo-border-radius-m);
   }
 `;
