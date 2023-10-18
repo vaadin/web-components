@@ -62,3 +62,5 @@ class GridPro extends InlineEditingMixin(Grid) {
 defineCustomElement(GridPro);
 
 export { GridPro };
+
+// Change
