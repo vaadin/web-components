@@ -10,20 +10,11 @@ import '../typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const requiredField = css`
-  :host {
-    /* Label properties */
-    --_label-color-default: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
-    --_label-color-focused: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
-    --_label-color-hovered: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
-    --_label-font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
-    --_label-font-weight: var(--vaadin-input-field-label-font-weight, 500);
-  }
-
   [part='label'] {
     align-self: flex-start;
-    color: var(--_label-color-default);
-    font-weight: var(--_label-font-weight);
-    font-size: var(--_label-font-size);
+    color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+    font-weight: var(--vaadin-input-field-label-font-weight, 500);
+    font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
     line-height: 1;
@@ -42,17 +33,17 @@ const requiredField = css`
   }
 
   :host([focused]:not([readonly])) [part='label'] {
-    color: var(--_label-color-focused);
+    color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
   }
 
   :host(:hover:not([readonly]):not([focused])) [part='label'] {
-    color: var(--_label-color-hovered);
+    color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
   }
 
   /* Touch device adjustment */
   @media (pointer: coarse) {
     :host(:hover:not([readonly]):not([focused])) [part='label'] {
-      color: var(--_label-color-default);
+      color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
     }
   }
 
