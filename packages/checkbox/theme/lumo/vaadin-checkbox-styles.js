@@ -28,8 +28,10 @@ registerStyles(
     }
 
     :host([has-label]) ::slotted(label) {
-      padding-block: var(--vaadin-checkbox-label-padding-v, var(--lumo-space-xs));
-      padding-inline: var(--vaadin-checkbox-label-padding-h, var(--lumo-space-xs) var(--lumo-space-s));
+      padding: var(
+        --vaadin-checkbox-label-padding,
+        var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
+      );
     }
 
     [part='checkbox'] {

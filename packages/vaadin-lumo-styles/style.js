@@ -41,8 +41,7 @@ const globals = css`
     --vaadin-checkbox-checkmark-size: calc(var(--vaadin-checkbox-size) + 2px);
     --vaadin-checkbox-label-color: var(--lumo-body-text-color);
     --vaadin-checkbox-label-font-size: var(--lumo-font-size-m);
-    --vaadin-checkbox-label-padding-h: var(--lumo-space-xs) var(--lumo-space-s);
-    --vaadin-checkbox-label-padding-v: var(--lumo-space-xs);
+    --vaadin-checkbox-label-padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
     --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
