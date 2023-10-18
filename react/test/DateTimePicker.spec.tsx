@@ -17,4 +17,16 @@ describe('DatePicker', () => {
 
     expect(element).to.have.value(value);
   });
+
+  it('should not override value set on DOM element on rerender', () => {
+    const { container, rerender } = render(<DateTimePicker label="Foo" />);
+
+    const element = container.querySelector('vaadin-date-time-picker');
+    expect(element).to.exist;
+    element!.value = '2020-01-01T15:00';
+    expect(element).to.have.value('2020-01-01T15:00');
+
+    rerender(<DateTimePicker label="Foo" />);
+    expect(element).to.have.value('2020-01-01T15:00');
+  });
 });

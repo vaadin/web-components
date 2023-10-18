@@ -14,7 +14,9 @@ export default function createComponentWithOrderedProps<P extends {}, E extends 
     }
 
     for (const name of names) {
-      orderedProps[name] = props[name];
+      if (props.hasOwnProperty(name)) {
+        orderedProps[name] = props[name];
+      }
     }
 
     orderedProps.ref = ref;
