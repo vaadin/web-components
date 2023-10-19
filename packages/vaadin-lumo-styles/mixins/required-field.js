@@ -79,9 +79,10 @@ const requiredField = css`
 
   [part='error-message'] {
     margin-left: calc(var(--lumo-border-radius-m) / 4);
-    font-size: var(--lumo-font-size-xs);
+    font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
     line-height: var(--lumo-line-height-xs);
-    color: var(--lumo-error-text-color);
+    font-weight: var(--vaadin-input-field-error-font-weight, 400);
+    color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
     will-change: max-height;
     transition: 0.4s max-height;
     max-height: 5em;
