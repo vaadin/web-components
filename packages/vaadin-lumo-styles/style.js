@@ -31,6 +31,26 @@ const style = css`
  */
 const globals = css`
   html {
+    /* Button */
+    --vaadin-button-background: var(--lumo-contrast-5pct);
+    --vaadin-button-border: none;
+    --vaadin-button-border-radius: var(--lumo-border-radius-m);
+    --vaadin-button-font-size: var(--lumo-font-size-m);
+    --vaadin-button-font-weight: 500;
+    --vaadin-button-height: var(--lumo-size-m);
+    --vaadin-button-margin: var(--lumo-space-xs) 0;
+    --vaadin-button-min-width: calc(var(--vaadin-button-height) * 2);
+    --vaadin-button-padding-h: calc(var(--vaadin-button-height) / 3 + var(--lumo-border-radius-m) / 2);
+    --vaadin-button-padding-v: 0;
+    --vaadin-button-text-color: var(--lumo-primary-text-color);
+    --vaadin-button-primary-background: var(--lumo-primary-color);
+    --vaadin-button-primary-border: none;
+    --vaadin-button-primary-font-weight: 600;
+    --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
+    --vaadin-button-tertiary-background: transparent !important;
+    --vaadin-button-tertiary-text-color: var(--lumo-primary-text-color);
+    --vaadin-button-tertiary-font-weight: 500;
+    --vaadin-button-tertiary-padding: 0 calc(var(--vaadin-button-height) / 6);
     /* Checkbox */
     --vaadin-checkbox-background: var(--lumo-contrast-20pct);
     --vaadin-checkbox-background-hover: var(--lumo-contrast-30pct);

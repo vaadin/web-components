@@ -9,13 +9,20 @@
   </head>
 
   <body>
-    <vaadin-notification position="middle" duration="0" theme="success"></vaadin-notification>
+    <vaadin-notification position="middle" duration="0" theme="primary"></vaadin-notification>
 
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/notification';
 
       const notification = document.querySelector('vaadin-notification');
-      notification.renderer = (root) => (root.textContent = 'Financial report generated');
+      notification.renderer = (root) => {
+        root.innerHTML = `
+          Operation completed
+          <vaadin-button theme="primary">Undo</vaadin-button>
+          <vaadin-button>Close</vaadin-button>
+        `
+      };
       notification.open();
     </script>
   </body>
