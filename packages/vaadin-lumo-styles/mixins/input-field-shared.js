@@ -37,10 +37,6 @@ const inputField = css`
     align-items: center;
   }
 
-  :host([focused]:not([readonly])) [part='label'] {
-    color: var(--lumo-primary-text-color);
-  }
-
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
     -webkit-mask-image: none;
     mask-image: none;
@@ -51,20 +47,12 @@ const inputField = css`
   }
 
   /* Hover */
-  :host(:hover:not([readonly]):not([focused])) [part='label'] {
-    color: var(--lumo-body-text-color);
-  }
-
   :host(:hover:not([readonly]):not([focused])) [part='input-field']::after {
     opacity: 0.1;
   }
 
   /* Touch device adjustment */
   @media (pointer: coarse) {
-    :host(:hover:not([readonly]):not([focused])) [part='label'] {
-      color: var(--lumo-secondary-text-color);
-    }
-
     :host(:hover:not([readonly]):not([focused])) [part='input-field']::after {
       opacity: 0;
     }

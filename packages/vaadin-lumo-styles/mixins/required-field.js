@@ -12,15 +12,15 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const requiredField = css`
   [part='label'] {
     align-self: flex-start;
-    color: var(--lumo-secondary-text-color);
-    font-weight: 500;
-    font-size: var(--lumo-font-size-s);
+    color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+    font-weight: var(--vaadin-input-field-label-font-weight, 500);
+    font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
     line-height: 1;
     padding-right: 1em;
     padding-bottom: 0.5em;
-    /* As a workaround for diacritics being cut off, add a top padding and a 
+    /* As a workaround for diacritics being cut off, add a top padding and a
     negative margin to compensate */
     padding-top: 0.25em;
     margin-top: -0.25em;
@@ -30,6 +30,21 @@ const requiredField = css`
     position: relative;
     max-width: 100%;
     box-sizing: border-box;
+  }
+
+  :host([focused]:not([readonly])) [part='label'] {
+    color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
+  }
+
+  :host(:hover:not([readonly]):not([focused])) [part='label'] {
+    color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+  }
+
+  /* Touch device adjustment */
+  @media (pointer: coarse) {
+    :host(:hover:not([readonly]):not([focused])) [part='label'] {
+      color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+    }
   }
 
   :host([has-label])::before {

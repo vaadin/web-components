@@ -78,6 +78,11 @@ const globals = css`
     --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
     --vaadin-focus-ring-color: var(--lumo-primary-color-50pct);
     --vaadin-focus-ring-width: 2px;
+    --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
+    --vaadin-input-field-focused-label-color: var(--lumo-primary-text-color);
+    --vaadin-input-field-hovered-label-color: var(--lumo-body-text-color);
+    --vaadin-input-field-label-font-size: var(--lumo-font-size-s);
+    --vaadin-input-field-label-font-weight: 500;
     --vaadin-text-input-field-height: var(--lumo-size-m);
     --vaadin-text-input-field-placeholder-color: var(--lumo-secondary-text-color);
     --vaadin-text-input-field-readonly-border: 1px dashed var(--lumo-contrast-30pct);
