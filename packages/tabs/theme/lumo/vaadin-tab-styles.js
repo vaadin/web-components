@@ -33,6 +33,8 @@ registerStyles(
       user-select: none;
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+      --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+      --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     }
 
     :host(:not([orientation='vertical'])) {
@@ -64,12 +66,12 @@ registerStyles(
     }
 
     :host([selected]) {
-      color: var(--lumo-primary-text-color);
+      color: var(--_selection-color-text);
       transition: 0.6s color;
     }
 
     :host([active]:not([selected])) {
-      color: var(--lumo-primary-text-color);
+      color: var(--_selection-color-text);
       transition-duration: 0.1s;
     }
 
@@ -92,7 +94,7 @@ registerStyles(
 
     :host([selected])::before,
     :host([selected])::after {
-      background-color: var(--lumo-primary-color);
+      background-color: var(--_selection-color);
     }
 
     :host([orientation='vertical'])::before,
@@ -107,7 +109,7 @@ registerStyles(
     }
 
     :host::after {
-      box-shadow: 0 0 0 4px var(--lumo-primary-color);
+      box-shadow: 0 0 0 4px var(--_selection-color);
       opacity: 0.15;
       transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
     }

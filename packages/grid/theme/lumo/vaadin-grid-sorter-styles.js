@@ -34,7 +34,7 @@ registerStyles(
     }
 
     :host([direction]) {
-      color: var(--lumo-primary-text-color);
+      color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     }
 
     [part='order'] {

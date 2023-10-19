@@ -25,6 +25,7 @@ registerStyles(
       --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+      --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     }
 
     :host([has-label]) ::slotted(label) {
@@ -52,7 +53,7 @@ registerStyles(
 
     :host([indeterminate]) [part='checkbox'],
     :host([checked]) [part='checkbox'] {
-      background-color: var(--lumo-primary-color);
+      background-color: var(--_selection-color);
     }
 
     /* Checkmark */

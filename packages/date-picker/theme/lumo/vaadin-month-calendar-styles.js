@@ -19,6 +19,8 @@ registerStyles(
       padding: 0 var(--lumo-space-xs);
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+      --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+      --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     }
 
     /* Month header */
@@ -78,7 +80,7 @@ registerStyles(
     /* Today date */
 
     [part~='date'][part~='today'] {
-      color: var(--lumo-primary-text-color);
+      color: var(--_selection-color-text);
     }
 
     /* Focused date */
@@ -122,7 +124,7 @@ registerStyles(
     }
 
     [part~='date'][part~='selected']::before {
-      background-color: var(--lumo-primary-color);
+      background-color: var(--_selection-color);
     }
 
     [part~='date'][part~='disabled'] {
