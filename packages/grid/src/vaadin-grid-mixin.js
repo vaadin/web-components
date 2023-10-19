@@ -254,7 +254,6 @@ export const GridMixin = (superClass) =>
 
       new ResizeObserver(() =>
         setTimeout(() => {
-          this.__updateFooterPositioning();
           this.__updateColumnsBodyContentHidden();
           this.__tryToRecalculateColumnWidthsIfPending();
         }),
@@ -876,23 +875,9 @@ export const GridMixin = (superClass) =>
       this._resetKeyboardNavigation();
       this._a11yUpdateHeaderRows();
       this._a11yUpdateFooterRows();
-      this.__updateFooterPositioning();
       this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
-    }
-
-    /** @private */
-    __updateFooterPositioning() {
-      // TODO: fixed in Firefox 99, remove when we can drop Firefox ESR 91 support
-      if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/u)[1]) < 99) {
-        // Sticky (or translated) footer in a flexbox host doesn't get included in
-        // the scroll height calculation on FF. This is a workaround for the issue.
-        this.$.items.style.paddingBottom = 0;
-        if (!this.allRowsVisible) {
-          this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
-        }
-      }
     }
 
     /**
@@ -930,7 +915,6 @@ export const GridMixin = (superClass) =>
     /** @private */
     _resizeHandler() {
       this._updateDetailsCellHeights();
-      this.__updateFooterPositioning();
       this.__updateHorizontalScrollPosition();
     }
 
