@@ -43,6 +43,15 @@ const globals = css`
     --vaadin-checkbox-label-font-size: var(--lumo-font-size-m);
     --vaadin-checkbox-label-padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
+    /* Radio button */
+    --vaadin-radio-button-background: var(--lumo-contrast-20pct);
+    --vaadin-radio-button-background-hover: var(--lumo-contrast-30pct);
+    --vaadin-radio-button-dot-color: var(--lumo-primary-contrast-color);
+    --vaadin-radio-button-dot-size: 3px;
+    --vaadin-radio-button-label-color: var(--lumo-body-text-color);
+    --vaadin-radio-button-label-font-size: var(--lumo-font-size-m);
+    --vaadin-radio-button-label-padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs)
+      var(--lumo-space-xs);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
     --vaadin-selection-color: var(--lumo-primary-color);
     --vaadin-selection-color-text: var(--lumo-primary-text-color);

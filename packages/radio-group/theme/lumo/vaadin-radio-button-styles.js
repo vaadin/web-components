@@ -9,8 +9,8 @@ registerStyles(
   'vaadin-radio-button',
   css`
     :host {
-      color: var(--lumo-body-text-color);
-      font-size: var(--lumo-font-size-m);
+      color: var(--vaadin-radio-button-label-color, var(--lumo-body-text-color));
+      font-size: var(--vaadin-radio-button-label-font-size, var(--lumo-font-size-m));
       font-family: var(--lumo-font-family);
       line-height: var(--lumo-line-height-s);
       -webkit-font-smoothing: antialiased;
@@ -28,8 +28,10 @@ registerStyles(
     }
 
     :host([has-label]) ::slotted(label) {
-      padding-block: var(--lumo-space-xs);
-      padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
+      padding: var(
+        --vaadin-radio-button-label-padding,
+        var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
+      );
     }
 
     [part='radio'] {
@@ -38,7 +40,7 @@ registerStyles(
       margin: var(--lumo-space-xs);
       position: relative;
       border-radius: 50%;
-      background-color: var(--lumo-contrast-20pct);
+      background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       will-change: transform;
       cursor: var(--lumo-clickable-cursor);
@@ -67,7 +69,8 @@ registerStyles(
       pointer-events: none;
       width: 0;
       height: 0;
-      border: 3px solid var(--lumo-primary-contrast-color);
+      border: var(--vaadin-radio-button-dot-size, 3px) solid
+        var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
       border-radius: 50%;
       position: absolute;
       top: 50%;
@@ -91,7 +94,7 @@ registerStyles(
     }
 
     :host(:not([checked]):not([disabled]):hover) [part='radio'] {
-      background-color: var(--lumo-contrast-30pct);
+      background: var(--vaadin-radio-button-background-hover, var(--lumo-contrast-30pct));
     }
 
     :host([active]) [part='radio'] {
