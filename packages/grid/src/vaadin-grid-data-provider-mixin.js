@@ -140,7 +140,7 @@ export const DataProviderMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems, itemIdPath)'];
+      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems)'];
     }
 
     constructor() {
