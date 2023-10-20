@@ -13,7 +13,10 @@ import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { radioButtonStyles } from './vaadin-radio-button-styles.js';
+
+registerStyles('vaadin-radio-button', radioButtonStyles, { moduleId: 'vaadin-radio-button-styles' });
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
@@ -68,75 +71,6 @@ class RadioButton extends LabelMixin(
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .vaadin-radio-button-container {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          align-items: baseline;
-        }
-
-        [part='radio'],
-        ::slotted(input),
-        ::slotted(label) {
-          grid-row: 1;
-        }
-
-        [part='radio'],
-        ::slotted(input) {
-          grid-column: 1;
-        }
-
-        [part='radio'] {
-          width: var(--vaadin-radio-button-size, 1em);
-          height: var(--vaadin-radio-button-size, 1em);
-          --_input-border-width: var(--vaadin-input-field-border-width, 0);
-          --_input-border-color: var(--vaadin-input-field-border-color, transparent);
-          box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
-        }
-
-        [part='radio']::before {
-          display: block;
-          content: '\\202F';
-          line-height: var(--vaadin-radio-button-size, 1em);
-          contain: paint;
-        }
-
-        /* visually hidden */
-        ::slotted(input) {
-          opacity: 0;
-          cursor: inherit;
-          margin: 0;
-          align-self: stretch;
-          -webkit-appearance: none;
-          width: initial;
-          height: initial;
-        }
-
-        @media (forced-colors: active) {
-          [part='radio'] {
-            outline: 1px solid;
-            outline-offset: -1px;
-          }
-          :host([focused]) [part='radio'] {
-            outline-width: 2px;
-          }
-          :host([disabled]) [part='radio'] {
-            outline-color: GrayText;
-          }
-        }
-      </style>
       <div class="vaadin-radio-button-container">
         <div part="radio" aria-hidden="true"></div>
         <slot name="input"></slot>
