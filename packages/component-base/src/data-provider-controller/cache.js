@@ -17,13 +17,6 @@ export class Cache {
   context;
 
   /**
-   * The number of items.
-   *
-   * @type {number}
-   */
-  size = 0;
-
-  /**
    * The number of items to display per page.
    *
    * @type {number}
@@ -57,6 +50,14 @@ export class Cache {
    * @private
    */
   __subCacheByIndex = {};
+
+  /**
+   * The number of items.
+   *
+   * @type {number}
+   * @private
+   */
+  __size = 0;
 
   /**
    * The total number of items, including items from expanded sub-caches.
@@ -137,6 +138,46 @@ export class Cache {
   }
 
   /**
+   * The number of items.
+   *
+   * @type {number}
+   * @private
+   */
+  get size() {
+    return this.__size;
+  }
+
+  /**
+   * Sets the number of items.
+   *
+   * @type {number}
+   * @private
+   */
+  set size(size) {
+    const oldSize = this.__size;
+    if (oldSize === size) {
+      return;
+    }
+
+    this.__size = size;
+
+    if (this.context.placeholder !== undefined) {
+      this.items.length = size;
+      for (let i = 0; i < size; i++) {
+        // eslint-disable-next-line logical-assignment-operators
+        this.items[i] = this.items[i] || this.context.placeholder;
+      }
+    }
+
+    Object.keys(this.pendingRequests).forEach((page) => {
+      const startIndex = parseInt(page) * this.pageSize;
+      if (startIndex >= this.size) {
+        delete this.pendingRequests[page];
+      }
+    });
+  }
+
+  /**
    * Recalculates the flattened size for the cache and its descendant caches recursively.
    */
   recalculateFlatSize() {
@@ -160,7 +201,10 @@ export class Cache {
   setPage(page, items) {
     const startIndex = page * this.pageSize;
     items.forEach((item, i) => {
-      this.items[startIndex + i] = item;
+      const itemIndex = startIndex + i;
+      if (itemIndex < this.size) {
+        this.items[itemIndex] = item;
+      }
     });
   }
 

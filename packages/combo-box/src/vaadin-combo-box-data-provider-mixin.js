@@ -3,6 +3,8 @@
  * Copyright (c) 2015 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
@@ -55,13 +57,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         },
 
         /** @private */
-        _pendingRequests: {
-          value: () => {
-            return {};
-          },
-        },
-
-        /** @private */
         __placeHolder: {
           value: new ComboBoxPlaceholder(),
         },
@@ -81,9 +76,28 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       ];
     }
 
+    constructor() {
+      super();
+
+      /** @type {DataProviderController} */
+      this._dataProviderController = new DataProviderController(this, {
+        size: this.size,
+        pageSize: this.pageSize,
+        getItemId: (item) => get(this.itemIdPath, item),
+        placeholder: this.__placeHolder,
+        dataProvider: this.dataProvider ? this.dataProvider.bind(this) : null,
+        dataProviderParams: () => ({ filter: this.filter }),
+      });
+    }
+
     /** @protected */
     ready() {
       super.ready();
+
+      this._dataProviderController.addEventListener('page-requested', this.__onDataProviderPageRequested.bind(this));
+      this._dataProviderController.addEventListener('page-received', this.__onDataProviderPageReceived.bind(this));
+      this._dataProviderController.addEventListener('page-loaded', this.__onDataProviderPageLoaded.bind(this));
+
       this._scroller.addEventListener('index-requested', (e) => {
         if (!this._shouldFetchData()) {
           return;
@@ -91,10 +105,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
         const index = e.detail.index;
         if (index !== undefined) {
-          const page = this._getPageForIndex(index);
-          if (this._shouldLoadPage(page)) {
-            this._loadPage(page);
-          }
+          this._dataProviderController.ensureFlatIndexLoaded(index);
         }
       });
     }
@@ -109,15 +120,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (this.__previousDataProviderFilter !== filter) {
         this.__previousDataProviderFilter = filter;
 
-        this._pendingRequests = {};
-        // Immediately mark as loading if this refresh leads to re-fetching pages
-        // This prevents some issues with the properties below triggering
-        // observers that also rely on the loading state
-        this.loading = this._shouldFetchData();
-        // Reset size and internal loading state
+        this._keepOverlayOpened = true;
         this.size = undefined;
-
         this.clearCache();
+        this._keepOverlayOpened = false;
       }
     }
 
@@ -136,74 +142,30 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
-      if (opened && this._shouldLoadPage(0)) {
-        this._loadPage(0);
+      if (opened && !this._dataProviderController.hasData) {
+        this._dataProviderController.loadFirstPage();
       }
     }
 
     /** @private */
-    _shouldLoadPage(page) {
-      if (!this.filteredItems || this._forceNextRequest) {
-        this._forceNextRequest = false;
-        return true;
-      }
-
-      const loadedItem = this.filteredItems[page * this.pageSize];
-      if (loadedItem !== undefined) {
-        return loadedItem instanceof ComboBoxPlaceholder;
-      }
-      return this.size === undefined;
-    }
-
-    /** @private */
-    _loadPage(page) {
-      // Make sure same page isn't requested multiple times.
-      if (this._pendingRequests[page] || !this.dataProvider) {
-        return;
-      }
-
-      const params = {
-        page,
-        pageSize: this.pageSize,
-        filter: this.filter,
-      };
-
-      const callback = (items, size) => {
-        if (this._pendingRequests[page] !== callback) {
-          return;
-        }
-
-        const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
-        filteredItems.splice(params.page * params.pageSize, items.length, ...items);
-        this.filteredItems = filteredItems;
-
-        if (!this.opened && !this._isInputFocused()) {
-          this._commitValue();
-        }
-
-        if (size !== undefined) {
-          this.size = size;
-        }
-
-        delete this._pendingRequests[page];
-
-        if (Object.keys(this._pendingRequests).length === 0) {
-          this.loading = false;
-        }
-      };
-
-      this._pendingRequests[page] = callback;
-      // Set the `loading` flag only after marking the request as pending
-      // to prevent the same page from getting requested multiple times
-      // as a result of `__loadingChanged` in the scroller which requests
-      // a virtualizer update which in turn may trigger a data provider page request.
+    __onDataProviderPageRequested() {
       this.loading = true;
-      this.dataProvider(params, callback);
     }
 
     /** @private */
-    _getPageForIndex(index) {
-      return Math.floor(index / this.pageSize);
+    __onDataProviderPageReceived() {
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    __onDataProviderPageLoaded() {
+      if (!this.opened && !this._isInputFocused()) {
+        this._commitValue();
+      }
+
+      if (!this._dataProviderController.isLoading()) {
+        this.loading = false;
+      }
     }
 
     /**
@@ -214,32 +176,74 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
-      this._pendingRequests = {};
-      const filteredItems = [];
-      for (let i = 0; i < (this.size || 0); i++) {
-        filteredItems.push(this.__placeHolder);
-      }
-      this.filteredItems = filteredItems;
+      this._dataProviderController.clearCache();
+
+      this.requestContentUpdate();
 
       if (this._shouldFetchData()) {
-        this._forceNextRequest = false;
-        this._loadPage(0);
-      } else {
-        this._forceNextRequest = true;
+        this._dataProviderController.loadFirstPage();
       }
     }
 
     /** @private */
     _sizeChanged(size = 0) {
-      const filteredItems = (this.filteredItems || []).slice(0, size);
-      for (let i = 0; i < size; i++) {
-        filteredItems[i] = filteredItems[i] !== undefined ? filteredItems[i] : this.__placeHolder;
+      const { rootCache } = this._dataProviderController;
+      // When the size update originates from the developer,
+      // sync the new size with the controller and trigger
+      // a content update to re-render the scroller.
+      if (rootCache.size !== size) {
+        rootCache.size = size;
+        this.requestContentUpdate();
       }
-      this.filteredItems = filteredItems;
+    }
 
-      // Cleans up the redundant pending requests for pages > size
-      // Refers to https://github.com/vaadin/vaadin-flow-components/issues/229
-      this._flushPendingRequests(size);
+    /**
+     * @private
+     * @override
+     */
+    _filteredItemsChanged(items) {
+      if (!this.dataProvider) {
+        return super._filteredItemsChanged(items);
+      }
+
+      const { rootCache } = this._dataProviderController;
+      // When the items update originates from the developer,
+      // sync the new items with the controller and trigger
+      // a content update to re-render the scroller.
+      if (rootCache.items !== items) {
+        rootCache.items = items;
+        this.requestContentUpdate();
+      }
+    }
+
+    /** @override */
+    requestContentUpdate() {
+      if (this.dataProvider) {
+        const { rootCache } = this._dataProviderController;
+
+        // Sync the controller's size with the component.
+        // They can be out of sync after, for example,
+        // the controller received new data.
+        if ((this.size || 0) !== rootCache.size) {
+          this.size = rootCache.size;
+        }
+
+        // Sync the controller's items with the component.
+        // They can be out of sync after, for example,
+        // the controller received new data.
+        if (this.filteredItems !== rootCache.items) {
+          this.filteredItems = rootCache.items;
+        }
+
+        // Sync the controller's loading state with the component.
+        this.loading = this._dataProviderController.isLoading();
+
+        // Set a copy of the controller's items as the dropdown items
+        // to trigger an update of the focused index in _setDropdownItems.
+        this._setDropdownItems([...this.filteredItems]);
+      }
+
+      super.requestContentUpdate();
     }
 
     /** @private */
@@ -248,6 +252,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         this.pageSize = oldPageSize;
         throw new Error('`pageSize` value must be an integer > 0');
       }
+
+      this._dataProviderController.setPageSize(pageSize);
       this.clearCache();
     }
 
@@ -257,6 +263,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         this.dataProvider = oldDataProvider;
       });
 
+      this._dataProviderController.setDataProvider(dataProvider);
       this.clearCache();
     }
 
@@ -265,8 +272,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (this.items !== undefined && this.dataProvider !== undefined) {
         restoreOldValueCallback();
         throw new Error('Using `items` and `dataProvider` together is not supported');
-      } else if (this.dataProvider && !this.filteredItems) {
-        this.filteredItems = [];
       }
     }
 
@@ -283,30 +288,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
               'instead of `value`',
           );
         }
-      }
-    }
-
-    /**
-     * This method cleans up the page callbacks which refers to the
-     * non-existing pages, i.e. which item indexes are greater than the
-     * changed size.
-     * This case is basically happens when:
-     * 1. Users scroll fast to the bottom and combo box generates the
-     * redundant page request/callback
-     * 2. Server side uses undefined size lazy loading and suddenly reaches
-     * the exact size which is on the range edge
-     * (for default page size = 50, it will be 100, 200, 300, ...).
-     * @param size the new size of items
-     * @private
-     */
-    _flushPendingRequests(size) {
-      if (this._pendingRequests) {
-        const lastPage = Math.ceil(size / this.pageSize);
-        Object.entries(this._pendingRequests).forEach(([page, callback]) => {
-          if (parseInt(page) >= lastPage) {
-            callback([], size);
-          }
-        });
       }
     }
   };

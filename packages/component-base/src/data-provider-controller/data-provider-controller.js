@@ -65,12 +65,27 @@ export class DataProviderController extends EventTarget {
    */
   rootCache;
 
-  constructor(host, { size, pageSize, isExpanded, getItemId, dataProvider, dataProviderParams }) {
+  /**
+   * Indicates whether any data has been loaded since the last cache clear.
+   *
+   * @type {boolean}
+   */
+  hasData = false;
+
+  /**
+   * A placeholder item that is used to indicate that the item is not loaded yet.
+   *
+   * @type {undefined | object}
+   */
+  placeholder;
+
+  constructor(host, { size, pageSize, isExpanded, getItemId, placeholder, dataProvider, dataProviderParams }) {
     super();
     this.host = host;
     this.pageSize = pageSize;
     this.getItemId = getItemId;
     this.isExpanded = isExpanded;
+    this.placeholder = placeholder;
     this.dataProvider = dataProvider;
     this.dataProviderParams = dataProviderParams;
     this.rootCache = this.__createRootCache(size);
@@ -87,6 +102,7 @@ export class DataProviderController extends EventTarget {
   get __cacheContext() {
     return {
       isExpanded: this.isExpanded,
+      placeholder: this.placeholder,
       // The controller instance is needed to ensure deprecated cache methods work.
       __controller: this,
     };
@@ -133,6 +149,7 @@ export class DataProviderController extends EventTarget {
    */
   clearCache() {
     this.rootCache = this.__createRootCache(this.rootCache.size);
+    this.hasData = false;
   }
 
   /**
@@ -187,7 +204,7 @@ export class DataProviderController extends EventTarget {
   ensureFlatIndexLoaded(flatIndex) {
     const { cache, page, item } = this.getFlatIndexContext(flatIndex);
 
-    if (!item) {
+    if (this.__isPlaceholder(item)) {
       this.__loadCachePage(cache, page);
     }
   }
@@ -202,7 +219,7 @@ export class DataProviderController extends EventTarget {
   ensureFlatIndexHierarchy(flatIndex) {
     const { cache, item, index } = this.getFlatIndexContext(flatIndex);
 
-    if (item && this.isExpanded(item) && !cache.getSubCache(index)) {
+    if (!this.__isPlaceholder(item) && this.isExpanded(item) && !cache.getSubCache(index)) {
       const subCache = cache.createSubCache(index);
       this.__loadCachePage(subCache, 0);
     }
@@ -251,6 +268,8 @@ export class DataProviderController extends EventTarget {
 
       this.recalculateFlatSize();
 
+      this.hasData = true;
+
       this.dispatchEvent(new CustomEvent('page-received'));
 
       delete cache.pendingRequests[page];
@@ -263,5 +282,10 @@ export class DataProviderController extends EventTarget {
     this.dispatchEvent(new CustomEvent('page-requested'));
 
     this.dataProvider(params, callback);
+  }
+
+  /** @private */
+  __isPlaceholder(item) {
+    return item === this.placeholder;
   }
 }

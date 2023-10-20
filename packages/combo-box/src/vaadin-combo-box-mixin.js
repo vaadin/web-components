@@ -280,7 +280,7 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
-        '_openedOrItemsChanged(opened, _dropdownItems, loading)',
+        '_openedOrItemsChanged(opened, _dropdownItems, loading, _keepOverlayOpened)',
         '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, _theme)',
       ];
     }
@@ -529,10 +529,10 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _openedOrItemsChanged(opened, items, loading) {
+    _openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = !!(opened && (loading || (items && items.length)));
+      this._overlayOpened = !!(opened && (keepOverlayOpened || loading || (items && items.length)));
     }
 
     /** @private */
@@ -1167,6 +1167,10 @@ export const ComboBoxMixin = (subclass) =>
       this._ensureItemsOrDataProvider(() => {
         this.items = oldItems;
       });
+
+      if (this.dataProvider) {
+        return;
+      }
 
       if (items) {
         this.filteredItems = items.slice(0);
