@@ -3,24 +3,12 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { type RadioButtonEventMap, RadioButtonMixin } from './vaadin-radio-button-mixin.js';
 
-/**
- * Fired when the `checked` property changes.
- */
-export type RadioButtonCheckedChangedEvent = CustomEvent<{ value: boolean }>;
-
-export interface RadioButtonCustomEventMap {
-  'checked-changed': RadioButtonCheckedChangedEvent;
-}
-
-export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCustomEventMap {}
+export * from './vaadin-radio-button-mixin.js';
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
@@ -57,14 +45,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  */
-declare class RadioButton extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))))),
-) {
-  /**
-   * The name of the radio button.
-   */
-  name: string;
-
+declare class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
   addEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
