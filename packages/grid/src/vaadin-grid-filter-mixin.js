@@ -19,10 +19,10 @@ export const FilterMixin = (superClass) =>
       };
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-      this.addEventListener('filter-changed', this._filterChanged.bind(this));
+    constructor() {
+      super();
+      this._filterChanged = this._filterChanged.bind(this);
+      this.addEventListener('filter-changed', this._filterChanged);
     }
 
     /** @private */

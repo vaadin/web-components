@@ -44,6 +44,7 @@ export const ActiveItemMixin = (superClass) =>
           type: Object,
           notify: true,
           value: null,
+          sync: true,
         },
       };
     }

@@ -33,6 +33,7 @@ export const GridColumnGroupMixin = (superClass) =>
         flexGrow: {
           type: Number,
           readOnly: true,
+          sync: true,
         },
 
         /**

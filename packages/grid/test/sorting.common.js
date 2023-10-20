@@ -17,7 +17,7 @@ describe('sorting', () => {
   describe('sorter', () => {
     let sorter, title, button, orderIndicator;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       sorter = fixtureSync(`
         <vaadin-grid-sorter path="path">
           <span class="title">title</span><button>Button</button>
@@ -25,6 +25,7 @@ describe('sorting', () => {
       `);
       button = sorter.querySelector('button');
       title = sorter.querySelector('.title');
+      await nextFrame();
       orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
     });
 

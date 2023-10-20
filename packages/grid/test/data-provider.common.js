@@ -245,8 +245,9 @@ describe('data provider', () => {
       grid.collapseItem(getItemForIndex(index));
     }
 
-    beforeEach(() => {
+    beforeEach(async () => {
       const treeColumn = document.createElement('vaadin-grid-tree-column');
+      await nextFrame();
       treeColumn.path = 'value';
       grid.itemHasChildrenPath = 'value';
       grid.prepend(treeColumn);
@@ -658,7 +659,9 @@ describe('wrapped grid', () => {
       container = fixtureSync('<wrapped-grid></wrapped-grid>');
       grid = container.$.grid;
       container.dataProvider = sinon.spy(infiniteDataProvider);
-      expect(grid.$.items.childElementCount).to.equal(0);
+      if (grid.$) {
+        expect(grid.$.items.childElementCount).to.equal(0);
+      }
     });
   });
 
@@ -750,11 +753,13 @@ describe('wrapped grid', () => {
       expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('bar');
     });
 
-    it('should apply `loading` attribute to scroller and grid', () => {
+    it('should apply `loading` attribute to scroller and grid', async () => {
       grid._setLoading(true);
+      await nextFrame();
       expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
       expect(grid.hasAttribute('loading')).to.be.true;
       grid._setLoading(false);
+      await nextFrame();
       expect(grid.$.scroller.hasAttribute('loading')).to.be.false;
       expect(grid.hasAttribute('loading')).to.be.false;
     });

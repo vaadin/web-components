@@ -6,7 +6,7 @@ import { flushGrid, getContainerCell } from './helpers.js';
 describe('column group', () => {
   let group, columns;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     group = fixtureSync(`
       <vaadin-grid-column-group>
         <vaadin-grid-column flex-grow="1" width="20%"></vaadin-grid-column>
@@ -14,6 +14,7 @@ describe('column group', () => {
       </vaadin-grid-column-group>
     `);
     columns = group.querySelectorAll('vaadin-grid-column');
+    await nextFrame();
   });
 
   it('should sum child column flex-grow', () => {

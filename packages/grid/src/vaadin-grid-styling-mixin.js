@@ -31,7 +31,10 @@ export const StylingMixin = (superClass) =>
          * @type {GridCellClassNameGenerator | null | undefined}
          * @deprecated Use `cellPartNameGenerator` instead.
          */
-        cellClassNameGenerator: Function,
+        cellClassNameGenerator: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * A function that allows generating CSS `part` names for grid cells in Shadow DOM based
@@ -52,7 +55,10 @@ export const StylingMixin = (superClass) =>
          *
          * @type {GridCellPartNameGenerator | null | undefined}
          */
-        cellPartNameGenerator: Function,
+        cellPartNameGenerator: {
+          type: Function,
+          sync: true,
+        },
       };
     }
 

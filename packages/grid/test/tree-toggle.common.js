@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
@@ -7,8 +7,9 @@ describe('tree toggle', () => {
   let toggle;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       toggle = fixtureSync('<vaadin-grid-tree-toggle></vaadin-grid-tree-toggle>');
+      await nextFrame();
     });
 
     describe('properties', () => {
@@ -85,7 +86,7 @@ describe('tree toggle', () => {
   });
 
   describe('with content', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       toggle = fixtureSync(`
         <vaadin-grid-tree-toggle>
           <label for="foo-input">foo label</label>
@@ -93,6 +94,7 @@ describe('tree toggle', () => {
           <div>foo</div>
         </vaadin-grid-tree-toggle>
       `);
+      await nextFrame();
     });
 
     it('should not toggle on internal focusable click', () => {

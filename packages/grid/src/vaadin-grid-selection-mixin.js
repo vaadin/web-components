@@ -19,6 +19,7 @@ export const SelectionMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -27,7 +28,6 @@ export const SelectionMixin = (superClass) =>
          */
         __selectedKeys: {
           type: Object,
-          computed: '__computeSelectedKeys(itemIdPath, selectedItems.*)',
         },
       };
     }
@@ -85,13 +85,14 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __selectedItemsChanged() {
+    __selectedItemsChanged(itemIdPath, selectedItems) {
+      this.__selectedKeys = this.__computeSelectedKeys(itemIdPath, selectedItems);
       this.requestContentUpdate();
     }
 
     /** @private */
     __computeSelectedKeys(itemIdPath, selectedItems) {
-      const selected = selectedItems.base || [];
+      const selected = selectedItems || [];
       const selectedKeys = new Set();
       selected.forEach((item) => {
         selectedKeys.add(this.getItemId(item));

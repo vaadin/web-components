@@ -24,6 +24,16 @@ export const DataProviderMixin = (superClass) =>
         size: {
           type: Number,
           notify: true,
+          sync: true,
+        },
+
+        /**
+         * @type {number}
+         * @protected
+         */
+        _flatSize: {
+          type: Number,
+          sync: true,
         },
 
         /**
@@ -35,6 +45,7 @@ export const DataProviderMixin = (superClass) =>
           type: Number,
           value: 50,
           observer: '_pageSizeChanged',
+          sync: true,
         },
 
         /**
@@ -64,6 +75,7 @@ export const DataProviderMixin = (superClass) =>
           type: Object,
           notify: true,
           observer: '_dataProviderChanged',
+          sync: true,
         },
 
         /**
@@ -82,6 +94,7 @@ export const DataProviderMixin = (superClass) =>
         _hasData: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -92,6 +105,7 @@ export const DataProviderMixin = (superClass) =>
           type: String,
           value: 'children',
           observer: '__itemHasChildrenPathChanged',
+          sync: true,
         },
 
         /**
@@ -101,6 +115,7 @@ export const DataProviderMixin = (superClass) =>
         itemIdPath: {
           type: String,
           value: null,
+          sync: true,
         },
 
         /**
@@ -111,6 +126,7 @@ export const DataProviderMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -118,13 +134,12 @@ export const DataProviderMixin = (superClass) =>
          */
         __expandedKeys: {
           type: Object,
-          computed: '__computeExpandedKeys(itemIdPath, expandedItems.*)',
         },
       };
     }
 
     static get observers() {
-      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems.*)'];
+      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems, itemIdPath)'];
     }
 
     constructor() {
@@ -239,11 +254,12 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _isExpanded(item) {
-      return this.__expandedKeys.has(this.getItemId(item));
+      return this.__expandedKeys && this.__expandedKeys.has(this.getItemId(item));
     }
 
     /** @private */
-    _expandedItemsChanged() {
+    _expandedItemsChanged(expandedItems, itemIdPath) {
+      this.__expandedKeys = this.__computeExpandedKeys(itemIdPath, expandedItems);
       this._dataProviderController.recalculateFlatSize();
       this._flatSize = this._dataProviderController.flatSize;
       this.__updateVisibleRows();
@@ -251,7 +267,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     __computeExpandedKeys(itemIdPath, expandedItems) {
-      const expanded = expandedItems.base || [];
+      const expanded = expandedItems || [];
       const expandedKeys = new Set();
       expanded.forEach((item) => {
         expandedKeys.add(this.getItemId(item));

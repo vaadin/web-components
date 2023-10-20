@@ -2,6 +2,7 @@ import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
+  grid.performUpdate?.();
   grid._observer.flush();
 
   [
@@ -14,6 +15,7 @@ export const flushGrid = (grid) => {
   ].forEach((debouncer) => debouncer?.flush());
 
   grid.__virtualizer.flush();
+  grid.performUpdate?.();
 };
 
 export function attributeRenderer(attributeName) {

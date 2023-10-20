@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { updateCellState } from './vaadin-grid-helpers.js';
@@ -100,7 +99,17 @@ export const DynamicColumnsMixin = (superClass) =>
     /** @protected */
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
+
       if (!arrayEquals(columnTree, this._columnTree)) {
+        // Request a synchronoys update for each column
+        columnTree.forEach((columnArray) => {
+          columnArray.forEach((column) => {
+            if (column.performUpdate) {
+              column.performUpdate();
+            }
+          });
+        });
+
         this._columnTree = columnTree;
       }
     }
@@ -141,7 +150,7 @@ export const DynamicColumnsMixin = (superClass) =>
         'vaadin-grid-sorter',
       ].forEach((elementName) => {
         const element = this.querySelector(elementName);
-        if (element && !(element instanceof PolymerElement)) {
+        if (element && !customElements.get(elementName)) {
           console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
         }
       });

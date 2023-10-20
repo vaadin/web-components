@@ -61,6 +61,7 @@ export const ScrollMixin = (superClass) =>
         columnRendering: {
           type: String,
           value: 'eager',
+          sync: true,
         },
 
         /**
@@ -391,6 +392,10 @@ export const ScrollMixin = (superClass) =>
 
     /** @protected */
     _frozenCellsChanged() {
+      if (!this.$) {
+        return;
+      }
+
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
         Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
           cell.style.transform = '';

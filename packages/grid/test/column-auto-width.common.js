@@ -251,6 +251,7 @@ describe('async recalculateWidth columns', () => {
     grid.dataProvider = (params, cb) => {
       grid._getData = () => cb(params.parentItem ? params.parentItem.children : data, 1);
     };
+    flushGrid(grid);
     grid._getData();
     flushGrid(grid);
     sinon.spy(grid, '_recalculateColumnWidths');

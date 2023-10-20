@@ -29,7 +29,7 @@ describe('keyboard navigation - focus button mode', () => {
     grid.insertBefore(column, grid.firstElementChild);
 
     grid.items = [{ name: 'foo' }, { name: 'bar' }];
-
+    flushGrid(grid);
     grid._observer.flush();
     flushGrid(grid);
 

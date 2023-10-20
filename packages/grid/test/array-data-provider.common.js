@@ -106,7 +106,7 @@ describe('array data provider', () => {
 describe('invalid paths', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column path="name.first"></vaadin-grid-column>
@@ -138,6 +138,7 @@ describe('invalid paths', () => {
       }
     };
     flushGrid(grid);
+    await nextFrame();
   });
 
   beforeEach(() => {
@@ -224,12 +225,13 @@ describe('items with a custom data provider', () => {
   const dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
   const items = [{ value: 'bar' }];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>
     `);
+    await nextFrame();
   });
 
   it('should use the items array', () => {
