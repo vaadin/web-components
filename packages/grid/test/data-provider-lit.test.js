@@ -1,4 +1,4 @@
 import './data-provider.styles.js';
-import '../theme/lumo/all-imports-lit.js';
-import '../src/all-imports-lit.js';
+import '../theme/lumo/lit-all-imports.js';
+import '../src/lit-all-imports.js';
 import './data-provider.common.js';
