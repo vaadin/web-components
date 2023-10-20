@@ -134,6 +134,7 @@ export const DataProviderMixin = (superClass) =>
          */
         __expandedKeys: {
           type: Object,
+          computed: '__computeExpandedKeys(itemIdPath, expandedItems)',
         },
       };
     }
@@ -258,8 +259,7 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    _expandedItemsChanged(expandedItems, itemIdPath) {
-      this.__expandedKeys = this.__computeExpandedKeys(itemIdPath, expandedItems);
+    _expandedItemsChanged() {
       this._dataProviderController.recalculateFlatSize();
       this._flatSize = this._dataProviderController.flatSize;
       this.__updateVisibleRows();

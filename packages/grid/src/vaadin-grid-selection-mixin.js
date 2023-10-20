@@ -28,6 +28,7 @@ export const SelectionMixin = (superClass) =>
          */
         __selectedKeys: {
           type: Object,
+          computed: '__computeSelectedKeys(itemIdPath, selectedItems)',
         },
       };
     }
@@ -85,8 +86,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __selectedItemsChanged(itemIdPath, selectedItems) {
-      this.__selectedKeys = this.__computeSelectedKeys(itemIdPath, selectedItems);
+    __selectedItemsChanged() {
       this.requestContentUpdate();
     }
 
