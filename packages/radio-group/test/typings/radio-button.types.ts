@@ -8,8 +8,10 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { RadioGroupMixinClass } from '../../src/vaadin-radio-group-mixin.js';
 import type { RadioButtonCheckedChangedEvent } from '../../vaadin-radio-button.js';
 import type {
   RadioGroupInvalidChangedEvent,
@@ -48,6 +50,17 @@ radio.addEventListener('checked-changed', (event) => {
 });
 
 const group = document.createElement('vaadin-radio-group');
+
+// Group mixins
+assertType<ControllerMixinClass>(group);
+assertType<DisabledMixinClass>(group);
+assertType<ElementMixinClass>(group);
+assertType<FieldMixinClass>(group);
+assertType<FocusMixinClass>(group);
+assertType<KeyboardMixinClass>(group);
+assertType<LabelMixinClass>(group);
+assertType<RadioGroupMixinClass>(group);
+assertType<ThemableMixinClass>(group);
 
 group.addEventListener('invalid-changed', (event) => {
   assertType<RadioGroupInvalidChangedEvent>(event);
