@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '../vaadin-radio-group.js';
-
 describe('keyboard navigation', () => {
   let group, buttons;
 
