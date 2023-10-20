@@ -22,6 +22,9 @@ const item = css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
   }
 
   /* Checkmark */
@@ -35,7 +38,7 @@ const item = css`
     width: 1em;
     height: 1em;
     margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
-    color: var(--lumo-primary-text-color);
+    color: var(--_selection-color-text);
     flex: none;
     opacity: 0;
     transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), opacity 0.1s;
@@ -69,7 +72,7 @@ const item = css`
     }
 
     :host([focus-ring]:not([disabled])) {
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
   }
 

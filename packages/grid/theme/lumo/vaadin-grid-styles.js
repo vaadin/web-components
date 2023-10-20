@@ -21,7 +21,8 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       /* For internal use only */
       --_lumo-grid-border-color: var(--lumo-contrast-20pct);
       --_lumo-grid-secondary-border-color: var(--lumo-contrast-10pct);
@@ -44,11 +45,14 @@ registerStyles(
     [part~='cell'] {
       min-height: var(--lumo-size-m);
       background-color: var(--lumo-base-color);
+      cursor: default;
+      --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
+      --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-m);
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-      cursor: default;
-      padding: var(--lumo-space-xs) var(--lumo-space-m);
+      cursor: inherit;
+      padding: var(--_cell-padding);
     }
 
     /* Apply row borders by default and introduce the "no-row-borders" variant */
@@ -79,7 +83,7 @@ registerStyles(
       position: absolute;
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     :host([navigating]) [part~='row']:focus::before {
@@ -94,7 +98,7 @@ registerStyles(
       z-index: 100;
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     [part~='row'][dragover] {
@@ -187,14 +191,14 @@ registerStyles(
 
     /* Headers and footers */
 
-    [part~='header-cell'] ::slotted(vaadin-grid-cell-content),
-    [part~='footer-cell'] ::slotted(vaadin-grid-cell-content),
+    [part~='header-cell'],
+    [part~='footer-cell'],
     [part~='reorder-ghost'] {
       font-size: var(--lumo-font-size-s);
       font-weight: 500;
     }
 
-    [part~='footer-cell'] ::slotted(vaadin-grid-cell-content) {
+    [part~='footer-cell'] {
       font-weight: 400;
     }
 
@@ -331,14 +335,11 @@ registerStyles(
 
     :host([theme~='compact']) [part~='cell'] {
       min-height: var(--lumo-size-s);
+      --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     :host([theme~='compact']) [part~='first-row'] [part~='cell']:not([part~='details-cell']) {
       min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
-    }
-
-    :host([theme~='compact']) [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-      padding: var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     /* Wrap cell contents */

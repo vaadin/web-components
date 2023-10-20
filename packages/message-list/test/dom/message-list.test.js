@@ -27,4 +27,10 @@ describe('vaadin-message-list', () => {
     await nextFrame();
     await expect(list).dom.to.equalSnapshot();
   });
+
+  it('className', async () => {
+    list.items = [{ text: 'Where to start', userName: 'Admin', className: 'pinned' }];
+    await nextFrame();
+    await expect(list).dom.to.equalSnapshot();
+  });
 });

@@ -706,6 +706,41 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<p><strong>Hello </strong></p><p><strong>world</strong></p>');
     });
 
+    it('should not lose leading tab characters from the resulting htmlValue', () => {
+      const htmlWithLeadingTab = '<p>\tTab</p>';
+      rte.dangerouslySetHtmlValue(htmlWithLeadingTab);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(htmlWithLeadingTab);
+    });
+
+    it('should not lose extra space characters from the resulting htmlValue', () => {
+      const htmlWithExtraSpaces = '<p>Extra   spaces</p>';
+      rte.dangerouslySetHtmlValue(htmlWithExtraSpaces);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(htmlWithExtraSpaces);
+    });
+
+    it('should not break code block attributes', () => {
+      const htmlWithCodeBlock = `<pre spellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(htmlWithCodeBlock);
+    });
+
+    it('should support double spaces inside html tags', () => {
+      const htmlWithCodeBlock = `<pre  spellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(`<pre spellcheck="false">code\n</pre>`);
+    });
+
+    it('should support tabs inside html tags', () => {
+      const htmlWithCodeBlock = `<pre\tspellcheck="false">code\n</pre>`;
+      rte.dangerouslySetHtmlValue(htmlWithCodeBlock);
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal(`<pre spellcheck="false">code\n</pre>`);
+    });
+
     it('should return the quill editor innerHTML', () => {
       expect(rte.htmlValue).to.equal('<p><br></p>');
     });

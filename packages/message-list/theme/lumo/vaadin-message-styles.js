@@ -18,10 +18,12 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: 100%;
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
     :host([focus-ring]) {
-      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     [part='header'] {

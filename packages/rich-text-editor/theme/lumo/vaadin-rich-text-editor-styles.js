@@ -9,6 +9,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const richTextEditor = css`
   :host {
     min-height: calc(var(--lumo-size-m) * 8);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   [part='toolbar'] {
@@ -32,7 +34,7 @@ const richTextEditor = css`
 
   [part~='toolbar-button']:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part~='toolbar-button']:hover {
@@ -48,7 +50,7 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button'][on] {
-    background-color: var(--lumo-primary-color);
+    background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     color: var(--lumo-primary-contrast-color);
   }
 

@@ -103,7 +103,7 @@ export const ClearButtonMixin = (superclass) =>
      * @protected
      */
     _onClearAction() {
-      this.clear();
+      this._inputElementValue = '';
       // Note, according to the HTML spec, the native change event isn't composed
       // while the input event is composed.
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));

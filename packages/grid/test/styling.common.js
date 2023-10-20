@@ -197,4 +197,107 @@ describe('styling', () => {
 
     runStylingTest('parts', 'cellPartNameGenerator', 'generateCellPartNames', assertPartNames);
   });
+
+  describe('header and footer part name', () => {
+    let column;
+    let headerCell;
+    let footerCell;
+
+    beforeEach(() => {
+      column = grid.querySelector('vaadin-grid-column');
+      column.footerRenderer = (root) => {
+        root.textContent = 'footer';
+      };
+      headerCell = getContainerCell(grid.$.header, 0, 0);
+      footerCell = getContainerCell(grid.$.footer, 0, 0);
+    });
+
+    it('should add a header and footer part name', () => {
+      column.headerPartName = 'foobar';
+      column.footerPartName = 'bazqux';
+
+      expect(headerCell.getAttribute('part')).to.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.contain('bazqux');
+    });
+
+    it('should clear the header and footer part name', () => {
+      column.headerPartName = 'foobar';
+      column.footerPartName = 'bazqux';
+
+      column.headerPartName = '';
+      column.footerPartName = '';
+
+      expect(headerCell.getAttribute('part')).to.not.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
+    });
+
+    it('should add multiple header and footer part names', () => {
+      column.headerPartName = 'foobar bazqux';
+      column.footerPartName = 'bazqux foobar';
+
+      expect(headerCell.getAttribute('part')).to.contain('foobar');
+      expect(headerCell.getAttribute('part')).to.contain('bazqux');
+      expect(footerCell.getAttribute('part')).to.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.contain('bazqux');
+    });
+
+    it('should remove one header and footer part name', () => {
+      column.headerPartName = 'foobar bazqux';
+      column.footerPartName = 'bazqux foobar';
+
+      column.headerPartName = 'foobar';
+      column.footerPartName = 'bazqux';
+
+      expect(headerCell.getAttribute('part')).to.contain('foobar');
+      expect(headerCell.getAttribute('part')).to.not.contain('bazqux');
+      expect(footerCell.getAttribute('part')).to.contain('bazqux');
+      expect(footerCell.getAttribute('part')).to.not.contain('foobar');
+    });
+
+    it('should add a header and footer part name with trailing whitespace', () => {
+      column.headerPartName = 'foobar ';
+      column.footerPartName = ' bazqux';
+
+      expect(headerCell.getAttribute('part')).to.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.contain('bazqux');
+    });
+
+    it('should clear the header and footer part name with null', () => {
+      column.headerPartName = 'foobar';
+      column.footerPartName = 'bazqux';
+
+      column.headerPartName = null;
+      column.footerPartName = null;
+
+      expect(headerCell.getAttribute('part')).to.not.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
+    });
+
+    it('should clear the header and footer part name with undefined', () => {
+      column.headerPartName = 'foobar';
+      column.footerPartName = 'bazqux';
+
+      column.headerPartName = undefined;
+      column.footerPartName = undefined;
+
+      expect(headerCell.getAttribute('part')).to.not.contain('foobar');
+      expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
+    });
+
+    it('should not override custom part names', () => {
+      const newColumn = document.createElement('vaadin-grid-column');
+      newColumn.path = 'value';
+      newColumn.headerPartName = 'foobar';
+      newColumn.footerPartName = 'bazqux';
+      grid.appendChild(newColumn);
+
+      flushGrid(grid);
+
+      const newHeaderCell = getContainerCell(grid.$.header, 0, 2);
+      const newFooterCell = getContainerCell(grid.$.footer, 0, 2);
+
+      expect(newHeaderCell.getAttribute('part')).to.contain('foobar');
+      expect(newFooterCell.getAttribute('part')).to.contain('bazqux');
+    });
+  });
 });

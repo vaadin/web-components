@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-highlighter",
-  "version": "24.3.0-alpha2",
+  "version": "24.3.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -34,29 +34,29 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.3.0-alpha2",
-    "@vaadin/overlay": "24.3.0-alpha2",
-    "@vaadin/vaadin-lumo-styles": "24.3.0-alpha2",
-    "@vaadin/vaadin-material-styles": "24.3.0-alpha2",
-    "@vaadin/vaadin-themable-mixin": "24.3.0-alpha2",
-    "lit": "^2.0.0"
+    "@vaadin/component-base": "24.3.0-alpha5",
+    "@vaadin/overlay": "24.3.0-alpha5",
+    "@vaadin/vaadin-lumo-styles": "24.3.0-alpha5",
+    "@vaadin/vaadin-material-styles": "24.3.0-alpha5",
+    "@vaadin/vaadin-themable-mixin": "24.3.0-alpha5",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/a11y-base": "24.3.0-alpha2",
-    "@vaadin/checkbox": "24.3.0-alpha2",
-    "@vaadin/checkbox-group": "24.3.0-alpha2",
-    "@vaadin/combo-box": "24.3.0-alpha2",
-    "@vaadin/date-picker": "24.3.0-alpha2",
-    "@vaadin/date-time-picker": "24.3.0-alpha2",
-    "@vaadin/item": "24.3.0-alpha2",
-    "@vaadin/list-box": "24.3.0-alpha2",
-    "@vaadin/radio-group": "24.3.0-alpha2",
-    "@vaadin/select": "24.3.0-alpha2",
-    "@vaadin/testing-helpers": "^0.5.0",
-    "@vaadin/text-area": "24.3.0-alpha2",
-    "@vaadin/text-field": "24.3.0-alpha2",
-    "@vaadin/time-picker": "24.3.0-alpha2",
+    "@vaadin/a11y-base": "24.3.0-alpha5",
+    "@vaadin/checkbox": "24.3.0-alpha5",
+    "@vaadin/checkbox-group": "24.3.0-alpha5",
+    "@vaadin/combo-box": "24.3.0-alpha5",
+    "@vaadin/date-picker": "24.3.0-alpha5",
+    "@vaadin/date-time-picker": "24.3.0-alpha5",
+    "@vaadin/item": "24.3.0-alpha5",
+    "@vaadin/list-box": "24.3.0-alpha5",
+    "@vaadin/radio-group": "24.3.0-alpha5",
+    "@vaadin/select": "24.3.0-alpha5",
+    "@vaadin/testing-helpers": "^0.6.0",
+    "@vaadin/text-area": "24.3.0-alpha5",
+    "@vaadin/text-field": "24.3.0-alpha5",
+    "@vaadin/time-picker": "24.3.0-alpha5",
     "sinon": "^13.0.2"
   }
 }

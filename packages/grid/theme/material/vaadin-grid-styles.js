@@ -20,14 +20,16 @@ registerStyles(
     [part~='cell'] {
       min-height: 48px;
       -webkit-tap-highlight-color: transparent;
+      --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
+      --_cell-default-padding: 8px 16px;
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-      padding: 8px 16px;
+      padding: var(--_cell-padding);
     }
 
-    [part~='details-cell'] ::slotted(vaadin-grid-cell-content) {
-      padding: 14px 16px;
+    [part~='details-cell'] {
+      --_cell-default-padding: 14px 16px;
     }
 
     [part~='header-cell'],

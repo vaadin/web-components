@@ -77,11 +77,13 @@ const uploadFile = css`
   :host {
     padding: var(--lumo-space-s) 0;
     outline: none;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   :host([focus-ring]) [part='row'] {
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part='row'] {
@@ -141,7 +143,7 @@ const uploadFile = css`
   [part$='button']:focus {
     outline: none;
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part$='icon']::before,

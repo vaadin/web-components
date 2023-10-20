@@ -13,8 +13,11 @@ import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
+import { radioGroupStyles } from './vaadin-radio-group-styles.js';
+
+registerStyles('vaadin-radio-group', radioGroupStyles, { moduleId: 'vaadin-radio-group-styles' });
 
 /**
  * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
@@ -76,36 +79,6 @@ class RadioGroup extends FieldMixin(
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-        }
-
-        :host::before {
-          content: '\\2003';
-          width: 0;
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        .vaadin-group-field-container {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
-
-        [part='group-field'] {
-          display: flex;
-          flex-wrap: wrap;
-        }
-
-        :host(:not([has-label])) [part='label'] {
-          display: none;
-        }
-      </style>
       <div class="vaadin-group-field-container">
         <div part="label">
           <slot name="label"></slot>

@@ -8,6 +8,11 @@ import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const sideNavItemStyles = css`
+  :host {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
   [part='link'] {
     width: 100%;
     gap: var(--lumo-space-xs);
@@ -74,7 +79,7 @@ export const sideNavItemStyles = css`
     [part='link']:focus-visible,
     [part='toggle-button']:focus-visible {
       border-radius: var(--lumo-border-radius-m);
-      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
   }
 
@@ -110,7 +115,7 @@ export const sideNavItemStyles = css`
 
   :host([current]) [part='content'] {
     background-color: var(--lumo-primary-color-10pct);
-    color: var(--lumo-primary-text-color);
+    color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     border-radius: var(--lumo-border-radius-m);
   }
 `;

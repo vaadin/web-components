@@ -139,10 +139,10 @@ registerStyles(
     }
 
     :host([theme~='primary']) {
-      --_lumo-button-background-color: var(--lumo-shade-20pct);
-      --_lumo-button-color: var(--lumo-primary-contrast-color);
-      --_lumo-button-primary-background-color: var(--lumo-primary-contrast-color);
-      --_lumo-button-primary-color: var(--lumo-primary-text-color);
+      --vaadin-button-background: var(--lumo-shade-20pct);
+      --vaadin-button-text-color: var(--lumo-primary-contrast-color);
+      --vaadin-button-primary-background: var(--lumo-primary-contrast-color);
+      --vaadin-button-primary-text-color: var(--lumo-primary-text-color);
     }
 
     :host([theme~='contrast']) [part='overlay'] {
@@ -152,10 +152,10 @@ registerStyles(
     }
 
     :host([theme~='contrast']) {
-      --_lumo-button-background-color: var(--lumo-contrast-20pct);
-      --_lumo-button-color: var(--lumo-base-color);
-      --_lumo-button-primary-background-color: var(--lumo-base-color);
-      --_lumo-button-primary-color: var(--lumo-contrast);
+      --vaadin-button-background: var(--lumo-contrast-20pct);
+      --vaadin-button-text-color: var(--lumo-base-color);
+      --vaadin-button-primary-background: var(--lumo-base-color);
+      --vaadin-button-primary-text-color: var(--lumo-contrast);
     }
 
     :host([theme~='success']) [part='overlay'] {
@@ -165,10 +165,10 @@ registerStyles(
     }
 
     :host([theme~='success']) {
-      --_lumo-button-background-color: var(--lumo-shade-20pct);
-      --_lumo-button-color: var(--lumo-success-contrast-color);
-      --_lumo-button-primary-background-color: var(--lumo-success-contrast-color);
-      --_lumo-button-primary-color: var(--lumo-success-text-color);
+      --vaadin-button-background: var(--lumo-shade-20pct);
+      --vaadin-button-text-color: var(--lumo-success-contrast-color);
+      --vaadin-button-primary-background: var(--lumo-success-contrast-color);
+      --vaadin-button-primary-text-color: var(--lumo-success-text-color);
     }
 
     :host([theme~='error']) [part='overlay'] {
@@ -178,10 +178,10 @@ registerStyles(
     }
 
     :host([theme~='error']) {
-      --_lumo-button-background-color: var(--lumo-shade-20pct);
-      --_lumo-button-color: var(--lumo-error-contrast-color);
-      --_lumo-button-primary-background-color: var(--lumo-error-contrast-color);
-      --_lumo-button-primary-color: var(--lumo-error-text-color);
+      --vaadin-button-background: var(--lumo-shade-20pct);
+      --vaadin-button-text-color: var(--lumo-error-contrast-color);
+      --vaadin-button-primary-background: var(--lumo-error-contrast-color);
+      --vaadin-button-primary-text-color: var(--lumo-error-text-color);
     }
 
     :host([theme~='warning']) [part='overlay'] {
@@ -191,10 +191,10 @@ registerStyles(
     }
 
     :host([theme~='warning']) {
-      --_lumo-button-background-color: var(--lumo-shade-20pct);
-      --_lumo-button-color: var(--lumo-warning-contrast-color);
-      --_lumo-button-primary-background-color: var(--lumo-shade-50pct);
-      --_lumo-button-primary-color: var(--lumo-primary-contrast-color);
+      --vaadin-button-background: var(--lumo-shade-20pct);
+      --vaadin-button-text-color: var(--lumo-warning-contrast-color);
+      --vaadin-button-primary-background: var(--lumo-shade-50pct);
+      --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
     }
   `,
   { moduleId: 'lumo-notification-card' },

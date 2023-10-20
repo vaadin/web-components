@@ -69,6 +69,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
        *   userAbbr: string,
        *   userImg: string,
        *   userColorIndex: number,
+       *   className: string,
        *   theme: string
        * }>
        * ```
@@ -160,6 +161,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
                 .userImg="${item.userImg}"
                 .userColorIndex="${item.userColorIndex}"
                 theme="${ifDefined(item.theme)}"
+                class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 >${item.text}</vaadin-message
               >

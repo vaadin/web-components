@@ -15,10 +15,10 @@ describe('menu-bar', () => {
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [
-      { text: 'Home' },
+      { text: 'Home', className: 'home' },
       {
         text: 'Reports',
-        children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
+        children: [{ text: 'View Reports' }, { text: 'Generate Report', className: 'reports generate' }],
       },
       { text: 'Dashboard', disabled: true },
       {
@@ -29,6 +29,7 @@ describe('menu-bar', () => {
           item.appendChild(bold);
           return item;
         })(),
+        className: 'help',
       },
     ];
     await nextRender();

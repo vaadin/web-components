@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
@@ -43,33 +42,29 @@ describe('edit column', () => {
       checkboxCell = getContainerCell(grid.$.items, 1, 2);
     });
 
-    it('should focus cell next available for editing in edit mode on Tab', async () => {
+    it('should focus cell next available for editing in edit mode on Tab', () => {
       dblclick(textCell._content);
       expect(getCellEditor(textCell)).to.be.ok;
 
       // Press Tab to edit the select cell
-      await sendKeys({ press: 'Tab' });
+      tab(document.activeElement);
       expect(getCellEditor(selectCell)).to.be.ok;
 
       // Press Tab to edit the checkbox cell
-      await sendKeys({ press: 'Tab' });
+      tab(document.activeElement);
       expect(getCellEditor(checkboxCell)).to.be.ok;
     });
 
-    it('should focus previous cell available for editing in edit mode on Shift Tab', async () => {
+    it('should focus previous cell available for editing in edit mode on Shift Tab', () => {
       dblclick(checkboxCell._content);
       expect(getCellEditor(checkboxCell)).to.be.ok;
 
       // Press Shift + Tab to edit the select cell
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      tab(document.activeElement, ['shift']);
       expect(getCellEditor(selectCell)).to.be.ok;
 
       // Press Shift + Tab to edit the text cell
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      tab(document.activeElement, ['shift']);
       expect(getCellEditor(textCell)).to.be.ok;
     });
   });

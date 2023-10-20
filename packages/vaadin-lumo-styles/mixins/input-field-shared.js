@@ -17,24 +17,24 @@ import { requiredField } from './required-field.js';
 const inputField = css`
   :host {
     --lumo-text-field-size: var(--lumo-size-m);
-    color: var(--lumo-body-text-color);
-    font-size: var(--lumo-font-size-m);
+    color: var(--vaadin-text-input-field-value-color, var(--lumo-body-text-color));
+    font-size: var(--vaadin-text-input-field-value-font-size, var(--lumo-font-size-m));
+    font-weight: var(--vaadin-text-input-field-value-font-weight, 400);
     font-family: var(--lumo-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     padding: var(--lumo-space-xs) 0;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_input-height: var(--vaadin-text-input-field-height, var(--lumo-text-field-size));
   }
 
   :host::before {
-    height: var(--lumo-text-field-size);
+    height: var(--_input-height);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-  }
-
-  :host([focused]:not([readonly])) [part='label'] {
-    color: var(--lumo-primary-text-color);
   }
 
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
@@ -43,24 +43,16 @@ const inputField = css`
   }
 
   ::slotted(:is(input, textarea):placeholder-shown) {
-    color: var(--lumo-secondary-text-color);
+    color: var(--vaadin-text-input-field-placeholder-color, var(--lumo-secondary-text-color));
   }
 
   /* Hover */
-  :host(:hover:not([readonly]):not([focused])) [part='label'] {
-    color: var(--lumo-body-text-color);
-  }
-
   :host(:hover:not([readonly]):not([focused])) [part='input-field']::after {
     opacity: 0.1;
   }
 
   /* Touch device adjustment */
   @media (pointer: coarse) {
-    :host(:hover:not([readonly]):not([focused])) [part='label'] {
-      color: var(--lumo-secondary-text-color);
-    }
-
     :host(:hover:not([readonly]):not([focused])) [part='input-field']::after {
       opacity: 0;
     }
@@ -78,7 +70,7 @@ const inputField = css`
 
   /* Focus-ring */
   :host([focus-ring]) [part='input-field'] {
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   /* Read-only and disabled */

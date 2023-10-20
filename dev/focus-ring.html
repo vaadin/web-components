@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus ring</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/avatar';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/combo-box';
+      import '@vaadin/date-picker';
+      import '@vaadin/details';
+      import '@vaadin/item';
+      import '@vaadin/list-box';
+      import '@vaadin/radio-group';
+      import '@vaadin/password-field';
+      import '@vaadin/rich-text-editor';
+      import '@vaadin/tabs';
+      import '@vaadin/text-field';
+    </script>
+
+    <style>
+      html {
+        --vaadin-focus-ring-color: purple;
+        --vaadin-focus-ring-width: 1px;
+      }
+
+      vaadin-button {
+        --vaadin-focus-ring-color: green;
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-avatar></vaadin-avatar>
+
+    <vaadin-button>Button</vaadin-button>
+
+    <vaadin-checkbox label="Checkbox"></vaadin-checkbox>
+
+    <vaadin-radio-group label="Radio group">
+      <vaadin-radio-button value="y" label="Yes"></vaadin-radio-button>
+      <vaadin-radio-button value="n" label="No"></vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <vaadin-details summary="Details">
+      <div>Toggle using mouse, Enter and Space keys.</div>
+    </vaadin-details>
+
+    <br />
+
+    <vaadin-list-box>
+      <vaadin-item>Foo</vaadin-item>
+      <vaadin-item>Bar</vaadin-item>
+    </vaadin-list-box>
+
+    <br />
+
+    <vaadin-combo-box label="Combo box" items='["Foo", "Bar", "Baz"]'></vaadin-combo-box>
+
+    <vaadin-text-field label="Text field"></vaadin-text-field>
+
+    <vaadin-password-field label="Password field"></vaadin-password-field>
+
+    <vaadin-date-picker label="Date picker"></vaadin-date-picker>
+
+    <vaadin-tabs>
+      <vaadin-tab>Foo</vaadin-tab>
+      <vaadin-tab>Bar</vaadin-tab>
+    </vaadin-tabs>
+
+    <br />
+
+    <vaadin-rich-text-editor></vaadin-rich-text-editor>
+  </body>
+</html>

@@ -37,8 +37,8 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderO
  * select.items = [
  *   { label: 'Most recent first', value: 'recent' },
  *   { component: 'hr' },
- *   { label: 'Rating: low to high', value: 'rating-asc' },
- *   { label: 'Rating: high to low', value: 'rating-desc' },
+ *   { label: 'Rating: low to high', value: 'rating-asc', className: 'asc' },
+ *   { label: 'Rating: high to low', value: 'rating-desc', className: 'desc' },
  *   { component: 'hr' },
  *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
  *   { label: 'Price: high to low', value: 'price-desc', disabled: true }

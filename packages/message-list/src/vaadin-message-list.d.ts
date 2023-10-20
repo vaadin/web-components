@@ -15,6 +15,7 @@ export interface MessageListItem {
   userImg?: string;
   userColorIndex?: number;
   theme?: string;
+  className?: string;
 }
 
 /**
@@ -62,6 +63,7 @@ declare class MessageList extends KeyboardDirectionMixin(ThemableMixin(ElementMi
    *   userAbbr: string,
    *   userImg: string,
    *   userColorIndex: number,
+   *   className: string,
    *   theme: string
    * }>
    * ```

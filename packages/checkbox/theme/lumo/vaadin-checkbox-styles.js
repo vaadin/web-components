@@ -10,8 +10,8 @@ registerStyles(
   'vaadin-checkbox',
   css`
     :host {
-      color: var(--lumo-body-text-color);
-      font-size: var(--lumo-font-size-m);
+      color: var(--vaadin-checkbox-label-color, var(--lumo-body-text-color));
+      font-size: var(--vaadin-checkbox-label-font-size, var(--lumo-font-size-m));
       font-family: var(--lumo-font-family);
       line-height: var(--lumo-line-height-s);
       -webkit-font-smoothing: antialiased;
@@ -23,11 +23,16 @@ registerStyles(
       cursor: default;
       outline: none;
       --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
+      --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+      --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+      --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     }
 
     :host([has-label]) ::slotted(label) {
-      padding-block: var(--lumo-space-xs);
-      padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
+      padding: var(
+        --vaadin-checkbox-label-padding,
+        var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
+      );
     }
 
     [part='checkbox'] {
@@ -35,8 +40,8 @@ registerStyles(
       height: var(--_checkbox-size);
       margin: var(--lumo-space-xs);
       position: relative;
-      border-radius: var(--lumo-border-radius-s);
-      background-color: var(--lumo-contrast-20pct);
+      border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
+      background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
       cursor: var(--lumo-clickable-cursor);
       /* Default field border color */
@@ -50,16 +55,16 @@ registerStyles(
 
     :host([indeterminate]) [part='checkbox'],
     :host([checked]) [part='checkbox'] {
-      background-color: var(--lumo-primary-color);
+      background-color: var(--_selection-color);
     }
 
     /* Checkmark */
     [part='checkbox']::after {
       pointer-events: none;
       font-family: 'lumo-icons';
-      content: var(--lumo-icons-checkmark);
-      color: var(--lumo-primary-contrast-color);
-      font-size: calc(var(--_checkbox-size) + 2px);
+      content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
+      color: var(--vaadin-checkbox-checkmark-color, var(--lumo-primary-contrast-color));
+      font-size: var(--vaadin-checkbox-checkmark-size, calc(var(--_checkbox-size) + 2px));
       line-height: 1;
       position: absolute;
       top: -1px;
@@ -74,7 +79,7 @@ registerStyles(
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      content: '';
+      content: var(--vaadin-checkbox-checkmark-char-intermediate, '');
       opacity: 1;
       top: 45%;
       height: 10%;
@@ -87,7 +92,7 @@ registerStyles(
 
     /* Focus ring */
     :host([focus-ring]) [part='checkbox'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct),
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 
@@ -135,13 +140,13 @@ registerStyles(
 
     /* Hover */
     :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
-      background-color: var(--lumo-contrast-30pct);
+      background: var(--vaadin-checkbox-background-hover, var(--lumo-contrast-30pct));
     }
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
       :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
-        background-color: var(--lumo-contrast-20pct);
+        background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       }
     }
 

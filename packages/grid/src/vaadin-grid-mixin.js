@@ -251,7 +251,6 @@ export const GridMixin = (superClass) =>
 
       new ResizeObserver(() =>
         setTimeout(() => {
-          this.__updateFooterPositioning();
           this.__updateColumnsBodyContentHidden();
           this.__tryToRecalculateColumnWidthsIfPending();
         }),
@@ -336,7 +335,10 @@ export const GridMixin = (superClass) =>
         return 0;
       }
 
-      const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
+      const columnWidth = Math.max(
+        this.__getIntrinsicWidth(col),
+        this.__getDistributedWidth((col.assignedSlot || col).parentElement, col),
+      );
 
       // We're processing a regular grid-column and not a grid-column-group
       if (!innerColumn) {
@@ -696,7 +698,7 @@ export const GridMixin = (superClass) =>
                 column._emptyCells.push(cell);
               }
             }
-            cell.setAttribute('part', `cell ${section}-cell`);
+            cell.part.add('cell', `${section}-cell`);
           }
 
           if (!cell._content.parentElement) {
@@ -872,22 +874,9 @@ export const GridMixin = (superClass) =>
       this._resetKeyboardNavigation();
       this._a11yUpdateHeaderRows();
       this._a11yUpdateFooterRows();
-      this.__updateFooterPositioning();
       this.generateCellClassNames();
       this.generateCellPartNames();
-    }
-
-    /** @private */
-    __updateFooterPositioning() {
-      // TODO: fixed in Firefox 99, remove when we can drop Firefox ESR 91 support
-      if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/u)[1]) < 99) {
-        // Sticky (or translated) footer in a flexbox host doesn't get included in
-        // the scroll height calculation on FF. This is a workaround for the issue.
-        this.$.items.style.paddingBottom = 0;
-        if (!this.allRowsVisible) {
-          this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
-        }
-      }
+      this.__updateHeaderAndFooter();
     }
 
     /**
@@ -925,7 +914,6 @@ export const GridMixin = (superClass) =>
     /** @private */
     _resizeHandler() {
       this._updateDetailsCellHeights();
-      this.__updateFooterPositioning();
       this.__updateHorizontalScrollPosition();
     }
 
@@ -997,19 +985,22 @@ export const GridMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (this._columnTree) {
-        // Header and footer renderers
-        this._columnTree.forEach((level) => {
-          level.forEach((column) => {
-            if (column._renderHeaderAndFooter) {
-              column._renderHeaderAndFooter();
-            }
-          });
-        });
+      // Header and footer renderers
+      this.__updateHeaderAndFooter();
 
-        // Body and row details renderers
-        this.__updateVisibleRows();
-      }
+      // Body and row details renderers
+      this.__updateVisibleRows();
+    }
+
+    /** @private */
+    __updateHeaderAndFooter() {
+      (this._columnTree || []).forEach((level) => {
+        level.forEach((column) => {
+          if (column._renderHeaderAndFooter) {
+            column._renderHeaderAndFooter();
+          }
+        });
+      });
     }
 
     /** @protected */
