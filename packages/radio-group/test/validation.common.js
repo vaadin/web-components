@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-radio-group.js';
 
 describe('validation', () => {
   let group, validateSpy;
@@ -60,13 +59,15 @@ describe('validation', () => {
       expect(group.checkValidity()).to.be.true;
     });
 
-    it('should validate on radio button click', () => {
+    it('should validate on radio button click', async () => {
       group.querySelector('vaadin-radio-button').click();
+      await nextUpdate(group);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on value change', () => {
+    it('should validate on value change', async () => {
       group.value = '1';
+      await nextUpdate(group);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
