@@ -24,6 +24,7 @@ class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(Lit
     return 'vaadin-grid-sorter';
   }
 
+  /** @protected */
   render() {
     return html`
       <div part="content">

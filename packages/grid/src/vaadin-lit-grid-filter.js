@@ -24,6 +24,7 @@ class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LitEl
     return 'vaadin-grid-filter';
   }
 
+  /** @protected */
   render() {
     return html`<slot></slot>`;
   }

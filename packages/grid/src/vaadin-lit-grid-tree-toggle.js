@@ -24,6 +24,7 @@ class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolylitM
     return 'vaadin-grid-tree-toggle';
   }
 
+  /** @protected */
   render() {
     return html`
       <span id="level-spacer"></span>
