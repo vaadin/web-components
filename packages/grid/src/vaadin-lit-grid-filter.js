@@ -5,6 +5,7 @@
  */
 import '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
@@ -28,6 +29,6 @@ class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LitEl
   }
 }
 
-customElements.define(GridFilter.is, GridFilter);
+defineCustomElement(GridFilter);
 
 export { GridFilter };

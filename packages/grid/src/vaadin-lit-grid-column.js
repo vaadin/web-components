@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
 
@@ -22,7 +23,7 @@ class GridColumn extends GridColumnMixin(PolylitMixin(LitElement)) {
   }
 }
 
-customElements.define(GridColumn.is, GridColumn);
+defineCustomElement(GridColumn);
 
 export { GridColumn };
 

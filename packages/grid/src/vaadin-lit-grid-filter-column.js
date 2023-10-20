@@ -5,6 +5,7 @@
  */
 
 import './vaadin-lit-grid-filter.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
@@ -23,6 +24,6 @@ class GridFilterColumn extends GridFilterColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridFilterColumn.is, GridFilterColumn);
+defineCustomElement(GridFilterColumn);
 
 export { GridFilterColumn };

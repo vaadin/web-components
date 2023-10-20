@@ -5,6 +5,7 @@
  */
 
 import '@vaadin/checkbox/src/vaadin-lit-checkbox.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
@@ -23,6 +24,6 @@ class GridSelectionColumn extends GridSelectionColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridSelectionColumn.is, GridSelectionColumn);
+defineCustomElement(GridSelectionColumn);
 
 export { GridSelectionColumn };

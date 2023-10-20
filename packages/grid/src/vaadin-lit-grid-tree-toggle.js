@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
@@ -32,6 +33,6 @@ class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolylitM
   }
 }
 
-customElements.define(GridTreeToggle.is, GridTreeToggle);
+defineCustomElement(GridTreeToggle);
 
 export { GridTreeToggle };

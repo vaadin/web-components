@@ -6,6 +6,7 @@
 import './vaadin-lit-grid-column.js';
 import { html, LitElement } from 'lit';
 import { isIOS, isSafari } from '@vaadin/component-base/src/browser-utils.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -57,6 +58,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)
   }
 }
 
-customElements.define(Grid.is, Grid);
+defineCustomElement(Grid);
 
 export { Grid };

@@ -5,6 +5,7 @@
  */
 
 import './vaadin-lit-grid-sorter.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
@@ -23,6 +24,6 @@ class GridSortColumn extends GridSortColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridSortColumn.is, GridSortColumn);
+defineCustomElement(GridSortColumn);
 
 export { GridSortColumn };

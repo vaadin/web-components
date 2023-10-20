@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
 
@@ -22,6 +23,6 @@ class GridColumnGroup extends GridColumnGroupMixin(PolylitMixin(LitElement)) {
   }
 }
 
-customElements.define(GridColumnGroup.is, GridColumnGroup);
+defineCustomElement(GridColumnGroup);
 
 export { GridColumnGroup };

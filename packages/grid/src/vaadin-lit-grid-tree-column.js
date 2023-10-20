@@ -5,6 +5,7 @@
  */
 
 import './vaadin-lit-grid-tree-toggle.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
@@ -23,6 +24,6 @@ class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   }
 }
 
-customElements.define(GridTreeColumn.is, GridTreeColumn);
+defineCustomElement(GridTreeColumn);
 
 export { GridTreeColumn };
