@@ -33,7 +33,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectedItemsChanged(itemIdPath, selectedItems.*)'];
+      return ['__selectedItemsChanged(itemIdPath, selectedItems)'];
     }
 
     /**
