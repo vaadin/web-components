@@ -3,6 +3,8 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
@@ -169,4 +171,82 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
 
   // Add new part to the cell attribute
   updatePart(cell, value, part || `${attribute}-cell`);
+}
+
+export class ColumnObserver {
+  constructor(host, callback) {
+    this.__host = host;
+    this.__callback = callback;
+    this.__currentSlots = [];
+
+    this.__onMutation = this.__onMutation.bind(this);
+    this.__observer = new MutationObserver(this.__onMutation);
+    this.__observer.observe(host, {
+      childList: true,
+    });
+
+    this.__initialCallDebouncer = Debouncer.debounce(this.__initialCallDebouncer, microTask, () => this.__onMutation());
+  }
+
+  disconnect() {
+    this.__observer.disconnect();
+    this.__initialCallDebouncer.cancel();
+    this.__toggleSlotChangeListeners(false);
+  }
+
+  flush() {
+    this.__onMutation();
+  }
+
+  __toggleSlotChangeListeners(add) {
+    this.__currentSlots.forEach((slot) => {
+      if (add) {
+        slot.addEventListener('slotchange', this.__onMutation);
+      } else {
+        slot.removeEventListener('slotchange', this.__onMutation);
+      }
+    });
+  }
+
+  __onMutation() {
+    const initialCall = !this.__currentColumns;
+    this.__currentColumns ||= [];
+
+    const columns = ColumnObserver.getColumns(this.__host);
+    const addedColumns = columns.filter((column) => !this.__currentColumns.includes(column));
+    const removedColumns = this.__currentColumns.filter((column) => !columns.includes(column));
+    const orderChanged = this.__currentColumns.some((column, index) => column !== columns[index]);
+    this.__currentColumns = columns;
+
+    this.__toggleSlotChangeListeners(false);
+    this.__currentSlots = [...this.__host.children].filter((child) => child instanceof HTMLSlotElement);
+    this.__toggleSlotChangeListeners(true);
+
+    const invokeCallback = initialCall || addedColumns.length || removedColumns.length || orderChanged;
+    if (invokeCallback) {
+      this.__callback(addedColumns, removedColumns);
+    }
+  }
+
+  static isColumnElement(node) {
+    return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/u.test(node.localName);
+  }
+
+  static getColumns(host) {
+    const columns = [];
+    // A temporary workaround for backwards compatibility
+    const isColumnElement = host._isColumnElement || ColumnObserver.isColumnElement;
+
+    [...host.children].forEach((child) => {
+      if (isColumnElement(child)) {
+        columns.push(child);
+      } else if (child instanceof HTMLSlotElement) {
+        [...child.assignedElements({ flatten: true })]
+          .filter((assignedElement) => isColumnElement(assignedElement))
+          .forEach((assignedElement) => columns.push(assignedElement));
+      }
+    });
+
+    return columns;
+  }
 }
