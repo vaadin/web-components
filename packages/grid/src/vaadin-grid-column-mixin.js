@@ -23,6 +23,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         resizable: {
           type: Boolean,
+          sync: true,
           value() {
             if (this.localName === 'vaadin-grid-column-group') {
               return;
@@ -44,6 +45,7 @@ export const ColumnBaseMixin = (superClass) =>
         frozen: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -59,6 +61,7 @@ export const ColumnBaseMixin = (superClass) =>
         frozenToEnd: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -74,6 +77,7 @@ export const ColumnBaseMixin = (superClass) =>
         rowHeader: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -82,6 +86,7 @@ export const ColumnBaseMixin = (superClass) =>
         hidden: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -89,6 +94,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         header: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -99,6 +105,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         textAlign: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -108,6 +115,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         headerPartName: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -117,6 +125,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         footerPartName: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -126,6 +135,7 @@ export const ColumnBaseMixin = (superClass) =>
         _lastFrozen: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -135,6 +145,7 @@ export const ColumnBaseMixin = (superClass) =>
         _bodyContentHidden: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -144,13 +155,20 @@ export const ColumnBaseMixin = (superClass) =>
         _firstFrozenToEnd: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /** @protected */
-        _order: Number,
+        _order: {
+          type: Number,
+          sync: true,
+        },
 
         /** @private */
-        _reorderStatus: Boolean,
+        _reorderStatus: {
+          type: Boolean,
+          sync: true,
+        },
 
         /**
          * @type {Array<!HTMLElement>}
@@ -189,7 +207,10 @@ export const ColumnBaseMixin = (superClass) =>
          *
          * @type {GridHeaderFooterRenderer | null | undefined}
          */
-        headerRenderer: Function,
+        headerRenderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * Represents the final header renderer computed on the set of observable arguments.
@@ -201,6 +222,7 @@ export const ColumnBaseMixin = (superClass) =>
         _headerRenderer: {
           type: Function,
           computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)',
+          sync: true,
         },
 
         /**
@@ -212,7 +234,10 @@ export const ColumnBaseMixin = (superClass) =>
          *
          * @type {GridHeaderFooterRenderer | null | undefined}
          */
-        footerRenderer: Function,
+        footerRenderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * Represents the final footer renderer computed on the set of observable arguments.
@@ -224,6 +249,7 @@ export const ColumnBaseMixin = (superClass) =>
         _footerRenderer: {
           type: Function,
           computed: '_computeFooterRenderer(footerRenderer, __initialized)',
+          sync: true,
         },
 
         /**
@@ -826,6 +852,7 @@ export const GridColumnMixin = (superClass) =>
         width: {
           type: String,
           value: '100px',
+          sync: true,
         },
 
         /**
@@ -836,6 +863,7 @@ export const GridColumnMixin = (superClass) =>
         flexGrow: {
           type: Number,
           value: 1,
+          sync: true,
         },
 
         /**
@@ -855,7 +883,10 @@ export const GridColumnMixin = (superClass) =>
          *
          * @type {GridBodyRenderer | null | undefined}
          */
-        renderer: Function,
+        renderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * Represents the final renderer computed on the set of observable arguments.
@@ -867,6 +898,7 @@ export const GridColumnMixin = (superClass) =>
         _renderer: {
           type: Function,
           computed: '_computeRenderer(renderer, __initialized)',
+          sync: true,
         },
 
         /**
@@ -875,6 +907,7 @@ export const GridColumnMixin = (superClass) =>
          */
         path: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -916,7 +949,10 @@ export const GridColumnMixin = (superClass) =>
          * @type {Array<!HTMLElement>}
          * @protected
          */
-        _cells: Array,
+        _cells: {
+          type: Array,
+          sync: true,
+        },
       };
     }
   };

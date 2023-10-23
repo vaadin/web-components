@@ -255,6 +255,7 @@ describe('scroll to index', () => {
           }
         });
       };
+      flushGrid(grid);
       grid.expandedItems = [PARENT];
       grid.scrollToIndex(0, 250);
     });
@@ -281,6 +282,7 @@ describe('scroll to index', () => {
           }
         });
       };
+      flushGrid(grid);
 
       grid.expandedItems = [parents[parents.length - 1]];
       grid.scrollToIndex(14);
@@ -318,9 +320,9 @@ describe('scroll to index', () => {
 
           pendingRequests.push(() => cb(pageItems, levelSize));
         };
-
-        flushPendingRequests();
         flushGrid(grid);
+        flushPendingRequests();
+
         await oneEvent(grid, 'animationend');
         await nextFrame();
       });

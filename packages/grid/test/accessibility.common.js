@@ -63,8 +63,9 @@ describe('accessibility', () => {
   }
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       initFixture('default');
+      await nextFrame();
     });
 
     describe('structural roles', () => {
@@ -300,8 +301,9 @@ describe('accessibility', () => {
   });
 
   describe('group', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       initFixture('group');
+      await nextFrame();
     });
 
     describe('row numbers', () => {

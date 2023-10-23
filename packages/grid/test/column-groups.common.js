@@ -552,6 +552,7 @@ describe('column groups', () => {
           `);
 
           await nextFrame();
+          await nextFrame();
           expect(console.warn.called).to.be.false;
         });
 
@@ -568,6 +569,7 @@ describe('column groups', () => {
           `);
 
           await nextFrame();
+          await nextFrame();
           expect(console.warn.called).to.be.false;
         });
 
@@ -583,6 +585,7 @@ describe('column groups', () => {
             </vaadin-grid>
           `);
 
+          await nextFrame();
           await nextFrame();
           expect(console.warn.called).to.be.false;
         });
@@ -602,6 +605,7 @@ describe('column groups', () => {
           `);
 
           await nextFrame();
+          await nextFrame();
           expect(console.warn.called).to.be.false;
         });
 
@@ -617,6 +621,7 @@ describe('column groups', () => {
             </vaadin-grid>
           `);
 
+          await nextFrame();
           await nextFrame();
           expect(console.warn.calledOnce).to.be.true;
         });
@@ -639,6 +644,7 @@ describe('column groups', () => {
           `);
 
           await nextFrame();
+          await nextFrame();
           expect(console.warn.calledOnce).to.be.true;
         });
 
@@ -656,6 +662,7 @@ describe('column groups', () => {
             </vaadin-grid>
           `);
 
+          await nextFrame();
           await nextFrame();
           expect(console.warn.calledOnce).to.be.true;
         });
@@ -675,6 +682,7 @@ describe('column groups', () => {
           `);
 
           await nextFrame();
+          await nextFrame();
           expect(console.warn.called).to.be.false;
         });
 
@@ -693,6 +701,7 @@ describe('column groups', () => {
             </vaadin-grid>
           `);
 
+          await nextFrame();
           await nextFrame();
           expect(console.warn.calledOnce).to.be.true;
         });

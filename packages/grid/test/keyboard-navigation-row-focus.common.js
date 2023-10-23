@@ -106,7 +106,7 @@ function getFocusedRowIndex() {
 }
 
 function getTabbableElements(root) {
-  return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
+  return [...root.querySelectorAll('[tabindex]:not([tabindex="-1"])')].filter((el) => el.offsetParent !== null);
 }
 
 function getTabbableRows(root) {
@@ -145,6 +145,7 @@ describe('keyboard navigation - row focus', () => {
       root.textContent = 'details';
     };
 
+    flushGrid(grid);
     header = grid.$.header;
     body = grid.$.items;
     footer = grid.$.footer;

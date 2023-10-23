@@ -19,6 +19,7 @@ export const RowDetailsMixin = (superClass) =>
         detailsOpenedItems: {
           type: Array,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -37,7 +38,10 @@ export const RowDetailsMixin = (superClass) =>
          *
          * @type {GridRowDetailsRenderer | null | undefined}
          */
-        rowDetailsRenderer: Function,
+        rowDetailsRenderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * @type {!Array<!HTMLElement> | undefined}

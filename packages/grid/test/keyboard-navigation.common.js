@@ -217,6 +217,7 @@ describe('keyboard navigation', () => {
       root.innerHTML = `<span>${index} ${item}</span>`;
     };
 
+    flushGrid(grid);
     scroller = grid.$.scroller;
     header = grid.$.header;
     body = grid.$.items;
@@ -1466,6 +1467,7 @@ describe('keyboard navigation', () => {
       it('should allow toggling a checkbox with space keypress', async () => {
         // Add a selection column
         grid.appendChild(document.createElement('vaadin-grid-selection-column'));
+        await nextFrame();
         flushGrid(grid);
 
         // Get a reference to a checkbox, focus it and hit space
@@ -1552,6 +1554,7 @@ describe('keyboard navigation', () => {
       grid.querySelector('#column-2').renderer = inputRenderer;
       grid.querySelector('#column-2').footerRenderer = inputRenderer;
 
+      flushGrid(grid);
       scroller = grid.$.scroller;
       header = grid.$.header;
       body = grid.$.items;

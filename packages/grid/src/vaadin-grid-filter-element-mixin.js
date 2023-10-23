@@ -37,7 +37,10 @@ export const GridFilterElementMixin = (superClass) =>
         /**
          * JS Path of the property in the item used for filtering the data.
          */
-        path: String,
+        path: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * Current filter value.
@@ -45,11 +48,13 @@ export const GridFilterElementMixin = (superClass) =>
         value: {
           type: String,
           notify: true,
+          sync: true,
         },
 
         /** @private */
         _textField: {
           type: Object,
+          sync: true,
         },
       };
     }
@@ -65,6 +70,10 @@ export const GridFilterElementMixin = (superClass) =>
       this._filterController = new SlotController(this, '', 'vaadin-text-field', {
         initializer: (field) => {
           field.addEventListener('value-changed', (e) => {
+            if (field.__previousValue === undefined && e.detail.value === '') {
+              field.__previousValue = e.detail.value;
+              return;
+            }
             this.value = e.detail.value;
           });
 

@@ -28,6 +28,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         width: {
           type: String,
           value: '58px',
+          sync: true,
         },
 
         /**
@@ -38,6 +39,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         flexGrow: {
           type: Number,
           value: 0,
+          sync: true,
         },
 
         /**
@@ -49,6 +51,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -59,6 +62,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         autoSelect: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -69,10 +73,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         dragSelect: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /** @protected */
-        _indeterminate: Boolean,
+        _indeterminate: {
+          type: Boolean,
+          sync: true,
+        },
 
         /** @protected */
         _selectAllHidden: Boolean,
@@ -181,7 +189,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // Get the row where the drag started
         const dragStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
         // Whether to select or deselect the items on drag
-        this.__dragSelect = !this._grid._isSelected(dragStartRow._item);
+        this.__selectOnDrag = !this._grid._isSelected(dragStartRow._item);
         // Store the index of the row where the drag started
         this.__dragStartIndex = dragStartRow.index;
         // Store the item of the row where the drag started
@@ -191,7 +199,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       } else if (event.detail.state === 'end') {
         // if drag start and end stays within the same item, then toggle its state
         if (this.__dragStartItem) {
-          if (this.__dragSelect) {
+          if (this.__selectOnDrag) {
             this._selectItem(this.__dragStartItem);
           } else {
             this._deselectItem(this.__dragStartItem);
@@ -254,7 +262,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
             (hoveredIndex > this.__dragStartIndex && row.index >= this.__dragStartIndex && row.index <= hoveredIndex) ||
             (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
           ) {
-            if (this.__dragSelect) {
+            if (this.__selectOnDrag) {
               this._selectItem(row._item);
             } else {
               this._deselectItem(row._item);

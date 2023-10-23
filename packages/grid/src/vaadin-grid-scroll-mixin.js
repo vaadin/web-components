@@ -61,6 +61,7 @@ export const ScrollMixin = (superClass) =>
         columnRendering: {
           type: String,
           value: 'eager',
+          sync: true,
         },
 
         /**

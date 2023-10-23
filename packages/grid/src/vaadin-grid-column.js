@@ -27,3 +27,5 @@ class GridColumn extends GridColumnMixin(PolymerElement) {
 defineCustomElement(GridColumn);
 
 export { GridColumn };
+
+export { ColumnBaseMixin } from './vaadin-grid-column-mixin.js';

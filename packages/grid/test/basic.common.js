@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   flushGrid,
@@ -18,7 +18,7 @@ import {
 describe('basic features', () => {
   let grid, column;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 300px;" size="1000">
         <vaadin-grid-column></vaadin-grid-column>
@@ -30,6 +30,7 @@ describe('basic features', () => {
       root.textContent = model.index;
     });
     flushGrid(grid);
+    await nextFrame();
   });
 
   it('should notify `size` property', () => {
@@ -146,7 +147,7 @@ describe('basic features', () => {
     [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach((steps) => {
       grid.$.table.scrollTop = 5000 + getPhysicalAverage(grid) * steps;
       flushGrid(grid);
-
+      flushGrid(grid);
       // Expect the physical rows to be in order after scrolling
       const rows = grid.$.items.querySelectorAll('tr');
 
