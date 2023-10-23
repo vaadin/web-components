@@ -121,6 +121,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           height: 100%;
           --vaadin-app-layout-transition: 200ms;
           transition: padding var(--vaadin-app-layout-transition);
+          --vaadin-app-layout-drawer-width: 16em;
           --vaadin-app-layout-touch-optimized: false;
           --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
           --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
@@ -196,7 +197,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           transition: transform var(--vaadin-app-layout-transition), visibility var(--vaadin-app-layout-transition);
           transform: translateX(-100%);
           max-width: 90%;
-          width: 16em;
+          width: var(--vaadin-app-layout-drawer-width);
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
           outline: none;
@@ -260,10 +261,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         @media (max-width: 800px), (max-height: 600px) {
           :host {
             --vaadin-app-layout-drawer-overlay: true;
-          }
-
-          [part='drawer'] {
-            width: 20em;
+            --vaadin-app-layout-drawer-width: 20em;
           }
         }
 
