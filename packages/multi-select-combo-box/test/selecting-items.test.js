@@ -164,8 +164,9 @@ describe('selecting items', () => {
 
   describe('group selected items', () => {
     function expectItems(values) {
-      getAllItems(comboBox).forEach((item, idx) => {
-        expect(item.textContent).to.equal(values[idx]);
+      const items = getAllItems(comboBox);
+      values.forEach((value, idx) => {
+        expect(items[idx].textContent).to.equal(value);
       });
     }
 
