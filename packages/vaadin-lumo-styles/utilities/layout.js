@@ -10,6 +10,9 @@ export const layout = css`
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
 
   /* === Box sizing === */
   .box-border {
@@ -273,6 +276,10 @@ export const layout = css`
 
   /* === Responsive design === */
   @media (min-width: 640px) {
+    /* Display */
+    .sm\\:block {
+      display: block;
+    }
     .sm\\:flex {
       display: flex;
     }
@@ -282,8 +289,41 @@ export const layout = css`
     .sm\\:hidden {
       display: none;
     }
+    .sm\\:inline {
+      display: inline;
+    }
+    .sm\\:inline-block {
+      display: inline-block;
+    }
+    .sm\\:inline-flex {
+      display: inline-flex;
+    }
+    .sm\\:inline-grid {
+      display: inline-grid;
+    }
+
+    /* Position */
+    .sm\\:absolute {
+      position: absolute;
+    }
+    .sm\\:fixed {
+      position: fixed;
+    }
+    .sm\\:relative {
+      position: relative;
+    }
+    .sm\\:static {
+      position: static;
+    }
+    .sm\\:sticky {
+      position: sticky;
+    }
   }
   @media (min-width: 768px) {
+    /* Display */
+    .md\\:block {
+      display: block;
+    }
     .md\\:flex {
       display: flex;
     }
@@ -293,8 +333,41 @@ export const layout = css`
     .md\\:hidden {
       display: none;
     }
+    .md\\:inline {
+      display: inline;
+    }
+    .md\\:inline-block {
+      display: inline-block;
+    }
+    .md\\:inline-flex {
+      display: inline-flex;
+    }
+    .md\\:inline-grid {
+      display: inline-grid;
+    }
+
+    /* Position */
+    .md\\:absolute {
+      position: absolute;
+    }
+    .md\\:fixed {
+      position: fixed;
+    }
+    .md\\:relative {
+      position: relative;
+    }
+    .md\\:static {
+      position: static;
+    }
+    .md\\:sticky {
+      position: sticky;
+    }
   }
   @media (min-width: 1024px) {
+    /* Display */
+    .lg\\:block {
+      display: block;
+    }
     .lg\\:flex {
       display: flex;
     }
@@ -304,8 +377,41 @@ export const layout = css`
     .lg\\:hidden {
       display: none;
     }
+    .lg\\:inline {
+      display: inline;
+    }
+    .lg\\:inline-block {
+      display: inline-block;
+    }
+    .lg\\:inline-flex {
+      display: inline-flex;
+    }
+    .lg\\:inline-grid {
+      display: inline-grid;
+    }
+
+    /* Position */
+    .lg\\:absolute {
+      position: absolute;
+    }
+    .lg\\:fixed {
+      position: fixed;
+    }
+    .lg\\:relative {
+      position: relative;
+    }
+    .lg\\:static {
+      position: static;
+    }
+    .lg\\:sticky {
+      position: sticky;
+    }
   }
   @media (min-width: 1280px) {
+    /* Display */
+    .xl\\:block {
+      display: block;
+    }
     .xl\\:flex {
       display: flex;
     }
@@ -315,8 +421,41 @@ export const layout = css`
     .xl\\:hidden {
       display: none;
     }
+    .xl\\:inline {
+      display: inline;
+    }
+    .xl\\:inline-block {
+      display: inline-block;
+    }
+    .xl\\:inline-flex {
+      display: inline-flex;
+    }
+    .xl\\:inline-grid {
+      display: inline-grid;
+    }
+
+    /* Position */
+    .xl\\:absolute {
+      position: absolute;
+    }
+    .xl\\:fixed {
+      position: fixed;
+    }
+    .xl\\:relative {
+      position: relative;
+    }
+    .xl\\:static {
+      position: static;
+    }
+    .xl\\:sticky {
+      position: sticky;
+    }
   }
   @media (min-width: 1536px) {
+    /* Display */
+    .\\32xl\\:block {
+      display: block;
+    }
     .\\32xl\\:flex {
       display: flex;
     }
@@ -325,6 +464,35 @@ export const layout = css`
     }
     .\\32xl\\:hidden {
       display: none;
+    }
+    .\\32xl\\:inline {
+      display: inline;
+    }
+    .\\32xl\\:inline-block {
+      display: inline-block;
+    }
+    .\\32xl\\:inline-flex {
+      display: inline-flex;
+    }
+    .\\32xl\\:inline-grid {
+      display: inline-grid;
+    }
+
+    /* Position */
+    .\\32xl\\:absolute {
+      position: absolute;
+    }
+    .\\32xl\\:fixed {
+      position: fixed;
+    }
+    .\\32xl\\:relative {
+      position: relative;
+    }
+    .\\32xl\\:static {
+      position: static;
+    }
+    .\\32xl\\:sticky {
+      position: sticky;
     }
   }
 `;

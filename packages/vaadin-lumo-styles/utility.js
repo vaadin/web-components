@@ -7,6 +7,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styl
 import { accessibility } from './utilities/accessibility.js';
 import { background } from './utilities/background.js';
 import { border } from './utilities/border.js';
+import { filter } from './utilities/filter.js';
 import { flexboxAndGrid } from './utilities/flexbox-grid.js';
 import { layout } from './utilities/layout.js';
 import { shadows } from './utilities/shadows.js';
@@ -20,6 +21,7 @@ export const utility = css`
 ${accessibility}
 ${background}
 ${border}
+${filter}
 ${flexboxAndGrid}
 ${layout}
 ${shadows}
