@@ -171,12 +171,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     if (this.topGroup) {
-      const filteredTopItems = this.topGroup.filter((selectedItem) => {
-        return items.some((item) => this._getItemValue(item) === this._getItemValue(selectedItem));
-      });
+      const filteredTopItems = [];
+      const filteredItems = [];
 
-      const filteredItems = (items || []).filter((item) => {
-        return !this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem));
+      (items || []).forEach((item) => {
+        if (this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem))) {
+          filteredTopItems.push(item);
+        } else {
+          filteredItems.push(item);
+        }
       });
 
       this._dropdownItems = [...filteredTopItems, ...filteredItems];
