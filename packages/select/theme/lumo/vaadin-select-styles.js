@@ -31,7 +31,7 @@ const select = css`
   }
 
   [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
-    color: var(--vaadin-text-input-field-value-color, var(--lumo-body-text-color));
+    color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
   }
 
   :host([readonly]) [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
@@ -40,7 +40,7 @@ const select = css`
 
   /* placeholder styles */
   [part='input-field'] ::slotted([slot='value'][placeholder]) {
-    color: var(--vaadin-text-input-field-placeholder-color, var(--lumo-secondary-text-color));
+    color: var(--vaadin-input-field-placeholder-color, var(--lumo-secondary-text-color));
   }
 
   :host(:is([readonly], [disabled])) ::slotted([slot='value'][placeholder]) {
@@ -69,7 +69,7 @@ registerStyles(
   css`
     :host {
       font-family: var(--lumo-font-family);
-      font-size: var(--vaadin-text-input-field-value-font-size, var(--lumo-font-size-m));
+      font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
       padding: 0 0.25em;
       --_lumo-selected-item-height: var(--lumo-size-m);
       --_lumo-selected-item-padding: 0.5em;

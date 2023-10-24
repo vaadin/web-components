@@ -74,7 +74,7 @@ registerStyles(
     :host([readonly])::after {
       background-color: transparent;
       opacity: 1;
-      border: var(--vaadin-text-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+      border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
     }
 
     /* Disabled */
