@@ -138,41 +138,31 @@ describe('light dom observing', () => {
         expect(getHeaderCellContent(grid, 0, 0).textContent).to.equal('second header');
       });
 
-      it('should invoke node observer twice when adding columns', async () => {
+      it('should invoke column observer once when adding columns', () => {
         const column = createColumn();
-        const spy = sinon.spy(grid._observer, 'callback');
+        const spy = sinon.spy(grid._observer, '__callback');
         grid.insertBefore(column, grid.firstChild);
         flushGrid(grid);
 
         // Once the column is added
         expect(spy.callCount).to.equal(1);
-
-        await nextFrame();
-
-        // Once the column cells are added
-        expect(spy.callCount).to.equal(2);
       });
 
-      it('should invoke node observer twice when removing columns', async () => {
+      it('should invoke column observer once when removing columns', () => {
         const column = grid.querySelector('vaadin-grid-column');
-        const spy = sinon.spy(grid._observer, 'callback');
+        const spy = sinon.spy(grid._observer, '__callback');
         grid.removeChild(column);
         flushGrid(grid);
 
         // Once the column is removed
         expect(spy.callCount).to.equal(1);
-
-        await nextFrame();
-
-        // Once the column cells are removed
-        expect(spy.callCount).to.equal(2);
       });
 
       it('should not invoke on row reorder', (done) => {
         grid.size = 100;
         flushGrid(grid);
         requestAnimationFrame(() => {
-          const spy = sinon.spy(grid._observer, 'callback');
+          const spy = sinon.spy(grid._observer, '__callback');
           scrollToEnd(grid, () => {
             expect(spy.called).to.be.false;
             done();
