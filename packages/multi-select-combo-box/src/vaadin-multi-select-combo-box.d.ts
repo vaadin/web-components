@@ -210,6 +210,12 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   filter: string;
 
   /**
+   * Set to true to group selected items at the top of the overlay.
+   * @attr {boolean} group-selected-items
+   */
+  groupSelectedItems: boolean;
+
+  /**
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
    */

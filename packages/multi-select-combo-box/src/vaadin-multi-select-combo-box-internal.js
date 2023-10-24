@@ -61,6 +61,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
+       * Set to true to group selected items at the top of the overlay.
+       * @attr {boolean} group-selected-items
+       */
+      groupSelectedItems: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
@@ -95,6 +104,14 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       lastFilter: {
         type: String,
         notify: true,
+      },
+
+      /**
+       * A subset of items to be shown at the top of the overlay.
+       */
+      topGroup: {
+        type: Array,
+        observer: '_topGroupChanged',
       },
 
       _target: {
@@ -141,6 +158,42 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override combo-box method to group selected
+   * items at the top of the overlay.
+   *
+   * @protected
+   * @override
+   */
+  _setDropdownItems(items) {
+    if (this.readonly || !this.groupSelectedItems) {
+      this._dropdownItems = items;
+      return;
+    }
+
+    if (this.topGroup) {
+      const filteredTopItems = [];
+      const filteredItems = [];
+
+      (items || []).forEach((item) => {
+        if (this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem))) {
+          filteredTopItems.push(item);
+        } else {
+          filteredItems.push(item);
+        }
+      });
+
+      this._dropdownItems = [...filteredTopItems, ...filteredItems];
+    }
+  }
+
+  /** @private */
+  _topGroupChanged(topGroup) {
+    if (topGroup) {
+      this._setDropdownItems(this.filteredItems);
+    }
+  }
+
+  /**
    * Override combo-box method to set correct owner for using by item renderers.
    * This needs to be done before the scroller gets added to the DOM to ensure
    * Lit directive works in case when combo-box is opened using attribute.
@@ -172,9 +225,9 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
         this.close();
       } else {
         // Keep selected item focused after committing on Enter.
-        const focusedItem = this.filteredItems[this._focusedIndex];
+        const focusedItem = this._dropdownItems[this._focusedIndex];
         this._commitValue();
-        this._focusedIndex = this.filteredItems.indexOf(focusedItem);
+        this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
       }
 
       return;

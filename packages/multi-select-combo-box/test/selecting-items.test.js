@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
-import { getDataProvider } from './helpers.js';
+import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox, internal, inputElement;
@@ -159,6 +159,125 @@ describe('selecting items', () => {
       comboBox.autoOpenDisabled = true;
       await sendKeys({ type: 'lime' });
       verifyEnterKeyPropagation(false);
+    });
+  });
+
+  describe('group selected items', () => {
+    function expectItems(values) {
+      const items = getAllItems(comboBox);
+      values.forEach((value, idx) => {
+        expect(items[idx].textContent).to.equal(value);
+      });
+    }
+
+    beforeEach(() => {
+      comboBox.groupSelectedItems = true;
+    });
+
+    describe('items', () => {
+      beforeEach(() => {
+        comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+        comboBox.selectedItems = ['lemon', 'orange'];
+      });
+
+      it('should show selected items at the top of the overlay', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+      });
+
+      it('should only show selected items when readonly is true', () => {
+        comboBox.readonly = true;
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange']);
+      });
+
+      it('should update dropdown items after overlay is re-opened', () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
+      });
+
+      it('should update dropdown items after clearing and re-opening', () => {
+        comboBox.clearButtonVisible = true;
+        comboBox.opened = true;
+        comboBox.$.clearButton.click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should show correct items when internal filtering applied', async () => {
+        comboBox.opened = true;
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        expectItems(['orange', 'apple', 'banana']);
+      });
+
+      it('should restore items when groupSelectedItems is set to false', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.groupSelectedItems = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+    });
+
+    describe('dataProvider', () => {
+      beforeEach(() => {
+        comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon', 'orange']);
+        comboBox.selectedItems = ['lemon', 'orange'];
+      });
+
+      it('should show selected items at the top of the overlay', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+      });
+
+      it('should only show selected items when readonly is true', () => {
+        comboBox.readonly = true;
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange']);
+      });
+
+      it('should update dropdown items after overlay is re-opened', () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
+      });
+
+      it('should update dropdown items after clearing and re-opening', () => {
+        comboBox.clearButtonVisible = true;
+        comboBox.opened = true;
+        comboBox.$.clearButton.click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should show correct items when internal filtering applied', async () => {
+        comboBox.opened = true;
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        expectItems(['orange', 'apple', 'banana']);
+      });
+
+      it('should restore items when groupSelectedItems is set to false', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.groupSelectedItems = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
     });
   });
 });
