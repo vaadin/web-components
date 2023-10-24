@@ -105,7 +105,7 @@ describe('column observer', () => {
     expect(spy).not.to.have.been.called;
   });
 
-  it('should call the callback initially when disconnected', async () => {
+  it('should not call the callback initially when disconnected', async () => {
     const newObserver = new ColumnObserver(host, spy);
     newObserver.disconnect();
     await nextFrame();

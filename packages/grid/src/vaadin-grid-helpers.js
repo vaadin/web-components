@@ -188,7 +188,7 @@ export class ColumnObserver {
       childList: true,
     });
 
-    // The observer callback is invoked once initially when the observer is created.
+    // The observer callback is invoked once initially.
     this.__initialCallDebouncer = Debouncer.debounce(this.__initialCallDebouncer, microTask, () => this.__onMutation());
   }
 
