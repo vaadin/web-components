@@ -194,5 +194,23 @@ describe('column observer', () => {
 
       expect(spy).not.to.have.been.called;
     });
+
+    it('should call the callback when a column is added trough multiple slots', async () => {
+      const slot2 = document.createElement('slot');
+      wrapper.appendChild(slot2);
+
+      const wrapper2 = document.createElement('wrapper-component');
+      wrapper2.shadowRoot.appendChild(wrapper);
+
+      const column = createColumn();
+      wrapper2.appendChild(column);
+      await nextFrame();
+
+      expect(spy.calledOnce).to.be.true;
+
+      const [addedColumns, removedColumns] = spy.getCalls()[0].args;
+      expect(addedColumns).to.deep.equal([column]);
+      expect(removedColumns).to.deep.equal([]);
+    });
   });
 });

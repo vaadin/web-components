@@ -173,6 +173,9 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
   updatePart(cell, value, part || `${attribute}-cell`);
 }
 
+/**
+ * A helper for observing flattened child column list of an element.
+ */
 export class ColumnObserver {
   constructor(host, callback) {
     this.__host = host;
@@ -185,6 +188,7 @@ export class ColumnObserver {
       childList: true,
     });
 
+    // The observer callback is invoked once initially when the observer is created.
     this.__initialCallDebouncer = Debouncer.debounce(this.__initialCallDebouncer, microTask, () => this.__onMutation());
   }
 
@@ -209,38 +213,48 @@ export class ColumnObserver {
   }
 
   __onMutation() {
+    // Detect if this is the initial call
     const initialCall = !this.__currentColumns;
     this.__currentColumns ||= [];
 
+    // Detect added and removed columns or if the columns order has changed
     const columns = ColumnObserver.getColumns(this.__host);
     const addedColumns = columns.filter((column) => !this.__currentColumns.includes(column));
     const removedColumns = this.__currentColumns.filter((column) => !columns.includes(column));
     const orderChanged = this.__currentColumns.some((column, index) => column !== columns[index]);
     this.__currentColumns = columns;
 
+    // Update the list of child slots and toggle their slotchange listeners
     this.__toggleSlotChangeListeners(false);
     this.__currentSlots = [...this.__host.children].filter((child) => child instanceof HTMLSlotElement);
     this.__toggleSlotChangeListeners(true);
 
+    // Invoke the callback if there are changes in the child columns or if this is the initial call
     const invokeCallback = initialCall || addedColumns.length || removedColumns.length || orderChanged;
     if (invokeCallback) {
       this.__callback(addedColumns, removedColumns);
     }
   }
 
-  static isColumnElement(node) {
+  /**
+   * Default filter for column elements.
+   */
+  static __isColumnElement(node) {
     return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/u.test(node.localName);
   }
 
   static getColumns(host) {
     const columns = [];
+
     // A temporary workaround for backwards compatibility
-    const isColumnElement = host._isColumnElement || ColumnObserver.isColumnElement;
+    const isColumnElement = host._isColumnElement || ColumnObserver.__isColumnElement;
 
     [...host.children].forEach((child) => {
       if (isColumnElement(child)) {
+        // The child is a column element, add it to the list
         columns.push(child);
       } else if (child instanceof HTMLSlotElement) {
+        // The child is a slot, add all assigned column elements to the list
         [...child.assignedElements({ flatten: true })]
           .filter((assignedElement) => isColumnElement(assignedElement))
           .forEach((assignedElement) => columns.push(assignedElement));
