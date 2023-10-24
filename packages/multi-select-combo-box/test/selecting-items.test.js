@@ -216,6 +216,15 @@ describe('selecting items', () => {
         await sendKeys({ type: 'a' });
         expectItems(['orange', 'apple', 'banana']);
       });
+
+      it('should restore items when groupSelectedItems is set to false', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.groupSelectedItems = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
     });
 
     describe('dataProvider', () => {
@@ -259,6 +268,15 @@ describe('selecting items', () => {
         comboBox.inputElement.focus();
         await sendKeys({ type: 'a' });
         expectItems(['orange', 'apple', 'banana']);
+      });
+
+      it('should restore items when groupSelectedItems is set to false', () => {
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.opened = false;
+        comboBox.groupSelectedItems = false;
+        comboBox.opened = true;
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
     });
   });

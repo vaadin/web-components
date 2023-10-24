@@ -842,7 +842,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __updateTopGroup(groupSelectedItems, selectedItems, opened) {
-    if (groupSelectedItems && !opened) {
+    if (!groupSelectedItems) {
+      this._topGroup = [];
+    } else if (!opened) {
       this._topGroup = [...selectedItems];
     }
   }
