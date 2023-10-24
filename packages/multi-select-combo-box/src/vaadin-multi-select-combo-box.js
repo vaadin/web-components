@@ -165,6 +165,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           size="{{size}}"
           filtered-items="[[__effectiveFilteredItems]]"
           selected-items="[[selectedItems]]"
+          group-selected-items="[[groupSelectedItems]]"
+          top-group="[[_topGroup]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
           theme$="[[_theme]]"
@@ -225,6 +227,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         reflectToAttribute: true,
         observer: '_clearButtonVisibleChanged',
+        value: false,
+      },
+
+      /**
+       * Set to true to group selected items at the top of the overlay.
+       * @attr {boolean} group-selected-items
+       */
+      groupSelectedItems: {
+        type: Boolean,
         value: false,
       },
 
@@ -464,6 +475,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       _lastFilter: {
         type: String,
       },
+
+      /** @private */
+      _topGroup: {
+        type: Array,
+      },
     };
   }
 
@@ -471,6 +487,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
       '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
+      '__updateTopGroup(selectedItems, opened)',
     ];
   }
 
@@ -821,6 +838,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this.validate();
 
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  }
+
+  /** @private */
+  __updateTopGroup(selectedItems, opened) {
+    if (!opened) {
+      this._topGroup = [...selectedItems];
+    }
   }
 
   /** @private */

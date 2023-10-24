@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
-import { getDataProvider } from './helpers.js';
+import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox, internal, inputElement;
@@ -159,6 +159,80 @@ describe('selecting items', () => {
       comboBox.autoOpenDisabled = true;
       await sendKeys({ type: 'lime' });
       verifyEnterKeyPropagation(false);
+    });
+  });
+
+  describe('group selected items', () => {
+    function expectItems(values) {
+      getAllItems(comboBox).forEach((item, idx) => {
+        expect(item.textContent).to.equal(values[idx]);
+      });
+    }
+
+    beforeEach(() => {
+      comboBox.groupSelectedItems = true;
+    });
+
+    describe('items', () => {
+      beforeEach(() => {
+        comboBox.items = ['a', 'b', 'c', 'd', 'e'];
+        comboBox.selectedItems = ['c', 'd'];
+      });
+
+      it('should show selected items at the top of the overlay', () => {
+        comboBox.opened = true;
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+      });
+
+      it('should update dropdown items after overlay is re-opened', () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['d', 'a', 'b', 'c', 'e']);
+      });
+
+      it('should update dropdown items after clearing and re-opening', () => {
+        comboBox.clearButtonVisible = true;
+        comboBox.opened = true;
+        comboBox.$.clearButton.click();
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['a', 'b', 'c', 'd', 'e']);
+      });
+    });
+
+    describe('dataProvider', () => {
+      beforeEach(() => {
+        comboBox.dataProvider = getDataProvider(['a', 'b', 'c', 'd', 'e']);
+        comboBox.selectedItems = ['c', 'd'];
+      });
+
+      it('should show selected items at the top of the overlay', () => {
+        comboBox.opened = true;
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+      });
+
+      it('should update dropdown items after overlay is re-opened', () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['d', 'a', 'b', 'c', 'e']);
+      });
+
+      it('should update dropdown items after clearing and re-opening', () => {
+        comboBox.clearButtonVisible = true;
+        comboBox.opened = true;
+        comboBox.$.clearButton.click();
+        expectItems(['c', 'd', 'a', 'b', 'e']);
+        comboBox.opened = false;
+        comboBox.opened = true;
+        expectItems(['a', 'b', 'c', 'd', 'e']);
+      });
     });
   });
 });
