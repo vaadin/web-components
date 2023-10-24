@@ -164,6 +164,15 @@ describe('rich text editor', () => {
         expect(btn.hasAttribute('on')).to.be.false;
       });
 
+      it('should toggle "toolbar-button-pressed" part value when the format button is clicked', () => {
+        btn = getButton('bold');
+
+        btn.click();
+        expect(btn.part.contains('toolbar-button-pressed')).to.be.true;
+        btn.click();
+        expect(btn.part.contains('toolbar-button-pressed')).to.be.false;
+      });
+
       it('should toggle "on" attribute for corresponding buttons when selection is changed', () => {
         const delta = new window.Quill.imports.delta([
           { attributes: { bold: true }, insert: 'Foo\n' },
