@@ -487,7 +487,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
       '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
-      '__updateTopGroup(selectedItems, opened)',
+      '__updateTopGroup(groupSelectedItems, selectedItems, opened)',
     ];
   }
 
@@ -841,8 +841,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  __updateTopGroup(selectedItems, opened) {
-    if (!opened) {
+  __updateTopGroup(groupSelectedItems, selectedItems, opened) {
+    if (groupSelectedItems && !opened) {
       this._topGroup = [...selectedItems];
     }
   }
