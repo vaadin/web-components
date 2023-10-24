@@ -175,63 +175,89 @@ describe('selecting items', () => {
 
     describe('items', () => {
       beforeEach(() => {
-        comboBox.items = ['a', 'b', 'c', 'd', 'e'];
-        comboBox.selectedItems = ['c', 'd'];
+        comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+        comboBox.selectedItems = ['lemon', 'orange'];
       });
 
       it('should show selected items at the top of the overlay', () => {
         comboBox.opened = true;
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+      });
+
+      it('should only show selected items when readonly is true', () => {
+        comboBox.readonly = true;
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange']);
       });
 
       it('should update dropdown items after overlay is re-opened', () => {
         comboBox.opened = true;
         getFirstItem(comboBox).click();
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
         comboBox.opened = true;
-        expectItems(['d', 'a', 'b', 'c', 'e']);
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
       });
 
       it('should update dropdown items after clearing and re-opening', () => {
         comboBox.clearButtonVisible = true;
         comboBox.opened = true;
         comboBox.$.clearButton.click();
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
         comboBox.opened = true;
-        expectItems(['a', 'b', 'c', 'd', 'e']);
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should show correct items when internal filtering applied', async () => {
+        comboBox.opened = true;
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        expectItems(['orange', 'apple', 'banana']);
       });
     });
 
     describe('dataProvider', () => {
       beforeEach(() => {
-        comboBox.dataProvider = getDataProvider(['a', 'b', 'c', 'd', 'e']);
-        comboBox.selectedItems = ['c', 'd'];
+        comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon', 'orange']);
+        comboBox.selectedItems = ['lemon', 'orange'];
       });
 
       it('should show selected items at the top of the overlay', () => {
         comboBox.opened = true;
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+      });
+
+      it('should only show selected items when readonly is true', () => {
+        comboBox.readonly = true;
+        comboBox.opened = true;
+        expectItems(['lemon', 'orange']);
       });
 
       it('should update dropdown items after overlay is re-opened', () => {
         comboBox.opened = true;
         getFirstItem(comboBox).click();
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
         comboBox.opened = true;
-        expectItems(['d', 'a', 'b', 'c', 'e']);
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
       });
 
       it('should update dropdown items after clearing and re-opening', () => {
         comboBox.clearButtonVisible = true;
         comboBox.opened = true;
         comboBox.$.clearButton.click();
-        expectItems(['c', 'd', 'a', 'b', 'e']);
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
         comboBox.opened = true;
-        expectItems(['a', 'b', 'c', 'd', 'e']);
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should show correct items when internal filtering applied', async () => {
+        comboBox.opened = true;
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        expectItems(['orange', 'apple', 'banana']);
       });
     });
   });
