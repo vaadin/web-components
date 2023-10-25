@@ -17,7 +17,6 @@ registerStyles(
 
     :host([all-chips-visible]) #wrapper {
       flex-wrap: wrap;
-      align-items: center;
     }
   `,
   {
