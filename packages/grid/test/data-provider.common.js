@@ -402,8 +402,10 @@ describe('data provider', () => {
         it('should update row part attribute when expanding / collapsing', () => {
           expandIndex(grid, 0);
           expect(bodyRows[0].getAttribute('part')).to.contain('expanded-row');
+          expect(bodyRows[0].getAttribute('part')).to.not.contain('collapsed-row');
           collapseIndex(grid, 0);
           expect(bodyRows[0].getAttribute('part')).to.not.contain('expanded-row');
+          expect(bodyRows[0].getAttribute('part')).to.contain('collapsed-row');
         });
 
         it('should update body cells part attribute when expanding / collapsing', () => {
@@ -411,10 +413,12 @@ describe('data provider', () => {
           expandIndex(grid, 0);
           cells.forEach((cell) => {
             expect(cell.getAttribute('part')).to.contain('expanded-row-cell');
+            expect(cell.getAttribute('part')).to.not.contain('collapsed-row-cell');
           });
           collapseIndex(grid, 0);
           cells.forEach((cell) => {
             expect(cell.getAttribute('part')).to.not.contain('expanded-row-cell');
+            expect(cell.getAttribute('part')).to.contain('collapsed-row-cell');
           });
         });
       });
