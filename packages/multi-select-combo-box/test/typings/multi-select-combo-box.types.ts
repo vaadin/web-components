@@ -105,6 +105,7 @@ assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
 assertType<string>(narrowedComboBox.overlayClass);
 assertType<boolean>(narrowedComboBox.groupSelectedItems);
+assertType<boolean>(narrowedComboBox.allChipsVisible);
 
 // Mixins
 assertType<ControllerMixinClass>(narrowedComboBox);
