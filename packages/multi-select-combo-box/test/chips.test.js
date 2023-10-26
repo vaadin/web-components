@@ -222,7 +222,7 @@ describe('chips', () => {
         await nextRender();
 
         const chips = getChips(comboBox);
-        const minWidth = getComputedStyle(comboBox).getPropertyValue('--chip-min-width');
+        const minWidth = getComputedStyle(comboBox).getPropertyValue('--_chip-min-width');
         expect(chips[1].style.maxWidth).to.equal(minWidth);
       });
     });
