@@ -245,11 +245,20 @@ describe('vaadin-app-layout', () => {
         expect(spy.calledTwice).to.be.true;
       });
 
-      it('should hide drawer if corresponding slot has no content', async () => {
+      it('should hide/unhide drawer if corresponding slot depending on the number of content', async () => {
         const section = layout.querySelector('[slot="drawer"]');
+        const initialPadding = getComputedStyle(layout).paddingInlineStart;
         section.parentNode.removeChild(section);
         await nextFrame();
+
         expect(drawer.hasAttribute('hidden')).to.be.true;
+        expect(getComputedStyle(layout).paddingInlineStart).to.be.equal('0px');
+
+        layout.appendChild(section);
+        await nextFrame();
+
+        expect(drawer.hasAttribute('hidden')).to.be.false;
+        expect(getComputedStyle(layout).paddingInlineStart).to.be.equal(initialPadding);
       });
 
       it('should not close the drawer on navigation event', () => {
