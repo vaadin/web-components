@@ -186,7 +186,7 @@ export type GridDefaultItem = any;
  * `last-footer-row-cell`     | Cell in the last footer row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
- * `collapsed-row-cell`       | Cell in an collapsed row
+ * `collapsed-row-cell`       | Cell in a collapsed row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
  * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)
