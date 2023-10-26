@@ -566,8 +566,10 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
     if (childCount === 0) {
       drawer.setAttribute('hidden', '');
+      this.style.setProperty('--_vaadin-app-layout-drawer-width', 0);
     } else {
       drawer.removeAttribute('hidden');
+      this.style.removeProperty('--_vaadin-app-layout-drawer-width');
     }
     this._updateOffsetSize();
   }
