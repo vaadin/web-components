@@ -64,6 +64,7 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-group-block`                | The group for preformatted block controls
  * `toolbar-group-format`               | The group for format controls
  * `toolbar-button`                     | The toolbar button (applies to all buttons)
+ * `toolbar-button-pressed`             | The toolbar button in pressed state (applies to all buttons)
  * `toolbar-button-undo`                | The "undo" button
  * `toolbar-button-redo`                | The "redo" button
  * `toolbar-button-bold`                | The "bold" button
