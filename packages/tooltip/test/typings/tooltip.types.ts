@@ -29,6 +29,6 @@ assertType<TooltipPosition>(tooltip.position);
 assertType<string>(tooltip.overlayClass);
 assertType<(target: HTMLElement, context?: Record<string, unknown>) => boolean>(tooltip.shouldShow);
 
-Tooltip.setDefaultFocusDelay(1);
-Tooltip.setDefaultHideDelay(1);
-Tooltip.setDefaultHoverDelay(1);
+assertType<(delay: number) => void>(Tooltip.setDefaultFocusDelay);
+assertType<(delay: number) => void>(Tooltip.setDefaultHideDelay);
+assertType<(delay: number) => void>(Tooltip.setDefaultHoverDelay);
