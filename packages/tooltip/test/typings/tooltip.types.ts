@@ -2,7 +2,7 @@ import '../../vaadin-tooltip.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import type { TooltipPosition } from '../../vaadin-tooltip.js';
+import { Tooltip, type TooltipPosition } from '../../vaadin-tooltip.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -28,3 +28,7 @@ assertType<number>(tooltip.hoverDelay);
 assertType<TooltipPosition>(tooltip.position);
 assertType<string>(tooltip.overlayClass);
 assertType<(target: HTMLElement, context?: Record<string, unknown>) => boolean>(tooltip.shouldShow);
+
+Tooltip.setDefaultFocusDelay(1);
+Tooltip.setDefaultHideDelay(1);
+Tooltip.setDefaultHoverDelay(1);
