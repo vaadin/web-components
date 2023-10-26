@@ -156,6 +156,7 @@ export type GridDefaultItem = any;
  * Part name                  | Description
  * ---------------------------|----------------
  * `row`                      | Row in the internal table
+ * `collapsed-row`            | Collapsed row
  * `expanded-row`             | Expanded row
  * `selected-row`             | Selected row
  * `details-opened-row`       | Row with details open
@@ -185,6 +186,7 @@ export type GridDefaultItem = any;
  * `last-footer-row-cell`     | Cell in the last footer row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
+ * `collapsed-row-cell`       | Cell in an collapsed row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
  * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)
