@@ -944,7 +944,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       remainingWidth -= this.__getOverflowWidth();
     }
 
-    const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--chip-min-width'));
+    const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
