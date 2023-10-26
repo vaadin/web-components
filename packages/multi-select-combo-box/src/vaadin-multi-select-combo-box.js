@@ -23,6 +23,7 @@ import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixi
 const multiSelectComboBox = css`
   :host {
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
+    --chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
   }
 
   #chips {
@@ -111,6 +112,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `50px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
@@ -942,6 +944,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       remainingWidth -= this.__getOverflowWidth();
     }
 
+    const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--chip-min-width'));
+
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
@@ -949,8 +953,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
       // If all the chips are visible, no need to measure remaining width
       if (!this.allChipsVisible && this.$.chips.clientWidth > remainingWidth) {
-        chip.remove();
-        break;
+        // Always show at least last selected item as a chip
+        if (refNode === null) {
+          chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+        } else {
+          chip.remove();
+          break;
+        }
       }
 
       items.pop();
