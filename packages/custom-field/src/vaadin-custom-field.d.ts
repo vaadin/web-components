@@ -72,6 +72,7 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  * `helper-text`        | The slotted helper text element wrapper
  * `error-message`      | The slotted error message element wrapper
  * `required-indicator` | The `required` state indicator element
+ * `input-fields`       | The slotted input elements wrapper
  *
  * The following state attributes are available for styling:
  *
