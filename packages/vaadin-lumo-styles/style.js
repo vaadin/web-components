@@ -93,13 +93,19 @@ const globals = css`
     --vaadin-input-field-error-color: var(--lumo-error-text-color);
     --vaadin-input-field-error-font-size: var(--lumo-font-size-xs);
     --vaadin-input-field-error-font-weight: 400;
-    /* Text field */
-    --vaadin-text-input-field-height: var(--lumo-size-m);
-    --vaadin-text-input-field-placeholder-color: var(--lumo-secondary-text-color);
-    --vaadin-text-input-field-readonly-border: 1px dashed var(--lumo-contrast-30pct);
-    --vaadin-text-input-field-value-color: var(--lumo-body-text-color);
-    --vaadin-text-input-field-value-font-size: var(--lumo-font-size-m);
-    --vaadin-text-input-field-value-font-weight: 400;
+    /* Input field */
+    --vaadin-input-field-background: var(--lumo-contrast-10pct);
+    --vaadin-input-field-icon-color: var(--lumo-contrast-60pct);
+    --vaadin-input-field-icon-size: var(--lumo-icon-size-m);
+    --vaadin-input-field-invalid-background: var(--lumo-error-color-10pct);
+    --vaadin-input-field-invalid-hover-highlight: var(--lumo-error-color-50pct);
+    --vaadin-input-field-height: var(--lumo-size-m);
+    --vaadin-input-field-hover-highlight: var(--lumo-contrast-50pct);
+    --vaadin-input-field-placeholder-color: var(--lumo-secondary-text-color);
+    --vaadin-input-field-readonly-border: 1px dashed var(--lumo-contrast-30pct);
+    --vaadin-input-field-value-color: var(--lumo-body-text-color);
+    --vaadin-input-field-value-font-size: var(--lumo-font-size-m);
+    --vaadin-input-field-value-font-weight: 400;
   }
 `;
 
