@@ -124,7 +124,7 @@ snapshots["vaadin-custom-field shadow default"] =
   </div>
   <div
     class="inputs-wrapper"
-    part="input"
+    part="input-fields"
   >
     <slot id="slot">
     </slot>
