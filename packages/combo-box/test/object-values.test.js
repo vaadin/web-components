@@ -24,6 +24,8 @@ describe('object values', () => {
         { label: 'duplicate value 2', value: 'duplicate' },
         { label: 'missing value 1' },
         { label: 'missing value 2' },
+        { label: 'duplicate label', value: 'duplicate-label-1' },
+        { label: 'duplicate label', value: 'duplicate-label-2' },
       ];
 
       comboBox.open();
@@ -188,6 +190,50 @@ describe('object values', () => {
       expect(comboBox.value).to.eql('duplicate');
       expect(input.value).to.eql('duplicate value 2');
       expect(spy.callCount).to.eql(1);
+    });
+
+    it('should select first of duplicate labels', () => {
+      comboBox.value = 'duplicate-label-1';
+
+      expect(comboBox.selectedItem).to.eql(comboBox.items[10]);
+    });
+
+    it('should select second of duplicate labels', () => {
+      comboBox.value = 'duplicate-label-2';
+
+      expect(comboBox.selectedItem).to.eql(comboBox.items[11]);
+    });
+
+    it('should select first of duplicate labels manually', () => {
+      const spy = sinon.spy();
+      comboBox.addEventListener('selected-item-changed', spy);
+
+      clickItem(comboBox, 10);
+
+      expect(comboBox.selectedItem).to.eql(comboBox.items[10]);
+      expect(comboBox.value).to.eql('duplicate-label-1');
+      expect(input.value).to.eql('duplicate label');
+      expect(spy.callCount).to.eql(1);
+    });
+
+    it('should select second of duplicate labels manually', () => {
+      const spy = sinon.spy();
+      comboBox.addEventListener('selected-item-changed', spy);
+
+      clickItem(comboBox, 11);
+
+      expect(comboBox.selectedItem).to.eql(comboBox.items[11]);
+      expect(comboBox.value).to.eql('duplicate-label-2');
+      expect(input.value).to.eql('duplicate label');
+      expect(spy.callCount).to.eql(1);
+    });
+
+    it('should maintain selection on second of duplicate labels on blur', () => {
+      clickItem(comboBox, 11);
+
+      comboBox.blur();
+      expect(comboBox.selectedItem).to.eql(comboBox.items[11]);
+      expect(comboBox.value).to.eql('duplicate-label-2');
     });
 
     it('should select correct with missing value', () => {
