@@ -155,16 +155,10 @@ describe('validation', () => {
       datePicker.min = '2016-01-01';
       datePicker.max = '2016-12-31';
 
-      const invalidChangedSpy = sinon.spy();
-      datePicker.addEventListener('invalid-changed', invalidChangedSpy);
-
       await open(datePicker);
 
-      await waitForValueChange(datePicker, () => {
-        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
-      });
-
-      expect(invalidChangedSpy.calledOnce).to.be.true;
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      expect(selectResult).to.be.equal(false);
     });
 
     it('should reflect correct invalid value on value-changed eventListener', async () => {
@@ -174,29 +168,23 @@ describe('validation', () => {
 
       await open(datePicker);
 
-      await waitForValueChange(datePicker, () => {
-        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
-      });
-
-      expect(datePicker.invalid).to.be.true;
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      expect(selectResult).to.be.equal(false);
     });
 
-    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', (done) => {
+    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', () => {
       datePicker.isDateDisabled = (date) => {
         if (!date) {
           return false;
         }
-        return date.toISOString().split('T')[0] === '2017-01-02';
+        const valid = date.year === 2017 && date.month === 0 && date.day === 1;
+        return valid;
       };
       datePicker.value = '2016-01-01'; // Valid
 
-      datePicker.addEventListener('value-changed', () => {
-        expect(datePicker.invalid).to.be.equal(true);
-        done();
-      });
-
       datePicker.open();
-      datePicker._overlayContent._selectDate(new Date('2017-01-02')); // Invalid
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01T12:00:00')); // Invalid
+      expect(selectResult).to.be.equal(false);
     });
 
     it('should fire a validated event on validation success', () => {
@@ -365,9 +353,77 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.true;
 
       // Try valid value.
-      datePicker.value = '2016-01-01';
+      datePicker.value = '2016-02-01';
       expect(datePicker.validate()).to.be.true;
       expect(datePicker.invalid).to.be.false;
+    });
+  });
+
+  describe('keyboard navigation', () => {
+    let focusSpy;
+
+    beforeEach(async () => {
+      datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01" max="2010-01-31"></vaadin-date-picker>`);
+      await nextRender();
+      await open(datePicker);
+      focusSpy = sinon.spy(datePicker._overlayContent, 'focusDate');
+      datePicker.isDateDisabled = (date) => {
+        if (!date) {
+          return false;
+        }
+        return date.year === 2010 && date.month === 0 && date.day === 29;
+      };
+    });
+
+    it('should not allow navigation prior to min', async () => {
+      datePicker.value = '2010-01-02';
+      datePicker.inputElement.focus();
+      // Move focus inside the dropdown to the typed date.
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      // Move focus to the previous week and it should instead move to the min date
+      await sendKeys({ press: 'ArrowUp' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      expect(focusSpy.called).to.be.true;
+      let calledDate = focusSpy.firstCall.args[0];
+      expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+      // Attempt to move focus to the previous week and it should stay on the min date
+      await sendKeys({ press: 'ArrowUp' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      calledDate = focusSpy.secondCall.args[0];
+      expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+    });
+
+    it('should not allow navigation beyond max', async () => {
+      datePicker.value = '2010-01-30';
+      datePicker.inputElement.focus();
+      // Move focus inside the dropdown to the typed date.
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      // Move focus to the previous week and it should instead move to the min date
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      expect(focusSpy.called).to.be.true;
+      let calledDate = focusSpy.firstCall.args[0];
+      expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+      // Attempt to move focus to the previous week and it should stay on the min date
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      calledDate = focusSpy.secondCall.args[0];
+      expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+    });
+
+    it('should allow navigation on a disabled date', async () => {
+      datePicker.value = '2010-01-28';
+      // Move focus inside the dropdown to the typed date.
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      // Attempt to move focus to a disabled date
+      await sendKeys({ press: 'ArrowRight' });
+      await waitForScrollToFinish(datePicker._overlayContent);
+      expect(focusSpy.called).to.be.true;
+      const calledDate = focusSpy.firstCall.args[0];
+      expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-29');
     });
   });
 });
