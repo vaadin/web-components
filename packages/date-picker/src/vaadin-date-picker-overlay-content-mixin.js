@@ -111,7 +111,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
          * A function to be used to determine whether the user can select a given date.
          * Receives a `DatePickerDate` object of the date to be selected and should return a
          * boolean.
-         * 
+         *
          * @type {function(DatePickerDate): boolean | undefined}
          */
         isDateDisabled: {
@@ -374,7 +374,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
-      if (!this._dateAllowed(this.focusedDate)) {
+      if (!this._dateAllowed(dateToSelect)) {
         return false;
       }
       this.selectedDate = dateToSelect;
@@ -949,21 +949,22 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
-      // if (this._dateAllowed(dateToFocus)) {
+      // For this check we do consider the isDateDisabled function because disabled dates are allowed to be focused, just not outside min/max
+      if (this._dateAllowed(dateToFocus, undefined, undefined, () => false)) {
         this.focusDate(dateToFocus, keepMonth);
-      // } else if (this._dateAllowed(this.focusedDate)) {
-      //   // Move to min or max date
-      //   if (diff > 0) {
-      //     // Down, Right or Page Down key
-      //     this.focusDate(this.maxDate);
-      //   } else {
-      //     // Up, Left or Page Up key
-      //     this.focusDate(this.minDate);
-      //   }
-      // } else {
-      //   // Move to closest allowed date
-      //   this._focusClosestDate(this.focusedDate);
-      // }
+      } else if (this._dateAllowed(this.focusedDate)) {
+        // Move to min or max date
+        if (diff > 0) {
+          // Down, Right or Page Down key
+          this.focusDate(this.maxDate);
+        } else {
+          // Up, Left or Page Up key
+          this.focusDate(this.minDate);
+        }
+      } else {
+        // Move to closest allowed date
+        this._focusClosestDate(this.focusedDate);
+      }
     }
 
     /** @private */
@@ -1033,7 +1034,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         const dateToCheck = extractDateParts(date);
         dateIsDisabled = isDateDisabled(dateToCheck);
       }
-      return (!min || date >= min) && (!max || date <= max) && (!dateIsDisabled);
+      return (!min || date >= min) && (!max || date <= max) && !dateIsDisabled;
     }
 
     /** @private */
