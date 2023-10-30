@@ -241,7 +241,10 @@ describe('vaadin-cookie-consent', () => {
       const event = keyboardEventFor('keydown', 32, [], ' ');
       getOverlay().querySelector('.cc-dismiss').dispatchEvent(event);
       await waitUntilOpened();
-      expect(getOverlay().offsetHeight).to.be.equal(0);
+
+      expect(getOverlay().classList.contains('cc-invisible')).to.be.true;
+      const opacity = getComputedStyle(getOverlay()).opacity;
+      expect(Number(opacity)).to.be.lessThan(1);
     });
   });
 
