@@ -44,7 +44,7 @@ registerStyles(
 
     [part~='cell'] {
       min-height: var(--lumo-size-m);
-      background-color: var(--lumo-base-color);
+      background-color: var(--vaadin-grid-cell-background, var(--lumo-base-color));
       cursor: default;
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
       --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-m);
