@@ -56,7 +56,7 @@ const globals = css`
     --vaadin-checkbox-background-hover: var(--lumo-contrast-30pct);
     --vaadin-checkbox-border-radius: var(--lumo-border-radius-s);
     --vaadin-checkbox-checkmark-char: var(--lumo-icons-checkmark);
-    --vaadin-checkbox-checkmark-char-intermediate: '';
+    --vaadin-checkbox-checkmark-char-indeterminate: '';
     --vaadin-checkbox-checkmark-color: var(--lumo-primary-contrast-color);
     --vaadin-checkbox-checkmark-size: calc(var(--vaadin-checkbox-size) + 2px);
     --vaadin-checkbox-label-color: var(--lumo-body-text-color);

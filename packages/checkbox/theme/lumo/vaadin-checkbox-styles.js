@@ -79,7 +79,7 @@ registerStyles(
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      content: var(--vaadin-checkbox-checkmark-char-intermediate, '');
+      content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
       opacity: 1;
       top: 45%;
       height: 10%;
