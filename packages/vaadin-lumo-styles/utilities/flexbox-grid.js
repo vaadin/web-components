@@ -289,6 +289,9 @@ export const flexboxAndGrid = css`
   .col-span-12 {
     grid-column: span 12 / span 12;
   }
+  .col-span-full {
+    grid-column: 1 / -1;
+  }
 
   /* === Span (row) === */
   .row-span-1 {
@@ -308,6 +311,9 @@ export const flexboxAndGrid = css`
   }
   .row-span-6 {
     grid-row: span 6 / span 6;
+  }
+  .row-span-full {
+    grid-row: 1 / -1;
   }
 
   /* === Responsive design === */
