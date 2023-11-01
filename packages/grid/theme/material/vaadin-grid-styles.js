@@ -59,12 +59,6 @@ registerStyles(
     }
 
     [part~='row']:hover > [part~='body-cell'] {
-      background: linear-gradient(
-          var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04)),
-          var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04))
-        )
-        var(--material-background-color);
-
       background: var(
         --vaadin-grid-cell-background,
         linear-gradient(
