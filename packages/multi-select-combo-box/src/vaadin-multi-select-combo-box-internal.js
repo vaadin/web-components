@@ -170,20 +170,32 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       return;
     }
 
-    if (this.topGroup) {
-      const filteredTopItems = [];
+    if (items && items.length && this.topGroup.length) {
+      let filteredTopItems = [];
       const filteredItems = [];
+      const topItems = [...this.topGroup];
 
-      (items || []).forEach((item) => {
-        if (this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem))) {
+      items.forEach((item) => {
+        const idx = topItems.findIndex((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem));
+        if (idx !== -1) {
           filteredTopItems.push(item);
+          topItems.splice(idx, 1);
         } else {
           filteredItems.push(item);
         }
       });
 
+      // When there is no filter, always show all the top group,
+      // including items from pages that haven't been loaded yet.
+      if (!this.filter && topItems.length) {
+        filteredTopItems = [...filteredTopItems, ...topItems];
+      }
+
       this._dropdownItems = [...filteredTopItems, ...filteredItems];
+      return;
     }
+
+    this._dropdownItems = items;
   }
 
   /** @private */
