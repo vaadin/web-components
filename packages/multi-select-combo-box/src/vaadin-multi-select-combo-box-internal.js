@@ -59,6 +59,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
+       * Set to true to group selected items at the top of the overlay.
+       * @attr {boolean} group-selected-items
+       */
+      groupSelectedItems: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
@@ -93,6 +102,14 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       lastFilter: {
         type: String,
         notify: true,
+      },
+
+      /**
+       * A subset of items to be shown at the top of the overlay.
+       */
+      topGroup: {
+        type: Array,
+        observer: '_topGroupChanged',
       },
 
       _target: {
@@ -136,6 +153,42 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
     this._target = this;
     this._toggleElement = this.querySelector('.toggle-button');
+  }
+
+  /**
+   * Override combo-box method to group selected
+   * items at the top of the overlay.
+   *
+   * @protected
+   * @override
+   */
+  _setDropdownItems(items) {
+    if (this.readonly || !this.groupSelectedItems) {
+      this._dropdownItems = items;
+      return;
+    }
+
+    if (this.topGroup) {
+      const filteredTopItems = [];
+      const filteredItems = [];
+
+      (items || []).forEach((item) => {
+        if (this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem))) {
+          filteredTopItems.push(item);
+        } else {
+          filteredItems.push(item);
+        }
+      });
+
+      this._dropdownItems = [...filteredTopItems, ...filteredItems];
+    }
+  }
+
+  /** @private */
+  _topGroupChanged(topGroup) {
+    if (topGroup) {
+      this._setDropdownItems(this.filteredItems);
+    }
   }
 
   /**
@@ -193,9 +246,9 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       this.__enterPressed = null;
 
       // Keep selected item focused after committing on Enter.
-      const focusedItem = this.filteredItems[this._focusedIndex];
+      const focusedItem = this._dropdownItems[this._focusedIndex];
       this._commitValue();
-      this._focusedIndex = this.filteredItems.indexOf(focusedItem);
+      this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
 
       return;
     }
