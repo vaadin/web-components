@@ -243,5 +243,48 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
     });
+
+    describe('lazy loading', () => {
+      let allItems;
+
+      beforeEach(() => {
+        allItems = Array.from({ length: 100 }, (_, i) => `item ${i}`);
+        comboBox.dataProvider = getDataProvider(allItems);
+        comboBox.groupSelectedItems = true;
+        comboBox.opened = true;
+      });
+
+      it('should show selected item on top when its page is not loaded yet', async () => {
+        comboBox.inputElement.focus();
+        await sendKeys({ type: '55' });
+
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'Enter' });
+
+        comboBox.opened = false;
+        comboBox.opened = true;
+
+        const item = getFirstItem(comboBox);
+        expect(item.label).to.equal('item 55');
+        expect(item.hasAttribute('selected')).to.be.true;
+      });
+
+      it('should not show selected item on top when filter is applied', async () => {
+        comboBox.inputElement.focus();
+        await sendKeys({ type: '55' });
+
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'Enter' });
+
+        comboBox.opened = false;
+        comboBox.opened = true;
+
+        await sendKeys({ type: '5' });
+
+        const item = getFirstItem(comboBox);
+        expect(item.label).to.equal('item 5');
+        expect(item.hasAttribute('selected')).to.be.false;
+      });
+    });
   });
 });
