@@ -67,6 +67,10 @@ const multiSelectComboBox = css`
     caret-color: var(--lumo-body-text-color) !important;
   }
 
+  [part='label'] {
+    flex-shrink: 0;
+  }
+
   /* Override input-container styles */
   ::slotted([slot='chip']),
   ::slotted([slot='overflow']) {
