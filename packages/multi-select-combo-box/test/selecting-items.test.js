@@ -210,11 +210,11 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
 
-      it('should show correct items when internal filtering applied', async () => {
+      it('should not show selected items on top when internal filtering applied', async () => {
         comboBox.opened = true;
         comboBox.inputElement.focus();
         await sendKeys({ type: 'a' });
-        expectItems(['orange', 'apple', 'banana']);
+        expectItems(['apple', 'banana', 'orange']);
       });
 
       it('should restore items when groupSelectedItems is set to false', () => {
@@ -263,11 +263,11 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
 
-      it('should show correct items when internal filtering applied', async () => {
+      it('should not show selected items on top when internal filtering applied', async () => {
         comboBox.opened = true;
         comboBox.inputElement.focus();
         await sendKeys({ type: 'a' });
-        expectItems(['orange', 'apple', 'banana']);
+        expectItems(['apple', 'banana', 'orange']);
       });
 
       it('should restore items when groupSelectedItems is set to false', () => {
