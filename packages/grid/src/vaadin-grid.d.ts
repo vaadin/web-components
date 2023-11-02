@@ -156,6 +156,7 @@ export type GridDefaultItem = any;
  * Part name                  | Description
  * ---------------------------|----------------
  * `row`                      | Row in the internal table
+ * `body-row`                 | Body row in the internal table
  * `collapsed-row`            | Collapsed row
  * `expanded-row`             | Expanded row
  * `selected-row`             | Selected row

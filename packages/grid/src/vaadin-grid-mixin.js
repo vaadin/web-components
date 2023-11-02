@@ -497,7 +497,7 @@ export const GridMixin = (superClass) =>
       const rows = [];
       for (let i = 0; i < count; i++) {
         const row = document.createElement('tr');
-        row.setAttribute('part', 'row');
+        row.setAttribute('part', 'row body-row');
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         if (this._columnTree) {
