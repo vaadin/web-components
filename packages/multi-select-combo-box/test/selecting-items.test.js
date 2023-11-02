@@ -315,10 +315,10 @@ describe('selecting items', () => {
         comboBox.opened = false;
         comboBox.opened = true;
 
-        await sendKeys({ type: '54' });
+        await sendKeys({ type: '5' });
 
         const item = getFirstItem(comboBox);
-        expect(item.label).to.equal('item 54');
+        expect(item.label).to.equal('item 5');
         expect(item.hasAttribute('selected')).to.be.false;
       });
     });
