@@ -170,7 +170,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       return;
     }
 
-    if (items && items.length && this.topGroup.length) {
+    if (items && items.length && this.topGroup && this.topGroup.length) {
       let filteredTopItems = [];
       const filteredItems = [];
       const topItems = [...this.topGroup];
