@@ -314,7 +314,7 @@ export const ItemsMixin = (superClass) =>
           // Initialize items synchronously
           menu._listBox._observer.flush();
 
-          const newItem = menu._listBox.items[index];
+          const newItem = menu._listBox.children[index];
           newItem.focus();
         } else if (!selectedItem.keepOpen) {
           this.close();
