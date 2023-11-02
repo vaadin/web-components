@@ -39,6 +39,7 @@ describe('items', () => {
           { text: 'foo-0-0', checked: true },
           { text: 'foo-0-1', disabled: true },
           { text: 'foo-0-2', children: [{ text: 'foo-0-2-0' }] },
+          { component: 'hr' },
           { text: 'foo-0-3', keepOpen: true },
         ],
       },
@@ -208,15 +209,15 @@ describe('items', () => {
   });
 
   it('should have a checked sub menu item after click if keep open', () => {
-    subMenu.items[3].checked = true;
-    getMenuItems(subMenu)[3].click();
-    expect(getMenuItems(subMenu)[3].hasAttribute('menu-item-checked')).to.be.true;
+    subMenu.items[4].checked = true;
+    getMenuItems(subMenu)[4].click();
+    expect(getMenuItems(subMenu)[4].hasAttribute('menu-item-checked')).to.be.true;
   });
 
   it('should have a focused sub menu item after click if keep open', () => {
-    subMenu.items[3].checked = true;
-    getMenuItems(subMenu)[3].click();
-    expect(getMenuItems(subMenu)[3].hasAttribute('focused')).to.be.true;
+    subMenu.items[4].checked = true;
+    getMenuItems(subMenu)[4].click();
+    expect(getMenuItems(subMenu)[4].hasAttribute('focused')).to.be.true;
   });
 
   it('should not have a checked item', async () => {
