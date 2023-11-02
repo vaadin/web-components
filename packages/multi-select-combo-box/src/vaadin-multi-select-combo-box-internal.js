@@ -188,10 +188,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       // When there is no filter, always show all the top group,
       // including items from pages that haven't been loaded yet.
       if (!this.filter && topItems.length) {
-        filteredTopItems = [...filteredTopItems, ...topItems];
+        filteredTopItems = filteredTopItems.concat(topItems);
       }
 
-      this._dropdownItems = [...filteredTopItems, ...filteredItems];
+      this._dropdownItems = filteredTopItems.concat(filteredItems);
       return;
     }
 
