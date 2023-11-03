@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grid Pro</title>
-    <script type="module" src="./common.js"></script>
+    <!-- <script type="module" src="./common.js"></script> -->
   </head>
   <body>
     <vaadin-grid-pro single-cell-edit>
@@ -20,8 +20,13 @@
     </vaadin-grid-pro>
 
     <script type="module">
-      import '@vaadin/grid-pro';
-      import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+      // import '@vaadin/grid-pro';
+      // import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+
+      import '@vaadin/grid-pro/theme/lumo/vaadin-lit-grid-pro.js';
+      import '@vaadin/grid-pro/theme/lumo/vaadin-lit-grid-pro-edit-column.js';
+
+
       import { users } from '../packages/grid-pro/test/visual/users.js';
 
       const grid = document.querySelector('vaadin-grid-pro');
