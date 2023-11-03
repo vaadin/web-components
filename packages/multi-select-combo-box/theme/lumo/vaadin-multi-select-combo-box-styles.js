@@ -25,6 +25,16 @@ registerStyles(
   },
 );
 
+registerStyles(
+  'vaadin-multi-select-combo-box-container',
+  css`
+    :host([all-chips-visible]) {
+      padding-block: var(--lumo-space-xs);
+    }
+  `,
+  { moduleId: 'lumo-multi-select-combo-box-container' },
+);
+
 const multiSelectComboBox = css`
   :host([has-value]) {
     padding-inline-start: 0;
@@ -36,6 +46,14 @@ const multiSelectComboBox = css`
 
   [part~='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
+  }
+
+  :host([all-chips-visible]) [part~='chip'] {
+    margin-block: calc(var(--lumo-space-xs) / 2);
+  }
+
+  :host([all-chips-visible]) ::slotted([slot='input']) {
+    min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
 
   [part~='overflow']:not([hidden]) + :not(:empty) {

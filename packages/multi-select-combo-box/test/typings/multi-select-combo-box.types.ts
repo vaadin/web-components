@@ -92,6 +92,7 @@ assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
 assertType<string | null | undefined>(narrowedComboBox.theme);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
+assertType<boolean>(narrowedComboBox.allChipsVisible);
 
 // Mixins
 assertType<ControllerMixinClass>(narrowedComboBox);
