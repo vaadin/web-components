@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/dialog",
-  "version": "23.3.25",
+  "version": "23.3.26",
   "publishConfig": {
     "access": "public"
   },
@@ -39,18 +39,18 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.3.25",
-    "@vaadin/lit-renderer": "~23.3.25",
-    "@vaadin/overlay": "~23.3.25",
-    "@vaadin/vaadin-lumo-styles": "~23.3.25",
-    "@vaadin/vaadin-material-styles": "~23.3.25",
-    "@vaadin/vaadin-themable-mixin": "~23.3.25"
+    "@vaadin/component-base": "~23.3.26",
+    "@vaadin/lit-renderer": "~23.3.26",
+    "@vaadin/overlay": "~23.3.26",
+    "@vaadin/vaadin-lumo-styles": "~23.3.26",
+    "@vaadin/vaadin-material-styles": "~23.3.26",
+    "@vaadin/vaadin-themable-mixin": "~23.3.26"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/polymer-legacy-adapter": "~23.3.25",
+    "@vaadin/polymer-legacy-adapter": "~23.3.26",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-area": "~23.3.25",
+    "@vaadin/text-area": "~23.3.26",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
   },
