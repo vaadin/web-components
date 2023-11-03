@@ -7,13 +7,11 @@ import {
   focusin,
   focusout,
   keyDownChar,
+  nextFrame,
   nextRender,
   space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
-import { Select } from '@vaadin/select/src/vaadin-select.js';
-import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 
 function itemPropertyRenderer(root, column, model) {
@@ -47,7 +45,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof TextField).to.equal(true);
+      expect(editor instanceof customElements.get('vaadin-text-field')).to.equal(true);
     });
 
     it('should render the select to cell with select editor type specified', () => {
@@ -55,7 +53,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 1);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof Select).to.equal(true);
+      expect(editor instanceof customElements.get('vaadin-select')).to.equal(true);
     });
 
     it('should render the checkbox to cell with text checkbox type specified', () => {
@@ -63,7 +61,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, 2);
       dblclick(cell._content);
       editor = column._getEditorComponent(cell);
-      expect(editor instanceof Checkbox).to.equal(true);
+      expect(editor instanceof customElements.get('vaadin-checkbox')).to.equal(true);
     });
   });
 
@@ -95,7 +93,7 @@ describe('edit column editor type', () => {
     it('should render the checkbox to cell in edit mode', () => {
       dblclick(cell._content);
       checkbox = column._getEditorComponent(cell);
-      expect(checkbox instanceof Checkbox).to.equal(true);
+      expect(checkbox instanceof customElements.get('vaadin-checkbox')).to.equal(true);
       expect(checkbox.checked).to.be.equal(grid.items[0].married);
     });
 
@@ -105,8 +103,9 @@ describe('edit column editor type', () => {
       expect(checkbox.hasAttribute('focus-ring')).to.be.true;
     });
 
-    it('should update value from checkbox checked after edit mode exit', () => {
+    it('should update value from checkbox checked after edit mode exit', async () => {
       dblclick(cell._content);
+      await nextFrame();
       checkbox = column._getEditorComponent(cell);
       checkbox.click();
       enter(checkbox);
@@ -119,8 +118,9 @@ describe('edit column editor type', () => {
         grid.editOnClick = true;
       });
 
-      it('should update value from checkbox checked after edit mode exit', () => {
+      it('should update value from checkbox checked after edit mode exit', async () => {
         cell._content.click();
+        await nextFrame();
         checkbox = column._getEditorComponent(cell);
         checkbox.click();
         enter(checkbox);
@@ -157,16 +157,18 @@ describe('edit column editor type', () => {
         enter(cell._content);
         editor = getCellEditor(cell);
         await onceOpened(editor);
+        await nextFrame();
       });
 
       it('should render the opened select to cell in edit mode', () => {
-        expect(editor instanceof Select).to.equal(true);
+        expect(editor instanceof customElements.get('vaadin-select')).to.equal(true);
         expect(editor.value).to.be.equal('mrs');
         expect(editor.opened).to.equal(true);
       });
 
       it('should open the select and stop focusout on editor click', async () => {
         editor.opened = false;
+        await nextFrame();
         editor.focusElement.click();
         focusout(editor);
         focusin(editor._overlayElement.querySelector('vaadin-select-item'));
@@ -182,6 +184,7 @@ describe('edit column editor type', () => {
 
       it('should open the select on space key', async () => {
         editor.opened = false;
+        await nextFrame();
         space(editor.focusElement);
         await nextRender(editor._menuElement);
         expect(editor.opened).to.equal(true);
@@ -189,6 +192,7 @@ describe('edit column editor type', () => {
 
       it('should open the select on arrow down key', async () => {
         editor.opened = false;
+        await nextFrame();
         arrowDown(editor.focusElement);
         await nextRender(editor._menuElement);
         expect(editor.opened).to.equal(true);
@@ -196,26 +200,29 @@ describe('edit column editor type', () => {
 
       it('should open the select on arrow up key', async () => {
         editor.opened = false;
+        await nextFrame();
         arrowUp(editor.focusElement);
         await nextRender(editor._menuElement);
         expect(editor.opened).to.equal(true);
       });
 
-      it('should update value and exit edit mode when item is selected', () => {
+      it('should update value and exit edit mode when item is selected', async () => {
         grid.singleCellEdit = true;
         const item = editor._overlayElement.querySelector('vaadin-select-item');
         const value = item.textContent;
         const spy = sinon.spy(cell, 'focus');
         item.click();
+        await nextFrame();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
         expect(cell._content.textContent).to.equal(value);
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should work with `enterNextRow`', () => {
+      it('should work with `enterNextRow`', async () => {
         grid.enterNextRow = true;
         const item = editor._overlayElement.querySelector('vaadin-select-item');
         enter(item);
+        await nextFrame();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
         const secondCell = getContainerCell(grid.$.items, 1, 1);
         expect(getCellEditor(secondCell)).to.be.ok;
@@ -255,7 +262,7 @@ describe('edit column editor type', () => {
       });
 
       it('should render the closed select to cell in edit mode', () => {
-        expect(editor instanceof Select).to.equal(true);
+        expect(editor instanceof customElements.get('vaadin-select')).to.equal(true);
         expect(editor.value).to.be.equal('mrs');
         expect(editor.opened).to.equal(false);
       });

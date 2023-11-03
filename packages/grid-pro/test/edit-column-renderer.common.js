@@ -260,6 +260,7 @@ describe('edit column renderer', () => {
         root.appendChild(field);
       };
       dblclick(cell._content);
+      await nextFrame();
       editor = getCellEditor(cell);
 
       const { x, y } = editor.$.clearButton.getBoundingClientRect();

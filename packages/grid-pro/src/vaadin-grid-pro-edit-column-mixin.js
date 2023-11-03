@@ -8,8 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { get, set } from '@polymer/polymer/lib/utils/path.js';
 import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
  * @polymerMixin
@@ -34,7 +34,10 @@ export const GridProEditColumnMixin = (superClass) =>
          *   - `model.detailsOpened` Details opened state.
          * @type {!GridBodyRenderer | null | undefined}
          */
-        editModeRenderer: Function,
+        editModeRenderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * The list of options which should be passed to cell editor component.
@@ -78,6 +81,7 @@ export const GridProEditColumnMixin = (superClass) =>
         path: {
           type: String,
           observer: '_pathChanged',
+          sync: true,
         },
 
         /** @private */
@@ -86,7 +90,7 @@ export const GridProEditColumnMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells.*)'];
+      return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells)'];
     }
 
     constructor() {
@@ -192,7 +196,7 @@ export const GridProEditColumnMixin = (superClass) =>
      */
     _getEditorValue(editor) {
       const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
-      return get(editor, path);
+      return get(path, editor);
     }
 
     /** @private */
@@ -240,7 +244,7 @@ export const GridProEditColumnMixin = (superClass) =>
       const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
       // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
       value = this.editorType === 'checkbox' && typeof value === 'string' ? value === 'true' : value;
-      set(editor, path, value);
+      set(path, value, editor);
       if (editor.notifyPath) {
         editor.notifyPath(path, value);
       }
@@ -260,9 +264,11 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
       document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
       this._setEditorOptions(editor);
-      this._setEditorValue(editor, get(model.item, this.path));
+      this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
+
       this._focusEditor(editor);
+      requestAnimationFrame(() => this._focusEditor(editor));
     }
 
     /**

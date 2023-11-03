@@ -10,6 +10,7 @@
  */
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
  * @polymerMixin
@@ -194,8 +195,8 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _applyEdit({ path, value, index, item }) {
-      this.set(path, value, item);
-      this.notifyPath(`items.${index}.${path}`, value);
+      set(path, value, item);
+      this.requestContentUpdate();
     }
 
     /** @private */
@@ -365,7 +366,7 @@ export const InlineEditingMixin = (superClass) =>
         const editor = column._getEditorComponent(cell);
         if (editor) {
           const value = column._getEditorValue(editor);
-          if (value !== this.get(column.path, model.item)) {
+          if (value !== get(column.path, model.item)) {
             // In some cases, where the value comes from the editor's change
             // event (eg. custom editor in vaadin-grid-pro-flow), the event is
             // not dispatched in FF/Safari/Edge. That's due the change event
