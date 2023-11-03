@@ -11,9 +11,6 @@ import {
   space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';

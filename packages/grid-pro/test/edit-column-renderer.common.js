@@ -2,8 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   createItems,

@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 import {
   createItems,
   dblclick,

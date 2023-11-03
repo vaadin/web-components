@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 import { html, render } from 'lit';
 import { until } from 'lit/directives/until.js';
 import { flushGrid, getCellEditor } from './helpers.js';

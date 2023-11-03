@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid-pro.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
