@@ -34,6 +34,11 @@ const multiSelectComboBox = css`
     min-height: 32px;
   }
 
+  :host([all-chips-visible]) [part~='chip'] {
+    margin-top: 0.25rem;
+    align-self: flex-start;
+  }
+
   [part='input-field'] ::slotted(input) {
     padding: 6px 0;
   }

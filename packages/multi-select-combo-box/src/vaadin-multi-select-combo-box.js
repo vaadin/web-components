@@ -46,6 +46,14 @@ const multiSelectComboBox = css`
     flex-basis: 0;
     padding: 0;
   }
+
+  :host([all-chips-visible]) #chips {
+    display: contents;
+  }
+
+  :host([all-chips-visible]) [class$='container'] {
+    width: fit-content;
+  }
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
@@ -179,6 +187,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         >
           <vaadin-multi-select-combo-box-container
             part="input-field"
+            all-chips-visible="[[allChipsVisible]]"
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
@@ -223,6 +232,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   static get properties() {
     return {
+      /**
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always show them all, causing input field to grow
+       * and wrap into multiple lines when width is limited.
+       * @attr {boolean} all-chips-visible
+       */
+      allChipsVisible: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_allChipsVisibleChanged',
+      },
+
       /**
        * Set true to prevent the overlay from opening automatically.
        * @attr {boolean} auto-open-disabled
@@ -650,6 +672,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     super._delegateAttribute(name, value);
   }
 
+  /** @private */
+  _allChipsVisibleChanged(visible, oldVisible) {
+    if (visible || oldVisible) {
+      this.__updateChips();
+    }
+  }
+
   /**
    * Setting clear button visible reduces total space available
    * for rendering chips, and making it hidden increases it.
@@ -921,7 +950,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       const chip = this.__createChip(items[i]);
       this.$.chips.insertBefore(chip, refNode);
 
-      if (this.$.chips.clientWidth > remainingWidth) {
+      // If all the chips are visible, no need to measure remaining width
+      if (!this.allChipsVisible && this.$.chips.clientWidth > remainingWidth) {
         chip.remove();
         break;
       }
