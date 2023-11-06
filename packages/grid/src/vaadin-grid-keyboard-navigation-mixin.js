@@ -686,7 +686,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // If the target focusable is tied to a column that is not visible,
       // find the first visible column and update the target in order to
       // prevent scrolling to the start of the row.
-      if (focusStepTarget && focusStepTarget._column && !this.__isColumnInViewport(focusStepTarget._column)) {
+      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepTarget)) {
         const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
         if (firstVisibleColumn) {
           if (focusStepTarget === this._headerFocusable) {
