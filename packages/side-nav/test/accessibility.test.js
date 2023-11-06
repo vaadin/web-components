@@ -91,7 +91,7 @@ describe('accessibility', () => {
       wrapper = fixtureSync(`
         <div>
           <input />
-          <vaadin-side-nav>
+          <vaadin-side-nav collapsible>
             <vaadin-side-nav-item path="/foo">Foo</vaadin-side-nav-item>
             <vaadin-side-nav-item path="/bar">Bar</vaadin-side-nav-item>
           </vaadin-side-nav>
