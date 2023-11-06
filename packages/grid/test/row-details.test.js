@@ -422,4 +422,58 @@ describe('row details', () => {
       expect(detailsCell.hidden).to.be.false;
     });
   });
+
+  describe('details cell height change', () => {
+    let bodyRow;
+    let updateDetailsCellHeight;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.rowDetailsRenderer = (root, _, { item }) => {
+        // Render the details cell with a height of 100px
+        root.innerHTML = `<div style="height: 100px; background: yellow;">Details</div>`;
+        // Increase the details cell height to 200px in a microtask
+        queueMicrotask(() => {
+          root.firstElementChild.style.height = '150px';
+        });
+
+        updateDetailsCellHeight = () => {
+          root.firstElementChild.style.height = '200px';
+        };
+      };
+      grid.items = [{ name: 'foo' }];
+      await nextFrame();
+      bodyRow = getRows(grid.$.items)[0];
+    });
+
+    it('should update the row height when opened items are updated', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      await nextFrame();
+      const detailsRowHeight = bodyRow.offsetHeight;
+
+      grid.detailsOpenedItems = [...grid.items];
+      await nextFrame();
+      expect(bodyRow.offsetHeight).to.equal(detailsRowHeight);
+    });
+
+    it('should clear row padding bottom when opened items are cleared', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.detailsOpenedItems = [];
+      await nextFrame();
+      expect(bodyRow.style.paddingBottom).to.equal('');
+    });
+
+    it('should update the row height when details cell height changes', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      await nextFrame();
+      const detailsRowHeight = bodyRow.offsetHeight;
+      updateDetailsCellHeight();
+      await nextFrame();
+      expect(bodyRow.offsetHeight).to.equal(detailsRowHeight + 50);
+    });
+  });
 });
