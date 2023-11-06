@@ -47,11 +47,11 @@ const multiSelectComboBox = css`
     padding: 0;
   }
 
-  :host([all-chips-visible]) #chips {
+  :host([wrap-chips]) #chips {
     display: contents;
   }
 
-  :host([all-chips-visible]) [class$='container'] {
+  :host([wrap-chips]) [class$='container'] {
     width: fit-content;
   }
 `;
@@ -187,7 +187,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         >
           <vaadin-multi-select-combo-box-container
             part="input-field"
-            all-chips-visible="[[allChipsVisible]]"
+            wrap-chips="[[wrapChips]]"
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
@@ -224,19 +224,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   static get properties() {
     return {
-      /**
-       * Set to true to not collapse selected items chips into the overflow
-       * chip and instead always show them all, causing input field to grow
-       * and wrap into multiple lines when width is limited.
-       * @attr {boolean} all-chips-visible
-       */
-      allChipsVisible: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-        observer: '_allChipsVisibleChanged',
-      },
-
       /**
        * Set true to prevent the overlay from opening automatically.
        * @attr {boolean} auto-open-disabled
@@ -470,6 +457,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: String,
       },
 
+      /**
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always show them all, causing input field to grow
+       * and wrap into multiple lines when width is limited.
+       * @attr {boolean} wrap-chips
+       */
+      wrapChips: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_wrapChipsChanged',
+      },
+
       /** @private */
       __effectiveItems: {
         type: Array,
@@ -699,7 +699,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _allChipsVisibleChanged(visible, oldVisible) {
+  _wrapChipsChanged(visible, oldVisible) {
     if (visible || oldVisible) {
       this.__updateChips();
     }
@@ -952,7 +952,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       this.insertBefore(chip, refNode);
 
       // If all the chips are visible, no need to measure remaining width
-      if (!this.allChipsVisible && this.$.chips.clientWidth > remainingWidth) {
+      if (!this.wrapChips && this.$.chips.clientWidth > remainingWidth) {
         // Always show at least last selected item as a chip
         if (refNode === null) {
           chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;

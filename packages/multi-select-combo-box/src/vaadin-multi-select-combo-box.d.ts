@@ -173,14 +173,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  */
 declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   /**
-   * Set to true to not collapse selected items chips into the overflow
-   * chip and instead always show them all, causing input field to grow
-   * and wrap into multiple lines when width is limited.
-   * @attr {boolean} all-chips-visible
-   */
-  allChipsVisible: boolean;
-
-  /**
    * When true, the user can input a value that is not present in the items list.
    * @attr {boolean} allow-custom-value
    */
@@ -326,6 +318,14 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * Total number of items.
    */
   size: number | undefined;
+
+  /**
+   * Set to true to not collapse selected items chips into the overflow
+   * chip and instead always show them all, causing input field to grow
+   * and wrap into multiple lines when width is limited.
+   * @attr {boolean} wrap-chips
+   */
+  wrapChips: boolean;
 
   /**
    * Clears the cached pages and reloads data from data provider when needed.

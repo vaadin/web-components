@@ -437,7 +437,7 @@ describe('chips', () => {
     });
   });
 
-  describe('allChipsVisible', () => {
+  describe('wrapChips', () => {
     let overflow;
 
     beforeEach(async () => {
@@ -446,32 +446,32 @@ describe('chips', () => {
       overflow = getChips(comboBox)[0];
     });
 
-    it('should not show overflow chip when allChipsVisible is set to true', async () => {
-      comboBox.allChipsVisible = true;
+    it('should not show overflow chip when wrapChips is set to true', async () => {
+      comboBox.wrapChips = true;
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
       expect(getChips(comboBox).length).to.equal(3);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should show overflow chip when allChipsVisible is set to false', async () => {
-      comboBox.allChipsVisible = true;
+    it('should show overflow chip when wrapChips is set to false', async () => {
+      comboBox.wrapChips = true;
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
 
-      comboBox.allChipsVisible = false;
+      comboBox.wrapChips = false;
       await nextRender();
       expect(getChips(comboBox).length).to.equal(2);
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should update chips when allChipsVisible is set after selectedItems', async () => {
+    it('should update chips when wrapChips is set after selectedItems', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
       expect(getChips(comboBox).length).to.equal(2);
       expect(overflow.hasAttribute('hidden')).to.be.false;
 
-      comboBox.allChipsVisible = true;
+      comboBox.wrapChips = true;
       await nextRender();
       expect(getChips(comboBox).length).to.equal(3);
       expect(overflow.hasAttribute('hidden')).to.be.true;
@@ -480,7 +480,7 @@ describe('chips', () => {
     it('should wrap chips and increase input field height if chips do not fit', async () => {
       const inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
       const height = inputField.clientHeight;
-      comboBox.allChipsVisible = true;
+      comboBox.wrapChips = true;
       comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
       await nextRender();
       expect(inputField.clientHeight).to.be.greaterThan(height);

@@ -15,7 +15,7 @@ registerStyles(
       width: 100%;
     }
 
-    :host([all-chips-visible]) #wrapper {
+    :host([wrap-chips]) #wrapper {
       flex-wrap: wrap;
     }
   `,
@@ -59,9 +59,9 @@ class MultiSelectComboBoxContainer extends InputContainer {
       /**
        * Set true to not collapse selected items chips into the overflow
        * chip and instead always show them, causing input field to grow.
-       * @attr {boolean} all-chips-visible
+       * @attr {boolean} wrap-chips
        */
-      allChipsVisible: {
+      wrapChips: {
         type: Boolean,
         reflectToAttribute: true,
       },

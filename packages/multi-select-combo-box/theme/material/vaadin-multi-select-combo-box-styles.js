@@ -56,7 +56,7 @@ const multiSelectComboBox = css`
     padding: 0 0.5rem;
   }
 
-  :host([all-chips-visible]) ::slotted([slot='chip']) {
+  :host([wrap-chips]) ::slotted([slot='chip']) {
     margin-top: 0.25rem;
     align-self: flex-start;
   }
