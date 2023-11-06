@@ -662,7 +662,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // If the target focusable is tied to a column that is not visible,
       // find the first visible column and update the target in order to
       // prevent scrolling to the start of the row.
-      if (focusStepTarget && focusStepTarget._column && !this.__isColumnInViewport(focusStepTarget._column)) {
+      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepTarget)) {
         const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
         if (firstVisibleColumn) {
           if (focusStepTarget === this._headerFocusable) {
@@ -688,9 +688,14 @@ export const KeyboardNavigationMixin = (superClass) =>
         // Assume frozen columns to always be inside the viewport
         return true;
       }
+      return this.__isHorizontallyInViewport(column._sizerCell);
+    }
+
+    /** @private */
+    __isHorizontallyInViewport(element) {
       return (
-        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth >= this._scrollLeft &&
-        column._sizerCell.offsetLeft <= this._scrollLeft + this.clientWidth
+        element.offsetLeft + element.offsetWidth >= this._scrollLeft &&
+        element.offsetLeft <= this._scrollLeft + this.clientWidth
       );
     }
 
