@@ -11,8 +11,7 @@ const button = css`
     --lumo-button-size: var(--lumo-size-m);
     min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
     height: var(--_button-size);
-    padding: var(--vaadin-button-padding-v, 0)
-      var(--vaadin-button-padding-h, calc(var(--_button-size) / 3 + var(--lumo-border-radius-m) / 2));
+    padding: var(--vaadin-button-padding, 0 calc(var(--_button-size) / 3 + var(--lumo-border-radius-m) / 2));
     margin: var(--vaadin-button-margin, var(--lumo-space-xs) 0);
     box-sizing: border-box;
     /* Style */

@@ -40,8 +40,7 @@ const globals = css`
     --vaadin-button-height: var(--lumo-size-m);
     --vaadin-button-margin: var(--lumo-space-xs) 0;
     --vaadin-button-min-width: calc(var(--vaadin-button-height) * 2);
-    --vaadin-button-padding-h: calc(var(--vaadin-button-height) / 3 + var(--lumo-border-radius-m) / 2);
-    --vaadin-button-padding-v: 0;
+    --vaadin-button-padding: 0 calc(var(--vaadin-button-height) / 3 + var(--lumo-border-radius-m) / 2);
     --vaadin-button-text-color: var(--lumo-primary-text-color);
     --vaadin-button-primary-background: var(--lumo-primary-color);
     --vaadin-button-primary-border: none;
