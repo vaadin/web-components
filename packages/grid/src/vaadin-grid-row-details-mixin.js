@@ -153,6 +153,13 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
 
+      this.__updateDetailsRowPadding(row, cell);
+      // Ensure the row has correct padding after frame (the resize observer might miss it)
+      requestAnimationFrame(() => this.__updateDetailsRowPadding(row, cell));
+    }
+
+    /** @private */
+    __updateDetailsRowPadding(row, cell) {
       if (cell.hidden) {
         row.style.removeProperty('padding-bottom');
       } else {
