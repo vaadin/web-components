@@ -320,9 +320,14 @@ export const ScrollMixin = (superClass) =>
       }
 
       // Check if the column's sizer cell is inside the viewport
+      return this.__isHorizontallyInViewport(column._sizerCell);
+    }
+
+    /** @private */
+    __isHorizontallyInViewport(element) {
       return (
-        column._sizerCell.offsetLeft + column._sizerCell.offsetWidth >= this._scrollLeft &&
-        column._sizerCell.offsetLeft <= this._scrollLeft + this.clientWidth
+        element.offsetLeft + element.offsetWidth >= this._scrollLeft &&
+        element.offsetLeft <= this._scrollLeft + this.clientWidth
       );
     }
 
