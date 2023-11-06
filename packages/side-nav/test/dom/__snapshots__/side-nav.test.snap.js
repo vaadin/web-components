@@ -71,19 +71,10 @@ snapshots["vaadin-side-nav host collapsed"] =
 /* end snapshot vaadin-side-nav host collapsed */
 
 snapshots["vaadin-side-nav shadow default"] = 
-`<button
-  aria-controls="children"
-  aria-hidden="true"
-  part="label"
->
+`<div part="label">
   <slot name="label">
   </slot>
-  <span
-    aria-hidden="true"
-    part="toggle-button"
-  >
-  </span>
-</button>
+</div>
 <ul
   aria-hidden="false"
   id="children"
