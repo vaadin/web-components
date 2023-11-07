@@ -14,7 +14,7 @@ import type {
 } from '@vaadin/grid';
 import type { GridColumn } from '@vaadin/grid/vaadin-grid-column';
 import type { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';
-import type { GridPro } from '../../vaadin-grid-pro';
+import type { GridPro, GridProEditorType } from '../../vaadin-grid-pro';
 import type { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
 
 interface TestGridItem {
@@ -96,3 +96,14 @@ assertType<GridProEditColumn>(genericEditColumn);
 
 const narrowedEditColumn = genericEditColumn as GridProEditColumn<TestGridItem>;
 assertType<GridColumn<TestGridItem>>(narrowedEditColumn);
+
+assertType<string | null | undefined>(narrowedEditColumn.path);
+assertType<string[]>(narrowedEditColumn.editorOptions);
+assertType<GridProEditorType>(narrowedEditColumn.editorType);
+assertType<string>(narrowedEditColumn.editorValuePath);
+
+narrowedEditColumn.editModeRenderer = (root, column, model) => {
+  assertType<HTMLElement>(root);
+  assertType<GridColumn<TestGridItem>>(column);
+  assertType<GridItemModel<TestGridItem>>(model);
+};

@@ -8,10 +8,11 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { GridBodyRenderer, GridDefaultItem, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
-import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
+import type { GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
+import type { GridColumn, GridColumnMixin } from '@vaadin/grid/src/vaadin-grid-column.js';
+import type { GridProEditColumnMixinClass } from './vaadin-grid-pro-edit-column-mixin.js';
 
-export type GridProEditorType = 'checkbox' | 'custom' | 'select' | 'text';
+export * from './vaadin-grid-pro-edit-column-mixin.js';
 
 /**
  * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`
@@ -28,60 +29,12 @@ export type GridProEditorType = 'checkbox' | 'custom' | 'select' | 'text';
  *    ...
  * ```
  */
-declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
-  /**
-   * JS Path of the property in the item used for the editable content.
-   */
-  path: string | null | undefined;
+declare class GridProEditColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
-  /**
-   * Custom function for rendering the cell content in edit mode.
-   * Receives three arguments:
-   *
-   * - `root` The cell content DOM element. Append your editor component to it.
-   * - `column` The `<vaadin-grid-pro-edit-column>` element.
-   * - `model` The object with the properties related with
-   *   the rendered item, contains:
-   *   - `model.index` The index of the item.
-   *   - `model.item` The item.
-   *   - `model.expanded` Sublevel toggle state.
-   *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
-   *   - `model.selected` Selected state.
-   *   - `model.detailsOpened` Details opened state.
-   */
-  editModeRenderer: GridBodyRenderer<TItem> | null | undefined;
-
-  /**
-   * The list of options which should be passed to cell editor component.
-   * Used with the `select` editor type, to provide a list of items.
-   */
-  editorOptions: string[];
-
-  /**
-   * Type of the cell editor component to be rendered. Allowed values:
-   * - `text` (default) - renders a text field
-   * - `checkbox` - renders a checkbox
-   * - `select` - renders a select with a list of items passed as `editorOptions`
-   *
-   * Editor type is set to `custom` when `editModeRenderer` is set.
-   * @attr {text|checkbox|select|custom} editor-type
-   */
-  editorType: GridProEditorType;
-
-  /**
-   * Path of the property used for the value of the editor component.
-   * @attr {string} editor-value-path
-   */
-  editorValuePath: string;
-
-  protected _getEditorComponent(cell: HTMLElement): HTMLElement | null;
-
-  protected _getEditorValue(editor: HTMLElement): unknown | null;
-
-  protected _startCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
-
-  protected _stopCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
-}
+interface GridProEditColumn<TItem = GridDefaultItem>
+  extends GridProEditColumnMixinClass<TItem>,
+    GridColumnMixin<TItem, GridColumn<TItem>>,
+    GridColumn<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
