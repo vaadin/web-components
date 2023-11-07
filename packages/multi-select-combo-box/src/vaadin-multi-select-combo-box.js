@@ -783,6 +783,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Update selected for dropdown items
     this.requestContentUpdate();
+
+    if (this.opened) {
+      this.$.comboBox.$.overlay._updateOverlayWidth();
+    }
   }
 
   /** @private */

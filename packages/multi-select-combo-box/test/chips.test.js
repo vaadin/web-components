@@ -485,5 +485,24 @@ describe('chips', () => {
       await nextRender();
       expect(inputField.clientHeight).to.be.greaterThan(height);
     });
+
+    it('should adapt overlay width to the input field width while opened', async () => {
+      comboBox.allChipsVisible = true;
+      comboBox.style.width = 'auto';
+      comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
+
+      await nextRender();
+      comboBox.opened = true;
+
+      const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
+      const overlayPart = overlay.$.overlay;
+      const width = overlayPart.clientWidth;
+      expect(width).to.equal(comboBox.clientWidth);
+
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextRender();
+      expect(overlayPart.clientWidth).to.be.lessThan(width);
+      expect(overlayPart.clientWidth).to.be.equal(comboBox.clientWidth);
+    });
   });
 });
