@@ -42,8 +42,6 @@
     "@vaadin/checkbox": "24.3.0-alpha9",
     "@vaadin/component-base": "24.3.0-alpha9",
     "@vaadin/grid": "24.3.0-alpha9",
-    "@vaadin/item": "24.3.0-alpha9",
-    "@vaadin/list-box": "24.3.0-alpha9",
     "@vaadin/lit-renderer": "24.3.0-alpha9",
     "@vaadin/select": "24.3.0-alpha9",
     "@vaadin/text-field": "24.3.0-alpha9",
