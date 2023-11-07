@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, esc, fixtureSync, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
 
 describe('keyboard navigation', () => {
