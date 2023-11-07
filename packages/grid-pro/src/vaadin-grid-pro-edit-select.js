@@ -8,8 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import '@vaadin/item/src/vaadin-item.js';
-import '@vaadin/list-box/src/vaadin-list-box.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
 
@@ -108,20 +106,10 @@ class GridProEditSelect extends Select {
 
   _optionsChanged(options) {
     if (options && options.length) {
-      this.renderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const listBox = document.createElement('vaadin-list-box');
-        listBox.selected = options.indexOf(this.value);
-        options.forEach((option) => {
-          const item = document.createElement('vaadin-item');
-          item.textContent = option;
-          listBox.appendChild(item);
-        });
-
-        root.appendChild(listBox);
-      };
+      this.items = options.map((option) => ({
+        label: option,
+        value: option,
+      }));
 
       this._overlayElement.addEventListener('vaadin-overlay-outside-click', () => {
         this._grid._stopEdit();
