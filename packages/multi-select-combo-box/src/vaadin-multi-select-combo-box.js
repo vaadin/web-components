@@ -175,7 +175,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           size="{{size}}"
           filtered-items="[[__effectiveFilteredItems]]"
           selected-items="[[selectedItems]]"
-          group-selected-items="[[groupSelectedItems]]"
+          selected-items-on-top="[[selectedItemsOnTop]]"
           top-group="[[_topGroup]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
@@ -251,15 +251,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         reflectToAttribute: true,
         observer: '_clearButtonVisibleChanged',
-        value: false,
-      },
-
-      /**
-       * Set to true to group selected items at the top of the overlay.
-       * @attr {boolean} group-selected-items
-       */
-      groupSelectedItems: {
-        type: Boolean,
         value: false,
       },
 
@@ -465,6 +456,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       filteredItems: Array,
 
+      /**
+       * Set to true to group selected items at the top of the overlay.
+       * @attr {boolean} selected-items-on-top
+       */
+      selectedItemsOnTop: {
+        type: Boolean,
+        value: false,
+      },
+
       /** @private */
       value: {
         type: String,
@@ -511,7 +511,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
       '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
-      '__updateTopGroup(groupSelectedItems, selectedItems, opened)',
+      '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
     ];
   }
 
@@ -872,8 +872,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  __updateTopGroup(groupSelectedItems, selectedItems, opened) {
-    if (!groupSelectedItems) {
+  __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
+    if (!selectedItemsOnTop) {
       this._topGroup = [];
     } else if (!opened) {
       this._topGroup = [...selectedItems];
