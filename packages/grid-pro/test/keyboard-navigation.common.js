@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
 
@@ -258,10 +258,11 @@ describe('keyboard navigation', () => {
       expect(input).to.be.ok;
     });
 
-    it('should not re-focus previous cell in edit mode on Enter, if `enterNextRow` is true', () => {
+    it('should not re-focus previous cell in edit mode on Enter, if `enterNextRow` is true', async () => {
       grid.enterNextRow = true;
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       enter(firstCell._content);
+      await nextFrame();
       input = getCellEditor(firstCell).inputElement;
 
       const spy = sinon.spy(firstCell, 'focus');

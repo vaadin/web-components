@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
-import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 
 describe('custom element definition', () => {
@@ -40,11 +38,11 @@ describe('basic features', () => {
   });
 
   it('should extend Grid', () => {
-    expect(grid instanceof Grid).to.be.true;
+    expect(grid instanceof customElements.get('vaadin-grid')).to.be.true;
   });
 
   it('should be possible to use grid modules for defining content and layout', () => {
-    expect(column instanceof GridColumn).to.be.true;
+    expect(column instanceof customElements.get('vaadin-grid-column')).to.be.true;
     expect(grid.querySelectorAll('vaadin-grid-cell-content').length).to.above(0);
   });
 
@@ -78,6 +76,7 @@ describe('missing imports', () => {
       });
 
       it('should not warn if not in use', () => {
+        flushGrid(grid);
         flushDebouncers();
         expect(console.warn.called).to.be.false;
       });
@@ -85,12 +84,14 @@ describe('missing imports', () => {
       it('should warn once if in use', () => {
         grid.appendChild(document.createElement(elementName));
         grid.appendChild(document.createElement(elementName));
+        flushGrid(grid);
         flushDebouncers();
         expect(console.warn.callCount).to.equal(1);
       });
 
       it('should warn and not throw after adding', () => {
         grid.appendChild(document.createElement(elementName));
+        flushGrid(grid);
         flushDebouncers();
 
         let error;
@@ -107,7 +108,12 @@ describe('missing imports', () => {
       });
 
       it('should not warn for present import', async () => {
-        await import(`../${elementName}.js`);
+        const isLitElement = grid.performUpdate !== undefined;
+        if (isLitElement) {
+          await import(`../src/${elementName.replace('vaadin-', 'vaadin-lit-')}.js`);
+        } else {
+          await import(`../src/${elementName}.js`);
+        }
         grid.appendChild(document.createElement(elementName));
         flushDebouncers();
         expect(console.warn.called).to.be.false;

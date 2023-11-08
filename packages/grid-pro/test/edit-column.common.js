@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   createItems,
@@ -23,7 +23,7 @@ describe('edit column', () => {
   (isIOS ? describe.skip : describe)('select column', () => {
     let grid, textCell, selectCell, checkboxCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
@@ -38,28 +38,33 @@ describe('edit column', () => {
       textCell = getContainerCell(grid.$.items, 1, 0);
       selectCell = getContainerCell(grid.$.items, 1, 1);
       checkboxCell = getContainerCell(grid.$.items, 1, 2);
+      await nextFrame();
     });
 
-    it('should focus cell next available for editing in edit mode on Tab', () => {
+    it('should focus cell next available for editing in edit mode on Tab', async () => {
       dblclick(textCell._content);
       expect(getCellEditor(textCell)).to.be.ok;
+      await nextFrame();
 
       // Press Tab to edit the select cell
       tab(document.activeElement);
       expect(getCellEditor(selectCell)).to.be.ok;
+      await nextFrame();
 
       // Press Tab to edit the checkbox cell
       tab(document.activeElement);
       expect(getCellEditor(checkboxCell)).to.be.ok;
     });
 
-    it('should focus previous cell available for editing in edit mode on Shift Tab', () => {
+    it('should focus previous cell available for editing in edit mode on Shift Tab', async () => {
       dblclick(checkboxCell._content);
       expect(getCellEditor(checkboxCell)).to.be.ok;
+      await nextFrame();
 
       // Press Shift + Tab to edit the select cell
       tab(document.activeElement, ['shift']);
       expect(getCellEditor(selectCell)).to.be.ok;
+      await nextFrame();
 
       // Press Shift + Tab to edit the text cell
       tab(document.activeElement, ['shift']);
@@ -239,11 +244,12 @@ describe('edit column', () => {
       expect(input).to.be.not.ok;
     });
 
-    it('should cancel editing when disabled is set to true', () => {
+    it('should cancel editing when disabled is set to true', async () => {
       const cell = getContainerCell(grid.$.items, 1, 0);
       const oldContent = cell._content.textContent;
       enter(cell);
       grid.disabled = true;
+      await nextFrame();
       expect(cell._content.textContent).to.equal(oldContent);
     });
   });
@@ -407,9 +413,10 @@ describe('edit column', () => {
         expect(activeItemChangedSpy.called).to.be.false;
       });
 
-      it('should not fire the event on checkbox click in the editable column', () => {
+      it('should not fire the event on checkbox click in the editable column', async () => {
         cell = getContainerCell(grid.$.items, 0, 1);
         dblclick(cell._content);
+        await nextFrame();
         cell._content.querySelector('input[type=checkbox]').click();
         expect(activeItemChangedSpy.called).to.be.false;
       });

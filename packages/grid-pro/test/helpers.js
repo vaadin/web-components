@@ -134,8 +134,8 @@ export const onceOpened = (element) => {
 
 export const createItems = () => {
   return [
-    { name: 'foo', age: 20, married: true, title: 'mrs' },
-    { name: 'bar', age: 30, married: false, title: 'ms' },
-    { name: 'baz', age: 40, married: false, title: 'mr' },
+    { name: 'foo', age: '20', married: true, title: 'mrs' },
+    { name: 'bar', age: '30', married: false, title: 'ms' },
+    { name: 'baz', age: '40', married: false, title: 'mr' },
   ];
 };
