@@ -137,16 +137,13 @@ describe('vaadin-month-calendar', () => {
 
     monthCalendar.isDateDisabled = (date) => {
       if (!date) {
-        return true;
+        return false;
       }
-      return date.toISOString().split('T')[0] === '2016-02-09';
+      return date.year === 2016 && date.month === 1 && date.day === 9;
     };
-    for (let i = 0; i < dateElements.length; i++) {
-      if (dateElements[i].date.getDate() === 9) {
-        // Ninth of February.
-        tap(dateElements[i]);
-      }
-    }
+    const date9 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 9);
+    tap(date9);
+
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
