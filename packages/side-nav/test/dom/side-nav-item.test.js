@@ -75,6 +75,12 @@ describe('vaadin-side-nav-item', () => {
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 
+    it('null path', async () => {
+      sideNavItem.path = null;
+      await nextRender(sideNavItem);
+      await expect(sideNavItem).shadowDom.to.equalSnapshot();
+    });
+
     it('i18n', async () => {
       sideNavItem.i18n = { toggle: 'Toggle children' };
       await nextRender();
