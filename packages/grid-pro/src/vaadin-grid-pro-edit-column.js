@@ -32,6 +32,7 @@ import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
  *
  * @customElement
  * @extends GridColumn
+ * @mixes GridProEditColumnMixin
  */
 class GridProEditColumn extends GridProEditColumnMixin(GridColumn) {
   static get is() {
