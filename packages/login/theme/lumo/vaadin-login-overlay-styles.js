@@ -173,7 +173,7 @@ const loginOverlayWrapper = css`
 `;
 
 registerStyles('vaadin-login-overlay-wrapper', [color, typography, loginOverlayWrapper], {
-  moduleId: 'vaadin-login-overlay-wrapper-lumo-styles',
+  moduleId: 'lumo-login-overlay-wrapper',
 });
 
 const loginFormWrapper = css`
