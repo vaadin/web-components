@@ -59,15 +59,6 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
-       * Set to true to group selected items at the top of the overlay.
-       * @attr {boolean} group-selected-items
-       */
-      groupSelectedItems: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
@@ -93,6 +84,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       selectedItems: {
         type: Array,
         value: () => [],
+      },
+
+      /**
+       * Set to true to group selected items at the top of the overlay.
+       * @attr {boolean} selected-items-on-top
+       */
+      selectedItemsOnTop: {
+        type: Boolean,
+        value: false,
       },
 
       /**
@@ -163,7 +163,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _setDropdownItems(items) {
-    if (this.filter || this.readonly || !this.groupSelectedItems) {
+    if (this.filter || this.readonly || !this.selectedItemsOnTop) {
       this._dropdownItems = items;
       return;
     }
