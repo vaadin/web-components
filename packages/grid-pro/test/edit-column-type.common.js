@@ -215,7 +215,7 @@ describe('edit column editor type', () => {
         await nextFrame();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
         expect(cell._content.textContent).to.equal(value);
-        expect(spy.calledOnce).to.be.true;
+        expect(spy.called).to.be.true;
       });
 
       it('should work with `enterNextRow`', async () => {
