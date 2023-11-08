@@ -5,12 +5,15 @@
  */
 
 /**
- * Check if two paths match
+ * Check if two paths can be resolved as URLs
+ * with the same origin and pathname.
  *
  * @param {string} path1
  * @param {string} path2
  */
 export function matchPaths(path1, path2) {
   const base = document.baseURI;
-  return new URL(path1, base).pathname === new URL(path2, base).pathname;
+  const url1 = new URL(path1, base);
+  const url2 = new URL(path2, base);
+  return url1.origin === url2.origin && url1.pathname === url2.pathname;
 }
