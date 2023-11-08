@@ -153,7 +153,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __getDayAriaDisabled(date, min, max, isDateDisabled) {
-    if (date === undefined || min === undefined || max === undefined) {
+    if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
       return;
     }
 
