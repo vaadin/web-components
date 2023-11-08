@@ -162,7 +162,7 @@ describe('selecting items', () => {
     });
   });
 
-  describe('group selected items', () => {
+  describe('selected items on top', () => {
     function expectItems(values) {
       const items = getAllItems(comboBox);
       values.forEach((value, idx) => {
@@ -171,7 +171,7 @@ describe('selecting items', () => {
     }
 
     beforeEach(() => {
-      comboBox.groupSelectedItems = true;
+      comboBox.selectedItemsOnTop = true;
     });
 
     describe('items', () => {
@@ -217,11 +217,11 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'orange']);
       });
 
-      it('should restore items when groupSelectedItems is set to false', () => {
+      it('should restore items when selectedItemsOnTop is set to false', () => {
         comboBox.opened = true;
         expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
-        comboBox.groupSelectedItems = false;
+        comboBox.selectedItemsOnTop = false;
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
@@ -270,11 +270,11 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'orange']);
       });
 
-      it('should restore items when groupSelectedItems is set to false', () => {
+      it('should restore items when selectedItemsOnTop is set to false', () => {
         comboBox.opened = true;
         expectItems(['lemon', 'orange', 'apple', 'banana']);
         comboBox.opened = false;
-        comboBox.groupSelectedItems = false;
+        comboBox.selectedItemsOnTop = false;
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
@@ -286,7 +286,7 @@ describe('selecting items', () => {
       beforeEach(() => {
         allItems = Array.from({ length: 100 }, (_, i) => `item ${i}`);
         comboBox.dataProvider = getDataProvider(allItems);
-        comboBox.groupSelectedItems = true;
+        comboBox.selectedItemsOnTop = true;
         comboBox.opened = true;
       });
 
