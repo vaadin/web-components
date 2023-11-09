@@ -199,7 +199,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
         <a
           id="link"
           ?disabled="${this.disabled}"
-          tabindex="${this.disabled || !this.path ? '-1' : '0'}"
+          tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
           href="${ifDefined(this.disabled ? null : this.path)}"
           part="link"
           aria-current="${this.current ? 'page' : 'false'}"
