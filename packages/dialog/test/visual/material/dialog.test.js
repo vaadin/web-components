@@ -65,4 +65,12 @@ describe('dialog', () => {
     element.headerRenderer = createRenderer('Header');
     await visualDiff(div, 'header-title-long-single-word');
   });
+
+  it('should not contain padding with no-padding theme', async () => {
+    element.setAttribute('theme', 'no-padding');
+    const contentStyles = new CSSStyleSheet();
+    contentStyles.insertRule('vaadin-dialog-overlay::part(content) { padding: 20px; }');
+    document.adoptedStyleSheets = [contentStyles];
+    await visualDiff(div, 'content-no-padding-theme');
+  });
 });
