@@ -71,7 +71,6 @@ describe('dialog', () => {
     const contentStyles = new CSSStyleSheet();
     contentStyles.insertRule('vaadin-dialog-overlay::part(content) { padding: 20px; }');
     document.adoptedStyleSheets = [contentStyles];
-    await nextUpdate(element);
     await visualDiff(div, 'content-no-padding-theme');
   });
 });
