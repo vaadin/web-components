@@ -120,22 +120,23 @@ describe('multi-select-combo-box', () => {
     });
   });
 
-  describe('all chips visible', () => {
+  describe('auto expand', () => {
     beforeEach(() => {
       element.selectedItems = [...element.items];
-      element.allChipsVisible = true;
+      element.autoExpandHorizontally = true;
+      element.autoExpandVertically = true;
     });
 
-    it('all chips visible', async () => {
-      await visualDiff(div, 'all-chips-visible');
+    it('auto expand', async () => {
+      await visualDiff(div, 'auto-expand');
     });
 
-    it('all chips visible max width', async () => {
+    it('auto expand max width', async () => {
       element.style.maxWidth = '250px';
-      await visualDiff(div, 'all-chips-visible-max-width');
+      await visualDiff(div, 'auto-expand-max-width');
     });
 
-    it('all chips visible height', async () => {
+    it('auto expand visible height', async () => {
       element.label = 'Label';
       element.style.width = '300px';
       element.style.height = '200px';
@@ -143,7 +144,7 @@ describe('multi-select-combo-box', () => {
       const items = Array.from({ length: 20 }).map((_, i) => `Item ${i}`);
       element.items = items;
       element.selectedItems = items;
-      await visualDiff(div, 'all-chips-visible-height');
+      await visualDiff(div, 'auto-expand-height');
     });
   });
 

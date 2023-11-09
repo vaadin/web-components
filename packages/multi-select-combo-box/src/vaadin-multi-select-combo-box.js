@@ -47,12 +47,12 @@ const multiSelectComboBox = css`
     padding: 0;
   }
 
-  :host([all-chips-visible]) #chips {
+  :host([auto-expand-vertically]) #chips {
     display: contents;
   }
 
-  :host([all-chips-visible]) [class$='container'] {
-    width: fit-content;
+  :host([auto-expand-horizontally]) [class$='container'] {
+    width: auto;
   }
 `;
 
@@ -187,7 +187,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         >
           <vaadin-multi-select-combo-box-container
             part="input-field"
-            all-chips-visible="[[allChipsVisible]]"
+            auto-expand-vertically="[[autoExpandVertically]]"
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
@@ -225,16 +225,28 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   static get properties() {
     return {
       /**
-       * Set to true to not collapse selected items chips into the overflow
-       * chip and instead always show them all, causing input field to grow
-       * and wrap into multiple lines when width is limited.
-       * @attr {boolean} all-chips-visible
+       * Set to true to auto expand horizontally, causing input field to
+       * grow until max width is reached.
+       * @attr {boolean} auto-expand-horizontally
        */
-      allChipsVisible: {
+      autoExpandHorizontally: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '_allChipsVisibleChanged',
+        observer: '_autoExpandHorizontallyChanged',
+      },
+
+      /**
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always expand vertically, causing input field to
+       * wrap into multiple lines when width is limited.
+       * @attr {boolean} auto-expand-vertically
+       */
+      autoExpandVertically: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_autoExpandVerticallyChanged',
       },
 
       /**
@@ -699,8 +711,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _allChipsVisibleChanged(visible, oldVisible) {
-    if (visible || oldVisible) {
+  _autoExpandHorizontallyChanged(autoExpand, oldAutoExpand) {
+    if (autoExpand || oldAutoExpand) {
+      this.__updateChips();
+    }
+  }
+
+  /** @private */
+  _autoExpandVerticallyChanged(autoExpand, oldAutoExpand) {
+    if (autoExpand || oldAutoExpand) {
       this.__updateChips();
     }
   }
@@ -950,13 +969,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
+    // Detect if the field can expand
+    if (this.autoExpandHorizontally) {
+      const extraWidth = this.__getExtraWidth();
+      remainingWidth += Math.max(0, extraWidth);
+    }
+
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
       this.insertBefore(chip, refNode);
 
-      // If all the chips are visible, no need to measure remaining width
-      if (!this.allChipsVisible && this.$.chips.clientWidth > remainingWidth) {
+      // When auto expanding vertically, no need to measure remaining width
+      if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {
         // Always show at least last selected item as a chip
         if (refNode === null) {
           chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
@@ -971,6 +996,27 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     this._overflowItems = items;
+  }
+
+  /** @private */
+  __getExtraWidth() {
+    // Check if max-width is set on the host
+    const maxWidth = parseInt(getComputedStyle(this).maxWidth);
+    if (!isNaN(maxWidth)) {
+      return maxWidth - this.clientWidth;
+    }
+
+    // Check if width is set using style attribute
+    const width = parseInt(this.style.width);
+    if (!isNaN(width)) {
+      return width - this.clientWidth;
+    }
+
+    // Check if parent element allows to expand
+    const parent = this.parentNode;
+    const host = parent instanceof ShadowRoot ? parent.host : parent;
+
+    return host.clientWidth - this.clientWidth;
   }
 
   /** @private */
