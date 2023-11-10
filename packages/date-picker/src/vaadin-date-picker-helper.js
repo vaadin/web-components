@@ -54,6 +54,20 @@ export function dateEquals(date1, date2) {
 }
 
 /**
+ * Extracts the basic component parts of a date (day, month and year)
+ * to the expected format.
+ * @param {!Date} date
+ * @return {{day: number, month: number, year: number}}
+ */
+export function extractDateParts(date) {
+  return {
+    day: date.getDate(),
+    month: date.getMonth(),
+    year: date.getFullYear(),
+  };
+}
+
+/**
  * Check if the given date is in the range of allowed dates.
  *
  * @param {!Date} date The date to check
@@ -95,20 +109,6 @@ export function getClosestDate(date, dates) {
       const closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
       return candidateDiff < closestDateDiff ? candidate : closestDate;
     });
-}
-
-/**
- * Extracts the basic component parts of a date (day, month and year)
- * to the expected format.
- * @param {!Date} date
- * @return {{day: number, month: number, year: number}}
- */
-export function extractDateParts(date) {
-  return {
-    day: date.getDate(),
-    month: date.getMonth(),
-    year: date.getFullYear(),
-  };
 }
 
 /**

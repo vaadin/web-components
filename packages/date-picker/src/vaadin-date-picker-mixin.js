@@ -18,7 +18,7 @@ import {
   extractDateParts,
   getAdjustedYear,
   getClosestDate,
-  parseDate
+  parseDate,
 } from './vaadin-date-picker-helper.js';
 
 /**
@@ -306,7 +306,7 @@ export const DatePickerMixin = (subclass) =>
          * A function to be used to determine whether the user can select a given date.
          * Receives a `DatePickerDate` object of the date to be selected and should return a
          * boolean.
-         * 
+         *
          * @type {function(DatePickerDate): boolean | undefined}
          */
         isDateDisabled: {
@@ -610,7 +610,8 @@ export const DatePickerMixin = (subclass) =>
     checkValidity() {
       const inputValue = this._inputElementValue;
       const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
-      const isDateValid = !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
+      const isDateValid =
+        !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
 
       let inputValidity = true;
       if (this.inputElement) {
@@ -861,7 +862,17 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     // eslint-disable-next-line max-params
-    __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers, isDateDisabled) {
+    __updateOverlayContent(
+      overlayContent,
+      i18n,
+      label,
+      minDate,
+      maxDate,
+      focusedDate,
+      selectedDate,
+      showWeekNumbers,
+      isDateDisabled,
+    ) {
       if (overlayContent) {
         overlayContent.i18n = i18n;
         overlayContent.label = label;
@@ -944,7 +955,9 @@ export const DatePickerMixin = (subclass) =>
 
       return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate, this.isDateDisabled)
         ? initialPosition
-        : ((this._minDate || this._maxDate) ? getClosestDate(initialPosition, [this._minDate, this._maxDate]) : new Date());
+        : this._minDate || this._maxDate
+        ? getClosestDate(initialPosition, [this._minDate, this._maxDate])
+        : new Date();
     }
 
     /**
