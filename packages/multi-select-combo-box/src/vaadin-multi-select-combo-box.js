@@ -969,10 +969,42 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
-    // Detect if the field can expand
     if (this.autoExpandHorizontally) {
-      const extraWidth = this.__getExtraWidth();
-      remainingWidth += Math.max(0, extraWidth);
+      const chips = [];
+
+      // First, add all chips to make the field fully expand
+      for (let i = items.length - 1, refNode = null; i >= 0; i--) {
+        const chip = this.__createChip(items[i]);
+        this.insertBefore(chip, refNode);
+        refNode = chip;
+        chips.unshift(chip);
+      }
+
+      const overflowItems = [];
+      const availableWidth = this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth;
+
+      // When auto expanding vertically, no need to measure width
+      if (!this.autoExpandVertically && availableWidth < inputWidth) {
+        // Always show at least last item as a chip
+        while (chips.length > 1) {
+          const lastChip = chips.pop();
+          lastChip.remove();
+          overflowItems.unshift(items.pop());
+
+          // Remove chips until there is enough width for the input element to fit
+          const neededWidth = overflowItems.length > 0 ? inputWidth + this.__getOverflowWidth() : inputWidth;
+          if (this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >= neededWidth) {
+            break;
+          }
+        }
+
+        if (chips.length === 1) {
+          chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+        }
+      }
+
+      this._overflowItems = overflowItems;
+      return;
     }
 
     // Add chips until remaining width is exceeded
@@ -996,27 +1028,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     this._overflowItems = items;
-  }
-
-  /** @private */
-  __getExtraWidth() {
-    // Check if max-width is set on the host
-    const maxWidth = parseInt(getComputedStyle(this).maxWidth);
-    if (!isNaN(maxWidth)) {
-      return maxWidth - this.clientWidth;
-    }
-
-    // Check if width is set using style attribute
-    const width = parseInt(this.style.width);
-    if (!isNaN(width)) {
-      return width - this.clientWidth;
-    }
-
-    // Check if parent element allows to expand
-    const parent = this.parentNode;
-    const host = parent instanceof ShadowRoot ? parent.host : parent;
-
-    return host.clientWidth - this.clientWidth;
   }
 
   /** @private */
