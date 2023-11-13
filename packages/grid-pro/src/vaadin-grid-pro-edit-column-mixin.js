@@ -259,6 +259,13 @@ export const GridProEditColumnMixin = (superClass) =>
       this._renderEditor(cell, model);
 
       const editor = this._getEditorComponent(cell);
+      editor.addEventListener('focusout', (event) => {
+        console.log('focusout', event);
+      });
+      editor.addEventListener('focusin', (event) => {
+        console.log('focusin', event);
+      });
+
       editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
       editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
       editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
