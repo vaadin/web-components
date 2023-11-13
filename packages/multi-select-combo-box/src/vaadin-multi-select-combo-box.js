@@ -47,12 +47,12 @@ const multiSelectComboBox = css`
     padding: 0;
   }
 
-  :host([all-chips-visible]) #chips {
+  :host([auto-expand-vertically]) #chips {
     display: contents;
   }
 
-  :host([all-chips-visible]) [class$='container'] {
-    width: fit-content;
+  :host([auto-expand-horizontally]) [class$='container'] {
+    width: auto;
   }
 `;
 
@@ -187,7 +187,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         >
           <vaadin-multi-select-combo-box-container
             part="input-field"
-            all-chips-visible="[[allChipsVisible]]"
+            auto-expand-vertically="[[autoExpandVertically]]"
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
@@ -225,16 +225,28 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   static get properties() {
     return {
       /**
-       * Set to true to not collapse selected items chips into the overflow
-       * chip and instead always show them all, causing input field to grow
-       * and wrap into multiple lines when width is limited.
-       * @attr {boolean} all-chips-visible
+       * Set to true to auto expand horizontally, causing input field to
+       * grow until max width is reached.
+       * @attr {boolean} auto-expand-horizontally
        */
-      allChipsVisible: {
+      autoExpandHorizontally: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '_allChipsVisibleChanged',
+        observer: '_autoExpandHorizontallyChanged',
+      },
+
+      /**
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always expand vertically, causing input field to
+       * wrap into multiple lines when width is limited.
+       * @attr {boolean} auto-expand-vertically
+       */
+      autoExpandVertically: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_autoExpandVerticallyChanged',
       },
 
       /**
@@ -699,8 +711,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _allChipsVisibleChanged(visible, oldVisible) {
-    if (visible || oldVisible) {
+  _autoExpandHorizontallyChanged(autoExpand, oldAutoExpand) {
+    if (autoExpand || oldAutoExpand) {
+      this.__updateChips();
+    }
+  }
+
+  /** @private */
+  _autoExpandVerticallyChanged(autoExpand, oldAutoExpand) {
+    if (autoExpand || oldAutoExpand) {
       this.__updateChips();
     }
   }
@@ -950,13 +969,51 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
+    if (this.autoExpandHorizontally) {
+      const chips = [];
+
+      // First, add all chips to make the field fully expand
+      for (let i = items.length - 1, refNode = null; i >= 0; i--) {
+        const chip = this.__createChip(items[i]);
+        this.insertBefore(chip, refNode);
+        refNode = chip;
+        chips.unshift(chip);
+      }
+
+      const overflowItems = [];
+      const availableWidth = this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth;
+
+      // When auto expanding vertically, no need to measure width
+      if (!this.autoExpandVertically && availableWidth < inputWidth) {
+        // Always show at least last item as a chip
+        while (chips.length > 1) {
+          const lastChip = chips.pop();
+          lastChip.remove();
+          overflowItems.unshift(items.pop());
+
+          // Remove chips until there is enough width for the input element to fit
+          const neededWidth = overflowItems.length > 0 ? inputWidth + this.__getOverflowWidth() : inputWidth;
+          if (this._inputField.$.wrapper.clientWidth - this.$.chips.clientWidth >= neededWidth) {
+            break;
+          }
+        }
+
+        if (chips.length === 1) {
+          chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
+        }
+      }
+
+      this._overflowItems = overflowItems;
+      return;
+    }
+
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
       this.insertBefore(chip, refNode);
 
-      // If all the chips are visible, no need to measure remaining width
-      if (!this.allChipsVisible && this.$.chips.clientWidth > remainingWidth) {
+      // When auto expanding vertically, no need to measure remaining width
+      if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {
         // Always show at least last selected item as a chip
         if (refNode === null) {
           chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;

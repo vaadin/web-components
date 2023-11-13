@@ -437,7 +437,7 @@ describe('chips', () => {
     });
   });
 
-  describe('allChipsVisible', () => {
+  describe('autoExpandVertically', () => {
     let overflow;
 
     beforeEach(async () => {
@@ -446,32 +446,32 @@ describe('chips', () => {
       overflow = getChips(comboBox)[0];
     });
 
-    it('should not show overflow chip when allChipsVisible is set to true', async () => {
-      comboBox.allChipsVisible = true;
+    it('should not show overflow chip when autoExpandVertically is set to true', async () => {
+      comboBox.autoExpandVertically = true;
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
       expect(getChips(comboBox).length).to.equal(3);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should show overflow chip when allChipsVisible is set to false', async () => {
-      comboBox.allChipsVisible = true;
+    it('should show overflow chip when autoExpandVertically is set to false', async () => {
+      comboBox.autoExpandVertically = true;
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
 
-      comboBox.allChipsVisible = false;
+      comboBox.autoExpandVertically = false;
       await nextRender();
       expect(getChips(comboBox).length).to.equal(2);
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should update chips when allChipsVisible is set after selectedItems', async () => {
+    it('should update chips when autoExpandVertically is set after selectedItems', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
       expect(getChips(comboBox).length).to.equal(2);
       expect(overflow.hasAttribute('hidden')).to.be.false;
 
-      comboBox.allChipsVisible = true;
+      comboBox.autoExpandVertically = true;
       await nextRender();
       expect(getChips(comboBox).length).to.equal(3);
       expect(overflow.hasAttribute('hidden')).to.be.true;
@@ -480,18 +480,66 @@ describe('chips', () => {
     it('should wrap chips and increase input field height if chips do not fit', async () => {
       const inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
       const height = inputField.clientHeight;
-      comboBox.allChipsVisible = true;
+      comboBox.autoExpandVertically = true;
       comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
       await nextRender();
       expect(inputField.clientHeight).to.be.greaterThan(height);
     });
+  });
+
+  describe('autoExpandHorizontally', () => {
+    let overflow;
+
+    beforeEach(async () => {
+      comboBox.autoExpandHorizontally = true;
+      await nextResize(comboBox);
+      comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
+      overflow = getChips(comboBox)[0];
+      await nextRender();
+    });
+
+    it('should show all chips when there is enough space by default', () => {
+      expect(getChips(comboBox).length).to.equal(5);
+      expect(overflow.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should collapse chips to overflow when max-width is set on the host', async () => {
+      comboBox.style.maxWidth = '300px';
+      await nextResize(comboBox);
+      expect(getChips(comboBox).length).to.equal(3);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should collapse chips to overflow when width is set on the host', async () => {
+      comboBox.style.width = '300px';
+      await nextResize(comboBox);
+      expect(getChips(comboBox).length).to.equal(3);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should collapse chips to overflow when max-width is set on the parent', async () => {
+      comboBox.parentElement.style.maxWidth = '300px';
+      await nextResize(comboBox);
+      expect(getChips(comboBox).length).to.equal(3);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should set max-width on the chip when the host width does not allow to fit', async () => {
+      comboBox.style.maxWidth = '180px';
+      await nextResize(comboBox);
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(2);
+      expect(getComputedStyle(chips[1]).maxWidth).to.be.ok;
+    });
+
+    it('should collapse chips when autoExpandHorizontally is set to false', async () => {
+      comboBox.autoExpandHorizontally = false;
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(2);
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+    });
 
     it('should adapt overlay width to the input field width while opened', async () => {
-      comboBox.allChipsVisible = true;
-      comboBox.style.width = 'auto';
-      comboBox.selectedItems = ['apple', 'banana', 'lemon', 'orange'];
-
-      await nextRender();
       comboBox.opened = true;
 
       const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
