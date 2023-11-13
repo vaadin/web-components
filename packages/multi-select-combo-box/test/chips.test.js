@@ -524,6 +524,14 @@ describe('chips', () => {
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
+    it('should set max-width on the chip when the host width does not allow to fit', async () => {
+      comboBox.style.maxWidth = '180px';
+      await nextResize(comboBox);
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(2);
+      expect(getComputedStyle(chips[1]).maxWidth).to.be.ok;
+    });
+
     it('should collapse chips when autoExpandHorizontally is set to false', async () => {
       comboBox.autoExpandHorizontally = false;
       await nextRender();
