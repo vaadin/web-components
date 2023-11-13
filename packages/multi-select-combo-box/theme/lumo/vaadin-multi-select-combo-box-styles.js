@@ -28,7 +28,7 @@ registerStyles(
 registerStyles(
   'vaadin-multi-select-combo-box-container',
   css`
-    :host([all-chips-visible]) {
+    :host([auto-expand-vertically]) {
       padding-block: var(--lumo-space-xs);
     }
   `,
@@ -52,11 +52,11 @@ const multiSelectComboBox = css`
     margin-inline-end: var(--lumo-space-xs);
   }
 
-  :host([all-chips-visible]) [part~='chip'] {
+  :host([auto-expand-vertically]) [part~='chip'] {
     margin-block: calc(var(--lumo-space-xs) / 2);
   }
 
-  :host([all-chips-visible]) ::slotted([slot='input']) {
+  :host([auto-expand-vertically]) ::slotted([slot='input']) {
     min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
 

@@ -120,19 +120,20 @@ describe('multi-select-combo-box', () => {
     });
   });
 
-  describe('all chips visible', () => {
+  describe('auto expand', () => {
     beforeEach(() => {
       element.selectedItems = [...element.items];
-      element.allChipsVisible = true;
+      element.autoExpandHorizontally = true;
+      element.autoExpandVertically = true;
     });
 
-    it('all chips visible', async () => {
-      await visualDiff(div, 'all-chips-visible');
+    it('auto expand', async () => {
+      await visualDiff(div, 'auto-expand');
     });
 
-    it('all chips visible max width', async () => {
+    it('auto expand max width', async () => {
       element.style.maxWidth = '250px';
-      await visualDiff(div, 'all-chips-visible-max-width');
+      await visualDiff(div, 'auto-expand-max-width');
     });
   });
 
