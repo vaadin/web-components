@@ -342,12 +342,12 @@ describe('validation', () => {
 
     it('should validate correctly with custom validator', () => {
       // Try invalid value.
-      datePicker.value = '2014-01-01';
+      datePicker.value = '2014-06-01';
       expect(datePicker.validate()).to.be.false;
       expect(datePicker.invalid).to.be.true;
 
       // Try valid value.
-      datePicker.value = '2016-01-01';
+      datePicker.value = '2016-06-01';
       expect(datePicker.validate()).to.be.true;
       expect(datePicker.invalid).to.be.false;
     });
