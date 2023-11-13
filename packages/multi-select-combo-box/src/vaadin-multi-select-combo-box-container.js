@@ -14,7 +14,7 @@ registerStyles(
       width: 100%;
     }
 
-    :host([all-chips-visible]) #wrapper {
+    :host([auto-expand-vertically]) #wrapper {
       flex-wrap: wrap;
     }
   `,
@@ -55,11 +55,12 @@ class MultiSelectComboBoxContainer extends InputContainer {
   static get properties() {
     return {
       /**
-       * Set true to not collapse selected items chips into the overflow
-       * chip and instead always show them, causing input field to grow.
-       * @attr {boolean} all-chips-visible
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always expand vertically, causing input field to
+       * wrap into multiple lines when width is limited.
+       * @attr {boolean} auto-expand-vertically
        */
-      allChipsVisible: {
+      autoExpandVertically: {
         type: Boolean,
         reflectToAttribute: true,
       },

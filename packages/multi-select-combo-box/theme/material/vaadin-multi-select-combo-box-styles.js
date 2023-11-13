@@ -34,7 +34,7 @@ const multiSelectComboBox = css`
     min-height: 32px;
   }
 
-  :host([all-chips-visible]) [part~='chip'] {
+  :host([auto-expand-vertically]) [part~='chip'] {
     margin-top: 0.25rem;
     align-self: flex-start;
   }
