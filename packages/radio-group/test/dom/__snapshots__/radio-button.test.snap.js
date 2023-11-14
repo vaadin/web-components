@@ -17,6 +17,7 @@ snapshots["vaadin-radio-button host default"] =
   <input
     id="input-vaadin-radio-button-1"
     slot="input"
+    tabindex="0"
     type="radio"
     value="on"
   >

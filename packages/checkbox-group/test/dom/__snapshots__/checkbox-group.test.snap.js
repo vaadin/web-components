@@ -19,6 +19,7 @@ snapshots["vaadin-checkbox-group host default"] =
     <input
       id="input-vaadin-checkbox-5"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="1"
     >
@@ -39,6 +40,7 @@ snapshots["vaadin-checkbox-group host default"] =
     <input
       id="input-vaadin-checkbox-6"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="2"
     >
@@ -178,6 +180,7 @@ snapshots["vaadin-checkbox-group host label"] =
     <input
       id="input-vaadin-checkbox-5"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="1"
     >
@@ -198,6 +201,7 @@ snapshots["vaadin-checkbox-group host label"] =
     <input
       id="input-vaadin-checkbox-6"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="2"
     >
@@ -240,6 +244,7 @@ snapshots["vaadin-checkbox-group host required"] =
     <input
       id="input-vaadin-checkbox-5"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="1"
     >
@@ -260,6 +265,7 @@ snapshots["vaadin-checkbox-group host required"] =
     <input
       id="input-vaadin-checkbox-6"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="2"
     >
@@ -301,6 +307,7 @@ snapshots["vaadin-checkbox-group host helper"] =
     <input
       id="input-vaadin-checkbox-5"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="1"
     >
@@ -321,6 +328,7 @@ snapshots["vaadin-checkbox-group host helper"] =
     <input
       id="input-vaadin-checkbox-6"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="2"
     >
@@ -369,6 +377,7 @@ snapshots["vaadin-checkbox-group host error"] =
     <input
       id="input-vaadin-checkbox-5"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="1"
     >
@@ -389,6 +398,7 @@ snapshots["vaadin-checkbox-group host error"] =
     <input
       id="input-vaadin-checkbox-6"
       slot="input"
+      tabindex="0"
       type="checkbox"
       value="2"
     >
