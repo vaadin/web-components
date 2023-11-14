@@ -285,7 +285,7 @@ describe('radio-button', () => {
       radio.addEventListener('focusout', spy);
       input.focus();
       await sendMouse({ type: 'click', position: [inputX, inputY] });
-      expect(spy).to.be.not.called;
+      expect(spy.called).to.be.false;
     });
   });
 });
