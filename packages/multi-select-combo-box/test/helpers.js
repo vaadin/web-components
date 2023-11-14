@@ -15,3 +15,21 @@ export const getAsyncDataProvider = (allItems) => {
     }, 0);
   };
 };
+
+/**
+ * Returns all the items of the combo box dropdown.
+ */
+export const getAllItems = (comboBox) => {
+  const internal = comboBox.$.comboBox;
+  return Array.from(internal._scroller.querySelectorAll('vaadin-multi-select-combo-box-item'))
+    .filter((item) => !item.hidden)
+    .sort((a, b) => a.index - b.index);
+};
+
+/**
+ * Returns first item of the combo box dropdown.
+ */
+export const getFirstItem = (comboBox) => {
+  const internal = comboBox.$.comboBox;
+  return internal._scroller.querySelector('vaadin-multi-select-combo-box-item');
+};

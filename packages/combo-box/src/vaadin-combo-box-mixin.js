@@ -234,6 +234,14 @@ export const ComboBoxMixin = (subclass) =>
           observer: '_toggleElementChanged',
         },
 
+        /**
+         * Set of items to be rendered in the dropdown.
+         * @protected
+         */
+        _dropdownItems: {
+          type: Array,
+        },
+
         /** @private */
         _closeOnBlurIsPrevented: Boolean,
 
@@ -251,8 +259,8 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
-        '_openedOrItemsChanged(opened, filteredItems, loading)',
-        '_updateScroller(_scroller, filteredItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
+        '_openedOrItemsChanged(opened, _dropdownItems, loading)',
+        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
       ];
     }
 
@@ -491,7 +499,7 @@ export const ComboBoxMixin = (subclass) =>
         this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
 
         this._onOpened();
-      } else if (wasOpened && this.filteredItems && this.filteredItems.length) {
+      } else if (wasOpened && this._dropdownItems && this._dropdownItems.length) {
         this.close();
 
         this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
@@ -681,7 +689,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onArrowDown() {
       if (this.opened) {
-        const items = this.filteredItems;
+        const items = this._dropdownItems;
         if (items) {
           this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
           this._prefillFocusedItemLabel();
@@ -697,7 +705,7 @@ export const ComboBoxMixin = (subclass) =>
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         } else {
-          const items = this.filteredItems;
+          const items = this._dropdownItems;
           if (items) {
             this._focusedIndex = items.length - 1;
           }
@@ -712,7 +720,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this.filteredItems[this._focusedIndex];
+        const focusedItem = this._dropdownItems[this._focusedIndex];
         this._inputElementValue = this._getItemLabel(focusedItem);
         this._markAllSelectionRange();
       }
@@ -885,7 +893,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _commitValue() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this.filteredItems[this._focusedIndex];
+        const focusedItem = this._dropdownItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -900,7 +908,7 @@ export const ComboBoxMixin = (subclass) =>
         }
       } else {
         // Try to find an item which label matches the input value.
-        const items = [...(this.filteredItems || []), this.selectedItem];
+        const items = [this.selectedItem, ...(this._dropdownItems || [])];
         const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
 
         if (
@@ -1115,6 +1123,8 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _filteredItemsChanged(filteredItems, oldFilteredItems) {
+      this._setDropdownItems(filteredItems);
+
       // Store the currently focused item if any. The focused index preserves
       // in the case when more filtered items are loading but it is reset
       // when the user types in a filter query.
@@ -1173,6 +1183,16 @@ export const ComboBoxMixin = (subclass) =>
       if (this.selectedItem === null && previouslySelectedItem === null) {
         this._selectedItemChanged(this.selectedItem);
       }
+    }
+
+    /**
+     * Provide items to be rendered in the dropdown.
+     * Override this method to show custom items.
+     *
+     * @protected
+     */
+    _setDropdownItems(items) {
+      this._dropdownItems = items;
     }
 
     /** @private */

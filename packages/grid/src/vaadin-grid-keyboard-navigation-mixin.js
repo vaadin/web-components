@@ -18,6 +18,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         _headerFocusable: {
           type: Object,
           observer: '_focusableChanged',
+          sync: true,
         },
 
         /**
@@ -27,12 +28,14 @@ export const KeyboardNavigationMixin = (superClass) =>
         _itemsFocusable: {
           type: Object,
           observer: '_focusableChanged',
+          sync: true,
         },
 
         /** @private */
         _footerFocusable: {
           type: Object,
           observer: '_focusableChanged',
+          sync: true,
         },
 
         /** @private */
@@ -54,6 +57,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         _focusedCell: {
           type: Object,
           observer: '_focusedCellChanged',
+          sync: true,
         },
 
         /**
@@ -267,7 +271,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     __isRowExpandable(row) {
       if (this.itemHasChildrenPath) {
         const item = row._item;
-        return item && get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
+        return !!(item && get(this.itemHasChildrenPath, item) && !this._isExpanded(item));
       }
     }
 
@@ -687,7 +691,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // If the target focusable is tied to a column that is not visible,
       // find the first visible column and update the target in order to
       // prevent scrolling to the start of the row.
-      if (focusStepTarget && focusStepTarget._column && !this.__isColumnInViewport(focusStepTarget._column)) {
+      if (focusStepTarget && !this.__isHorizontallyInViewport(focusStepTarget)) {
         const firstVisibleColumn = this._getColumnsInOrder().find((column) => this.__isColumnInViewport(column));
         if (firstVisibleColumn) {
           if (focusStepTarget === this._headerFocusable) {
@@ -967,6 +971,9 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @protected */
     _resetKeyboardNavigation() {
+      if (!this.$ && this.performUpdate) {
+        this.performUpdate();
+      }
       // Header / footer
       ['header', 'footer'].forEach((section) => {
         if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
@@ -985,7 +992,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
-          delete this._focusedColumnOrder;
+          this._focusedColumnOrder = undefined;
           this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
         }
       } else {

@@ -46,19 +46,24 @@ export const ComboBoxOverlayMixin = (superClass) =>
       return !eventPath.includes(this.positionTarget) && !eventPath.includes(this);
     }
 
+    /** @protected */
+    _updateOverlayWidth() {
+      const propPrefix = this.localName;
+      this.style.setProperty(`--_${propPrefix}-default-width`, `${this.positionTarget.clientWidth}px`);
+
+      const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
+
+      if (customWidth === '') {
+        this.style.removeProperty(`--${propPrefix}-width`);
+      } else {
+        this.style.setProperty(`--${propPrefix}-width`, customWidth);
+      }
+    }
+
     /** @private */
     _setOverlayWidth(positionTarget, opened) {
       if (positionTarget && opened) {
-        const propPrefix = this.localName;
-        this.style.setProperty(`--_${propPrefix}-default-width`, `${positionTarget.clientWidth}px`);
-
-        const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
-
-        if (customWidth === '') {
-          this.style.removeProperty(`--${propPrefix}-width`);
-        } else {
-          this.style.setProperty(`--${propPrefix}-width`, customWidth);
-        }
+        this._updateOverlayWidth();
 
         this._updatePosition();
       }

@@ -146,6 +146,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `50px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
@@ -171,6 +172,21 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
+  /**
+   * Set to true to auto expand horizontally, causing input field to
+   * grow until max width is reached.
+   * @attr {boolean} auto-expand-horizontally
+   */
+  autoExpandHorizontally: boolean;
+
+  /**
+   * Set to true to not collapse selected items chips into the overflow
+   * chip and instead always expand vertically, causing input field to
+   * wrap into multiple lines when width is limited.
+   * @attr {boolean} auto-expand-vertically
+   */
+  autoExpandVertically: boolean;
+
   /**
    * When true, the user can input a value that is not present in the items list.
    * @attr {boolean} allow-custom-value
@@ -306,6 +322,12 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * Note: modifying the selected items creates a new array each time.
    */
   selectedItems: TItem[];
+
+  /**
+   * Set to true to group selected items at the top of the overlay.
+   * @attr {boolean} selected-items-on-top
+   */
+  selectedItemsOnTop: boolean;
 
   /**
    * Total number of items.

@@ -3,11 +3,10 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ColumnBaseMixin } from './vaadin-grid-column-mixin.js';
-import { updateColumnOrders } from './vaadin-grid-helpers.js';
+import { ColumnObserver, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common vaadin-grid-column-group functionality.
@@ -33,6 +32,7 @@ export const GridColumnGroupMixin = (superClass) =>
         flexGrow: {
           type: Number,
           readOnly: true,
+          sync: true,
         },
 
         /**
@@ -330,29 +330,24 @@ export const GridColumnGroupMixin = (superClass) =>
      * @protected
      */
     _getChildColumns(el) {
-      return FlattenedNodesObserver.getFlattenedNodes(el).filter(this._isColumnElement);
+      return ColumnObserver.getColumns(el);
     }
 
     /** @private */
     _addNodeObserver() {
-      this._observer = new FlattenedNodesObserver(this, (info) => {
-        if (
-          info.addedNodes.filter(this._isColumnElement).length > 0 ||
-          info.removedNodes.filter(this._isColumnElement).length > 0
-        ) {
-          // Prevent synchronization of the hidden state to child columns.
-          // If the group is currently auto-hidden, and a visible column is added,
-          // we don't want the other columns to become visible as well.
-          this._preventHiddenSynchronization = true;
-          this._rootColumns = this._getChildColumns(this);
-          this._childColumns = this._rootColumns;
-          this._updateVisibleChildColumns(this._childColumns);
-          this._preventHiddenSynchronization = false;
+      this._observer = new ColumnObserver(this, () => {
+        // Prevent synchronization of the hidden state to child columns.
+        // If the group is currently auto-hidden, and a visible column is added,
+        // we don't want the other columns to become visible as well.
+        this._preventHiddenSynchronization = true;
+        this._rootColumns = this._getChildColumns(this);
+        this._childColumns = this._rootColumns;
+        this._updateVisibleChildColumns(this._childColumns);
+        this._preventHiddenSynchronization = false;
 
-          // Update the column tree
-          if (this._grid && this._grid._debounceUpdateColumnTree) {
-            this._grid._debounceUpdateColumnTree();
-          }
+        // Update the column tree
+        if (this._grid && this._grid._debounceUpdateColumnTree) {
+          this._grid._debounceUpdateColumnTree();
         }
       });
       this._observer.flush();

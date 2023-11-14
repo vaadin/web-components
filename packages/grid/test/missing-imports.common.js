@@ -11,6 +11,7 @@ describe('missing imports', () => {
       <vaadin-grid style="width: 200px; height: 300px;" size="1000">
       </vaadin-grid>
     `);
+    flushGrid(grid);
   });
 
   it('should not throw on requestContentUpdate', () => {

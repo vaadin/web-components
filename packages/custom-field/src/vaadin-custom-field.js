@@ -32,6 +32,7 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  * `helper-text`        | The slotted helper text element wrapper
  * `error-message`      | The slotted error message element wrapper
  * `required-indicator` | The `required` state indicator element
+ * `input-fields`       | The slotted input elements wrapper
  *
  * The following state attributes are available for styling:
  *
@@ -74,7 +75,7 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerEle
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" on-change="_onInputChange">
+        <div class="inputs-wrapper" part="input-fields" on-change="_onInputChange">
           <slot id="slot"></slot>
         </div>
 

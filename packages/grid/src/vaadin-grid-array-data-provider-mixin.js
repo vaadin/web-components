@@ -17,23 +17,24 @@ export const ArrayDataProviderMixin = (superClass) =>
          *
          * @type {Array<!GridItem> | undefined}
          */
-        items: Array,
+        items: {
+          type: Array,
+          sync: true,
+        },
       };
     }
 
     static get observers() {
-      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, items.*, _filters, _sorters)'];
+      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, _filters, _sorters, items.*)'];
     }
 
     /** @private */
     __setArrayDataProvider(items) {
       const arrayDataProvider = createArrayDataProvider(this.items, {});
       arrayDataProvider.__items = items;
-      this.setProperties({
-        _arrayDataProvider: arrayDataProvider,
-        size: items.length,
-        dataProvider: arrayDataProvider,
-      });
+      this._arrayDataProvider = arrayDataProvider;
+      this.size = items.length;
+      this.dataProvider = arrayDataProvider;
     }
 
     /** @private */
@@ -47,17 +48,13 @@ export const ArrayDataProviderMixin = (superClass) =>
 
         if (dataProvider !== this._arrayDataProvider) {
           // A custom data provider was set externally
-          this.setProperties({
-            _arrayDataProvider: undefined,
-            items: undefined,
-          });
+          this._arrayDataProvider = undefined;
+          this.items = undefined;
         } else if (!items) {
           // The items array was unset
-          this.setProperties({
-            _arrayDataProvider: undefined,
-            dataProvider: undefined,
-            size: 0,
-          });
+          this._arrayDataProvider = undefined;
+          this.dataProvider = undefined;
+          this.size = 0;
           this.clearCache();
         } else if (this._arrayDataProvider.__items === items) {
           // The items array was modified

@@ -5,6 +5,7 @@
  */
 
 /**
- * Check if two paths match
+ * Check if two paths can be resolved as URLs
+ * with the same origin and pathname.
  */
 export declare function matchPaths(path1: string, path2: string): boolean;

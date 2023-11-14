@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/checkbox/theme/lumo/vaadin-checkbox.js';
+import '@vaadin/checkbox/theme/lumo/vaadin-checkbox-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -44,7 +44,7 @@ registerStyles(
 
     [part~='cell'] {
       min-height: var(--lumo-size-m);
-      background-color: var(--lumo-base-color);
+      background-color: var(--vaadin-grid-cell-background, var(--lumo-base-color));
       cursor: default;
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
       --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-m);

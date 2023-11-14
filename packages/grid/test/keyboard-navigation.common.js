@@ -217,6 +217,7 @@ describe('keyboard navigation', () => {
       root.innerHTML = `<span>${index} ${item}</span>`;
     };
 
+    flushGrid(grid);
     scroller = grid.$.scroller;
     header = grid.$.header;
     body = grid.$.items;
@@ -1146,6 +1147,26 @@ describe('keyboard navigation', () => {
         shiftTab();
         expect(grid.$.table.scrollLeft).to.be.at.least(100);
       });
+
+      it('should not throw when focusing a group header cell', () => {
+        // Wrap the columns in a group
+        const group = document.createElement('vaadin-grid-column-group');
+        group.append(...grid.querySelectorAll('vaadin-grid-column'));
+        group.header = 'group';
+        grid.appendChild(group);
+        flushGrid(grid);
+
+        // Move focused header cell to the group header row
+        tabToBody();
+        shiftTab();
+        up();
+
+        // Tab to body
+        tab();
+
+        // Tab back to header
+        shiftTab();
+      });
     });
 
     describe('vertical scrolling', () => {
@@ -1466,6 +1487,7 @@ describe('keyboard navigation', () => {
       it('should allow toggling a checkbox with space keypress', async () => {
         // Add a selection column
         grid.appendChild(document.createElement('vaadin-grid-selection-column'));
+        await nextFrame();
         flushGrid(grid);
 
         // Get a reference to a checkbox, focus it and hit space
@@ -1552,6 +1574,7 @@ describe('keyboard navigation', () => {
       grid.querySelector('#column-2').renderer = inputRenderer;
       grid.querySelector('#column-2').footerRenderer = inputRenderer;
 
+      flushGrid(grid);
       scroller = grid.$.scroller;
       header = grid.$.header;
       body = grid.$.items;

@@ -120,6 +120,34 @@ describe('multi-select-combo-box', () => {
     });
   });
 
+  describe('auto expand', () => {
+    beforeEach(() => {
+      element.selectedItems = [...element.items];
+      element.autoExpandHorizontally = true;
+      element.autoExpandVertically = true;
+    });
+
+    it('auto expand', async () => {
+      await visualDiff(div, 'auto-expand');
+    });
+
+    it('auto expand max width', async () => {
+      element.style.maxWidth = '250px';
+      await visualDiff(div, 'auto-expand-max-width');
+    });
+
+    it('auto expand visible height', async () => {
+      element.label = 'Label';
+      element.style.width = '300px';
+      element.style.height = '200px';
+      div.style.height = '240px';
+      const items = Array.from({ length: 20 }).map((_, i) => `Item ${i}`);
+      element.items = items;
+      element.selectedItems = items;
+      await visualDiff(div, 'auto-expand-height');
+    });
+  });
+
   describe('opened', () => {
     beforeEach(() => {
       div.style.height = '200px';

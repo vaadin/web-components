@@ -48,6 +48,16 @@ registerStyles(
   { moduleId: 'lumo-multi-select-combo-box-overlay' },
 );
 
+registerStyles(
+  'vaadin-multi-select-combo-box-container',
+  css`
+    :host([auto-expand-vertically]) {
+      padding-block: var(--lumo-space-xs);
+    }
+  `,
+  { moduleId: 'lumo-multi-select-combo-box-container' },
+);
+
 const multiSelectComboBox = css`
   :host([has-value]) {
     padding-inline-start: 0;
@@ -55,6 +65,10 @@ const multiSelectComboBox = css`
 
   :host([has-value]) ::slotted(input:placeholder-shown) {
     caret-color: var(--lumo-body-text-color) !important;
+  }
+
+  [part='label'] {
+    flex-shrink: 0;
   }
 
   /* Override input-container styles */
@@ -67,8 +81,16 @@ const multiSelectComboBox = css`
     mask-image: none;
   }
 
+  :host([auto-expand-vertically]) ::slotted([slot='chip']) {
+    margin-block: calc(var(--lumo-space-xs) / 2);
+  }
+
   ::slotted([slot='chip']:not([readonly]):not([disabled])) {
     padding-inline-end: 0;
+  }
+
+  :host([auto-expand-vertically]) ::slotted([slot='input']) {
+    min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
 
   ::slotted([slot='chip']:not(:last-of-type)),
@@ -77,7 +99,7 @@ const multiSelectComboBox = css`
   }
 
   ::slotted([slot='chip'][focused]) {
-    background-color: var(--lumo-primary-color);
+    background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     color: var(--lumo-primary-contrast-color);
   }
 

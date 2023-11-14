@@ -46,6 +46,7 @@ describe('dynamic physical count', () => {
       root.textContent = model.index;
     };
     grid.dataProvider = infiniteDataProvider;
+    flushGrid(grid);
     scroller = grid.$.scroller;
     flushGrid(grid);
   });

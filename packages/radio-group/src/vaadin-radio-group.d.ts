@@ -3,37 +3,11 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { type RadioGroupEventMap, RadioGroupMixin } from './vaadin-radio-group-mixin.js';
 
-/**
- * Fired when the `invalid` property changes.
- */
-export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
- * Fired when the `value` property changes.
- */
-export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
-
-/**
- * Fired whenever the field is validated.
- */
-export type RadioGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
-
-export interface RadioGroupCustomEventMap {
-  'invalid-changed': RadioGroupInvalidChangedEvent;
-
-  'value-changed': RadioGroupValueChangedEvent;
-
-  validated: RadioGroupValidatedEvent;
-}
-
-export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCustomEventMap {}
+export * from './vaadin-radio-group-mixin.js';
 
 /**
  * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
@@ -77,22 +51,7 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class RadioGroup extends FieldMixin(
-  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement))))),
-) {
-  /**
-   * The value of the radio group.
-   */
-  value: string | null | undefined;
-
-  /**
-   * When present, the user cannot modify the value of the radio group.
-   * The property works similarly to the `disabled` property.
-   * While the `disabled` property disables all the radio buttons inside the group,
-   * the `readonly` property disables only unchecked ones.
-   */
-  readonly: boolean;
-
+declare class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,

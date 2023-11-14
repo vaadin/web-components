@@ -14,6 +14,10 @@ describe('url-utils', () => {
       expect(matchPaths('/path1', '/path2')).to.be.false;
     });
 
+    it('should return false when passing an external URL', () => {
+      expect(matchPaths('/', 'https://vaadin.com')).to.be.false;
+    });
+
     it('should ignore leading and trailing spaces in paths', () => {
       paths.forEach((path) => {
         const pathWithExtraSpace = ` ${path} `;

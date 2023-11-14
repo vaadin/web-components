@@ -120,6 +120,23 @@ describe('multi-select-combo-box', () => {
     });
   });
 
+  describe('auto expand', () => {
+    beforeEach(() => {
+      element.selectedItems = [...element.items];
+      element.autoExpandHorizontally = true;
+      element.autoExpandVertically = true;
+    });
+
+    it('auto expand', async () => {
+      await visualDiff(div, 'auto-expand');
+    });
+
+    it('auto expand max width', async () => {
+      element.style.maxWidth = '250px';
+      await visualDiff(div, 'auto-expand-max-width');
+    });
+  });
+
   describe('opened', () => {
     beforeEach(() => {
       div.style.height = '200px';

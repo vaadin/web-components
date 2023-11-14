@@ -19,6 +19,7 @@ export const RowDetailsMixin = (superClass) =>
         detailsOpenedItems: {
           type: Array,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -37,7 +38,10 @@ export const RowDetailsMixin = (superClass) =>
          *
          * @type {GridRowDetailsRenderer | null | undefined}
          */
-        rowDetailsRenderer: Function,
+        rowDetailsRenderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * @type {!Array<!HTMLElement> | undefined}
@@ -51,7 +55,7 @@ export const RowDetailsMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems.*, rowDetailsRenderer)',
+        '_detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer)',
         '_rowDetailsRendererChanged(rowDetailsRenderer)',
       ];
     }
@@ -90,12 +94,7 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(changeRecord, rowDetailsRenderer) {
-      // Skip to avoid duplicate work of both `.splices` and `.length` updates.
-      if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
-        return;
-      }
-
+    _detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer) {
       iterateChildren(this.$.items, (row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {
@@ -154,6 +153,13 @@ export const RowDetailsMixin = (superClass) =>
         return;
       }
 
+      this.__updateDetailsRowPadding(row, cell);
+      // Ensure the row has correct padding after frame (the resize observer might miss it)
+      requestAnimationFrame(() => this.__updateDetailsRowPadding(row, cell));
+    }
+
+    /** @private */
+    __updateDetailsRowPadding(row, cell) {
       if (cell.hidden) {
         row.style.removeProperty('padding-bottom');
       } else {

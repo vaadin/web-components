@@ -34,7 +34,7 @@ registerStyles(
 
     [part~='header-cell'],
     [part~='footer-cell'] {
-      background-color: var(--material-background-color);
+      background-color: var(--vaadin-grid-cell-background, var(--material-background-color));
       color: var(--material-secondary-text-color);
       font-size: var(--material-caption-font-size);
       font-weight: 500;
@@ -55,15 +55,18 @@ registerStyles(
     /* Body rows/cells */
 
     [part~='body-cell'] {
-      background-color: var(--material-background-color);
+      background-color: var(--vaadin-grid-cell-background, var(--material-background-color));
     }
 
     [part~='row']:hover > [part~='body-cell'] {
-      background: linear-gradient(
-          var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04)),
-          var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04))
-        )
-        var(--material-background-color);
+      background: var(
+        --vaadin-grid-cell-background,
+        linear-gradient(
+            var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04)),
+            var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04))
+          )
+          var(--material-background-color)
+      );
     }
 
     @media (hover: none) {

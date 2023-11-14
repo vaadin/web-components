@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
+import { getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('keyboard', () => {
@@ -347,7 +347,7 @@ describe('keyboard', () => {
 
     async function checkMonthAndDayOffset(monthOffsetToAdd, dayOffsetToAdd, expectedYearOffset) {
       input.value = '';
-      const referenceDate = new Date(datePicker.i18n.referenceDate);
+      const referenceDate = parseDate(datePicker.i18n.referenceDate);
       const yearToTest = referenceDate.getFullYear() + 50;
       await sendKeys({
         type: `${referenceDate.getMonth() + 1 + monthOffsetToAdd}/${referenceDate.getDate() + dayOffsetToAdd}/${

@@ -14,6 +14,10 @@ registerStyles(
       display: flex;
       width: 100%;
     }
+
+    :host([auto-expand-vertically]) #wrapper {
+      flex-wrap: wrap;
+    }
   `,
   {
     moduleId: 'vaadin-multi-select-combo-box-container-styles',
@@ -48,6 +52,21 @@ class MultiSelectComboBoxContainer extends InputContainer {
       wrapper.appendChild(slots[1]);
     }
     return memoizedTemplate;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Set to true to not collapse selected items chips into the overflow
+       * chip and instead always expand vertically, causing input field to
+       * wrap into multiple lines when width is limited.
+       * @attr {boolean} auto-expand-vertically
+       */
+      autoExpandVertically: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+    };
   }
 }
 

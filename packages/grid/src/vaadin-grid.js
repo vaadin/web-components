@@ -4,13 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-column.js';
-import './vaadin-grid-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
+import { gridStyles } from './vaadin-grid-styles.js';
+
+registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -154,6 +156,8 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * Part name                  | Description
  * ---------------------------|----------------
  * `row`                      | Row in the internal table
+ * `body-row`                 | Body row in the internal table
+ * `collapsed-row`            | Collapsed row
  * `expanded-row`             | Expanded row
  * `selected-row`             | Selected row
  * `details-opened-row`       | Row with details open
@@ -183,6 +187,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * `last-footer-row-cell`     | Cell in the last footer row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
+ * `collapsed-row-cell`       | Cell in a collapsed row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
  * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)

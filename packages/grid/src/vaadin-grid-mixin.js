@@ -86,10 +86,7 @@ export const GridMixin = (superClass) =>
     ),
   ) {
     static get observers() {
-      return [
-        '_columnTreeChanged(_columnTree, _columnTree.*)',
-        '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)',
-      ];
+      return ['_columnTreeChanged(_columnTree)', '_flatSizeChanged(_flatSize, __virtualizer, _hasData, _columnTree)'];
     }
 
     static get properties() {
@@ -254,7 +251,6 @@ export const GridMixin = (superClass) =>
 
       new ResizeObserver(() =>
         setTimeout(() => {
-          this.__updateFooterPositioning();
           this.__updateColumnsBodyContentHidden();
           this.__tryToRecalculateColumnWidthsIfPending();
         }),
@@ -501,7 +497,7 @@ export const GridMixin = (superClass) =>
       const rows = [];
       for (let i = 0; i < count; i++) {
         const row = document.createElement('tr');
-        row.setAttribute('part', 'row');
+        row.setAttribute('part', 'row body-row');
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         if (this._columnTree) {
@@ -511,9 +507,11 @@ export const GridMixin = (superClass) =>
       }
 
       if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach(
-          (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells),
-        );
+        this._columnTree[this._columnTree.length - 1].forEach((c) => {
+          if (c.isConnected && c._cells) {
+            c._cells = [...c._cells];
+          }
+        });
       }
 
       this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
@@ -678,8 +676,8 @@ export const GridMixin = (superClass) =>
               detailsCell._vacant = false;
             }
 
-            if (column.notifyPath && !noNotify) {
-              column.notifyPath('_cells.*', column._cells);
+            if (!noNotify) {
+              column._cells = [...column._cells];
             }
           } else {
             // Header & footer
@@ -814,6 +812,7 @@ export const GridMixin = (superClass) =>
     _updateRowStateParts(row, { expanded, selected, detailsOpened }) {
       updateBooleanRowStates(row, {
         expanded,
+        collapsed: this.__isRowExpandable(row),
         selected,
         'details-opened': detailsOpened,
       });
@@ -876,23 +875,9 @@ export const GridMixin = (superClass) =>
       this._resetKeyboardNavigation();
       this._a11yUpdateHeaderRows();
       this._a11yUpdateFooterRows();
-      this.__updateFooterPositioning();
       this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
-    }
-
-    /** @private */
-    __updateFooterPositioning() {
-      // TODO: fixed in Firefox 99, remove when we can drop Firefox ESR 91 support
-      if (this._firefox && parseFloat(navigator.userAgent.match(/Firefox\/(\d{2,3}.\d)/u)[1]) < 99) {
-        // Sticky (or translated) footer in a flexbox host doesn't get included in
-        // the scroll height calculation on FF. This is a workaround for the issue.
-        this.$.items.style.paddingBottom = 0;
-        if (!this.allRowsVisible) {
-          this.$.items.style.paddingBottom = `${this.$.footer.offsetHeight}px`;
-        }
-      }
     }
 
     /**
@@ -930,7 +915,6 @@ export const GridMixin = (superClass) =>
     /** @private */
     _resizeHandler() {
       this._updateDetailsCellHeights();
-      this.__updateFooterPositioning();
       this.__updateHorizontalScrollPosition();
     }
 
@@ -984,7 +968,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     _hideTooltip(immediate) {
-      const tooltip = this._tooltipController.node;
+      const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
         tooltip._stateController.close(immediate);
       }
