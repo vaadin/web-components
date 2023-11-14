@@ -532,5 +532,74 @@ describe('keyboard navigation', () => {
       await overlay.focusDateElement();
       expect(spy.calledOnce).to.be.true;
     });
+
+    describe('disabled dates', () => {
+      let focusSpy;
+      let datePicker;
+
+      beforeEach(async () => {
+        datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01" max="2010-01-31"></vaadin-date-picker>`);
+        await nextRender();
+        await open(datePicker);
+        focusSpy = sinon.spy(datePicker._overlayContent, 'focusDate');
+        datePicker.isDateDisabled = (date) => {
+          if (!date) {
+            return false;
+          }
+          return date.year === 2010 && date.month === 0 && date.day === 29;
+        };
+      });
+
+      it('should not allow navigation prior to min', async () => {
+        datePicker.value = '2010-01-02';
+        datePicker.inputElement.focus();
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        // Move focus to the previous week and it should instead move to the min date
+        await sendKeys({ press: 'ArrowUp' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        expect(focusSpy.called).to.be.true;
+        let calledDate = focusSpy.firstCall.args[0];
+        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+        // Attempt to move focus to the previous week and it should stay on the min date
+        await sendKeys({ press: 'ArrowUp' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        calledDate = focusSpy.secondCall.args[0];
+        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+      });
+
+      it('should not allow navigation beyond max', async () => {
+        datePicker.value = '2010-01-30';
+        datePicker.inputElement.focus();
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        // Move focus to the previous week and it should instead move to the min date
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        expect(focusSpy.called).to.be.true;
+        let calledDate = focusSpy.firstCall.args[0];
+        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+        // Attempt to move focus to the previous week and it should stay on the min date
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        calledDate = focusSpy.secondCall.args[0];
+        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+      });
+
+      it('should allow navigation on a disabled date', async () => {
+        datePicker.value = '2010-01-28';
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        // Attempt to move focus to a disabled date
+        await sendKeys({ press: 'ArrowRight' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+        expect(focusSpy.called).to.be.true;
+        const calledDate = focusSpy.firstCall.args[0];
+        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-29');
+      });
+    });
   });
 });
