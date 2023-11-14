@@ -20,6 +20,7 @@ snapshots["vaadin-radio-group host default"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -41,6 +42,7 @@ snapshots["vaadin-radio-group host default"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -83,6 +85,7 @@ snapshots["vaadin-radio-group host label"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -104,6 +107,7 @@ snapshots["vaadin-radio-group host label"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -218,6 +222,7 @@ snapshots["vaadin-radio-group host required"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -239,6 +244,7 @@ snapshots["vaadin-radio-group host required"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -281,6 +287,7 @@ snapshots["vaadin-radio-group host helper"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -302,6 +309,7 @@ snapshots["vaadin-radio-group host helper"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -352,6 +360,7 @@ snapshots["vaadin-radio-group host error"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -373,6 +382,7 @@ snapshots["vaadin-radio-group host error"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >

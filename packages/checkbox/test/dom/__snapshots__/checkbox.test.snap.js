@@ -12,6 +12,7 @@ snapshots["vaadin-checkbox host default"] =
   <input
     id="input-vaadin-checkbox-1"
     slot="input"
+    tabindex="0"
     type="checkbox"
     value="on"
   >
@@ -72,6 +73,7 @@ snapshots["vaadin-checkbox host name"] =
     id="input-vaadin-checkbox-1"
     name="Name"
     slot="input"
+    tabindex="0"
     type="checkbox"
     value="on"
   >
@@ -94,6 +96,7 @@ snapshots["vaadin-checkbox host label"] =
   <input
     id="input-vaadin-checkbox-1"
     slot="input"
+    tabindex="0"
     type="checkbox"
     value="on"
   >

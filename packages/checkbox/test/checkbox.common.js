@@ -133,16 +133,29 @@ describe('checkbox', () => {
     });
 
     describe('focus', () => {
+      let inputX, inputY;
+
+      beforeEach(() => {
+        const rect = input.getBoundingClientRect();
+        inputX = Math.floor(rect.x + rect.width / 2);
+        inputY = Math.floor(rect.y + rect.height / 2);
+      });
+
       afterEach(async () => {
         await resetMouse();
       });
 
-      it('should focus on input click if not focused', async () => {
-        const rect = input.getBoundingClientRect();
-        const middleX = Math.floor(rect.x + rect.width / 2);
-        const middleY = Math.floor(rect.y + rect.height / 2);
-        await sendMouse({ type: 'click', position: [middleX, middleY] });
+      it('should focus on input click when not focused yet', async () => {
+        await sendMouse({ type: 'click', position: [inputX, inputY] });
         expect(checkbox.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should keep focus on input click when already focused', async () => {
+        const spy = sinon.spy();
+        checkbox.addEventListener('focusout', spy);
+        input.focus();
+        await sendMouse({ type: 'click', position: [inputX, inputY] });
+        expect(spy).to.be.not.called;
       });
     });
 
