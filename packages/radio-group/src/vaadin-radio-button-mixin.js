@@ -32,6 +32,18 @@ export const RadioButtonMixin = (superclass) =>
           type: String,
           value: '',
         },
+
+        /**
+         * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+         *
+         * @override
+         * @protected
+         */
+        tabindex: {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true,
+        },
       };
     }
 
