@@ -329,13 +329,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
         type: Boolean,
       },
 
-      opened: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        reflectToAttribute: true,
-      },
-
       /**
        * The current selected date time.
        * @private
@@ -489,21 +482,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
   }
 
-  _shouldSetFocus(event) {
-    const target = event.relatedTarget;
-    const overlayContent = this.__datePicker._overlayContent;
-
-    if (
-      this.__datePicker.contains(target) ||
-      this.__timePicker.contains(target) ||
-      (overlayContent && overlayContent.contains(target))
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
   /**
    * Override method inherited from `FocusMixin` to not remove focused
    * state when focus moves between pickers or to the overlay.
@@ -549,7 +527,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   __openedChangedEventHandler() {
-    this.opened = this.__datePicker.opened || this.__timePicker.opened;
+    const opened = this.__datePicker.opened || this.__timePicker.opened;
+    this.style.pointerEvents = opened ? 'auto' : '';
   }
 
   /** @private */
