@@ -125,10 +125,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   static get template() {
     return html`
       <style>
-        :host([opened]) {
-          pointer-events: auto;
-        }
-
         .vaadin-date-time-picker-container {
           --vaadin-field-default-width: auto;
         }
