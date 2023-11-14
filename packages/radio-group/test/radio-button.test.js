@@ -259,4 +259,33 @@ describe('radio-button', () => {
       expect(radio.hasAttribute('has-label')).to.be.true;
     });
   });
+
+  describe('focus', () => {
+    let inputX, inputY;
+
+    beforeEach(() => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      input = radio.querySelector('[slot=input]');
+      const rect = input.getBoundingClientRect();
+      inputX = Math.floor(rect.x + rect.width / 2);
+      inputY = Math.floor(rect.y + rect.height / 2);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should focus on input click when not focused yet', async () => {
+      await sendMouse({ type: 'click', position: [inputX, inputY] });
+      expect(radio.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should keep focus on input click when already focused', async () => {
+      const spy = sinon.spy();
+      radio.addEventListener('focusout', spy);
+      input.focus();
+      await sendMouse({ type: 'click', position: [inputX, inputY] });
+      expect(spy).to.be.not.called;
+    });
+  });
 });
