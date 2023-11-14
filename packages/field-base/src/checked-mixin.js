@@ -48,12 +48,6 @@ export const CheckedMixin = dedupingMixin(
         const input = event.target;
 
         this._toggleChecked(input.checked);
-
-        // Clicking the checkbox or radio-button in Safari
-        // does not make it focused, so we do it manually.
-        if (!isElementFocused(input)) {
-          input.focus();
-        }
       }
 
       /** @protected */
