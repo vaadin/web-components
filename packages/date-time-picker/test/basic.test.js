@@ -1,7 +1,7 @@
-import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
+import { expect } from '@esm-bundle/chai';
 import { changeInputValue } from './helpers.js';
 
 const fixtures = {
@@ -100,6 +100,50 @@ describe('Basic features', () => {
       const element = document.createElement('vaadin-date-time-picker');
       expect(() => element.focus()).not.to.throw(Error);
     });
+  });
+
+  it('should not have `pointer-events` by default', () => {
+    expect(dateTimePicker.style.pointerEvents).to.be.empty;
+  });
+
+  it('should set `pointer-events: auto` when opening date-picker', async () => {
+    datePicker.click();
+    await nextRender();
+    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+  });
+
+  it('should remove `pointer-events: auto` when closing date-picker', async () => {
+    datePicker.click();
+    await nextRender();
+    outsideClick();
+    expect(dateTimePicker.style.pointerEvents).to.be.empty;
+  });
+
+  it('should set `pointer-events: auto` when opening time-picker', async () => {
+    timePicker.click();
+    await nextRender();
+    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+  });
+
+  it('should remove `pointer-events: auto` when closing time-picker', async () => {
+    timePicker.click();
+    await nextRender();
+    outsideClick();
+    expect(dateTimePicker.style.pointerEvents).to.be.empty;
+  });
+
+  it('should keep `pointer-events: auto` when switching between pickers', async () => {
+    datePicker.click();
+    await nextRender();
+    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+
+    timePicker.click();
+    await nextRender();
+    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+
+    datePicker.click();
+    await nextRender();
+    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
   });
 
   describe('focused', () => {
