@@ -561,12 +561,14 @@ describe('keyboard navigation', () => {
         await waitForScrollToFinish(datePicker._overlayContent);
         expect(focusSpy.called).to.be.true;
         let calledDate = focusSpy.firstCall.args[0];
-        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+        let formattedDate = `${calledDate.getFullYear()}-${calledDate.getMonth() + 1}-${calledDate.getDate()}`;
+        expect(formattedDate).to.be.eql('2010-1-1');
         // Attempt to move focus to the previous week and it should stay on the min date
         await sendKeys({ press: 'ArrowUp' });
         await waitForScrollToFinish(datePicker._overlayContent);
         calledDate = focusSpy.secondCall.args[0];
-        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-01');
+        formattedDate = `${calledDate.getFullYear()}-${calledDate.getMonth() + 1}-${calledDate.getDate()}`;
+        expect(formattedDate).to.be.eql('2010-1-1');
       });
 
       it('should not allow navigation beyond max', async () => {
@@ -580,12 +582,14 @@ describe('keyboard navigation', () => {
         await waitForScrollToFinish(datePicker._overlayContent);
         expect(focusSpy.called).to.be.true;
         let calledDate = focusSpy.firstCall.args[0];
-        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+        let formattedDate = `${calledDate.getFullYear()}-${calledDate.getMonth() + 1}-${calledDate.getDate()}`;
+        expect(formattedDate).to.be.eql('2010-1-31');
         // Attempt to move focus to the previous week and it should stay on the min date
         await sendKeys({ press: 'ArrowDown' });
         await waitForScrollToFinish(datePicker._overlayContent);
         calledDate = focusSpy.secondCall.args[0];
-        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-31');
+        formattedDate = `${calledDate.getFullYear()}-${calledDate.getMonth() + 1}-${calledDate.getDate()}`;
+        expect(formattedDate).to.be.eql('2010-1-31');
       });
 
       it('should allow navigation on a disabled date', async () => {
@@ -598,7 +602,8 @@ describe('keyboard navigation', () => {
         await waitForScrollToFinish(datePicker._overlayContent);
         expect(focusSpy.called).to.be.true;
         const calledDate = focusSpy.firstCall.args[0];
-        expect(calledDate.toISOString().split('T')[0]).to.be.eql('2010-01-29');
+        const formattedDate = `${calledDate.getFullYear()}-${calledDate.getMonth() + 1}-${calledDate.getDate()}`;
+        expect(formattedDate).to.be.eql('2010-1-29');
       });
     });
   });
