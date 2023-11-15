@@ -910,7 +910,7 @@ export const ComboBoxMixin = (subclass) =>
         }
       } else {
         // Try to find an item which label matches the input value.
-        const items = [...(this._dropdownItems || []), this.selectedItem];
+        const items = [this.selectedItem, ...(this._dropdownItems || [])];
         const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
 
         if (
