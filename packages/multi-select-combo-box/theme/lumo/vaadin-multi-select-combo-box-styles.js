@@ -44,6 +44,10 @@ const multiSelectComboBox = css`
     caret-color: var(--lumo-body-text-color) !important;
   }
 
+  [part='label'] {
+    flex-shrink: 0;
+  }
+
   [part~='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
   }
