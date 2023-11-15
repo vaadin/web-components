@@ -1,22 +1,18 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
+import { render } from '@testing-library/react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
+import chaiAsPromised from 'chai-as-promised';
 import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
 import { ListBox } from '../src/ListBox.js';
 import { Item } from '../src/Item.js';
-import { Select, type SelectElement } from '../src/Select.js';
-import catchRender from './utils/catchRender.js';
-import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+import { Select } from '../src/Select.js';
+import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 useChaiPlugin(chaiDom);
+useChaiPlugin(chaiAsPromised);
 
 describe('Select', () => {
-  const overlayTag = 'vaadin-select-overlay';
-
-  const [ref, catcher] = createOverlayCloseCatcher<SelectElement>(overlayTag, (ref) => {
-    ref.opened = false;
-  });
-
   const items = [
     { label: 'Foo', value: 'foo' },
     { label: 'Bar', value: 'bar' },
@@ -31,47 +27,73 @@ describe('Select', () => {
     );
   }
 
-  function isListBoxRendered(node: Node) {
-    return node instanceof HTMLElement && node.localName.includes('list-box');
-  }
+  async function assert(user: ReturnType<UserEvent['setup']>) {
+    const select = await findByQuerySelector('vaadin-select');
 
-  async function assert(container: HTMLElement) {
-    const select = container.querySelector('vaadin-select');
-    expect(select).to.exist;
+    const valueButton = await findByQuerySelector('vaadin-select-value-button', select);
+    expect(valueButton).to.have.text('Bar');
 
-    const valueButton = select!.querySelector('vaadin-select-value-button');
-    expect(valueButton).to.exist;
+    await user.click(valueButton);
 
-    valueButton!.dispatchEvent(new PointerEvent('click', { bubbles: true }));
-
-    const overlay = document.querySelector('vaadin-select-overlay');
-    expect(overlay).to.exist;
-
-    await catchRender(overlay!, isListBoxRendered);
-
+    const overlay = await findByQuerySelector('vaadin-select-overlay');
     expect(overlay).to.have.text('FooBar');
   }
 
-  afterEach(cleanup);
-  afterEach(catcher);
+  let user: ReturnType<UserEvent['setup']>;
 
-  it('should use children if no renderer property set', async () => {
-    const { container } = render(<Select ref={ref} items={items} value="bar" />);
-    await assert(container);
+  beforeEach(() => {
+    user = userEvent.setup();
   });
 
-  it('should use renderer prop if it is set', async () => {
-    const { container } = render(<Select ref={ref} items={items} renderer={Renderer} value="bar" />);
-    await assert(container);
+  it('should use items if no renderer property set', async () => {
+    render(<Select items={items} value="bar" />);
+    await assert(user);
   });
 
-  it('should use children render function as a renderer prop', async () => {
-    const { container } = render(
-      <Select ref={ref} value="bar">
-        {Renderer}
-      </Select>,
-    );
+  it('should correctly render the value if default value changed', async () => {
+    const { rerender } = render(<Select renderer={Renderer} value="bar" />);
+    await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
 
-    await assert(container);
+    rerender(<Select renderer={Renderer} value="foo" />);
+    await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Foo');
+  });
+
+  describe('renderer', () => {
+    function NewRenderer() {
+      return (
+        <ListBox>
+          <Item value="foo">Foo</Item>
+          <Item value="bar">Bar</Item>
+          <Item value="baz">Baz</Item>
+        </ListBox>
+      );
+    }
+
+    it('should use renderer prop if it is set', async () => {
+      render(<Select renderer={Renderer} value="bar" />);
+      await assert(user);
+    });
+
+    it('should use children render function as a renderer prop', async () => {
+      render(<Select value="bar">{Renderer}</Select>);
+      await assert(user);
+    });
+
+    it('should correctly render the value if renderer prop is changed', async () => {
+      render(<Select renderer={Renderer} value="bar" />);
+      await findByQuerySelector('vaadin-select-value-button');
+
+      render(<Select renderer={NewRenderer} value="bar" />);
+
+      await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
+    });
+
+    it('should correctly render the value if children prop is changed', async () => {
+      render(<Select value="bar">{Renderer}</Select>);
+      await findByQuerySelector('vaadin-select-value-button');
+      render(<Select value="bar">{NewRenderer}</Select>);
+
+      await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
+    });
   });
 });
