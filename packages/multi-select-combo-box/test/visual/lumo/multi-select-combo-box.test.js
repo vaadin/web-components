@@ -134,6 +134,17 @@ describe('multi-select-combo-box', () => {
       element.style.maxWidth = '250px';
       await visualDiff(div, 'all-chips-visible-max-width');
     });
+
+    it('all chips visible height', async () => {
+      element.label = 'Label';
+      element.style.width = '300px';
+      element.style.height = '200px';
+      div.style.height = '240px';
+      const items = Array.from({ length: 20 }).map((_, i) => `Item ${i}`);
+      element.items = items;
+      element.selectedItems = items;
+      await visualDiff(div, 'all-chips-visible-height');
+    });
   });
 
   describe('opened', () => {
