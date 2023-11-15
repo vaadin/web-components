@@ -24,14 +24,14 @@
   },
   "files": [
     "src",
-    "!src/vaadin-lit-rich-text-editor.d.ts",
-    "!src/vaadin-lit-rich-text-editor.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
     "vendor",
     "web-types.json",
-    "web-types.lit.json"
+    "web-types.lit.json",
+    "!vaadin-lit-*.d.ts",
+    "!vaadin-lit-*.js"
   ],
   "keywords": [
     "Vaadin",
