@@ -19,6 +19,7 @@ snapshots["vaadin-radio-group host default"] =
     <input
       id="input-vaadin-radio-button-6"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -39,6 +40,7 @@ snapshots["vaadin-radio-group host default"] =
     <input
       id="input-vaadin-radio-button-7"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -80,6 +82,7 @@ snapshots["vaadin-radio-group host label"] =
     <input
       id="input-vaadin-radio-button-6"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -100,6 +103,7 @@ snapshots["vaadin-radio-group host label"] =
     <input
       id="input-vaadin-radio-button-7"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -211,6 +215,7 @@ snapshots["vaadin-radio-group host required"] =
     <input
       id="input-vaadin-radio-button-6"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -231,6 +236,7 @@ snapshots["vaadin-radio-group host required"] =
     <input
       id="input-vaadin-radio-button-7"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -272,6 +278,7 @@ snapshots["vaadin-radio-group host helper"] =
     <input
       id="input-vaadin-radio-button-6"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -292,6 +299,7 @@ snapshots["vaadin-radio-group host helper"] =
     <input
       id="input-vaadin-radio-button-7"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
@@ -342,6 +350,7 @@ snapshots["vaadin-radio-group host error"] =
       id="input-vaadin-radio-button-6"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="1"
     >
@@ -363,6 +372,7 @@ snapshots["vaadin-radio-group host error"] =
       id="input-vaadin-radio-button-7"
       name="vaadin-radio-group-5"
       slot="input"
+      tabindex="0"
       type="radio"
       value="2"
     >
