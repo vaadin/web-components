@@ -3,6 +3,7 @@ import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-help
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import '../vaadin-grid-tree-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
@@ -282,6 +283,41 @@ describe('all rows visible', () => {
       const gridRect = grid.getBoundingClientRect();
       const belowGrid = document.elementFromPoint(gridRect.left + 1, gridRect.bottom + 1);
       expect(grid.contains(belowGrid)).to.be.false;
+    });
+  });
+
+  describe('tree grid', () => {
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-tree-column path="value"></vaadin-grid-tree-column>
+        </vaadin-grid>
+      `);
+      grid.allRowsVisible = true;
+      grid.itemIdPath = 'value';
+      grid.dataProvider = ({ parentItem }, cb) => {
+        const item = {
+          value: `${parentItem ? `${parentItem.value}-` : ''}0`,
+          children: true,
+        };
+        cb([item], 1);
+      };
+      flushGrid(grid);
+    });
+
+    it('should have all rows visible on deep expand', () => {
+      grid.expandedItems = [
+        { value: '0' },
+        { value: '0-0' },
+        { value: '0-0-0' },
+        { value: '0-0-0-0' },
+        { value: '0-0-0-0-0' },
+        { value: '0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0-0' },
+      ];
+      expect(grid._firstVisibleIndex).to.equal(0);
+      expect(grid._lastVisibleIndex).to.equal(8);
     });
   });
 });
