@@ -310,6 +310,7 @@ export class IronListAdapter {
       this.__preventElementUpdates = false;
     } else {
       // Already initialized, just update _virtualCount
+      this._updateScrollerSize();
       this._virtualCount = this.items.length;
     }
 
