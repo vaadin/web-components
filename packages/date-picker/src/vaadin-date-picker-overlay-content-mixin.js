@@ -11,6 +11,7 @@ import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import { dateAllowed } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -1029,12 +1030,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
-      let dateIsDisabled = false;
-      if (typeof isDateDisabled === 'function' && !!date) {
-        const dateToCheck = extractDateParts(date);
-        dateIsDisabled = isDateDisabled(dateToCheck);
-      }
-      return (!min || date >= min) && (!max || date <= max) && !dateIsDisabled;
+      return dateAllowed(date, min, max, isDateDisabled);
     }
 
     /** @private */
