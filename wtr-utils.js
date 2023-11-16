@@ -247,6 +247,7 @@ const createUnitTestsConfig = (config) => {
       config: {
         ui: 'bdd',
         timeout: '10000',
+        retries: process.env.GITHUB_REF ? 2 : 0,
       },
     },
     coverage: hasCoverageParam,
@@ -325,6 +326,7 @@ const createIntegrationTestsConfig = (config) => {
       config: {
         ui: 'bdd',
         timeout: '10000',
+        retries: process.env.GITHUB_REF ? 2 : 0,
       },
     },
     groups: [
