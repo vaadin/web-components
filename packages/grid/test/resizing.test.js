@@ -3,6 +3,7 @@ import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-help
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import '../vaadin-grid-tree-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
