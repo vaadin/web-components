@@ -3,10 +3,10 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-lit-button.js';
 import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
-import './vaadin-date-picker-year.js';
+import './vaadin-lit-date-picker-year.js';
 import './vaadin-lit-month-calendar.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
