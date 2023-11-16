@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-split-layout",
-  "version": "23.3.25",
+  "version": "23.4.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/split-layout": "~23.3.25"
+    "@vaadin/split-layout": "23.4.0-alpha1"
   }
 }
