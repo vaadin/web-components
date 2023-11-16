@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-overlay.d.ts",
-    "!src/vaadin-lit-overlay.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js"
