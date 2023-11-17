@@ -192,9 +192,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // If drag start and end stays within the same item, then toggle its state
         if (this.__dragStartItem) {
           if (this.__dragSelect) {
-            this._grid.selectItem(this.__dragStartItem);
+            this._selectItem(this.__dragStartItem);
           } else {
-            this._grid.deselectItem(this.__dragStartItem);
+            this._deselectItem(this.__dragStartItem);
           }
         }
         // Clear drag state after timeout, which allows preventing the
@@ -255,9 +255,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
             (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
           ) {
             if (this.__dragSelect) {
-              this._grid.selectItem(row._item);
+              this._selectItem(row._item);
             } else {
-              this._grid.deselectItem(row._item);
+              this._deselectItem(row._item);
             }
             this.__dragStartItem = undefined;
           }
