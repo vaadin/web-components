@@ -11,7 +11,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { tabsStyles } from './vaadin-tabs-styles.js';
+
+registerStyles('vaadin-tabs', tabsStyles, { moduleId: 'vaadin-tabs-styles' });
 
 /**
  * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
@@ -57,83 +60,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          align-items: center;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([orientation='vertical']) {
-          display: block;
-        }
-
-        :host([orientation='horizontal']) [part='tabs'] {
-          flex-grow: 1;
-          display: flex;
-          align-self: stretch;
-          overflow-x: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        /* This seems more future-proof than \`overflow: -moz-scrollbars-none\` which is marked obsolete
-         and is no longer guaranteed to work:
-         https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions */
-        @-moz-document url-prefix() {
-          :host([orientation='horizontal']) [part='tabs'] {
-            overflow: hidden;
-          }
-        }
-
-        :host([orientation='horizontal']) [part='tabs']::-webkit-scrollbar {
-          display: none;
-        }
-
-        :host([orientation='vertical']) [part='tabs'] {
-          height: 100%;
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        [part='back-button'],
-        [part='forward-button'] {
-          pointer-events: none;
-          opacity: 0;
-          cursor: default;
-        }
-
-        :host([overflow~='start']) [part='back-button'],
-        :host([overflow~='end']) [part='forward-button'] {
-          pointer-events: auto;
-          opacity: 1;
-        }
-
-        [part='back-button']::after {
-          content: '\\25C0';
-        }
-
-        [part='forward-button']::after {
-          content: '\\25B6';
-        }
-
-        :host([orientation='vertical']) [part='back-button'],
-        :host([orientation='vertical']) [part='forward-button'] {
-          display: none;
-        }
-
-        /* RTL specific styles */
-
-        :host([dir='rtl']) [part='back-button']::after {
-          content: '\\25B6';
-        }
-
-        :host([dir='rtl']) [part='forward-button']::after {
-          content: '\\25C0';
-        }
-      </style>
       <div on-click="_scrollBack" part="back-button" aria-hidden="true"></div>
 
       <div id="scroll" part="tabs">

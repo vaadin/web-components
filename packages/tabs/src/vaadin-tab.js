@@ -9,7 +9,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { tabStyles } from './vaadin-tab-styles.js';
+
+registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
@@ -43,25 +46,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        @media (forced-colors: active) {
-          :host([focused]) {
-            outline: 1px solid;
-            outline-offset: -1px;
-          }
-          :host([selected]) {
-            border-bottom: 2px solid;
-          }
-        }
-      </style>
       <slot></slot>
       <slot name="tooltip"></slot>
     `;
