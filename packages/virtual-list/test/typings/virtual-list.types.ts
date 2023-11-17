@@ -1,4 +1,6 @@
 import '../../vaadin-virtual-list.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { VirtualList, VirtualListItemModel, VirtualListRenderer } from '../../vaadin-virtual-list.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -6,6 +8,9 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const genericVirtualList = document.createElement('vaadin-virtual-list');
 
 assertType<VirtualList>(genericVirtualList);
+
+assertType<ThemableMixinClass>(genericVirtualList);
+assertType<ElementMixinClass>(genericVirtualList);
 
 genericVirtualList.items = [1, 2, 3];
 
