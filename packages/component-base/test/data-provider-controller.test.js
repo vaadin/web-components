@@ -82,10 +82,6 @@ describe('DataProviderController', () => {
       });
     });
 
-    it('should have size', () => {
-      expect(controller.size).to.equal(500);
-    });
-
     it('should have rootCache size', () => {
       expect(controller.rootCache.size).to.equal(500);
     });
@@ -141,31 +137,6 @@ describe('DataProviderController', () => {
     it('should set pageSize for the new cache', () => {
       controller.clearCache();
       expect(controller.rootCache.pageSize).to.equal(50);
-    });
-  });
-
-  describe('changing size', () => {
-    beforeEach(() => {
-      controller = new DataProviderController(host, {
-        pageSize: 50,
-        isExpanded,
-        dataProvider: (_params, callback) => callback([], 0),
-      });
-    });
-
-    it('should set the new size', () => {
-      controller.setSize(100);
-      expect(controller.size).to.equal(100);
-    });
-
-    it('should set the new rootCache size', () => {
-      controller.setSize(100);
-      expect(controller.rootCache.size).to.equal(100);
-    });
-
-    it('should recalculate flatSize', () => {
-      controller.setSize(100);
-      expect(controller.flatSize).to.equal(100);
     });
   });
 

@@ -186,7 +186,8 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _sizeChanged(size) {
-      this._dataProviderController.setSize(size);
+      this._dataProviderController.rootCache.size = size;
+      this._dataProviderController.recalculateFlatSize();
       this._flatSize = this._dataProviderController.flatSize;
     }
 
@@ -363,6 +364,7 @@ export const DataProviderMixin = (superClass) =>
      */
     clearCache() {
       this._dataProviderController.clearCache();
+      this._dataProviderController.rootCache.size = this.size;
       this._hasData = false;
       this.__updateVisibleRows();
 
