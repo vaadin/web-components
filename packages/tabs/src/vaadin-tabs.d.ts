@@ -3,12 +3,11 @@
  * Copyright (c) 2017 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { TabsMixin, TabsOrientation } from './vaadin-tabs-mixin.js';
 
-export type TabsOrientation = 'horizontal' | 'vertical';
+export { TabsOrientation };
 
 /**
  * Fired when the `items` property changes.
@@ -62,17 +61,7 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(HTMLElement)))) {
-  /**
-   * The index of the selected tab.
-   */
-  selected: number | null | undefined;
-
-  /**
-   * Set tabs disposition. Possible values are `horizontal|vertical`
-   */
-  orientation: TabsOrientation;
-
+declare class Tabs extends TabsMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof TabsEventMap>(
     type: K,
     listener: (this: Tabs, ev: TabsEventMap[K]) => void,
