@@ -19,7 +19,6 @@ import { GridProEditSelectMixin } from './vaadin-grid-pro-edit-select-mixin.js';
  *
  * This component is an experiment not intended for publishing to npm.
  * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class GridProEditSelect extends GridProEditSelectMixin(Select) {
   static get is() {
