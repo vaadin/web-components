@@ -37,7 +37,7 @@ export const TabsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__tabsItemsChanged(items, items.*)'];
+      return ['__tabsItemsChanged(items)'];
     }
 
     constructor() {
