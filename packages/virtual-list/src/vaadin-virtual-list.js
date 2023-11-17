@@ -10,7 +10,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { virtualListStyles } from './vaadin-virtual-list-styles.js';
+
+registerStyles('vaadin-virtual-list', virtualListStyles, { moduleId: 'vaadin-virtual-list-styles' });
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
@@ -44,28 +47,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-          height: 400px;
-          overflow: auto;
-          flex: auto;
-          align-self: stretch;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host(:not([grid])) #items > ::slotted(*) {
-          width: 100%;
-        }
-
-        #items {
-          position: relative;
-        }
-      </style>
-
       <div id="items">
         <slot></slot>
       </div>
