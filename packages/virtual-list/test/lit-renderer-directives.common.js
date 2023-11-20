@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-virtual-list.js';
 import { html, render } from 'lit';
 import { virtualListRenderer } from '../lit.js';
 
