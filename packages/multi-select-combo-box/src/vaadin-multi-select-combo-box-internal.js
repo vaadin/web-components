@@ -165,7 +165,12 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _setDropdownItems(items) {
-    if (this.filter || this.readonly || !this.selectedItemsOnTop) {
+    if (this.readonly) {
+      this._dropdownItems = this.selectedItems;
+      return;
+    }
+
+    if (this.filter || !this.selectedItemsOnTop) {
       this._dropdownItems = items;
       return;
     }
