@@ -418,8 +418,8 @@ export const GridMixin = (superClass) =>
         })
         .forEach((cell) => {
           cell.__measuringAutoWidth = autoWidth;
-          cell._content.style.width = autoWidth ? 'auto' : '';
-          cell._content.style.position = autoWidth ? 'absolute' : '';
+          cell.style.width = autoWidth ? 'auto' : '';
+          cell.style.position = autoWidth ? 'absolute' : '';
         });
     }
 
@@ -433,7 +433,7 @@ export const GridMixin = (superClass) =>
       // Note: _allCells only contains cells which are currently rendered in DOM
       return col._allCells.reduce((width, cell) => {
         // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        return cell.__measuringAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
+        return cell.__measuringAutoWidth ? Math.max(width, cell.offsetWidth + 1) : width;
       }, 0);
     }
 

@@ -194,6 +194,21 @@ describe('column auto-width', () => {
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns, [74]);
   });
+
+  it('should take cell styling into account', async () => {
+    fixtureSync(`
+      <style>
+        vaadin-grid::part(cell) {
+          padding: 10px;
+        }
+      </style>
+    `);
+
+    grid.recalculateColumnWidths();
+
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns, [63]);
+  });
 });
 
 describe('tree column', () => {
