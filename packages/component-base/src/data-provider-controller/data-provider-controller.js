@@ -68,13 +68,12 @@ export class DataProviderController extends EventTarget {
   constructor(host, { size, pageSize, isExpanded, getItemId, dataProvider, dataProviderParams }) {
     super();
     this.host = host;
-    this.size = size;
     this.pageSize = pageSize;
     this.getItemId = getItemId;
     this.isExpanded = isExpanded;
     this.dataProvider = dataProvider;
     this.dataProviderParams = dataProviderParams;
-    this.rootCache = this.__createRootCache();
+    this.rootCache = this.__createRootCache(size);
   }
 
   /**
@@ -100,17 +99,6 @@ export class DataProviderController extends EventTarget {
    */
   isLoading() {
     return this.rootCache.isLoading;
-  }
-
-  /**
-   * Sets the size for the root cache and recalculates the flattened size.
-   *
-   * @param {number} size
-   */
-  setSize(size) {
-    this.size = size;
-    this.rootCache.size = size;
-    this.recalculateFlatSize();
   }
 
   /**
@@ -144,7 +132,7 @@ export class DataProviderController extends EventTarget {
    * Clears the cache.
    */
   clearCache() {
-    this.rootCache = this.__createRootCache();
+    this.rootCache = this.__createRootCache(this.rootCache.size);
   }
 
   /**
@@ -228,8 +216,8 @@ export class DataProviderController extends EventTarget {
   }
 
   /** @private */
-  __createRootCache() {
-    return new Cache(this.__cacheContext, this.pageSize, this.size);
+  __createRootCache(size) {
+    return new Cache(this.__cacheContext, this.pageSize, size);
   }
 
   /** @private */
