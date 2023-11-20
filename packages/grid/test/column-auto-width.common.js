@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { flushGrid } from './helpers.js';
+import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('column auto-width', () => {
   let grid;
@@ -208,6 +208,13 @@ describe('column auto-width', () => {
 
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns, [63]);
+  });
+
+  it('should have correct cell width after re-measuring', async () => {
+    grid.recalculateColumnWidths();
+    await recalculateWidths();
+
+    expect(getContainerCell(grid.$.header, 0, 0).getBoundingClientRect().width).to.be.closeTo(43, 5);
   });
 });
 

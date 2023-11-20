@@ -418,8 +418,19 @@ export const GridMixin = (superClass) =>
         })
         .forEach((cell) => {
           cell.__measuringAutoWidth = autoWidth;
-          cell.style.width = autoWidth ? 'auto' : '';
-          cell.style.position = autoWidth ? 'absolute' : '';
+
+          if (cell.__measuringAutoWidth) {
+            // Store the original inline width of the cell to restore it later
+            cell.__originalWidth = cell.style.width;
+            // Prepare the cell for having its intrinsic width measured
+            cell.style.width = 'auto';
+            cell.style.position = 'absolute';
+          } else {
+            // Restore the original width
+            cell.style.width = cell.__originalWidth || '';
+            delete cell.__originalWidth;
+            cell.style.position = '';
+          }
         });
     }
 
