@@ -193,7 +193,7 @@ describe('readonly', () => {
       expect(items[3].textContent).to.equal('orange');
     });
 
-    it('should only render selected items in the dropdown when size is set', async () => {
+    it('should render selected items in the dropdown when size is set', async () => {
       inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
