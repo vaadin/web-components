@@ -494,6 +494,24 @@ describe('vaadin-list-mixin', () => {
       const listElement = document.createElement('test-list-element');
       expect(() => listElement.focus()).not.to.throw(Error);
     });
+
+    describe('non-latin keys', () => {
+      const LARGE = 'ใหญ่';
+      const SMALL = 'เล็ก';
+
+      beforeEach(() => {
+        list.items[0].textContent = LARGE;
+        list.items[1].textContent = SMALL;
+      });
+
+      it('should select items when non-latin keys are pressed', () => {
+        keyDownChar(list, SMALL.charAt(0));
+        expect(list.items[1].focused).to.be.true;
+
+        keyDownChar(list, LARGE.charAt(0));
+        expect(list.items[0].focused).to.be.true;
+      });
+    });
   });
 
   describe('orientation', () => {
