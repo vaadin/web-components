@@ -54,7 +54,7 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
         .noCloseOnEsc="${this.noCloseOnEsc}"
         .contentHeight="${this._contentHeight}"
         .contentWidth="${this._contentWidth}"
-        @opened-changed=${this._onOpenedChanged}"
+        @opened-changed="${this._onOpenedChanged}"
       ></vaadin-confirm-dialog-dialog>
 
       <div hidden>
