@@ -196,7 +196,7 @@ describe('column auto-width', () => {
   });
 
   it('should take cell styling into account', async () => {
-    const firstColumnWidth = columns[0].width;
+    const firstColumnWidth = parseInt(columns[0].width);
 
     fixtureSync(`
       <style>
@@ -207,9 +207,9 @@ describe('column auto-width', () => {
     `);
 
     grid.recalculateColumnWidths();
-
     await recalculateWidths();
-    expectColumnWidthsToBeOk(columns, [parseInt(firstColumnWidth) + 20]);
+
+    expectColumnWidthsToBeOk(columns, [firstColumnWidth + 20]);
   });
 
   it('should have correct cell width after re-measuring', async () => {
