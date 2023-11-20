@@ -196,10 +196,12 @@ describe('column auto-width', () => {
   });
 
   it('should take cell styling into account', async () => {
+    const firstColumnWidth = columns[0].width;
+
     fixtureSync(`
       <style>
         vaadin-grid::part(cell) {
-          padding: 10px;
+          padding-right: 20px;
         }
       </style>
     `);
@@ -207,7 +209,7 @@ describe('column auto-width', () => {
     grid.recalculateColumnWidths();
 
     await recalculateWidths();
-    expectColumnWidthsToBeOk(columns, [63]);
+    expectColumnWidthsToBeOk(columns, [parseInt(firstColumnWidth) + 20]);
   });
 
   it('should have correct cell width after re-measuring', async () => {
