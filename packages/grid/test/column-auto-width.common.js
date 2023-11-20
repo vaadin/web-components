@@ -211,10 +211,13 @@ describe('column auto-width', () => {
   });
 
   it('should have correct cell width after re-measuring', async () => {
+    const headerCell = getContainerCell(grid.$.header, 0, 0);
+    const headerCellWidth = headerCell.getBoundingClientRect().width;
+
     grid.recalculateColumnWidths();
     await recalculateWidths();
 
-    expect(getContainerCell(grid.$.header, 0, 0).getBoundingClientRect().width).to.be.closeTo(43, 5);
+    expect(headerCell.getBoundingClientRect().width).to.be.closeTo(headerCellWidth, 5);
   });
 });
 

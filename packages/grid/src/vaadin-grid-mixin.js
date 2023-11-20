@@ -427,7 +427,7 @@ export const GridMixin = (superClass) =>
             cell.style.position = 'absolute';
           } else {
             // Restore the original width
-            cell.style.width = cell.__originalWidth || '';
+            cell.style.width = cell.__originalWidth;
             delete cell.__originalWidth;
             cell.style.position = '';
           }
