@@ -197,7 +197,7 @@ describe('readonly', () => {
       inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
-      comboBox.size = 5;
+      comboBox.size = 4;
       const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
