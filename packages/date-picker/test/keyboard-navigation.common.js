@@ -180,7 +180,7 @@ describe('keyboard navigation', () => {
         expect(cell.date).to.eql(new Date(2010, 0, 31));
       });
 
-      it('should allow navigation on a disabled date', async () => {
+      it('should allow navigation, but not ENTER on a disabled date', async () => {
         datePicker.value = '2010-01-28';
 
         // Move focus inside the dropdown to the typed date.
@@ -193,6 +193,11 @@ describe('keyboard navigation', () => {
 
         const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell.date).to.eql(new Date(2010, 0, 29));
+
+        const spy = sinon.spy(datePicker._overlayContent, '_close');
+        // Pressing ENTER should not close the overlay because date is disabled
+        await sendKeys({ press: 'Enter' });
+        expect(spy.calledOnce).to.be.false;
       });
     });
   });
