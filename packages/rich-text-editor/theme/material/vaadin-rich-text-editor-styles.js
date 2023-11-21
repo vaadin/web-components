@@ -91,6 +91,11 @@ const richTextEditor = css`
   strong {
     font-weight: 600;
   }
+
+  code,
+  pre {
+    background-color: var(--material-secondary-background-color);
+  }
 `;
 
 registerStyles('vaadin-rich-text-editor', [typography, richTextEditor], {
