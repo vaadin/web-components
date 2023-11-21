@@ -697,8 +697,18 @@ class Grid extends ElementMixin(
       })
       .forEach((cell) => {
         cell.__measuringAutoWidth = autoWidth;
-        cell._content.style.width = autoWidth ? 'auto' : '';
-        cell._content.style.position = autoWidth ? 'absolute' : '';
+        if (cell.__measuringAutoWidth) {
+          // Store the original inline width of the cell to restore it later
+          cell.__originalWidth = cell.style.width;
+          // Prepare the cell for having its intrinsic width measured
+          cell.style.width = 'auto';
+          cell.style.position = 'absolute';
+        } else {
+          // Restore the original width
+          cell.style.width = cell.__originalWidth;
+          delete cell.__originalWidth;
+          cell.style.position = '';
+        }
       });
   }
 
@@ -712,7 +722,7 @@ class Grid extends ElementMixin(
     // Note: _allCells only contains cells which are currently rendered in DOM
     return col._allCells.reduce((width, cell) => {
       // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-      return cell.__measuringAutoWidth ? Math.max(width, cell._content.offsetWidth + 1) : width;
+      return cell.__measuringAutoWidth ? Math.max(width, cell.offsetWidth + 1) : width;
     }, 0);
   }
 
