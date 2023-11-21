@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-rich-text-editor.js';
+import { colorDark } from '@vaadin/vaadin-material-styles/color.js';
 
 describe('rich-text-editor', () => {
   let div, element;
@@ -65,5 +66,22 @@ describe('rich-text-editor', () => {
       {"insert":"\\n"}
     ]`;
     await visualDiff(div, 'max-height');
+  });
+
+  it('dark theme', async () => {
+    document.documentElement.setAttribute('theme', 'dark');
+
+    fixtureSync(`<style>${colorDark.toString().replace(':host', 'html')}</style>`);
+
+    element.value = `[
+      {"insert":"<body>"},
+      {"attributes":{"code-block":true},"insert":"\\n"},
+      {"insert":"  <vaadin-rich-text-editor></vaadin-rich-text-editor>"},
+      {"attributes":{"code-block":true},"insert":"\\n"},
+      {"insert":"</body>"},
+      {"attributes":{"code-block":true},"insert":"\\n"},
+      {"insert":"\\n"}
+    ]`;
+    await visualDiff(div, 'dark-theme');
   });
 });
