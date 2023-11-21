@@ -172,4 +172,14 @@ describe('MultiSelectListMixin', () => {
     list.multiple = false;
     expect(list.hasAttribute('aria-multiselectable')).to.be.false;
   });
+
+  it('should not reset selected state when setting disabled to false', () => {
+    list.multiple = true;
+    list.disabled = true;
+
+    list.selectedValues = [2];
+    list.disabled = false;
+
+    expect(list.items[2].selected).to.be.true;
+  });
 });
