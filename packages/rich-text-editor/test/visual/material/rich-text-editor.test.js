@@ -71,9 +71,7 @@ describe('rich-text-editor', () => {
   it('dark theme', async () => {
     document.documentElement.setAttribute('theme', 'dark');
 
-    const style = document.createElement('style');
-    style.innerHTML = `${colorDark.toString().replace(':host', 'html')}`;
-    document.head.appendChild(style);
+    fixtureSync(`<style>${colorDark.toString().replace(':host', 'html')}</style>`);
 
     element.value = `[
       {"insert":"<body>"},
