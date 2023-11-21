@@ -192,6 +192,17 @@ describe('readonly', () => {
       expect(items[2].textContent).to.equal('lemon');
       expect(items[3].textContent).to.equal('orange');
     });
+
+    it('should render selected items in the dropdown when size is set', async () => {
+      inputElement.click();
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      comboBox.size = 4;
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('apple');
+      expect(items[1].textContent).to.equal('orange');
+    });
   });
 
   describe('dataProvider is set after selectedItems', () => {
