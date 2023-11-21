@@ -52,7 +52,7 @@ export const MultiSelectListMixin = (superClass) =>
 
     /** @private */
     _enhanceMultipleItems(items, multiple, selected, disabled, selectedValues) {
-      if (!items || !multiple || disabled) {
+      if (!items || !multiple) {
         return;
       }
 
