@@ -141,6 +141,22 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override combo-box method to group selected
+   * items at the top of the overlay.
+   *
+   * @protected
+   * @override
+   */
+  _setDropdownItems(items) {
+    if (this.readonly) {
+      this._dropdownItems = this.selectedItems;
+      return;
+    }
+
+    this._dropdownItems = items;
+  }
+
+  /**
    * Override combo-box method to set correct owner for using by item renderers.
    * This needs to be done before the scroller gets added to the DOM to ensure
    * Lit directive works in case when combo-box is opened using attribute.
