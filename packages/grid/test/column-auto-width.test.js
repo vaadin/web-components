@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-tree-column.js';
-import { flushGrid } from './helpers.js';
+import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('column auto-width', () => {
   let grid;
@@ -196,6 +196,33 @@ describe('column auto-width', () => {
     // Column widths should recalculate, keeping the same width
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns, [74]);
+  });
+
+  it('should take cell styling into account', async () => {
+    const firstColumnWidth = parseInt(columns[0].width);
+
+    fixtureSync(`
+      <style>
+        vaadin-grid::part(cell) {
+          padding-right: 20px;
+        }
+      </style>
+    `);
+
+    grid.recalculateColumnWidths();
+    await recalculateWidths();
+
+    expectColumnWidthsToBeOk(columns, [firstColumnWidth + 20]);
+  });
+
+  it('should have correct cell width after re-measuring', async () => {
+    const headerCell = getContainerCell(grid.$.header, 0, 0);
+    const headerCellWidth = headerCell.getBoundingClientRect().width;
+
+    grid.recalculateColumnWidths();
+    await recalculateWidths();
+
+    expect(headerCell.getBoundingClientRect().width).to.be.closeTo(headerCellWidth, 5);
   });
 });
 
