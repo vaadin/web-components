@@ -64,6 +64,7 @@ export const TextAreaMixin = (superClass) =>
      * @override
      */
     _onResize() {
+      this._updateHeight();
       this.__scrollPositionUpdated();
     }
 
