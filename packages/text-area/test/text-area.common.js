@@ -274,6 +274,21 @@ describe('text-area', () => {
       expect(textArea.clientHeight).to.equal(height);
     });
 
+    it('should change height automatically on width change', async () => {
+      // Make the textarea wide and fill it with text
+      textArea.style.width = '800px';
+      textArea.value = Array(400).join('400');
+      await nextUpdate(textArea);
+      const height = textArea.offsetHeight;
+
+      // Decrease the width
+      textArea.style.width = '400px';
+      await nextUpdate(textArea);
+
+      // Expect the height to have increased
+      expect(textArea.offsetHeight).to.be.above(height);
+    });
+
     it('should have the correct width', () => {
       textArea.style.width = '300px';
       expect(native.clientWidth).to.equal(
