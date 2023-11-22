@@ -210,6 +210,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
    * @override
    */
   _onResize() {
+    this._updateHeight();
     this.__scrollPositionUpdated();
   }
 
