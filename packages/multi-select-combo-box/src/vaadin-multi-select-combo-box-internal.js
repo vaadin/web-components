@@ -178,7 +178,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     if (items && items.length && this.topGroup && this.topGroup.length) {
       // Filter out items included to the top group.
       const filteredItems = items.filter(
-        (item) => !this.topGroup.some((selectedItem) => this._getItemValue(item) === this._getItemValue(selectedItem)),
+        (item) => this._comboBox._findIndex(item, this.topGroup, this.itemIdPath) === -1,
       );
 
       this._dropdownItems = this.topGroup.concat(filteredItems);
@@ -205,6 +205,8 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    */
   _initScroller() {
     const comboBox = this.getRootNode().host;
+
+    this._comboBox = comboBox;
 
     super._initScroller(comboBox);
   }
