@@ -2,6 +2,26 @@ import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver has processed a resize.
+ */
+async function onceResized(element) {
+  await onceInvoked(element, '_onResize');
+}
+
 describe('text-area', () => {
   let textArea;
 
@@ -272,6 +292,21 @@ describe('text-area', () => {
       setInputValue(textArea, value.slice(0, -1));
       await nextFrame();
       expect(textArea.clientHeight).to.equal(height);
+    });
+
+    it('should change height automatically on width change', async () => {
+      // Make the textarea wide and fill it with text
+      textArea.style.width = '800px';
+      textArea.value = Array(400).join('400');
+      await nextFrame();
+      const height = textArea.offsetHeight;
+
+      // Decrease the width
+      textArea.style.width = '400px';
+      await onceResized(textArea);
+
+      // Expect the height to have increased
+      expect(textArea.offsetHeight).to.be.above(height);
     });
 
     it('should have the correct width', () => {
