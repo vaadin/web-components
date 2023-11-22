@@ -302,7 +302,6 @@ describe('all rows visible', () => {
         };
         cb([item], 1);
       };
-      flushGrid(grid);
     });
 
     it('should have all rows visible on deep expand', () => {
@@ -316,6 +315,28 @@ describe('all rows visible', () => {
         { value: '0-0-0-0-0-0-0' },
         { value: '0-0-0-0-0-0-0-0' },
       ];
+
+      flushGrid(grid);
+      expect(grid._firstVisibleIndex).to.equal(0);
+      expect(grid._lastVisibleIndex).to.equal(8);
+    });
+
+    it('should have all rows visible on deep expand with no header', () => {
+      grid.expandedItems = [
+        { value: '0' },
+        { value: '0-0' },
+        { value: '0-0-0' },
+        { value: '0-0-0-0' },
+        { value: '0-0-0-0-0' },
+        { value: '0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0-0' },
+      ];
+
+      const column = grid.querySelector('vaadin-grid-tree-column');
+      column.header = null;
+
+      flushGrid(grid);
       expect(grid._firstVisibleIndex).to.equal(0);
       expect(grid._lastVisibleIndex).to.equal(8);
     });
