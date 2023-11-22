@@ -8,8 +8,11 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { TabMixin } from './vaadin-tab-mixin.js';
+import { tabStyles } from './vaadin-tab-styles.js';
+
+registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
@@ -38,30 +41,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes ItemMixin
+ * @mixes TabMixin
  */
-class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerElement)))) {
+class Tab extends ElementMixin(ThemableMixin(TabMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        @media (forced-colors: active) {
-          :host([focused]) {
-            outline: 1px solid;
-            outline-offset: -1px;
-          }
-          :host([selected]) {
-            border-bottom: 2px solid;
-          }
-        }
-      </style>
       <slot></slot>
       <slot name="tooltip"></slot>
     `;
@@ -74,30 +58,9 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerEl
   /** @protected */
   ready() {
     super.ready();
-    this.setAttribute('role', 'tab');
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
-  }
-
-  /**
-   * Override an event listener from `KeyboardMixin`
-   * to handle clicking anchors inside the tabs.
-   * @param {!KeyboardEvent} event
-   * @protected
-   * @override
-   */
-  _onKeyUp(event) {
-    const willClick = this.hasAttribute('active');
-
-    super._onKeyUp(event);
-
-    if (willClick) {
-      const anchor = this.querySelector('a');
-      if (anchor) {
-        anchor.click();
-      }
-    }
   }
 }
 

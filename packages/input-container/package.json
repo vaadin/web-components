@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/input-container",
-  "version": "24.3.0-alpha10",
+  "version": "24.3.0-alpha11",
   "publishConfig": {
     "access": "public"
   },
@@ -21,7 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-input-container.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js"
@@ -33,15 +32,15 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.3.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "24.3.0-alpha10",
-    "@vaadin/vaadin-material-styles": "24.3.0-alpha10",
-    "@vaadin/vaadin-themable-mixin": "24.3.0-alpha10"
+    "@vaadin/component-base": "24.3.0-alpha11",
+    "@vaadin/vaadin-lumo-styles": "24.3.0-alpha11",
+    "@vaadin/vaadin-material-styles": "24.3.0-alpha11",
+    "@vaadin/vaadin-themable-mixin": "24.3.0-alpha11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/icon": "24.3.0-alpha10",
-    "@vaadin/icons": "24.3.0-alpha10",
+    "@vaadin/icon": "24.3.0-alpha11",
+    "@vaadin/icons": "24.3.0-alpha11",
     "@vaadin/testing-helpers": "^0.6.0",
     "sinon": "^13.0.2"
   }

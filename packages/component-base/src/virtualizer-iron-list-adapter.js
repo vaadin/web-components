@@ -310,7 +310,9 @@ export class IronListAdapter {
       this.__preventElementUpdates = false;
     } else {
       // Already initialized, just update _virtualCount
+      this._updateScrollerSize();
       this._virtualCount = this.items.length;
+      this._render();
     }
 
     // When reducing size while invisible, iron-list does not update items, so

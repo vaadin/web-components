@@ -288,4 +288,60 @@ describe('all rows visible', () => {
       expect(grid.contains(belowGrid)).to.be.false;
     });
   });
+
+  describe('tree grid', () => {
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-tree-column path="value"></vaadin-grid-tree-column>
+        </vaadin-grid>
+      `);
+      grid.allRowsVisible = true;
+      grid.itemIdPath = 'value';
+      grid.dataProvider = ({ parentItem }, cb) => {
+        const item = {
+          value: `${parentItem ? `${parentItem.value}-` : ''}0`,
+          children: true,
+        };
+        cb([item], 1);
+      };
+    });
+
+    it('should have all rows visible on deep expand', () => {
+      grid.expandedItems = [
+        { value: '0' },
+        { value: '0-0' },
+        { value: '0-0-0' },
+        { value: '0-0-0-0' },
+        { value: '0-0-0-0-0' },
+        { value: '0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0-0' },
+      ];
+
+      flushGrid(grid);
+      expect(grid._firstVisibleIndex).to.equal(0);
+      expect(grid._lastVisibleIndex).to.equal(8);
+    });
+
+    it('should have all rows visible on deep expand with no header', () => {
+      grid.expandedItems = [
+        { value: '0' },
+        { value: '0-0' },
+        { value: '0-0-0' },
+        { value: '0-0-0-0' },
+        { value: '0-0-0-0-0' },
+        { value: '0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0' },
+        { value: '0-0-0-0-0-0-0-0' },
+      ];
+
+      const column = grid.querySelector('vaadin-grid-tree-column');
+      column.header = null;
+
+      flushGrid(grid);
+      expect(grid._firstVisibleIndex).to.equal(0);
+      expect(grid._lastVisibleIndex).to.equal(8);
+    });
+  });
 });

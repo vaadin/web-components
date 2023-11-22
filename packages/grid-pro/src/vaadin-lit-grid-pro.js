@@ -19,7 +19,6 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  *
  * This component is an experiment not intended for publishing to npm.
  * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class GridPro extends InlineEditingMixin(Grid) {
   static get is() {
