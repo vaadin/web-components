@@ -129,6 +129,7 @@ describe('selecting items', () => {
   describe('selected items on top', () => {
     function expectItems(values) {
       const items = getAllItems(comboBox);
+      expect(items.length).to.equal(values.length);
       values.forEach((value, idx) => {
         expect(items[idx].textContent).to.equal(value);
       });
@@ -188,6 +189,27 @@ describe('selecting items', () => {
         comboBox.selectedItemsOnTop = false;
         comboBox.opened = true;
         expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+    });
+
+    describe('object items', () => {
+      const items = [
+        { id: '0', label: 'apple' },
+        { id: '1', label: 'banana' },
+        { id: '2', label: 'lemon' },
+        { id: '3', label: 'orange' },
+        { id: '4', label: 'pear' },
+      ];
+
+      beforeEach(() => {
+        comboBox.itemIdPath = 'id';
+        comboBox.items = items;
+        comboBox.selectedItems = items.slice(1, 3);
+      });
+
+      it('should show selected items at the top of the overlay', () => {
+        comboBox.opened = true;
+        expectItems(['banana', 'lemon', 'apple', 'orange', 'pear']);
       });
     });
 
