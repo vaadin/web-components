@@ -298,7 +298,7 @@ describe('text-area', () => {
       // Make the textarea wide and fill it with text
       textArea.style.width = '800px';
       textArea.value = Array(400).join('400');
-      await nextUpdate(textArea);
+      await nextFrame();
       const height = textArea.offsetHeight;
 
       // Decrease the width
