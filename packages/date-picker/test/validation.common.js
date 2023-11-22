@@ -172,7 +172,7 @@ describe('validation', () => {
       expect(selectResult).to.be.equal(false);
     });
 
-    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', () => {
+    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', async () => {
       datePicker.isDateDisabled = (date) => {
         if (!date) {
           return false;
@@ -182,7 +182,7 @@ describe('validation', () => {
       };
       datePicker.value = '2016-01-01'; // Valid
 
-      datePicker.open();
+      await open(datePicker);
       const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01T12:00:00')); // Invalid
       expect(selectResult).to.be.equal(false);
     });

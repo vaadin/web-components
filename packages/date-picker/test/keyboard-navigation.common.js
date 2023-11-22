@@ -130,8 +130,9 @@ describe('keyboard navigation', () => {
           return date.year === 2010 && date.month === 0 && date.day === 29;
         };
 
-        await open(datePicker);
         await nextRender();
+        await open(datePicker);
+
         input = datePicker.inputElement;
         input.focus();
       });
