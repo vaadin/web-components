@@ -477,7 +477,8 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _onMouseDown(event) {
-      const focusable = getClosestFocusable(event.target);
+      const target = event.target;
+      const focusable = getClosestFocusable(target.focusElement || target);
       if (focusable) {
         event.preventDefault();
         focusable.focus();
