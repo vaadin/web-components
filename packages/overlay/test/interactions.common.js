@@ -4,6 +4,8 @@ import {
   enterKeyDown,
   escKeyDown,
   fixtureSync,
+  makeMouseEvent,
+  middleOfNode,
   mousedown,
   mouseup,
   nextRender,
@@ -67,7 +69,15 @@ describe('interactions', () => {
       parent = document.createElement('div');
       overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
       overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'overlay content';
+          root.appendChild(div);
+
+          const btn = document.createElement('button');
+          btn.textContent = 'Button';
+          root.appendChild(btn);
+        }
       };
       await nextRender();
       overlayPart = overlay.$.overlay;
@@ -291,6 +301,28 @@ describe('interactions', () => {
         click(overlayPart);
 
         expect(overlay.opened).to.be.true;
+      });
+    });
+
+    describe('mousedown on content', () => {
+      it('should prevent default on content mousedown', () => {
+        const div = overlay.querySelector('div');
+        const event = makeMouseEvent('mousedown', middleOfNode(div), div);
+        expect(event.defaultPrevented).to.be.true;
+      });
+
+      it('should focus an overlay part on content mousedown', () => {
+        const div = overlay.querySelector('div');
+        const spy = sinon.spy(overlayPart, 'focus');
+        mousedown(div);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should focus a focusable content element, if any', () => {
+        const button = overlay.querySelector('button');
+        const spy = sinon.spy(button, 'focus');
+        mousedown(button);
+        expect(spy.calledOnce).to.be.true;
       });
     });
   });
