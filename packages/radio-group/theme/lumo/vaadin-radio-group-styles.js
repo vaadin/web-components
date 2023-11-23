@@ -30,6 +30,11 @@ const radioGroup = css`
     flex-direction: column;
   }
 
+  :host([disabled]) [part='label'] {
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+  }
+
   :host([focused]:not([readonly])) [part='label'] {
     color: var(--lumo-primary-text-color);
   }
