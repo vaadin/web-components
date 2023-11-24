@@ -11,6 +11,7 @@ import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-controller.js';
+import { getClosestFocusable } from '@vaadin/component-base/src/focus-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -376,6 +377,10 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this.$.backdrop.addEventListener('click', () => {});
 
     this.addController(this.__focusTrapController);
+
+    this.addEventListener('mousedown', (e) => {
+      this._onMouseDown(e);
+    });
   }
 
   /** @private */
@@ -985,6 +990,16 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     }
     this.style.zIndex = zIndex;
     this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
+  }
+
+  /** @private */
+  _onMouseDown(event) {
+    const target = event.target;
+    const focusable = getClosestFocusable(target.focusElement || target);
+    if (focusable) {
+      event.preventDefault();
+      focusable.focus();
+    }
   }
 }
 
