@@ -11,6 +11,7 @@ import {
   nextRender,
   oneEvent,
 } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { createOverlay } from './helpers.js';
 
@@ -305,6 +306,20 @@ describe('interactions', () => {
     });
 
     describe('mousedown on content', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should not move focus to body on clicking the content element', async () => {
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(overlay);
+      });
+
       it('should prevent default on content mousedown', () => {
         const div = overlay.querySelector('div');
         const event = makeMouseEvent('mousedown', middleOfNode(div), div);
