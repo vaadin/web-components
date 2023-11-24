@@ -1,5 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
+import {
+  click,
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  makeMouseEvent,
+  middleOfNode,
+  mousedown,
+  mouseup,
+  nextRender,
+  oneEvent,
+} from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
@@ -197,16 +209,25 @@ describe('vaadin-overlay', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay>
-            <template>
-              overlay-content
-            </template>
-          </vaadin-overlay>
-        </div>
-      `);
-      overlay = parent.children[0];
+      parent = document.createElement('div');
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+      overlay.renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'overlay content';
+          root.appendChild(div);
+
+          const btn = document.createElement('button');
+          btn.textContent = 'Button';
+
+          const wrapper = document.createElement('p');
+          // Mimic the DelegateFocusMixin logic
+          wrapper.focusElement = btn;
+          wrapper.appendChild(btn);
+
+          root.appendChild(wrapper);
+        }
+      };
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
       overlay._observer.flush();
@@ -397,6 +418,52 @@ describe('vaadin-overlay', () => {
         click(overlayPart);
 
         expect(overlay.opened).to.be.true;
+      });
+    });
+
+    describe('mousedown on content', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should not move focus to body on clicking the content element', async () => {
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(overlay);
+      });
+
+      it('should move focus to focusElement if the click target has one', async () => {
+        const p = overlay.querySelector('p');
+        const { x, y } = middleOfNode(p);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(p.querySelector('button'));
+      });
+
+      it('should prevent default on content mousedown', () => {
+        const div = overlay.querySelector('div');
+        const event = makeMouseEvent('mousedown', middleOfNode(div), div);
+        expect(event.defaultPrevented).to.be.true;
+      });
+
+      it('should focus an overlay part on content mousedown', () => {
+        const div = overlay.querySelector('div');
+        const spy = sinon.spy(overlayPart, 'focus');
+        mousedown(div);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should focus a focusable content element, if any', () => {
+        const button = overlay.querySelector('button');
+        const spy = sinon.spy(button, 'focus');
+        mousedown(button);
+        expect(spy.calledOnce).to.be.true;
       });
     });
   });
