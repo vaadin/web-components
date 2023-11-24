@@ -214,13 +214,11 @@ describe('data provider', () => {
       `);
 
       // Set data provider
-      grid.dataProvider = (params, callback) => {
-        infiniteDataProvider(params, (items) => callback(items, 1));
-      };
+      grid.dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
 
       // Expect the grid to have a body row
       flushGrid(grid);
-      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo0');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
     });
   });
 
