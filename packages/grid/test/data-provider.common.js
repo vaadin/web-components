@@ -203,6 +203,25 @@ describe('data provider', () => {
     it('should set itemHasChildren path by default', () => {
       expect(grid.itemHasChildrenPath).to.equal('children');
     });
+
+    it('should request items when sorting is applied initially', () => {
+      // Initialize a fresh grid
+      grid.remove();
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-sort-column path="value" direction="asc"></vaadin-grid-sort-column>
+        </vaadin-grid>
+      `);
+
+      // Set data provider
+      grid.dataProvider = (params, callback) => {
+        infiniteDataProvider(params, (items) => callback(items, 1));
+      };
+
+      // Expect the grid to have a body row
+      flushGrid(grid);
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo0');
+    });
   });
 
   describe('tree', () => {
