@@ -77,7 +77,13 @@ describe('interactions', () => {
 
           const btn = document.createElement('button');
           btn.textContent = 'Button';
-          root.appendChild(btn);
+
+          const wrapper = document.createElement('p');
+          // Mimic the DelegateFocusMixin logic
+          wrapper.focusElement = btn;
+          wrapper.appendChild(btn);
+
+          root.appendChild(wrapper);
         }
       };
       await nextRender();
@@ -318,6 +324,16 @@ describe('interactions', () => {
         await nextRender();
 
         expect(document.activeElement).to.be.equal(overlay);
+      });
+
+      it('should move focus to focusElement if the click target has one', async () => {
+        const p = overlay.querySelector('p');
+        const { x, y } = middleOfNode(p);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(p.querySelector('button'));
       });
 
       it('should prevent default on content mousedown', () => {
