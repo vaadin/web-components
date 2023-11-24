@@ -354,6 +354,11 @@ describe('focus-utils', () => {
       expect(getClosestFocusable(content)).to.equal(focusable);
     });
 
+    it('should return element outside shadow DOM for a slotted element', () => {
+      const footer = element.querySelector('[slot="footer"]');
+      expect(getClosestFocusable(footer)).to.equal(host.parentElement);
+    });
+
     it('should return element outside shadow DOM for a shadow root', () => {
       expect(getClosestFocusable(host.shadowRoot)).to.equal(host.parentElement);
     });
