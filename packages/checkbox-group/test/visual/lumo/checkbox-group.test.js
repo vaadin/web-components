@@ -49,6 +49,12 @@ describe('checkbox-group', () => {
       await visualDiff(div, 'label-focused');
     });
 
+    it('label disabled', async () => {
+      element.label = 'Label';
+      element.disabled = true;
+      await visualDiff(div, 'label-disabled');
+    });
+
     it('value', async () => {
       element.value = ['a', 'c'];
       await visualDiff(div, 'value');
