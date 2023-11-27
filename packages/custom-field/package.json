@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/custom-field",
-  "version": "23.3.27",
+  "version": "23.3.28",
   "publishConfig": {
     "access": "public"
   },
@@ -35,25 +35,25 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.3.27",
-    "@vaadin/field-base": "~23.3.27",
-    "@vaadin/vaadin-lumo-styles": "~23.3.27",
-    "@vaadin/vaadin-material-styles": "~23.3.27",
-    "@vaadin/vaadin-themable-mixin": "~23.3.27"
+    "@vaadin/component-base": "~23.3.28",
+    "@vaadin/field-base": "~23.3.28",
+    "@vaadin/vaadin-lumo-styles": "~23.3.28",
+    "@vaadin/vaadin-material-styles": "~23.3.28",
+    "@vaadin/vaadin-themable-mixin": "~23.3.28"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/combo-box": "~23.3.27",
-    "@vaadin/date-picker": "~23.3.27",
-    "@vaadin/email-field": "~23.3.27",
-    "@vaadin/form-layout": "~23.3.27",
-    "@vaadin/number-field": "~23.3.27",
-    "@vaadin/password-field": "~23.3.27",
-    "@vaadin/select": "~23.3.27",
+    "@vaadin/combo-box": "~23.3.28",
+    "@vaadin/date-picker": "~23.3.28",
+    "@vaadin/email-field": "~23.3.28",
+    "@vaadin/form-layout": "~23.3.28",
+    "@vaadin/number-field": "~23.3.28",
+    "@vaadin/password-field": "~23.3.28",
+    "@vaadin/select": "~23.3.28",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-area": "~23.3.27",
-    "@vaadin/text-field": "~23.3.27",
-    "@vaadin/time-picker": "~23.3.27",
+    "@vaadin/text-area": "~23.3.28",
+    "@vaadin/text-field": "~23.3.28",
+    "@vaadin/time-picker": "~23.3.28",
     "sinon": "^13.0.2"
   },
   "web-types": [
