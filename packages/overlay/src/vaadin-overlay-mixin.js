@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { getClosestFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
@@ -118,6 +119,10 @@ export const OverlayMixin = (superClass) =>
       // and <vaadin-context-menu>).
       this.addEventListener('click', () => {});
       this.$.backdrop.addEventListener('click', () => {});
+
+      this.addEventListener('mousedown', (e) => {
+        this._onMouseDown(e);
+      });
     }
 
     /** @protected */
@@ -467,6 +472,16 @@ export const OverlayMixin = (superClass) =>
         if (this.opened && !evt.defaultPrevented) {
           this.close(event);
         }
+      }
+    }
+
+    /** @private */
+    _onMouseDown(event) {
+      const target = event.target;
+      const focusable = getClosestFocusable(target.focusElement || target);
+      if (focusable) {
+        event.preventDefault();
+        focusable.focus();
       }
     }
   };
