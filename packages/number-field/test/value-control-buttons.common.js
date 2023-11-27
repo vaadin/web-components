@@ -214,6 +214,21 @@ describe('value control buttons', () => {
       expect(numberField.value).to.equal('0');
     });
 
+    it('should not change value on value control buttons touchend event if not cancelable', async () => {
+      numberField.value = 0;
+      await nextUpdate(numberField);
+
+      let e = new CustomEvent('touchend', { cancelable: false });
+      increaseButton.dispatchEvent(e);
+      expect(e.defaultPrevented).to.be.false;
+      expect(numberField.value).to.equal('0');
+
+      e = new CustomEvent('touchend', { cancelable: false });
+      decreaseButton.dispatchEvent(e);
+      expect(e.defaultPrevented).to.be.false;
+      expect(numberField.value).to.equal('0');
+    });
+
     it('should decrease value to max value on minus button click when value is over max', async () => {
       numberField.value = 50;
       numberField.max = 10;
