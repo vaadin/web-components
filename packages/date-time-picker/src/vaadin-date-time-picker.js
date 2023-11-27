@@ -364,12 +364,12 @@ class DateTimePicker extends FieldMixin(
       '__stepChanged(step)',
       '__initialPositionChanged(initialPosition)',
       '__showWeekNumbersChanged(showWeekNumbers)',
-      '__requiredChanged(required)',
-      '__invalidChanged(invalid)',
-      '__disabledChanged(disabled)',
-      '__readonlyChanged(readonly)',
+      '__requiredChanged(required, __datePicker, __timePicker)',
+      '__invalidChanged(invalid, __datePicker, __timePicker)',
+      '__disabledChanged(disabled, __datePicker, __timePicker)',
+      '__readonlyChanged(readonly, __datePicker, __timePicker)',
       '__i18nChanged(i18n.*)',
-      '__autoOpenDisabledChanged(autoOpenDisabled)',
+      '__autoOpenDisabledChanged(autoOpenDisabled,  __datePicker, __timePicker)',
       '__themeChanged(_theme, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)',
     ];
@@ -541,7 +541,6 @@ class DateTimePicker extends FieldMixin(
     if (newDatePicker.__defaultPicker) {
       // Synchronize properties to default date picker
       newDatePicker.placeholder = this.datePlaceholder;
-      newDatePicker.invalid = this.invalid;
       newDatePicker.initialPosition = this.initialPosition;
       newDatePicker.showWeekNumbers = this.showWeekNumbers;
       this.__syncI18n(newDatePicker, this, datePickerI18nProps);
@@ -557,10 +556,6 @@ class DateTimePicker extends FieldMixin(
     // min and max need to be dynamically set depending on currently selected date instead of simple propagation
     newDatePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
     newDatePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
-    newDatePicker.required = this.required;
-    newDatePicker.disabled = this.disabled;
-    newDatePicker.readonly = this.readonly;
-    newDatePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
     newDatePicker.validate = () => {};
@@ -584,7 +579,6 @@ class DateTimePicker extends FieldMixin(
       // Synchronize properties to default time picker
       newTimePicker.placeholder = this.timePlaceholder;
       newTimePicker.step = this.step;
-      newTimePicker.invalid = this.invalid;
       this.__syncI18n(newTimePicker, this, timePickerI18nProps);
     } else {
       // Synchronize properties from slotted time picker
@@ -596,10 +590,6 @@ class DateTimePicker extends FieldMixin(
     // Min and max are always synchronized from parent to slotted because time picker min and max
     // need to be dynamically set depending on currently selected date instead of simple propagation
     this.__updateTimePickerMinMax();
-    newTimePicker.required = this.required;
-    newTimePicker.disabled = this.disabled;
-    newTimePicker.readonly = this.readonly;
-    newTimePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
     newTimePicker.validate = () => {};
@@ -679,42 +669,42 @@ class DateTimePicker extends FieldMixin(
   }
 
   /** @private */
-  __invalidChanged(invalid) {
-    if (this.__datePicker) {
-      this.__datePicker.invalid = invalid;
+  __invalidChanged(invalid, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.invalid = invalid;
     }
-    if (this.__timePicker) {
-      this.__timePicker.invalid = invalid;
-    }
-  }
-
-  /** @private */
-  __requiredChanged(required) {
-    if (this.__datePicker) {
-      this.__datePicker.required = required;
-    }
-    if (this.__timePicker) {
-      this.__timePicker.required = required;
+    if (timePicker) {
+      timePicker.invalid = invalid;
     }
   }
 
   /** @private */
-  __disabledChanged(disabled) {
-    if (this.__datePicker) {
-      this.__datePicker.disabled = disabled;
+  __requiredChanged(required, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.required = required;
     }
-    if (this.__timePicker) {
-      this.__timePicker.disabled = disabled;
+    if (timePicker) {
+      timePicker.required = required;
     }
   }
 
   /** @private */
-  __readonlyChanged(readonly) {
-    if (this.__datePicker) {
-      this.__datePicker.readonly = readonly;
+  __disabledChanged(disabled, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.disabled = disabled;
     }
-    if (this.__timePicker) {
-      this.__timePicker.readonly = readonly;
+    if (timePicker) {
+      timePicker.disabled = disabled;
+    }
+  }
+
+  /** @private */
+  __readonlyChanged(readonly, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.readonly = readonly;
+    }
+    if (timePicker) {
+      timePicker.readonly = readonly;
     }
   }
 
@@ -1020,12 +1010,12 @@ class DateTimePicker extends FieldMixin(
   }
 
   /** @private */
-  __autoOpenDisabledChanged(autoOpenDisabled) {
-    if (this.__datePicker) {
-      this.__datePicker.autoOpenDisabled = autoOpenDisabled;
+  __autoOpenDisabledChanged(autoOpenDisabled, datePicker, timePicker) {
+    if (datePicker) {
+      datePicker.autoOpenDisabled = autoOpenDisabled;
     }
-    if (this.__timePicker) {
-      this.__timePicker.autoOpenDisabled = autoOpenDisabled;
+    if (timePicker) {
+      timePicker.autoOpenDisabled = autoOpenDisabled;
     }
   }
 

@@ -27,6 +27,7 @@ const fixtures = {
       required
       disabled
       readonly
+      invalid
       auto-open-disabled
     ></vaadin-date-time-picker>
   `,
@@ -37,6 +38,7 @@ const fixtures = {
       required
       disabled
       readonly
+      invalid
       auto-open-disabled
       min="2019-09-01T08:00"
       max="2019-09-30T22:00"
@@ -309,6 +311,12 @@ function getTimePicker(dateTimePicker) {
       expect(dateTimePicker.autoOpenDisabled).to.be.true;
       expect(datePicker.autoOpenDisabled).to.be.true;
       expect(timePicker.autoOpenDisabled).to.be.true;
+    });
+
+    it('should have initial value for invalid', () => {
+      expect(dateTimePicker.invalid).to.be.true;
+      expect(datePicker.invalid).to.be.true;
+      expect(timePicker.invalid).to.be.true;
     });
 
     it('should have initial value for value property', () => {
