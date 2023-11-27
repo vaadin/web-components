@@ -270,16 +270,22 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   /** @private */
   _decreaseButtonTouchend(e) {
-    // Cancel the following click and focus events
-    e.preventDefault();
-    this._decreaseValue();
+    // Cancel the following click and focus events. If the event is not cancelable,
+    // it means scrolling is in progress, therefore we shouldn't update field value.
+    if (e.cancelable) {
+      e.preventDefault();
+      this._decreaseValue();
+    }
   }
 
   /** @private */
   _increaseButtonTouchend(e) {
-    // Cancel the following click and focus events
-    e.preventDefault();
-    this._increaseValue();
+    // Cancel the following click and focus events. If the event is not cancelable,
+    // it means scrolling is in progress, therefore we shouldn't update field value.
+    if (e.cancelable) {
+      e.preventDefault();
+      this._increaseValue();
+    }
   }
 
   /** @private */
