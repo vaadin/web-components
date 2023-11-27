@@ -181,16 +181,22 @@ export const NumberFieldMixin = (superClass) =>
 
     /** @protected */
     _onDecreaseButtonTouchend(e) {
-      // Cancel the following click and focus events
-      e.preventDefault();
-      this._decreaseValue();
+      // Cancel the following click and focus events. If the event is not cancelable,
+      // it means scrolling is in progress, therefore we shouldn't update field value.
+      if (e.cancelable) {
+        e.preventDefault();
+        this._decreaseValue();
+      }
     }
 
     /** @protected */
     _onIncreaseButtonTouchend(e) {
-      // Cancel the following click and focus events
-      e.preventDefault();
-      this._increaseValue();
+      // Cancel the following click and focus events. If the event is not cancelable,
+      // it means scrolling is in progress, therefore we shouldn't update field value.
+      if (e.cancelable) {
+        e.preventDefault();
+        this._increaseValue();
+      }
     }
 
     /** @protected */
