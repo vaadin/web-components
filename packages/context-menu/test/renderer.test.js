@@ -5,7 +5,7 @@ import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
 describe('renderer', () => {
-  let menu, target;
+  let menu, target, overlay;
 
   beforeEach(() => {
     menu = fixtureSync(`
@@ -22,6 +22,7 @@ describe('renderer', () => {
       );
     });
     target = menu.querySelector('#target');
+    overlay = menu._overlayElement;
   });
 
   afterEach(() => {
@@ -34,19 +35,19 @@ describe('renderer', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu.renderer.callCount).to.equal(1);
-    expect(menu.$.overlay.textContent).to.contain('Renderer');
+    expect(overlay.textContent).to.contain('Renderer');
   });
 
   it('should have target in context', () => {
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.textContent).to.contain('target');
+    expect(overlay.textContent).to.contain('target');
   });
 
   it('should have detail in context', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
 
-    expect(menu.$.overlay.textContent).to.contain('bar');
+    expect(overlay.textContent).to.contain('bar');
   });
 
   it('should have contextMenu owner argument', () => {
@@ -102,11 +103,11 @@ describe('renderer', () => {
     };
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.textContent.trim()).to.equal('foo');
+    expect(overlay.textContent.trim()).to.equal('foo');
 
     menu.renderer = null;
 
-    expect(menu.$.overlay.textContent.trim()).to.equal('');
+    expect(overlay.textContent.trim()).to.equal('');
   });
 
   it('should not throw if requestContentUpdate() called before adding to DOM', () => {

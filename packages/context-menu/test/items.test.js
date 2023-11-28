@@ -22,7 +22,7 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 describe('items', () => {
-  let rootMenu, subMenu, target;
+  let rootMenu, subMenu, target, rootOverlay, subOverlay1;
 
   beforeEach(async () => {
     rootMenu = fixtureSync(`
@@ -47,8 +47,10 @@ describe('items', () => {
       { text: 'foo-2', keepOpen: true },
     ];
     await openMenu(target);
+    rootOverlay = rootMenu._overlayElement;
     await openMenu(getMenuItems(rootMenu)[0]);
     subMenu = getSubMenu(rootMenu);
+    subOverlay1 = subMenu._overlayElement;
   });
 
   afterEach(() => {
@@ -93,7 +95,7 @@ describe('items', () => {
   (isTouch ? it.skip : it)('should open the subMenu on the left side', async () => {
     subMenu.close();
     let rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
-    rootMenu.$.overlay.style.left = `${window.innerWidth - rootItemRect.width * 1.5}px`;
+    rootOverlay.style.left = `${window.innerWidth - rootItemRect.width * 1.5}px`;
     await openMenu(getMenuItems(rootMenu)[0]);
     rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
@@ -102,12 +104,12 @@ describe('items', () => {
 
   (isTouch ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
     subMenu.close();
-    rootMenu.$.overlay.style.removeProperty('top');
-    rootMenu.$.overlay.style.bottom = '0px';
-    rootMenu.$.overlay.setAttribute('bottom-aligned', '');
+    rootOverlay.style.removeProperty('top');
+    rootOverlay.style.bottom = '0px';
+    rootOverlay.setAttribute('bottom-aligned', '');
     await openMenu(getMenuItems(rootMenu)[0]);
-    const rootMenuRect = rootMenu.$.overlay.getBoundingClientRect();
-    const subMenuRect = subMenu.$.overlay.getBoundingClientRect();
+    const rootMenuRect = rootOverlay.getBoundingClientRect();
+    const subMenuRect = subOverlay1.getBoundingClientRect();
     expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
   });
 
@@ -116,14 +118,13 @@ describe('items', () => {
     await nextRender(subMenu);
     const rootItem = getMenuItems(rootMenu)[0];
     const rootItemRect = rootItem.getBoundingClientRect();
-    const rootOverlay = rootMenu.$.overlay;
     rootOverlay.style.removeProperty('left');
     rootOverlay.style.right = `${rootItemRect.width}px`;
     rootOverlay.setAttribute('end-aligned', '');
     await openMenu(rootItem);
-    expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
+    expect(subOverlay1.hasAttribute('end-aligned')).to.be.true;
     const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
-    const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
+    const subMenuRect = subOverlay1.$.content.getBoundingClientRect();
     expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 2);
   });
 
@@ -137,7 +138,6 @@ describe('items', () => {
 
     const rootItem = getMenuItems(rootMenu)[0];
     const rootItemRect = rootItem.getBoundingClientRect();
-    const rootOverlay = rootMenu.$.overlay;
     rootOverlay.style.removeProperty('left');
     rootOverlay.style.right = `${rootItemRect.width}px`;
     rootOverlay.setAttribute('end-aligned', '');
@@ -145,19 +145,19 @@ describe('items', () => {
 
     /* First sub-menu end-aligned */
     await openMenu(rootItem);
-    expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
+    expect(subOverlay1.hasAttribute('end-aligned')).to.be.true;
     const rootMenuRect = rootOverlay.$.content.getBoundingClientRect();
-    const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
+    const subMenuRect = subOverlay1.$.content.getBoundingClientRect();
     expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 1);
 
     /* Second sub-menu left-aligned */
     const nestedItem = getMenuItems(subMenu)[2];
     const nestedItemRect = nestedItem.getBoundingClientRect();
-    padding = parseFloat(getComputedStyle(subMenu.$.overlay.$.content).paddingLeft) * 2;
+    padding = parseFloat(getComputedStyle(subOverlay1.$.content).paddingLeft) * 2;
     await openMenu(nestedItem);
     const subMenu2 = getSubMenu(subMenu);
-    expect(subMenu2.$.overlay.hasAttribute('end-aligned')).to.be.false;
-    const subMenu2Rect = subMenu2.$.overlay.$.content.getBoundingClientRect();
+    expect(subMenu2._overlayElement.hasAttribute('end-aligned')).to.be.false;
+    const subMenu2Rect = subMenu2._overlayElement.$.content.getBoundingClientRect();
     expect(subMenu2Rect.left).to.be.closeTo(nestedItemRect.right + padding / 2, 1);
   });
 
@@ -295,7 +295,7 @@ describe('items', () => {
   });
 
   it('should close on backdrop click', () => {
-    subMenu.$.overlay.$.backdrop.click();
+    subOverlay1.$.backdrop.click();
     expect(subMenu.opened).to.be.false;
   });
 
@@ -343,7 +343,7 @@ describe('items', () => {
 
   it('should not focus item if parent item is not focused', async () => {
     subMenu.close();
-    rootMenu.$.overlay.focus();
+    rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
@@ -352,22 +352,22 @@ describe('items', () => {
 
   it('should focus first item in submenu on overlay element arrow down', async () => {
     subMenu.close();
-    rootMenu.$.overlay.focus();
+    rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const item = getMenuItems(subMenu)[0];
     const spy = sinon.spy(item, 'focus');
-    arrowDownKeyDown(subMenu.$.overlay.$.overlay);
+    arrowDownKeyDown(subOverlay1.$.overlay);
     expect(spy.calledOnce).to.be.true;
   });
 
   it('should focus last item in submenu on overlay element arrow up', async () => {
     subMenu.close();
-    rootMenu.$.overlay.focus();
+    rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     const items = getMenuItems(subMenu);
     const item = items[items.length - 1];
     const spy = sinon.spy(item, 'focus');
-    arrowUpKeyDown(subMenu.$.overlay.$.overlay);
+    arrowUpKeyDown(subOverlay1.$.overlay);
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -403,7 +403,7 @@ describe('items', () => {
   });
 
   it('should not call requestContentUpdate', () => {
-    const spy = sinon.spy(rootMenu.$.overlay, 'requestContentUpdate');
+    const spy = sinon.spy(rootOverlay, 'requestContentUpdate');
     rootMenu.requestContentUpdate();
     expect(spy.called).to.be.false;
   });
@@ -455,12 +455,12 @@ describe('items', () => {
 
       scrollElm = window.document.scrollingElement || window.document.querySelector('html');
 
-      rootOverlay = rootMenu.$.overlay;
-      subOverlay1 = subMenu.$.overlay;
+      rootOverlay = rootMenu._overlayElement;
+      subOverlay1 = subMenu._overlayElement;
 
       await openMenu(getMenuItems(subMenu)[2]);
       const subMenu2 = getSubMenu(subMenu);
-      subOverlay2 = subMenu2.$.overlay;
+      subOverlay2 = subMenu2._overlayElement;
       await nextFrame();
     });
 

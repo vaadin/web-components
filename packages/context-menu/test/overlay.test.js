@@ -15,7 +15,7 @@ describe('overlay', () => {
     menu.renderer = (root) => {
       root.textContent = 'OVERLAY CONTENT';
     };
-    overlay = menu.$.overlay;
+    overlay = menu._overlayElement;
     content = overlay.$.overlay.children[0];
     // Make content have a fixed size
     content.style.height = content.style.width = '100px';

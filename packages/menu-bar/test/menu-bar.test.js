@@ -751,7 +751,7 @@ describe('item components', () => {
     it('should teleport the same component to overflow sub-menu and back', async () => {
       overflow.click();
       await nextRender(subMenu);
-      const listBox = subMenu.$.overlay.querySelector('vaadin-menu-bar-list-box');
+      const listBox = subMenu._overlayElement.querySelector('vaadin-menu-bar-list-box');
       expect(listBox.items[0]).to.equal(buttons[2].item.component);
       expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
       expect(listBox.items[0].firstChild.localName).to.equal('div');

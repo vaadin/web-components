@@ -64,7 +64,7 @@ describe('context-menu', () => {
       </vaadin-context-menu>
     `);
     await nextRender();
-    overlay = menu.$.overlay;
+    overlay = menu._overlayElement;
   });
 
   it('items', async () => {
@@ -84,7 +84,7 @@ describe('context-menu', () => {
     await nextRender();
 
     const subMenu = overlay.querySelector('vaadin-context-menu');
-    await expect(subMenu.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('items overlay class', async () => {
@@ -94,7 +94,7 @@ describe('context-menu', () => {
     contextmenu(menu);
     await nextRender();
 
-    await expect(menu.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('items overlay class nested', async () => {
@@ -106,6 +106,6 @@ describe('context-menu', () => {
     await nextRender();
 
     const subMenu = overlay.querySelector('vaadin-context-menu');
-    await expect(subMenu.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

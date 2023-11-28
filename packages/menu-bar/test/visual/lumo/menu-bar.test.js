@@ -67,6 +67,8 @@ describe('menu-bar', () => {
       });
 
       describe('theme', () => {
+        let overlay;
+
         function makeIcon(img) {
           const item = document.createElement('vaadin-menu-bar-item');
           const icon = document.createElement('vaadin-icon');
@@ -93,13 +95,14 @@ describe('menu-bar', () => {
             },
             { text: 'Help' },
           ];
+          overlay = element._subMenu._overlayElement;
         });
 
         it('primary', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'primary');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-primary`);
         });
 
@@ -107,7 +110,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'secondary');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-secondary`);
         });
 
@@ -115,7 +118,7 @@ describe('menu-bar', () => {
           div.style.width = '265px';
           element.setAttribute('theme', 'tertiary');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-tertiary`);
         });
 
@@ -123,7 +126,7 @@ describe('menu-bar', () => {
           div.style.width = '200px';
           element.setAttribute('theme', 'tertiary-inline');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-tertiary-inline`);
         });
 
@@ -131,7 +134,7 @@ describe('menu-bar', () => {
           div.style.width = '265px';
           element.setAttribute('theme', 'small');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-small`);
         });
 

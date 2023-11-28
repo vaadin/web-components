@@ -98,7 +98,7 @@ describe('properties', () => {
     it('should not close on `click`', () => {
       menu.closeOn = '';
 
-      menu.$.overlay.dispatchEvent(new CustomEvent('click'));
+      menu._overlayElement.dispatchEvent(new CustomEvent('click'));
 
       expect(menu.opened).to.eql(true);
     });
@@ -106,7 +106,7 @@ describe('properties', () => {
     it('should close on custom event', () => {
       menu.closeOn = 'foobar';
 
-      fire(menu.$.overlay, 'foobar');
+      fire(menu._overlayElement, 'foobar');
 
       expect(menu.opened).to.eql(false);
     });
@@ -165,7 +165,7 @@ describe('properties', () => {
     });
 
     it('should propagate theme attribute to overlay', () => {
-      expect(menu.$.overlay.getAttribute('theme')).to.equal('foo');
+      expect(menu._overlayElement.getAttribute('theme')).to.equal('foo');
     });
   });
 });

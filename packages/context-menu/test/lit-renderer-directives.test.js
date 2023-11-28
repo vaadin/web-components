@@ -31,7 +31,7 @@ describe('lit renderer directives', () => {
       beforeEach(async () => {
         contextMenu = await renderContextMenu(container, { content: 'Content' });
         target = contextMenu.querySelector('button');
-        overlay = contextMenu.$.overlay;
+        overlay = contextMenu._overlayElement;
       });
 
       it('should set `renderer` property when the directive is attached', () => {
