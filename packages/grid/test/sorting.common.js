@@ -368,8 +368,9 @@ describe('sorting', () => {
         expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('bar');
       });
 
-      it('should sort automatically on sort', () => {
+      it('should sort automatically on sort', async () => {
         sorterFirst.direction = null;
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
@@ -439,7 +440,7 @@ describe('sorting', () => {
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('11');
       });
 
-      it('should sort dates correctly', () => {
+      it('should sort dates correctly', async () => {
         grid.items = [
           { first: 1, last: new Date(2000, 1, 2) },
           { first: 2, last: new Date(2000, 1, 3) },
@@ -449,6 +450,7 @@ describe('sorting', () => {
         sorterFirst.direction = '';
         sorterLast.direction = 'asc';
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('2');
@@ -470,8 +472,9 @@ describe('sorting', () => {
         ]);
       });
 
-      it('should request new data on sort', () => {
+      it('should request new data on sort', async () => {
         sorterFirst.direction = 'desc';
+        await nextFrame();
         const lastCall = grid.dataProvider.lastCall;
         const params = lastCall.args[0];
         expect(params.sortOrders).to.eql([
@@ -480,9 +483,10 @@ describe('sorting', () => {
         ]);
       });
 
-      it('should request new data on change in existing sorters', () => {
+      it('should request new data on change in existing sorters', async () => {
         grid.dataProvider.resetHistory();
         sorterLast.direction = 'asc';
+        await nextFrame();
         expect(grid.dataProvider.called).to.be.true;
       });
     });
@@ -557,10 +561,11 @@ describe('sorting', () => {
         grid.dataProvider = sinon.spy(grid.dataProvider);
       });
 
-      it('should only using single sorter', () => {
+      it('should only using single sorter', async () => {
         grid.dataProvider.resetHistory();
         sorterFirst.direction = 'desc';
 
+        await nextFrame();
         expect(grid.dataProvider.args[0][0].sortOrders.length).to.eql(1);
       });
 
@@ -595,10 +600,11 @@ describe('sorting', () => {
         expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('descending');
       });
 
-      it('should update aria-sort on sorter change', () => {
+      it('should update aria-sort on sorter change', async () => {
         sorterFirst.direction = 'desc';
         sorterLast.direction = null;
 
+        await nextFrame();
         expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('descending');
         expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('none');
       });

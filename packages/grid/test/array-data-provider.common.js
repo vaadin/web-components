@@ -156,25 +156,28 @@ describe('invalid paths', () => {
       sorter = grid.querySelector('vaadin-grid-sorter');
     });
 
-    it('should warn about invalid path with undefined parent property', () => {
+    it('should warn about invalid path with undefined parent property', async () => {
       sorter.path = 'foo.bar';
       click(sorter);
+      await nextFrame();
       expect(console.warn.called).to.be.true;
     });
 
-    it('should not warn about undefined values with defined parent property', () => {
+    it('should not warn about undefined values with defined parent property', async () => {
       sorter.path = 'name.foo';
       click(sorter);
+      await nextFrame();
       expect(console.warn.called).to.be.false;
     });
 
-    it('should not warn about invalid path without dots', () => {
+    it('should not warn about invalid path without dots', async () => {
       sorter.path = 'foobar';
       click(sorter);
+      await nextFrame();
       expect(console.warn.called).to.be.false;
     });
 
-    it('should not warn about undefined values with defined parent property (long path)', () => {
+    it('should not warn about undefined values with defined parent property (long path)', async () => {
       grid.items = [
         {
           name: {
@@ -187,6 +190,7 @@ describe('invalid paths', () => {
 
       sorter.path = 'name.last.foo';
       click(sorter);
+      await nextFrame();
       expect(console.warn.called).to.be.false;
     });
   });
