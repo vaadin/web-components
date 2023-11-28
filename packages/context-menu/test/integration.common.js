@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MenuWrapper extends PolymerElement {
@@ -30,8 +28,9 @@ customElements.define('menu-wrapper', MenuWrapper);
 describe('integration', () => {
   let wrapper, menu, button, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync('<menu-wrapper></menu-wrapper>');
+    await nextRender();
     menu = wrapper.$.menu;
     button = wrapper.$.button;
     overlay = menu._overlayElement;

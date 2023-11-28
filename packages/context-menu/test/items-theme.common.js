@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
@@ -43,6 +41,7 @@ describe('items theme', () => {
       },
       { text: 'foo-1' },
     ];
+    await nextRender();
     await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
     subMenu = getSubMenu(rootMenu);
@@ -68,8 +67,9 @@ describe('items theme', () => {
     });
   });
 
-  it('should close the menu and submenu on theme changed', () => {
+  it('should close the menu and submenu on theme changed', async () => {
     rootMenu.setAttribute('theme', 'bar');
+    await nextRender();
     expect(rootMenu.opened).to.be.false;
     expect(subMenu.opened).to.be.false;
     expect(subMenu2.opened).to.be.false;
@@ -79,7 +79,7 @@ describe('items theme', () => {
     rootMenu.removeAttribute('theme');
 
     // Should wait until submenus will be opened again.
-    await nextFrame();
+    await nextRender();
     await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
     await openMenu(getMenuItems(subMenu)[1]);

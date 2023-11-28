@@ -8,7 +8,10 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/context-menu';
+      import '@vaadin/context-menu/theme/lumo/vaadin-context-menu-item-styles.js';
+      import '@vaadin/context-menu/theme/lumo/vaadin-context-menu-list-box-styles.js';
+      import '@vaadin/context-menu/theme/lumo/vaadin-context-menu-overlay-styles.js';
+      import '@vaadin/context-menu/src/vaadin-lit-context-menu.js';
 
       const menu = document.querySelector('vaadin-context-menu');
       menu.items = [

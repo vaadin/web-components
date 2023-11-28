@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getMenuItems } from './helpers.js';
 
@@ -10,7 +8,7 @@ describe('a11y', () => {
   describe('focus restoration', () => {
     let contextMenu, contextMenuButton, beforeButton, afterButton;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
           <button>Before</button>
@@ -18,9 +16,11 @@ describe('a11y', () => {
             <button>Open context menu</button>
           </vaadin-context-menu>
           <button>After</button>
+        </div>
       `);
       [beforeButton, contextMenu, afterButton] = wrapper.children;
       contextMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', children: [{ text: 'Item 1/0' }] }];
+      await nextRender();
       contextMenuButton = contextMenu.querySelector('button');
       contextMenuButton.focus();
     });

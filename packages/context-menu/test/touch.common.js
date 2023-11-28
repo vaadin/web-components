@@ -6,12 +6,11 @@ import {
   listenOnce,
   makeSoloTouchEvent,
   middleOfNode,
+  nextRender,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { gestures } from '@vaadin/component-base/src/gestures.js';
 
@@ -38,8 +37,9 @@ customElements.define('menu-touch-wrapper', MenuTouchWrapper);
 describe('mobile support', () => {
   let menu, target;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const testWrapper = fixtureSync('<menu-touch-wrapper></menu-touch-wrapper>');
+    await nextRender();
     menu = testWrapper.$.menu;
     target = menu.querySelector('#target');
     menu._phone = true;

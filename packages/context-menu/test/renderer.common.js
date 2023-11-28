@@ -1,13 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 
 describe('renderer', () => {
   let menu, target, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     menu = fixtureSync(`
       <vaadin-context-menu>
         <div id="target"></div>
@@ -21,6 +19,7 @@ describe('renderer', () => {
         document.createTextNode(`Renderer ${context.detail && context.detail.foo} ${context.target.id}`),
       );
     });
+    await nextRender();
     target = menu.querySelector('#target');
     overlay = menu._overlayElement;
   });
@@ -29,66 +28,84 @@ describe('renderer', () => {
     menu.close();
   });
 
-  it('should render on open', () => {
+  it('should render on open', async () => {
     expect(menu.renderer.callCount).to.equal(0);
 
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu.renderer.callCount).to.equal(1);
     expect(overlay.textContent).to.contain('Renderer');
   });
 
-  it('should have target in context', () => {
+  it('should have target in context', async () => {
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(overlay.textContent).to.contain('target');
   });
 
-  it('should have detail in context', () => {
+  it('should have detail in context', async () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
+    await nextRender();
 
     expect(overlay.textContent).to.contain('bar');
   });
 
-  it('should have contextMenu owner argument', () => {
+  it('should have contextMenu owner argument', async () => {
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu.renderer.firstCall.args[1]).to.equal(menu);
   });
 
-  it('should rerender on reopen', () => {
+  it('should rerender on reopen', async () => {
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
+
     menu.close();
+
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu.renderer.callCount).to.equal(2);
     expect(menu.renderer.getCall(1).args).to.deep.equal(menu.renderer.getCall(0).args);
   });
 
-  it('should rerender with new target on reopen', () => {
+  it('should rerender with new target on reopen', async () => {
     const otherTarget = document.createElement('div');
     menu.appendChild(otherTarget);
+
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
+
     menu.close();
+
     fire(otherTarget, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu.renderer.callCount).to.equal(2);
     expect(menu.renderer.getCall(0).args[2].target).to.equal(target);
     expect(menu.renderer.getCall(1).args[2].target).to.equal(otherTarget);
   });
 
-  it('should rerender with new detail on reopen', () => {
+  it('should rerender with new detail on reopen', async () => {
     fire(target, 'vaadin-contextmenu', { foo: 'one' });
+    await nextRender();
+
     menu.close();
+
     fire(target, 'vaadin-contextmenu', { foo: 'two' });
+    await nextRender();
 
     expect(menu.renderer.callCount).to.equal(2);
     expect(menu.renderer.getCall(0).args[2].detail).to.deep.equal({ foo: 'one' });
     expect(menu.renderer.getCall(1).args[2].detail).to.deep.equal({ foo: 'two' });
   });
 
-  it('should run renderers when requesting content update', () => {
+  it('should run renderers when requesting content update', async () => {
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu.renderer.calledOnce).to.be.true;
 
@@ -97,15 +114,17 @@ describe('renderer', () => {
     expect(menu.renderer.calledTwice).to.be.true;
   });
 
-  it('should clear the content when removing the renderer', () => {
+  it('should clear the content when removing the renderer', async () => {
     menu.renderer = (root) => {
       root.innerHTML = 'foo';
     };
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(overlay.textContent.trim()).to.equal('foo');
 
     menu.renderer = null;
+    await nextRender();
 
     expect(overlay.textContent.trim()).to.equal('');
   });

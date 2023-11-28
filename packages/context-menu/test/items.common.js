@@ -16,8 +16,6 @@ import {
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
@@ -46,6 +44,7 @@ describe('items', () => {
       { text: 'foo-1' },
       { text: 'foo-2', keepOpen: true },
     ];
+    await nextRender();
     await openMenu(target);
     rootOverlay = rootMenu._overlayElement;
     await openMenu(getMenuItems(rootMenu)[0]);
@@ -196,27 +195,31 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
   });
 
-  it('should have a checked root item after click if keep open', () => {
+  it('should have a checked root item after click if keep open', async () => {
     rootMenu.items[2].checked = true;
     getMenuItems(rootMenu)[2].click();
+    await nextRender();
     expect(getMenuItems(rootMenu)[2].hasAttribute('menu-item-checked')).to.be.true;
   });
 
-  it('should have a focused root item after click if keep open', () => {
+  it('should have a focused root item after click if keep open', async () => {
     rootMenu.items[2].checked = true;
     getMenuItems(rootMenu)[2].click();
+    await nextRender();
     expect(getMenuItems(rootMenu)[2].hasAttribute('focused')).to.be.true;
   });
 
-  it('should have a checked sub menu item after click if keep open', () => {
+  it('should have a checked sub menu item after click if keep open', async () => {
     subMenu.items[4].checked = true;
     getMenuItems(subMenu)[4].click();
+    await nextRender();
     expect(getMenuItems(subMenu)[4].hasAttribute('menu-item-checked')).to.be.true;
   });
 
-  it('should have a focused sub menu item after click if keep open', () => {
+  it('should have a focused sub menu item after click if keep open', async () => {
     subMenu.items[4].checked = true;
     getMenuItems(subMenu)[4].click();
+    await nextRender();
     expect(getMenuItems(subMenu)[4].hasAttribute('focused')).to.be.true;
   });
 
@@ -377,15 +380,17 @@ describe('items', () => {
     expect(element).not.to.equal(document.documentElement);
   });
 
-  it('should close submenus', () => {
+  it('should close submenus', async () => {
     rootMenu.close();
+    await nextRender();
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should fire an event for item selection', () => {
+  it('should fire an event for item selection', async () => {
     const eventSpy = sinon.spy();
     rootMenu.addEventListener('item-selected', eventSpy);
     getMenuItems(subMenu)[0].click();
+    await nextRender();
     expect(eventSpy.getCall(0).args[0].detail.value).to.equal(rootMenu.items[0].children[0]);
   });
 
@@ -428,10 +433,11 @@ describe('items', () => {
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should have expanded attributes', () => {
+  it('should have expanded attributes', async () => {
     expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
     subMenu.close();
+    await nextRender();
     expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
     expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
   });

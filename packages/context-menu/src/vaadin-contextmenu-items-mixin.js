@@ -66,7 +66,10 @@ export const ItemsMixin = (superClass) =>
          * ----------------|----------------|----------------
          * `:host` | expanded | Expanded parent item
          */
-        items: Array,
+        items: {
+          type: Array,
+          sync: true,
+        },
       };
     }
 
@@ -300,7 +303,9 @@ export const ItemsMixin = (superClass) =>
 
       // Listen to the forwarded event from sub-menu.
       this.addEventListener('close-all-menus', () => {
-        this.close();
+        // Call `close()` on the overlay to close synchronously,
+        // as we can't have `sync: true` on `opened` property.
+        this._overlayElement.close();
       });
 
       // Listen to the forwarded event from sub-menu.
