@@ -126,11 +126,18 @@ export const ContextMenuMixin = (superClass) =>
         '_targetOrOpenOnChanged(listenOn, openOn)',
         '_rendererChanged(renderer, items)',
         '_touchOrWideChanged(_touch, _wide)',
+        '_overlayContextChanged(_overlayElement, _context)',
+        '_overlayModelessChanged(_overlayElement, _modeless)',
+        '_overlayPhoneChanged(_overlayElement, _phone)',
+        '_overlayThemeChanged(_overlayElement, _theme)',
       ];
     }
 
     constructor() {
       super();
+
+      this._createOverlay();
+
       this._boundOpen = this.open.bind(this);
       this._boundClose = this.close.bind(this);
       this._boundPreventDefault = this._preventDefault.bind(this);
@@ -165,14 +172,28 @@ export const ContextMenuMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._overlayElement = this.$.overlay;
-      this._overlayElement.owner = this;
-
       this.addController(
         new MediaQueryController(this._wideMediaQuery, (matches) => {
           this._wide = matches;
         }),
       );
+    }
+
+    /** @private */
+    _createOverlay() {
+      // Create an overlay in the constructor to use in observers before `ready()`
+      const overlay = document.createElement(`${this._tagNamePrefix}-overlay`);
+      overlay.owner = this;
+
+      overlay.addEventListener('opened-changed', (e) => {
+        this._onOverlayOpened(e);
+      });
+
+      overlay.addEventListener('vaadin-overlay-open', (e) => {
+        this._onVaadinOverlayOpen(e);
+      });
+
+      this._overlayElement = overlay;
     }
 
     /**
@@ -190,8 +211,41 @@ export const ContextMenuMixin = (superClass) =>
      */
     _onVaadinOverlayOpen() {
       this.__alignOverlayPosition();
-      this.$.overlay.style.opacity = '';
+      this._overlayElement.style.opacity = '';
       this.__forwardFocus();
+    }
+
+    /** @private */
+    _overlayContextChanged(overlay, context) {
+      if (overlay) {
+        overlay.model = context;
+      }
+    }
+
+    /** @private */
+    _overlayModelessChanged(overlay, modeless) {
+      if (overlay) {
+        overlay.modeless = modeless;
+      }
+    }
+
+    /** @private */
+    _overlayPhoneChanged(overlay, phone) {
+      if (overlay) {
+        overlay.toggleAttribute('phone', phone);
+        overlay.withBackdrop = phone;
+      }
+    }
+
+    /** @private */
+    _overlayThemeChanged(overlay, theme) {
+      if (overlay) {
+        if (theme) {
+          overlay.setAttribute('theme', theme);
+        } else {
+          overlay.removeAttribute('theme');
+        }
+      }
     }
 
     /** @private */
@@ -238,7 +292,7 @@ export const ContextMenuMixin = (superClass) =>
       // Outside click event from overlay
       const evtOverlay = 'vaadin-overlay-outside-click';
 
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
 
       if (oldCloseOn) {
         this._unlisten(overlay, oldCloseOn, this._boundClose);
@@ -267,7 +321,7 @@ export const ContextMenuMixin = (superClass) =>
       }
 
       // Has to be set after instance has been created
-      this.$.overlay.opened = opened;
+      this._overlayElement.opened = opened;
     }
 
     /**
@@ -298,7 +352,7 @@ export const ContextMenuMixin = (superClass) =>
         renderer = this.__itemsRenderer;
       }
 
-      this.$.overlay.renderer = renderer;
+      this._overlayElement.renderer = renderer;
     }
 
     /**
@@ -342,7 +396,7 @@ export const ContextMenuMixin = (superClass) =>
           this.__y = this._getEventCoordinate(e, 'y');
           this.__pageYOffset = window.pageYOffset;
 
-          this.$.overlay.style.opacity = '0';
+          this._overlayElement.style.opacity = '0';
           this._setOpened(true);
         }
       }
@@ -369,7 +423,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __adjustPosition(coord, diff) {
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
       const style = overlay.style;
 
       style[coord] = `${(parseInt(style[coord]) || 0) + diff}px`;
@@ -377,7 +431,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __alignOverlayPosition() {
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
 
       if (overlay.positionTarget) {
         // The overlay is positioned relative to another node, for example, a

@@ -138,7 +138,7 @@ export const MenuBarMixin = (superClass) =>
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
       this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
 
-      const overlay = this._subMenu.$.overlay;
+      const overlay = this._subMenu._overlayElement;
       overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
       const container = this.shadowRoot.querySelector('[part="container"]');
@@ -675,7 +675,7 @@ export const MenuBarMixin = (superClass) =>
 
       subMenu.items = items;
       subMenu.listenOn = button;
-      const overlay = subMenu.$.overlay;
+      const overlay = subMenu._overlayElement;
       overlay.positionTarget = button;
       overlay.noVerticalOverlap = true;
 
@@ -720,13 +720,13 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu.$.overlay.firstElementChild;
+      const list = this._subMenu._overlayElement.firstElementChild;
       list.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu.$.overlay.firstElementChild;
+      const list = this._subMenu._overlayElement.firstElementChild;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();

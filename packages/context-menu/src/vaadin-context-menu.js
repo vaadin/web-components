@@ -222,17 +222,6 @@ class ContextMenu extends ContextMenuMixin(
       </style>
 
       <slot id="slot"></slot>
-
-      <vaadin-context-menu-overlay
-        id="overlay"
-        on-opened-changed="_onOverlayOpened"
-        on-vaadin-overlay-open="_onVaadinOverlayOpen"
-        modeless="[[_modeless]]"
-        with-backdrop="[[_phone]]"
-        phone$="[[_phone]]"
-        model="[[_context]]"
-        theme$="[[_theme]]"
-      ></vaadin-context-menu-overlay>
     `;
   }
 
@@ -245,6 +234,19 @@ class ContextMenu extends ContextMenuMixin(
     super.ready();
 
     processTemplates(this);
+  }
+
+  /**
+   * @param {DocumentFragment} dom
+   * @return {null}
+   * @protected
+   * @override
+   */
+  _attachDom(dom) {
+    const root = this.attachShadow({ mode: 'open' });
+    root.appendChild(dom);
+    root.appendChild(this._overlayElement);
+    return root;
   }
 
   /**

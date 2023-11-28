@@ -5,7 +5,7 @@ import '@vaadin/context-menu';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 
 describe('template', () => {
-  let menu, target;
+  let menu, target, overlay;
 
   beforeEach(() => {
     menu = fixtureSync(`
@@ -15,23 +15,24 @@ describe('template', () => {
       </vaadin-context-menu>
     `);
     target = document.querySelector('#target');
+    overlay = menu._overlayElement;
   });
 
   it('should stamp template on open', () => {
     menu._setOpened(true);
 
-    expect(menu.$.overlay.textContent).to.contain('FOOBAR');
+    expect(overlay.textContent).to.contain('FOOBAR');
   });
 
   it('should bind target property', () => {
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.textContent).to.contain('target');
+    expect(overlay.textContent).to.contain('target');
   });
 
   it('should bind detail property', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
 
-    expect(menu.$.overlay.textContent).to.contain('bar');
+    expect(overlay.textContent).to.contain('bar');
   });
 });

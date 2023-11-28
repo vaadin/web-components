@@ -110,7 +110,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @protected */
     __forwardFocus() {
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
       const child = overlay.getFirstChild();
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
@@ -131,9 +131,9 @@ export const ItemsMixin = (superClass) =>
       subMenu.listenOn = itemElement;
       subMenu.overlayClass = overlayClass;
 
-      const parent = this.$.overlay;
+      const parent = this._overlayElement;
 
-      const subMenuOverlay = subMenu.$.overlay;
+      const subMenuOverlay = subMenu._overlayElement;
       subMenuOverlay.positionTarget = itemElement;
       subMenuOverlay.noHorizontalOverlap = true;
       // Store the reference parent overlay
@@ -146,7 +146,7 @@ export const ItemsMixin = (superClass) =>
         subMenu.removeAttribute('theme');
       }
 
-      const content = subMenu.$.overlay.$.content;
+      const content = subMenuOverlay.$.content;
       content.style.minWidth = '';
 
       itemElement.dispatchEvent(
@@ -233,7 +233,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __initOverlay() {
-      const overlay = this.$.overlay;
+      const overlay = this._overlayElement;
 
       overlay.$.backdrop.addEventListener('click', () => {
         this.close();
@@ -342,7 +342,7 @@ export const ItemsMixin = (superClass) =>
       }
 
       // Don't open sub-menus while the menu is still opening
-      if (this.$.overlay.hasAttribute('opening')) {
+      if (this._overlayElement.hasAttribute('opening')) {
         requestAnimationFrame(() => {
           this.__showSubMenu(event, item);
         });

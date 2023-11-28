@@ -4,7 +4,6 @@ export const snapshots = {};
 snapshots["context-menu items"] = 
 `<vaadin-context-menu-overlay
   dir="ltr"
-  id="overlay"
   opened=""
 >
   <vaadin-context-menu-list-box
@@ -64,7 +63,6 @@ snapshots["context-menu items"] =
 snapshots["context-menu items nested"] = 
 `<vaadin-context-menu-overlay
   dir="ltr"
-  id="overlay"
   modeless=""
   opened=""
   right-aligned=""
@@ -106,7 +104,6 @@ snapshots["context-menu items overlay class"] =
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
   dir="ltr"
-  id="overlay"
   opened=""
 >
   <vaadin-context-menu-list-box
@@ -167,7 +164,6 @@ snapshots["context-menu items overlay class nested"] =
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
   dir="ltr"
-  id="overlay"
   modeless=""
   opened=""
   right-aligned=""
