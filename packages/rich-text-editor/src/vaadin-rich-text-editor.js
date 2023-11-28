@@ -997,7 +997,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.value = '';
       return;
     }
-    
+
     const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
     this._editor.setContents(deltaFromHtml, SOURCE.API);
   }
