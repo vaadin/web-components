@@ -56,7 +56,7 @@ describe('items theme', () => {
 
   it('should propagate host theme attribute to the nested elements', () => {
     [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
-      const overlay = subMenu.$.overlay;
+      const overlay = subMenu._overlayElement;
       const listBox = overlay.querySelector('vaadin-context-menu-list-box');
       const items = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
 
@@ -84,7 +84,7 @@ describe('items theme', () => {
     await openMenu(getMenuItems(subMenu)[1]);
 
     [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
-      const overlay = subMenu.$.overlay;
+      const overlay = subMenu._overlayElement;
       const listBox = overlay.querySelector('vaadin-context-menu-list-box');
       const items = Array.from(listBox.querySelectorAll('vaadin-context-menu-item'));
 

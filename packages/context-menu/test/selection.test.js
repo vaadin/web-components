@@ -11,7 +11,7 @@ describe('selection', () => {
 
   beforeEach(() => {
     menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
-    overlay = menu.$.overlay;
+    overlay = menu._overlayElement;
     menu.renderer = (root) => {
       root.innerHTML = `
         <vaadin-list-box id="menu">

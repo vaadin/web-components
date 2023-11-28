@@ -51,7 +51,7 @@ describe('mobile support', () => {
 
   it('should align to bottom of the viewport', (done) => {
     listenOnce(menu, 'opened-changed', () => {
-      const styles = window.getComputedStyle(menu.$.overlay);
+      const styles = window.getComputedStyle(menu._overlayElement);
       expect(styles.alignItems).to.eql('stretch');
       expect(styles.justifyContent).to.eql('flex-end');
       done();

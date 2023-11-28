@@ -48,13 +48,13 @@ describe('context', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu._context.target).to.eql(target);
-    expect(menu.$.overlay.textContent).to.contain(target.textContent);
+    expect(menu._overlayElement.textContent).to.contain(target.textContent);
 
     menu.close();
     fire(another, 'vaadin-contextmenu');
 
     expect(menu._context.target).to.eql(another);
-    expect(menu.$.overlay.textContent).to.contain(another.textContent);
+    expect(menu._overlayElement.textContent).to.contain(another.textContent);
   });
 
   it('should use details as context details', () => {

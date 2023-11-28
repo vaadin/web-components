@@ -21,7 +21,7 @@ describe('a11y', () => {
           ],
         },
       ];
-      overlay = menuBar._subMenu.$.overlay;
+      overlay = menuBar._subMenu._overlayElement;
       buttons = menuBar.querySelectorAll('vaadin-menu-bar-button');
       buttons[0].focus();
     });

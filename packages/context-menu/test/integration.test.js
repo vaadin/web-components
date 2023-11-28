@@ -34,7 +34,7 @@ describe('integration', () => {
     wrapper = fixtureSync('<menu-wrapper></menu-wrapper>');
     menu = wrapper.$.menu;
     button = wrapper.$.button;
-    overlay = menu.$.overlay;
+    overlay = menu._overlayElement;
   });
 
   it('should open context menu on .open(e)', () => {

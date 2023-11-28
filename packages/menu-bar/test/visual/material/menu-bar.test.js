@@ -68,6 +68,8 @@ describe('menu-bar', () => {
       });
 
       describe('theme', () => {
+        let overlay;
+
         function makeIcon(img) {
           const item = document.createElement('vaadin-menu-bar-item');
           const icon = document.createElement('vaadin-icon');
@@ -94,13 +96,14 @@ describe('menu-bar', () => {
             },
             { text: 'Help' },
           ];
+          overlay = element._subMenu.$.overlay;
         });
 
         it('outlined', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'outlined');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-outlined`);
         });
 
@@ -108,7 +111,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'contained');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-contained`);
         });
 
@@ -116,7 +119,7 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'text');
           arrowDown(element._buttons[1]);
-          await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-text`);
         });
 
