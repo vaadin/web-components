@@ -6,6 +6,7 @@ import {
   listenOnce,
   makeSoloTouchEvent,
   middleOfNode,
+  nextRender,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -36,8 +37,9 @@ customElements.define('menu-touch-wrapper', MenuTouchWrapper);
 describe('mobile support', () => {
   let menu, target;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const testWrapper = fixtureSync('<menu-touch-wrapper></menu-touch-wrapper>');
+    await nextRender();
     menu = testWrapper.$.menu;
     target = menu.querySelector('#target');
     menu._phone = true;

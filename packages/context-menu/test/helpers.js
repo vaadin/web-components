@@ -1,4 +1,4 @@
-import { fire, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fire, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') {
@@ -8,7 +8,7 @@ export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') 
   }
   const { right, bottom } = target.getBoundingClientRect();
   fire(target, event, { x: right, y: bottom });
-  await nextFrame();
+  await nextRender();
 }
 
 export function getMenuItems(menu) {

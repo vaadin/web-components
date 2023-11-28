@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, nothing, render } from 'lit';
 import { contextMenuRenderer } from '../lit.js';
@@ -13,7 +13,7 @@ async function renderContextMenu(container, { content }) {
     `,
     container,
   );
-  await nextFrame();
+  await nextRender();
   return container.querySelector('vaadin-context-menu');
 }
 
@@ -41,8 +41,9 @@ describe('lit renderer directives', () => {
         expect(contextMenu.renderer).not.to.exist;
       });
 
-      it('should render the content with the renderer when the menu is opened', () => {
+      it('should render the content with the renderer when the menu is opened', async () => {
         target.click();
+        await nextRender();
         expect(overlay.textContent).to.equal('Content');
       });
 

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
@@ -20,7 +20,7 @@ customElements.define('x-foo', XFoo);
 describe('context', () => {
   let menu, foo, target, another;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     menu = fixtureSync(`
       <vaadin-context-menu>
         <div id="target">
@@ -37,19 +37,23 @@ describe('context', () => {
         </vaadin-list-box>
       `;
     };
+    await nextRender();
     foo = document.querySelector('x-foo');
     target = document.querySelector('#target');
     another = document.querySelector('#another');
   });
 
-  it('should use target as default context', () => {
+  it('should use target as default context', async () => {
     fire(target, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu._context.target).to.eql(target);
     expect(menu._overlayElement.textContent).to.contain(target.textContent);
 
     menu.close();
+
     fire(another, 'vaadin-contextmenu');
+    await nextRender();
 
     expect(menu._context.target).to.eql(another);
     expect(menu._overlayElement.textContent).to.contain(another.textContent);
