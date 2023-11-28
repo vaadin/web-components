@@ -96,7 +96,7 @@ describe('menu-bar', () => {
             },
             { text: 'Help' },
           ];
-          overlay = element._subMenu.$.overlay;
+          overlay = element._subMenu._overlayElement;
         });
 
         it('outlined', async () => {

@@ -68,7 +68,7 @@ class MenuBarSubmenu extends ContextMenu {
    * Overriding the observer to not add global "contextmenu" listener.
    */
   _openedChanged(opened) {
-    this.$.overlay.opened = opened;
+    this._overlayElement.opened = opened;
   }
 
   /**
