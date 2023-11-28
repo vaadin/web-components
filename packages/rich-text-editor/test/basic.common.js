@@ -1042,3 +1042,47 @@ describe('rich text editor', () => {
     });
   });
 });
+
+describe('unattached rich text editor', () => {
+  let rte;
+
+  beforeEach(() => {
+    rte = document.createElement('vaadin-rich-text-editor');
+  });
+
+  const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
+
+  async function attach() {
+    const parent = fixtureSync('<div></div>');
+    parent.appendChild(rte);
+    await nextRender();
+    flushValueDebouncer();
+  }
+
+  it('should not throw when setting html value', () => {
+    expect(() => rte.dangerouslySetHtmlValue('<h1>Foo</h1>')).to.not.throw(Error);
+  });
+
+  it('should have the html value once attached', async () => {
+    rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
+    await attach();
+
+    expect(rte.htmlValue).to.equal('<h1>Foo</h1>');
+  });
+
+  it('should override the htmlValue', async () => {
+    rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
+    rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
+    await attach();
+
+    expect(rte.htmlValue).to.equal('<p>Vaadin</p>');
+  });
+
+  it('should override the value', async () => {
+    rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
+    rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
+    await attach();
+
+    expect(rte.htmlValue).to.equal('<h1>Foo</h1>');
+  });
+});
