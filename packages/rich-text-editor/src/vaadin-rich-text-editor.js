@@ -641,6 +641,9 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     this._editor.on('selection-change', this.__announceFormatting.bind(this));
+
+    // Flush pending htmlValue only once the editor is fully initialized
+    this.__flushPendingHtmlValue();
   }
 
   /** @protected */
@@ -987,8 +990,23 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
    * @param {string} htmlValue
    */
   dangerouslySetHtmlValue(htmlValue) {
+    if (!this._editor) {
+      // The editor isn't ready yet, store the value for later
+      this.__pendingHtmlValue = htmlValue;
+      // Clear a possible value to prevent it from clearing the pending htmlValue once the editor property is set
+      this.value = '';
+      return;
+    }
+
     const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
     this._editor.setContents(deltaFromHtml, SOURCE.API);
+  }
+
+  /** @private */
+  __flushPendingHtmlValue() {
+    if (this.__pendingHtmlValue) {
+      this.dangerouslySetHtmlValue(this.__pendingHtmlValue);
+    }
   }
 
   /** @private */
@@ -1110,6 +1128,11 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _valueChanged(value, editor) {
+    if (value && this.__pendingHtmlValue) {
+      // A non-empty value is set explicitly. Clear pending htmlValue to prevent it from overriding the value.
+      this.__pendingHtmlValue = undefined;
+    }
+
     if (editor === undefined) {
       return;
     }
