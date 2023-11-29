@@ -139,7 +139,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         }
 
         :host([drawer-opened]) {
-          --vaadin-app-layout-drawer-offset-left: var(--_vaadin-app-layout-drawer-width);
+          --vaadin-app-layout-drawer-offset-left: var(--_vaadin-app-layout-drawer-offset-size);
         }
 
         :host([overlay]) {
@@ -589,8 +589,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     const navbarBottom = this.$.navbarBottom;
     const navbarBottomRect = navbarBottom.getBoundingClientRect();
 
+    const drawer = this.$.drawer;
+    const drawerRect = drawer.getBoundingClientRect();
+
     this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarRect.height}px`);
     this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
+    this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${drawerRect.width}px`);
   }
 
   /** @protected */
