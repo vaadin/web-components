@@ -204,7 +204,6 @@ describe('vaadin-app-layout', () => {
 
     describe('desktop layout', () => {
       beforeEach(async () => {
-        document.adoptedStyleSheets = [];
         await fixtureLayout('desktop');
       });
 
@@ -308,13 +307,15 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should use the drawer width as offset width', async () => {
-        const css = new CSSStyleSheet();
+        const style = document.createElement('style');
+        document.documentElement.append(style);
+        const css = style.sheet;
         css.insertRule('vaadin-app-layout::part(drawer) { width: 100px; }');
-        document.adoptedStyleSheets = [css];
 
         await nextRender();
         const { width } = layout.$.drawer.getBoundingClientRect();
 
+        style.remove();
         expect(width).to.be.equal(100);
       });
     });
