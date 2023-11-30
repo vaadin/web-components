@@ -318,7 +318,6 @@ describe('vaadin-app-layout', () => {
         await nextRender();
         const { width } = layout.$.drawer.getBoundingClientRect();
 
-        style.remove();
         expect(width).to.be.equal(100);
       });
     });
