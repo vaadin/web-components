@@ -307,10 +307,13 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should use the drawer width as offset width', async () => {
-        const style = document.createElement('style');
-        document.documentElement.append(style);
-        const css = style.sheet;
-        css.insertRule('vaadin-app-layout::part(drawer) { width: 100px; }');
+        fixtureSync(`
+          <style>
+            vaadin-app-layout::part(drawer) {
+              width: 100px;
+            }
+          </style>
+        `);
 
         await nextRender();
         const { width } = layout.$.drawer.getBoundingClientRect();
