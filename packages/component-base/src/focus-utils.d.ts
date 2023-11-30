@@ -49,11 +49,3 @@ export declare function isElementFocused(element: HTMLElement): boolean;
  * The method traverses nodes in shadow DOM trees too if any.
  */
 export declare function getFocusableElements(element: HTMLElement): HTMLElement[];
-
-/**
- * Returns a closest focusable ancestor of an element,
- * or an element itself in case if it's focusable.
- *
- * The method traverses nodes in shadow DOM trees too if any.
- */
-export declare function getClosestFocusable(element: HTMLElement): HTMLElement | undefined;
