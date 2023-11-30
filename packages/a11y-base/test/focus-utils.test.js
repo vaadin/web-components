@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { defineCE, fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import {
-  getClosestFocusable,
   getDeepActiveElement,
   getFocusableElements,
   isElementFocusable,
@@ -299,72 +298,6 @@ describe('focus-utils', () => {
           expect(getDeepActiveElement()).to.eql(el);
         });
       });
-    });
-  });
-
-  describe('getClosestFocusable', () => {
-    let element, host;
-
-    const hostTag = defineCE(
-      class extends HTMLElement {
-        constructor() {
-          super();
-          this.attachShadow({ mode: 'open' });
-          this.shadowRoot.innerHTML = `
-            <div tabindex="0">
-              <slot></slot>
-              <input id="inner" />
-            </div>
-            <slot name="footer"></slot>
-          `;
-        }
-      },
-    );
-
-    beforeEach(() => {
-      element = fixtureSync(`
-        <div>
-          <div tabindex="0">
-            <${hostTag}>
-              <input id="outer" />
-              <div id="content">Content</div>
-              <div slot="footer">Footer</footer>
-            </${hostTag}>
-          </div>
-        </div>
-      `);
-      host = element.querySelector(`${hostTag}`);
-    });
-
-    it('should return element itself in case if it is focusable', () => {
-      const outerInput = element.querySelector('#outer');
-      expect(getClosestFocusable(outerInput)).to.equal(outerInput);
-
-      const innerInput = host.shadowRoot.querySelector('#inner');
-      expect(getClosestFocusable(innerInput)).to.equal(innerInput);
-    });
-
-    it('should return parent element in case if it is focusable', () => {
-      expect(getClosestFocusable(host)).to.equal(host.parentElement);
-    });
-
-    it('should return element in shadow DOM for a slotted element', () => {
-      const content = element.querySelector('#content');
-      const focusable = host.shadowRoot.querySelector('[tabindex="0"]');
-      expect(getClosestFocusable(content)).to.equal(focusable);
-    });
-
-    it('should return element outside shadow DOM for a slotted element', () => {
-      const footer = element.querySelector('[slot="footer"]');
-      expect(getClosestFocusable(footer)).to.equal(host.parentElement);
-    });
-
-    it('should return element outside shadow DOM for a shadow root', () => {
-      expect(getClosestFocusable(host.shadowRoot)).to.equal(host.parentElement);
-    });
-
-    it('should return undefined if no focusable ancestor is found', () => {
-      expect(getClosestFocusable(element)).to.be.undefined;
     });
   });
 });
