@@ -884,7 +884,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileReject(event) {
-      announce(`${event.detail.file.name}: ${event.detail.file.error}`, { mode: 'alert' });
+      announce(`${event.detail.file.name}: ${event.detail.error}`, { mode: 'alert' });
     }
 
     /** @private */
