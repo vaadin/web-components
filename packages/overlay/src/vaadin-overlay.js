@@ -5,7 +5,6 @@
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { getClosestFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -294,10 +293,6 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
     // and <vaadin-context-menu>).
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
-
-    this.addEventListener('mousedown', (e) => {
-      this._onMouseDown(e);
-    });
 
     processTemplates(this);
   }
@@ -706,16 +701,6 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
     }
     this.style.zIndex = zIndex;
     this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
-  }
-
-  /** @private */
-  _onMouseDown(event) {
-    const target = event.target;
-    const focusable = getClosestFocusable(target.focusElement || target);
-    if (focusable) {
-      event.preventDefault();
-      focusable.focus();
-    }
   }
 
   /**
