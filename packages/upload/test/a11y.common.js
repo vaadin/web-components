@@ -100,7 +100,7 @@ describe('a11y', () => {
 
     it('should announce file reject', () => {
       upload.dispatchEvent(
-        new CustomEvent('file-reject', { detail: { file: { name: 'file.js', error: 'rejected' } } }),
+        new CustomEvent('file-reject', { detail: { file: { name: 'file.js' }, error: 'rejected' } }),
       );
       clock.tick(200);
       expect(announceRegion.textContent).to.equal('file.js: rejected');
