@@ -305,6 +305,21 @@ describe('vaadin-app-layout', () => {
 
         expect(spy.callCount).to.be.equal(1);
       });
+
+      it('should use the drawer width as offset width', async () => {
+        fixtureSync(`
+          <style>
+            vaadin-app-layout::part(drawer) {
+              width: 100px;
+            }
+          </style>
+        `);
+
+        await nextRender();
+        const { width } = layout.$.drawer.getBoundingClientRect();
+
+        expect(width).to.be.equal(100);
+      });
     });
 
     describe('mobile layout', () => {
