@@ -1,13 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
 
 describe('lit', () => {
   describe('renderer', () => {
     let list;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       list = fixtureSync(`<vaadin-virtual-list></vaadin-virtual-list>`);
+      await nextFrame();
 
       const size = 100;
 

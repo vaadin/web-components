@@ -20,7 +20,7 @@ export const VirtualListMixin = (superClass) =>
          * An array containing items determining how many instances to render.
          * @type {Array<!VirtualListItem> | undefined}
          */
-        items: { type: Array },
+        items: { type: Array, sync: true },
 
         /**
          * Custom function for rendering the content of every item.
@@ -34,7 +34,7 @@ export const VirtualListMixin = (superClass) =>
          *   - `model.item` The item.
          * @type {VirtualListRenderer | undefined}
          */
-        renderer: Function,
+        renderer: { type: Function, sync: true },
 
         /** @private */
         __virtualizer: Object,
