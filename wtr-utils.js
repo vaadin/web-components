@@ -60,7 +60,8 @@ const getAllUnitPackages = () => {
   return fs
     .readdirSync('packages')
     .filter(
-      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.js`).length > 0,
+      (dir) =>
+        fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
     );
 };
 
@@ -126,7 +127,7 @@ const getSnapshotTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/dom/*.test.js`,
+      files: `packages/${pkg}/test/dom/*.test.{js,ts}`,
     };
   });
 };
@@ -138,7 +139,7 @@ const getUnitTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/*.test.js`,
+      files: `packages/${pkg}/test/*.test.{js,ts}`,
     };
   });
 };
@@ -154,16 +155,16 @@ const getVisualTestGroups = (packages, theme) => {
     .map((pkg) => {
       return {
         name: pkg,
-        files: `packages/${pkg}/test/visual/${theme}/*.test.js`,
+        files: `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`,
       };
     })
     .concat({
       name: `vaadin-${theme}-styles`,
-      files: `packages/vaadin-${theme}-styles/test/visual/*.test.js`,
+      files: `packages/vaadin-${theme}-styles/test/visual/*.test.{js,ts}`,
     })
     .concat({
       name: `vaadin-icons`,
-      files: `packages/icons/test/visual/*.test.js`,
+      files: `packages/icons/test/visual/*.test.{js,ts}`,
     });
 };
 
@@ -332,7 +333,7 @@ const createIntegrationTestsConfig = (config) => {
     groups: [
       {
         name: 'integration',
-        files: 'integration/tests/*.test.js',
+        files: 'integration/tests/*.test.{js,ts}',
       },
     ],
     testRunnerHtml: getTestRunnerHtml(),

@@ -2,12 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import type { Button } from '../vaadin-button.js';
 
 describe('vaadin-button', () => {
-  let button;
+  let button: Button;
 
   describe('custom element definition', () => {
-    let tagName;
+    let tagName: string;
 
     beforeEach(() => {
       button = fixtureSync('<vaadin-button></vaadin-button>');
@@ -19,7 +20,7 @@ describe('vaadin-button', () => {
     });
 
     it('should have a valid static "is" getter', () => {
-      expect(customElements.get(tagName).is).to.equal(tagName);
+      expect((customElements.get(tagName) as any).is).to.equal(tagName);
     });
   });
 
@@ -27,7 +28,7 @@ describe('vaadin-button', () => {
     describe('default', () => {
       beforeEach(async () => {
         button = fixtureSync('<vaadin-button>Press me</vaadin-button>');
-        await nextRender();
+        await nextRender(button);
       });
 
       it('should set role attribute to button by default', () => {
@@ -38,7 +39,7 @@ describe('vaadin-button', () => {
     describe('custom', () => {
       beforeEach(async () => {
         button = fixtureSync('<vaadin-button role="menuitem">Press me</vaadin-button>');
-        await nextRender();
+        await nextRender(button);
       });
 
       it('should not override custom role attribute', () => {
@@ -50,7 +51,7 @@ describe('vaadin-button', () => {
   describe('keyboard', () => {
     beforeEach(async () => {
       button = fixtureSync('<vaadin-button>Press me</vaadin-button>');
-      await nextRender();
+      await nextRender(button);
       button.focus();
     });
 

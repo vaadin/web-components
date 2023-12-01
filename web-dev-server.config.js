@@ -1,5 +1,6 @@
 /* eslint-env node */
 const fs = require('fs');
+const { esbuildPlugin } = require('@web/dev-server-esbuild');
 
 const preventFouc = `
   <style>
@@ -48,5 +49,6 @@ module.exports = {
         }
       },
     },
+    esbuildPlugin({ ts: true }),
   ],
 };

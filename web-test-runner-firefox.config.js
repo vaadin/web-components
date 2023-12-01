@@ -1,7 +1,13 @@
 /* eslint-env node */
 const { playwrightLauncher } = require('@web/test-runner-playwright');
 const { createUnitTestsConfig } = require('./wtr-utils.js');
+const devServerConfig = require('./web-dev-server.config.js');
 
-module.exports = createUnitTestsConfig({
+const unitTestsConfig = createUnitTestsConfig({
   browsers: [playwrightLauncher({ product: 'firefox' })],
 });
+
+module.exports = {
+  ...unitTestsConfig,
+  ...devServerConfig,
+};
