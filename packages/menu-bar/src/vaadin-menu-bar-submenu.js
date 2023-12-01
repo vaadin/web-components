@@ -35,17 +35,6 @@ class MenuBarSubmenu extends ContextMenu {
       </style>
 
       <slot id="slot"></slot>
-
-      <vaadin-menu-bar-overlay
-        id="overlay"
-        on-opened-changed="_onOverlayOpened"
-        on-vaadin-overlay-open="_onVaadinOverlayOpen"
-        modeless="[[_modeless]]"
-        with-backdrop="[[_phone]]"
-        phone$="[[_phone]]"
-        model="[[_context]]"
-        theme$="[[_theme]]"
-      ></vaadin-menu-bar-overlay>
     `;
   }
 
