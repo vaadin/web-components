@@ -41,6 +41,7 @@ export const PositionMixin = (superClass) =>
         positionTarget: {
           type: Object,
           value: null,
+          sync: true,
         },
 
         /**
@@ -56,6 +57,7 @@ export const PositionMixin = (superClass) =>
         horizontalAlign: {
           type: String,
           value: 'start',
+          sync: true,
         },
 
         /**
@@ -70,6 +72,7 @@ export const PositionMixin = (superClass) =>
         verticalAlign: {
           type: String,
           value: 'top',
+          sync: true,
         },
 
         /**
@@ -81,6 +84,7 @@ export const PositionMixin = (superClass) =>
         noHorizontalOverlap: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -92,6 +96,7 @@ export const PositionMixin = (superClass) =>
         noVerticalOverlap: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -105,6 +110,7 @@ export const PositionMixin = (superClass) =>
         requiredVerticalSpace: {
           type: Number,
           value: 0,
+          sync: true,
         },
       };
     }
