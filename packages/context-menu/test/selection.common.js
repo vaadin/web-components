@@ -3,8 +3,6 @@ import { click, enter, fire, fixtureSync, isIOS, nextRender, oneEvent } from '@v
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 
 describe('selection', () => {
   let menu, overlay;

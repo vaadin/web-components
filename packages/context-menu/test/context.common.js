@@ -3,8 +3,6 @@ import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class XFoo extends PolymerElement {
