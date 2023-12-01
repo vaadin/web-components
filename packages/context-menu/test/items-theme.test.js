@@ -47,7 +47,7 @@ describe('items theme', () => {
     await openMenu(getMenuItems(rootMenu)[0]);
     subMenu = getSubMenu(rootMenu);
     await openMenu(getMenuItems(subMenu)[1]);
-    subMenu2 = getSubMenu(rootMenu);
+    subMenu2 = getSubMenu(subMenu);
   });
 
   afterEach(() => {
@@ -80,6 +80,7 @@ describe('items theme', () => {
 
     // Should wait until submenus will be opened again.
     await nextFrame();
+    await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
     await openMenu(getMenuItems(subMenu)[1]);
 
@@ -152,7 +153,7 @@ describe('items theme', () => {
   });
 
   it('should not remove theme provided on the item component', () => {
-    const item = getMenuItems(subMenu2)[2];
+    const item = getMenuItems(subMenu)[2];
     expect(item.getAttribute('theme')).to.equal('bar');
   });
 
@@ -163,7 +164,7 @@ describe('items theme', () => {
 
     await openMenu(getMenuItems(rootMenu)[0]);
 
-    const item = getMenuItems(subMenu2)[2];
+    const item = getMenuItems(subMenu)[2];
 
     expect(item.getAttribute('theme')).to.equal('bar-1');
   });
