@@ -3,6 +3,7 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
@@ -12,15 +13,120 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * @polymerMixin
+ * @mixes DisabledMixin
  * @mixes ControllerMixin
  * @mixes FocusMixin
  * @mixes KeyboardDirectionMixin
  * @mixes ResizeMixin
  */
 export const MenuBarMixin = (superClass) =>
-  class MenuBarMixinClass extends KeyboardDirectionMixin(ResizeMixin(FocusMixin(ControllerMixin(superClass)))) {
+  class MenuBarMixinClass extends KeyboardDirectionMixin(
+    ResizeMixin(FocusMixin(DisabledMixin(ControllerMixin(superClass)))),
+  ) {
     static get properties() {
       return {
+        /**
+         * @typedef MenuBarItem
+         * @type {object}
+         * @property {string} text - Text to be set as the menu button component's textContent.
+         * @property {string} tooltip - Text to be set as the menu button's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
+         * @property {union: string | object} component - The component to represent the button content.
+         * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
+         * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
+         * @property {union: string | string[]} theme - Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
+         * @property {SubMenuItem[]} children - Array of submenu items.
+         */
+
+        /**
+         * @typedef SubMenuItem
+         * @type {object}
+         * @property {string} text - Text to be set as the menu item component's textContent.
+         * @property {union: string | object} component - The component to represent the item.
+         * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
+         * @property {boolean} disabled - If true, the item is disabled and cannot be selected.
+         * @property {boolean} checked - If true, the item shows a checkmark next to it.
+         * @property {SubMenuItem[]} children - Array of child submenu items.
+         */
+
+        /**
+         * Defines a hierarchical structure, where root level items represent menu bar buttons,
+         * and `children` property configures a submenu with items to be opened below
+         * the button on click, Enter, Space, Up and Down arrow keys.
+         *
+         * #### Example
+         *
+         * ```js
+         * menubar.items = [
+         *   {
+         *     text: 'File',
+         *     className: 'file',
+         *     children: [
+         *       {text: 'Open', className: 'file open'}
+         *       {text: 'Auto Save', checked: true},
+         *     ]
+         *   },
+         *   {component: 'hr'},
+         *   {
+         *     text: 'Edit',
+         *     children: [
+         *       {text: 'Undo', disabled: true},
+         *       {text: 'Redo'}
+         *     ]
+         *   },
+         *   {text: 'Help'}
+         * ];
+         * ```
+         *
+         * @type {!Array<!MenuBarItem>}
+         */
+        items: {
+          type: Array,
+          value: () => [],
+        },
+
+        /**
+         * The object used to localize this component.
+         * To change the default localization, replace the entire
+         * `i18n` object with a custom one.
+         *
+         * To update individual properties, extend the existing i18n object like so:
+         * ```
+         * menuBar.i18n = {
+         *   ...menuBar.i18n,
+         *   moreOptions: 'More options'
+         * }
+         * ```
+         *
+         * The object has the following JSON structure and default values:
+         * ```
+         * {
+         *   moreOptions: 'More options'
+         * }
+         * ```
+         *
+         * @type {!MenuBarI18n}
+         * @default {English/US}
+         */
+        i18n: {
+          type: Object,
+          value: () => {
+            return {
+              moreOptions: 'More options',
+            };
+          },
+        },
+
+        /**
+         * A space-delimited list of CSS class names
+         * to set on each sub-menu overlay element.
+         *
+         * @attr {string} overlay-class
+         */
+        overlayClass: {
+          type: String,
+        },
+
         /**
          * If true, the submenu will open on hover (mouseover) instead of click.
          * @attr {boolean} open-on-hover
@@ -53,6 +159,7 @@ export const MenuBarMixin = (superClass) =>
     static get observers() {
       return [
         '_itemsChanged(items, items.splices)',
+        '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(i18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container, items.splices)',
@@ -177,6 +284,43 @@ export const MenuBarMixin = (superClass) =>
       this.__detectOverflow();
     }
 
+    /**
+     * Override method inherited from `DisabledMixin`
+     * to update the `disabled` property for the buttons
+     * whenever the property changes on the menu bar.
+     *
+     * @param {boolean} newValue the new disabled value
+     * @param {boolean} oldValue the previous disabled value
+     * @override
+     * @protected
+     */
+    _disabledChanged(newValue, oldValue) {
+      super._disabledChanged(newValue, oldValue);
+      if (oldValue !== newValue) {
+        this.__updateButtonsDisabled(newValue);
+      }
+    }
+
+    /**
+     * A callback for the `_theme` property observer.
+     * It propagates the host theme to the buttons and the sub menu.
+     *
+     * @param {string | null} theme
+     * @private
+     */
+    _themeChanged(theme, overflow, container) {
+      if (overflow && container) {
+        this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
+        this.__detectOverflow();
+      }
+
+      if (theme) {
+        this._subMenu.setAttribute('theme', theme);
+      } else {
+        this._subMenu.removeAttribute('theme');
+      }
+    }
+
     /** @private */
     __hasOverflowChanged(hasOverflow, overflow) {
       if (overflow) {
@@ -236,6 +380,14 @@ export const MenuBarMixin = (superClass) =>
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
+    }
+
+    /** @private */
+    __updateButtonsDisabled(disabled) {
+      this._buttons.forEach((btn) => {
+        // Disable the button if the entire menu-bar is disabled or the item alone is disabled
+        btn.disabled = disabled || (btn.item && btn.item.disabled);
+      });
     }
 
     /** @private */
