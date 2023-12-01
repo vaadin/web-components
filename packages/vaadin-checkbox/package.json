@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-checkbox",
-  "version": "23.3.28",
+  "version": "23.3.29",
   "publishConfig": {
     "access": "public"
   },
@@ -33,7 +33,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/checkbox": "~23.3.28",
-    "@vaadin/checkbox-group": "~23.3.28"
+    "@vaadin/checkbox": "~23.3.29",
+    "@vaadin/checkbox-group": "~23.3.29"
   }
 }

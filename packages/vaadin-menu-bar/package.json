@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-menu-bar",
-  "version": "23.3.28",
+  "version": "23.3.29",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/menu-bar": "~23.3.28"
+    "@vaadin/menu-bar": "~23.3.29"
   }
 }

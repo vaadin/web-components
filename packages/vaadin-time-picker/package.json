@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-time-picker",
-  "version": "23.3.28",
+  "version": "23.3.29",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/time-picker": "~23.3.28"
+    "@vaadin/time-picker": "~23.3.29"
   }
 }

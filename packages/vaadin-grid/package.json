@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-grid",
-  "version": "23.3.28",
+  "version": "23.3.29",
   "publishConfig": {
     "access": "public"
   },
@@ -39,6 +39,6 @@
     "data-table"
   ],
   "dependencies": {
-    "@vaadin/grid": "~23.3.28"
+    "@vaadin/grid": "~23.3.29"
   }
 }
