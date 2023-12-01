@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
 
 describe('overlay', () => {
   let menu, overlay, content, viewHeight, viewWidth;
