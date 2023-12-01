@@ -338,6 +338,7 @@ describe('array data provider', () => {
     grid._filters[1].value = 'r';
     await nextFrame();
     grid.querySelector('vaadin-grid-sorter').direction = 'asc';
+    flushGrid(grid);
     expect(grid.size).to.equal(2);
     expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
     expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');

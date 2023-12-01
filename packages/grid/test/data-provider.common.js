@@ -214,11 +214,38 @@ describe('data provider', () => {
       `);
 
       // Set data provider
-      grid.dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
+      grid.dataProvider = (_params, callback) => callback([{ value: 'foo' }], 1);
 
       // Expect the grid to have a body row
       flushGrid(grid);
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
+    });
+
+    it('should request items only once when multiple sorters are added', async () => {
+      // Set data provider
+      grid.dataProvider = sinon.spy((_params, callback) => callback([{ value: 'foo' }], 1));
+      await nextFrame();
+      grid.dataProvider.resetHistory();
+
+      // Add multiple pre-sorted sort columns
+      const columns = fixtureSync`
+        <div>
+          <vaadin-grid-sort-column path="name" direction="asc"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="price" direction="asc"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="discount" direction="asc"></vaadin-grid-sort-column>
+        </div>
+      `;
+      grid.multiSort = true;
+      grid.append(...columns.childNodes);
+
+      // Expect the data provider to be called only once with the correct sort orders
+      await nextFrame();
+      expect(grid.dataProvider.callCount).to.equal(1);
+      expect(grid.dataProvider.lastCall.args[0].sortOrders).to.eql([
+        { path: 'discount', direction: 'asc' },
+        { path: 'price', direction: 'asc' },
+        { path: 'name', direction: 'asc' },
+      ]);
     });
   });
 

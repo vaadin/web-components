@@ -173,7 +173,7 @@ export const SortMixin = (superClass) =>
         this.isAttached &&
         JSON.stringify(this._previousSorters) !== JSON.stringify(this._mapSorters())
       ) {
-        this.clearCache();
+        this.__debounceClearCache();
       }
 
       this._a11yUpdateSorters();

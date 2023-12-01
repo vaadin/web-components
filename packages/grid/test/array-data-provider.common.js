@@ -159,18 +159,21 @@ describe('invalid paths', () => {
     it('should warn about invalid path with undefined parent property', () => {
       sorter.path = 'foo.bar';
       click(sorter);
+      flushGrid(grid);
       expect(console.warn.called).to.be.true;
     });
 
     it('should not warn about undefined values with defined parent property', () => {
       sorter.path = 'name.foo';
       click(sorter);
+      flushGrid(grid);
       expect(console.warn.called).to.be.false;
     });
 
     it('should not warn about invalid path without dots', () => {
       sorter.path = 'foobar';
       click(sorter);
+      flushGrid(grid);
       expect(console.warn.called).to.be.false;
     });
 
@@ -187,6 +190,7 @@ describe('invalid paths', () => {
 
       sorter.path = 'name.last.foo';
       click(sorter);
+      flushGrid(grid);
       expect(console.warn.called).to.be.false;
     });
   });

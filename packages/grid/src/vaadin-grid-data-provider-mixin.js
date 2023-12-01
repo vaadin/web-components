@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { timeOut } from '@vaadin/component-base/src/async.js';
+import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
@@ -357,6 +357,11 @@ export const DataProviderMixin = (superClass) =>
       if (!this._dataProviderController.isLoading()) {
         this._debouncerApplyCachedData.flush();
       }
+    }
+
+    /** @private */
+    __debounceClearCache() {
+      this.__clearCacheDebouncer = Debouncer.debounce(this.__clearCacheDebouncer, microTask, () => this.clearCache());
     }
 
     /**
