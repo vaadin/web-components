@@ -158,11 +158,10 @@ export const MenuBarMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_itemsChanged(items, items.splices)',
         '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(i18n, _overflow)',
-        '_menuItemsChanged(items, _overflow, _container, items.splices)',
+        '_menuItemsChanged(items, _overflow, _container)',
       ];
     }
 
@@ -337,6 +336,11 @@ export const MenuBarMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
+      }
+
+      const subMenu = this._subMenu;
+      if (subMenu && subMenu.opened) {
+        subMenu.close();
       }
     }
 
@@ -740,14 +744,6 @@ export const MenuBarMixin = (superClass) =>
         default:
           super._onKeyDown(event);
           break;
-      }
-    }
-
-    /** @private */
-    _itemsChanged() {
-      const subMenu = this._subMenu;
-      if (subMenu && subMenu.opened) {
-        subMenu.close();
       }
     }
 

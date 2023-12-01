@@ -370,7 +370,7 @@ describe('sub-menu', () => {
     buttons[0].click();
     await nextRender(subMenu);
 
-    menu.splice('items', 0, 1, { text: 'Menu Item 1' });
+    menu.items = [...menu.items, { text: 'Menu Item 1' }];
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
   });
