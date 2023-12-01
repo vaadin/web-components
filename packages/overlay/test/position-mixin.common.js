@@ -1,33 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
-import { css } from 'lit';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
-import { Overlay } from '../src/vaadin-overlay.js';
-import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
-
-class PositionedOverlay extends PositionMixin(Overlay) {
-  static get is() {
-    return 'vaadin-positioned-overlay';
-  }
-}
-
-customElements.define(PositionedOverlay.is, PositionedOverlay);
-
-registerStyles(
-  'vaadin-positioned-overlay',
-  css`
-    @keyframes slidein {
-      0% {
-        transform: translateY(10px);
-      }
-    }
-
-    :host(.animated) [part='overlay'] {
-      animation: slidein 0.2s;
-    }
-  `,
-);
 
 describe('position mixin', () => {
   const TOP = 'top';
@@ -74,6 +47,7 @@ describe('position mixin', () => {
         root.appendChild(div);
       }
     };
+    await nextRender();
     overlayContent = overlay.$.overlay;
     overlay.positionTarget = target;
     overlay.opened = true;
@@ -93,11 +67,13 @@ describe('position mixin', () => {
     expectEdgesAligned(LEFT, LEFT);
   });
 
-  it('should update position on open', () => {
+  it('should update position on open', async () => {
     overlay.opened = false;
+    await nextUpdate(overlay);
     target.style.top = '5px';
     target.style.left = '10px';
     overlay.opened = true;
+    await nextUpdate(overlay);
     expectEdgesAligned(TOP, TOP);
     expectEdgesAligned(LEFT, LEFT);
   });
@@ -387,10 +363,12 @@ describe('position mixin', () => {
       expect(overlay.hasAttribute('end-aligned')).to.be.false;
     });
 
-    it('should align right edges with right-to-left', () => {
+    it('should align right edges with right-to-left', async () => {
       overlay.opened = false;
+      await nextUpdate(overlay);
       document.dir = 'rtl';
       overlay.opened = true;
+      await nextUpdate(overlay);
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
@@ -492,10 +470,12 @@ describe('position mixin', () => {
       expect(overlay.hasAttribute('start-aligned')).to.be.false;
     });
 
-    it('should align left edges with right-to-left', () => {
+    it('should align left edges with right-to-left', async () => {
       overlay.opened = false;
+      await nextUpdate(overlay);
       document.dir = 'rtl';
       overlay.opened = true;
+      await nextUpdate(overlay);
       expectEdgesAligned(LEFT, LEFT);
     });
 
