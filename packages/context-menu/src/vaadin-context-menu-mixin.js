@@ -43,6 +43,7 @@ export const ContextMenuMixin = (superClass) =>
         openOn: {
           type: String,
           value: 'vaadin-contextmenu',
+          sync: true,
         },
 
         /**
@@ -54,6 +55,7 @@ export const ContextMenuMixin = (superClass) =>
          */
         listenOn: {
           type: Object,
+          sync: true,
           value() {
             return this;
           },
@@ -68,6 +70,7 @@ export const ContextMenuMixin = (superClass) =>
           type: String,
           value: 'click',
           observer: '_closeOnChanged',
+          sync: true,
         },
 
         /**
@@ -83,6 +86,7 @@ export const ContextMenuMixin = (superClass) =>
          */
         renderer: {
           type: Function,
+          sync: true,
         },
 
         /**
@@ -91,10 +95,14 @@ export const ContextMenuMixin = (superClass) =>
          */
         _modeless: {
           type: Boolean,
+          sync: true,
         },
 
         /** @private */
-        _context: Object,
+        _context: {
+          type: Object,
+          sync: true,
+        },
 
         /** @private */
         _phone: {

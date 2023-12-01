@@ -8,7 +8,7 @@ describe('a11y', () => {
   describe('focus restoration', () => {
     let contextMenu, contextMenuButton, beforeButton, afterButton;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
           <button>Before</button>
@@ -16,9 +16,11 @@ describe('a11y', () => {
             <button>Open context menu</button>
           </vaadin-context-menu>
           <button>After</button>
+        </div>
       `);
       [beforeButton, contextMenu, afterButton] = wrapper.children;
       contextMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', children: [{ text: 'Item 1/0' }] }];
+      await nextRender();
       contextMenuButton = contextMenu.querySelector('button');
       contextMenuButton.focus();
     });

@@ -21,6 +21,15 @@ export const MenuOverlayMixin = (superClass) =>
           type: Object,
           readOnly: true,
         },
+
+        /**
+         * @protected
+         */
+        _theme: {
+          type: String,
+          readOnly: true,
+          sync: true,
+        },
       };
     }
 

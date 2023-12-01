@@ -7,7 +7,7 @@ import '@vaadin/list-box/vaadin-list-box.js';
 describe('selection', () => {
   let menu, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
     overlay = menu._overlayElement;
     menu.renderer = (root) => {
@@ -19,6 +19,7 @@ describe('selection', () => {
         </vaadin-list-box>
       `;
     };
+    await nextRender();
   });
 
   it('should close on item click', async () => {
@@ -41,6 +42,7 @@ describe('selection', () => {
 
     const item = overlay.querySelector('#menu vaadin-item');
     enter(item);
+    await nextRender();
     expect(spy.calledOnce).to.be.true;
   });
 
