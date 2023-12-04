@@ -146,6 +146,23 @@ describe('multi-select-combo-box', () => {
       element.selectedItems = items;
       await visualDiff(div, 'auto-expand-height');
     });
+
+    it('auto expand long chip', async () => {
+      element.style.maxWidth = '300px';
+      const items = [...element.items];
+      items[0] = 'Super long item that does not fit into input';
+      element.items = element.selectedItems = [items[0]];
+      await visualDiff(div, 'auto-expand-long-chip');
+    });
+
+    it('auto expand long chip clear button', async () => {
+      element.style.maxWidth = '300px';
+      element.clearButtonVisible = true;
+      const items = [...element.items];
+      items[0] = 'Super long item that does not fit into input';
+      element.items = element.selectedItems = [items[0]];
+      await visualDiff(div, 'auto-expand-long-chip-clear-button');
+    });
   });
 
   describe('opened', () => {
