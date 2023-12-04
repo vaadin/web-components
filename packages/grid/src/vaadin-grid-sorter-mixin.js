@@ -105,7 +105,6 @@ export const GridSorterMixin = (superClass) =>
         /** @private */
         _isConnected: {
           type: Boolean,
-          observer: '__isConnectedChanged',
         },
       };
     }
@@ -124,6 +123,7 @@ export const GridSorterMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this._isConnected = true;
+      this.__dispatchSorterChanged();
     }
 
     /** @protected */
@@ -133,26 +133,21 @@ export const GridSorterMixin = (superClass) =>
 
       if (!this.parentNode && this._grid) {
         this._grid.__removeSorters([this]);
+      } else {
+        this.__dispatchSorterChanged();
       }
     }
 
     /** @private */
     _pathOrDirectionChanged() {
-      this.__dispatchSorterChangedEvenIfPossible();
-    }
-
-    /** @private */
-    __isConnectedChanged(newValue, oldValue) {
-      if (oldValue === false) {
-        return;
+      if (this._isConnected) {
+        this.__dispatchSorterChanged();
       }
-
-      this.__dispatchSorterChangedEvenIfPossible();
     }
 
     /** @private */
-    __dispatchSorterChangedEvenIfPossible() {
-      if (this.path === undefined || this.direction === undefined || !this._isConnected) {
+    __dispatchSorterChanged() {
+      if (this.path === undefined) {
         return;
       }
 

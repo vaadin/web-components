@@ -91,8 +91,9 @@ export const SortMixin = (superClass) =>
 
     /** @private */
     _onSorterChanged(e) {
-      const sorter = e.target;
       e.stopPropagation();
+
+      const sorter = e.target;
       sorter._grid = this;
       this.__updateSorter(sorter, e.detail.shiftClick, e.detail.fromSorterClick);
       this.__applySorters();
@@ -104,64 +105,41 @@ export const SortMixin = (superClass) =>
         return;
       }
 
-      this._sorters = this._sorters.filter((sorter) => sortersToRemove.indexOf(sorter) < 0);
-      if (this.multiSort) {
-        this.__updateSortOrders();
-      }
+      this._sorters = this._sorters.filter((sorter) => !sortersToRemove.find(sorter));
       this.__applySorters();
     }
 
     /** @private */
     __updateSortOrders() {
-      this._sorters.forEach((sorter, index) => {
-        sorter._order = this._sorters.length > 1 ? index : null;
+      this._activeSorters.forEach((sorter, index) => {
+        sorter._order = this._activeSorters.length > 1 ? index : null;
       });
     }
 
     /** @private */
-    __appendSorter(sorter) {
-      if (!sorter.direction) {
-        this._removeArrayItem(this._sorters, sorter);
-      } else if (!this._sorters.includes(sorter)) {
-        this._sorters.push(sorter);
-      }
-
-      this.__updateSortOrders();
-    }
-
-    /** @private */
-    __prependSorter(sorter) {
-      this._removeArrayItem(this._sorters, sorter);
-      if (sorter.direction) {
-        this._sorters.unshift(sorter);
-      }
-      this.__updateSortOrders();
-    }
-
-    /** @private */
     __updateSorter(sorter, shiftClick, fromSorterClick) {
-      if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
-        return;
-      }
-
-      sorter._order = null;
-
+      const restSorters = this._sorters.filter((s) => s !== sorter);
       if (
         (this.multiSort && (!this.multiSortOnShiftClick || !fromSorterClick)) ||
         (this.multiSortOnShiftClick && shiftClick)
       ) {
         if (this.multiSortPriority === 'append') {
-          this.__appendSorter(sorter);
+          // Append the sorter to the end of the sorters array.
+          this._sorters = [...restSorters, sorter];
         } else {
-          this.__prependSorter(sorter);
+          // Prepend the sorter to the beginning of the sorters array.
+          this._sorters = [sorter, ...restSorters];
         }
-      } else if (sorter.direction || this.multiSortOnShiftClick) {
-        const otherSorters = this._sorters.filter((s) => s !== sorter);
-        this._sorters = sorter.direction ? [sorter] : [];
-        otherSorters.forEach((sorter) => {
-          sorter._order = null;
-          sorter.direction = null;
+      } else {
+        // Reset the direction of the rest sorters.
+        restSorters.forEach((restSorter) => {
+          restSorter.direction = null;
         });
+
+        if (!this._sorters.includes(sorter)) {
+          // Append the sorter to the end of the sorters array.
+          this._sorters = [...restSorters, sorter];
+        }
       }
     }
 
@@ -176,9 +154,15 @@ export const SortMixin = (superClass) =>
         this.__debounceClearCache();
       }
 
+      this.__updateSortOrders();
       this._a11yUpdateSorters();
 
       this._previousSorters = this._mapSorters();
+    }
+
+    /** @private */
+    get _activeSorters() {
+      return this._sorters.filter((sorter) => sorter.direction && sorter._isConnected);
     }
 
     /**
@@ -186,7 +170,7 @@ export const SortMixin = (superClass) =>
      * @protected
      */
     _mapSorters() {
-      return this._sorters.map((sorter) => {
+      return this._activeSorters.map((sorter) => {
         return {
           path: sorter.path,
           direction: sorter.direction,
