@@ -79,7 +79,7 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
         }
       </style>
       <div part="label">[[label]]</div>
-      <div part="remove-button" role="button" on-click="_onRemoveClick"></div>
+      <div part="remove-button" on-click="_onRemoveClick"></div>
     `;
   }
 
