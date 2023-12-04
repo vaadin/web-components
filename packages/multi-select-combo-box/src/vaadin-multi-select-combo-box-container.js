@@ -13,6 +13,7 @@ registerStyles(
     #wrapper {
       display: flex;
       width: 100%;
+      min-width: 0;
     }
 
     :host([auto-expand-vertically]) #wrapper {
