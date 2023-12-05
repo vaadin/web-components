@@ -1,5 +1,16 @@
 import { expect } from '@esm-bundle/chai';
-import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
+import {
+  click,
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  middleOfNode,
+  mousedown,
+  mouseup,
+  nextRender,
+  oneEvent,
+} from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
@@ -197,16 +208,15 @@ describe('vaadin-overlay', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay>
-            <template>
-              overlay-content
-            </template>
-          </vaadin-overlay>
-        </div>
-      `);
-      overlay = parent.children[0];
+      parent = document.createElement('div');
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+      overlay.renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'overlay content';
+          root.appendChild(div);
+        }
+      };
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
       overlay._observer.flush();
@@ -397,6 +407,34 @@ describe('vaadin-overlay', () => {
         click(overlayPart);
 
         expect(overlay.opened).to.be.true;
+      });
+    });
+
+    describe('mousedown on content', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should focus overlay part on clicking the content element', async () => {
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(overlay);
+      });
+
+      it('should not focus overlay part if tabindex attribute removed', async () => {
+        overlay.$.overlay.removeAttribute('tabindex');
+
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(document.body);
       });
     });
   });
