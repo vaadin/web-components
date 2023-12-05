@@ -5,10 +5,13 @@ import {
   escKeyDown,
   fixtureSync,
   isIOS,
+  middleOfNode,
   mousedown,
   mouseup,
+  nextRender,
   oneEvent,
 } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -188,7 +191,11 @@ describe('vaadin-overlay', () => {
       parent = document.createElement('div');
       overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
       overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'overlay content';
+          root.appendChild(div);
+        }
       };
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
@@ -401,6 +408,34 @@ describe('vaadin-overlay', () => {
         click(overlayPart);
 
         expect(overlay.opened).to.be.true;
+      });
+    });
+
+    describe('mousedown on content', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should focus overlay part on clicking the content element', async () => {
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(overlay);
+      });
+
+      it('should not focus overlay part if tabindex attribute removed', async () => {
+        overlay.$.overlay.removeAttribute('tabindex');
+
+        const div = overlay.querySelector('div');
+        const { x, y } = middleOfNode(div);
+
+        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await nextRender();
+
+        expect(document.activeElement).to.be.equal(document.body);
       });
     });
   });

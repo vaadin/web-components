@@ -294,6 +294,14 @@ class Overlay extends OverlayFocusMixin(ThemableMixin(DirMixin(PolymerElement)))
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
 
+    this.addEventListener('mouseup', () => {
+      // In Chrome, focus moves to body on overlay content mousedown
+      // See https://github.com/vaadin/flow-components/issues/5507
+      if (document.activeElement === document.body && this.$.overlay.getAttribute('tabindex') === '0') {
+        this.$.overlay.focus();
+      }
+    });
+
     processTemplates(this);
   }
 
