@@ -103,7 +103,13 @@ describe('sorting', () => {
   });
 
   describe('DOM operations', () => {
-    let grid, sorterFirst, sorterSecond, sorterThird, columnFirst, columnThird;
+    let grid, columns, sorters;
+
+    function assertColumnCellOrder(column, expected) {
+      const colIndex = columns.indexOf(column);
+      const rows = [...getRows(grid.$.items)];
+      expect(rows.map((_, rowIndex) => getBodyCellContent(grid, rowIndex, colIndex).textContent)).to.eql(expected);
+    }
 
     beforeEach(async () => {
       grid = fixtureSync(`
@@ -115,13 +121,10 @@ describe('sorting', () => {
       `);
       await nextFrame();
 
-      // TODO: find better way to select
-      columnFirst = grid.querySelectorAll('vaadin-grid-sort-column')[0];
-      columnThird = grid.querySelectorAll('vaadin-grid-sort-column')[2];
-
-      sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
-      sorterSecond = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
-      sorterThird = getHeaderCellContent(grid, 0, 2).querySelector('vaadin-grid-sorter');
+      columns = [...grid.querySelectorAll('vaadin-grid-sort-column')];
+      sorters = columns.map((_, colIndex) =>
+        getHeaderCellContent(grid, 0, colIndex).querySelector('vaadin-grid-sorter'),
+      );
 
       grid.items = [
         { first: '1', second: '2', third: '3' },
@@ -133,61 +136,53 @@ describe('sorting', () => {
     });
 
     it('should preserve sort order for sorters when grid is re-attached', () => {
-      click(sorterSecond);
+      click(sorters[1]);
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
       parentNode.appendChild(grid);
 
-      expect(sorterFirst._order).to.equal(2);
-      expect(sorterSecond._order).to.equal(0);
-      expect(sorterThird._order).to.equal(1);
+      expect(sorters.map((sorter) => sorter._order)).to.eql([2, 0, 1]);
     });
 
     it('should not keep references to sorters when column is removed', () => {
-      grid.removeChild(columnFirst);
+      grid.removeChild(columns[0]);
       flushGrid(grid);
-      expect(grid._sorters).to.not.contain(sorterFirst);
+      expect(grid._sorters).to.not.contain(sorters[0]);
     });
 
     it('should update sorting when column is removed', () => {
-      grid.removeChild(columnThird);
+      grid.removeChild(columns[2]);
       flushGrid(grid);
 
-      expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
-      expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
-      expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('2');
-
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
-      expect(getBodyCellContent(grid, 1, 1).innerText).to.equal('2');
-      expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('3');
+      assertColumnCellOrder(columns[0], ['3', '1', '2']);
+      assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
     it('should update sort order when column removed and grid is not attached', () => {
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
 
-      grid.removeChild(columnThird);
+      grid.removeChild(columns[2]);
       flushGrid(grid);
-      expect(sorterFirst._order).to.equal(1);
-      expect(sorterSecond._order).to.equal(0);
+      expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, 0]);
     });
 
     it('should not sort items before grid is re-attached', () => {
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
 
-      grid.removeChild(columnThird);
+      grid.removeChild(columns[2]);
       flushGrid(grid);
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('2');
+      assertColumnCellOrder(columns[0], ['1', '3', '2']);
 
       parentNode.appendChild(grid);
       flushGrid(grid);
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
+      assertColumnCellOrder(columns[0], ['3', '1', '2']);
     });
   });
 
   describe('grid', () => {
-    let grid, sorterFirst, sorterLast;
+    let grid, sorters;
 
     beforeEach(async () => {
       grid = fixtureSync(`
@@ -197,7 +192,7 @@ describe('sorting', () => {
           <vaadin-grid-sort-column></vaadin-grid-sort-column>
         </vaadin-grid>
       `);
-      const columns = document.querySelectorAll('vaadin-grid-column');
+      const columns = [...grid.querySelectorAll('vaadin-grid-column')];
       columns[0].headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -218,8 +213,9 @@ describe('sorting', () => {
       };
       await nextFrame();
 
-      sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
-      sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
+      sorters = columns.map((_, colIndex) =>
+        getHeaderCellContent(grid, 0, colIndex).querySelector('vaadin-grid-sorter'),
+      );
 
       grid.items = [
         { first: 'foo', last: 'bar' },
@@ -231,7 +227,7 @@ describe('sorting', () => {
     });
 
     it('should ignore sorter', () => {
-      sorterFirst.direction = '';
+      sorters[0].direction = '';
       const sortOrders = grid._mapSorters();
       expect(sortOrders).to.have.length(1);
       expect(sortOrders[0].path).to.equal('last');
@@ -239,21 +235,21 @@ describe('sorting', () => {
     });
 
     it('should show order indicators', () => {
-      expect(sorterFirst._order).to.equal(1);
-      expect(sorterLast._order).to.equal(0);
+      expect(sorters[0]._order).to.equal(1);
+      expect(sorters[1]._order).to.equal(0);
     });
 
     it('should not show order indicators for one sorter', () => {
-      sorterLast.direction = '';
-      expect(sorterFirst._order).to.equal(null);
-      expect(sorterLast._order).to.equal(null);
+      sorters[1].direction = '';
+      expect(sorters[0]._order).to.equal(null);
+      expect(sorters[1]._order).to.equal(null);
     });
 
     it('should not show order indicators', () => {
-      sorterFirst.direction = null;
-      sorterLast.direction = null;
-      expect(sorterFirst._order).to.equal(null);
-      expect(sorterLast._order).to.equal(null);
+      sorters[0].direction = null;
+      sorters[1].direction = null;
+      expect(sorters[0]._order).to.equal(null);
+      expect(sorters[1]._order).to.equal(null);
     });
 
     describe('multiSortOnShiftClick', () => {
@@ -263,96 +259,96 @@ describe('sorting', () => {
       });
 
       it('should add to sort on shift-click', () => {
-        sorterLast.direction = null;
-        sorterFirst.direction = null;
-        shiftClick(sorterLast);
-        shiftClick(sorterFirst);
-        expect(sorterFirst._order).to.equal(0);
-        expect(sorterLast._order).to.equal(1);
+        sorters[1].direction = null;
+        sorters[0].direction = null;
+        shiftClick(sorters[1]);
+        shiftClick(sorters[0]);
+        expect(sorters[0]._order).to.equal(0);
+        expect(sorters[1]._order).to.equal(1);
       });
 
       it('should add to sort on Shift+Space', () => {
-        sorterFirst.direction = null;
-        sorterLast.direction = null;
+        sorters[0].direction = null;
+        sorters[1].direction = null;
         const lastCell = getContainerCell(grid.$.header, 0, 1);
         const firstCell = getContainerCell(grid.$.header, 0, 0);
         keyUpOn(lastCell, 32, 'shift', ' ');
         keyUpOn(firstCell, 32, 'shift', ' ');
-        expect(sorterFirst._order).to.equal(0);
-        expect(sorterLast._order).to.equal(1);
+        expect(sorters[0]._order).to.equal(0);
+        expect(sorters[1]._order).to.equal(1);
       });
 
       it('should single-sort on shift-click if multi-sort-on-shift-click not enabled', () => {
         grid.multiSortOnShiftClick = false;
-        sorterLast.direction = null;
-        sorterFirst.direction = null;
-        shiftClick(sorterLast);
-        shiftClick(sorterFirst);
-        expect(sorterLast._order).to.equal(null);
-        expect(sorterFirst._order).to.equal(null);
-        expect(sorterLast.direction).to.equal(null);
-        expect(sorterFirst.direction).to.equal('asc');
+        sorters[1].direction = null;
+        sorters[0].direction = null;
+        shiftClick(sorters[1]);
+        shiftClick(sorters[0]);
+        expect(sorters[1]._order).to.equal(null);
+        expect(sorters[0]._order).to.equal(null);
+        expect(sorters[1].direction).to.equal(null);
+        expect(sorters[0].direction).to.equal('asc');
       });
 
       it('should clear multi-sort on regular click', () => {
-        click(sorterLast);
-        expect(sorterFirst.direction).to.be.null;
-        expect(sorterLast.direction).to.be.null;
-        expect(sorterFirst._order).to.equal(null);
-        expect(sorterLast._order).to.equal(null);
+        click(sorters[1]);
+        expect(sorters[0].direction).to.be.null;
+        expect(sorters[1].direction).to.be.null;
+        expect(sorters[0]._order).to.equal(null);
+        expect(sorters[1]._order).to.equal(null);
       });
 
       it('should clear multi-sort on regular click when multi-sort enabled', () => {
         grid.multiSort = true;
-        click(sorterLast);
-        expect(sorterFirst.direction).to.be.null;
-        expect(sorterLast.direction).to.be.null;
-        expect(sorterFirst._order).to.equal(null);
-        expect(sorterLast._order).to.equal(null);
+        click(sorters[1]);
+        expect(sorters[0].direction).to.be.null;
+        expect(sorters[1].direction).to.be.null;
+        expect(sorters[0]._order).to.equal(null);
+        expect(sorters[1]._order).to.equal(null);
       });
 
       it('should add to active sorters on regular click if sorter has direction', () => {
-        click(sorterFirst);
+        click(sorters[0]);
         expect(grid._sorters.length).to.equal(1);
       });
 
       it('should not add to active sorters on regular click if sorter has no direction', () => {
-        click(sorterLast);
+        click(sorters[1]);
         expect(grid._sorters).to.be.empty;
       });
 
       it('should add to sorters if multi-sort is enabled and sorting is done programatically', () => {
         grid.multiSort = true;
-        sorterFirst.direction = 'desc';
-        sorterLast.direction = 'asc';
-        expect(sorterFirst._order).to.equal(1);
-        expect(sorterFirst.direction).to.equal('desc');
-        expect(sorterLast._order).to.equal(0);
-        expect(sorterLast.direction).to.equal('asc');
+        sorters[0].direction = 'desc';
+        sorters[1].direction = 'asc';
+        expect(sorters[0]._order).to.equal(1);
+        expect(sorters[0].direction).to.equal('desc');
+        expect(sorters[1]._order).to.equal(0);
+        expect(sorters[1].direction).to.equal('asc');
         expect(grid._sorters).to.have.lengthOf(2);
       });
 
       it('programmatically multi-sorting should be possible after user interacts with the sorters when multi-sort enabled', () => {
         grid.multiSort = true;
-        click(sorterFirst);
-        click(sorterLast);
-        sorterFirst.direction = 'asc';
+        click(sorters[0]);
+        click(sorters[1]);
+        sorters[0].direction = 'asc';
 
-        expect(sorterFirst.direction).to.equal('asc');
-        expect(sorterLast.direction).to.equal('asc');
+        expect(sorters[0].direction).to.equal('asc');
+        expect(sorters[1].direction).to.equal('asc');
         expect(grid._sorters).to.have.lengthOf(2);
       });
 
       it('should not multi-sort when programmatically sorting after shift-click', () => {
-        sorterFirst.direction = null;
-        sorterLast.direction = null;
-        shiftClick(sorterFirst);
-        shiftClick(sorterLast);
+        sorters[0].direction = null;
+        sorters[1].direction = null;
+        shiftClick(sorters[0]);
+        shiftClick(sorters[1]);
         expect(grid._sorters).to.have.lengthOf(2);
-        sorterFirst.direction = 'desc';
+        sorters[0].direction = 'desc';
 
-        expect(sorterFirst.direction).to.equal('desc');
-        expect(sorterLast.direction).to.be.null;
+        expect(sorters[0].direction).to.equal('desc');
+        expect(sorters[1].direction).to.be.null;
         expect(grid._sorters).to.have.lengthOf(1);
       });
     });
@@ -369,7 +365,7 @@ describe('sorting', () => {
       });
 
       it('should sort automatically on sort', () => {
-        sorterFirst.direction = null;
+        sorters[0].direction = null;
         flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
@@ -377,8 +373,8 @@ describe('sorting', () => {
       });
 
       it('should not sort the items if sorter directions are not defined', () => {
-        sorterFirst.direction = null;
-        sorterLast.direction = null;
+        sorters[0].direction = null;
+        sorters[1].direction = null;
         grid.items = buildDataSet(100);
         const bodyRows = getRows(grid.$.items);
         expect(grid.__getRowModel(bodyRows[0]).item).to.equal(grid.items[0]);
@@ -447,8 +443,8 @@ describe('sorting', () => {
           { first: 3, last: new Date(2000, 1, 1) },
         ];
 
-        sorterFirst.direction = '';
-        sorterLast.direction = 'asc';
+        sorters[0].direction = '';
+        sorters[1].direction = 'asc';
 
         flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
@@ -473,7 +469,7 @@ describe('sorting', () => {
       });
 
       it('should request new data on sort', () => {
-        sorterFirst.direction = 'desc';
+        sorters[0].direction = 'desc';
         flushGrid(grid);
         const lastCall = grid.dataProvider.lastCall;
         const params = lastCall.args[0];
@@ -485,7 +481,7 @@ describe('sorting', () => {
 
       it('should request new data on change in existing sorters', () => {
         grid.dataProvider.resetHistory();
-        sorterLast.direction = 'asc';
+        sorters[1].direction = 'asc';
         flushGrid(grid);
         expect(grid.dataProvider.called).to.be.true;
       });
@@ -497,21 +493,21 @@ describe('sorting', () => {
       });
 
       it('should append sort order when setting sort direction', () => {
-        sorterLast.direction = null;
+        sorters[1].direction = null;
 
-        sorterLast.direction = 'asc';
-        expect(sorterFirst._order).to.equal(0);
-        expect(sorterLast._order).to.equal(1);
+        sorters[1].direction = 'asc';
+        expect(sorters[0]._order).to.equal(0);
+        expect(sorters[1]._order).to.equal(1);
       });
 
       it('should retain sort order when changing sort direction', () => {
-        sorterFirst.direction = 'desc';
-        expect(sorterFirst._order).to.equal(1);
-        expect(sorterLast._order).to.equal(0);
+        sorters[0].direction = 'desc';
+        expect(sorters[0]._order).to.equal(1);
+        expect(sorters[1]._order).to.equal(0);
       });
 
       it('should remove sorter when clearing sort direction', () => {
-        sorterLast.direction = null;
+        sorters[1].direction = null;
 
         const sortOrders = grid._mapSorters();
         expect(sortOrders).to.have.length(1);
@@ -520,9 +516,9 @@ describe('sorting', () => {
       });
 
       it('should update order when clearing sort direction', () => {
-        sorterLast.direction = null;
+        sorters[1].direction = null;
 
-        expect(sorterFirst._order).to.be.null;
+        expect(sorters[0]._order).to.be.null;
       });
     });
 
@@ -563,7 +559,7 @@ describe('sorting', () => {
 
       it('should only using single sorter', () => {
         grid.dataProvider.resetHistory();
-        sorterFirst.direction = 'desc';
+        sorters[0].direction = 'desc';
 
         flushGrid(grid);
         expect(grid.dataProvider.args[0][0].sortOrders.length).to.eql(1);
@@ -571,22 +567,22 @@ describe('sorting', () => {
 
       it('should remove order from sorters', () => {
         // Initial order before multiSort was set
-        expect(sorterLast._order).to.eql(0);
-        expect(sorterFirst._order).to.eql(1);
+        expect(sorters[1]._order).to.eql(0);
+        expect(sorters[0]._order).to.eql(1);
 
-        sorterFirst.direction = 'desc';
+        sorters[0].direction = 'desc';
 
-        expect(sorterFirst._order).to.be.null;
-        expect(sorterLast._order).to.be.null;
+        expect(sorters[0]._order).to.be.null;
+        expect(sorters[1]._order).to.be.null;
       });
 
       it('should remove direction from previous sorter', () => {
-        sorterFirst.direction = 'desc';
+        sorters[0].direction = 'desc';
 
-        sorterLast.direction = 'desc';
+        sorters[1].direction = 'desc';
 
-        expect(sorterFirst.direction).to.be.null;
-        expect(sorterLast.direction).to.eql('desc');
+        expect(sorters[0].direction).to.be.null;
+        expect(sorters[1].direction).to.eql('desc');
       });
     });
 
@@ -596,17 +592,17 @@ describe('sorting', () => {
       }
 
       it('should set aria-sort on cells', () => {
-        expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('ascending');
-        expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('descending');
+        expect(getSorterCell(sorters[0]).getAttribute('aria-sort')).to.equal('ascending');
+        expect(getSorterCell(sorters[1]).getAttribute('aria-sort')).to.equal('descending');
       });
 
       it('should update aria-sort on sorter change', () => {
-        sorterFirst.direction = 'desc';
-        sorterLast.direction = null;
+        sorters[0].direction = 'desc';
+        sorters[1].direction = null;
 
         flushGrid(grid);
-        expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('descending');
-        expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('none');
+        expect(getSorterCell(sorters[0]).getAttribute('aria-sort')).to.equal('descending');
+        expect(getSorterCell(sorters[1]).getAttribute('aria-sort')).to.equal('none');
       });
     });
 
@@ -670,7 +666,7 @@ describe('sorting', () => {
           <vaadin-grid-column path="last"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      const columns = document.querySelectorAll('vaadin-grid-column');
+      const columns = grid.querySelectorAll('vaadin-grid-column');
       columns[0].headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -698,7 +694,7 @@ describe('sorting', () => {
   });
 
   describe('detached sorter', () => {
-    let grid, firstName;
+    let grid, firstNameColumn, firstNameSorter;
 
     beforeEach(async () => {
       grid = fixtureSync(`
@@ -707,8 +703,8 @@ describe('sorting', () => {
           <vaadin-grid-column path="last"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      firstName = grid.querySelector('vaadin-grid-column');
-      firstName.headerRenderer = (root) => {
+      firstNameColumn = grid.querySelector('vaadin-grid-column');
+      firstNameColumn.headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = '<vaadin-grid-sorter path="first">First name</vaadin-grid-sorter>';
         }
@@ -716,30 +712,29 @@ describe('sorting', () => {
       grid.items = [{ first: 'John', last: 'Doe' }];
       flushGrid(grid);
       await nextFrame();
+      firstNameSorter = grid.querySelector('vaadin-grid-sorter');
     });
 
     it('should remove detached sorter with no parent', () => {
-      const sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
-      sorterFirst.click();
+      firstNameSorter.click();
 
-      firstName.headerRenderer = (root) => {
+      firstNameColumn.headerRenderer = (root) => {
         root.innerHTML = '<vaadin-grid-sorter path="first">1st</vaadin-grid-sorter>';
       };
       grid.requestContentUpdate();
 
-      expect(grid._sorters).to.not.contain(sorterFirst);
+      expect(grid._sorters).to.not.contain(firstNameSorter);
     });
 
     it('should not remove sorter for hidden column', async () => {
-      const sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
-      sorterFirst.click();
-      firstName.setAttribute('hidden', '');
+      firstNameSorter.click();
+      firstNameColumn.setAttribute('hidden', '');
       await nextFrame();
 
-      firstName.removeAttribute('hidden');
+      firstNameColumn.removeAttribute('hidden');
       await nextFrame();
 
-      expect(grid._sorters).to.contain(sorterFirst);
+      expect(grid._sorters).to.contain(firstNameSorter);
     });
   });
 });
