@@ -114,8 +114,9 @@ export const SortMixin = (superClass) =>
         sorter._order = null;
       });
 
-      if (this._activeSorters.length > 1) {
-        this._activeSorters.forEach((sorter, index) => {
+      const activeSorters = this._getActiveSorters();
+      if (activeSorters.length > 1) {
+        activeSorters.forEach((sorter, index) => {
           sorter._order = index;
         });
       }
@@ -186,7 +187,7 @@ export const SortMixin = (superClass) =>
      * @type {GridSorterDefinition[]}
      * @protected
      */
-    get _activeSorters() {
+    _getActiveSorters() {
       return this._sorters.filter((sorter) => sorter.direction && sorter.isConnected);
     }
 
@@ -195,7 +196,7 @@ export const SortMixin = (superClass) =>
      * @protected
      */
     _mapSorters() {
-      return this._activeSorters.map((sorter) => {
+      return this._getActiveSorters().map((sorter) => {
         return {
           path: sorter.path,
           direction: sorter.direction,
