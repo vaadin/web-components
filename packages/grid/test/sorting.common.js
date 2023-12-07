@@ -105,6 +105,12 @@ describe('sorting', () => {
   describe('DOM operations', () => {
     let grid, columns, sorters;
 
+    function assertColumnCellOrder(column, expected) {
+      const colIndex = columns.indexOf(column);
+      const rows = [...getRows(grid.$.items)];
+      expect(rows.map((_, rowIndex) => getBodyCellContent(grid, rowIndex, colIndex).textContent)).to.eql(expected);
+    }
+
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 400px; height: 200px;" multi-sort>
@@ -116,7 +122,9 @@ describe('sorting', () => {
       await nextFrame();
 
       columns = [...grid.querySelectorAll('vaadin-grid-sort-column')];
-      sorters = [...grid.querySelectorAll('vaadin-grid-sorter')];
+      sorters = columns.map((_, colIndex) =>
+        getHeaderCellContent(grid, 0, colIndex).querySelector('vaadin-grid-sorter'),
+      );
 
       grid.items = [
         { first: '1', second: '2', third: '3' },
@@ -133,9 +141,7 @@ describe('sorting', () => {
       parentNode.removeChild(grid);
       parentNode.appendChild(grid);
 
-      expect(sorters[0]._order).to.equal(2);
-      expect(sorters[1]._order).to.equal(0);
-      expect(sorters[2]._order).to.equal(1);
+      expect(sorters.map((sorter) => sorter._order)).to.eql([2, 0, 1]);
     });
 
     it('should not keep references to sorters when column is removed', () => {
@@ -148,13 +154,8 @@ describe('sorting', () => {
       grid.removeChild(columns[2]);
       flushGrid(grid);
 
-      expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
-      expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
-      expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('2');
-
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
-      expect(getBodyCellContent(grid, 1, 1).innerText).to.equal('2');
-      expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('3');
+      assertColumnCellOrder(columns[0], ['3', '1', '2']);
+      assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
     it('should update sort order when column removed and grid is not attached', () => {
@@ -163,8 +164,7 @@ describe('sorting', () => {
 
       grid.removeChild(columns[2]);
       flushGrid(grid);
-      expect(sorters[0]._order).to.equal(1);
-      expect(sorters[1]._order).to.equal(0);
+      expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, 0]);
     });
 
     it('should not sort items before grid is re-attached', () => {
@@ -173,11 +173,11 @@ describe('sorting', () => {
 
       grid.removeChild(columns[2]);
       flushGrid(grid);
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('2');
+      assertColumnCellOrder(columns[0], ['1', '3', '2']);
 
       parentNode.appendChild(grid);
       flushGrid(grid);
-      expect(getBodyCellContent(grid, 0, 1).innerText).to.equal('1');
+      assertColumnCellOrder(columns[0], ['3', '1', '2']);
     });
   });
 
@@ -192,7 +192,7 @@ describe('sorting', () => {
           <vaadin-grid-sort-column></vaadin-grid-sort-column>
         </vaadin-grid>
       `);
-      const columns = grid.querySelectorAll('vaadin-grid-column');
+      const columns = [...grid.querySelectorAll('vaadin-grid-column')];
       columns[0].headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -213,7 +213,9 @@ describe('sorting', () => {
       };
       await nextFrame();
 
-      sorters = [...grid.querySelectorAll('vaadin-grid-sorter')];
+      sorters = columns.map((_, colIndex) =>
+        getHeaderCellContent(grid, 0, colIndex).querySelector('vaadin-grid-sorter'),
+      );
 
       grid.items = [
         { first: 'foo', last: 'bar' },
