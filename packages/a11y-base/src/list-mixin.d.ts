@@ -16,11 +16,6 @@ export declare function ListMixin<T extends Constructor<HTMLElement>>(
 
 export declare class ListMixinClass {
   /**
-   * Used for mixin detection because `instanceof` does not work with mixins.
-   */
-  _hasVaadinListMixin: boolean;
-
-  /**
    * If true, the user cannot interact with this element.
    * When the element is disabled, the selected item is
    * not updated when `selected` property is changed.

@@ -4,7 +4,7 @@ import '@vaadin/item/vaadin-item.js';
 import '../vaadin-list-box.js';
 
 describe('vaadin-list-box', () => {
-  let listBox;
+  let listBox, tagName;
 
   beforeEach(() => {
     listBox = fixtureSync(`
@@ -13,9 +13,14 @@ describe('vaadin-list-box', () => {
         <vaadin-item>Bar</vaadin-item>
       </vaadin-list-box>
     `);
+    tagName = listBox.tagName.toLowerCase();
   });
 
-  it('should extend list-mixin', () => {
-    expect(listBox._hasVaadinListMixin).to.be.true;
+  it('should be defined in custom element registry', () => {
+    expect(customElements.get(tagName)).to.be.ok;
+  });
+
+  it('should have a valid static "is" getter', () => {
+    expect(customElements.get(tagName).is).to.equal(tagName);
   });
 });
