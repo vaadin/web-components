@@ -105,17 +105,20 @@ export const SortMixin = (superClass) =>
       }
 
       this._sorters = this._sorters.filter((sorter) => sortersToRemove.indexOf(sorter) < 0);
-      if (this.multiSort) {
-        this.__updateSortOrders();
-      }
       this.__applySorters();
     }
 
     /** @private */
     __updateSortOrders() {
-      this._sorters.forEach((sorter, index) => {
-        sorter._order = this._sorters.length > 1 ? index : null;
+      this._sorters.forEach((sorter) => {
+        sorter._order = null;
       });
+
+      if (this._activeSorters.length > 1) {
+        this._activeSorters.forEach((sorter, index) => {
+          sorter._order = index;
+        });
+      }
     }
 
     /** @private */
@@ -125,8 +128,6 @@ export const SortMixin = (superClass) =>
       } else if (!this._sorters.includes(sorter)) {
         this._sorters.push(sorter);
       }
-
-      this.__updateSortOrders();
     }
 
     /** @private */
@@ -135,7 +136,6 @@ export const SortMixin = (superClass) =>
       if (sorter.direction) {
         this._sorters.unshift(sorter);
       }
-      this.__updateSortOrders();
     }
 
     /** @private */
@@ -176,9 +176,18 @@ export const SortMixin = (superClass) =>
         this.__debounceClearCache();
       }
 
+      this.__updateSortOrders();
       this._a11yUpdateSorters();
 
       this._previousSorters = this._mapSorters();
+    }
+
+    /**
+     * @type {GridSorterDefinition[]}
+     * @protected
+     */
+    get _activeSorters() {
+      return this._sorters.filter((sorter) => sorter.direction && sorter.isConnected);
     }
 
     /**
@@ -186,7 +195,7 @@ export const SortMixin = (superClass) =>
      * @protected
      */
     _mapSorters() {
-      return this._sorters.map((sorter) => {
+      return this._activeSorters.map((sorter) => {
         return {
           path: sorter.path,
           direction: sorter.direction,

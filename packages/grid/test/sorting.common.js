@@ -135,7 +135,7 @@ describe('sorting', () => {
       flushGrid(grid);
     });
 
-    it('should preserve sort order for sorters when grid is re-attached', () => {
+    it('should preserve sorter order when grid is re-attached', () => {
       click(sorters[1]);
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
@@ -144,24 +144,19 @@ describe('sorting', () => {
       expect(sorters.map((sorter) => sorter._order)).to.eql([2, 0, 1]);
     });
 
-    it('should not keep references to sorters when column is removed', () => {
+    it('should remove sorter reference when removing column', () => {
       grid.removeChild(columns[0]);
       flushGrid(grid);
       expect(grid._sorters).to.not.contain(sorters[0]);
     });
 
-    it('should update sorting when column is removed', () => {
+    it('should exclude removed column from sorting', () => {
       grid.removeChild(columns[2]);
       flushGrid(grid);
-
-      assertColumnCellOrder(columns[0], ['3', '1', '2']);
       assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
-    it('should update sort order when column removed and grid is not attached', () => {
-      const parentNode = grid.parentNode;
-      parentNode.removeChild(grid);
-
+    it('should update sorter order when removing column', () => {
       grid.removeChild(columns[2]);
       flushGrid(grid);
       expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, 0]);
@@ -173,11 +168,67 @@ describe('sorting', () => {
 
       grid.removeChild(columns[2]);
       flushGrid(grid);
+      // The items should still be sorted by the 3rd column in desc order.
       assertColumnCellOrder(columns[0], ['1', '3', '2']);
 
       parentNode.appendChild(grid);
       flushGrid(grid);
-      assertColumnCellOrder(columns[0], ['3', '1', '2']);
+      // The items should be sorted by the 2nd column in asc order.
+      assertColumnCellOrder(columns[1], ['1', '2', '3']);
+    });
+
+    it('should exclude column from sorting when hidden', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+
+      // The items should be sorted by the 2nd column in asc order.
+      assertColumnCellOrder(columns[1], ['1', '2', '3']);
+    });
+
+    it('should include column in sorting when shown again', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+      columns[2].hidden = false;
+      await nextFrame();
+
+      // The items should be sorted by the 3rd column in desc order.
+      assertColumnCellOrder(columns[2], ['3', '2', '1']);
+    });
+
+    it('should include shown column in sorting if its direction was changed', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+      columns[2].direction = 'asc';
+      columns[2].hidden = false;
+      await nextFrame();
+
+      // The items should be sorted by the 3rd column in asc order.
+      assertColumnCellOrder(columns[2], ['1', '2', '3']);
+    });
+
+    it('should not include shown column in sorting if its direction was reset', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+      columns[2].direction = null;
+      columns[2].hidden = false;
+      await nextFrame();
+
+      // The items should be sorted by the 2nd column in asc order.
+      assertColumnCellOrder(columns[1], ['1', '2', '3']);
+    });
+
+    it('should update sorter order when column gets hidden', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+      expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, null]);
+    });
+
+    it('should update sorter order when column gets shown again', async () => {
+      columns[2].hidden = true;
+      await nextFrame();
+      columns[2].hidden = false;
+      await nextFrame();
+      expect(sorters.map((sorter) => sorter._order)).to.eql([2, 1, 0]);
     });
   });
 
