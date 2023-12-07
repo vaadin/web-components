@@ -81,3 +81,5 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))
 }
 
 customElements.define(DetailsSummary.is, DetailsSummary);
+
+export { DetailsSummary };
