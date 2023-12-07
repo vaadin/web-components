@@ -11,13 +11,15 @@ import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export * from './generated/GridSortColumn.js';
 
+/*
+ * The `headerRenderer` is not allowed for `vaadin-grid-sort-column`.
+ */
 export type GridSortColumnProps<TItem> = Partial<
   Omit<_GridSortColumnProps<TItem>, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
-    headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
@@ -25,19 +27,11 @@ function GridSortColumn<TItem = GridDefaultItem>(
   props: GridSortColumnProps<TItem>,
   ref: ForwardedRef<GridSortColumnElement<TItem>>,
 ): ReactElement | null {
-  const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
   const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
   const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
 
   return (
-    <_GridSortColumn<TItem>
-      {...props}
-      footerRenderer={footerRenderer}
-      headerRenderer={headerRenderer}
-      ref={ref}
-      renderer={bodyRenderer}
-    >
-      {headerPortals}
+    <_GridSortColumn<TItem> {...props} footerRenderer={footerRenderer} ref={ref} renderer={bodyRenderer}>
       {footerPortals}
       {bodyPortals}
     </_GridSortColumn>

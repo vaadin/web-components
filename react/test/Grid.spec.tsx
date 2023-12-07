@@ -169,9 +169,7 @@ describe('Grid', () => {
     it('should render correctly', async () => {
       render(
         <Grid<Item> items={items}>
-          <GridSortColumn<Item> headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer}>
-            {DefaultBodyRenderer}
-          </GridSortColumn>
+          <GridSortColumn<Item> footerRenderer={DefaultFooterRenderer}>{DefaultBodyRenderer}</GridSortColumn>
         </Grid>,
       );
 
