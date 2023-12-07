@@ -72,8 +72,6 @@ export interface AvatarGroupItem {
 declare class AvatarGroup extends ResizeMixin(
   OverlayClassMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))),
 ) {
-  readonly _avatars: HTMLElement[];
-
   /**
    * An array containing the items which will be stamped as avatars.
    *
