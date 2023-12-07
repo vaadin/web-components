@@ -158,6 +158,4 @@ export declare class ComboBoxMixinClass<TItem> {
    * Closes the dropdown list.
    */
   close(): void;
-
-  protected _revertInputValue(): void;
 }
