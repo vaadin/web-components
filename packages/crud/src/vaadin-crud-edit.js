@@ -64,3 +64,5 @@ class CrudEdit extends Button {
 }
 
 customElements.define(CrudEdit.is, CrudEdit);
+
+export { CrudEdit };
