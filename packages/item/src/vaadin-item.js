@@ -81,13 +81,13 @@ class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
      * Submittable string value. The default value is the trimmed text content of the element.
      * @type {string}
      */
-    this.value;
+    this.value; // eslint-disable-line no-unused-expressions
 
     /**
      * String that can be set to visually represent the selected item in `vaadin-select`.
      * @type {string}
      */
-    this.label;
+    this.label; // eslint-disable-line no-unused-expressions
   }
 
   /** @protected */
