@@ -135,7 +135,7 @@ describe('sorting', () => {
       flushGrid(grid);
     });
 
-    it('should preserve sorter order when grid is re-attached', () => {
+    it('should preserve sorters order when grid is re-attached', () => {
       click(sorters[1]);
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
@@ -156,7 +156,7 @@ describe('sorting', () => {
       assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
-    it('should update sorter order when removing column', () => {
+    it('should update sorters order when removing column', () => {
       grid.removeChild(columns[2]);
       flushGrid(grid);
       expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, 0]);
@@ -217,13 +217,13 @@ describe('sorting', () => {
       assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
-    it('should update sorter order when column gets hidden', async () => {
+    it('should update sorters order when column gets hidden', async () => {
       columns[2].hidden = true;
       await nextFrame();
       expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, null]);
     });
 
-    it('should update sorter order when column gets shown again', async () => {
+    it('should update sorters order when column gets shown again', async () => {
       columns[2].hidden = true;
       await nextFrame();
       columns[2].hidden = false;
