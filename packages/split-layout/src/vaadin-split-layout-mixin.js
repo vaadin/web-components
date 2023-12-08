@@ -80,11 +80,6 @@ export const SplitLayoutMixin = (superClass) =>
       children
         .filter((child) => !child.hasAttribute('slot'))
         .forEach((child, i) => {
-          if (this._primaryChild && this._secondaryChild) {
-            child.removeAttribute('slot');
-            return;
-          }
-
           let slotName;
           if (this._primaryChild || this._secondaryChild) {
             slotName = this._primaryChild ? 'secondary' : 'primary';
