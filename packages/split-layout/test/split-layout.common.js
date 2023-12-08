@@ -144,6 +144,24 @@ describe('split layout', () => {
         expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('secondary');
         expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('primary');
       });
+
+      it('should assign slots only for direct children', async () => {
+        const layout = fixtureSync(`
+          <vaadin-split-layout>
+            <div id="first">primary</div>
+            <vaadin-split-layout id="second">
+              <div id="nested-first slot="primary"></div>
+              <div id="nested-second" slot="secondary"></div>
+            </vaadin-split-layout>
+          </vaadin-split-layout>
+        `);
+        await nextRender();
+
+        const first = layout.querySelector('#first');
+        expect(first.getAttribute('slot')).to.be.equal('primary');
+        const second = layout.querySelector('#second');
+        expect(second.getAttribute('slot')).to.be.equal('secondary');
+      });
     });
   });
 });
