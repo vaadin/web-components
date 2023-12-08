@@ -63,16 +63,21 @@ export const SplitLayoutMixin = (superClass) =>
 
     /** @private */
     _processChildren() {
-      this.querySelectorAll('[slot]').forEach((child) => {
-        const slot = child.getAttribute('slot');
-        if (child.__autoSlotted) {
-          this[`_${slot}Child`] = null;
-          child.removeAttribute('slot');
-        } else {
-          this[`_${slot}Child`] = child;
-        }
-      });
-      [...this.children]
+      const children = [...this.children];
+
+      children
+        .filter((child) => child.hasAttribute('slot'))
+        .forEach((child) => {
+          const slot = child.getAttribute('slot');
+          if (child.__autoSlotted) {
+            this[`_${slot}Child`] = null;
+            child.removeAttribute('slot');
+          } else {
+            this[`_${slot}Child`] = child;
+          }
+        });
+
+      children
         .filter((child) => !child.hasAttribute('slot'))
         .forEach((child, i) => {
           if (this._primaryChild && this._secondaryChild) {
