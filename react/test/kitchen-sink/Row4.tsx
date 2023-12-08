@@ -3,6 +3,7 @@ import { CustomField } from '../../src/CustomField.js';
 import { DatePicker } from '../../src/DatePicker.js';
 import { DateTimePicker } from '../../src/DateTimePicker.js';
 import { Details } from '../../src/Details.js';
+import { DetailsSummary } from '../../src/DetailsSummary.js';
 import { FormItem } from '../../src/FormItem.js';
 import { FormLayout } from '../../src/FormLayout.js';
 import { IntegerField } from '../../src/IntegerField.js';
@@ -21,7 +22,7 @@ export default function Row4() {
         <PasswordField placeholder="Password"></PasswordField>
       </CustomField>
       <Details opened>
-        <label slot="summary">Details</label>
+        <DetailsSummary slot="summary">Details</DetailsSummary>
         <p>Details content</p>
       </Details>
       <FormLayout>

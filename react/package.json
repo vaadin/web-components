@@ -164,6 +164,10 @@
       "types": "./Accordion.d.ts",
       "default": "./Accordion.js"
     },
+    "./AccordionHeading.js": {
+      "types": "./AccordionHeading.d.ts",
+      "default": "./AccordionHeading.js"
+    },
     "./AccordionPanel.js": {
       "types": "./AccordionPanel.d.ts",
       "default": "./AccordionPanel.js"
@@ -259,6 +263,10 @@
     "./Details.js": {
       "types": "./Details.d.ts",
       "default": "./Details.js"
+    },
+    "./DetailsSummary.js": {
+      "types": "./DetailsSummary.d.ts",
+      "default": "./DetailsSummary.js"
     },
     "./Dialog.js": {
       "types": "./Dialog.d.ts",
@@ -473,6 +481,7 @@
       "default": "./VirtualList.js"
     },
     "./Accordion": "./Accordion.js",
+    "./AccordionHeading": "./AccordionHeading.js",
     "./AccordionPanel": "./AccordionPanel.js",
     "./AppLayout": "./AppLayout.js",
     "./Avatar": "./Avatar.js",
@@ -497,6 +506,7 @@
     "./DatePickerLight": "./DatePickerLight.js",
     "./DateTimePicker": "./DateTimePicker.js",
     "./Details": "./Details.js",
+    "./DetailsSummary": "./DetailsSummary.js",
     "./Dialog": "./Dialog.js",
     "./DrawerToggle": "./DrawerToggle.js",
     "./EmailField": "./EmailField.js",

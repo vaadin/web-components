@@ -1,6 +1,7 @@
 import { SideNav } from '../../src/SideNav.js';
 import { SideNavItem } from '../../src/SideNavItem.js';
 import { Accordion } from '../../src/Accordion.js';
+import { AccordionHeading } from '../../src/AccordionHeading.js';
 import { AccordionPanel } from '../../src/AccordionPanel.js';
 import { AvatarGroup } from '../../src/AvatarGroup.js';
 import { BoardRow } from '../../src/BoardRow.js';
@@ -16,9 +17,12 @@ export default function Row1() {
         <SideNavItem>Side Navigation Item 3</SideNavItem>
       </SideNav>
       <Accordion theme="primary">
-        <AccordionPanel>
-          <div slot="summary">AccordeonPanel</div>
+        <AccordionPanel summary="Panel 1">
           <div>Accordion content 1</div>
+        </AccordionPanel>
+        <AccordionPanel>
+          <AccordionHeading slot="summary">Panel 2</AccordionHeading>
+          <div>Accordion content 2</div>
         </AccordionPanel>
       </Accordion>
       <AvatarGroup prefix="Users: " items={[{ name: 'Jane Roe', abbr: 'JD' }]}></AvatarGroup>
