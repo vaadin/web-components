@@ -118,7 +118,7 @@ export const GridSorterMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.__applySorters();
+        this._grid._applySorters();
       } else {
         this.__dispatchSorterChangedEvenIfPossible();
       }
@@ -131,7 +131,7 @@ export const GridSorterMixin = (superClass) =>
       if (!this.parentNode && this._grid) {
         this._grid.__removeSorters([this]);
       } else if (this._grid) {
-        this._grid.__applySorters();
+        this._grid._applySorters();
       }
     }
 
