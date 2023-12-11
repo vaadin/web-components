@@ -233,7 +233,7 @@ describe('sorting', () => {
   });
 
   describe('grid', () => {
-    let grid, sorters;
+    let grid, columns, sorters;
 
     beforeEach(async () => {
       grid = fixtureSync(`
@@ -243,7 +243,7 @@ describe('sorting', () => {
           <vaadin-grid-sort-column></vaadin-grid-sort-column>
         </vaadin-grid>
       `);
-      const columns = [...grid.querySelectorAll('vaadin-grid-column')];
+      columns = [...grid.querySelectorAll('vaadin-grid-column')];
       columns[0].headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -535,6 +535,26 @@ describe('sorting', () => {
         sorters[1].direction = 'asc';
         flushGrid(grid);
         expect(grid.dataProvider.called).to.be.true;
+      });
+
+      it('should request new data when showing a column whose direction was changed', async () => {
+        columns[0].hidden = true;
+        await nextFrame();
+        grid.dataProvider.resetHistory();
+        sorters[0].direction = 'desc';
+        columns[0].hidden = false;
+        await nextFrame();
+        expect(grid.dataProvider.calledOnce).to.be.true;
+      });
+
+      it('should not request new data when showing a column whose direction was reset', async () => {
+        columns[0].hidden = true;
+        await nextFrame();
+        grid.dataProvider.resetHistory();
+        sorters[0].direction = null;
+        columns[0].hidden = false;
+        await nextFrame();
+        expect(grid.dataProvider.called).to.be.false;
       });
     });
 
