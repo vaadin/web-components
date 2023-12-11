@@ -95,7 +95,7 @@ export const SortMixin = (superClass) =>
       e.stopPropagation();
       sorter._grid = this;
       this.__updateSorter(sorter, e.detail.shiftClick, e.detail.fromSorterClick);
-      this._applySorters();
+      this.__applySorters();
     }
 
     /** @private */
@@ -105,7 +105,7 @@ export const SortMixin = (superClass) =>
       }
 
       this._sorters = this._sorters.filter((sorter) => sortersToRemove.indexOf(sorter) < 0);
-      this._applySorters();
+      this.__applySorters();
     }
 
     /** @private */
@@ -166,8 +166,8 @@ export const SortMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    _applySorters() {
+    /** @private */
+    __applySorters() {
       if (
         this.dataProvider &&
         // No need to clear cache if sorters didn't change and grid is attached
