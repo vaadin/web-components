@@ -65,32 +65,36 @@ export const SplitLayoutMixin = (superClass) =>
     _processChildren() {
       const children = [...this.children];
 
-      children
-        .filter((child) => child.hasAttribute('slot'))
-        .forEach((child) => {
-          const slot = child.getAttribute('slot');
-          if (child.__autoSlotted) {
-            this[`_${slot}Child`] = null;
-            child.removeAttribute('slot');
-          } else {
-            this[`_${slot}Child`] = child;
-          }
-        });
+      children.filter((child) => child.hasAttribute('slot')).forEach((child) => this._processChildWithSlot(child));
 
       children
         .filter((child) => !child.hasAttribute('slot'))
-        .forEach((child, i) => {
-          let slotName;
-          if (this._primaryChild || this._secondaryChild) {
-            slotName = this._primaryChild ? 'secondary' : 'primary';
-          } else {
-            slotName = i === 0 ? 'primary' : 'secondary';
-          }
+        .forEach((child, i) => this._processChildWithoutSlot(child, i));
+    }
 
-          this[`_${slotName}Child`] = child;
-          child.setAttribute('slot', slotName);
-          child.__autoSlotted = true;
-        });
+    /** @private */
+    _processChildWithSlot(child) {
+      const slot = child.getAttribute('slot');
+      if (child.__autoSlotted) {
+        this[`_${slot}Child`] = null;
+        child.removeAttribute('slot');
+      } else {
+        this[`_${slot}Child`] = child;
+      }
+    }
+
+    /** @private */
+    _processChildWithoutSlot(child, idx) {
+      let slotName;
+      if (this._primaryChild || this._secondaryChild) {
+        slotName = this._primaryChild ? 'secondary' : 'primary';
+      } else {
+        slotName = idx === 0 ? 'primary' : 'secondary';
+      }
+
+      this[`_${slotName}Child`] = child;
+      child.setAttribute('slot', slotName);
+      child.__autoSlotted = true;
     }
 
     /** @private */
