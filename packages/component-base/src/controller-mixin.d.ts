@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { ReactiveController, ReactiveControllerHost } from 'lit';
+import type { ReactiveController } from 'lit';
 
 /**
  * A mixin for connecting controllers to the element.
@@ -13,16 +13,14 @@ export declare function ControllerMixin<T extends Constructor<HTMLElement>>(
   superclass: T,
 ): Constructor<ControllerMixinClass> & T;
 
-export declare class ControllerMixinClass
-  implements Pick<ReactiveControllerHost, 'addController' | 'removeController'>
-{
+export declare class ControllerMixinClass {
   /**
    * Registers a controller to participate in the element update cycle.
    */
-  addController(controller: ReactiveController): void;
+  protected addController(controller: ReactiveController): void;
 
   /**
    * Removes a controller from the element.
    */
-  removeController(controller: ReactiveController): void;
+  protected removeController(controller: ReactiveController): void;
 }
