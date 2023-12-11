@@ -29,6 +29,7 @@
     "validate": "concurrently npm:validate:*",
     "validate:types": "tsc --noEmit",
     "validate:prettier": "prettier -c scripts src test types karma.config.cjs vite.config.ts",
+    "validate:build": "tsx scripts/validate-build.ts",
     "version": "tsx scripts/package-json-version.ts && npm install --package-lock-only --ignore-scripts"
   },
   "repository": {

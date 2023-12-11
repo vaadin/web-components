@@ -6,6 +6,7 @@ import {
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type React from 'react';
 import type { RefAttributes } from 'react';
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 
 declare const __VERSION__: string;
 
@@ -59,15 +60,24 @@ export type ThemedWebComponentProps<
   theme?: string;
 };
 
-export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I extends ThemePropertyMixinClass
+type AllWebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I extends ThemePropertyMixinClass
   ? ThemedWebComponentProps<I, E>
   : _WebComponentProps<I, E>;
+
+// TODO: LoginOverlay has "autofocus" property so we can't omit it
+type OmittedWebComponentProps = Omit<HTMLElement, keyof React.HTMLAttributes<any> | 'autofocus'> & ControllerMixinClass;
+
+export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = Omit<
+  AllWebComponentProps<I, E>,
+  keyof OmittedWebComponentProps
+>;
 
 // We need a separate declaration here; otherwise, the TypeScript fails into the
 // endless loop trying to resolve the typings.
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(
   options: Options<I, E>,
 ): (props: WebComponentProps<I, E> & RefAttributes<I>) => React.ReactElement | null;
+
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>): any {
   const { elementClass } = options;
 
