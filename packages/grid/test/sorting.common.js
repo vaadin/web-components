@@ -144,7 +144,7 @@ describe('sorting', () => {
       expect(sorters.map((sorter) => sorter._order)).to.eql([2, 0, 1]);
     });
 
-    it('should remove sorter reference when removing column', () => {
+    it('should remove sorter reference when removing a column', () => {
       grid.removeChild(columns[0]);
       flushGrid(grid);
       expect(grid._sorters).to.not.contain(sorters[0]);
@@ -156,7 +156,7 @@ describe('sorting', () => {
       assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
-    it('should update sorters order when removing column', () => {
+    it('should update sorters order when removing a column', () => {
       grid.removeChild(columns[2]);
       flushGrid(grid);
       expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, 0]);
@@ -217,13 +217,13 @@ describe('sorting', () => {
       assertColumnCellOrder(columns[1], ['1', '2', '3']);
     });
 
-    it('should update sorters order when column gets hidden', async () => {
+    it('should update sorters order when a column gets hidden', async () => {
       columns[2].hidden = true;
       await nextFrame();
       expect(sorters.map((sorter) => sorter._order)).to.eql([1, 0, null]);
     });
 
-    it('should update sorters order when column gets shown again', async () => {
+    it('should update sorters order when a column gets shown again', async () => {
       columns[2].hidden = true;
       await nextFrame();
       columns[2].hidden = false;
