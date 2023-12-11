@@ -168,6 +168,8 @@ export const SortMixin = (superClass) =>
 
     /** @private */
     __applySorters() {
+      this.__updateSortOrders();
+
       if (
         this.dataProvider &&
         // No need to clear cache if sorters didn't change and grid is attached
@@ -177,7 +179,6 @@ export const SortMixin = (superClass) =>
         this.__debounceClearCache();
       }
 
-      this.__updateSortOrders();
       this._a11yUpdateSorters();
 
       this._previousSorters = this._mapSorters();
