@@ -83,8 +83,8 @@ describe('split layout', () => {
           </vaadin-split-layout>
         `);
         await nextRender();
-        expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('primary');
-        expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('secondary');
+        expect(layout.querySelector('#first').slot).to.be.equal('primary');
+        expect(layout.querySelector('#second').slot).to.be.equal('secondary');
       });
 
       it('should assign a slot if only one element has "secondary" slot pre-defined', async () => {
@@ -95,8 +95,8 @@ describe('split layout', () => {
           </vaadin-split-layout>
         `);
         await nextRender();
-        expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('primary');
-        expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('secondary');
+        expect(layout.querySelector('#first').slot).to.be.equal('primary');
+        expect(layout.querySelector('#second').slot).to.be.equal('secondary');
       });
 
       it('should assign a slot if only element has "primary" slot pre-defined', async () => {
@@ -107,8 +107,8 @@ describe('split layout', () => {
           </vaadin-split-layout>
         `);
         await nextRender();
-        expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('primary');
-        expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('secondary');
+        expect(layout.querySelector('#first').slot).to.be.equal('primary');
+        expect(layout.querySelector('#second').slot).to.be.equal('secondary');
       });
 
       it('should respect assigned slot if only one element has slot pre-defined after order is inverted', async () => {
@@ -124,8 +124,8 @@ describe('split layout', () => {
         layout.prepend(first);
         await nextRender();
 
-        expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('primary');
-        expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('secondary');
+        expect(layout.querySelector('#first').slot).to.be.equal('primary');
+        expect(layout.querySelector('#second').slot).to.be.equal('secondary');
       });
 
       it('should swap slots if children without pre-defined slots invert order', async () => {
@@ -141,8 +141,8 @@ describe('split layout', () => {
         layout.prepend(second);
         await nextRender();
 
-        expect(layout.querySelector('#first').getAttribute('slot')).to.be.equal('secondary');
-        expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('primary');
+        expect(layout.querySelector('#first').slot).to.be.equal('secondary');
+        expect(layout.querySelector('#second').slot).to.be.equal('primary');
       });
 
       it('should assign slots only for direct children', async () => {
@@ -158,9 +158,9 @@ describe('split layout', () => {
         await nextRender();
 
         const first = layout.querySelector('#first');
-        expect(first.getAttribute('slot')).to.be.equal('primary');
+        expect(first.slot).to.be.equal('primary');
         const second = layout.querySelector('#second');
-        expect(second.getAttribute('slot')).to.be.equal('secondary');
+        expect(second.slot).to.be.equal('secondary');
       });
     });
   });
