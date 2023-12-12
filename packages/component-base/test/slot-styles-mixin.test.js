@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { ControllerMixin } from '../src/controller-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
+import { SlotController } from '../src/slot-controller.js';
 import { SlotStylesMixin } from '../src/slot-styles-mixin.js';
 
 const runTests = (defineHelper, baseMixin) => {
