@@ -87,7 +87,7 @@ describe('split layout', () => {
         expect(layout.querySelector('#second').getAttribute('slot')).to.be.equal('secondary');
       });
 
-      it('should assign a slot if one element has "secondary" slot pre-defined', async () => {
+      it('should assign a slot if only one element has "secondary" slot pre-defined', async () => {
         const layout = fixtureSync(`
           <vaadin-split-layout>
             <div id="second" slot="secondary">secondary</div>
@@ -150,7 +150,7 @@ describe('split layout', () => {
           <vaadin-split-layout>
             <div id="first">primary</div>
             <vaadin-split-layout id="second">
-              <div id="nested-first slot="primary"></div>
+              <div id="nested-first" slot="primary"></div>
               <div id="nested-second" slot="secondary"></div>
             </vaadin-split-layout>
           </vaadin-split-layout>
