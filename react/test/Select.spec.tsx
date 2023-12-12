@@ -96,4 +96,51 @@ describe('Select', () => {
       await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
     });
   });
+
+  describe('slot', () => {
+    it('should render the element with slot if renderer prop is set', async () => {
+      render(
+        <Select renderer={Renderer}>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if items prop is set', async () => {
+      render(
+        <Select items={items}>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if children render function is set', async () => {
+      render(
+        <Select>
+          {Renderer}
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if children component is set', async () => {
+      render(
+        <Select>
+          <ListBox>
+            <Item value="foo">Foo</Item>
+            <Item value="bar">Bar</Item>
+          </ListBox>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+  });
 });

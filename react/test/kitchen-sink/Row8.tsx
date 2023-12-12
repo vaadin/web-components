@@ -5,6 +5,7 @@ import { RadioButton } from '../../src/RadioButton.js';
 import { RadioGroup } from '../../src/RadioGroup.js';
 import { RichTextEditor } from '../../src/RichTextEditor.js';
 import { Select } from '../../src/Select.js';
+import { Tooltip } from '../../src/Tooltip.js';
 
 function SelectListBox() {
   return (
@@ -27,7 +28,11 @@ export default function Row8() {
         </RadioButton>
       </RadioGroup>
       <RichTextEditor></RichTextEditor>
-      <Select label="Select" value="2" renderer={SelectListBox} />
+      <Select label="Select" value="2">
+        {SelectListBox}
+        <span slot="prefix">+</span>
+        <Tooltip slot="tooltip" text="Select tooltip"></Tooltip>
+      </Select>
     </BoardRow>
   );
 }
