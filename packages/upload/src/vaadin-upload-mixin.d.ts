@@ -20,6 +20,7 @@ export interface UploadFile extends File {
   error: string;
   abort?: boolean;
   complete?: boolean;
+  held?: boolean;
   uploading?: boolean;
 }
 
