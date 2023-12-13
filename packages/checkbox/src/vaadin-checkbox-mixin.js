@@ -130,4 +130,10 @@ export const CheckboxMixin = (superclass) =>
 
       super._toggleChecked(checked);
     }
+
+    /**
+     * Fired when the checkbox is checked or unchecked by the user.
+     *
+     * @event change
+     */
   };
