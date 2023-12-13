@@ -268,17 +268,38 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _processChildren() {
-    [...this.children].forEach((child, i) => {
-      if (i === 0) {
-        this._primaryChild = child;
-        child.setAttribute('slot', 'primary');
-      } else if (i === 1) {
-        this._secondaryChild = child;
-        child.setAttribute('slot', 'secondary');
-      } else {
-        child.removeAttribute('slot');
-      }
-    });
+    const children = [...this.children];
+
+    children.filter((child) => child.hasAttribute('slot')).forEach((child) => this._processChildWithSlot(child));
+
+    children
+      .filter((child) => !child.hasAttribute('slot'))
+      .forEach((child, i) => this._processChildWithoutSlot(child, i));
+  }
+
+  /** @private */
+  _processChildWithSlot(child) {
+    const slot = child.getAttribute('slot');
+    if (child.__autoSlotted) {
+      this[`_${slot}Child`] = null;
+      child.removeAttribute('slot');
+    } else {
+      this[`_${slot}Child`] = child;
+    }
+  }
+
+  /** @private */
+  _processChildWithoutSlot(child, idx) {
+    let slotName;
+    if (this._primaryChild || this._secondaryChild) {
+      slotName = this._primaryChild ? 'secondary' : 'primary';
+    } else {
+      slotName = idx === 0 ? 'primary' : 'secondary';
+    }
+
+    this[`_${slotName}Child`] = child;
+    child.setAttribute('slot', slotName);
+    child.__autoSlotted = true;
   }
 
   /** @private */
