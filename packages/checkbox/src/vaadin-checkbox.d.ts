@@ -12,6 +12,13 @@ import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * Fired when the checkbox is checked or unchecked by the user.
+ */
+export type CheckboxChangeEvent = Event & {
+  target: Checkbox;
+};
+
+/**
  * Fired when the `checked` property changes.
  */
 export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -27,7 +34,9 @@ export interface CheckboxCustomEventMap {
   'indeterminate-changed': CheckboxIndeterminateChangedEvent;
 }
 
-export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEventMap {}
+export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEventMap {
+  change: CheckboxChangeEvent;
+}
 
 /**
  * `<vaadin-checkbox>` is an input field representing a binary choice.
@@ -58,6 +67,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {Event} change - Fired when the checkbox is checked or unchecked by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */
