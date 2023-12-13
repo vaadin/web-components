@@ -9,7 +9,12 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { CheckboxCheckedChangedEvent, CheckboxIndeterminateChangedEvent } from '../../vaadin-checkbox.js';
+import type {
+  Checkbox,
+  CheckboxChangeEvent,
+  CheckboxCheckedChangedEvent,
+  CheckboxIndeterminateChangedEvent,
+} from '../../vaadin-checkbox.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 
@@ -45,4 +50,9 @@ checkbox.addEventListener('checked-changed', (event) => {
 checkbox.addEventListener('indeterminate-changed', (event) => {
   assertType<CheckboxIndeterminateChangedEvent>(event);
   assertType<boolean>(event.detail.value);
+});
+
+checkbox.addEventListener('change', (event) => {
+  assertType<CheckboxChangeEvent>(event);
+  assertType<Checkbox>(event.target);
 });

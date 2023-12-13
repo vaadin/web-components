@@ -42,6 +42,7 @@ registerStyles('vaadin-checkbox', checkboxStyles, { moduleId: 'vaadin-checkbox-s
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {Event} change - Fired when the checkbox is checked or unchecked by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
