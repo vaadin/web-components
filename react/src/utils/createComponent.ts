@@ -93,7 +93,7 @@ export function createComponent<I extends HTMLElement, E extends EventNames = {}
           elementClass: {
             // @ts-expect-error: it is a specific workaround for Polymer classes.
             name: elementClass.name,
-            prototype: elementClass._properties,
+            prototype: { ...elementClass._properties, hidden: Boolean },
           },
         }
       : options,
