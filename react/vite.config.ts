@@ -1,8 +1,8 @@
 import react from '@vitejs/plugin-react';
 import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
 import type { PackageJson } from 'type-fest';
 import { defineConfig } from 'vite';
+import devPagesPlugin from './dev/dev-pages-plugin';
 
 const root = new URL(import.meta.url);
 
@@ -16,6 +16,6 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-  plugins: [react()],
-  root: resolve(process.cwd(), 'test/kitchen-sink'),
+  plugins: [react(), devPagesPlugin()],
+  root: process.cwd(),
 });

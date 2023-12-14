@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{component}</title>
+    <script type="module">
+      import { createElement, StrictMode } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import Page from '/dev/pages/{component}.tsx';
+      import '@vaadin/vaadin-lumo-styles/color-global.js';
+      import '@vaadin/vaadin-lumo-styles/typography-global.js';
+
+      ReactDOM.createRoot(document.getElementById('root')).render(createElement(StrictMode, {}, createElement(Page)));
+    </script>
+  </head>
+  <body>
+    <main id="root"></main>
+  </body>
+</html>
