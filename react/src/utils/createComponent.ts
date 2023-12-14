@@ -48,14 +48,12 @@ type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
 export type ThemedWebComponentProps<
   I extends ThemePropertyMixinClass & HTMLElement,
   E extends EventNames = {},
-> = Partial<Omit<_WebComponentProps<I, E>, 'theme'>> & {
+> = _WebComponentProps<I, E> & {
   /**
-   * Remove the deprecation warning for React components. In our case, the
-   * property is deprecated in favor of an attribute. However, for React, it
-   * does not matter if an attribute or a property is set; the same algorithm
-   * will be used.
+   * Attribute that can be used by the component to apply built-in style variants,
+   * or to propagate its value to the sub-components in Shadow DOM.
    *
-   * @see ThemePropertyMixinClass#theme
+   * @see ThemePropertyMixinClass#_theme
    */
   theme?: string;
 };
