@@ -264,11 +264,6 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  */
 declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
-   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
-   */
-  readonly _fields: HTMLElement[];
-
-  /**
    * An array containing the items which will be stamped to the column template instances.
    */
   items: Item[] | null | undefined;
@@ -403,6 +398,11 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
    * ```
    */
   i18n: CrudI18n;
+
+  /**
+   * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
+   */
+  protected readonly _fields: HTMLElement[];
 
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
