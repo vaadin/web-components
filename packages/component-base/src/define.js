@@ -9,7 +9,7 @@ export function defineCustomElement(CustomElement) {
   if (!defined) {
     Object.defineProperty(CustomElement, 'version', {
       get() {
-        return '24.3.0';
+        return '24.4.0-alpha0';
       },
     });
 
