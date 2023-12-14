@@ -16,5 +16,5 @@ export declare class DelegateStateMixinClass {
   /**
    * A target element to which attributes and properties are delegated.
    */
-  stateTarget: HTMLElement | null;
+  protected stateTarget: HTMLElement | null;
 }
