@@ -163,7 +163,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
-          items="[[__effectiveItems]]"
+          items="[[items]]"
           item-id-path="[[itemIdPath]]"
           item-label-path="[[itemLabelPath]]"
           item-value-path="[[itemValuePath]]"
@@ -177,7 +177,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           last-filter="{{_lastFilter}}"
           loading="{{loading}}"
           size="{{size}}"
-          filtered-items="[[__effectiveFilteredItems]]"
+          filtered-items="[[filteredItems]]"
           selected-items="[[selectedItems]]"
           selected-items-on-top="[[selectedItemsOnTop]]"
           top-group="[[_topGroup]]"
@@ -484,18 +484,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       /** @private */
       value: {
         type: String,
-      },
-
-      /** @private */
-      __effectiveItems: {
-        type: Array,
-        computed: '__computeEffectiveItems(items, selectedItems, readonly)',
-      },
-
-      /** @private */
-      __effectiveFilteredItems: {
-        type: Array,
-        computed: '__computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly)',
       },
 
       /** @private */
@@ -1265,16 +1253,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Prevent mousedown event to keep the input focused
     // and keep the overlay opened when clicking a chip.
     event.preventDefault();
-  }
-
-  /** @private */
-  __computeEffectiveItems(items, selectedItems, readonly) {
-    return items && readonly ? selectedItems : items;
-  }
-
-  /** @private */
-  __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
-    return !items && readonly ? selectedItems : filteredItems;
   }
 }
 

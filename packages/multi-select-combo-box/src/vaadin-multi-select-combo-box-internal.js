@@ -120,6 +120,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     };
   }
 
+  static get observers() {
+    return ['_readonlyChanged(readonly)'];
+  }
+
   /**
    * Reference to the clear button element.
    * @protected
@@ -155,6 +159,11 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
     this._target = this;
     this._toggleElement = this.querySelector('.toggle-button');
+  }
+
+  /** @private */
+  _readonlyChanged() {
+    this._setDropdownItems(this.filteredItems);
   }
 
   /**
