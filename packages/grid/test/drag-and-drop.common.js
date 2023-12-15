@@ -872,6 +872,8 @@ describe('drag and drop', () => {
 
       it('should enable row drag once items are available', () => {
         finishLoadingItems([getTestItems()[0], undefined]);
+        // Manually trigger a content update to re-request the first page.
+        grid.requestContentUpdate();
         finishLoadingItems();
         expect(getDraggable(grid, 1)).to.be.ok;
         expect(grid.$.items.children[1].hasAttribute('drag-disabled')).to.be.false;
@@ -988,6 +990,8 @@ describe('drag and drop', () => {
 
       it('should enable drop on row once items are available', () => {
         finishLoadingItems([getTestItems()[0], undefined]);
+        // Manually trigger a content update to re-request the first page.
+        grid.requestContentUpdate();
         finishLoadingItems();
         const row = grid.$.items.children[1];
         fireDragOver(row, 'above');
