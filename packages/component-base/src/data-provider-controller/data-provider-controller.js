@@ -237,6 +237,10 @@ export class DataProviderController extends EventTarget {
     }
 
     const callback = (items, size) => {
+      if (cache.pendingRequests[page] !== callback) {
+        return;
+      }
+
       if (size !== undefined) {
         cache.size = size;
       } else if (params.parentItem) {
