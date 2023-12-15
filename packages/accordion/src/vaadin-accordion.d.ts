@@ -3,9 +3,9 @@
  * Copyright (c) 2019 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { AccordionMixin } from './vaadin-accordion-mixin.js';
 import type { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
@@ -70,21 +70,7 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Accordion extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(HTMLElement))) {
-  /**
-   * The index of currently opened panel. First panel is opened by
-   * default. Only one panel can be opened at the same time.
-   * Setting null or undefined closes all the accordion panels.
-   */
-  opened: number | null;
-
-  /**
-   * The list of `<vaadin-accordion-panel>` child elements.
-   * It is populated from the elements passed to the light DOM,
-   * and updated dynamically when adding or removing panels.
-   */
-  readonly items: AccordionPanel[];
-
+declare class Accordion extends AccordionMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof AccordionEventMap>(
     type: K,
     listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
