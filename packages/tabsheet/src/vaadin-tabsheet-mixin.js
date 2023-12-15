@@ -73,6 +73,7 @@ export const TabSheetMixin = (superClass) =>
           readOnly: true,
           notify: true,
         },
+
         /**
          * The index of the selected tab.
          */
@@ -81,12 +82,14 @@ export const TabSheetMixin = (superClass) =>
           type: Number,
           notify: true,
         },
+
         /**
          * The slotted <vaadin-tabs> element.
          */
         __tabs: {
           type: Object,
         },
+
         /**
          * The panel elements.
          */

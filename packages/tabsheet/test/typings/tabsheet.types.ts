@@ -17,4 +17,6 @@ tabsheet.addEventListener('selected-changed', (event) => {
   assertType<number>(event.detail.value);
 });
 
+assertType<Tab[] | undefined>(tabsheet.items);
+
 assertType<ThemableMixinClass>(tabsheet);

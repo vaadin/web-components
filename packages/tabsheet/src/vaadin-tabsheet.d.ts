@@ -70,7 +70,7 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class TabSheet extends TabSheetMixin(
+declare class TabSheet extends TabSheetMixin<Tab>(
   ControllerMixin(DelegateStateMixin(ElementMixin(ThemableMixin(HTMLElement)))),
 ) {
   addEventListener<K extends keyof TabSheetEventMap>(

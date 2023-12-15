@@ -5,16 +5,16 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
-import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 
 /**
  * A mixin providing common tab-sheet functionality.
  */
-export declare function TabSheetMixin<T extends Constructor<HTMLElement>>(
-  base: T,
-): Constructor<DelegateStateMixinClass> & Constructor<TabSheetMixinClass> & T;
+export declare function TabSheetMixin<
+  Tab extends HTMLElement,
+  T extends Constructor<HTMLElement> = Constructor<HTMLElement>,
+>(base: T): Constructor<DelegateStateMixinClass> & Constructor<TabSheetMixinClass<Tab>> & T;
 
-export declare class TabSheetMixinClass {
+export declare class TabSheetMixinClass<Tab extends HTMLElement> {
   /**
    * The index of the selected tab.
    */
