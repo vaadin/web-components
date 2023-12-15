@@ -16,7 +16,7 @@ describe('DataProviderController - data callbacks', () => {
     });
   });
 
-  it('should ignore already invoked once callbacks', () => {
+  it('should ignore data from re-invoked callbacks', () => {
     controller.loadFirstPage();
     dataProviderCallback(['Item-0', 'Item-1'], 2);
     dataProviderCallback(['Item-2'], 1);
@@ -24,7 +24,7 @@ describe('DataProviderController - data callbacks', () => {
     expect(controller.rootCache.items).to.eql(['Item-0', 'Item-1']);
   });
 
-  it('should ignore old pending callbacks after clearing cache', () => {
+  it('should ignore data from callbacks created before cache clear', () => {
     controller.loadFirstPage();
     controller.clearCache();
     dataProviderCallback(['Item-0', 'Item-1'], 2);
