@@ -12,7 +12,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { AccordionMixin } from './vaadin-accordion-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-avatar>` web component.
+ * LitElement based version of `<vaadin-accordion>` web component.
  *
  * ## Disclaimer
  *

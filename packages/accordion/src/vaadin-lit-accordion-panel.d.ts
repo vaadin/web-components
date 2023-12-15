@@ -1,1 +1,1 @@
-export * from './src/vaadin-accordion-panel.js';
+export * from './vaadin-accordion-panel.js';
