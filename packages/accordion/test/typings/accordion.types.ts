@@ -20,6 +20,8 @@ accordion.addEventListener('items-changed', (event) => {
 
 const panel = document.createElement('vaadin-accordion-panel');
 
+assertType<string | null | undefined>(panel.summary);
+
 panel.addEventListener('opened-changed', (event) => {
   assertType<AccordionPanelOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
