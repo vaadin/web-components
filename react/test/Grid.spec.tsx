@@ -10,6 +10,7 @@ import { GridSortColumn } from '../src/GridSortColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
 import catchRender from './utils/catchRender.js';
 import { GridColumnGroup } from '../src/GridColumnGroup.js';
+import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 useChaiPlugin(chaiDom);
 
@@ -119,6 +120,19 @@ describe('Grid', () => {
       expect(nameBodyCell2).to.have.text('Ringo');
       expect(surnameBodyCell2).to.have.text('Starr');
       expect(roleBodyCell2).to.have.text('drums');
+    });
+
+    it('should consider custom renderer content with column auto-width', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridColumn<Item> header="name" autoWidth flexGrow={0}>
+            {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
+          </GridColumn>
+        </Grid>,
+      );
+
+      const column = await findByQuerySelector('vaadin-grid-column');
+      expect(parseFloat(String(column.width))).to.be.greaterThan(300);
     });
   });
 

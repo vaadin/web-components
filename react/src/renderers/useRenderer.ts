@@ -7,7 +7,7 @@ import {
   useCallback,
   useReducer,
 } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import type { Slice, WebComponentRenderer } from './renderer.js';
 
 export type UseRendererResult<W extends WebComponentRenderer> = readonly [
@@ -34,7 +34,7 @@ export function useRenderer<P extends {}, W extends WebComponentRenderer>(
   convert?: (props: Slice<Parameters<W>, 1>) => PropsWithChildren<P>,
 ): UseRendererResult<W> {
   const [map, update] = useReducer<typeof rendererReducer<W>>(rendererReducer, initialState);
-  const renderer = useCallback(((...args: Parameters<W>) => update(args)) as W, []);
+  const renderer = useCallback(((...args: Parameters<W>) => flushSync(() => update(args))) as W, []);
 
   return reactRendererOrNode
     ? [
