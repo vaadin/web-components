@@ -1122,34 +1122,8 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _filteredItemsChanged(filteredItems, oldFilteredItems) {
+    _filteredItemsChanged(filteredItems) {
       this._setDropdownItems(filteredItems);
-
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldFilteredItems ? oldFilteredItems[this._focusedIndex] : null;
-
-      // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
-      // (as a result of external filtering or when they have been loaded by the data provider).
-      // When `value` is specified but `selectedItem` is not, it means that there was no item
-      // matching `value` at the moment `value` was set, so `selectedItem` has remained unsynced.
-      const valueIndex = this.__getItemIndexByValue(filteredItems, this.value);
-      if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
-        this.selectedItem = filteredItems[valueIndex];
-      }
-
-      // Try to first set focus on the item that had been focused before `filteredItems` were updated
-      // if it is still present in the `filteredItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(filteredItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByLabel(this.filteredItems, this.filter);
-      }
     }
 
     /** @private */
@@ -1191,8 +1165,35 @@ export const ComboBoxMixin = (subclass) =>
      *
      * @protected
      */
-    _setDropdownItems(items) {
-      this._dropdownItems = items;
+    _setDropdownItems(newItems) {
+      const oldItems = this._dropdownItems;
+      this._dropdownItems = newItems;
+
+      // Store the currently focused item if any. The focused index preserves
+      // in the case when more filtered items are loading but it is reset
+      // when the user types in a filter query.
+      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+
+      // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
+      // (as a result of external filtering or when they have been loaded by the data provider).
+      // When `value` is specified but `selectedItem` is not, it means that there was no item
+      // matching `value` at the moment `value` was set, so `selectedItem` has remained unsynced.
+      const valueIndex = this.__getItemIndexByValue(newItems, this.value);
+      if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
+        this.selectedItem = newItems[valueIndex];
+      }
+
+      // Try to first set focus on the item that had been focused before `newItems` were updated
+      // if it is still present in the `newItems` array. Otherwise, set the focused index
+      // depending on the selected item or the filter query.
+      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
+      if (focusedItemIndex > -1) {
+        this._focusedIndex = focusedItemIndex;
+      } else {
+        // When the user filled in something that is different from the current value = filtering is enabled,
+        // set the focused index to the item that matches the filter query.
+        this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
+      }
     }
 
     /** @private */
