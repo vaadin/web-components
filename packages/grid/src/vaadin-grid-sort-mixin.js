@@ -104,7 +104,7 @@ export const SortMixin = (superClass) =>
         return;
       }
 
-      this._sorters = this._sorters.filter((sorter) => sortersToRemove.indexOf(sorter) < 0);
+      this._sorters = this._sorters.filter((sorter) => !sortersToRemove.includes(sorter));
       this.__applySorters();
     }
 
@@ -123,43 +123,26 @@ export const SortMixin = (superClass) =>
     }
 
     /** @private */
-    __appendSorter(sorter) {
-      if (!sorter.direction) {
-        this._removeArrayItem(this._sorters, sorter);
-      } else if (!this._sorters.includes(sorter)) {
-        this._sorters.push(sorter);
-      }
-    }
-
-    /** @private */
-    __prependSorter(sorter) {
-      this._removeArrayItem(this._sorters, sorter);
-      if (sorter.direction) {
-        this._sorters.unshift(sorter);
-      }
-    }
-
-    /** @private */
     __updateSorter(sorter, shiftClick, fromSorterClick) {
-      if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
+      if (!sorter.direction && !this._sorters.includes(sorter)) {
         return;
       }
 
       sorter._order = null;
 
+      const restSorters = this._sorters.filter((s) => s !== sorter);
       if (
         (this.multiSort && (!this.multiSortOnShiftClick || !fromSorterClick)) ||
         (this.multiSortOnShiftClick && shiftClick)
       ) {
         if (this.multiSortPriority === 'append') {
-          this.__appendSorter(sorter);
+          this._sorters = [...restSorters, sorter];
         } else {
-          this.__prependSorter(sorter);
+          this._sorters = [sorter, ...restSorters];
         }
       } else if (sorter.direction || this.multiSortOnShiftClick) {
-        const otherSorters = this._sorters.filter((s) => s !== sorter);
         this._sorters = sorter.direction ? [sorter] : [];
-        otherSorters.forEach((sorter) => {
+        restSorters.forEach((sorter) => {
           sorter._order = null;
           sorter.direction = null;
         });
@@ -203,13 +186,5 @@ export const SortMixin = (superClass) =>
           direction: sorter.direction,
         };
       });
-    }
-
-    /** @private */
-    _removeArrayItem(array, item) {
-      const index = array.indexOf(item);
-      if (index > -1) {
-        array.splice(index, 1);
-      }
     }
   };
