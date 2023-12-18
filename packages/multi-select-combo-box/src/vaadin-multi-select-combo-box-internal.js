@@ -175,12 +175,12 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    */
   _setDropdownItems(items) {
     if (this.readonly) {
-      this._dropdownItems = this.selectedItems;
+      super._setDropdownItems(this.selectedItems);
       return;
     }
 
     if (this.filter || !this.selectedItemsOnTop) {
-      this._dropdownItems = items;
+      super._setDropdownItems(items);
       return;
     }
 
@@ -190,11 +190,11 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
         (item) => this._comboBox._findIndex(item, this.topGroup, this.itemIdPath) === -1,
       );
 
-      this._dropdownItems = this.topGroup.concat(filteredItems);
+      super._setDropdownItems(this.topGroup.concat(filteredItems));
       return;
     }
 
-    this._dropdownItems = items;
+    super._setDropdownItems(items);
   }
 
   /** @private */
