@@ -1,4 +1,4 @@
-import { createComponent as _createComponent, type EventName, type ReactWebComponent } from '@lit/react';
+import { createComponent as _createComponent, type EventName } from '@lit/react';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type React from 'react';
 import type { RefAttributes } from 'react';
@@ -41,10 +41,25 @@ type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
   tagName: string;
 }>;
 
+// A map of expected event listener types based on EventNames.
+type EventListeners<R extends EventNames> = {
+  [K in keyof R]?: R[K] extends EventName ? (e: R[K]['__eventType']) => void : (e: Event) => void;
+};
+
+// Props derived from custom element class. Currently has limitations of making
+// all properties optional and also surfaces life cycle methods in autocomplete.
 // TODO: LoginOverlay has "autofocus" property, so we add it back manually.
-type ComponentProps<I extends HTMLElement, E extends EventNames = {}> = React.ComponentProps<
-  ReactWebComponent<I, E>
-> & { autofocus?: boolean };
+type ElementProps<I> = Partial<Omit<I, keyof HTMLElement>> & { autofocus?: boolean };
+
+// Acceptable props to the React component.
+type ComponentProps<I, E extends EventNames = {}> = Omit<
+  React.HTMLAttributes<I>,
+  // Prefer type of provided event handler props or those on element over
+  // built-in HTMLAttributes
+  keyof E | keyof ElementProps<I>
+> &
+  EventListeners<E> &
+  ElementProps<I>;
 
 export type ThemedWebComponentProps<
   I extends ThemePropertyMixinClass & HTMLElement,
