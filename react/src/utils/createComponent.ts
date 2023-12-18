@@ -1,8 +1,4 @@
-import {
-  createComponent as _createComponent,
-  type EventName,
-  type WebComponentProps as _WebComponentProps,
-} from '@lit-labs/react';
+import { createComponent as _createComponent, type EventName, type ReactWebComponent } from '@lit/react';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type React from 'react';
 import type { RefAttributes } from 'react';
@@ -45,10 +41,15 @@ type Options<I extends HTMLElement, E extends EventNames = {}> = Readonly<{
   tagName: string;
 }>;
 
+// TODO: LoginOverlay has "autofocus" property, so we add it back manually.
+type ComponentProps<I extends HTMLElement, E extends EventNames = {}> = React.ComponentProps<
+  ReactWebComponent<I, E>
+> & { autofocus?: boolean };
+
 export type ThemedWebComponentProps<
   I extends ThemePropertyMixinClass & HTMLElement,
   E extends EventNames = {},
-> = _WebComponentProps<I, E> & {
+> = ComponentProps<I, E> & {
   /**
    * Attribute that can be used by the component to apply built-in style variants,
    * or to propagate its value to the sub-components in Shadow DOM.
@@ -60,14 +61,11 @@ export type ThemedWebComponentProps<
 
 type AllWebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I extends ThemePropertyMixinClass
   ? ThemedWebComponentProps<I, E>
-  : _WebComponentProps<I, E>;
-
-// TODO: LoginOverlay has "autofocus" property so we can't omit it
-type OmittedWebComponentProps = Omit<HTMLElement, keyof React.HTMLAttributes<any> | 'autofocus'> & ControllerMixinClass;
+  : ComponentProps<I, E>;
 
 export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = Omit<
   AllWebComponentProps<I, E>,
-  keyof OmittedWebComponentProps
+  keyof ControllerMixinClass
 >;
 
 // We need a separate declaration here; otherwise, the TypeScript fails into the

@@ -35,7 +35,7 @@ const CREATE_COMPONENT_PATH = '$CREATE_COMPONENT_PATH$';
 const EVENT_MAP = '$EVENT_MAP$';
 const EVENT_MAP_REF_IN_EVENTS = '$EVENT_MAP_REF_IN_EVENTS$';
 const EVENTS_DECLARATION = '$EVENTS_DECLARATION$';
-const LIT_REACT_PATH = '@lit-labs/react';
+const LIT_REACT_PATH = '@lit/react';
 const MODULE_PATH = '$MODULE_PATH$';
 
 type ElementData = Readonly<{
