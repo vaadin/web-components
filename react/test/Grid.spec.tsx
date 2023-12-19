@@ -137,6 +137,28 @@ describe('Grid', () => {
       const column = await findByQuerySelector('vaadin-grid-column');
       expect(parseFloat(String(column.width))).to.be.greaterThan(300);
     });
+
+    it('should support setting header and footer components', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridColumnGroup header={<i>Group Header</i>} footer={<i>Group Footer</i>}>
+            <GridColumn<Item> path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
+          </GridColumnGroup>
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column');
+
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(6);
+
+      const [groupHeaderCell, nameHeaderCell, nameFooterCell, groupFooterCell] = cells;
+
+      expect(groupHeaderCell).to.have.text('Group Header');
+      expect(nameHeaderCell).to.have.text('Name');
+      expect(nameFooterCell).to.have.text('Name Footer');
+      expect(groupFooterCell).to.have.text('Group Footer');
+    });
   });
 
   describe('GridFilterColumn', () => {
@@ -156,6 +178,22 @@ describe('Grid', () => {
       expect(footerCell).to.have.text('Name Footer');
       expect(bodyCell1).to.have.text('John');
       expect(bodyCell2).to.have.text('Ringo');
+    });
+
+    it('should support setting footer component', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridFilterColumn<Item> path="name" footer={<i>Name Footer</i>} />
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(4);
+
+      const footerCell = cells[1];
+
+      expect(footerCell).to.have.text('Name Footer');
     });
   });
 
@@ -180,6 +218,22 @@ describe('Grid', () => {
       expect(bodyCell1).to.have.text('John');
       expect(bodyCell2).to.have.text('Ringo');
     });
+
+    it('should support setting footer component', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridSelectionColumn footer={<i>Footer</i>}>{DefaultBodyRenderer}</GridSelectionColumn>
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(3);
+
+      const footerCell = cells[0];
+
+      expect(footerCell).to.have.text('Footer');
+    });
   });
 
   describe('GridSortColumn', () => {
@@ -199,6 +253,22 @@ describe('Grid', () => {
       expect(footerCell).to.have.text('Name Footer');
       expect(bodyCell1).to.have.text('John');
       expect(bodyCell2).to.have.text('Ringo');
+    });
+
+    it('should support setting footer component', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridSortColumn<Item> path="name" footer={<i>Name Footer</i>}></GridSortColumn>
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(4);
+
+      const footerCell = cells[1];
+
+      expect(footerCell).to.have.text('Name Footer');
     });
   });
 
@@ -223,6 +293,23 @@ describe('Grid', () => {
       expect(bodyCell1).to.have.text('John');
       expect(bodyCell2).to.have.text('Ringo');
     });
+
+    it('should support setting header and footer components', async () => {
+      render(
+        <Grid<Item> items={items}>
+          <GridProEditColumn<Item> path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(4);
+
+      const [headerCell, footerCell] = cells;
+
+      expect(headerCell).to.have.text('Name');
+      expect(footerCell).to.have.text('Name Footer');
+    });
   });
 
   describe('GridTreeColumn', () => {
@@ -245,6 +332,25 @@ describe('Grid', () => {
       render(
         <Grid<TreeItem> dataProvider={dataProvider}>
           <GridTreeColumn path="name" headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer} />
+          <GridColumn path="name"></GridColumn>
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(7);
+
+      const [treeHeaderCell, nameHeaderCell, treeFooterCell] = cells;
+
+      expect(treeHeaderCell).to.have.text('Name');
+      expect(nameHeaderCell).to.have.text('Name');
+      expect(treeFooterCell).to.have.text('Name Footer');
+    });
+
+    it('should support setting header and footer components', async () => {
+      render(
+        <Grid<TreeItem> dataProvider={dataProvider}>
+          <GridTreeColumn path="name" header={<b>Name</b>} footer={<b>Name Footer</b>} />
           <GridColumn path="name"></GridColumn>
         </Grid>,
       );

@@ -1,4 +1,11 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
 import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridFilterColumn as _GridFilterColumn,
@@ -7,7 +14,7 @@ import {
 } from './generated/GridFilterColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
-import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridFilterColumn.js';
@@ -24,15 +31,16 @@ export type GridFilterColumnProps<TItem> = Partial<
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
+    footer?: ReactNode;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
 function GridFilterColumn<TItem = GridDefaultItem>(
-  props: GridFilterColumnProps<TItem>,
+  { footer, ...props }: GridFilterColumnProps<TItem>,
   ref: ForwardedRef<GridFilterColumnElement<TItem>>,
 ): ReactElement | null {
-  const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
   const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
 
   return (

@@ -1,4 +1,11 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
 import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridProEditColumn as _GridProEditColumn,
@@ -7,7 +14,7 @@ import {
 } from './generated/GridProEditColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
-import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridProEditColumn.js';
@@ -18,6 +25,7 @@ export type GridProEditColumnProps<TItem> = Partial<
     | 'children'
     | 'editModeRenderer'
     | 'footerRenderer'
+    | 'header'
     | 'headerRenderer'
     | 'renderer'
     | keyof OmittedGridColumnHTMLAttributes<TItem>
@@ -26,19 +34,21 @@ export type GridProEditColumnProps<TItem> = Partial<
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     editModeRenderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
+    footer?: ReactNode;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
+    header?: ReactNode;
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
 function GridProEditColumn<TItem = GridDefaultItem>(
-  props: GridProEditColumnProps<TItem>,
+  { children, footer, header, ...props }: GridProEditColumnProps<TItem>,
   ref: ForwardedRef<GridProEditColumnElement<TItem>>,
 ): ReactElement | null {
   const [editModePortals, editModeRenderer] = useModelRenderer(props.editModeRenderer);
-  const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
-  const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? children);
 
   return (
     <_GridProEditColumn<TItem>

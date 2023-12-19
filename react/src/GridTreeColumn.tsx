@@ -1,4 +1,11 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
 import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridTreeColumnElement,
@@ -6,7 +13,7 @@ import {
   type GridTreeColumnProps as _GridTreeColumnProps,
 } from './generated/GridTreeColumn.js';
 import type { GridEdgeReactRendererProps } from './renderers/grid.js';
-import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridTreeColumn.js';
@@ -14,20 +21,27 @@ export * from './generated/GridTreeColumn.js';
 export type GridTreeColumnProps<TItem> = Partial<
   Omit<
     _GridTreeColumnProps<TItem>,
-    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+    | 'children'
+    | 'footerRenderer'
+    | 'header'
+    | 'headerRenderer'
+    | 'renderer'
+    | keyof OmittedGridColumnHTMLAttributes<TItem>
   >
 > &
   Readonly<{
+    footer?: ReactNode;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
+    header?: ReactNode;
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
   }>;
 
 function GridTreeColumn<TItem = GridDefaultItem>(
-  props: GridTreeColumnProps<TItem>,
+  { footer, header, ...props }: GridTreeColumnProps<TItem>,
   ref: ForwardedRef<GridTreeColumnElement<TItem>>,
 ): ReactElement | null {
-  const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
-  const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
 
   return (
     <_GridTreeColumn<TItem> {...props} headerRenderer={headerRenderer} footerRenderer={footerRenderer} ref={ref}>

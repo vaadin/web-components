@@ -1,4 +1,11 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  forwardRef,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
 import type { GridDefaultItem } from './generated/Grid.js';
 import {
   GridColumn as _GridColumn,
@@ -7,7 +14,7 @@ import {
 } from './generated/GridColumn.js';
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
-import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 
 export * from './generated/GridColumn.js';
 
@@ -20,23 +27,30 @@ export type OmittedGridColumnHTMLAttributes<TItem> = Omit<
 export type GridColumnProps<TItem> = Partial<
   Omit<
     _GridColumnProps<TItem>,
-    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+    | 'children'
+    | 'footerRenderer'
+    | 'header'
+    | 'headerRenderer'
+    | 'renderer'
+    | keyof OmittedGridColumnHTMLAttributes<TItem>
   >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
+    footer?: ReactNode;
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
+    header?: ReactNode;
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
 function GridColumn<TItem = GridDefaultItem>(
-  props: GridColumnProps<TItem>,
+  { children, footer, header, ...props }: GridColumnProps<TItem>,
   ref: ForwardedRef<GridColumnElement<TItem>>,
 ): ReactElement | null {
-  const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer);
-  const [footerPortals, footerRenderer] = useSimpleRenderer(props.footerRenderer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? children);
 
   return (
     <_GridColumn<TItem>
