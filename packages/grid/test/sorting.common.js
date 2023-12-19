@@ -502,6 +502,18 @@ describe('sorting', () => {
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('2');
       });
+
+      it('should invoke data provider only once when removing a column with sorter', () => {
+        const spy = sinon.spy(grid.dataProvider);
+        grid._arrayDataProvider = spy;
+        grid.dataProvider = spy;
+        spy.resetHistory();
+
+        grid.removeChild(columns[0]);
+        flushGrid(grid);
+
+        expect(spy).to.be.calledOnce;
+      });
     });
 
     describe('data provider', () => {
