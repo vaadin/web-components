@@ -8,13 +8,19 @@ import {
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridProEditColumn.js';
 
 export type GridProEditColumnProps<TItem> = Partial<
   Omit<
     _GridProEditColumnProps<TItem>,
-    'children' | 'editModeRenderer' | 'footerRenderer' | 'headerRenderer' | 'renderer'
+    | 'children'
+    | 'editModeRenderer'
+    | 'footerRenderer'
+    | 'headerRenderer'
+    | 'renderer'
+    | keyof OmittedGridColumnHTMLAttributes<TItem>
   >
 > &
   Readonly<{

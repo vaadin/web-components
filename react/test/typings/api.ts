@@ -1,7 +1,13 @@
-import React, { type HTMLAttributes, type RefAttributes } from 'react';
+import React, { type ComponentType, type DOMAttributes, type HTMLAttributes, type RefAttributes } from 'react';
 import { TextField, TextFieldElement } from '../../TextField.js';
 import type { LitElement } from 'lit';
 import { GridColumn, GridColumnElement } from '../../GridColumn.js';
+import { GridTreeColumn } from '../../GridTreeColumn.js';
+import { GridSortColumn } from '../../GridSortColumn.js';
+import { GridFilterColumn } from '../../GridFilterColumn.js';
+import { GridSelectionColumn } from '../../GridSelectionColumn.js';
+import { GridProEditColumn } from '../../GridProEditColumn.js';
+import { GridColumnGroup, GridColumnGroupElement } from '../../GridColumnGroup.js';
 import { Dialog, DialogElement } from '../../Dialog.js';
 import { DatePicker, DatePickerElement } from '../../DatePicker.js';
 import { LoginOverlay, LoginOverlayElement } from '../../LoginOverlay.js';
@@ -52,10 +58,57 @@ assertOmitted<LitElement, TextFieldProps>('removeController');
 const gridColumnProps = React.createElement(GridColumn, {}).props;
 type GridColumnProps = typeof gridColumnProps;
 assertType<GridColumnElement['hidden'] | undefined>(gridColumnProps.hidden);
+assertType<GridColumnElement['autoWidth'] | undefined>(gridColumnProps.autoWidth);
+assertType<HTMLAttributes<GridColumnElement>['id']>(gridColumnProps.id);
+assertType<RefAttributes<GridColumnElement>['ref']>(gridColumnProps.ref);
+assertType<HTMLAttributes<GridColumnElement>['className']>(gridColumnProps.className);
+assertType<HTMLAttributes<GridColumnElement>['dangerouslySetInnerHTML']>(gridColumnProps.dangerouslySetInnerHTML);
+assertType<HTMLAttributes<GridColumnElement>['slot']>(gridColumnProps.slot);
+assertType<HTMLAttributes<GridColumnElement>['title']>(gridColumnProps.title);
+assertType<ComponentType<Readonly<any>> | undefined | null>(gridColumnProps.children);
 
+// Some omitted HTMLElement properties
 assertOmitted<HTMLElement, GridColumnProps>('append');
 assertOmitted<HTMLElement, GridColumnProps>('prepend');
 assertOmitted<HTMLElement, GridColumnProps>('ariaLabel');
+
+const gridColumnGroupProps = React.createElement(GridColumnGroup, {}).props;
+
+assertType<DOMAttributes<GridColumnGroupElement>['children'] | undefined>(gridColumnGroupProps.children);
+
+assertOmitted<GridColumnProps, GridColumnGroupElement>('renderer');
+
+const gridTreeColumnProps = React.createElement(GridTreeColumn, {}).props;
+type GridTreeColumnProps = typeof gridTreeColumnProps;
+
+assertType<string | null | undefined>(gridTreeColumnProps.path);
+
+assertOmitted<GridColumnProps, GridTreeColumnProps>('renderer');
+assertOmitted<GridColumnProps, GridTreeColumnProps>('headerRenderer');
+assertOmitted<GridColumnProps, GridTreeColumnProps>('footerRenderer');
+assertOmitted<GridColumnProps, GridTreeColumnProps>('children');
+
+const gridSortColumnProps = React.createElement(GridSortColumn, {}).props;
+const gridFilterColumnProps = React.createElement(GridFilterColumn, {}).props;
+const gridSelectionColumnProps = React.createElement(GridSelectionColumn, {}).props;
+const gridProEditColumnProps = React.createElement(GridProEditColumn, {}).props;
+
+type AllColumnsProps = typeof gridColumnGroupProps &
+  typeof gridColumnProps &
+  typeof gridTreeColumnProps &
+  typeof gridSortColumnProps &
+  typeof gridFilterColumnProps &
+  typeof gridSelectionColumnProps &
+  typeof gridProEditColumnProps;
+
+// Some omitted HTMLAttributes properties
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('style');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('aria-label');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('contentEditable');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('translate');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('draggable');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('role');
+assertOmitted<HTMLAttributes<GridColumnElement>, AllColumnsProps>('onClick');
 
 const dialogProps = React.createElement(Dialog, {}).props;
 type DialogProps = typeof dialogProps;

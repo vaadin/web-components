@@ -8,6 +8,7 @@ import {
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridFilterColumn.js';
 
@@ -16,7 +17,10 @@ export * from './generated/GridFilterColumn.js';
  * `headerRenderer` is not allowed for `vaadin-grid-filter-column`.
  */
 export type GridFilterColumnProps<TItem> = Partial<
-  Omit<_GridFilterColumnProps<TItem>, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>
+  Omit<
+    _GridFilterColumnProps<TItem>,
+    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+  >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;

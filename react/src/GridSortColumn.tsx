@@ -8,6 +8,7 @@ import {
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridSortColumn.js';
 
@@ -15,7 +16,10 @@ export * from './generated/GridSortColumn.js';
  * The `headerRenderer` is not allowed for `vaadin-grid-sort-column`.
  */
 export type GridSortColumnProps<TItem> = Partial<
-  Omit<_GridSortColumnProps<TItem>, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>
+  Omit<
+    _GridSortColumnProps<TItem>,
+    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+  >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;

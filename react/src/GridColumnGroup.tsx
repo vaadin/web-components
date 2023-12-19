@@ -5,10 +5,13 @@ import {
   type GridColumnGroupProps as _GridColumnGroupProps,
 } from './generated/GridColumnGroup.js';
 import { useSimpleRenderer, type ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridColumnGroup.js';
 
-export type GridColumnGroupProps = Partial<Omit<_GridColumnGroupProps, 'footerRenderer' | 'headerRenderer'>> &
+export type GridColumnGroupProps = Partial<
+  Omit<_GridColumnGroupProps, 'footerRenderer' | 'headerRenderer' | keyof OmittedGridColumnHTMLAttributes<any>>
+> &
   Readonly<{
     footerRenderer?: ComponentType<ReactSimpleRendererProps<GridColumnGroupElement>> | null;
     headerRenderer?: ComponentType<ReactSimpleRendererProps<GridColumnGroupElement>> | null;

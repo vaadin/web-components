@@ -11,8 +11,17 @@ import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 
 export * from './generated/GridColumn.js';
 
+// Properties from HTMLAttributes that are omitted from all GridColumn types
+export type OmittedGridColumnHTMLAttributes<TItem> = Omit<
+  React.HTMLAttributes<GridColumnElement<TItem>>,
+  'hidden' | 'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot' | 'children' | 'title'
+>;
+
 export type GridColumnProps<TItem> = Partial<
-  Omit<_GridColumnProps<TItem>, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>
+  Omit<
+    _GridColumnProps<TItem>,
+    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+  >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
