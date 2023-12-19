@@ -318,6 +318,18 @@ describe('array data provider', () => {
     expect(getVisibleItems(grid).length).to.equal(3);
   });
 
+  it('should invoke data provider only once when removing a column with filter', () => {
+    const spy = sinon.spy(grid.dataProvider);
+    grid._arrayDataProvider = spy;
+    grid.dataProvider = spy;
+    spy.resetHistory();
+
+    grid.removeChild(grid.firstElementChild);
+    flushGrid(grid);
+
+    expect(spy).to.be.calledOnce;
+  });
+
   it('should not filter items before grid is re-attached', () => {
     filterFirst.value = 'bar';
     flushFilters(grid);

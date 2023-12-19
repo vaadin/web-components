@@ -25,7 +25,7 @@ export const ArrayDataProviderMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, _filters, _sorters, items.*)'];
+      return ['__dataProviderOrItemsChanged(dataProvider, items, isAttached, items.*)'];
     }
 
     /** @private */
@@ -35,6 +35,18 @@ export const ArrayDataProviderMixin = (superClass) =>
       this._arrayDataProvider = arrayDataProvider;
       this.size = items.length;
       this.dataProvider = arrayDataProvider;
+    }
+
+    /**
+     * @override
+     * @protected
+     */
+    _onDataProviderPageReceived() {
+      super._onDataProviderPageReceived();
+
+      if (this._arrayDataProvider) {
+        this.size = this._flatSize;
+      }
     }
 
     /** @private */
@@ -59,7 +71,6 @@ export const ArrayDataProviderMixin = (superClass) =>
         } else if (this._arrayDataProvider.__items === items) {
           // The items array was modified
           this.clearCache();
-          this.size = this._flatSize;
         } else {
           // The items array was replaced
           this.__setArrayDataProvider(items);
