@@ -77,10 +77,7 @@ type AllWebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I 
   ? ThemedWebComponentProps<I, E>
   : ComponentProps<I, E>;
 
-export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = Omit<
-  AllWebComponentProps<I, E>,
-  keyof {}
->;
+export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = Partial<AllWebComponentProps<I, E>>;
 
 // We need a separate declaration here; otherwise, the TypeScript fails into the
 // endless loop trying to resolve the typings.
