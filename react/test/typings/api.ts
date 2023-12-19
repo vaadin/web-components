@@ -84,8 +84,6 @@ type GridTreeColumnProps = typeof gridTreeColumnProps;
 assertType<string | null | undefined>(gridTreeColumnProps.path);
 
 assertOmitted<GridColumnProps, GridTreeColumnProps>('renderer');
-assertOmitted<GridColumnProps, GridTreeColumnProps>('headerRenderer');
-assertOmitted<GridColumnProps, GridTreeColumnProps>('footerRenderer');
 assertOmitted<GridColumnProps, GridTreeColumnProps>('children');
 
 const gridSortColumnProps = React.createElement(GridSortColumn, {}).props;

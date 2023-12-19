@@ -1,12 +1,13 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import chaiDom from 'chai-dom';
 import { cleanup, render } from '@testing-library/react/pure.js';
-import { Grid } from '../src/Grid.js';
+import { Grid, type GridDataProvider } from '../src/Grid.js';
 import { GridColumn } from '../src/GridColumn.js';
 import { GridFilterColumn } from '../src/GridFilterColumn.js';
 import { GridProEditColumn } from '../src/GridProEditColumn.js';
 import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
 import { GridSortColumn } from '../src/GridSortColumn.js';
+import { GridTreeColumn } from '../src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
 import catchRender from './utils/catchRender.js';
 import { GridColumnGroup } from '../src/GridColumnGroup.js';
@@ -16,6 +17,8 @@ useChaiPlugin(chaiDom);
 
 describe('Grid', () => {
   type Item = Readonly<{ name: string; surname: string; role: string }>;
+
+  type TreeItem = { name: string; children: boolean };
 
   const items = [
     { name: 'John', surname: 'Lennon', role: 'singer' },
@@ -219,6 +222,42 @@ describe('Grid', () => {
       expect(footerCell).to.have.text('Name Footer');
       expect(bodyCell1).to.have.text('John');
       expect(bodyCell2).to.have.text('Ringo');
+    });
+  });
+
+  describe('GridTreeColumn', () => {
+    const dataProvider: GridDataProvider<TreeItem> = ({ parentItem, page, pageSize }, cb) => {
+      const levelSize = 2;
+
+      const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+        const indexInLevel = page * pageSize + i;
+
+        return {
+          name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+          children: true,
+        };
+      });
+
+      cb(pageItems, levelSize);
+    };
+
+    it('should render correctly', async () => {
+      render(
+        <Grid<TreeItem> dataProvider={dataProvider}>
+          <GridTreeColumn path="name" headerRenderer={DefaultHeaderRenderer} footerRenderer={DefaultFooterRenderer} />
+          <GridColumn path="name"></GridColumn>
+        </Grid>,
+      );
+
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column');
+      expect(columns).to.have.length(1);
+      expect(cells).to.have.length(7);
+
+      const [treeHeaderCell, nameHeaderCell, treeFooterCell] = cells;
+
+      expect(treeHeaderCell).to.have.text('Name');
+      expect(nameHeaderCell).to.have.text('Name');
+      expect(treeFooterCell).to.have.text('Name Footer');
     });
   });
 });
