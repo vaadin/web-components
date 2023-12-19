@@ -39,8 +39,12 @@ function GridSortColumn<TItem = GridDefaultItem>(
   { footer, ...props }: GridSortColumnProps<TItem>,
   ref: ForwardedRef<GridSortColumnElement<TItem>>,
 ): ReactElement | null {
-  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children);
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer, {
+    renderSync: true,
+  });
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children, {
+    renderSync: true,
+  });
 
   return (
     <_GridSortColumn<TItem> {...props} footerRenderer={footerRenderer} ref={ref} renderer={bodyRenderer}>

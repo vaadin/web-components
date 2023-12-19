@@ -1,8 +1,10 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
+import sinon from 'sinon';
 import { Dialog, type DialogElement } from '../src/Dialog.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+import { useState } from 'react';
 
 useChaiPlugin(chaiDom);
 
@@ -61,5 +63,28 @@ describe('Dialog', () => {
       </Dialog>,
     );
     assert();
+  });
+
+  it('should not warn on open', async () => {
+    function TestDialog() {
+      const [opened, setOpened] = useState(false);
+      return (
+        <>
+          <button id="open-button" onClick={() => setOpened(true)}>
+            Open
+          </button>
+          <Dialog opened={opened}>FooBar</Dialog>
+        </>
+      );
+    }
+
+    render(<TestDialog />);
+
+    const warn = sinon.stub(console, 'error');
+    document.querySelector<HTMLButtonElement>('#open-button')?.click();
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    warn.restore();
+
+    expect(warn.called).to.be.false;
   });
 });

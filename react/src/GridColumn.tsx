@@ -48,9 +48,15 @@ function GridColumn<TItem = GridDefaultItem>(
   { children, footer, header, ...props }: GridColumnProps<TItem>,
   ref: ForwardedRef<GridColumnElement<TItem>>,
 ): ReactElement | null {
-  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header);
-  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer);
-  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? children);
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header, {
+    renderSync: true,
+  });
+  const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer, {
+    renderSync: true,
+  });
+  const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? children, {
+    renderSync: true,
+  });
 
   return (
     <_GridColumn<TItem>
