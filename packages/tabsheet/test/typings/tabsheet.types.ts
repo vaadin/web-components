@@ -1,11 +1,16 @@
 import '../../vaadin-tabsheet.js';
+import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { TabSheetItemsChangedEvent, TabSheetSelectedChangedEvent } from '../../vaadin-tabsheet.js';
 
 const tabsheet = document.createElement('vaadin-tabsheet');
 
 const assertType = <TExpected>(actual: TExpected) => actual;
+
+assertType<ThemePropertyMixinClass>(tabsheet);
+assertType<DelegateStateMixinClass>(tabsheet);
 
 tabsheet.addEventListener('items-changed', (event) => {
   assertType<TabSheetItemsChangedEvent>(event);

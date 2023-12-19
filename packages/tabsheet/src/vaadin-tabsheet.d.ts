@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -70,9 +69,7 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class TabSheet extends TabSheetMixin<Tab>(
-  ControllerMixin(DelegateStateMixin(ElementMixin(ThemableMixin(HTMLElement)))),
-) {
+declare class TabSheet extends ThemableMixin(TabSheetMixin<Tab>(ControllerMixin(ElementMixin(HTMLElement)))) {
   addEventListener<K extends keyof TabSheetEventMap>(
     type: K,
     listener: (this: TabSheet, ev: TabSheetEventMap[K]) => void,
