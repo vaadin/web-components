@@ -1,4 +1,11 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type ReactNode } from 'react';
+import {
+  type ComponentType,
+  type ForwardedRef,
+  type HTMLAttributes,
+  forwardRef,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { Dialog as _Dialog, type DialogElement, type DialogProps as _DialogProps } from './generated/Dialog.js';
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
 import type { ReactSimpleRendererProps } from './renderers/useSimpleRenderer.js';
@@ -7,7 +14,14 @@ export * from './generated/Dialog.js';
 
 export type DialogReactRendererProps = ReactSimpleRendererProps<DialogElement>;
 
-export type DialogProps = Partial<Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer'>> &
+type OmittedDialogHTMLAttributes = Omit<
+  HTMLAttributes<DialogElement>,
+  'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot' | 'aria-label' | 'draggable'
+>;
+
+export type DialogProps = Partial<
+  Omit<_DialogProps, 'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedDialogHTMLAttributes>
+> &
   Readonly<{
     children?: ReactNode | ComponentType<DialogReactRendererProps>;
     footer?: ReactNode;

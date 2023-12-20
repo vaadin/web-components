@@ -8,9 +8,13 @@ import { GridFilterColumn } from '../../GridFilterColumn.js';
 import { GridSelectionColumn } from '../../GridSelectionColumn.js';
 import { GridProEditColumn } from '../../GridProEditColumn.js';
 import { GridColumnGroup, GridColumnGroupElement } from '../../GridColumnGroup.js';
+import { ChartSeries, ChartSeriesElement } from '../../ChartSeries.js';
+import { ConfirmDialog, ConfirmDialogElement } from '../../ConfirmDialog.js';
+import { CookieConsent, CookieConsentElement } from '../../CookieConsent.js';
 import { Dialog, DialogElement } from '../../Dialog.js';
 import { DatePicker, DatePickerElement } from '../../DatePicker.js';
 import { LoginOverlay, LoginOverlayElement } from '../../LoginOverlay.js';
+import { Notification, NotificationElement } from '../../Notification.js';
 import { TimePicker, type TimePickerChangeEvent } from '../../TimePicker.js';
 import { TextArea, TextAreaElement, type TextAreaChangeEvent } from '../../TextArea.js';
 import { MessageInput, MessageInputElement, type MessageInputSubmitEvent } from '../../MessageInput.js';
@@ -114,6 +118,42 @@ type DialogProps = typeof dialogProps;
 assertType<DialogElement['ariaLabel'] | undefined>(dialogProps['aria-label']);
 
 assertType<DialogProps['footer']>(dialogProps.footer);
+assertType<DialogProps['draggable']>(dialogProps.draggable);
+assertType<DialogProps['resizable']>(dialogProps.resizable);
+
+assertOmitted<HTMLAttributes<DialogElement>, DialogProps>('style');
+assertOmitted<HTMLAttributes<DialogElement>, DialogProps>('contentEditable');
+assertOmitted<HTMLAttributes<DialogElement>, DialogProps>('onClick');
+
+const confirmDialogProps = React.createElement(ConfirmDialog, {}).props;
+type ConfirmDialogProps = typeof confirmDialogProps;
+
+assertType<ConfirmDialogElement['ariaLabel'] | undefined>(confirmDialogProps['aria-label']);
+
+assertOmitted<HTMLAttributes<ConfirmDialogElement>, ConfirmDialogProps>('style');
+assertOmitted<HTMLAttributes<ConfirmDialogElement>, ConfirmDialogProps>('contentEditable');
+assertOmitted<HTMLAttributes<ConfirmDialogElement>, ConfirmDialogProps>('onClick');
+
+const notificationProps = React.createElement(Notification, {}).props;
+type NotificationProps = typeof notificationProps;
+
+assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('style');
+assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('contentEditable');
+assertOmitted<HTMLAttributes<NotificationElement>, NotificationProps>('onClick');
+
+const cookieConsentProps = React.createElement(CookieConsent, {}).props;
+type CookieConsentProps = typeof cookieConsentProps;
+
+assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('style');
+assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('contentEditable');
+assertOmitted<HTMLAttributes<CookieConsentElement>, CookieConsentProps>('onClick');
+
+const chartSeriesProps = React.createElement(ChartSeries, {}).props;
+type ChartSeriesProps = typeof chartSeriesProps;
+
+assertOmitted<HTMLAttributes<ChartSeriesElement>, ChartSeriesProps>('style');
+assertOmitted<HTMLAttributes<ChartSeriesElement>, ChartSeriesProps>('contentEditable');
+assertOmitted<HTMLAttributes<ChartSeriesElement>, ChartSeriesProps>('onClick');
 
 const datePickerProps = React.createElement(DatePicker, {}).props;
 
@@ -148,3 +188,9 @@ assertType<typeof timePickerProps.onChange>((_event: TimePickerChangeEvent) => {
 const loginOverlayProps = React.createElement(LoginOverlay, {}).props;
 
 assertType<LoginOverlayElement['autofocus'] | undefined>(loginOverlayProps.autofocus);
+type LoginOverlayProps = typeof loginOverlayProps;
+
+assertType<string | undefined>(loginOverlayProps.title);
+assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('style');
+assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('contentEditable');
+assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('onClick');

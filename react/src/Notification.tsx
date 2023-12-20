@@ -3,6 +3,7 @@ import {
   type ForwardedRef,
   forwardRef,
   type ForwardRefExoticComponent,
+  type HTMLAttributes,
   type ReactElement,
   type ReactNode,
   type RefAttributes,
@@ -20,7 +21,14 @@ export * from './generated/Notification.js';
 
 export type NotificationReactRendererProps = ReactSimpleRendererProps<NotificationElement>;
 
-export type NotificationProps = Partial<Omit<_NotificationProps, 'children' | 'renderer'>> &
+type OmittedNotificationHTMLAttributes = Omit<
+  HTMLAttributes<NotificationElement>,
+  'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot'
+>;
+
+export type NotificationProps = Partial<
+  Omit<_NotificationProps, 'children' | 'renderer' | keyof OmittedNotificationHTMLAttributes>
+> &
   Readonly<{
     children?: ReactNode | ComponentType<NotificationReactRendererProps>;
     renderer?: ComponentType<NotificationReactRendererProps>;
