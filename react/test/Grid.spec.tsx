@@ -15,6 +15,12 @@ import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 useChaiPlugin(chaiDom);
 
+async function until(predicate: () => boolean) {
+  while (!predicate()) {
+    await new Promise((r) => setTimeout(r, 10));
+  }
+}
+
 describe('Grid', () => {
   type Item = Readonly<{ name: string; surname: string; role: string }>;
 
@@ -157,7 +163,7 @@ describe('Grid', () => {
         expect(columns.length).to.be.above(0);
 
         for (const column of columns) {
-          expect(parseFloat(String(column.width))).to.be.greaterThan(300);
+          await until(() => parseFloat(String(column.width)) > 300);
         }
       });
     });
@@ -180,7 +186,7 @@ describe('Grid', () => {
       expect(columns.length).to.be.above(0);
 
       for (const column of columns) {
-        expect(parseFloat(String(column.width))).to.be.greaterThan(300);
+        await until(() => parseFloat(String(column.width)) > 300);
       }
     });
 
