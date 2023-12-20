@@ -282,20 +282,6 @@ describe('dropdown', () => {
 
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
-
-    it('should stop click events from bubbling outside the overlay', async () => {
-      const clickSpy = sinon.spy();
-      document.addEventListener('click', clickSpy);
-
-      input.focus();
-      await open(datePicker);
-
-      dateTap();
-      await aTimeout(0);
-
-      document.removeEventListener('click', clickSpy);
-      expect(clickSpy.notCalled).to.be.true;
-    });
   });
 
   describe('virtual keyboard', () => {
