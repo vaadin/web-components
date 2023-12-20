@@ -78,6 +78,39 @@ describe('grid', () => {
         });
       });
 
+      describe('column group with footer only', () => {
+        beforeEach(async () => {
+          element = fixtureSync(`
+            <vaadin-grid style="height: 250px">
+              <vaadin-grid-column-group>
+                <vaadin-grid-column width="30px" flex-grow="0" resizable header="#"></vaadin-grid-column>
+                <vaadin-grid-column width="calc(20% - 50px)" path="name.first"></vaadin-grid-column>
+                <vaadin-grid-column width="calc(20% - 50px)" path="name.last"></vaadin-grid-column>
+                <vaadin-grid-column width="calc(20% - 50px)" path="location.city"></vaadin-grid-column>
+                <vaadin-grid-column width="calc(20% - 50px)" path="location.state"></vaadin-grid-column>
+                <vaadin-grid-column width="200px" resizable path="location.street"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid>
+          `);
+          element.items = users;
+          const indexColumn = element.querySelector('vaadin-grid-column[header="#"]');
+          indexColumn.renderer = (root, _column, model) => {
+            root.textContent = model.index;
+          };
+          const columnGroup = element.querySelector('vaadin-grid-column-group');
+          columnGroup.footerRenderer = (root) => {
+            root.textContent = 'Group footer';
+          };
+
+          flushGrid(element);
+          await nextRender(element);
+        });
+
+        it('column group with footer only', async () => {
+          await visualDiff(element, `${dir}-column-group-with-footer-only`);
+        });
+      });
+
       describe('row details', () => {
         beforeEach(async () => {
           element = fixtureSync(`
