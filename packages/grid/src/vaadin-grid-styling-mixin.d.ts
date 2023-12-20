@@ -10,7 +10,7 @@ import type { GridColumn } from './vaadin-grid-column.js';
 export type GridCellPartNameGenerator<TItem> = (column: GridColumn<TItem>, model: GridItemModel<TItem>) => string;
 
 /**
- * @deprecated Use `GridPartCellGenerator` type and `cellPartNameGenerator` API instead.
+ * @deprecated Use `GridCellPartNameGenerator` type and `cellPartNameGenerator` API instead.
  */
 export type GridCellClassNameGenerator<TItem> = GridCellPartNameGenerator<TItem>;
 
