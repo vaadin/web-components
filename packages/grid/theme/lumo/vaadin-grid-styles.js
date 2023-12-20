@@ -213,6 +213,11 @@ registerStyles(
       border-top: 0;
     }
 
+    /* Hide header row top border if previous row is hidden */
+    [part~='row'][hidden] + [part~='row'] [part~='header-cell'] {
+      border-top: 0;
+    }
+
     [part~='row']:last-child [part~='header-cell'] {
       border-bottom: var(--_lumo-grid-border-width) solid transparent;
     }
