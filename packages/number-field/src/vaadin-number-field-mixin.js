@@ -270,9 +270,8 @@ export const NumberFieldMixin = (superClass) =>
 
       const newValue = this._getIncrement(incr, value);
       if (!this.value || incr === 0 || this._incrementIsInsideTheLimits(incr, value)) {
-        this.__keepCommittedValue = true;
-        this.value = this.inputElement.value = String(parseFloat(newValue));
-        this.__keepCommittedValue = false;
+        this.inputElement.value = String(parseFloat(newValue));
+        this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
         this.__commitValueChange();
       }
     }

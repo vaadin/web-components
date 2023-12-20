@@ -14,6 +14,20 @@ describe('value control buttons', () => {
   });
 
   describe('basic', () => {
+    it('should fire input event on input element when clicking minus button', () => {
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      decreaseButton.click();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire input event on input element when clicking plus button', () => {
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      increaseButton.click();
+      expect(spy).to.be.calledOnce;
+    });
+
     it('should increase value by 1 on plus button click', async () => {
       numberField.value = 0;
       await nextUpdate(numberField);

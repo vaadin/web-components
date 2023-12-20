@@ -40,18 +40,36 @@ describe('number-field', () => {
       expect(numberField.value).equal('9.99');
     });
 
-    it('should increment value on arrow up', async () => {
+    it('should increment value on ArrowUp', async () => {
       numberField.step = 3;
       await nextUpdate(numberField);
       arrowUp(input);
       expect(numberField.value).equal('3');
     });
 
-    it('should decrement value on arrow down', async () => {
+    it('should fire input event on input element when pressing ArrowUp', async () => {
+      numberField.step = 3;
+      await nextUpdate(numberField);
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      arrowUp(input);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should decrement value on ArrowDown', async () => {
       numberField.step = 3;
       await nextUpdate(numberField);
       arrowDown(input);
       expect(numberField.value).equal('-3');
+    });
+
+    it('should fire input event on input element when pressing ArrowDown', async () => {
+      numberField.step = 3;
+      await nextUpdate(numberField);
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      arrowDown(input);
+      expect(spy).to.be.calledOnce;
     });
 
     it('should not change value on arrow keys when readonly', async () => {
