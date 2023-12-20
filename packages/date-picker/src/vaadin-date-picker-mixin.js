@@ -518,6 +518,8 @@ export const DatePickerMixin = (subclass) =>
         }
       });
 
+      this._overlayContent.addEventListener('click', (e) => e.stopPropagation());
+
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
     }
