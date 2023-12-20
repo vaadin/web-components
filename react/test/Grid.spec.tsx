@@ -2,7 +2,7 @@ import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import chaiDom from 'chai-dom';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import { Grid, type GridDataProvider } from '../src/Grid.js';
-import { GridColumn } from '../src/GridColumn.js';
+import { GridColumn, GridColumnElement } from '../src/GridColumn.js';
 import { GridFilterColumn } from '../src/GridFilterColumn.js';
 import { GridProEditColumn } from '../src/GridProEditColumn.js';
 import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
@@ -125,17 +125,63 @@ describe('Grid', () => {
       expect(roleBodyCell2).to.have.text('drums');
     });
 
-    it('should consider custom renderer content with column auto-width', async () => {
+    [
+      [GridColumn<Item>, 'GridColumn'],
+      [GridFilterColumn<Item>, 'GridFilterColumn'],
+      [GridSelectionColumn<Item>, 'GridSelectionColumn'],
+      [GridSortColumn<Item>, 'GridSortColumn'],
+      [GridTreeColumn<Item>, 'GridTreeColumn'],
+    ].forEach(([ColumnType, columnName]) => {
+      it(`should consider custom renderer content with column auto-width: ${columnName}`, async () => {
+        render(
+          <Grid<Item> items={items}>
+            {ColumnType !== GridFilterColumn<Item> &&
+            ColumnType !== GridSelectionColumn<Item> &&
+            ColumnType !== GridSortColumn<Item> ? (
+              // @ts-expect-error not all column types have header prop
+              <ColumnType header={<button style={{ width: '300px' }}>header</button>} autoWidth flexGrow={0} />
+            ) : null}
+
+            {ColumnType !== GridTreeColumn<Item> ? (
+              <ColumnType autoWidth flexGrow={0}>
+                {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
+              </ColumnType>
+            ) : null}
+
+            <ColumnType footer={<button style={{ width: '300px' }}>footer</button>} autoWidth flexGrow={0} />
+          </Grid>,
+        );
+
+        const grid = await findByQuerySelector('vaadin-grid');
+        const columns = Array.from(grid.children).filter((c): c is GridColumnElement => c.localName.includes('column'));
+        expect(columns.length).to.be.above(0);
+
+        for (const column of columns) {
+          expect(parseFloat(String(column.width))).to.be.greaterThan(300);
+        }
+      });
+    });
+
+    it(`should consider custom renderer content with column auto-width: GridColumnGroup`, async () => {
       render(
         <Grid<Item> items={items}>
-          <GridColumn<Item> header="name" autoWidth flexGrow={0}>
-            {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
-          </GridColumn>
+          <GridColumnGroup header={<button style={{ width: '300px' }}>header</button>}>
+            <GridColumn autoWidth flexGrow={0} />
+          </GridColumnGroup>
+
+          <GridColumnGroup footer={<button style={{ width: '300px' }}>footer</button>}>
+            <GridColumn autoWidth flexGrow={0} />
+          </GridColumnGroup>
         </Grid>,
       );
 
-      const column = await findByQuerySelector('vaadin-grid-column');
-      expect(parseFloat(String(column.width))).to.be.greaterThan(300);
+      const grid = await findByQuerySelector('vaadin-grid');
+      const columns = Array.from(grid.querySelectorAll<GridColumnElement>('vaadin-grid-column'));
+      expect(columns.length).to.be.above(0);
+
+      for (const column of columns) {
+        expect(parseFloat(String(column.width))).to.be.greaterThan(300);
+      }
     });
 
     it('should support setting header and footer components', async () => {
