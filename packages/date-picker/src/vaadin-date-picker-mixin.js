@@ -559,6 +559,8 @@ export const DatePickerMixin = (subclass) =>
       content.addEventListener('focused-date-changed', (e) => {
         this._focusedDate = e.detail.value;
       });
+
+      content.addEventListener('click', (e) => e.stopPropagation());
     }
 
     /**
