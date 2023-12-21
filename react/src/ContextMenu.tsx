@@ -4,28 +4,40 @@ import {
   type ContextMenuRendererContext,
   type ContextMenuElement,
   type ContextMenuProps as _ContextMenuProps,
+  type ContextMenuItem as _ContextMenuItem,
 } from './generated/ContextMenu.js';
 import { type ReactContextRendererProps, useContextRenderer } from './renderers/useContextRenderer.js';
+import { mapItemsWithComponents } from './utils/mapItemsWithComponents.js';
 
 export * from './generated/ContextMenu.js';
 
 export type ContextMenuReactRendererProps = ReactContextRendererProps<ContextMenuRendererContext, ContextMenuElement>;
 
+export type ContextMenuItem = Omit<_ContextMenuItem, 'component' | 'children'> & {
+  component?: ReactElement | string;
+
+  children?: Array<ContextMenuItem>;
+};
+
 // The 'opened' property is omitted because it is readonly in the web component.
 // So you cannot set it up manually, only read from the component.
 // For changing the property, use specific methods of the component.
-export type ContextMenuProps = Partial<Omit<_ContextMenuProps, 'opened' | 'renderer'>> &
+export type ContextMenuProps = Partial<Omit<_ContextMenuProps, 'opened' | 'renderer' | 'items'>> &
   Readonly<{
     renderer?: ComponentType<ContextMenuReactRendererProps> | null;
+
+    items?: Array<ContextMenuItem>;
   }>;
 
 function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuElement>): ReactElement | null {
   const [portals, renderer] = useContextRenderer(props.renderer);
+  const [itemPortals, webComponentItems] = mapItemsWithComponents(props.items, 'vaadin-context-menu-item');
 
   return (
-    <_ContextMenu {...props} ref={ref} renderer={renderer}>
+    <_ContextMenu {...props} ref={ref} renderer={renderer} items={webComponentItems}>
       {props.children}
       {portals}
+      {itemPortals}
     </_ContextMenu>
   );
 }

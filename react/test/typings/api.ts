@@ -1,4 +1,10 @@
-import React, { type ComponentType, type DOMAttributes, type HTMLAttributes, type RefAttributes } from 'react';
+import React, {
+  type ComponentType,
+  type DOMAttributes,
+  type HTMLAttributes,
+  type ReactElement,
+  type RefAttributes,
+} from 'react';
 import { TextField, TextFieldElement } from '../../TextField.js';
 import type { LitElement } from 'lit';
 import { GridColumn, GridColumnElement } from '../../GridColumn.js';
@@ -19,6 +25,7 @@ import { TimePicker, type TimePickerChangeEvent } from '../../TimePicker.js';
 import { TextArea, TextAreaElement, type TextAreaChangeEvent } from '../../TextArea.js';
 import { MessageInput, MessageInputElement, type MessageInputSubmitEvent } from '../../MessageInput.js';
 import { ComboBox, type ComboBoxChangeEvent } from '../../ComboBox.js';
+import { ContextMenu, type ContextMenuItem } from '../../ContextMenu.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 const assertOmitted = <C, T>(prop: keyof Omit<C, keyof T>) => prop;
@@ -194,3 +201,8 @@ assertType<string | undefined>(loginOverlayProps.title);
 assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('style');
 assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('contentEditable');
 assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('onClick');
+
+const contextMenuProps = React.createElement(ContextMenu, {}).props;
+
+assertType<ReactElement | string | undefined>(contextMenuProps.items![0].component);
+assertType<ContextMenuItem[]>(contextMenuProps.items!);
