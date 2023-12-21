@@ -1,2 +1,3 @@
-import './vaadin-drawer-toggle-styles.js';
-import '../../src/vaadin-drawer-toggle.js';
+import { DrawerToggle } from './vaadin-drawer-toggle-plain.js';
+
+DrawerToggle.register();

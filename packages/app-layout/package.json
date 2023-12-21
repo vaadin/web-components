@@ -34,6 +34,11 @@
     "web-component",
     "polymer"
   ],
+  "sideEffects": [
+    "src/vaadin-drawer-toggle.js",
+    "theme/lumo/vaadin-drawer-toggle.js",
+    "theme/material/vaadin-drawer-toggle.js"
+  ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/a11y-base": "24.4.0-alpha1",
