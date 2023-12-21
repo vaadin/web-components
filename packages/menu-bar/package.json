@@ -34,6 +34,11 @@
     "web-component",
     "polymer"
   ],
+  "sideEffects": [
+    "src/vaadin-menu-bar.js",
+    "theme/lumo/vaadin-menu-bar.js",
+    "theme/material/vaadin-menu-bar.js"
+  ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",

@@ -21,7 +21,8 @@
   "type": "module",
   "sideEffects": [
     "./Button.js",
-    "./DrawerToggle.js"
+    "./DrawerToggle.js",
+    "./MenuBar.js"
   ],
   "dependencies": {
     "@lit/react": "^1.0.0",

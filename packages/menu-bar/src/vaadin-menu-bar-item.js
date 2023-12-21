@@ -42,6 +42,10 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
     `;
   }
 
+  static register() {
+    defineCustomElement(this);
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -51,7 +55,5 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
     this.setAttribute('role', 'menuitem');
   }
 }
-
-defineCustomElement(MenuBarItem);
 
 export { MenuBarItem };

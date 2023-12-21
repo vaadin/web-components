@@ -1,5 +1,4 @@
-import { button } from '@vaadin/button/theme/material/vaadin-button-styles';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarButton = css`
   [part='label'] {
@@ -106,6 +105,4 @@ const menuBarButton = css`
   }
 `;
 
-registerStyles('vaadin-menu-bar-button', [button, menuBarButton], {
-  moduleId: 'material-menu-bar-button',
-});
+export { menuBarButton };

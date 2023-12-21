@@ -1,5 +1,8 @@
-import { button } from '@vaadin/button/theme/lumo/vaadin-button-styles.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarButton = css`
   :host {
@@ -97,6 +100,4 @@ const menuBarButton = css`
   }
 `;
 
-registerStyles('vaadin-menu-bar-button', [button, menuBarButton], {
-  moduleId: 'lumo-menu-bar-button',
-});
+export { menuBarButton };

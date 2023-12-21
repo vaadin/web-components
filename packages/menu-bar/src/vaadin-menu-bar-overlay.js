@@ -42,6 +42,8 @@ export class MenuBarOverlay extends MenuOverlayMixin(OverlayMixin(DirMixin(Thema
       </div>
     `;
   }
-}
 
-defineCustomElement(MenuBarOverlay);
+  static register() {
+    defineCustomElement(this);
+  }
+}

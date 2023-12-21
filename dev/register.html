@@ -13,14 +13,41 @@
 
     <vaadin-button>Button</vaadin-button>
 
+    <vaadin-menu-bar></vaadin-menu-bar>
+
     <script type="module">
       import { Button } from '@vaadin/button/theme/lumo/vaadin-button-plain.js';
       import { DrawerToggle } from '@vaadin/app-layout/theme/lumo/vaadin-drawer-toggle-plain.js';
+      import { MenuBar } from '@vaadin/menu-bar/theme/lumo/vaadin-menu-bar-plain.js';
+
+      const menuBar = document.querySelector('vaadin-menu-bar');
+      menuBar.items = [
+        { text: 'View', tooltip: 'Options for how to view the content' },
+        { text: 'Edit' },
+        {
+          text: 'Share',
+          children: [
+            {
+              text: 'On social media',
+              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+            },
+            { text: 'By email' },
+            { text: 'Get link' },
+          ],
+        },
+        {
+          text: 'Move',
+          tooltip: 'Move to a different folder or trash.',
+          children: [{ text: 'To folder' }, { text: 'To trash' }],
+        },
+        { text: 'Duplicate', tooltip: 'Create a duplicate' },
+      ];
 
       setTimeout(() => {
         DrawerToggle.register();
         Button.register();
-      });
+        // MenuBar.register();
+      }, 1000);
     </script>
   </body>
 </html>

@@ -1,7 +1,5 @@
 import '@vaadin/vaadin-material-styles/typography.js';
-import { contextMenuItem } from '@vaadin/context-menu/theme/material/vaadin-context-menu-item-styles.js';
-import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarItem = css`
   [part='content'] {
@@ -20,4 +18,4 @@ const menuBarItem = css`
   }
 `;
 
-registerStyles('vaadin-menu-bar-item', [item, contextMenuItem, menuBarItem], { moduleId: 'material-menu-bar-item' });
+export { menuBarItem };

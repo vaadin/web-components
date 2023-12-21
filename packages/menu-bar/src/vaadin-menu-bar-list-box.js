@@ -61,6 +61,10 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Po
     };
   }
 
+  static register() {
+    defineCustomElement(this);
+  }
+
   /**
    * @return {!HTMLElement}
    * @protected
@@ -77,7 +81,5 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Po
     this.setAttribute('role', 'menu');
   }
 }
-
-defineCustomElement(MenuBarListBox);
 
 export { MenuBarListBox };

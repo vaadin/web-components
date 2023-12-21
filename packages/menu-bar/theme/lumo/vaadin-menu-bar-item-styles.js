@@ -1,8 +1,6 @@
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { contextMenuItem } from '@vaadin/context-menu/theme/lumo/vaadin-context-menu-item-styles.js';
-import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const menuBarItem = css`
   [part='content'] {
@@ -24,4 +22,4 @@ const menuBarItem = css`
   }
 `;
 
-registerStyles('vaadin-menu-bar-item', [item, contextMenuItem, menuBarItem], { moduleId: 'lumo-menu-bar-item' });
+export { menuBarItem };
