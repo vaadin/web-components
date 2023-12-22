@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/side-nav",
-  "version": "24.2.5",
+  "version": "24.2.6",
   "publishConfig": {
     "access": "public"
   },
@@ -34,11 +34,11 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/a11y-base": "~24.2.5",
-    "@vaadin/component-base": "~24.2.5",
-    "@vaadin/vaadin-lumo-styles": "~24.2.5",
-    "@vaadin/vaadin-material-styles": "~24.2.5",
-    "@vaadin/vaadin-themable-mixin": "~24.2.5",
+    "@vaadin/a11y-base": "~24.2.6",
+    "@vaadin/component-base": "~24.2.6",
+    "@vaadin/vaadin-lumo-styles": "~24.2.6",
+    "@vaadin/vaadin-material-styles": "~24.2.6",
+    "@vaadin/vaadin-themable-mixin": "~24.2.6",
     "lit": "^2.0.0"
   },
   "devDependencies": {
