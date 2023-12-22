@@ -48,14 +48,7 @@ export const eventSettings = new Map<string, EventSettings>([
   [
     'MultiSelectComboBox',
     {
-      remove: [
-        // Internal events
-        'vaadin-combo-box-dropdown-closed',
-        'vaadin-combo-box-dropdown-opened',
-        // FIXME: missing event typing in the web component, see
-        // https://github.com/vaadin/web-components/issues/4900#issuecomment-1512927512
-        'opened-changed',
-      ],
+      remove: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'],
     },
   ],
   ['RadioButton', { remove: ['value-changed'] }],
