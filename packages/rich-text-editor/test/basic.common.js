@@ -145,6 +145,27 @@ describe('rich text editor', () => {
       });
     });
 
+    describe('RTL set initially', () => {
+      beforeEach(async () => {
+        rte = fixtureSync('<vaadin-rich-text-editor dir="rtl"></vaadin-rich-text-editor>');
+        await nextRender();
+        editor = rte._editor;
+      });
+
+      ['center', 'left'].forEach((align) => {
+        it(`should apply ${align} alignment when clicking the "toolbar-button-align-${align}" part in RTL`, () => {
+          btn = getButton(`align-${align}`);
+
+          btn.click();
+          expect(editor.getFormat(0).align).to.be.equal(align);
+
+          btn = getButton('align-right');
+          btn.click();
+          expect(editor.getFormat(0).align).to.be.not.ok;
+        });
+      });
+    });
+
     it('should clear formatting when clicking the "clean-button" part', () => {
       editor.format('bold', true);
       editor.format('underline', true);

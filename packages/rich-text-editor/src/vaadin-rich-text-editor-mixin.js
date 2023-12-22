@@ -255,6 +255,10 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __setDirection(dir) {
+      if (!this._editor) {
+        return;
+      }
+
       // Needed for proper `ql-align` class to be set and activate the toolbar align button
       const alignAttributor = Quill.import('attributors/class/align');
       alignAttributor.whitelist = [dir === 'rtl' ? 'left' : 'right', 'center', 'justify'];
@@ -296,6 +300,8 @@ export const RichTextEditorMixin = (superClass) =>
       if (isFirefox) {
         this.__patchFirefoxFocus();
       }
+
+      this.__setDirection(this.__dir);
 
       const editorContent = editor.querySelector('.ql-editor');
 
