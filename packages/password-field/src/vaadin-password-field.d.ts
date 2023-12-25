@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
+import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -71,32 +72,7 @@ export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFiel
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class PasswordField extends TextField {
-  /**
-   * Set to true to hide the eye icon which toggles the password visibility.
-   * @attr {boolean} reveal-button-hidden
-   */
-  revealButtonHidden: boolean;
-
-  /**
-   * True if the password is visible ([type=text]).
-   * @attr {boolean} password-visible
-   */
-  readonly passwordVisible: boolean;
-
-  /**
-   * An object with translated strings used for localization.
-   * It has the following structure and default values:
-   *
-   * ```
-   * {
-   *   // Translation of the reveal icon button accessible label
-   *   reveal: 'Show password'
-   * }
-   * ```
-   */
-  i18n: { reveal: string };
-
+declare class PasswordField extends PasswordFieldMixin(TextField) {
   addEventListener<K extends keyof PasswordFieldEventMap>(
     type: K,
     listener: (this: PasswordField, ev: PasswordFieldEventMap[K]) => void,
