@@ -24,6 +24,8 @@
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
+    "!vaadin-lit-*.d.ts",
+    "!vaadin-lit-*.js",
     "web-types.json",
     "web-types.lit.json"
   ],
@@ -46,7 +48,8 @@
     "@vaadin/overlay": "24.4.0-alpha13",
     "@vaadin/vaadin-lumo-styles": "24.4.0-alpha13",
     "@vaadin/vaadin-material-styles": "24.4.0-alpha13",
-    "@vaadin/vaadin-themable-mixin": "24.4.0-alpha13"
+    "@vaadin/vaadin-themable-mixin": "24.4.0-alpha13",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
