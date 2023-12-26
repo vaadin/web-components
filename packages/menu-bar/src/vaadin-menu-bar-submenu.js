@@ -6,18 +6,25 @@
 import './vaadin-menu-bar-item.js';
 import './vaadin-menu-bar-list-box.js';
 import './vaadin-menu-bar-overlay.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { ContextMenuMixin } from '@vaadin/context-menu/src/vaadin-context-menu-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
  * @customElement
- * @extends ContextMenu
+ * @extends HTMLElement
+ * @mixes ContextMenuMixin
+ * @mixes ControllerMixin
+ * @mixes OverlayClassMixin
+ * @mixes ThemePropertyMixin
  * @protected
  */
-class MenuBarSubmenu extends ContextMenu {
+class MenuBarSubmenu extends ContextMenuMixin(OverlayClassMixin(ControllerMixin(ThemePropertyMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
@@ -51,6 +58,19 @@ class MenuBarSubmenu extends ContextMenu {
    */
   get _tagNamePrefix() {
     return 'vaadin-menu-bar';
+  }
+
+  /**
+   * @param {DocumentFragment} dom
+   * @return {null}
+   * @protected
+   * @override
+   */
+  _attachDom(dom) {
+    const root = this.attachShadow({ mode: 'open' });
+    root.appendChild(dom);
+    root.appendChild(this._overlayElement);
+    return root;
   }
 
   /**
