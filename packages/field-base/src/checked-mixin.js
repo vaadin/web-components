@@ -5,7 +5,6 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
