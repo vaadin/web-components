@@ -1,38 +1,38 @@
 import { expect } from '@esm-bundle/chai';
 import {
+  defineLit,
+  definePolymer,
   enterKeyDown,
   fixtureSync,
   focusin,
   focusout,
   mousedown,
   mouseup,
+  nextRender,
+  nextUpdate,
   space,
   spaceKeyDown,
   spaceKeyUp,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '../src/vaadin-item-mixin.js';
 
-class TestItem extends ItemMixin(PolymerElement) {
-  static get template() {
-    return html`<slot></slot>`;
-  }
-}
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper('item-mixin', '<slot></slot>', (Base) => class extends ItemMixin(baseMixin(Base)) {});
 
-customElements.define('test-item', TestItem);
-
-describe('vaadin-item-mixin', () => {
   let item;
 
   describe('properties', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       item = fixtureSync(`
-        <test-item value="foo">
+        <${tag} value="foo">
           text-content
-        </test-item>
+        </${tag}>
       `);
+      await nextRender();
     });
 
     describe('selected', () => {
@@ -40,13 +40,15 @@ describe('vaadin-item-mixin', () => {
         expect(item.selected).to.be.false;
       });
 
-      it('should reflect selected to attribute', () => {
+      it('should reflect selected to attribute', async () => {
         item.selected = true;
+        await nextUpdate(item);
         expect(item.hasAttribute('selected')).to.be.true;
       });
 
-      it('should set aria-selected attribute', () => {
+      it('should set aria-selected attribute', async () => {
         item.selected = true;
+        await nextUpdate(item);
         expect(item.getAttribute('aria-selected')).to.equal('true');
       });
     });
@@ -56,22 +58,28 @@ describe('vaadin-item-mixin', () => {
         expect(item.disabled).to.be.false;
       });
 
-      it('should reflect disabled to attribute', () => {
+      it('should reflect disabled to attribute', async () => {
         item.disabled = true;
+        await nextUpdate(item);
         expect(item.hasAttribute('disabled')).to.be.true;
       });
 
-      it('should set selected to false when disabled', () => {
+      it('should set selected to false when disabled', async () => {
         item.selected = true;
+        await nextUpdate(item);
         space(item);
         item.disabled = true;
+        await nextUpdate(item);
         expect(item.selected).to.be.false;
       });
 
-      it('should have aria-disabled when disabled', () => {
+      it('should have aria-disabled when disabled', async () => {
         item.disabled = true;
+        await nextUpdate(item);
         expect(item.getAttribute('aria-disabled')).to.equal('true');
+
         item.disabled = false;
+        await nextUpdate(item);
         expect(item.getAttribute('aria-disabled')).to.be.null;
       });
     });
@@ -206,8 +214,9 @@ describe('vaadin-item-mixin', () => {
   });
 
   describe('default value', () => {
-    beforeEach(() => {
-      item = fixtureSync('<test-item>text-content</test-item>');
+    beforeEach(async () => {
+      item = fixtureSync(`<${tag}>text-content</${tag}>`);
+      await nextRender();
     });
 
     it('should use trimmed textContent', () => {
@@ -221,12 +230,13 @@ describe('vaadin-item-mixin', () => {
   });
 
   describe('with clickable child', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       item = fixtureSync(`
-        <test-item>
+        <${tag}>
           <button>Clickable</button>
-        </test-item>
+        </${tag}>
       `);
+      await nextRender();
     });
 
     it('should not set active attribute if keydown was prevented', () => {
@@ -248,4 +258,12 @@ describe('vaadin-item-mixin', () => {
       expect(spy.called).to.be.false;
     });
   });
+};
+
+describe('ItemMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('ItemMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
