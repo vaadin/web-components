@@ -3,11 +3,7 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import {
-  removeAriaIDReference,
-  restoreGeneratedAriaIDReference,
-  setAriaIDReference,
-} from '@vaadin/a11y-base/src/aria-id-reference.js';
+import { removeAriaIDReference, restoreGeneratedAriaIDReference, setAriaIDReference } from './aria-id-reference.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
