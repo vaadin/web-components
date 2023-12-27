@@ -9,7 +9,6 @@
  * license.
  */
 import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';

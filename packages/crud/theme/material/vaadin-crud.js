@@ -1,6 +1,5 @@
 import '@vaadin/button/theme/material/vaadin-button.js';
 import '@vaadin/confirm-dialog/theme/material/vaadin-confirm-dialog.js';
-import '@vaadin/dialog/theme/material/vaadin-dialog.js';
 import '@vaadin/form-layout/theme/material/vaadin-form-layout.js';
 import '@vaadin/grid/theme/material/vaadin-grid.js';
 import '@vaadin/grid/theme/material/vaadin-grid-sorter.js';
