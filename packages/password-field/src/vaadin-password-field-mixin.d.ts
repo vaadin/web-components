@@ -4,10 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 
 export declare function PasswordFieldMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PasswordFieldMixinClass> & T;
+): Constructor<DisabledMixinClass> &
+  Constructor<FocusMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<PasswordFieldMixinClass> &
+  T;
 
 export declare class PasswordFieldMixinClass {
   /**

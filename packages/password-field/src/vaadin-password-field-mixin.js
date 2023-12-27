@@ -3,13 +3,19 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes DisabledMixin
+ * @mixes FocusMixin
+ * @mixes InputMixin
  */
 export const PasswordFieldMixin = (superClass) =>
-  class PasswordFieldMixinClass extends superClass {
+  class PasswordFieldMixinClass extends DisabledMixin(FocusMixin(InputMixin(superClass))) {
     static get properties() {
       return {
         /**
