@@ -3,31 +3,32 @@
  * Copyright (c) 2021 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-overlay-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-multi-select-combo-box-overlay',
-  css`
-    #overlay {
-      width: var(
-        --vaadin-multi-select-combo-box-overlay-width,
-        var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
-      );
-    }
+const multiSelectComboBoxOverlayStyles = css`
+  #overlay {
+    width: var(
+      --vaadin-multi-select-combo-box-overlay-width,
+      var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
+    );
+  }
 
-    [part='content'] {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-  `,
-  { moduleId: 'vaadin-multi-select-combo-box-overlay-styles' },
-);
+  [part='content'] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
 
-let memoizedTemplate;
+registerStyles('vaadin-multi-select-combo-box-overlay', [overlayStyles, multiSelectComboBoxOverlayStyles], {
+  moduleId: 'vaadin-multi-select-combo-box-overlay-styles',
+});
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
@@ -36,25 +37,19 @@ let memoizedTemplate;
  * @extends ComboBoxOverlay
  * @private
  */
-class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(Overlay) {
+class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-overlay';
   }
 
   static get template() {
-    if (!memoizedTemplate) {
-      memoizedTemplate = super.template.cloneNode(true);
-
-      const overlay = memoizedTemplate.content.querySelector('[part~="overlay"]');
-      overlay.removeAttribute('tabindex');
-
-      const loader = document.createElement('div');
-      loader.setAttribute('part', 'loader');
-
-      overlay.insertBefore(loader, overlay.firstElementChild);
-    }
-
-    return memoizedTemplate;
+    return html`
+      <div id="backdrop" part="backdrop" hidden></div>
+      <div part="overlay" id="overlay">
+        <div part="loader"></div>
+        <div part="content" id="content"><slot></slot></div>
+      </div>
+    `;
   }
 }
 
