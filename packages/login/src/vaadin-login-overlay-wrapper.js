@@ -18,7 +18,10 @@ registerStyles('vaadin-login-overlay-wrapper', [overlayStyles, loginOverlayWrapp
 /**
  * An element used internally by `<vaadin-login-overlay>`. Not intended to be used separately.
  *
- * @extends Overlay
+ * @extends HTMLElement
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
 class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
