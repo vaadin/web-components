@@ -19,8 +19,6 @@ export declare function GridSelectionColumnBaseMixin<TItem, T extends Constructo
  * Web component-specific selection state updates must be implemented in the
  * `<vaadin-grid-selection-column>` itself, by overriding the protected methods
  * provided by this mixin.
- *
- * @polymerMixin
  */
 export declare class GridSelectionColumnBaseMixinClass<TItem> {
   /**
