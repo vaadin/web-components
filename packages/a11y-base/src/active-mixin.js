@@ -17,6 +17,8 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  * by the pointer or by releasing the activation key.
  *
  * @polymerMixin
+ * @mixes DisabledMixin
+ * @mixes KeyboardMixin
  */
 export const ActiveMixin = (superclass) =>
   class ActiveMixinClass extends DisabledMixin(KeyboardMixin(superclass)) {
