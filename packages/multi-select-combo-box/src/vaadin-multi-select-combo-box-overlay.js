@@ -34,7 +34,11 @@ registerStyles('vaadin-multi-select-combo-box-overlay', [overlayStyles, multiSel
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
  *
  * @customElement
- * @extends ComboBoxOverlay
+ * @extends HTMLElement
+ * @mixes ComboBoxOverlayMixin
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
  * @private
  */
 class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
