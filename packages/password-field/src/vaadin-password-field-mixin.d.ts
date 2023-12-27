@@ -6,6 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 
 export declare function PasswordFieldMixin<T extends Constructor<HTMLElement>>(
@@ -14,6 +15,7 @@ export declare function PasswordFieldMixin<T extends Constructor<HTMLElement>>(
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<PasswordFieldMixinClass> &
+  Constructor<SlotStylesMixinClass> &
   T;
 
 export declare class PasswordFieldMixinClass {

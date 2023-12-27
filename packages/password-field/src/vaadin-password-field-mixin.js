@@ -6,6 +6,7 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 
 /**
@@ -13,9 +14,10 @@ import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
  * @mixes DisabledMixin
  * @mixes FocusMixin
  * @mixes InputMixin
+ * @mixes SlotStylesMixin
  */
 export const PasswordFieldMixin = (superClass) =>
-  class PasswordFieldMixinClass extends DisabledMixin(FocusMixin(InputMixin(superClass))) {
+  class PasswordFieldMixinClass extends SlotStylesMixin(DisabledMixin(FocusMixin(InputMixin(superClass)))) {
     static get properties() {
       return {
         /**
