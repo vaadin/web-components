@@ -62,7 +62,7 @@ class MenuBarSubmenu extends ContextMenuMixin(OverlayClassMixin(ControllerMixin(
 
   /**
    * @param {DocumentFragment} dom
-   * @return {null}
+   * @return {ShadowRoot}
    * @protected
    * @override
    */
