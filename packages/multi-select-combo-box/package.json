@@ -18,6 +18,7 @@
   },
   "main": "vaadin-multi-select-combo-box.js",
   "module": "vaadin-multi-select-combo-box.js",
+  "type": "module",
   "files": [
     "lit.d.ts",
     "lit.js",
