@@ -1003,4 +1003,50 @@ describe('PolylitMixin', () => {
       expect(element.count).to.equal(1);
     });
   });
+
+  describe('setProperties()', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            disabled: {
+              type: Boolean,
+              sync: true,
+            },
+
+            value: {
+              type: String,
+            },
+          };
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should set property values on the element', () => {
+      element.setProperties({ value: 'foo', disabled: true });
+      expect(element.value).to.equal('foo');
+      expect(element.disabled).to.be.true;
+    });
+
+    it('should request update for each passed property', () => {
+      const spy = sinon.spy(element, 'requestUpdate');
+      element.setProperties({ value: 'foo', disabled: true });
+      expect(spy).to.be.calledTwice;
+      expect(spy.firstCall.args[0]).to.equal('value');
+      expect(spy.secondCall.args[0]).to.equal('disabled');
+    });
+
+    it('should only call performUpdate() method once', () => {
+      const spy = sinon.spy(element, 'performUpdate');
+      element.setProperties({ value: 'foo', disabled: true });
+      expect(spy).to.be.calledOnce;
+    });
+  });
 });

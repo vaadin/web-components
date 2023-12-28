@@ -93,6 +93,9 @@ const PolylitMixinImplementation = (superclass) => {
 
       let result = defaultDescriptor;
 
+      // Set the key for this property
+      this.getOrCreateMap('__propKeys').set(name, key);
+
       if (options.sync) {
         result = {
           get: defaultDescriptor.get,
@@ -230,6 +233,24 @@ const PolylitMixinImplementation = (superclass) => {
         this.__isReadyInvoked = true;
         this.ready();
       }
+    }
+
+    /**
+     * Set several properties at once and perform synchronous update.
+     * @protected
+     */
+    setProperties(props) {
+      Object.entries(props).forEach(([name, value]) => {
+        // Use private key and not setter to not trigger
+        // update for properties marked as `sync: true`.
+        const key = this.constructor.__propKeys.get(name);
+        const oldValue = this[name];
+        this[key] = value;
+        this.requestUpdate(name, oldValue);
+      });
+
+      // Perform sync update
+      this.performUpdate();
     }
 
     /** @protected */
