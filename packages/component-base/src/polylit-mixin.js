@@ -244,7 +244,7 @@ const PolylitMixinImplementation = (superclass) => {
         // Use private key and not setter to not trigger
         // update for properties marked as `sync: true`.
         const key = this.constructor.__propKeys.get(name);
-        const oldValue = this[name];
+        const oldValue = this[key];
         this[key] = value;
         this.requestUpdate(name, oldValue);
       });
