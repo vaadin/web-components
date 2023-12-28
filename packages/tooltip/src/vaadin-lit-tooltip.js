@@ -21,7 +21,6 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  *
- * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
