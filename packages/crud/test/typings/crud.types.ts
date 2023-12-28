@@ -23,7 +23,10 @@ type User = {
   };
 };
 
-const crud: Crud<User> = document.createElement('vaadin-crud');
+const genericCrud = document.createElement('vaadin-crud');
+assertType<Crud>(genericCrud);
+
+const crud = genericCrud as Crud<User>;
 
 crud.addEventListener('editor-opened-changed', (event) => {
   assertType<CrudEditorOpenedChangedEvent>(event);

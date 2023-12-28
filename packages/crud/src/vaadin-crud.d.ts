@@ -10,7 +10,7 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import type { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
+import type { GridDefaultItem, GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export type CrudDataProviderCallback<T> = (items: T[], size?: number) => void;
@@ -262,7 +262,7 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  */
-declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class Crud<Item = GridDefaultItem> extends ControllerMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * An array containing the items which will be stamped to the column template instances.
    */
@@ -419,7 +419,7 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-crud': Crud<any>;
+    'vaadin-crud': Crud<GridDefaultItem>;
   }
 }
 
