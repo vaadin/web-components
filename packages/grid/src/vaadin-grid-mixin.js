@@ -425,11 +425,13 @@ export const GridMixin = (superClass) =>
             // Prepare the cell for having its intrinsic width measured
             cell.style.width = 'auto';
             cell.style.position = 'absolute';
+            cell.setAttribute('measuring-auto-width', '');
           } else {
             // Restore the original width
             cell.style.width = cell.__originalWidth;
             delete cell.__originalWidth;
             cell.style.position = '';
+            cell.removeAttribute('measuring-auto-width');
           }
         });
     }
