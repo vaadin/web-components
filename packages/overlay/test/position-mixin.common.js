@@ -577,3 +577,28 @@ describe('position mixin', () => {
     });
   });
 });
+
+describe('opened before attach', () => {
+  let parent, overlay, target;
+
+  beforeEach(() => {
+    parent = fixtureSync(`
+      <div>
+        <div id="target"></div>
+      </div>
+    `);
+    target = parent.firstElementChild;
+  });
+
+  it('should not throw when adding pre-opened overlay to the DOM', async () => {
+    overlay = document.createElement('vaadin-positioned-overlay');
+
+    overlay.positionTarget = target;
+    overlay.opened = true;
+
+    parent.appendChild(overlay);
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    expect(overlay.hasAttribute('start-aligned')).to.be.true;
+  });
+});

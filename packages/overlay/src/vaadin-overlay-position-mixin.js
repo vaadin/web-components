@@ -210,7 +210,7 @@ export const PositionMixin = (superClass) =>
     }
 
     _updatePosition() {
-      if (!this.positionTarget || !this.opened) {
+      if (!this.positionTarget || !this.opened || !this.__margins) {
         return;
       }
 
