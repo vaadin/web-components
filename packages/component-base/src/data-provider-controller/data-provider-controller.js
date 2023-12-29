@@ -286,6 +286,6 @@ export class DataProviderController extends EventTarget {
 
   /** @private */
   __isPlaceholder(item) {
-    return item === this.placeholder;
+    return this.placeholder ? item === this.placeholder : !item;
   }
 }
