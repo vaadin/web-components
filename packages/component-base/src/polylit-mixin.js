@@ -250,7 +250,9 @@ const PolylitMixinImplementation = (superclass) => {
       });
 
       // Perform sync update
-      this.performUpdate();
+      if (this.hasUpdated) {
+        this.performUpdate();
+      }
     }
 
     /** @protected */

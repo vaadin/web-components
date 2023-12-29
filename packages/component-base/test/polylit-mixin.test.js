@@ -1048,5 +1048,11 @@ describe('PolylitMixin', () => {
       element.setProperties({ value: 'foo', disabled: true });
       expect(spy).to.be.calledOnce;
     });
+
+    it('should not throw when calling before first render', () => {
+      expect(() => {
+        document.createElement(tag).setProperties({ disabled: true });
+      }).to.not.throw(Error);
+    });
   });
 });
