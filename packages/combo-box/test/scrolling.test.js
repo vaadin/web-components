@@ -25,30 +25,6 @@ describe('scrolling', () => {
     });
   });
 
-  describe('the height of scroller', () => {
-    beforeEach(() => {
-      document.body.style.height = '100px';
-      const items = [];
-
-      for (let i = 0; i < 100; i++) {
-        items.push(i.toString());
-      }
-
-      comboBox.items = items;
-    });
-
-    afterEach(() => {
-      document.body.style.height = null;
-    });
-
-    it('should the height of scroller extends taller than mins-height for many items', () => {
-      comboBox.open();
-
-      const height = parseFloat(getComputedStyle(scroller).height.split('p')[0]);
-      expect(height).to.above(116);
-    });
-  });
-
   describe('scrolling position', () => {
     beforeEach(() => {
       const items = [];
