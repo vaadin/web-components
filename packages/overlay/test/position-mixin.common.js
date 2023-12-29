@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 
 describe('position mixin', () => {
@@ -575,5 +575,30 @@ describe('position mixin', () => {
         expectEdgesAligned(RIGHT, LEFT);
       });
     });
+  });
+});
+
+describe('opened before attach', () => {
+  let parent, overlay, target;
+
+  beforeEach(() => {
+    parent = fixtureSync(`
+      <div>
+        <div id="target"></div>
+      </div>
+    `);
+    target = parent.firstElementChild;
+  });
+
+  it('should not throw when adding pre-opened overlay to the DOM', async () => {
+    overlay = document.createElement('vaadin-positioned-overlay');
+
+    overlay.positionTarget = target;
+    overlay.opened = true;
+
+    parent.appendChild(overlay);
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    expect(overlay.hasAttribute('start-aligned')).to.be.true;
   });
 });
