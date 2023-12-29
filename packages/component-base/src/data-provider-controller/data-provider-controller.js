@@ -258,13 +258,13 @@ export class DataProviderController extends EventTarget {
         return;
       }
 
+      cache.setPage(page, items);
+
       if (size !== undefined) {
         cache.size = size;
       } else if (params.parentItem) {
         cache.size = items.length;
       }
-
-      cache.setPage(page, items);
 
       this.recalculateFlatSize();
 

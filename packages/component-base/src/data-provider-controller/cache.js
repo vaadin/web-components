@@ -201,10 +201,7 @@ export class Cache {
   setPage(page, items) {
     const startIndex = page * this.pageSize;
     items.forEach((item, i) => {
-      const itemIndex = startIndex + i;
-      if (itemIndex < this.size) {
-        this.items[itemIndex] = item;
-      }
+      this.items[startIndex + i] = item;
     });
   }
 
