@@ -3,18 +3,10 @@
  * Copyright (c) 2015 - 2023 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
-import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
-import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
+import { ComboBoxBaseMixin } from './vaadin-combo-box-base-mixin.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
@@ -47,51 +39,14 @@ function findItemIndex(items, callback) {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
+ * @mixes ComboBoxBaseMixin
  * @mixes ValidateMixin
- * @mixes DisabledMixin
- * @mixes InputMixin
- * @mixes KeyboardMixin
- * @mixes FocusMixin
- * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
-  class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))))),
-  ) {
+  class ComboBoxMixinClass extends ComboBoxBaseMixin(ValidateMixin(subclass)) {
     static get properties() {
       return {
-        /**
-         * True if the dropdown is open, false otherwise.
-         * @type {boolean}
-         */
-        opened: {
-          type: Boolean,
-          notify: true,
-          value: false,
-          reflectToAttribute: true,
-          observer: '_openedChanged',
-        },
-
-        /**
-         * Set true to prevent the overlay from opening automatically.
-         * @attr {boolean} auto-open-disabled
-         */
-        autoOpenDisabled: {
-          type: Boolean,
-        },
-
-        /**
-         * When present, it specifies that the field is read-only.
-         * @type {boolean}
-         */
-        readonly: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true,
-        },
-
         /**
          * Custom function for rendering the content of every item.
          * Receives three arguments:
@@ -157,16 +112,6 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /**
-         * @type {number}
-         * @protected
-         */
-        _focusedIndex: {
-          type: Number,
-          observer: '_focusedIndexChanged',
-          value: -1,
-        },
-
-        /**
          * Filtering string the user has typed into the input field.
          * @type {string}
          */
@@ -226,15 +171,6 @@ export const ComboBoxMixin = (subclass) =>
         itemIdPath: String,
 
         /**
-         * @type {!HTMLElement | undefined}
-         * @protected
-         */
-        _toggleElement: {
-          type: Object,
-          observer: '_toggleElementChanged',
-        },
-
-        /**
          * Set of items to be rendered in the dropdown.
          * @protected
          */
@@ -244,9 +180,6 @@ export const ComboBoxMixin = (subclass) =>
 
         /** @private */
         _closeOnBlurIsPrevented: Boolean,
-
-        /** @private */
-        _scroller: Object,
 
         /** @private */
         _overlayOpened: {
@@ -267,29 +200,7 @@ export const ComboBoxMixin = (subclass) =>
     constructor() {
       super();
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
-      this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
-      this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
-      this._boundOnTouchend = this._onTouchend.bind(this);
-    }
-
-    /**
-     * Tag name prefix used by scroller and items.
-     * @protected
-     * @return {string}
-     */
-    get _tagNamePrefix() {
-      return 'vaadin-combo-box';
-    }
-
-    /**
-     * Get a reference to the native `<input>` element.
-     * Override to provide a custom input.
-     * @protected
-     * @return {HTMLInputElement | undefined}
-     */
-    get _nativeInput() {
-      return this.inputElement;
     }
 
     /**
@@ -301,27 +212,8 @@ export const ComboBoxMixin = (subclass) =>
     _inputElementChanged(inputElement) {
       super._inputElementChanged(inputElement);
 
-      const input = this._nativeInput;
-
-      if (input) {
-        input.autocomplete = 'off';
-        input.autocapitalize = 'off';
-
-        input.setAttribute('role', 'combobox');
-        input.setAttribute('aria-autocomplete', 'list');
-        input.setAttribute('aria-expanded', !!this.opened);
-
-        // Disable the macOS Safari spell check auto corrections.
-        input.setAttribute('spellcheck', 'false');
-
-        // Disable iOS autocorrect suggestions.
-        input.setAttribute('autocorrect', 'off');
-
+      if (this._nativeInput) {
         this._revertInputValueToValue();
-
-        if (this.clearElement) {
-          this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
-        }
       }
     }
 
@@ -329,34 +221,9 @@ export const ComboBoxMixin = (subclass) =>
     ready() {
       super.ready();
 
-      this._initOverlay();
-      this._initScroller();
-
       this._lastCommittedValue = this.value;
 
-      this.addEventListener('click', this._boundOnClick);
-      this.addEventListener('touchend', this._boundOnTouchend);
-
-      const bringToFrontListener = () => {
-        requestAnimationFrame(() => {
-          this._overlayElement.bringToFront();
-        });
-      };
-
-      this.addEventListener('mousedown', bringToFrontListener);
-      this.addEventListener('touchstart', bringToFrontListener);
-
       processTemplates(this);
-
-      this.addController(new VirtualKeyboardController(this));
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      // Close the overlay on detach
-      this.close();
     }
 
     /**
@@ -378,23 +245,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Opens the dropdown list.
-     */
-    open() {
-      // Prevent _open() being called when input is disabled or read-only
-      if (!this.disabled && !this.readonly) {
-        this.opened = true;
-      }
-    }
-
-    /**
-     * Closes the dropdown list.
-     */
-    close() {
-      this.opened = false;
-    }
-
-    /**
      * Override Polymer lifecycle callback to handle `filter` property change after
      * the observer for `opened` property is triggered. This is needed when opening
      * combo-box on user input to ensure the focused index is set correctly.
@@ -413,25 +263,19 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _initOverlay() {
-      const overlay = this.$.overlay;
+      super._initOverlay();
 
-      // Store instance for detecting "dir" attribute on opening
-      overlay._comboBox = this;
+      const overlay = this.$.overlay;
 
       overlay.addEventListener('touchend', this._boundOnOverlayTouchAction);
       overlay.addEventListener('touchmove', this._boundOnOverlayTouchAction);
-
-      // Prevent blurring the input when clicking inside the overlay
-      overlay.addEventListener('mousedown', (e) => e.preventDefault());
 
       // Manual two-way binding for the overlay "opened" property
       overlay.addEventListener('opened-changed', (e) => {
         this._overlayOpened = e.detail.value;
       });
-
-      this._overlayElement = overlay;
     }
 
     /**
@@ -439,29 +283,22 @@ export const ComboBoxMixin = (subclass) =>
      * Override to provide custom host reference.
      *
      * @protected
+     * @override
      */
     _initScroller(host) {
-      const scrollerTag = `${this._tagNamePrefix}-scroller`;
+      super._initScroller(host);
 
-      const overlay = this._overlayElement;
+      const scroller = this._scroller;
 
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          root.appendChild(document.createElement(scrollerTag));
-        }
-      };
-
-      // Ensure the scroller is rendered
-      overlay.requestContentUpdate();
-
-      const scroller = overlay.querySelector(scrollerTag);
-
-      scroller.owner = host || this;
-      scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
+    }
 
-      // Trigger the observer to set properties
-      this._scroller = scroller;
+    /**
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this._dropdownItems;
     }
 
     /** @private */
@@ -506,68 +343,15 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _focusedIndexChanged(index, oldIndex) {
-      if (oldIndex === undefined) {
-        return;
-      }
-      this._updateActiveDescendant(index);
-    }
-
-    /** @protected */
-    _isInputFocused() {
-      return this.inputElement && isElementFocused(this.inputElement);
-    }
-
-    /** @private */
-    _updateActiveDescendant(index) {
-      const input = this._nativeInput;
-      if (!input) {
-        return;
-      }
-
-      const item = this._getItemElements().find((el) => el.index === index);
-      if (item) {
-        input.setAttribute('aria-activedescendant', item.id);
-      } else {
-        input.removeAttribute('aria-activedescendant');
-      }
-    }
-
-    /** @private */
+    /**
+     * @protected
+     * @override
+     */
     _openedChanged(opened, wasOpened) {
-      // Prevent _close() being called when opened is set to its default value (false).
-      if (wasOpened === undefined) {
-        return;
-      }
+      super._openedChanged(opened, wasOpened);
 
-      if (opened) {
-        this._openedWithFocusRing = this.hasAttribute('focus-ring');
-        // For touch devices, we don't want to popup virtual keyboard
-        // unless input element is explicitly focused by the user.
-        if (!this._isInputFocused() && !isTouch) {
-          if (this.inputElement) {
-            this.inputElement.focus();
-          }
-        }
-
-        this._overlayElement.restoreFocusOnClose = true;
-      } else {
+      if (wasOpened) {
         this._onClosed();
-        if (this._openedWithFocusRing && this._isInputFocused()) {
-          this.setAttribute('focus-ring', '');
-        }
-      }
-
-      const input = this._nativeInput;
-      if (input) {
-        input.setAttribute('aria-expanded', !!opened);
-
-        if (opened) {
-          input.setAttribute('aria-controls', this._scroller.id);
-        } else {
-          input.removeAttribute('aria-controls');
-        }
       }
     }
 
@@ -580,24 +364,12 @@ export const ComboBoxMixin = (subclass) =>
       this._closeOnBlurIsPrevented = false;
     }
 
-    /** @protected */
-    _isClearButton(event) {
-      return event.composedPath()[0] === this.clearElement;
-    }
-
-    /** @private */
-    __onClearButtonMouseDown(event) {
-      event.preventDefault(); // Prevent native focusout event
-      this.inputElement.focus();
-    }
-
     /**
      * @param {Event} event
      * @protected
      */
     _onClearButtonClick(event) {
-      event.preventDefault();
-      this._onClearAction();
+      super._onClearButtonClick(event);
 
       // De-select dropdown item
       if (this.opened) {
@@ -606,75 +378,11 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * @param {Event} event
-     * @private
-     */
-    _onToggleButtonClick(event) {
-      // Prevent parent components such as `vaadin-grid`
-      // from handling the click event after it bubbles.
-      event.preventDefault();
-
-      if (this.opened) {
-        this.close();
-      } else {
-        this.open();
-      }
-    }
-
-    /**
-     * @param {Event} event
-     * @protected
-     */
-    _onHostClick(event) {
-      if (!this.autoOpenDisabled) {
-        event.preventDefault();
-        this.open();
-      }
-    }
-
-    /** @private */
-    _onClick(event) {
-      if (this._isClearButton(event)) {
-        this._onClearButtonClick(event);
-      } else if (event.composedPath().includes(this._toggleElement)) {
-        this._onToggleButtonClick(event);
-      } else {
-        this._onHostClick(event);
-      }
-    }
-
-    /**
-     * Override an event listener from `KeyboardMixin`.
-     *
-     * @param {KeyboardEvent} e
      * @protected
      * @override
      */
-    _onKeyDown(e) {
-      super._onKeyDown(e);
-
-      if (e.key === 'Tab') {
-        this._overlayElement.restoreFocusOnClose = false;
-      } else if (e.key === 'ArrowDown') {
-        this._onArrowDown();
-
-        // Prevent caret from moving
-        e.preventDefault();
-      } else if (e.key === 'ArrowUp') {
-        this._onArrowUp();
-
-        // Prevent caret from moving
-        e.preventDefault();
-      }
-    }
-
-    /** @private */
     _getItemLabel(item) {
-      let label = item && this.itemLabelPath ? get(this.itemLabelPath, item) : undefined;
-      if (label === undefined || label === null) {
-        label = item ? item.toString() : '';
-      }
-      return label;
+      return super._getItemLabel(item, this.itemLabelPath);
     }
 
     /** @private */
@@ -684,72 +392,6 @@ export const ComboBoxMixin = (subclass) =>
         value = item ? item.toString() : '';
       }
       return value;
-    }
-
-    /** @private */
-    _onArrowDown() {
-      if (this.opened) {
-        const items = this._dropdownItems;
-        if (items) {
-          this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
-          this._prefillFocusedItemLabel();
-        }
-      } else {
-        this.open();
-      }
-    }
-
-    /** @private */
-    _onArrowUp() {
-      if (this.opened) {
-        if (this._focusedIndex > -1) {
-          this._focusedIndex = Math.max(0, this._focusedIndex - 1);
-        } else {
-          const items = this._dropdownItems;
-          if (items) {
-            this._focusedIndex = items.length - 1;
-          }
-        }
-
-        this._prefillFocusedItemLabel();
-      } else {
-        this.open();
-      }
-    }
-
-    /** @private */
-    _prefillFocusedItemLabel() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this._inputElementValue = this._getItemLabel(focusedItem);
-        this._markAllSelectionRange();
-      }
-    }
-
-    /** @private */
-    _setSelectionRange(start, end) {
-      // Setting selection range focuses and/or moves the caret in some browsers,
-      // and there's no need to modify the selection range if the input isn't focused anyway.
-      // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
-      // the next focusable element instead of the combo-box itself.
-      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
-        this.inputElement.setSelectionRange(start, end);
-      }
-    }
-
-    /** @private */
-    _markAllSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        this._setSelectionRange(0, this._inputElementValue.length);
-      }
-    }
-
-    /** @private */
-    _clearSelectionRange() {
-      if (this._inputElementValue !== undefined) {
-        const pos = this._inputElementValue ? this._inputElementValue.length : 0;
-        this._setSelectionRange(pos, pos);
-      }
     }
 
     /** @private */
@@ -836,20 +478,6 @@ export const ComboBoxMixin = (subclass) =>
         e.stopPropagation();
         // The clear button is visible and the overlay is closed, so clear the value.
         this._onClearAction();
-      }
-    }
-
-    /** @private */
-    _toggleElementChanged(toggleElement) {
-      if (toggleElement) {
-        // Don't blur the input on toggle mousedown
-        toggleElement.addEventListener('mousedown', (e) => e.preventDefault());
-        // Unfocus previously focused element if focus is not inside combo box (on touch devices)
-        toggleElement.addEventListener('click', () => {
-          if (isTouch && !this._isInputFocused()) {
-            document.activeElement.blur();
-          }
-        });
       }
     }
 
@@ -1197,11 +825,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _getItemElements() {
-      return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
-    }
-
-    /** @private */
     _scrollIntoView(index) {
       if (!this._scroller) {
         return;
@@ -1303,16 +926,6 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       return true;
-    }
-
-    /** @private */
-    _onTouchend(event) {
-      if (!this.clearElement || event.composedPath()[0] !== this.clearElement) {
-        return;
-      }
-
-      event.preventDefault();
-      this._onClearAction();
     }
 
     /**

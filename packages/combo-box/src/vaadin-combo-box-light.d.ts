@@ -10,6 +10,7 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxDefaultItem, ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 export {
@@ -147,7 +148,8 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
 }
 
 interface ComboBoxLight<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderMixinClass<TItem>,
+  extends ComboBoxBaseMixinClass,
+    ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
     KeyboardMixinClass,
     InputMixinClass,
