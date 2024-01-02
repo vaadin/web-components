@@ -183,6 +183,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           top-group="[[_topGroup]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
+          keep-filter="[[keepFilter]]"
           theme$="[[_theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxChange"
@@ -303,6 +304,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       itemIdPath: {
         type: String,
+      },
+
+      /**
+       * When true, filter string isn't cleared after selecting an item.
+       */
+      keepFilter: {
+        type: Boolean,
+        value: false,
       },
 
       /**
@@ -872,7 +881,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this.__updateSelection(itemsCopy);
 
     // Suppress `value-changed` event.
-    this.__clearFilter();
+    if (!this.keepFilter) {
+      this.__clearFilter();
+    } else {
+      this.filter = this._lastFilter;
+    }
 
     this.__announceItem(itemLabel, isSelected, itemsCopy.length);
   }

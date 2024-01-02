@@ -891,7 +891,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _commitValue() {
+    _commitValue(keepFilter = false) {
       if (this._focusedIndex > -1) {
         const focusedItem = this._dropdownItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
@@ -946,7 +946,9 @@ export const ComboBoxMixin = (subclass) =>
 
       this._clearSelectionRange();
 
-      this.filter = '';
+      if (!keepFilter) {
+        this.filter = '';
+      }
     }
 
     /**

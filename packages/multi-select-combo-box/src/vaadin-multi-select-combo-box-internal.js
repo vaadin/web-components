@@ -61,6 +61,14 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
+       * When true, filter string isn't cleared after selecting an item.
+       */
+      keepFilter: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
@@ -277,7 +285,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     // an item which is already selected, to not un-select it.
     this.lastFilter = this.filter;
 
-    super._commitValue();
+    super._commitValue(this.keepFilter);
   }
 
   /**
