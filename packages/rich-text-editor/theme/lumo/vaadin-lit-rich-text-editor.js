@@ -1,4 +1,4 @@
-import '@vaadin/button/theme/lumo/vaadin-button-styles.js';
+import '@vaadin/button/theme/lumo/vaadin-lit-button.js';
 import '@vaadin/confirm-dialog/theme/lumo/vaadin-confirm-dialog-styles.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field-styles.js';
 import '@vaadin/tooltip/theme/lumo/vaadin-tooltip-styles.js';

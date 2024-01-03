@@ -1,0 +1,31 @@
+{
+  "name": "@vaadin/react-components",
+  "version": "24.4.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Vaadin React components",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/react"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "index.js",
+  "module": "index.js",
+  "type": "module",
+  "sideEffects": [
+    "./Button.js"
+  ],
+  "dependencies": {
+    "@lit/react": "^1.0.0",
+    "@vaadin/button": "24.4.0-alpha1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

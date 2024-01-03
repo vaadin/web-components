@@ -1,2 +1,5 @@
-import './vaadin-button-styles.js';
-import '../../src/vaadin-lit-button.js';
+import { Button } from './vaadin-lit-button-component.js';
+
+Button.register();
+
+export { Button };
