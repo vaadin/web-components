@@ -1,2 +1,3 @@
-import './vaadin-button-styles.js';
-import '../../src/vaadin-button.js';
+import { Button } from './vaadin-button-plain.js';
+
+Button.register();

@@ -18,6 +18,8 @@ export declare class ThemableMixinClass {
   protected static finalize(): void;
 
   protected static finalizeStyles(styles?: CSSResultGroup): CSSResult[];
+
+  protected static registerStyles(options: { styles: CSSResultGroup; moduleId: string }): void;
 }
 
 /**

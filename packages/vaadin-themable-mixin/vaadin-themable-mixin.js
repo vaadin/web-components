@@ -23,6 +23,8 @@ export { css, unsafeCSS };
  */
 const themeRegistry = [];
 
+const themeMap = new WeakMap();
+
 /**
  * Check if the custom element type has themes applied.
  * @param {Function} elementClass
@@ -242,6 +244,24 @@ export const ThemableMixin = (superClass) =>
       const themeStyles = this.__themes.flatMap((theme) => theme.styles);
       // Remove duplicates
       return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
+    }
+
+    /** @protected */
+    static applyStyles() {
+      const themes = themeMap.get(this);
+      if (themes) {
+        themes.forEach(({ styles, moduleId }) => {
+          registerStyles(this.is, styles, { moduleId });
+        });
+      }
+    }
+
+    /** @protected */
+    static registerStyles(styles) {
+      if (!themeMap.has(this)) {
+        themeMap.set(this, new Set());
+      }
+      themeMap.get(this).add(styles);
     }
   };
 
