@@ -3,7 +3,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const button = css`
   :host {
@@ -269,7 +269,5 @@ const button = css`
     margin-right: 0;
   }
 `;
-
-registerStyles('vaadin-button', button, { moduleId: 'lumo-button' });
 
 export { button };

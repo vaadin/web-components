@@ -1,7 +1,7 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const button = css`
   :host {
@@ -164,7 +164,5 @@ const button = css`
     margin-right: 8px;
   }
 `;
-
-registerStyles('vaadin-button', button, { moduleId: 'material-button' });
 
 export { button };

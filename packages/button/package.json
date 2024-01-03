@@ -33,6 +33,16 @@
     "web-components",
     "web-component"
   ],
+  "sideEffects": [
+    "vaadin-button.js",
+    "vaadin-lit-button.js",
+    "src/vaadin-button.js",
+    "src/vaadin-lit-button.js",
+    "theme/lumo/vaadin-button.js",
+    "theme/lumo/vaadin-lit-button.js",
+    "theme/material/vaadin-button.js",
+    "theme/material/vaadin-lit-button.js"
+  ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
