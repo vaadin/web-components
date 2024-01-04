@@ -109,6 +109,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       });
     }
 
+    /** @private */
+    get _visibleItemsCount() {
+      return this._lastVisibleIndex - this._firstVisibleIndex - 1;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -304,8 +309,9 @@ export const KeyboardNavigationMixin = (superClass) =>
     _onNavigationKeyDown(e, key) {
       e.preventDefault();
 
-      const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
       const isRTL = this.__isRTL;
+      const activeRow = e.composedPath().find((el) => this.__isRow(el));
+      const activeCell = e.composedPath().find((el) => this.__isCell(el));
 
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
@@ -350,17 +356,18 @@ export const KeyboardNavigationMixin = (superClass) =>
           dy = -1;
           break;
         case 'PageDown':
-          dy = visibleItemsCount;
+          {
+            const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
+            this.scrollToIndex(currentRowIndex); // scroll the current row to the top...
+            dy = this._visibleItemsCount; // ... only then measure the visible items count
+          }
           break;
         case 'PageUp':
-          dy = -visibleItemsCount;
+          dy = -this._visibleItemsCount;
           break;
         default:
           break;
       }
-
-      const activeRow = e.composedPath().find((el) => this.__isRow(el));
-      const activeCell = e.composedPath().find((el) => this.__isCell(el));
 
       if ((this.__rowFocusMode && !activeRow) || (!this.__rowFocusMode && !activeCell)) {
         // When using a screen reader, it's possible that neither a cell nor a row is focused.

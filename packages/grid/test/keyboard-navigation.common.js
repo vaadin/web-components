@@ -22,6 +22,7 @@ import {
   getCell,
   getCellContent,
   getContainerCell,
+  getFirstVisibleItem,
   getLastVisibleItem,
   getRowCells,
   getRows,
@@ -1231,6 +1232,17 @@ describe('keyboard navigation', () => {
 
         expect(getLastVisibleItem(grid).index).to.be.gt(1); // Sanity check
         expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
+      });
+
+      it('should previous focused item be first visible item after third page down', () => {
+        focusItem(0);
+        pageDown();
+        pageDown();
+
+        const previousLastIndex = getFocusedRowIndex();
+        pageDown();
+
+        expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
       });
 
       it('should scroll up one page with page up', async () => {
