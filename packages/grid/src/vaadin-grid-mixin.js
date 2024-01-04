@@ -432,6 +432,12 @@ export const GridMixin = (superClass) =>
             cell.style.position = '';
           }
         });
+
+      if (autoWidth) {
+        this.$.scroller.setAttribute('measuring-auto-width', '');
+      } else {
+        this.$.scroller.removeAttribute('measuring-auto-width');
+      }
     }
 
     /**
