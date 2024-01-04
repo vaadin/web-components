@@ -154,7 +154,7 @@ export const gridStyles = css`
 
   /* Switch the focusButtonMode wrapping element to "position: static" temporarily
      when measuring real width of the cells in the auto-width columns. */
-  [part~='cell'][measuring-auto-width] > [tabindex] {
+  [measuring-auto-width] [part~='cell'] > [tabindex] {
     position: static;
   }
 
