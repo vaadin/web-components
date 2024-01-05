@@ -64,7 +64,8 @@ const menuBarButton = css`
   }
 
   :host([slot='overflow']) {
-    min-width: var(--lumo-button-size);
+    width: var(--lumo-size-m);
+    min-width: var(--lumo-size-m);
     padding-left: calc(var(--lumo-button-size) / 4);
     padding-right: calc(var(--lumo-button-size) / 4);
   }
