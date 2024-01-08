@@ -1,6 +1,6 @@
 {
-  "name": "@hilla/react-components",
-  "version": "2.4.0-alpha2",
+  "name": "@vaadin/react-components",
+  "version": "24.4.0-alpha2",
   "description": "React wrappers for Vaadin components",
   "type": "module",
   "module": "index.js",
