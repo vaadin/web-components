@@ -8,11 +8,9 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
-
-registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
+import { buttonStyles } from './vaadin-button-styles.js';
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -54,8 +52,29 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
     return 'vaadin-button';
   }
 
+  static get styles() {
+    return [buttonStyles];
+  }
+
   static get template() {
-    return buttonTemplate(html);
+    const style = document.createElement('template');
+    style.innerHTML = `<style>${this.styles.join(' ')}</style>`;
+
+    return html`
+      ${style}
+      <div class="vaadin-button-container">
+        <span part="prefix" aria-hidden="true">
+          <slot name="prefix"></slot>
+        </span>
+        <span part="label">
+          <slot></slot>
+        </span>
+        <span part="suffix" aria-hidden="true">
+          <slot name="suffix"></slot>
+        </span>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */

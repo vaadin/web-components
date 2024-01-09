@@ -9,8 +9,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
+import { buttonStyles } from './vaadin-button-styles.js';
 
 /**
  * LitElement based version of `<vaadin-button>` web component.
@@ -32,7 +32,20 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @protected */
   render() {
-    return buttonTemplate(html);
+    return html`
+      <div class="vaadin-button-container">
+        <span part="prefix" aria-hidden="true">
+          <slot name="prefix"></slot>
+        </span>
+        <span part="label">
+          <slot></slot>
+        </span>
+        <span part="suffix" aria-hidden="true">
+          <slot name="suffix"></slot>
+        </span>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */

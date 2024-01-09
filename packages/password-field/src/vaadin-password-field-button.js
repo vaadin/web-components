@@ -4,13 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-base.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
+import { buttonStyles } from '@vaadin/button/src/vaadin-button-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles('vaadin-password-field-button', buttonStyles, { moduleId: 'vaadin-password-field-button-styles' });
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.
@@ -27,8 +25,14 @@ class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolymerElem
     return 'vaadin-password-field-button';
   }
 
+  static get styles() {
+    return [buttonStyles];
+  }
+
   static get template() {
-    return html``;
+    const style = document.createElement('template');
+    style.innerHTML = `<style>${this.styles.join(' ')}</style>`;
+    return html`${style}`;
   }
 }
 

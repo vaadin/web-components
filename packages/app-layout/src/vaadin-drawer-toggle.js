@@ -4,15 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-base.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
+import { buttonStyles } from '@vaadin/button/src/vaadin-button-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
-
-registerStyles('vaadin-drawer-toggle', [buttonStyles, drawerToggle], { moduleId: 'vaadin-drawer-toggle-styles' });
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -30,8 +28,16 @@ registerStyles('vaadin-drawer-toggle', [buttonStyles, drawerToggle], { moduleId:
  * @mixes ThemableMixin
  */
 class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) {
+  static get styles() {
+    return [buttonStyles, drawerToggle];
+  }
+
   static get template() {
+    const style = document.createElement('template');
+    style.innerHTML = `<style>${this.styles.join(' ')}</style>`;
+
     return html`
+      ${style}
       <slot id="slot">
         <div part="icon"></div>
       </slot>
