@@ -24,7 +24,7 @@ declare global {
 window.Vaadin ??= {};
 window.Vaadin.registrations ??= [];
 window.Vaadin.registrations.push({
-  is: '@hilla/react-components',
+  is: '@vaadin/react-components',
   version: __VERSION__,
 });
 
