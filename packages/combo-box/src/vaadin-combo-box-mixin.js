@@ -947,7 +947,7 @@ export const ComboBoxMixin = (subclass) =>
           this.value = this._getItemValue(itemMatchingInputValue);
         } else {
           // Revert the input value
-          this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
+          this._revertInputValueToValue();
         }
       }
 

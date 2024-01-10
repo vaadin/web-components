@@ -378,6 +378,18 @@ describe('selecting items', () => {
       expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
+    it('should clear a matching filter when closing the overlay', async () => {
+      await sendKeys({ type: 'apple' });
+
+      inputElement.blur();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+
+      comboBox.opened = true;
+      expectItems(['apple', 'banana', 'lemon', 'orange']);
+    });
+
     it('should clear the filter when pressing escape', async () => {
       await sendKeys({ type: 'an' });
       expectItems(['banana', 'orange']);
@@ -407,10 +419,15 @@ describe('selecting items', () => {
       expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
-    it('should not select filtered value when closing the overlay', async () => {
-      await sendKeys({ type: 'apple' });
-      inputElement.blur();
-      expect(comboBox.selectedItems).to.deep.equal([]);
+    it('should clear the filter when committing a non-existing item', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.opened).to.be.true;
+      expect(inputElement.value).to.equal('');
+      expect(comboBox.filter).to.equal('');
+      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should allow toggling items via keyboard', async () => {
@@ -429,6 +446,19 @@ describe('selecting items', () => {
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['banana']);
       expect(inputElement.value).to.equal('an');
+    });
+
+    describe('with allowCustomValue', () => {
+      beforeEach(() => {
+        comboBox.allowCustomValue = true;
+      });
+
+      it('should clear the filter value after entering custom value', async () => {
+        await sendKeys({ type: 'pear' });
+        await sendKeys({ down: 'Enter' });
+        expect(comboBox.filter).to.equal('');
+        expect(inputElement.value).to.equal('');
+      });
     });
   });
 });

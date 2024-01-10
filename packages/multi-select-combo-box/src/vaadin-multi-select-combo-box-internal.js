@@ -289,6 +289,19 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override method from combo-box
+   * This is called in several cases, for example on cancel or when reverting
+   * from a value with no matches on commit. In these cases we also want to
+   * clear the filter, regardless of the keepFilter option.
+   * @override
+   * @protected
+   */
+  _revertInputValueToValue() {
+    super._revertInputValueToValue();
+    this.filter = '';
+  }
+
+  /**
    * @protected
    * @override
    */
