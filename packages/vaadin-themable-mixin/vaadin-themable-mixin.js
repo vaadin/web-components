@@ -86,6 +86,7 @@ function updateInstanceStyles(instance) {
   }
 
   // Adopted stylesheets
+  // TODO: This may not be ideal. An element may have 0 styles beforehand.
   if (instance.shadowRoot.adoptedStyleSheets.length) {
     if (!componentClass.__adoptedStyleSheets) {
       componentClass.__adoptedStyleSheets = componentClass.finalizeStyles(componentClass.styles).flatMap((style) => {
@@ -127,15 +128,17 @@ export function registerStyles(themeFor, styles, options = {}) {
 
   if (themeFor) {
     if (hasThemes(themeFor)) {
-      // Mark the component class as needing manual style update on instance creation
       const componentClass = customElements.get(themeFor);
       if (componentClass) {
+        // Mark the component class as needing manual style update on instance creation
         componentClass.__needsStyleUpdate = true;
+        // Clear the adopted stylesheets cache
         componentClass.__adoptedStyleSheets = null;
       }
 
-      // Iterate over all instances of the component type and update their styles
+      // Clean up the weak references to GC'd instances
       themableInstances = themableInstances.filter((ref) => ref.deref());
+      // Iterate over all themable instances and update their styles if needed
       themableInstances.forEach((ref) => {
         const instance = ref.deref();
         if (instance && matchesThemeFor(themeFor, instance.constructor.is)) {
@@ -248,13 +251,28 @@ function getThemes(tagName) {
  */
 export const ThemableMixin = (superClass) =>
   class VaadinThemableMixin extends ThemePropertyMixin(superClass) {
+    constructor() {
+      super();
+      // Store a weak reference to the instance
+      themableInstances.push(new WeakRef(this));
+    }
+
     /** @protected */
     ready() {
       super.ready();
-      // Store a weak reference to the instance
-      themableInstances.push(new WeakRef(this));
+      this.__updateInstanceStyles();
+    }
 
-      if (this.constructor.__needsStyleUpdate) {
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+      this.__updateInstanceStyles();
+    }
+
+    __updateInstanceStyles() {
+      if (!this.__stylesUpdatedOnInit && this.constructor.__needsStyleUpdate) {
+        // Avoid PolyLitMixin-based components from running twice (from firstUpdated and ready)
+        this.__stylesUpdatedOnInit = true;
         // If new themes have been registered after the component definition was finalized,
         // update the styles of the component instances.
         updateInstanceStyles(this);
