@@ -484,7 +484,16 @@ export const GridMixin = (superClass) =>
         return;
       }
       const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
-      this._recalculateColumnWidths(cols);
+
+      const undefinedCols = cols.filter((col) => !customElements.get(col.localName));
+      if (undefinedCols.length) {
+        // Some of the columns are not defined yet, wait for them to be defined before measuring
+        Promise.all(undefinedCols.map((col) => customElements.whenDefined(col.localName))).then(() => {
+          this._recalculateColumnWidths(cols);
+        });
+      } else {
+        this._recalculateColumnWidths(cols);
+      }
     }
 
     /** @private */
