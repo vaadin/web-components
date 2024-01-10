@@ -8,15 +8,57 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/tooltip';
+      import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+      const USE_LIT = true;
+
+      registerStyles(
+        'vaadin-button',
+        css`
+          :host {
+            outline: 2px solid blue;
+          }
+        `,
+      );
+
+      const button = document.querySelector('#add');
+      button.addEventListener('click', () => {
+        const newButton = document.createElement('vaadin-button');
+        newButton.textContent = 'New button';
+        document.body.appendChild(newButton);
+      });
+
+      const register = document.querySelector('#register');
+      register.addEventListener('click', () => {
+        registerStyles(
+          'vaadin-button',
+          css`
+            :host {
+              box-shadow: 10px 10px 10px blue;
+            }
+          `,
+        );
+      });
+
+      const importButton = document.querySelector('#import-button');
+      importButton.addEventListener('click', () => {
+        import(`@vaadin/button/src/vaadin-${USE_LIT ? 'lit-' : ''}button.js`);
+      });
+
+      const importLumo = document.querySelector('#import-lumo');
+      importLumo.addEventListener('click', () => {
+        import(`@vaadin/button/theme/lumo/vaadin-${USE_LIT ? 'lit-' : ''}button.js`);
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-button>
-      Edit
-      <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
-    </vaadin-button>
+    <button id="add">Add more buttons</button>
+    <button id="register">Register a new style for button</button>
+    <button id="import-button">Import Vaadin Button</button>
+    <button id="import-lumo">Import Lumo Button</button>
+
+    <br /><br />
+    <vaadin-button>I'm a Vaadin button</vaadin-button>
   </body>
 </html>

@@ -23,6 +23,8 @@ export { css, unsafeCSS };
  */
 const themeRegistry = [];
 
+let themableInstances = [];
+
 /**
  * Check if the custom element type has themes applied.
  * @param {Function} elementClass
@@ -58,6 +60,48 @@ function flattenStyles(styles = []) {
 }
 
 /**
+ * Returns true if the themeFor string matches the tag name
+ * @param {string} themeFor
+ * @param {string} tagName
+ * @returns {boolean}
+ */
+function matchesThemeFor(themeFor, tagName) {
+  return (themeFor || '').split(' ').some((themeForToken) => {
+    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
+  });
+}
+
+/**
+ * Dynamically updates the styles of the given component instance.
+ */
+function updateInstanceStyles(instance) {
+  const componentClass = instance.constructor;
+
+  // Style elements in the shadow root
+  // TOOD: Can there be multiple style elements (inheritance)?
+  const style = instance.shadowRoot.querySelector('style[themable-mixin-style]');
+  if (style) {
+    const themeStyles = componentClass.getStylesForThis();
+    style.innerHTML = themeStyles.map((s) => s.cssText).join('\n');
+  }
+
+  // Adopted stylesheets
+  if (instance.shadowRoot.adoptedStyleSheets.length) {
+    if (!componentClass.__adoptedStyleSheets) {
+      componentClass.__adoptedStyleSheets = componentClass.finalizeStyles(componentClass.styles).flatMap((style) => {
+        if (style instanceof CSSStyleSheet) {
+          return style;
+        }
+        const styleSheet = new CSSStyleSheet();
+        styleSheet.replaceSync(style.cssText);
+        return styleSheet;
+      });
+    }
+    instance.shadowRoot.adoptedStyleSheets = componentClass.__adoptedStyleSheets;
+  }
+}
+
+/**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
@@ -68,15 +112,6 @@ function flattenStyles(styles = []) {
  * @return {void}
  */
 export function registerStyles(themeFor, styles, options = {}) {
-  if (themeFor) {
-    if (hasThemes(themeFor)) {
-      console.warn(`The custom element definition for "${themeFor}"
-      was finalized before a style module was registered.
-      Make sure to add component specific style modules before
-      importing the corresponding custom element.`);
-    }
-  }
-
   styles = flattenStyles(styles);
 
   if (window.Vaadin && window.Vaadin.styleModules) {
@@ -88,6 +123,33 @@ export function registerStyles(themeFor, styles, options = {}) {
       include: options.include,
       moduleId: options.moduleId,
     });
+  }
+
+  if (themeFor) {
+    if (hasThemes(themeFor)) {
+      // Mark the component class as needing manual style update on instance creation
+      const componentClass = customElements.get(themeFor);
+      if (componentClass) {
+        componentClass.__needsStyleUpdate = true;
+        componentClass.__adoptedStyleSheets = null;
+      }
+
+      // Iterate over all instances of the component type and update their styles
+      themableInstances = themableInstances.filter((ref) => ref.deref());
+      themableInstances.forEach((ref) => {
+        const instance = ref.deref();
+        if (instance && matchesThemeFor(themeFor, instance.constructor.is)) {
+          updateInstanceStyles(instance);
+        }
+      });
+
+      console.warn(
+        `The custom element definition for "${themeFor}" ` +
+          `was finalized before a style module was registered. ` +
+          `Make sure to add component specific style modules before ` +
+          `importing the corresponding custom element.`,
+      );
+    }
   }
 }
 
@@ -101,18 +163,6 @@ function getAllThemes() {
     return window.Vaadin.styleModules.getAllThemes();
   }
   return themeRegistry;
-}
-
-/**
- * Returns true if the themeFor string matches the tag name
- * @param {string} themeFor
- * @param {string} tagName
- * @returns {boolean}
- */
-function matchesThemeFor(themeFor, tagName) {
-  return (themeFor || '').split(' ').some((themeForToken) => {
-    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
-  });
 }
 
 /**
@@ -158,6 +208,7 @@ function getIncludedStyles(theme) {
  */
 function addStylesToTemplate(styles, template) {
   const styleEl = document.createElement('style');
+  styleEl.setAttribute('themable-mixin-style', '');
   styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
   template.content.appendChild(styleEl);
 }
@@ -197,6 +248,19 @@ function getThemes(tagName) {
  */
 export const ThemableMixin = (superClass) =>
   class VaadinThemableMixin extends ThemePropertyMixin(superClass) {
+    /** @protected */
+    ready() {
+      super.ready();
+      // Store a weak reference to the instance
+      themableInstances.push(new WeakRef(this));
+
+      if (this.constructor.__needsStyleUpdate) {
+        // If new themes have been registered after the component definition was finalized,
+        // update the styles of the component instances.
+        updateInstanceStyles(this);
+      }
+    }
+
     /**
      * Covers PolymerElement based component styling
      * @protected
