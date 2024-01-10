@@ -882,9 +882,16 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Suppress `value-changed` event.
     if (!this.keepFilter) {
+      // Clear both combo box value and filter.
       this.__clearFilter();
     } else {
-      this.filter = this._lastFilter;
+      // Only clear combo box value. This effectively resets _lastCommittedValue
+      // which allows toggling the same item multiple times via keyboard.
+      this.$.comboBox.clear();
+      // Restore input to the filter value. Needed when items are
+      // navigated with keyboard, which overrides the input value
+      // with the item label.
+      this._inputElementValue = this.filter;
     }
 
     this.__announceItem(itemLabel, isSelected, itemsCopy.length);

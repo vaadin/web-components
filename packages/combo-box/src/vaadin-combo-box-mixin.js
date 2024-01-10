@@ -868,6 +868,15 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Clears the current filter. Should be used instead of setting the property
+     * directly in order to allow overriding this in multi-select combo box.
+     * @protected
+     */
+    _clearFilter() {
+      this.filter = '';
+    }
+
+    /**
      * Reverts back to original value.
      */
     cancel() {
@@ -891,7 +900,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _commitValue(keepFilter = false) {
+    _commitValue() {
       if (this._focusedIndex > -1) {
         const focusedItem = this._dropdownItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
@@ -946,9 +955,7 @@ export const ComboBoxMixin = (subclass) =>
 
       this._clearSelectionRange();
 
-      if (!keepFilter) {
-        this.filter = '';
-      }
+      this._clearFilter();
     }
 
     /**
@@ -1089,7 +1096,7 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = null;
       }
 
-      this.filter = '';
+      this._clearFilter();
 
       // In the next _detectAndDispatchChange() call, the change detection should pass
       this._lastCommittedValue = undefined;

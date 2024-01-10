@@ -277,6 +277,18 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override from combo-box to not clear filter if the keepFilter
+   * option is enabled and the overlay is still open.
+   * @protected
+   * @override
+   */
+  _clearFilter() {
+    if (!this.keepFilter || !this.opened) {
+      super._clearFilter();
+    }
+  }
+
+  /**
    * @protected
    * @override
    */
@@ -285,7 +297,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     // an item which is already selected, to not un-select it.
     this.lastFilter = this.filter;
 
-    super._commitValue(this.keepFilter);
+    super._commitValue();
   }
 
   /**
