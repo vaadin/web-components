@@ -11,21 +11,14 @@
 import { html } from '@polymer/polymer/polymer-element.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-/**
- * Use registerStyles instead of the `<style>` tag to make sure
- * that this CSS will override core styles of `vaadin-button`.
- */
-registerStyles(
-  'vaadin-crud-edit',
-  css`
-    :host {
-      display: block;
-    }
-  `,
-  { moduleId: 'vaadin-crud-edit-styles' },
-);
+// Override core styles of vaadin-button
+const crudEdit = css`
+  :host {
+    display: block;
+  }
+`;
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
@@ -40,8 +33,16 @@ registerStyles(
  * @mixes ThemableMixin
  */
 class CrudEdit extends Button {
+  static get styles() {
+    return [...super.styles, crudEdit];
+  }
+
   static get template() {
+    const style = document.createElement('template');
+    style.innerHTML = `<style>${this.styles.join(' ')}</style>`;
+
     return html`
+      ${style}
       <div part="icon"></div>
       <slot name="tooltip"></slot>
     `;
