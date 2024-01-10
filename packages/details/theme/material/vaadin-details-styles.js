@@ -1,7 +1,7 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const details = css`
   :host {
@@ -18,7 +18,5 @@ const details = css`
     padding: 8px 24px 24px;
   }
 `;
-
-registerStyles('vaadin-details', details, { moduleId: 'material-details' });
 
 export { details };

@@ -1,2 +1,3 @@
-import './vaadin-details-summary-styles.js';
-import '../../src/vaadin-details-summary.js';
+import LumoDetailsSummary from './vaadin-details-summary-element.js';
+
+LumoDetailsSummary.register();

@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const detailsSummary = css`
   :host {
@@ -117,7 +117,5 @@ const detailsSummary = css`
     padding-right: var(--lumo-space-m);
   }
 `;
-
-registerStyles('vaadin-details-summary', detailsSummary, { moduleId: 'lumo-details-summary' });
 
 export { detailsSummary };

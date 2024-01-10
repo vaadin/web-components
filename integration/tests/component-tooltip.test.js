@@ -7,7 +7,7 @@ import { ComboBox } from '@vaadin/combo-box';
 import { CustomField } from '@vaadin/custom-field';
 import { DatePicker } from '@vaadin/date-picker';
 import { DateTimePicker } from '@vaadin/date-time-picker';
-import { Details } from '@vaadin/details';
+import { DetailsElement } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
 import { Icon } from '@vaadin/icon';
 import { IntegerField } from '@vaadin/integer-field';
@@ -52,7 +52,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
     applyShouldNotShowCondition: (element) => element.querySelector('input').click(),
   },
   {
-    tagName: Details.is,
+    tagName: DetailsElement.is,
     children: '<vaadin-details-summary slot="summary"></vaadin-details-summary>',
     targetSelector: '[slot="summary"]',
     position: 'bottom-start',

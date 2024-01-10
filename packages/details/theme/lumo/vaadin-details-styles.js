@@ -2,7 +2,7 @@ import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const details = css`
   :host {
@@ -36,7 +36,5 @@ const details = css`
     font-size: var(--lumo-font-size-s);
   }
 `;
-
-registerStyles('vaadin-details', details, { moduleId: 'lumo-details' });
 
 export { details };

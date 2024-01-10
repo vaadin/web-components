@@ -42,10 +42,19 @@ export const DetailsBaseMixin = (superClass) =>
       return ['disabled', 'opened'];
     }
 
+    /**
+     * Tag name prefix used by the summary element.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-details';
+    }
+
     constructor() {
       super();
 
-      this._summaryController = new SummaryController(this, 'vaadin-details-summary');
+      this._summaryController = new SummaryController(this, `${this._tagNamePrefix}-summary`);
       this._summaryController.addEventListener('slot-content-changed', (event) => {
         const { node } = event.target;
 

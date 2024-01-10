@@ -1,7 +1,7 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const detailsSummary = css`
   :host {
@@ -98,7 +98,5 @@ const detailsSummary = css`
     right: 0;
   }
 `;
-
-registerStyles('vaadin-details-summary', detailsSummary, { moduleId: 'material-details-summary' });
 
 export { detailsSummary };
