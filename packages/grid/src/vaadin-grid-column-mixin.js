@@ -598,11 +598,9 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _runRenderer(renderer, cell, model) {
-      if (
-        !(model && model.item && !cell.parentElement.hidden) &&
-        renderer !== this._headerRenderer &&
-        renderer !== this._footerRenderer
-      ) {
+      const isVisibleBodyCell = model && model.item && !cell.parentElement.hidden;
+      const shouldRender = isVisibleBodyCell || renderer === this._headerRenderer || renderer === this._footerRenderer;
+      if (!shouldRender) {
         return;
       }
 
