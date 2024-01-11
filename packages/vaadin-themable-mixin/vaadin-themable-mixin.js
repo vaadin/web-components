@@ -300,7 +300,7 @@ export const ThemableMixin = (superClass) =>
       // a LitElement based component. The theme styles are added after it
       // so that they can override the component styles.
       const themeStyles = this.getStylesForThis();
-      return styles ? [...super.finalizeStyles(styles), ...themeStyles] : themeStyles;
+      return styles ? [...[styles].flat(Infinity), ...themeStyles] : themeStyles;
     }
 
     /**
