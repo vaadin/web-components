@@ -277,8 +277,9 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
-   * Override from combo-box to not clear filter if the keepFilter
-   * option is enabled and the overlay is still open.
+   * Override from combo-box to ignore requests to clear the filter if the
+   * keepFilter option is enabled. Exceptions are when the dropdown is closed,
+   * so the filter is still cleared on cancel and focus out.
    * @protected
    * @override
    */
@@ -289,10 +290,8 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
-   * Override method from combo-box
-   * This is called in several cases, for example on cancel or when reverting
-   * from a value with no matches on commit. In these cases we also want to
-   * clear the filter, regardless of the keepFilter option.
+   * Override method from combo-box to always clear the filter when reverting
+   * the input value, regardless of the keepFilter option.
    * @override
    * @protected
    */
