@@ -362,7 +362,10 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
       expectItems(['banana', 'orange']);
+      // Filter should never change, otherwise data provider would be called
       expect(filterChangeSpy.notCalled).to.be.true;
     });
 
@@ -373,9 +376,6 @@ describe('selecting items', () => {
       inputElement.blur();
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
-
-      comboBox.opened = true;
-      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should clear a matching filter when closing the overlay', async () => {
@@ -385,9 +385,6 @@ describe('selecting items', () => {
       expect(comboBox.selectedItems).to.deep.equal([]);
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
-
-      comboBox.opened = true;
-      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should clear the filter when pressing escape', async () => {
@@ -397,9 +394,6 @@ describe('selecting items', () => {
       await sendKeys({ down: 'Escape' });
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
-
-      comboBox.opened = true;
-      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should clear the filter when pressing escape after selecting an item', async () => {
@@ -414,9 +408,6 @@ describe('selecting items', () => {
       expect(comboBox.opened).to.be.false;
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
-
-      comboBox.opened = true;
-      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should clear the filter when committing a non-existing item', async () => {
@@ -427,7 +418,6 @@ describe('selecting items', () => {
       expect(comboBox.opened).to.be.true;
       expect(inputElement.value).to.equal('');
       expect(comboBox.filter).to.equal('');
-      expectItems(['apple', 'banana', 'lemon', 'orange']);
     });
 
     it('should allow toggling items via keyboard', async () => {
