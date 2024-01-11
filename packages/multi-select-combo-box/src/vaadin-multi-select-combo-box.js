@@ -183,6 +183,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           top-group="[[_topGroup]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
+          keep-filter="[[keepFilter]]"
           theme$="[[_theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxChange"
@@ -340,6 +341,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             total: '{count} items selected',
           };
         },
+      },
+
+      /**
+       * When true, filter string isn't cleared after selecting an item.
+       */
+      keepFilter: {
+        type: Boolean,
+        value: false,
       },
 
       /**
@@ -824,10 +833,27 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return selectedItems.indexOf(item);
   }
 
-  /** @private */
-  __clearFilter() {
-    this.filter = '';
-    this.$.comboBox.clear();
+  /**
+   * Clear the internal combo box value and filter. Filter will not be cleared
+   * when the `keepFilter` option is enabled. Using `force` can enforce clearing
+   * the filter.
+   * @param {boolean} force overrides the keepFilter option
+   * @private
+   */
+  __clearInternalValue(force = false) {
+    if (!this.keepFilter || force) {
+      // Clear both combo box value and filter.
+      this.filter = '';
+      this.$.comboBox.clear();
+    } else {
+      // Only clear combo box value. This effectively resets _lastCommittedValue
+      // which allows toggling the same item multiple times via keyboard.
+      this.$.comboBox.clear();
+      // Restore input to the filter value. Needed when items are
+      // navigated with keyboard, which overrides the input value
+      // with the item label.
+      this._inputElementValue = this.filter;
+    }
   }
 
   /** @private */
@@ -859,7 +885,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       const lastFilter = this._lastFilter;
       // Do not unselect when manually typing and committing an already selected item.
       if (lastFilter && lastFilter.toLowerCase() === itemLabel.toLowerCase()) {
-        this.__clearFilter();
+        this.__clearInternalValue();
         return;
       }
 
@@ -872,7 +898,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this.__updateSelection(itemsCopy);
 
     // Suppress `value-changed` event.
-    this.__clearFilter();
+    this.__clearInternalValue();
 
     this.__announceItem(itemLabel, isSelected, itemsCopy.length);
   }
@@ -1232,7 +1258,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Stop the original event
     event.stopPropagation();
 
-    this.__clearFilter();
+    this.__clearInternalValue(true);
 
     this.dispatchEvent(
       new CustomEvent('custom-value-set', {

@@ -275,6 +275,12 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   i18n: MultiSelectComboBoxI18n;
 
   /**
+   * When true, filter string isn't cleared after selecting an item.
+   * @attr {boolean} keep-filter
+   */
+  keepFilter: boolean;
+
+  /**
    * True when loading items from the data provider, false otherwise.
    */
   loading: boolean;
