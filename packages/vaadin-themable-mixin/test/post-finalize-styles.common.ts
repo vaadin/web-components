@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import exp from 'constants';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
 function defineComponent(tagName, parentTagName = 'test-element') {

@@ -23,6 +23,9 @@ export { css, unsafeCSS };
  */
 const themeRegistry = [];
 
+/**
+ * @type {WeakRef<HTMLElement>[]}
+ */
 let themableInstances = [];
 
 /**
@@ -74,6 +77,14 @@ function matchesThemeFor(themeFor, tagName) {
 const STYLE_ID = 'vaadin-themable-mixin-style';
 
 /**
+ * Returns the CSS text content from an array of CSSResults
+ * @param {CSSResult[]} styles
+ */
+function getCssText(styles) {
+  return styles.map((style) => style.cssText).join('\n');
+}
+
+/**
  * Includes the styles to the template.
  * @param {CSSResult[]} styles
  * @param {HTMLTemplateElement} template
@@ -81,7 +92,7 @@ const STYLE_ID = 'vaadin-themable-mixin-style';
 function addStylesToTemplate(styles, template) {
   const styleEl = document.createElement('style');
   styleEl.id = STYLE_ID;
-  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
+  styleEl.textContent = getCssText(styles);
   template.content.appendChild(styleEl);
 }
 
@@ -117,6 +128,35 @@ function updateInstanceStyles(instance) {
 }
 
 /**
+ * Dynamically updates the styles of the component type matching the given tag name.
+ */
+function updateStyles(tagName) {
+  const componentClass = customElements.get(tagName);
+
+  // Update Polymer-based component's template
+  const template = componentClass.prototype._template;
+  if (template) {
+    // Update the style element content in the template
+    template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
+  }
+
+  // Update LitElement-based component's elementStyles
+  if (componentClass.elementStyles) {
+    componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
+  }
+
+  // Clean up the weak references to GC'd instances
+  themableInstances = themableInstances.filter((ref) => ref.deref());
+  // Iterate over all themable instances and update their styles if needed
+  themableInstances.forEach((ref) => {
+    const instance = ref.deref();
+    if (instance && matchesThemeFor(tagName, instance.constructor.is)) {
+      updateInstanceStyles(instance);
+    }
+  });
+}
+
+/**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
@@ -149,34 +189,7 @@ export function registerStyles(themeFor, styles, options = {}) {
           `importing the corresponding custom element.`,
       );
 
-      const componentClass = customElements.get(themeFor);
-
-      // Update Polymer-based component's template
-      const template = componentClass.prototype._template;
-      if (template) {
-        // Remove existing styles
-        const style = template.content.getElementById(STYLE_ID);
-        if (style) {
-          style.remove();
-        }
-        // Add updated styles
-        addStylesToTemplate(componentClass.getStylesForThis(), template);
-      }
-
-      // Update LitElement-based component's styles
-      if (componentClass.elementStyles) {
-        componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
-      }
-
-      // Clean up the weak references to GC'd instances
-      themableInstances = themableInstances.filter((ref) => ref.deref());
-      // Iterate over all themable instances and update their styles if needed
-      themableInstances.forEach((ref) => {
-        const instance = ref.deref();
-        if (instance && matchesThemeFor(themeFor, instance.constructor.is)) {
-          updateInstanceStyles(instance);
-        }
-      });
+      updateStyles(themeFor);
     }
   }
 }
