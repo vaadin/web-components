@@ -28,6 +28,9 @@ const themeRegistry = [];
  */
 let themableInstances = [];
 
+/**
+ * @type {string[]}
+ */
 const themableTypes = new Set();
 
 /**
@@ -136,13 +139,10 @@ function updateInstanceStyles(instance) {
 /**
  * Dynamically updates the styles of the given component type.
  */
-function updateStyles(tagName) {
-  const componentClass = customElements.get(tagName);
-
+function updateStyles(componentClass) {
   // Update Polymer-based component's template
   const template = componentClass.prototype._template;
   if (template) {
-    // Update the style element content in the template
     template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
   }
 
@@ -156,15 +156,16 @@ function updateStyles(tagName) {
   // Iterate over all themable instances and update their styles if needed
   themableInstances.forEach((ref) => {
     const instance = ref.deref();
-    if (instance && matchesThemeFor(tagName, instance.constructor.is)) {
+    if (instance instanceof componentClass) {
       updateInstanceStyles(instance);
     }
   });
 
   // Update the styles of inheriting types
   themableTypes.forEach((inheritingTagName) => {
-    if (inheritingTagName !== tagName && customElements.get(inheritingTagName).prototype instanceof componentClass) {
-      updateStyles(inheritingTagName);
+    const inheritingClass = customElements.get(inheritingTagName);
+    if (inheritingClass && inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
+      updateStyles(inheritingClass);
     }
   });
 }
@@ -202,7 +203,7 @@ export function registerStyles(themeFor, styles, options = {}) {
           `importing the corresponding custom element.`,
       );
 
-      updateStyles(themeFor);
+      updateStyles(customElements.get(themeFor));
     }
   }
 }
