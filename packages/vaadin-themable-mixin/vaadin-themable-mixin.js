@@ -105,9 +105,7 @@ function updateInstanceStyles(instance) {
         if (style instanceof CSSStyleSheet) {
           return style;
         }
-        const styleSheet = new CSSStyleSheet();
-        styleSheet.replaceSync(style.cssText);
-        return styleSheet;
+        return style.styleSheet;
       });
     }
     instance.shadowRoot.adoptedStyleSheets = componentClass.__adoptedStyleSheets;
@@ -142,8 +140,6 @@ export function registerStyles(themeFor, styles, options = {}) {
     if (hasThemes(themeFor)) {
       const componentClass = customElements.get(themeFor);
       if (componentClass) {
-        // Mark the component class as needing manual style update on instance creation
-        componentClass.__needsStyleUpdate = true;
         // Clear the adopted stylesheets cache
         componentClass.__adoptedStyleSheets = null;
       }
@@ -168,6 +164,11 @@ export function registerStyles(themeFor, styles, options = {}) {
         }
         // Add updated styles
         addStylesToTemplate(componentClass.getStylesForThis(), template);
+      }
+
+      // Update LitElement-based component's styles
+      if (componentClass.elementStyles) {
+        componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
       }
 
       console.warn(
@@ -267,16 +268,6 @@ export const ThemableMixin = (superClass) =>
       super();
       // Store a weak reference to the instance
       themableInstances.push(new WeakRef(this));
-    }
-
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-      if (this.constructor.__needsStyleUpdate) {
-        // If new themes have been registered after the component definition was finalized,
-        // update the styles of the component instances.
-        updateInstanceStyles(this);
-      }
     }
 
     /**
