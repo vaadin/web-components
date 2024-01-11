@@ -117,9 +117,9 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
       grid.items = [{ name: 'Item 1' }, { name: 'Item 2' }];
       grid._getRenderedRows()[1].hidden = true;
       const renderedItems = [];
-      columns[0].renderer = Sinon.spy((root, _, model) => {
+      columns[0].renderer = (root, _, model) => {
         renderedItems.push(model.item.name);
-      });
+      };
       await nextFrame();
       expect(renderedItems).to.include('Item 1');
       expect(renderedItems).to.not.include('Item 2');
