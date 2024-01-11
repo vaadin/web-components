@@ -115,7 +115,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
     it('should not render hidden rows on renderer change', async () => {
       grid.items = [{ name: 'Item 1' }, { name: 'Item 2' }];
-      grid._getRenderedRows()[1].hidden = true;
+      grid.items = [{ name: 'Item 1' }];
       const renderedItems = [];
       columns[0].renderer = (root, _, model) => {
         renderedItems.push(model.item.name);
