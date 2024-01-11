@@ -72,6 +72,18 @@ function matchesThemeFor(themeFor, tagName) {
 }
 
 /**
+ * Includes the styles to the template.
+ * @param {CSSResult[]} styles
+ * @param {HTMLTemplateElement} template
+ */
+function addStylesToTemplate(styles, template) {
+  const styleEl = document.createElement('style');
+  styleEl.setAttribute('themable-mixin-style', '');
+  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
+  template.content.appendChild(styleEl);
+}
+
+/**
  * Dynamically updates the styles of the given component instance.
  */
 function updateInstanceStyles(instance) {
@@ -146,6 +158,18 @@ export function registerStyles(themeFor, styles, options = {}) {
         }
       });
 
+      // Update Polymer-based component's template
+      const template = componentClass.prototype._template;
+      if (template) {
+        // Remove existing styles
+        const style = template.content.querySelector('style[themable-mixin-style]');
+        if (style) {
+          style.remove();
+        }
+        // Add updated styles
+        addStylesToTemplate(componentClass.getStylesForThis(), template);
+      }
+
       console.warn(
         `The custom element definition for "${themeFor}" ` +
           `was finalized before a style module was registered. ` +
@@ -205,18 +229,6 @@ function getIncludedStyles(theme) {
 }
 
 /**
- * Includes the styles to the template.
- * @param {CSSResult[]} styles
- * @param {HTMLTemplateElement} template
- */
-function addStylesToTemplate(styles, template) {
-  const styleEl = document.createElement('style');
-  styleEl.setAttribute('themable-mixin-style', '');
-  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
-  template.content.appendChild(styleEl);
-}
-
-/**
  * Returns an array of themes that should be used for styling a component matching
  * the tag name. The array is sorted by the include order.
  * @param {string} tagName
@@ -258,21 +270,9 @@ export const ThemableMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
-      this.__updateInstanceStyles();
-    }
-
-    /** @protected */
     firstUpdated() {
       super.firstUpdated();
-      this.__updateInstanceStyles();
-    }
-
-    __updateInstanceStyles() {
-      if (!this.__stylesUpdatedOnInit && this.constructor.__needsStyleUpdate) {
-        // Avoid PolyLitMixin-based components from running twice (from firstUpdated and ready)
-        this.__stylesUpdatedOnInit = true;
+      if (this.constructor.__needsStyleUpdate) {
         // If new themes have been registered after the component definition was finalized,
         // update the styles of the component instances.
         updateInstanceStyles(this);
