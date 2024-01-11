@@ -307,14 +307,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
-       * When true, filter string isn't cleared after selecting an item.
-       */
-      keepFilter: {
-        type: Boolean,
-        value: false,
-      },
-
-      /**
        * The object used to localize this component.
        * To change the default localization, replace the entire
        * _i18n_ object or just the property you want to modify.
@@ -349,6 +341,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             total: '{count} items selected',
           };
         },
+      },
+
+      /**
+       * When true, filter string isn't cleared after selecting an item.
+       */
+      keepFilter: {
+        type: Boolean,
+        value: false,
       },
 
       /**
@@ -838,7 +838,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
    * when the `keepFilter` option is enabled. Using `force` can enforce clearing
    * the filter.
    * @param {boolean} force overrides the keepFilter option
-   * @private */
+   * @private
+   */
   __clearInternalValue(force = false) {
     if (!this.keepFilter || force) {
       // Clear both combo box value and filter.
