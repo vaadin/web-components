@@ -15,6 +15,12 @@ function defineComponent(tagName, parentTagName = 'test-element') {
 describe('ThemableMixin - post-finalize styles', () => {
   let warn;
 
+  let tagId = 0;
+  function uniqueTagName() {
+    tagId += 1;
+    return `custom-element-${tagId}`;
+  }
+
   beforeEach(() => {
     warn = sinon.stub(console, 'warn');
   });
@@ -24,7 +30,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   });
 
   it('should have pre-finalize styles', () => {
-    const tagName = 'pre-finalize-styles';
+    const tagName = uniqueTagName();
 
     registerStyles(
       tagName,
@@ -43,7 +49,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   });
 
   it('should have post-finalize styles', async () => {
-    const tagName = 'post-finalize-styles';
+    const tagName = uniqueTagName();
 
     defineComponent(tagName);
     const instance = fixtureSync(`<${tagName}></${tagName}>`);
@@ -64,7 +70,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   });
 
   it('should have post-finalize styles on a new instance', async () => {
-    const tagName = 'post-finalize-styles-new-instance';
+    const tagName = uniqueTagName();
     defineComponent(tagName);
     // Create an instance to trigger finalize in case of a Polymer component
     fixtureSync(`<${tagName}></${tagName}>`);
@@ -86,7 +92,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   });
 
   it('should warn when using post-finalize styles', () => {
-    const tagName = 'post-finalize-warning';
+    const tagName = uniqueTagName();
     defineComponent(tagName);
     fixtureSync(`<${tagName}></${tagName}>`);
     registerStyles(
@@ -102,7 +108,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   });
 
   it('should inherit post-finalize styles from parent', async () => {
-    const parentTagName = 'parent-component';
+    const parentTagName = uniqueTagName();
     defineComponent(parentTagName);
     const parent = fixtureSync(`<${parentTagName}></${parentTagName}>`);
     await nextFrame();
@@ -115,7 +121,7 @@ describe('ThemableMixin - post-finalize styles', () => {
       `,
     );
 
-    const childTagName = 'child-component';
+    const childTagName = uniqueTagName();
     defineComponent(childTagName, parentTagName);
     const child = fixtureSync(`<${childTagName}></${childTagName}>`);
     await nextFrame();
@@ -138,5 +144,59 @@ describe('ThemableMixin - post-finalize styles', () => {
     expect(childStyles.getPropertyValue('--foo')).to.equal('foo');
     expect(childStyles.getPropertyValue('--bar')).to.equal('bar');
     expect(childStyles.display).to.equal('block');
+  });
+
+  it('should inherit post-finalize styles to already defined child after instantiating', async () => {
+    const parentTagName = uniqueTagName();
+    defineComponent(parentTagName);
+    await nextFrame();
+
+    const childTagName = uniqueTagName();
+    defineComponent(childTagName, parentTagName);
+    const child = fixtureSync(`<${childTagName}></${childTagName}>`);
+    await nextFrame();
+
+    registerStyles(
+      parentTagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+
+    const childStyles = getComputedStyle(child);
+    expect(childStyles.getPropertyValue('--foo')).to.equal('foo');
+  });
+
+  it('should inherit post-finalize styles to already defined child before instantiating', async () => {
+    const parentTagName = uniqueTagName();
+    defineComponent(parentTagName);
+    await nextFrame();
+
+    const childTagName = uniqueTagName();
+    defineComponent(childTagName, parentTagName);
+    // Create an instance to trigger finalize in case of a Polymer component
+    fixtureSync(`<${childTagName}></${childTagName}>`);
+    await nextFrame();
+
+    registerStyles(
+      parentTagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+
+    const child = fixtureSync(`<${childTagName}></${childTagName}>`);
+    await nextFrame();
+
+    const childStyles = getComputedStyle(child);
+    expect(childStyles.getPropertyValue('--foo')).to.equal('foo');
   });
 });

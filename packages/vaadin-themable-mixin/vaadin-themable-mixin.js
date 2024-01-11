@@ -28,6 +28,8 @@ const themeRegistry = [];
  */
 let themableInstances = [];
 
+const themableTypes = new Set();
+
 /**
  * Check if the custom element type has themes applied.
  * @param {Function} elementClass
@@ -100,6 +102,10 @@ function addStylesToTemplate(styles, template) {
  * Dynamically updates the styles of the given component instance.
  */
 function updateInstanceStyles(instance) {
+  if (!instance.shadowRoot) {
+    return;
+  }
+
   const componentClass = instance.constructor;
 
   if (instance instanceof LitElement) {
@@ -119,16 +125,16 @@ function updateInstanceStyles(instance) {
     // PolymerElement
 
     // Update style element content in the shadow root
-    const style = instance.shadowRoot.getElementById(STYLE_ID);
     const template = componentClass.prototype._template;
-    if (style && template) {
+    if (template) {
+      const style = instance.shadowRoot.getElementById(STYLE_ID);
       style.textContent = template.content.getElementById(STYLE_ID).textContent;
     }
   }
 }
 
 /**
- * Dynamically updates the styles of the component type matching the given tag name.
+ * Dynamically updates the styles of the given component type.
  */
 function updateStyles(tagName) {
   const componentClass = customElements.get(tagName);
@@ -152,6 +158,13 @@ function updateStyles(tagName) {
     const instance = ref.deref();
     if (instance && matchesThemeFor(tagName, instance.constructor.is)) {
       updateInstanceStyles(instance);
+    }
+  });
+
+  // Update the styles of inheriting types
+  themableTypes.forEach((inheritingTagName) => {
+    if (inheritingTagName !== tagName && customElements.get(inheritingTagName).prototype instanceof componentClass) {
+      updateStyles(inheritingTagName);
     }
   });
 }
@@ -290,6 +303,10 @@ export const ThemableMixin = (superClass) =>
     static finalize() {
       super.finalize();
 
+      if (this.is) {
+        themableTypes.add(this.is);
+      }
+
       // Make sure not to run the logic intended for PolymerElement when LitElement is used.
       if (this.elementStyles) {
         return;
@@ -322,8 +339,7 @@ export const ThemableMixin = (superClass) =>
      * @private
      */
     static getStylesForThis() {
-      const parent = Object.getPrototypeOf(this.prototype);
-      const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
+      const inheritedThemes = superClass.__themes || [];
       this.__themes = [...inheritedThemes, ...getThemes(this.is)];
       const themeStyles = this.__themes.flatMap((theme) => theme.styles);
       // Remove duplicates
