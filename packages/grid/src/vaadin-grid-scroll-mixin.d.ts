@@ -43,6 +43,8 @@ export declare class ScrollMixinClass {
    * - Keyboard Navigation: Tabbing through focusable elements inside the grid body may not work as expected because
    * some of the columns that would include focusable elements in the body cells may be outside the visible viewport
    * and thus not rendered.
+   *
+   * @attr {eager|lazy} column-rendering
    */
   columnRendering: ColumnRendering;
 
