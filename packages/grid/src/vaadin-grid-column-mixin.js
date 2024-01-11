@@ -605,7 +605,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       const args = [cell._content, this];
-      if (model && model.item) {
+      if (isVisibleBodyCell) {
         args.push(model);
       }
 
