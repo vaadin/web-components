@@ -340,8 +340,11 @@ export const ThemableMixin = (superClass) =>
      * @private
      */
     static getStylesForThis() {
-      const inheritedThemes = superClass.__themes || [];
-      this.__themes = [...inheritedThemes, ...getThemes(this.is)];
+      const parent = Object.getPrototypeOf(this.prototype);
+      const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
+      const superClassThemes = superClass.__themes || [];
+
+      this.__themes = [...inheritedThemes, ...superClassThemes, ...getThemes(this.is)];
       const themeStyles = this.__themes.flatMap((theme) => theme.styles);
       // Remove duplicates
       return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
