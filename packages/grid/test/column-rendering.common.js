@@ -113,6 +113,18 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
       expectBodyCellNotRendered(columns.length - 1);
     });
 
+    it('should not render hidden rows on renderer change', async () => {
+      grid.items = [{ name: 'Item 1' }, { name: 'Item 2' }];
+      grid.items = [{ name: 'Item 1' }];
+      const renderedItems = [];
+      columns[0].renderer = (root, _, model) => {
+        renderedItems.push(model.item.name);
+      };
+      await nextFrame();
+      expect(renderedItems).to.include('Item 1');
+      expect(renderedItems).to.not.include('Item 2');
+    });
+
     it('new rows - should render columns inside the viewport', () => {
       resetRenderers();
       grid.items = [{ name: `Item 1` }, { name: `Item 2` }];
