@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, CSSResult, unsafeCSS } from 'lit';
+import { adoptStyles, css, CSSResult, LitElement, supportsAdoptingStyleSheets, unsafeCSS } from 'lit';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -71,6 +71,8 @@ function matchesThemeFor(themeFor, tagName) {
   });
 }
 
+const STYLE_ID = 'vaadin-themable-mixin-style';
+
 /**
  * Includes the styles to the template.
  * @param {CSSResult[]} styles
@@ -78,7 +80,7 @@ function matchesThemeFor(themeFor, tagName) {
  */
 function addStylesToTemplate(styles, template) {
   const styleEl = document.createElement('style');
-  styleEl.setAttribute('themable-mixin-style', '');
+  styleEl.id = STYLE_ID;
   styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
   template.content.appendChild(styleEl);
 }
@@ -89,26 +91,28 @@ function addStylesToTemplate(styles, template) {
 function updateInstanceStyles(instance) {
   const componentClass = instance.constructor;
 
-  // Style elements in the shadow root
-  // TOOD: Can there be multiple style elements (inheritance)?
-  const style = instance.shadowRoot.querySelector('style[themable-mixin-style]');
-  if (style) {
-    const themeStyles = componentClass.getStylesForThis();
-    style.innerHTML = themeStyles.map((s) => s.cssText).join('\n');
-  }
+  if (instance instanceof LitElement) {
+    // LitElement
+    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => {
+      // If adoptStyles falls back to appending style elements to shadow root,
+      // the old styles need to be removed. Styles marked with a special 'template-style'
+      // class name are left untouched.
+      if (!supportsAdoptingStyleSheets && !style.classList.contains('template-style')) {
+        style.remove();
+      }
+    });
 
-  // Adopted stylesheets
-  // TODO: This may not be ideal. An element may have 0 styles beforehand.
-  if (instance.shadowRoot.adoptedStyleSheets.length) {
-    if (!componentClass.__adoptedStyleSheets) {
-      componentClass.__adoptedStyleSheets = componentClass.finalizeStyles(componentClass.styles).flatMap((style) => {
-        if (style instanceof CSSStyleSheet) {
-          return style;
-        }
-        return style.styleSheet;
-      });
+    // Update LitElement styles
+    adoptStyles(instance.shadowRoot, componentClass.elementStyles);
+  } else {
+    // PolymerElement
+
+    // Update style element content in the shadow root
+    const style = instance.shadowRoot.getElementById(STYLE_ID);
+    const template = componentClass.prototype._template;
+    if (style && template) {
+      style.textContent = template.content.getElementById(STYLE_ID).textContent;
     }
-    instance.shadowRoot.adoptedStyleSheets = componentClass.__adoptedStyleSheets;
   }
 }
 
@@ -138,27 +142,20 @@ export function registerStyles(themeFor, styles, options = {}) {
 
   if (themeFor) {
     if (hasThemes(themeFor)) {
-      const componentClass = customElements.get(themeFor);
-      if (componentClass) {
-        // Clear the adopted stylesheets cache
-        componentClass.__adoptedStyleSheets = null;
-      }
+      console.warn(
+        `The custom element definition for "${themeFor}" ` +
+          `was finalized before a style module was registered. ` +
+          `Make sure to add component specific style modules before ` +
+          `importing the corresponding custom element.`,
+      );
 
-      // Clean up the weak references to GC'd instances
-      themableInstances = themableInstances.filter((ref) => ref.deref());
-      // Iterate over all themable instances and update their styles if needed
-      themableInstances.forEach((ref) => {
-        const instance = ref.deref();
-        if (instance && matchesThemeFor(themeFor, instance.constructor.is)) {
-          updateInstanceStyles(instance);
-        }
-      });
+      const componentClass = customElements.get(themeFor);
 
       // Update Polymer-based component's template
       const template = componentClass.prototype._template;
       if (template) {
         // Remove existing styles
-        const style = template.content.querySelector('style[themable-mixin-style]');
+        const style = template.content.getElementById(STYLE_ID);
         if (style) {
           style.remove();
         }
@@ -171,12 +168,15 @@ export function registerStyles(themeFor, styles, options = {}) {
         componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
       }
 
-      console.warn(
-        `The custom element definition for "${themeFor}" ` +
-          `was finalized before a style module was registered. ` +
-          `Make sure to add component specific style modules before ` +
-          `importing the corresponding custom element.`,
-      );
+      // Clean up the weak references to GC'd instances
+      themableInstances = themableInstances.filter((ref) => ref.deref());
+      // Iterate over all themable instances and update their styles if needed
+      themableInstances.forEach((ref) => {
+        const instance = ref.deref();
+        if (instance && matchesThemeFor(themeFor, instance.constructor.is)) {
+          updateInstanceStyles(instance);
+        }
+      });
     }
   }
 }
