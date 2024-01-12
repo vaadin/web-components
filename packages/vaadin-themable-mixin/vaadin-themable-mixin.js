@@ -133,6 +133,23 @@ function updateInstanceStyles(instance) {
 }
 
 /**
+ * Dynamically updates the styles of the instances matching the given component type.
+ * @param {Function} componentClass
+ */
+function updateInstanceStylesOfType(componentClass) {
+  // Iterate over component instances and update their styles if needed
+  themableInstances.forEach((ref) => {
+    const instance = ref.deref();
+    if (instance instanceof componentClass) {
+      updateInstanceStyles(instance);
+    } else if (!instance) {
+      // Clean up the weak reference to a GC'd instance
+      themableInstances.delete(ref);
+    }
+  });
+}
+
+/**
  * Dynamically updates the styles of the given component type.
  * @param {Function} componentClass
  */
@@ -151,26 +168,6 @@ function updateComponentStyles(componentClass) {
     const inheritingClass = customElements.get(inheritingTagName);
     if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
       updateComponentStyles(inheritingClass);
-    }
-  });
-}
-
-/**
- * Dynamically updates the styles of the given component type and all its instances.
- * @param {Function} componentClass
- */
-function updateComponentAndInstanceStyles(componentClass) {
-  // Update the styles of the component type
-  updateComponentStyles(componentClass);
-
-  // Iterate over component instances and update their styles if needed
-  themableInstances.forEach((ref) => {
-    const instance = ref.deref();
-    if (instance instanceof componentClass) {
-      updateInstanceStyles(instance);
-    } else if (!instance) {
-      // Clean up the weak reference to a GC'd instance
-      themableInstances.delete(ref);
     }
   });
 }
@@ -203,7 +200,11 @@ export function registerStyles(themeFor, styles, options = {}) {
     // Update styles of the component types that match themeFor and have already been finalized
     themableTypes.forEach((tagName) => {
       if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
-        updateComponentAndInstanceStyles(customElements.get(tagName));
+        const componentClass = customElements.get(tagName);
+        // Update the styles of the component type
+        updateComponentStyles(componentClass);
+        // Update the styles of the component instances matching the component type
+        updateInstanceStylesOfType(componentClass);
       }
     });
   }
