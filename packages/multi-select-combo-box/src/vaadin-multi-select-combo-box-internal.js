@@ -244,7 +244,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
       if (this.readonly) {
         this.close();
-      } else {
+      } else if (this._hasValidInputValue()) {
         // Keep selected item focused after committing on Enter.
         const focusedItem = this._dropdownItems[this._focusedIndex];
         this._commitValue();

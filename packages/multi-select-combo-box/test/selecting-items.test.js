@@ -125,6 +125,14 @@ describe('selecting items', () => {
       comboBox.clear();
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
+
+    it('should keep the filter and input value when committing an invalid option', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
   });
 
   describe('dataProvider', () => {
@@ -410,14 +418,14 @@ describe('selecting items', () => {
       expect(inputElement.value).to.equal('');
     });
 
-    it('should clear the filter when committing a non-existing item', async () => {
+    it('should keep the filter and input value when committing an invalid option', async () => {
       await sendKeys({ type: 'an' });
       expectItems(['banana', 'orange']);
 
       await sendKeys({ down: 'Enter' });
       expect(comboBox.opened).to.be.true;
-      expect(inputElement.value).to.equal('');
-      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('an');
+      expect(comboBox.filter).to.equal('an');
     });
 
     it('should allow toggling items via keyboard', async () => {
