@@ -58,6 +58,12 @@ describe('vaadin-combo-box', () => {
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
+    it('value', async () => {
+      comboBox.allowCustomValue = true;
+      comboBox.value = 'value';
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
     describe('opened', () => {
       const SNAPSHOT_CONFIG = {
         // Some inline CSS styles related to the overlay's position
@@ -77,6 +83,10 @@ describe('vaadin-combo-box', () => {
 
       it('overlay', async () => {
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
+      it('overlay shadow', async () => {
+        await expect(comboBox.$.overlay).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('overlay class', async () => {
