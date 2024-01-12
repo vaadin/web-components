@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
 function defineComponent(tagName, parentTagName = 'test-element') {
@@ -286,5 +287,60 @@ describe('ThemableMixin - post-finalize styles', () => {
       );
 
     expect(doRegister).to.not.throw();
+  });
+
+  it('should warn when the same style rules get added again', async () => {
+    const tagName = uniqueTagName();
+    defineComponent(tagName);
+    const instance = fixtureSync(`<${tagName}></${tagName}>`);
+
+    const warn = sinon.stub(console, 'warn');
+
+    registerStyles(
+      tagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    registerStyles(
+      tagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+    warn.restore();
+
+    expect(warn.calledOnce).to.be.true;
+    expect(getComputedStyle(instance).getPropertyValue('--foo')).to.equal('foo');
+  });
+
+  it('should warn when the same style instance gets added again', async () => {
+    const tagName = uniqueTagName();
+    defineComponent(tagName);
+    const instance = fixtureSync(`<${tagName}></${tagName}>`);
+
+    const warn = sinon.stub(console, 'warn');
+
+    const style = css`
+      :host {
+        --foo: foo;
+      }
+    `;
+
+    registerStyles(tagName, style);
+    registerStyles(tagName, style);
+
+    await nextFrame();
+    warn.restore();
+
+    expect(warn.calledOnce).to.be.true;
+    expect(getComputedStyle(instance).getPropertyValue('--foo')).to.equal('foo');
   });
 });

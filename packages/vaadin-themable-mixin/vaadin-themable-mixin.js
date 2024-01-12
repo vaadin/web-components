@@ -173,6 +173,24 @@ function updateComponentStyles(componentClass) {
 }
 
 /**
+ * Check if the component type already has a style matching the given styles.
+ *
+ * @param {Function} componentClass
+ * @param {CSSResultGroup} styles
+ * @returns {boolean}
+ */
+function hasMatchingStyle(componentClass, styles) {
+  const themes = componentClass.__themes;
+  if (!themes || !styles) {
+    return false;
+  }
+
+  return themes.some((theme) =>
+    theme.styles.some((themeStyle) => styles.some((style) => style.cssText === themeStyle.cssText)),
+  );
+}
+
+/**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
@@ -201,6 +219,12 @@ export function registerStyles(themeFor, styles, options = {}) {
     themableTypes.forEach((tagName) => {
       if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
         const componentClass = customElements.get(tagName);
+
+        // Show a warning if the component type already has some of the given styles
+        if (hasMatchingStyle(componentClass, styles)) {
+          console.warn(`Registering styles for ${themeFor} that already exist for ${tagName}`);
+        }
+
         // Update the styles of the component type
         updateComponentStyles(componentClass);
         // Update the styles of the component instances matching the component type
