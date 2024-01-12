@@ -598,8 +598,14 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _runRenderer(renderer, cell, model) {
+      const isVisibleBodyCell = model && model.item && !cell.parentElement.hidden;
+      const shouldRender = isVisibleBodyCell || renderer === this._headerRenderer || renderer === this._footerRenderer;
+      if (!shouldRender) {
+        return;
+      }
+
       const args = [cell._content, this];
-      if (model && model.item) {
+      if (isVisibleBodyCell) {
         args.push(model);
       }
 
@@ -634,9 +640,7 @@ export const ColumnBaseMixin = (superClass) =>
 
         cell._renderer = renderer;
 
-        if (model.item || renderer === this._headerRenderer || renderer === this._footerRenderer) {
-          this._runRenderer(renderer, cell, model);
-        }
+        this._runRenderer(renderer, cell, model);
       });
     }
 
