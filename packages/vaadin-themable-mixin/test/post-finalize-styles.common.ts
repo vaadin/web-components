@@ -13,13 +13,13 @@ function defineComponent(tagName, parentTagName = 'test-element') {
 
 function getCssText(instance) {
   if (instance.shadowRoot.adoptedStyleSheets?.length) {
-    // LitElement
+    // Uses adopted stylesheets
     return [...instance.shadowRoot.adoptedStyleSheets].reduce((acc, sheet) => {
       return sheet.rules ? acc + [...sheet.rules].reduce((acc, rule) => acc + rule.cssText, '') : acc;
     });
   }
-  // PolymerElement
-  return instance.shadowRoot.querySelector('#vaadin-themable-mixin-style').textContent;
+  // Uses style elements
+  return [...instance.shadowRoot.querySelectorAll('style')].reduce((acc, style) => acc + style.textContent, '');
 }
 
 describe('ThemableMixin - post-finalize styles', () => {
