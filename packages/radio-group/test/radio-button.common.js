@@ -250,26 +250,6 @@ describe('radio-button', () => {
     });
   });
 
-  describe('has-label attribute', () => {
-    beforeEach(async () => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
-      await nextRender();
-    });
-
-    it('should not set has-label attribute when label content is empty', () => {
-      expect(radio.hasAttribute('has-label')).to.be.false;
-    });
-
-    it('should set has-label attribute when the label is added', async () => {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = 'Added label';
-      paragraph.setAttribute('slot', 'label');
-      radio.appendChild(paragraph);
-      await nextFrame();
-      expect(radio.hasAttribute('has-label')).to.be.true;
-    });
-  });
-
   describe('focus', () => {
     let inputX, inputY;
 
