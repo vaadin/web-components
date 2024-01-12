@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
 function defineComponent(tagName, parentTagName = 'test-element') {
@@ -13,21 +12,11 @@ function defineComponent(tagName, parentTagName = 'test-element') {
 }
 
 describe('ThemableMixin - post-finalize styles', () => {
-  let warn;
-
   let tagId = 0;
   function uniqueTagName() {
     tagId += 1;
     return `custom-element-${tagId}`;
   }
-
-  beforeEach(() => {
-    warn = sinon.stub(console, 'warn');
-  });
-
-  afterEach(() => {
-    warn.restore();
-  });
 
   it('should have pre-finalize styles', () => {
     const tagName = uniqueTagName();
@@ -89,22 +78,6 @@ describe('ThemableMixin - post-finalize styles', () => {
 
     const styles = getComputedStyle(instance);
     expect(styles.getPropertyValue('--foo')).to.equal('foo');
-  });
-
-  it('should warn when using post-finalize styles', () => {
-    const tagName = uniqueTagName();
-    defineComponent(tagName);
-    fixtureSync(`<${tagName}></${tagName}>`);
-    registerStyles(
-      tagName,
-      css`
-        :host {
-          --foo: foo;
-        }
-      `,
-    );
-
-    expect(warn.calledOnce).to.be.true;
   });
 
   it('should inherit post-finalize styles from parent', async () => {

@@ -195,16 +195,12 @@ export function registerStyles(themeFor, styles, options = {}) {
   }
 
   if (themeFor) {
-    if (hasThemes(themeFor)) {
-      console.warn(
-        `The custom element definition for "${themeFor}" ` +
-          `was finalized before a style module was registered. ` +
-          `Make sure to add component specific style modules before ` +
-          `importing the corresponding custom element.`,
-      );
-
-      updateStyles(customElements.get(themeFor));
-    }
+    // Update styles of the component types that match themeFor and have already been finalized
+    themableTypes.forEach((tagName) => {
+      if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
+        updateStyles(customElements.get(tagName));
+      }
+    });
   }
 }
 

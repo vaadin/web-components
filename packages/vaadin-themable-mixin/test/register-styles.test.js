@@ -189,39 +189,5 @@ describe('registerStyles', () => {
       // There should be only one occurrence
       expect(occurrences).to.equal(1);
     });
-
-    describe('warnings', () => {
-      beforeEach(() => {
-        sinon.stub(console, 'warn');
-      });
-
-      afterEach(() => {
-        console.warn.restore();
-      });
-
-      it('should warn about registering the style too late', () => {
-        defineAndInstantiate(unique());
-
-        registerStyles(unique(), styles);
-
-        expect(console.warn.called).to.be.true;
-      });
-
-      it('should not warn about registering the style too late', () => {
-        registerStyles(unique(), styles);
-
-        expect(console.warn.called).to.be.false;
-      });
-
-      if (customElements.get('register-styles-component-type-test').template) {
-        // Only relevant for PolymerElement based components
-        it('should not warn about registering the style too late 2 (Polymer only)', () => {
-          define(unique());
-          registerStyles(unique(), styles);
-
-          expect(console.warn.called).to.be.false;
-        });
-      }
-    });
   });
 });
