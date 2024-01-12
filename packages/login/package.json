@@ -21,12 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-login-form-wrapper.js",
-    "!src/vaadin-lit-login-form.d.ts",
-    "!src/vaadin-lit-login-form.js",
-    "!src/vaadin-lit-login-overlay-wrapper.js",
-    "!src/vaadin-lit-login-overlay.d.ts",
-    "!src/vaadin-lit-login-overlay.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
