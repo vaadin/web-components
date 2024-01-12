@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { adoptStyles, css, CSSResult, LitElement, supportsAdoptingStyleSheets, unsafeCSS } from 'lit';
+import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -26,7 +26,7 @@ const themeRegistry = [];
 /**
  * @type {WeakRef<HTMLElement>[]}
  */
-let themableInstances = [];
+const themableInstances = new Set();
 
 /**
  * @type {string[]}
@@ -79,15 +79,16 @@ function matchesThemeFor(themeFor, tagName) {
   });
 }
 
-const STYLE_ID = 'vaadin-themable-mixin-style';
-
 /**
  * Returns the CSS text content from an array of CSSResults
  * @param {CSSResult[]} styles
+ * @returns {string}
  */
 function getCssText(styles) {
   return styles.map((style) => style.cssText).join('\n');
 }
+
+const STYLE_ID = 'vaadin-themable-mixin-style';
 
 /**
  * Includes the styles to the template.
@@ -103,6 +104,7 @@ function addStylesToTemplate(styles, template) {
 
 /**
  * Dynamically updates the styles of the given component instance.
+ * @param {HTMLElement} instance
  */
 function updateInstanceStyles(instance) {
   if (!instance.shadowRoot) {
@@ -113,16 +115,12 @@ function updateInstanceStyles(instance) {
 
   if (instance instanceof LitElement) {
     // LitElement
-    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => {
-      // If adoptStyles falls back to appending style elements to shadow root,
-      // the old styles need to be removed. Styles marked with a special 'template-style'
-      // class name are left untouched.
-      if (!supportsAdoptingStyleSheets && !style.classList.contains('template-style')) {
-        style.remove();
-      }
-    });
 
-    // Update LitElement styles
+    // The adoptStyles may fall back to appending style elements to shadow root.
+    // Remove them first to avoid duplicates.
+    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
+
+    // Adopt the updated styles
     adoptStyles(instance.shadowRoot, componentClass.elementStyles);
   } else {
     // PolymerElement
@@ -138,26 +136,28 @@ function updateInstanceStyles(instance) {
 
 /**
  * Dynamically updates the styles of the given component type.
+ * @param {Function} componentClass
  */
 function updateStyles(componentClass) {
-  // Update Polymer-based component's template
-  const template = componentClass.prototype._template;
-  if (template) {
-    template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
-  }
-
-  // Update LitElement-based component's elementStyles
-  if (componentClass.elementStyles) {
+  if (componentClass.prototype instanceof LitElement) {
+    // Update LitElement-based component's elementStyles
     componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
+  } else {
+    // Update Polymer-based component's template
+    const template = componentClass.prototype._template;
+    if (template) {
+      template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
+    }
   }
 
-  // Clean up the weak references to GC'd instances
-  themableInstances = themableInstances.filter((ref) => ref.deref());
-  // Iterate over all themable instances and update their styles if needed
+  // Iterate over component instances and update their styles if needed
   themableInstances.forEach((ref) => {
     const instance = ref.deref();
     if (instance instanceof componentClass) {
       updateInstanceStyles(instance);
+    } else if (!instance) {
+      // Clean up the weak reference to a GC'd instance
+      themableInstances.delete(ref);
     }
   });
 
@@ -294,7 +294,7 @@ export const ThemableMixin = (superClass) =>
     constructor() {
       super();
       // Store a weak reference to the instance
-      themableInstances.push(new WeakRef(this));
+      themableInstances.add(new WeakRef(this));
     }
 
     /**
