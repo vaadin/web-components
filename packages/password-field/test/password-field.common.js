@@ -1,48 +1,56 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, focusout, mousedown, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {
   let passwordField, input, revealButton;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
+    await nextRender();
     input = passwordField.inputElement;
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 
-  it('should reveal the password on reveal button click', () => {
+  it('should reveal the password on reveal button click', async () => {
     revealButton.click();
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('text');
 
     revealButton.click();
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('password');
   });
 
-  it('should hide the password on field focusout', () => {
+  it('should hide the password on field focusout', async () => {
     passwordField.focus();
     revealButton.click();
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('text');
 
     focusout(passwordField);
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('password');
   });
 
-  it('should not hide the password when focus moves to reveal button', () => {
+  it('should not hide the password when focus moves to reveal button', async () => {
     passwordField.focus();
     revealButton.click();
+    await nextUpdate(passwordField);
 
     focusout(passwordField, revealButton);
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('text');
   });
 
-  it('should not hide the password when focus moves back to the input', () => {
+  it('should not hide the password when focus moves back to the input', async () => {
     revealButton.focus();
     revealButton.click();
+    await nextUpdate(passwordField);
 
     focusout(revealButton, input);
+    await nextUpdate(passwordField);
     expect(input.type).to.equal('text');
   });
 
@@ -93,11 +101,13 @@ describe('password-field', () => {
     expect(spy.called).to.be.false;
   });
 
-  it('should toggle aria-pressed attribute on reveal button click', () => {
+  it('should toggle aria-pressed attribute on reveal button click', async () => {
     revealButton.click();
+    await nextUpdate(passwordField);
     expect(revealButton.getAttribute('aria-pressed')).to.equal('true');
 
     revealButton.click();
+    await nextUpdate(passwordField);
     expect(revealButton.getAttribute('aria-pressed')).to.equal('false');
   });
 
@@ -176,9 +186,10 @@ describe('password-field', () => {
   describe('revealButtonHidden', () => {
     let revealPart;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       revealPart = passwordField.shadowRoot.querySelector('[part="reveal-button"]');
       passwordField.revealButtonHidden = true;
+      await nextUpdate(passwordField);
     });
 
     it('should hide reveal part when revealButtonHidden is set to true', () => {
@@ -193,18 +204,21 @@ describe('password-field', () => {
       expect(revealButton.getAttribute('aria-hidden')).to.equal('true');
     });
 
-    it('should show reveal part when revealButtonHidden is set to false', () => {
+    it('should show reveal part when revealButtonHidden is set to false', async () => {
       passwordField.revealButtonHidden = false;
+      await nextUpdate(passwordField);
       expect(revealPart.hidden).to.be.false;
     });
 
-    it('should reset tabindex when revealButtonHidden is set to false', () => {
+    it('should reset tabindex when revealButtonHidden is set to false', async () => {
       passwordField.revealButtonHidden = false;
+      await nextUpdate(passwordField);
       expect(revealButton.tabIndex).to.equal(0);
     });
 
-    it('should remove aria-hidden attribute when revealButtonHidden set to false', () => {
+    it('should remove aria-hidden attribute when revealButtonHidden set to false', async () => {
       passwordField.revealButtonHidden = false;
+      await nextUpdate(passwordField);
       expect(revealButton.hasAttribute('aria-hidden')).to.be.false;
     });
   });
@@ -214,8 +228,9 @@ describe('disabled', () => {
   let passwordField;
   let revealButton;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     passwordField = fixtureSync('<vaadin-password-field disabled></vaadin-password-field>');
+    await nextRender();
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 
@@ -241,26 +256,33 @@ describe('disabled', () => {
 
     it('should focus the reveal button of an enabled password field', async () => {
       passwordField.disabled = false;
+      await nextUpdate(passwordField);
       await shiftTab();
       expect(document.activeElement).to.equal(revealButton);
     });
 
     it('should not focus the reveal button of a dynamically disabled password field', async () => {
       passwordField.disabled = false;
+      await nextUpdate(passwordField);
+
       passwordField.disabled = true;
+      await nextUpdate(passwordField);
+
       await shiftTab();
       expect(document.activeElement).not.to.equal(revealButton);
     });
   });
 
   describe('tabindex', () => {
-    it('should restore button tabindex when field is re-enabled', () => {
+    it('should restore button tabindex when field is re-enabled', async () => {
       passwordField.disabled = false;
+      await nextUpdate(passwordField);
       expect(revealButton.tabIndex).to.equal(0);
     });
 
-    it('should restore input tabindex when field is re-enabled', () => {
+    it('should restore input tabindex when field is re-enabled', async () => {
       passwordField.disabled = false;
+      await nextUpdate(passwordField);
       expect(passwordField.inputElement.tabIndex).to.equal(0);
     });
   });
@@ -270,8 +292,9 @@ describe('i18n', () => {
   let passwordField, revealButton;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
+      await nextRender();
       revealButton = passwordField.querySelector('[slot=reveal]');
     });
 
@@ -279,8 +302,9 @@ describe('i18n', () => {
       expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
     });
 
-    it('should translate accessible label when setting new i18n object', () => {
+    it('should translate accessible label when setting new i18n object', async () => {
       passwordField.i18n = { reveal: 'Näytä salasana' };
+      await nextUpdate(passwordField);
       expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
     });
   });
@@ -294,9 +318,10 @@ describe('i18n', () => {
       passwordField.remove();
     });
 
-    it('should not override i18n object set before attaching to the DOM', () => {
+    it('should not override i18n object set before attaching to the DOM', async () => {
       passwordField.i18n = { reveal: 'Näytä salasana' };
       document.body.appendChild(passwordField);
+      await nextRender();
 
       revealButton = passwordField.querySelector('[slot=reveal]');
       expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
