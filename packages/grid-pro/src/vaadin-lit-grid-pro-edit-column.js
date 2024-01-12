@@ -20,7 +20,7 @@ import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
  *
  * ## Disclaimer
  *
- * This component is an experiment not intended for publishing to npm.
+ * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  */
 class GridProEditColumn extends GridProEditColumnMixin(GridColumn) {
