@@ -116,7 +116,7 @@ function updateInstanceStyles(instance) {
   if (instance instanceof LitElement) {
     // LitElement
 
-    // The adoptStyles may fall back to appending style elements to shadow root.
+    // The adoptStyles function may fall back to appending style elements to shadow root.
     // Remove them first to avoid duplicates.
     [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
 
@@ -136,7 +136,7 @@ function updateInstanceStyles(instance) {
  * Dynamically updates the styles of the given component type.
  * @param {Function} componentClass
  */
-function updateStyles(componentClass) {
+function updateComponentStyles(componentClass) {
   if (componentClass.prototype instanceof LitElement) {
     // Update LitElement-based component's elementStyles
     componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
@@ -146,6 +146,23 @@ function updateStyles(componentClass) {
     template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
   }
 
+  // Update the styles of inheriting types
+  themableTypes.forEach((inheritingTagName) => {
+    const inheritingClass = customElements.get(inheritingTagName);
+    if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
+      updateComponentStyles(inheritingClass);
+    }
+  });
+}
+
+/**
+ * Dynamically updates the styles of the given component type and all its instances.
+ * @param {Function} componentClass
+ */
+function updateComponentAndInstanceStyles(componentClass) {
+  // Update the styles of the component type
+  updateComponentStyles(componentClass);
+
   // Iterate over component instances and update their styles if needed
   themableInstances.forEach((ref) => {
     const instance = ref.deref();
@@ -154,14 +171,6 @@ function updateStyles(componentClass) {
     } else if (!instance) {
       // Clean up the weak reference to a GC'd instance
       themableInstances.delete(ref);
-    }
-  });
-
-  // Update the styles of inheriting types
-  themableTypes.forEach((inheritingTagName) => {
-    const inheritingClass = customElements.get(inheritingTagName);
-    if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
-      updateStyles(inheritingClass);
     }
   });
 }
@@ -194,7 +203,7 @@ export function registerStyles(themeFor, styles, options = {}) {
     // Update styles of the component types that match themeFor and have already been finalized
     themableTypes.forEach((tagName) => {
       if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
-        updateStyles(customElements.get(tagName));
+        updateComponentAndInstanceStyles(customElements.get(tagName));
       }
     });
   }
