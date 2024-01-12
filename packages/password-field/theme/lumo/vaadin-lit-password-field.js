@@ -6,4 +6,4 @@
 import '@vaadin/text-field/theme/lumo/vaadin-text-field-styles.js';
 import './vaadin-password-field-button-styles.js';
 import './vaadin-password-field-styles.js';
-import '../../src/vaadin-password-field.js';
+import '../../src/vaadin-lit-password-field.js';
