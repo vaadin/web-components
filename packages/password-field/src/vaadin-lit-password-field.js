@@ -29,6 +29,7 @@ export class PasswordField extends PasswordFieldMixin(TextField) {
    */
   _renderSuffix() {
     return html`
+      ${super._renderSuffix()}
       <div part="reveal-button" slot="suffix">
         <slot name="reveal"></slot>
       </div>

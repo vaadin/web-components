@@ -56,8 +56,6 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
           ${this._renderSuffix()}
         </vaadin-input-container>
 
@@ -86,7 +84,10 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
 
   /** @protected */
   _renderSuffix() {
-    return html``;
+    return html`
+      <slot name="suffix" slot="suffix"></slot>
+      <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+    `;
   }
 }
 
