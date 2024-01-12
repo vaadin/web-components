@@ -126,11 +126,9 @@ function updateInstanceStyles(instance) {
     // PolymerElement
 
     // Update style element content in the shadow root
+    const style = instance.shadowRoot.getElementById(STYLE_ID);
     const template = componentClass.prototype._template;
-    if (template) {
-      const style = instance.shadowRoot.getElementById(STYLE_ID);
-      style.textContent = template.content.getElementById(STYLE_ID).textContent;
-    }
+    style.textContent = template.content.getElementById(STYLE_ID).textContent;
   }
 }
 
@@ -145,9 +143,7 @@ function updateStyles(componentClass) {
   } else {
     // Update Polymer-based component's template
     const template = componentClass.prototype._template;
-    if (template) {
-      template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
-    }
+    template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
   }
 
   // Iterate over component instances and update their styles if needed
@@ -164,7 +160,7 @@ function updateStyles(componentClass) {
   // Update the styles of inheriting types
   themableTypes.forEach((inheritingTagName) => {
     const inheritingClass = customElements.get(inheritingTagName);
-    if (inheritingClass && inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
+    if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
       updateStyles(inheritingClass);
     }
   });
@@ -336,11 +332,10 @@ export const ThemableMixin = (superClass) =>
      * @private
      */
     static getStylesForThis() {
+      const superClassThemes = superClass.__themes || [];
       const parent = Object.getPrototypeOf(this.prototype);
       const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
-      const superClassThemes = superClass.__themes || [];
-
-      this.__themes = [...inheritedThemes, ...superClassThemes, ...getThemes(this.is)];
+      this.__themes = [...superClassThemes, ...inheritedThemes, ...getThemes(this.is)];
       const themeStyles = this.__themes.flatMap((theme) => theme.styles);
       // Remove duplicates
       return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));

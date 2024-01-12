@@ -11,12 +11,25 @@ function defineComponent(tagName, parentTagName = 'test-element') {
   );
 }
 
+function getCssText(instance) {
+  if (instance.shadowRoot.adoptedStyleSheets?.length) {
+    // LitElement
+    return [...instance.shadowRoot.adoptedStyleSheets].reduce((acc, sheet) => {
+      return sheet.rules ? acc + [...sheet.rules].reduce((acc, rule) => acc + rule.cssText, '') : acc;
+    });
+  }
+  // PolymerElement
+  return instance.shadowRoot.querySelector('#vaadin-themable-mixin-style').textContent;
+}
+
 describe('ThemableMixin - post-finalize styles', () => {
   let tagId = 0;
   function uniqueTagName() {
     tagId += 1;
     return `custom-element-${tagId}`;
   }
+
+  before(() => customElements.whenDefined('test-element'));
 
   it('should have pre-finalize styles', () => {
     const tagName = uniqueTagName();
@@ -45,6 +58,27 @@ describe('ThemableMixin - post-finalize styles', () => {
 
     registerStyles(
       tagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+
+    const styles = getComputedStyle(instance);
+    expect(styles.getPropertyValue('--foo')).to.equal('foo');
+  });
+
+  it('should have post-finalize styles for a type matching a wildcard', async () => {
+    const tagName = uniqueTagName();
+
+    defineComponent(tagName);
+    const instance = fixtureSync(`<${tagName}></${tagName}>`);
+
+    registerStyles(
+      `${tagName}*`,
       css`
         :host {
           --foo: foo;
@@ -119,6 +153,30 @@ describe('ThemableMixin - post-finalize styles', () => {
     expect(childStyles.display).to.equal('block');
   });
 
+  it('should not include duplicate styles', async () => {
+    const parentTagName = uniqueTagName();
+    defineComponent(parentTagName);
+    const parent = fixtureSync(`<${parentTagName}></${parentTagName}>`);
+    await nextFrame();
+    registerStyles(
+      parentTagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    const childTagName = uniqueTagName();
+    defineComponent(childTagName, parentTagName);
+    const child = fixtureSync(`<${childTagName}></${childTagName}>`);
+    await nextFrame();
+
+    // Expect the cssText to contain "--foo: foo;" only once
+    const count = (getCssText(child).match(/--foo: foo;/gu) || []).length;
+    expect(count).to.equal(1);
+  });
+
   it('should inherit post-finalize styles to already defined child after instantiating', async () => {
     const parentTagName = uniqueTagName();
     defineComponent(parentTagName);
@@ -171,5 +229,62 @@ describe('ThemableMixin - post-finalize styles', () => {
 
     const childStyles = getComputedStyle(child);
     expect(childStyles.getPropertyValue('--foo')).to.equal('foo');
+  });
+
+  it('should inherit ThemableMixin from parent', async () => {
+    const parentTagName = uniqueTagName();
+    defineComponent(parentTagName);
+    registerStyles(
+      parentTagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    const childTagName = uniqueTagName();
+    class Child extends (customElements.get(parentTagName)!) {
+      static is = childTagName;
+    }
+    customElements.define(childTagName, Child);
+
+    const child = fixtureSync(`<${childTagName}></${childTagName}>`);
+    await nextFrame();
+
+    const childStyles = getComputedStyle(child);
+    expect(childStyles.getPropertyValue('--foo')).to.equal('foo');
+  });
+
+  it('should not throw for components without shadow root', async () => {
+    class Component extends ThemableMixin(customElements.get('test-element')!) {
+      static is = 'rootless-component';
+
+      // LitElement
+      createRenderRoot() {
+        return this;
+      }
+
+      // PolymerElement
+      _attachDom(dom) {
+        this.appendChild(dom);
+      }
+    }
+
+    customElements.define('rootless-component', Component);
+    fixtureSync('<rootless-component></rootless-component>');
+    await nextFrame();
+
+    const doRegister = () =>
+      registerStyles(
+        'rootless-component',
+        css`
+          :host {
+            --foo: foo;
+          }
+        `,
+      );
+
+    expect(doRegister).to.not.throw();
   });
 });
