@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
 
@@ -12,6 +12,36 @@ describe('integer-field', () => {
   });
 
   describe('basic', () => {
+    it('should fire input event on input element when pressing ArrowUp', () => {
+      integerField.step = 3;
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      arrowUp(input);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire input event on input element when pressing ArrowDown', () => {
+      integerField.step = 3;
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      arrowDown(input);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire input event on input element when clicking decrease button', () => {
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      integerField.shadowRoot.querySelector('[part=decrease-button]').click();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire input event on input element when clicking increase button', () => {
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      integerField.shadowRoot.querySelector('[part=increase-button]').click();
+      expect(spy).to.be.calledOnce;
+    });
+
     it('should not prevent default for input wheel events when not focused', () => {
       const event = new CustomEvent('wheel', { cancelable: true });
       input.dispatchEvent(event);
