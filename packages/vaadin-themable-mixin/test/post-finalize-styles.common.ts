@@ -24,6 +24,8 @@ function getCssText(instance) {
 }
 
 describe('ThemableMixin - post-finalize styles', () => {
+  let warn;
+
   let tagId = 0;
   function uniqueTagName() {
     tagId += 1;
@@ -31,6 +33,14 @@ describe('ThemableMixin - post-finalize styles', () => {
   }
 
   before(() => customElements.whenDefined('test-element'));
+
+  beforeEach(() => {
+    warn = sinon.stub(console, 'warn');
+  });
+
+  afterEach(() => {
+    warn.restore();
+  });
 
   it('should have pre-finalize styles', () => {
     const tagName = uniqueTagName();
@@ -289,12 +299,49 @@ describe('ThemableMixin - post-finalize styles', () => {
     expect(doRegister).to.not.throw();
   });
 
+  it('should warn when using post-finalize styles', async () => {
+    const tagName = uniqueTagName();
+    defineComponent(tagName);
+    fixtureSync(`<${tagName}></${tagName}>`);
+    registerStyles(
+      tagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+
+    expect(warn.calledOnce).to.be.true;
+    expect(warn.args[0][0]).to.include('The custom element definition for');
+  });
+
+  it('should suppress the warning for post-finalize styles', async () => {
+    Object.assign(window, { Vaadin: { suppressPostFinalizeStylesWarning: true } });
+
+    const tagName = uniqueTagName();
+    defineComponent(tagName);
+    fixtureSync(`<${tagName}></${tagName}>`);
+    registerStyles(
+      tagName,
+      css`
+        :host {
+          --foo: foo;
+        }
+      `,
+    );
+
+    await nextFrame();
+
+    expect(warn.called).to.be.false;
+  });
+
   it('should warn when the same style rules get added again', async () => {
     const tagName = uniqueTagName();
     defineComponent(tagName);
     const instance = fixtureSync(`<${tagName}></${tagName}>`);
-
-    const warn = sinon.stub(console, 'warn');
 
     registerStyles(
       tagName,
@@ -315,9 +362,9 @@ describe('ThemableMixin - post-finalize styles', () => {
     );
 
     await nextFrame();
-    warn.restore();
 
     expect(warn.calledOnce).to.be.true;
+    expect(warn.args[0][0]).to.include('Registering styles that already exist for');
     expect(getComputedStyle(instance).getPropertyValue('--foo')).to.equal('foo');
   });
 
@@ -325,8 +372,6 @@ describe('ThemableMixin - post-finalize styles', () => {
     const tagName = uniqueTagName();
     defineComponent(tagName);
     const instance = fixtureSync(`<${tagName}></${tagName}>`);
-
-    const warn = sinon.stub(console, 'warn');
 
     const style = css`
       :host {
@@ -338,9 +383,9 @@ describe('ThemableMixin - post-finalize styles', () => {
     registerStyles(tagName, style);
 
     await nextFrame();
-    warn.restore();
 
     expect(warn.calledOnce).to.be.true;
+    expect(warn.args[0][0]).to.include('Registering styles that already exist for');
     expect(getComputedStyle(instance).getPropertyValue('--foo')).to.equal('foo');
   });
 });

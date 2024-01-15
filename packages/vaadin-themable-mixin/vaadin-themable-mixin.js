@@ -220,9 +220,18 @@ export function registerStyles(themeFor, styles, options = {}) {
       if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
         const componentClass = customElements.get(tagName);
 
-        // Show a warning if the component type already has some of the given styles
         if (hasMatchingStyle(componentClass, styles)) {
+          // Show a warning if the component type already has some of the given styles
           console.warn(`Registering styles that already exist for ${tagName}`);
+        } else if (!window.Vaadin || !window.Vaadin.suppressPostFinalizeStylesWarning) {
+          // Show a warning if the component type has already been finalized
+          console.warn(
+            `The custom element definition for "${tagName}" ` +
+              `was finalized before a style module was registered. ` +
+              `Ideally, import component specific style modules before ` +
+              `importing the corresponding custom element. ` +
+              `This warning can be suppressed by setting "window.Vaadin.suppressPostFinalizeStylesWarning = true".`,
+          );
         }
 
         // Update the styles of the component type
