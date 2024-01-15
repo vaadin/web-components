@@ -10,8 +10,13 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
-import { dateAllowed } from './vaadin-date-picker-helper.js';
+import {
+  dateAfterXMonths,
+  dateEquals,
+  extractDateParts,
+  getClosestDate,
+  dateAllowed,
+} from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
