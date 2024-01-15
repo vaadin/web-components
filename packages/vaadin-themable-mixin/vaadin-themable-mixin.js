@@ -31,7 +31,7 @@ const themableInstances = new Set();
 /**
  * @type {string[]}
  */
-const themableTypes = new Set();
+const themableTagNames = new Set();
 
 /**
  * Check if the custom element type has themes applied.
@@ -164,7 +164,7 @@ function updateComponentStyles(componentClass) {
   }
 
   // Update the styles of inheriting types
-  themableTypes.forEach((inheritingTagName) => {
+  themableTagNames.forEach((inheritingTagName) => {
     const inheritingClass = customElements.get(inheritingTagName);
     if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
       updateComponentStyles(inheritingClass);
@@ -216,13 +216,13 @@ export function registerStyles(themeFor, styles, options = {}) {
 
   if (themeFor) {
     // Update styles of the component types that match themeFor and have already been finalized
-    themableTypes.forEach((tagName) => {
+    themableTagNames.forEach((tagName) => {
       if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
         const componentClass = customElements.get(tagName);
 
         // Show a warning if the component type already has some of the given styles
         if (hasMatchingStyle(componentClass, styles)) {
-          console.warn(`Registering styles for ${themeFor} that already exist for ${tagName}`);
+          console.warn(`Registering styles that already exist for ${tagName}`);
         }
 
         // Update the styles of the component type
@@ -331,7 +331,7 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       if (this.is) {
-        themableTypes.add(this.is);
+        themableTagNames.add(this.is);
       }
 
       // Make sure not to run the logic intended for PolymerElement when LitElement is used.
