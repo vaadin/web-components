@@ -117,6 +117,14 @@ describe('selecting items', () => {
       comboBox.clear();
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
+
+    it('should keep the filter and input value when committing an invalid option', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
   });
 
   describe('dataProvider', () => {
