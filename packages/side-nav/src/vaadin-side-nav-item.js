@@ -127,6 +127,11 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
         readOnly: true,
         reflectToAttribute: true,
       },
+
+      /**
+       * The target of the link. Works only when `path` is set.
+       */
+      target: String,
     };
   }
 
@@ -201,6 +206,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
           ?disabled="${this.disabled}"
           tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
           href="${ifDefined(this.disabled ? null : this.path)}"
+          target="${ifDefined(this.target)}"
           part="link"
           aria-current="${this.current ? 'page' : 'false'}"
         >
