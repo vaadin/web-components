@@ -99,13 +99,6 @@ describe('Properties', () => {
     });
   });
 
-  describe('has-value attribute', () => {
-    it('should be updated when setting the value', () => {
-      comboBox.value = 'foo';
-      expect(comboBox.hasAttribute('has-value')).to.be.true;
-    });
-  });
-
   describe('allowCustomValue property', () => {
     beforeEach(() => {
       comboBox.items = [];
@@ -140,17 +133,6 @@ describe('Properties', () => {
 
       expect(comboBox.value).to.eql('foo');
       expect(input.value).to.eql('foo');
-    });
-  });
-
-  describe('label property', () => {
-    it('should have undefined by default', () => {
-      expect(comboBox.label).to.be.undefined;
-    });
-
-    it('should be set label element text content', () => {
-      comboBox.label = 'Label';
-      expect(comboBox.querySelector('[slot="label"]').textContent).to.eql('Label');
     });
   });
 

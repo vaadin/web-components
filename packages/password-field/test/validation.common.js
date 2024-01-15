@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-password-field.js';
 
 describe('validation', () => {
   let passwordField;
@@ -41,8 +40,9 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
+      await nextRender();
     });
 
     it('should fire a validated event on validation success', () => {
@@ -55,10 +55,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       passwordField.addEventListener('validated', validatedSpy);
       passwordField.required = true;
+      await nextUpdate(passwordField);
       passwordField.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -68,8 +69,9 @@ describe('validation', () => {
   });
 
   describe('invalid', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       passwordField = fixtureSync('<vaadin-password-field invalid></vaadin-password-field>');
+      await nextRender();
     });
 
     it('should not remove "invalid" state when ready', () => {
@@ -78,8 +80,9 @@ describe('validation', () => {
   });
 
   describe('invalid with value', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       passwordField = fixtureSync('<vaadin-password-field invalid value="123456"></vaadin-password-field>');
+      await nextRender();
     });
 
     it('should not remove "invalid" state when ready', () => {

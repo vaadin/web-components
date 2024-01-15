@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-lit-input-container.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -18,7 +18,7 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
  *
  * ## Disclaimer
  *
- * This component is an experiment not intended for publishing to npm.
+ * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
@@ -28,14 +28,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
   }
 
   static get styles() {
-    return [
-      inputFieldShared,
-      css`
-        [part='input-field'] {
-          flex-grow: 0;
-        }
-      `,
-    ];
+    return [inputFieldShared];
   }
 
   /** @protected */
@@ -56,8 +49,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          ${this._renderSuffix()}
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -81,6 +73,14 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
     this._tooltipController.setPosition('top');
     this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
+  }
+
+  /** @protected */
+  _renderSuffix() {
+    return html`
+      <slot name="suffix" slot="suffix"></slot>
+      <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+    `;
   }
 }
 
