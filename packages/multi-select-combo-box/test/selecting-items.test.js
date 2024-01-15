@@ -9,6 +9,14 @@ import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 describe('selecting items', () => {
   let comboBox, internal, inputElement;
 
+  function expectItems(values) {
+    const items = getAllItems(comboBox);
+    expect(items.length).to.equal(values.length);
+    values.forEach((value, idx) => {
+      expect(items[idx].textContent).to.equal(value);
+    });
+  }
+
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     internal = comboBox.$.comboBox;
@@ -110,6 +118,14 @@ describe('selecting items', () => {
       comboBox.clear();
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
+
+    it('should keep the filter and input value when committing an invalid option', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
   });
 
   describe('dataProvider', () => {
@@ -127,14 +143,6 @@ describe('selecting items', () => {
   });
 
   describe('selected items on top', () => {
-    function expectItems(values) {
-      const items = getAllItems(comboBox);
-      expect(items.length).to.equal(values.length);
-      values.forEach((value, idx) => {
-        expect(items[idx].textContent).to.equal(value);
-      });
-    }
-
     beforeEach(() => {
       comboBox.selectedItemsOnTop = true;
     });
@@ -306,6 +314,112 @@ describe('selecting items', () => {
         const item = getFirstItem(comboBox);
         expect(item.label).to.equal('item 5');
         expect(item.hasAttribute('selected')).to.be.false;
+      });
+    });
+  });
+
+  describe('keep filter', () => {
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+      comboBox.keepFilter = true;
+    });
+
+    it('should keep the filter after selecting items', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      const filterChangeSpy = sinon.spy();
+      comboBox.addEventListener('filter-changed', filterChangeSpy);
+
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+      expectItems(['banana', 'orange']);
+      // Filter should never change, otherwise data provider would be called
+      expect(filterChangeSpy.notCalled).to.be.true;
+    });
+
+    it('should clear the filter when closing the overlay', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      inputElement.blur();
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear a matching filter when closing the overlay', async () => {
+      await sendKeys({ type: 'apple' });
+
+      inputElement.blur();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear the filter when pressing escape', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'Escape' });
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear the filter when pressing escape after selecting an item', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      // Pressing escape twice to first deselect item and then close the overlay
+      await sendKeys({ down: 'Escape' });
+      await sendKeys({ down: 'Escape' });
+      expect(comboBox.opened).to.be.false;
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should keep the filter and input value when committing an invalid option', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.opened).to.be.true;
+      expect(inputElement.value).to.equal('an');
+      expect(comboBox.filter).to.equal('an');
+    });
+
+    it('should allow toggling items via keyboard', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should restore the input value to the filter after selecting an item', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(inputElement.value).to.equal('an');
+    });
+
+    describe('with allowCustomValue', () => {
+      beforeEach(() => {
+        comboBox.allowCustomValue = true;
+      });
+
+      it('should clear the filter value after entering custom value', async () => {
+        await sendKeys({ type: 'pear' });
+        await sendKeys({ down: 'Enter' });
+        expect(comboBox.filter).to.equal('');
+        expect(inputElement.value).to.equal('');
       });
     });
   });

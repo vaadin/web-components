@@ -59,6 +59,14 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
+       * When true, filter string isn't cleared after selecting an item.
+       */
+      keepFilter: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
@@ -272,6 +280,30 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     super._onEscape(event);
+  }
+
+  /**
+   * Override from combo-box to ignore requests to clear the filter if the
+   * keepFilter option is enabled. Exceptions are when the dropdown is closed,
+   * so the filter is still cleared on cancel and focus out.
+   * @protected
+   * @override
+   */
+  _clearFilter() {
+    if (!this.keepFilter || !this.opened) {
+      super._clearFilter();
+    }
+  }
+
+  /**
+   * Override method from combo-box to always clear the filter when reverting
+   * the input value, regardless of the keepFilter option.
+   * @override
+   * @protected
+   */
+  _revertInputValueToValue() {
+    super._revertInputValueToValue();
+    this.filter = '';
   }
 
   /**
