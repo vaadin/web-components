@@ -193,6 +193,6 @@ const loginFormWrapper = css`
   }
 `;
 
-registerStyles('vaadin-login-form-wrapper', [color, typography, loginFormWrapper], {
+registerStyles('vaadin-login-form-wrapper', [loginFormWrapper], {
   moduleId: 'lumo-login-overlay',
 });
