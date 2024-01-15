@@ -12,10 +12,10 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import {
   dateAfterXMonths,
+  dateAllowed,
   dateEquals,
   extractDateParts,
   getClosestDate,
-  dateAllowed,
 } from './vaadin-date-picker-helper.js';
 
 /**
