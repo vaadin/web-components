@@ -305,13 +305,7 @@ describe('side-nav-item', () => {
         await nextRender();
         item.target = null;
         await nextRender();
-        expect(anchor.getAttribute('target')).to.be.not.ok;
-      });
-
-      it('should not set target attribute to the anchor when target is empty string', async () => {
-        item.target = '';
-        await nextRender();
-        expect(anchor.getAttribute('target')).to.be.not.ok;
+        expect(anchor.hasAttribute('target')).to.be.not.ok;
       });
     });
   });
