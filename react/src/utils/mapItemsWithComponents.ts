@@ -9,6 +9,7 @@ type ItemWithReactElementComponent<T> = T & {
 type ItemWithHTMLElementComponent<T> = T & {
   component?: HTMLElement | string;
   children?: Array<ItemWithHTMLElementComponent<T>>;
+  __item?: ItemWithReactElementComponent<unknown>;
 };
 
 /**
@@ -40,6 +41,7 @@ export function mapItemsWithComponents<T>(
         ...rest,
         component: root,
         children: webComponentChildren,
+        __item: item,
       };
     } else {
       return {
@@ -47,9 +49,17 @@ export function mapItemsWithComponents<T>(
         ...rest,
         component,
         children: webComponentChildren,
+        __item: item,
       };
     }
   });
 
   return [itemPortals, webComponentItems];
+}
+
+/**
+ * Returns the original item related to the given mapped item.
+ */
+export function getOriginalItem<T>(mappedItem: ItemWithHTMLElementComponent<T>) {
+  return mappedItem.__item;
 }

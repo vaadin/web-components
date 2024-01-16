@@ -6,28 +6,28 @@ import React, {
   type ReactNode,
   type RefAttributes,
 } from 'react';
-import { TextField, TextFieldElement } from '../../TextField.js';
+import { TextField, TextFieldElement } from '../../src/TextField.js';
 import type { LitElement } from 'lit';
-import { GridColumn, GridColumnElement } from '../../GridColumn.js';
-import { GridTreeColumn } from '../../GridTreeColumn.js';
-import { GridSortColumn } from '../../GridSortColumn.js';
-import { GridFilterColumn } from '../../GridFilterColumn.js';
-import { GridSelectionColumn } from '../../GridSelectionColumn.js';
-import { GridProEditColumn } from '../../GridProEditColumn.js';
-import { GridColumnGroup, GridColumnGroupElement } from '../../GridColumnGroup.js';
-import { ChartSeries, ChartSeriesElement } from '../../ChartSeries.js';
-import { ConfirmDialog, ConfirmDialogElement } from '../../ConfirmDialog.js';
-import { CookieConsent, CookieConsentElement } from '../../CookieConsent.js';
-import { Dialog, DialogElement } from '../../Dialog.js';
-import { DatePicker, DatePickerElement } from '../../DatePicker.js';
-import { LoginOverlay, LoginOverlayElement } from '../../LoginOverlay.js';
-import { Notification, NotificationElement } from '../../Notification.js';
-import { TimePicker, type TimePickerChangeEvent } from '../../TimePicker.js';
-import { TextArea, TextAreaElement, type TextAreaChangeEvent } from '../../TextArea.js';
-import { MessageInput, MessageInputElement, type MessageInputSubmitEvent } from '../../MessageInput.js';
-import { ComboBox, type ComboBoxChangeEvent } from '../../ComboBox.js';
-import { ContextMenu, type ContextMenuItem } from '../../ContextMenu.js';
-import { MenuBar, type MenuBarItem } from '../../MenuBar.js';
+import { GridColumn, GridColumnElement } from '../../src/GridColumn.js';
+import { GridTreeColumn } from '../../src/GridTreeColumn.js';
+import { GridSortColumn } from '../../src/GridSortColumn.js';
+import { GridFilterColumn } from '../../src/GridFilterColumn.js';
+import { GridSelectionColumn } from '../../src/GridSelectionColumn.js';
+import { GridProEditColumn } from '../../src/GridProEditColumn.js';
+import { GridColumnGroup, GridColumnGroupElement } from '../../src/GridColumnGroup.js';
+import { ChartSeries, ChartSeriesElement } from '../../src/ChartSeries.js';
+import { ConfirmDialog, ConfirmDialogElement } from '../../src/ConfirmDialog.js';
+import { CookieConsent, CookieConsentElement } from '../../src/CookieConsent.js';
+import { Dialog, DialogElement } from '../../src/Dialog.js';
+import { DatePicker, DatePickerElement } from '../../src/DatePicker.js';
+import { LoginOverlay, LoginOverlayElement } from '../../src/LoginOverlay.js';
+import { Notification, NotificationElement } from '../../src/Notification.js';
+import { TimePicker, type TimePickerChangeEvent } from '../../src/TimePicker.js';
+import { TextArea, TextAreaElement, type TextAreaChangeEvent } from '../../src/TextArea.js';
+import { MessageInput, MessageInputElement, type MessageInputSubmitEvent } from '../../src/MessageInput.js';
+import { ComboBox, type ComboBoxChangeEvent } from '../../src/ComboBox.js';
+import { ContextMenu, type ContextMenuItem, type ContextMenuItemSelectedEvent } from '../../src/ContextMenu.js';
+import { MenuBar, type MenuBarItem, type MenuBarItemSelectedEvent } from '../../src/MenuBar.js';
 import type { SubMenuItem } from '../../src/MenuBar.js';
 import { TabSheet, TabSheetElement, TabSheetTab } from '../../src/TabSheet.js';
 import type { TabElement } from '../../src/Tab.js';
@@ -211,6 +211,11 @@ const contextMenuProps = React.createElement(ContextMenu, {}).props;
 
 assertType<ReactElement | string | undefined>(contextMenuProps.items![0].component);
 assertType<ContextMenuItem[]>(contextMenuProps.items!);
+const contextMenuOnItemSelected: typeof contextMenuProps.onItemSelected = (event) => {
+  assertType<ContextMenuItemSelectedEvent>(event);
+  assertType<ContextMenuItem>(event.detail.value);
+};
+assertType<typeof contextMenuProps.onItemSelected>(contextMenuOnItemSelected);
 
 const menuBarProps = React.createElement(MenuBar, {}).props;
 assertType<ReactElement | string | undefined>(menuBarProps.items![0].component);
@@ -218,6 +223,11 @@ assertType<MenuBarItem[] | undefined>(menuBarProps.items);
 assertType<boolean | undefined>(menuBarProps.items![0].children![0].checked);
 assertOmitted<SubMenuItem, MenuBarItem>('checked');
 assertType<SubMenuItem[] | undefined>(menuBarProps.items![0].children);
+const menuBarOnItemSelected: typeof menuBarProps.onItemSelected = (event) => {
+  assertType<MenuBarItemSelectedEvent>(event);
+  assertType<MenuBarItem>(event.detail.value);
+};
+assertType<typeof menuBarProps.onItemSelected>(menuBarOnItemSelected);
 
 const tabSheetProps = React.createElement(TabSheet, {}).props;
 type TabSheetProps = typeof tabSheetProps;

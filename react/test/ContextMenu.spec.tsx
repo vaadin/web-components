@@ -11,6 +11,7 @@ import { Item } from '../src/Item.js';
 import { ListBox } from '../src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+import sinon from 'sinon';
 
 useChaiPlugin(chaiDom);
 
@@ -133,5 +134,26 @@ describe('ContextMenu', () => {
 
     const item = document.querySelector(`${overlayTag} ${menuItemTag} > span`);
     expect(item).to.have.text('foo');
+  });
+
+  it('should have the correct item reference in the item-selected event', async () => {
+    const items = [{ text: 'foo' }, { text: 'bar' }];
+
+    const spy = sinon.spy();
+
+    const { container } = render(
+      <ContextMenu ref={ref} items={items} onItemSelected={spy}>
+        <div id="target">target</div>
+      </ContextMenu>,
+    );
+
+    const target = container.querySelector<HTMLDivElement>('#target')!;
+    await openContextMenu(target);
+
+    const rootItem = document.querySelector<HTMLElement>(`${overlayTag} ${menuItemTag}`)!;
+    rootItem.click();
+
+    expect(spy.called).to.be.true;
+    expect(spy.firstCall.args[0].detail.value).to.equal(items[0]);
   });
 });
