@@ -569,6 +569,21 @@ describe('form layout', () => {
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
     });
 
+    it('should update layout after updating a data-colspan attribute', async () => {
+      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
+
+      layout.children[0].setAttribute('data-colspan', 2);
+      await nextRender(container);
+      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+    });
+
+    it('should prefer colspan attribute over data-colspan when both are set', async () => {
+      layout.children[0].setAttribute('colspan', 2);
+      layout.children[0].setAttribute('data-colspan', 1);
+      await nextRender(container);
+      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+    });
+
     it('should update style if hidden property of layout-item is changed and the element has not had style yet', async () => {
       const itemWidth = layout.children[0].getBoundingClientRect().width;
       expect(itemWidth).to.be.above(0);

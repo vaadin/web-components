@@ -44,7 +44,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ### Spanning Items on Multiple Columns
  *
- * You can use `colspan` attribute on the items.
+ * You can use `colspan` or `data-colspan` attribute on the items.
  * In the example below, the first text field spans on two columns:
  *
  * ```html
@@ -290,7 +290,9 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
       mutationRecord.forEach((mutation) => {
         if (
           mutation.type === 'attributes' &&
-          (mutation.attributeName === 'colspan' || mutation.attributeName === 'hidden')
+          (mutation.attributeName === 'colspan' ||
+            mutation.attributeName === 'data-colspan' ||
+            mutation.attributeName === 'hidden')
         ) {
           this._updateLayout();
         }
@@ -482,8 +484,9 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
           return;
         }
 
+        const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
         let colspan;
-        colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+        colspan = this._naturalNumberOrOne(parseFloat(attrColspan));
 
         // Never span further than the number of columns
         colspan = Math.min(colspan, this._columnCount);
