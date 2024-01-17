@@ -30,17 +30,14 @@ import type { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin'
 import type { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
 import type { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
 import type {
-  ColumnBaseMixinClass,
   Grid,
   GridActiveItemChangedEvent,
   GridBodyRenderer,
   GridCellActivateEvent,
   GridCellClassNameGenerator,
   GridCellFocusEvent,
-  GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
-  GridColumnTextAlign,
   GridDataProvider,
   GridDataProviderCallback,
   GridDataProviderChangedEvent,
@@ -60,6 +57,7 @@ import type {
   GridSorterDefinition,
   GridSorterDirection,
 } from '../../vaadin-lit-grid.js';
+import type { ColumnBaseMixinClass, GridColumn, GridColumnTextAlign } from '../../vaadin-lit-grid-column.js';
 
 interface TestGridItem {
   testProperty: string;
