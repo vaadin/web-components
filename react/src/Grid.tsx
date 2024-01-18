@@ -34,3 +34,15 @@ const ForwardedGrid = forwardRef(Grid) as <TItem = GridDefaultItem>(
 ) => ReactElement | null;
 
 export { ForwardedGrid as Grid };
+
+customElements.whenDefined('vaadin-grid').then(() => {
+  const gridProto = customElements.get('vaadin-grid')?.prototype;
+  const originalRecalculateColumnWidths = gridProto?._recalculateColumnWidths;
+  gridProto._recalculateColumnWidths = function (...args: any[]) {
+    // Multiple synchronous calls to the renderers using flushSync cause
+    // some of the renderers to be called asynchronously (see useRenderer.ts).
+    // To make sure all the column cell content is rendered before recalculating
+    // the column widths, we need to make _recalculateColumnWidths asynchronous.
+    queueMicrotask(() => originalRecalculateColumnWidths.call(this, ...args));
+  };
+});

@@ -13,7 +13,7 @@ import catchRender from './utils/catchRender.js';
 import { GridColumnGroup } from '../src/GridColumnGroup.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 import { GridPro } from '../src/GridPro.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import sinon from 'sinon';
 
 useChaiPlugin(chaiDom);
@@ -143,24 +143,35 @@ describe('Grid', () => {
       [GridTreeColumn<Item>, 'GridTreeColumn'],
     ].forEach(([ColumnType, columnName]) => {
       it(`should consider custom renderer content with column auto-width: ${columnName}`, async () => {
-        render(
-          <Grid<Item> items={items}>
-            {ColumnType !== GridFilterColumn<Item> &&
-            ColumnType !== GridSelectionColumn<Item> &&
-            ColumnType !== GridSortColumn<Item> ? (
-              // @ts-expect-error not all column types have header prop
-              <ColumnType header={<button style={{ width: '300px' }}>header</button>} autoWidth flexGrow={0} />
-            ) : null}
+        function GridWithAutoWidthColumns() {
+          const [gridItems, setGridItems] = useState<Item[] | undefined>();
 
-            {ColumnType !== GridTreeColumn<Item> ? (
-              <ColumnType autoWidth flexGrow={0}>
-                {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
-              </ColumnType>
-            ) : null}
+          useEffect(() => {
+            setTimeout(() => setGridItems(items));
+          }, []);
 
-            <ColumnType footer={<button style={{ width: '300px' }}>footer</button>} autoWidth flexGrow={0} />
-          </Grid>,
-        );
+          return (
+            <Grid<Item> items={gridItems}>
+              {ColumnType !== GridFilterColumn<Item> &&
+              ColumnType !== GridSelectionColumn<Item> &&
+              ColumnType !== GridSortColumn<Item> ? (
+                // @ts-expect-error not all column types have header prop
+                <ColumnType header={<button style={{ width: '300px' }}>header</button>} autoWidth flexGrow={0} />
+              ) : null}
+
+              {ColumnType !== GridTreeColumn<Item> ? (
+                <ColumnType autoWidth flexGrow={0}>
+                  {({ item }) => <button style={{ width: '300px' }}>{item.name}</button>}
+                </ColumnType>
+              ) : null}
+
+              <ColumnType footer={<button style={{ width: '300px' }}>footer</button>} autoWidth flexGrow={0} />
+            </Grid>
+          );
+        }
+
+        const error = sinon.stub(console, 'error');
+        render(<GridWithAutoWidthColumns></GridWithAutoWidthColumns>);
 
         const grid = await findByQuerySelector('vaadin-grid');
         const columns = Array.from(grid.children).filter((c): c is GridColumnElement => c.localName.includes('column'));
@@ -169,6 +180,9 @@ describe('Grid', () => {
         for (const column of columns) {
           await until(() => parseFloat(String(column.width)) > 300);
         }
+
+        error.restore();
+        expect(error.called).to.be.false;
       });
     });
 

@@ -47,7 +47,20 @@ export function useRenderer<P extends {}, W extends WebComponentRenderer>(
   const renderer = useCallback(
     ((...args: Parameters<W>) => {
       if (config?.renderSync) {
+        // The web components may request multiple synchronous renderer calls that
+        // would result in flushSync logging a warning (and actually executing the
+        // overlapping flushSync in microtask timing). Suppress the warning and allow
+        // the resulting asynchronicity.
+        const console = globalThis.console as any;
+        const error = console.error;
+        console.error = (message: string) => {
+          if (message.includes('flushSync')) {
+            return;
+          }
+          error(message);
+        };
         flushSync(() => update(args));
+        console.error = error;
       } else {
         update(args);
       }
