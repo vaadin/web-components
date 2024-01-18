@@ -398,14 +398,13 @@ const elementFilesMap = await prepareElementFiles(descriptions);
 
 const sourceFiles = Array.from(elementFilesMap.entries(), ([element, data]) => generateReactComponent(element, data));
 
-function generateIndexDtsFile(elementNames: readonly string[]): SourceFile {
-  const sourceLines = [
-    `// Workaround for VSCode, enables TypeScript auto-imports form package.json`,
-    ...elementNames.map((elementName) => `import './${elementName}.js';`),
-  ];
+const elementNames = sourceFiles.map(({ fileName }) => basename(fileName, '.ts'));
+
+function generateIndexFile(elementNames: readonly string[], extension: string): SourceFile {
+  const sourceLines = [...elementNames.map((elementName) => `export * from './${elementName}.js';`)];
 
   return ts.createSourceFile(
-    resolve(rootDir, 'index.d.ts'),
+    resolve(rootDir, `index.${extension}`),
     sourceLines.join('\n'),
     ts.ScriptTarget.ES2019,
     undefined,
@@ -413,15 +412,9 @@ function generateIndexDtsFile(elementNames: readonly string[]): SourceFile {
   );
 }
 
-const indexDtsFile = generateIndexDtsFile(sourceFiles.map(({ fileName }) => basename(fileName, '.ts')));
+const indexDtsFile = generateIndexFile(elementNames, 'd.ts');
 
-const indexJsFile = ts.createSourceFile(
-  resolve(rootDir, 'index.js'),
-  '// Intentionally empty, please import from individual contained .js files',
-  ts.ScriptTarget.ES2019,
-  undefined,
-  ts.ScriptKind.JS,
-);
+const indexJsFile = generateIndexFile(elementNames, 'js');
 
 async function printAndWrite(file: SourceFile) {
   const contents = printer.printFile(file);

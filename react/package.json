@@ -123,6 +123,7 @@
       "optional": true
     }
   },
+  "sideEffects": false,
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@testing-library/react": "^14.0.0",
@@ -170,6 +171,10 @@
     "*.js.map"
   ],
   "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
     "./package.json": "./package.json",
     "./Accordion.js": {
       "types": "./Accordion.d.ts",

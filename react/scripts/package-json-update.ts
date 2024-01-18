@@ -9,6 +9,10 @@ const packageJsonPath = resolve(rootDir, 'package.json');
 const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'));
 
 const exports: Record<string, PackageJson.Exports> = {
+  '.': {
+    types: './index.d.ts',
+    default: './index.js',
+  },
   './package.json': './package.json',
 };
 
