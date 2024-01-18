@@ -1053,6 +1053,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   _onClearButtonTouchend(event) {
     // Cancel the following click and focus events
     event.preventDefault();
+    // Prevent default combo box behavior which can otherwise unnecessarily
+    // clear the input and filter
+    event.stopPropagation();
 
     this.clear();
   }

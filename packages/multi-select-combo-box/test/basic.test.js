@@ -224,6 +224,17 @@ describe('basic', () => {
       clearButton.dispatchEvent(new CustomEvent('touchend', { cancelable: true }));
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
+
+    it('should not clear filter on clear button touchend', async () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      inputElement.focus();
+      await sendKeys({ type: 'app' });
+
+      clearButton.dispatchEvent(new CustomEvent('touchend', { cancelable: true, bubbles: true }));
+      expect(inputElement.value).to.equal('app');
+      expect(comboBox.filter).to.equal('app');
+      expect(comboBox.filteredItems).to.deep.equal(['apple']);
+    });
   });
 
   describe('toggle button', () => {
