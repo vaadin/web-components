@@ -2319,6 +2319,11 @@ describe('hierarchical data', () => {
     callback(items, itemsOnEachLevel);
   }
 
+  function getItemForIndex(index) {
+    const { item } = grid._dataProviderController.getFlatIndexContext(index);
+    return item;
+  }
+
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
@@ -2354,6 +2359,17 @@ describe('hierarchical data', () => {
     await sendKeys({ press: 'ArrowRight' });
     // Expect the focus to not have changed
     expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
+  });
+
+  it('should previous focused item be first visible item after second page down on expanded tree', () => {
+    grid.expandItem(getItemForIndex(0));
+    focusItem(0);
+
+    pageDown();
+    const previousLastIndex = getFocusedRowIndex();
+    pageDown();
+
+    expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
   });
 });
 

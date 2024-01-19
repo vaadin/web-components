@@ -358,7 +358,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         case 'PageDown':
           {
             const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
-            this.scrollToIndex(currentRowIndex); // scroll the current row to the top...
+            this._scrollToFlatIndex(currentRowIndex); // scroll the current row to the top...
             dy = this._visibleItemsCount; // ... only then measure the visible items count
           }
           break;
