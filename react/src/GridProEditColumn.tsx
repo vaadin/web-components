@@ -37,8 +37,14 @@ export type GridProEditColumnProps<TItem> = Partial<
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     editModeRenderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;

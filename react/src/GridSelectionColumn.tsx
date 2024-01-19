@@ -15,7 +15,6 @@ import {
 import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
 import { useModelRenderer } from './renderers/useModelRenderer.js';
 import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
-import { useSimpleRenderer } from './renderers/useSimpleRenderer.js';
 import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridSelectionColumn.js';
@@ -23,22 +22,34 @@ export * from './generated/GridSelectionColumn.js';
 export type GridSelectionColumnProps<TItem> = Partial<
   Omit<
     _GridSelectionColumnProps<TItem>,
-    'children' | 'footerRenderer' | 'headerRenderer' | 'renderer' | keyof OmittedGridColumnHTMLAttributes<TItem>
+    | 'children'
+    | 'footerRenderer'
+    | 'headerRenderer'
+    | 'renderer'
+    | 'header'
+    | keyof OmittedGridColumnHTMLAttributes<TItem>
   >
 > &
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
+    header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;
 
 function GridSelectionColumn<TItem = GridDefaultItem>(
-  { footer, ...props }: GridSelectionColumnProps<TItem>,
+  { footer, header, ...props }: GridSelectionColumnProps<TItem>,
   ref: ForwardedRef<GridSelectionColumnElement<TItem>>,
 ): ReactElement | null {
-  const [headerPortals, headerRenderer] = useSimpleRenderer(props.headerRenderer, {
+  const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header, {
     renderSync: true,
   });
   const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer, {

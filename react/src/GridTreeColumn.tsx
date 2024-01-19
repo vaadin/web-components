@@ -31,8 +31,14 @@ export type GridTreeColumnProps<TItem> = Partial<
 > &
   Readonly<{
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
   }>;
 

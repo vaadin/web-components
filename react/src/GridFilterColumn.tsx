@@ -32,6 +32,9 @@ export type GridFilterColumnProps<TItem> = Partial<
   Readonly<{
     children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
     renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
   }>;

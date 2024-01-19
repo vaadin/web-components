@@ -289,20 +289,23 @@ describe('Grid', () => {
       expect(bodyCell2).to.have.text('Ringo');
     });
 
-    it('should support setting footer component', async () => {
+    it('should support setting header and footer component', async () => {
       render(
         <Grid<Item> items={items}>
-          <GridSelectionColumn footer={<i>Footer</i>}>{DefaultBodyRenderer}</GridSelectionColumn>
+          <GridSelectionColumn header={<i>Header</i>} footer={<i>Footer</i>}>
+            {DefaultBodyRenderer}
+          </GridSelectionColumn>
         </Grid>,
       );
 
       const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column');
       expect(columns).to.have.length(1);
-      expect(cells).to.have.length(3);
+      expect(cells).to.have.length(4);
 
-      const footerCell = cells[0];
+      const [headerCell, footerCell] = cells;
 
       expect(footerCell).to.have.text('Footer');
+      expect(headerCell).to.have.text('Header');
     });
   });
 

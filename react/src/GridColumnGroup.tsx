@@ -25,8 +25,14 @@ export type GridColumnGroupProps = Partial<
 > &
   Readonly<{
     footer?: ReactNode;
+    /**
+     * @deprecated Use `footer` instead.
+     */
     footerRenderer?: ComponentType<ReactSimpleRendererProps<GridColumnGroupElement>> | null;
     header?: ReactNode;
+    /**
+     * @deprecated Use `header` instead.
+     */
     headerRenderer?: ComponentType<ReactSimpleRendererProps<GridColumnGroupElement>> | null;
   }>;
 
