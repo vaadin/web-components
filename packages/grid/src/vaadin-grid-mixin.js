@@ -196,6 +196,12 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
+    __getFirstVisibleCell() {
+      const firstVisibleRow = this.__getFirstVisibleItem();
+      return firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+    }
+
+    /** @private */
     __getLastVisibleItem() {
       return this._getRenderedRows()
         .reverse()
@@ -1017,6 +1023,16 @@ export const GridMixin = (superClass) =>
 
       // Body and row details renderers
       this.__updateVisibleRows();
+    }
+
+    /**
+     * Focuses on the first cell in the grid.
+     */
+    focus() {
+      const firstVisibleCell = this.__getFirstVisibleCell();
+      if (firstVisibleCell) {
+        firstVisibleCell.focus();
+      }
     }
 
     /** @private */
