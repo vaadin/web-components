@@ -7,7 +7,8 @@ import {
   type RefAttributes,
   createElement,
 } from 'react';
-import type { GridBodyRenderer, GridColumn, GridDefaultItem } from './generated/Grid.js';
+import type { GridBodyRenderer, GridDefaultItem } from './generated/Grid.js';
+import type { GridColumnElement } from './generated/GridColumn.js';
 import {
   GridProEditColumn as _GridProEditColumn,
   type GridProEditColumnElement,
@@ -79,7 +80,7 @@ function editColumnRenderer(bodyRenderer?: (GridBodyRenderer & { __wrapperRender
 
   bodyRenderer.__wrapperRenderer ||= (
     root: EditColumnRendererRoot,
-    column: GridColumn & {
+    column: GridColumnElement & {
       __originalClearCellContent?: ClearFunction;
       _clearCellContent?: ClearFunction;
     },
