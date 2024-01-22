@@ -772,11 +772,7 @@ export const ComboBoxMixin = (subclass) =>
       // Do not commit value when custom values are disallowed and input value is not a valid option
       // also stop propagation of the event, otherwise the user could submit a form while the input
       // still contains an invalid value
-      const hasInvalidOption =
-        this._focusedIndex < 0 &&
-        this._inputElementValue !== '' &&
-        this._getItemLabel(this.selectedItem) !== this._inputElementValue;
-      if (!this.allowCustomValue && hasInvalidOption) {
+      if (!this._hasValidInputValue()) {
         // Do not submit the surrounding form.
         e.preventDefault();
         // Do not trigger global listeners
@@ -794,6 +790,18 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       this._closeOrCommit();
+    }
+
+    /**
+     * @protected
+     */
+    _hasValidInputValue() {
+      const hasInvalidOption =
+        this._focusedIndex < 0 &&
+        this._inputElementValue !== '' &&
+        this._getItemLabel(this.selectedItem) !== this._inputElementValue;
+
+      return this.allowCustomValue || !hasInvalidOption;
     }
 
     /**
@@ -868,6 +876,15 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Clears the current filter. Should be used instead of setting the property
+     * directly in order to allow overriding this in multi-select combo box.
+     * @protected
+     */
+    _clearFilter() {
+      this.filter = '';
+    }
+
+    /**
      * Reverts back to original value.
      */
     cancel() {
@@ -938,7 +955,7 @@ export const ComboBoxMixin = (subclass) =>
           this.value = this._getItemValue(itemMatchingInputValue);
         } else {
           // Revert the input value
-          this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
+          this._revertInputValueToValue();
         }
       }
 
@@ -946,7 +963,7 @@ export const ComboBoxMixin = (subclass) =>
 
       this._clearSelectionRange();
 
-      this.filter = '';
+      this._clearFilter();
     }
 
     /**
@@ -1087,7 +1104,7 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = null;
       }
 
-      this.filter = '';
+      this._clearFilter();
 
       // In the next _detectAndDispatchChange() call, the change detection should pass
       this._lastCommittedValue = undefined;

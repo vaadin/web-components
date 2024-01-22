@@ -155,16 +155,10 @@ describe('validation', () => {
       datePicker.min = '2016-01-01';
       datePicker.max = '2016-12-31';
 
-      const invalidChangedSpy = sinon.spy();
-      datePicker.addEventListener('invalid-changed', invalidChangedSpy);
-
       await open(datePicker);
 
-      await waitForValueChange(datePicker, () => {
-        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
-      });
-
-      expect(invalidChangedSpy.calledOnce).to.be.true;
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      expect(selectResult).to.be.equal(false);
     });
 
     it('should reflect correct invalid value on value-changed eventListener', async () => {
@@ -174,11 +168,23 @@ describe('validation', () => {
 
       await open(datePicker);
 
-      await waitForValueChange(datePicker, () => {
-        datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
-      });
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
+      expect(selectResult).to.be.equal(false);
+    });
 
-      expect(datePicker.invalid).to.be.true;
+    it('should reflect correct invalid value on value-changed eventListener when using isDateDisabled', async () => {
+      datePicker.isDateDisabled = (date) => {
+        if (!date) {
+          return false;
+        }
+        const valid = date.year === 2017 && date.month === 0 && date.day === 1;
+        return valid;
+      };
+      datePicker.value = '2016-01-01'; // Valid
+
+      await open(datePicker);
+      const selectResult = datePicker._overlayContent._selectDate(new Date('2017-01-01T12:00:00')); // Invalid
+      expect(selectResult).to.be.equal(false);
     });
 
     it('should fire a validated event on validation success', () => {

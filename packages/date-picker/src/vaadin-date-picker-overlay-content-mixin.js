@@ -10,7 +10,13 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import {
+  dateAfterXMonths,
+  dateAllowed,
+  dateEquals,
+  extractDateParts,
+  getClosestDate,
+} from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -108,6 +114,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         },
 
         /**
+         * A function to be used to determine whether the user can select a given date.
+         * Receives a `DatePickerDate` object of the date to be selected and should return a
+         * boolean.
+         *
+         * @type {function(DatePickerDate): boolean | undefined}
+         */
+        isDateDisabled: {
+          type: Function,
+        },
+
+        /**
          * Input label
          */
         label: String,
@@ -134,9 +151,9 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate)',
+        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
         '__updateYears(years, selectedDate, _theme)',
       ];
     }
@@ -303,10 +320,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    __updateTodayButton(todayButton, i18n, minDate, maxDate) {
+    __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
       if (todayButton) {
         todayButton.textContent = i18n && i18n.today;
-        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate);
+        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
       }
     }
 
@@ -321,12 +338,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       showWeekNumbers,
       ignoreTaps,
       theme,
+      isDateDisabled,
     ) {
       if (calendars && calendars.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
+          calendar.isDateDisabled = isDateDisabled;
           calendar.focusedDate = focusedDate;
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
@@ -361,10 +380,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
+      if (!this._dateAllowed(dateToSelect)) {
+        return false;
+      }
       this.selectedDate = dateToSelect;
       this.dispatchEvent(
         new CustomEvent('date-selected', { detail: { date: dateToSelect }, bubbles: true, composed: true }),
       );
+      return true;
     }
 
     /** @private */
@@ -775,9 +798,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           handled = true;
           break;
         case 'Enter':
-          this._selectDate(this.focusedDate);
-          this._close();
-          handled = true;
+          if (this._selectDate(this.focusedDate)) {
+            this._close();
+            handled = true;
+          }
           break;
         case ' ':
           this.__toggleDate(this.focusedDate);
@@ -931,7 +955,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
-      if (this._dateAllowed(dateToFocus)) {
+      // For this check we do consider the isDateDisabled function because disabled dates are allowed to be focused, just not outside min/max
+      if (this._dateAllowed(dateToFocus, undefined, undefined, () => false)) {
         this.focusDate(dateToFocus, keepMonth);
       } else if (this._dateAllowed(this.focusedDate)) {
         // Move to min or max date
@@ -1009,18 +1034,18 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _dateAllowed(date, min = this.minDate, max = this.maxDate) {
-      return (!min || date >= min) && (!max || date <= max);
+    _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
+      return dateAllowed(date, min, max, isDateDisabled);
     }
 
     /** @private */
-    _isTodayAllowed(min, max) {
+    _isTodayAllowed(min, max, isDateDisabled) {
       const today = new Date();
       const todayMidnight = new Date(0, 0);
       todayMidnight.setFullYear(today.getFullYear());
       todayMidnight.setMonth(today.getMonth());
       todayMidnight.setDate(today.getDate());
-      return this._dateAllowed(todayMidnight, min, max);
+      return this._dateAllowed(todayMidnight, min, max, isDateDisabled);
     }
 
     /**

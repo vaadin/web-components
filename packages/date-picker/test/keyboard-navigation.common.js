@@ -119,6 +119,97 @@ describe('keyboard navigation', () => {
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
     });
+
+    describe('disabled dates', () => {
+      beforeEach(async () => {
+        datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01" max="2010-01-31"></vaadin-date-picker>`);
+        datePicker.isDateDisabled = (date) => {
+          if (!date) {
+            return false;
+          }
+          return date.year === 2010 && date.month === 0 && date.day === 29;
+        };
+
+        await nextRender();
+        await open(datePicker);
+
+        input = datePicker.inputElement;
+        input.focus();
+      });
+
+      it('should not allow navigation prior to min', async () => {
+        datePicker.value = '2010-01-02';
+
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        // Move focus to the previous week and it should instead move to the min date
+        await sendKeys({ press: 'ArrowUp' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        let cell = getFocusedCell(datePicker._overlayContent);
+        expect(cell.date).to.eql(new Date(2010, 0, 1));
+
+        // Attempt to move focus to the previous week and it should stay on the min date
+        await sendKeys({ press: 'ArrowUp' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        cell = getFocusedCell(datePicker._overlayContent);
+        expect(cell.date).to.eql(new Date(2010, 0, 1));
+      });
+
+      it('should not allow navigation beyond max', async () => {
+        datePicker.value = '2010-01-30';
+
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        // Move focus to the next week and it should instead move to the max date
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        let cell = getFocusedCell(datePicker._overlayContent);
+        expect(cell.date).to.eql(new Date(2010, 0, 31));
+
+        // Attempt to move focus to the next week and it should stay on the max date
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        cell = getFocusedCell(datePicker._overlayContent);
+        expect(cell.date).to.eql(new Date(2010, 0, 31));
+      });
+
+      it('should allow navigation on a disabled date', async () => {
+        datePicker.value = '2010-01-28';
+
+        // Move focus inside the dropdown to the typed date.
+        await sendKeys({ press: 'ArrowDown' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        // Move focus to a disabled date
+        await sendKeys({ press: 'ArrowRight' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        const cell = getFocusedCell(datePicker._overlayContent);
+        expect(cell.date).to.eql(new Date(2010, 0, 29));
+      });
+
+      it('should not commit value when pressing enter on a disabled date', async () => {
+        datePicker.value = '2010-01-28';
+
+        // Move focus to a disabled date
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'ArrowRight' });
+        await waitForScrollToFinish(datePicker._overlayContent);
+
+        await sendKeys({ press: 'Enter' });
+
+        expect(datePicker.opened).to.be.true;
+        expect(datePicker.value).to.eql('2010-01-28');
+      });
+    });
   });
 
   describe('overlay', () => {

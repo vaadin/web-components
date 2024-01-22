@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { flushGrid, getContainerCell } from './helpers.js';
 
@@ -220,6 +220,56 @@ describe('column auto-width', () => {
     await recalculateWidths();
 
     expect(headerCell.getBoundingClientRect().width).to.be.closeTo(headerCellWidth, 5);
+  });
+
+  it('should have correct column widths for lazily defined columns', async () => {
+    const tagName = 'vaadin-custom-column';
+    const newColumn = document.createElement(tagName);
+    newColumn.autoWidth = true;
+    newColumn.flexGrow = 0;
+    newColumn.path = 'a';
+
+    // Replace 'a' column with a new one
+    grid.removeChild(columns[0]);
+    grid.insertBefore(newColumn, columns[1]);
+    columns = grid.querySelectorAll(`${tagName}, vaadin-grid-column`);
+    grid.items = testItems;
+
+    // Define the custom column element after a delay
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        customElements.define(
+          tagName,
+          class extends customElements.get('vaadin-grid-column') {
+            static is = tagName;
+          },
+        );
+        resolve();
+      }, 100);
+    });
+
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
+  });
+
+  describe('focusButtonMode column', () => {
+    beforeEach(async () => {
+      const column = document.createElement('vaadin-grid-column');
+      column.autoWidth = true;
+      column.path = 'b';
+      column._focusButtonMode = true;
+      grid.insertBefore(column, grid.firstElementChild);
+      columns = grid.querySelectorAll('vaadin-grid-column');
+
+      await aTimeout(0);
+    });
+
+    it('should calculate auto-width of focusButtonMode column correctly', async () => {
+      grid.items = testItems;
+
+      await recalculateWidths();
+      expectColumnWidthsToBeOk(columns, [114, 71, 114, 84, 107]);
+    });
   });
 });
 

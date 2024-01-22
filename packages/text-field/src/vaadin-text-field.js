@@ -90,12 +90,6 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
 
   static get template() {
     return html`
-      <style>
-        [part='input-field'] {
-          flex-grow: 0;
-        }
-      </style>
-
       <div class="vaadin-field-container">
         <div part="label">
           <slot name="label"></slot>

@@ -292,5 +292,21 @@ describe('side-nav-item', () => {
       toggle.click();
       expect(spy.called).to.be.false;
     });
+
+    describe('target property', () => {
+      it('should set target attribute to the anchor when target is set', async () => {
+        item.target = '_blank';
+        await nextRender();
+        expect(anchor.getAttribute('target')).to.be.equal('_blank');
+      });
+
+      it('should remove target attribute from the anchor when target is removed', async () => {
+        item.target = '_blank';
+        await nextRender();
+        item.target = null;
+        await nextRender();
+        expect(anchor.hasAttribute('target')).to.be.not.ok;
+      });
+    });
   });
 });

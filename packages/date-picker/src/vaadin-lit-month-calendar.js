@@ -61,7 +61,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                 ${week.map((date) => {
                   const isFocused = dateEquals(date, this.focusedDate);
                   const isSelected = dateEquals(date, this.selectedDate);
-                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate);
+                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
 
                   const parts = [
                     'date',

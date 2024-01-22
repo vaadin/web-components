@@ -100,6 +100,11 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    */
   readonly current: boolean;
 
+  /**
+   * The target of the link. Works only when `path` is set.
+   */
+  target: string | null | undefined;
+
   addEventListener<K extends keyof SideNavItemEventMap>(
     type: K,
     listener: (this: SideNavItem, ev: SideNavItemEventMap[K]) => void,

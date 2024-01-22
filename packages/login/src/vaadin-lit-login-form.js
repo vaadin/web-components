@@ -3,9 +3,9 @@
  * Copyright (c) 2018 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
-import '@vaadin/password-field/src/vaadin-password-field.js';
+import '@vaadin/button/src/vaadin-lit-button.js';
+import '@vaadin/text-field/src/vaadin-lit-text-field.js';
+import '@vaadin/password-field/src/vaadin-lit-password-field.js';
 import './vaadin-lit-login-form-wrapper.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -20,7 +20,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  *
  * ## Disclaimer
  *
- * This component is an experiment not intended for publishing to npm.
+ * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */

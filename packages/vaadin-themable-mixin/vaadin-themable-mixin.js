@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, CSSResult, unsafeCSS } from 'lit';
+import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -22,6 +22,16 @@ export { css, unsafeCSS };
  * @type {Theme[]}
  */
 const themeRegistry = [];
+
+/**
+ * @type {WeakRef<HTMLElement>[]}
+ */
+const themableInstances = new Set();
+
+/**
+ * @type {string[]}
+ */
+const themableTagNames = new Set();
 
 /**
  * Check if the custom element type has themes applied.
@@ -58,6 +68,129 @@ function flattenStyles(styles = []) {
 }
 
 /**
+ * Returns true if the themeFor string matches the tag name
+ * @param {string} themeFor
+ * @param {string} tagName
+ * @returns {boolean}
+ */
+function matchesThemeFor(themeFor, tagName) {
+  return (themeFor || '').split(' ').some((themeForToken) => {
+    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
+  });
+}
+
+/**
+ * Returns the CSS text content from an array of CSSResults
+ * @param {CSSResult[]} styles
+ * @returns {string}
+ */
+function getCssText(styles) {
+  return styles.map((style) => style.cssText).join('\n');
+}
+
+const STYLE_ID = 'vaadin-themable-mixin-style';
+
+/**
+ * Includes the styles to the template.
+ * @param {CSSResult[]} styles
+ * @param {HTMLTemplateElement} template
+ */
+function addStylesToTemplate(styles, template) {
+  const styleEl = document.createElement('style');
+  styleEl.id = STYLE_ID;
+  styleEl.textContent = getCssText(styles);
+  template.content.appendChild(styleEl);
+}
+
+/**
+ * Dynamically updates the styles of the given component instance.
+ * @param {HTMLElement} instance
+ */
+function updateInstanceStyles(instance) {
+  if (!instance.shadowRoot) {
+    return;
+  }
+
+  const componentClass = instance.constructor;
+
+  if (instance instanceof LitElement) {
+    // LitElement
+
+    // The adoptStyles function may fall back to appending style elements to shadow root.
+    // Remove them first to avoid duplicates.
+    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
+
+    // Adopt the updated styles
+    adoptStyles(instance.shadowRoot, componentClass.elementStyles);
+  } else {
+    // PolymerElement
+
+    // Update style element content in the shadow root
+    const style = instance.shadowRoot.getElementById(STYLE_ID);
+    const template = componentClass.prototype._template;
+    style.textContent = template.content.getElementById(STYLE_ID).textContent;
+  }
+}
+
+/**
+ * Dynamically updates the styles of the instances matching the given component type.
+ * @param {Function} componentClass
+ */
+function updateInstanceStylesOfType(componentClass) {
+  // Iterate over component instances and update their styles if needed
+  themableInstances.forEach((ref) => {
+    const instance = ref.deref();
+    if (instance instanceof componentClass) {
+      updateInstanceStyles(instance);
+    } else if (!instance) {
+      // Clean up the weak reference to a GC'd instance
+      themableInstances.delete(ref);
+    }
+  });
+}
+
+/**
+ * Dynamically updates the styles of the given component type.
+ * @param {Function} componentClass
+ */
+function updateComponentStyles(componentClass) {
+  if (componentClass.prototype instanceof LitElement) {
+    // Update LitElement-based component's elementStyles
+    componentClass.elementStyles = componentClass.finalizeStyles(componentClass.styles);
+  } else {
+    // Update Polymer-based component's template
+    const template = componentClass.prototype._template;
+    template.content.getElementById(STYLE_ID).textContent = getCssText(componentClass.getStylesForThis());
+  }
+
+  // Update the styles of inheriting types
+  themableTagNames.forEach((inheritingTagName) => {
+    const inheritingClass = customElements.get(inheritingTagName);
+    if (inheritingClass !== componentClass && inheritingClass.prototype instanceof componentClass) {
+      updateComponentStyles(inheritingClass);
+    }
+  });
+}
+
+/**
+ * Check if the component type already has a style matching the given styles.
+ *
+ * @param {Function} componentClass
+ * @param {CSSResultGroup} styles
+ * @returns {boolean}
+ */
+function hasMatchingStyle(componentClass, styles) {
+  const themes = componentClass.__themes;
+  if (!themes || !styles) {
+    return false;
+  }
+
+  return themes.some((theme) =>
+    theme.styles.some((themeStyle) => styles.some((style) => style.cssText === themeStyle.cssText)),
+  );
+}
+
+/**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
@@ -68,15 +201,6 @@ function flattenStyles(styles = []) {
  * @return {void}
  */
 export function registerStyles(themeFor, styles, options = {}) {
-  if (themeFor) {
-    if (hasThemes(themeFor)) {
-      console.warn(`The custom element definition for "${themeFor}"
-      was finalized before a style module was registered.
-      Make sure to add component specific style modules before
-      importing the corresponding custom element.`);
-    }
-  }
-
   styles = flattenStyles(styles);
 
   if (window.Vaadin && window.Vaadin.styleModules) {
@@ -87,6 +211,34 @@ export function registerStyles(themeFor, styles, options = {}) {
       styles,
       include: options.include,
       moduleId: options.moduleId,
+    });
+  }
+
+  if (themeFor) {
+    // Update styles of the component types that match themeFor and have already been finalized
+    themableTagNames.forEach((tagName) => {
+      if (matchesThemeFor(themeFor, tagName) && hasThemes(tagName)) {
+        const componentClass = customElements.get(tagName);
+
+        if (hasMatchingStyle(componentClass, styles)) {
+          // Show a warning if the component type already has some of the given styles
+          console.warn(`Registering styles that already exist for ${tagName}`);
+        } else if (!window.Vaadin || !window.Vaadin.suppressPostFinalizeStylesWarning) {
+          // Show a warning if the component type has already been finalized
+          console.warn(
+            `The custom element definition for "${tagName}" ` +
+              `was finalized before a style module was registered. ` +
+              `Ideally, import component specific style modules before ` +
+              `importing the corresponding custom element. ` +
+              `This warning can be suppressed by setting "window.Vaadin.suppressPostFinalizeStylesWarning = true".`,
+          );
+        }
+
+        // Update the styles of the component type
+        updateComponentStyles(componentClass);
+        // Update the styles of the component instances matching the component type
+        updateInstanceStylesOfType(componentClass);
+      }
     });
   }
 }
@@ -101,18 +253,6 @@ function getAllThemes() {
     return window.Vaadin.styleModules.getAllThemes();
   }
   return themeRegistry;
-}
-
-/**
- * Returns true if the themeFor string matches the tag name
- * @param {string} themeFor
- * @param {string} tagName
- * @returns {boolean}
- */
-function matchesThemeFor(themeFor, tagName) {
-  return (themeFor || '').split(' ').some((themeForToken) => {
-    return new RegExp(`^${themeForToken.split('*').join('.*')}$`, 'u').test(tagName);
-  });
 }
 
 /**
@@ -152,17 +292,6 @@ function getIncludedStyles(theme) {
 }
 
 /**
- * Includes the styles to the template.
- * @param {CSSResult[]} styles
- * @param {HTMLTemplateElement} template
- */
-function addStylesToTemplate(styles, template) {
-  const styleEl = document.createElement('style');
-  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
-  template.content.appendChild(styleEl);
-}
-
-/**
  * Returns an array of themes that should be used for styling a component matching
  * the tag name. The array is sorted by the include order.
  * @param {string} tagName
@@ -197,12 +326,22 @@ function getThemes(tagName) {
  */
 export const ThemableMixin = (superClass) =>
   class VaadinThemableMixin extends ThemePropertyMixin(superClass) {
+    constructor() {
+      super();
+      // Store a weak reference to the instance
+      themableInstances.add(new WeakRef(this));
+    }
+
     /**
      * Covers PolymerElement based component styling
      * @protected
      */
     static finalize() {
       super.finalize();
+
+      if (this.is) {
+        themableTagNames.add(this.is);
+      }
 
       // Make sure not to run the logic intended for PolymerElement when LitElement is used.
       if (this.elementStyles) {
@@ -227,7 +366,7 @@ export const ThemableMixin = (superClass) =>
       // a LitElement based component. The theme styles are added after it
       // so that they can override the component styles.
       const themeStyles = this.getStylesForThis();
-      return styles ? [...super.finalizeStyles(styles), ...themeStyles] : themeStyles;
+      return styles ? [...[styles].flat(Infinity), ...themeStyles] : themeStyles;
     }
 
     /**
@@ -236,9 +375,10 @@ export const ThemableMixin = (superClass) =>
      * @private
      */
     static getStylesForThis() {
+      const superClassThemes = superClass.__themes || [];
       const parent = Object.getPrototypeOf(this.prototype);
       const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
-      this.__themes = [...inheritedThemes, ...getThemes(this.is)];
+      this.__themes = [...superClassThemes, ...inheritedThemes, ...getThemes(this.is)];
       const themeStyles = this.__themes.flatMap((theme) => theme.styles);
       // Remove duplicates
       return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));

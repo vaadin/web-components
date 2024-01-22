@@ -287,6 +287,35 @@ snapshots["vaadin-combo-box host error"] =
 `;
 /* end snapshot vaadin-combo-box host error */
 
+snapshots["vaadin-combo-box host value"] = 
+`<vaadin-combo-box has-value="">
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-combo-box>
+`;
+/* end snapshot vaadin-combo-box host value */
+
 snapshots["vaadin-combo-box host opened default"] = 
 `<vaadin-combo-box
   focused=""
@@ -357,6 +386,30 @@ snapshots["vaadin-combo-box host opened overlay"] =
 </vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box host opened overlay */
+
+snapshots["vaadin-combo-box host opened overlay shadow"] = 
+`<div
+  hidden=""
+  id="backdrop"
+  part="backdrop"
+>
+</div>
+<div
+  id="overlay"
+  part="overlay"
+>
+  <div part="loader">
+  </div>
+  <div
+    id="content"
+    part="content"
+  >
+    <slot>
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-combo-box host opened overlay shadow */
 
 snapshots["vaadin-combo-box host opened overlay class"] = 
 `<vaadin-combo-box-overlay

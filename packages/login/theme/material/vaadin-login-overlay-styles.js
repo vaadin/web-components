@@ -347,4 +347,4 @@ const loginFormWrapper = css`
   }
 `;
 
-registerStyles('vaadin-login-form-wrapper', [typography, loginFormWrapper], { moduleId: 'material-login-overlay' });
+registerStyles('vaadin-login-form-wrapper', [loginFormWrapper], { moduleId: 'material-login-overlay' });

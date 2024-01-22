@@ -16,7 +16,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
  *
  * ## Disclaimer
  *
- * This component is an experiment not intended for publishing to npm.
+ * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  */
 class GridProEditCheckbox extends Checkbox {

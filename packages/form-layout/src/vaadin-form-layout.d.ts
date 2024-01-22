@@ -50,7 +50,7 @@ export type FormLayoutResponsiveStep = {
  *
  * ### Spanning Items on Multiple Columns
  *
- * You can use `colspan` attribute on the items.
+ * You can use `colspan` or `data-colspan` attribute on the items.
  * In the example below, the first text field spans on two columns:
  *
  * ```html

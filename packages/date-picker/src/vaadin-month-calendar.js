@@ -50,12 +50,12 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
               <template is="dom-repeat" items="[[week]]">
                 <td
                   role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate)]]"
+                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate, isDateDisabled)]]"
                   date="[[item]]"
                   tabindex$="[[__getDayTabindex(item, focusedDate)]]"
-                  disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
+                  disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateDisabled)]]"
                   aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
-                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
+                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate, isDateDisabled)]]"
                   aria-label$="[[__getDayAriaLabel(item)]]"
                   >[[_getDate(item)]]</td
                 >
@@ -76,7 +76,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       /** @protected */
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n, minDate, maxDate)',
+        computed: '_getDays(month, i18n, minDate, maxDate, isDateDisabled)',
       },
 
       /** @protected */
@@ -107,10 +107,10 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate) {
+  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled) {
     const result = ['date'];
 
-    if (this.__isDayDisabled(date, minDate, maxDate)) {
+    if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled)) {
       result.push('disabled');
     }
 
@@ -147,17 +147,17 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __isDayDisabled(date, minDate, maxDate) {
-    return !dateAllowed(date, minDate, maxDate);
+  __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
+    return !dateAllowed(date, minDate, maxDate, isDateDisabled);
   }
 
   /** @private */
-  __getDayAriaDisabled(date, min, max) {
-    if (date === undefined || min === undefined || max === undefined) {
+  __getDayAriaDisabled(date, min, max, isDateDisabled) {
+    if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
       return;
     }
 
-    if (this.__isDayDisabled(date, min, max)) {
+    if (this.__isDayDisabled(date, min, max, isDateDisabled)) {
       return 'true';
     }
   }

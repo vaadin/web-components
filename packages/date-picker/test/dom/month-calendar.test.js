@@ -37,5 +37,15 @@ describe('vaadin-month-calendar', () => {
       await nextFrame();
       await expect(monthCalendar).shadowDom.to.equalSnapshot();
     });
+
+    it('disabled dates', async () => {
+      monthCalendar.isDateDisabled = (date) => {
+        if (!date) {
+          return false;
+        }
+        return !!(date.day % 2);
+      };
+      await expect(monthCalendar).shadowDom.to.equalSnapshot();
+    });
   });
 });
