@@ -444,6 +444,32 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         // Expect the cell that was previously not visible to have the last-row-cell part
         expect(getBodyCell(1, 0).getAttribute('part')).to.include('last-row-cell');
       });
+
+      it('should have only one cell removed from sizer row after a column is hidden', async () => {
+        await scrollHorizontally(-100);
+        columns[4].hidden = true;
+
+        await nextFrame();
+
+        const sizerCellsCount = grid.$.sizer.querySelectorAll('td').length;
+        expect(sizerCellsCount).to.equal(columns.length - 1);
+      });
+
+      it('should have the same amount of visible columns after a column is hidden', async () => {
+        let columnsInViewport = columns.filter((column) => !column.hidden && isColumnInViewport(column));
+        const isCellsInViewportVisibleBefore = columnsInViewport.every(
+          (col) => !isBodyCellContentHidden(columns.indexOf(col)),
+        );
+        columns[7].hidden = true;
+        await scrollHorizontally(-100);
+        await nextFrame();
+
+        columnsInViewport = columns.filter((column) => !column.hidden && isColumnInViewport(column));
+        const isCellsOnViewportVisible = columnsInViewport.every(
+          (col) => !isBodyCellContentHidden(columns.indexOf(col)),
+        );
+        expect(isCellsOnViewportVisible).to.equal(isCellsInViewportVisibleBefore);
+      });
     });
 
     describe(`keyboard navigation - ${dir}`, () => {
