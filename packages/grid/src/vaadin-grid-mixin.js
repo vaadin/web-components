@@ -674,11 +674,13 @@ export const GridMixin = (superClass) =>
             cell.__parentRow = row;
             // Cache the cell reference
             row.__cells.push(cell);
-            if (!column._bodyContentHidden) {
+
+            const isSizerRow = row === this.$.sizer;
+            if (!column._bodyContentHidden || isSizerRow) {
               row.appendChild(cell);
             }
 
-            if (row === this.$.sizer) {
+            if (isSizerRow) {
               column._sizerCell = cell;
             }
 
