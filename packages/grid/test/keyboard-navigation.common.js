@@ -2135,6 +2135,27 @@ describe('keyboard navigation on column groups', () => {
     expect(getFocusedRowIndex()).to.equal(0);
   });
 
+  it('should not scroll body on header pagedown', () => {
+    grid.items = Array.from({ length: 1000 }, (_, i) => String(i));
+
+    // Focus a body cell
+    tabToBody();
+
+    // Scroll down
+    pageDown();
+    pageDown();
+
+    const firstVisibleIndex = getFirstVisibleItem(grid).index;
+    expect(firstVisibleIndex).to.be.above(5);
+
+    // Tab to header
+    tabToHeader();
+
+    pageDown();
+
+    expect(getFirstVisibleItem(grid).index).to.equal(firstVisibleIndex);
+  });
+
   describe('updating tabbable cells', () => {
     describe('header', () => {
       let header;

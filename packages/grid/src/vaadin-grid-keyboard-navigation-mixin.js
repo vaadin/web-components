@@ -356,11 +356,14 @@ export const KeyboardNavigationMixin = (superClass) =>
           dy = -1;
           break;
         case 'PageDown':
-          {
+          // Check if the active group is body
+          if (this.$.items.contains(activeRow)) {
             const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
-            this._scrollToFlatIndex(currentRowIndex); // scroll the current row to the top...
-            dy = this._visibleItemsCount; // ... only then measure the visible items count
+            // Scroll the current row to the top...
+            this._scrollToFlatIndex(currentRowIndex);
           }
+          // ...only then measure the visible items count
+          dy = this._visibleItemsCount;
           break;
         case 'PageUp':
           dy = -this._visibleItemsCount;
