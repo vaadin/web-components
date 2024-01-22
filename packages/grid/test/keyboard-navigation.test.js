@@ -26,6 +26,7 @@ import {
   getCell,
   getCellContent,
   getContainerCell,
+  getFirstVisibleItem,
   getLastVisibleItem,
   getRowCells,
   getRows,
@@ -1236,6 +1237,17 @@ describe('keyboard navigation', () => {
         expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
       });
 
+      it('should previous focused item be first visible item after third page down', () => {
+        focusItem(0);
+        pageDown();
+        pageDown();
+
+        const previousLastIndex = getFocusedRowIndex();
+        pageDown();
+
+        expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
+      });
+
       it('should scroll up one page with page up', async () => {
         focusItem(0);
         pageDown();
@@ -2124,6 +2136,27 @@ describe('keyboard navigation on column groups', () => {
     expect(getFocusedRowIndex()).to.equal(0);
   });
 
+  it('should not scroll body on header pagedown', () => {
+    grid.items = Array.from({ length: 1000 }, (_, i) => String(i));
+
+    // Focus a body cell
+    tabToBody();
+
+    // Scroll down
+    pageDown();
+    pageDown();
+
+    const firstVisibleIndex = getFirstVisibleItem(grid).index;
+    expect(firstVisibleIndex).to.be.above(5);
+
+    // Tab to header
+    tabToHeader();
+
+    pageDown();
+
+    expect(getFirstVisibleItem(grid).index).to.equal(firstVisibleIndex);
+  });
+
   describe('updating tabbable cells', () => {
     describe('header', () => {
       let header;
@@ -2308,6 +2341,11 @@ describe('hierarchical data', () => {
     callback(items, itemsOnEachLevel);
   }
 
+  function getItemForIndex(index) {
+    const { item } = grid._cache.items[index];
+    return item;
+  }
+
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
@@ -2343,6 +2381,17 @@ describe('hierarchical data', () => {
     await sendKeys({ press: 'ArrowRight' });
     // Expect the focus to not have changed
     expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
+  });
+
+  it('should previous focused item be first visible item after second page down on expanded tree', () => {
+    grid.expandItem(getItemForIndex(0));
+    focusItem(0);
+
+    pageDown();
+    const previousLastIndex = getFocusedRowIndex();
+    pageDown();
+
+    expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
   });
 });
 
