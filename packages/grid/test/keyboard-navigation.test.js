@@ -2342,7 +2342,7 @@ describe('hierarchical data', () => {
   }
 
   function getItemForIndex(index) {
-    const { item } = grid._dataProviderController.getFlatIndexContext(index);
+    const { item } = grid._cache.items[index];
     return item;
   }
 
