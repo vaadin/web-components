@@ -321,12 +321,18 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _onDataProviderPageReceived() {
+      const flatSizeChanged = this._dataProviderController.flatSize !== this._flatSize;
       // With the new items added, update the cache size and the grid's effective size
       this._flatSize = this._dataProviderController.flatSize;
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
+      // or if some of the rows are missing an item
       this._getRenderedRows().forEach((row) => {
         this._dataProviderController.ensureFlatIndexHierarchy(row.index);
+        if (flatSizeChanged) {
+          // To avoid excess requests, ensure the index is loaded only if flat size changed
+          this._dataProviderController.ensureFlatIndexLoaded(row.index);
+        }
       });
 
       this._hasData = true;
