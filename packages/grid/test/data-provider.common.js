@@ -109,6 +109,14 @@ function simulateScrollToEnd(grid) {
   });
 }
 
+async function until(predicate) {
+  while (!predicate()) {
+    await new Promise((r) => {
+      setTimeout(r, 10);
+    });
+  }
+}
+
 describe('data provider', () => {
   let grid;
 
@@ -246,6 +254,15 @@ describe('data provider', () => {
         { path: 'price', direction: 'asc' },
         { path: 'name', direction: 'asc' },
       ]);
+    });
+
+    it('should not request again when resolving with an empty array', async () => {
+      grid.dataProvider = sinon.spy((_params, callback) => callback([], 10));
+
+      grid.dataProvider.resetHistory();
+      await aTimeout(100);
+
+      expect(grid.dataProvider.callCount).to.equal(0);
     });
   });
 
@@ -427,6 +444,34 @@ describe('data provider', () => {
         grid.clearCache();
         cell = getContainerCell(grid.$.items, 1, 0);
         expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
+      });
+
+      it('should have correct row hierarchy with small page size', async () => {
+        grid.pageSize = 2;
+        grid.itemIdPath = 'value';
+        grid.expandedItems = [{ value: '0' }, { value: '0-0' }];
+        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+          const levelSize = parentItem ? 5 : 100;
+
+          const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+            const indexInLevel = page * pageSize + i;
+            return {
+              value: `${parentItem ? `${parentItem.value}-` : ''}${indexInLevel}`,
+              children: true,
+            };
+          });
+
+          setTimeout(() => cb(pageItems, levelSize), 0);
+        };
+
+        const expectedRowContent = ['0', '0-0', '0-0-0', '0-0-1', '0-0-2', '0-0-3', '0-0-4', '0-1', '0-2', '0-3'];
+
+        for (const [index, expectedContent] of expectedRowContent.entries()) {
+          const cell = getContainerCell(grid.$.items, index, 0);
+          // Due to the async nature of the data provider, we need to wait until the cell content is
+          // updated
+          await until(() => getCellContent(cell).textContent.trim() === expectedContent);
+        }
       });
 
       describe('row state', () => {
