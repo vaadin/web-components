@@ -138,6 +138,11 @@ export declare class MenuBarMixinClass {
    */
   openOnHover: boolean | null | undefined;
 
+  /**
+   * Closes the current submenu.
+   */
+  close(): void;
+
   protected readonly _buttons: HTMLElement[];
 
   protected readonly _container: HTMLElement;

@@ -432,6 +432,15 @@ describe('overflow', () => {
       expect(subMenu.opened).to.be.false;
     });
 
+    it('should close the overflow sub-menu programmatically', async () => {
+      overflow.click();
+      await nextRender(subMenu);
+      expect(subMenu.opened).to.be.true;
+
+      menu.close();
+      expect(subMenu.opened).to.be.false;
+    });
+
     it('should teleport the same component to overflow sub-menu and back', async () => {
       overflow.click();
       await nextRender(subMenu);
