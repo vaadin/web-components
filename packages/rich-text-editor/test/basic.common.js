@@ -727,6 +727,21 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
     });
 
+    it('should filter out ql-* class names', () => {
+      // Modify the editor content directly, as setDangerouslyHtmlValue() strips
+      // classes
+      rte.shadowRoot.querySelector('.ql-editor').innerHTML =
+        '<pre class="ql-syntax foo ql-cursor"><code>console.log("hello")</code></pre>';
+      rte.__updateHtmlValue();
+      expect(rte.htmlValue).to.equal('<pre class=" foo "><code>console.log("hello")</code></pre>');
+    });
+
+    it('should not filter out ql-* in content', () => {
+      rte.dangerouslySetHtmlValue('<p>mysql-driver</p>');
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal('<p>mysql-driver</p>');
+    });
+
     it('should filter out empty span elements from the resulting htmlValue', () => {
       rte.dangerouslySetHtmlValue(
         '<p><strong>Hello </strong></p><p><strong><span class="ql-cursor"></span>world</strong></p>',
