@@ -330,8 +330,12 @@ export const DataProviderMixin = (superClass) =>
       this._getRenderedRows().forEach((row) => {
         this._dataProviderController.ensureFlatIndexHierarchy(row.index);
         if (flatSizeChanged) {
-          // To avoid excess requests, ensure the index is loaded only if flat size changed
-          this._dataProviderController.ensureFlatIndexLoaded(row.index);
+          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
+          if (!item) {
+            // To avoid excess requests, ensure the index is loaded only if flat size changed
+            this.__updateLoading(row, true);
+            this._dataProviderController.ensureFlatIndexLoaded(row.index);
+          }
         }
       });
 
