@@ -673,7 +673,12 @@ export const RichTextEditorMixin = (superClass) =>
       let content = editor.innerHTML;
 
       // Remove Quill classes, e.g. ql-syntax, except for align
-      content = content.replace(/(?<=class="[^"]*)ql-(?!align)[\w-]*(?=[^"]*")/gu, '');
+      content = content.replace(/class="([^"]*)"/gu, (match, group1) => {
+        const classes = group1.split(' ').filter((className) => {
+          return !className.startsWith('ql-') || className.startsWith('ql-align');
+        });
+        return `class="${classes.join(' ')}"`;
+      });
       // Remove meta spans, e.g. cursor which are empty after Quill classes removed
       content = content.replace(/<\/?span[^>]*>/gu, '');
 

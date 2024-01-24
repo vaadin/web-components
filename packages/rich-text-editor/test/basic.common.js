@@ -733,7 +733,7 @@ describe('rich text editor', () => {
       rte.shadowRoot.querySelector('.ql-editor').innerHTML =
         '<pre class="ql-syntax foo ql-cursor"><code>console.log("hello")</code></pre>';
       rte.__updateHtmlValue();
-      expect(rte.htmlValue).to.equal('<pre class=" foo "><code>console.log("hello")</code></pre>');
+      expect(rte.htmlValue).to.equal('<pre class="foo"><code>console.log("hello")</code></pre>');
     });
 
     it('should not filter out ql-* in content', () => {
