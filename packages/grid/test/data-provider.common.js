@@ -461,7 +461,16 @@ describe('data provider', () => {
             };
           });
 
-          setTimeout(() => cb(pageItems, levelSize), 0);
+          setTimeout(() => {
+            cb(pageItems, levelSize);
+
+            for (const row of getRows(grid.$.items)) {
+              if (!grid._dataProviderController.getFlatIndexContext(row.index).item) {
+                // Rows that don't have a cached item after the callback resolves should be in loading state
+                expect(row.hasAttribute('loading')).to.be.true;
+              }
+            }
+          }, 10);
         };
 
         const expectedRowContent = ['0', '0-0', '0-0-0', '0-0-1', '0-0-2', '0-0-3', '0-0-4', '0-1', '0-2', '0-3'];
