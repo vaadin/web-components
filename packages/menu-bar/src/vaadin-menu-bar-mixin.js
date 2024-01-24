@@ -908,11 +908,18 @@ export const MenuBarMixin = (superClass) =>
      * @param {boolean} restoreFocus
      * @protected
      */
-    _close(restoreFocus) {
+    _close(restoreFocus = false) {
       this.style.pointerEvents = '';
       this.__deactivateButton(restoreFocus);
       if (this._subMenu.opened) {
         this._subMenu.close();
       }
+    }
+
+    /**
+     * Closes the current submenu.
+     */
+    close() {
+      this._close();
     }
   };

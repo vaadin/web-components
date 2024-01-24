@@ -283,6 +283,15 @@ describe('sub-menu', () => {
     expect(spy.firstCall.args[0].detail.value).to.deep.equal({ text: 'Menu Item 1 1' });
   });
 
+  it('should close sub-menu programmatically', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.true;
+
+    menu.close();
+    expect(subMenu.opened).to.be.false;
+  });
+
   it('should not close submenu on item contextmenu event', async () => {
     buttons[0].click();
     await nextRender(subMenu);
