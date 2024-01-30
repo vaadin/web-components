@@ -727,6 +727,26 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
+     * Override an event listener from `KeyboardMixin` to open
+     * the sub-menu and focus the first item.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onEnter(event) {
+      this.__handleButtonPressEvent(event, true);
+    }
+
+    /**
+     * @param {!KeyboardEvent} event
+     * @private
+     */
+    _onSpace(event) {
+      this.__handleButtonPressEvent(event, true);
+    }
+
+    /**
      * Override an event listener from `KeyboardMixin`.
      *
      * @param {!KeyboardEvent} event
@@ -740,6 +760,9 @@ export const MenuBarMixin = (superClass) =>
           break;
         case 'ArrowUp':
           this._onArrowUp(event);
+          break;
+        case ' ':
+          this._onSpace(event);
           break;
         default:
           super._onKeyDown(event);
@@ -796,10 +819,15 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __onButtonClick(e) {
+      this.__handleButtonPressEvent(e, false);
+    }
+
+    /** @private */
+    __handleButtonPressEvent(e, keydown) {
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
-        this.__openSubMenu(button, false);
+        this.__openSubMenu(button, keydown);
       }
     }
 
