@@ -128,8 +128,6 @@
     "./Map": "./Map.js",
     "./RichTextEditor": "./RichTextEditor.js",
     "./utils/createComponent.d.ts": "./utils/createComponent.d.ts",
-    "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map",
-    "./utils/createComponent.js": "./utils/createComponent.js",
-    "./utils/createComponent.js.map": "./utils/createComponent.js.map"
+    "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map"
   }
 }
