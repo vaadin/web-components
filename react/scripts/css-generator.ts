@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, posix, relative, resolve, sep } from 'node:path';
 import { createContext, type Module as VmModule, SourceTextModule, SyntheticModule } from 'node:vm';
-import { nodeModulesDir, rootDir, stylePackages } from './utils/config.js';
+import { nodeModulesDir, packageDir, stylePackages } from './utils/config.js';
 
 const themeNameRegex = /^@vaadin\/vaadin-(.+)-styles/;
 
@@ -340,7 +340,7 @@ for (const stylePackage of stylePackages) {
 }
 
 // Write files
-const cssDir = resolve(rootDir, 'css');
+const cssDir = resolve(packageDir, 'css');
 for (const [cssPath, contents] of output) {
   const filePath = resolve(cssDir, cssPath);
   await mkdir(dirname(filePath), { recursive: true });

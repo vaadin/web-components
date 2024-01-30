@@ -4,12 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { build, type Plugin } from 'esbuild';
 import { glob } from 'glob';
 import type { PackageJson } from 'type-fest';
+import { packageURL, srcURL, generatedURL } from './utils/config.js';
 
-const root = new URL('../', import.meta.url);
-const src = new URL('src/', root);
-const generated = new URL('generated/', src);
-
-const packageJson: PackageJson = await readFile(new URL('package.json', root), 'utf8').then(JSON.parse);
+const packageJson: PackageJson = await readFile(new URL('package.json', packageURL), 'utf8').then(JSON.parse);
 
 const fixImports: Plugin = {
   name: 'add-imports',
@@ -23,7 +20,7 @@ const fixImports: Plugin = {
       const result = basename(path, extname(path));
       const [contents, generatedContents] = await Promise.all([
         readFile(path, 'utf8'),
-        readFile(new URL(`${result}.ts`, generated), 'utf8'),
+        readFile(new URL(`${result}.ts`, generatedURL), 'utf8'),
       ]);
 
       const exportAllLine = generatedContents.split('\n').find((line) => line.startsWith('export *')) ?? '';
@@ -50,11 +47,11 @@ const fixImports: Plugin = {
 async function detectEntryPoints(patterns: string[], ignore: string[] = []) {
   return (
     await glob(patterns, {
-      cwd: fileURLToPath(src),
+      cwd: fileURLToPath(srcURL),
       ignore: ['**/*.d.ts', ...ignore],
     })
   )
-    .map((file) => new URL(file, src))
+    .map((file) => new URL(file, srcURL))
     .map(fileURLToPath);
 }
 
@@ -64,11 +61,11 @@ const commonOptions = {
   },
   format: 'esm',
   minify: true,
-  outdir: fileURLToPath(root),
+  outdir: fileURLToPath(packageURL),
   sourcemap: 'linked',
   sourcesContent: true,
   target: 'es2021',
-  tsconfig: fileURLToPath(new URL('./tsconfig.build.json', root)),
+  tsconfig: fileURLToPath(new URL('./tsconfig.build.json', packageURL)),
 } as const;
 
 const [componentEntryPoints, utilsEntryPoints] = await Promise.all([

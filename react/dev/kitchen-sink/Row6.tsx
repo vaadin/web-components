@@ -1,12 +1,12 @@
-import { BoardRow } from '../../src/BoardRow.js';
-import { HorizontalLayout } from '../../src/HorizontalLayout.js';
-import { Icon } from '../../src/Icon.js';
-import { Iconset } from '../../src/Iconset.js';
-import { LoginForm } from '../../src/LoginForm.js';
-import { LoginOverlay } from '../../src/LoginOverlay.js';
-import { MenuBar } from '../../src/MenuBar.js';
-import { Scroller } from '../../src/Scroller.js';
-import { VerticalLayout } from '../../src/VerticalLayout.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { HorizontalLayout } from '../../packages/react-components/src/HorizontalLayout.js';
+import { Icon } from '../../packages/react-components/src/Icon.js';
+import { Iconset } from '../../packages/react-components/src/Iconset.js';
+import { LoginForm } from '../../packages/react-components/src/LoginForm.js';
+import { LoginOverlay } from '../../packages/react-components/src/LoginOverlay.js';
+import { MenuBar } from '../../packages/react-components/src/MenuBar.js';
+import { Scroller } from '../../packages/react-components/src/Scroller.js';
+import { VerticalLayout } from '../../packages/react-components/src/VerticalLayout.js';
 
 export default function Row6() {
   return (

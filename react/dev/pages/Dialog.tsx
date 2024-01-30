@@ -1,7 +1,7 @@
-import { Dialog } from '../../src/Dialog.js';
-import { Button } from '../../src/Button.js';
+import { Dialog } from '../../packages/react-components/src/Dialog.js';
+import { Button } from '../../packages/react-components/src/Button.js';
 import { useState } from 'react';
-import { Icon } from '../../src/Icon.js';
+import { Icon } from '../../packages/react-components/src/Icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 
 export default function () {

@@ -1,5 +1,5 @@
-import { Button } from '../../src/Button.js';
-import { Tooltip } from '../../src/Tooltip.js';
+import { Button } from '../../packages/react-components/src/Button.js';
+import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
 
 export default function () {
   return (

@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react';
 import chaiDom from 'chai-dom';
-import { SideNav, SideNavElement } from '../src/SideNav.js';
+import { SideNav, SideNavElement } from '../packages/react-components/src/SideNav.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 useChaiPlugin(chaiDom);

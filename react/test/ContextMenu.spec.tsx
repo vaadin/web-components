@@ -6,9 +6,9 @@ import {
   type ContextMenuElement,
   type ContextMenuItem,
   type ContextMenuReactRendererProps,
-} from '../src/ContextMenu.js';
-import { Item } from '../src/Item.js';
-import { ListBox } from '../src/ListBox.js';
+} from '../packages/react-components/src/ContextMenu.js';
+import { Item } from '../packages/react-components/src/Item.js';
+import { ListBox } from '../packages/react-components/src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 import sinon from 'sinon';

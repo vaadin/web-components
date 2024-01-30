@@ -1,18 +1,18 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import chaiDom from 'chai-dom';
 import { cleanup, render } from '@testing-library/react/pure.js';
-import { Grid, type GridDataProvider } from '../src/Grid.js';
-import { GridColumn, GridColumnElement } from '../src/GridColumn.js';
-import { GridFilterColumn } from '../src/GridFilterColumn.js';
-import { GridProEditColumn } from '../src/GridProEditColumn.js';
-import { GridSelectionColumn } from '../src/GridSelectionColumn.js';
-import { GridSortColumn } from '../src/GridSortColumn.js';
-import { GridTreeColumn } from '../src/GridTreeColumn.js';
-import type { GridBodyReactRendererProps } from '../src/renderers/grid.js';
+import { Grid, type GridDataProvider } from '../packages/react-components/src/Grid.js';
+import { GridColumn, GridColumnElement } from '../packages/react-components/src/GridColumn.js';
+import { GridFilterColumn } from '../packages/react-components/src/GridFilterColumn.js';
+import { GridProEditColumn } from '../packages/react-components-pro/src/GridProEditColumn.js';
+import { GridSelectionColumn } from '../packages/react-components/src/GridSelectionColumn.js';
+import { GridSortColumn } from '../packages/react-components/src/GridSortColumn.js';
+import { GridTreeColumn } from '../packages/react-components/src/GridTreeColumn.js';
+import type { GridBodyReactRendererProps } from '../packages/react-components/src/renderers/grid.js';
 import catchRender from './utils/catchRender.js';
-import { GridColumnGroup } from '../src/GridColumnGroup.js';
+import { GridColumnGroup } from '../packages/react-components/src/GridColumnGroup.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
-import { GridPro } from '../src/GridPro.js';
+import { GridPro } from '../packages/react-components-pro/src/GridPro.js';
 import { useEffect, useState } from 'react';
 import sinon from 'sinon';
 

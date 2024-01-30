@@ -1,6 +1,6 @@
-import { MenuBar, type MenuBarItem } from '../../src/MenuBar.js';
-import { Tooltip } from '../../src/Tooltip.js';
-import { Icon } from '../../src/Icon.js';
+import { MenuBar, type MenuBarItem } from '../../packages/react-components/src/MenuBar.js';
+import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import { Icon } from '../../packages/react-components/src/Icon.js';
 import '@vaadin/icons';
 
 const iconStyle = {

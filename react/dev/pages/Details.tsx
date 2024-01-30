@@ -1,4 +1,4 @@
-import { Details } from '../../src/Details.js';
+import { Details } from '../../packages/react-components/src/Details.js';
 
 export default function () {
   return (

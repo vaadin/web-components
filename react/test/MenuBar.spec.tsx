@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { MenuBar, MenuBarElement } from '../src/MenuBar.js';
+import { MenuBar, MenuBarElement } from '../packages/react-components/src/MenuBar.js';
 import sinon from 'sinon';
 
 useChaiPlugin(chaiDom);

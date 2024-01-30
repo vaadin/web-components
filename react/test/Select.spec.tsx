@@ -4,9 +4,9 @@ import userEvent, { type UserEvent } from '@testing-library/user-event';
 import chaiAsPromised from 'chai-as-promised';
 import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
-import { ListBox } from '../src/ListBox.js';
-import { Item } from '../src/Item.js';
-import { Select, SelectElement } from '../src/Select.js';
+import { ListBox } from '../packages/react-components/src/ListBox.js';
+import { Item } from '../packages/react-components/src/Item.js';
+import { Select, SelectElement } from '../packages/react-components/src/Select.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 useChaiPlugin(chaiDom);

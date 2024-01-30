@@ -1,5 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2024 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import React from 'react';
 import {
-  type ComponentType,
   type ForwardedRef,
   forwardRef,
   type ReactElement,
@@ -7,19 +17,21 @@ import {
   type RefAttributes,
   createElement,
 } from 'react';
-import type { GridBodyRenderer, GridDefaultItem } from './generated/Grid.js';
-import type { GridColumnElement } from './generated/GridColumn.js';
+import type { GridBodyRenderer, GridDefaultItem } from '@vaadin/react-components/Grid.js';
+import type { GridColumnElement, GridColumnProps } from '@vaadin/react-components/GridColumn.js';
 import {
   GridProEditColumn as _GridProEditColumn,
   type GridProEditColumnElement,
   type GridProEditColumnProps as _GridProEditColumnProps,
 } from './generated/GridProEditColumn.js';
-import type { GridBodyReactRendererProps, GridEdgeReactRendererProps } from './renderers/grid.js';
-import { useModelRenderer } from './renderers/useModelRenderer.js';
-import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
-import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
+import { useModelRenderer } from '@vaadin/react-components/renderers/useModelRenderer.js';
+import { useSimpleOrChildrenRenderer } from '@vaadin/react-components/renderers/useSimpleOrChildrenRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from '@vaadin/react-components/GridColumn.js';
 
 export * from './generated/GridProEditColumn.js';
+
+type GridColumnRenderer<TItem> = GridColumnProps<TItem>['renderer'];
+type GridColumnHeaderFooterRenderer<TItem> = GridColumnProps<TItem>['footerRenderer'];
 
 export type GridProEditColumnProps<TItem> = Partial<
   Omit<
@@ -34,22 +46,22 @@ export type GridProEditColumnProps<TItem> = Partial<
   >
 > &
   Readonly<{
-    children?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
-    editModeRenderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
+    children?: GridColumnRenderer<TItem>;
+    editModeRenderer?: GridColumnRenderer<TItem>;
     footer?: ReactNode;
     /**
      * @deprecated Use `footer` instead.
      */
-    footerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
+    footerRenderer?: GridColumnHeaderFooterRenderer<TItem>;
     header?: ReactNode;
     /**
      * @deprecated Use `header` instead.
      */
-    headerRenderer?: ComponentType<GridEdgeReactRendererProps<TItem>> | null;
-    renderer?: ComponentType<GridBodyReactRendererProps<TItem>> | null;
+    headerRenderer?: GridColumnHeaderFooterRenderer<TItem>;
+    renderer?: GridColumnRenderer<TItem>;
   }>;
 
-type ReactBodyRenderer<TItem> = ComponentType<GridBodyReactRendererProps<TItem>> & {
+type ReactBodyRenderer<TItem> = GridColumnRenderer<TItem> & {
   __wrapperRenderer?: ReactBodyRenderer<TItem>;
 };
 

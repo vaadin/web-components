@@ -1,14 +1,23 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
-import type { GridDefaultItem } from './generated/Grid.js';
+/**
+ * @license
+ * Copyright (c) 2000 - 2024 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+import { type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
+import type { GridDefaultItem, GridProps } from '@vaadin/react-components/Grid.js';
 import { GridPro as _GridPro, type GridProElement, type GridProProps as _GridProProps } from './generated/GridPro.js';
-import type { GridRowDetailsReactRendererProps } from './renderers/grid.js';
-import { useModelRenderer } from './renderers/useModelRenderer.js';
+import { useModelRenderer } from '@vaadin/react-components/renderers/useModelRenderer.js';
 
 export * from './generated/GridPro.js';
 
 export type GridProProps<TItem> = Partial<Omit<_GridProProps<TItem>, 'rowDetailsRenderer'>> &
   Readonly<{
-    rowDetailsRenderer?: ComponentType<GridRowDetailsReactRendererProps<TItem>> | null;
+    rowDetailsRenderer?: GridProps<TItem>['rowDetailsRenderer'];
   }>;
 
 function GridPro<TItem = GridDefaultItem>(

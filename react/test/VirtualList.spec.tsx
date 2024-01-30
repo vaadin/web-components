@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { VirtualList, type VirtualListReactRendererProps } from '../src/VirtualList.js';
+import { VirtualList, type VirtualListReactRendererProps } from '../packages/react-components/src/VirtualList.js';
 
 useChaiPlugin(chaiDom);
 

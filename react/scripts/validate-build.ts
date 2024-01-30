@@ -1,7 +1,13 @@
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('../', import.meta.url);
-const generated = new URL('generated/', root);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = resolve(__dirname, '..');
+const packagesDir = resolve(rootDir, 'packages');
+const corePackage = 'react-components';
+const proPackage = 'react-components-pro';
 
 /**
  * This function validates that the generated TypeScript definition file for a component
@@ -15,7 +21,9 @@ const generated = new URL('generated/', root);
  * @throws {Error} If the generated file contains any of the inherited properties.
  */
 async function validateInheritedProperties() {
-  const typeDefinitionContent = await readFile(new URL('Checkbox.d.ts', generated), 'utf8');
+  const checkboxPath = resolve(packagesDir, corePackage, 'generated', 'Checkbox.d.ts');
+
+  const typeDefinitionContent = await readFile(checkboxPath, 'utf8');
 
   // Expect the generated file not to contain definitions for properties that are inherited.
   const inheritedProperties = [
@@ -32,4 +40,37 @@ async function validateInheritedProperties() {
   }
 }
 
-await Promise.all([validateInheritedProperties()]);
+/**
+ * Validates that the generated directory exists.
+ */
+async function hasGeneratedDir() {
+  [proPackage, corePackage].forEach((packageName) => {
+    if (!existsSync(resolve(packagesDir, packageName, 'generated'))) {
+      throw new Error(`The generated directory does not exist. Run "npm run build" to generate it.`);
+    }
+  });
+}
+
+/**
+ * Validates that the pro package does not have css dir and the core package does.
+ */
+async function hasNoCssDir() {
+  if (existsSync(resolve(packagesDir, proPackage, 'css'))) {
+    throw new Error(`The css directory should not exist in the pro package.`);
+  }
+
+  if (!existsSync(resolve(packagesDir, corePackage, 'css'))) {
+    throw new Error(`The css directory does not exist in the core package.`);
+  }
+}
+
+/**
+ * Validates that TS definition files have been copied (build:code:copy-dts has been run)
+ */
+async function hasCopiedDts() {
+  if (!existsSync(resolve(packagesDir, corePackage, 'renderers', 'grid.d.ts'))) {
+    throw new Error(`The renderers/grid.d.ts file does not exist.`);
+  }
+}
+
+await Promise.all([validateInheritedProperties(), hasGeneratedDir(), hasNoCssDir(), hasCopiedDts()]);

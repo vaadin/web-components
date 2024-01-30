@@ -1,4 +1,4 @@
-import { unlink, writeFile } from 'node:fs/promises';
+import { unlink, writeFile, readFile } from 'node:fs/promises';
 import { relative, resolve, basename } from 'node:path';
 import ts, {
   type ExpressionStatement,
@@ -10,7 +10,7 @@ import ts, {
 } from 'typescript';
 import type { HtmlElement as SchemaHTMLElement, JSONSchemaForWebTypes } from '../types/schema.js';
 import { extractElementsFromDescriptions, loadDescriptions } from './descriptions.js';
-import { generatedDir, nodeModulesDir, rootDir, utilsDir } from './utils/config.js';
+import { generatedDir, nodeModulesDir, utilsDir, packageDir } from './utils/config.js';
 import { ElementNameMissingError } from './utils/errors.js';
 import fromAsync from './utils/fromAsync.js';
 import { fswalk } from './utils/fswalk.js';
@@ -46,6 +46,10 @@ type ElementData = Readonly<{
 // Remove all existing files
 await fromAsync(fswalk(generatedDir), ([path]) => unlink(path));
 
+const packagePath = resolve(packageDir, './package.json');
+const packageJson = JSON.parse(await readFile(packagePath, 'utf8'));
+const dependencies = Object.keys(packageJson.dependencies);
+
 async function prepareElementFiles(
   descriptions: readonly JSONSchemaForWebTypes[],
 ): Promise<Map<SchemaHTMLElement, ElementData>> {
@@ -59,7 +63,7 @@ async function prepareElementFiles(
 
       const path = await search(element.name, resolve(nodeModulesDir, packageName));
 
-      if (path) {
+      if (path && dependencies.includes(packageName)) {
         elementFilesMap.set(element, {
           packageName,
           path,
@@ -404,7 +408,7 @@ function generateIndexFile(elementNames: readonly string[], extension: string): 
   const sourceLines = [...elementNames.map((elementName) => `export * from './${elementName}.js';`)];
 
   return ts.createSourceFile(
-    resolve(rootDir, `index.${extension}`),
+    resolve(packageDir, `index.${extension}`),
     sourceLines.join('\n'),
     ts.ScriptTarget.ES2019,
     undefined,

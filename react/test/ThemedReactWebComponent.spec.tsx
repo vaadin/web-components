@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { Accordion } from '../src/Accordion.js';
+import { Accordion } from '../packages/react-components/src/Accordion.js';
 
 useChaiPlugin(chaiDom);
 

@@ -1,13 +1,13 @@
-import { BoardRow } from '../../src/BoardRow.js';
-import { Checkbox } from '../../src/Checkbox.js';
-import { ComboBox } from '../../src/ComboBox.js';
-import { ContextMenu } from '../../src/ContextMenu.js';
-import { CookieConsent } from '../../src/CookieConsent.js';
-import { Crud, crudPath } from '../../src/Crud.js';
-import { FormLayout } from '../../src/FormLayout.js';
-import { Item } from '../../src/Item.js';
-import { ListBox } from '../../src/ListBox.js';
-import { TextField } from '../../src/TextField.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
+import { ComboBox } from '../../packages/react-components/src/ComboBox.js';
+import { ContextMenu } from '../../packages/react-components/src/ContextMenu.js';
+import { CookieConsent } from '../../packages/react-components-pro/src/CookieConsent.js';
+import { Crud, crudPath } from '../../packages/react-components-pro/src/Crud.js';
+import { FormLayout } from '../../packages/react-components/src/FormLayout.js';
+import { Item } from '../../packages/react-components/src/Item.js';
+import { ListBox } from '../../packages/react-components/src/ListBox.js';
+import { TextField } from '../../packages/react-components/src/TextField.js';
 import { CrudRole, crudData } from './data.js';
 
 const menuItems = [{ text: 'Edit' }, { text: 'Delete' }];

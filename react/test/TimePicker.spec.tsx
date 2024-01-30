@@ -1,7 +1,7 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
-import { TimePicker } from '../src/TimePicker.js';
+import { TimePicker } from '../packages/react-components/src/TimePicker.js';
 
 useChaiPlugin(chaiDom);
 

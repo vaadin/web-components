@@ -1,12 +1,12 @@
 import { readFile, readdir } from 'node:fs/promises';
-import { dirname } from 'path';
+import { dirname, resolve } from 'path';
 import type { ViteDevServer } from 'vite';
+import { fileURLToPath } from 'node:url';
 
-const dev = new URL(import.meta.url);
-const devPath = dirname(dev.pathname);
+const dev = dirname(fileURLToPath(import.meta.url));
 
-const indexFile = await readFile(new URL('index.html', dev), 'utf8');
-const pageFile = await readFile(new URL('page.html', dev), 'utf8');
+const indexFile = await readFile(resolve(dev, 'index.html'), 'utf8');
+const pageFile = await readFile(resolve(dev, 'page.html'), 'utf8');
 
 function toDashCase(camelCase: string): string {
   return camelCase
@@ -28,7 +28,7 @@ export default () => ({
         return;
       }
 
-      const components = (await readdir(devPath + '/pages'))
+      const components = (await readdir(resolve(dev, 'pages')))
         .filter((file) => file.endsWith('.tsx'))
         .map((file) => file.replace('.tsx', ''));
 

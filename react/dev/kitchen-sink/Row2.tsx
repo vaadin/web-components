@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { BoardRow } from '../../src/BoardRow.js';
-import { Checkbox } from '../../src/Checkbox.js';
-import { CheckboxGroup } from '../../src/CheckboxGroup.js';
-import { ComboBox } from '../../src/ComboBox.js';
-import { ConfirmDialog } from '../../src/ConfirmDialog.js';
-import { MultiSelectComboBox } from '../../src/MultiSelectComboBox.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
+import { CheckboxGroup } from '../../packages/react-components/src/CheckboxGroup.js';
+import { ComboBox } from '../../packages/react-components/src/ComboBox.js';
+import { ConfirmDialog } from '../../packages/react-components/src/ConfirmDialog.js';
+import { MultiSelectComboBox } from '../../packages/react-components/src/MultiSelectComboBox.js';
 
 function CheckboxesWithListener() {
   const [checked, setChecked] = useState('first');

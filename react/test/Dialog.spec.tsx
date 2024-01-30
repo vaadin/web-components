@@ -2,7 +2,7 @@ import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import { cleanup, render } from '@testing-library/react/pure.js';
 import chaiDom from 'chai-dom';
 import sinon from 'sinon';
-import { Dialog, type DialogElement } from '../src/Dialog.js';
+import { Dialog, type DialogElement } from '../packages/react-components/src/Dialog.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 import { useState } from 'react';
 

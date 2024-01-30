@@ -1,11 +1,12 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { basename, extname, relative, resolve, sep } from 'node:path';
+import { existsSync } from 'node:fs';
 import type { PackageJson } from 'type-fest';
-import { rootDir, srcDir } from './utils/config.js';
+import { packageDir, srcDir } from './utils/config.js';
 import fromAsync from './utils/fromAsync.js';
 import { fswalk } from './utils/fswalk.js';
 
-const packageJsonPath = resolve(rootDir, 'package.json');
+const packageJsonPath = resolve(packageDir, 'package.json');
 const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'));
 
 const exports: Record<string, PackageJson.Exports> = {
@@ -57,19 +58,56 @@ Object.assign(
 );
 
 // Add css file entries
-const outCssDir = resolve(rootDir, 'css');
-Object.assign(
-  exports,
-  Object.fromEntries(
-    (
-      await fromAsync(fswalk(outCssDir, { recursive: true }), async ([path]) => {
-        const cssPath = relative(outCssDir, path).replaceAll(sep, '/');
 
-        return [`./css/${cssPath}`, `./css/${cssPath}`] as PlainExportsEntry;
-      })
-    ).sort(compareExportsPaths),
-  ),
-);
+const outCssDir = resolve(packageDir, 'css');
+if (existsSync(outCssDir)) {
+  Object.assign(
+    exports,
+    Object.fromEntries(
+      (
+        await fromAsync(fswalk(outCssDir, { recursive: true }), async ([path]) => {
+          const cssPath = relative(outCssDir, path).replaceAll(sep, '/');
+
+          return [`./css/${cssPath}`, `./css/${cssPath}`] as PlainExportsEntry;
+        })
+      ).sort(compareExportsPaths),
+    ),
+  );
+}
+
+// Add utils entries
+const outUtilsDir = resolve(packageDir, 'utils');
+if (existsSync(outUtilsDir)) {
+  Object.assign(
+    exports,
+    Object.fromEntries(
+      (
+        await fromAsync(fswalk(outUtilsDir, { recursive: true }), async ([path]) => {
+          const utilsPath = relative(outUtilsDir, path).replaceAll(sep, '/');
+
+          return [`./utils/${utilsPath}`, `./utils/${utilsPath}`] as PlainExportsEntry;
+        })
+      ).sort(compareExportsPaths),
+    ),
+  );
+}
+
+// Add renderers entries
+const outRenderersDir = resolve(packageDir, 'renderers');
+if (existsSync(outRenderersDir)) {
+  Object.assign(
+    exports,
+    Object.fromEntries(
+      (
+        await fromAsync(fswalk(outRenderersDir, { recursive: true }), async ([path]) => {
+          const renderersPath = relative(outRenderersDir, path).replaceAll(sep, '/');
+
+          return [`./renderers/${renderersPath}`, `./renderers/${renderersPath}`] as PlainExportsEntry;
+        })
+      ).sort(compareExportsPaths),
+    ),
+  );
+}
 
 packageJson['exports'] = exports;
 

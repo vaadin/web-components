@@ -1,16 +1,16 @@
-import { BoardRow } from '../../src/BoardRow.js';
-import { CustomField } from '../../src/CustomField.js';
-import { DatePicker } from '../../src/DatePicker.js';
-import { DateTimePicker } from '../../src/DateTimePicker.js';
-import { Details } from '../../src/Details.js';
-import { DetailsSummary } from '../../src/DetailsSummary.js';
-import { FormItem } from '../../src/FormItem.js';
-import { FormLayout } from '../../src/FormLayout.js';
-import { IntegerField } from '../../src/IntegerField.js';
-import { NumberField } from '../../src/NumberField.js';
-import { PasswordField } from '../../src/PasswordField.js';
-import { TextField } from '../../src/TextField.js';
-import { TimePicker } from '../../src/TimePicker.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { CustomField } from '../../packages/react-components/src/CustomField.js';
+import { DatePicker } from '../../packages/react-components/src/DatePicker.js';
+import { DateTimePicker } from '../../packages/react-components/src/DateTimePicker.js';
+import { Details } from '../../packages/react-components/src/Details.js';
+import { DetailsSummary } from '../../packages/react-components/src/DetailsSummary.js';
+import { FormItem } from '../../packages/react-components/src/FormItem.js';
+import { FormLayout } from '../../packages/react-components/src/FormLayout.js';
+import { IntegerField } from '../../packages/react-components/src/IntegerField.js';
+import { NumberField } from '../../packages/react-components/src/NumberField.js';
+import { PasswordField } from '../../packages/react-components/src/PasswordField.js';
+import { TextField } from '../../packages/react-components/src/TextField.js';
+import { TimePicker } from '../../packages/react-components/src/TimePicker.js';
 
 export default function Row4() {
   return (
