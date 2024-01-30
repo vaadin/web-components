@@ -1,4 +1,4 @@
-import { basename, dirname, extname } from 'node:path';
+import { basename, dirname, extname, join } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { build, type Plugin } from 'esbuild';
@@ -68,9 +68,10 @@ const commonOptions = {
   tsconfig: fileURLToPath(new URL('./tsconfig.build.json', packageURL)),
 } as const;
 
-const [componentEntryPoints, utilsEntryPoints] = await Promise.all([
+const [componentEntryPoints, utilsEntryPoints, renderersEntryPoints] = await Promise.all([
   detectEntryPoints(['*.{ts,tsx}']),
-  detectEntryPoints(['utils/*.{ts,tsx}', 'renderers/*.{ts,tsx}']),
+  detectEntryPoints(['utils/*.{ts,tsx}']),
+  detectEntryPoints(['renderers/*.{ts,tsx}']),
 ]);
 
 await Promise.all([
@@ -83,6 +84,12 @@ await Promise.all([
   }),
   build({
     ...commonOptions,
+    outdir: join(commonOptions.outdir, 'utils'),
     entryPoints: utilsEntryPoints,
+  }),
+  build({
+    ...commonOptions,
+    outdir: join(commonOptions.outdir, 'renderers'),
+    entryPoints: renderersEntryPoints,
   }),
 ]);
