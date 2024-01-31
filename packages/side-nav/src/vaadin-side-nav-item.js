@@ -12,8 +12,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+import { sideNavItemBaseStyles } from './vaadin-side-nav-item-base-styles.js';
 
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
