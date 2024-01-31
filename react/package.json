@@ -19,7 +19,7 @@
     "validate:types": "tsc --noEmit",
     "validate:prettier": "prettier -c scripts packages/**/src/*.ts packages/**/src/{utils,renderers}/*.ts test types karma.config.cjs vite.config.ts",
     "validate:build": "tsx scripts/validate-build.ts",
-    "version": "npm run version -ws && git add packages/**/package.json && npm install --package-lock-only --ignore-scripts"
+    "version": "npm run version -ws && git add packages/**/package.json && rimraf package-lock.json node_modules && npm install"
   },
   "repository": {
     "type": "git",
