@@ -321,22 +321,12 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _onDataProviderPageReceived() {
-      const flatSizeChanged = this._dataProviderController.flatSize !== this._flatSize;
       // With the new items added, update the cache size and the grid's effective size
       this._flatSize = this._dataProviderController.flatSize;
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      // or if some of the rows are missing an item
       this._getRenderedRows().forEach((row) => {
         this._dataProviderController.ensureFlatIndexHierarchy(row.index);
-        if (flatSizeChanged) {
-          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (!item) {
-            // To avoid excess requests, ensure the index is loaded only if flat size changed
-            this.__updateLoading(row, true);
-            this._dataProviderController.ensureFlatIndexLoaded(row.index);
-          }
-        }
       });
 
       this._hasData = true;
@@ -357,6 +347,17 @@ export const DataProviderMixin = (superClass) =>
 
         this.__scrollToPendingIndexes();
         this.__dispatchPendingBodyCellFocus();
+
+        // Move to loadingchanged?
+        this._debounceUnloadedRows = Debouncer.debounce(this._debounceUnloadedRows, timeOut.after(0), () => {
+          const unloadedRenderedRow = this._getRenderedRows().find((row) => {
+            const { item } = this._dataProviderController.getFlatIndexContext(row.index);
+            return !item;
+          });
+          if (unloadedRenderedRow) {
+            this._dataProviderController.ensureFlatIndexLoaded(unloadedRenderedRow.index);
+          }
+        });
       });
 
       // If the grid is not loading anything, flush the debouncer immediately
