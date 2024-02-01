@@ -44,10 +44,10 @@ const item = css`
     :host(:hover:not([disabled])) {
       background-color: var(--material-secondary-background-color);
     }
+  }
 
-    :host([focused]:not([disabled])) {
-      background-color: var(--material-divider-color);
-    }
+  :host([focused]:not([disabled])) {
+    background-color: var(--material-divider-color);
   }
 
   /* Disabled */
