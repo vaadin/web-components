@@ -70,10 +70,10 @@ const item = css`
     :host(:hover:not([disabled])) {
       background-color: var(--lumo-primary-color-10pct);
     }
+  }
 
-    :host([focus-ring]:not([disabled])) {
-      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-    }
+  :host([focus-ring]:not([disabled])) {
+    box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   /* RTL specific styles */
