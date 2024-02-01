@@ -799,7 +799,7 @@ export const MenuBarMixin = (superClass) =>
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
-        this.__openSubMenu(button, e.isTrusted && isKeyboardActive());
+        this.__openSubMenu(button, isKeyboardActive());
       }
     }
 

@@ -37,6 +37,31 @@ class MenuBarButton extends Button {
   static get is() {
     return 'vaadin-menu-bar-button';
   }
+
+  /**
+   * Override method inherited from `HTMLElement`. Dispatches a `mousedown` event before the click. This allows to communicate the nature of the click to the menu bar. Clicks triggered by Space or an Enter key presses should focus the first item in the submenu. These cases are handled in `VaadinMenuBarMixin`.
+   *
+   * @override
+   */
+  click() {
+    if (!this.__triggeredWithActiveKeys) {
+      window.dispatchEvent(new CustomEvent('mousedown'));
+    }
+    this.__triggeredWithActiveKeys = null;
+    super.click();
+  }
+
+  /**
+   * Override method inherited from `ButtonMixin`. Sets a flag based on whether the key is an active key.
+   *
+   * @param {KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDown(event) {
+    this.__triggeredWithActiveKeys = this._activeKeys.includes(event.key);
+    super._onKeyDown(event);
+  }
 }
 
 defineCustomElement(MenuBarButton);
