@@ -639,7 +639,7 @@ export const MenuBarMixin = (superClass) =>
       });
 
       if (wasExpanded && item.item && item.item.children) {
-        this.__openSubMenu(item, true, { keepFocus: true });
+        this.__openSubMenu(item, { keepFocus: true });
       } else if (item === this._overflow) {
         this._hideTooltip();
       } else {
@@ -688,7 +688,7 @@ export const MenuBarMixin = (superClass) =>
         // Menu opened previously, focus first item
         this._focusFirstItem();
       } else {
-        this.__openSubMenu(button, true);
+        this.__openSubMenu(button);
       }
     }
 
@@ -705,7 +705,7 @@ export const MenuBarMixin = (superClass) =>
         // Menu opened previously, focus last item
         this._focusLastItem();
       } else {
-        this.__openSubMenu(button, true, { focusLast: true });
+        this.__openSubMenu(button, { focusLast: true });
       }
     }
 
@@ -759,7 +759,7 @@ export const MenuBarMixin = (superClass) =>
       } else if (button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
         if (button.item.children && (this.openOnHover || isOpened)) {
-          this.__openSubMenu(button, false);
+          this.__openSubMenu(button);
         } else if (isOpened) {
           this._close();
         }
@@ -799,12 +799,12 @@ export const MenuBarMixin = (superClass) =>
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
-        this.__openSubMenu(button, isKeyboardActive());
+        this.__openSubMenu(button);
       }
     }
 
     /** @private */
-    __openSubMenu(button, keydown, options = {}) {
+    __openSubMenu(button, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
 
@@ -856,7 +856,7 @@ export const MenuBarMixin = (superClass) =>
           }
 
           // Do not focus item when open not from keyboard
-          if (!keydown) {
+          if (!isKeyboardActive()) {
             overlay.$.overlay.focus();
           }
 
