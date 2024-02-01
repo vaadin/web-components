@@ -37,20 +37,6 @@ class MenuBarButton extends Button {
   static get is() {
     return 'vaadin-menu-bar-button';
   }
-
-  /**
-   * Override method inherited from `ButtonMixin`. A Space or an Enter key press should not result in a button click for a menu bar button. It also has to focus on the first item in the submenu. These cases are handled in `VaadinMenuBarMixin`.
-   *
-   * @param {KeyboardEvent} event
-   * @protected
-   * @override
-   */
-  _onKeyDown(event) {
-    if (this._activeKeys.includes(event.key)) {
-      return;
-    }
-    super._onKeyDown(event);
-  }
 }
 
 defineCustomElement(MenuBarButton);
