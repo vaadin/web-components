@@ -801,7 +801,6 @@ export const MenuBarMixin = (superClass) =>
       if (button) {
         this.__openSubMenu(button, button.__triggeredWithActiveKeys);
       }
-      button.__triggeredWithActiveKeys = null;
     }
 
     /** @private */

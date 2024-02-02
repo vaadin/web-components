@@ -48,6 +48,7 @@ class MenuBarButton extends Button {
   _onKeyDown(event) {
     this.__triggeredWithActiveKeys = this._activeKeys.includes(event.key);
     super._onKeyDown(event);
+    this.__triggeredWithActiveKeys = null;
   }
 }
 
