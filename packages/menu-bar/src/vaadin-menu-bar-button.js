@@ -39,7 +39,7 @@ class MenuBarButton extends Button {
   }
 
   /**
-   * Override method inherited from `ButtonMixin`. Sets a flag based on whether the key is an active key.
+   * Override method inherited from `ButtonMixin`. Sets a flag based on whether the key is an active key. Unlike a mouse click, Enter and Space should also focus the first item. This flag is used in menu bar to identify the action that triggered the click.
    *
    * @param {KeyboardEvent} event
    * @protected
