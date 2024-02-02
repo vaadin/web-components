@@ -175,6 +175,10 @@ function getFocusedCellIndex() {
 
 function getFocusedRowIndex() {
   const focusedRow = grid.shadowRoot.activeElement.parentNode;
+  if (grid.$.items.contains(focusedRow)) {
+    // If the focusedRow is a body row, we musn't rely on its DOM position within its parent
+    return focusedRow.index;
+  }
   return Array.from(focusedRow.parentNode.children).indexOf(focusedRow);
 }
 

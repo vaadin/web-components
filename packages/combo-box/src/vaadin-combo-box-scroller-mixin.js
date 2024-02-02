@@ -139,6 +139,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
         elementsContainer: this,
         scrollTarget: this,
         scrollContainer: this.$.selector,
+        reorderElements: true,
       });
     }
 
