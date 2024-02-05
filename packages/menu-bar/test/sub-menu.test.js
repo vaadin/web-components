@@ -5,12 +5,14 @@ import {
   arrowRight,
   arrowUp,
   click,
+  enter,
   esc,
   fire,
   fixtureSync,
   isDesktopSafari as isSafari,
   nextRender,
   oneEvent,
+  space,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -123,6 +125,20 @@ describe('sub-menu', () => {
     const spy = sinon.spy(item, 'focus');
     await nextRender(subMenu);
     expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should focus the first item on button space', async () => {
+    space(buttons[0]);
+    await nextRender(subMenu);
+    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
+    expect(item.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should focus the first item on button enter', async () => {
+    enter(buttons[0]);
+    await nextRender(subMenu);
+    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
+    expect(item.hasAttribute('focused')).to.be.true;
   });
 
   it('should open sub-menu and focus last item on arrow up', async () => {
