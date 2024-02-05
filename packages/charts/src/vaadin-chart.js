@@ -29,6 +29,7 @@ import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -68,6 +69,28 @@ export function deepMerge(target, source) {
   });
   /* eslint-enable no-invalid-this */
 });
+
+// Monkeypatch the onDocumentMouseMove method to fix the check for the source of the event
+// Due to the fact that the event is attached to the document, the target of the event is
+// the <vaadin-chart> element, so we need to use the composedPath to get the actual target (#7107)
+Pointer.prototype.onDocumentMouseMove = function (e) {
+  const chart = this.chart;
+  const chartPosition = this.chartPosition;
+  const pEvt = this.normalize(e, chartPosition);
+  const tooltip = chart.tooltip;
+  // If we're outside, hide the tooltip
+  if (
+    chartPosition &&
+    (!tooltip || !tooltip.isStickyOnContact()) &&
+    !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
+      visiblePlotOnly: true,
+    }) &&
+    // Use the first element from the composed path instead of the actual target
+    !this.inClass(pEvt.composedPath()[0], 'highcharts-tracker')
+  ) {
+    this.reset();
+  }
+};
 
 // Init Highcharts global language defaults
 // No data message should be empty by default
