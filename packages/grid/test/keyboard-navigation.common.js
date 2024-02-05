@@ -11,6 +11,7 @@ import {
   keyUpOn,
   listenOnce,
   nextFrame,
+  oneEvent,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
@@ -1972,6 +1973,45 @@ describe('keyboard navigation', () => {
         grid.$.items.focus();
         enter(grid);
       }).not.to.throw(Error);
+    });
+
+    it('should tab through the elements in order', async () => {
+      // Add 100 items to the grid
+      grid.items = Array.from(Array(100), (_, i) => `item-${i}`);
+
+      // Remove an unused column
+      const columns = grid.querySelectorAll('vaadin-grid-column');
+      columns[2].hidden = true;
+      flushGrid(grid);
+
+      // Focus the input on the first row
+      focusFirstBodyInput(0);
+
+      const tabToIndex = 20;
+
+      // Tab downwards
+      for (let i = 1; i <= tabToIndex; i++) {
+        await nextFrame();
+        queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
+        await oneEvent(grid, 'focusin');
+        await nextFrame();
+        const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
+        expect(focusedRow.index).to.equal(i);
+      }
+
+      // Tab upwards
+      for (let i = tabToIndex - 1; i >= 0; i--) {
+        await nextFrame();
+        queueMicrotask(async () => {
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
+        });
+        await oneEvent(grid, 'focusin');
+        await nextFrame();
+        const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
+        expect(focusedRow.index).to.equal(i);
+      }
     });
   });
 
