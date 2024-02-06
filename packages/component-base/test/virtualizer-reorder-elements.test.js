@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, mouseup } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, mousedown, mouseup, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -50,6 +51,7 @@ describe('reorder elements', () => {
         el.index = index;
         el.id = `item-${index}`;
         el.textContent = el.id;
+        el.tabIndex = 0;
       },
       scrollTarget,
       scrollContainer,
@@ -124,5 +126,86 @@ describe('reorder elements', () => {
     scrollRecycle();
     mouseup(elementsContainer);
     expect(elementsInOrder()).to.be.true;
+  });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      // Don't use a fake clock for these tests
+      clock.restore();
+    });
+
+    it('should tab through the elements in order', async () => {
+      const firstElement = elementsContainer.children[0];
+      expect(firstElement.id).to.equal('item-0');
+      firstElement.focus();
+
+      const tabToIndex = 20;
+
+      // Tab downwards
+      for (let i = 1; i <= tabToIndex; i++) {
+        await nextFrame();
+        queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
+        await oneEvent(elementsContainer, 'focusin');
+        await nextFrame();
+        expect(document.activeElement.id).to.equal(`item-${i}`);
+      }
+
+      // Tab upwards
+      for (let i = tabToIndex - 1; i >= 0; i--) {
+        await nextFrame();
+        queueMicrotask(async () => {
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
+        });
+        await oneEvent(elementsContainer, 'focusin');
+        await nextFrame();
+        expect(document.activeElement.id).to.equal(`item-${i}`);
+      }
+    });
+
+    it('should not throw if non-item element is focused', () => {
+      elementsContainer.tabIndex = 0;
+      expect(() => elementsContainer.focus()).not.to.throw();
+    });
+
+    it('should not change scroll position if elements are being reordered - scrolling forwards', () => {
+      const lastRenderedElement = [...elementsContainer.children].pop();
+      // Scroll the last rendered element into view
+      scrollTarget.scrollTop +=
+        lastRenderedElement.getBoundingClientRect().bottom - scrollTarget.getBoundingClientRect().bottom;
+      // Make sure the next sibling is also inside the viewport
+      scrollTarget.scrollTop += 10;
+
+      // Record the current scroll position
+      const scrollTop = scrollTarget.scrollTop;
+
+      // Focus the element
+      lastRenderedElement.focus();
+
+      // Make sure scroll position has not changed
+      expect(scrollTarget.scrollTop).to.equal(scrollTop);
+    });
+
+    it('should not change scroll position if elements are being reordered - scrolling backwards', () => {
+      virtualizer.scrollToIndex(virtualizer.size - 1);
+      virtualizer.flush();
+
+      const firstRenderedElement = elementsContainer.children[0];
+      // Scroll the first rendered element into view
+      scrollTarget.scrollTop -=
+        scrollTarget.getBoundingClientRect().top - firstRenderedElement.getBoundingClientRect().top;
+      // Make sure the previous sibling is also inside the viewport
+      scrollTarget.scrollTop -= 10;
+
+      // Record the current scroll position
+      const scrollTop = scrollTarget.scrollTop;
+
+      // Focus the element
+      firstRenderedElement.focus();
+
+      // Make sure scroll position has not changed
+      expect(scrollTarget.scrollTop).to.equal(scrollTop);
+    });
   });
 });

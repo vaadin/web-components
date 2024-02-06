@@ -73,6 +73,7 @@ export const VirtualListMixin = (superClass) =>
         elementsContainer: this,
         scrollTarget: this,
         scrollContainer: this.shadowRoot.querySelector('#items'),
+        reorderElements: true,
       });
 
       this.__overflowController = new OverflowController(this);

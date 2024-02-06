@@ -55,6 +55,13 @@ export class IronListAdapter {
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
+    this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
+    this.elementsContainer.addEventListener('focusin', (e) => {
+      this.scrollTarget.dispatchEvent(
+        new CustomEvent('virtualizer-element-focused', { detail: { element: this.__getFocusedElement() } }),
+      );
+    });
+
     if (this.reorderElements) {
       // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
       // Need to defer reordering until the user lets go of the scroll bar handle.
@@ -425,6 +432,75 @@ export class IronListAdapter {
   /** @private */
   toggleScrollListener() {}
 
+  /** @private */
+  __getFocusedElement(visibleElements = this.__getVisibleElements()) {
+    return visibleElements.find(
+      (element) =>
+        element.contains(this.elementsContainer.getRootNode().activeElement) ||
+        element.contains(this.scrollTarget.getRootNode().activeElement),
+    );
+  }
+
+  /** @private */
+  __nextFocusableSiblingMissing(focusedElement, visibleElements) {
+    return (
+      // Check if focused element is the last visible DOM element
+      visibleElements.indexOf(focusedElement) === visibleElements.length - 1 &&
+      // ...while there are more items available
+      this.size > focusedElement.__virtualIndex + 1
+    );
+  }
+
+  /** @private */
+  __previousFocusableSiblingMissing(focusedElement, visibleElements) {
+    return (
+      // Check if focused element is the first visible DOM element
+      visibleElements.indexOf(focusedElement) === 0 &&
+      // ...while there are preceding items available
+      focusedElement.__virtualIndex > 0
+    );
+  }
+
+  /** @private */
+  __onElementFocused(e) {
+    if (!this.reorderElements) {
+      return;
+    }
+
+    const focusedElement = e.detail.element;
+    if (!focusedElement) {
+      return;
+    }
+
+    // User has tabbed to or within a virtualizer element.
+    // Check if a next or previous focusable sibling is missing while it should be there (so the user can continue tabbing).
+    // The focusable sibling might be missing due to the elements not yet being in the correct DOM order.
+    // First try flushing (which also flushes any active __scrollReorderDebouncer).
+    const visibleElements = this.__getVisibleElements();
+    if (
+      this.__previousFocusableSiblingMissing(focusedElement, visibleElements) ||
+      this.__nextFocusableSiblingMissing(focusedElement, visibleElements)
+    ) {
+      this.flush();
+    }
+
+    // If the focusable sibling is still missing (because the focused element is at the edge of the viewport and
+    // the virtual scrolling logic hasn't had the need to recycle elements), scroll the virtualizer just enough to
+    // have the focusable sibling inside the visible viewport to force the virtualizer to recycle.
+    const reorderedVisibleElements = this.__getVisibleElements();
+    if (this.__nextFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
+      this._scrollTop +=
+        Math.ceil(focusedElement.getBoundingClientRect().bottom) -
+        Math.floor(this.scrollTarget.getBoundingClientRect().bottom - 1);
+      this.flush();
+    } else if (this.__previousFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
+      this._scrollTop -=
+        Math.ceil(this.scrollTarget.getBoundingClientRect().top + 1) -
+        Math.floor(focusedElement.getBoundingClientRect().top);
+      this.flush();
+    }
+  }
+
   _scrollHandler() {
     // The scroll target is hidden.
     if (this.scrollTarget.offsetHeight === 0) {
@@ -662,13 +738,7 @@ export class IronListAdapter {
 
     // Which row to use as a target?
     const visibleElements = this.__getVisibleElements();
-
-    const elementWithFocus = visibleElements.find(
-      (element) =>
-        element.contains(this.elementsContainer.getRootNode().activeElement) ||
-        element.contains(this.scrollTarget.getRootNode().activeElement),
-    );
-    const targetElement = elementWithFocus || visibleElements[0];
+    const targetElement = this.__getFocusedElement(visibleElements) || visibleElements[0];
     if (!targetElement) {
       // All elements are hidden, don't reorder
       return;

@@ -123,6 +123,19 @@ export const ScrollMixin = (superClass) =>
       this.$.items.addEventListener('focusin', (e) => {
         const itemsIndex = e.composedPath().indexOf(this.$.items);
         this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
+
+        if (this._rowWithFocusedElement) {
+          // Make sure the row with the focused element is fully inside the visible viewport
+          this.__scrollIntoViewport(this._rowWithFocusedElement.index);
+
+          if (!this.$.table.contains(e.relatedTarget)) {
+            // Virtualizer can't catch the event because if orginates from the light DOM.
+            // Dispatch a virtualizer-element-focused event for virtualizer to catch.
+            this.$.table.dispatchEvent(
+              new CustomEvent('virtualizer-element-focused', { detail: { element: this._rowWithFocusedElement } }),
+            );
+          }
+        }
       });
       this.$.items.addEventListener('focusout', () => {
         this._rowWithFocusedElement = undefined;
