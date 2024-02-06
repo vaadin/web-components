@@ -17,16 +17,16 @@ import {
   type RefAttributes,
   createElement,
 } from 'react';
-import type { GridBodyRenderer, GridDefaultItem } from '@vaadin/react-components/Grid.js';
-import type { GridColumnElement, GridColumnProps } from '@vaadin/react-components/GridColumn.js';
+import type { GridBodyRenderer, GridDefaultItem } from './Grid.js';
+import type { GridColumnElement, GridColumnProps } from './GridColumn.js';
 import {
   GridProEditColumn as _GridProEditColumn,
   type GridProEditColumnElement,
   type GridProEditColumnProps as _GridProEditColumnProps,
 } from './generated/GridProEditColumn.js';
-import { useModelRenderer } from '@vaadin/react-components/renderers/useModelRenderer.js';
-import { useSimpleOrChildrenRenderer } from '@vaadin/react-components/renderers/useSimpleOrChildrenRenderer.js';
-import type { OmittedGridColumnHTMLAttributes } from '@vaadin/react-components/GridColumn.js';
+import { useModelRenderer } from './renderers/useModelRenderer.js';
+import { useSimpleOrChildrenRenderer } from './renderers/useSimpleOrChildrenRenderer.js';
+import type { OmittedGridColumnHTMLAttributes } from './GridColumn.js';
 
 export * from './generated/GridProEditColumn.js';
 

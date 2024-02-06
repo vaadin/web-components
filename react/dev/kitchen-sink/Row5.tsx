@@ -1,12 +1,12 @@
 import type { CSSProperties } from 'react';
 import { TextField } from '../../packages/react-components/src/TextField.js';
-import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
 import { Grid, type GridDataProvider } from '../../packages/react-components/src/Grid.js';
 import { GridColumn } from '../../packages/react-components/src/GridColumn.js';
 import { GridColumnGroup } from '../../packages/react-components/src/GridColumnGroup.js';
 import { GridFilterColumn } from '../../packages/react-components/src/GridFilterColumn.js';
-import { GridPro } from '../../packages/react-components-pro/src/GridPro.js';
-import { GridProEditColumn } from '../../packages/react-components-pro/src/GridProEditColumn.js';
+import { GridPro } from '../../packages/react-components/src/GridPro.js';
+import { GridProEditColumn } from '../../packages/react-components/src/GridProEditColumn.js';
 import { GridSortColumn } from '../../packages/react-components/src/GridSortColumn.js';
 import { GridTreeColumn } from '../../packages/react-components/src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../../packages/react-components/src/renderers/grid.js';

@@ -1,4 +1,4 @@
-import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
 import { Tab } from '../../packages/react-components/src/Tab.js';
 import { Tabs } from '../../packages/react-components/src/Tabs.js';
 import { tab, TabSheet } from '../../packages/react-components/src/TabSheet.js';

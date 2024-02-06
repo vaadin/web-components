@@ -1,4 +1,4 @@
-import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
 import { CustomField } from '../../packages/react-components/src/CustomField.js';
 import { DatePicker } from '../../packages/react-components/src/DatePicker.js';
 import { DateTimePicker } from '../../packages/react-components/src/DateTimePicker.js';

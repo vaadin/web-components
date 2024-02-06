@@ -4,7 +4,7 @@ import { cleanup, render } from '@testing-library/react/pure.js';
 import { Grid, type GridDataProvider } from '../packages/react-components/src/Grid.js';
 import { GridColumn, GridColumnElement } from '../packages/react-components/src/GridColumn.js';
 import { GridFilterColumn } from '../packages/react-components/src/GridFilterColumn.js';
-import { GridProEditColumn } from '../packages/react-components-pro/src/GridProEditColumn.js';
+import { GridProEditColumn } from '../packages/react-components/src/GridProEditColumn.js';
 import { GridSelectionColumn } from '../packages/react-components/src/GridSelectionColumn.js';
 import { GridSortColumn } from '../packages/react-components/src/GridSortColumn.js';
 import { GridTreeColumn } from '../packages/react-components/src/GridTreeColumn.js';
@@ -12,7 +12,7 @@ import type { GridBodyReactRendererProps } from '../packages/react-components/sr
 import catchRender from './utils/catchRender.js';
 import { GridColumnGroup } from '../packages/react-components/src/GridColumnGroup.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
-import { GridPro } from '../packages/react-components-pro/src/GridPro.js';
+import { GridPro } from '../packages/react-components/src/GridPro.js';
 import { useEffect, useState } from 'react';
 import sinon from 'sinon';
 

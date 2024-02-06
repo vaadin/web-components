@@ -1,4 +1,4 @@
-import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
 import { Message } from '../../packages/react-components/src/Message.js';
 import { MessageInput } from '../../packages/react-components/src/MessageInput.js';
 import { MessageList } from '../../packages/react-components/src/MessageList.js';
