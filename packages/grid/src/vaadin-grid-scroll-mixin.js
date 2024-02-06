@@ -129,7 +129,7 @@ export const ScrollMixin = (superClass) =>
 
         if (this._rowWithFocusedElement && !this.$.table.contains(e.relatedTarget)) {
           // Virtualizer can't catch the event because if orginates from the light DOM.
-          // Dispatch a virtualizer-element-focused event for virtualizer to catch
+          // Dispatch a virtualizer-element-focused event for virtualizer to catch.
           this.$.table.dispatchEvent(
             new CustomEvent('virtualizer-element-focused', { detail: { element: this._rowWithFocusedElement } }),
           );

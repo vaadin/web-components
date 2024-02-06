@@ -55,7 +55,7 @@ export class IronListAdapter {
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
-    this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__elementFocused(e));
+    this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
     this.elementsContainer.addEventListener('focusin', (e) => {
       this.scrollTarget.dispatchEvent(
         new CustomEvent('virtualizer-element-focused', { detail: { element: this.__getFocusedElement() } }),
@@ -462,14 +462,12 @@ export class IronListAdapter {
   }
 
   /** @private */
-  __elementFocused(e) {
+  __onElementFocused(e) {
     if (!this.reorderElements) {
       return;
     }
 
-    const visibleElements = this.__getVisibleElements();
     const focusedElement = e.detail.element;
-
     if (!focusedElement) {
       return;
     }
@@ -478,6 +476,7 @@ export class IronListAdapter {
     // Check if a next or previous focusable sibling is missing while it should be there (so the user can continue tabbing).
     // The focusable sibling might be missing due to the elements not yet being in the correct DOM order.
     // First try flushing (which also flushes any active __scrollReorderDebouncer).
+    const visibleElements = this.__getVisibleElements();
     if (
       this.__previousFocusableSiblingMissing(focusedElement, visibleElements) ||
       this.__nextFocusableSiblingMissing(focusedElement, visibleElements)
@@ -487,7 +486,7 @@ export class IronListAdapter {
 
     // If the focusable sibling is still missing (because the focused element is at the edge of the viewport and
     // the virtual scrolling logic hasn't had the need to recycle elements), scroll the virtualizer just enough to
-    // have the focusable sibling inside the visible viewport to force the virtualizer to recycle elements.
+    // have the focusable sibling inside the visible viewport to force the virtualizer to recycle.
     const reorderedVisibleElements = this.__getVisibleElements();
     if (this.__nextFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
       this._scrollTop +=
