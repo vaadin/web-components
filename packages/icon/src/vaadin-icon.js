@@ -96,6 +96,8 @@ class Icon extends ThemableMixin(ElementMixin(ControllerMixin(SlotStylesMixin(Ic
           display: block;
           width: 100%;
           height: 100%;
+          /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
+          overflow: visible;
         }
 
         :host(:is([icon-class], [font-icon-content])) svg {
