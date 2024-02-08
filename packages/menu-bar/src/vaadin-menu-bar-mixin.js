@@ -471,6 +471,14 @@ export const MenuBarMixin = (superClass) =>
 
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
+
+      // Apply first/last visible attributes to the visible buttons
+      buttons
+        .filter((btn) => btn.style.visibility !== 'hidden')
+        .forEach((btn, index, visibleButtons) => {
+          btn.toggleAttribute('first-visible', index === 0);
+          btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
+        });
     }
 
     /** @protected */

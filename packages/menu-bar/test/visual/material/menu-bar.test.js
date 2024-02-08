@@ -48,8 +48,11 @@ describe('menu-bar', () => {
         it('reverse-collapse opened', async () => {
           div.style.width = '250px';
           element.reverseCollapse = true;
-          element._buttons[4].click();
+          element.setAttribute('theme', 'outlined');
           await nextRender(element);
+          element._buttons[4].click();
+          const overlay = element._subMenu._overlayElement;
+          await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-reverse-collapse-opened`);
         });
       });

@@ -46,14 +46,14 @@ const menuBarButton = css`
     padding: 0;
   }
 
-  :host(:first-of-type) {
+  :host([first-visible]) {
     border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
 
     /* Needed to retain the focus-ring with border-radius */
     margin-left: calc(var(--lumo-space-xs) / 2);
   }
 
-  :host(:nth-last-of-type(2)),
+  :host([last-visible]),
   :host([slot='overflow']) {
     border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
   }
@@ -86,12 +86,12 @@ const menuBarButton = css`
     border-radius: 0;
   }
 
-  :host([dir='rtl']:first-of-type) {
+  :host([dir='rtl'][first-visible]) {
     border-radius: 0 var(--lumo-border-radius-m) var(--lumo-border-radius-m) 0;
     margin-right: calc(var(--lumo-space-xs) / 2);
   }
 
-  :host([dir='rtl']:nth-last-of-type(2)),
+  :host([dir='rtl'][last-visible]),
   :host([dir='rtl'][slot='overflow']) {
     border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
   }
