@@ -203,6 +203,50 @@ describe('overflow', () => {
       menu.i18n = { ...menu.i18n, moreOptions: '' };
       expect(overflow.hasAttribute('aria-label')).to.be.false;
     });
+
+    describe('reverse-collapse', () => {
+      beforeEach(() => {
+        menu.reverseCollapse = true;
+      });
+
+      it('should show overflow button and hide the buttons which do not fit', () => {
+        assertHidden(buttons[0]);
+        expect(buttons[0].disabled).to.be.true;
+        assertHidden(buttons[1]);
+        expect(buttons[1].disabled).to.be.true;
+        assertHidden(buttons[2]);
+        expect(buttons[2].disabled).to.be.true;
+        assertVisible(buttons[3]);
+        expect(buttons[3].disabled).to.be.false;
+        assertVisible(buttons[4]);
+        expect(buttons[4].disabled).to.be.true;
+
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should set items to overflow button for buttons which do not fit', () => {
+        expect(overflow.item).to.be.instanceOf(Object);
+        expect(overflow.item.children).to.be.instanceOf(Array);
+        expect(overflow.item.children.length).to.equal(3);
+        expect(overflow.item.children[0]).to.deep.equal(menu.items[0]);
+        expect(overflow.item.children[1]).to.deep.equal(menu.items[1]);
+        expect(overflow.item.children[2]).to.deep.equal(menu.items[2]);
+      });
+
+      it('should update oveflow when reverseCollapse changes', () => {
+        menu.reverseCollapse = false;
+        assertVisible(buttons[0]);
+        expect(buttons[0].disabled).to.be.false;
+        assertVisible(buttons[1]);
+        expect(buttons[1].disabled).to.be.false;
+        assertHidden(buttons[2]);
+        expect(buttons[2].disabled).to.be.true;
+        assertHidden(buttons[3]);
+        expect(buttons[3].disabled).to.be.true;
+        assertHidden(buttons[4]);
+        expect(buttons[4].disabled).to.be.true;
+      });
+    });
   });
 
   describe('has-single-button attribute', () => {
