@@ -332,6 +332,9 @@ export const MenuBarMixin = (superClass) =>
 
     /**
      * A callback for the 'reverseCollapse' property observer.
+     *
+     * @param {boolean | null} _reverseCollapse
+     * @private
      */
     _reverseCollapseChanged(_reverseCollapse, overflow, container) {
       if (overflow && container) {
