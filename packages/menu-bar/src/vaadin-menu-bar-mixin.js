@@ -167,10 +167,11 @@ export const MenuBarMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_themeChanged(_theme, _overflow, _container, reverseCollapse)',
+        '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(i18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container)',
+        '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
       ];
     }
 
@@ -326,6 +327,15 @@ export const MenuBarMixin = (superClass) =>
         this._subMenu.setAttribute('theme', theme);
       } else {
         this._subMenu.removeAttribute('theme');
+      }
+    }
+
+    /**
+     * A callback for the 'reverseCollapse' property observer.
+     */
+    _reverseCollapseChanged(_reverseCollapse, overflow, container) {
+      if (overflow && container) {
+        this.__detectOverflow();
       }
     }
 
