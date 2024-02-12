@@ -139,6 +139,13 @@ export declare class MenuBarMixinClass {
   openOnHover: boolean | null | undefined;
 
   /**
+   * If true, the buttons will be collapsed into the overflow menu
+   * starting from the "start" end of the bar instead of the "end".
+   * @attr {boolean} reverse-collapse
+   */
+  reverseCollapse: boolean | null | undefined;
+
+  /**
    * Closes the current submenu.
    */
   close(): void;

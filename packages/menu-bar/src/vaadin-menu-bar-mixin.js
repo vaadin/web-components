@@ -136,6 +136,15 @@ export const MenuBarMixin = (superClass) =>
         },
 
         /**
+         * If true, the buttons will be collapsed into the overflow menu
+         * starting from the "start" end of the bar instead of the "end".
+         * @attr {boolean} reverse-collapse
+         */
+        reverseCollapse: {
+          type: Boolean,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -162,6 +171,7 @@ export const MenuBarMixin = (superClass) =>
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(i18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container)',
+        '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
       ];
     }
 
@@ -320,6 +330,18 @@ export const MenuBarMixin = (superClass) =>
       }
     }
 
+    /**
+     * A callback for the 'reverseCollapse' property observer.
+     *
+     * @param {boolean | null} _reverseCollapse
+     * @private
+     */
+    _reverseCollapseChanged(_reverseCollapse, overflow, container) {
+      if (overflow && container) {
+        this.__detectOverflow();
+      }
+    }
+
     /** @private */
     __hasOverflowChanged(hasOverflow, overflow) {
       if (overflow) {
@@ -410,34 +432,35 @@ export const MenuBarMixin = (superClass) =>
         const isRTL = this.__isRTL;
         const containerLeft = container.getBoundingClientRect().left;
 
-        let i;
-        for (i = buttons.length; i > 0; i--) {
-          const btn = buttons[i - 1];
-          const btnStyle = getComputedStyle(btn);
-          const btnLeft = btn.getBoundingClientRect().left - containerLeft;
+        const remaining = [...buttons];
+        while (remaining.length) {
+          const lastButton = remaining[remaining.length - 1];
+          const btnLeft = lastButton.getBoundingClientRect().left - containerLeft;
 
           // If this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btnLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
+            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
             (isRTL && btnLeft >= overflow.offsetWidth)
           ) {
             break;
           }
 
+          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
+
+          // Save width for buttons with component
+          btn.style.width = getComputedStyle(btn).width;
           btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
-          // Save width for buttons with component
-          btn.style.width = btnStyle.width;
         }
-        const items = buttons.filter((_, idx) => idx >= i).map((b) => b.item);
+
+        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
         this.__updateOverflow(items);
 
-        const remaining = buttons.slice(0, i);
         // Ensure there is at least one button with tabindex set to 0
         // so that menu-bar is not skipped when navigating with Tab
-        if (i > 0 && !remaining.some((btn) => btn.getAttribute('tabindex') === '0')) {
-          this._setTabindex(remaining[i - 1], true);
+        if (remaining.length && !remaining.some((btn) => btn.getAttribute('tabindex') === '0')) {
+          this._setTabindex(remaining[remaining.length - 1], true);
         }
       }
     }
@@ -461,6 +484,14 @@ export const MenuBarMixin = (superClass) =>
 
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
+
+      // Apply first/last visible attributes to the visible buttons
+      buttons
+        .filter((btn) => btn.style.visibility !== 'hidden')
+        .forEach((btn, index, visibleButtons) => {
+          btn.toggleAttribute('first-visible', index === 0);
+          btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
+        });
     }
 
     /** @protected */

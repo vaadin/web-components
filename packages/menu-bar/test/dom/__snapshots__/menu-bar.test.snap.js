@@ -5,6 +5,7 @@ snapshots["menu-bar basic"] =
 `<vaadin-menu-bar role="menubar">
   <vaadin-menu-bar-button
     class="home"
+    first-visible=""
     role="menuitem"
     tabindex="0"
   >
@@ -28,6 +29,7 @@ snapshots["menu-bar basic"] =
   </vaadin-menu-bar-button>
   <vaadin-menu-bar-button
     class="help"
+    last-visible=""
     role="menuitem"
     tabindex="0"
   >
