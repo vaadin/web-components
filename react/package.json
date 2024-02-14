@@ -26,7 +26,7 @@
     "url": "github.com/vaadin/react-components"
   },
   "author": "Vaadin Ltd.",
-  "license": "Apache-2.0",
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)",
   "overrides": {
     "esbuild": "$esbuild"
   },
