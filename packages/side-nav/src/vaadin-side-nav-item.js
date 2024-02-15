@@ -189,12 +189,14 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     this.__updateCurrent();
 
     window.addEventListener('popstate', this.__boundUpdateCurrent);
+    window.addEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('popstate', this.__boundUpdateCurrent);
+    window.removeEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
   }
 
   /** @protected */

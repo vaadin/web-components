@@ -12,6 +12,7 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+import { SideNavItem } from './vaadin-side-nav-item.js';
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -103,6 +104,10 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
         notify: true,
         reflectToAttribute: true,
       },
+
+      onNavigate: {
+        type: Function,
+      },
     };
   }
 
@@ -114,6 +119,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     super();
 
     this._labelId = `side-nav-label-${generateUniqueId()}`;
+    this.addEventListener('click', this.__onClick);
   }
 
   /**
@@ -206,6 +212,57 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   /** @private */
   __toggleCollapsed() {
     this.collapsed = !this.collapsed;
+  }
+
+  /** @private */
+  __onClick(e) {
+    if (!this.onNavigate) {
+      return;
+    }
+
+    const hasModifier = e.metaKey || e.shiftKey;
+    if (hasModifier) {
+      // TODO: Is this a good default?
+      return;
+    }
+
+    const composedPath = e.composedPath();
+    const item = composedPath.find((el) => el instanceof SideNavItem);
+    const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+    if (!item || !anchor) {
+      return;
+    }
+
+    const isRelative = anchor.href && anchor.href.startsWith(location.origin);
+    if (!isRelative) {
+      // TODO: Is this a good default?
+      return;
+    }
+
+    if (item.target === '_blank') {
+      // TODO: Is this a good default?
+      return;
+    }
+
+    const result = this.onNavigate({
+      path: item.path,
+      target: item.target,
+      current: item.current,
+      expanded: item.expanded,
+      pathAliases: item.pathAliases,
+      originalEvent: e,
+    });
+
+    if (result !== false) {
+      e.preventDefault();
+    }
+  }
+
+  /**
+   * Helper static method that dispatches a `side-nav-location-changed` event
+   */
+  static dispatchLocationChangedEvent() {
+    window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
   }
 }
 
