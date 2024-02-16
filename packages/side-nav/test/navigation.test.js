@@ -62,9 +62,9 @@ describe('navigation', () => {
     expect(items[1].hasAttribute('expanded')).to.be.true;
   });
 
-  it('should update current attribute with dispatchLocationChangedEvent', async () => {
+  it('should update current attribute on location change', async () => {
     history.pushState({}, '', '1');
-    SideNav.dispatchLocationChangedEvent();
+    sideNav.location = '1';
 
     await nextRender();
 

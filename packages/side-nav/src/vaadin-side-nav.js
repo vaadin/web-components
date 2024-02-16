@@ -108,6 +108,11 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
       onNavigate: {
         type: Function,
       },
+
+      location: {
+        type: Object,
+        observer: '__locationChanged',
+      },
     };
   }
 
@@ -210,6 +215,11 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 
   /** @private */
+  __locationChanged() {
+    window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+  }
+
+  /** @private */
   __toggleCollapsed() {
     this.collapsed = !this.collapsed;
   }
@@ -256,13 +266,6 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     if (result !== false) {
       e.preventDefault();
     }
-  }
-
-  /**
-   * Helper static method that dispatches a `side-nav-location-changed` event
-   */
-  static dispatchLocationChangedEvent() {
-    window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
   }
 }
 
