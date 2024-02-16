@@ -7,6 +7,7 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SideNavChildrenMixin, type SideNavI18n } from './vaadin-side-nav-children-mixin.js';
+import type { SideNavItem } from './vaadin-side-nav-item.js';
 
 export type { SideNavI18n };
 
@@ -20,6 +21,15 @@ export interface SideNavCustomEventMap {
 }
 
 export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
+
+export type OnNavigateProps = {
+  path: SideNavItem['path'];
+  target: SideNavItem['target'];
+  current: SideNavItem['current'];
+  expanded: SideNavItem['expanded'];
+  pathAliases: SideNavItem['pathAliases'];
+  originalEvent: MouseEvent;
+};
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -82,6 +92,38 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    * Whether the side nav is collapsed. When collapsed, the items are hidden.
    */
   collapsed: boolean;
+
+  /**
+   * Callback function for router integration.
+   *
+   * When a side nav item link is clicked, this function is called and the default click action is cancelled.
+   * This delegates the responsibility of navigation to the function's logic.
+   *
+   * The click event is not cancelled in the following cases:
+   * - The click event has a modifier (e.g. `metaKey`, `shiftKey`)
+   * - The click event is on an external link
+   * - The click event is on a link with `target="_blank"`
+   * - The function explicitly returns `false`
+   *
+   * The function receives an object with the properties of the clicked side-nav item:
+   * - `path`: The path of the navigation item.
+   * - `target`: The target of the navigation item.
+   * - `current`: A boolean indicating whether the navigation item is currently selected.
+   * - `expanded`: A boolean indicating whether the navigation item is expanded.
+   * - `pathAliases`: An array of path aliases for the navigation item.
+   * - `originalEvent`: The original DOM event that triggered the navigation.
+   *
+   * Also see the `location` property for updating the highlighted navigation item on route change.
+   */
+  onNavigate?: ((event: OnNavigateProps) => boolean) | ((event: OnNavigateProps) => void);
+
+  /**
+   * The current route of the application.
+   *
+   * This property should be kept in sync with the application's state. While it usually reflects the browser's URL,
+   * it can be set to any value. Changes to `location` update the highlighted item in the side navigation.
+   */
+  location: any;
 
   addEventListener<K extends keyof SideNavEventMap>(
     type: K,

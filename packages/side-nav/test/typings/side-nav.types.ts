@@ -3,7 +3,7 @@ import '../../vaadin-side-nav-item.js';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { SideNav, SideNavCollapsedChangedEvent, SideNavI18n } from '../../src/vaadin-side-nav';
+import type { OnNavigateProps, SideNav, SideNavCollapsedChangedEvent, SideNavI18n } from '../../src/vaadin-side-nav';
 import type { SideNavChildrenMixinClass } from '../../src/vaadin-side-nav-children-mixin.js';
 import type { SideNavItem, SideNavItemExpandedChangedEvent } from '../../src/vaadin-side-nav-item';
 
@@ -26,6 +26,21 @@ sideNav.addEventListener('collapsed-changed', (event) => {
   assertType<SideNavCollapsedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
+
+// Router integration
+sideNav.onNavigate = undefined;
+sideNav.onNavigate = () => false;
+sideNav.onNavigate = (event) => {
+  assertType<OnNavigateProps>(event);
+  assertType<string | null | undefined>(event.path);
+  assertType<string | null | undefined>(event.target);
+  assertType<boolean>(event.current);
+  assertType<boolean>(event.expanded);
+  assertType<string[]>(event.pathAliases);
+  assertType<MouseEvent>(event.originalEvent);
+};
+
+assertType<any>(sideNav.location);
 
 const sideNavItem: SideNavItem = document.createElement('vaadin-side-nav-item');
 
