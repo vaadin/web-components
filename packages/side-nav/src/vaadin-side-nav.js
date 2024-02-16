@@ -264,6 +264,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
 
     const hasModifier = e.metaKey || e.shiftKey;
     if (hasModifier) {
+      // Allow default action for clicks with modifiers
       return;
     }
 
@@ -271,18 +272,22 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     const item = composedPath.find((el) => el instanceof SideNavItem);
     const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
     if (!item || !anchor) {
+      // Not a click on a side-nav-item anchor
       return;
     }
 
     const isRelative = anchor.href && anchor.href.startsWith(location.origin);
     if (!isRelative) {
+      // Allow default action for external links
       return;
     }
 
     if (item.target === '_blank') {
+      // Allow default action for links with target="_blank"
       return;
     }
 
+    // Call the onNavigate callback
     const result = this.onNavigate({
       path: item.path,
       target: item.target,
@@ -293,6 +298,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     });
 
     if (result !== false) {
+      // Cancel the default action if the callback didn't return false
       e.preventDefault();
     }
   }
