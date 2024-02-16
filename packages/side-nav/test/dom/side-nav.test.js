@@ -16,6 +16,7 @@ describe('vaadin-side-nav', () => {
             `,
     );
     await nextFrame();
+    await nextFrame();
   });
 
   describe('host', () => {
