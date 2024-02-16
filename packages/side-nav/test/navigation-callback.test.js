@@ -17,8 +17,12 @@ describe('navigation callback', () => {
   beforeEach(async () => {
     sideNav = fixtureSync(`
       <vaadin-side-nav>
-        <span slot="label">Main menu</span>
-        <vaadin-side-nav-item path="/foobar">Item</vaadin-side-nav-item>
+        <a slot="label" href="/home">Home</a>
+
+        <vaadin-side-nav-item path="/foo">
+          foo
+          <vaadin-side-nav-item slot="children" path="/bar">bar</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
       </vaadin-side-nav>
     `);
 
@@ -76,6 +80,26 @@ describe('navigation callback', () => {
     expect(clickEvent.defaultPrevented).to.be.false;
   });
 
+  it('should not cancel label click event', () => {
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    const label = sideNav.querySelector('[slot="label"]');
+    expect(() => label.dispatchEvent(event)).to.not.throw();
+    expect(event.defaultPrevented).to.be.false;
+  });
+
+  it('should not cancel toggle click event', () => {
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    const toggle = sideNavItem.shadowRoot.querySelector('button');
+    expect(() => toggle.dispatchEvent(event)).to.not.throw();
+    expect(event.defaultPrevented).to.be.false;
+  });
+
+  it('should not cancel item click event', () => {
+    const event = new MouseEvent('click', { bubbles: true, composed: true, cancelable: true });
+    expect(() => sideNavItem.dispatchEvent(event)).to.not.throw();
+    expect(event.defaultPrevented).to.be.false;
+  });
+
   it('should pass correct properties to the callback', () => {
     const clickEvent = clickItemLink(sideNavItem);
 
@@ -83,7 +107,7 @@ describe('navigation callback', () => {
     const callbackArguments = sideNav.onNavigate.firstCall.args;
     expect(callbackArguments).to.eql([
       {
-        path: '/foobar',
+        path: '/foo',
         target: undefined,
         current: false,
         expanded: false,
@@ -91,9 +115,5 @@ describe('navigation callback', () => {
         originalEvent: clickEvent,
       },
     ]);
-  });
-
-  it('should not throw on label click', () => {
-    expect(() => sideNav.shadowRoot.querySelector('[part="label"]').click()).to.not.throw();
   });
 });

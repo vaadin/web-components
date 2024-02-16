@@ -271,7 +271,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     const composedPath = e.composedPath();
     const item = composedPath.find((el) => el instanceof SideNavItem);
     const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
-    if (!item || !anchor) {
+    if (!item || !item.shadowRoot.contains(anchor)) {
       // Not a click on a side-nav-item anchor
       return;
     }
