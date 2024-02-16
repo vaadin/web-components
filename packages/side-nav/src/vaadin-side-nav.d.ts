@@ -22,7 +22,7 @@ export interface SideNavCustomEventMap {
 
 export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
 
-export type OnNavigateProps = {
+export type NavigateEvent = {
   path: SideNavItem['path'];
   target: SideNavItem['target'];
   current: SideNavItem['current'];
@@ -99,7 +99,7 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    * When a side nav item link is clicked, this function is called and the default click action is cancelled.
    * This delegates the responsibility of navigation to the function's logic.
    *
-   * The click event is not cancelled in the following cases:
+   * The click event action is not cancelled in the following cases:
    * - The click event has a modifier (e.g. `metaKey`, `shiftKey`)
    * - The click event is on an external link
    * - The click event is on a link with `target="_blank"`
@@ -115,7 +115,7 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    *
    * Also see the `location` property for updating the highlighted navigation item on route change.
    */
-  onNavigate?: ((event: OnNavigateProps) => boolean) | ((event: OnNavigateProps) => void);
+  onNavigate?: ((event: NavigateEvent) => boolean) | ((event: NavigateEvent) => void);
 
   /**
    * The current route of the application.

@@ -111,7 +111,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
        * When a side nav item link is clicked, this function is called and the default click action is cancelled.
        * This delegates the responsibility of navigation to the function's logic.
        *
-       * The click event is not cancelled in the following cases:
+       * The click event action is not cancelled in the following cases:
        * - The click event has a modifier (e.g. `metaKey`, `shiftKey`)
        * - The click event is on an external link
        * - The click event is on a link with `target="_blank"`
@@ -139,10 +139,9 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
        * This property should be kept in sync with the application's state. While it usually reflects the browser's URL,
        * it can be set to any value. Changes to `location` update the highlighted item in the side navigation.
        *
-       * @type {Object}
+       * @type {any}
        */
       location: {
-        type: Object,
         observer: '__locationChanged',
       },
     };

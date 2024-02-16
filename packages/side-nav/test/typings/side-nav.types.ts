@@ -3,7 +3,7 @@ import '../../vaadin-side-nav-item.js';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { OnNavigateProps, SideNav, SideNavCollapsedChangedEvent, SideNavI18n } from '../../src/vaadin-side-nav';
+import type { NavigateEvent, SideNav, SideNavCollapsedChangedEvent, SideNavI18n } from '../../src/vaadin-side-nav';
 import type { SideNavChildrenMixinClass } from '../../src/vaadin-side-nav-children-mixin.js';
 import type { SideNavItem, SideNavItemExpandedChangedEvent } from '../../src/vaadin-side-nav-item';
 
@@ -31,7 +31,7 @@ sideNav.addEventListener('collapsed-changed', (event) => {
 sideNav.onNavigate = undefined;
 sideNav.onNavigate = () => false;
 sideNav.onNavigate = (event) => {
-  assertType<OnNavigateProps>(event);
+  assertType<NavigateEvent>(event);
   assertType<string | null | undefined>(event.path);
   assertType<string | null | undefined>(event.target);
   assertType<boolean>(event.current);
