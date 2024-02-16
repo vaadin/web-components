@@ -75,11 +75,15 @@ describe('navigation', () => {
 });
 
 describe('custom item click actions', () => {
-  let sideNav, item, itemLink;
+  let sideNav, sideNavItem;
   let clickListener;
 
+  function clickItemLink(item, props = {}) {
+    const itemLink = item.shadowRoot.querySelector('a');
+    itemLink.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true, ...props }));
+  }
+
   beforeEach(async () => {
-    const currentURL = location.href;
     sideNav = fixtureSync(`
       <vaadin-side-nav>
         <span slot="label">Main menu</span>
@@ -88,76 +92,65 @@ describe('custom item click actions', () => {
     `);
 
     clickListener = sinon.spy();
-    sideNav.addEventListener('click', (e) => {
-      clickListener({
-        defaultPreventedByComponent: e.defaultPrevented,
-        clickEvent: e,
-      });
-
-      // Prevent the tests from navigating away
-      e.preventDefault();
-    });
+    sideNav.addEventListener('click', clickListener);
 
     sideNav.onNavigate = sinon.spy();
 
     await nextRender();
-    item = sideNav.querySelector('vaadin-side-nav-item');
-    itemLink = item.shadowRoot.querySelector('a');
+    sideNavItem = sideNav.querySelector('vaadin-side-nav-item');
   });
 
   it('should cancel the click event', () => {
-    itemLink.click();
+    clickItemLink(sideNavItem);
     expect(clickListener.calledOnce).to.be.true;
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.true;
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.true;
   });
 
   it('should not cancel the click event on meta key + click', () => {
-    itemLink.dispatchEvent(new MouseEvent('click', { metaKey: true, bubbles: true, composed: true, cancelable: true }));
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    clickItemLink(sideNavItem, { metaKey: true });
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should not cancel the click event on shift key + click', () => {
-    itemLink.dispatchEvent(
-      new MouseEvent('click', { shiftKey: true, bubbles: true, composed: true, cancelable: true }),
-    );
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    clickItemLink(sideNavItem, { shiftKey: true });
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should not cancel the click event for external link', async () => {
-    item.path = 'https://vaadin.com';
+    sideNavItem.path = 'https://vaadin.com';
     await nextRender();
-    itemLink.click();
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    clickItemLink(sideNavItem);
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should not cancel the click event if callback is not defined', () => {
     sideNav.onNavigate = undefined;
-    itemLink.click();
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    clickItemLink(sideNavItem);
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should not cancel the click event if callback returns false', () => {
     sideNav.onNavigate = () => false;
-    itemLink.click();
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    clickItemLink(sideNavItem);
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should not cancel the click event if target is _blank', () => {
-    item.target = '_blank';
-    itemLink.click();
-    const { defaultPreventedByComponent } = clickListener.firstCall.firstArg;
-    expect(defaultPreventedByComponent).to.be.false;
+    sideNavItem.target = '_blank';
+    clickItemLink(sideNavItem);
+    const clickEvent = clickListener.firstCall.firstArg;
+    expect(clickEvent.defaultPrevented).to.be.false;
   });
 
   it('should pass correct properties to the callback', () => {
-    itemLink.click();
-    const { clickEvent } = clickListener.firstCall.firstArg;
+    clickItemLink(sideNavItem);
+    const clickEvent = clickListener.firstCall.firstArg;
 
     expect(sideNav.onNavigate.calledOnce).to.be.true;
     const callbackArguments = sideNav.onNavigate.firstCall.args;

@@ -264,7 +264,6 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
 
     const hasModifier = e.metaKey || e.shiftKey;
     if (hasModifier) {
-      // TODO: Is this a good default?
       return;
     }
 
@@ -277,12 +276,10 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
 
     const isRelative = anchor.href && anchor.href.startsWith(location.origin);
     if (!isRelative) {
-      // TODO: Is this a good default?
       return;
     }
 
     if (item.target === '_blank') {
-      // TODO: Is this a good default?
       return;
     }
 
