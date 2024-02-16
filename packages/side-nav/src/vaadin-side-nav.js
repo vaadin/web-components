@@ -12,7 +12,6 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
-import { SideNavItem } from './vaadin-side-nav-item.js';
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -268,7 +267,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     }
 
     const composedPath = e.composedPath();
-    const item = composedPath.find((el) => el instanceof SideNavItem);
+    const item = composedPath.find((el) => el.localName && el.localName.includes('side-nav-item'));
     const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
     if (!item || !item.shadowRoot.contains(anchor)) {
       // Not a click on a side-nav-item anchor
