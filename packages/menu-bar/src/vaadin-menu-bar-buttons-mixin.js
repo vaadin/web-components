@@ -14,6 +14,15 @@ export const ButtonsMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * If true, the buttons will be collapsed into the overflow menu
+         * starting from the "start" end of the bar instead of the "end".
+         * @attr {boolean} reverse-collapse
+         */
+        reverseCollapse: {
+          type: Boolean,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -25,7 +34,7 @@ export const ButtonsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_menuItemsChanged(items, items.splices)'];
+      return ['_menuItemsChanged(items, items.splices)', '_reverseCollapseChanged(reverseCollapse)'];
     }
 
     /**
@@ -125,6 +134,16 @@ export const ButtonsMixin = (superClass) =>
       this._hasOverflow = items.length > 0;
     }
 
+    /**
+     * A callback for the 'reverseCollapse' property observer.
+     *
+     * @param {boolean | null} _reverseCollapse
+     * @private
+     */
+    _reverseCollapseChanged(_reverseCollapse) {
+      this.__detectOverflow();
+    }
+
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
@@ -133,27 +152,30 @@ export const ButtonsMixin = (superClass) =>
         this._hasOverflow = true;
 
         const isRTL = this.getAttribute('dir') === 'rtl';
+        const containerLeft = container.getBoundingClientRect().left;
 
-        let i;
-        for (i = buttons.length; i > 0; i--) {
-          const btn = buttons[i - 1];
-          const btnStyle = getComputedStyle(btn);
+        const remaining = [...buttons];
+        while (remaining.length) {
+          const lastButton = remaining[remaining.length - 1];
+          const btnLeft = lastButton.getBoundingClientRect().left - containerLeft;
 
           // If this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btn.offsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btn.offsetLeft >= overflow.offsetWidth)
+            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
+            (isRTL && btnLeft >= overflow.offsetWidth)
           ) {
             break;
           }
 
+          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
+
+          // Save width for buttons with component
+          btn.style.width = getComputedStyle(btn).width;
           btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
-          // Save width for buttons with component
-          btn.style.width = btnStyle.width;
         }
-        const items = buttons.filter((_, idx) => idx >= i).map((b) => b.item);
+        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
         this.__updateOverflow(items);
       }
     }
@@ -177,6 +199,14 @@ export const ButtonsMixin = (superClass) =>
 
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
+
+      // Apply first/last visible attributes to the visible buttons
+      buttons
+        .filter((btn) => btn.style.visibility !== 'hidden')
+        .forEach((btn, index, visibleButtons) => {
+          btn.toggleAttribute('first-visible', index === 0);
+          btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
+        });
     }
 
     /** @protected */

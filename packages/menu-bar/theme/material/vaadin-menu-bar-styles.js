@@ -12,7 +12,7 @@ registerStyles(
       border-radius: 4px;
     }
 
-    :host([theme~='end-aligned']) [part$='button']:first-child,
+    :host([theme~='end-aligned']) [part$='button'][first-visible],
     :host([theme~='end-aligned'][has-single-button]) [part$='button'] {
       margin-inline-start: auto;
     }
