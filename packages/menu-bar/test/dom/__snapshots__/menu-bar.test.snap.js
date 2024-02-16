@@ -10,6 +10,7 @@ snapshots["menu-bar host"] =
 snapshots["menu-bar shadow"] = 
 `<div part="container">
   <vaadin-menu-bar-button
+    first-visible=""
     part="menu-bar-button"
     role="menuitem"
     tabindex="0"
@@ -35,6 +36,7 @@ snapshots["menu-bar shadow"] =
     Dashboard
   </vaadin-menu-bar-button>
   <vaadin-menu-bar-button
+    last-visible=""
     part="menu-bar-button"
     role="menuitem"
     tabindex="0"

@@ -11,6 +11,13 @@ export declare function ButtonsMixin<T extends Constructor<HTMLElement>>(
 ): Constructor<ButtonsMixinClass> & Constructor<ResizeMixinClass> & T;
 
 export declare class ButtonsMixinClass {
+  /**
+   * If true, the buttons will be collapsed into the overflow menu
+   * starting from the "start" end of the bar instead of the "end".
+   * @attr {boolean} reverse-collapse
+   */
+  reverseCollapse: boolean | null | undefined;
+
   protected readonly _buttons: HTMLElement[];
 
   protected readonly _container: HTMLElement;

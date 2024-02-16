@@ -49,11 +49,11 @@ const menuBarButton = css`
     margin-right: 1px;
   }
 
-  :host(:first-of-type) {
+  :host([first-visible]) {
     border-radius: 4px 0 0 4px;
   }
 
-  :host(:nth-last-of-type(2)),
+  :host([last-visible]),
   :host([part~='overflow-button']) {
     border-radius: 0 4px 4px 0;
   }
@@ -72,7 +72,7 @@ const menuBarButton = css`
     margin-right: -1px;
   }
 
-  :host([theme~='outlined']:not([dir='rtl']):nth-last-of-type(2)),
+  :host([theme~='outlined']:not([dir='rtl'])[last-visible]),
   :host([theme~='outlined']:not([dir='rtl'])[part~='overflow-button']) {
     margin-right: 0;
   }
@@ -83,11 +83,11 @@ const menuBarButton = css`
   }
 
   /* RTL styles */
-  :host([dir='rtl']:first-of-type) {
+  :host([dir='rtl'][first-visible]) {
     border-radius: 0 4px 4px 0;
   }
 
-  :host([dir='rtl']:nth-last-of-type(2)),
+  :host([dir='rtl'][last-visible]),
   :host([dir='rtl'][part='overflow-button']) {
     border-radius: 4px 0 0 4px;
   }
@@ -100,7 +100,7 @@ const menuBarButton = css`
     margin-left: -1px;
   }
 
-  :host([theme~='outlined'][dir='rtl']:nth-last-of-type(2)),
+  :host([theme~='outlined'][dir='rtl'][last-visible]),
   :host([theme~='outlined'][dir='rtl'][part~='overflow-button']) {
     margin-left: 0;
   }
