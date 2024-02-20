@@ -60,4 +60,14 @@ describe('navigation', () => {
     await nextRender();
     expect(items[1].hasAttribute('expanded')).to.be.true;
   });
+
+  it('should update current attribute on location change', async () => {
+    expect(items[0].hasAttribute('current')).to.be.false;
+
+    history.pushState({}, '', '1');
+    sideNav.location = '1';
+
+    await nextRender();
+    expect(items[0].hasAttribute('current')).to.be.true;
+  });
 });

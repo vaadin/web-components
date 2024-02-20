@@ -103,6 +103,48 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
         notify: true,
         reflectToAttribute: true,
       },
+
+      /**
+       * Callback function for router integration.
+       *
+       * When a side nav item link is clicked, this function is called and the default click action is cancelled.
+       * This delegates the responsibility of navigation to the function's logic.
+       *
+       * The click event action is not cancelled in the following cases:
+       * - The click event has a modifier (e.g. `metaKey`, `shiftKey`)
+       * - The click event is on an external link
+       * - The click event is on a link with `target="_blank"`
+       * - The function explicitly returns `false`
+       *
+       * The function receives an object with the properties of the clicked side-nav item:
+       * - `path`: The path of the navigation item.
+       * - `target`: The target of the navigation item.
+       * - `current`: A boolean indicating whether the navigation item is currently selected.
+       * - `expanded`: A boolean indicating whether the navigation item is expanded.
+       * - `pathAliases`: An array of path aliases for the navigation item.
+       * - `originalEvent`: The original DOM event that triggered the navigation.
+       *
+       * Also see the `location` property for updating the highlighted navigation item on route change.
+       *
+       * @type {function(Object): boolean | undefined}
+       */
+      onNavigate: {
+        attribute: false,
+      },
+
+      /**
+       * A change to this property triggers an update of the highlighted item in the side navigation. While it typically
+       * corresponds to the browser's URL, the specific value assigned to the property is irrelevant. The component has
+       * its own internal logic for determining which item is highlighted.
+       *
+       * The main use case for this property is when the side navigation is used with a client-side router. In this case,
+       * the component needs to be informed about route changes so it can update the highlighted item.
+       *
+       * @type {any}
+       */
+      location: {
+        observer: '__locationChanged',
+      },
     };
   }
 
@@ -114,6 +156,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
     super();
 
     this._labelId = `side-nav-label-${generateUniqueId()}`;
+    this.addEventListener('click', this.__onClick);
   }
 
   /**
@@ -204,8 +247,60 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 
   /** @private */
+  __locationChanged() {
+    window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+  }
+
+  /** @private */
   __toggleCollapsed() {
     this.collapsed = !this.collapsed;
+  }
+
+  /** @private */
+  __onClick(e) {
+    if (!this.onNavigate) {
+      return;
+    }
+
+    const hasModifier = e.metaKey || e.shiftKey;
+    if (hasModifier) {
+      // Allow default action for clicks with modifiers
+      return;
+    }
+
+    const composedPath = e.composedPath();
+    const item = composedPath.find((el) => el.localName && el.localName.includes('side-nav-item'));
+    const anchor = composedPath.find((el) => el instanceof HTMLAnchorElement);
+    if (!item || !item.shadowRoot.contains(anchor)) {
+      // Not a click on a side-nav-item anchor
+      return;
+    }
+
+    const isRelative = anchor.href && anchor.href.startsWith(location.origin);
+    if (!isRelative) {
+      // Allow default action for external links
+      return;
+    }
+
+    if (item.target === '_blank') {
+      // Allow default action for links with target="_blank"
+      return;
+    }
+
+    // Call the onNavigate callback
+    const result = this.onNavigate({
+      path: item.path,
+      target: item.target,
+      current: item.current,
+      expanded: item.expanded,
+      pathAliases: item.pathAliases,
+      originalEvent: e,
+    });
+
+    if (result !== false) {
+      // Cancel the default action if the callback didn't return false
+      e.preventDefault();
+    }
   }
 }
 
