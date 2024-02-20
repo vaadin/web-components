@@ -118,10 +118,12 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
   onNavigate?: ((event: NavigateEvent) => boolean) | ((event: NavigateEvent) => void);
 
   /**
-   * The current route of the application.
+   * A change to this property triggers an update of the highlighted item in the side navigation. While it typically
+   * corresponds to the browser's URL, the specific value assigned to the property is irrelevant. The component has
+   * its own internal logic for determining which item is highlighted.
    *
-   * This property should be kept in sync with the application's state. While it usually reflects the browser's URL,
-   * it can be set to any value. Changes to `location` update the highlighted item in the side navigation.
+   * The main use case for this property is when the side navigation is used with a client-side router. In this case,
+   * the component needs to be informed about route changes so it can update the highlighted item.
    */
   location: any;
 
