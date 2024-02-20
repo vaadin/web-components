@@ -77,10 +77,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         },
 
         /**
-         * Custom function for determining whether the header cell should be rendered for the provided row.
+         * Custom function for determining whether the header cell should be rendered for the provided row index.
          * Receives one argument:
-         * - `root` The header row DOM element.
-         * @type {function(HTMLTableRowElement): boolean | undefined}
+         * - `headerRowIndex` The index of the header row.
+         * @type {function(number): boolean | undefined}
          */
         selectionHeaderCellProvider: {
           type: Function,

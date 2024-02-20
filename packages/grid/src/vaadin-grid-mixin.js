@@ -712,7 +712,8 @@ export const GridMixin = (superClass) =>
             const tagName = section === 'header' ? 'th' : 'td';
             let renderAsHeaderOrFooterCell;
             if (column.selectionHeaderCellProvider) {
-              renderAsHeaderOrFooterCell = column.selectionHeaderCellProvider(row);
+              const headerRowIndex = Array.from(this.$.header.children).indexOf(row);
+              renderAsHeaderOrFooterCell = column.selectionHeaderCellProvider(headerRowIndex);
             } else {
               renderAsHeaderOrFooterCell = isColumnRow || column.localName === 'vaadin-grid-column-group';
             }

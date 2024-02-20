@@ -40,11 +40,11 @@ export declare class GridSelectionColumnBaseMixinClass<TItem> {
   dragSelect: boolean;
 
   /**
-   * Custom function for determining whether the header cell should be rendered for the provided row.
+   * Custom function for determining whether the header cell should be rendered for the provided row index.
    * Receives one argument:
-   * - `root` The header row DOM element.
+   * - `headerRowIndex` The index of the header row.
    */
-  selectionHeaderCellProvider: (row: HTMLTableRowElement) => boolean;
+  selectionHeaderCellProvider: (headerRowIndex: number) => boolean;
 
   /**
    * Override to handle the user selecting all items.
