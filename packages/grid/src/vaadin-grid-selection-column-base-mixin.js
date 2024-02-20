@@ -76,6 +76,17 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * Custom function for determining whether the header cell should be rendered for the provided row.
+         * Receives one argument:
+         * - `root` The header row DOM element.
+         * @type {function(HTMLTableRowElement): boolean | undefined}
+         */
+        selectionHeaderCellProvider: {
+          type: Function,
+          observer: '__selectionHeaderCellProviderChanged',
+        },
+
         /** @protected */
         _indeterminate: {
           type: Boolean,
@@ -230,6 +241,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // don't  want to toggle it again from clicking the checkbox or changing
         // the active item.
         e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __selectionHeaderCellProviderChanged() {
+      if (this._grid && this._grid._renderColumnTree) {
+        this._grid._renderColumnTree(this._grid._columnTree);
       }
     }
 

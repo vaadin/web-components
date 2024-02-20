@@ -710,7 +710,13 @@ export const GridMixin = (superClass) =>
           } else {
             // Header & footer
             const tagName = section === 'header' ? 'th' : 'td';
-            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+            let renderAsHeaderOrFooterCell;
+            if (column.selectionHeaderCellProvider) {
+              renderAsHeaderOrFooterCell = column.selectionHeaderCellProvider(row);
+            } else {
+              renderAsHeaderOrFooterCell = isColumnRow || column.localName === 'vaadin-grid-column-group';
+            }
+            if (renderAsHeaderOrFooterCell) {
               cell = column[`_${section}Cell`] || this._createCell(tagName);
               cell._column = column;
               row.appendChild(cell);
