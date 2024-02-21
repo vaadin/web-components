@@ -4,7 +4,15 @@ import sinon from 'sinon';
 import '../vaadin-side-nav-item.js';
 
 describe('side-nav-item', () => {
-  let item;
+  let item, baseUri;
+
+  beforeEach(() => {
+    baseUri = sinon.stub(document, 'baseURI').value('http://localhost/');
+  });
+
+  afterEach(() => {
+    baseUri.restore();
+  });
 
   describe('custom element definition', () => {
     let tagName;
