@@ -11,7 +11,7 @@
  * @param {URLSearchParams} expected
  */
 function containsQueryParams(actual, expected) {
-  return [...expected.entries()].every(([key, value]) => actual.has(key, value));
+  return [...expected.entries()].every(([key, value]) => actual.getAll(key).includes(value));
 }
 
 /**
