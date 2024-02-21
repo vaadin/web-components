@@ -179,7 +179,9 @@ describe('multi selection column', () => {
           <vaadin-grid-selection-column></vaadin-grid-selection-column>
         </vaadin-grid-column-group>
 
-        <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>
+        <vaadin-grid-column-group  header="group header">
+          <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>
+        </vaadin-grid-column-group>
       </vaadin-grid>
     `);
     await nextFrame();
@@ -529,6 +531,22 @@ describe('multi selection column', () => {
     selectionColumn.selectAll = true;
 
     expect(grid.selectedItems).to.eql(grid.items);
+  });
+
+  it('should update select all checkbox location when a cell provider is set', async () => {
+    let newHeaderCellContent = getCellContent(getRowCells(getRows(grid.$.header)[0])[0]);
+    let oldHeaderCellContent = getCellContent(getRowCells(getRows(grid.$.header)[1])[0]);
+    expect(newHeaderCellContent.children).to.be.empty;
+    expect(oldHeaderCellContent.children).to.be.not.empty;
+
+    selectionColumn.selectionHeaderCellProvider = (index) => index === 0;
+    await nextFrame();
+
+    newHeaderCellContent = getCellContent(getRowCells(getRows(grid.$.header)[0])[0]);
+    oldHeaderCellContent = getCellContent(getRowCells(getRows(grid.$.header)[1])[0]);
+
+    expect(newHeaderCellContent.classList.contains('vaadin-grid-select-all-checkbox')).to.be.true;
+    expect(oldHeaderCellContent.children).to.be.empty;
   });
 
   describe('drag selection', () => {

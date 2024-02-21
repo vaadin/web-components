@@ -246,7 +246,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __selectionHeaderCellProviderChanged() {
-      if (this._grid && this._grid._renderColumnTree) {
+      if (this._grid && this._grid._renderColumnTree && this._grid._columnTree) {
         this._grid._renderColumnTree(this._grid._columnTree);
       }
     }
