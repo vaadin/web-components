@@ -5,15 +5,33 @@
  */
 
 /**
- * Check if two paths can be resolved as URLs
- * with the same origin and pathname.
+ * Checks if one set of URL parameters contains all the parameters from another set.
  *
- * @param {string} path1
- * @param {string} path2
+ * @param {URLSearchParams} actual
+ * @param {URLSearchParams} expected
  */
-export function matchPaths(path1, path2) {
+function containsQueryParams(actual, expected) {
+  return [...expected.entries()].every(([key, value]) => actual.has(key, value));
+}
+
+/**
+ * Checks if two paths match based on their origin, pathname, and query parameters.
+ *
+ * The function matches an actual URL against an expected URL to see if they share the same
+ * base origin (like https://example.com), the same path (like /path/to/page), and if the
+ * actual URL contains all query parameters from the expected URL.
+ *
+ * @param {string} actual The actual URL to match.
+ * @param {string} expected The expected URL to match.
+ */
+export function matchPaths(actual, expected) {
   const base = document.baseURI;
-  const url1 = new URL(path1, base);
-  const url2 = new URL(path2, base);
-  return url1.origin === url2.origin && url1.pathname === url2.pathname;
+  const actualUrl = new URL(actual, base);
+  const expectedUrl = new URL(expected, base);
+
+  return (
+    actualUrl.origin === expectedUrl.origin &&
+    actualUrl.pathname === expectedUrl.pathname &&
+    containsQueryParams(actualUrl.searchParams, expectedUrl.searchParams)
+  );
 }

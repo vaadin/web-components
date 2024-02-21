@@ -4,7 +4,17 @@ import { matchPaths } from '../src/url-utils.js';
 
 describe('url-utils', () => {
   describe('matchPaths', () => {
+    let baseUri;
+
     const paths = ['', '/', '/path', 'base/path'];
+
+    beforeEach(() => {
+      baseUri = sinon.stub(document, 'baseURI').value('http://localhost/');
+    });
+
+    afterEach(() => {
+      baseUri.restore();
+    });
 
     it('should return true when paths match', () => {
       paths.forEach((path) => expect(matchPaths(path, path)).to.be.true);
@@ -35,20 +45,68 @@ describe('url-utils', () => {
       });
     });
 
-    describe('base url', () => {
-      let baseUri;
+    it('should use document.baseURI as a base url', () => {
+      baseUri.value('https://vaadin.com/docs/');
+      expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
+    });
 
-      beforeEach(() => {
-        baseUri = sinon.stub(document, 'baseURI');
+    describe('query params', () => {
+      it('should return true when query params match', () => {
+        expect(matchPaths('/products', '/products')).to.be.true;
+        expect(matchPaths('/products?c=socks', '/products')).to.be.true;
+        expect(matchPaths('/products?c=pants', '/products')).to.be.true;
+        expect(matchPaths('/products?c=', '/products')).to.be.true;
+        expect(matchPaths('/products?c=socks&item=5', '/products')).to.be.true;
+        expect(matchPaths('/products?item=5&c=socks', '/products')).to.be.true;
+        expect(matchPaths('/products?c=socks&c=pants', '/products')).to.be.true;
+        expect(matchPaths('/products?socks', '/products')).to.be.true;
+        expect(matchPaths('/products?socks=', '/products')).to.be.true;
+
+        expect(matchPaths('/products?c=socks', '/products?c=socks')).to.be.true;
+        expect(matchPaths('/products?c=socks&item=5', '/products?c=socks')).to.be.true;
+        expect(matchPaths('/products?item=5&c=socks', '/products?c=socks')).to.be.true;
+        expect(matchPaths('/products?c=socks&c=pants', '/products?c=socks')).to.be.true;
+
+        expect(matchPaths('/products?c=', '/products?c=')).to.be.true;
+
+        expect(matchPaths('/products?c=socks&c=pants', '/products?c=socks&c=pants')).to.be.true;
+
+        expect(matchPaths('/products?socks', '/products?socks')).to.be.true;
+        expect(matchPaths('/products?socks=', '/products?socks')).to.be.true;
       });
 
-      afterEach(() => {
-        baseUri.restore();
-      });
+      it('should return false when query params do not match', () => {
+        expect(matchPaths('/products', '/products?c=socks')).to.be.false;
+        expect(matchPaths('/products?c=pants', '/products?c=socks')).to.be.false;
+        expect(matchPaths('/products?c=', '/products?c=socks')).to.be.false;
+        expect(matchPaths('/products?socks', '/products?c=socks')).to.be.false;
+        expect(matchPaths('/products?socks=', '/products?c=socks')).to.be.false;
 
-      it('should use document.baseURI as a base url', () => {
-        baseUri.value('https://vaadin.com/docs/');
-        expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
+        expect(matchPaths('/products', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?c=socks', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?c=pants', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?c=socks&item=5', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?item=5&c=socks', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?c=socks&c=pants', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?socks', '/products?c=')).to.be.false;
+        expect(matchPaths('/products?socks=', '/products?c=')).to.be.false;
+
+        expect(matchPaths('/products', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?c=socks', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?c=pants', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?c=', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?c=socks&item=5', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?item=5&c=socks', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?socks', '/products?c=socks&c=pants')).to.be.false;
+        expect(matchPaths('/products?socks=', '/products?c=socks&c=pants')).to.be.false;
+
+        expect(matchPaths('/products', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?c=socks', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?c=pants', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?c=', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?c=socks&item=5', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?item=5&c=socks', '/products?socks')).to.be.false;
+        expect(matchPaths('/products?c=socks&c=pants', '/products?socks')).to.be.false;
       });
     });
   });
