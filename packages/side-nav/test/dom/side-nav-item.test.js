@@ -6,14 +6,14 @@ import '@vaadin/icon';
 import '@vaadin/icons';
 
 describe('vaadin-side-nav-item', () => {
-  let sideNavItem, baseUri;
+  let sideNavItem, documentBaseURI;
 
   beforeEach(() => {
-    baseUri = sinon.stub(document, 'baseURI').value('http://localhost/');
+    documentBaseURI = sinon.stub(document, 'baseURI').value('http://localhost/');
   });
 
   afterEach(() => {
-    baseUri.restore();
+    documentBaseURI.restore();
   });
 
   beforeEach(async () => {

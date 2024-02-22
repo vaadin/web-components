@@ -4,16 +4,16 @@ import { matchPaths } from '../src/url-utils.js';
 
 describe('url-utils', () => {
   describe('matchPaths', () => {
-    let baseUri;
+    let documentBaseURI;
 
     const paths = ['', '/', '/path', 'base/path'];
 
     beforeEach(() => {
-      baseUri = sinon.stub(document, 'baseURI').value('http://localhost/');
+      documentBaseURI = sinon.stub(document, 'baseURI').value('http://localhost/');
     });
 
     afterEach(() => {
-      baseUri.restore();
+      documentBaseURI.restore();
     });
 
     it('should return true when paths match', () => {
@@ -46,7 +46,7 @@ describe('url-utils', () => {
     });
 
     it('should use document.baseURI as a base url', () => {
-      baseUri.value('https://vaadin.com/docs/');
+      documentBaseURI.value('https://vaadin.com/docs/');
       expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
     });
 

@@ -4,14 +4,14 @@ import sinon from 'sinon';
 import '../vaadin-side-nav-item.js';
 
 describe('side-nav-item', () => {
-  let item, baseUri;
+  let item, documentBaseURI;
 
   beforeEach(() => {
-    baseUri = sinon.stub(document, 'baseURI').value('http://localhost/');
+    documentBaseURI = sinon.stub(document, 'baseURI').value('http://localhost/');
   });
 
   afterEach(() => {
-    baseUri.restore();
+    documentBaseURI.restore();
   });
 
   describe('custom element definition', () => {
