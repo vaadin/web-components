@@ -115,9 +115,14 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       },
 
       /**
-       * Whether the path of the item matches the current path.
-       * Set when the item is appended to DOM or when navigated back
-       * to the page that contains this item using the browser.
+       * Whether the item's path matches the current browser URL.
+       *
+       * A match occurs when both share the same base origin (like https://example.com),
+       * the same path (like /path/to/page), and the browser URL contains at least
+       * all the query parameters with the same values from the item's path.
+       *
+       * The state is updated when the item is added to the DOM or when the browser
+       * navigates to a new page.
        *
        * @type {boolean}
        */
@@ -266,10 +271,9 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     if (this.path == null) {
       return false;
     }
-    return (
-      matchPaths(document.location.pathname, this.path) ||
-      this.pathAliases.some((alias) => matchPaths(document.location.pathname, alias))
-    );
+
+    const browserPath = `${document.location.pathname}${document.location.search}`;
+    return matchPaths(browserPath, this.path) || this.pathAliases.some((alias) => matchPaths(browserPath, alias));
   }
 }
 

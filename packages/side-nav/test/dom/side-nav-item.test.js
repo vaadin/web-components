@@ -1,11 +1,20 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../../src/vaadin-side-nav-item.js';
 import '@vaadin/icon';
 import '@vaadin/icons';
 
 describe('vaadin-side-nav-item', () => {
-  let sideNavItem;
+  let sideNavItem, documentBaseURI;
+
+  beforeEach(() => {
+    documentBaseURI = sinon.stub(document, 'baseURI').value('http://localhost/');
+  });
+
+  afterEach(() => {
+    documentBaseURI.restore();
+  });
 
   beforeEach(async () => {
     sideNavItem = fixtureSync(
