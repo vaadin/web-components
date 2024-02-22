@@ -5,7 +5,8 @@
  */
 
 /**
- * Checks if one set of URL parameters contains all the parameters from another set.
+ * Checks if one set of URL parameters contains all the parameters
+ * with the same values from another set.
  *
  * @param {URLSearchParams} actual
  * @param {URLSearchParams} expected
@@ -19,9 +20,10 @@ function containsQueryParams(actual, expected) {
 /**
  * Checks if two paths match based on their origin, pathname, and query parameters.
  *
- * The function matches an actual URL against an expected URL to see if they share the same
- * base origin (like https://example.com), the same path (like /path/to/page), and if the
- * actual URL contains all query parameters from the expected URL.
+ * The function matches an actual URL against an expected URL to see if they share
+ * the same base origin (like https://example.com), the same path (like /path/to/page),
+ * and if the actual URL contains at least all the query parameters with the same values
+ * from the expected URL.
  *
  * @param {string} actual The actual URL to match.
  * @param {string} expected The expected URL to match.
