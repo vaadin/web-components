@@ -151,6 +151,7 @@ export const MenuBarMixin = (superClass) =>
         _hasOverflow: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /** @protected */
@@ -855,7 +856,9 @@ export const MenuBarMixin = (superClass) =>
       subMenu.items = items;
       subMenu.listenOn = button;
       const overlay = subMenu._overlayElement;
-      overlay.positionTarget = button;
+      // Unset old positioning to prevent flashing.
+      overlay.removeAttribute('style');
+      overlay.positionTarget = undefined;
       overlay.noVerticalOverlap = true;
 
       this._expandedButton = button;
@@ -891,6 +894,9 @@ export const MenuBarMixin = (superClass) =>
             overlay.$.overlay.focus();
           }
 
+          // Delay setting position target until overlay is rendered
+          // to correctly measure item content in Lit based version.
+          overlay.positionTarget = button;
           overlay._updatePosition();
         },
         { once: true },

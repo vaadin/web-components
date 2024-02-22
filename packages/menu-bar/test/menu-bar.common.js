@@ -1,8 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
+import {
+  arrowLeft,
+  arrowRight,
+  end,
+  fixtureSync,
+  focusin,
+  home,
+  nextRender,
+  nextUpdate,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
 
 describe('custom element definition', () => {
   let menu, tagName;
@@ -24,8 +31,9 @@ describe('custom element definition', () => {
 describe('root menu layout', () => {
   let menu, buttons;
 
-  function updateItemsAndButtons() {
+  async function updateItemsAndButtons() {
     menu.items = [...menu.items];
+    await nextUpdate(menu);
     buttons = menu._buttons;
   }
 
@@ -51,18 +59,21 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should disable all buttons when menu-bar disabled is set to true', () => {
+  it('should disable all buttons when menu-bar disabled is set to true', async () => {
     menu.disabled = true;
+    await nextUpdate(menu);
     buttons.forEach((btn) => {
       expect(btn.disabled).to.be.true;
     });
   });
 
-  it('should keep previously disabled buttons disabled when re-enabling the menu-bar', () => {
+  it('should keep previously disabled buttons disabled when re-enabling the menu-bar', async () => {
     expect(buttons[2].disabled).to.be.true;
     menu.disabled = true;
+    await nextUpdate(menu);
     expect(buttons[2].disabled).to.be.true;
     menu.disabled = false;
+    await nextUpdate(menu);
     expect(buttons[2].disabled).to.be.true;
   });
 
@@ -111,9 +122,9 @@ describe('root menu layout', () => {
         expect(buttons[0].hasAttribute('focused')).to.be.true;
       });
 
-      it('should move focus to second button if first is disabled on "home" keydown', () => {
+      it('should move focus to second button if first is disabled on "home" keydown', async () => {
         menu.items[0].disabled = true;
-        updateItemsAndButtons();
+        await updateItemsAndButtons();
         buttons[3].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         home(buttons[3]);
@@ -129,9 +140,9 @@ describe('root menu layout', () => {
         expect(buttons[3].hasAttribute('focused')).to.be.true;
       });
 
-      it('should move focus to the closest enabled button if last is disabled on "end" keydown', () => {
+      it('should move focus to the closest enabled button if last is disabled on "end" keydown', async () => {
         menu.items[3].disabled = true;
-        updateItemsAndButtons();
+        await updateItemsAndButtons();
         buttons[0].focus();
         const spy = sinon.spy(buttons[1], 'focus');
         end(buttons[0]);
@@ -196,81 +207,88 @@ describe('root menu layout', () => {
   });
 
   describe('updating items', () => {
-    it('should remove buttons when setting empty array', () => {
+    it('should remove buttons when setting empty array', async () => {
       menu.items = [];
+      await nextUpdate(menu);
       expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
     });
 
-    it('should remove buttons when setting falsy items property', () => {
+    it('should remove buttons when setting falsy items property', async () => {
       menu.items = undefined;
+      await nextUpdate(menu);
       expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
     });
   });
 
   describe('theme attribute', () => {
-    it('should propagate theme attribute to all internal buttons', () => {
+    it('should propagate theme attribute to all internal buttons', async () => {
       menu.setAttribute('theme', 'contained');
+      await nextUpdate(menu);
       buttons.forEach((btn) => expect(btn.getAttribute('theme')).to.equal('contained'));
     });
 
     it('should propagate theme attribute to added buttons', async () => {
       menu.setAttribute('theme', 'contained');
-      menu.unshift('items', { text: 'new' });
-      await nextRender(menu);
+      await nextUpdate(menu);
+      menu.items = [{ text: 'new' }, ...menu.items];
+      await nextUpdate(menu);
       buttons.forEach((btn) => expect(btn.getAttribute('theme')).to.equal('contained'));
     });
 
-    it('should remove theme attribute from internal buttons when it is removed from host', () => {
+    it('should remove theme attribute from internal buttons when it is removed from host', async () => {
       menu.setAttribute('theme', 'contained');
+      await nextUpdate(menu);
       menu.removeAttribute('theme');
+      await nextUpdate(menu);
       buttons.forEach((btn) => expect(btn.hasAttribute('theme')).to.be.false);
     });
 
-    it('should override the theme attribute of the component with the item.theme property', () => {
+    it('should override the theme attribute of the component with the item.theme property', async () => {
       menu.setAttribute('theme', 'contained');
       menu.items[1].theme = 'item-theme';
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[0].getAttribute('theme')).to.equal('contained');
       expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
 
       menu.removeAttribute('theme');
+      await nextUpdate(menu);
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
       expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
     });
 
-    it('should support setting multiple themes with an array', () => {
+    it('should support setting multiple themes with an array', async () => {
       menu.items[1].theme = ['theme-1', 'theme-2'];
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[1].getAttribute('theme')).to.equal('theme-1 theme-2');
 
       menu.items[1].theme = [];
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[1].hasAttribute('theme')).to.be.false;
     });
 
-    it('should override the theme attribute of the component with an empty item.theme property', () => {
+    it('should override the theme attribute of the component with an empty item.theme property', async () => {
       menu.setAttribute('theme', 'contained');
       menu.items[0].theme = '';
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = [];
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = [''];
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = null;
-      updateItemsAndButtons();
+      await updateItemsAndButtons();
 
       expect(buttons[0].getAttribute('theme')).to.equal('contained');
     });
@@ -343,7 +361,7 @@ describe('menu-bar in flex', () => {
   let wrapper;
   let menu;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync(`
       <div style="display: flex; width: 400px;">
         <vaadin-menu-bar></vaadin-menu-bar>
@@ -351,6 +369,7 @@ describe('menu-bar in flex', () => {
     `);
     menu = wrapper.firstElementChild;
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }];
+    await nextRender();
   });
 
   it('should not expand to full width of the container', () => {
