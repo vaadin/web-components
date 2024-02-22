@@ -418,4 +418,32 @@ describe('text-area', () => {
       });
     });
   });
+
+  describe('scrolling and cursor positioning', () => {
+    beforeEach(() => {
+      textArea.value = Array(400).join('400');
+      textArea.style.height = '300px';
+      textArea._inputField.style.border = 'none';
+      textArea.style.padding = '0';
+    });
+
+    it('should scroll to start', () => {
+      textArea._inputField.scrollTop = 100; // Simulate scrolling
+      textArea.scrollToStart();
+      expect(textArea._inputField.scrollTop).to.equal(0);
+    });
+
+    it('should scroll to end', () => {
+      textArea.scrollToStart();
+      expect(textArea._inputField.scrollTop).to.equal(0);
+      textArea.scrollToEnd();
+      expect(textArea._inputField.scrollTop).to.equal(textArea._inputField.scrollHeight - textArea.scrollHeight);
+    });
+
+    it('should set cursor position', () => {
+      textArea.setCursorPosition(5);
+      expect(textArea.inputElement.selectionStart).to.equal(5);
+      expect(textArea.inputElement.selectionEnd).to.equal(5);
+    });
+  });
 });
