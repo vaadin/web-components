@@ -272,6 +272,14 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
+    it('should not close the overlay when focusing the scroll bar', () => {
+      comboBox.open();
+
+      focusout(input, overlay);
+
+      expect(comboBox.opened).to.be.true;
+    });
+
     describe('focus', () => {
       it('should restore focus to the input on outside click', async () => {
         comboBox.focus();
@@ -287,6 +295,13 @@ describe('toggling dropdown', () => {
         outsideClick();
         await aTimeout(0);
         expect(document.activeElement).to.equal(input);
+      });
+
+      it('should not remove the focused attribute when focusing the scroll bar', () => {
+        comboBox.focus();
+        comboBox.open();
+        focusout(input, overlay);
+        expect(comboBox.hasAttribute('focused')).to.be.true;
       });
 
       it('should keep focus-ring attribute after closing with Escape', () => {
