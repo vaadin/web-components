@@ -16,6 +16,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
@@ -358,7 +359,9 @@ describe('toggling dropdown', () => {
     });
   });
 
-  (isIOS ? describe : describe.skip)('external focus (initially)', () => {
+  // FIXME: isTouch check returns true for WebKit (Playwright).
+  // See https://github.com/vaadin/web-components/issues/257
+  (isTouch ? describe : describe.skip)('external focus (initially)', () => {
     let input, blurSpy;
 
     beforeEach(() => {

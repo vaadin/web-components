@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isIOS } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-combo-box.js';
 import './not-animated-styles.js';
 import { makeItems, setInputValue } from './helpers.js';
@@ -117,7 +117,7 @@ describe('overlay position', () => {
     });
   });
 
-  (isIOS ? describe.skip : describe)('overlay alignment', () => {
+  describe('overlay alignment', () => {
     describe('horizontal alignment', () => {
       const inputWidth = 150;
 

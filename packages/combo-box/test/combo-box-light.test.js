@@ -6,7 +6,6 @@ import {
   fire,
   fixtureSync,
   isDesktopSafari,
-  isIOS,
   mousedown,
   mouseup,
   nextRender,
@@ -122,7 +121,7 @@ describe('vaadin-combo-box-light', () => {
     });
   });
 
-  (isIOS ? describe.skip : describe)('after opening', () => {
+  describe('after opening', () => {
     beforeEach(() => {
       comboBox.open();
     });
