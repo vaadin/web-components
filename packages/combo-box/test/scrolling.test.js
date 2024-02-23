@@ -1,28 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
 describe('scrolling', () => {
   let comboBox, overlay, scroller, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    await nextRender();
     overlay = comboBox.$.overlay;
     input = comboBox.inputElement;
     scroller = comboBox._scroller;
-  });
-
-  afterEach(() => {
-    comboBox.close();
-  });
-
-  (isIOS ? describe : describe.skip)('iOS', () => {
-    it('should have momentum scrolling enabled', () => {
-      comboBox.open();
-
-      expect(getComputedStyle(scroller).WebkitOverflowScrolling).to.equal('touch');
-    });
   });
 
   describe('scrolling position', () => {

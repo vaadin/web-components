@@ -50,11 +50,6 @@ describe('overlay position', () => {
     await aTimeout(0);
   });
 
-  // Clean out <vaadin-overlay> elements from body.
-  afterEach(() => {
-    comboBox.close();
-  });
-
   describe('overlay position', () => {
     it('should match the input container width', () => {
       comboBox.open();

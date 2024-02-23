@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -8,13 +8,10 @@ import { getAllItems, getFirstItem, setInputValue } from './helpers.js';
 describe('item renderer', () => {
   let comboBox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
-  });
-
-  afterEach(() => {
-    comboBox.opened = false;
   });
 
   describe('arguments', () => {
