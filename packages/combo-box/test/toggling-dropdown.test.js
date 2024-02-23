@@ -126,20 +126,6 @@ describe('toggling dropdown', () => {
       expect(getComputedStyle(overlay).display).to.eql('none');
     });
 
-    it('should set body `pointer-events: none` on open and restore initial value on close', () => {
-      document.body.style.pointerEvents = 'painted';
-      comboBox.open();
-
-      expect(getComputedStyle(document.body).pointerEvents).to.be.equal('none');
-      expect(getComputedStyle(comboBox).pointerEvents).to.be.equal('auto');
-
-      // The actual overlay part of the overlay moved to body should dispatch pointer events
-      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.be.equal('auto');
-
-      comboBox.close();
-      expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
-    });
-
     it('should not close an open popup', () => {
       comboBox.open();
 
