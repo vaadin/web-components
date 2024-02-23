@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fire, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -9,8 +9,9 @@ describe('selecting items', () => {
   let comboBox;
   let valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box style="width: 320px"></vaadin-combo-box>');
+    await nextRender();
     comboBox.items = ['foo', 'bar'];
 
     valueChangedSpy = sinon.spy();
@@ -42,12 +43,7 @@ describe('selecting items', () => {
   });
 
   it('should fire `selection-changed` after the scrolling grace period', async () => {
-    const items = [];
-    for (let i = 1; i < 50; i++) {
-      items.push(i);
-    }
-    comboBox.items = items;
-
+    comboBox.items = new Array(50).fill().map((_, idx) => `${idx}`);
     comboBox.opened = true;
     scrollToIndex(comboBox, 20);
 

@@ -8,6 +8,7 @@ import {
   fixtureSync,
   keyboardEventFor,
   nextFrame,
+  nextRender,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
@@ -21,8 +22,9 @@ describe('keyboard', () => {
     return comboBox._focusedIndex;
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
   });
@@ -469,15 +471,8 @@ describe('keyboard', () => {
 
   describe('scrolling items', () => {
     beforeEach(async () => {
-      const items = [];
-
-      for (let i = 0; i < 100; i++) {
-        items.push(i.toString());
-      }
-
       comboBox.open();
-      comboBox.items = items;
-
+      comboBox.items = new Array(100).fill().map((_, idx) => `${idx}`);
       await aTimeout(1);
     });
 
