@@ -286,7 +286,7 @@ describe('toggling dropdown', () => {
         expect(document.activeElement).to.equal(input);
       });
 
-      it('should keep focus-ring attribute if it was set before opening and input has focus', () => {
+      it('should keep focus-ring attribute after closing with Escape', () => {
         comboBox.focus();
         comboBox.setAttribute('focus-ring', '');
         comboBox.open();
@@ -294,7 +294,7 @@ describe('toggling dropdown', () => {
         expect(comboBox.hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should not keep focus-ring attribute if the combo-box is closed on outside click', () => {
+      it('should not keep focus-ring attribute after closing with outside click', () => {
         comboBox.focus();
         comboBox.setAttribute('focus-ring', '');
         comboBox.open();
