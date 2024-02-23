@@ -188,15 +188,6 @@ export const TextAreaMixin = (superClass) =>
       this._inputField.scrollTop = this._inputField.scrollHeight;
     }
 
-    setCursorPosition(value) {
-      // Set the cursor position in the textarea
-      // Ensure the value is within the valid range
-      this.inputElement.focus();
-      value = Math.max(0, Math.min(value, this.inputElement.value.length));
-      this.inputElement.selectionStart = value;
-      this.inputElement.selectionEnd = value;
-    }
-
     /**
      * Returns true if the current textarea value satisfies all constraints (if any).
      * @return {boolean}

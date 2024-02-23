@@ -419,7 +419,7 @@ describe('text-area', () => {
     });
   });
 
-  describe('scrolling and cursor positioning', () => {
+  describe('scrolling behavior', () => {
     beforeEach(() => {
       textArea.value = Array(400).join('400');
       textArea.style.height = '300px';
@@ -438,12 +438,6 @@ describe('text-area', () => {
       expect(textArea._inputField.scrollTop).to.equal(0);
       textArea.scrollToEnd();
       expect(textArea._inputField.scrollTop).to.equal(textArea._inputField.scrollHeight - textArea.scrollHeight);
-    });
-
-    it('should set cursor position', () => {
-      textArea.setCursorPosition(5);
-      expect(textArea.inputElement.selectionStart).to.equal(5);
-      expect(textArea.inputElement.selectionEnd).to.equal(5);
     });
   });
 });
