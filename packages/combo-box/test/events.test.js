@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -9,10 +9,11 @@ describe('events', () => {
   let comboBox;
 
   describe('custom-value-set event', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.allowCustomValue = true;
       comboBox.items = ['a', 'b'];
+      await nextRender();
       comboBox.inputElement.focus();
     });
 

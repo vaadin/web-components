@@ -7,6 +7,7 @@ import {
   fixtureSync,
   focusout,
   isIOS,
+  nextRender,
   outsideClick,
   tap,
   touchstart,
@@ -15,13 +16,15 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
+    await nextRender();
     input = comboBox.inputElement;
     overlay = comboBox.$.overlay;
   });
@@ -269,6 +272,14 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
+    it('should not close the overlay when focusing the scroll bar', () => {
+      comboBox.open();
+
+      focusout(input, overlay);
+
+      expect(comboBox.opened).to.be.true;
+    });
+
     describe('focus', () => {
       it('should restore focus to the input on outside click', async () => {
         comboBox.focus();
@@ -284,6 +295,13 @@ describe('toggling dropdown', () => {
         outsideClick();
         await aTimeout(0);
         expect(document.activeElement).to.equal(input);
+      });
+
+      it('should not remove the focused attribute when focusing the scroll bar', () => {
+        comboBox.focus();
+        comboBox.open();
+        focusout(input, overlay);
+        expect(comboBox.hasAttribute('focused')).to.be.true;
       });
 
       it('should keep focus-ring attribute after closing with Escape', () => {
@@ -356,7 +374,9 @@ describe('toggling dropdown', () => {
     });
   });
 
-  (isIOS ? describe : describe.skip)('external focus (initially)', () => {
+  // FIXME: isTouch check returns true for WebKit (Playwright).
+  // See https://github.com/vaadin/web-components/issues/257
+  (isTouch ? describe : describe.skip)('external focus (initially)', () => {
     let input, blurSpy;
 
     beforeEach(() => {

@@ -11,6 +11,7 @@ describe('object values', () => {
   describe('label and value paths', () => {
     beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      await nextRender();
       input = comboBox.inputElement;
 
       comboBox.items = [
@@ -32,7 +33,7 @@ describe('object values', () => {
       await nextRender();
     });
 
-    it('it should change combo-box value when value path changes', () => {
+    it('should change combo-box value when value path changes', () => {
       clickItem(comboBox, 0);
       comboBox.itemValuePath = 'custom';
       expect(comboBox.value).to.be.equal('bazs');
