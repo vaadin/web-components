@@ -1,5 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import {
+  arrowDownKeyDown,
+  arrowUpKeyDown,
   aTimeout,
   click,
   escKeyDown,
@@ -19,169 +21,232 @@ import '../vaadin-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 
-describe('toggling dropdown', () => {
+describe('overlay opening', () => {
   let comboBox, overlay, input;
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
+    comboBox = fixtureSync('<vaadin-combo-box label="Label"></vaadin-combo-box>');
     await nextRender();
+    comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
     overlay = comboBox.$.overlay;
   });
 
   describe('opening', () => {
-    it('should open synchronously by clicking label', () => {
-      expect(comboBox.opened).to.be.false;
-      tap(comboBox.querySelector('[slot="label"]'));
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
+    describe('default (auto open)', () => {
+      it('should set opened to false by default', () => {
+        expect(comboBox.opened).to.be.false;
+      });
 
-    it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
-      comboBox.autoOpenDisabled = true;
-      expect(comboBox.opened).to.be.false;
-      tap(comboBox.querySelector('[slot="label"]'));
-      expect(comboBox.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
+      it('should open by clicking label element', () => {
+        comboBox.querySelector('[slot="label"]').click();
 
-    it('should open synchronously by clicking input', () => {
-      expect(comboBox.opened).to.be.false;
-      tap(input);
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-    it('should not open synchronously by clicking input when autoOpenDisabled is true', () => {
-      comboBox.autoOpenDisabled = true;
-      expect(comboBox.opened).to.be.false;
-      tap(input);
-      expect(comboBox.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
+      it('should open by clicking input element', () => {
+        input.click();
 
-    it('should open by clicking icon', () => {
-      tap(comboBox._toggleElement);
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
+      it('should open by clicking toggle button', () => {
+        comboBox._toggleElement.click();
 
-    it('should open by clicking icon when autoOpenDisabled is true and input is invalid', () => {
-      comboBox.autoOpenDisabled = true;
-      setInputValue(comboBox, 3);
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-      tap(comboBox._toggleElement);
+      it('should open by entering input value', () => {
+        setInputValue(comboBox, 'foo');
 
-      expect(comboBox.opened).to.be.true;
-    });
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-    it('should not open the overlay on helper click', () => {
-      comboBox.helperText = 'Helper Text';
-      comboBox.querySelector('[slot=helper]').click();
-      expect(comboBox.opened).to.be.false;
-    });
+      it('should open by clearing input value', () => {
+        comboBox.value = 'foo';
+        expect(comboBox.opened).to.be.false;
 
-    it('should not open the overlay on error message click', () => {
-      comboBox.invalid = true;
-      comboBox.errorMessage = 'Error message';
-      comboBox.querySelector('[slot=error-message]').click();
-      expect(comboBox.opened).to.be.false;
-    });
+        setInputValue(comboBox, '');
 
-    it('should prevent default for the handled toggle-button click', () => {
-      const event = click(comboBox._toggleElement);
-      expect(event.defaultPrevented).to.be.true;
-    });
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-    it('should prevent default for the handled label element click', () => {
-      const event = click(comboBox.querySelector('[slot="label"]'));
-      expect(event.defaultPrevented).to.be.true;
-    });
+      it('should open with Arrow Down key', () => {
+        arrowDownKeyDown(input);
 
-    it('should not prevent default for click when autoOpenDisabled', () => {
-      comboBox.autoOpenDisabled = true;
-      const event = click(comboBox.querySelector('[slot="label"]'));
-      expect(event.defaultPrevented).to.be.false;
-    });
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-    it('should open on function call', () => {
-      comboBox.open();
+      it('should open with Arrow Up key', () => {
+        arrowUpKeyDown(input);
 
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
 
-    it('should not open overlay when setting items to null', () => {
-      comboBox.items = null;
-
-      comboBox.open();
-
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when setting empty items array', () => {
-      comboBox.items = [];
-
-      comboBox.open();
-
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when setting empty filteredItems array', () => {
-      comboBox.filteredItems = [];
-
-      comboBox.open();
-
-      expect(comboBox.opened).to.be.true;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when disabled', () => {
-      comboBox.disabled = true;
-      comboBox.open();
-      expect(comboBox.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when readonly', () => {
-      comboBox.readonly = true;
-      comboBox.open();
-      expect(comboBox.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    (isIOS ? describe : describe.skip)('after opening', () => {
-      beforeEach(() => {
+      it('should open on function call', () => {
         comboBox.open();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
       });
 
-      it('should not set focused attribute on dropdown open', () => {
-        expect(comboBox.hasAttribute('focused')).to.be.false;
-      });
-
-      it('should not refocus the input field when closed from icon', () => {
-        tap(comboBox._toggleElement);
-        expect(comboBox.hasAttribute('focused')).to.be.false;
-      });
-
-      it('should focus input on dropdown open after a timeout', async () => {
-        await aTimeout(1);
-        expect(comboBox.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should refocus the input field when closed from icon', async () => {
-        tap(comboBox._toggleElement);
-        await aTimeout(1);
-        expect(comboBox.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should prevent default on overlay mousedown', () => {
-        const event = fire(overlay, 'mousedown');
+      it('should prevent default for the handled label element click', () => {
+        const event = click(comboBox.querySelector('[slot="label"]'));
         expect(event.defaultPrevented).to.be.true;
       });
+
+      it('should prevent default for the handled toggle button click', () => {
+        const event = click(comboBox._toggleElement);
+        expect(event.defaultPrevented).to.be.true;
+      });
+    });
+
+    describe('auto open disabled', () => {
+      beforeEach(() => {
+        comboBox.autoOpenDisabled = true;
+      });
+
+      it('should not open by clicking label element when autoOpenDisabled is true', () => {
+        comboBox.querySelector('[slot="label"]').click();
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open by clicking input element when autoOpenDisabled is true', () => {
+        input.click();
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open by entering input value when autoOpenDisabled is true', () => {
+        setInputValue(comboBox, 'foo');
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open by clearing input value when autoOpenDisabled is true', () => {
+        comboBox.value = 'foo';
+        expect(comboBox.opened).to.be.false;
+
+        setInputValue(comboBox, '');
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should open by clicking toggle button when autoOpenDisabled is true', () => {
+        comboBox._toggleElement.click();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not prevent default for label click when autoOpenDisabled', () => {
+        const event = click(comboBox.querySelector('[slot="label"]'));
+        expect(event.defaultPrevented).to.be.false;
+      });
+    });
+
+    describe('opening disallowed', () => {
+      it('should not open on helper element click', () => {
+        comboBox.helperText = 'Helper Text';
+        comboBox.querySelector('[slot=helper]').click();
+
+        expect(comboBox.opened).to.be.false;
+      });
+
+      it('should not open on error message element click', () => {
+        comboBox.invalid = true;
+        comboBox.errorMessage = 'Error message';
+
+        comboBox.querySelector('[slot=error-message]').click();
+
+        expect(comboBox.opened).to.be.false;
+      });
+
+      it('should not open overlay when disabled is set to true', () => {
+        comboBox.disabled = true;
+        comboBox.open();
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open overlay when readonly is set to true', () => {
+        comboBox.readonly = true;
+        comboBox.open();
+
+        expect(comboBox.opened).to.be.false;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open overlay when setting items to null', () => {
+        comboBox.items = null;
+
+        comboBox.open();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open overlay when setting empty items array', () => {
+        comboBox.items = [];
+
+        comboBox.open();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not open overlay when setting empty filteredItems array', () => {
+        comboBox.filteredItems = [];
+
+        comboBox.open();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.false;
+      });
+    });
+  });
+
+  (isIOS ? describe : describe.skip)('after opening', () => {
+    beforeEach(() => {
+      comboBox.open();
+    });
+
+    it('should not set focused attribute on dropdown open', () => {
+      expect(comboBox.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should not refocus the input field when closed from icon', () => {
+      tap(comboBox._toggleElement);
+      expect(comboBox.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should focus input on dropdown open after a timeout', async () => {
+      await aTimeout(1);
+      expect(comboBox.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should refocus the input field when closed from icon', async () => {
+      tap(comboBox._toggleElement);
+      await aTimeout(1);
+      expect(comboBox.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should prevent default on overlay mousedown', () => {
+      const event = fire(overlay, 'mousedown');
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 
@@ -315,12 +380,12 @@ describe('toggling dropdown', () => {
         comboBox.open();
 
         // Existent value
-        setInputValue(comboBox, '1');
+        setInputValue(comboBox, 'foo');
         expect(overlay.opened).to.be.true;
         expect(comboBox.opened).to.be.true;
 
         // Non-existent value
-        setInputValue(comboBox, '3');
+        setInputValue(comboBox, 'qux');
         expect(overlay.opened).to.be.false;
         expect(comboBox.opened).to.be.true;
       });
@@ -328,31 +393,13 @@ describe('toggling dropdown', () => {
       it('should not commit value the input on dropdown closing', () => {
         comboBox.open();
 
-        setInputValue(comboBox, '3');
-        expect(input.value).to.equal('3');
+        setInputValue(comboBox, 'qux');
+        expect(input.value).to.equal('qux');
         expect(comboBox.value).to.be.empty;
 
         focusout(input);
         expect(input.value).to.be.empty;
       });
-    });
-  });
-
-  // FIXME: isTouch check returns true for WebKit (Playwright).
-  // See https://github.com/vaadin/web-components/issues/257
-  (isTouch ? describe : describe.skip)('external focus (initially)', () => {
-    let input, blurSpy;
-
-    beforeEach(() => {
-      input = document.createElement('input');
-      comboBox.insertAdjacentElement('beforebegin', input);
-      input.focus();
-      blurSpy = sinon.spy(input, 'blur');
-    });
-
-    it('should blur previously focused element when clicking on toggle button', () => {
-      tap(comboBox._toggleElement);
-      expect(blurSpy.calledOnce).to.be.true;
     });
   });
 });

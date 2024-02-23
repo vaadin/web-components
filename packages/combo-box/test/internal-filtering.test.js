@@ -32,49 +32,12 @@ describe('internal filtering', () => {
       comboBox.items = ['foo', 'bar', 'baz'];
     });
 
-    it('should open the popup if closed', () => {
-      expect(comboBox.opened).to.equal(false);
-
-      setInputValue(comboBox, 'foo');
-
-      expect(comboBox.opened).to.equal(true);
-    });
-
-    it('should not open the popup if closed and autoOpenDisabled is true', () => {
-      comboBox.autoOpenDisabled = true;
-
-      setInputValue(comboBox, 'foo');
-
-      expect(comboBox.opened).to.equal(false);
-    });
-
-    it('should filter items when filter is changed regardless of autoOpenDisabled', () => {
-      comboBox.autoOpenDisabled = true;
-
+    it('should filter items when filter is changed', () => {
       comboBox.value = 'foo';
       comboBox.open();
       setInputValue(comboBox, 'foo ');
 
       expect(comboBox.filteredItems).to.be.empty;
-    });
-
-    it('should open the popup when the value of the input field is set to none', () => {
-      comboBox.value = 'foo';
-      expect(comboBox.opened).to.equal(false);
-
-      setInputValue(comboBox, '');
-
-      expect(comboBox.opened).to.equal(true);
-    });
-
-    it('should not open the popup when the value of the input field is set to none and autoOpenDisabled is true', () => {
-      comboBox.autoOpenDisabled = true;
-      comboBox.value = 'foo';
-      expect(comboBox.opened).to.equal(false);
-
-      setInputValue(comboBox, '');
-
-      expect(comboBox.opened).to.equal(false);
     });
 
     it('should not change the value of the combobox', () => {
