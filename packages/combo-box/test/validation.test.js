@@ -11,9 +11,10 @@ describe('validation', () => {
   describe('basic', () => {
     let validateSpy, changeSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
+      await nextRender();
       input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
       changeSpy = sinon.spy();

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enter, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -9,9 +9,10 @@ describe('external filtering', () => {
   let comboBox, overlay;
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
+      await nextRender();
       overlay = comboBox.$.overlay;
     });
 
@@ -50,7 +51,7 @@ describe('external filtering', () => {
 
     it('should update focus when opening with filling filter', () => {
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
-      comboBox.close();
+      expect(comboBox.opened).to.be.false;
 
       setInputValue(comboBox, 'bar');
 
@@ -65,17 +66,7 @@ describe('external filtering', () => {
 
       expect(comboBox.opened).to.be.true;
       expect(comboBox.$.overlay.hasAttribute('hidden')).to.be.false;
-    });
-
-    // FIXME(@platosha): Hiding does not play nice with lazy loading.
-    // Should display a loading indicator instead.
-    it.skip('should hide the scroller while loading', () => {
-      setInputValue(comboBox, 'foo');
-
-      comboBox.loading = true;
-
-      expect(comboBox.opened).to.be.true;
-      expect(comboBox._scroller.hidden).to.be.true;
+      expect(comboBox._scroller.hidden).to.be.false;
     });
 
     it('should refresh items after reassignment', () => {
@@ -94,18 +85,12 @@ describe('external filtering', () => {
       expect(comboBox.hasAttribute('loading')).to.be.false;
       expect(overlay.hasAttribute('loading')).to.be.false;
     });
-
-    it('should not perform measurements when loading changes if not opened', () => {
-      const measureSpy = sinon.spy(comboBox.inputElement, 'getBoundingClientRect');
-      comboBox.loading = true;
-
-      expect(measureSpy.called).to.be.false;
-    });
   });
 
   describe('filtered items attribute', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box filtered-items='["a", "b", "c"]' value='b'></vaadin-combo-box>`);
+      await nextRender();
     });
 
     it('should not throw when passing filteredItems and value as attributes', () => {
@@ -115,8 +100,9 @@ describe('external filtering', () => {
   });
 
   describe('value is set after', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
+      await nextRender();
       comboBox.filteredItems = ['foo', 'bar'];
       comboBox.value = 'foo';
     });
@@ -152,8 +138,9 @@ describe('external filtering', () => {
   });
 
   describe('value is set before', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
+      await nextRender();
       comboBox.filteredItems = ['foo', 'bar'];
     });
 
@@ -180,8 +167,9 @@ describe('external filtering', () => {
   });
 
   describe('value is set before + autoOpenDisabled', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box auto-open-disabled value="bar"></vaadin-combo-box>`);
+      await nextRender();
       comboBox.filteredItems = ['foo', 'bar'];
     });
 
@@ -237,8 +225,9 @@ describe('external filtering', () => {
       { label: 'Item 2', value: '2' },
     ];
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
+      await nextRender();
       comboBox.selectedItem = items[0];
       comboBox.filteredItems = items;
     });

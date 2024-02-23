@@ -7,6 +7,7 @@ import {
   fixtureSync,
   focusout,
   isIOS,
+  nextRender,
   outsideClick,
   tap,
   touchstart,
@@ -20,8 +21,9 @@ import { getFirstItem, setInputValue } from './helpers.js';
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
+    await nextRender();
     input = comboBox.inputElement;
     overlay = comboBox.$.overlay;
   });

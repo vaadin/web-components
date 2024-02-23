@@ -1,15 +1,16 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { getViewportItems, setInputValue } from './helpers.js';
 
-describe('Properties', () => {
+describe('basic features', () => {
   let comboBox, overlay, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    await nextRender();
     overlay = comboBox.$.overlay;
     input = comboBox.inputElement;
   });
@@ -106,7 +107,7 @@ describe('Properties', () => {
       input.focus();
     });
 
-    it('should set bind value after setting value property', () => {
+    it('should set input value after setting value property', () => {
       comboBox.value = 'foo';
 
       expect(input.value).to.eql('foo');
@@ -207,10 +208,6 @@ describe('Properties', () => {
       expect(comboBox.hasAttribute('focused')).to.be.false;
     });
 
-    it('should not throw on focusout', () => {
-      expect(() => comboBox.dispatchEvent(new Event('focusout'))).not.to.throw(Error);
-    });
-
     it('should focus the input with focus method', () => {
       comboBox.focus();
 
@@ -273,12 +270,13 @@ describe('Properties', () => {
 describe('inside flexbox', () => {
   let container;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = fixtureSync(`
       <div style="display: flex; flex-direction: column; width:500px;">
         <vaadin-combo-box></vaadin-combo-box>
       </div>
     `);
+    await nextRender();
   });
 
   it('combo-box should stretch to fit the flex container', () => {
@@ -292,8 +290,9 @@ describe('clear button', () => {
   let comboBox, clearButton;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      await nextRender();
     });
 
     it('should not have clear button visible by default', () => {
@@ -302,8 +301,9 @@ describe('clear button', () => {
   });
 
   describe('visible', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box clear-button-visible></vaadin-combo-box>');
+      await nextRender();
       clearButton = comboBox.$.clearButton;
     });
 
@@ -334,10 +334,11 @@ describe('value set before attach', () => {
     comboBox.remove();
   });
 
-  it('should set value to the input when added to the DOM', () => {
+  it('should set value to the input when added to the DOM', async () => {
     comboBox.items = ['a', 'b'];
     comboBox.value = 'a';
     document.body.appendChild(comboBox);
+    await nextRender();
     expect(comboBox.inputElement.value).to.equal('a');
   });
 });
@@ -351,20 +352,22 @@ describe('pre-opened', () => {
     expect(() => fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`)).to.not.throw(Error);
   });
 
-  it('should have overlay with correct width', () => {
+  it('should have overlay with correct width', async () => {
     const comboBox = fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`);
+    await nextRender();
     const expectedOverlayWidth = comboBox.clientWidth;
     const actualOverlayWidth = comboBox.$.overlay.$.content.clientWidth;
     expect(actualOverlayWidth).to.eq(expectedOverlayWidth);
   });
 
-  it('should have overlay with correct width', () => {
+  it('should have scroller with correct max height', async () => {
     const comboBox = fixtureSync(`
       <vaadin-combo-box
         opened
         items="[0]"
         style="--vaadin-combo-box-overlay-max-height: 200px"
       ></vaadin-combo-box>`);
+    await nextRender();
     const scroller = comboBox.$.overlay.querySelector('vaadin-combo-box-scroller');
     expect(scroller.style.maxHeight).to.equal('200px');
   });

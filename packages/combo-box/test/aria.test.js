@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { getAllItems } from './helpers.js';
@@ -7,9 +7,10 @@ import { getAllItems } from './helpers.js';
 describe('ARIA', () => {
   let comboBox, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
+    await nextRender();
     input = comboBox.inputElement;
   });
 
@@ -32,8 +33,8 @@ describe('ARIA', () => {
 
     beforeEach(async () => {
       arrowDownKeyDown(input);
-      items = getAllItems(comboBox);
       await nextFrame();
+      items = getAllItems(comboBox);
     });
 
     it('should set aria-activedescendant on the input element depending on the focused item', () => {
