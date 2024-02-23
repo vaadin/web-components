@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import {
   aTimeout,
   click,
+  escKeyDown,
   fire,
   fixtureSync,
   focusout,
@@ -39,13 +40,6 @@ describe('toggling dropdown', () => {
       tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.false;
       expect(overlay.opened).to.be.false;
-    });
-
-    it('should restore attribute focus-ring if it was initially set before opening and combo-box is focused', () => {
-      comboBox.setAttribute('focus-ring', '');
-      comboBox.opened = true;
-      comboBox.opened = false;
-      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should open synchronously by clicking input', () => {
@@ -275,20 +269,40 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should restore focus to the field on outside click', async () => {
-      comboBox.focus();
-      comboBox.open();
-      outsideClick();
-      await aTimeout(0);
-      expect(document.activeElement).to.equal(input);
-    });
+    describe('focus', () => {
+      it('should restore focus to the input on outside click', async () => {
+        comboBox.focus();
+        comboBox.open();
+        outsideClick();
+        await aTimeout(0);
+        expect(document.activeElement).to.equal(input);
+      });
 
-    it('should focus the field on outside click', async () => {
-      expect(document.activeElement).to.equal(document.body);
-      comboBox.open();
-      outsideClick();
-      await aTimeout(0);
-      expect(document.activeElement).to.equal(input);
+      it('should focus the input on outside click if not focused before opening', async () => {
+        expect(document.activeElement).to.equal(document.body);
+        comboBox.open();
+        outsideClick();
+        await aTimeout(0);
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should keep focus-ring attribute after closing with Escape', () => {
+        comboBox.focus();
+        comboBox.setAttribute('focus-ring', '');
+        comboBox.open();
+        escKeyDown(input);
+        expect(comboBox.hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('should not keep focus-ring attribute after closing with outside click', () => {
+        comboBox.focus();
+        comboBox.setAttribute('focus-ring', '');
+        comboBox.open();
+        outsideClick();
+        expect(comboBox.hasAttribute('focus-ring')).to.be.false;
+        // FIXME: see https://github.com/vaadin/web-components/issues/4148
+        // expect(comboBox.hasAttribute('focus-ring')).to.be.true;
+      });
     });
 
     describe('virtual keyboard', () => {

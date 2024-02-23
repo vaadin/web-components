@@ -542,7 +542,6 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       if (opened) {
-        this._openedWithFocusRing = this.hasAttribute('focus-ring');
         // For touch devices, we don't want to popup virtual keyboard
         // unless input element is explicitly focused by the user.
         if (!this._isInputFocused() && !isTouch) {
@@ -554,9 +553,6 @@ export const ComboBoxMixin = (subclass) =>
         this._overlayElement.restoreFocusOnClose = true;
       } else {
         this._onClosed();
-        if (this._openedWithFocusRing && this._isInputFocused()) {
-          this.setAttribute('focus-ring', '');
-        }
       }
 
       const input = this._nativeInput;
