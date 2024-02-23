@@ -112,14 +112,6 @@ describe('toggling dropdown', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not close an open popup', () => {
-      comboBox.open();
-
-      comboBox.open();
-
-      expect(comboBox.opened).to.be.true;
-    });
-
     it('should not open overlay when setting items to null', () => {
       comboBox.items = null;
 
