@@ -131,7 +131,7 @@ export class IronListAdapter {
 
     if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop && !this.grid) {
       // Workaround an iron-list issue by manually adjusting the scroll position
-      this._scrollTop -= this.__getIndexScrollOffset(index) || 0;
+      this._scrollTop -= this.__getIndexScrollOffsetTop(index) || 0;
     }
     this._scrollHandler();
 
@@ -278,9 +278,18 @@ export class IronListAdapter {
     }
   }
 
-  __getIndexScrollOffset(index) {
+  __getIndexScrollOffsetTop(index) {
     const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
-    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
+    if (element) {
+      return this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top;
+    }
+  }
+
+  __getIndexScrollOffsetBottom(index) {
+    const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
+    if (element) {
+      return this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().bottom;
+    }
   }
 
   get size() {
@@ -299,6 +308,8 @@ export class IronListAdapter {
       // Avoid creating unnecessary elements on the following flush()
       this._debouncers._increasePoolIfNeeded.cancel();
     }
+
+    const adjustedScrollPosition = this._getAdjustedScrollPositionOnSizeChange(size);
 
     // Change the size
     this.__size = size;
@@ -329,10 +340,41 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
+    if (adjustedScrollPosition !== undefined) {
+      this._scrollTop = adjustedScrollPosition;
+    }
+
     // Schedule and flush a resize handler. This will cause a
     // re-render for the elements.
     this._resizeHandler();
     flush();
+  }
+
+  _getAdjustedScrollPositionOnSizeChange(newSize) {
+    // Calculate the index of the last item based on the new size.
+    const newLastIndex = newSize - 1;
+
+    // If there are visible items that are beyond the new size, it means
+    // the size is being reduced and we should ensure the scroll position
+    // is at the end after the size change.
+    if (this.lastVisibleIndex > newLastIndex) {
+      return this._scrollHeight;
+    }
+
+    // If only buffered (not visible) items are beyond the new size, we need to adjust the scroll position
+    // to compensate for the items that will be removed at the bottom. This is to prevent the visible range
+    // from shifting up after the size change.
+    const lastRenderedIndex = this._virtualEnd;
+    if (lastRenderedIndex > newLastIndex) {
+      // Calculate the height difference of items that are beyond the new size and are outside the viewport
+      // (guaranteed by the previous condition that checks the last visible index).
+      const delta =
+        this.__getIndexScrollOffsetBottom(lastRenderedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
+
+      // Subtract the calculated difference from the scroll position, which
+      // effectively "moves up" the content.
+      return this._scrollTop - delta;
+    }
   }
 
   /** @private */
