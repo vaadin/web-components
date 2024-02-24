@@ -77,6 +77,27 @@ describe('interactions', () => {
 
       expect(comboBox.opened).to.be.true;
     });
+
+    it('should close the overlay on entering non-existent value', () => {
+      // Existent value
+      setInputValue(comboBox, 'foo');
+      expect(overlay.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
+
+      // Non-existent value
+      setInputValue(comboBox, 'qux');
+      expect(overlay.opened).to.be.false;
+      expect(comboBox.opened).to.be.true;
+    });
+
+    it('should not commit non-existent value on overlay closing', () => {
+      setInputValue(comboBox, 'qux');
+      expect(input.value).to.equal('qux');
+      expect(comboBox.value).to.be.empty;
+
+      focusout(input);
+      expect(input.value).to.be.empty;
+    });
   });
 
   describe('focus', () => {
@@ -234,33 +255,6 @@ describe('interactions', () => {
       await aTimeout(0);
       await sendKeys({ press: 'Tab' });
       expect(input.inputMode).to.equal('');
-    });
-  });
-
-  describe('filtered items are empty', () => {
-    it('should close the dropdown on non-existent values', () => {
-      comboBox.open();
-
-      // Existent value
-      setInputValue(comboBox, 'foo');
-      expect(overlay.opened).to.be.true;
-      expect(comboBox.opened).to.be.true;
-
-      // Non-existent value
-      setInputValue(comboBox, 'qux');
-      expect(overlay.opened).to.be.false;
-      expect(comboBox.opened).to.be.true;
-    });
-
-    it('should not commit value the input on dropdown closing', () => {
-      comboBox.open();
-
-      setInputValue(comboBox, 'qux');
-      expect(input.value).to.equal('qux');
-      expect(comboBox.value).to.be.empty;
-
-      focusout(input);
-      expect(input.value).to.be.empty;
     });
   });
 });
