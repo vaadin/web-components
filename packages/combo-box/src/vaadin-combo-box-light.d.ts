@@ -11,6 +11,7 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxLightMixinClass } from './vaadin-combo-box-light-mixin.js';
 import type { ComboBoxDefaultItem, ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 export {
   ComboBoxDataProvider,
@@ -126,13 +127,6 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
-  /**
-   * Name of the two-way data-bindable property representing the
-   * value of the custom input field.
-   * @attr {string} attr-for-value
-   */
-  attrForValue: string;
-
   addEventListener<K extends keyof ComboBoxLightEventMap<TItem>>(
     type: K,
     listener: (this: ComboBoxLight<TItem>, ev: ComboBoxLightEventMap<TItem>[K]) => void,
@@ -148,6 +142,7 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
 
 interface ComboBoxLight<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxLightMixinClass,
     ComboBoxMixinClass<TItem>,
     KeyboardMixinClass,
     InputMixinClass,

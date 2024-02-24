@@ -19,6 +19,7 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
+import type { ComboBoxLightMixinClass } from '../../src/vaadin-combo-box-light-mixin.js';
 import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import type {
   ComboBox,
@@ -209,9 +210,11 @@ assertType<boolean>(narrowedComboBoxLight.invalid);
 assertType<boolean>(narrowedComboBoxLight.disabled);
 assertType<boolean>(narrowedComboBoxLight.readonly);
 assertType<string>(narrowedComboBoxLight.value);
+assertType<string>(narrowedComboBoxLight.attrForValue);
 
 // ComboBoxLight mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
+assertType<ComboBoxLightMixinClass>(narrowedComboBoxLight);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
 assertType<DisabledMixinClass>(narrowedComboBoxLight);
 assertType<InputMixinClass>(narrowedComboBoxLight);
