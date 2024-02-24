@@ -6,7 +6,6 @@ import {
   fire,
   fixtureSync,
   focusout,
-  isIOS,
   nextRender,
   outsideClick,
   tap,
@@ -16,6 +15,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 
 describe('interactions', () => {
@@ -117,11 +117,6 @@ describe('interactions', () => {
       expect(document.activeElement).to.equal(input);
     });
 
-    it('should focus the input on opening if not focused', () => {
-      comboBox.open();
-      expect(document.activeElement).to.equal(input);
-    });
-
     it('should not blur the input on overlay touchstart', () => {
       comboBox.focus();
       comboBox.open();
@@ -178,15 +173,29 @@ describe('interactions', () => {
       expect(document.activeElement).to.equal(input);
     });
 
-    (isIOS ? it : it.skip)('should not focus input on dropdown open if not focused', () => {
+    // NOTE: WebKit incorrectly detects touch environment
+    // See https://github.com/vaadin/web-components/issues/257
+    (isTouch ? it.skip : it)('should focus the input on opening if not focused', () => {
+      const spy = sinon.spy(input, 'focus');
       comboBox.open();
-      expect(document.activeElement).to.not.equal(input);
+
+      expect(spy).to.be.calledOnce;
+      expect(comboBox.hasAttribute('focused')).to.be.true;
     });
 
-    (isIOS ? it : it.skip)('should not restore focus to the input on toggle button click', () => {
+    (isTouch ? it : it.skip)('should not focus input on dropdown open if not focused', () => {
+      const spy = sinon.spy(input, 'focus');
+      comboBox.open();
+
+      expect(spy).to.be.not.called;
+    });
+
+    (isTouch ? it : it.skip)('should not restore focus to the input on toggle button click', () => {
+      const spy = sinon.spy(input, 'focus');
       comboBox.open();
       tap(comboBox._toggleElement);
-      expect(document.activeElement).to.not.equal(input);
+
+      expect(spy).to.be.not.called;
     });
 
     it('should not remove the focused attribute when focusing the scroll bar', () => {
