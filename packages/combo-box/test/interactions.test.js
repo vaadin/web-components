@@ -30,9 +30,11 @@ describe('interactions', () => {
   });
 
   describe('closing', () => {
-    it('should close overlay on outside click', () => {
+    beforeEach(() => {
       comboBox.open();
+    });
 
+    it('should close overlay on outside click', () => {
       outsideClick();
 
       expect(comboBox.opened).to.be.false;
@@ -40,49 +42,37 @@ describe('interactions', () => {
     });
 
     it('should not close when clicking on the overlay', () => {
-      comboBox.open();
-
       click(overlay);
 
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should not close popup when clicking on any overlay children', () => {
-      comboBox.open();
-
+    it('should not close when clicking on any overlay children', () => {
       comboBox._scroller.click();
 
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should close on clicking icon', () => {
-      comboBox.open();
-
+    it('should close on toggle button click', () => {
       tap(comboBox._toggleElement);
 
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should close the overlay when focus is lost', () => {
-      comboBox.open();
-
+    it('should close the when focus is lost', () => {
       focusout(input);
 
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should not close the overlay when focus is moved to item', () => {
-      comboBox.open();
-
+    it('should not close when focus is moved to item', () => {
       const item = getFirstItem(comboBox);
       focusout(input, item);
 
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should not close the overlay when focusing the scroll bar', () => {
-      comboBox.open();
-
+    it('should not close when focus is moved to overlay', () => {
       focusout(input, overlay);
 
       expect(comboBox.opened).to.be.true;
