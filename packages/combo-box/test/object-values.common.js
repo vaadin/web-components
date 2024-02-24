@@ -291,8 +291,9 @@ describe('object values', () => {
       console.error.restore();
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      await nextRender();
       input = comboBox.inputElement;
       comboBox.itemValuePath = undefined;
       comboBox.itemLabelPath = undefined;

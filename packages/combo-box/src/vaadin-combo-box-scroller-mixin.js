@@ -21,6 +21,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         items: {
           type: Array,
+          sync: true,
           observer: '__itemsChanged',
         },
 
@@ -30,6 +31,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         focusedIndex: {
           type: Number,
+          sync: true,
           observer: '__focusedIndexChanged',
         },
 
@@ -38,6 +40,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         loading: {
           type: Boolean,
+          sync: true,
           observer: '__loadingChanged',
         },
 
@@ -47,6 +50,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          sync: true,
           observer: '__openedChanged',
         },
 
@@ -55,6 +59,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         selectedItem: {
           type: Object,
+          sync: true,
           observer: '__selectedItemChanged',
         },
 
@@ -84,6 +89,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
          */
         renderer: {
           type: Object,
+          sync: true,
           observer: '__rendererChanged',
         },
 
@@ -158,7 +164,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
      * @param {number} index
      */
     scrollIntoView(index) {
-      if (!(this.opened && index >= 0)) {
+      if (!this.__virtualizer || !(this.opened && index >= 0)) {
         return;
       }
 
@@ -285,6 +291,12 @@ export const ComboBoxScrollerMixin = (superClass) =>
         renderer: this.renderer,
         focused: !this.loading && focusedIndex === index,
       });
+
+      // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
+      // However, this causes issues with virtualizer. So we enforce sync update.
+      if (el.performUpdate && !el.hasUpdated) {
+        el.performUpdate();
+      }
 
       el.id = `${this.__hostTagName}-item-${index}`;
       el.setAttribute('role', index !== undefined ? 'option' : false);

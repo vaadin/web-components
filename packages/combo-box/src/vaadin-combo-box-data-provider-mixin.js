@@ -21,6 +21,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
           type: Number,
           value: 50,
           observer: '_pageSizeChanged',
+          sync: true,
         },
 
         /**
@@ -30,6 +31,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         size: {
           type: Number,
           observer: '_sizeChanged',
+          sync: true,
         },
 
         /**
@@ -49,6 +51,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         dataProvider: {
           type: Object,
           observer: '_dataProviderChanged',
+          sync: true,
         },
 
         /** @private */

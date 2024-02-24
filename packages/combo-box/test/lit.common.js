@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { html, LitElement, render } from 'lit';
 import { getViewportItems } from './helpers.js';
 
@@ -7,8 +7,9 @@ describe('lit', () => {
   describe('renderer', () => {
     let comboBox;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
+      await nextRender();
 
       const size = 100;
 

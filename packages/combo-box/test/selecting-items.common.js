@@ -98,20 +98,22 @@ describe('selecting items', () => {
     }).to.not.throw(Error);
   });
 
-  it('should be possible to set selectedItem before attaching to the DOM', () => {
+  it('should be possible to set selectedItem before attaching to the DOM', async () => {
     const clone = comboBox.cloneNode(true);
     clone.items = ['foo', 'bar'];
     clone.selectedItem = 'foo';
     comboBox.parentElement.appendChild(clone);
+    await nextRender();
     expect(clone.value).to.equal('foo');
     clone.remove();
   });
 
-  it('should be possible to set selectedItem after attaching to the DOM and before setting items', () => {
+  it('should be possible to set selectedItem after attaching to the DOM and before setting items', async () => {
     const clone = comboBox.cloneNode(true);
     comboBox.parentElement.appendChild(clone);
     clone.selectedItem = 'foo';
     clone.items = ['foo', 'bar'];
+    await nextRender();
     expect(clone.value).to.equal('foo');
     clone.remove();
   });

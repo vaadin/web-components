@@ -71,6 +71,7 @@ export const ComboBoxMixin = (subclass) =>
           notify: true,
           value: false,
           reflectToAttribute: true,
+          sync: true,
           observer: '_openedChanged',
         },
 
@@ -80,6 +81,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         autoOpenDisabled: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -104,7 +106,10 @@ export const ComboBoxMixin = (subclass) =>
          *   - `model.item` The item.
          * @type {ComboBoxRenderer | undefined}
          */
-        renderer: Function,
+        renderer: {
+          type: Object,
+          sync: true,
+        },
 
         /**
          * A full set of items to filter the visible options from.
@@ -113,6 +118,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         items: {
           type: Array,
+          sync: true,
           observer: '_itemsChanged',
         },
 
@@ -138,6 +144,7 @@ export const ComboBoxMixin = (subclass) =>
         filteredItems: {
           type: Array,
           observer: '_filteredItemsChanged',
+          sync: true,
         },
 
         /**
@@ -154,6 +161,7 @@ export const ComboBoxMixin = (subclass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -164,6 +172,7 @@ export const ComboBoxMixin = (subclass) =>
           type: Number,
           observer: '_focusedIndexChanged',
           value: -1,
+          sync: true,
         },
 
         /**
@@ -174,6 +183,7 @@ export const ComboBoxMixin = (subclass) =>
           type: String,
           value: '',
           notify: true,
+          sync: true,
         },
 
         /**
@@ -183,6 +193,7 @@ export const ComboBoxMixin = (subclass) =>
         selectedItem: {
           type: Object,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -199,6 +210,7 @@ export const ComboBoxMixin = (subclass) =>
           type: String,
           value: 'label',
           observer: '_itemLabelPathChanged',
+          sync: true,
         },
 
         /**
@@ -214,6 +226,7 @@ export const ComboBoxMixin = (subclass) =>
         itemValuePath: {
           type: String,
           value: 'value',
+          sync: true,
         },
 
         /**
@@ -223,7 +236,10 @@ export const ComboBoxMixin = (subclass) =>
          * `dataProvider` callback).
          * @attr {string} item-id-path
          */
-        itemIdPath: String,
+        itemIdPath: {
+          type: String,
+          sync: true,
+        },
 
         /**
          * @type {!HTMLElement | undefined}
@@ -240,17 +256,22 @@ export const ComboBoxMixin = (subclass) =>
          */
         _dropdownItems: {
           type: Array,
+          sync: true,
         },
 
         /** @private */
         _closeOnBlurIsPrevented: Boolean,
 
         /** @private */
-        _scroller: Object,
+        _scroller: {
+          type: Object,
+          sync: true,
+        },
 
         /** @private */
         _overlayOpened: {
           type: Boolean,
+          sync: true,
           observer: '_overlayOpenedChanged',
         },
       };
@@ -260,7 +281,7 @@ export const ComboBoxMixin = (subclass) =>
       return [
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_openedOrItemsChanged(opened, _dropdownItems, loading)',
-        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
+        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, _theme)',
       ];
     }
 
@@ -413,6 +434,18 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
+    /**
+     * Override LitElement lifecycle callback to handle filter property change.
+     * @param {Object} props
+     */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('filter')) {
+        this._filterChanged(this.filter);
+      }
+    }
+
     /** @private */
     _initOverlay() {
       const overlay = this.$.overlay;
@@ -441,24 +474,22 @@ export const ComboBoxMixin = (subclass) =>
      * @protected
      */
     _initScroller(host) {
-      const scrollerTag = `${this._tagNamePrefix}-scroller`;
+      const scroller = document.createElement(`${this._tagNamePrefix}-scroller`);
+
+      scroller.owner = host || this;
+      scroller.getItemLabel = this._getItemLabel.bind(this);
+      scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
       const overlay = this._overlayElement;
 
       overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          root.appendChild(document.createElement(scrollerTag));
+        if (!root.innerHTML) {
+          root.appendChild(scroller);
         }
       };
 
       // Ensure the scroller is rendered
       overlay.requestContentUpdate();
-
-      const scroller = overlay.querySelector(scrollerTag);
-
-      scroller.owner = host || this;
-      scroller.getItemLabel = this._getItemLabel.bind(this);
-      scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
       // Trigger the observer to set properties
       this._scroller = scroller;
@@ -483,6 +514,17 @@ export const ComboBoxMixin = (subclass) =>
           renderer,
           theme,
         });
+
+        // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
+        // This means for the first opening, properties won't be set synchronously.
+        // Call `performUpdate()` in this case to mimic the Polymer version logic.
+        if (scroller.performUpdate && !scroller.hasUpdated) {
+          try {
+            scroller.performUpdate();
+          } catch (_) {
+            // Suppress errors in synchronous tests for pre-opened combo-box.
+          }
+        }
       }
     }
 

@@ -1274,8 +1274,9 @@ describe('lazy loading', () => {
   };
 
   describe('combo-box', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      await nextRender();
     });
 
     describeLazyLoading();
