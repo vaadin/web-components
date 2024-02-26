@@ -374,7 +374,7 @@ export const DataProviderMixin = (superClass) =>
       this._hasData = false;
       this.__updateVisibleRows();
 
-      if (!this.__virtualizer.size) {
+      if (!this.__virtualizer || !this.__virtualizer.size) {
         this._dataProviderController.loadFirstPage();
       }
     }
