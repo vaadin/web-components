@@ -690,6 +690,13 @@ describe('attached', () => {
   });
 });
 
+describe('unattached', () => {
+  it('should not throw on clearCache', () => {
+    const grid = document.createElement('vaadin-grid');
+    expect(() => grid.clearCache()).to.not.throw(Error);
+  });
+});
+
 describe('page size grid', () => {
   it('should render grid rows when setting page-size before size', () => {
     const container = fixtureSync('<page-size-grid></page-size-grid>');
