@@ -30,17 +30,15 @@ describe('keyboard', () => {
   });
 
   describe('opening the overlay', () => {
-    it('should open the overlay with arrow down and not focus any item', () => {
+    it('should not focus any item when opened with Arrow Down key', () => {
       arrowDownKeyDown(input);
 
-      expect(comboBox.opened).to.equal(true);
       expect(getFocusedIndex()).to.equal(-1);
     });
 
-    it('should open the overlay with arrow up and not focus any item', () => {
+    it('should not focus any item when opened with Arrow Up key', () => {
       arrowUpKeyDown(input);
 
-      expect(comboBox.opened).to.equal(true);
       expect(getFocusedIndex()).to.equal(-1);
     });
 

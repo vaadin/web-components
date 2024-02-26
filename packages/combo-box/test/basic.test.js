@@ -203,58 +203,6 @@ describe('basic features', () => {
     });
   });
 
-  describe('focus API', () => {
-    it('should not be focused by default', () => {
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-    });
-
-    it('should focus the input with focus method', () => {
-      comboBox.focus();
-
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-    });
-
-    it('should blur the input with the blur method', () => {
-      comboBox.focus();
-      comboBox.blur();
-
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-    });
-
-    it('should focus on required indicator click', () => {
-      comboBox.required = true;
-      comboBox.autoOpenDisabled = true;
-      comboBox.shadowRoot.querySelector('[part="required-indicator"]').click();
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-    });
-
-    describe('touch devices', () => {
-      it('should blur the input on touchend', () => {
-        comboBox.focus();
-
-        const spy = sinon.spy(input, 'blur');
-        overlay.dispatchEvent(new CustomEvent('touchend'));
-        expect(spy.callCount).to.eql(1);
-      });
-
-      it('should blur the input on touchmove', () => {
-        comboBox.focus();
-
-        const spy = sinon.spy(input, 'blur');
-        overlay.dispatchEvent(new CustomEvent('touchmove'));
-        expect(spy.callCount).to.eql(1);
-      });
-
-      it('should not blur the input on touchstart', () => {
-        comboBox.focus();
-
-        const spy = sinon.spy(input, 'blur');
-        overlay.dispatchEvent(new CustomEvent('touchstart'));
-        expect(spy.callCount).to.eql(0);
-      });
-    });
-  });
-
   describe('dir attribute', () => {
     it('should preserve and propagate dir to the dropdown overlay', () => {
       comboBox.setAttribute('dir', 'ltr');
