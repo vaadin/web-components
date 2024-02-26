@@ -40,7 +40,7 @@ const hasAllParam = process.argv.includes('--all');
  * Check if lockfile has changed.
  */
 const isLockfileChanged = () => {
-  const log = execSync('git diff --name-only origin/main HEAD').toString();
+  const log = execSync('git diff --name-only origin/main HEAD').toString(); // NOSONAR
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 
