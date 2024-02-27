@@ -61,4 +61,14 @@ export declare class TextAreaMixinClass {
    * The pattern must match the entire value, not just some subset.
    */
   pattern: string;
+
+  /**
+   * Scrolls the textarea to the start.
+   */
+  scrollToStart(): void;
+
+  /**
+   * Scrolls the textarea to the end.
+   */
+  scrollToEnd(): void;
 }
