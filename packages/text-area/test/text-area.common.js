@@ -423,8 +423,6 @@ describe('text-area', () => {
     beforeEach(() => {
       textArea.value = Array(400).join('400');
       textArea.style.height = '300px';
-      textArea._inputField.style.border = 'none';
-      textArea.style.padding = '0';
     });
 
     it('should scroll to start', () => {
