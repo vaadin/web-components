@@ -435,7 +435,9 @@ describe('text-area', () => {
       textArea.scrollToStart();
       expect(textArea._inputField.scrollTop).to.equal(0);
       textArea.scrollToEnd();
-      expect(textArea._inputField.scrollTop).to.equal(textArea._inputField.scrollHeight - textArea.scrollHeight);
+      expect(textArea._inputField.scrollTop).to.equal(
+        textArea._inputField.scrollHeight - textArea._inputField.clientHeight,
+      );
     });
   });
 });
