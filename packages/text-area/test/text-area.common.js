@@ -419,7 +419,7 @@ describe('text-area', () => {
     });
   });
 
-  describe('scrolling behavior', () => {
+  describe('programmatic scrolling', () => {
     beforeEach(() => {
       textArea.value = Array(400).join('400');
       textArea.style.height = '300px';
