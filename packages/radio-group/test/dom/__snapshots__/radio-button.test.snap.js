@@ -2,10 +2,28 @@
 export const snapshots = {};
 
 snapshots["vaadin-radio-button host default"] = 
+`<vaadin-radio-button has-value="">
+  <label
+    for="input-vaadin-radio-button-1"
+    id="label-vaadin-radio-button-0"
+    slot="label"
+  >
+  </label>
+  <input
+    id="input-vaadin-radio-button-1"
+    slot="input"
+    tabindex="0"
+    type="radio"
+    value="on"
+  >
+</vaadin-radio-button>
+`;
+/* end snapshot vaadin-radio-button host default */
+
+snapshots["vaadin-radio-button host label"] = 
 `<vaadin-radio-button
   has-label=""
   has-value=""
-  label="Radio button"
 >
   <label
     for="input-vaadin-radio-button-1"
@@ -23,22 +41,19 @@ snapshots["vaadin-radio-button host default"] =
   >
 </vaadin-radio-button>
 `;
-/* end snapshot vaadin-radio-button host default */
+/* end snapshot vaadin-radio-button host label */
 
 snapshots["vaadin-radio-button host disabled"] = 
 `<vaadin-radio-button
   aria-disabled="true"
   disabled=""
-  has-label=""
   has-value=""
-  label="Radio button"
 >
   <label
     for="input-vaadin-radio-button-1"
     id="label-vaadin-radio-button-0"
     slot="label"
   >
-    Radio button
   </label>
   <input
     disabled=""
