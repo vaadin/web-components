@@ -298,6 +298,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
        */
       showWeekNumbers: {
         type: Boolean,
+        value: false,
       },
 
       /**

@@ -200,7 +200,7 @@ function getTimePicker(dateTimePicker) {
     });
 
     it('should propagate showWeekNumbers to date picker', () => {
-      expect(datePicker.showWeekNumbers).to.be.not.ok;
+      expect(datePicker.showWeekNumbers).to.be.false;
       dateTimePicker.showWeekNumbers = true;
       expect(datePicker.showWeekNumbers).to.be.true;
     });
