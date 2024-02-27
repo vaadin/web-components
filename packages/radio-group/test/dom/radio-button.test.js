@@ -8,11 +8,16 @@ describe('vaadin-radio-button', () => {
 
   beforeEach(() => {
     resetUniqueId();
-    radio = fixtureSync('<vaadin-radio-button label="Radio button"></vaadin-radio-button>');
+    radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
   });
 
   describe('host', () => {
     it('default', async () => {
+      await expect(radio).dom.to.equalSnapshot();
+    });
+
+    it('label', async () => {
+      radio.label = 'Radio button';
       await expect(radio).dom.to.equalSnapshot();
     });
 
