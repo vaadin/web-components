@@ -179,14 +179,14 @@ export const TextAreaMixin = (superClass) =>
     }
 
     /**
-     * Scrolls the textarea to the start.
+     * Scrolls the textarea to the start if it has a vertical scrollbar.
      */
     scrollToStart() {
       this._inputField.scrollTop = 0;
     }
 
     /**
-     * Scrolls the textarea to the end.
+     * Scrolls the textarea to the end if it has a vertical scrollbar.
      */
     scrollToEnd() {
       this._inputField.scrollTop = this._inputField.scrollHeight;
