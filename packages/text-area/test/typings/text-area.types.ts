@@ -45,3 +45,6 @@ area.addEventListener('validated', (event) => {
   assertType<TextAreaValidatedEvent>(event);
   assertType<boolean>(event.detail.valid);
 });
+
+assertType<() => void>(area.scrollToStart);
+assertType<() => void>(area.scrollToEnd);

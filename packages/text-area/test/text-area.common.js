@@ -418,4 +418,26 @@ describe('text-area', () => {
       });
     });
   });
+
+  describe('programmatic scrolling', () => {
+    beforeEach(() => {
+      textArea.value = Array(400).join('400');
+      textArea.style.height = '300px';
+    });
+
+    it('should scroll to start', () => {
+      textArea._inputField.scrollTop = 100; // Simulate scrolling
+      textArea.scrollToStart();
+      expect(textArea._inputField.scrollTop).to.equal(0);
+    });
+
+    it('should scroll to end', () => {
+      textArea.scrollToStart();
+      expect(textArea._inputField.scrollTop).to.equal(0);
+      textArea.scrollToEnd();
+      expect(textArea._inputField.scrollTop).to.equal(
+        textArea._inputField.scrollHeight - textArea._inputField.clientHeight,
+      );
+    });
+  });
 });
