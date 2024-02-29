@@ -1279,6 +1279,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
     return !items && readonly ? selectedItems : filteredItems;
   }
+
+  /**
+   * Fired when the user sets a custom value.
+   * @event custom-value-set
+   * @param {string} detail the custom value
+   */
 }
 
 defineCustomElement(MultiSelectComboBox);
