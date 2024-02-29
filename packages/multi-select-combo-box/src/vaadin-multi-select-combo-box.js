@@ -1283,6 +1283,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // and keep the overlay opened when clicking a chip.
     event.preventDefault();
   }
+
+  /**
+   * Fired when the user sets a custom value.
+   * @event custom-value-set
+   * @param {string} detail the custom value
+   */
 }
 
 defineCustomElement(MultiSelectComboBox);
