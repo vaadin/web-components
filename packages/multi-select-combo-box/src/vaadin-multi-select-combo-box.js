@@ -1295,6 +1295,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   get _hasValue() {
     return this.selectedItems && this.selectedItems.length > 0;
   }
+
+  /**
+   * Fired when the user sets a custom value.
+   * @event custom-value-set
+   * @param {string} detail the custom value
+   */
 }
 
 customElements.define(MultiSelectComboBox.is, MultiSelectComboBox);
