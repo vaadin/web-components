@@ -317,11 +317,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __hasRowsWithClientHeight() {
-      return !!Array.from(this.$.items.children).filter((row) => row.clientHeight).length;
-    }
-
-    /** @private */
     __getIntrinsicWidth(col) {
       if (!this.__intrinsicWidthCache.has(col)) {
         this.__calculateAndCacheIntrinsicWidths([col]);
@@ -498,12 +493,23 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     __tryToRecalculateColumnWidthsIfPending() {
-      if (
-        this.__pendingRecalculateColumnWidths &&
-        !isElementHidden(this) &&
-        !this._dataProviderController.isLoading() &&
-        this.__hasRowsWithClientHeight()
-      ) {
+      if (!this.__pendingRecalculateColumnWidths || isElementHidden(this) || this._dataProviderController.isLoading()) {
+        return;
+      }
+
+      // Delay recalculation if any rows are missing an index, which might occur during the grid's initialization
+      // if the recalculation is triggered in the middle of the virtualizer update loop (_updateScrollerItem).
+      // This can happen if the data provider responds synchronously to the page request. In this case, rows after
+      // the one that triggered the page request may not have an index property yet, leading to _onDataProviderPageReceived
+      // not requesting children for these rows, and setting the loading state to false. However, these rows will be processed
+      // shorly after in the next iteration of the virtualizer update loop.
+      const hasRowsWithUndefinedIndex = [...this.$.items.children].some((row) => row.index === undefined);
+      if (hasRowsWithUndefinedIndex) {
+        return;
+      }
+
+      const hasRowsWithClientHeight = [...this.$.items.children].some((row) => row.clientHeight > 0);
+      if (hasRowsWithClientHeight) {
         this.__pendingRecalculateColumnWidths = false;
         this.recalculateColumnWidths();
       }
