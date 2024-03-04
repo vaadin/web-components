@@ -497,12 +497,15 @@ export const GridMixin = (superClass) =>
         return;
       }
 
-      // Delay recalculation if any rows are missing an index, which might occur during the grid's initialization
-      // if the recalculation is triggered in the middle of the virtualizer update loop (_updateScrollerItem).
-      // This can happen if the data provider responds synchronously to the page request. In this case, rows after
-      // the one that triggered the page request may not have an index property yet, leading to _onDataProviderPageReceived
-      // not requesting children for these rows, and setting the loading state to false. However, these rows will be processed
-      // shorly after in the next iteration of the virtualizer update loop.
+      // Delay recalculation if any rows are missing an index.
+      // This can happen during the grid's initialization if the recalculation is triggered
+      // as a result of the data provider responding synchronously to a page request created
+      // in the middle of the virtualizer update loop. In this case, rows after the one that
+      // triggered the page request may not have an index property yet. The lack of index
+      // prevents _onDataProviderPageReceived from requesting children for these rows,
+      // resulting in loading state being set to false and the recalculation beginning
+      // before all the data is loaded. Note, rows without index get updated in later iterations
+      // of the virtualizer update loop, ensuring the grid eventually reaches a stable state.
       const hasRowsWithUndefinedIndex = [...this.$.items.children].some((row) => row.index === undefined);
       if (hasRowsWithUndefinedIndex) {
         return;
