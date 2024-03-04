@@ -341,14 +341,14 @@ describe('async recalculateWidth columns', () => {
   });
 
   describe('initially empty grid', () => {
-    let spy, dataProvider;
+    let recalculateColumnWidthsSpy, dataProvider;
 
     beforeEach(() => {
-      spy = sinon.spy(grid, 'recalculateColumnWidths');
+      recalculateColumnWidthsSpy = sinon.spy(grid, 'recalculateColumnWidths');
       dataProvider = (_params, callback) => callback([], 0);
       grid.dataProvider = (params, callback) => dataProvider(params, callback);
       flushGrid(grid);
-      spy.resetHistory();
+      recalculateColumnWidthsSpy.resetHistory();
     });
 
     it('should recalculate column widths when child items are loaded asynchonously', async () => {
@@ -366,9 +366,9 @@ describe('async recalculateWidth columns', () => {
       grid.size = 2;
       flushGrid(grid);
 
-      expect(spy).to.be.not.called;
+      expect(recalculateColumnWidthsSpy).to.be.not.called;
       await aTimeout(0);
-      expect(spy).to.be.calledOnce;
+      expect(recalculateColumnWidthsSpy).to.be.calledOnce;
     });
   });
 });
