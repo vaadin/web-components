@@ -317,11 +317,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __hasRowsWithClientHeight() {
-      return !!Array.from(this.$.items.children).filter((row) => row.clientHeight).length;
-    }
-
-    /** @private */
     __getIntrinsicWidth(col) {
       if (!this.__intrinsicWidthCache.has(col)) {
         this.__calculateAndCacheIntrinsicWidths([col]);
@@ -498,12 +493,26 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     __tryToRecalculateColumnWidthsIfPending() {
-      if (
-        this.__pendingRecalculateColumnWidths &&
-        !isElementHidden(this) &&
-        !this._dataProviderController.isLoading() &&
-        this.__hasRowsWithClientHeight()
-      ) {
+      if (!this.__pendingRecalculateColumnWidths || isElementHidden(this) || this._dataProviderController.isLoading()) {
+        return;
+      }
+
+      // Delay recalculation if any rows are missing an index.
+      // This can happen during the grid's initialization if the recalculation is triggered
+      // as a result of the data provider responding synchronously to a page request created
+      // in the middle of the virtualizer update loop. In this case, rows after the one that
+      // triggered the page request may not have an index property yet. The lack of index
+      // prevents _onDataProviderPageReceived from requesting children for these rows,
+      // resulting in loading state being set to false and the recalculation beginning
+      // before all the data is loaded. Note, rows without index get updated in later iterations
+      // of the virtualizer update loop, ensuring the grid eventually reaches a stable state.
+      const hasRowsWithUndefinedIndex = [...this.$.items.children].some((row) => row.index === undefined);
+      if (hasRowsWithUndefinedIndex) {
+        return;
+      }
+
+      const hasRowsWithClientHeight = [...this.$.items.children].some((row) => row.clientHeight > 0);
+      if (hasRowsWithClientHeight) {
         this.__pendingRecalculateColumnWidths = false;
         this.recalculateColumnWidths();
       }
