@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -267,7 +267,7 @@ describe('async recalculateWidth columns', () => {
     `);
   });
 
-  it('should recalculate column widths when child items loaded', () => {
+  it('should recalculate column widths when child items are loaded synchronously', () => {
     const data = [
       {
         name: 'foo',
@@ -290,6 +290,38 @@ describe('async recalculateWidth columns', () => {
     grid._getData();
     flushGrid(grid);
     expect(grid._recalculateColumnWidths.called).to.be.true;
+  });
+
+  describe('initially empty grid', () => {
+    let recalculateColumnWidthsSpy, dataProvider;
+
+    beforeEach(() => {
+      recalculateColumnWidthsSpy = sinon.spy(grid, 'recalculateColumnWidths');
+      dataProvider = (_params, callback) => callback([], 0);
+      grid.dataProvider = (params, callback) => dataProvider(params, callback);
+      flushGrid(grid);
+      recalculateColumnWidthsSpy.resetHistory();
+    });
+
+    it('should recalculate column widths when child items are loaded asynchonously', async () => {
+      const items = [{ name: 'Item-0' }, { name: 'Item-1', children: [{ name: 'Item-1-0' }] }];
+
+      dataProvider = ({ parentItem }, callback) => {
+        if (parentItem) {
+          setTimeout(() => callback(parentItem.children, parentItem.children.length));
+        } else {
+          callback(items.slice(0, grid.size), grid.size);
+        }
+      };
+
+      grid.expandItem(items[1]);
+      grid.size = 2;
+      flushGrid(grid);
+
+      expect(recalculateColumnWidthsSpy).to.be.not.called;
+      await aTimeout(0);
+      expect(recalculateColumnWidthsSpy).to.be.calledOnce;
+    });
   });
 });
 
