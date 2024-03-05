@@ -206,10 +206,6 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _getItem(index, el) {
-      if (index >= this._flatSize) {
-        return;
-      }
-
       el.index = index;
 
       const { item } = this._dataProviderController.getFlatIndexContext(index);
