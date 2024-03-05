@@ -23,6 +23,7 @@ registerStyles(
         var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
       /* Fallback */
       --_input-container-radius: var(--vaadin-input-field-border-radius, var(--lumo-border-radius-m));
+      --_input-height: var(--lumo-text-field-size, var(--lumo-size-m));
       /* Default values */
       --_background: var(--vaadin-input-field-background, var(--lumo-contrast-10pct));
       --_hover-highlight: var(--vaadin-input-field-hover-highlight, var(--lumo-contrast-50pct));
@@ -57,7 +58,7 @@ registerStyles(
 
     ::slotted(:not([slot$='fix'])) {
       cursor: inherit;
-      min-height: var(--lumo-text-field-size, var(--lumo-size-m));
+      min-height: var(--vaadin-input-field-height, var(--_input-height));
       padding: 0 0.25em;
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
       -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
