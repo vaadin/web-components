@@ -143,7 +143,6 @@ export class IronListAdapter {
   }
 
   flush() {
-    const startPhysicalCount = this._physicalCount;
     // The scroll target is hidden.
     if (this.scrollTarget.offsetHeight === 0) {
       return;
@@ -160,11 +159,6 @@ export class IronListAdapter {
     }
     if (this.__debouncerWheelAnimationFrame) {
       this.__debouncerWheelAnimationFrame.flush();
-    }
-
-    if (this._physicalCount !== startPhysicalCount) {
-      // Flushing again until physical count stabilizes fixes https://github.com/vaadin/flow-components/issues/5595#issuecomment-1770278913
-      this.flush();
     }
   }
 
