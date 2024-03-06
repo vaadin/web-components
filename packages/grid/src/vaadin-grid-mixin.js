@@ -826,7 +826,7 @@ export const GridMixin = (superClass) =>
 
       this._updateRowOrderParts(row);
       this._a11yUpdateRowRowindex(row);
-      this._getItem(row);
+      this._requestOrUpdateRowItem(row);
     }
 
     /** @private */
