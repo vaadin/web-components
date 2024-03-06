@@ -186,18 +186,26 @@ export const DataProviderMixin = (superClass) =>
      * @param {HTMLElement} row
      * @protected
      */
-    _getItem(row) {
+    _requestOrUpdateRowItem(row) {
       const { item } = this._dataProviderController.getFlatIndexContext(row.index);
       if (item) {
-        this.__updateLoading(row, false);
+        this._updateRowLoading(row, false);
         this._updateItem(row, item);
         if (this._isExpanded(item)) {
-          this._dataProviderController.ensureFlatIndexHierarchy(row.index);
+          this._ensureRowHierarchy(row);
         }
       } else {
-        this.__updateLoading(row, true);
+        this._updateRowLoading(row, true);
         this._dataProviderController.ensureFlatIndexLoaded(row.index);
       }
+    }
+
+    /**
+     * @param {HTMLElement} row
+     * @private
+     */
+    _ensureRowHierarchy(row) {
+      this._dataProviderController.ensureFlatIndexHierarchy(row.index);
     }
 
     /**
@@ -205,7 +213,7 @@ export const DataProviderMixin = (superClass) =>
      * @param {boolean} loading
      * @private
      */
-    __updateLoading(row, loading) {
+    _updateRowLoading(row, loading) {
       const cells = getBodyRowCells(row);
 
       // Row state attribute
@@ -309,9 +317,7 @@ export const DataProviderMixin = (superClass) =>
       }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      this._getRenderedRows().forEach((row) => {
-        this._dataProviderController.ensureFlatIndexHierarchy(row.index);
-      });
+      this._getRenderedRows().forEach((row) => this._ensureRowHierarchy(row));
 
       this._hasData = true;
     }
@@ -328,7 +334,7 @@ export const DataProviderMixin = (superClass) =>
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
           if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
-            this._getItem(row);
+            this._requestOrUpdateRowItem(row);
           }
         });
 
