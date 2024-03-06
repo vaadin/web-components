@@ -57,11 +57,10 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {number} index
      * @protected
      */
-    _a11yUpdateRowRowindex(row, index) {
-      row.setAttribute('aria-rowindex', index + this._a11yGetHeaderRowCount(this._columnTree) + 1);
+    _a11yUpdateRowRowindex(row) {
+      row.setAttribute('aria-rowindex', row.index + this._a11yGetHeaderRowCount(this._columnTree) + 1);
     }
 
     /**
