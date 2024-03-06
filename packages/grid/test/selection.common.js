@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   fire,
@@ -252,6 +253,73 @@ describe('multi selection column', () => {
     expect(grid.selectedItems).to.eql([]);
   });
 
+  it('should add the item to selectedItems on selection column cell Space key', async () => {
+    const cell = getRowCells(rows[1])[0];
+    cell.focus();
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([grid.items[1]]);
+  });
+
+  it('should remove the item from selectedItems on selection column cell Space key', async () => {
+    grid.selectItem(grid.items[1]);
+    const cell = getRowCells(rows[1])[0];
+
+    cell.focus();
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([]);
+  });
+
+  it('should add the item to selectedItems on selection column cell Space key when autoSelect is false', async () => {
+    selectionColumn.autoSelect = false;
+
+    const cell = getRowCells(rows[1])[0];
+    cell.focus();
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([grid.items[1]]);
+  });
+
+  it('should remove the item from selectedItems on selection column cell Space key when autoSelect is false', async () => {
+    selectionColumn.autoSelect = false;
+
+    grid.selectItem(grid.items[1]);
+    const cell = getRowCells(rows[1])[0];
+    cell.focus();
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([]);
+  });
+
+  it('should add the item to selectedItems on selection column checkbox Space key', async () => {
+    selectionColumn.autoSelect = false;
+
+    const cell = getRowCells(rows[1])[0];
+    cell.focus();
+
+    // Enter interaction mode to focus checkbox
+    await sendKeys({ press: 'Enter' });
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([grid.items[1]]);
+  });
+
+  it('should remove the item from selectedItems on selection column checkbox Space key', async () => {
+    selectionColumn.autoSelect = false;
+
+    grid.selectItem(grid.items[1]);
+
+    const cell = getRowCells(rows[1])[0];
+    cell.focus();
+
+    // Enter interaction mode to focus checkbox
+    await sendKeys({ press: 'Enter' });
+    await sendKeys({ press: 'Space' });
+
+    expect(grid.selectedItems).to.eql([]);
+  });
+
   it('should have bound the body checkbox to selected items', () => {
     const selectCheckbox = firstBodyCheckbox;
 
@@ -271,6 +339,21 @@ describe('multi selection column', () => {
   it('should set selectAll when header checkbox is clicked', async () => {
     selectAllCheckbox.click();
     await nextFrame();
+    expect(selectionColumn.selectAll).to.be.true;
+  });
+
+  it('should set selectAll on header cell Space key', async () => {
+    const headerCell = getRowCells(headerRows[1])[0];
+    headerCell.focus();
+    await sendKeys({ press: 'Space' });
+    expect(selectionColumn.selectAll).to.be.true;
+  });
+
+  it('should set selectAll on header cell checkbox Space key', async () => {
+    const headerCell = getRowCells(headerRows[1])[0];
+    headerCell.focus();
+    await sendKeys({ press: 'Enter' });
+    await sendKeys({ press: 'Space' });
     expect(selectionColumn.selectAll).to.be.true;
   });
 

@@ -98,7 +98,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @override
      */
-    _defaultHeaderRenderer(root, _column) {
+    _defaultHeaderRenderer(root, column) {
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
@@ -107,6 +107,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
         checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
+        // Toggle on Space without having to enter interaction mode first
+        column._headerCell.addEventListener('keydown', (e) => {
+          if (e.keyCode === 32 && e.composedPath()[0] === column._headerCell) {
+            checkbox.checked = !checkbox.checked;
+          }
+        });
       }
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
@@ -132,6 +138,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
         root.addEventListener('click', this.__onCellClick.bind(this));
+        const cell = root.assignedSlot.parentNode;
+        cell.addEventListener('keydown', (e) => {
+          // Prevent handling click on Space twice
+          if (!this.autoSelect && e.keyCode === 32 && e.composedPath()[0] === cell) {
+            checkbox.checked = !checkbox.checked;
+          }
+        });
       }
 
       checkbox.__item = item;
