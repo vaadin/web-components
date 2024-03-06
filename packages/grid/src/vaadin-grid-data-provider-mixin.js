@@ -183,23 +183,20 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /**
-     * @param {number} index
-     * @param {HTMLElement} el
+     * @param {HTMLElement} row
      * @protected
      */
-    _getItem(index, el) {
-      el.index = index;
-
-      const { item } = this._dataProviderController.getFlatIndexContext(index);
+    _getItem(row) {
+      const { item } = this._dataProviderController.getFlatIndexContext(row.index);
       if (item) {
-        this.__updateLoading(el, false);
-        this._updateItem(el, item);
+        this.__updateLoading(row, false);
+        this._updateItem(row, item);
         if (this._isExpanded(item)) {
-          this._dataProviderController.ensureFlatIndexHierarchy(index);
+          this._dataProviderController.ensureFlatIndexHierarchy(row.index);
         }
       } else {
-        this.__updateLoading(el, true);
-        this._dataProviderController.ensureFlatIndexLoaded(index);
+        this.__updateLoading(row, true);
+        this._dataProviderController.ensureFlatIndexLoaded(row.index);
       }
     }
 
@@ -331,7 +328,7 @@ export const DataProviderMixin = (superClass) =>
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
           if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
-            this._getItem(row.index, row);
+            this._getItem(row);
           }
         });
 

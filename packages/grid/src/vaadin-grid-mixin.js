@@ -639,10 +639,11 @@ export const GridMixin = (superClass) =>
         return;
       }
 
-      this._updateRowOrderParts(row, index);
+      row.index = index;
 
-      this._a11yUpdateRowRowindex(row, index);
-      this._getItem(index, row);
+      this._updateRowOrderParts(row);
+      this._a11yUpdateRowRowindex(row);
+      this._getItem(row);
     }
 
     /** @private */
@@ -652,12 +653,12 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateRowOrderParts(row, index = row.index) {
+    _updateRowOrderParts(row) {
       updateBooleanRowStates(row, {
-        first: index === 0,
-        last: index === this._flatSize - 1,
-        odd: index % 2 !== 0,
-        even: index % 2 === 0,
+        first: row.index === 0,
+        last: row.index === this._flatSize - 1,
+        odd: row.index % 2 !== 0,
+        even: row.index % 2 === 0,
       });
     }
 
