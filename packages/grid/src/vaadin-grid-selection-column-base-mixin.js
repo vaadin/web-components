@@ -107,12 +107,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
         checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
-        // Toggle on Space without having to enter interaction mode first
-        column._headerCell.addEventListener('keydown', (e) => {
-          if (e.keyCode === 32 && e.composedPath()[0] === column._headerCell) {
-            checkbox.checked = !checkbox.checked;
-          }
-        });
+        column._headerCell.addEventListener('keydown', this.__onHeaderCellKeydown.bind(this));
       }
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
@@ -138,13 +133,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
         root.addEventListener('click', this.__onCellClick.bind(this));
-        const cell = root.assignedSlot.parentNode;
-        cell.addEventListener('keydown', (e) => {
-          // Prevent handling click on Space twice
-          if (!this.autoSelect && e.keyCode === 32 && e.composedPath()[0] === cell) {
-            checkbox.checked = !checkbox.checked;
-          }
-        });
+        root.assignedSlot.parentNode.addEventListener('keydown', this.__onCellKeydown.bind(this));
       }
 
       checkbox.__item = item;
@@ -243,6 +232,25 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         // don't  want to toggle it again from clicking the checkbox or changing
         // the active item.
         e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onHeaderCellKeydown(e) {
+      // Toggle on Space without having to enter interaction mode first
+      if (e.keyCode === 32 && e.composedPath()[0] === this._headerCell) {
+        const checkbox = this._headerCell._content.firstElementChild;
+        checkbox.checked = !checkbox.checked;
+      }
+    }
+
+    /** @private */
+    __onCellKeydown(e) {
+      const target = e.composedPath()[0];
+      // Toggle on Space without having to enter interaction mode first
+      if (!this.autoSelect && e.keyCode === 32 && this._cells.includes(target)) {
+        const checkbox = target._content.firstElementChild;
+        checkbox.checked = !checkbox.checked;
       }
     }
 
