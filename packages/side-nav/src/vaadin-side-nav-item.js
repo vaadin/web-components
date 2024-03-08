@@ -262,8 +262,23 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   __updateCurrent() {
     this._setCurrent(this.__isCurrent());
     if (this.current) {
+      this.__expandParentItems();
       this.expanded = this._items.length > 0;
     }
+  }
+
+  /** @private */
+  __expandParentItems() {
+    const parentItem = this.__getParentItem();
+    if (parentItem) {
+      parentItem.__expandParentItems();
+    }
+    this.expanded = true;
+  }
+
+  /** @private */
+  __getParentItem() {
+    return this.parentElement instanceof SideNavItem ? this.parentElement : null;
   }
 
   /** @private */
