@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/charts",
-  "version": "23.3.30",
+  "version": "23.3.31",
   "publishConfig": {
     "access": "public"
   },
@@ -36,10 +36,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.3.30",
-    "@vaadin/vaadin-lumo-styles": "~23.3.30",
-    "@vaadin/vaadin-material-styles": "~23.3.30",
-    "@vaadin/vaadin-themable-mixin": "~23.3.30",
+    "@vaadin/component-base": "~23.3.31",
+    "@vaadin/vaadin-lumo-styles": "~23.3.31",
+    "@vaadin/vaadin-material-styles": "~23.3.31",
+    "@vaadin/vaadin-themable-mixin": "~23.3.31",
     "highcharts": "9.2.2"
   },
   "devDependencies": {

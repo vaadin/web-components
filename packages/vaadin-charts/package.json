@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-charts",
-  "version": "23.3.30",
+  "version": "23.3.31",
   "publishConfig": {
     "access": "public"
   },
@@ -33,7 +33,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/charts": "~23.3.30"
+    "@vaadin/charts": "~23.3.31"
   },
   "cvdlName": "vaadin-chart"
 }
