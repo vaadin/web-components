@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-combo-box.js';
 import { flushComboBox, getViewportItems, scrollToIndex } from './helpers.js';
 
 describe('dynamic size change', () => {

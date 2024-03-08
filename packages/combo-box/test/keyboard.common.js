@@ -12,7 +12,6 @@ import {
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-combo-box.js';
 import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {

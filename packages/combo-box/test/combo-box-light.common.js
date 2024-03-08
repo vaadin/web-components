@@ -15,8 +15,6 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
-import './not-animated-styles.js';
-import '../vaadin-combo-box-light.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem } from './helpers.js';

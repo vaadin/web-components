@@ -1,11 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/text-field/vaadin-text-field.js';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
-import '../vaadin-combo-box-light.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
   clickItem,
@@ -20,15 +15,6 @@ import {
   scrollToIndex,
   setInputValue,
 } from './helpers.js';
-
-registerStyles(
-  'vaadin-combo-box*',
-  css`
-    :host {
-      --vaadin-combo-box-overlay-max-height: 400px;
-    }
-  `,
-);
 
 describe('lazy loading', () => {
   const DEFAULT_PAGE_SIZE = 50;
