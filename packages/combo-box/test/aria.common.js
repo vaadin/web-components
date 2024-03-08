@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
 import { getAllItems } from './helpers.js';
 
 describe('ARIA', () => {

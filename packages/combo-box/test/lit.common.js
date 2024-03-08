@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
 import { html, LitElement, render } from 'lit';
 import { getViewportItems } from './helpers.js';
 

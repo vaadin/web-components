@@ -13,8 +13,6 @@ import {
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 

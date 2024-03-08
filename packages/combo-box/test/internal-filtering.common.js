@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 

@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
 import { getFocusedItemIndex, setInputValue } from './helpers.js';
 
 describe('external filtering', () => {
