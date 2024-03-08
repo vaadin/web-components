@@ -15,7 +15,7 @@ describe('virtualizer', () => {
     }
 
     scrollTarget = fixtureSync(`
-      <div style="height: 100px;">
+      <div style="height: 150px;">
         <div></div>
       </div>
     `);
@@ -174,7 +174,7 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should restore scroll position on size change', () => {
+  it('should restore scroll position offset on size increase', () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
     scrollTarget.scrollTop += 10;
@@ -182,6 +182,29 @@ describe('virtualizer', () => {
     virtualizer.size *= 2;
     const item = elementsContainer.querySelector('#item-50');
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
+  });
+
+  it('should set scroll to end when last visible index exceeds bounds after size decrease', () => {
+    virtualizer.scrollToIndex(50);
+    virtualizer.size = virtualizer.lastVisibleIndex - 20;
+    const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
+    expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
+  });
+
+  it('should restore scroll position when last buffered index exceeds bounds after size decrease', () => {
+    virtualizer.scrollToIndex(50);
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+    const item = elementsContainer.querySelector('#item-50');
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top, 1);
+  });
+
+  it('should restore scroll position offset when last buffered index exceeds bounds after size decrease', async () => {
+    virtualizer.scrollToIndex(50);
+    scrollTarget.scrollTop += 10;
+    await nextFrame();
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+    const item = elementsContainer.querySelector('#item-50');
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
   it('should not request item updates on size increase', () => {

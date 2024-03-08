@@ -350,29 +350,29 @@ export class IronListAdapter {
     flush();
   }
 
+  /** @private */
   _getAdjustedScrollPositionOnSizeChange(newSize) {
     // Calculate the index of the last item based on the new size.
     const newLastIndex = newSize - 1;
 
-    // If there are visible items that are beyond the new size, it means
-    // the size is being reduced and we should ensure the scroll position
-    // is at the end after the size change.
+    // If there are visible items that exceed the new size bounds,
+    // it means the size is being reduced and we should set scroll
+    // to the end after the size change.
     if (this.lastVisibleIndex > newLastIndex) {
       return this._scrollHeight;
     }
 
-    // If only buffered (not visible) items are beyond the new size, we need to adjust the scroll position
-    // to compensate for the items that will be removed at the bottom. This is to prevent the visible range
-    // from shifting up after the size change.
+    // If only buffered (not visible) items exceed the new size bounds, we need to adjust
+    // the scroll position to compensate for the items that will be removed at the bottom.
+    // This is to prevent the visible range from shifting up after the size change.
     const lastRenderedIndex = this._virtualEnd;
     if (lastRenderedIndex > newLastIndex) {
-      // Calculate the height difference of items that are beyond the new size and are outside the viewport
-      // (guaranteed by the previous condition that checks the last visible index).
+      // Calculate the height difference of exceeding items outside the viewport:
       const delta =
         this.__getIndexScrollOffsetBottom(lastRenderedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
 
-      // Subtract the calculated difference from the scroll position, which
-      // effectively "moves up" the content.
+      // Subtract the calculated difference from the scroll position,
+      // which effectively "moves up" the content.
       return this._scrollTop - delta;
     }
   }
