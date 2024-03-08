@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('unlimited size', () => {
@@ -201,5 +201,55 @@ describe('unlimited size', () => {
       Math.floor(itemRect.top),
       Math.ceil(itemRect.bottom),
     );
+  });
+
+  it('should set scroll to end when a visible index exceeds bounds after size decrease', () => {
+    virtualizer.scrollToIndex(virtualizer.size - 1000);
+    virtualizer.size = virtualizer.lastVisibleIndex - 20;
+    virtualizer.flush(); // TODO: Why does the test fail without it?
+    const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
+    expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
+  });
+
+  it('should restore scroll position when a buffered index exceeds bounds after size decrease', () => {
+    // Force the virtualizer to increase the buffer size.
+    scrollTarget.style.height = '250px';
+    virtualizer.flush();
+
+    // Scroll to an index.
+    const index = virtualizer.size - 1000;
+    virtualizer.scrollToIndex(index);
+    virtualizer.flush();
+
+    // Make sure there are at least 2 buffered elements after the last visible element.
+    const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
+    expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
+
+    // Decrease the size so that all buffered indexes exceed the new size bounds.
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top, 1);
+  });
+
+  it('should restore scroll position offset when a buffered index exceeds bounds after size decrease', () => {
+    // Force the virtualizer to increase the buffer size.
+    scrollTarget.style.height = '250px';
+    virtualizer.flush();
+
+    // Scroll to an index and add an additional offset.
+    virtualizer.scrollToIndex(50);
+    scrollTarget.scrollTop += 10;
+    virtualizer.flush();
+
+    // Make sure there are at least 2 buffered elements after the last visible element.
+    const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
+    expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
+
+    // Decrease the size so that all buffered indexes exceed the new size bounds.
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+
+    const item = elementsContainer.querySelector('#item-50');
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 });

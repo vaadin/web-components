@@ -358,18 +358,20 @@ export class IronListAdapter {
     // If there are visible items that exceed the new size bounds,
     // it means the size is being reduced and we should set scroll
     // to the end after the size change.
-    if (this.lastVisibleIndex > newLastIndex) {
+    if (this.adjustedLastVisibleIndex > newLastIndex) {
       return this._scrollHeight;
     }
 
     // If only buffered (not visible) items exceed the new size bounds, we need to adjust
     // the scroll position to compensate for the items that will be removed at the bottom.
     // This is to prevent the visible range from shifting up after the size change.
-    const lastRenderedIndex = this._virtualEnd;
-    if (lastRenderedIndex > newLastIndex) {
-      // Calculate the height difference of exceeding items outside the viewport:
+    const adjustedLastBufferedIndex = this._virtualEnd + (this._vidxOffset || 0);
+    if (adjustedLastBufferedIndex > newLastIndex) {
+      // Calculate the height difference of exceeding items outside the viewport.
       const delta =
-        this.__getIndexScrollOffsetBottom(lastRenderedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
+        this.__getIndexScrollOffsetBottom(adjustedLastBufferedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
+
+      console.log(this._scrollTop, delta);
 
       // Subtract the calculated difference from the scroll position,
       // which effectively "moves up" the content.
