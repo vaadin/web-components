@@ -371,8 +371,6 @@ export class IronListAdapter {
       const delta =
         this.__getIndexScrollOffsetBottom(adjustedLastBufferedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
 
-      console.log(this._scrollTop, delta);
-
       // Subtract the calculated difference from the scroll position,
       // which effectively "moves up" the content.
       return this._scrollTop - delta;

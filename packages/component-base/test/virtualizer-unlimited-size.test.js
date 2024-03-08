@@ -206,7 +206,7 @@ describe('unlimited size', () => {
   it('should set scroll to end when a visible index exceeds bounds after size decrease', () => {
     virtualizer.scrollToIndex(virtualizer.size - 1000);
     virtualizer.size = virtualizer.lastVisibleIndex - 20;
-    virtualizer.flush(); // TODO: Why does the test fail without it?
+    virtualizer.flush(); // TODO: Why is it needed?
     const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
@@ -238,7 +238,8 @@ describe('unlimited size', () => {
     virtualizer.flush();
 
     // Scroll to an index and add an additional offset.
-    virtualizer.scrollToIndex(50);
+    const index = virtualizer.size - 1000;
+    virtualizer.scrollToIndex(index);
     scrollTarget.scrollTop += 10;
     virtualizer.flush();
 
@@ -249,7 +250,7 @@ describe('unlimited size', () => {
     // Decrease the size so that all buffered indexes exceed the new size bounds.
     virtualizer.size = virtualizer.lastVisibleIndex + 1;
 
-    const item = elementsContainer.querySelector('#item-50');
+    const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 });
