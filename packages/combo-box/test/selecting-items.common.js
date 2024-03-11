@@ -239,67 +239,6 @@ describe('selecting items', () => {
   });
 });
 
-describe('clearing a selection', () => {
-  let comboBox, clearIcon;
-
-  beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box style="width: 320px" clear-button-visible></vaadin-combo-box>');
-    comboBox.items = ['foo', 'bar'];
-    comboBox.value = 'foo';
-    clearIcon = comboBox.$.clearButton;
-  });
-
-  it('should show the clearing icon only when comboBox has value', () => {
-    expect(window.getComputedStyle(clearIcon).display).not.to.contain('none');
-
-    comboBox.value = '';
-    expect(window.getComputedStyle(clearIcon).display).to.contain('none');
-  });
-
-  it('should clear the selection when clicking on the icon', () => {
-    comboBox.open();
-
-    clearIcon.click();
-
-    expect(comboBox.value).to.eql('');
-    expect(comboBox._scroller.selectedItem).to.be.null;
-    expect(comboBox.selectedItem).to.be.null;
-  });
-
-  it('should not close the dropdown after clearing a selection', () => {
-    comboBox.open();
-
-    clearIcon.click();
-
-    expect(comboBox.opened).to.eql(true);
-  });
-
-  it('should de-select dropdown item after clearing a selection', () => {
-    comboBox.open();
-
-    const item = document.querySelector('vaadin-combo-box-item');
-    expect(item.hasAttribute('selected')).to.be.true;
-
-    clearIcon.click();
-    expect(item.hasAttribute('selected')).to.be.false;
-  });
-
-  it('should not open the dropdown after clearing a selection', () => {
-    clearIcon.click();
-
-    expect(comboBox.opened).to.eql(false);
-  });
-
-  it('should prevent mousedown event to avoid input blur', () => {
-    comboBox.open();
-
-    const event = new CustomEvent('mousedown', { cancelable: true });
-    clearIcon.dispatchEvent(event);
-
-    expect(event.defaultPrevented).to.be.true;
-  });
-});
-
 describe('selecting a custom value', () => {
   let comboBox;
 

@@ -165,20 +165,6 @@ describe('basic features', () => {
       expect(comboBox.selectedItem).to.be.null;
     });
 
-    it('should be null after clearing the value', () => {
-      comboBox.value = 'foo';
-      comboBox.$.clearButton.click();
-
-      expect(comboBox.selectedItem).to.be.null;
-    });
-
-    it('should not open the overlay after clearing the value', () => {
-      comboBox.value = 'foo';
-      comboBox.$.clearButton.click();
-
-      expect(overlay.opened).not.to.be.true;
-    });
-
     describe('autoselect', () => {
       it('should set autoselect to false by default', () => {
         expect(comboBox.autoselect).to.be.false;
@@ -229,43 +215,6 @@ describe('inside flexbox', () => {
     const combobox = container.querySelector('vaadin-combo-box');
     expect(window.getComputedStyle(container).width).to.eql('500px');
     expect(window.getComputedStyle(combobox).width).to.eql('500px');
-  });
-});
-
-describe('clear button', () => {
-  let comboBox, clearButton;
-
-  describe('default', () => {
-    beforeEach(async () => {
-      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-      await nextRender();
-    });
-
-    it('should not have clear button visible by default', () => {
-      expect(comboBox.clearButtonVisible).to.be.false;
-    });
-  });
-
-  describe('visible', () => {
-    beforeEach(async () => {
-      comboBox = fixtureSync('<vaadin-combo-box clear-button-visible></vaadin-combo-box>');
-      await nextRender();
-      clearButton = comboBox.$.clearButton;
-    });
-
-    it('should reflect clear-button-visible attribute to property', () => {
-      expect(comboBox.clearButtonVisible).to.be.true;
-    });
-
-    it('should hide clear button should when disabled', () => {
-      comboBox.disabled = true;
-      expect(getComputedStyle(clearButton).display).to.equal('none');
-    });
-
-    it('should hide clear button when readonly', () => {
-      comboBox.readonly = true;
-      expect(getComputedStyle(clearButton).display).to.equal('none');
-    });
   });
 });
 

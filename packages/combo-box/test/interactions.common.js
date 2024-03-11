@@ -255,4 +255,87 @@ describe('interactions', () => {
       expect(input.inputMode).to.equal('');
     });
   });
+
+  describe('clear button', () => {
+    let clearButton;
+
+    describe('default', () => {
+      it('should not have clear button visible by default', () => {
+        expect(comboBox.clearButtonVisible).to.be.false;
+      });
+
+      it('should reflect clear-button-visible property to attribute', () => {
+        comboBox.clearButtonVisible = true;
+        expect(comboBox.hasAttribute('clear-button-visible')).to.be.true;
+      });
+    });
+
+    describe('visible', () => {
+      beforeEach(() => {
+        comboBox.clearButtonVisible = true;
+        comboBox.value = 'foo';
+        clearButton = comboBox.$.clearButton;
+      });
+
+      it('should show clear button only when value property is set', () => {
+        expect(getComputedStyle(clearButton).display).to.equal('block');
+
+        comboBox.value = '';
+        expect(getComputedStyle(clearButton).display).to.equal('none');
+      });
+
+      it('should not show clear button should when disabled', () => {
+        comboBox.disabled = true;
+        expect(getComputedStyle(clearButton).display).to.equal('none');
+      });
+
+      it('should not show clear button when readonly', () => {
+        comboBox.readonly = true;
+        expect(getComputedStyle(clearButton).display).to.equal('none');
+      });
+
+      it('should clear the value on clear button click', () => {
+        comboBox.open();
+
+        clearButton.click();
+
+        expect(comboBox.value).to.eql('');
+        expect(comboBox._scroller.selectedItem).to.be.null;
+        expect(comboBox.selectedItem).to.be.null;
+      });
+
+      it('should not open the overlay on clear button click', () => {
+        clearButton.click();
+
+        expect(comboBox.opened).to.be.false;
+      });
+
+      it('should not close the overlay on clear button click', () => {
+        comboBox.open();
+
+        clearButton.click();
+
+        expect(comboBox.opened).to.be.true;
+      });
+
+      it('should de-select dropdown item on clear button click', () => {
+        comboBox.open();
+
+        const item = getFirstItem(comboBox);
+        expect(item.hasAttribute('selected')).to.be.true;
+
+        clearButton.click();
+        expect(item.hasAttribute('selected')).to.be.false;
+      });
+
+      it('should prevent mousedown event to avoid input blur', () => {
+        comboBox.open();
+
+        const event = new CustomEvent('mousedown', { cancelable: true });
+        clearButton.dispatchEvent(event);
+
+        expect(event.defaultPrevented).to.be.true;
+      });
+    });
+  });
 });
