@@ -280,9 +280,7 @@ export class IronListAdapter {
 
   __getIndexScrollOffset(index) {
     const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
-    if (element) {
-      return this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top;
-    }
+    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
   }
 
   get size() {
@@ -305,6 +303,7 @@ export class IronListAdapter {
     const prevLastVisibleIndex = this.adjustedLastVisibleIndex;
     const prevFirstVisibleIndex = this.adjustedFirstVisibleIndex;
     const prevFirstVisibleIndexScrollOffset = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
+    const sizeDiff = size - this.size;
 
     // Change the size
     this.__size = size;
@@ -324,11 +323,14 @@ export class IronListAdapter {
       this._render();
     }
 
-    if (prevLastVisibleIndex > this.size - 1) {
-      this.scrollToIndex(this.size - 1);
-    } else {
-      this.scrollToIndex(prevFirstVisibleIndex);
-      this._scrollTop += prevFirstVisibleIndexScrollOffset;
+    // Size is reduced
+    if (sizeDiff < 0) {
+      if (prevLastVisibleIndex > this.size - 1) {
+        this.scrollToIndex(this.size - 1);
+      } else {
+        this.scrollToIndex(prevFirstVisibleIndex);
+        this._scrollTop += prevFirstVisibleIndexScrollOffset;
+      }
     }
 
     // When reducing size while invisible, iron-list does not update items, so
