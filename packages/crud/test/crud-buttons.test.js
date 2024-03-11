@@ -849,6 +849,37 @@ describe('crud buttons', () => {
     });
   });
 
+  describe('no default buttons', () => {
+    let crud;
+
+    beforeEach(async () => {
+      crud = document.createElement('vaadin-crud');
+      crud._noDefaultButtons = true;
+      document.body.appendChild(crud);
+      await nextRender();
+    });
+
+    afterEach(() => {
+      crud.remove();
+    });
+
+    it('should not create default new-button', () => {
+      expect(crud.querySelector('[slot="new-button"]')).to.be.null;
+    });
+
+    it('should not create default save-button', () => {
+      expect(crud.querySelector('[slot="save-button"]')).to.be.null;
+    });
+
+    it('should not create default cancel-button', () => {
+      expect(crud.querySelector('[slot="cancel-button"]')).to.be.null;
+    });
+
+    it('should not create default delete-button', () => {
+      expect(crud.querySelector('[slot="delete-button"]')).to.be.null;
+    });
+  });
+
   describe('dataProvider', () => {
     let items;
 
