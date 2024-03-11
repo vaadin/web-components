@@ -661,11 +661,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.__onGridSizeChanged = this.__onGridSizeChanged.bind(this);
     this.__onGridActiveItemChanged = this.__onGridActiveItemChanged.bind(this);
 
-    this._newButtonController = new ButtonSlotController(this, 'new', 'primary');
-    this._saveButtonController = new ButtonSlotController(this, 'save', 'primary');
-    this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary');
-    this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error');
-
     this.__focusRestorationController = new FocusRestorationController();
   }
 
@@ -704,6 +699,12 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     this.addController(this._gridController);
 
     this.addController(new FormSlotController(this));
+
+    // Init controllers in `ready()` (not constructor) so that Flow can set `_noDefaultButtons`
+    this._newButtonController = new ButtonSlotController(this, 'new', 'primary', this._noDefaultButtons);
+    this._saveButtonController = new ButtonSlotController(this, 'save', 'primary', this._noDefaultButtons);
+    this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary', this._noDefaultButtons);
+    this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error', this._noDefaultButtons);
 
     this.addController(this._newButtonController);
 
