@@ -131,7 +131,7 @@ export class IronListAdapter {
 
     if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop && !this.grid) {
       // Workaround an iron-list issue by manually adjusting the scroll position
-      this._scrollTop -= this.__getIndexScrollOffsetTop(index) || 0;
+      this._scrollTop -= this.__getIndexScrollOffset(index) || 0;
     }
     this._scrollHandler();
 
@@ -278,17 +278,10 @@ export class IronListAdapter {
     }
   }
 
-  __getIndexScrollOffsetTop(index) {
+  __getIndexScrollOffset(index) {
     const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
     if (element) {
       return this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top;
-    }
-  }
-
-  __getIndexScrollOffsetBottom(index) {
-    const element = this.__getVisibleElements().find((el) => el.__virtualIndex === index);
-    if (element) {
-      return this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().bottom;
     }
   }
 
@@ -309,7 +302,9 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
-    const adjustedScrollPosition = this._getAdjustedScrollPositionOnSizeChange(size);
+    const prevLastVisibleIndex = this.adjustedLastVisibleIndex;
+    const prevFirstVisibleIndex = this.adjustedFirstVisibleIndex;
+    const prevFirstVisibleIndexScrollOffset = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
 
     // Change the size
     this.__size = size;
@@ -329,6 +324,13 @@ export class IronListAdapter {
       this._render();
     }
 
+    if (prevLastVisibleIndex > this.size - 1) {
+      this.scrollToIndex(this.size - 1);
+    } else {
+      this.scrollToIndex(prevFirstVisibleIndex);
+      this._scrollTop += prevFirstVisibleIndexScrollOffset;
+    }
+
     // When reducing size while invisible, iron-list does not update items, so
     // their hidden state is not updated and their __lastUpdatedIndex is not
     // reset. In that case force an update here.
@@ -340,41 +342,10 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    if (adjustedScrollPosition !== undefined) {
-      this._scrollTop = adjustedScrollPosition;
-    }
-
     // Schedule and flush a resize handler. This will cause a
     // re-render for the elements.
     this._resizeHandler();
     flush();
-  }
-
-  /** @private */
-  _getAdjustedScrollPositionOnSizeChange(newSize) {
-    // Calculate the index of the last item based on the new size.
-    const newLastIndex = newSize - 1;
-
-    // If there are visible items that exceed the new size bounds,
-    // it means the size is being reduced and we should set scroll
-    // to the end after the size change.
-    if (this.adjustedLastVisibleIndex > newLastIndex) {
-      return this._scrollHeight;
-    }
-
-    // If only buffered (not visible) items exceed the new size bounds, we need to adjust
-    // the scroll position to compensate for the items that will be removed at the bottom.
-    // This is to prevent the visible range from shifting up after the size change.
-    const adjustedLastBufferedIndex = this._virtualEnd + (this._vidxOffset || 0);
-    if (adjustedLastBufferedIndex > newLastIndex) {
-      // Calculate the height difference of exceeding items outside the viewport.
-      const delta =
-        this.__getIndexScrollOffsetBottom(adjustedLastBufferedIndex) - this.__getIndexScrollOffsetTop(newLastIndex + 1);
-
-      // Subtract the calculated difference from the scroll position,
-      // which effectively "moves up" the content.
-      return this._scrollTop - delta;
-    }
   }
 
   /** @private */
