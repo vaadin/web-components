@@ -28,6 +28,7 @@ const invalidAddresses = [
   'email@example.com (Joe Smith)',
   'email@example..com',
   'email.@example.com',
+  '.email@example.com',
   'email@example',
 ];
 
