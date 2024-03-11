@@ -28,7 +28,7 @@ export class EmailField extends TextField {
   constructor() {
     super();
     this._setType('email');
-    this.pattern = '^([a-zA-Z0-9_\\-+])+(?:\\.[a-zA-Z0-9_\\-+]+)*@[a-zA-Z0-9\\-.]+\\.[a-zA-Z0-9\\-]{2,}$';
+    this.pattern = '^[a-zA-Z0-9_\\-+]+(?:\\.[a-zA-Z0-9_\\-+]+)*@[a-zA-Z0-9\\-.]+\\.[a-zA-Z0-9\\-]{2,}$';
   }
 
   /** @protected */
