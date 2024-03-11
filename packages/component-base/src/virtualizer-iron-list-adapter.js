@@ -300,6 +300,7 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
+    const prevLastBufferedIndex = this._virtualEnd + (this._vidxOffset || 0);
     const prevLastVisibleIndex = this.adjustedLastVisibleIndex;
     const prevFirstVisibleIndex = this.adjustedFirstVisibleIndex;
     const prevFirstVisibleIndexScrollOffset = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
@@ -323,21 +324,26 @@ export class IronListAdapter {
       this._render();
     }
 
-    // Size is reduced
-    if (sizeDiff < 0) {
-      if (prevLastVisibleIndex > this.size - 1) {
-        this.scrollToIndex(this.size - 1);
-      } else {
-        this.scrollToIndex(prevFirstVisibleIndex);
-        this._scrollTop += prevFirstVisibleIndexScrollOffset;
-      }
-    }
-
     // When reducing size while invisible, iron-list does not update items, so
     // their hidden state is not updated and their __lastUpdatedIndex is not
     // reset. In that case force an update here.
     if (!this._isVisible) {
       this._assignModels();
+    }
+
+    // Size is reduced
+    if (sizeDiff < 0) {
+      if (prevLastVisibleIndex > size - 1) {
+        // If the index that was last visible is now out of the size bounds,
+        // set the scroll position to the end.
+        this.scrollToIndex(size - 1);
+      } else if (prevLastBufferedIndex > size - 1) {
+        // If the index that was last in the buffer is now out of the size bounds,
+        // restore the scroll position to prevent the visible range from shifting down
+        // as a result of some items being removed from the end.
+        this.scrollToIndex(prevFirstVisibleIndex);
+        this._scrollTop += prevFirstVisibleIndexScrollOffset;
+      }
     }
 
     if (!this.elementsContainer.children.length) {
