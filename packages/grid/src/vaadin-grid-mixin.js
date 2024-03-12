@@ -589,6 +589,16 @@ export const GridMixin = (superClass) =>
         });
       }
 
+      if (column) {
+        if (column._onCellKeydown && tagName === 'td') {
+          cell.addEventListener('keydown', column._onCellKeydown.bind(column));
+        }
+
+        if (column._onHeaderCellKeydown && tagName === 'th') {
+          cell.addEventListener('keydown', column._onHeaderCellKeydown.bind(column));
+        }
+      }
+
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
 
@@ -720,7 +730,7 @@ export const GridMixin = (superClass) =>
             // Header & footer
             const tagName = section === 'header' ? 'th' : 'td';
             if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              cell = column[`_${section}Cell`] || this._createCell(tagName);
+              cell = column[`_${section}Cell`] || this._createCell(tagName, column);
               cell._column = column;
               row.appendChild(cell);
               column[`_${section}Cell`] = cell;

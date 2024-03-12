@@ -107,7 +107,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
         checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
-        column._headerCell.addEventListener('keydown', this.__onHeaderCellKeydown.bind(this));
       }
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
@@ -133,7 +132,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
         root.addEventListener('click', this.__onCellClick.bind(this));
-        root.assignedSlot.parentNode.addEventListener('keydown', this.__onCellKeydown.bind(this));
       }
 
       checkbox.__item = item;
@@ -235,8 +233,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onHeaderCellKeydown(e) {
+    /** @protected */
+    _onHeaderCellKeydown(e) {
       // Toggle on Space without having to enter interaction mode first
       if (e.keyCode === 32 && e.composedPath()[0] === this._headerCell) {
         const checkbox = this._headerCell._content.firstElementChild;
@@ -244,8 +242,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onCellKeydown(e) {
+    /** @protected */
+    _onCellKeydown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
       if (!this.autoSelect && e.keyCode === 32 && this._cells.includes(target)) {
