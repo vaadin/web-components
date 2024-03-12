@@ -60,6 +60,12 @@ describe('checkbox-group', () => {
       await visualDiff(div, 'value');
     });
 
+    it('readonly', async () => {
+      element.readonly = true;
+      element.value = ['a', 'c'];
+      await visualDiff(div, 'readonly');
+    });
+
     it('required', async () => {
       element.label = 'Label';
       element.required = true;

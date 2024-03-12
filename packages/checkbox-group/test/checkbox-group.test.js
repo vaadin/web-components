@@ -84,6 +84,38 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
+  describe('readonly', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-checkbox-group readonly>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
+          <vaadin-checkbox value="2" label="Checkbox 2"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      `);
+      await nextFrame();
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
+    });
+
+    it('should propagate readonly property to checkboxes', () => {
+      checkboxes.forEach((checkbox) => {
+        expect(checkbox.readonly).to.be.true;
+      });
+
+      group.readonly = false;
+      checkboxes.forEach((checkbox) => {
+        expect(checkbox.readonly).to.be.false;
+      });
+    });
+
+    it('should set disabled property to dynamically added checkboxes', async () => {
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = '3';
+      group.appendChild(checkbox);
+      await nextFrame();
+      expect(checkbox.readonly).to.be.true;
+    });
+  });
+
   describe('value', () => {
     beforeEach(async () => {
       group = fixtureSync(`
