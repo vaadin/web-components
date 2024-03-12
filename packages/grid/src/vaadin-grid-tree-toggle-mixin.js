@@ -125,10 +125,8 @@ export const GridTreeToggleMixin = (superClass) =>
       };
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
-
+    constructor() {
+      super();
       this.addEventListener('click', (e) => this._onClick(e));
     }
 
