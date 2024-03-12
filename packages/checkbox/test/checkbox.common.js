@@ -132,6 +132,25 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
+    describe('readonly', () => {
+      it('should not toggle checked property on click when readonly', async () => {
+        checkbox.readonly = true;
+        await nextUpdate(checkbox);
+        input.click();
+        expect(checkbox.checked).to.be.false;
+      });
+
+      it('should update input aria-readonly on readonly property change', async () => {
+        checkbox.readonly = true;
+        await nextUpdate(checkbox);
+        expect(input.getAttribute('aria-readonly')).to.equal('true');
+
+        checkbox.readonly = false;
+        await nextUpdate(checkbox);
+        expect(input.hasAttribute('aria-readonly')).to.be.false;
+      });
+    });
+
     describe('focus', () => {
       let inputX, inputY;
 
@@ -169,6 +188,13 @@ describe('checkbox', () => {
       });
 
       it('should not set active attribute during label link click', () => {
+        mousedown(link);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute on mousedown when readonly', async () => {
+        checkbox.readonly = true;
+        await nextUpdate(checkbox);
         mousedown(link);
         expect(checkbox.hasAttribute('active')).to.be.false;
       });

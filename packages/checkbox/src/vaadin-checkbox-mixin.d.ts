@@ -47,4 +47,12 @@ export declare class CheckboxMixinClass {
    * The name of the checkbox.
    */
   name: string;
+
+  /**
+   * When true, the user cannot modify the value of the checkbox.
+   * The difference between `disabled` and `readonly` is that the
+   * read-only checkbox remains focusable, is announced by screen
+   * readers and its value can be submitted as part of the form.
+   */
+  readonly: boolean;
 }

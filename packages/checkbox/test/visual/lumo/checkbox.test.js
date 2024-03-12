@@ -64,6 +64,26 @@ describe('checkbox', () => {
     });
   });
 
+  describe('readonly', () => {
+    beforeEach(() => {
+      element.readonly = true;
+    });
+
+    it('basic', async () => {
+      await visualDiff(div, 'readonly');
+    });
+
+    it('checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'readonly-checked');
+    });
+
+    it('indeterminate', async () => {
+      element.indeterminate = true;
+      await visualDiff(div, 'readonly-indeterminate');
+    });
+  });
+
   describe('RTL', () => {
     before(() => {
       document.documentElement.setAttribute('dir', 'rtl');

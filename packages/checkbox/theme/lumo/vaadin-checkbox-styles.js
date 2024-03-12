@@ -119,6 +119,11 @@ registerStyles(
       background-color: var(--lumo-contrast-30pct);
     }
 
+    :host([readonly][checked]) [part='checkbox'],
+    :host([readonly][indeterminate]) [part='checkbox'] {
+      background-color: var(--lumo-contrast-50pct);
+    }
+
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
@@ -139,13 +144,13 @@ registerStyles(
     }
 
     /* Hover */
-    :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
+    :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
       background: var(--vaadin-checkbox-background-hover, var(--lumo-contrast-30pct));
     }
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
-      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
+      :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
         background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       }
     }

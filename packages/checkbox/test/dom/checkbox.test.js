@@ -30,6 +30,11 @@ describe('vaadin-checkbox', () => {
       checkbox.disabled = true;
       await expect(checkbox).dom.to.equalSnapshot();
     });
+
+    it('readonly', async () => {
+      checkbox.readonly = true;
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
