@@ -9,6 +9,7 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { CheckboxMixinClass } from '../../src/vaadin-checkbox-mixin.js';
 import type {
   Checkbox,
   CheckboxChangeEvent,
@@ -36,6 +37,7 @@ assertType<DisabledMixinClass>(checkbox);
 assertType<ElementMixinClass>(checkbox);
 assertType<FocusMixinClass>(checkbox);
 assertType<KeyboardMixinClass>(checkbox);
+assertType<CheckboxMixinClass>(checkbox);
 assertType<CheckedMixinClass>(checkbox);
 assertType<DelegateFocusMixinClass>(checkbox);
 assertType<LabelMixinClass>(checkbox);
