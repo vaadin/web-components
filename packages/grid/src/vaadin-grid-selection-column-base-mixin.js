@@ -234,6 +234,16 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
+    _onCellKeyDown(e) {
+      const target = e.composedPath()[0];
+      // Toggle on Space without having to enter interaction mode first
+      if (e.keyCode === 32 && (target === this._headerCell || (this._cells.includes(target) && !this.autoSelect))) {
+        const checkbox = target._content.firstElementChild;
+        checkbox.checked = !checkbox.checked;
+      }
+    }
+
+    /** @private */
     __dragAutoScroller() {
       if (this.__dragStartIndex === undefined) {
         return;
