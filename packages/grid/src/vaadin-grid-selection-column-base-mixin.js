@@ -98,7 +98,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @override
      */
-    _defaultHeaderRenderer(root, column) {
+    _defaultHeaderRenderer(root, _column) {
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
