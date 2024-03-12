@@ -25,8 +25,10 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
-    // Iron-list uses this value to determine how many pages of elements to render
-    this._maxPages = 1.3;
+    // Iron-list uses this value to determine how many pages of elements to render.
+    // Lower values result in inconsistent grid height when all rows are visible and row heights vary.
+    // See related issue: https://github.com/vaadin/web-components/issues/7160
+    this._maxPages = 1.7;
 
     // Placeholder height (used for sizing elements that have intrinsic 0 height after update)
     this.__placeholderHeight = 200;

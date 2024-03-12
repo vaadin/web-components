@@ -273,6 +273,27 @@ describe('basic features', () => {
     grid.size = 1;
     expect(getFirstCellRenderCount()).to.equal(1);
   });
+
+  it('should render all items with varying row heights when all rows visible', async () => {
+    grid = fixtureSync(`
+      <vaadin-grid all-rows-visible>
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    const rowHeights = [30, 120, 30, 30, 20, 20, 150, 20];
+    grid.items = rowHeights.map((value) => {
+      return { height: value };
+    });
+    column = grid.firstElementChild;
+    column.renderer = (root, _, model) => {
+      root.innerHTML = `<button style="height:${model.item.height}px">Button</button>`;
+    };
+    flushGrid(grid);
+    await nextFrame();
+    expect(getPhysicalItems(grid).length).to.equal(rowHeights.length);
+    const sum = rowHeights.reduce((acc, value) => acc + value, 0);
+    expect(grid.clientHeight).to.be.greaterThan(sum);
+  });
 });
 
 describe('flex child', () => {
