@@ -233,20 +233,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    _onHeaderCellKeydown(e) {
-      // Toggle on Space without having to enter interaction mode first
-      if (e.keyCode === 32 && e.composedPath()[0] === this._headerCell) {
-        const checkbox = this._headerCell._content.firstElementChild;
-        checkbox.checked = !checkbox.checked;
-      }
-    }
-
-    /** @protected */
-    _onCellKeydown(e) {
+    /** @private */
+    _onCellKeyDown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
-      if (!this.autoSelect && e.keyCode === 32 && this._cells.includes(target)) {
+      if (e.keyCode === 32 && (target === this._headerCell || (this._cells.includes(target) && !this.autoSelect))) {
         const checkbox = target._content.firstElementChild;
         checkbox.checked = !checkbox.checked;
       }

@@ -589,14 +589,8 @@ export const GridMixin = (superClass) =>
         });
       }
 
-      if (column) {
-        if (column._onCellKeydown && tagName === 'td') {
-          cell.addEventListener('keydown', column._onCellKeydown.bind(column));
-        }
-
-        if (column._onHeaderCellKeydown && tagName === 'th') {
-          cell.addEventListener('keydown', column._onHeaderCellKeydown.bind(column));
-        }
+      if (column && column._onCellKeyDown) {
+        cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
       }
 
       const slot = document.createElement('slot');
