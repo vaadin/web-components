@@ -25,7 +25,7 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
-    // Iron-list uses this value to determine how many pages of elements to render.
+    // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
     // Placeholder height (used for sizing elements that have intrinsic 0 height after update)
