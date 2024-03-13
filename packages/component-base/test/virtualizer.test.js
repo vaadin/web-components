@@ -174,7 +174,7 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should restore scroll position offset on size increase', () => {
+  it('should preserve scroll position on size increase', () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
     scrollTarget.scrollTop += 10;
@@ -184,51 +184,42 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
   });
 
-  it('should set scroll to end when the last visible index exceeds bounds after size decrease', () => {
+  it('should set scroll to end when the last visible index exceeds bounds after size decrease', async () => {
     virtualizer.scrollToIndex(50);
     virtualizer.size = virtualizer.lastVisibleIndex - 20;
+    await oneEvent(scrollTarget, 'scroll');
     const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should restore scroll position when the last buffered index exceeds bounds after size decrease', () => {
-    // Force the virtualizer to increase the buffer size.
+  it('should preserve scroll position when the last buffered index exceeds bounds after size decrease', async () => {
+    // Force the virtualizer to increase the buffer size to have at least 2 buffered items at the end.
     scrollTarget.style.height = '250px';
     virtualizer.flush();
-
-    // Scroll to an index.
-    virtualizer.scrollToIndex(50);
-    virtualizer.flush();
-
-    // Make sure there are at least 2 buffered elements after the last visible element.
     const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
     expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
-    // Decrease the size so that all buffered indexes exceed the new size bounds.
-    virtualizer.size = virtualizer.lastVisibleIndex + 1;
-
-    const item = elementsContainer.querySelector('#item-50');
-    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top, 1);
-  });
-
-  it('should restore scroll position offset when the last buffered index exceeds bounds after size decrease', () => {
-    // Force the virtualizer to increase the buffer size.
-    scrollTarget.style.height = '250px';
-    virtualizer.flush();
-
-    // Scroll to an index and add an additional offset.
-    virtualizer.scrollToIndex(50);
-    virtualizer.flush();
+    const index = 50;
+    virtualizer.scrollToIndex(index);
     scrollTarget.scrollTop += 10;
 
-    // Make sure there are at least 2 buffered elements after the last visible element.
-    const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
-    expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
-
     // Decrease the size so that all buffered indexes exceed the new size bounds.
     virtualizer.size = virtualizer.lastVisibleIndex + 1;
+    await oneEvent(scrollTarget, 'scroll');
 
-    const item = elementsContainer.querySelector('#item-50');
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  it('should preserve scroll position when no rendered indexes exceed bounds after size decrease', async () => {
+    const index = 50;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    virtualizer.size = 80;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 

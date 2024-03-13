@@ -335,14 +335,14 @@ export class IronListAdapter {
       if (lastVisibleIndex > size - 1) {
         // If the index that was last visible is now out of bounds,
         // set the scroll to the end. Note, calling scrollToIndex also
-        // updates the virtual index offset, removing items beyond the new size.
+        // updates the virtual index offset, which removes exceeding items.
         this.scrollToIndex(size - 1);
         this._scrollTop = this._scrollHeight;
       } else {
         // Otherwise, restore the previous scroll position to avoid an unexpected
         // content shift when the size decrease affects some of the rendered items.
-        // Note, calling scrollToIndex also updates the virtual index offset, removing
-        // items beyond the new size.
+        // Note, calling scrollToIndex also updates the virtual index offset, which
+        // removes exceeding items.
         this.scrollToIndex(firstVisibleIndex);
         const firstVisibleIndexScrollOffsetAfter = this.__getIndexScrollOffset(firstVisibleIndex);
         this._scrollTop += firstVisibleIndexScrollOffsetBefore - firstVisibleIndexScrollOffsetAfter;
