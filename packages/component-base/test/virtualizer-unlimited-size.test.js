@@ -203,7 +203,7 @@ describe('unlimited size', () => {
     );
   });
 
-  it('should set scroll to end when the last visible index exceeds bounds after size decrease', async () => {
+  it('should set scroll to end when size decrease affects the last visible index', async () => {
     virtualizer.scrollToIndex(virtualizer.size - 1000);
     virtualizer.size = virtualizer.lastVisibleIndex - 20;
     await oneEvent(scrollTarget, 'scroll');
@@ -211,19 +211,19 @@ describe('unlimited size', () => {
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should preserve scroll position when the last buffered index exceeds bounds after size decrease', async () => {
+  it('should preserve scroll position when size decrease affects the last buffered index', async () => {
     // Force the virtualizer to increase the buffer size to have at least 2 buffered items at the end.
     scrollTarget.style.height = '250px';
     virtualizer.flush();
     const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
     expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
-    // Scroll to an index.
+    // Scroll to an index and add an additional scroll offset.
     const index = virtualizer.size - 1000;
     virtualizer.scrollToIndex(index);
     scrollTarget.scrollTop += 10;
 
-    // Decrease the size so that all buffered indexes exceed the new size bounds.
+    // Decrease the size so that the last buffered index exceeds the new size bounds.
     virtualizer.size = virtualizer.lastVisibleIndex + 1;
     await oneEvent(scrollTarget, 'scroll');
 
@@ -231,11 +231,13 @@ describe('unlimited size', () => {
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
-  it('should preserve scroll position when no rendered indexes exceed bounds after size decrease', async () => {
+  it('should preserve scroll position when size decrease does not affect any rendered indexes', async () => {
+    // Scroll to an index and add an additional scroll offset.
     const index = virtualizer.size - 2000;
     virtualizer.scrollToIndex(index);
     scrollTarget.scrollTop += 10;
 
+    // Decrease the size so that no rendered indexes are affected.
     virtualizer.size -= 1000;
     await oneEvent(scrollTarget, 'scroll');
 
