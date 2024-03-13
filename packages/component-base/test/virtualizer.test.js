@@ -195,7 +195,8 @@ describe('virtualizer', () => {
   it('should preserve scroll position when size decrease affects a buffered index', async () => {
     // Force the virtualizer to increase the buffer size to have at least 2 buffered items at the end.
     scrollTarget.style.height = '250px';
-    await nextFrame();
+    // Wait for the resize observer flush
+    await aTimeout(100);
     const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
     expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
