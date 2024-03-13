@@ -50,10 +50,7 @@ export class IronListAdapter {
     }
 
     this.__resizeObserver.observe(this.scrollTarget);
-    this.scrollTarget.addEventListener('scroll', () => {
-      console.log('scroll event');
-      this._scrollHandler();
-    });
+    this.scrollTarget.addEventListener('scroll', () => this._scrollHandler());
 
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
