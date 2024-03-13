@@ -300,10 +300,9 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
-    const prevLastBufferedIndex = this._virtualEnd + (this._vidxOffset || 0);
-    const prevLastVisibleIndex = this.adjustedLastVisibleIndex;
-    const prevFirstVisibleIndex = this.adjustedFirstVisibleIndex;
-    const prevFirstVisibleIndexScrollOffset = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
+    const lastVisibleIndex = this.adjustedLastVisibleIndex;
+    const firstVisibleIndex = this.adjustedFirstVisibleIndex;
+    const firstVisibleIndexScrollOffsetBefore = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
     const sizeDiff = size - this.size;
 
     // Change the size
@@ -333,17 +332,26 @@ export class IronListAdapter {
 
     // Size is reduced
     if (sizeDiff < 0) {
-      if (prevLastVisibleIndex > size - 1) {
-        // If the index that was last visible is now out of the size bounds,
-        // set the scroll position to the end.
+      if (lastVisibleIndex > size - 1) {
+        // If the index that was last visible is now out of bounds,
+        // set the scroll to the end. Note, calling scrollToIndex also updates
+        // the virtual index offset, removing any items beyond the new size.
         this.scrollToIndex(size - 1);
-      } else if (prevLastBufferedIndex > size - 1) {
-        // If the index that was last in the buffer is now out of the size bounds,
-        // restore the scroll position to prevent the visible range from shifting down
-        // as a result of some items being removed from the end.
-        this.scrollToIndex(prevFirstVisibleIndex);
-        this._scrollTop += prevFirstVisibleIndexScrollOffset;
+        this._scrollTop = this._scrollHeight;
+      } else {
+        // Otherwise, restore the previous scroll position to avoid an unexpected
+        // content shift when the size decrease affects some of the rendered items.
+        // Note, calling scrollToIndex also updates the virtual index offset, removing
+        // any items beyond the new size.
+        this.scrollToIndex(firstVisibleIndex);
+        const firstVisibleIndexScrollOffsetAfter = this.__getIndexScrollOffset(firstVisibleIndex);
+        this._scrollTop += firstVisibleIndexScrollOffsetBefore - firstVisibleIndexScrollOffsetAfter;
       }
+
+      // Skip _adjustVirtualIndexOffset() in _scrollHandler() to prevent it from
+      // resetting the earlier set scroll offset on scroll event scheduled
+      // by the scrollTop property change.
+      this.__skipNextVirtualIndexAdjust = true;
     }
 
     if (!this.elementsContainer.children.length) {
@@ -524,8 +532,8 @@ export class IronListAdapter {
       return;
     }
 
-    this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
     const delta = this.scrollTarget.scrollTop - this._scrollPosition;
+    this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
 
     super._scrollHandler();
 
