@@ -328,6 +328,8 @@ export class IronListAdapter {
       if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
         this._scrollTop += fviOffsetBefore - fviOffsetAfter;
       }
+
+      this.__skipNextVirtualIndexAdjust = true;
     }
 
     this.__preventElementUpdates = false;
