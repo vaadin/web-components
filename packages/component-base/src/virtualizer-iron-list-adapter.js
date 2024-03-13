@@ -705,6 +705,20 @@ export class IronListAdapter {
   }
 
   /**
+   * Sets the scroll height, that's the height of the content
+   * @override
+   */
+  _updateScrollerSize(forceUpdate) {
+    super._updateScrollerSize(forceUpdate);
+    if (
+      this._scrollHeight !== this._estScrollHeight &&
+      this._estScrollHeight >= this._maxPages * this._viewportHeight
+    ) {
+      super._updateScrollerSize(true);
+    }
+  }
+
+  /**
    * @returns {Number|undefined} - The browser's default font-size in pixels
    * @private
    */

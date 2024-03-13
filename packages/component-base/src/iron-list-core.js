@@ -627,7 +627,6 @@ export const ironList = {
       forceUpdate ||
       this._scrollHeight === 0 ||
       this._scrollPosition >= estScrollHeight - this._physicalSize ||
-      estScrollHeight >= this._maxPages * this._viewportHeight ||
       Math.abs(estScrollHeight - this._scrollHeight) >= this._viewportHeight
     ) {
       this.$.items.style.height = `${estScrollHeight}px`;
