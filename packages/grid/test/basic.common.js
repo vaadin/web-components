@@ -280,7 +280,7 @@ describe('basic features', () => {
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
-    const rowHeights = [30, 120, 30, 30, 20, 20, 150, 20];
+    const rowHeights = [30, 100, 30, 30, 100, 30];
     grid.items = rowHeights.map((value) => {
       return { height: value };
     });
