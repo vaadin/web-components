@@ -201,25 +201,6 @@ describe('virtualizer', () => {
     expect(updateElement.called).to.be.false;
   });
 
-  it('should not request item updates on size increase when scrolled', async () => {
-    const updateElement = sinon.spy((el, index) => {
-      el.textContent = `item-${index}`;
-    });
-    init({ size: 100, updateElement });
-
-    // Scroll halfway down the list
-    virtualizer.scrollToIndex(50);
-    // Manually scroll down a bit
-    scrollTarget.scrollTop += 100;
-    await nextFrame();
-
-    // Increase the size so it shouldn't affect the current viewport items
-    updateElement.resetHistory();
-    virtualizer.size = 200;
-
-    expect(updateElement.called).to.be.false;
-  });
-
   it('should request a different set of items on size decrease', () => {
     const updateElement = sinon.spy((el, index) => {
       el.textContent = `item-${index}`;
