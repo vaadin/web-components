@@ -393,6 +393,7 @@ describe('virtualizer - item height - lazy rendering', () => {
     it('should scroll to end', async () => {
       renderPlaceholders = false;
       virtualizer.update();
+      await contentUpdate();
       virtualizer.scrollToIndex(Infinity);
       await contentUpdate();
 
