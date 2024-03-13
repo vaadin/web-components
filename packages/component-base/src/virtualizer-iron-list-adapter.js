@@ -300,10 +300,8 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
-    const lastVisibleIndex = this.adjustedLastVisibleIndex;
-    const firstVisibleIndex = this.adjustedFirstVisibleIndex;
+    let firstVisibleIndex = this.adjustedFirstVisibleIndex;
     const firstVisibleIndexScrollOffsetBefore = this.__getIndexScrollOffset(this.adjustedFirstVisibleIndex);
-    const sizeDiff = size - this.size;
 
     // Change the size
     this.__size = size;
@@ -330,25 +328,17 @@ export class IronListAdapter {
       this._assignModels();
     }
 
-    // Size is reduced
-    if (sizeDiff < 0) {
-      if (lastVisibleIndex > size - 1) {
-        // If the index that was last visible is now out of bounds,
-        // set the scroll to the end. Note, calling scrollToIndex also
-        // updates the virtual index offset, which removes exceeding items.
-        this.scrollToIndex(size - 1);
-        this._scrollTop = this._scrollHeight;
-      } else {
-        // Otherwise, restore the previous scroll position to avoid an unexpected
-        // content shift when the size decrease affects some of the rendered items.
-        // Note, calling scrollToIndex also updates the virtual index offset, which
-        // removes exceeding items.
-        this.scrollToIndex(firstVisibleIndex);
+    // Restore the previous scroll position to avoid unexpected content shifts
+    // e.g when the size change affects some of the currently visible items.
+    // Note that calling scrollToIndex also updates the virtual index offset, which
+    // ensures an update of the scroll height and items when the size change happens
+    // on large distances (firstVisibleIndex > 100 000).
+    firstVisibleIndex = Math.min(firstVisibleIndex, size - 1);
+    this.scrollToIndex(firstVisibleIndex);
 
-        const firstVisibleIndexScrollOffsetAfter = this.__getIndexScrollOffset(firstVisibleIndex);
-        this._scrollTop += firstVisibleIndexScrollOffsetBefore - firstVisibleIndexScrollOffsetAfter;
-      }
-    }
+    // Restore the previous scroll offset taking into account a potential top offset of the scroll container.
+    const firstVisibleIndexScrollOffsetAfter = this.__getIndexScrollOffset(firstVisibleIndex);
+    this._scrollTop += firstVisibleIndexScrollOffsetBefore - firstVisibleIndexScrollOffsetAfter;
 
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
