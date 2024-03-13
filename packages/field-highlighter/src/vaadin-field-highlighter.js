@@ -161,7 +161,7 @@ export class FieldHighlighter extends HTMLElement {
   }
 
   static get version() {
-    return '24.2.8';
+    return '24.2.9';
   }
 
   static init(field) {
