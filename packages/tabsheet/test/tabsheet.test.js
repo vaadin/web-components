@@ -353,3 +353,78 @@ describe('tabsheet - lazy tabs', () => {
     expect(getPanels()[2].hidden).to.be.true;
   });
 });
+
+describe('tabsheet - tabs without ID', () => {
+  let tabsheet, tabs;
+
+  function getPanels() {
+    return [...tabsheet.querySelectorAll(`[tab]`)];
+  }
+
+  beforeEach(async () => {
+    tabsheet = fixtureSync(`
+      <vaadin-tabsheet>
+        <vaadin-tabs slot="tabs">
+          <vaadin-tab>Tab 1</vaadin-tab>
+          <vaadin-tab>Tab 2</vaadin-tab>
+        </vaadin-tabs>
+
+        <div tab="tab-1">Panel 1</div>
+        <div tab="tab-2">Panel 2</div>
+      </vaadin-tabsheet>
+    `);
+
+    await nextFrame();
+    tabs = tabsheet.querySelector('vaadin-tabs');
+  });
+
+  it('should be in loading state until ID is set on the tab', () => {
+    expect(tabsheet.hasAttribute('loading')).to.be.true;
+  });
+
+  it('should not be in loading state after setting ID on the tab', async () => {
+    tabs.items[0].id = 'tab-1';
+    await nextFrame();
+    expect(tabsheet.hasAttribute('loading')).to.be.false;
+  });
+
+  it('should restore loading state after removing ID from the tab', async () => {
+    tabs.items[0].id = 'tab-1';
+    await nextFrame();
+
+    tabs.items[0].id = null;
+    await nextFrame();
+    expect(tabsheet.hasAttribute('loading')).to.be.true;
+  });
+
+  it('should have all panels hidden until ID is set on the tab', () => {
+    expect(getPanels()[0].hidden).to.be.true;
+    expect(getPanels()[1].hidden).to.be.true;
+  });
+
+  it('should have matching panel visible after setting ID on the selected tab', async () => {
+    tabs.items[0].id = 'tab-1';
+    await nextFrame();
+    expect(getPanels()[0].hidden).to.be.false;
+    expect(getPanels()[1].hidden).to.be.true;
+  });
+
+  it('should not have matching panel visible after setting ID on the not selected tab', async () => {
+    tabs.items[1].id = 'tab-2';
+    await nextFrame();
+    expect(getPanels()[0].hidden).to.be.true;
+    expect(getPanels()[1].hidden).to.be.true;
+  });
+
+  it('should link tab with panel after setting ID regardless of tab selected state', async () => {
+    tabs.items[0].id = 'tab-1';
+    await nextFrame();
+    expect(tabs.items[0].getAttribute('aria-controls')).to.equal(getPanels()[0].id);
+    expect(getPanels()[0].getAttribute('aria-labelledby')).to.equal('tab-1');
+
+    tabs.items[1].id = 'tab-2';
+    await nextFrame();
+    expect(tabs.items[1].getAttribute('aria-controls')).to.equal(getPanels()[1].id);
+    expect(getPanels()[1].getAttribute('aria-labelledby')).to.equal('tab-2');
+  });
+});
