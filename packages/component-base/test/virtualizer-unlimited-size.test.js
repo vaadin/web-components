@@ -203,7 +203,7 @@ describe('unlimited size', () => {
     );
   });
 
-  it('should set scroll to end when size decrease affects the last visible index', async () => {
+  it('should set scroll to end when size decrease affects a visible index', async () => {
     virtualizer.scrollToIndex(virtualizer.size - 1000);
     virtualizer.size = virtualizer.lastVisibleIndex - 20;
     await oneEvent(scrollTarget, 'scroll');
@@ -211,10 +211,10 @@ describe('unlimited size', () => {
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should preserve scroll position when size decrease affects the last buffered index', async () => {
+  it('should preserve scroll position when size decrease affects a buffered index', async () => {
     // Force the virtualizer to increase the buffer size to have at least 2 buffered items at the end.
     scrollTarget.style.height = '250px';
-    virtualizer.flush();
+    await nextFrame();
     const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
     expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 

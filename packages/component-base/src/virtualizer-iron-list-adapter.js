@@ -50,7 +50,10 @@ export class IronListAdapter {
     }
 
     this.__resizeObserver.observe(this.scrollTarget);
-    this.scrollTarget.addEventListener('scroll', () => this._scrollHandler());
+    this.scrollTarget.addEventListener('scroll', () => {
+      console.log('scroll event');
+      this._scrollHandler();
+    });
 
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
@@ -344,14 +347,10 @@ export class IronListAdapter {
         // Note, calling scrollToIndex also updates the virtual index offset, which
         // removes exceeding items.
         this.scrollToIndex(firstVisibleIndex);
+
         const firstVisibleIndexScrollOffsetAfter = this.__getIndexScrollOffset(firstVisibleIndex);
         this._scrollTop += firstVisibleIndexScrollOffsetBefore - firstVisibleIndexScrollOffsetAfter;
       }
-
-      // Skip _adjustVirtualIndexOffset in _scrollHandler to prevent it from
-      // resetting the previously set scroll offset on scroll event scheduled
-      // by the respective scrollTop property change.
-      this.__skipNextVirtualIndexAdjust = true;
     }
 
     if (!this.elementsContainer.children.length) {
