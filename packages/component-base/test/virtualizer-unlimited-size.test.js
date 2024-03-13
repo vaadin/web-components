@@ -205,7 +205,7 @@ describe('unlimited size', () => {
 
   it('should set scroll to end when size decrease affects a visible index', async () => {
     virtualizer.scrollToIndex(virtualizer.size - 1000);
-    virtualizer.size = virtualizer.lastVisibleIndex - 20;
+    virtualizer.size = virtualizer.firstVisibleIndex - 20;
     await oneEvent(scrollTarget, 'scroll');
     const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
