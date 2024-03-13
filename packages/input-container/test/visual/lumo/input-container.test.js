@@ -35,6 +35,12 @@ describe('input-container', () => {
     await visualDiff(div, 'invalid');
   });
 
+  it('readonly invalid', async () => {
+    element.readonly = true;
+    element.invalid = true;
+    await visualDiff(div, 'readonly-invalid');
+  });
+
   it('prefix icon', async () => {
     const icon = document.createElement('vaadin-icon');
     icon.setAttribute('slot', 'prefix');

@@ -93,7 +93,7 @@ registerStyles(
       background: var(--_invalid-background);
     }
 
-    :host([invalid])::after {
+    :host([invalid]:not([readonly]))::after {
       background: var(--_invalid-hover-highlight);
     }
 
