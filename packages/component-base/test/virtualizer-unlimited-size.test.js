@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('unlimited size', () => {
@@ -9,7 +9,7 @@ describe('unlimited size', () => {
 
   beforeEach(() => {
     scrollTarget = fixtureSync(`
-      <div style="height: 250px;">
+      <div style="height: 200px;">
         <div></div>
       </div>
     `);
@@ -235,13 +235,12 @@ describe('unlimited size', () => {
 
   it('should preserve scroll position when size decrease affects a buffered index', () => {
     // Make sure there are at least 2 buffered items at the end.
-    const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
-    expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
+    expect(getLastRenderedIndex() - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
     // Scroll to an index and add an additional scroll offset.
     const index = virtualizer.size - 1000;
     virtualizer.scrollToIndex(index);
-    // scrollTarget.scrollTop += 10;
+    scrollTarget.scrollTop += 10;
 
     // Decrease the size so that the last buffered index exceeds the new size bounds.
     virtualizer.size = virtualizer.lastVisibleIndex + 1;

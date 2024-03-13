@@ -1,80 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Virtualizer</title>
-    <script type="module" src="./common.js"></script>
-  </head>
-  <body>
-    <style>
-      html,
-      body {
-        height: 100%;
-      }
-    </style>
+<script type="module" src="./common.js"></script>
+<script type="module">
+  import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 
-    <script type="module">
-      import '@vaadin/button';
-      import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
-      import '@vaadin/horizontal-layout';
-      import '@vaadin/integer-field';
-      import { Notification } from '@vaadin/notification';
-      import '@vaadin/split-layout';
-      import '@vaadin/vertical-layout';
+  const scrollTarget = document.querySelector('#scroll-target');
+  const scrollContainer = document.querySelector('#scroll-container');
 
-      // Set up the virtualizer
-      const scrollTarget = document.querySelector('#scroll-target');
-      const scrollContainer = document.querySelector('#scroll-container');
+  const virtualizer = new Virtualizer({
+    createElements: (count) => [...Array(count)].map(() => document.createElement('div')),
+    updateElement: (el, index) => {
+      el.style.right = '0';
+      el.style.left = '0';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.background = index % 2 === 0 ? '#DCDCDC' : '#C0C0C0';
+      el.style.height = '35px';
+      el.style.padding = '0 10px';
+      el.textContent = `Item ${index}`;
+    },
+    scrollTarget,
+    scrollContainer,
+    reorderElements: true,
+  });
 
-      const virtualizer = new Virtualizer({
-        createElements: (count) => [...Array(count)].map(() => document.createElement('div')),
-        updateElement: (el, index) => (el.textContent = `Item ${index}`),
-        scrollTarget,
-        scrollContainer,
-        reorderElements: true,
-      });
+  virtualizer.size = 500000;
 
-      virtualizer.size = 1000;
+  document.querySelector('.scroll-to-end').addEventListener('click', () => {
+    virtualizer.scrollToIndex(virtualizer.size - 1);
+  });
 
-      // Set up the controls
-      const sizeField = document.querySelector('#size');
-      sizeField.addEventListener('value-changed', (e) => (virtualizer.size = e.detail.value));
-      sizeField.value = virtualizer.size;
+  document.querySelector('.scroll-to-index').addEventListener('click', () => {
+    virtualizer.scrollToIndex(400000);
+  });
 
-      const scrollToIndexField = document.querySelector('#scroll-to-index');
-      const scrollButton = document.querySelector('#scroll');
-      scrollButton.addEventListener('click', () => {
-        virtualizer.scrollToIndex(parseInt(scrollToIndexField.value));
-      });
+  document.querySelector('.decrease-size').addEventListener('click', () => {
+    virtualizer.size = 400012;
+  });
 
-      const firstVisibleIndexButton = document.querySelector('#first-last-visible-index');
-      firstVisibleIndexButton.addEventListener('click', () => {
-        Notification.show(
-          `First visible index: ${virtualizer.firstVisibleIndex}, last visible index: ${virtualizer.lastVisibleIndex}`,
-        );
-      });
-    </script>
+  document.querySelector('.increase-size').addEventListener('click', () => {
+      virtualizer.size = 600000;
+    });
 
-    <vaadin-split-layout orientation="vertical" style="height: 100%">
-      <!-- Virtualizer -->
-      <div style="height: 30%; position: relative" id="scroll-target">
-        <div id="scroll-container"></div>
-      </div>
+  window.virtualizer = virtualizer;
+</script>
 
-      <!-- Controls -->
-      <vaadin-vertical-layout style="height: 70%">
-        <vaadin-integer-field id="size" label="Size" min="0"></vaadin-integer-field>
+<button class="scroll-to-end">Scroll to end</button>
 
-        <vaadin-horizontal-layout style="align-items: flex-end" theme="spacing">
-          <vaadin-integer-field id="scroll-to-index" label="Scroll To Index" value="500" min="0"></vaadin-integer-field>
+<button class="scroll-to-index">Scroll to index</button>
 
-          <vaadin-button id="scroll">Scroll</vaadin-button>
-        </vaadin-horizontal-layout>
+<button class="decrease-size">Decrease size</button>
 
-        <vaadin-button id="first-last-visible-index" style="margin-top: 30px">First/last visible index</vaadin-button>
-      </vaadin-vertical-layout>
-    </vaadin-split-layout>
-  </body>
-</html>
+<button class="increase-size">Increase size</button>
+
+<div style="height: 250px; margin: 10px 0;" id="scroll-target">
+  <!-- <div style="height: 50px; background: red; position: sticky; top: 0; z-index: 1"></div> -->
+  <div id="scroll-container"></div>
+</div>

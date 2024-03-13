@@ -15,7 +15,7 @@ describe('virtualizer', () => {
     }
 
     scrollTarget = fixtureSync(`
-      <div style="height: 250px;">
+      <div style="height: 200px;">
         <div></div>
       </div>
     `);
@@ -39,6 +39,10 @@ describe('virtualizer', () => {
   }
 
   beforeEach(() => init({}));
+
+  function getLastRenderedIndex() {
+    return [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
+  }
 
   it('should have the first item at the top', () => {
     const item = elementsContainer.querySelector('#item-0');
@@ -193,8 +197,7 @@ describe('virtualizer', () => {
   });
 
   it('should preserve scroll position when size decrease affects a buffered index', () => {
-    const lastBufferedIndex = [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
-    expect(lastBufferedIndex - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
+    expect(getLastRenderedIndex() - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
     // Scroll to an index and add an additional scroll offset.
     const index = 50;
