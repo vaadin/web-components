@@ -182,10 +182,8 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
     };
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
+  constructor() {
+    super();
     this.addEventListener('click', (e) => this._onClick(e));
   }
 
