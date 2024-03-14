@@ -178,6 +178,7 @@ export const ItemsMixin = (superClass) =>
       // Support menu-bar / context-menu item
       if (component._hasVaadinItemMixin) {
         component.setAttribute('role', 'menuitem');
+        component.tabIndex = -1;
       }
 
       if (component.localName === 'hr') {

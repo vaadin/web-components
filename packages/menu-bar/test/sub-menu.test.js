@@ -29,6 +29,12 @@ const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 describe('sub-menu', () => {
   let menu, buttons, subMenu, subMenuOverlay, item;
 
+  const createComponent = (text) => {
+    const item = document.createElement('vaadin-menu-bar-item');
+    item.textContent = text;
+    return item;
+  };
+
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [
@@ -45,7 +51,14 @@ describe('sub-menu', () => {
       { text: 'Menu Item 2' },
       {
         text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+        children: [
+          {
+            component: createComponent('Menu Item 3 1'),
+          },
+          {
+            component: createComponent('Menu Item 3 2'),
+          },
+        ],
       },
     ];
     await nextRender(menu);
@@ -150,6 +163,22 @@ describe('sub-menu', () => {
     const spy = sinon.spy(last, 'focus');
     await nextRender(subMenu);
     expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should focus first item after re-opening when using components', async () => {
+    arrowDown(buttons[2]);
+    await nextRender(subMenu);
+
+    const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
+    arrowDown(items[0]);
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+
+    // Close and re-open
+    esc(items[1]);
+    arrowDown(buttons[2]);
+    await nextRender(subMenu);
+
+    expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
 
   it('should close sub-menu on first item arrow up', async () => {
