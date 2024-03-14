@@ -22,6 +22,12 @@ import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 describe('items', () => {
   let rootMenu, subMenu, target, rootOverlay, subOverlay1;
 
+  const createComponent = (text) => {
+    const item = document.createElement('vaadin-context-menu-item');
+    item.textContent = text;
+    return item;
+  };
+
   beforeEach(async () => {
     rootMenu = fixtureSync(`
       <vaadin-context-menu>
@@ -43,6 +49,14 @@ describe('items', () => {
       },
       { text: 'foo-1' },
       { text: 'foo-2', keepOpen: true },
+      {
+        text: 'foo-3',
+        children: [
+          { component: createComponent('foo-3-0') },
+          { component: createComponent('foo-3-1') },
+          { component: createComponent('foo-3-2') },
+        ],
+      },
     ];
     await nextRender();
     await openMenu(target);
@@ -372,6 +386,32 @@ describe('items', () => {
     const spy = sinon.spy(item, 'focus');
     arrowUpKeyDown(subOverlay1.$.overlay);
     expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should focus first item after re-opening when using components', async () => {
+    subMenu.close();
+    rootOverlay.focus();
+
+    const rootItem = getMenuItems(rootMenu)[3];
+
+    // Open the sub-menu with item components
+    await openMenu(rootItem);
+    const subMenu2 = getSubMenu(rootMenu);
+    const items = getMenuItems(subMenu2);
+
+    // Arrow Down to focus next item
+    items[0].focus();
+    arrowDownKeyDown(items[0]);
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+
+    // Arrow Left to close the sub-menu
+    arrowLeftKeyDown(items[1]);
+    await nextFrame();
+    expect(rootItem.hasAttribute('focus-ring')).to.be.true;
+
+    // Re-open sub-menu and check focus
+    await openMenu(rootItem);
+    expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
 
   it('should have modeless sub menus', () => {
