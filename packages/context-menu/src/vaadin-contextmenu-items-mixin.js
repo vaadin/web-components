@@ -211,6 +211,7 @@ export const ItemsMixin = (superClass) =>
 
         if (component instanceof Item) {
           component.setAttribute('role', 'menuitem');
+          component.tabIndex = -1;
           component.classList.add('vaadin-menu-item');
         } else if (component.localName === 'hr') {
           component.setAttribute('role', 'separator');
