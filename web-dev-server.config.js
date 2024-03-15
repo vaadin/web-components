@@ -51,4 +51,8 @@ module.exports = {
     },
     esbuildPlugin({ ts: true }),
   ],
+  nodeResolve: {
+    // Use Lit in production mode
+    exportConditions: ['default'],
+  },
 };
