@@ -51,6 +51,17 @@ describe('tree toggle', () => {
 
         toggle.removeEventListener('expanded-changed', spy);
       });
+
+      it('should have the correct expanded state on listener invocation', (done) => {
+        toggle = document.createElement('vaadin-grid-tree-toggle');
+        toggle.addEventListener('click', () => {
+          expect(toggle.expanded).to.be.true;
+          done();
+        });
+        const wrapper = fixtureSync('<div></div>');
+        wrapper.append(toggle);
+        click(toggle);
+      });
     });
 
     describe('level', () => {
