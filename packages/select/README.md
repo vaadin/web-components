@@ -4,7 +4,7 @@ A web component for selecting a single value from a list of options presented in
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/select)
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-select)](https://www.npmjs.com/package/@vaadin/vaadin-select)
+[![npm version](https://badgen.net/npm/v/@vaadin/select)](https://www.npmjs.com/package/@vaadin/select)
 
 ```html
 <vaadin-select label="Sort by"></vaadin-select>
