@@ -1,8 +1,16 @@
 /* eslint-env node */
+const { chromeLauncher } = require('@web/test-runner-chrome');
 const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
+  browsers: [
+    chromeLauncher({
+      launchOptions: {
+        headless: 'shell',
+      },
+    }),
+  ],
   coverageConfig: {
     include: ['packages/**/src/**/*', 'packages/*/*.js'],
     threshold: {
