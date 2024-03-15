@@ -163,7 +163,7 @@ Are you looking for an example project to get started? Visit [start.vaadin.com](
 
 ## Questions
 
-For help and support questions, please use our [community chat](https://vaad.in/chat).
+For help and support questions, please use [Vaadin Forum](https://vaadin.com/forum/).
 
 ## Big Thanks
 
