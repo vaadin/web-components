@@ -1,7 +1,6 @@
 # Lumo
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-lumo-styles)](https://www.npmjs.com/package/@vaadin/vaadin-lumo-styles)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 > Lumo – ✨ enchantment (Finnish) and 🔆 light (Esperanto)
 

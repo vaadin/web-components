@@ -5,7 +5,6 @@ An extension of [`<vaadin-number-field>`](https://www.npmjs.com/package/@vaadin/
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/number-field/#integer-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/integer-field)](https://www.npmjs.com/package/@vaadin/integer-field)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-integer-field label="X"></vaadin-integer-field>

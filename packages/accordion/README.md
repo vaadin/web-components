@@ -5,7 +5,6 @@ A web component for displaying a vertically stacked set of expandable panels.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/accordion)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/accordion)](https://www.npmjs.com/package/@vaadin/accordion)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-accordion>

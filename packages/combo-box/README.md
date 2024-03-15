@@ -5,7 +5,6 @@ A web component for choosing a value from a filterable list of options presented
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/combo-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/combo-box)](https://www.npmjs.com/package/@vaadin/combo-box)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-combo-box

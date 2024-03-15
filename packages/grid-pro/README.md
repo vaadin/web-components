@@ -7,7 +7,6 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/grid-pro)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid-pro)](https://www.npmjs.com/package/@vaadin/grid-pro)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-grid-pro>

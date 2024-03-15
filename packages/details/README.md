@@ -5,7 +5,6 @@ A web component that provides an expandable panel for showing and hiding content
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/details)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/details)](https://www.npmjs.com/package/@vaadin/details)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-details opened>

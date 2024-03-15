@@ -5,7 +5,6 @@ A web component for displaying items in list-box, context-menu or select compone
 [Documentation + Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/item)](https://www.npmjs.com/package/@vaadin/item)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-item>Simple Item</vaadin-item> <vaadin-item disabled>Disabled Item</vaadin-item>

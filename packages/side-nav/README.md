@@ -5,7 +5,6 @@ A web component for navigation menus.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/side-nav)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-side-nav)](https://www.npmjs.com/package/@vaadin/vaadin-side-nav)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-side-nav collapsible>

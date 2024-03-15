@@ -5,7 +5,6 @@ An input field representing a binary choice.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/checkbox)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/checkbox)](https://www.npmjs.com/package/@vaadin/checkbox)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-checkbox label="Checked" checked></vaadin-checkbox>

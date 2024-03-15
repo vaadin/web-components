@@ -5,7 +5,6 @@ A web component that allows the user to choose several items from a group of bin
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/checkbox)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/checkbox-group)](https://www.npmjs.com/package/@vaadin/checkbox-group)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-checkbox-group label="Export data">

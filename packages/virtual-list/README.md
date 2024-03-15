@@ -5,7 +5,6 @@ A web component for rendering a long list of items without sacrificing performan
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/virtual-list)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/virtual-list)](https://www.npmjs.com/package/@vaadin/virtual-list)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-virtual-list></vaadin-virtual-list>

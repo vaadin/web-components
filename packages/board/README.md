@@ -7,7 +7,6 @@ A powerful and easy to use layout web component for building responsive views.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/board)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-board>

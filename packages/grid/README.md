@@ -5,7 +5,6 @@ A web component for showing tabular data.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/grid)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid)](https://www.npmjs.com/package/@vaadin/grid)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>

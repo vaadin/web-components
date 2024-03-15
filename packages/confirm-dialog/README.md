@@ -5,7 +5,6 @@ A modal dialog web component for confirming user actions.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/confirm-dialog)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog)](https://www.npmjs.com/package/@vaadin/confirm-dialog)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" reject-text="Discard" cancel reject>

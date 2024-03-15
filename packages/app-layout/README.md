@@ -5,7 +5,6 @@ A web component for building common application layouts.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/app-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/app-layout)](https://www.npmjs.com/package/@vaadin/app-layout)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-app-layout>

@@ -5,7 +5,6 @@ An accessible and customizable button that allows users to perform actions.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/button)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/button)](https://www.npmjs.com/package/@vaadin/button)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-button theme="primary">Primary</vaadin-button>

@@ -5,7 +5,6 @@ A web component for selecting one or more values from a scrollable list of items
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/list-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/list-box)](https://www.npmjs.com/package/@vaadin/list-box)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-list-box selected="2">

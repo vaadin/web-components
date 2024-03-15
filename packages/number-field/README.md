@@ -5,7 +5,6 @@ An input field web component that only accepts numeric input.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/number-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/number-field)](https://www.npmjs.com/package/@vaadin/number-field)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-number-field label="Balance"></vaadin-number-field>

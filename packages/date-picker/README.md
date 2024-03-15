@@ -5,7 +5,6 @@ A web component that allows to enter a date by typing or by selecting from a cal
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/date-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/date-picker)](https://www.npmjs.com/package/@vaadin/date-picker)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-date-picker label="Label" value="2018-12-03" clear-button-visible></vaadin-date-picker>

@@ -5,7 +5,6 @@ A web component for organizing and grouping content into sections.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/tabs)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/tabs)](https://www.npmjs.com/package/@vaadin/tabs)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-tabs selected="3">

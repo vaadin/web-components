@@ -5,7 +5,6 @@ A web component for wrapping multiple components as a single field.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/custom-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/custom-field)](https://www.npmjs.com/package/@vaadin/custom-field)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-custom-field label="Enrollment period" helper-text="Cannot be longer than 30 days" required>

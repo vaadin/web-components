@@ -7,7 +7,6 @@ A web component to display a banner for users to give consent to the usage of co
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/cookie-consent)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-cookie-consent></vaadin-cookie-consent>
