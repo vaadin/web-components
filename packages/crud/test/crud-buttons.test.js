@@ -738,6 +738,25 @@ describe('crud buttons', () => {
 
         expect(button.textContent).to.equal('Add user');
       });
+
+      it('should set theme attribute of the new item button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('primary');
+      });
+
+      it('should not change theme attribute of the new item button when marked as a default', async () => {
+        button._isDefault = true;
+        button.setAttribute('theme', 'primary success');
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('primary success');
+      });
     });
 
     describe('delete', () => {
@@ -773,6 +792,25 @@ describe('crud buttons', () => {
         await nextRender();
 
         expect(button.textContent).to.equal('Drop user');
+      });
+
+      it('should set theme attribute of the delete button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('tertiary error');
+      });
+
+      it('should not change theme attribute of the delete button when marked as a default', async () => {
+        button._isDefault = true;
+        button.setAttribute('theme', 'tertiary contrast');
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('tertiary contrast');
       });
     });
 
@@ -810,6 +848,25 @@ describe('crud buttons', () => {
 
         expect(button.textContent).to.equal('Save user');
       });
+
+      it('should set theme attribute of the save button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('primary');
+      });
+
+      it('should not change theme attribute of the save button when marked as a default', async () => {
+        button._isDefault = true;
+        button.setAttribute('theme', 'primary contrast');
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('primary contrast');
+      });
     });
 
     describe('cancel', () => {
@@ -845,6 +902,25 @@ describe('crud buttons', () => {
         await nextRender();
 
         expect(button.textContent).to.equal('Discard');
+      });
+
+      it('should set theme attribute of the cancel button when marked as a default', async () => {
+        button._isDefault = true;
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('tertiary');
+      });
+
+      it('should not change theme attribute of the cancel button when marked as a default', async () => {
+        button._isDefault = true;
+        button.setAttribute('theme', 'tertiary contrast');
+
+        crud.appendChild(button);
+        await nextRender();
+
+        expect(button.getAttribute('theme')).to.equal('tertiary contrast');
       });
     });
   });
