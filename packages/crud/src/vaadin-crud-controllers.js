@@ -41,7 +41,8 @@ export class ButtonSlotController extends SlotController {
       this.defaultNode = node;
     }
 
-    if (node === this.defaultNode) {
+    // Respect default theme attribute set by the Flow counterpart
+    if (node === this.defaultNode && !node.hasAttribute('theme')) {
       node.setAttribute('theme', this.theme);
     }
 
