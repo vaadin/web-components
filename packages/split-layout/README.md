@@ -5,7 +5,6 @@ A web component with two content areas and a draggable split handle between them
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/split-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-split-layout>

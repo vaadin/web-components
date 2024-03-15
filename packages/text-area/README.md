@@ -5,7 +5,6 @@ An input field component for multi-line text input.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/text-area)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/text-area)](https://www.npmjs.com/package/@vaadin/text-area)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-text-area label="Comment"></vaadin-text-area>

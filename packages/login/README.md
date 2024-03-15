@@ -5,7 +5,6 @@ A web component for displaying a login form, either inline, or as an overlay.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/login)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/login)](https://www.npmjs.com/package/@vaadin/login)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-login-overlay opened></vaadin-login-overlay>

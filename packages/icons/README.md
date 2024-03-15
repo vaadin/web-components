@@ -5,7 +5,6 @@ A set of 600+ icons designed for web applications.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icons)](https://www.npmjs.com/package/@vaadin/icons)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 [<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/icons/screenshot.png" width="728" alt="Screenshot of vaadin-icons">](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
 

@@ -5,7 +5,6 @@ A web component for grouping multiple [`<vaadin-avatar>`](https://www.npmjs.com/
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/avatar/#avatar-group)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/avatar-group)](https://www.npmjs.com/package/@vaadin/avatar-group)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-avatar-group max-items-visible="3"></vaadin-avatar-group>

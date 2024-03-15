@@ -5,7 +5,6 @@ A web component for creating a horizontal button bar with hierarchical drop-down
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/menu-bar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/menu-bar)](https://www.npmjs.com/package/@vaadin/menu-bar)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-menu-bar></vaadin-menu-bar>

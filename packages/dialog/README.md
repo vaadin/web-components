@@ -5,7 +5,6 @@ A web component for presenting information and user interface elements in an ove
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/dialog)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/dialog)](https://www.npmjs.com/package/@vaadin/dialog)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-dialog opened></vaadin-dialog>

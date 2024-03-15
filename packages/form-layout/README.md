@@ -5,7 +5,6 @@ A web component for building responsive forms with multiple columns.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/form-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/form-layout)](https://www.npmjs.com/package/@vaadin/form-layout)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-form-layout>

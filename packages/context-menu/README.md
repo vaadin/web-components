@@ -5,7 +5,6 @@ A web component that can be attached to any component to display a context menu.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/context-menu)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-context-menu>

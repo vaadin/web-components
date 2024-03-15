@@ -5,7 +5,6 @@ A web component that allows the user to input and edit text.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/text-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/text-field)](https://www.npmjs.com/package/@vaadin/text-field)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-text-field label="Street Address"></vaadin-text-field>

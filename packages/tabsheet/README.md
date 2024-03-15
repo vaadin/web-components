@@ -5,7 +5,6 @@ A web component for organizing and grouping content into sections.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/tabs/#tab-sheet)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet)](https://www.npmjs.com/package/@vaadin/tabsheet)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-tabsheet>

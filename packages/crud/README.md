@@ -7,7 +7,6 @@ A web component for displaying, editing, creating, and deleting items from a dat
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/crud)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/crud)](https://www.npmjs.com/package/@vaadin/crud)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'></vaadin-crud>

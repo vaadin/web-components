@@ -5,7 +5,6 @@ An input field web component for selecting both a date and a time.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/date-time-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/date-time-picker)](https://www.npmjs.com/package/@vaadin/date-time-picker)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-date-time-picker></vaadin-date-time-picker>

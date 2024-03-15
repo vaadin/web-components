@@ -5,7 +5,6 @@ A web component for uploading files.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/upload)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/upload)](https://www.npmjs.com/package/@vaadin/upload)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-upload accept=".pdf">

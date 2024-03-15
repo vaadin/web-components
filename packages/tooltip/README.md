@@ -3,7 +3,6 @@
 A web component for creating tooltips.
 
 [![npm version](https://badgen.net/npm/v/@vaadin/tooltip)](https://www.npmjs.com/package/@vaadin/tooltip)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-button id="confirm">Confirm</vaadin-button>

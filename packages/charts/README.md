@@ -7,7 +7,6 @@ A feature-rich interactive charting library providing multiple different chart t
 [Documentation + Live Demo ↗](https://charts.demo.vaadin.com/vaadin-charts/)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/charts)](https://www.npmjs.com/package/@vaadin/charts)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-chart type="pie">

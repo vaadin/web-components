@@ -7,7 +7,6 @@ A component for displaying web maps.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/map)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/map)](https://www.npmjs.com/package/@vaadin/map)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-map></vaadin-map>

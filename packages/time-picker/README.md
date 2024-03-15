@@ -5,7 +5,6 @@ A web component that allows to enter a time, either by typing, or by selecting f
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/time-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/time-picker)](https://www.npmjs.com/package/@vaadin/time-picker)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-time-picker label="Delivery Time"></vaadin-time-picker>

@@ -10,7 +10,6 @@
 
 [![Build](https://github.com/vaadin/web-components/actions/workflows/coverage.yml/badge.svg)](https://github.com/vaadin/web-components/actions/workflows/coverage.yml)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/vaadin.svg?label=follow+vaadin)](https://twitter.com/vaadin)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 </div>
 

@@ -5,7 +5,6 @@ A web component for providing feedback to the user.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/notification)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/notification)](https://www.npmjs.com/package/@vaadin/notification)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-notification opened position="middle" duration="-1"></vaadin-notification>

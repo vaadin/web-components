@@ -5,7 +5,6 @@ A web component for displaying SVG icons.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icon)](https://www.npmjs.com/package/@vaadin/icon)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-icon name="vaadin:user"></vaadin-icon>

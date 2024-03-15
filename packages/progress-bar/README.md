@@ -5,7 +5,6 @@ A web component for showing the completion status of a task or process.
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/progress-bar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/progress-bar)](https://www.npmjs.com/package/@vaadin/progress-bar)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-progress-bar></vaadin-progress-bar>

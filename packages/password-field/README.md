@@ -5,7 +5,6 @@ An extension of [`<vaadin-text-field>`](https://www.npmjs.com/package/@vaadin/te
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/password-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/password-field)](https://www.npmjs.com/package/@vaadin/password-field)
-[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-password-field label="Password"></vaadin-password-field>
