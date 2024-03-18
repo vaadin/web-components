@@ -370,6 +370,7 @@ describe('edit column editor type', () => {
       cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
       cell.focus();
       await sendKeys({ down: 'a' });
+      await nextRender();
       await sendKeys({ down: 'b' });
       await sendKeys({ down: 'Enter' });
       await nextRender();
