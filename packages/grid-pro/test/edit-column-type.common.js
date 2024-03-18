@@ -372,7 +372,6 @@ describe('edit column editor type', () => {
       await sendKeys({ down: 'a' });
       await sendKeys({ down: 'b' });
       await sendKeys({ down: 'Enter' });
-      await nextRender();
       expect(cell._content.textContent).to.equal('ab');
     });
   });
