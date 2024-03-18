@@ -267,8 +267,10 @@ export const GridProEditColumnMixin = (superClass) =>
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
 
-      this._focusEditor(editor);
-      requestAnimationFrame(() => this._focusEditor(editor));
+      queueMicrotask(() => {
+        this._focusEditor(editor);
+        queueMicrotask(() => editor.focus());
+      });
     }
 
     /**

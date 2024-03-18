@@ -11,6 +11,7 @@ import {
   nextRender,
   space,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 
@@ -97,8 +98,9 @@ describe('edit column editor type', () => {
       expect(checkbox.checked).to.be.equal(grid.items[0].married);
     });
 
-    it('should set focus-ring on the checkbox', () => {
+    it('should set focus-ring on the checkbox', async () => {
       dblclick(cell._content);
+      await nextFrame();
       checkbox = column._getEditorComponent(cell);
       expect(checkbox.hasAttribute('focus-ring')).to.be.true;
     });
@@ -361,6 +363,16 @@ describe('edit column editor type', () => {
       keyDownChar(cell._content, 'a');
       editor = column._getEditorComponent(cell);
       expect(editor).to.be.not.ok;
+    });
+
+    it('should not start edit with first character selected', async () => {
+      column = grid.querySelector('[path="name"]');
+      cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
+      cell.focus();
+      await sendKeys({ down: 'a' });
+      await sendKeys({ down: 'b' });
+      editor = column._getEditorComponent(cell);
+      expect(editor.value).to.be.equal('ab');
     });
   });
 });

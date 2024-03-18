@@ -169,7 +169,7 @@ describe('edit column renderer', () => {
       expect(editor.value).to.be.equal(grid.items[0].name);
     });
 
-    it('should call `focus()` on the custom editor component after entering the cell edit mode', () => {
+    it('should call `focus()` on the custom editor component after entering the cell edit mode', async () => {
       let spy;
 
       column.editModeRenderer = function (root) {
@@ -180,10 +180,11 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      expect(spy.calledOnce).to.be.true;
+      await nextFrame();
+      expect(spy.called).to.be.true;
     });
 
-    it('should call `select()` on the custom editor component, if the <input> was rendered', () => {
+    it('should call `select()` on the custom editor component, if the <input> was rendered', async () => {
       let spy;
 
       column.editModeRenderer = function (root) {
@@ -194,7 +195,8 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      expect(spy.calledOnce).to.be.true;
+      await nextFrame();
+      expect(spy.called).to.be.true;
     });
 
     it('should exit the edit mode on custom editor component focusout event', () => {
