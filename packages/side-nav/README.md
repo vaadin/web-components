@@ -4,7 +4,7 @@ A web component for navigation menus.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/side-nav)
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-side-nav)](https://www.npmjs.com/package/@vaadin/vaadin-side-nav)
+[![npm version](https://badgen.net/npm/v/@vaadin/side-nav)](https://www.npmjs.com/package/@vaadin/side-nav)
 
 ```html
 <vaadin-side-nav collapsible>
