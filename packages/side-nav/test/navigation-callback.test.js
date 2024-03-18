@@ -62,6 +62,13 @@ describe('navigation callback', () => {
     expect(clickEvent.defaultPrevented).to.be.false;
   });
 
+  it('should not cancel the click event when using router-ignore', async () => {
+    sideNavItem.routerIgnore = true;
+    await nextRender();
+    const clickEvent = clickItemLink(sideNavItem);
+    expect(clickEvent.defaultPrevented).to.be.false;
+  });
+
   it('should not cancel the click event if callback is not defined', () => {
     sideNav.onNavigate = undefined;
     const clickEvent = clickItemLink(sideNavItem);

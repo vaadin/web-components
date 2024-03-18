@@ -331,5 +331,25 @@ describe('side-nav-item', () => {
         expect(anchor.hasAttribute('target')).to.be.not.ok;
       });
     });
+
+    describe('router ignore property', () => {
+      it('should not set router-ignore attribute by default', () => {
+        expect(anchor.hasAttribute('router-ignore')).to.be.false;
+      });
+
+      it('should set router-ignore attribute to the anchor when router-ignore is enabled', async () => {
+        item.routerIgnore = true;
+        await nextRender();
+        expect(anchor.hasAttribute('router-ignore')).to.be.true;
+      });
+
+      it('should remove router-ignore attribute from the anchor when router-ignore is disabled', async () => {
+        item.routerIgnore = true;
+        await nextRender();
+        item.routerIgnore = false;
+        await nextRender();
+        expect(anchor.hasAttribute('router-ignore')).to.be.false;
+      });
+    });
   });
 });
