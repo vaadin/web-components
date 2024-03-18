@@ -116,7 +116,7 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    * page reload. This only works with supported routers, such as the one
    * provided in Vaadin apps, or when using the side nav `onNavigate` hook.
    *
-   * @type {boolean}
+   * @attr {boolean} router-ignore
    */
   routerIgnore: boolean;
 

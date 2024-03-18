@@ -145,11 +145,11 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
        * provided in Vaadin apps, or when using the side nav `onNavigate` hook.
        *
        * @type {boolean}
+       * @attr {boolean} router-ignore
        */
       routerIgnore: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
       },
     };
   }
