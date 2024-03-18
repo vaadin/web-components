@@ -9,7 +9,7 @@ describe('unlimited size', () => {
 
   beforeEach(() => {
     scrollTarget = fixtureSync(`
-      <div style="height: 200px;">
+      <div style="height: 250px;">
         <div></div>
       </div>
     `);
@@ -22,6 +22,11 @@ describe('unlimited size', () => {
         el.index = index;
         el.id = `item-${index}`;
         el.textContent = el.id;
+        el.style.display = 'flex';
+        el.style.alignItems = 'center';
+        el.style.background = index % 2 === 0 ? '#DCDCDC' : '#C0C0C0';
+        el.style.height = '30px';
+        el.style.padding = '0 10px';
       },
       scrollTarget,
       scrollContainer,
