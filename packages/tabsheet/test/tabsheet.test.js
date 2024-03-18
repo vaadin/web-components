@@ -416,6 +416,17 @@ describe('tabsheet - tabs without ID', () => {
     expect(getPanels()[1].hidden).to.be.true;
   });
 
+  it('should not have matching panel visible after setting ID on the detached tab', async () => {
+    // Move selected tab out of the `vaadin-tabs`
+    const tab = tabs.items[0];
+    tabsheet.parentNode.appendChild(tab);
+    await nextFrame();
+    tab.id = 'tab-1';
+    await nextFrame();
+    expect(getPanels()[0].hidden).to.be.true;
+    expect(getPanels()[1].hidden).to.be.true;
+  });
+
   it('should link tab with panel after setting ID regardless of tab selected state', async () => {
     tabs.items[0].id = 'tab-1';
     await nextFrame();

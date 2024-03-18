@@ -37,6 +37,7 @@ class TabsSlotController extends SlotController {
 
   /** @private */
   __tabsItemsChangedListener() {
+    this.__tabIdObserver.disconnect();
     const items = this.tabs.items || [];
     items.forEach((tab) => {
       this.__tabIdObserver.observe(tab, {
