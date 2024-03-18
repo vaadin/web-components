@@ -118,9 +118,11 @@ export const ListMixin = (superClass) =>
       if (this._observer) {
         this._observer.flush();
       }
-      const firstItem = this.querySelector('[tabindex="0"]');
-      if (firstItem && !isElementHidden(firstItem)) {
-        this._focusItem(firstItem);
+
+      const items = Array.isArray(this.items) ? this.items : [];
+      const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0 && !isElementHidden(item));
+      if (idx >= 0) {
+        this._focus(idx);
       } else {
         // Call `KeyboardDirectionMixin` logic to focus first non-disabled item.
         super.focus();
