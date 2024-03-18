@@ -306,6 +306,11 @@ registerStyles(
       border-left-color: var(--_lumo-grid-border-color);
     }
 
+    [part~='cell'][last-frozen] ::slotted(vaadin-grid-cell-content),
+    [part~='cell'][first-frozen-to-end] ::slotted(vaadin-grid-cell-content) {
+      min-width: calc(100% + var(--_lumo-grid-border-width));
+    }
+
     /* Row stripes */
 
     :host([theme~='row-stripes']) [part~='even-row'] [part~='body-cell'],
