@@ -307,6 +307,14 @@ const runTests = (defineHelper, baseMixin) => {
       list.focus();
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should change tabindex from -1 to 0 on first non-disabled item when focusing it', () => {
+      list.items.forEach((item) => {
+        item.tabIndex = -1;
+      });
+      list.focus();
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
   });
 
   describe('tabIndex when all the items are disabled', () => {
