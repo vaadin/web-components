@@ -323,8 +323,8 @@ export class IronListAdapter {
     if (size > 0) {
       fvi = Math.min(fvi, size - 1);
       // Note, calling scrollToIndex also updates the virtual index offset,
-      // causing the virtualizer to add more items on size decrease,
-      // and remove exceeding items on size decrease.
+      // causing the virtualizer to add more items when size is increased,
+      // and remove exceeding items when size is decreased.
       this.scrollToIndex(fvi);
 
       const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
