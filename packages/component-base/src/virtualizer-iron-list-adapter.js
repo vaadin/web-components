@@ -89,6 +89,10 @@ export class IronListAdapter {
     return this.lastVisibleIndex + this._vidxOffset;
   }
 
+  get _maxVirtualIndexOffset() {
+    return this.size - this._virtualCount;
+  }
+
   __hasPlaceholders() {
     return this.__getVisibleElements().some((el) => el.__virtualizerPlaceholder);
   }
@@ -113,7 +117,7 @@ export class IronListAdapter {
     let targetVirtualIndex = Math.floor((index / this.size) * this._virtualCount);
     if (this._virtualCount - targetVirtualIndex < visibleElementCount) {
       targetVirtualIndex = this._virtualCount - (this.size - index);
-      this._vidxOffset = this.size - this._virtualCount;
+      this._vidxOffset = this._maxVirtualIndexOffset;
     } else if (targetVirtualIndex < visibleElementCount) {
       if (index < OFFSET_ADJUST_MIN_THRESHOLD) {
         targetVirtualIndex = index;
@@ -769,6 +773,8 @@ export class IronListAdapter {
 
   /** @private */
   _adjustVirtualIndexOffset(delta) {
+    const maxOffset = this._maxVirtualIndexOffset;
+
     if (this._virtualCount >= this.size) {
       this._vidxOffset = 0;
     } else if (this.__skipNextVirtualIndexAdjust) {
@@ -776,8 +782,7 @@ export class IronListAdapter {
     } else if (Math.abs(delta) > 10000) {
       // Process a large scroll position change
       const scale = this._scrollTop / (this.scrollTarget.scrollHeight - this.scrollTarget.offsetHeight);
-      const offset = scale * this.size;
-      this._vidxOffset = Math.round(offset - scale * this._virtualCount);
+      this._vidxOffset = Math.round(scale * maxOffset);
     } else {
       // Make sure user can always swipe/wheel scroll to the start and end
       const oldOffset = this._vidxOffset;
@@ -796,7 +801,6 @@ export class IronListAdapter {
       }
 
       // Near end
-      const maxOffset = this.size - this._virtualCount;
       if (this._scrollTop >= this._maxScrollTop && this._maxScrollTop > 0) {
         this._vidxOffset = maxOffset;
         if (oldOffset !== this._vidxOffset) {
