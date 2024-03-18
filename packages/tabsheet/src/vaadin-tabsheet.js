@@ -25,11 +25,29 @@ class TabsSlotController extends SlotController {
     super(host, 'tabs');
     this.__tabsItemsChangedListener = this.__tabsItemsChangedListener.bind(this);
     this.__tabsSelectedChangedListener = this.__tabsSelectedChangedListener.bind(this);
+    this.__tabIdObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        const tab = mutation.target;
+
+        host.__linkTabAndPanel(tab);
+
+        if (tab.selected) {
+          host.__togglePanels(tab);
+        }
+      });
+    });
   }
 
   /** @private */
   __tabsItemsChangedListener() {
-    this.host._setItems(this.tabs.items);
+    this.__tabIdObserver.disconnect();
+    const items = this.tabs.items || [];
+    items.forEach((tab) => {
+      this.__tabIdObserver.observe(tab, {
+        attributeFilter: ['id'],
+      });
+    });
+    this.host._setItems(items);
   }
 
   /** @private */
@@ -242,16 +260,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     }
 
     items.forEach((tabItem) => {
-      const panel = panels.find((panel) => panel.getAttribute('tab') === tabItem.id);
-      if (panel) {
-        panel.role = 'tabpanel';
-        if (!panel.id) {
-          panel.id = `tabsheet-panel-${generateUniqueId()}`;
-        }
-        panel.setAttribute('aria-labelledby', tabItem.id);
-
-        tabItem.setAttribute('aria-controls', panel.id);
-      }
+      this.__linkTabAndPanel(tabItem, panels);
     });
   }
 
@@ -264,11 +273,14 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       return;
     }
 
-    const content = this.shadowRoot.querySelector('[part="content"]');
+    this.__togglePanels(items[selected], panels);
+  }
 
-    const selectedTab = items[selected];
+  /** @private */
+  __togglePanels(selectedTab, panels = this.__panels) {
     const selectedTabId = selectedTab ? selectedTab.id : '';
     const selectedPanel = panels.find((panel) => panel.getAttribute('tab') === selectedTabId);
+    const content = this.shadowRoot.querySelector('[part="content"]');
 
     // Mark loading state if a selected panel is not found.
     this.toggleAttribute('loading', !selectedPanel);
@@ -287,6 +299,19 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     panels.forEach((panel) => {
       panel.hidden = panel !== selectedPanel;
     });
+  }
+
+  /** @private */
+  __linkTabAndPanel(tab, panels = this.__panels) {
+    const panel = panels.find((panel) => panel.getAttribute('tab') === tab.id);
+    if (panel) {
+      panel.role = 'tabpanel';
+      if (!panel.id) {
+        panel.id = `tabsheet-panel-${generateUniqueId()}`;
+      }
+      panel.setAttribute('aria-labelledby', tab.id);
+      tab.setAttribute('aria-controls', panel.id);
+    }
   }
 }
 
