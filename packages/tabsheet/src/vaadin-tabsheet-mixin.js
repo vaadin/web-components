@@ -22,14 +22,10 @@ class TabsSlotController extends SlotController {
       mutations.forEach((mutation) => {
         const tab = mutation.target;
 
-        if (mutation.type === 'attributes') {
-          // We use attributeFilter to only observe ID mutation,
-          // no need to check for attribute name separately.
-          host.__linkTabAndPanel(tab);
+        host.__linkTabAndPanel(tab);
 
-          if (tab.selected) {
-            host.__togglePanels(tab);
-          }
+        if (tab.selected) {
+          host.__togglePanels(tab);
         }
       });
     });
@@ -41,7 +37,6 @@ class TabsSlotController extends SlotController {
     const items = this.tabs.items || [];
     items.forEach((tab) => {
       this.__tabIdObserver.observe(tab, {
-        attributes: true,
         attributeFilter: ['id'],
       });
     });
