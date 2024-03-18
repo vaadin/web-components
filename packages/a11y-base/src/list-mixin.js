@@ -8,6 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { isElementHidden } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -118,7 +119,7 @@ export const ListMixin = (superClass) =>
         this._observer.flush();
       }
       const firstItem = this.querySelector('[tabindex="0"]');
-      if (firstItem) {
+      if (firstItem && !isElementHidden(firstItem)) {
         this._focusItem(firstItem);
       } else {
         // Call `KeyboardDirectionMixin` logic to focus first non-disabled item.

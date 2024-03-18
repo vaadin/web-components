@@ -297,6 +297,16 @@ const runTests = (defineHelper, baseMixin) => {
       list.focus();
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should call focus() on the first non-disabled visible item if all items have tabindex -1', () => {
+      list.items.forEach((item) => {
+        item.tabIndex = -1;
+      });
+      list.items[2].setAttribute('hidden', '');
+      const spy = sinon.spy(list.items[3], 'focus');
+      list.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('tabIndex when all the items are disabled', () => {
