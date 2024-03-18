@@ -30,9 +30,11 @@ describe('virtualizer', () => {
           el.index = index;
           el.id = `item-${index}`;
           el.textContent = el.id;
+          el.style.right = '0';
+          el.style.left = '0';
           el.style.display = 'flex';
           el.style.alignItems = 'center';
-          el.style.background = index % 2 === 0 ? '#DCDCDC' : '#C0C0C0';
+          el.style.background = index % 2 === 0 ? '#e7e7e7' : '#d0d0d0';
           el.style.height = '30px';
           el.style.padding = '0 10px';
         }),
