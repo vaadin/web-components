@@ -414,6 +414,35 @@ describe('items', () => {
     expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
 
+  it('should focus first non-disabled item after re-opening when using components', async () => {
+    subMenu.close();
+    rootOverlay.focus();
+
+    rootMenu.items[3].children[0].disabled = true;
+
+    const rootItem = getMenuItems(rootMenu)[3];
+
+    // Open the sub-menu with item components
+    await openMenu(rootItem);
+    const subMenu2 = getSubMenu(rootMenu);
+    const items = getMenuItems(subMenu2);
+
+    // expect(items[1].hasAttribute('focus-ring')).to.be.true;
+    // Arrow Down to focus next item
+    items[1].focus();
+    arrowDownKeyDown(items[1]);
+    expect(items[2].hasAttribute('focus-ring')).to.be.true;
+
+    // Arrow Left to close the sub-menu
+    arrowLeftKeyDown(items[2]);
+    await nextFrame();
+    expect(rootItem.hasAttribute('focus-ring')).to.be.true;
+
+    // Re-open sub-menu and check focus
+    await openMenu(rootItem);
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+  });
+
   it('should have modeless sub menus', () => {
     const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);

@@ -117,8 +117,13 @@ export const ListMixin = (superClass) =>
       if (this._observer) {
         this._observer.flush();
       }
-      const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
-      this._focusItem(firstItem);
+      const firstItem = this.querySelector('[tabindex="0"]');
+      if (firstItem) {
+        this._focusItem(firstItem);
+      } else {
+        // Call `KeyboardDirectionMixin` logic to focus first non-disabled item.
+        super.focus();
+      }
     }
 
     /** @protected */
