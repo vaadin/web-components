@@ -233,7 +233,7 @@ describe('unlimited size', () => {
     expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should preserve scroll position when size decrease affects a buffered index', () => {
+  it('should preserve scroll position when size decrease affects a buffered index', async () => {
     // Make sure there are at least 2 buffered items at the end.
     expect(getLastRenderedIndex() - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
@@ -244,7 +244,7 @@ describe('unlimited size', () => {
 
     // Decrease the size so that the last buffered index exceeds the new size bounds.
     virtualizer.size = virtualizer.lastVisibleIndex + 1;
-    // await oneEvent(scrollTarget, 'scroll');
+    await oneEvent(scrollTarget, 'scroll');
 
     const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
