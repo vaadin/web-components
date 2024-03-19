@@ -742,10 +742,6 @@ export const GridMixin = (superClass) =>
             cell.part.add('cell', `${section}-cell`);
           }
 
-          if (column._cellPart) {
-            cell.part.add(column._cellPart);
-          }
-
           if (!cell._content.parentElement) {
             contentsFragment.appendChild(cell._content);
           }
