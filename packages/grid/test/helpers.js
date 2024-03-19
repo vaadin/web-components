@@ -13,7 +13,6 @@ export const flushGrid = (grid) => {
     grid._debouncerHiddenChanged,
     grid._debouncerApplyCachedData,
     grid.__debounceUpdateFrozenColumn,
-    grid._debouncerLoadedItems,
   ].forEach((debouncer) => debouncer?.flush());
 
   grid.__virtualizer.flush();
