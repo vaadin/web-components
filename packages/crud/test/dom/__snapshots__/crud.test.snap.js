@@ -176,7 +176,7 @@ snapshots["vaadin-crud host default"] =
 `;
 /* end snapshot vaadin-crud host default */
 
-snapshots["vaadin-crud shadow default"] =
+snapshots["vaadin-crud shadow default"] = 
 `<div id="container">
   <div id="main">
     <slot name="grid">
@@ -192,15 +192,15 @@ snapshots["vaadin-crud shadow default"] =
     </div>
   </div>
   <div
-    aria-labelledby="header"
     hidden=""
     id="editor"
     part="editor"
-    role="group"
   >
     <div
+      aria-labelledby="header"
       id="scroller"
       part="scroller"
+      role="group"
     >
       <div
         id="header"

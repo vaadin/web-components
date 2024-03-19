@@ -74,14 +74,7 @@ registerStyles(
         background: var(--material-background-color);
       }
 
-      [part='editor'] {
-        position: relative;
-      }
-
-      [part='editor']:focus::before {
-        position: absolute;
-        inset: 0;
-        content: '';
+      [part='scroller']:focus {
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
       }
 

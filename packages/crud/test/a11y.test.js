@@ -258,8 +258,8 @@ describe('a11y', () => {
   );
 
   ['aside', 'bottom'].forEach((editorPosition) => {
-    describe(`editor focus - ${editorPosition} position`, () => {
-      let newButton, editButtons, editor;
+    describe(`scroller focus - ${editorPosition} position`, () => {
+      let newButton, editButtons, scroller;
 
       beforeEach(async () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
@@ -268,7 +268,7 @@ describe('a11y', () => {
         await nextRender();
         newButton = crud.querySelector('[slot=new-button]');
         editButtons = crud.querySelectorAll('vaadin-crud-edit');
-        editor = crud.$.editor;
+        scroller = crud.$.scroller;
       });
 
       afterEach(async () => {
@@ -276,18 +276,18 @@ describe('a11y', () => {
         await nextRender();
       });
 
-      it('should move focus to the editor on new button click', async () => {
+      it('should move focus to the scroller on new button click', async () => {
         newButton.focus();
         newButton.click();
         await nextRender();
-        expect(getDeepActiveElement()).to.equal(editor);
+        expect(getDeepActiveElement()).to.equal(scroller);
       });
 
-      it('should move focus to the editor on edit button click', async () => {
+      it('should move focus to the scroller on edit button click', async () => {
         editButtons[0].focus();
         editButtons[0].click();
         await nextRender();
-        expect(getDeepActiveElement()).to.equal(editor);
+        expect(getDeepActiveElement()).to.equal(scroller);
       });
     });
   });

@@ -66,6 +66,11 @@ registerStyles(
 
       [part='scroller'] {
         padding: var(--lumo-space-l);
+        position: relative;
+      }
+
+      [part='scroller']:focus {
+        box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       }
 
       [part='toolbar'] {
@@ -101,13 +106,6 @@ registerStyles(
         background: var(--lumo-base-color);
         box-sizing: border-box;
         position: relative;
-      }
-
-      [part='editor']:focus::before {
-        position: absolute;
-        inset: 0;
-        content: '';
-        box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
