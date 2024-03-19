@@ -163,8 +163,8 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
-                >${item.text}</vaadin-message
-              >
+                >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+              ></vaadin-message>
             `,
         )}
       `,
