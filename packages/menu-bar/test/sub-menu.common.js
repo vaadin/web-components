@@ -190,11 +190,10 @@ describe('sub-menu', () => {
     await nextRender(subMenu);
 
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
-    arrowDown(items[1]);
-    expect(items[2].hasAttribute('focus-ring')).to.be.true;
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
 
     // Close and re-open
-    esc(items[2]);
+    esc(items[1]);
     arrowDown(buttons[2]);
     await nextRender(subMenu);
 
