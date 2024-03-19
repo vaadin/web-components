@@ -144,6 +144,12 @@ describe('message-list', () => {
         expect(items[0]).to.eql(firstMessage);
         expect(items[1]).to.not.eql(firstMessage);
       });
+
+      it('should not remove vaadin-avatar elements when updating items', async () => {
+        messageList.items = [{ text: '', userName: 'Assistant' }];
+        await nextRender();
+        expect(messageList.querySelector('vaadin-avatar')).to.be.ok;
+      });
     });
 
     describe('scroll', () => {
