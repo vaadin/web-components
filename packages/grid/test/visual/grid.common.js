@@ -189,6 +189,61 @@ describe('grid', () => {
         });
       });
 
+      describe('selection', () => {
+        let selectionColumn;
+
+        describe('start', () => {
+          beforeEach(async () => {
+            element = fixtureSync(`
+              <vaadin-grid style="height: 250px; max-width: 260px">
+                <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+                <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+                <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+              </vaadin-grid>
+            `);
+            element.items = users;
+            flushGrid(element);
+            await nextRender(element);
+            selectionColumn = element.querySelector('vaadin-grid-selection-column');
+          });
+
+          it('initial', async () => {
+            await visualDiff(element, `${dir}-selection-start-initial`);
+          });
+
+          it('frozen', async () => {
+            selectionColumn.frozen = true;
+            element.$.table.scrollLeft = element.__isRTL ? -20 : 20;
+            await visualDiff(element, `${dir}-selection-start-frozen`);
+          });
+        });
+
+        describe('end', () => {
+          beforeEach(async () => {
+            element = fixtureSync(`
+              <vaadin-grid style="height: 250px; max-width: 260px">
+                <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+                <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+                <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+              </vaadin-grid>
+            `);
+            element.items = users;
+            flushGrid(element);
+            await nextRender(element);
+            selectionColumn = element.querySelector('vaadin-grid-selection-column');
+          });
+
+          it('initial', async () => {
+            await visualDiff(element, `${dir}-selection-end-initial`);
+          });
+
+          it('frozen', async () => {
+            selectionColumn.frozenToEnd = true;
+            await visualDiff(element, `${dir}-selection-end-frozen`);
+          });
+        });
+      });
+
       describe('row focus', () => {
         beforeEach(async () => {
           element = fixtureSync(`

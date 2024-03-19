@@ -32,6 +32,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * Override `autoWidth` to enable auto-width
+         */
+        autoWidth: {
+          type: Boolean,
+          value: true,
+        },
+
+        /**
          * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
          * @attr {number} flex-grow
          * @type {number}
