@@ -137,6 +137,20 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
        * The target of the link. Works only when `path` is set.
        */
       target: String,
+
+      /**
+       * Whether to exclude the item from client-side routing. When enabled,
+       * this causes the item to behave like a regular anchor, causing a full
+       * page reload. This only works with supported routers, such as the one
+       * provided in Vaadin apps, or when using the side nav `onNavigate` hook.
+       *
+       * @type {boolean}
+       * @attr {boolean} router-ignore
+       */
+      routerIgnore: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -214,6 +228,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
           tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
           href="${ifDefined(this.disabled ? null : this.path)}"
           target="${ifDefined(this.target)}"
+          ?router-ignore="${this.routerIgnore}"
           part="link"
           aria-current="${this.current ? 'page' : 'false'}"
         >

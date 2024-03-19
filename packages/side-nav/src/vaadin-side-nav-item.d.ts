@@ -110,6 +110,16 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    */
   target: string | null | undefined;
 
+  /**
+   * Whether to exclude the item from client-side routing. When enabled,
+   * this causes the item to behave like a regular anchor, causing a full
+   * page reload. This only works with supported routers, such as the one
+   * provided in Vaadin apps, or when using the side nav `onNavigate` hook.
+   *
+   * @attr {boolean} router-ignore
+   */
+  routerIgnore: boolean;
+
   addEventListener<K extends keyof SideNavItemEventMap>(
     type: K,
     listener: (this: SideNavItem, ev: SideNavItemEventMap[K]) => void,

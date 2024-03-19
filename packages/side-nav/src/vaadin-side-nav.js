@@ -287,6 +287,11 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
       return;
     }
 
+    if (item.routerIgnore) {
+      // Allow default action when client-side routing is ignored
+      return;
+    }
+
     // Call the onNavigate callback
     const result = this.onNavigate({
       path: item.path,
