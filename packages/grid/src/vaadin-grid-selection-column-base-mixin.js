@@ -93,6 +93,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       ];
     }
 
+    /** @protected */
+    get _cellPart() {
+      return 'selection-column-cell';
+    }
+
     /**
      * Renders the Select All checkbox to the header cell.
      *
