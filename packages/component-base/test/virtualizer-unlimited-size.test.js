@@ -9,7 +9,7 @@ describe('unlimited size', () => {
 
   beforeEach(() => {
     scrollTarget = fixtureSync(`
-      <div style="height: 100px;">
+      <div style="height: 250px;">
         <div></div>
       </div>
     `);
@@ -22,6 +22,13 @@ describe('unlimited size', () => {
         el.index = index;
         el.id = `item-${index}`;
         el.textContent = el.id;
+        el.style.right = '0';
+        el.style.left = '0';
+        el.style.display = 'flex';
+        el.style.alignItems = 'center';
+        el.style.background = index % 2 === 0 ? '#e7e7e7' : '#d0d0d0';
+        el.style.height = '30px';
+        el.style.padding = '0 10px';
       },
       scrollTarget,
       scrollContainer,
@@ -29,6 +36,10 @@ describe('unlimited size', () => {
 
     virtualizer.size = 1000000;
   });
+
+  function getLastRenderedIndex() {
+    return [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
+  }
 
   it('should scroll to a large index', () => {
     const index = Math.floor(virtualizer.size / 2);
@@ -201,5 +212,76 @@ describe('unlimited size', () => {
       Math.floor(itemRect.top),
       Math.ceil(itemRect.bottom),
     );
+  });
+
+  it('should add more items on size increase', () => {
+    const index = virtualizer.size - 1;
+    virtualizer.scrollToIndex(index);
+    expect(getLastRenderedIndex()).to.equal(index);
+
+    virtualizer.size += 2000;
+    expect(getLastRenderedIndex()).to.be.above(index);
+  });
+
+  it('should remove exceeding items on size decrease', () => {
+    const index = virtualizer.size - 1;
+    virtualizer.scrollToIndex(index);
+    expect(getLastRenderedIndex()).to.equal(index);
+
+    virtualizer.size -= 1000;
+    expect(getLastRenderedIndex()).to.be.below(index);
+  });
+
+  it('should set scroll to end when size decrease affects a visible index', async () => {
+    virtualizer.scrollToIndex(virtualizer.size - 1000);
+    virtualizer.size = virtualizer.firstVisibleIndex - 20;
+    await oneEvent(scrollTarget, 'scroll');
+    const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
+    expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
+  });
+
+  it('should preserve scroll position when size decrease affects a buffered index', async () => {
+    // Make sure there are at least 2 buffered items at the end.
+    expect(getLastRenderedIndex() - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
+
+    // Scroll to an index and add an additional scroll offset.
+    const index = virtualizer.size - 1000;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    // Decrease the size so that the last buffered index exceeds the new size bounds.
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  // FIXME: Fails due to a scroll offset reset caused by _adjustVirtualIndexOffset on scroll event.
+  it.skip('should preserve scroll position when size decrease does not affect any rendered indexes', async () => {
+    // Scroll to an index and add an additional scroll offset.
+    const index = virtualizer.size - 2000;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    // Decrease the size so that no rendered indexes are affected.
+    virtualizer.size -= 1000;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  // FIXME: Fails due to a scroll offset reset caused by _adjustVirtualIndexOffset on scroll event.
+  it.skip('should preserve scroll position on size increase', async () => {
+    const index = virtualizer.size - 2000;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    virtualizer.size += 1000;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 });
