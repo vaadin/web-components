@@ -58,6 +58,9 @@ describe('sub-menu', () => {
           {
             component: createComponent('Menu Item 3 2'),
           },
+          {
+            component: createComponent('Menu Item 3 3'),
+          },
         ],
       },
     ];
@@ -179,6 +182,23 @@ describe('sub-menu', () => {
     await nextRender(subMenu);
 
     expect(items[0].hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should focus first non-disabled item after re-opening when using components', async () => {
+    menu.items[2].children[0].disabled = true;
+
+    arrowDown(buttons[2]);
+    await nextRender(subMenu);
+
+    const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+
+    // Close and re-open
+    esc(items[1]);
+    arrowDown(buttons[2]);
+    await nextRender(subMenu);
+
+    expect(items[1].hasAttribute('focus-ring')).to.be.true;
   });
 
   it('should close sub-menu on first item arrow up', async () => {
