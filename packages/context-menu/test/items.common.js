@@ -427,7 +427,6 @@ describe('items', () => {
     const subMenu2 = getSubMenu(rootMenu);
     const items = getMenuItems(subMenu2);
 
-    // expect(items[1].hasAttribute('focus-ring')).to.be.true;
     // Arrow Down to focus next item
     items[1].focus();
     arrowDownKeyDown(items[1]);
