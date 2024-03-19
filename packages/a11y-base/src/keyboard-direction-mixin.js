@@ -36,7 +36,7 @@ export const KeyboardDirectionMixin = (superclass) =>
       if (Array.isArray(items)) {
         const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
         if (idx >= 0) {
-          items[idx].focus();
+          this._focus(idx);
         }
       }
     }
