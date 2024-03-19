@@ -288,6 +288,40 @@ const runTests = (defineHelper, baseMixin) => {
       list.focus();
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should call focus() on the first non-disabled item if all items have tabindex -1', () => {
+      list.items.forEach((item) => {
+        item.tabIndex = -1;
+      });
+      const spy = sinon.spy(list.items[2], 'focus');
+      list.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should call focus() on the first non-disabled visible item if all items have tabindex -1', () => {
+      list.items.forEach((item) => {
+        item.tabIndex = -1;
+      });
+      list.items[2].setAttribute('hidden', '');
+      const spy = sinon.spy(list.items[3], 'focus');
+      list.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should change tabindex from -1 to 0 on first non-disabled item when focusing it', () => {
+      list.items.forEach((item) => {
+        item.tabIndex = -1;
+      });
+      list.focus();
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
+
+    it('should change tabindex from 0 to -1 on items with tabindex 0 other than focused one', () => {
+      list.items[2].tabIndex = 0;
+      list.items[3].tabIndex = 0;
+      list.focus();
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
   });
 
   describe('tabIndex when all the items are disabled', () => {
