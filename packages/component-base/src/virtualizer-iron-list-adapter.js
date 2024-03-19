@@ -297,23 +297,40 @@ export class IronListAdapter {
       this._debouncers._increasePoolIfNeeded.cancel();
     }
 
+    // Prevent element update while the scroll position is being restored
+    this.__preventElementUpdates = true;
+
+    // Record the scroll position before changing the size
+    let fvi; // First visible index
+    let fviOffsetBefore; // Scroll offset of the first visible index
+    if (size > 0) {
+      fvi = this.adjustedFirstVisibleIndex;
+      fviOffsetBefore = this.__getIndexScrollOffset(fvi);
+    }
+
     // Change the size
     this.__size = size;
 
-    if (!this._physicalItems) {
-      // Not initialized yet
-      this._itemsChanged({
-        path: 'items',
-      });
-      this.__preventElementUpdates = true;
-      flush();
-      this.__preventElementUpdates = false;
-    } else {
-      // Already initialized, just update _virtualCount
-      this._updateScrollerSize();
-      this._virtualCount = this.items.length;
-      this._render();
+    this._itemsChanged({
+      path: 'items',
+    });
+    flush();
+
+    // Try to restore the scroll position if the new size is larger than 0
+    if (size > 0) {
+      fvi = Math.min(fvi, size - 1);
+      // Note, calling scrollToIndex also updates the virtual index offset,
+      // causing the virtualizer to add more items when size is increased,
+      // and remove exceeding items when size is decreased.
+      this.scrollToIndex(fvi);
+
+      const fviOffsetAfter = this.__getIndexScrollOffset(fvi);
+      if (fviOffsetBefore !== undefined && fviOffsetAfter !== undefined) {
+        this._scrollTop += fviOffsetBefore - fviOffsetAfter;
+      }
     }
+
+    this.__preventElementUpdates = false;
 
     // When reducing size while invisible, iron-list does not update items, so
     // their hidden state is not updated and their __lastUpdatedIndex is not
@@ -326,8 +343,7 @@ export class IronListAdapter {
       requestAnimationFrame(() => this._resizeHandler());
     }
 
-    // Schedule and flush a resize handler. This will cause a
-    // re-render for the elements.
+    // Schedule and flush a resize handler
     this._resizeHandler();
     flush();
   }

@@ -15,7 +15,7 @@ describe('virtualizer', () => {
     }
 
     scrollTarget = fixtureSync(`
-      <div style="height: 100px;">
+      <div style="height: 250px;">
         <div></div>
       </div>
     `);
@@ -30,6 +30,13 @@ describe('virtualizer', () => {
           el.index = index;
           el.id = `item-${index}`;
           el.textContent = el.id;
+          el.style.right = '0';
+          el.style.left = '0';
+          el.style.display = 'flex';
+          el.style.alignItems = 'center';
+          el.style.background = index % 2 === 0 ? '#e7e7e7' : '#d0d0d0';
+          el.style.height = '30px';
+          el.style.padding = '0 10px';
         }),
       scrollTarget,
       scrollContainer,
@@ -39,6 +46,10 @@ describe('virtualizer', () => {
   }
 
   beforeEach(() => init({}));
+
+  function getLastRenderedIndex() {
+    return [...elementsContainer.children].reduce((max, el) => Math.max(max, el.index), 0);
+  }
 
   it('should have the first item at the top', () => {
     const item = elementsContainer.querySelector('#item-0');
@@ -174,7 +185,7 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should restore scroll position on size change', () => {
+  it('should preserve scroll position on size increase', () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
     scrollTarget.scrollTop += 10;
@@ -184,40 +195,43 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
   });
 
-  it('should not request item updates on size increase', () => {
-    const updateElement = sinon.spy((el, index) => {
-      el.textContent = `item-${index}`;
-    });
-    init({ size: 100, updateElement });
-
-    // Scroll halfway down the list
-    updateElement.resetHistory();
+  it('should set scroll to end when size decrease affects a visible index', async () => {
     virtualizer.scrollToIndex(50);
-
-    // Increase the size so it shouldn't affect the current viewport items
-    updateElement.resetHistory();
-    virtualizer.size = 200;
-
-    expect(updateElement.called).to.be.false;
+    virtualizer.size = virtualizer.firstVisibleIndex - 20;
+    await oneEvent(scrollTarget, 'scroll');
+    const lastItem = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
+    expect(lastItem.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
   });
 
-  it('should not request item updates on size increase when scrolled', async () => {
-    const updateElement = sinon.spy((el, index) => {
-      el.textContent = `item-${index}`;
-    });
-    init({ size: 100, updateElement });
+  it('should preserve scroll position when size decrease affects a buffered index', async () => {
+    // Make sure there are at least 2 buffered items at the end.
+    expect(getLastRenderedIndex() - virtualizer.lastVisibleIndex).to.be.greaterThanOrEqual(2);
 
-    // Scroll halfway down the list
-    virtualizer.scrollToIndex(50);
-    // Manually scroll down a bit
-    scrollTarget.scrollTop += 100;
-    await nextFrame();
+    // Scroll to an index and add an additional scroll offset.
+    const index = 50;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
 
-    // Increase the size so it shouldn't affect the current viewport items
-    updateElement.resetHistory();
-    virtualizer.size = 200;
+    // Decrease the size so that the last buffered index exceeds the new size bounds.
+    virtualizer.size = virtualizer.lastVisibleIndex + 1;
+    await oneEvent(scrollTarget, 'scroll');
 
-    expect(updateElement.called).to.be.false;
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  it('should preserve scroll position when size decrease does not affect any rendered indexes', async () => {
+    // Scroll to an index and add an additional scroll offset.
+    const index = 50;
+    virtualizer.scrollToIndex(index);
+    scrollTarget.scrollTop += 10;
+
+    // Decrease the size so that no rendered indexes are affected.
+    virtualizer.size = 80;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${index}`);
+    expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
   it('should request a different set of items on size decrease', () => {
