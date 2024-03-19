@@ -306,10 +306,6 @@ registerStyles(
       border-left-color: var(--_lumo-grid-border-color);
     }
 
-    [part~='selection-column-cell'] ::slotted(vaadin-grid-cell-content) {
-      overflow: visible;
-    }
-
     /* Row stripes */
 
     :host([theme~='row-stripes']) [part~='even-row'] [part~='body-cell'],

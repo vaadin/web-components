@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { updateCellsPart } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin that provides basic functionality for the
@@ -30,6 +29,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           type: String,
           value: '58px',
           sync: true,
+        },
+
+        /**
+         * Override `autoWidth` to enable auto-width
+         */
+        autoWidth: {
+          type: Boolean,
+          value: true,
         },
 
         /**
@@ -91,7 +98,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     static get observers() {
       return [
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
-        '__selectionColumnCellsChanged(_headerCell, _footerCell, _cells)',
       ];
     }
 
@@ -358,10 +364,5 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      */
     __isChecked(selectAll, indeterminate) {
       return indeterminate || selectAll;
-    }
-
-    /** @private */
-    __selectionColumnCellsChanged() {
-      updateCellsPart(this._allCells, 'selection-column-cell', true);
     }
   };
