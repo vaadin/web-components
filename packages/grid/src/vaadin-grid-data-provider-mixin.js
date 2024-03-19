@@ -321,22 +321,16 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _onDataProviderPageReceived() {
-      const flatSizeChanged = this._dataProviderController.flatSize !== this._flatSize;
-      // With the new items added, update the cache size and the grid's effective size
+      if (this._flatSize !== this._dataProviderController.flatSize) {
+        this._allRowsUpdateAfterPageLoadPending = true;
+      }
+
+      // With the new items added, update the grid's flat size.
       this._flatSize = this._dataProviderController.flatSize;
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      // or if some of the rows are missing an item
       this._getRenderedRows().forEach((row) => {
         this._dataProviderController.ensureFlatIndexHierarchy(row.index);
-        if (flatSizeChanged) {
-          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (!item) {
-            // To avoid excess requests, ensure the index is loaded only if flat size changed
-            this.__updateLoading(row, true);
-            this._dataProviderController.ensureFlatIndexLoaded(row.index);
-          }
-        }
       });
 
       this._hasData = true;
@@ -348,9 +342,12 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
         this._setLoading(false);
 
+        const allRowsUpdateAfterPageLoadPending = this._allRowsUpdateAfterPageLoadPending;
+        this._allRowsUpdateAfterPageLoadPending = false;
+
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (item) {
+          if (item || allRowsUpdateAfterPageLoadPending) {
             this._getItem(row.index, row);
           }
         });

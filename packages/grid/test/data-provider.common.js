@@ -14,6 +14,7 @@ import {
   getRowBodyCells,
   getRowCells,
   getRows,
+  getVisibleItems,
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
@@ -107,14 +108,6 @@ function simulateScrollToEnd(grid) {
     table.addEventListener('scroll', handler);
     table.scrollTop += 2500;
   });
-}
-
-async function until(predicate) {
-  while (!predicate()) {
-    await new Promise((r) => {
-      setTimeout(r, 10);
-    });
-  }
 }
 
 describe('data provider', () => {
@@ -451,9 +444,9 @@ describe('data provider', () => {
         grid.itemIdPath = 'value';
         grid.expandedItems = [{ value: '0' }, { value: '0-0' }];
         grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-          const levelSize = parentItem ? 5 : 100;
+          const levelSize = parentItem ? 4 : 100;
 
-          const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          const pageItems = Array.from({ length: pageSize }, (_, i) => {
             const indexInLevel = page * pageSize + i;
             return {
               value: `${parentItem ? `${parentItem.value}-` : ''}${indexInLevel}`,
@@ -461,26 +454,23 @@ describe('data provider', () => {
             };
           });
 
-          setTimeout(() => {
-            cb(pageItems, levelSize);
-
-            for (const row of getRows(grid.$.items)) {
-              if (!grid._dataProviderController.getFlatIndexContext(row.index).item) {
-                // Rows that don't have a cached item after the callback resolves should be in loading state
-                expect(row.hasAttribute('loading')).to.be.true;
-              }
-            }
-          }, 10);
+          setTimeout(() => cb(pageItems, levelSize), 0);
         };
 
-        const expectedRowContent = ['0', '0-0', '0-0-0', '0-0-1', '0-0-2', '0-0-3', '0-0-4', '0-1', '0-2', '0-3'];
+        await aTimeout(0); // Wait for 0 level
+        await aTimeout(0); // Wait for 0-0 level
+        await aTimeout(0); // Wait for 0-0-0 level
+        await aTimeout(0); // Wait for the second page requests
 
-        for (const [index, expectedContent] of expectedRowContent.entries()) {
-          const cell = getContainerCell(grid.$.items, index, 0);
-          // Due to the async nature of the data provider, we need to wait until the cell content is
-          // updated
-          await until(() => getCellContent(cell).textContent.trim() === expectedContent);
-        }
+        const expectedRowContent = ['0', '0-0', '0-0-0', '0-0-1', '0-0-2', '0-0-3', '0-1', '0-2', '0-3'];
+
+        getVisibleItems(grid).forEach((row) => {
+          const cell = getRowCells(row)[0];
+          const expectedContent = expectedRowContent[row.index];
+          if (expectedContent) {
+            expect(getCellContent(cell).textContent).to.equal(expectedContent);
+          }
+        });
       });
 
       describe('row state', () => {
