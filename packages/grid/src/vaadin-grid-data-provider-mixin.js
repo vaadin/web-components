@@ -323,8 +323,8 @@ export const DataProviderMixin = (superClass) =>
     _onDataProviderPageReceived() {
       // If the page response affected the flat size
       if (this._flatSize !== this._dataProviderController.flatSize) {
-        // Schedule all rendered rows to be updated in _debouncerApplyCachedData,
-        // to ensure that all the rows are loaded by the end of the grid loading.
+        // Schedule an update of all rendered rows by _debouncerApplyCachedData,
+        // to ensure that all pages associated with the rendered rows are loaded.
         this._shouldUpdateAllRenderedRowsAfterPageLoad = true;
 
         // TODO: Updating the flat size property can still result in a synchonous virtualizer update
