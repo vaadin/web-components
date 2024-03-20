@@ -321,12 +321,18 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _onDataProviderPageReceived() {
+      // If the page response affected the flat size
       if (this._flatSize !== this._dataProviderController.flatSize) {
-        this._allRowsUpdateAfterPageLoadPending = true;
-      }
+        // Schedule all rendered rows to be updated in _debouncerApplyCachedData,
+        // to ensure that all the rows are loaded by the end of the grid loading.
+        this._shouldUpdateAllRenderedRowsAfterPageLoad = true;
 
-      // With the new items added, update the grid's flat size.
-      this._flatSize = this._dataProviderController.flatSize;
+        // TODO: Updating the flat size property can still result in a synchonous virtualizer update
+        // if the size change requires the virtualizer to increase the amount of physical elements
+        // to display new items e.g. the viewport fits 10 items and the size changes from 1 to 10.
+        // This is something to be optimized in the future.
+        this._flatSize = this._dataProviderController.flatSize;
+      }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
       this._getRenderedRows().forEach((row) => {
@@ -342,12 +348,12 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
         this._setLoading(false);
 
-        const allRowsUpdateAfterPageLoadPending = this._allRowsUpdateAfterPageLoadPending;
-        this._allRowsUpdateAfterPageLoadPending = false;
+        const shouldUpdateAllRenderedRowsAfterPageLoad = this._shouldUpdateAllRenderedRowsAfterPageLoad;
+        this._shouldUpdateAllRenderedRowsAfterPageLoad = false;
 
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (item || allRowsUpdateAfterPageLoadPending) {
+          if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
             this._getItem(row.index, row);
           }
         });
