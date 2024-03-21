@@ -634,8 +634,9 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     editorContent.addEventListener('focus', () => {
-      // Format changed, but no value changed happened
-      if (this._toolbarState === STATE.CLICKED) {
+      // When editing link, editor gets focus while dialog is still open.
+      // Keep toolbar state as clicked in this case to fire change event.
+      if (this._toolbarState === STATE.CLICKED && !this._linkEditing) {
         this._cleanToolbarState();
       }
     });

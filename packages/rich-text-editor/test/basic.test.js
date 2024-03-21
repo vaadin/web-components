@@ -401,34 +401,39 @@ describe('rich text editor', () => {
       });
 
       describe('change', () => {
-        it('should dispatch change event if the value has been updated', () => {
+        it('should dispatch change event if the value has been updated', async () => {
           rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
           editor.focus();
           editor.setSelection(0, 6);
           flushValueDebouncer();
           btn.click();
+          await nextRender();
+
           rte.$.linkUrl.value = url;
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
           rte.$.confirmLink.click();
+          await nextRender();
           flushValueDebouncer();
           expect(spy.calledOnce).to.be.true;
         });
 
-        it('should not change value and not dispatch change if the dialog was cancelled', () => {
+        it('should not change value and not dispatch change if the dialog was cancelled', async () => {
           const value = `[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`;
           rte.value = value;
           flushValueDebouncer();
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
+          await nextRender();
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
           rte.$.cancelLink.click();
+          await nextRender();
           flushValueDebouncer();
           expect(rte.value).to.equal(value);
           expect(spy.called).to.be.false;
