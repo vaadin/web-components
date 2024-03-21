@@ -39,7 +39,8 @@ export const overlayStyles = css`
   }
 
   :host([hidden]),
-  :host(:not([opened]):not([closing])) {
+  :host(:not([opened]):not([closing])),
+  :host(:not([opened]):not([closing])) [part='overlay'] {
     display: none !important;
   }
 

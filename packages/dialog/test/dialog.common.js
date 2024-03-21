@@ -145,10 +145,11 @@ describe('vaadin-dialog', () => {
       it('should restore opened state when added to the DOM', async () => {
         const parent = dialog.parentNode;
         dialog.remove();
-        await aTimeout(0);
+        await nextRender();
         expect(dialog.opened).to.be.false;
 
         parent.appendChild(dialog);
+        await nextRender();
         expect(dialog.opened).to.be.true;
       });
 
@@ -202,11 +203,13 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    it('should not throw an exception if renderer is not present', () => {
-      const openDialog = () => {
+    it('should not throw an exception if renderer is not present', async () => {
+      try {
         dialog.opened = true;
-      };
-      expect(openDialog).to.not.throw();
+        await nextRender();
+      } catch (e) {
+        expect.fail(`Error when opening dialog: ${e}`);
+      }
     });
 
     it('should have min-width for content', async () => {
