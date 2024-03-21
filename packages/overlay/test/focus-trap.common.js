@@ -28,6 +28,8 @@ describe('focus-trap', () => {
       await nextRender();
       overlayPart = overlay.$.overlay;
       overlay.requestContentUpdate();
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
       focusableElements = getFocusableElements(overlayPart);
     });
 
@@ -45,10 +47,7 @@ describe('focus-trap', () => {
       expect(focusableElements[4]).to.equal(overlay.querySelector('input'));
     });
 
-    it('should focus focusable elements inside the content when focusTrap = true', async () => {
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-
+    it('should focus focusable elements inside the content when focusTrap = true', () => {
       // Tab
       for (let i = 0; i < focusableElements.length; i++) {
         const focusedIndex = getFocusedElementIndex();
@@ -68,10 +67,7 @@ describe('focus-trap', () => {
       expect(getFocusedElementIndex()).to.equal(focusableElements.length - 1);
     });
 
-    it('should update focus sequence when focusing a random element', async () => {
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-
+    it('should update focus sequence when focusing a random element', () => {
       tabKeyDown(document.body);
       expect(getFocusedElementIndex()).to.equal(1);
 
@@ -83,15 +79,16 @@ describe('focus-trap', () => {
 
   describe('empty', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
       await nextRender();
       overlayPart = overlay.$.overlay;
-      focusableElements = getFocusableElements(overlayPart);
     });
 
     it('should focus the overlay part when focusTrap = true', async () => {
+      overlay.focusTrap = true;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      focusableElements = getFocusableElements(overlayPart);
       expect(focusableElements[0]).to.equal(overlayPart);
       expect(getFocusedElementIndex()).to.equal(0);
     });
@@ -100,6 +97,7 @@ describe('focus-trap', () => {
       overlay.focusTrap = false;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      focusableElements = getFocusableElements(overlayPart);
       expect(getFocusedElementIndex()).to.equal(-1);
     });
   });
