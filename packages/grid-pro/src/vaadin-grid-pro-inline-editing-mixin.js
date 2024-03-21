@@ -11,6 +11,7 @@
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
+import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -55,6 +56,11 @@ export const InlineEditingMixin = (superClass) =>
         /** @private */
         _editingDisabled: {
           type: Boolean,
+        },
+
+        cellEditableProvider: {
+          type: Function,
+          sync: true,
         },
       };
     }
@@ -218,6 +224,10 @@ export const InlineEditingMixin = (superClass) =>
             return;
           }
 
+          if (!this._isCellEditable(cell)) {
+            return;
+          }
+
           callback(e);
         }
       });
@@ -325,8 +335,10 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _startEdit(cell, column) {
+      const isCellEditable = this._isCellEditable(cell);
+
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
-      if (this.disabled || this._editingDisabled) {
+      if (this.disabled || this._editingDisabled || !isCellEditable) {
         return;
       }
       // Cancel debouncer enqueued on focusout
@@ -490,6 +502,37 @@ export const InlineEditingMixin = (superClass) =>
         }
       }
       super._updateItem(row, item);
+    }
+
+    /**
+     * Override method from `StylingMixin` to apply `editable-cell` part to the
+     * cells of edit columns.
+     *
+     * @override
+     */
+    _generateCellPartNames(row, model) {
+      super._generateCellPartNames(row, model);
+
+      iterateRowCells(row, (cell) => {
+        const isEditable = this._isCellEditable(cell);
+        const target = cell._focusButton || cell;
+        updatePart(target, isEditable, 'editable-cell');
+      });
+    }
+
+    _isCellEditable(cell) {
+      const column = cell._column;
+      // Not editable if the column is not an edit column
+      if (!this._isEditColumn(column)) {
+        return false;
+      }
+      // Editable by default if no cellEditableProvider is set
+      if (!this.cellEditableProvider) {
+        return true;
+      }
+      // Otherwise, check the cellEditableProvider
+      const model = this.__getRowModel(cell.parentElement);
+      return this.cellEditableProvider(column, model);
     }
 
     /**

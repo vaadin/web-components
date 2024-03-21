@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
@@ -90,7 +89,7 @@ export const GridProEditColumnMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells)'];
+      return ['_editModeRendererChanged(editModeRenderer, __initialized)'];
     }
 
     constructor() {
@@ -118,14 +117,6 @@ export const GridProEditColumnMixin = (superClass) =>
       if (!path || path.length === 0) {
         throw new Error('You should specify the path for the edit column');
       }
-    }
-
-    /** @private */
-    _cellsChanged() {
-      this._cells.forEach((cell) => {
-        const target = cell._focusButton || cell;
-        addValueToAttribute(target, 'part', 'editable-cell');
-      });
     }
 
     /** @private */

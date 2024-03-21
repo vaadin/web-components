@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   createItems,
@@ -251,6 +251,82 @@ describe('edit column', () => {
       grid.disabled = true;
       await nextFrame();
       expect(cell._content.textContent).to.equal(oldContent);
+    });
+  });
+
+  describe('cell editable provider', () => {
+    let grid;
+
+    function isCellEditable(row, col) {
+      const cell = getContainerCell(grid.$.items, row, col);
+      enter(cell);
+      const isEditable = !!getCellEditor(cell);
+      esc(cell);
+      return isEditable;
+    }
+
+    function hasEditablePart(row, col) {
+      const cell = getContainerCell(grid.$.items, row, col);
+      const target = cell._focusButton || cell;
+      return (target.getAttribute('part') || '').includes('editable-cell');
+    }
+
+    function triggersNavigatingState(row, col) {
+      const cell = getContainerCell(grid.$.items, row, col);
+      // Mimic the real events sequence to avoid using fake focus shim from grid
+      cell.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
+      return grid.hasAttribute('navigating');
+    }
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid-pro>
+          <vaadin-grid-column path="status"></vaadin-grid-column>
+          <vaadin-grid-pro-edit-column path="amount"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-edit-column path="notes"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
+      `);
+      grid.items = [
+        {
+          status: 'draft',
+          amount: 100,
+          notes: 'foo',
+        },
+        {
+          status: 'completed',
+          amount: 200,
+          notes: 'bar',
+        },
+      ];
+      grid.cellEditableProvider = (column, model) => {
+        // Disable editing for the amount when status is completed
+        return !(column.path === 'amount' && model.item.status === 'completed');
+      };
+      flushGrid(grid);
+      await nextFrame();
+    });
+
+    it('should not show editor when cell is not editable', () => {
+      // Cells in first row are editable
+      expect(isCellEditable(0, 1)).to.be.true;
+      expect(isCellEditable(0, 2)).to.be.true;
+      // Amount cell in second row is not editable
+      expect(isCellEditable(1, 1)).to.be.false;
+      expect(isCellEditable(1, 2)).to.be.true;
+    });
+
+    it('should not add editable-cell part to non-editable cells', () => {
+      expect(hasEditablePart(0, 1)).to.be.true;
+      expect(hasEditablePart(0, 2)).to.be.true;
+      expect(hasEditablePart(1, 1)).to.be.false;
+      expect(hasEditablePart(1, 2)).to.be.true;
+    });
+
+    it('should not be in navigating state when clicking non-editable cells', () => {
+      expect(triggersNavigatingState(0, 1)).to.be.true;
+      expect(triggersNavigatingState(0, 2)).to.be.true;
+      expect(triggersNavigatingState(1, 1)).to.be.false;
+      expect(triggersNavigatingState(1, 2)).to.be.true;
     });
   });
 
