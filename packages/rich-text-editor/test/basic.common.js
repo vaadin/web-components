@@ -448,7 +448,7 @@ describe('rich text editor', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextUpdate(rte);
+          await nextRender();
 
           rte.$.linkUrl.value = url;
 
@@ -456,6 +456,7 @@ describe('rich text editor', () => {
           rte.addEventListener('change', spy);
 
           rte.$.confirmLink.click();
+          await nextRender();
           flushValueDebouncer();
 
           expect(spy.calledOnce).to.be.true;
@@ -468,12 +469,13 @@ describe('rich text editor', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextUpdate(rte);
+          await nextRender();
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
           rte.$.cancelLink.click();
+          await nextRender();
           flushValueDebouncer();
           expect(rte.value).to.equal(value);
           expect(spy.called).to.be.false;
