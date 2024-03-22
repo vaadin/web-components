@@ -273,9 +273,11 @@ export const GridProEditColumnMixin = (superClass) =>
       const editInitiatorChar = this._editInitiatorChar;
       this._editInitiatorChar = undefined;
       requestAnimationFrame(() => {
-        this._focusEditor(editor);
         if (editInitiatorChar) {
           this._setEditorValue(editor, editInitiatorChar);
+          editor.focus();
+        } else {
+          this._focusEditor(editor);
         }
       });
     }
