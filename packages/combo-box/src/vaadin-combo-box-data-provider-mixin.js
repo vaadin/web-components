@@ -101,7 +101,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       super.ready();
 
       this._dataProviderController.addEventListener('page-requested', this.__onDataProviderPageRequested.bind(this));
-      this._dataProviderController.addEventListener('page-received', this.__onDataProviderPageReceived.bind(this));
       this._dataProviderController.addEventListener('page-loaded', this.__onDataProviderPageLoaded.bind(this));
 
       this._scroller.addEventListener('index-requested', (e) => {
@@ -159,19 +158,13 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __onDataProviderPageReceived() {
-      this._hasData = true;
-      this.requestContentUpdate();
-    }
-
-    /** @private */
     __onDataProviderPageLoaded() {
+      this._hasData = true;
+
+      this.requestContentUpdate();
+
       if (!this.opened && !this._isInputFocused()) {
         this._commitValue();
-      }
-
-      if (!this._dataProviderController.isLoading()) {
-        this.loading = false;
       }
     }
 
