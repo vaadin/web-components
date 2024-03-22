@@ -346,7 +346,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
           new CustomEvent('index-requested', {
             detail: {
               index,
-              currentScrollerPos: this._oldScrollerPosition,
             },
           }),
         );
