@@ -140,8 +140,7 @@ export class Cache {
   /**
    * The number of items.
    *
-   * @type {number}
-   * @private
+   * @return {number}
    */
   get size() {
     return this.__size;
@@ -150,8 +149,7 @@ export class Cache {
   /**
    * Sets the number of items.
    *
-   * @type {number}
-   * @private
+   * @param {number} size
    */
   set size(size) {
     const oldSize = this.__size;
