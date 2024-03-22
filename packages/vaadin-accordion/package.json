@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-accordion",
-  "license": "Apache-2.0",
+  "license": "https://vaadin.com/commercial-license-and-service-terms",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

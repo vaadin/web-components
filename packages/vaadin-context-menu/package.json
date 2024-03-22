@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "Web Component for showing context dependent items for any element on the page",
-  "license": "Apache-2.0",
+  "license": "https://vaadin.com/commercial-license-and-service-terms",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

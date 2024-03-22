@@ -1,7 +1,12 @@
 /**
  * @license
- * Copyright (c) 2021 - 2022 Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ * Copyright (c) 2000 - 2024 Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
  */
 import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
