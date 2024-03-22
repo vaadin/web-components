@@ -57,14 +57,14 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         },
 
         /** @private */
-        __previousDataProviderFilter: {
-          type: String,
-        },
-
-        /** @private */
         _hasData: {
           type: Boolean,
           value: false,
+        },
+
+        /** @private */
+        __previousDataProviderFilter: {
+          type: String,
         },
       };
     }
