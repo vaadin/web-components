@@ -6,11 +6,12 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Icon } from './vaadin-icon.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
+import { IconSetMixin } from './vaadin-iconset-mixin.js';
 
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  */
-declare class Iconset extends ElementMixin(HTMLElement) {
+declare class Iconset extends ElementMixin(IconSetMixin(HTMLElement)) {
   /**
    * Set of the `vaadin-icon` instances in the DOM.
    */
@@ -39,22 +40,6 @@ declare class Iconset extends ElementMixin(HTMLElement) {
     size?: number;
     viewBox?: string | null;
   };
-
-  /**
-   * The name of the iconset. Every iconset is required to have its own unique name.
-   * All the SVG icons in the iconset must have IDs conforming to its name.
-   *
-   * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
-   */
-  name: string;
-
-  /**
-   * The size of an individual icon. Note that icons must be square.
-   *
-   * When using `vaadin-icon`, the size of the iconset will take precedence
-   * over the size defined by the user to ensure correct appearance.
-   */
-  size: number;
 }
 
 declare global {

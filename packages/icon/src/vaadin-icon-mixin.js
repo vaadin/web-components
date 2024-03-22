@@ -40,6 +40,7 @@ export const IconMixin = (superClass) =>
           observer: '__iconChanged',
           sync: true,
         },
+
         /**
          * The SVG icon wrapped in a Lit template literal.
          */
@@ -47,6 +48,7 @@ export const IconMixin = (superClass) =>
           type: Object,
           sync: true,
         },
+
         /**
          * The SVG source to be loaded as the icon. It can be:
          * - an URL to a file containing the icon
@@ -61,6 +63,7 @@ export const IconMixin = (superClass) =>
           type: String,
           sync: true,
         },
+
         /**
          * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
          * `src` property
@@ -71,6 +74,7 @@ export const IconMixin = (superClass) =>
           type: String,
           sync: true,
         },
+
         /**
          * Class names defining an icon font and/or a specific glyph inside an icon font.
          *
@@ -84,6 +88,7 @@ export const IconMixin = (superClass) =>
           reflectToAttribute: true,
           sync: true,
         },
+
         /**
          * A hexadecimal code point that specifies a glyph from an icon font.
          *
@@ -95,6 +100,7 @@ export const IconMixin = (superClass) =>
           type: String,
           sync: true,
         },
+
         /**
          * A ligature name that specifies an icon from an icon font with support for ligatures.
          *
@@ -106,6 +112,7 @@ export const IconMixin = (superClass) =>
           type: String,
           sync: true,
         },
+
         /**
          * The font family to use for the font icon.
          *
@@ -116,6 +123,7 @@ export const IconMixin = (superClass) =>
           observer: '__fontFamilyChanged',
           sync: true,
         },
+
         /**
          * The size of an icon, used to set the `viewBox` attribute.
          */
@@ -124,27 +132,37 @@ export const IconMixin = (superClass) =>
           value: 24,
           sync: true,
         },
+
         /** @private */
         __defaultPAR: {
           type: String,
           value: 'xMidYMid meet',
         },
+
         /** @private */
         __preserveAspectRatio: String,
+
         /** @private */
         __useRef: Object,
+
         /** @private */
         __svgElement: String,
+
         /** @private */
         __viewBox: String,
+
         /** @private */
         __fill: String,
+
         /** @private */
         __stroke: String,
+
         /** @private */
         __strokeWidth: String,
+
         /** @private */
         __strokeLinecap: String,
+
         /** @private */
         __strokeLinejoin: String,
       };
