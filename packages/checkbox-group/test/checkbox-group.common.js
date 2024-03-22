@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-checkbox-group.js';
 
 describe('vaadin-checkbox-group', () => {
   let group, checkboxes;
@@ -47,7 +46,9 @@ describe('vaadin-checkbox-group', () => {
       container.appendChild(group);
       await nextFrame();
       checkboxes[0].checked = true;
+      await nextFrame();
       checkboxes[0].checked = false;
+      await nextFrame();
       expect(checkboxes[0].checked).to.be.false;
     });
   });
@@ -64,12 +65,13 @@ describe('vaadin-checkbox-group', () => {
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
-    it('should propagate disabled property to checkboxes', () => {
+    it('should propagate disabled property to checkboxes', async () => {
       checkboxes.forEach((checkbox) => {
         expect(checkbox.disabled).to.be.true;
       });
 
       group.disabled = false;
+      await nextFrame();
       checkboxes.forEach((checkbox) => {
         expect(checkbox.disabled).to.be.false;
       });
@@ -96,12 +98,13 @@ describe('vaadin-checkbox-group', () => {
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
-    it('should propagate readonly property to checkboxes', () => {
+    it('should propagate readonly property to checkboxes', async () => {
       checkboxes.forEach((checkbox) => {
         expect(checkbox.readonly).to.be.true;
       });
 
       group.readonly = false;
+      await nextFrame();
       checkboxes.forEach((checkbox) => {
         expect(checkbox.readonly).to.be.false;
       });
@@ -193,34 +196,43 @@ describe('vaadin-checkbox-group', () => {
       expect(group.value).to.not.include('1');
     });
 
-    it('should set proper value to checkbox-group when a checkbox is checked', () => {
+    it('should set proper value to checkbox-group when a checkbox is checked', async () => {
       checkboxes[0].checked = true;
+      await nextFrame();
       expect(group.value).to.deep.equal(['1']);
       checkboxes[1].checked = true;
+      await nextFrame();
       expect(group.value).to.deep.equal(['1', '2']);
     });
 
-    it('should set proper value to checkbox-group when a checkbox is unchecked', () => {
+    it('should set proper value to checkbox-group when a checkbox is unchecked', async () => {
       checkboxes[0].checked = true;
+      await nextFrame();
       checkboxes[1].checked = true;
+      await nextFrame();
       expect(group.value).to.deep.equal(['1', '2']);
       checkboxes[1].checked = false;
+      await nextFrame();
       expect(group.value).to.deep.equal(['1']);
     });
 
-    it('should check proper checkbox when value is set', () => {
+    it('should check proper checkbox when value is set', async () => {
       group.value = ['2'];
+      await nextFrame();
       expect(checkboxes[1].checked).to.be.true;
       group.value = ['1', '3'];
+      await nextFrame();
       expect(checkboxes[0].checked).to.be.true;
       expect(checkboxes[2].checked).to.be.true;
     });
 
-    it('should uncheck proper checkbox when value is removed', () => {
+    it('should uncheck proper checkbox when value is removed', async () => {
       group.value = ['1', '3'];
+      await nextFrame();
       expect(checkboxes[0].checked).to.be.true;
       expect(checkboxes[2].checked).to.be.true;
       group.value = ['1'];
+      await nextFrame();
       expect(checkboxes[0].checked).to.be.true;
       expect(checkboxes[2].checked).to.be.false;
     });
@@ -288,10 +300,12 @@ describe('vaadin-checkbox-group', () => {
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
-    it('should toggle the attribute on value change', () => {
+    it('should toggle the attribute on value change', async () => {
       group.value = ['2'];
+      await nextFrame();
       expect(group.hasAttribute('has-value')).to.be.true;
       group.value = [];
+      await nextFrame();
       expect(group.hasAttribute('has-value')).to.be.false;
     });
   });
