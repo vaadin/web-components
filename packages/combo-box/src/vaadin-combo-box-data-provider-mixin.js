@@ -121,7 +121,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _shouldFetchData() {
       if (!this.dataProvider) {
         return false;
