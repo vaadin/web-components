@@ -68,16 +68,18 @@ describe('crud buttons', () => {
           confirmDeleteOverlay = crud.$.confirmDelete.$.dialog.$.overlay;
         });
 
-        it('should save an edited item', () => {
+        it('should save an edited item', async () => {
           edit(crud.items[0]);
+          await nextRender();
           crud._form._fields[0].value = 'baz';
           change(crud._form);
           saveButton.click();
           expect(crud.items[0].foo).to.be.equal('baz');
         });
 
-        it('should save a new item', () => {
+        it('should save a new item', async () => {
           crud.$.new.click();
+          await nextRender();
           crud._form._fields[0].value = 'baz';
           change(crud._form);
           saveButton.click();
@@ -86,30 +88,32 @@ describe('crud buttons', () => {
 
         it('should delete an item', async () => {
           edit(crud.items[0]);
+          await nextRender();
           deleteButton.click();
           await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
           confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
           expect(crud.items.length).to.be.equal(0);
         });
 
-        it('should notify size changes', (done) => {
-          listenOnce(crud, 'size-changed', () => {
-            expect(crud.size).to.be.equal(2);
-            done();
-          });
+        it('should notify size changes', async () => {
+          const spy = sinon.spy();
+          crud.addEventListener('size-changed', spy);
           crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
+          await nextRender();
+          expect(spy.firstCall.args[0].detail.value).to.equal(2);
         });
 
-        it('should notify editedItem changes', (done) => {
-          listenOnce(crud, 'edited-item-changed', () => {
-            expect(crud.editedItem).to.deep.equal({ foo: 'bar' });
-            done();
-          });
+        it('should notify editedItem changes', async () => {
+          const spy = sinon.spy();
+          crud.addEventListener('edited-item-changed', spy);
           edit(crud.items[0]);
+          await nextRender();
+          expect(spy.firstCall.args[0].detail.value).to.deep.eql({ foo: 'bar' });
         });
 
-        it('should save a new pre-filled item', () => {
+        it('should save a new pre-filled item', async () => {
           crud.editedItem = { foo: 'baz' };
+          await nextRender();
           crud._form._fields[0].value = 'baz';
           change(crud._form);
           saveButton.click();
@@ -118,19 +122,22 @@ describe('crud buttons', () => {
 
         it('should not delete any item if item was not in items array', async () => {
           crud.editedItem = { foo: 'baz' };
+          await nextRender();
           deleteButton.click();
           await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
           confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
           expect(crud.items.length).to.be.equal(1);
         });
 
-        it('should highlight the edited item', () => {
+        it('should highlight the edited item', async () => {
           edit(crud.items[0]);
+          await nextRender();
           expect(crud._grid.selectedItems).to.eql([crud.items[0]]);
         });
 
-        it('should clear highlighting of the edited item after closing the editor', () => {
+        it('should clear highlighting of the edited item after closing the editor', async () => {
           edit(crud.items[0]);
+          await nextRender();
           crud.editorOpened = false;
           expect(crud._grid.selectedItems).to.eql([]);
         });
@@ -161,57 +168,70 @@ describe('crud buttons', () => {
             confirmCancelDialog.opened = false;
           });
 
-          it('should not ask for confirmation on cancel when not modified', () => {
+          it('should not ask for confirmation on cancel when not modified', async () => {
             edit(crud.items[0]);
+            await nextRender();
             cancelButton.click();
             expect(confirmCancelDialog.opened).not.to.be.ok;
           });
 
-          it('should not ask for confirmation on cancel when not modified - click out', () => {
+          it('should not ask for confirmation on cancel when not modified - click out', async () => {
             edit(crud.items[0]);
+            await nextRender();
             crud.$.new.click();
+            await nextRender();
             expect(confirmCancelDialog.opened).not.to.be.ok;
           });
 
-          it('should not ask for confirmation on cancel when not modified - esc', () => {
+          it('should not ask for confirmation on cancel when not modified - esc', async () => {
             edit(crud.items[0]);
+            await nextRender();
             editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
             expect(confirmCancelDialog.opened).not.to.be.ok;
           });
 
-          it('should ask for confirmation on cancel when modified', () => {
+          it('should ask for confirmation on cancel when modified', async () => {
             edit(crud.items[0]);
+            await nextRender();
             change(crud._form);
             cancelButton.click();
+            await nextRender();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
-          it('should ask for confirmation on cancel when modified - click out', () => {
+          it('should ask for confirmation on cancel when modified - click out', async () => {
             edit(crud.items[0]);
+            await nextRender();
             change(crud._form);
             crud.$.new.click();
+            await nextRender();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
-          it('should ask for confirmation on cancel when modified - esc', () => {
+          it('should ask for confirmation on cancel when modified - esc', async () => {
             edit(crud.items[0]);
+            await nextRender();
             change(crud._form);
             editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+            await nextRender();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
           it('should continue editing when closing confirmation with cancel', async () => {
             edit(crud.items[0]);
+            await nextRender();
             change(crud._form);
             cancelButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
             confirmCancelOverlay.querySelector('[slot^="cancel"]').click();
+            await nextRender();
             expect(confirmCancelDialog.opened).not.to.be.ok;
             expect(editorDialog.opened).to.be.true;
           });
 
           it('should cancel editing when closing confirmation with confirm', async () => {
             edit(crud.items[0]);
+            await nextRender();
             change(crud._form);
             cancelButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
@@ -227,8 +247,10 @@ describe('crud buttons', () => {
             crud.addEventListener('cancel', cancelSpyListener);
 
             crud._grid.activeItem = crud.items[0];
+            await nextRender();
+
             cancelButton.click();
-            await aTimeout(0);
+            await nextRender();
             expect(cancelSpyListener.calledOnce).to.be.ok;
           });
 
@@ -239,15 +261,10 @@ describe('crud buttons', () => {
             crud.addEventListener('cancel', cancelSpyListener);
 
             crud._grid.activeItem = crud.items[0];
-            crud.$.new.dispatchEvent(
-              new CustomEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                composed: true,
-              }),
-            );
+            await nextRender();
 
-            await aTimeout(0);
+            crud.$.new.click();
+            await nextRender();
             expect(cancelSpyListener.calledOnce).to.be.ok;
           });
 
@@ -258,8 +275,10 @@ describe('crud buttons', () => {
             crud.addEventListener('cancel', cancelSpyListener);
 
             crud._grid.activeItem = crud.items[0];
+            await nextRender();
+
             editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
-            await aTimeout(0);
+            await nextRender();
             expect(cancelSpyListener.calledOnce).to.be.ok;
           });
 
@@ -271,6 +290,8 @@ describe('crud buttons', () => {
 
             crud._grid.activeItem = crud.items[0];
             edit(crud.items[0]);
+            await nextRender();
+
             change(crud._form);
             saveButton.click();
             await aTimeout(0);
@@ -287,14 +308,16 @@ describe('crud buttons', () => {
             confirmDeleteOverlay = confirmDeleteDialog.$.dialog.$.overlay;
           });
 
-          it('should ask for confirmation on delete', () => {
+          it('should ask for confirmation on delete', async () => {
             edit(crud.items[0]);
+            await nextRender();
             deleteButton.click();
             expect(confirmDeleteDialog.opened).to.be.true;
           });
 
           it('should continue editing when closing confirmation with cancel', async () => {
             edit(crud.items[0]);
+            await nextRender();
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
             confirmDeleteOverlay.querySelector('[slot^="cancel"]').click();
@@ -304,6 +327,7 @@ describe('crud buttons', () => {
 
           it('should delete when closing confirmation with confirm', async () => {
             edit(crud.items[0]);
+            await nextRender();
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
             confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
@@ -322,27 +346,31 @@ describe('crud buttons', () => {
           deleteButton = crud.querySelector('[slot=delete-button]');
         });
 
-        it('should configure dirty and new flags on new', () => {
+        it('should configure dirty and new flags on new', async () => {
           crud.$.new.click();
+          await nextRender();
           expect(crud.__isDirty).not.to.be.true;
           expect(crud.__isNew).to.be.true;
         });
 
-        it('should configure dirty and new flags on edit', () => {
+        it('should configure dirty and new flags on edit', async () => {
           edit(crud.items[0]);
+          await nextRender();
           expect(crud.__isDirty).not.to.be.true;
           expect(crud.__isNew).not.to.be.true;
         });
 
         it('should configure new flag when editedItem changed', async () => {
           crud.editedItem = crud.items[0];
+          await nextRender();
           cancelButton.click();
           await nextRender(crud);
           expect(crud.__isNew).not.to.be.true;
         });
 
-        it('should set dirty on editor changes', () => {
+        it('should set dirty on editor changes', async () => {
           edit(crud.items[0]);
+          await nextRender();
           change(crud._form);
           expect(crud.__isDirty).to.be.true;
         });
@@ -387,22 +415,27 @@ describe('crud buttons', () => {
             confirmCancelDialog.opened = false;
           });
 
-          it('should prevent changing edited items if dirty', () => {
+          it('should prevent changing edited items if dirty', async () => {
             crud._grid.activeItem = crud.items[0];
+            await nextRender();
             expect(crud.editorOpened).to.be.true;
 
             change(crud._form);
             crud._grid.activeItem = crud.items[1];
+            await nextRender();
+
             expect(confirmCancelDialog.opened).to.be.true;
             expect(crud.editedItem).to.be.equal(crud.items[0]);
           });
 
-          it('should prompt confirm if dirty and new button is clicked', () => {
+          it('should prompt confirm if dirty and new button is clicked', async () => {
             crud._grid.activeItem = crud.items[0];
+            await nextRender();
             expect(crud.editorOpened).to.be.true;
 
             change(crud._form);
             crud.$.new.click();
+            await nextRender();
             expect(confirmCancelDialog.opened).to.be.true;
           });
 
@@ -438,126 +471,172 @@ describe('crud buttons', () => {
         });
 
         describe('new', () => {
-          it('should fire the new event', (done) => {
-            listenOnce(crud, 'new', () => done());
+          it('should fire the new event', async () => {
+            const spy = sinon.spy();
+            crud.addEventListener('new', spy);
             crud.$.new.click();
+            await nextRender();
+            expect(spy.calledOnce).to.be.true;
           });
 
-          it('on new should set the item and open dialog if not default prevented', () => {
+          it('on new should set the item and open dialog if not default prevented', async () => {
             expect(crud.editedItem).not.to.be.ok;
             crud.$.new.click();
             expect(crud.editedItem).to.be.ok;
+            await nextRender();
             expect(crud.editorOpened).to.be.true;
           });
 
-          it('on new should not set the item but open dialog if default prevented', () => {
-            listenOnce(crud, 'new', (e) => e.preventDefault());
+          it('on new should not set the item but open dialog if default prevented', async () => {
+            crud.addEventListener('new', (e) => e.preventDefault(), { once: true });
             crud.$.new.click();
+            await nextRender();
             expect(crud.editedItem).not.to.be.ok;
             expect(crud.editorOpened).to.be.true;
           });
         });
 
         describe('edit', () => {
-          it('should fire the edit event', (done) => {
-            listenOnce(crud, 'edit', (e) => {
-              expect(e.detail.item).to.be.equal(crud.items[0]);
-              done();
-            });
+          it('should fire the edit event', async () => {
+            const spy = sinon.spy();
+            crud.addEventListener('edit', spy);
             edit(crud.items[0]);
+            await nextRender();
+            const event = spy.firstCall.args[0];
+            expect(event.detail.item).to.be.equal(crud.items[0]);
           });
 
-          it('should not fire the edit event over the same opened item', () => {
-            const editListener = sinon.spy();
-            crud.addEventListener('edit', editListener);
+          it('should not fire the edit event over the same opened item', async () => {
+            const spy = sinon.spy();
+            crud.addEventListener('edit', spy);
             edit(crud.items[0]);
+            await nextRender();
             edit(crud.items[0]);
-            expect(editListener.calledOnce).to.be.true;
+            await nextRender();
+            expect(spy.calledOnce).to.be.true;
           });
 
-          it('on edit should set the item and open dialog if not default prevented', () => {
+          it('should set the item and open dialog on edit if not default prevented', async () => {
             edit(crud.items[0]);
             expect(crud.editedItem).to.be.equal(crud.items[0]);
+            await nextRender();
             expect(crud.$.dialog.opened).to.be.true;
             expect(crud.editorOpened).to.be.true;
           });
 
-          it('on edit should not set the item nor open dialog if default prevented', () => {
-            listenOnce(crud, 'edit', (e) => e.preventDefault());
+          it('should not set the item but open dialog on edit if default prevented', async () => {
+            crud.addEventListener('edit', (e) => e.preventDefault(), { once: true });
             edit(crud.items[0]);
             expect(crud.editedItem).not.to.be.ok;
+            await nextRender();
+            expect(crud.$.dialog.opened).to.be.true;
+            expect(crud.editorOpened).to.be.true;
           });
         });
 
         describe('save', () => {
-          it('should fire the save event', (done) => {
-            listenOnce(crud, 'save', (e) => {
-              expect(e.detail.item).to.be.deep.equal(crud.items[0]);
-              done();
-            });
+          it('should fire the save event on save button click', async () => {
+            const spy = sinon.spy();
+            crud.addEventListener('save', spy);
+
             edit(crud.items[0]);
+            await nextRender();
+
             change(crud._form);
             saveButton.click();
+            await nextRender();
+
+            const event = spy.firstCall.args[0];
+            expect(event.detail.item).to.deep.equal(crud.items[0]);
           });
 
-          it('on save should close dialog if not default prevented', () => {
+          it('should close dialog on save if not default prevented', async () => {
             edit(crud.items[0]);
+            await nextRender();
+
             change(crud._form);
             saveButton.click();
+            await nextRender();
+
             expect(crud.editorOpened).not.to.be.ok;
           });
 
-          it('on save should keep opened dialog if default prevented', () => {
-            listenOnce(crud, 'save', (e) => e.preventDefault());
+          it('should keep dialog opened on save if default prevented', async () => {
+            crud.addEventListener('save', (e) => e.preventDefault(), { once: true });
+
             edit(crud.items[0]);
+            await nextRender();
+
             saveButton.click();
+            await nextRender();
+
             expect(crud.editorOpened).to.be.true;
           });
 
-          it('on save should keep item unmodified if default prevented', () => {
-            listenOnce(crud, 'save', (e) => e.preventDefault());
+          it('should keep item unmodified on save if default prevented', async () => {
+            crud.addEventListener('save', (e) => e.preventDefault(), { once: true });
 
             const originalItem = { ...crud.items[0] };
             edit(crud.items[0]);
+            await nextRender();
+
             crud._fields[0].value = 'Modified';
             change(crud._form);
             saveButton.click();
+            await nextRender();
 
             expect(crud.items[0]).to.be.deep.equal(originalItem);
           });
 
-          it('on save should modify item if not default prevented', () => {
+          it('should modify item on save if not default prevented', async () => {
             const originalItem = { ...crud.items[0] };
             edit(crud.items[0]);
+            await nextRender();
+
             crud._fields[0].value = 'Modified';
             change(crud._form);
             saveButton.click();
+            await nextRender();
 
             expect(crud.items[0]).to.not.be.deep.equal(originalItem);
           });
         });
 
         describe('cancel', () => {
-          it('should fire the cancel event', (done) => {
-            listenOnce(crud, 'cancel', (e) => {
-              expect(e.detail.item).to.be.equal(crud.items[0]);
-              done();
-            });
+          it('should fire the cancel event on cancel button click', async () => {
+            const spy = sinon.spy();
+            crud.addEventListener('cancel', spy);
+
             edit(crud.items[0]);
+            await nextRender();
+
             cancelButton.click();
+            await nextRender();
+
+            const event = spy.firstCall.args[0];
+            expect(event.detail.item).to.deep.equal(crud.items[0]);
           });
 
-          it('on cancel should close dialog if not default prevented', () => {
+          it('should close dialog on cancel if not default prevented', async () => {
             edit(crud.items[0]);
+            await nextRender();
+
             cancelButton.click();
+            await nextRender();
+
             expect(crud.$.dialog.opened).not.to.be.ok;
             expect(crud.editorOpened).not.to.be.ok;
           });
 
-          it('on cancel should keep opened dialog if default prevented', () => {
-            listenOnce(crud, 'cancel', (e) => e.preventDefault());
+          it('should keep dialog opened on cancel if default prevented', async () => {
+            crud.addEventListener('cancel', (e) => e.preventDefault(), { once: true });
+
             edit(crud.items[0]);
+            await nextRender();
+
             cancelButton.click();
+            await nextRender();
+
             expect(crud.editorOpened).to.be.true;
           });
         });

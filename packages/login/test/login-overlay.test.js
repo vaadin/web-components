@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
 import { fillUsernameAndPassword } from './helpers.js';
@@ -15,8 +15,9 @@ describe('login overlay', () => {
     overlay.opened = false;
   });
 
-  it('should render form wrapper when opened', () => {
+  it('should render form wrapper when opened', async () => {
     overlay.opened = true;
+    await nextRender();
     expect(document.querySelector('vaadin-login-form-wrapper')).to.be.ok;
   });
 });
@@ -32,8 +33,9 @@ describe('opened overlay', () => {
     submitStub.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     overlay = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
+    await nextRender();
   });
 
   afterEach(() => {
@@ -51,10 +53,11 @@ describe('opened overlay', () => {
     expect(document.querySelector('vaadin-login-form-wrapper')).not.to.exist;
   });
 
-  it('should not remove form wrapper when moved within DOM', () => {
+  it('should not remove form wrapper when moved within DOM', async () => {
     const newParent = document.createElement('div');
     document.body.appendChild(newParent);
     newParent.appendChild(overlay);
+    await nextRender();
 
     expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
@@ -124,20 +127,22 @@ describe('no autofocus', () => {
     overlay = fixtureSync('<vaadin-login-overlay no-autofocus></vaadin-login-overlay>');
   });
 
-  it('should not focus the username field', () => {
-    const activeElement = document.activeElement;
+  it('should not focus the username field', async () => {
     overlay.opened = true;
-    expect(document.activeElement).to.equal(activeElement);
+    await nextRender();
+    // Overlay traps focus and focuses the wrapper by default
+    expect(document.activeElement).to.equal(overlay.$.vaadinLoginOverlayWrapper);
   });
 });
 
 describe('title and description', () => {
   let overlay, headerElement, descriptionElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     overlay = fixtureSync(`
       <vaadin-login-overlay title="New title" description="New description" opened></vaadin-login-overlay>
     `);
+    await nextRender();
     headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] h1');
     descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] p');
   });
@@ -174,15 +179,16 @@ describe('title and description', () => {
   });
 });
 
-describe('title component', () => {
+describe('title slot', () => {
   let overlay, overlayWrapper;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     overlay = fixtureSync(`
       <vaadin-login-overlay description="New description" opened>
         <div slot="title">Teleported title</div>
       </vaadin-login-overlay>
     `);
+    await nextRender();
     overlayWrapper = overlay.$.vaadinLoginOverlayWrapper;
   });
 
@@ -190,16 +196,18 @@ describe('title component', () => {
     overlay.opened = false;
   });
 
-  it('should teleport title', () => {
+  it('should teleport title', async () => {
     let titleElements = overlayWrapper.querySelectorAll('[slot=title]');
     expect(titleElements.length).to.be.equal(1);
     expect(titleElements[0].textContent).to.be.equal('Teleported title');
 
     overlay.opened = false;
+    await nextRender();
     titleElements = overlayWrapper.querySelectorAll('[slot=title]');
     expect(titleElements.length).to.be.equal(0);
 
     overlay.opened = true;
+    await nextRender();
     titleElements = overlayWrapper.querySelectorAll('[slot=title]');
     expect(titleElements.length).to.be.equal(1);
     expect(titleElements[0].textContent).to.be.equal('Teleported title');

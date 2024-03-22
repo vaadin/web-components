@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fire, fixtureSync, isIOS, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
@@ -176,35 +177,44 @@ describe('crud', () => {
     });
 
     describe('create and edit', () => {
+      let spy;
+
       beforeEach(async () => {
         crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
         crud.dataProvider = (_, callback) => callback(items, items.length);
         await nextRender(crud);
         btnSave = crud.querySelector('[slot=save-button]');
+
+        spy = sinon.spy();
+        crud.addEventListener('save', spy);
       });
 
-      it('should save a new item', (done) => {
-        listenOnce(crud, 'save', (e) => {
-          expect(e.detail.item.foo).to.be.equal('baz');
-          done();
-        });
+      it('should save a new item', async () => {
         crud.$.new.click();
+        await nextRender();
+
         crud._form._fields[0].value = 'baz';
         change(crud._form);
+
         btnSave.click();
-        expect(crud.editedItem.foo).to.be.equal('baz');
+        await nextRender();
+
+        const event = spy.firstCall.args[0];
+        expect(event.detail.item.foo).to.be.equal('baz');
       });
 
-      it('should save an edited item', (done) => {
-        listenOnce(crud, 'save', (e) => {
-          expect(e.detail.item.foo).to.be.equal('baz');
-          done();
-        });
+      it('should save an edited item', async () => {
         edit(items[0]);
+        await nextRender();
+
         crud._form._fields[0].value = 'baz';
         change(crud._form);
+
         btnSave.click();
-        expect(crud.editedItem.foo).to.be.equal('baz');
+        await nextRender();
+
+        const event = spy.firstCall.args[0];
+        expect(event.detail.item.foo).to.be.equal('baz');
       });
     });
   });
@@ -307,16 +317,17 @@ describe('crud', () => {
       expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
     });
 
-    it('should not highlight the edited item', () => {
+    it('should not highlight the edited item', async () => {
       grid.setAttribute('slot', 'grid');
       crud.appendChild(grid);
       crud._observer.flush();
       crud.items = [{ foo: 'bar' }];
       edit(crud.items[0]);
+      await nextRender();
       expect(crud._grid.selectedItems).to.eql([]);
     });
 
-    it('should not clear selection of a custom grid', () => {
+    it('should not clear selection of a custom grid', async () => {
       grid.setAttribute('slot', 'grid');
       crud.appendChild(grid);
       crud._observer.flush();
@@ -324,6 +335,7 @@ describe('crud', () => {
       grid.selectedItems = [crud.items[0]];
 
       edit(crud.items[0]);
+      await nextRender();
       crud.editorOpened = false;
       expect(crud._grid.selectedItems).to.eql([crud.items[0]]);
     });
@@ -352,8 +364,9 @@ describe('crud', () => {
       crud.editorOpened = false;
     });
 
-    it('should be able to validate fields', () => {
+    it('should be able to validate fields', async () => {
       edit(crud.items[0]);
+      await nextRender();
       expect(crud.__validate()).to.be.true;
 
       crud.__fields[0].value = '';
@@ -364,15 +377,18 @@ describe('crud', () => {
       expect(crud.__validate()).to.be.false;
     });
 
-    it('should not save if invalid', () => {
+    it('should not save if invalid', async () => {
+      const spy = sinon.spy();
+      crud.addEventListener('save', spy);
+
       edit(crud.items[0]);
+      await nextRender();
+
       crud.__fields[1].value = '';
 
-      listenOnce(crud, 'save', () => {
-        throw Error('Error save event thrown in an invalid form');
-      });
-
       crud.__save();
+      await nextRender();
+      expect(spy.called).to.be.false;
     });
   });
 
@@ -412,8 +428,9 @@ describe('crud', () => {
       expect(crud.$.toolbar.style.display).to.be.equal('none');
     });
 
-    it('should show toolbar with default editor position and opened', () => {
+    it('should show toolbar with default editor position and opened', async () => {
       crud.$.new.click();
+      await nextRender();
 
       expect(crud.$.toolbar.style.display).to.be.not.equal('none');
     });
@@ -434,7 +451,7 @@ describe('crud', () => {
       expect(getComputedStyle(crud.$.toolbar).display).to.be.equal('none');
     });
 
-    it('should always show the editor in dialog on mobile', () => {
+    it('should always show the editor in dialog on mobile', async () => {
       if (isIOS) {
         // Only setting crud._fullscreen = true is not working on iOS test
         crud._fullscreenMediaQuery = '(max-width: 1000px), (max-height: 1000px)';
@@ -442,6 +459,7 @@ describe('crud', () => {
       crud._fullscreen = true;
       crud.editorPosition = 'bottom';
       crud.$.new.click();
+      await nextRender();
 
       expect(crud._fullscreen).to.be.true;
     });
@@ -457,7 +475,7 @@ describe('crud', () => {
       crud.editorPosition = 'bottom';
       crud._fullscreen = true;
       crud.$.new.click();
-      await oneEvent(crud, 'editor-opened-changed');
+      await nextRender();
       expect(editorDialog.opened).to.be.true;
       crud._fullscreen = false;
       expect(editorDialog.opened).to.be.false;
@@ -490,16 +508,19 @@ describe('crud', () => {
       expect(crud.editorOpened).to.be.not.ok;
     });
 
-    it('should open editor on row click if edit-on-click is set', () => {
+    it('should open editor on row click if edit-on-click is set', async () => {
       fakeClickOnRow(0);
+      await nextRender();
       expect(crud.editorOpened).to.be.true;
     });
 
-    it('should be able to open rows in sequence', () => {
+    it('should be able to open rows in sequence', async () => {
       fakeClickOnRow(0);
+      await nextRender();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
       fakeClickOnRow(1);
+      await nextRender();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[1]);
     });
@@ -513,8 +534,9 @@ describe('crud', () => {
       expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.null;
     });
 
-    it('should close editor after a second click on the same row', () => {
+    it('should close editor after a second click on the same row', async () => {
       fakeClickOnRow(0);
+      await nextRender();
       expect(crud.editorOpened).to.be.true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
       expect(crud.editorOpened).to.be.false;
