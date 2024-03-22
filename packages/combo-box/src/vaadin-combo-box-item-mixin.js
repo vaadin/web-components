@@ -60,7 +60,7 @@ export const ComboBoxItemMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__rendererOrItemChanged(renderer, index, item.*, selected, focused)', '__updateLabel(label, renderer)'];
+      return ['__rendererOrItemChanged(renderer, index, item, selected, focused)', '__updateLabel(label, renderer)'];
     }
 
     static get observedAttributes() {

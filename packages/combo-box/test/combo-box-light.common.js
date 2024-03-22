@@ -447,12 +447,13 @@ describe('custom buttons', () => {
 describe('theme attribute', () => {
   let comboBox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light theme="foo">
         <vaadin-text-field></vaadin-text-field>
       </vaadin-combo-box-light>
     `);
+    await nextRender();
   });
 
   it('should propagate theme attribute to overlay', () => {

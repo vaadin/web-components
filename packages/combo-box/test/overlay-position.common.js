@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { makeItems, setInputValue } from './helpers.js';
 
 describe('overlay position', () => {
@@ -28,6 +28,7 @@ describe('overlay position', () => {
     `);
 
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
+    await nextRender();
     const comboBoxRect = comboBox.getBoundingClientRect();
     comboBox.items = makeItems(20);
     inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');

@@ -7,6 +7,7 @@ import {
   fixtureSync,
   focusout,
   nextRender,
+  nextUpdate,
   outsideClick,
   tap,
   touchstart,
@@ -264,16 +265,18 @@ describe('interactions', () => {
         expect(comboBox.clearButtonVisible).to.be.false;
       });
 
-      it('should reflect clear-button-visible property to attribute', () => {
+      it('should reflect clear-button-visible property to attribute', async () => {
         comboBox.clearButtonVisible = true;
+        await nextUpdate(comboBox);
         expect(comboBox.hasAttribute('clear-button-visible')).to.be.true;
       });
     });
 
     describe('visible', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox.clearButtonVisible = true;
         comboBox.value = 'foo';
+        await nextUpdate(comboBox);
         clearButton = comboBox.$.clearButton;
       });
 
@@ -284,13 +287,15 @@ describe('interactions', () => {
         expect(getComputedStyle(clearButton).display).to.equal('none');
       });
 
-      it('should not show clear button should when disabled', () => {
+      it('should not show clear button should when disabled', async () => {
         comboBox.disabled = true;
+        await nextUpdate(comboBox);
         expect(getComputedStyle(clearButton).display).to.equal('none');
       });
 
-      it('should not show clear button when readonly', () => {
+      it('should not show clear button when readonly', async () => {
         comboBox.readonly = true;
+        await nextUpdate(comboBox);
         expect(getComputedStyle(clearButton).display).to.equal('none');
       });
 

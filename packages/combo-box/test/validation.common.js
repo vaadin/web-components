@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -86,10 +86,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       comboBox.addEventListener('validated', validatedSpy);
       comboBox.required = true;
+      await nextUpdate(comboBox);
       comboBox.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -115,10 +116,11 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = ['foo', 'bar', 'baz'];
       comboBox.required = true;
+      await nextRender();
       input = comboBox.inputElement;
     });
 

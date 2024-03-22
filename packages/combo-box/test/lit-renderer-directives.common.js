@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, render } from 'lit';
 import { comboBoxRenderer } from '../lit.js';
-import { getAllItems } from './helpers.js';
+import { flushComboBox, getAllItems } from './helpers.js';
 
 async function renderComboBox(container, { items }) {
   render(
@@ -64,6 +64,8 @@ describe('lit renderer directives', () => {
         );
         await nextFrame();
         comboBox = container.querySelector('vaadin-combo-box');
+        // Needed by Lit
+        flushComboBox(comboBox);
       });
 
       it('should pass the item to the renderer', () => {
