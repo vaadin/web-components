@@ -3,11 +3,9 @@
  * Copyright (c) 2018 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
 
 /**
  * Fired when the `invalid` property changes.
@@ -76,15 +74,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
-  /**
-   * An array containing values of the currently checked checkboxes.
-   *
-   * The array is immutable so toggling checkboxes always results in
-   * creating a new array.
-   */
-  value: string[];
-
+declare class CheckboxGroup extends CheckboxGroupMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
     listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,

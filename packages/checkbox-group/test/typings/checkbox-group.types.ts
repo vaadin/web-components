@@ -1,4 +1,12 @@
 import '../../vaadin-checkbox-group.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { CheckboxGroupMixinClass } from '../../src/vaadin-checkbox-group-mixin.js';
 import type {
   CheckboxGroupInvalidChangedEvent,
   CheckboxGroupValidatedEvent,
@@ -23,3 +31,13 @@ group.addEventListener('validated', (event) => {
   assertType<CheckboxGroupValidatedEvent>(event);
   assertType<boolean>(event.detail.valid);
 });
+
+// Mixins
+assertType<CheckboxGroupMixinClass>(group);
+assertType<ControllerMixinClass>(group);
+assertType<DisabledMixinClass>(group);
+assertType<ElementMixinClass>(group);
+assertType<FieldMixinClass>(group);
+assertType<FocusMixinClass>(group);
+assertType<LabelMixinClass>(group);
+assertType<ThemableMixinClass>(group);
