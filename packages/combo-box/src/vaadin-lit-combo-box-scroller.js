@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
 
@@ -55,4 +56,4 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
   }
 }
 
-customElements.define(ComboBoxScroller.is, ComboBoxScroller);
+defineCustomElement(ComboBoxScroller);

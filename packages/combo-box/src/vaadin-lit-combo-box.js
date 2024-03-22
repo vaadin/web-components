@@ -9,6 +9,7 @@ import './vaadin-lit-combo-box-overlay.js';
 import './vaadin-lit-combo-box-scroller.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -164,6 +165,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 }
 
-customElements.define(ComboBox.is, ComboBox);
+defineCustomElement(ComboBox);
 
 export { ComboBox };

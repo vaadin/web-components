@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
@@ -72,4 +73,4 @@ export class ComboBoxOverlay extends ComboBoxOverlayMixin(
   }
 }
 
-customElements.define(ComboBoxOverlay.is, ComboBoxOverlay);
+defineCustomElement(ComboBoxOverlay);
