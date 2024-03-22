@@ -86,6 +86,9 @@ export const GridProEditColumnMixin = (superClass) =>
 
         /** @private */
         _oldRenderer: Function,
+
+        /** @private */
+        _editInitiatorChar: String,
       };
     }
 
@@ -267,9 +270,13 @@ export const GridProEditColumnMixin = (superClass) =>
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
 
-      queueMicrotask(() => {
+      const editInitiatorChar = this._editInitiatorChar;
+      this._editInitiatorChar = undefined;
+      requestAnimationFrame(() => {
         this._focusEditor(editor);
-        queueMicrotask(() => editor.focus());
+        if (editInitiatorChar) {
+          this._setEditorValue(editor, editInitiatorChar);
+        }
       });
     }
 
