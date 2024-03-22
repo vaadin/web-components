@@ -12,6 +12,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
+import { iconStyles } from './vaadin-icon-styles.js';
 
 /**
  * LitElement based version of `<vaadin-icon>` web component.
@@ -23,50 +24,10 @@ import { IconMixin } from './vaadin-icon-mixin.js';
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class Icon extends IconMixin(ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+  static styles = iconStyles;
+
   render() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          vertical-align: middle;
-          width: 24px;
-          height: 24px;
-          fill: currentColor;
-          container-type: size;
-        }
-
-        :host::after,
-        :host::before {
-          line-height: 1;
-          font-size: 100cqh;
-          -webkit-font-smoothing: antialiased;
-          text-rendering: optimizeLegibility;
-          -moz-osx-font-smoothing: grayscale;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        svg {
-          display: block;
-          width: 100%;
-          height: 100%;
-          /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
-          overflow: visible;
-        }
-
-        :host(:is([icon-class], [font-icon-content])) svg {
-          display: none;
-        }
-
-        :host([font-icon-content])::before {
-          content: attr(font-icon-content);
-        }
-      </style>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
