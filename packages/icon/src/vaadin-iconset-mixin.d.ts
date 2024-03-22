@@ -8,9 +8,9 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin providing common iconset functionality.
  */
-export declare function IconSetMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<IconSetMixinClass> & T;
+export declare function IconsetMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<IconsetMixinClass> & T;
 
-export declare class IconSetMixinClass {
+export declare class IconsetMixinClass {
   /**
    * The name of the iconset. Every iconset is required to have its own unique name.
    * All the SVG icons in the iconset must have IDs conforming to its name.

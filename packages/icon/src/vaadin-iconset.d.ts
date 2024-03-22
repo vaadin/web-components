@@ -6,12 +6,12 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Icon } from './vaadin-icon.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
-import { IconSetMixin } from './vaadin-iconset-mixin.js';
+import { IconsetMixin } from './vaadin-iconset-mixin.js';
 
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  */
-declare class Iconset extends ElementMixin(IconSetMixin(HTMLElement)) {
+declare class Iconset extends ElementMixin(IconsetMixin(HTMLElement)) {
   /**
    * Set of the `vaadin-icon` instances in the DOM.
    */
