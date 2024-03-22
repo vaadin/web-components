@@ -1,15 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-icon.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
-import { Iconset } from '../vaadin-iconset.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
 const ANGLE_RIGHT = '<path d="M4 13h2l5-5-5-5h-2l5 5z"></path>';
 const PLUS = '<path d="M3.5,7V0M0,3.5h7"></path>';
 const MINUS = '<path d="M2 7h12v2h-12v-2z"></path>';
+
+const Iconset = customElements.get('vaadin-iconset');
 
 describe('vaadin-icon', () => {
   let icon, svgElement;
@@ -41,8 +41,9 @@ describe('vaadin-icon', () => {
   });
 
   describe('svg element', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
@@ -53,8 +54,9 @@ describe('vaadin-icon', () => {
   });
 
   describe('svg property', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
@@ -104,8 +106,9 @@ describe('vaadin-icon', () => {
   });
 
   describe('src property', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
@@ -198,16 +201,18 @@ describe('vaadin-icon', () => {
       icon.__fetch.restore();
     });
 
-    it('should append value from symbol property to src', () => {
+    it('should append value from symbol property to src', async () => {
       icon.src = './icon.svg';
       icon.symbol = 'symbol-id';
+      await nextFrame();
 
       expect(svgElement.querySelector(`use[href="${icon.src}#${icon.symbol}"]`)).to.exist;
     });
 
-    it('should use value from symbol when src path has a hash value', () => {
+    it('should use value from symbol when src path has a hash value', async () => {
       icon.src = './icon.svg#id-0';
       icon.symbol = 'id-1';
+      await nextFrame();
 
       expect(svgElement.querySelector(`use[href="${icon.src.split('#')[0]}#${icon.symbol}"]`)).to.exist;
     });
@@ -273,8 +278,9 @@ describe('vaadin-icon', () => {
       console.error.restore();
     });
 
-    it('should render <use> tag when path with id selector is given', () => {
+    it('should render <use> tag when path with id selector is given', async () => {
       icon.src = 'icon.svg#symbol-id';
+      await nextFrame();
       // We expect a 404 error log from this test, but the test is simply to check
       // that the <use> element is added when the source provided has the file#id pattern
       expect(svgElement.querySelector(`use[href="${icon.src}"]`)).to.exist;
@@ -304,8 +310,9 @@ describe('vaadin-icon', () => {
   });
 
   describe('size property', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      await nextFrame();
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
@@ -449,9 +456,10 @@ describe('vaadin-icon', () => {
         document.body.removeChild(icon);
       });
 
-      it('should set icon when the value is set before attach', () => {
+      it('should set icon when the value is set before attach', async () => {
         icon.icon = 'vaadin:angle-up';
         document.body.appendChild(icon);
+        await nextFrame();
         svgElement = icon.shadowRoot.querySelector('svg');
         expectIcon(`<g>${ANGLE_UP}</g>`);
       });
