@@ -57,11 +57,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         },
 
         /** @private */
-        __placeHolder: {
-          value: new ComboBoxPlaceholder(),
-        },
-
-        /** @private */
         __previousDataProviderFilter: {
           type: String,
         },
@@ -90,7 +85,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         size: this.size,
         pageSize: this.pageSize,
         getItemId: (item) => get(this.itemIdPath, item),
-        placeholder: this.__placeHolder,
+        placeholder: new ComboBoxPlaceholder(),
+        isPlaceholder: (item) => item instanceof ComboBoxPlaceholder,
         dataProvider: this.dataProvider ? this.dataProvider.bind(this) : null,
         dataProviderParams: () => ({ filter: this.filter }),
       });

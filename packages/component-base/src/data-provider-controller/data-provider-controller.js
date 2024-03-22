@@ -72,6 +72,13 @@ export class DataProviderController extends EventTarget {
    */
   placeholder;
 
+  /**
+   * A callback that returns whether the given item is a placeholder.
+   *
+   * @type {(item: unknown) => boolean}
+   */
+  isPlaceholder;
+
   constructor(host, { size, pageSize, isExpanded, getItemId, placeholder, dataProvider, dataProviderParams }) {
     super();
     this.host = host;
@@ -196,7 +203,7 @@ export class DataProviderController extends EventTarget {
   ensureFlatIndexLoaded(flatIndex) {
     const { cache, page, item } = this.getFlatIndexContext(flatIndex);
 
-    if (this.__isPlaceholder(item)) {
+    if (!this.__isItemLoaded(item)) {
       this.__loadCachePage(cache, page);
     }
   }
@@ -211,7 +218,7 @@ export class DataProviderController extends EventTarget {
   ensureFlatIndexHierarchy(flatIndex) {
     const { cache, item, index } = this.getFlatIndexContext(flatIndex);
 
-    if (!this.__isPlaceholder(item) && this.isExpanded(item) && !cache.getSubCache(index)) {
+    if (this.__isItemLoaded(item) && this.isExpanded(item) && !cache.getSubCache(index)) {
       const subCache = cache.createSubCache(index);
       this.__loadCachePage(subCache, 0);
     }
@@ -275,7 +282,12 @@ export class DataProviderController extends EventTarget {
   }
 
   /** @private */
-  __isPlaceholder(item) {
-    return this.placeholder ? item === this.placeholder : !item;
+  __isItemLoaded(item) {
+    if (this.isPlaceholder) {
+      return !this.isPlaceholder(item);
+    } else if (this.placeholder) {
+      return item !== this.placeholder;
+    }
+    return !!item;
   }
 }
