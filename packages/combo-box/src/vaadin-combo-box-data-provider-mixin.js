@@ -65,6 +65,12 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         __previousDataProviderFilter: {
           type: String,
         },
+
+        /** @private */
+        _hasData: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -142,7 +148,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
-      if (opened && !this._dataProviderController.hasData) {
+      if (opened && !this._hasData) {
         this._dataProviderController.loadFirstPage();
       }
     }
@@ -154,6 +160,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     __onDataProviderPageReceived() {
+      this._hasData = true;
       this.requestContentUpdate();
     }
 
@@ -177,6 +184,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
 
       this._dataProviderController.clearCache();
+
+      this._hasData = false;
 
       this.requestContentUpdate();
 

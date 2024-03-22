@@ -66,13 +66,6 @@ export class DataProviderController extends EventTarget {
   rootCache;
 
   /**
-   * Indicates whether any data has been loaded since the last cache clear.
-   *
-   * @type {boolean}
-   */
-  hasData = false;
-
-  /**
    * A placeholder item that is used to indicate that the item is not loaded yet.
    *
    * @type {undefined | object}
@@ -149,7 +142,6 @@ export class DataProviderController extends EventTarget {
    */
   clearCache() {
     this.rootCache = this.__createRootCache(this.rootCache.size);
-    this.hasData = false;
   }
 
   /**
@@ -267,8 +259,6 @@ export class DataProviderController extends EventTarget {
       }
 
       this.recalculateFlatSize();
-
-      this.hasData = true;
 
       this.dispatchEvent(new CustomEvent('page-received'));
 
