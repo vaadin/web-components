@@ -85,6 +85,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     ready() {
       super.ready();
       this._scroller.addEventListener('index-requested', (e) => {
+        if (!this._shouldFetchData()) {
+          return;
+        }
+
         const index = e.detail.index;
         if (index !== undefined) {
           const page = this._getPageForIndex(index);
@@ -128,6 +132,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _ensureFirstPage(opened) {
+      if (!this._shouldFetchData()) {
+        return;
+      }
+
       if (opened && this._shouldLoadPage(0)) {
         this._loadPage(0);
       }

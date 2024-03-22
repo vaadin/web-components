@@ -413,17 +413,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * Override method inherited from the combo-box
    * to not request data provider when read-only.
    *
-   * @param {number}
-   * @return {boolean}
    * @protected
    * @override
    */
-  _shouldLoadPage(page) {
+  _shouldFetchData() {
     if (this.readonly) {
       return false;
     }
 
-    return super._shouldLoadPage(page);
+    return super._shouldFetchData();
   }
 
   /**
