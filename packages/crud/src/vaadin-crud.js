@@ -229,6 +229,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           flex-direction: column;
           height: 100%;
           outline: none;
+          overflow: auto;
         }
 
         :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
@@ -247,7 +248,6 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         [part='scroller'] {
           display: flex;
           flex-direction: column;
-          overflow: auto;
           flex: auto;
         }
 
@@ -255,6 +255,8 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           display: flex;
           flex: none;
           flex-direction: row-reverse;
+          position: sticky;
+          bottom: 0;
         }
       </style>
 

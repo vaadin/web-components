@@ -71,18 +71,11 @@ registerStyles(
 
       [part='scroller'] {
         padding: 16px;
-        background: var(--material-background-color);
       }
 
       [part='editor'] {
         position: relative;
-      }
-
-      [part='editor']:focus::before {
-        position: absolute;
-        inset: 0;
-        content: '';
-        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+        background: var(--material-background-color);
       }
 
       [part='toolbar'] {
@@ -94,6 +87,14 @@ registerStyles(
         padding: 8px 4px;
       }
 
+      [part='editor']:focus [part='footer']::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border: solid 2px var(--material-primary-color);
+        border-top: 0;
+      }
+
       [part='footer'] ::slotted(*) {
         margin-left: 4px;
         margin-right: 4px;
@@ -101,6 +102,10 @@ registerStyles(
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
         box-shadow: var(--material-shadow-elevation-12dp);
+      }
+
+      :host(:not([editor-position=''])) [part='editor']:not([hidden]):focus {
+        box-shadow: var(--material-shadow-elevation-12dp), inset 0 0 0 2px var(--material-primary-color);
       }
 
       :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
