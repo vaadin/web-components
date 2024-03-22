@@ -12,7 +12,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { checkboxGroupStyles } from './vaadin-checkbox-group-styles.js';
+
+registerStyles('vaadin-checkbox-group', checkboxGroupStyles, { moduleId: 'vaadin-checkbox-group-styles' });
 
 /**
  * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
@@ -71,37 +74,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-        }
-
-        :host::before {
-          content: '\\2003';
-          width: 0;
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        .vaadin-group-field-container {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
-
-        [part='group-field'] {
-          display: flex;
-          flex-wrap: wrap;
-        }
-
-        :host(:not([has-label])) [part='label'] {
-          display: none;
-        }
-      </style>
-
       <div class="vaadin-group-field-container">
         <div part="label">
           <slot name="label"></slot>
