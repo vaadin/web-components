@@ -96,8 +96,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._dataProviderController.addEventListener('page-requested', this.__onDataProviderPageRequested.bind(this));
-      this._dataProviderController.addEventListener('page-loaded', this.__onDataProviderPageLoaded.bind(this));
+      this._dataProviderController.addEventListener('page-requested', this._onDataProviderPageRequested.bind(this));
+      this._dataProviderController.addEventListener('page-loaded', this._onDataProviderPageLoaded.bind(this));
 
       this._scroller.addEventListener('index-requested', (e) => {
         if (!this._shouldFetchData()) {
@@ -149,12 +149,12 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __onDataProviderPageRequested() {
+    _onDataProviderPageRequested() {
       this.loading = true;
     }
 
     /** @private */
-    __onDataProviderPageLoaded() {
+    _onDataProviderPageLoaded() {
       this._hasData = true;
 
       this.requestContentUpdate();

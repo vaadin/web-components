@@ -274,6 +274,12 @@ export const ComboBoxMixin = (subclass) =>
           sync: true,
           observer: '_overlayOpenedChanged',
         },
+
+        /** @private */
+        _keepOverlayOpened: {
+          type: Boolean,
+          sync: true,
+        },
       };
     }
 
