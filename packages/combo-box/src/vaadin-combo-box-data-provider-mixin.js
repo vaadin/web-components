@@ -87,7 +87,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         getItemId: (item) => get(this.itemIdPath, item),
         placeholder: new ComboBoxPlaceholder(),
         isPlaceholder: (item) => item instanceof ComboBoxPlaceholder,
-        dataProvider: this.dataProvider ? this.dataProvider.bind(this) : null,
+        dataProvider: this.dataProvider,
         dataProviderParams: () => ({ filter: this.filter }),
       });
     }
