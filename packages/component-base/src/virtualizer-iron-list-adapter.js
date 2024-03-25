@@ -731,7 +731,7 @@ export class IronListAdapter {
       this.__skipNextVirtualIndexAdjust = false;
     } else if (Math.abs(delta) > 10000) {
       // Process a large scroll position change
-      const scale = this._scrollTop / (this.scrollTarget.scrollHeight - this.scrollTarget.offsetHeight);
+      const scale = this._scrollTop / (this.scrollTarget.scrollHeight - this.scrollTarget.clientHeight);
       this._vidxOffset = Math.round(scale * maxOffset);
     } else {
       // Make sure user can always swipe/wheel scroll to the start and end
