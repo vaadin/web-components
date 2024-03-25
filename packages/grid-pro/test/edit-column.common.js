@@ -254,7 +254,7 @@ describe('edit column', () => {
     });
   });
 
-  describe('isCellEditable', () => {
+  describe('disable editing for individual cells', () => {
     let grid, amountColumn;
 
     function isCellEditable(row, col) {
@@ -287,16 +287,8 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = [
-        {
-          status: 'draft',
-          amount: 100,
-          notes: 'foo',
-        },
-        {
-          status: 'completed',
-          amount: 200,
-          notes: 'bar',
-        },
+        { status: 'draft', amount: 100, notes: 'foo' },
+        { status: 'completed', amount: 200, notes: 'bar' },
       ];
       // Disable editing for the amount when status is completed
       amountColumn = grid.querySelector('[path="amount"]');
@@ -329,11 +321,12 @@ describe('edit column', () => {
       expect(hasEditablePart(1, 2)).to.be.true;
     });
 
-    it('should update part name when cell becomes editable after updating provider function', () => {
+    it('should update part name when cell becomes editable after updating provider function', async () => {
       // Not editable initially
       expect(hasEditablePart(1, 1)).to.be.false;
       // Enable editing
       amountColumn.isCellEditable = () => true;
+      await nextFrame();
       expect(hasEditablePart(1, 1)).to.be.true;
     });
 
@@ -350,6 +343,142 @@ describe('edit column', () => {
       // Enable editing
       amountColumn.isCellEditable = () => true;
       expect(triggersNavigatingState(1, 1)).to.be.true;
+    });
+
+    describe('editor navigation', () => {
+      beforeEach(async () => {
+        // Five rows, only second and forth are editable
+        grid.items = [
+          { status: 'completed', amount: 100, notes: 'foo' },
+          { status: 'draft', amount: 200, notes: 'bar' },
+          { status: 'completed', amount: 100, notes: 'foo' },
+          { status: 'draft', amount: 100, notes: 'foo' },
+          { status: 'completed', amount: 200, notes: 'bar' },
+        ];
+        grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
+          column.isCellEditable = (model) => model.item.status !== 'completed';
+        });
+        flushGrid(grid);
+        await nextFrame();
+      });
+
+      describe('with Tab', () => {
+        it('should skip non-editable cells when navigating with Tab', () => {
+          let cell = getContainerCell(grid.$.items, 1, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          tab(cell);
+          cell = getContainerCell(grid.$.items, 1, 2);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          // Should skip non-editable rows
+          tab(cell);
+          cell = getContainerCell(grid.$.items, 3, 1);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          tab(cell);
+          cell = getContainerCell(grid.$.items, 3, 2);
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should skip non-editable cells when navigating with Shift-Tab', () => {
+          let cell = getContainerCell(grid.$.items, 3, 2);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          tab(cell, ['shift']);
+          cell = getContainerCell(grid.$.items, 3, 1);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          // Should skip non-editable rows
+          tab(cell, ['shift']);
+          cell = getContainerCell(grid.$.items, 1, 2);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          tab(cell, ['shift']);
+          cell = getContainerCell(grid.$.items, 1, 1);
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should stop editing and focus last edited cell if there are no more editable cells with Tab', () => {
+          const cell = getContainerCell(grid.$.items, 3, 2);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
+
+          tab(cell);
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+          const target = cell._focusButton || cell;
+          expect(grid.shadowRoot.activeElement).to.equal(target);
+          expect(grid.hasAttribute('navigating')).to.be.true;
+        });
+
+        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Tab', () => {
+          const cell = getContainerCell(grid.$.items, 1, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
+
+          tab(cell, ['shift']);
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+          const target = cell._focusButton || cell;
+          expect(grid.shadowRoot.activeElement).to.equal(target);
+          expect(grid.hasAttribute('navigating')).to.be.true;
+        });
+      });
+
+      describe('with Enter', () => {
+        beforeEach(() => {
+          grid.enterNextRow = true;
+        });
+
+        it('should skip non-editable cells when navigating with Enter', () => {
+          let cell = getContainerCell(grid.$.items, 1, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          enter(cell);
+          cell = getContainerCell(grid.$.items, 3, 1);
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should skip non-editable cells when navigating with Shift-Enter', () => {
+          let cell = getContainerCell(grid.$.items, 3, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+
+          enter(cell, ['shift']);
+          cell = getContainerCell(grid.$.items, 1, 1);
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should stop editing and focus last edited cell if there are no more editable cells with Enter', () => {
+          const cell = getContainerCell(grid.$.items, 3, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
+
+          enter(cell);
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+          const target = cell._focusButton || cell;
+          expect(grid.shadowRoot.activeElement).to.equal(target);
+          expect(grid.hasAttribute('navigating')).to.be.true;
+        });
+
+        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Enter', () => {
+          const cell = getContainerCell(grid.$.items, 1, 1);
+          enter(cell);
+          expect(getCellEditor(cell)).to.be.ok;
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
+
+          enter(cell, ['shift']);
+          expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
+          const target = cell._focusButton || cell;
+          expect(grid.shadowRoot.activeElement).to.equal(target);
+          expect(grid.hasAttribute('navigating')).to.be.true;
+        });
+      });
     });
   });
 

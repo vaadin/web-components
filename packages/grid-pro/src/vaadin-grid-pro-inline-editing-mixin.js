@@ -428,59 +428,68 @@ export const InlineEditingMixin = (superClass) =>
 
       this._cancelStopEdit();
 
-      const cols = this._getEditColumns();
-
+      const editableColumns = this._getEditColumns();
       const { cell, column, model } = this.__edited;
-      const colIndex = cols.indexOf(column);
-      const { index } = model;
 
-      let nextCol = null;
-      let nextIdx = index;
+      let directionX = 0;
+      let directionY = 0;
 
-      // Enter key
-      if (e.keyCode === 13) {
-        nextCol = column;
-
-        // Move up / down
-        if (this.enterNextRow) {
-          nextIdx = e.shiftKey ? index - 1 : index + 1;
-        }
+      // Enter key: move up / down
+      if (e.keyCode === 13 && this.enterNextRow) {
+        directionY = e.shiftKey ? -1 : 1;
       }
 
       // Tab: move right / left
       if (e.keyCode === 9) {
-        if (e.shiftKey) {
-          if (cols[colIndex - 1]) {
-            nextCol = cols[colIndex - 1];
-          } else if (index > 0) {
-            nextIdx = index - 1;
-            nextCol = cols[cols.length - 1];
+        directionX = e.shiftKey ? -1 : 1;
+      }
+
+      let nextIndex = model.index;
+      let nextColumn = column;
+      let nextCell = cell;
+
+      // Try to find the next editable cell
+      if (directionX || directionY) {
+        while (nextCell) {
+          if (directionX) {
+            // Move horizontally
+            nextColumn = editableColumns[editableColumns.indexOf(nextColumn) + directionX];
+            if (!nextColumn) {
+              // Wrap to the next or previous row
+              nextIndex += directionX;
+              nextColumn = editableColumns[directionX > 0 ? 0 : editableColumns.length - 1];
+            }
           }
-        } else if (cols[colIndex + 1]) {
-          nextCol = cols[colIndex + 1];
-        } else {
-          nextIdx = index + 1;
-          nextCol = cols[0];
+          // Move vertically
+          if (directionY) {
+            nextIndex += directionY;
+          }
+          // Stop looking if the next cell is editable
+          const nextRow = this._getRowByIndex(nextIndex);
+          // eslint-disable-next-line @typescript-eslint/no-loop-func
+          nextCell = nextRow && Array.from(nextRow.children).find((cell) => cell._column === nextColumn);
+          if (nextCell && this._isCellEditable(nextCell)) {
+            break;
+          }
         }
       }
 
-      const nextRow = nextIdx === index ? cell.parentNode : this._getRowByIndex(nextIdx) || null;
+      // Use current cell as fallback
+      if (!nextCell) {
+        nextCell = cell;
+        nextIndex = model.index;
+      }
 
       this._stopEdit();
+      e.preventDefault();
+      // Prevent vaadin-grid handler from being called
+      e.stopImmediatePropagation();
 
-      if (nextRow && nextCol) {
-        const nextCell = Array.from(nextRow.children).find((cell) => cell._column === nextCol);
-        e.preventDefault();
-
-        // Prevent vaadin-grid handler from being called
-        e.stopImmediatePropagation();
-
-        if (!this.singleCellEdit && nextCell !== cell) {
-          this._startEdit(nextCell, nextCol);
-        } else {
-          this._ensureScrolledToIndex(nextIdx);
-          nextCell.focus();
-        }
+      if (!this.singleCellEdit && nextCell !== cell) {
+        this._startEdit(nextCell, nextColumn);
+      } else {
+        this._ensureScrolledToIndex(nextIndex);
+        nextCell.focus();
       }
     }
 
