@@ -255,7 +255,7 @@ describe('edit column', () => {
   });
 
   describe('isCellEditable', () => {
-    let grid;
+    let grid, amountColumn;
 
     function isCellEditable(row, col) {
       const cell = getContainerCell(grid.$.items, row, col);
@@ -299,7 +299,7 @@ describe('edit column', () => {
         },
       ];
       // Disable editing for the amount when status is completed
-      const amountColumn = grid.querySelector('[path="amount"]');
+      amountColumn = grid.querySelector('[path="amount"]');
       amountColumn.isCellEditable = (model) => model.item.status !== 'completed';
       flushGrid(grid);
       await nextFrame();
@@ -314,6 +314,14 @@ describe('edit column', () => {
       expect(isCellEditable(1, 2)).to.be.true;
     });
 
+    it('should show editor when cell becomes editable after updating provider function', () => {
+      // Not editable initially
+      expect(isCellEditable(1, 1)).to.be.false;
+      // Enable editing
+      amountColumn.isCellEditable = () => true;
+      expect(isCellEditable(1, 1)).to.be.true;
+    });
+
     it('should not add editable-cell part to non-editable cells', () => {
       expect(hasEditablePart(0, 1)).to.be.true;
       expect(hasEditablePart(0, 2)).to.be.true;
@@ -321,11 +329,27 @@ describe('edit column', () => {
       expect(hasEditablePart(1, 2)).to.be.true;
     });
 
+    it('should update part name when cell becomes editable after updating provider function', () => {
+      // Not editable initially
+      expect(hasEditablePart(1, 1)).to.be.false;
+      // Enable editing
+      amountColumn.isCellEditable = () => true;
+      expect(hasEditablePart(1, 1)).to.be.true;
+    });
+
     it('should not be in navigating state when clicking non-editable cells', () => {
       expect(triggersNavigatingState(0, 1)).to.be.true;
       expect(triggersNavigatingState(0, 2)).to.be.true;
       expect(triggersNavigatingState(1, 1)).to.be.false;
       expect(triggersNavigatingState(1, 2)).to.be.true;
+    });
+
+    it('should be in navigating state when cell becomes editable after updating provider function', () => {
+      // Not editable initially
+      expect(triggersNavigatingState(1, 1)).to.be.false;
+      // Enable editing
+      amountColumn.isCellEditable = () => true;
+      expect(triggersNavigatingState(1, 1)).to.be.true;
     });
   });
 

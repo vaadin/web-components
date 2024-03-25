@@ -103,6 +103,7 @@ export const GridProEditColumnMixin = (superClass) =>
          */
         isCellEditable: {
           type: Function,
+          observer: '_isCellEditableChanged',
           value: () => () => true,
         },
 
@@ -133,8 +134,6 @@ export const GridProEditColumnMixin = (superClass) =>
         `;
         }
       };
-
-      this.isCellEditable = () => true;
     }
 
     /** @private */
@@ -142,6 +141,16 @@ export const GridProEditColumnMixin = (superClass) =>
       if (!path || path.length === 0) {
         throw new Error('You should specify the path for the edit column');
       }
+    }
+
+    /** @private */
+    _isCellEditableChanged(newValue, oldValue) {
+      // Ignore setting initial / default function
+      if (!oldValue) {
+        return;
+      }
+      // Re-render grid to update editable-cell part names
+      this._grid.requestContentUpdate();
     }
 
     /** @private */
