@@ -143,7 +143,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _shouldLoadPage(page) {
-      if (!this.filteredItems || this._forceNextRequest) {
+      if (this._forceNextRequest) {
         this._forceNextRequest = false;
         return true;
       }
