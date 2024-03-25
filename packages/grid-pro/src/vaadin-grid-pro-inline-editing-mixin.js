@@ -57,11 +57,6 @@ export const InlineEditingMixin = (superClass) =>
         _editingDisabled: {
           type: Boolean,
         },
-
-        cellEditableProvider: {
-          type: Function,
-          sync: true,
-        },
       };
     }
 
@@ -526,13 +521,13 @@ export const InlineEditingMixin = (superClass) =>
       if (!this._isEditColumn(column)) {
         return false;
       }
-      // Editable by default if no cellEditableProvider is set
-      if (!this.cellEditableProvider) {
-        return true;
+      // isCellEditable can be undefined if edit column is not imported
+      if (!column.isCellEditable) {
+        return false;
       }
-      // Otherwise, check the cellEditableProvider
+      // Otherwise, check isCellEditable function
       const model = this.__getRowModel(cell.parentElement);
-      return this.cellEditableProvider(column, model);
+      return column.isCellEditable(model);
     }
 
     /**

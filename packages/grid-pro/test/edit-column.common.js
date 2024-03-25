@@ -254,7 +254,7 @@ describe('edit column', () => {
     });
   });
 
-  describe('cell editable provider', () => {
+  describe('isCellEditable', () => {
     let grid;
 
     function isCellEditable(row, col) {
@@ -298,10 +298,9 @@ describe('edit column', () => {
           notes: 'bar',
         },
       ];
-      grid.cellEditableProvider = (column, model) => {
-        // Disable editing for the amount when status is completed
-        return !(column.path === 'amount' && model.item.status === 'completed');
-      };
+      // Disable editing for the amount when status is completed
+      const amountColumn = grid.querySelector('[path="amount"]');
+      amountColumn.isCellEditable = (model) => model.item.status !== 'completed';
       flushGrid(grid);
       await nextFrame();
     });
