@@ -137,7 +137,7 @@ registerStyles(
 
     :host([readonly][checked]) [part='checkbox'],
     :host([readonly][indeterminate]) [part='checkbox'] {
-      background-color: var(--lumo-contrast-50pct);
+      background-color: var(--vaadin-checkbox-readonly-checked-background, var(--lumo-contrast-70pct));
     }
 
     /* RTL specific styles */
