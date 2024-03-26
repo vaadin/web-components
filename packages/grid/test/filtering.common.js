@@ -25,12 +25,16 @@ class FilterWrapper extends LitElement {
           display: block;
         }
       </style>
-      <vaadin-grid-filter path="foo" .value="${this._filterValue}"></vaadin-grid-filter>
+      <vaadin-grid-filter
+        path="foo"
+        .value="${this._filterValue}"
+        @value-changed="${this._onValueChanged}"
+      ></vaadin-grid-filter>
     `;
   }
 
-  _onFilterInput(e) {
-    this._filterValue = e.target.value;
+  _onValueChanged(e) {
+    this._filterValue = e.detail.value;
   }
 }
 
