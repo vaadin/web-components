@@ -723,9 +723,12 @@ export const GridMixin = (superClass) =>
             // Header & footer
             const tagName = section === 'header' ? 'th' : 'td';
             if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              cell = column[`_${section}Cell`] || this._createCell(tagName);
-              if (column._onCellKeyDown) {
-                cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
+              cell = column[`_${section}Cell`];
+              if (!cell) {
+                cell = this._createCell(tagName);
+                if (column._onCellKeyDown) {
+                  cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
+                }
               }
               cell._column = column;
               row.appendChild(cell);
