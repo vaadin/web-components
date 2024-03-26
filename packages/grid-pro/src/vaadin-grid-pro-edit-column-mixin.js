@@ -88,7 +88,7 @@ export const GridProEditColumnMixin = (superClass) =>
         _oldRenderer: Function,
 
         /** @private */
-        _editInitiatorChar: String,
+        _editInitiatorKey: String,
       };
     }
 
@@ -275,11 +275,11 @@ export const GridProEditColumnMixin = (superClass) =>
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
 
-      const editInitiatorChar = this._editInitiatorChar;
-      this._editInitiatorChar = undefined;
+      const editInitiatorKey = this._editInitiatorKey;
+      this._editInitiatorKey = undefined;
       requestAnimationFrame(() => {
-        if (editInitiatorChar) {
-          this._setEditorValue(editor, editInitiatorChar);
+        if (editInitiatorKey) {
+          this._setEditorValue(editor, editInitiatorKey);
           this._focusEditor(editor);
         } else {
           this._focusEditor(editor);

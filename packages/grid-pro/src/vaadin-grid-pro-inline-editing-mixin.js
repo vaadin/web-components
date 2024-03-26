@@ -291,7 +291,7 @@ export const InlineEditingMixin = (superClass) =>
         this._flushStopEdit();
 
         if (type === 'text') {
-          column._editInitiatorChar = e.key;
+          column._editInitiatorKey = e.key;
         }
 
         this._startEdit(cell, column);
