@@ -252,10 +252,8 @@ export const ColumnReorderingMixin = (superClass) =>
         }
         // Check if element is the cell of a focus button mode column
         if (
-          element instanceof HTMLDivElement &&
-          element.getAttribute('role') === 'button' &&
           element.parentElement &&
-          element.parentElement._column
+          element.parentElement._focusButton === element
         ) {
           return element.parentElement;
         }
