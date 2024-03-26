@@ -267,3 +267,21 @@ describe('pre-opened', () => {
     expect(scroller.style.maxHeight).to.equal('200px');
   });
 });
+
+describe('layout calculation', () => {
+  let spy;
+
+  before(() => {
+    spy = sinon.spy(window, 'getComputedStyle');
+  });
+
+  after(() => {
+    spy.restore();
+  });
+
+  it('should not call getComputedStyle when creating a combo-box', async () => {
+    fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    await nextRender();
+    expect(spy.callCount).to.equal(0);
+  });
+});
