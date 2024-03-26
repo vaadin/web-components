@@ -230,6 +230,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           height: 100%;
           outline: none;
           overflow: auto;
+          overscroll-behavior: none;
         }
 
         :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
