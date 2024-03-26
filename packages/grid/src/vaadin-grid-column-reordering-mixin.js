@@ -237,13 +237,30 @@ export const ColumnReorderingMixin = (superClass) =>
       if (!this._draggedColumn) {
         this.$.scroller.toggleAttribute('no-content-pointer-events', true);
       }
-      const cell = this.shadowRoot.elementFromPoint(x, y);
+      const elementFromPoint = this.shadowRoot.elementFromPoint(x, y);
       this.$.scroller.toggleAttribute('no-content-pointer-events', false);
 
-      // Make sure the element is actually a cell
-      if (cell && cell._column) {
-        return cell;
+      return this._getCellFromElement(elementFromPoint);
+    }
+
+    /** @private */
+    _getCellFromElement(element) {
+      if (element) {
+        // Check if element is a cell
+        if (element._column) {
+          return element;
+        }
+        // Check if element is the cell of a focus button mode column
+        if (
+          element instanceof HTMLDivElement &&
+          element.getAttribute('role') === 'button' &&
+          element.parentElement &&
+          element.parentElement._column
+        ) {
+          return element.parentElement;
+        }
       }
+      return null;
     }
 
     /**
