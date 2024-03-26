@@ -113,7 +113,7 @@ describe('keyboard navigation', () => {
       expect(getCellEditor(firstCell)).to.be.not.ok;
     });
 
-    it.skip('should focus correct editable cell after column reordering', () => {
+    it('should focus correct editable cell after column reordering', () => {
       grid.columnReorderingAllowed = true;
       const headerContent = [
         getContainerCell(grid.$.header, 0, 0)._content,
