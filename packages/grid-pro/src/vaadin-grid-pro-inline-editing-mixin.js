@@ -444,11 +444,11 @@ export const InlineEditingMixin = (superClass) =>
         directionX = e.shiftKey ? -1 : 1;
       }
 
+      // Try to find the next editable cell
       let nextIndex = model.index;
       let nextColumn = column;
       let nextCell = cell;
 
-      // Try to find the next editable cell
       if (directionX || directionY) {
         while (nextCell) {
           if (directionX) {
@@ -474,7 +474,7 @@ export const InlineEditingMixin = (superClass) =>
         }
       }
 
-      // Use current cell as fallback
+      // Focus current cell as fallback
       if (!nextCell) {
         nextCell = cell;
         nextIndex = model.index;
@@ -524,6 +524,7 @@ export const InlineEditingMixin = (superClass) =>
       });
     }
 
+    /** @private */
     _isCellEditable(cell) {
       const column = cell._column;
       // Not editable if the column is not an edit column
