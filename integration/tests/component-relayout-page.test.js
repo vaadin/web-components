@@ -1,9 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { ComboBox } from '@vaadin/combo-box';
 import { ContextMenu } from '@vaadin/context-menu';
 import { MenuBar } from '@vaadin/menu-bar';
 
 [
+  { tagName: ComboBox.is },
   { tagName: ContextMenu.is },
   {
     tagName: MenuBar.is,
