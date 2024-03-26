@@ -5,6 +5,10 @@ import { flushGrid } from './helpers.js';
 
 let grid;
 
+function getHeaderCell(grid, index) {
+  return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+}
+
 function getRowCell(rowIndex, cellIndex) {
   return grid.$.items.children[rowIndex].children[cellIndex];
 }
@@ -88,5 +92,10 @@ describe('keyboard navigation - focus button mode', () => {
     const cell2 = getRowFirstCell(1);
     cell2.focus();
     expect(cell.firstChild.getAttribute('part')).to.be.null;
+  });
+
+  it('should not create a focusable div with role="button" inside the header cell', () => {
+    const headerCell = getHeaderCell(grid, 0);
+    expect(headerCell.firstChild.localName).to.equal('slot');
   });
 });
