@@ -70,7 +70,10 @@ export const GridFilterElementMixin = (superClass) =>
       this._filterController = new SlotController(this, '', 'vaadin-text-field', {
         initializer: (field) => {
           field.addEventListener('value-changed', (e) => {
-            if (field.__previousValue === undefined && e.detail.value === '') {
+            // In Lit version, two value-changed events occur during initialization: first,
+            // value set to undefined and then changes to empty string. Use `hasUpdated` to
+            // detect Lit as in Polymer there is only one event and this logic is not needed.
+            if (field.hasUpdated && field.__previousValue === undefined && e.detail.value === '') {
               field.__previousValue = e.detail.value;
               return;
             }

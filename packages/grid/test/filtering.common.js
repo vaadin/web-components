@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, LitElement } from 'lit';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';
@@ -25,9 +25,7 @@ class FilterWrapper extends LitElement {
           display: block;
         }
       </style>
-      <vaadin-grid-filter path="foo" .value="${this._filterValue}">
-        <input @input="${this._onFilterInput}" />
-      </vaadin-grid-filter>
+      <vaadin-grid-filter path="foo" .value="${this._filterValue}"></vaadin-grid-filter>
     `;
   }
 
@@ -51,7 +49,7 @@ describe('filter', () => {
 
   beforeEach(async () => {
     filterWrapper = fixtureSync('<filter-wrapper></filter-wrapper>');
-    await filterWrapper.updateComplete;
+    await nextRender();
     filter = filterWrapper.shadowRoot.querySelector('vaadin-grid-filter');
     clock = sinon.useFakeTimers();
   });
@@ -64,6 +62,27 @@ describe('filter', () => {
     const spy = sinon.spy();
     filter.addEventListener('filter-changed', spy);
     filter.value = 'foo';
+    await clock.tickAsync(200);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should fire `filter-changed` on field value change', async () => {
+    const spy = sinon.spy();
+    const field = filter.querySelector('vaadin-text-field');
+    filter.addEventListener('filter-changed', spy);
+    field.value = 'foo';
+    await clock.tickAsync(200);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should fire `filter-changed` on field value change to empty string', async () => {
+    const spy = sinon.spy();
+    const field = filter.querySelector('vaadin-text-field');
+    filter.addEventListener('filter-changed', spy);
+    field.value = 'foo';
+    await clock.tickAsync(200);
+    spy.resetHistory();
+    field.value = '';
     await clock.tickAsync(200);
     expect(spy.calledOnce).to.be.true;
   });
