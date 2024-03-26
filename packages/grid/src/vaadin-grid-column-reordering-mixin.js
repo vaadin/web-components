@@ -251,10 +251,7 @@ export const ColumnReorderingMixin = (superClass) =>
           return element;
         }
         // Check if element is the cell of a focus button mode column
-        if (
-          element.parentElement &&
-          element.parentElement._focusButton === element
-        ) {
+        if (element.parentElement && element.parentElement._focusButton === element) {
           return element.parentElement;
         }
       }
