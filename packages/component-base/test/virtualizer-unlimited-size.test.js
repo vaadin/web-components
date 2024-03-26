@@ -102,6 +102,16 @@ describe('unlimited size', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
+  it('should manually scroll to end when the scroll target has a border', async () => {
+    scrollTarget.style.borderTop = '20px solid black';
+
+    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    await oneEvent(scrollTarget, 'scroll');
+
+    const item = elementsContainer.querySelector(`#item-${virtualizer.size - 1}`);
+    expect(item.getBoundingClientRect().bottom).to.be.closeTo(scrollTarget.getBoundingClientRect().bottom, 1);
+  });
+
   it('should manually scroll to start after scroll to index', async () => {
     virtualizer.scrollToIndex(virtualizer.size / 400);
 
