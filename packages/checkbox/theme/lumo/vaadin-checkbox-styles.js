@@ -77,6 +77,22 @@ registerStyles(
       opacity: 1;
     }
 
+    :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
+      background: transparent;
+    }
+
+    :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
+      content: '';
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      top: 0;
+      left: 0;
+      opacity: 1;
+      border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-50pct));
+    }
+
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
       content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
