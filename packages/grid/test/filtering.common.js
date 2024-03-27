@@ -55,7 +55,7 @@ describe('filter', () => {
     filterWrapper = fixtureSync('<filter-wrapper></filter-wrapper>');
     await nextRender();
     filter = filterWrapper.shadowRoot.querySelector('vaadin-grid-filter');
-    clock = sinon.useFakeTimers();
+    clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
   });
 
   afterEach(() => {
@@ -70,23 +70,26 @@ describe('filter', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should fire `filter-changed` on field value change', async () => {
+  it('should fire `filter-changed` on field input event', async () => {
     const spy = sinon.spy();
-    const field = filter.querySelector('vaadin-text-field');
+    const input = filter.querySelector('input');
     filter.addEventListener('filter-changed', spy);
-    field.value = 'foo';
+    input.value = 'foo';
+    fire(input, 'input');
     await clock.tickAsync(200);
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should fire `filter-changed` on field value change to empty string', async () => {
+  it('should fire `filter-changed` on field input event with empty string', async () => {
     const spy = sinon.spy();
-    const field = filter.querySelector('vaadin-text-field');
+    const input = filter.querySelector('input');
     filter.addEventListener('filter-changed', spy);
-    field.value = 'foo';
+    input.value = 'foo';
+    fire(input, 'input');
     await clock.tickAsync(200);
     spy.resetHistory();
-    field.value = '';
+    input.value = '';
+    fire(input, 'input');
     await clock.tickAsync(200);
     expect(spy.calledOnce).to.be.true;
   });
@@ -268,7 +271,8 @@ describe('filtering', () => {
     });
 
     it('should apply the input fields value to the filter', async () => {
-      filterTextField.value = 'foo';
+      filterTextField.inputElement.value = 'foo';
+      fire(filterTextField.inputElement, 'input');
       await nextFrame();
       expect(filter.value).to.equal('foo');
     });
