@@ -180,7 +180,7 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      expect(spy.called).to.be.true;
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should call `select()` on the custom editor component, if the <input> was rendered', () => {
@@ -194,7 +194,7 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      expect(spy.called).to.be.true;
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should exit the edit mode on custom editor component focusout event', () => {
