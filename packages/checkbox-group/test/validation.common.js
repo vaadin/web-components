@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-checkbox-group.js';
 
 describe('validation', () => {
   let group, validateSpy;
@@ -56,15 +55,18 @@ describe('validation', () => {
       expect(group.checkValidity()).to.be.true;
     });
 
-    it('should validate when adding a value', () => {
+    it('should validate when adding a value', async () => {
       group.value = ['en', 'fr'];
+      await nextUpdate(group);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate when removing a value', () => {
+    it('should validate when removing a value', async () => {
       group.value = ['en', 'fr'];
+      await nextUpdate(group);
       validateSpy.resetHistory();
       group.value = ['en'];
+      await nextUpdate(group);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
@@ -98,10 +100,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       group.addEventListener('validated', validatedSpy);
       group.required = true;
+      await nextUpdate(group);
       group.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -157,14 +160,17 @@ describe('validation', () => {
       expect(group.checkValidity()).to.be.true;
     });
 
-    it('should be valid after selecting a checkbox', () => {
+    it('should be valid after selecting a checkbox', async () => {
       checkboxes[0].click();
+      await nextUpdate(group);
       expect(group.invalid).to.be.false;
     });
 
-    it('should be invalid after deselecting all checkboxes', () => {
+    it('should be invalid after deselecting all checkboxes', async () => {
       checkboxes[0].click();
+      await nextUpdate(group);
       checkboxes[0].click();
+      await nextUpdate(group);
       expect(group.invalid).to.be.true;
     });
   });
