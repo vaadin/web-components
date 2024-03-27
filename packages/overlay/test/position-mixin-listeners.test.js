@@ -126,6 +126,16 @@ describe('position mixin listeners', () => {
       updatePositionSpy.resetHistory();
     });
 
+    it('should not update position on window resize', () => {
+      resize(window);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
+    it('should not update position on document scroll', () => {
+      scroll(document);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
     it('should update position on visual viewport resize', () => {
       resize(window.visualViewport);
       expect(updatePositionSpy.called).to.be.true;
