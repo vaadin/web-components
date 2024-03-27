@@ -79,6 +79,7 @@ registerStyles(
 
     :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
       background: transparent;
+      box-shadow: none;
     }
 
     :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
@@ -110,6 +111,10 @@ registerStyles(
     :host([focus-ring]) [part='checkbox'] {
       box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+    }
+
+    :host([focus-ring][readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
     }
 
     /* Disabled */

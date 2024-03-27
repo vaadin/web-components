@@ -82,6 +82,11 @@ describe('checkbox', () => {
       element.indeterminate = true;
       await visualDiff(div, 'readonly-indeterminate');
     });
+
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'readonly-focus-ring');
+    });
   });
 
   describe('RTL', () => {
