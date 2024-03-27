@@ -28,6 +28,12 @@ class GridProEditText extends TextField {
     super.ready();
     this.setAttribute('theme', 'grid-pro-editor');
   }
+
+  focus() {
+    this.performUpdate();
+    this.shadowRoot.querySelector('vaadin-input-container').performUpdate();
+    super.focus();
+  }
 }
 
 defineCustomElement(GridProEditText);

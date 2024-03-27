@@ -50,6 +50,7 @@ describe('edit column', () => {
       tab(document.activeElement);
       expect(getCellEditor(selectCell)).to.be.ok;
       await nextFrame();
+      await nextFrame();
 
       // Press Tab to edit the checkbox cell
       tab(document.activeElement);
@@ -64,6 +65,7 @@ describe('edit column', () => {
       // Press Shift + Tab to edit the select cell
       tab(document.activeElement, ['shift']);
       expect(getCellEditor(selectCell)).to.be.ok;
+      await nextFrame();
       await nextFrame();
 
       // Press Shift + Tab to edit the text cell

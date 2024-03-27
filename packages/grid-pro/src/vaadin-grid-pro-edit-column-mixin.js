@@ -268,7 +268,6 @@ export const GridProEditColumnMixin = (superClass) =>
       editor._grid = this._grid;
 
       this._focusEditor(editor);
-      requestAnimationFrame(() => this._focusEditor(editor));
     }
 
     /**

@@ -24,6 +24,11 @@ class GridProEditSelect extends GridProEditSelectMixin(Select) {
   static get is() {
     return 'vaadin-grid-pro-edit-select';
   }
+
+  focus() {
+    this.performUpdate();
+    super.focus();
+  }
 }
 
 defineCustomElement(GridProEditSelect);

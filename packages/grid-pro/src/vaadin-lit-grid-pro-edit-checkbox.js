@@ -23,6 +23,11 @@ class GridProEditCheckbox extends Checkbox {
   static get is() {
     return 'vaadin-grid-pro-edit-checkbox';
   }
+
+  focus() {
+    this.performUpdate();
+    super.focus();
+  }
 }
 
 defineCustomElement(GridProEditCheckbox);
