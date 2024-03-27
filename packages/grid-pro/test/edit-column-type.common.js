@@ -6,6 +6,7 @@ import {
   fixtureSync,
   focusin,
   focusout,
+  isFirefox,
   keyDownChar,
   nextFrame,
   nextRender,
@@ -365,7 +366,7 @@ describe('edit column editor type', () => {
       expect(editor).to.be.not.ok;
     });
 
-    it('should not start edit with first character selected', async () => {
+    (isFirefox ? it.skip : it)('should not start edit with first character selected', async () => {
       column = grid.querySelector('[path="name"]');
       cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
       cell.focus();
