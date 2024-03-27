@@ -91,10 +91,10 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.true;
     });
 
-    it('should update position on document scroll after assigning a position target', () => {
+    it('should update position on visual viewport scroll after assigning a position target', () => {
       overlay.positionTarget = target;
       updatePositionSpy.resetHistory();
-      scroll(document);
+      scroll(window.visualViewport);
       expect(updatePositionSpy.called).to.be.true;
     });
 
@@ -161,13 +161,13 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
-    ['document', 'ancestor'].forEach((name) => {
+    ['visual viewport', 'ancestor'].forEach((name) => {
       describe(name, () => {
         let scrollableNode;
 
         beforeEach(() => {
-          if (name === 'document') {
-            scrollableNode = document;
+          if (name === 'visual viewport') {
+            scrollableNode = window.visualViewport;
           }
           if (name === 'ancestor') {
             scrollableNode = wrapper.shadowRoot.querySelector('#scrollable');
@@ -219,8 +219,8 @@ describe('position mixin listeners', () => {
         updatePositionSpy.resetHistory();
       });
 
-      it('should update position on document scroll', () => {
-        scroll(document);
+      it('should update position on visual viewport scroll', () => {
+        scroll(window.visualViewport);
         expect(updatePositionSpy.called).to.be.true;
       });
 
@@ -245,8 +245,8 @@ describe('position mixin listeners', () => {
         newWrapper.appendChild(target);
       });
 
-      it('should update position on document scroll after re-opened', async () => {
-        scroll(document);
+      it('should update position on visual viewport scroll after re-opened', async () => {
+        scroll(window.visualViewport);
         expect(updatePositionSpy.called).to.be.true;
 
         overlay.opened = false;
@@ -254,7 +254,7 @@ describe('position mixin listeners', () => {
         await nextFrame();
         updatePositionSpy.resetHistory();
 
-        scroll(document);
+        scroll(window.visualViewport);
         expect(updatePositionSpy.called).to.be.true;
       });
 
