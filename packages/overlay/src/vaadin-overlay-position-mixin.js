@@ -146,7 +146,8 @@ export const PositionMixin = (superClass) =>
 
     /** @private */
     __addUpdatePositionEventListeners() {
-      window.addEventListener('resize', this._updatePosition);
+      window.visualViewport.addEventListener('resize', this._updatePosition);
+      window.visualViewport.addEventListener('scroll', this.__onScroll, true);
 
       this.__positionTargetAncestorRootNodes = getAncestorRootNodes(this.positionTarget);
       this.__positionTargetAncestorRootNodes.forEach((node) => {
@@ -156,7 +157,8 @@ export const PositionMixin = (superClass) =>
 
     /** @private */
     __removeUpdatePositionEventListeners() {
-      window.removeEventListener('resize', this._updatePosition);
+      window.visualViewport.removeEventListener('resize', this._updatePosition);
+      window.visualViewport.removeEventListener('scroll', this.__onScroll, true);
 
       if (this.__positionTargetAncestorRootNodes) {
         this.__positionTargetAncestorRootNodes.forEach((node) => {
@@ -204,9 +206,11 @@ export const PositionMixin = (superClass) =>
     /** @private */
     __onScroll(e) {
       // If the scroll event occurred inside the overlay, ignore it.
-      if (!this.contains(e.target)) {
-        this._updatePosition();
+      if (e.target instanceof Node && this.contains(e.target)) {
+        return;
       }
+
+      this._updatePosition();
     }
 
     _updatePosition() {
