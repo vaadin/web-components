@@ -77,6 +77,10 @@ registerStyles(
       opacity: 1;
     }
 
+    :host([readonly]:not([checked]):not([indeterminate])) {
+      color: var(--lumo-secondary-text-color);
+    }
+
     :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
       background: transparent;
       box-shadow: none;
