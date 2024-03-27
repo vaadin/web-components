@@ -86,9 +86,6 @@ export const GridProEditColumnMixin = (superClass) =>
 
         /** @private */
         _oldRenderer: Function,
-
-        /** @private */
-        _editInitiatorKey: String,
       };
     }
 
@@ -185,12 +182,7 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.focus();
       if (this.editorType === 'checkbox') {
         editor.setAttribute('focus-ring', '');
-      }
-    }
-
-    /** @private */
-    _selectEditorInput(editor) {
-      if (editor instanceof HTMLInputElement) {
+      } else if (editor instanceof HTMLInputElement) {
         editor.select();
       } else if (editor.focusElement && editor.focusElement instanceof HTMLInputElement) {
         editor.focusElement.select();
@@ -275,17 +267,11 @@ export const GridProEditColumnMixin = (superClass) =>
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
 
-      const editInitiatorKey = this._editInitiatorKey;
-      this._editInitiatorKey = undefined;
-      requestAnimationFrame(() => {
-        if (editInitiatorKey) {
-          this._setEditorValue(editor, editInitiatorKey);
-          this._focusEditor(editor);
-        } else {
-          this._focusEditor(editor);
-          this._selectEditorInput(editor);
-        }
-      });
+      if (editor.updateComplete) {
+        editor.updateComplete.then(() => this._focusEditor(editor));
+      } else {
+        this._focusEditor(editor);
+      }
     }
 
     /**
