@@ -97,8 +97,9 @@ describe('edit column editor type', () => {
       expect(checkbox.checked).to.be.equal(grid.items[0].married);
     });
 
-    it('should set focus-ring on the checkbox', () => {
+    it('should set focus-ring on the checkbox', async () => {
       dblclick(cell._content);
+      await nextFrame();
       checkbox = column._getEditorComponent(cell);
       expect(checkbox.hasAttribute('focus-ring')).to.be.true;
     });
