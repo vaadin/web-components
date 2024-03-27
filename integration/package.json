@@ -3,7 +3,7 @@
   "version": "23.4.0",
   "private": true,
   "description": "Vaadin web components integration tests",
-  "license": "Apache-2.0",
+  "license": "https://vaadin.com/commercial-license-and-service-terms",
   "author": "Vaadin Ltd",
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

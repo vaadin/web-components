@@ -13,4 +13,6 @@ Lumo contains foundational styles – typography, colors, visual style, sizing 
 
 ## License
 
-Apache License 2.0
+This program is available under Vaadin Commercial License and Service Terms.
+See https://vaadin.com/commercial-license-and-service-terms for the full
+license.

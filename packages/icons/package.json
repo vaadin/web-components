@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "Collection of 600+ unique icons designed for web applications",
-  "license": "Apache-2.0",
+  "license": "https://vaadin.com/commercial-license-and-service-terms",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

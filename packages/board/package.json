@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "https://vaadin.com/commercial-license-and-service-terms",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
