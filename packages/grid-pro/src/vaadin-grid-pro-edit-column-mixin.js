@@ -255,7 +255,7 @@ export const GridProEditColumnMixin = (superClass) =>
      * @param {!GridItemModel} model
      * @protected
      */
-    _startCellEdit(cell, model) {
+    _startCellEdit(cell, model, value) {
       this._renderEditor(cell, model);
 
       const editor = this._getEditorComponent(cell);
@@ -264,11 +264,18 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
       document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
       this._setEditorOptions(editor);
-      this._setEditorValue(editor, get(this.path, model.item));
+      this._setEditorValue(editor, value || get(this.path, model.item));
       editor._grid = this._grid;
 
       this._focusEditor(editor);
-      requestAnimationFrame(() => this._focusEditor(editor));
+      requestAnimationFrame(() => {
+        if (value !== undefined) {
+          // For Lit. Needs a test.
+          editor.focus();
+        } else {
+          this._focusEditor(editor);
+        }
+      });
     }
 
     /**

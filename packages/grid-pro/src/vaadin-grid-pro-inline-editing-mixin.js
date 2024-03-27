@@ -108,7 +108,7 @@ export const InlineEditingMixin = (superClass) =>
             break;
           default:
             if (e.key && e.key.length === 1) {
-              this._enterEditFromEvent(e, 'text');
+              this._enterEditFromEvent(e, 'text', e.key);
             }
             break;
         }
@@ -267,7 +267,7 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _enterEditFromEvent(e, type) {
+    _enterEditFromEvent(e, type, value) {
       const context = this.getEventContext(e);
       const column = context.column;
       const edited = this.__edited;
@@ -290,7 +290,7 @@ export const InlineEditingMixin = (superClass) =>
 
         this._flushStopEdit();
 
-        this._startEdit(cell, column);
+        this._startEdit(cell, column, value);
       } else if (edited) {
         this._stopEdit();
       }
@@ -324,7 +324,7 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _startEdit(cell, column) {
+    _startEdit(cell, column, value) {
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
       if (this.disabled || this._editingDisabled) {
         return;
@@ -336,7 +336,7 @@ export const InlineEditingMixin = (superClass) =>
 
       const model = this.__getRowModel(cell.parentElement);
       this.__edited = { cell, column, model };
-      column._startCellEdit(cell, model);
+      column._startCellEdit(cell, model, value);
 
       this.dispatchEvent(
         new CustomEvent('cell-edit-started', {
