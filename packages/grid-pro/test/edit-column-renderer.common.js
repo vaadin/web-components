@@ -169,7 +169,7 @@ describe('edit column renderer', () => {
       expect(editor.value).to.be.equal(grid.items[0].name);
     });
 
-    it('should call `focus()` on the custom editor component after entering the cell edit mode', async () => {
+    it('should call `focus()` on the custom editor component after entering the cell edit mode', () => {
       let spy;
 
       column.editModeRenderer = function (root) {
@@ -180,11 +180,10 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      await nextFrame();
       expect(spy.called).to.be.true;
     });
 
-    it('should call `select()` on the custom editor component, if the <input> was rendered', async () => {
+    it('should call `select()` on the custom editor component, if the <input> was rendered', () => {
       let spy;
 
       column.editModeRenderer = function (root) {
@@ -195,7 +194,6 @@ describe('edit column renderer', () => {
       };
 
       dblclick(cell._content);
-      await nextFrame();
       expect(spy.called).to.be.true;
     });
 
