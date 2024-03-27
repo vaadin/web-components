@@ -248,32 +248,6 @@ describe('reordering simple grid', () => {
       expectVisualOrder(grid, [2, 1]);
     });
 
-    it('should reorder focus button mode columns', () => {
-      grid = fixtureSync(`
-        <vaadin-grid column-reordering-allowed>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-          <vaadin-grid-column path="age"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
-        col._focusButtonMode = true;
-      });
-      grid.items = [
-        { name: 'John', age: 30 },
-        { name: 'Ringo', age: 40 },
-      ];
-      flushGrid(grid);
-
-      const headerContent = [
-        getContainerCell(grid.$.header, 0, 0)._content,
-        getContainerCell(grid.$.header, 0, 1)._content,
-      ];
-      dragAndDropOver(headerContent[0], headerContent[1]);
-
-      expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.be.equal('Age');
-      expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.be.equal('Name');
-    });
-
     it('should allow dropping over body cell of another column', () => {
       dragAndDropOver(headerContent[0], getVisualCellContent(grid.$.items, 0, 1));
       expectVisualOrder(grid, [2, 1]);
@@ -389,6 +363,41 @@ describe('reordering simple grid', () => {
       expect(spy.calledOnce).to.be.true;
       const e = spy.firstCall.args[0];
       expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
+    });
+
+    describe('focus button mode', () => {
+      beforeEach(() => {
+        grid = fixtureSync(`
+          <vaadin-grid column-reordering-allowed>
+            <vaadin-grid-column path="name"></vaadin-grid-column>
+            <vaadin-grid-column path="age"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+        grid.querySelectorAll('vaadin-grid-column').forEach((col) => {
+          col._focusButtonMode = true;
+        });
+        grid.items = [
+          { name: 'John', age: 30 },
+          { name: 'Ringo', age: 40 },
+        ];
+        flushGrid(grid);
+        headerContent = [
+          getContainerCell(grid.$.header, 0, 0)._content,
+          getContainerCell(grid.$.header, 0, 1)._content,
+        ];
+      });
+
+      it('should reorder the columns', () => {
+        dragAndDropOver(headerContent[0], headerContent[1]);
+        expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.be.equal('Age');
+        expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.be.equal('Name');
+      });
+
+      it('should allow dropping over body cell of another column', () => {
+        dragAndDropOver(headerContent[0], getVisualCellContent(grid.$.items, 0, 1));
+        expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.be.equal('Age');
+        expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.be.equal('Name');
+      });
     });
   });
 
