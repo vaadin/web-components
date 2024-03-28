@@ -14,6 +14,7 @@ import {
   getRowBodyCells,
   getRowCells,
   getRows,
+  getVisibleItems,
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
@@ -247,6 +248,15 @@ describe('data provider', () => {
         { path: 'name', direction: 'asc' },
       ]);
     });
+
+    it('should not request again when resolving with an empty array', async () => {
+      grid.dataProvider = sinon.spy((_params, callback) => callback([], 10));
+
+      grid.dataProvider.resetHistory();
+      await aTimeout(100);
+
+      expect(grid.dataProvider.callCount).to.equal(0);
+    });
   });
 
   describe('tree', () => {
@@ -427,6 +437,40 @@ describe('data provider', () => {
         grid.clearCache();
         cell = getContainerCell(grid.$.items, 1, 0);
         expect(grid.__getRowModel(cell.parentElement).level).to.equal(1);
+      });
+
+      it('should have correct row hierarchy with small page size', async () => {
+        grid.pageSize = 2;
+        grid.itemIdPath = 'value';
+        grid.expandedItems = [{ value: '0' }, { value: '0-0' }];
+        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+          const levelSize = parentItem ? 4 : 100;
+
+          const pageItems = Array.from({ length: pageSize }, (_, i) => {
+            const indexInLevel = page * pageSize + i;
+            return {
+              value: `${parentItem ? `${parentItem.value}-` : ''}${indexInLevel}`,
+              children: true,
+            };
+          });
+
+          setTimeout(() => cb(pageItems, levelSize), 0);
+        };
+
+        await aTimeout(0); // Wait for 0 level
+        await aTimeout(0); // Wait for 0-0 level
+        await aTimeout(0); // Wait for 0-0-0 level
+        await aTimeout(0); // Wait for the second page requests
+
+        const expectedRowContent = ['0', '0-0', '0-0-0', '0-0-1', '0-0-2', '0-0-3', '0-1', '0-2', '0-3'];
+
+        getVisibleItems(grid).forEach((row) => {
+          const cell = getRowCells(row)[0];
+          const expectedContent = expectedRowContent[row.index];
+          if (expectedContent) {
+            expect(getCellContent(cell).textContent).to.equal(expectedContent);
+          }
+        });
       });
 
       describe('row state', () => {
