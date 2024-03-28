@@ -69,12 +69,8 @@ export const GridFilterElementMixin = (superClass) =>
 
       this._filterController = new SlotController(this, '', 'vaadin-text-field', {
         initializer: (field) => {
-          field.addEventListener('value-changed', (e) => {
-            if (field.__previousValue === undefined && e.detail.value === '') {
-              field.__previousValue = e.detail.value;
-              return;
-            }
-            this.value = e.detail.value;
+          field.addEventListener('input', (e) => {
+            this.value = e.target.value;
           });
 
           this._textField = field;
@@ -88,12 +84,8 @@ export const GridFilterElementMixin = (superClass) =>
       if (path === undefined || value === undefined || !textField) {
         return;
       }
-      if (this._previousValue === undefined && value === '') {
-        return;
-      }
 
       textField.value = value;
-      this._previousValue = value;
 
       this._debouncerFilterChanged = Debouncer.debounce(this._debouncerFilterChanged, timeOut.after(200), () => {
         this.dispatchEvent(new CustomEvent('filter-changed', { bubbles: true }));
