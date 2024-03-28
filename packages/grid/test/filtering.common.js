@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, LitElement } from 'lit';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';
@@ -25,14 +25,16 @@ class FilterWrapper extends LitElement {
           display: block;
         }
       </style>
-      <vaadin-grid-filter path="foo" .value="${this._filterValue}">
-        <input @input="${this._onFilterInput}" />
-      </vaadin-grid-filter>
+      <vaadin-grid-filter
+        path="foo"
+        .value="${this._filterValue}"
+        @value-changed="${this._onValueChanged}"
+      ></vaadin-grid-filter>
     `;
   }
 
-  _onFilterInput(e) {
-    this._filterValue = e.target.value;
+  _onValueChanged(e) {
+    this._filterValue = e.detail.value;
   }
 }
 
@@ -51,9 +53,9 @@ describe('filter', () => {
 
   beforeEach(async () => {
     filterWrapper = fixtureSync('<filter-wrapper></filter-wrapper>');
-    await filterWrapper.updateComplete;
+    await nextRender();
     filter = filterWrapper.shadowRoot.querySelector('vaadin-grid-filter');
-    clock = sinon.useFakeTimers();
+    clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
   });
 
   afterEach(() => {
@@ -64,6 +66,30 @@ describe('filter', () => {
     const spy = sinon.spy();
     filter.addEventListener('filter-changed', spy);
     filter.value = 'foo';
+    await clock.tickAsync(200);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should fire `filter-changed` on field input event', async () => {
+    const spy = sinon.spy();
+    const input = filter.querySelector('input');
+    filter.addEventListener('filter-changed', spy);
+    input.value = 'foo';
+    fire(input, 'input');
+    await clock.tickAsync(200);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should fire `filter-changed` on field input event with empty string', async () => {
+    const spy = sinon.spy();
+    const input = filter.querySelector('input');
+    filter.addEventListener('filter-changed', spy);
+    input.value = 'foo';
+    fire(input, 'input');
+    await clock.tickAsync(200);
+    spy.resetHistory();
+    input.value = '';
+    fire(input, 'input');
     await clock.tickAsync(200);
     expect(spy.calledOnce).to.be.true;
   });
@@ -245,7 +271,8 @@ describe('filtering', () => {
     });
 
     it('should apply the input fields value to the filter', async () => {
-      filterTextField.value = 'foo';
+      filterTextField.inputElement.value = 'foo';
+      fire(filterTextField.inputElement, 'input');
       await nextFrame();
       expect(filter.value).to.equal('foo');
     });
