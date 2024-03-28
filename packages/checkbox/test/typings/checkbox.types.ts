@@ -26,6 +26,7 @@ assertType<boolean>(checkbox.autofocus);
 assertType<boolean>(checkbox.checked);
 assertType<boolean>(checkbox.disabled);
 assertType<boolean>(checkbox.indeterminate);
+assertType<boolean>(checkbox.readonly);
 assertType<string | null | undefined>(checkbox.label);
 assertType<string>(checkbox.name);
 assertType<string>(checkbox.value);

@@ -36,6 +36,19 @@ export const CheckboxGroupMixin = (superclass) =>
           notify: true,
           observer: '__valueChanged',
         },
+
+        /**
+         * When true, the user cannot modify the value of the checkbox group.
+         * The difference between `disabled` and `readonly` is that in the
+         * read-only checkbox group, all the checkboxes are also read-only,
+         * and therefore remain focusable and announced by screen readers.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          observer: '__readonlyChanged',
+        },
       };
     }
 
@@ -145,6 +158,10 @@ export const CheckboxGroupMixin = (superclass) =>
         checkbox.disabled = true;
       }
 
+      if (this.readonly) {
+        checkbox.readonly = true;
+      }
+
       if (checkbox.checked) {
         this.__addCheckboxToValue(checkbox.value);
       } else if (this.value.includes(checkbox.value)) {
@@ -245,6 +262,15 @@ export const CheckboxGroupMixin = (superclass) =>
 
       if (oldValue !== undefined) {
         this.validate();
+      }
+    }
+
+    /** @private */
+    __readonlyChanged(readonly, oldReadonly) {
+      if (readonly || oldReadonly) {
+        this.__checkboxes.forEach((checkbox) => {
+          checkbox.readonly = readonly;
+        });
       }
     }
 

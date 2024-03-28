@@ -77,6 +77,27 @@ registerStyles(
       opacity: 1;
     }
 
+    :host([readonly]:not([checked]):not([indeterminate])) {
+      color: var(--lumo-secondary-text-color);
+    }
+
+    :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
+      content: '';
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      top: 0;
+      left: 0;
+      opacity: 1;
+      border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-50pct));
+    }
+
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
       content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
@@ -94,6 +115,10 @@ registerStyles(
     :host([focus-ring]) [part='checkbox'] {
       box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+    }
+
+    :host([focus-ring][readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
     }
 
     /* Disabled */
@@ -119,6 +144,11 @@ registerStyles(
       background-color: var(--lumo-contrast-30pct);
     }
 
+    :host([readonly][checked]) [part='checkbox'],
+    :host([readonly][indeterminate]) [part='checkbox'] {
+      background-color: var(--vaadin-checkbox-readonly-checked-background, var(--lumo-contrast-70pct));
+    }
+
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
@@ -139,13 +169,13 @@ registerStyles(
     }
 
     /* Hover */
-    :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
+    :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
       background: var(--vaadin-checkbox-background-hover, var(--lumo-contrast-30pct));
     }
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
-      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part='checkbox'] {
+      :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
         background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       }
     }

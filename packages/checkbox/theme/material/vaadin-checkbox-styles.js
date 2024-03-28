@@ -118,6 +118,12 @@ registerStyles(
       background-color: var(--material-disabled-color);
     }
 
+    :host([readonly][checked]) [part='checkbox'],
+    :host([readonly][indeterminate]) [part='checkbox'],
+    :host([readonly]) [part='checkbox']::before {
+      background-color: var(--material-secondary-text-color);
+    }
+
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: 3px 6px 3px 12px;

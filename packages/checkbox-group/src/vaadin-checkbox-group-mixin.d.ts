@@ -33,4 +33,12 @@ export declare class CheckboxGroupMixinClass {
    * creating a new array.
    */
   value: string[];
+
+  /**
+   * When true, the user cannot modify the value of the checkbox group.
+   * The difference between `disabled` and `readonly` is that in the
+   * read-only checkbox group, all the checkboxes are also read-only,
+   * and therefore remain focusable and announced by screen readers.
+   */
+  readonly: boolean;
 }

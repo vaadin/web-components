@@ -64,6 +64,31 @@ describe('checkbox', () => {
     });
   });
 
+  describe('readonly', () => {
+    beforeEach(() => {
+      element.readonly = true;
+    });
+
+    it('basic', async () => {
+      await visualDiff(div, 'readonly');
+    });
+
+    it('checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'readonly-checked');
+    });
+
+    it('indeterminate', async () => {
+      element.indeterminate = true;
+      await visualDiff(div, 'readonly-indeterminate');
+    });
+
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'readonly-focus-ring');
+    });
+  });
+
   describe('RTL', () => {
     before(() => {
       document.documentElement.setAttribute('dir', 'rtl');
@@ -87,24 +112,35 @@ describe('checkbox', () => {
     before(() => {
       document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
     });
+
     after(() => {
       document.documentElement.style.removeProperty('--vaadin-input-field-border-width');
     });
+
     it('bordered default', async () => {
       await visualDiff(div, 'bordered-default');
     });
+
     it('bordered focus-ring', async () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'bordered-focus-ring');
     });
+
     it('bordered checked', async () => {
       element.checked = true;
       await visualDiff(div, 'bordered-checked');
     });
+
     it('bordered-disabled', async () => {
       element.disabled = true;
       await visualDiff(div, 'bordered-disabled');
     });
+
+    it('bordered readonly', async () => {
+      element.readonly = true;
+      await visualDiff(div, 'bordered-readonly');
+    });
+
     it('Bordered dark', async () => {
       document.documentElement.setAttribute('theme', 'dark');
       await visualDiff(div, 'bordered-dark');
