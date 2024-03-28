@@ -259,8 +259,10 @@ export const SelectBaseMixin = (superClass) =>
         menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e), true);
         menuElement.addEventListener(
           'click',
-          () => {
-            this.__dispatchChangePending = true;
+          (e) => {
+            const value = e.target.value;
+            this.__dispatchChangePending = value !== undefined && value !== this.value;
+            this.opened = false;
           },
           true,
         );
@@ -523,7 +525,6 @@ export const SelectBaseMixin = (superClass) =>
           this._selectedChanging = true;
           this.value = selected.value || '';
           if (this.__dispatchChangePending) {
-            this.opened = false;
             this.__dispatchChange();
           }
           delete this._selectedChanging;
