@@ -26,6 +26,13 @@ registerStyles(
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+      --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.4em);
+      --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
+    }
+
+    [part='label'] {
+      display: flex;
+      position: relative;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -169,13 +176,13 @@ registerStyles(
     }
 
     /* Hover */
-    :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
+    :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):not([invalid]):hover) [part='checkbox'] {
       background: var(--vaadin-checkbox-background-hover, var(--lumo-contrast-30pct));
     }
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
-      :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):hover) [part='checkbox'] {
+      :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):not([invalid]):hover) [part='checkbox'] {
         background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       }
     }
@@ -194,6 +201,90 @@ registerStyles(
       transition-duration: 0.01s, 0.01s;
       transform: scale(0);
       opacity: 0.4;
+    }
+
+    /* Required */
+    :host([required]) [part='required-indicator'] {
+      position: relative;
+      right: var(--lumo-space-xs);
+      align-self: center;
+    }
+
+    :host([required][dir='rtl']) [part='required-indicator'] {
+      right: auto;
+      left: var(--lumo-space-xs);
+    }
+
+    :host([required]) [part='required-indicator']::after {
+      content: var(--lumo-required-field-indicator, '\\2022');
+      transition: opacity 0.2s;
+      color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+      width: 1em;
+      text-align: center;
+    }
+
+    /* Invalid */
+    :host([invalid]) [part='checkbox'] {
+      background: var(--_invalid-background);
+    }
+
+    :host([invalid][focus-ring]) {
+      --_focus-ring-color: var(--lumo-error-color-50pct);
+    }
+
+    :host([invalid]) [part='required-indicator']::after {
+      color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+    }
+
+    /* Error message */
+    [part='error-message'] {
+      font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
+      line-height: var(--lumo-line-height-xs);
+      font-weight: var(--vaadin-input-field-error-font-weight, 400);
+      color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
+      will-change: max-height;
+      transition: 0.4s max-height;
+      max-height: 5em;
+      padding-inline-start: var(--lumo-space-xs);
+    }
+
+    :host([has-error-message]) [part='error-message']::before,
+    :host([has-error-message]) [part='error-message']::after {
+      content: '';
+      display: block;
+      height: 0.4em;
+    }
+
+    :host(:not([invalid])) [part='error-message'] {
+      max-height: 0;
+      overflow: hidden;
+    }
+
+    /* Helper */
+    :host([has-helper]) [part='helper-text']::before {
+      content: '';
+      display: block;
+      height: var(--_helper-spacing);
+    }
+
+    [part='helper-text'] {
+      display: block;
+      color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
+      font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
+      line-height: var(--lumo-line-height-xs);
+      font-weight: var(--vaadin-input-field-helper-font-weight, 400);
+      margin-left: calc(var(--lumo-border-radius-m) / 4);
+      transition: color 0.2s;
+      padding-inline-start: var(--lumo-space-xs);
+    }
+
+    :host(:hover:not([readonly])) [part='helper-text'] {
+      color: var(--lumo-body-text-color);
+    }
+
+    :host([disabled]) [part='helper-text'] {
+      color: var(--lumo-disabled-text-color);
+      -webkit-text-fill-color: var(--lumo-disabled-text-color);
     }
   `,
   { moduleId: 'lumo-checkbox' },

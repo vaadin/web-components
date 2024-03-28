@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-checkbox.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -33,6 +33,23 @@ describe('vaadin-checkbox', () => {
 
     it('readonly', async () => {
       checkbox.readonly = true;
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      checkbox.helperText = 'Helper';
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
+
+    it('required', async () => {
+      checkbox.required = true;
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      checkbox.errorMessage = 'Error';
+      checkbox.invalid = true;
+      await aTimeout(0);
       await expect(checkbox).dom.to.equalSnapshot();
     });
   });

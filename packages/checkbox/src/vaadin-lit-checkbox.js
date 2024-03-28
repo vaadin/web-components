@@ -36,7 +36,16 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMi
       <div class="vaadin-checkbox-container">
         <div part="checkbox" aria-hidden="true"></div>
         <slot name="input"></slot>
-        <slot name="label"></slot>
+        <div part="label">
+          <slot name="label"></slot>
+          <div part="required-indicator"></div>
+        </div>
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
       <slot name="tooltip"></slot>
     `;

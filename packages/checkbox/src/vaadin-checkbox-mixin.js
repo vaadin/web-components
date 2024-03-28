@@ -6,8 +6,8 @@
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
 /**
@@ -17,10 +17,10 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
  * @mixes ActiveMixin
  * @mixes CheckedMixin
  * @mixes DelegateFocusMixin
- * @mixes LabelMixin
+ * @mixes FieldMixin
  */
 export const CheckboxMixin = (superclass) =>
-  class CheckboxMixinClass extends LabelMixin(CheckedMixin(DelegateFocusMixin(ActiveMixin(superclass)))) {
+  class CheckboxMixinClass extends FieldMixin(CheckedMixin(DelegateFocusMixin(ActiveMixin(superclass)))) {
     static get properties() {
       return {
         /**
@@ -114,6 +114,8 @@ export const CheckboxMixin = (superclass) =>
         }),
       );
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+      this._createMethodObserver('_checkedChanged(checked)');
     }
 
     /**
@@ -193,6 +195,53 @@ export const CheckboxMixin = (superclass) =>
       }
 
       super._toggleChecked(checked);
+    }
+
+    /**
+     * @override
+     * @return {boolean}
+     */
+    checkValidity() {
+      return !this.required || !!this.checked;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to validate on blur.
+     * @param {boolean} focused
+     * @protected
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
+
+      // Do not validate when focusout is caused by document
+      // losing focus, which happens on browser tab switch.
+      if (!focused && document.hasFocus()) {
+        this.validate();
+      }
+    }
+
+    /** @private */
+    _checkedChanged(checked) {
+      if (checked || this.__oldChecked) {
+        this.validate();
+      }
+
+      this.__oldChecked = checked;
+    }
+
+    /**
+     * Override an observer from `FieldMixin`
+     * to validate when required is removed.
+     *
+     * @protected
+     * @override
+     */
+    _requiredChanged(required) {
+      super._requiredChanged(required);
+
+      if (required === false) {
+        this.validate();
+      }
     }
 
     /**

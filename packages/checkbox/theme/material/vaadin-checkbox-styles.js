@@ -15,6 +15,11 @@ registerStyles(
       --_checkbox-size: var(--vaadin-checkbox-size, 16px);
     }
 
+    [part='label'] {
+      display: flex;
+      position: relative;
+    }
+
     :host([has-label]) ::slotted(label) {
       padding: 3px 12px 3px 6px;
     }
@@ -127,6 +132,50 @@ registerStyles(
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: 3px 6px 3px 12px;
+    }
+
+    /* Required */
+    :host([required]) [part='required-indicator'] {
+      position: relative;
+      right: 9px;
+      color: var(--material-error-text-color);
+      align-self: center;
+    }
+
+    :host([dir='rtl'][required]) [part='required-indicator'] {
+      right: auto;
+      left: 9px;
+    }
+
+    :host([required]) [part='required-indicator']::after {
+      content: '*';
+    }
+
+    [part='error-message'] {
+      font-size: 0.75em;
+      line-height: 1;
+      padding-left: 6px;
+      color: var(--material-error-text-color);
+    }
+
+    :host([has-error-message]) [part='error-message']::before {
+      content: '';
+      display: block;
+      height: 6px;
+    }
+
+    /* Helper */
+    [part='helper-text'] {
+      font-size: 0.75rem;
+      line-height: 1;
+      padding-left: 6px;
+      color: var(--material-secondary-text-color);
+    }
+
+    :host([has-helper]) [part='helper-text']::before {
+      content: '';
+      display: block;
+      height: 6px;
     }
   `,
   { moduleId: 'material-checkbox' },
