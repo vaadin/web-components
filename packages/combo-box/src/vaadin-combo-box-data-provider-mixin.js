@@ -70,6 +70,12 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         __previousDataProviderFilter: {
           type: String,
         },
+
+        /** @private */
+        _hasData: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -136,23 +142,15 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
-      if (opened && this._shouldLoadPage(0)) {
+      if (opened && !this._hasData) {
         this._loadPage(0);
       }
     }
 
     /** @private */
     _shouldLoadPage(page) {
-      if (this._forceNextRequest) {
-        this._forceNextRequest = false;
-        return true;
-      }
-
       const loadedItem = this.filteredItems[page * this.pageSize];
-      if (loadedItem !== undefined) {
-        return loadedItem instanceof ComboBoxPlaceholder;
-      }
-      return this.size === undefined;
+      return loadedItem instanceof ComboBoxPlaceholder;
     }
 
     /** @private */
@@ -185,6 +183,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
           this.size = size;
         }
 
+        this._hasData = true;
+
         delete this._pendingRequests[page];
 
         if (Object.keys(this._pendingRequests).length === 0) {
@@ -214,6 +214,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
+      this._hasData = false;
       this._pendingRequests = {};
       const filteredItems = [];
       for (let i = 0; i < (this.size || 0); i++) {
@@ -222,10 +223,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       this.filteredItems = filteredItems;
 
       if (this._shouldFetchData()) {
-        this._forceNextRequest = false;
         this._loadPage(0);
-      } else {
-        this._forceNextRequest = true;
       }
     }
 
