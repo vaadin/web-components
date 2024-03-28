@@ -30,13 +30,7 @@ export const GridFilterColumnMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, _filterValue)'];
-    }
-
-    constructor() {
-      super();
-
-      this.__boundOnFilterValueChanged = this.__onFilterValueChanged.bind(this);
+      return ['_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)'];
     }
 
     /**
@@ -54,16 +48,12 @@ export const GridFilterColumnMixin = (superClass) =>
         textField.setAttribute('theme', 'small');
         textField.setAttribute('style', 'max-width: 100%;');
         textField.setAttribute('focus-target', '');
-        textField.addEventListener('value-changed', this.__boundOnFilterValueChanged);
         filter.appendChild(textField);
         root.appendChild(filter);
       }
 
       filter.path = this.path;
-      filter.value = this._filterValue;
 
-      textField.__rendererValue = this._filterValue;
-      textField.value = this._filterValue;
       textField.label = this.__getHeader(this.header, this.path);
     }
 
@@ -76,21 +66,6 @@ export const GridFilterColumnMixin = (superClass) =>
      */
     _computeHeaderRenderer() {
       return this._defaultHeaderRenderer;
-    }
-
-    /**
-     * Updates the internal filter value once the filter text field is changed.
-     * The listener handles only user-fired events.
-     *
-     * @private
-     */
-    __onFilterValueChanged(e) {
-      // Skip if the value is changed by the renderer.
-      if (e.detail.value === e.target.__rendererValue) {
-        return;
-      }
-
-      this._filterValue = e.detail.value;
     }
 
     /** @private */
