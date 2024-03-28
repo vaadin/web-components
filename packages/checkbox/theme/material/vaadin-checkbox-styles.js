@@ -139,7 +139,6 @@ registerStyles(
     :host([required]) [part='required-indicator'] {
       position: relative;
       right: 9px;
-      color: var(--material-error-text-color);
       align-self: center;
     }
 
@@ -150,6 +149,11 @@ registerStyles(
 
     :host([required]) [part='required-indicator']::after {
       content: '*';
+      color: var(--material-secondary-text-color);
+    }
+
+    :host([invalid]) [part='required-indicator']::after {
+      color: var(--material-error-text-color);
     }
 
     [part='error-message'],
