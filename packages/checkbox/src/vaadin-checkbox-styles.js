@@ -26,13 +26,23 @@ export const checkboxStyles = css`
 
   [part='checkbox'],
   ::slotted(input),
-  ::slotted(label) {
+  [part='label'] {
     grid-row: 1;
   }
 
   [part='checkbox'],
   ::slotted(input) {
     grid-column: 1;
+  }
+
+  [part='helper-text'],
+  [part='error-message'] {
+    grid-column: 2;
+  }
+
+  :host(:not([has-helper])) [part='helper-text'],
+  :host(:not([has-error-message])) [part='error-message'] {
+    display: none;
   }
 
   [part='checkbox'] {
