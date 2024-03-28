@@ -70,7 +70,7 @@ export const CheckboxMixin = (superclass) =>
 
     /** @override */
     static get delegateAttrs() {
-      return [...super.delegateAttrs, 'name'];
+      return [...super.delegateAttrs, 'name', 'invalid'];
     }
 
     constructor() {
