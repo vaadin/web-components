@@ -387,7 +387,7 @@ describe('reordering simple grid', () => {
         ];
       });
 
-      it('should reorder the columns', () => {
+      it('should allow dropping over header cell of another column', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
         expect(getVisualHeaderCellContent(grid, 0, 0).innerText).to.be.equal('Age');
         expect(getVisualHeaderCellContent(grid, 0, 1).innerText).to.be.equal('Name');
