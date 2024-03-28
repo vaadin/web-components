@@ -132,6 +132,18 @@ describe('vaadin-select', () => {
         expect(select._overlayElement.opened).to.be.false;
       });
 
+      it('should close the overlay when clicking an already selected item', async () => {
+        click(select._items[1]);
+        await nextUpdate(select);
+
+        select.opened = true;
+        await nextRender();
+
+        click(select._items[1]);
+        await nextUpdate(select);
+        expect(select._overlayElement.opened).to.be.false;
+      });
+
       it('should preserve the selected attribute when selecting the disabled item', async () => {
         menu.selected = 5;
         await nextUpdate(select);
