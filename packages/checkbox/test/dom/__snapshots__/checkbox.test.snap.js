@@ -225,7 +225,9 @@ snapshots["vaadin-checkbox host error"] =
   </div>
   <input
     aria-describedby="error-message-vaadin-checkbox-2"
+    aria-invalid="true"
     id="input-vaadin-checkbox-3"
+    invalid=""
     slot="input"
     tabindex="0"
     type="checkbox"
