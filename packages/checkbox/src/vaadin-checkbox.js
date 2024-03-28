@@ -71,7 +71,7 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolymerEl
         <slot name="input"></slot>
         <div part="label">
           <slot name="label"></slot>
-          <div part="required-indicator"></div>
+          <div part="required-indicator" on-click="_onRequiredIndicatorClick"></div>
         </div>
         <div part="helper-text">
           <slot name="helper"></slot>

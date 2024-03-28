@@ -61,6 +61,17 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.false;
     });
 
+    it('should toggle checked property on required indicator click', async () => {
+      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
+      indicator.click();
+      await nextUpdate(checkbox);
+      expect(checkbox.checked).to.be.true;
+
+      indicator.click();
+      await nextUpdate(checkbox);
+      expect(checkbox.checked).to.be.false;
+    });
+
     it('should not toggle checked property on label link click', async () => {
       link.click();
       await nextUpdate(checkbox);
