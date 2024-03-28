@@ -33,6 +33,7 @@ registerStyles(
     [part='label'] {
       display: flex;
       position: relative;
+      white-space: nowrap;
     }
 
     :host([has-label]) ::slotted(label) {
