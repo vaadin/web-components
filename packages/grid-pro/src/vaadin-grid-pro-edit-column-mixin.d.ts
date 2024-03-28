@@ -58,6 +58,24 @@ export declare class GridProEditColumnMixinClass<TItem> {
    */
   editorValuePath: string;
 
+  /**
+   * A function to check whether a specific cell of this column can be
+   * edited. This allows to disable editing of individual rows or cells,
+   * based on the item.
+   *
+   * Receives a `model` object containing the item for an individual row,
+   * and should return a boolean indicating whether the column's cell in
+   * that row is editable.
+   *
+   * The `model` object contains:
+   * - `model.index` The index of the item.
+   * - `model.item` The item.
+   * - `model.expanded` Sublevel toggle state.
+   * - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+   * - `model.selected` Selected state.
+   */
+  isCellEditable: (model: GridItemModel<TItem>) => boolean;
+
   protected _getEditorComponent(cell: HTMLElement): HTMLElement | null;
 
   protected _getEditorValue(editor: HTMLElement): unknown | null;
