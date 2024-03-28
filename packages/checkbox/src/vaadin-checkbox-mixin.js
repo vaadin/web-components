@@ -102,7 +102,8 @@ export const CheckboxMixin = (superclass) =>
 
     /**
      * Override method inherited from `ActiveMixin` to prevent setting
-     * `active` attribute when clicking a link placed inside the label.
+     * `active` attribute when clicking a link placed inside the label,
+     * or when clicking slotted helper or error message element.
      *
      * @param {Event} event
      * @return {boolean}
@@ -110,7 +111,7 @@ export const CheckboxMixin = (superclass) =>
      * @override
      */
     _shouldSetActive(event) {
-      if (event.target.localName === 'a') {
+      if (event.target.localName === 'a' || event.target === this._helperNode || event.target === this._errorNode) {
         return false;
       }
 
