@@ -152,27 +152,22 @@ registerStyles(
       content: '*';
     }
 
-    [part='error-message'] {
+    [part='error-message'],
+    [part='helper-text'] {
       font-size: 0.75em;
       line-height: 1;
       padding-left: 6px;
+    }
+
+    [part='error-message'] {
       color: var(--material-error-text-color);
     }
 
-    :host([has-error-message]) [part='error-message']::before {
-      content: '';
-      display: block;
-      height: 6px;
-    }
-
-    /* Helper */
     [part='helper-text'] {
-      font-size: 0.75rem;
-      line-height: 1;
-      padding-left: 6px;
       color: var(--material-secondary-text-color);
     }
 
+    :host([has-error-message]) [part='error-message']::before,
     :host([has-helper]) [part='helper-text']::before {
       content: '';
       display: block;
