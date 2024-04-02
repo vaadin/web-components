@@ -107,7 +107,7 @@ describe('vaadin-checkbox-group', () => {
       });
     });
 
-    it('should set disabled property to dynamically added checkboxes', async () => {
+    it('should set readonly property to dynamically added checkboxes', async () => {
       const checkbox = document.createElement('vaadin-checkbox');
       checkbox.value = '3';
       group.appendChild(checkbox);
