@@ -33,7 +33,6 @@ registerStyles(
     [part='label'] {
       display: flex;
       position: relative;
-      white-space: nowrap;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -207,8 +206,9 @@ registerStyles(
     /* Required */
     :host([required]) [part='required-indicator'] {
       position: relative;
+      top: var(--lumo-space-xs);
       right: var(--lumo-space-xs);
-      align-self: center;
+      align-self: flex-start;
     }
 
     :host([required][dir='rtl']) [part='required-indicator'] {
