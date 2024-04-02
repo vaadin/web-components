@@ -1,19 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
-function formatDateISO(date) {
-  return date.toISOString().split('T')[0];
-}
-
-const TODAY_DATE = formatDateISO(new Date());
-const YESTERDAY_DATE = formatDateISO(new Date(Date.now() - 3600 * 1000 * 24));
-
 describe('value commit', () => {
-  let datePicker, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy;
+  let datePicker, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy, todayDate, yesterdayDate;
 
   function expectNoValueCommit() {
     expect(valueChangedSpy).to.be.not.called;
@@ -63,6 +56,9 @@ describe('value commit', () => {
     datePicker.addEventListener('unparsable-change', unparsableChangeSpy);
 
     datePicker.focus();
+
+    todayDate = datePicker._formatISO(new Date());
+    yesterdayDate = datePicker._formatISO(new Date(Date.now() - 3600 * 1000 * 24));
   });
 
   describe('default', () => {
@@ -150,17 +146,17 @@ describe('value commit', () => {
         expectValueCommit('');
       });
 
-      it('should commit on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'ArrowDown' });
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
+        expectNoValueCommit();
       });
     });
 
     describe('value set programmatically', () => {
       beforeEach(() => {
-        datePicker.value = TODAY_DATE;
+        datePicker.value = todayDate;
         valueChangedSpy.resetHistory();
         validateSpy.resetHistory();
       });
@@ -244,9 +240,9 @@ describe('value commit', () => {
         expectUnparsableValueCommit();
       });
 
-      it('should clear and commit as unparsable value change on close with Escape', async () => {
+      it('should clear and not commit as unparsable value change on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectUnparsableValueCommit();
+        expect(unparsableChangeSpy).to.be.not.called;
         expect(datePicker.inputElement.value).to.equal('');
       });
     });
@@ -265,22 +261,22 @@ describe('value commit', () => {
     it('should commit on focused date selection with click', () => {
       const date = getDeepActiveElement();
       tap(date);
-      expectValueCommit(YESTERDAY_DATE);
+      expectValueCommit(yesterdayDate);
     });
 
     it('should commit on focused date selection with Enter', async () => {
       await sendKeys({ press: 'Enter' });
-      expectValueCommit(YESTERDAY_DATE);
+      expectValueCommit(yesterdayDate);
     });
 
     it('should commit on focused date selection with Space', async () => {
       await sendKeys({ press: 'Space' });
-      expectValueCommit(YESTERDAY_DATE);
+      expectValueCommit(yesterdayDate);
     });
 
     it('should commit focused date on close with outside click', () => {
       outsideClick();
-      expectValueCommit(YESTERDAY_DATE);
+      expectValueCommit(yesterdayDate);
     });
 
     it('should revert on close with Escape', async () => {
@@ -312,7 +308,7 @@ describe('value commit', () => {
       validateSpy.resetHistory();
       changeSpy.resetHistory();
       outsideClick();
-      expectValueCommit(TODAY_DATE);
+      expectValueCommit(todayDate);
     });
 
     describe('another date focused', () => {
@@ -325,17 +321,17 @@ describe('value commit', () => {
       it('should commit on focused date selection with click', () => {
         const date = getDeepActiveElement();
         tap(date);
-        expectValueCommit(YESTERDAY_DATE);
+        expectValueCommit(yesterdayDate);
       });
 
       it('should commit on focused date selection with Space', async () => {
         await sendKeys({ press: 'Space' });
-        expectValueCommit(YESTERDAY_DATE);
+        expectValueCommit(yesterdayDate);
       });
 
       it('should commit on focused date selection with Enter', async () => {
         await sendKeys({ press: 'Enter' });
-        expectValueCommit(YESTERDAY_DATE);
+        expectValueCommit(yesterdayDate);
       });
     });
   });
@@ -344,7 +340,7 @@ describe('value commit', () => {
     let initialInputElementValue;
 
     beforeEach(() => {
-      datePicker.value = TODAY_DATE;
+      datePicker.value = todayDate;
       initialInputElementValue = datePicker.inputElement.value;
       valueChangedSpy.resetHistory();
       validateSpy.resetHistory();
@@ -424,17 +420,17 @@ describe('value commit', () => {
         expect(datePicker.inputElement.value).to.equal('foo');
       });
 
-      it('should commit an empty value on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
-        expect(datePicker.inputElement.value).to.equal('foo');
+        expectNoValueCommit();
+        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
   });
 
   describe('with clear button', () => {
     beforeEach(() => {
-      datePicker.value = TODAY_DATE;
+      datePicker.value = todayDate;
       datePicker.clearButtonVisible = true;
       validateSpy.resetHistory();
       valueChangedSpy.resetHistory();
