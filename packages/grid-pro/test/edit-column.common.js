@@ -268,7 +268,7 @@ describe('edit column', () => {
     function hasEditablePart(row, col) {
       const cell = getContainerCell(grid.$.items, row, col);
       const target = cell._focusButton || cell;
-      return (target.getAttribute('part') || '').includes('editable-cell');
+      return !!target.getAttribute('part')?.includes('editable-cell');
     }
 
     function triggersNavigatingState(row, col) {

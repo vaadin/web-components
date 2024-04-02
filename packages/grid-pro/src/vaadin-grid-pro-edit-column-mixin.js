@@ -99,7 +99,7 @@ export const GridProEditColumnMixin = (superClass) =>
          * - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
          * - `model.selected` Selected state.
          *
-         * @type {function(GridItemModel): boolean}
+         * @type {(model: GridItemModel) => boolean}
          */
         isCellEditable: {
           type: Function,
