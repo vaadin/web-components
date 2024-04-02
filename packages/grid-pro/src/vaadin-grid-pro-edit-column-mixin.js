@@ -104,7 +104,6 @@ export const GridProEditColumnMixin = (superClass) =>
         isCellEditable: {
           type: Function,
           observer: '_isCellEditableChanged',
-          value: () => () => true,
         },
 
         /** @private */

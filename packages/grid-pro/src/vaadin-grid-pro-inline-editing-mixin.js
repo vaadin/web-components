@@ -531,9 +531,9 @@ export const InlineEditingMixin = (superClass) =>
       if (!this._isEditColumn(column)) {
         return false;
       }
-      // isCellEditable can be undefined if edit column is not imported
+      // Cell is editable by default if isCellEditable is not configured
       if (!column.isCellEditable) {
-        return false;
+        return true;
       }
       // Otherwise, check isCellEditable function
       const model = this.__getRowModel(cell.parentElement);

@@ -314,6 +314,14 @@ describe('edit column', () => {
       expect(isCellEditable(1, 1)).to.be.true;
     });
 
+    it('should show editor when cell becomes editable after removing provider function', () => {
+      // Not editable initially
+      expect(isCellEditable(1, 1)).to.be.false;
+      // Remove provider
+      amountColumn.isCellEditable = null;
+      expect(isCellEditable(1, 1)).to.be.true;
+    });
+
     it('should not add editable-cell part to non-editable cells', () => {
       expect(hasEditablePart(0, 1)).to.be.true;
       expect(hasEditablePart(0, 2)).to.be.true;
