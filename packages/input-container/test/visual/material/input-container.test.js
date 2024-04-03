@@ -14,33 +14,43 @@ describe('input-container', () => {
     element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
   });
 
-  it('basic', async () => {
-    await visualDiff(div, 'basic');
-  });
+  ['empty', 'non-empty'].forEach((initialState) => {
+    describe(initialState, () => {
+      beforeEach(() => {
+        if (initialState === 'non-empty') {
+          element.querySelector('input').value = 'Some text';
+        }
+      });
 
-  it('disabled', async () => {
-    element.disabled = true;
-    await visualDiff(div, 'disabled');
-  });
+      it('basic', async () => {
+        await visualDiff(div, `${initialState}-basic`);
+      });
 
-  it('invalid', async () => {
-    element.invalid = true;
-    await visualDiff(div, 'invalid');
-  });
+      it('disabled', async () => {
+        element.disabled = true;
+        await visualDiff(div, `${initialState}-disabled`);
+      });
 
-  it('prefix icon', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'prefix');
-    icon.icon = 'lumo:user';
-    element.appendChild(icon);
-    await visualDiff(div, 'prefix-icon');
-  });
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-invalid`);
+      });
 
-  it('suffix icon', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'suffix');
-    icon.icon = 'lumo:user';
-    element.appendChild(icon);
-    await visualDiff(div, 'suffix-icon');
+      it('prefix icon', async () => {
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('slot', 'prefix');
+        icon.icon = 'lumo:user';
+        element.appendChild(icon);
+        await visualDiff(div, `${initialState}-prefix-icon`);
+      });
+
+      it('suffix icon', async () => {
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('slot', 'suffix');
+        icon.icon = 'lumo:user';
+        element.appendChild(icon);
+        await visualDiff(div, `${initialState}-suffix-icon`);
+      });
+    });
   });
 });

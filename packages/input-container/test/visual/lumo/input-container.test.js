@@ -16,45 +16,55 @@ describe('input-container', () => {
     input = element.querySelector('input');
   });
 
-  it('basic', async () => {
-    await visualDiff(div, 'basic');
-  });
+  ['empty', 'non-empty'].forEach((initialState) => {
+    describe(initialState, () => {
+      beforeEach(() => {
+        if (initialState === 'non-empty') {
+          input.value = 'Some text';
+        }
+      });
 
-  it('disabled', async () => {
-    element.disabled = true;
-    await visualDiff(div, 'disabled');
-  });
+      it('basic', async () => {
+        await visualDiff(div, `${initialState}-basic`);
+      });
 
-  it('readonly', async () => {
-    element.readonly = true;
-    await visualDiff(div, 'readonly');
-  });
+      it('disabled', async () => {
+        element.disabled = true;
+        await visualDiff(div, `${initialState}-disabled`);
+      });
 
-  it('invalid', async () => {
-    element.invalid = true;
-    await visualDiff(div, 'invalid');
-  });
+      it('readonly', async () => {
+        element.readonly = true;
+        await visualDiff(div, `${initialState}-readonly`);
+      });
 
-  it('readonly invalid', async () => {
-    element.readonly = true;
-    element.invalid = true;
-    await visualDiff(div, 'readonly-invalid');
-  });
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-invalid`);
+      });
 
-  it('prefix icon', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'prefix');
-    icon.icon = 'lumo:user';
-    element.appendChild(icon);
-    await visualDiff(div, 'prefix-icon');
-  });
+      it('readonly invalid', async () => {
+        element.readonly = true;
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-readonly-invalid`);
+      });
 
-  it('suffix icon', async () => {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('slot', 'suffix');
-    icon.icon = 'lumo:user';
-    element.appendChild(icon);
-    await visualDiff(div, 'suffix-icon');
+      it('prefix icon', async () => {
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('slot', 'prefix');
+        icon.icon = 'lumo:user';
+        element.appendChild(icon);
+        await visualDiff(div, `${initialState}-prefix-icon`);
+      });
+
+      it('suffix icon', async () => {
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('slot', 'suffix');
+        icon.icon = 'lumo:user';
+        element.appendChild(icon);
+        await visualDiff(div, `${initialState}-suffix-icon`);
+      });
+    });
   });
 
   it('custom font', async () => {
