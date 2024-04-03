@@ -1003,9 +1003,8 @@ export const DatePickerMixin = (subclass) =>
 
       if (this._closedByEscape) {
         this._applyInputValue(this._selectedDate);
-      } else {
-        this.__commitParsedOrFocusedDate();
       }
+      this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
