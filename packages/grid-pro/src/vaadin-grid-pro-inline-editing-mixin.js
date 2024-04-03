@@ -431,6 +431,15 @@ export const InlineEditingMixin = (superClass) =>
       const editableColumns = this._getEditColumns();
       const { cell, column, model } = this.__edited;
 
+      this._stopEdit();
+      e.preventDefault();
+      // Prevent vaadin-grid handler from being called
+      e.stopImmediatePropagation();
+
+      // Try to find the next editable cell
+      let nextIndex = model.index;
+      let nextColumn = column;
+      let nextCell = cell;
       let directionX = 0;
       let directionY = 0;
 
@@ -443,11 +452,6 @@ export const InlineEditingMixin = (superClass) =>
       if (e.keyCode === 9) {
         directionX = e.shiftKey ? -1 : 1;
       }
-
-      // Try to find the next editable cell
-      let nextIndex = model.index;
-      let nextColumn = column;
-      let nextCell = cell;
 
       if (directionX || directionY) {
         while (nextCell) {
@@ -479,11 +483,6 @@ export const InlineEditingMixin = (superClass) =>
         nextCell = cell;
         nextIndex = model.index;
       }
-
-      this._stopEdit();
-      e.preventDefault();
-      // Prevent vaadin-grid handler from being called
-      e.stopImmediatePropagation();
 
       if (!this.singleCellEdit && nextCell !== cell) {
         this._startEdit(nextCell, nextColumn);

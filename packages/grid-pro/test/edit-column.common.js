@@ -281,14 +281,15 @@ describe('edit column', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
-          <vaadin-grid-column path="status"></vaadin-grid-column>
+          <vaadin-grid-column path="id"></vaadin-grid-column>
+          <vaadin-grid-pro-edit-column path="status"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="amount"></vaadin-grid-pro-edit-column>
           <vaadin-grid-pro-edit-column path="notes"></vaadin-grid-pro-edit-column>
         </vaadin-grid-pro>
       `);
       grid.items = [
-        { status: 'draft', amount: 100, notes: 'foo' },
-        { status: 'completed', amount: 200, notes: 'bar' },
+        { id: 1, status: 'draft', amount: 100, notes: 'foo' },
+        { id: 2, status: 'completed', amount: 200, notes: 'bar' },
       ];
       // Disable editing for the amount when status is completed
       amountColumn = grid.querySelector('[path="amount"]');
@@ -301,67 +302,73 @@ describe('edit column', () => {
       // Cells in first row are editable
       expect(isCellEditable(0, 1)).to.be.true;
       expect(isCellEditable(0, 2)).to.be.true;
+      expect(isCellEditable(0, 3)).to.be.true;
       // Amount cell in second row is not editable
-      expect(isCellEditable(1, 1)).to.be.false;
-      expect(isCellEditable(1, 2)).to.be.true;
+      expect(isCellEditable(1, 1)).to.be.true;
+      expect(isCellEditable(1, 2)).to.be.false;
+      expect(isCellEditable(1, 3)).to.be.true;
     });
 
     it('should show editor when cell becomes editable after updating provider function', () => {
       // Not editable initially
-      expect(isCellEditable(1, 1)).to.be.false;
+      expect(isCellEditable(1, 2)).to.be.false;
       // Enable editing
       amountColumn.isCellEditable = () => true;
-      expect(isCellEditable(1, 1)).to.be.true;
+      expect(isCellEditable(1, 2)).to.be.true;
     });
 
     it('should show editor when cell becomes editable after removing provider function', () => {
       // Not editable initially
-      expect(isCellEditable(1, 1)).to.be.false;
+      expect(isCellEditable(1, 2)).to.be.false;
       // Remove provider
       amountColumn.isCellEditable = null;
-      expect(isCellEditable(1, 1)).to.be.true;
+      expect(isCellEditable(1, 2)).to.be.true;
     });
 
     it('should not add editable-cell part to non-editable cells', () => {
+      expect(hasEditablePart(0, 0)).to.be.false;
       expect(hasEditablePart(0, 1)).to.be.true;
       expect(hasEditablePart(0, 2)).to.be.true;
-      expect(hasEditablePart(1, 1)).to.be.false;
-      expect(hasEditablePart(1, 2)).to.be.true;
+      expect(hasEditablePart(0, 3)).to.be.true;
+      expect(hasEditablePart(1, 0)).to.be.false;
+      expect(hasEditablePart(1, 1)).to.be.true;
+      expect(hasEditablePart(1, 2)).to.be.false;
+      expect(hasEditablePart(1, 3)).to.be.true;
     });
 
     it('should update part name when cell becomes editable after updating provider function', async () => {
       // Not editable initially
-      expect(hasEditablePart(1, 1)).to.be.false;
+      expect(hasEditablePart(1, 2)).to.be.false;
       // Enable editing
       amountColumn.isCellEditable = () => true;
       await nextFrame();
-      expect(hasEditablePart(1, 1)).to.be.true;
+      expect(hasEditablePart(1, 2)).to.be.true;
     });
 
     it('should not be in navigating state when clicking non-editable cells', () => {
       expect(triggersNavigatingState(0, 1)).to.be.true;
       expect(triggersNavigatingState(0, 2)).to.be.true;
-      expect(triggersNavigatingState(1, 1)).to.be.false;
-      expect(triggersNavigatingState(1, 2)).to.be.true;
+      expect(triggersNavigatingState(1, 1)).to.be.true;
+      expect(triggersNavigatingState(1, 2)).to.be.false;
     });
 
     it('should be in navigating state when cell becomes editable after updating provider function', () => {
       // Not editable initially
-      expect(triggersNavigatingState(1, 1)).to.be.false;
+      expect(triggersNavigatingState(1, 2)).to.be.false;
       // Enable editing
       amountColumn.isCellEditable = () => true;
-      expect(triggersNavigatingState(1, 1)).to.be.true;
+      expect(triggersNavigatingState(1, 2)).to.be.true;
     });
 
     describe('editor navigation', () => {
       beforeEach(async () => {
         // Five rows, only second and forth are editable
         grid.items = [
-          { status: 'completed', amount: 100, notes: 'foo' },
-          { status: 'draft', amount: 200, notes: 'bar' },
-          { status: 'completed', amount: 100, notes: 'foo' },
-          { status: 'draft', amount: 100, notes: 'foo' },
-          { status: 'completed', amount: 200, notes: 'bar' },
+          { id: 1, status: 'completed', amount: 100, notes: 'foo' },
+          { id: 2, status: 'draft', amount: 200, notes: 'bar' },
+          { id: 3, status: 'completed', amount: 100, notes: 'foo' },
+          { id: 4, status: 'draft', amount: 100, notes: 'foo' },
+          { id: 5, status: 'completed', amount: 200, notes: 'bar' },
         ];
         grid.querySelectorAll('vaadin-grid-pro-edit-column').forEach((column) => {
           column.isCellEditable = (model) => model.item.status !== 'completed';
@@ -372,15 +379,15 @@ describe('edit column', () => {
 
       describe('with Tab', () => {
         it('should skip non-editable cells when navigating with Tab', () => {
-          let cell = getContainerCell(grid.$.items, 1, 1);
+          let cell = getContainerCell(grid.$.items, 1, 2);
           enter(cell);
           expect(getCellEditor(cell)).to.be.ok;
 
           tab(cell);
-          cell = getContainerCell(grid.$.items, 1, 2);
+          cell = getContainerCell(grid.$.items, 1, 3);
           expect(getCellEditor(cell)).to.be.ok;
 
-          // Should skip non-editable rows
+          // Should skip non-editable row
           tab(cell);
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
@@ -401,16 +408,30 @@ describe('edit column', () => {
 
           // Should skip non-editable rows
           tab(cell, ['shift']);
-          cell = getContainerCell(grid.$.items, 1, 2);
+          cell = getContainerCell(grid.$.items, 1, 3);
           expect(getCellEditor(cell)).to.be.ok;
 
           tab(cell, ['shift']);
-          cell = getContainerCell(grid.$.items, 1, 1);
+          cell = getContainerCell(grid.$.items, 1, 2);
+          expect(getCellEditor(cell)).to.be.ok;
+        });
+
+        it('should skip cells that become non-editable after editing current cell', () => {
+          // Edit status in row 2 to be completed, so none of the cells in this
+          // row should be editable anymore
+          let cell = getContainerCell(grid.$.items, 1, 1);
+          enter(cell);
+          const input = getCellEditor(cell);
+          input.value = 'completed';
+          tab(cell);
+
+          // Should skip to row 4
+          cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
         it('should stop editing and focus last edited cell if there are no more editable cells with Tab', () => {
-          const cell = getContainerCell(grid.$.items, 3, 2);
+          const cell = getContainerCell(grid.$.items, 3, 3);
           enter(cell);
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
