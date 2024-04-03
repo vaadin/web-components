@@ -525,13 +525,6 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     _areSizerCellsAssigned() {
-      const columnsInOrder = this._getColumnsInOrder();
-      if (columnsInOrder.length === 0) {
-        return false;
-      }
-      if (this._lazyColumns) {
-        return columnsInOrder.every((column) => column._sizerCell);
-      }
-      return !!columnsInOrder[0]._sizerCell;
+      return this._getColumnsInOrder().every((column) => column._sizerCell);
     }
   };
