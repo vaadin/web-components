@@ -231,10 +231,12 @@ registerStyles(
 
     :host([invalid]) [part='checkbox'] {
       background: var(--_invalid-background);
+      background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
     }
 
     :host([invalid]:hover) [part='checkbox'] {
-      background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
+      background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%),
+        linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
     }
 
     :host([invalid][focus-ring]) {
