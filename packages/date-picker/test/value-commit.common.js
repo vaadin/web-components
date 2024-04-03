@@ -240,9 +240,9 @@ describe('value commit', () => {
         expectUnparsableValueCommit();
       });
 
-      it('should clear and not commit as unparsable value change on close with Escape', async () => {
+      it('should clear and commit as unparsable value change on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expect(unparsableChangeSpy).to.be.not.called;
+        expectUnparsableValueCommit();
         expect(datePicker.inputElement.value).to.equal('');
       });
     });
