@@ -233,6 +233,10 @@ registerStyles(
       background: var(--_invalid-background);
     }
 
+    :host([invalid]:hover) [part='checkbox'] {
+      background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
+    }
+
     :host([invalid][focus-ring]) {
       --_focus-ring-color: var(--lumo-error-color-50pct);
     }
