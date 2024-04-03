@@ -26,7 +26,7 @@ registerStyles(
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
-      --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.4em);
+      --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.2em);
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
     }
 
@@ -257,7 +257,7 @@ registerStyles(
     :host([has-error-message]) [part='error-message']::after {
       content: '';
       display: block;
-      height: 0.4em;
+      height: 0.2em;
     }
 
     :host(:not([invalid])) [part='error-message'] {
