@@ -144,10 +144,6 @@ export const GridProEditColumnMixin = (superClass) =>
 
     /** @private */
     _isCellEditableChanged(newValue, oldValue) {
-      // Ignore setting initial / default function
-      if (!oldValue) {
-        return;
-      }
       // Re-render grid to update editable-cell part names
       this._grid.requestContentUpdate();
     }
