@@ -48,23 +48,23 @@ describe('input-container', () => {
         element.invalid = true;
         await visualDiff(div, `${initialState}-readonly-invalid`);
       });
-
-      it('prefix icon', async () => {
-        const icon = document.createElement('vaadin-icon');
-        icon.setAttribute('slot', 'prefix');
-        icon.icon = 'lumo:user';
-        element.appendChild(icon);
-        await visualDiff(div, `${initialState}-prefix-icon`);
-      });
-
-      it('suffix icon', async () => {
-        const icon = document.createElement('vaadin-icon');
-        icon.setAttribute('slot', 'suffix');
-        icon.icon = 'lumo:user';
-        element.appendChild(icon);
-        await visualDiff(div, `${initialState}-suffix-icon`);
-      });
     });
+  });
+
+  it('prefix icon', async () => {
+    const icon = document.createElement('vaadin-icon');
+    icon.setAttribute('slot', 'prefix');
+    icon.icon = 'lumo:user';
+    element.appendChild(icon);
+    await visualDiff(div, 'prefix-icon');
+  });
+
+  it('suffix icon', async () => {
+    const icon = document.createElement('vaadin-icon');
+    icon.setAttribute('slot', 'suffix');
+    icon.icon = 'lumo:user';
+    element.appendChild(icon);
+    await visualDiff(div, 'suffix-icon');
   });
 
   it('custom font', async () => {
