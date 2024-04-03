@@ -170,6 +170,11 @@ describe('checkbox', () => {
       await visualDiff(div, 'bordered-readonly');
     });
 
+    it('bordered invalid', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'bordered-invalid');
+    });
+
     it('Bordered dark', async () => {
       document.documentElement.setAttribute('theme', 'dark');
       await visualDiff(div, 'bordered-dark');

@@ -225,6 +225,10 @@ registerStyles(
     }
 
     /* Invalid */
+    :host([invalid]) {
+      --vaadin-input-field-border-color: var(--lumo-error-color);
+    }
+
     :host([invalid]) [part='checkbox'] {
       background: var(--_invalid-background);
     }
