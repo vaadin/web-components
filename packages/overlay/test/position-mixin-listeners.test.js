@@ -78,6 +78,11 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
+    it('should not update position on visual viewport scroll', () => {
+      scroll(window.visualViewport);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
     it('should not update position on ancestor scroll', () => {
       const scrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
       scroll(scrollableAncestor);
@@ -95,6 +100,13 @@ describe('position mixin listeners', () => {
       overlay.positionTarget = target;
       updatePositionSpy.resetHistory();
       scroll(window.visualViewport);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should update position on document scroll after assigning a position target', () => {
+      overlay.positionTarget = target;
+      updatePositionSpy.resetHistory();
+      scroll(document);
       expect(updatePositionSpy.called).to.be.true;
     });
 
@@ -131,9 +143,9 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
-    it('should not update position on document scroll', () => {
+    it('should update position on document scroll', () => {
       scroll(document);
-      expect(updatePositionSpy.called).to.be.false;
+      expect(updatePositionSpy.called).to.be.true;
     });
 
     it('should update position on visual viewport resize', () => {
@@ -150,6 +162,12 @@ describe('position mixin listeners', () => {
     it('should update position on visual viewport scroll', () => {
       scroll(window.visualViewport);
       expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should not update position on document scroll when closed', () => {
+      overlay.opened = false;
+      scroll(document);
+      expect(updatePositionSpy.called).to.be.false;
     });
 
     it('should not update position on visual viewport scroll when closed', () => {
@@ -171,11 +189,14 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
-    ['visual viewport', 'ancestor'].forEach((name) => {
+    ['document', 'visual viewport', 'ancestor'].forEach((name) => {
       describe(name, () => {
         let scrollableNode;
 
         beforeEach(() => {
+          if (name === 'document') {
+            scrollableNode = document;
+          }
           if (name === 'visual viewport') {
             scrollableNode = window.visualViewport;
           }
@@ -229,6 +250,11 @@ describe('position mixin listeners', () => {
         updatePositionSpy.resetHistory();
       });
 
+      it('should update position on document scroll', () => {
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
+      });
+
       it('should update position on visual viewport scroll', () => {
         scroll(window.visualViewport);
         expect(updatePositionSpy.called).to.be.true;
@@ -253,6 +279,19 @@ describe('position mixin listeners', () => {
       beforeEach(() => {
         newWrapper = fixtureSync(`<scrollable-wrapper></scrollable-wrapper>`);
         newWrapper.appendChild(target);
+      });
+
+      it('should update position on document scroll after re-opened', async () => {
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
+
+        overlay.opened = false;
+        overlay.opened = true;
+        await nextFrame();
+        updatePositionSpy.resetHistory();
+
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
       });
 
       it('should update position on visual viewport scroll after re-opened', async () => {
