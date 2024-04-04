@@ -14,18 +14,28 @@ describe('input-container', () => {
     element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
   });
 
-  it('basic', async () => {
-    await visualDiff(div, 'basic');
-  });
+  ['empty', 'non-empty'].forEach((initialState) => {
+    describe(initialState, () => {
+      beforeEach(() => {
+        if (initialState === 'non-empty') {
+          element.querySelector('input').value = 'Some text';
+        }
+      });
 
-  it('disabled', async () => {
-    element.disabled = true;
-    await visualDiff(div, 'disabled');
-  });
+      it('basic', async () => {
+        await visualDiff(div, `${initialState}-basic`);
+      });
 
-  it('invalid', async () => {
-    element.invalid = true;
-    await visualDiff(div, 'invalid');
+      it('disabled', async () => {
+        element.disabled = true;
+        await visualDiff(div, `${initialState}-disabled`);
+      });
+
+      it('invalid', async () => {
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-invalid`);
+      });
+    });
   });
 
   it('prefix icon', async () => {
