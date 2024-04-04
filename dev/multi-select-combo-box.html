@@ -34,9 +34,21 @@
       item-id-path="id"
     ></vaadin-multi-select-combo-box>
     -->
-
+    <style>
+      .gaz {
+        background-color: var(--lumo-warning-color);
+      }
+    </style>
     <script>
       const comboBox = document.querySelector('vaadin-multi-select-combo-box');
+
+      comboBox.chipClassNameGenerator = (item) => {
+        if (['Nitrogen', 'Hydrogen', 'Oxygen', 'Helium', 'Neon', 'Argon'].includes(item)) {
+          return 'gaz';
+        } else {
+          return 'other';
+        }
+      };
 
       comboBox.items = [
         'Hydrogen',

@@ -261,6 +261,16 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       autoOpenDisabled: Boolean,
 
       /**
+       * A function that allows generating CSS class names for chips
+       * based on the item. The return value should be the generated
+       * class name as a string, or multiple class names separated
+       * by whitespace characters.
+       */
+      chipClassNameGenerator: {
+        type: Object,
+      },
+
+      /**
        * Set to true to display the clear icon which clears the input.
        * @attr {boolean} clear-button-visible
        */
@@ -933,6 +943,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const label = this._getItemLabel(item);
     chip.label = label;
     chip.setAttribute('title', label);
+
+    if (typeof this.chipClassNameGenerator === 'function') {
+      chip.className = this.chipClassNameGenerator(item);
+    }
 
     chip.addEventListener('item-removed', (e) => this._onItemRemoved(e));
     chip.addEventListener('mousedown', (e) => this._preventBlur(e));
