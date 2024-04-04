@@ -33,6 +33,7 @@ registerStyles(
     [part='label'] {
       display: flex;
       position: relative;
+      max-width: max-content;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -40,6 +41,14 @@ registerStyles(
         --vaadin-checkbox-label-padding,
         var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
       );
+    }
+
+    :host([dir='rtl'][has-label]) ::slotted(label) {
+      padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
+    }
+
+    :host([has-label][required]) ::slotted(label) {
+      padding-inline-end: var(--lumo-space-m);
     }
 
     [part='checkbox'] {
@@ -156,11 +165,6 @@ registerStyles(
       background-color: var(--vaadin-checkbox-readonly-checked-background, var(--lumo-contrast-70pct));
     }
 
-    /* RTL specific styles */
-    :host([dir='rtl'][has-label]) ::slotted(label) {
-      padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
-    }
-
     /* Used for activation "halo" */
     [part='checkbox']::before {
       pointer-events: none;
@@ -205,10 +209,9 @@ registerStyles(
 
     /* Required */
     :host([required]) [part='required-indicator'] {
-      position: relative;
+      position: absolute;
       top: var(--lumo-space-xs);
       right: var(--lumo-space-xs);
-      align-self: flex-start;
     }
 
     :host([required][dir='rtl']) [part='required-indicator'] {

@@ -18,6 +18,7 @@ registerStyles(
     [part='label'] {
       display: flex;
       position: relative;
+      max-width: max-content;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -136,15 +137,14 @@ registerStyles(
 
     /* Required */
     :host([required]) [part='required-indicator'] {
-      position: relative;
+      position: absolute;
       top: 3px;
-      right: 9px;
-      align-self: flex-start;
+      right: 2px;
     }
 
     :host([dir='rtl'][required]) [part='required-indicator'] {
       right: auto;
-      left: 9px;
+      left: 2px;
     }
 
     :host([required]) [part='required-indicator']::after {
