@@ -27,7 +27,7 @@ const select = css`
   }
 
   [part='input-field'] ::slotted([slot='value']) {
-    font-weight: 500;
+    font-weight: var(--vaadin-input-field-value-font-weight, 500);
   }
 
   [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
@@ -79,6 +79,7 @@ registerStyles(
       min-height: var(--_lumo-selected-item-height);
       padding-top: var(--_lumo-selected-item-padding);
       padding-bottom: var(--_lumo-selected-item-padding);
+      font-size: inherit;
     }
 
     ::slotted(*:hover) {
