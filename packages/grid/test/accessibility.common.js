@@ -274,6 +274,16 @@ describe('accessibility', () => {
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
 
+    it('should not count a column with a path and null header in aria-rowcount', () => {
+      col.path = 'value';
+      col.header = null;
+      flushGrid(grid);
+
+      const rowCount = Array.from(grid.$.table.querySelectorAll('tr')).filter((tr) => !tr.hidden).length;
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal(String(rowCount));
+      expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('2');
+    });
+
     it('should have aria-rowcount on the table (header)', () => {
       col.header = 'Foo';
       flushGrid(grid);
