@@ -111,6 +111,7 @@ assertType<boolean>(narrowedComboBox.opened);
 assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
+assertType<(item: TestComboBoxItem) => string>(narrowedComboBox.itemClassNameGenerator);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);

@@ -64,6 +64,17 @@ export const ComboBoxScrollerMixin = (superClass) =>
         },
 
         /**
+         * A function used to generate CSS class names for dropdown
+         * items based on the item. The return value should be the
+         * generated class name as a string, or multiple class names
+         * separated by whitespace characters.
+         */
+        itemClassNameGenerator: {
+          type: Object,
+          observer: '__itemClassNameGeneratorChanged',
+        },
+
+        /**
          * Path for the id of the item, used to detect whether the item is selected.
          */
         itemIdPath: {
@@ -255,6 +266,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /** @private */
+    __itemClassNameGeneratorChanged(generator, oldGenerator) {
+      if (generator || oldGenerator) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /** @private */
     __focusedIndexChanged(index, oldIndex) {
       if (index !== oldIndex) {
         this.requestContentUpdate();
@@ -304,6 +322,12 @@ export const ComboBoxScrollerMixin = (superClass) =>
         renderer: this.renderer,
         focused: !this.loading && focusedIndex === index,
       });
+
+      if (typeof this.itemClassNameGenerator === 'function') {
+        el.className = this.itemClassNameGenerator(item);
+      } else if (el.className !== '') {
+        el.className = '';
+      }
 
       // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
       // However, this causes issues with virtualizer. So we enforce sync update.

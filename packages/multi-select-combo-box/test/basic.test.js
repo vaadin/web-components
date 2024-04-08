@@ -128,6 +128,12 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('loading')).to.be.false;
     });
 
+    it('should propagate itemClassNameGenerator property to combo-box', () => {
+      const generator = (item) => item;
+      comboBox.itemClassNameGenerator = generator;
+      expect(internal.itemClassNameGenerator).to.equal(generator);
+    });
+
     it('should update filteredItems when combo-box filteredItems changes', () => {
       internal.filteredItems = ['apple'];
       expect(comboBox.filteredItems).to.deep.equal(['apple']);

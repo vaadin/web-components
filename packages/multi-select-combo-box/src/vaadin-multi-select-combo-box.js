@@ -180,6 +180,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           filtered-items="[[filteredItems]]"
           selected-items="[[selectedItems]]"
           selected-items-on-top="[[selectedItemsOnTop]]"
+          item-class-name-generator="[[itemClassNameGenerator]]"
           top-group="[[_topGroup]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
@@ -277,6 +278,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       items: {
         type: Array,
+      },
+
+      /**
+       * A function used to generate CSS class names for dropdown
+       * items and selected chips based on the item. The return
+       * value should be the generated class name as a string, or
+       * multiple class names separated by whitespace characters.
+       */
+      itemClassNameGenerator: {
+        type: Object,
+        observer: '_itemClassNameGeneratorChanged',
       },
 
       /**
@@ -762,6 +774,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
+  _itemClassNameGeneratorChanged(generator, oldGenerator) {
+    if (generator || oldGenerator) {
+      this.__updateChips();
+    }
+  }
+
+  /** @private */
   _pageSizeChanged(pageSize, oldPageSize) {
     if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
       this.pageSize = oldPageSize;
@@ -933,6 +952,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const label = this._getItemLabel(item);
     chip.label = label;
     chip.setAttribute('title', label);
+
+    if (typeof this.itemClassNameGenerator === 'function') {
+      chip.className = this.itemClassNameGenerator(item);
+    }
 
     chip.addEventListener('item-removed', (e) => this._onItemRemoved(e));
     chip.addEventListener('mousedown', (e) => this._preventBlur(e));

@@ -197,6 +197,16 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /**
+         * A function used to generate CSS class names for dropdown
+         * items based on the item. The return value should be the
+         * generated class name as a string, or multiple class names
+         * separated by whitespace characters.
+         */
+        itemClassNameGenerator: {
+          type: Object,
+        },
+
+        /**
          * Path for label of the item. If `items` is an array of objects, the
          * `itemLabelPath` is used to fetch the displayed string label for each
          * item.
@@ -287,7 +297,7 @@ export const ComboBoxMixin = (subclass) =>
       return [
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
-        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, _theme)',
+        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, _theme, itemClassNameGenerator)',
       ];
     }
 
@@ -503,7 +513,18 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     // eslint-disable-next-line max-params
-    _updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
+    _updateScroller(
+      scroller,
+      items,
+      opened,
+      loading,
+      selectedItem,
+      itemIdPath,
+      focusedIndex,
+      renderer,
+      theme,
+      itemClassNameGenerator,
+    ) {
       if (scroller) {
         if (opened) {
           scroller.style.maxHeight =
@@ -519,6 +540,7 @@ export const ComboBoxMixin = (subclass) =>
           focusedIndex,
           renderer,
           theme,
+          itemClassNameGenerator,
         });
 
         // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
