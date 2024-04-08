@@ -16,7 +16,9 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     _a11yGetHeaderRowCount(_columnTree) {
-      return _columnTree.filter((level) => level.some((col) => col.headerRenderer || col.path || col.header)).length;
+      return _columnTree.filter((level) =>
+        level.some((col) => col.headerRenderer || (col.path && col.header !== null) || col.header),
+      ).length;
     }
 
     /** @private */
