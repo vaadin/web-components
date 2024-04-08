@@ -447,9 +447,28 @@ describe('vaadin-select', () => {
     });
 
     describe('placeholder', () => {
+      beforeEach(() => {
+        select.placeholder = 'Select an item';
+      });
+
       it('should set placeholder as a value node text content', async () => {
         select.value = null;
-        select.placeholder = 'Select an item';
+        await nextUpdate(select);
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should show placeholder when selecting an item with empty label', async () => {
+        select.opened = true;
+        await nextRender();
+        click(select._items[4]);
+        await nextUpdate(select);
+        expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should show placeholder when selecting an item with empty text', async () => {
+        select.opened = true;
+        await nextRender();
+        click(select._items[3]);
         await nextUpdate(select);
         expect(valueButton.textContent).to.equal('Select an item');
       });
