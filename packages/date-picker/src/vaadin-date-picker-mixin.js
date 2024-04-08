@@ -908,7 +908,9 @@ export const DatePickerMixin = (subclass) =>
     /** @protected */
     _onOverlayEscapePress() {
       this._focusedDate = this._selectedDate;
+      this._closedByEscape = true;
       this._close();
+      this._closedByEscape = false;
     }
 
     /** @protected */
@@ -999,6 +1001,9 @@ export const DatePickerMixin = (subclass) =>
       }
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
+      if (this._closedByEscape) {
+        this._applyInputValue(this._selectedDate);
+      }
       this.__commitParsedOrFocusedDate();
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
