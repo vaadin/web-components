@@ -512,23 +512,21 @@ export const SelectBaseMixin = (superClass) =>
 
       valueButton.removeAttribute('placeholder');
 
-      if (!selected) {
-        if (this.placeholder) {
-          const item = this.__createItemElement({ label: this.placeholder });
-          this.__appendValueItemElement(item, valueButton);
-          valueButton.setAttribute('placeholder', '');
-        }
-      } else {
+      if (this._hasContent(selected)) {
         this.__attachSelectedItem(selected);
+      } else if (this.placeholder) {
+        const item = this.__createItemElement({ label: this.placeholder });
+        this.__appendValueItemElement(item, valueButton);
+        valueButton.setAttribute('placeholder', '');
+      }
 
-        if (!this._valueChanging) {
-          this._selectedChanging = true;
-          this.value = selected.value || '';
-          if (this.__dispatchChangePending) {
-            this.__dispatchChange();
-          }
-          delete this._selectedChanging;
+      if (!this._valueChanging && selected) {
+        this._selectedChanging = true;
+        this.value = selected.value || '';
+        if (this.__dispatchChangePending) {
+          this.__dispatchChange();
         }
+        delete this._selectedChanging;
       }
 
       const labelledIdReferenceConfig =
@@ -538,6 +536,14 @@ export const SelectBaseMixin = (superClass) =>
       if (this.accessibleName || this.accessibleNameRef) {
         this._setCustomAriaLabelledBy(this.accessibleNameRef || this._srLabelController.defaultId);
       }
+    }
+
+    /** @private */
+    _hasContent(item) {
+      if (!item) {
+        return false;
+      }
+      return Boolean(item.hasAttribute('label') ? item.getAttribute('label') : item.textContent.trim());
     }
 
     /** @private */
