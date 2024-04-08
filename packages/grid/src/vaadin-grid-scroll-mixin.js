@@ -235,17 +235,11 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __updateColumnsBodyContentHidden() {
-      if (!this._columnTree) {
+      if (!this._columnTree || !this._areSizerCellsAssigned()) {
         return;
       }
 
       const columnsInOrder = this._getColumnsInOrder();
-
-      // Return if sizer cells are not yet assigned to columns
-      if (!columnsInOrder[0] || !columnsInOrder[0]._sizerCell) {
-        return;
-      }
-
       let bodyContentHiddenChanged = false;
 
       // Remove the column cells from the DOM if the column is outside the viewport.
@@ -485,7 +479,7 @@ export const ScrollMixin = (superClass) =>
 
       let transformFrozenToEndBody = transformFrozenToEnd;
 
-      if (this._lazyColumns) {
+      if (this._lazyColumns && this._areSizerCellsAssigned()) {
         // Lazy column rendering is used, calculate the offset to apply to the frozen to end cells
         const columnsInOrder = this._getColumnsInOrder();
 
@@ -514,5 +508,10 @@ export const ScrollMixin = (superClass) =>
       if (this.hasAttribute('navigating') && this.__rowFocusMode) {
         this.$.table.style.setProperty('--_grid-horizontal-scroll-position', `${-x}px`);
       }
+    }
+
+    /** @private */
+    _areSizerCellsAssigned() {
+      return this._getColumnsInOrder().every((column) => column._sizerCell);
     }
   };

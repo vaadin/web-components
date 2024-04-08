@@ -215,6 +215,23 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
       expect(secondRect.top).to.equal(firstRect.bottom + detailsHeight);
     });
 
+    it('should render new appended column', async () => {
+      grid = fixtureSync(`
+        <vaadin-grid item-id-path="name" column-rendering="lazy">
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: `Item 1` }];
+      await onceResized(grid);
+      flushGrid(grid);
+
+      const newColumn = document.createElement('vaadin-grid-column');
+      grid.appendChild(newColumn);
+      await nextFrame();
+
+      expect(isColumnInViewport(newColumn)).to.be.true;
+    });
+
     describe(`scroll horizontally - ${dir}`, () => {
       /**
        * Expect the cells DOM order to match the column order
