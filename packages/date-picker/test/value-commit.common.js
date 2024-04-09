@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -146,11 +146,11 @@ describe('value commit', () => {
         expectValueCommit('');
       });
 
-      it('should commit on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'ArrowDown' });
         await waitForOverlayRender();
         await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
+        expectNoValueCommit();
       });
     });
 
@@ -420,10 +420,10 @@ describe('value commit', () => {
         expect(datePicker.inputElement.value).to.equal('foo');
       });
 
-      it('should commit an empty value on close with Escape', async () => {
+      it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'Escape' });
-        expectValueCommit('');
-        expect(datePicker.inputElement.value).to.equal('foo');
+        expectNoValueCommit();
+        expect(datePicker.inputElement.value).to.equal(initialInputElementValue);
       });
     });
   });
