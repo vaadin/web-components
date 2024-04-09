@@ -292,7 +292,7 @@ describe('a11y', () => {
     });
   });
 
-  describe('dialog aria-label', () => {
+  describe('dialog ARIA attributes', () => {
     let newButton, editButtons, dialog;
 
     beforeEach(async () => {
@@ -307,6 +307,12 @@ describe('a11y', () => {
     afterEach(async () => {
       crud.editorOpened = false;
       await nextRender();
+    });
+
+    it('should set correct role attribute to the dialog overlay', async () => {
+      newButton.click();
+      await nextRender();
+      expect(dialog.$.overlay.getAttribute('role')).to.equal('dialog');
     });
 
     it('should set correct aria-label to the new item dialog', async () => {
