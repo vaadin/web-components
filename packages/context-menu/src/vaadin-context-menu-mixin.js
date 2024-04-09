@@ -209,8 +209,11 @@ export const ContextMenuMixin = (superClass) =>
      * @private
      */
     _onOverlayOpened(e) {
-      this._setOpened(e.detail.value);
-      this.__alignOverlayPosition();
+      const opened = e.detail.value;
+      this._setOpened(opened);
+      if (opened) {
+        this.__alignOverlayPosition();
+      }
     }
 
     /**
