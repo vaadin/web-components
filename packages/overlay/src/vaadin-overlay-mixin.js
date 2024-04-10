@@ -220,12 +220,13 @@ export const OverlayMixin = (superClass) =>
       this._oldOwner = owner;
 
       const rendererChanged = this._oldRenderer !== renderer;
+      const hasOldRenderer = this._oldRenderer !== undefined;
       this._oldRenderer = renderer;
 
       const openedChanged = this._oldOpened !== opened;
       this._oldOpened = opened;
 
-      if (rendererChanged) {
+      if (rendererChanged && hasOldRenderer) {
         this.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
         // When clearing the rendered content, this part needs to be manually disposed of.
