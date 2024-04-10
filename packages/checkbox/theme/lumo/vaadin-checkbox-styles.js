@@ -186,6 +186,7 @@ registerStyles(
 
     /* Disable hover for touch devices */
     @media (pointer: coarse) {
+      /* prettier-ignore */
       :host(:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):not([invalid]):hover) [part='checkbox'] {
         background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
       }
