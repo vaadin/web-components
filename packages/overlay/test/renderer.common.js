@@ -140,4 +140,29 @@ describe('renderer', () => {
     await nextRender();
     expect(overlay.textContent.trim()).to.equal('');
   });
+
+  it('should not clear the root on open when setting renderer', async () => {
+    const spy = sinon.spy(overlay, 'innerHTML', ['set']);
+    overlay.renderer = (root) => {
+      if (!root.innerHTML) {
+        root.appendChild(content);
+      }
+    };
+    overlay.opened = true;
+    await nextRender();
+    expect(spy.set).to.not.be.called;
+  });
+
+  it('should not re-render when opened after requesting content update', async () => {
+    const spy = sinon.spy(overlay, 'appendChild');
+    overlay.renderer = (root) => {
+      if (!root.innerHTML) {
+        root.appendChild(content);
+      }
+    };
+    overlay.requestContentUpdate();
+    overlay.opened = true;
+    await nextRender();
+    expect(spy).to.be.calledOnce;
+  });
 });
