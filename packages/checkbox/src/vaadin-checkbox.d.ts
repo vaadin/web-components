@@ -24,10 +24,24 @@ export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CheckboxIndeterminateChangedEvent = CustomEvent<{ value: boolean }>;
 
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type CheckboxInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired whenever the checkbox is validated.
+ */
+export type CheckboxValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface CheckboxCustomEventMap {
   'checked-changed': CheckboxCheckedChangedEvent;
 
   'indeterminate-changed': CheckboxIndeterminateChangedEvent;
+
+  'invalid-changed': CheckboxInvalidChangedEvent;
+
+  validated: CheckboxValidatedEvent;
 }
 
 export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEventMap {
