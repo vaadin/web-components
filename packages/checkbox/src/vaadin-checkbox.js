@@ -39,6 +39,7 @@ registerStyles('vaadin-checkbox', checkboxStyles, { moduleId: 'vaadin-checkbox-s
  * `active`             | Set when the checkbox is activated with mouse, touch or the keyboard.
  * `checked`            | Set when the checkbox is checked.
  * `disabled`           | Set when the checkbox is disabled.
+ * `readonly`           | Set when the checkbox is readonly.
  * `focus-ring`         | Set when the checkbox is focused using the keyboard.
  * `focused`            | Set when the checkbox is focused.
  * `indeterminate`      | Set when the checkbox is in the indeterminate state.

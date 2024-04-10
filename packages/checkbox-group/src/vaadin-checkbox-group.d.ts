@@ -61,6 +61,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * Attribute           | Description                               | Part name
  * --------------------|-------------------------------------------|------------
  * `disabled`          | Set when the element is disabled          | :host
+ * `readonly`          | Set when the element is readonly          | :host
  * `invalid`           | Set when the element is invalid           | :host
  * `focused`           | Set when the element is focused           | :host
  * `has-label`         | Set when the element has a label          | :host
