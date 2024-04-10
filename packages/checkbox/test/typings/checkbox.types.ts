@@ -17,6 +17,8 @@ import type {
   CheckboxChangeEvent,
   CheckboxCheckedChangedEvent,
   CheckboxIndeterminateChangedEvent,
+  CheckboxInvalidChangedEvent,
+  CheckboxValidatedEvent,
 } from '../../vaadin-checkbox.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
@@ -62,4 +64,14 @@ checkbox.addEventListener('indeterminate-changed', (event) => {
 checkbox.addEventListener('change', (event) => {
   assertType<CheckboxChangeEvent>(event);
   assertType<Checkbox>(event.target);
+});
+
+checkbox.addEventListener('invalid-changed', (event) => {
+  assertType<CheckboxInvalidChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});
+
+checkbox.addEventListener('validated', (event) => {
+  assertType<CheckboxValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
