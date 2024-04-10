@@ -24,21 +24,29 @@ registerStyles('vaadin-checkbox', checkboxStyles, { moduleId: 'vaadin-checkbox-s
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name   | Description
- * ------------|-------------
- * `checkbox`  | The element representing a stylable custom checkbox.
+ * Part name            | Description
+ * ---------------------|-------------
+ * `checkbox`           | The element representing a stylable custom checkbox
+ * `label`              | The slotted label element wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
- * Attribute       | Description
- * ----------------|-------------
- * `active`        | Set when the checkbox is activated with mouse, touch or the keyboard.
- * `checked`       | Set when the checkbox is checked.
- * `disabled`      | Set when the checkbox is disabled.
- * `focus-ring`    | Set when the checkbox is focused using the keyboard.
- * `focused`       | Set when the checkbox is focused.
- * `indeterminate` | Set when the checkbox is in the indeterminate state.
- * `has-label`     | Set when the checkbox has a label.
+ * Attribute            | Description
+ * ---------------------|-------------
+ * `active`             | Set when the checkbox is activated with mouse, touch or the keyboard.
+ * `checked`            | Set when the checkbox is checked.
+ * `disabled`           | Set when the checkbox is disabled.
+ * `readonly`           | Set when the checkbox is readonly.
+ * `focus-ring`         | Set when the checkbox is focused using the keyboard.
+ * `focused`            | Set when the checkbox is focused.
+ * `indeterminate`      | Set when the checkbox is in the indeterminate state.
+ * `invalid`            | Set when the checkbox is invalid.
+ * `has-label`          | Set when the checkbox has a label.
+ * `has-helper`         | Set when the checkbox has helper text.
+ * `has-error-message`  | Set when the checkbox has an error message.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -62,7 +70,16 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolymerEl
       <div class="vaadin-checkbox-container">
         <div part="checkbox" aria-hidden="true"></div>
         <slot name="input"></slot>
-        <slot name="label"></slot>
+        <div part="label">
+          <slot name="label"></slot>
+          <div part="required-indicator" on-click="_onRequiredIndicatorClick"></div>
+        </div>
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
       <slot name="tooltip"></slot>
     `;

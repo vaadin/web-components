@@ -43,6 +43,23 @@ describe('checkbox', () => {
     await visualDiff(div, 'checked-focus-ring');
   });
 
+  it('required', async () => {
+    element.required = true;
+    await visualDiff(div, 'required');
+  });
+
+  it('error message', async () => {
+    element.errorMessage = 'This field is required';
+    element.required = true;
+    element.validate();
+    await visualDiff(div, 'error-message');
+  });
+
+  it('helper text', async () => {
+    element.helperText = 'Helper text';
+    await visualDiff(div, 'helper-text');
+  });
+
   describe('readonly', () => {
     beforeEach(() => {
       element.readonly = true;
@@ -105,6 +122,11 @@ describe('checkbox', () => {
     it('empty', async () => {
       element.label = '';
       await visualDiff(div, 'rtl-empty');
+    });
+
+    it('required', async () => {
+      element.required = true;
+      await visualDiff(div, 'rtl-required');
     });
   });
 });

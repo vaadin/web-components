@@ -12,8 +12,10 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 
 /**
  * A mixin providing common checkbox functionality.
@@ -27,10 +29,12 @@ export declare function CheckboxMixin<T extends Constructor<HTMLElement>>(
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
+  Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass> &
   T;
 
 export declare class CheckboxMixinClass {

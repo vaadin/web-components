@@ -15,6 +15,12 @@ registerStyles(
       --_checkbox-size: var(--vaadin-checkbox-size, 16px);
     }
 
+    [part='label'] {
+      display: flex;
+      position: relative;
+      max-width: max-content;
+    }
+
     :host([has-label]) ::slotted(label) {
       padding: 3px 12px 3px 6px;
     }
@@ -127,6 +133,49 @@ registerStyles(
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: 3px 6px 3px 12px;
+    }
+
+    /* Required */
+    :host([required]) [part='required-indicator'] {
+      position: absolute;
+      top: 3px;
+      right: 2px;
+    }
+
+    :host([dir='rtl'][required]) [part='required-indicator'] {
+      right: auto;
+      left: 2px;
+    }
+
+    :host([required]) [part='required-indicator']::after {
+      content: '*';
+      color: var(--material-secondary-text-color);
+    }
+
+    :host([invalid]) [part='required-indicator']::after {
+      color: var(--material-error-text-color);
+    }
+
+    [part='error-message'],
+    [part='helper-text'] {
+      font-size: 0.75em;
+      line-height: 1;
+      padding-left: 6px;
+    }
+
+    [part='error-message'] {
+      color: var(--material-error-text-color);
+    }
+
+    [part='helper-text'] {
+      color: var(--material-secondary-text-color);
+    }
+
+    :host([has-error-message]) [part='error-message']::before,
+    :host([has-helper]) [part='helper-text']::before {
+      content: '';
+      display: block;
+      height: 6px;
     }
   `,
   { moduleId: 'material-checkbox' },

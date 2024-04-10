@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -57,6 +57,17 @@ describe('checkbox', () => {
       expect(checkbox.checked).to.be.true;
 
       label.click();
+      await nextUpdate(checkbox);
+      expect(checkbox.checked).to.be.false;
+    });
+
+    it('should toggle checked property on required indicator click', async () => {
+      const indicator = checkbox.shadowRoot.querySelector('[part="required-indicator"]');
+      indicator.click();
+      await nextUpdate(checkbox);
+      expect(checkbox.checked).to.be.true;
+
+      indicator.click();
       await nextUpdate(checkbox);
       expect(checkbox.checked).to.be.false;
     });
@@ -208,6 +219,21 @@ describe('checkbox', () => {
 
         // Release Space on the input
         await sendKeys({ up: 'Space' });
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute on helper element click', async () => {
+        checkbox.helperText = 'Helper';
+        await nextFrame();
+        mousedown(checkbox.querySelector('[slot="helper"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute on error message element click', async () => {
+        checkbox.errorMessage = 'Error';
+        checkbox.invalid = true;
+        await nextFrame();
+        mousedown(checkbox.querySelector('[slot="error-message"]'));
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
     });

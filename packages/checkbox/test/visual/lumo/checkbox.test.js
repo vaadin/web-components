@@ -44,6 +44,30 @@ describe('checkbox', () => {
     await visualDiff(div, 'checked-focus-ring');
   });
 
+  it('required', async () => {
+    element.required = true;
+    await visualDiff(div, 'required');
+  });
+
+  it('invalid focus-ring', async () => {
+    element.required = true;
+    element.invalid = true;
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'invalid-focus-ring');
+  });
+
+  it('error message', async () => {
+    element.errorMessage = 'This field is required';
+    element.required = true;
+    element.validate();
+    await visualDiff(div, 'error-message');
+  });
+
+  it('helper text', async () => {
+    element.helperText = 'Helper text';
+    await visualDiff(div, 'helper-text');
+  });
+
   describe('disabled', () => {
     beforeEach(() => {
       element.disabled = true;
@@ -106,6 +130,11 @@ describe('checkbox', () => {
       element.label = '';
       await visualDiff(div, 'rtl-empty');
     });
+
+    it('required', async () => {
+      element.required = true;
+      await visualDiff(div, 'rtl-required');
+    });
   });
 
   describe('borders enabled', () => {
@@ -139,6 +168,11 @@ describe('checkbox', () => {
     it('bordered readonly', async () => {
       element.readonly = true;
       await visualDiff(div, 'bordered-readonly');
+    });
+
+    it('bordered invalid', async () => {
+      element.invalid = true;
+      await visualDiff(div, 'bordered-invalid');
     });
 
     it('Bordered dark', async () => {
