@@ -31,6 +31,11 @@ describe('vaadin-checkbox-group', () => {
       await expect(group).dom.to.equalSnapshot();
     });
 
+    it('readonly', async () => {
+      group.readonly = true;
+      await expect(group).dom.to.equalSnapshot();
+    });
+
     it('required', async () => {
       group.required = true;
       await expect(group).dom.to.equalSnapshot();

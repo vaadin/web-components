@@ -50,6 +50,18 @@ export const CheckboxMixin = (superclass) =>
         },
 
         /**
+         * When true, the user cannot modify the value of the checkbox.
+         * The difference between `disabled` and `readonly` is that the
+         * read-only checkbox remains focusable, is announced by screen
+         * readers and its value can be submitted as part of the form.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
          *
          * @override
@@ -61,6 +73,10 @@ export const CheckboxMixin = (superclass) =>
           reflectToAttribute: true,
         },
       };
+    }
+
+    static get observers() {
+      return ['__readonlyChanged(readonly, inputElement)'];
     }
 
     /** @override */
@@ -77,6 +93,8 @@ export const CheckboxMixin = (superclass) =>
       super();
 
       this._setType('checkbox');
+
+      this._boundOnInputClick = this._onInputClick.bind(this);
 
       // Set the string "on" as the default value for the checkbox following the HTML specification:
       // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
@@ -99,8 +117,8 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /**
-     * Override method inherited from `ActiveMixin` to prevent setting
-     * `active` attribute when clicking a link placed inside the label.
+     * Override method inherited from `ActiveMixin` to prevent setting `active`
+     * attribute when readonly or when clicking a link placed inside the label.
      *
      * @param {Event} event
      * @return {boolean}
@@ -108,11 +126,57 @@ export const CheckboxMixin = (superclass) =>
      * @override
      */
     _shouldSetActive(event) {
-      if (event.target.localName === 'a') {
+      if (this.readonly || event.target.localName === 'a') {
         return false;
       }
 
       return super._shouldSetActive(event);
+    }
+
+    /**
+     * Override method inherited from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _addInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.addEventListener('click', this._boundOnInputClick);
+    }
+
+    /**
+     * Override method inherited from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _removeInputListeners(input) {
+      super._removeInputListeners(input);
+
+      input.removeEventListener('click', this._boundOnInputClick);
+    }
+
+    /** @private */
+    _onInputClick(event) {
+      // Prevent native checkbox checked change
+      if (this.readonly) {
+        event.preventDefault();
+      }
+    }
+
+    /** @private */
+    __readonlyChanged(readonly, inputElement) {
+      if (!inputElement) {
+        return;
+      }
+
+      // Use aria-readonly since native checkbox doesn't support readonly
+      if (readonly) {
+        inputElement.setAttribute('aria-readonly', 'true');
+      } else {
+        inputElement.removeAttribute('aria-readonly');
+      }
     }
 
     /**

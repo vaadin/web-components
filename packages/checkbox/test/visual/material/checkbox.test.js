@@ -43,6 +43,32 @@ describe('checkbox', () => {
     await visualDiff(div, 'checked-focus-ring');
   });
 
+  describe('readonly', () => {
+    beforeEach(() => {
+      element.readonly = true;
+    });
+
+    it('basic', async () => {
+      await visualDiff(div, 'readonly');
+    });
+
+    it('checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'readonly-checked');
+    });
+
+    it('checked focus-ring', async () => {
+      element.checked = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'readonly-checked-focus-ring');
+    });
+
+    it('indeterminate', async () => {
+      element.indeterminate = true;
+      await visualDiff(div, 'readonly-indeterminate');
+    });
+  });
+
   describe('disabled', () => {
     beforeEach(() => {
       element.disabled = true;

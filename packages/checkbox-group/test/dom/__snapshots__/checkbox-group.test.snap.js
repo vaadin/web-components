@@ -60,6 +60,70 @@ snapshots["vaadin-checkbox-group host default"] =
 `;
 /* end snapshot vaadin-checkbox-group host default */
 
+snapshots["vaadin-checkbox-group host label"] = 
+`<vaadin-checkbox-group
+  aria-labelledby="label-vaadin-checkbox-group-0"
+  has-label=""
+  role="group"
+>
+  <vaadin-checkbox
+    has-label=""
+    has-value=""
+    label="Checkbox 1"
+    value="1"
+  >
+    <label
+      for="input-vaadin-checkbox-5"
+      id="label-vaadin-checkbox-3"
+      slot="label"
+    >
+      Checkbox 1
+    </label>
+    <input
+      id="input-vaadin-checkbox-5"
+      slot="input"
+      tabindex="0"
+      type="checkbox"
+      value="1"
+    >
+  </vaadin-checkbox>
+  <vaadin-checkbox
+    has-label=""
+    has-value=""
+    label="Checkbox 2"
+    value="2"
+  >
+    <label
+      for="input-vaadin-checkbox-6"
+      id="label-vaadin-checkbox-4"
+      slot="label"
+    >
+      Checkbox 2
+    </label>
+    <input
+      id="input-vaadin-checkbox-6"
+      slot="input"
+      tabindex="0"
+      type="checkbox"
+      value="2"
+    >
+  </vaadin-checkbox>
+  <label
+    id="label-vaadin-checkbox-group-0"
+    slot="label"
+  >
+    Label
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-checkbox-group-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-checkbox-group>
+`;
+/* end snapshot vaadin-checkbox-group host label */
+
 snapshots["vaadin-checkbox-group host disabled"] = 
 `<vaadin-checkbox-group
   aria-disabled="true"
@@ -129,45 +193,16 @@ snapshots["vaadin-checkbox-group host disabled"] =
 `;
 /* end snapshot vaadin-checkbox-group host disabled */
 
-snapshots["vaadin-checkbox-group shadow default"] = 
-`<div class="vaadin-group-field-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div part="group-field">
-    <slot>
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-<slot name="tooltip">
-</slot>
-`;
-/* end snapshot vaadin-checkbox-group shadow default */
-
-snapshots["vaadin-checkbox-group host label"] = 
+snapshots["vaadin-checkbox-group host readonly"] = 
 `<vaadin-checkbox-group
-  aria-labelledby="label-vaadin-checkbox-group-0"
-  has-label=""
+  readonly=""
   role="group"
 >
   <vaadin-checkbox
     has-label=""
     has-value=""
     label="Checkbox 1"
+    readonly=""
     value="1"
   >
     <label
@@ -178,6 +213,7 @@ snapshots["vaadin-checkbox-group host label"] =
       Checkbox 1
     </label>
     <input
+      aria-readonly="true"
       id="input-vaadin-checkbox-5"
       slot="input"
       tabindex="0"
@@ -189,6 +225,7 @@ snapshots["vaadin-checkbox-group host label"] =
     has-label=""
     has-value=""
     label="Checkbox 2"
+    readonly=""
     value="2"
   >
     <label
@@ -199,6 +236,7 @@ snapshots["vaadin-checkbox-group host label"] =
       Checkbox 2
     </label>
     <input
+      aria-readonly="true"
       id="input-vaadin-checkbox-6"
       slot="input"
       tabindex="0"
@@ -210,7 +248,6 @@ snapshots["vaadin-checkbox-group host label"] =
     id="label-vaadin-checkbox-group-0"
     slot="label"
   >
-    Label
   </label>
   <div
     hidden=""
@@ -220,7 +257,7 @@ snapshots["vaadin-checkbox-group host label"] =
   </div>
 </vaadin-checkbox-group>
 `;
-/* end snapshot vaadin-checkbox-group host label */
+/* end snapshot vaadin-checkbox-group host readonly */
 
 snapshots["vaadin-checkbox-group host required"] = 
 `<vaadin-checkbox-group
@@ -418,4 +455,33 @@ snapshots["vaadin-checkbox-group host error"] =
 </vaadin-checkbox-group>
 `;
 /* end snapshot vaadin-checkbox-group host error */
+
+snapshots["vaadin-checkbox-group shadow default"] = 
+`<div class="vaadin-group-field-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div part="group-field">
+    <slot>
+    </slot>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-checkbox-group shadow default */
 
