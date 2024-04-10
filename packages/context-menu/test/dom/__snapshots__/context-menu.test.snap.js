@@ -65,7 +65,6 @@ snapshots["context-menu items nested"] =
   dir="ltr"
   modeless=""
   opened=""
-  right-aligned=""
   start-aligned=""
   top-aligned=""
 >
@@ -166,7 +165,6 @@ snapshots["context-menu items overlay class nested"] =
   dir="ltr"
   modeless=""
   opened=""
-  right-aligned=""
   start-aligned=""
   top-aligned=""
 >
