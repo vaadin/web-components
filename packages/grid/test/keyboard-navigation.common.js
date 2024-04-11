@@ -544,6 +544,17 @@ describe('keyboard navigation', () => {
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
     });
 
+    it('should not enter grid on table click', () => {
+      const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+      // Click and focusin on table element
+      mouseDown(tabbableElements[0]);
+      focusin(tabbableElements[0], focusable);
+
+      // Expect no focus on header cell
+      expect(grid.shadowRoot.activeElement).to.be.null;
+    });
+
     it('should set native focus to header on header cell click', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
       focusFirstHeaderCell();

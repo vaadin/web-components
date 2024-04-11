@@ -814,10 +814,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       const rootTarget = e.composedPath()[0];
 
       if (rootTarget === this.$.table || rootTarget === this.$.focusexit) {
-        // The focus enters the top (bottom) of the grid, meaning that user has
-        // tabbed (shift-tabbed) into the grid. Move the focus to
-        // the first (the last) focusable.
-        this._predictFocusStepTarget(rootTarget, rootTarget === this.$.table ? 1 : -1).focus();
+        if (!this._isMousedown) {
+          // The focus enters the top (bottom) of the grid, meaning that user has
+          // tabbed (shift-tabbed) into the grid. Move the focus to
+          // the first (the last) focusable.
+          this._predictFocusStepTarget(rootTarget, rootTarget === this.$.table ? 1 : -1).focus();
+        }
         this._setInteracting(false);
       } else {
         this._detectInteracting(e);
