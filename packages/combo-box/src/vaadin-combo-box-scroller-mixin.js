@@ -132,23 +132,21 @@ export const ComboBoxScrollerMixin = (superClass) =>
       this.addEventListener('click', (e) => e.stopPropagation());
 
       this.__patchWheelOverScrolling();
-
-      this.__virtualizer = new Virtualizer({
-        createElements: this.__createElements.bind(this),
-        updateElement: this._updateElement.bind(this),
-        elementsContainer: this,
-        scrollTarget: this,
-        scrollContainer: this.$.selector,
-      });
     }
 
     /**
      * Requests an update for the virtualizer to re-render items.
      */
     requestContentUpdate() {
-      if (this.__virtualizer) {
-        this.__virtualizer.update();
+      if (!this.opened) {
+        return;
       }
+
+      if (!this.__virtualizer) {
+        this.__initVirtualizer();
+      }
+
+      this.__virtualizer.update();
     }
 
     /**
@@ -209,8 +207,23 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /** @private */
+    __initVirtualizer() {
+      this.__virtualizer = new Virtualizer({
+        createElements: this.__createElements.bind(this),
+        updateElement: this._updateElement.bind(this),
+        elementsContainer: this,
+        scrollTarget: this,
+        scrollContainer: this.$.selector,
+      });
+    }
+
+    /** @private */
     __itemsChanged(items) {
-      if (this.__virtualizer && items) {
+      if (items && this.opened) {
+        if (!this.__virtualizer) {
+          this.__initVirtualizer();
+        }
+
         this.__virtualizer.size = items.length;
         this.__virtualizer.flush();
         this.requestContentUpdate();
