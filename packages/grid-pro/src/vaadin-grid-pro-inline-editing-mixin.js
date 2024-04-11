@@ -11,6 +11,7 @@
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
+import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -218,6 +219,10 @@ export const InlineEditingMixin = (superClass) =>
             return;
           }
 
+          if (!this._isCellEditable(cell)) {
+            return;
+          }
+
           callback(e);
         }
       });
@@ -325,8 +330,10 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _startEdit(cell, column) {
+      const isCellEditable = this._isCellEditable(cell);
+
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
-      if (this.disabled || this._editingDisabled) {
+      if (this.disabled || this._editingDisabled || !isCellEditable) {
         return;
       }
       // Cancel debouncer enqueued on focusout
@@ -421,59 +428,67 @@ export const InlineEditingMixin = (superClass) =>
 
       this._cancelStopEdit();
 
-      const cols = this._getEditColumns();
-
+      const editableColumns = this._getEditColumns();
       const { cell, column, model } = this.__edited;
-      const colIndex = cols.indexOf(column);
-      const { index } = model;
 
-      let nextCol = null;
-      let nextIdx = index;
+      this._stopEdit();
+      e.preventDefault();
+      // Prevent vaadin-grid handler from being called
+      e.stopImmediatePropagation();
 
-      // Enter key
-      if (e.keyCode === 13) {
-        nextCol = column;
+      // Try to find the next editable cell
+      let nextIndex = model.index;
+      let nextColumn = column;
+      let nextCell = cell;
+      let directionX = 0;
+      let directionY = 0;
 
-        // Move up / down
-        if (this.enterNextRow) {
-          nextIdx = e.shiftKey ? index - 1 : index + 1;
-        }
+      // Enter key: move up / down
+      if (e.keyCode === 13 && this.enterNextRow) {
+        directionY = e.shiftKey ? -1 : 1;
       }
 
       // Tab: move right / left
       if (e.keyCode === 9) {
-        if (e.shiftKey) {
-          if (cols[colIndex - 1]) {
-            nextCol = cols[colIndex - 1];
-          } else if (index > 0) {
-            nextIdx = index - 1;
-            nextCol = cols[cols.length - 1];
+        directionX = e.shiftKey ? -1 : 1;
+      }
+
+      if (directionX || directionY) {
+        while (nextCell) {
+          if (directionX) {
+            // Move horizontally
+            nextColumn = editableColumns[editableColumns.indexOf(nextColumn) + directionX];
+            if (!nextColumn) {
+              // Wrap to the next or previous row
+              nextIndex += directionX;
+              nextColumn = editableColumns[directionX > 0 ? 0 : editableColumns.length - 1];
+            }
           }
-        } else if (cols[colIndex + 1]) {
-          nextCol = cols[colIndex + 1];
-        } else {
-          nextIdx = index + 1;
-          nextCol = cols[0];
+          // Move vertically
+          if (directionY) {
+            nextIndex += directionY;
+          }
+          // Stop looking if the next cell is editable
+          const nextRow = this._getRowByIndex(nextIndex);
+          // eslint-disable-next-line @typescript-eslint/no-loop-func
+          nextCell = nextRow && Array.from(nextRow.children).find((cell) => cell._column === nextColumn);
+          if (nextCell && this._isCellEditable(nextCell)) {
+            break;
+          }
         }
       }
 
-      const nextRow = nextIdx === index ? cell.parentNode : this._getRowByIndex(nextIdx) || null;
+      // Focus current cell as fallback
+      if (!nextCell) {
+        nextCell = cell;
+        nextIndex = model.index;
+      }
 
-      this._stopEdit();
-
-      if (nextRow && nextCol) {
-        const nextCell = Array.from(nextRow.children).find((cell) => cell._column === nextCol);
-        e.preventDefault();
-
-        // Prevent vaadin-grid handler from being called
-        e.stopImmediatePropagation();
-
-        if (!this.singleCellEdit && nextCell !== cell) {
-          this._startEdit(nextCell, nextCol);
-        } else {
-          this._ensureScrolledToIndex(nextIdx);
-          nextCell.focus();
-        }
+      if (!this.singleCellEdit && nextCell !== cell) {
+        this._startEdit(nextCell, nextColumn);
+      } else {
+        this._ensureScrolledToIndex(nextIndex);
+        nextCell.focus();
       }
     }
 
@@ -490,6 +505,38 @@ export const InlineEditingMixin = (superClass) =>
         }
       }
       super._updateItem(row, item);
+    }
+
+    /**
+     * Override method from `StylingMixin` to apply `editable-cell` part to the
+     * cells of edit columns.
+     *
+     * @override
+     */
+    _generateCellPartNames(row, model) {
+      super._generateCellPartNames(row, model);
+
+      iterateRowCells(row, (cell) => {
+        const isEditable = this._isCellEditable(cell);
+        const target = cell._focusButton || cell;
+        updatePart(target, isEditable, 'editable-cell');
+      });
+    }
+
+    /** @private */
+    _isCellEditable(cell) {
+      const column = cell._column;
+      // Not editable if the column is not an edit column
+      if (!this._isEditColumn(column)) {
+        return false;
+      }
+      // Cell is editable by default if isCellEditable is not configured
+      if (!column.isCellEditable) {
+        return true;
+      }
+      // Otherwise, check isCellEditable function
+      const model = this.__getRowModel(cell.parentElement);
+      return column.isCellEditable(model);
     }
 
     /**

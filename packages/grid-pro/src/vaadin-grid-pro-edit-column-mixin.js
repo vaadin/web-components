@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
@@ -84,13 +83,36 @@ export const GridProEditColumnMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * A function to check whether a specific cell of this column can be
+         * edited. This allows to disable editing of individual rows or cells,
+         * based on the item.
+         *
+         * Receives a `model` object containing the item for an individual row,
+         * and should return a boolean indicating whether the column's cell in
+         * that row is editable.
+         *
+         * The `model` object contains:
+         * - `model.index` The index of the item.
+         * - `model.item` The item.
+         * - `model.expanded` Sublevel toggle state.
+         * - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
+         * - `model.selected` Selected state.
+         *
+         * @type {(model: GridItemModel) => boolean}
+         */
+        isCellEditable: {
+          type: Function,
+          observer: '_isCellEditableChanged',
+        },
+
         /** @private */
         _oldRenderer: Function,
       };
     }
 
     static get observers() {
-      return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells)'];
+      return ['_editModeRendererChanged(editModeRenderer, __initialized)'];
     }
 
     constructor() {
@@ -121,11 +143,9 @@ export const GridProEditColumnMixin = (superClass) =>
     }
 
     /** @private */
-    _cellsChanged() {
-      this._cells.forEach((cell) => {
-        const target = cell._focusButton || cell;
-        addValueToAttribute(target, 'part', 'editable-cell');
-      });
+    _isCellEditableChanged(newValue, oldValue) {
+      // Re-render grid to update editable-cell part names
+      this._grid.requestContentUpdate();
     }
 
     /** @private */
