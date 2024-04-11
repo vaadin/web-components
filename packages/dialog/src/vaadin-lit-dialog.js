@@ -72,6 +72,7 @@ class Dialog extends DialogDraggableMixin(
     return html`
       <vaadin-dialog-overlay
         id="overlay"
+        role="dialog"
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"
@@ -90,13 +91,6 @@ class Dialog extends DialogDraggableMixin(
         focus-trap
       ></vaadin-dialog-overlay>
     `;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement.setAttribute('role', 'dialog');
   }
 }
 
