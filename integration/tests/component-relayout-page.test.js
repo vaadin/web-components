@@ -1,8 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { ContextMenu } from '@vaadin/context-menu';
+import { MenuBar } from '@vaadin/menu-bar';
 
-[{ tagName: ContextMenu.is }].forEach(({ tagName }) => {
+[
+  { tagName: ContextMenu.is },
+  {
+    tagName: MenuBar.is,
+    callback: (el) => {
+      el.items = [{ text: 'Item' }];
+    },
+  },
+].forEach(({ tagName, callback }) => {
   describe(`${tagName} re-layout`, () => {
     let wrapper;
 
@@ -16,6 +25,9 @@ import { ContextMenu } from '@vaadin/context-menu';
       }
 
       wrapper.appendChild(document.createElement(tagName));
+      if (callback) {
+        callback(wrapper.firstElementChild);
+      }
 
       for (let i = 0; i < 100; i++) {
         const btn = document.createElement('button');
