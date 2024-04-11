@@ -7,7 +7,7 @@ describe('a11y', () => {
   describe('focus restoration', () => {
     let menuBar, overlay, buttons;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       menuBar = fixtureSync(`<vaadin-menu-bar></vaadin-menu-bar>`);
       menuBar.items = [
         {
@@ -21,6 +21,7 @@ describe('a11y', () => {
           ],
         },
       ];
+      await nextRender();
       overlay = menuBar._subMenu._overlayElement;
       buttons = menuBar.querySelectorAll('vaadin-menu-bar-button');
       buttons[0].focus();
@@ -61,6 +62,7 @@ describe('a11y', () => {
       await nextRender();
       // Select Item 0/0
       enter(getDeepActiveElement());
+      await nextRender();
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 
@@ -76,6 +78,7 @@ describe('a11y', () => {
       await nextRender();
       // Select Item 0/1/0
       enter(getDeepActiveElement());
+      await nextRender();
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
   });
