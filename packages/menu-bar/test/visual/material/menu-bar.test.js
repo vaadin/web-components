@@ -19,11 +19,13 @@ describe('menu-bar', () => {
       });
 
       describe('basic', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           div = document.createElement('div');
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          await nextRender();
+
           element.items = [
             { text: 'Home' },
             {
@@ -47,11 +49,13 @@ describe('menu-bar', () => {
       });
 
       describe('single button', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           div = document.createElement('div');
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          await nextRender();
+
           element.items = [{ text: 'Actions' }];
           element.setAttribute('theme', 'outlined');
         });
@@ -78,11 +82,13 @@ describe('menu-bar', () => {
           return item;
         }
 
-        beforeEach(() => {
+        beforeEach(async () => {
           div = document.createElement('div');
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          await nextRender();
+
           element.items = [
             { component: 'u', text: 'Home' },
             {
