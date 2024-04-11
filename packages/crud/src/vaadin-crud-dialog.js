@@ -145,6 +145,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
         fullscreen$="[[fullscreen]]"
+        role="dialog"
         focus-trap
       ></vaadin-crud-dialog-overlay>
     `;
