@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-cookie-consent",
-  "version": "23.3.31",
+  "version": "23.3.32",
   "publishConfig": {
     "access": "public"
   },
@@ -33,7 +33,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/cookie-consent": "~23.3.31"
+    "@vaadin/cookie-consent": "~23.3.32"
   },
   "cvdlName": "vaadin-cookie-consent"
 }
