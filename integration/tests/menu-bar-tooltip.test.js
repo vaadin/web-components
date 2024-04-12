@@ -14,7 +14,7 @@ import {
 import sinon from 'sinon';
 import '@vaadin/menu-bar';
 import { Tooltip } from '@vaadin/tooltip';
-import { mouseleave } from '@vaadin/tooltip/test/helpers.js';
+import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 export function mouseover(target) {
   fire(target, 'mouseover');
@@ -127,6 +127,14 @@ describe('menu-bar with tooltip', () => {
     mouseover(buttons[0]);
     mousedown(buttons[0]);
     expect(tooltip.opened).to.be.false;
+  });
+
+  it('should hide tooltip on mouseleave from overlay to outside', () => {
+    const overlay = tooltip._overlayElement;
+    mouseover(buttons[0]);
+    mouseenter(overlay);
+    mouseleave(overlay);
+    expect(overlay.opened).to.be.false;
   });
 
   it('should not show tooltip on focus without keyboard interaction', async () => {
