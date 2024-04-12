@@ -148,10 +148,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
         return;
       }
 
-      if (!this.__virtualizer) {
-        this.__initVirtualizer();
-      }
-
       this.__virtualizer.update();
     }
 
@@ -226,13 +222,8 @@ export const ComboBoxScrollerMixin = (superClass) =>
 
     /** @private */
     __itemsChanged(items) {
-      if (items && this.opened) {
-        if (!this.__virtualizer) {
-          this.__initVirtualizer();
-        }
-
-        this.__virtualizer.size = items.length;
-        this.__virtualizer.flush();
+      if (items && this.__virtualizer) {
+        this.__setVirtualizerItems(items);
         this.requestContentUpdate();
       }
     }
@@ -245,8 +236,22 @@ export const ComboBoxScrollerMixin = (superClass) =>
     /** @private */
     __openedChanged(opened) {
       if (opened) {
+        if (!this.__virtualizer) {
+          this.__initVirtualizer();
+
+          if (this.items) {
+            this.__setVirtualizerItems(this.items);
+          }
+        }
+
         this.requestContentUpdate();
       }
+    }
+
+    /** @private */
+    __setVirtualizerItems(items) {
+      this.__virtualizer.size = items.length;
+      this.__virtualizer.flush();
     }
 
     /** @private */
