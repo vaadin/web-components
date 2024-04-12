@@ -168,6 +168,7 @@ export const MenuBarMixin = (superClass) =>
     constructor() {
       super();
       this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+      this.__boundOnTooltipMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
     }
 
     /**
@@ -592,6 +593,11 @@ export const MenuBarMixin = (superClass) =>
           tooltip.generator = ({ item }) => item && item.tooltip;
         }
 
+        if (!tooltip._mouseLeaveListenerAdded) {
+          tooltip._overlayElement.addEventListener('mouseleave', this.__boundOnTooltipMouseLeave);
+          tooltip._mouseLeaveListenerAdded = true;
+        }
+
         if (!this._subMenu.opened) {
           this._tooltipController.setTarget(button);
           this._tooltipController.setContext({ item: button.item });
@@ -610,6 +616,13 @@ export const MenuBarMixin = (superClass) =>
       const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
         tooltip._stateController.close(immediate);
+      }
+    }
+
+    /** @private */
+    __onTooltipOverlayMouseLeave(event) {
+      if (event.relatedTarget !== this._tooltipController.target) {
+        this._hideTooltip();
       }
     }
 
