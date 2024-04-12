@@ -1023,6 +1023,10 @@ describe('lazy loading', () => {
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
         });
+
+        it('should reset visible items count to 0', () => {
+          expect(getVisibleItemsCount(comboBox)).to.equal(0);
+        });
       });
 
       describe('using data provider, lost focus before data is returned', () => {
