@@ -55,6 +55,17 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
     `;
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // When setting `opened` as an attribute, the overlay is already teleported to body
+    // by the time when `ready()` callback of the `vaadin-select` is executed by Polymer,
+    // so querySelector() would return null. So we use this workaround to set properties.
+    this.owner = this.__dataHost;
+    this.owner._overlayElement = this;
+  }
+
   requestContentUpdate() {
     super.requestContentUpdate();
 

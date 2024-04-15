@@ -171,10 +171,6 @@ export const SelectBaseMixin = (superClass) =>
     ready() {
       super.ready();
 
-      const overlay = this.shadowRoot.querySelector('vaadin-select-overlay');
-      overlay.owner = this;
-      this._overlayElement = overlay;
-
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
       this._valueButtonController = new ButtonController(this);
