@@ -101,6 +101,15 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
     `;
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    const overlay = this.shadowRoot.querySelector('vaadin-select-overlay');
+    overlay.owner = this;
+    this._overlayElement = overlay;
+  }
+
   /** @private */
   _onOpenedChanged(event) {
     this.opened = event.detail.value;
