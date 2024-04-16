@@ -321,8 +321,18 @@ export const DataProviderMixin = (superClass) =>
 
     /** @protected */
     _onDataProviderPageReceived() {
-      // With the new items added, update the cache size and the grid's effective size
-      this._flatSize = this._dataProviderController.flatSize;
+      // If the page response affected the flat size
+      if (this._flatSize !== this._dataProviderController.flatSize) {
+        // Schedule an update of all rendered rows by _debouncerApplyCachedData,
+        // to ensure that all pages associated with the rendered rows are loaded.
+        this._shouldUpdateAllRenderedRowsAfterPageLoad = true;
+
+        // TODO: Updating the flat size property can still result in a synchonous virtualizer update
+        // if the size change requires the virtualizer to increase the amount of physical elements
+        // to display new items e.g. the viewport fits 10 items and the size changes from 1 to 10.
+        // This is something to be optimized in the future.
+        this._flatSize = this._dataProviderController.flatSize;
+      }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
       this._getRenderedRows().forEach((row) => {
@@ -338,9 +348,12 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
         this._setLoading(false);
 
+        const shouldUpdateAllRenderedRowsAfterPageLoad = this._shouldUpdateAllRenderedRowsAfterPageLoad;
+        this._shouldUpdateAllRenderedRowsAfterPageLoad = false;
+
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (item) {
+          if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
             this._getItem(row.index, row);
           }
         });
