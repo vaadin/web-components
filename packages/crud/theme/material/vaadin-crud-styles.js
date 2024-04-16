@@ -83,6 +83,7 @@ registerStyles(
         inset: 0;
         content: '';
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
+        pointer-events: none;
       }
 
       [part='toolbar'] {

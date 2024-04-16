@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import '../vaadin-crud.js';
 import { flushGrid } from './helpers.js';
@@ -9,6 +9,16 @@ describe('crud editor', () => {
 
   before(async () => {
     await setViewport({ width: 1024, height: 768 });
+  });
+
+  afterEach(async () => {
+    // Wait until the crud dialog overlay is closed
+    let overlay;
+    while ((overlay = document.querySelector('body > vaadin-crud-dialog-overlay'))) {
+      // Press esc to close the dialog
+      overlay.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await aTimeout(1);
+    }
   });
 
   describe('header', () => {
@@ -121,6 +131,22 @@ describe('crud editor', () => {
 
         expect(form.parentElement).to.be.null;
         expect(newForm.parentElement).to.equal(overlay);
+      });
+
+      it('should not cover the editor content with focus ring element', async () => {
+        // Open the editor
+        crud.editorPosition = 'aside';
+        crud._newButton.click();
+        await nextRender();
+
+        // Get the elementFromPoint of the editor header
+        const header = crud.querySelector('[slot=header]');
+        const headerRect = header.getBoundingClientRect();
+        const x = headerRect.left + headerRect.width / 2;
+        const y = headerRect.top + headerRect.height / 2;
+        const elementFromPoint = document.elementFromPoint(x, y);
+
+        expect(elementFromPoint).to.equal(header);
       });
     });
   });
