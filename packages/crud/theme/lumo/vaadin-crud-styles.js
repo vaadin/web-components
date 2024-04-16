@@ -108,6 +108,7 @@ registerStyles(
         inset: 0;
         content: '';
         box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+        pointer-events: none;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
