@@ -487,13 +487,15 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
   /** @private */
   _animatedAppendNotificationCard() {
     if (this._card) {
+      this._card.removeAttribute('closing');
       this._card.setAttribute('opening', '');
       this._appendNotificationCard();
-      const listener = () => {
-        this._card.removeEventListener('animationend', listener);
+      this._card.removeEventListener('animationend', this.__animationEndListener);
+      this.__animationEndListener = () => {
+        this._card.removeEventListener('animationend', this.__animationEndListener);
         this._card.removeAttribute('opening');
       };
-      this._card.addEventListener('animationend', listener);
+      this._card.addEventListener('animationend', this.__animationEndListener);
       this._didAnimateNotificationAppend = true;
     } else {
       this._didAnimateNotificationAppend = false;
@@ -538,14 +540,16 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
 
   /** @private */
   _animatedRemoveNotificationCard() {
+    this._card.removeAttribute('opening');
     this._card.setAttribute('closing', '');
     const name = getComputedStyle(this._card).getPropertyValue('animation-name');
     if (name && name !== 'none') {
-      const listener = () => {
+      this._card.removeEventListener('animationend', this.__animationEndListener);
+      this.__animationEndListener = () => {
         this._removeNotificationCard();
-        this._card.removeEventListener('animationend', listener);
+        this._card.removeEventListener('animationend', this.__animationEndListener);
       };
-      this._card.addEventListener('animationend', listener);
+      this._card.addEventListener('animationend', this.__animationEndListener);
     } else {
       this._removeNotificationCard();
     }

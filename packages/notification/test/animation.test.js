@@ -34,8 +34,12 @@ describe('animated notifications', () => {
     await aTimeout(animationDuration / 2);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     notifications.forEach((n) => n.close());
+    // Wait for the notification container to be removed
+    while (document.querySelector('body > vaadin-notification-container')) {
+      await aTimeout(1);
+    }
   });
 
   describe('animation', () => {
@@ -78,6 +82,36 @@ describe('animated notifications', () => {
       notifications[1].open();
       expect(notifications[1]._card.hasAttribute('opening')).to.be.true;
       await oneEvent(notifications[1]._card, 'animationend');
+      expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
+    });
+
+    it('should remain opened', async () => {
+      // Close the non-animated notification as it's not relevant for this test
+      notifications[0].close();
+
+      notifications[1].open();
+      notifications[1].close();
+      notifications[1].open();
+      await oneEvent(notifications[1]._card, 'animationend');
+
+      expect(notifications[1].opened).to.be.true;
+      expect(container.isConnected).to.be.true;
+      expect(container.contains(notifications[1]._card)).to.be.true;
+      expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
+      expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
+    });
+
+    it('should remain closed', async () => {
+      // Close the non-animated notification as it's not relevant for this test
+      notifications[0].close();
+
+      notifications[1].open();
+      notifications[1].close();
+      await oneEvent(notifications[1]._card, 'animationend');
+
+      expect(notifications[1].opened).to.be.false;
+      expect(container.isConnected).to.be.false;
+      expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
       expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
     });
   });
