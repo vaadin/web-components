@@ -89,6 +89,8 @@ describe('animated notifications', () => {
     });
 
     it('should set `opening` attribute and remove later', async () => {
+      await oneEvent(notifications[1]._card, 'animationend');
+      notifications[1].open();
       expect(notifications[1]._card.hasAttribute('opening')).to.be.true;
       await oneEvent(notifications[1]._card, 'animationend');
       expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
@@ -100,6 +102,7 @@ describe('animated notifications', () => {
       beforeEach(() => {
         // Use the animated notification for these tests
         notification = notifications[1];
+        notification.duration = -1;
         card = notification._card;
         // Close the non-animated notification as it's not relevant for these tests
         notifications[0].close();
