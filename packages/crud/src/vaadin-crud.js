@@ -512,6 +512,9 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       /**
        * Number of items in the data set which is reported by the grid.
        * Typically it reflects the number of filtered items displayed in the grid.
+       *
+       * Note: As with `<vaadin-grid>`, this property updates automatically only
+       * if `items` is used for data.
        */
       size: {
         type: Number,
