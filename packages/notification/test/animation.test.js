@@ -85,34 +85,42 @@ describe('animated notifications', () => {
       expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
     });
 
-    it('should remain opened', async () => {
-      // Close the non-animated notification as it's not relevant for this test
-      notifications[0].close();
+    describe('simultaneous opening and closing', () => {
+      let notification, card;
 
-      notifications[1].open();
-      notifications[1].close();
-      notifications[1].open();
-      await oneEvent(notifications[1]._card, 'animationend');
+      beforeEach(() => {
+        // Use the animated notification for these tests
+        notification = notifications[1];
+        card = notification._card;
+        // Close the non-animated notification as it's not relevant for these tests
+        notifications[0].close();
+      });
 
-      expect(notifications[1].opened).to.be.true;
-      expect(container.isConnected).to.be.true;
-      expect(container.contains(notifications[1]._card)).to.be.true;
-      expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
-      expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
-    });
+      it('should remain opened after closing and opening', async () => {
+        // Simultanously close and open the animated notification
+        notification.close();
+        notification.open();
+        await oneEvent(card, 'animationend');
 
-    it('should remain closed', async () => {
-      // Close the non-animated notification as it's not relevant for this test
-      notifications[0].close();
+        expect(notification.opened).to.be.true;
+        expect(card.hasAttribute('closing')).to.be.false;
+        expect(card.hasAttribute('opening')).to.be.false;
+        expect(container.parentNode).to.equal(document.body);
+        expect(container.contains(card)).to.be.true;
+      });
 
-      notifications[1].open();
-      notifications[1].close();
-      await oneEvent(notifications[1]._card, 'animationend');
+      it('should remain closed after opening and closing', async () => {
+        // Simultanously open and close the animated notification
+        notification.close();
+        notification.open();
+        notification.close();
+        await oneEvent(card, 'animationend');
 
-      expect(notifications[1].opened).to.be.false;
-      expect(container.isConnected).to.be.false;
-      expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
-      expect(notifications[1]._card.hasAttribute('opening')).to.be.false;
+        expect(notification.opened).to.be.false;
+        expect(card.hasAttribute('closing')).to.be.false;
+        expect(card.hasAttribute('opening')).to.be.false;
+        expect(container.parentNode).to.not.equal(document.body);
+      });
     });
   });
 });
