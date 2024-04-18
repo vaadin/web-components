@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
-import { getPhysicalItems } from './helpers.js';
+import { flush } from '@vaadin/component-base/src/debounce.js';
+import { getBodyCellContent, getPhysicalItems } from './helpers.js';
 
 describe('lit', () => {
   it('should render items after dynamically adding more columns', async () => {
@@ -57,5 +58,76 @@ describe('lit', () => {
 
     // Then render a grid with one column
     renderGrid(['c1'], [{ c1: '1-1', c2: '1-2' }]);
+  });
+
+  // Test case for https://github.com/vaadin/web-components/issues/7162
+  it('should render child item content correctly', async () => {
+    const testComponentName = 'test-component';
+
+    // Define a web component that flushes global debouncers on connect
+    class TestComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' }).innerHTML = '<slot></slot>';
+      }
+
+      /** @protected */
+      connectedCallback() {
+        this.innerHTML = 'Foobar';
+        flush();
+      }
+    }
+    customElements.define(testComponentName, TestComponent);
+
+    // Build items
+    const rootItem = { id: 'item', children: [] };
+    for (let i = 0; i < 3; i++) {
+      const item = { id: `item_${i}`, children: [] };
+      rootItem.children.push(item);
+      for (let j = 0; j < 1; j++) {
+        const childItem = { id: `item_${i}_${j}` };
+        item.children.push(childItem);
+      }
+    }
+
+    const expandedItems = [rootItem, rootItem.children[1]];
+
+    const dataProvider = (params, callback) => {
+      const items = params.parentItem?.children || [rootItem];
+      callback(items, items.length);
+    };
+
+    const renderer = (root, _column, { item }) => {
+      let itemContent;
+
+      if (item.children) {
+        itemContent = html`${item.id}`;
+      } else {
+        itemContent = document.createElement('test-component');
+      }
+
+      render(html`<div>${itemContent}</div>`, root);
+    };
+
+    const wrapper = fixtureSync(`<div></div>`);
+    render(
+      html`
+        <vaadin-grid .dataProvider=${dataProvider} .expandedItems=${expandedItems}>
+          <vaadin-grid-tree-column width="80px" flex-grow="0"></vaadin-grid-tree-column>
+          <vaadin-grid-column .renderer=${renderer}></vaadin-grid-column>
+        </vaadin-grid>
+      `,
+      wrapper,
+    );
+
+    await nextFrame();
+
+    const grid = wrapper.querySelector('vaadin-grid');
+    grid.expandedItems = [rootItem];
+    await nextFrame();
+
+    const content = getBodyCellContent(grid, 3, 1);
+    expect(content.textContent).to.equal('item_2');
+    expect(content.querySelector(testComponentName)).not.to.be.ok;
   });
 });
