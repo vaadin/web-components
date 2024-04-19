@@ -288,15 +288,6 @@ describe('lazy loading', () => {
           expect(spyDataProvider.calledOnce).to.be.true;
         });
 
-        it('should not request empty loaded page again', () => {
-          const dp = sinon.spy((params, callback) => callback([], 0));
-          comboBox.dataProvider = dp;
-          comboBox.open();
-          comboBox.close();
-          comboBox.open();
-          expect(dp.calledOnce).to.be.true;
-        });
-
         it('should request pages asynchronously when scrolling', async () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
@@ -345,6 +336,26 @@ describe('lazy loading', () => {
             }
           };
           comboBox.open();
+        });
+      });
+
+      describe('empty data set is loaded', () => {
+        beforeEach(() => {
+          comboBox.dataProvider = sinon.spy((_params, callback) => callback([], 0));
+          comboBox.open();
+          comboBox.close();
+          comboBox.dataProvider.resetHistory();
+        });
+
+        it('should not request first page on open', () => {
+          comboBox.open();
+          expect(comboBox.dataProvider).to.be.not.called;
+        });
+
+        it('should request first page on open after increasing size property', () => {
+          comboBox.size = SIZE;
+          comboBox.open();
+          expect(comboBox.dataProvider).to.be.calledOnce;
         });
       });
 
@@ -1134,7 +1145,7 @@ describe('lazy loading', () => {
         });
       });
 
-      describe('after empty data set loaded', () => {
+      describe('empty data set is loaded', () => {
         const emptyDataProvider = sinon.spy((params, callback) => callback([], 0));
 
         beforeEach(() => {
