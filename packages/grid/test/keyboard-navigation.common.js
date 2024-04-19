@@ -11,6 +11,7 @@ import {
   keyUpOn,
   listenOnce,
   nextFrame,
+  nextRender,
   oneEvent,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
@@ -2000,26 +2001,33 @@ describe('keyboard navigation', () => {
 
       const tabToIndex = 20;
 
+      async function rendered() {
+        await nextFrame();
+        await nextRender(grid);
+        await nextFrame();
+      }
+
       // Tab downwards
       for (let i = 1; i <= tabToIndex; i++) {
-        await nextFrame();
+        await rendered();
         queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
         await oneEvent(grid, 'focusin');
-        await nextFrame();
+        await rendered();
+
         const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
         expect(focusedRow.index).to.equal(i);
       }
 
       // Tab upwards
       for (let i = tabToIndex - 1; i >= 0; i--) {
-        await nextFrame();
+        await rendered();
         queueMicrotask(async () => {
           await sendKeys({ down: 'Shift' });
           await sendKeys({ press: 'Tab' });
           await sendKeys({ up: 'Shift' });
         });
         await oneEvent(grid, 'focusin');
-        await nextFrame();
+        await rendered();
         const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
         expect(focusedRow.index).to.equal(i);
       }
