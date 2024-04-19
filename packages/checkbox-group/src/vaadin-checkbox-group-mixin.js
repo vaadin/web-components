@@ -34,6 +34,7 @@ export const CheckboxGroupMixin = (superclass) =>
           type: Array,
           value: () => [],
           notify: true,
+          sync: true,
           observer: '__valueChanged',
         },
 
