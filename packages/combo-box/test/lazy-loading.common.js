@@ -576,9 +576,28 @@ describe('lazy loading', () => {
         expect(comboBox.size).to.be.undefined;
       });
 
+      it('should not have default value after setting dataProvider', () => {
+        comboBox.dataProvider = spyDataProvider;
+        expect(comboBox.size).to.be.undefined;
+      });
+
       it('should be set from dataProvider callback', () => {
         comboBox.opened = true;
         comboBox.dataProvider = spyDataProvider;
+        expect(comboBox.size).to.equal(SIZE);
+      });
+
+      it('should be 0 after dataProvider returns size 0', () => {
+        comboBox.opened = true;
+        comboBox.dataProvider = (params, callback) => callback([], 0);
+        expect(comboBox.size).to.equal(0);
+      });
+
+      it('should keep previous value after dataProvider returns size undefined', () => {
+        comboBox.opened = true;
+        comboBox.dataProvider = spyDataProvider;
+        expect(comboBox.size).to.equal(SIZE);
+        comboBox.dataProvider = (params, callback) => callback([], undefined);
         expect(comboBox.size).to.equal(SIZE);
       });
 
@@ -998,6 +1017,14 @@ describe('lazy loading', () => {
         it('should not request first page', () => {
           comboBox.clearCache();
           expect(spyDataProvider.called).to.be.false;
+        });
+
+        it('should request first page on reopen', () => {
+          comboBox.clearCache();
+          comboBox.opened = true;
+          expect(spyDataProvider).to.be.calledOnce;
+          const params = spyDataProvider.firstCall.args[0];
+          expect(params.page).to.equal(0);
         });
 
         it('should request page 1 on scroll after reopen', async () => {
