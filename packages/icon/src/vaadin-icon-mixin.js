@@ -116,6 +116,7 @@ export const IconMixin = (superClass) =>
         /**
          * The font family to use for the font icon.
          *
+         * @attr {string} font-family
          * @type {string}
          */
         fontFamily: {

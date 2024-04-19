@@ -76,6 +76,8 @@ export declare class IconMixinClass {
 
   /**
    * The font family to use for the font icon.
+   *
+   * @attr {string} font-family
    */
   fontFamily: string | null;
 
