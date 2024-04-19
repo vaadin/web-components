@@ -109,20 +109,17 @@ describe('lit', () => {
       render(html`<div>${itemContent}</div>`, root);
     };
 
-    const wrapper = fixtureSync(`<div></div>`);
-    render(
+    const grid = render(
       html`
         <vaadin-grid .dataProvider=${dataProvider} .expandedItems=${expandedItems}>
           <vaadin-grid-tree-column width="80px" flex-grow="0"></vaadin-grid-tree-column>
           <vaadin-grid-column .renderer=${renderer}></vaadin-grid-column>
         </vaadin-grid>
       `,
-      wrapper,
-    );
-
+      fixtureSync(`<div></div>`),
+    ).parentNode.firstElementChild;
     await nextFrame();
 
-    const grid = wrapper.querySelector('vaadin-grid');
     grid.expandedItems = [rootItem];
     await nextFrame();
 
