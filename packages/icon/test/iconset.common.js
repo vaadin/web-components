@@ -1,12 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { isValidSvg } from '../src/vaadin-icon-svg.js';
-import { Iconset } from '../vaadin-iconset.js';
+
+const Iconset = customElements.get('vaadin-iconset');
 
 describe('vaadin-iconset', () => {
   let iconset;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     iconset = fixtureSync(`
       <vaadin-iconset name="vaadin" size="16">
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -17,6 +18,7 @@ describe('vaadin-iconset', () => {
         </svg>
       </vaadin-iconset>
     `);
+    await nextFrame();
   });
 
   describe('getIconSvg', () => {
