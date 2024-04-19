@@ -62,7 +62,7 @@ describe('lit', () => {
 
   // Test case for https://github.com/vaadin/web-components/issues/7162
   it('should render child item content correctly', async () => {
-    const testComponentName = 'test-component';
+    const testComponentName = 'flushing-test-component';
 
     // Define a web component that flushes global debouncers on connect
     class TestComponent extends HTMLElement {
@@ -103,7 +103,7 @@ describe('lit', () => {
       if (item.children) {
         itemContent = html`${item.id}`;
       } else {
-        itemContent = document.createElement('test-component');
+        itemContent = document.createElement(testComponentName);
       }
 
       render(html`<div>${itemContent}</div>`, root);
