@@ -175,6 +175,12 @@ export const ComboBoxMixin = (subclass) =>
           sync: true,
         },
 
+        /** @private */
+        __focusedItem: {
+          type: Object,
+          sync: true,
+        },
+
         /**
          * Filtering string the user has typed into the input field.
          * @type {string}
@@ -553,6 +559,9 @@ export const ComboBoxMixin = (subclass) =>
       if (oldIndex === undefined) {
         return;
       }
+
+      this.__focusedItem = index > -1 ? this._dropdownItems[index] : null;
+
       this._updateActiveDescendant(index);
     }
 
@@ -758,8 +767,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this._inputElementValue = this._getItemLabel(focusedItem);
+        this._inputElementValue = this._getItemLabel(this.__focusedItem);
         this._markAllSelectionRange();
       }
     }
@@ -948,7 +956,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _commitValue() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+        const focusedItem = this.__focusedItem;
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -1221,15 +1229,9 @@ export const ComboBoxMixin = (subclass) =>
      * @protected
      */
     _setDropdownItems(newItems) {
-      const oldItems = this._dropdownItems;
       this._dropdownItems = newItems;
 
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
-
-      // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
+      // Try to sync `selectedItem` based on `value` once a new set of `dropdownItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
       // When `value` is specified but `selectedItem` is not, it means that there was no item
       // matching `value` at the moment `value` was set, so `selectedItem` has remained unsynced.
@@ -1238,17 +1240,20 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = newItems[valueIndex];
       }
 
-      // Try to first set focus on the item that had been focused before `newItems` were updated
-      // if it is still present in the `newItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
+      // Restore focus on the item that had been focused before the dropdownItems update
+      // if the new dropdownItems array still contains this item.
+      if (this._focusedIndex > -1) {
+        const focusedItemValue = this._getItemValue(this.__focusedItem);
+        const focusedItemNewIndex = this.__getItemIndexByValue(newItems, focusedItemValue);
+        if (focusedItemNewIndex > -1) {
+          this._focusedIndex = focusedItemNewIndex;
+          return;
+        }
       }
+
+      // Otherwise, set focus on the item that matches the filter.
+      // Note, this will remove focus if there is no match or no filter.
+      this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
     }
 
     /** @private */
