@@ -572,11 +572,11 @@ describe('lazy loading', () => {
     });
 
     describe('size', () => {
-      it('should not have default value', () => {
+      it('should be undefined by default', () => {
         expect(comboBox.size).to.be.undefined;
       });
 
-      it('should not have default value after setting dataProvider', () => {
+      it('should be undefined after setting dataProvider', () => {
         comboBox.dataProvider = spyDataProvider;
         expect(comboBox.size).to.be.undefined;
       });
