@@ -724,12 +724,4 @@ export const ironList = {
   _clamp(v, min, max) {
     return Math.min(max, Math.max(min, v));
   },
-
-  _debounce(name, cb, asyncModule) {
-    if (!this._debouncers) {
-      this._debouncers = {};
-    }
-    this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
-    enqueueDebouncer(this._debouncers[name]);
-  },
 };

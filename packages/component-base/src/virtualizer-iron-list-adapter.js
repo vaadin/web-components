@@ -7,7 +7,7 @@
 // https://github.com/vaadin/eslint-config-vaadin/issues/33
 import { animationFrame, timeOut } from './async.js';
 import { isSafari } from './browser-utils.js';
-import { Debouncer, flush } from './debounce.js';
+import { Debouncer } from './debounce.js';
 import { ironList } from './iron-list-core.js';
 
 // Iron-list can by default handle sizes up to around 100000.
@@ -32,6 +32,8 @@ export class IronListAdapter {
     this.__placeholderHeight = 200;
     // A queue of 10 previous element heights
     this.__elementHeightQueue = Array(10);
+
+    this.debouncerQueue = new Set();
 
     this.timeouts = {
       SCROLL_REORDER: 500,
@@ -130,6 +132,8 @@ export class IronListAdapter {
       this._vidxOffset = index - targetVirtualIndex;
     }
 
+    this.flushDebouncers();
+
     this.__skipNextVirtualIndexAdjust = true;
     super.scrollToIndex(targetVirtualIndex);
 
@@ -153,7 +157,7 @@ export class IronListAdapter {
     }
 
     this._resizeHandler();
-    flush();
+    this.flushDebouncers();
     this._scrollHandler();
     if (this.__fixInvalidItemPositioningDebouncer) {
       this.__fixInvalidItemPositioningDebouncer.flush();
@@ -186,7 +190,7 @@ export class IronListAdapter {
   _updateMetrics(itemSet) {
     // Make sure we distributed all the physical items
     // so we can measure them.
-    flush();
+    this.flushDebouncers();
 
     let newPhysicalSize = 0;
     let oldPhysicalSize = 0;
@@ -321,7 +325,7 @@ export class IronListAdapter {
     this._itemsChanged({
       path: 'items',
     });
-    flush();
+    this.flushDebouncers();
 
     // Try to restore the scroll position if the new size is larger than 0
     if (size > 0) {
@@ -352,7 +356,7 @@ export class IronListAdapter {
 
     // Schedule and flush a resize handler
     this._resizeHandler();
-    flush();
+    this.flushDebouncers();
   }
 
   /** @private */
@@ -828,6 +832,60 @@ export class IronListAdapter {
       }
     }
   }
+
+  _debounce(name, cb, asyncModule) {
+    if (!this._debouncers) {
+      this._debouncers = {};
+    }
+    this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
+    this._enqueueDebouncer(this._debouncers[name]);
+  }
+
+  _enqueueDebouncer(debouncer) {
+    debouncer.__currentConfig = {
+      asyncModule: debouncer._asyncModule,
+      callback: debouncer._callback,
+      timer: debouncer._timer,
+    };
+    this.debouncerQueue.add(debouncer);
+  }
+
+  /**
+   * Flushes any enqueued debouncers
+   *
+   * @return {boolean} Returns whether any debouncers were flushed
+   */
+  __doflushDebouncers() {
+    const didFlush = Boolean(this.debouncerQueue.size);
+    // If new debouncers are added while flushing, Set.forEach will ensure
+    // newly added ones are also flushed
+    [...this.debouncerQueue].forEach((debouncer) => {
+      try {
+        const configChanged =
+          debouncer.__currentConfig.asyncModule !== debouncer._asyncModule ||
+          debouncer.__currentConfig.callback !== debouncer._callback ||
+          debouncer.__currentConfig.timer !== debouncer._timer;
+
+        if (configChanged || !debouncer.isActive()) {
+          this.debouncerQueue.delete(debouncer);
+        } else {
+          debouncer.flush();
+        }
+      } catch (e) {
+        setTimeout(() => {
+          throw e;
+        });
+      }
+    });
+    return didFlush;
+  }
+
+  flushDebouncers = () => {
+    let debouncers;
+    do {
+      debouncers = this.__doflushDebouncers();
+    } while (debouncers);
+  };
 }
 
 Object.setPrototypeOf(IronListAdapter.prototype, ironList);
