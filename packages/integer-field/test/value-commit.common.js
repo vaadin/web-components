@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-integer-field.js';
 
 describe('value commit', () => {
   let integerField, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy;
