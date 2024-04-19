@@ -109,15 +109,11 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (this.__previousDataProviderFilter !== filter) {
         this.__previousDataProviderFilter = filter;
 
+        this.__keepOverlayOpened = true;
         this._pendingRequests = {};
-        // Immediately mark as loading if this refresh leads to re-fetching pages
-        // This prevents some issues with the properties below triggering
-        // observers that also rely on the loading state
-        this.loading = this._shouldFetchData();
-        // Reset size and internal loading state
         this.size = undefined;
-
         this.clearCache();
+        this.__keepOverlayOpened = false;
       }
     }
 
