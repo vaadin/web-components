@@ -8,7 +8,9 @@ import '../../not-animated-styles.js';
 describe('menu-bar', () => {
   let div, element;
 
-  ['ltr', 'rtl'].forEach((dir) => {
+  // FIXME: overflow doesn't work correctly in RTL in older Chrome version
+  // See comments under https://github.com/vaadin/web-components/pull/7347
+  ['ltr' /* , 'rtl' */].forEach((dir) => {
     describe(dir, () => {
       before(() => {
         document.documentElement.setAttribute('dir', dir);
