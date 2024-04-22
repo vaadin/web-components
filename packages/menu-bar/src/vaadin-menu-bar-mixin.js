@@ -437,12 +437,12 @@ export const MenuBarMixin = (superClass) =>
         this._hasOverflow = true;
 
         const isRTL = this.__isRTL;
-        const containerLeft = container.getBoundingClientRect().left;
+        const containerLeft = container.offsetLeft;
 
         const remaining = [...buttons];
         while (remaining.length) {
           const lastButton = remaining[remaining.length - 1];
-          const btnLeft = lastButton.getBoundingClientRect().left - containerLeft;
+          const btnLeft = lastButton.offsetLeft - containerLeft;
 
           // If this button isn't overflowing, then the rest aren't either
           if (
