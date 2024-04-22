@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-integer-field.js';
 
 describe('validation', () => {
   let integerField;
@@ -81,10 +80,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       integerField.addEventListener('validated', validatedSpy);
       integerField.required = true;
+      await nextUpdate(integerField);
       integerField.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -96,8 +96,9 @@ describe('validation', () => {
   describe('bad input', () => {
     let input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
+      await nextRender();
       input = integerField.inputElement;
       input.focus();
     });

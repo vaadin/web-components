@@ -1,27 +1,29 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-integer-field.js';
 
 describe('integer-field', () => {
   let integerField, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
+    await nextRender();
     input = integerField.inputElement;
   });
 
   describe('basic', () => {
-    it('should fire input event on input element when pressing ArrowUp', () => {
+    it('should fire input event on input element when pressing ArrowUp', async () => {
       integerField.step = 3;
+      await nextUpdate(integerField);
       const spy = sinon.spy();
       input.addEventListener('input', spy);
       arrowUp(input);
       expect(spy).to.be.calledOnce;
     });
 
-    it('should fire input event on input element when pressing ArrowDown', () => {
+    it('should fire input event on input element when pressing ArrowDown', async () => {
       integerField.step = 3;
+      await nextUpdate(integerField);
       const spy = sinon.spy();
       input.addEventListener('input', spy);
       arrowDown(input);
@@ -195,23 +197,27 @@ describe('integer-field', () => {
       expect(integerField.value).to.eql(initialValue);
     });
 
-    it('should accept integer value as number and convert to string', () => {
+    it('should accept integer value as number and convert to string', async () => {
       integerField.value = 2;
+      await nextUpdate(integerField);
       expect(integerField.value).to.eql('2');
     });
 
-    it('should accept negative integer value as string', () => {
+    it('should accept negative integer value as string', async () => {
       integerField.value = '-2';
+      await nextUpdate(integerField);
       expect(integerField.value).to.eql('-2');
     });
 
-    it('should accept negative integer value as number and convert to string', () => {
+    it('should accept negative integer value as number and convert to string', async () => {
       integerField.value = -2;
+      await nextUpdate(integerField);
       expect(integerField.value).to.eql('-2');
     });
 
-    it('should accept empty string', () => {
+    it('should accept empty string', async () => {
       integerField.value = '';
+      await nextUpdate(integerField);
       expect(integerField.value).to.eql('');
     });
 
@@ -225,8 +231,9 @@ describe('integer-field', () => {
       });
 
       ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1', undefined, null, {}].forEach((invalidValue) => {
-        it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, () => {
+        it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, async () => {
           integerField.value = invalidValue;
+          await nextUpdate(integerField);
           expect(integerField.value).to.eql('');
           expect(console.warn.called).to.be.true;
         });
@@ -255,21 +262,24 @@ describe('integer-field', () => {
       });
 
       ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', {}, ''].forEach((invalidStep) => {
-        it(`should reset default step when setting ${typeof invalidStep} value: "${invalidStep}"`, () => {
+        it(`should reset default step when setting ${typeof invalidStep} value: "${invalidStep}"`, async () => {
           integerField.step = invalidStep;
+          await nextUpdate(integerField);
           expect(integerField.step).to.be.null;
           expect(console.warn.called).to.be.true;
         });
       });
 
-      it('should not show the warning when setting step to undefined', () => {
+      it('should not show the warning when setting step to undefined', async () => {
         integerField.step = undefined;
+        await nextUpdate(integerField);
         expect(integerField.step).to.be.undefined;
         expect(console.warn.called).to.be.false;
       });
 
-      it('should not show the warning when setting step to null', () => {
+      it('should not show the warning when setting step to null', async () => {
         integerField.step = null;
+        await nextUpdate(integerField);
         expect(integerField.step).to.be.null;
         expect(console.warn.called).to.be.false;
       });
