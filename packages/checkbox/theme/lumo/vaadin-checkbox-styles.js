@@ -140,7 +140,6 @@ registerStyles(
     /* Disabled */
     :host([disabled]) {
       pointer-events: none;
-      color: var(--lumo-disabled-text-color);
       --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
     }
 

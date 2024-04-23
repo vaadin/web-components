@@ -153,7 +153,6 @@ registerStyles(
 
     :host([required]) [part='required-indicator']::after {
       content: '*';
-      color: inherit;
     }
 
     :host([invalid]) [part='required-indicator']::after {
