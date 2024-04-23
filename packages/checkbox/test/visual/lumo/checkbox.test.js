@@ -86,6 +86,11 @@ describe('checkbox', () => {
       element.indeterminate = true;
       await visualDiff(div, 'disabled-indeterminate');
     });
+
+    it('required', async () => {
+      element.required = true;
+      await visualDiff(div, 'disabled-required');
+    });
   });
 
   describe('readonly', () => {

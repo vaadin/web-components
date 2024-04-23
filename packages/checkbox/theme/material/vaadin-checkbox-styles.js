@@ -147,9 +147,12 @@ registerStyles(
       left: 2px;
     }
 
+    :host([required]:not([disabled])) [part='required-indicator'] {
+      color: var(--material-secondary-text-color);
+    }
+
     :host([required]) [part='required-indicator']::after {
       content: '*';
-      color: var(--material-secondary-text-color);
     }
 
     :host([invalid]) [part='required-indicator']::after {

@@ -140,7 +140,6 @@ registerStyles(
     /* Disabled */
     :host([disabled]) {
       pointer-events: none;
-      color: var(--lumo-disabled-text-color);
       --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
     }
 
@@ -154,6 +153,12 @@ registerStyles(
 
     :host([disabled]) [part='checkbox']::after {
       color: var(--lumo-contrast-30pct);
+    }
+
+    :host([disabled]) [part='label'],
+    :host([disabled]) [part='helper-text'] {
+      color: var(--lumo-disabled-text-color);
+      -webkit-text-fill-color: var(--lumo-disabled-text-color);
     }
 
     :host([indeterminate][disabled]) [part='checkbox']::after {
@@ -295,11 +300,6 @@ registerStyles(
 
     :host(:hover:not([readonly])) [part='helper-text'] {
       color: var(--lumo-body-text-color);
-    }
-
-    :host([disabled]) [part='helper-text'] {
-      color: var(--lumo-disabled-text-color);
-      -webkit-text-fill-color: var(--lumo-disabled-text-color);
     }
   `,
   { moduleId: 'lumo-checkbox' },
