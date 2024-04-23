@@ -39,14 +39,14 @@ const checkboxGroup = css`
     color: var(--lumo-primary-text-color);
   }
 
-  :host(:hover:not([disabled]):not([focused])) [part='label'],
-  :host(:hover:not([disabled]):not([focused])) [part='helper-text'] {
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
     color: var(--lumo-body-text-color);
   }
 
   /* Touch device adjustment */
   @media (pointer: coarse) {
-    :host(:hover:not([disabled]):not([focused])) [part='label'] {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
       color: var(--lumo-secondary-text-color);
     }
   }
