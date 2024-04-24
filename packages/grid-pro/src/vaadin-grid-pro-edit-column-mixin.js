@@ -144,13 +144,6 @@ export const GridProEditColumnMixin = (superClass) =>
 
     /** @private */
     _isCellEditableChanged(newValue, oldValue) {
-      if (this._grid.__edited) {
-        // Exit edit mode when a cell is made non-editable
-        const { cell } = this._grid.__edited;
-        if (!this._grid._isCellEditable(cell)) {
-          this._grid._stopEdit();
-        }
-      }
       // Re-render grid to update editable-cell part names
       this._grid.requestContentUpdate();
     }

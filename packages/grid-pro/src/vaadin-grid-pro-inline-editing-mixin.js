@@ -536,7 +536,15 @@ export const InlineEditingMixin = (superClass) =>
       }
       // Otherwise, check isCellEditable function
       const model = this.__getRowModel(cell.parentElement);
-      return column.isCellEditable(model);
+      const isEditable = column.isCellEditable(model);
+
+      // Cancel editing if the cell is currently edited one and becomes no longer editable
+      // TODO: should be moved to `_updateItem` when Grid connector is updated to use it.
+      if (this.__edited && this.__edited.cell === cell && !isEditable) {
+        this._stopEdit(true, true);
+      }
+
+      return isEditable;
     }
 
     /**
