@@ -357,6 +357,12 @@ describe('lazy loading', () => {
           comboBox.open();
           expect(comboBox.dataProvider).to.be.calledOnce;
         });
+
+        it('should request first page on open after clearing cache', () => {
+          comboBox.clearCache();
+          comboBox.open();
+          expect(comboBox.dataProvider).to.be.calledOnce;
+        });
       });
 
       describe('when selecting item', () => {
@@ -1142,23 +1148,6 @@ describe('lazy loading', () => {
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('other value');
-        });
-      });
-
-      describe('empty data set is loaded', () => {
-        const emptyDataProvider = sinon.spy((params, callback) => callback([], 0));
-
-        beforeEach(() => {
-          comboBox.dataProvider = emptyDataProvider;
-          comboBox.open();
-          comboBox.close();
-          emptyDataProvider.resetHistory();
-        });
-
-        it('should request first page on open', () => {
-          comboBox.clearCache();
-          comboBox.open();
-          expect(emptyDataProvider.calledOnce).to.be.true;
         });
       });
     });
