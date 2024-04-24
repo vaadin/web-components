@@ -26,7 +26,6 @@ registerStyles(
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
-      --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.2em);
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
     }
 
@@ -268,11 +267,11 @@ registerStyles(
       padding-inline-start: var(--lumo-space-xs);
     }
 
-    :host([has-error-message]) [part='error-message']::before,
-    :host([has-error-message]) [part='error-message']::after {
+    :host([has-error-message]) [part='error-message']::after,
+    :host([has-helper]) [part='helper-text']::after {
       content: '';
       display: block;
-      height: 0.2em;
+      height: 0.4em;
     }
 
     :host(:not([invalid])) [part='error-message'] {
@@ -281,12 +280,6 @@ registerStyles(
     }
 
     /* Helper */
-    :host([has-helper]) [part='helper-text']::before {
-      content: '';
-      display: block;
-      height: var(--_helper-spacing);
-    }
-
     [part='helper-text'] {
       display: block;
       color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
@@ -300,6 +293,11 @@ registerStyles(
 
     :host(:hover:not([readonly])) [part='helper-text'] {
       color: var(--lumo-body-text-color);
+    }
+
+    :host([has-error-message]) ::slotted(label),
+    :host([has-helper]) ::slotted(label) {
+      padding-bottom: 0;
     }
   `,
   { moduleId: 'lumo-checkbox' },
