@@ -267,12 +267,11 @@ registerStyles(
       padding-inline-start: var(--lumo-space-xs);
     }
 
-    :host([has-error-message][has-helper]) [part='error-message']::before,
     :host([has-error-message]) [part='error-message']::after,
     :host([has-helper]) [part='helper-text']::after {
       content: '';
       display: block;
-      height: 0.2em;
+      height: 0.4em;
     }
 
     :host(:not([invalid])) [part='error-message'] {
