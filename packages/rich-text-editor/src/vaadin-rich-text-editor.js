@@ -12,6 +12,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
+import './vaadin-rich-text-editor-popup.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -128,6 +129,25 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <!-- Strike -->
             <button id="btn-strike" class="ql-strike" part="toolbar-button toolbar-button-strike"></button>
             <vaadin-tooltip for="btn-strike" text="[[i18n.strike]]"></vaadin-tooltip>
+          </span>
+
+          <span part="toolbar-group toolbar-group-style">
+            <!-- Color -->
+            <button
+              id="btn-color"
+              type="button"
+              part="toolbar-button toolbar-button-color"
+              on-click="_onColorClick"
+            ></button>
+            <vaadin-tooltip for="btn-color" text="[[i18n.color]]"></vaadin-tooltip>
+            <!-- Background -->
+            <button
+              id="btn-background"
+              type="button"
+              part="toolbar-button toolbar-button-background"
+              on-click="_onBackgroundClick"
+            ></button>
+            <vaadin-tooltip for="btn-background" text="[[i18n.background]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-heading">
@@ -305,6 +325,18 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
           [[i18n.cancel]]
         </vaadin-button>
       </vaadin-confirm-dialog>
+
+      <vaadin-rich-text-editor-popup
+        id="colorPopup"
+        opened="{{_colorEditing}}"
+        on-color-selected="_onColorSelected"
+      ></vaadin-rich-text-editor-popup>
+
+      <vaadin-rich-text-editor-popup
+        id="backgroundPopup"
+        opened="{{_backgroundEditing}}"
+        on-color-selected="_onBackgroundSelected"
+      ></vaadin-rich-text-editor-popup>
     `;
   }
 

@@ -1,6 +1,21 @@
 import '@vaadin/vaadin-material-styles/color.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-material-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const popupOverlay = css`
+  [part='overlay'] {
+    margin-top: 0.25rem;
+  }
+
+  [part='content'] {
+    padding: 0.25rem;
+  }
+`;
+
+registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay], {
+  moduleId: 'material-rich-text-editor-popup-overlay',
+});
 
 const richTextEditor = css`
   :host {
@@ -69,6 +84,14 @@ const richTextEditor = css`
   [part~='toolbar-button-underline']::before,
   [part~='toolbar-button-strike']::before {
     font-size: 20px;
+  }
+
+  [part~='toolbar-button-background']::before {
+    background-color: var(--material-secondary-background-color);
+  }
+
+  [part~='toolbar-button-background']::after {
+    inset: 0.25rem;
   }
 
   /* TODO unsupported selector */

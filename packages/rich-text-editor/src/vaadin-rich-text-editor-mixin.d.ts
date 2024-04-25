@@ -17,6 +17,8 @@ export interface RichTextEditorI18n {
   italic: string;
   underline: string;
   strike: string;
+  color: string;
+  background: string;
   h1: string;
   h2: string;
   h3: string;

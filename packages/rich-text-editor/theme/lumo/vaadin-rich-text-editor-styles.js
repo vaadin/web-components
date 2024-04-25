@@ -3,8 +3,23 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import { color } from '@vaadin/vaadin-lumo-styles/color.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const popupOverlay = css`
+  [part='overlay'] {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-xs);
+  }
+`;
+
+registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay], {
+  moduleId: 'lumo-rich-text-editor-popup-overlay',
+});
 
 const richTextEditor = css`
   :host {
@@ -73,6 +88,8 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-bold']::before,
+  [part~='toolbar-button-background']::before,
+  [part~='toolbar-button-color']::before,
   [part~='toolbar-button-italic']::before,
   [part~='toolbar-button-underline']::before,
   [part~='toolbar-button-strike']::before {
@@ -82,6 +99,21 @@ const richTextEditor = css`
 
   [part~='toolbar-button-bold']::before {
     font-weight: 700;
+  }
+
+  [part~='toolbar-button-background']::before {
+    background-color: var(--lumo-base-color);
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  }
+
+  [part~='toolbar-button-background']:hover::before {
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+      linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  }
+
+  [part~='toolbar-button-background']:active::before {
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+      linear-gradient(var(--lumo-contrast-10pct), var(--lumo-contrast-10pct));
   }
 
   [part~='toolbar-button-h1']::before,

@@ -146,6 +146,8 @@ export const RichTextEditorMixin = (superClass) =>
               italic: 'italic',
               underline: 'underline',
               strike: 'strike',
+              color: 'color',
+              background: 'background',
               h1: 'h1',
               h2: 'h2',
               h3: 'h3',
@@ -207,6 +209,30 @@ export const RichTextEditorMixin = (superClass) =>
 
         /** @private */
         _linkUrl: {
+          type: String,
+          value: '',
+        },
+
+        /** @private */
+        _colorEditing: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
+        _colorValue: {
+          type: String,
+          value: '',
+        },
+
+        /** @private */
+        _backgroundEditing: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
+        _backgroundValue: {
           type: String,
           value: '',
         },
@@ -366,6 +392,9 @@ export const RichTextEditorMixin = (superClass) =>
       this._toolbar = this._toolbarConfig.container;
 
       this._addToolbarListeners();
+
+      this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
+      this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
 
       requestAnimationFrame(() => {
         this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
@@ -666,6 +695,36 @@ export const RichTextEditorMixin = (superClass) =>
         e.stopPropagation();
         this.$.confirmLink.click();
       }
+    }
+
+    /** @private */
+    _onColorClick() {
+      this._colorEditing = true;
+    }
+
+    /** @private */
+    _onColorSelected(event) {
+      const color = event.detail.color;
+      this._colorValue = color === '#000000' ? null : color;
+      this._markToolbarClicked();
+      this._editor.format('color', this._colorValue, SOURCE.USER);
+      this.style.setProperty('--_color-value', this._colorValue);
+      this._colorEditing = false;
+    }
+
+    /** @private */
+    _onBackgroundClick() {
+      this._backgroundEditing = true;
+    }
+
+    /** @private */
+    _onBackgroundSelected(event) {
+      const color = event.detail.color;
+      this._backgroundValue = color === '#ffffff' ? null : color;
+      this._markToolbarClicked();
+      this._editor.format('background', this._backgroundValue, SOURCE.USER);
+      this.style.setProperty('--_background-value', this._backgroundValue);
+      this._backgroundEditing = false;
     }
 
     /** @private */
