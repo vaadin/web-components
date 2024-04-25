@@ -325,6 +325,18 @@ describe('edit column', () => {
       expect(isCellEditable(1, 2)).to.be.true;
     });
 
+    it('should stop editing when cell becomes non-editable after updating provider function', async () => {
+      // Enable editing
+      amountColumn.isCellEditable = () => true;
+      const cell = getContainerCell(grid.$.items, 1, 2);
+      enter(cell);
+      expect(getCellEditor(cell)).to.be.ok;
+      // Disable editing
+      amountColumn.isCellEditable = () => false;
+      await nextFrame();
+      expect(getCellEditor(cell)).to.be.not.ok;
+    });
+
     it('should not add editable-cell part to non-editable cells', () => {
       expect(hasEditablePart(0, 0)).to.be.false;
       expect(hasEditablePart(0, 1)).to.be.true;
