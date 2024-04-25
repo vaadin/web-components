@@ -146,6 +146,8 @@ export const RichTextEditorMixin = (superClass) =>
               italic: 'italic',
               underline: 'underline',
               strike: 'strike',
+              color: 'color',
+              background: 'background',
               h1: 'h1',
               h2: 'h2',
               h3: 'h3',
@@ -166,6 +168,28 @@ export const RichTextEditorMixin = (superClass) =>
               cancel: 'Cancel',
               remove: 'Remove',
             };
+          },
+        },
+
+        /**
+         * The list of colors used by the background and text color
+         * selection controls. Should contain an array of HEX strings.
+         *
+         * When user selects `#000000` (black) as a text color,
+         * or `#ffffff` (white) as a background color, it resets
+         * the corresponding format for the selected text.
+         */
+        colorOptions: {
+          type: Array,
+          value: () => {
+            /* prettier-ignore */
+            return [
+              '#000000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff',
+              '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff',
+              '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff',
+              '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2',
+              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'
+            ];
           },
         },
 
@@ -207,6 +231,30 @@ export const RichTextEditorMixin = (superClass) =>
 
         /** @private */
         _linkUrl: {
+          type: String,
+          value: '',
+        },
+
+        /** @private */
+        _colorEditing: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
+        _colorValue: {
+          type: String,
+          value: '',
+        },
+
+        /** @private */
+        _backgroundEditing: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
+        _backgroundValue: {
           type: String,
           value: '',
         },
@@ -315,6 +363,15 @@ export const RichTextEditorMixin = (superClass) =>
         });
       });
 
+      this._editor.on('editor-change', () => {
+        const selection = this._editor.getSelection();
+        if (selection) {
+          const format = this._editor.getFormat(selection.index, selection.length);
+          this.style.setProperty('--_color-value', format.color || null);
+          this.style.setProperty('--_background-value', format.background || null);
+        }
+      });
+
       const TAB_KEY = 9;
 
       editorContent.addEventListener('keydown', (e) => {
@@ -366,6 +423,9 @@ export const RichTextEditorMixin = (superClass) =>
       this._toolbar = this._toolbarConfig.container;
 
       this._addToolbarListeners();
+
+      this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
+      this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
 
       requestAnimationFrame(() => {
         this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
@@ -666,6 +726,36 @@ export const RichTextEditorMixin = (superClass) =>
         e.stopPropagation();
         this.$.confirmLink.click();
       }
+    }
+
+    /** @private */
+    _onColorClick() {
+      this._colorEditing = true;
+    }
+
+    /** @private */
+    _onColorSelected(event) {
+      const color = event.detail.color;
+      this._colorValue = color === '#000000' ? null : color;
+      this._markToolbarClicked();
+      this._editor.format('color', this._colorValue, SOURCE.USER);
+      this.style.setProperty('--_color-value', this._colorValue);
+      this._colorEditing = false;
+    }
+
+    /** @private */
+    _onBackgroundClick() {
+      this._backgroundEditing = true;
+    }
+
+    /** @private */
+    _onBackgroundSelected(event) {
+      const color = event.detail.color;
+      this._backgroundValue = color === '#ffffff' ? null : color;
+      this._markToolbarClicked();
+      this._editor.format('background', this._backgroundValue, SOURCE.USER);
+      this.style.setProperty('--_background-value', this._backgroundValue);
+      this._backgroundEditing = false;
     }
 
     /** @private */

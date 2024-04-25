@@ -57,6 +57,7 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-group-history`              | The group for histroy controls
  * `toolbar-group-emphasis`             | The group for emphasis controls
  * `toolbar-group-heading`              | The group for heading controls
+ * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
  * `toolbar-group-group-list`           | The group for group list controls
  * `toolbar-group-alignment`            | The group for alignment controls
@@ -71,6 +72,8 @@ export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEdi
  * `toolbar-button-italic`              | The "italic" button
  * `toolbar-button-underline`           | The "underline" button
  * `toolbar-button-strike`              | The "strike-through" button
+ * `toolbar-button-color`               | The "color" button
+ * `toolbar-button-background`          | The "background" button
  * `toolbar-button-h1`                  | The "header 1" button
  * `toolbar-button-h2`                  | The "header 2" button
  * `toolbar-button-h3`                  | The "header 3" button

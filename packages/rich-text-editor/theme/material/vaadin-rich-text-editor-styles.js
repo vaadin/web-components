@@ -1,6 +1,32 @@
 import '@vaadin/vaadin-material-styles/color.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-material-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const popupOverlay = css`
+  [part='overlay'] {
+    margin: 0.25rem 0;
+  }
+
+  [part='content'] {
+    padding: 0.25rem;
+    max-width: calc(7 * (1.25rem + 6px));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  [part='content'] ::slotted(button) {
+    border: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 3px;
+  }
+`;
+
+registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay], {
+  moduleId: 'material-rich-text-editor-popup-overlay',
+});
 
 const richTextEditor = css`
   :host {
@@ -37,6 +63,10 @@ const richTextEditor = css`
     color: inherit;
   }
 
+  [part~='toolbar-button'][aria-expanded='true'] {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+
   [part~='toolbar-button'][on] {
     background-color: rgba(0, 0, 0, 0.1);
     color: inherit;
@@ -69,6 +99,14 @@ const richTextEditor = css`
   [part~='toolbar-button-underline']::before,
   [part~='toolbar-button-strike']::before {
     font-size: 20px;
+  }
+
+  [part~='toolbar-button-background']::before {
+    background-color: var(--material-secondary-background-color);
+  }
+
+  [part~='toolbar-button-background']::after {
+    inset: 0.25rem;
   }
 
   /* TODO unsupported selector */

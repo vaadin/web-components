@@ -12,6 +12,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
+import './vaadin-rich-text-editor-popup.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -55,6 +56,7 @@ registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaa
  * `toolbar-group-history`              | The group for histroy controls
  * `toolbar-group-emphasis`             | The group for emphasis controls
  * `toolbar-group-heading`              | The group for heading controls
+ * `toolbar-group-style`                | The group for style controls
  * `toolbar-group-glyph-transformation` | The group for glyph transformation controls
  * `toolbar-group-group-list`           | The group for group list controls
  * `toolbar-group-alignment`            | The group for alignment controls
@@ -69,6 +71,8 @@ registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaa
  * `toolbar-button-italic`              | The "italic" button
  * `toolbar-button-underline`           | The "underline" button
  * `toolbar-button-strike`              | The "strike-through" button
+ * `toolbar-button-color`               | The "color" button
+ * `toolbar-button-background`          | The "background" button
  * `toolbar-button-h1`                  | The "header 1" button
  * `toolbar-button-h2`                  | The "header 2" button
  * `toolbar-button-h3`                  | The "header 3" button
@@ -128,6 +132,25 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <!-- Strike -->
             <button id="btn-strike" class="ql-strike" part="toolbar-button toolbar-button-strike"></button>
             <vaadin-tooltip for="btn-strike" text="[[i18n.strike]]"></vaadin-tooltip>
+          </span>
+
+          <span part="toolbar-group toolbar-group-style">
+            <!-- Color -->
+            <button
+              id="btn-color"
+              type="button"
+              part="toolbar-button toolbar-button-color"
+              on-click="_onColorClick"
+            ></button>
+            <vaadin-tooltip for="btn-color" text="[[i18n.color]]"></vaadin-tooltip>
+            <!-- Background -->
+            <button
+              id="btn-background"
+              type="button"
+              part="toolbar-button toolbar-button-background"
+              on-click="_onBackgroundClick"
+            ></button>
+            <vaadin-tooltip for="btn-background" text="[[i18n.background]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-heading">
@@ -305,6 +328,20 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
           [[i18n.cancel]]
         </vaadin-button>
       </vaadin-confirm-dialog>
+
+      <vaadin-rich-text-editor-popup
+        id="colorPopup"
+        colors="[[colorOptions]]"
+        opened="{{_colorEditing}}"
+        on-color-selected="_onColorSelected"
+      ></vaadin-rich-text-editor-popup>
+
+      <vaadin-rich-text-editor-popup
+        id="backgroundPopup"
+        colors="[[colorOptions]]"
+        opened="{{_backgroundEditing}}"
+        on-color-selected="_onBackgroundSelected"
+      ></vaadin-rich-text-editor-popup>
     `;
   }
 
