@@ -123,4 +123,17 @@ describe('message-input', () => {
       expect(messageInput.getAttribute('disabled')).to.exist;
     });
   });
+
+  describe('focus', () => {
+    it('should focus the text-area when calling focus()', () => {
+      const spy = sinon.spy(textArea, 'focus');
+      messageInput.focus();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not throw on focus when not attached to the DOM', () => {
+      const element = document.createElement('vaadin-message-input');
+      expect(() => element.focus()).not.to.throw(Error);
+    });
+  });
 });

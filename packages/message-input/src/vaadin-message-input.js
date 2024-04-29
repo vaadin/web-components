@@ -183,6 +183,12 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
     this.addController(this._tooltipController);
   }
 
+  focus() {
+    if (this._textArea) {
+      this._textArea.focus();
+    }
+  }
+
   /** @private */
   __buttonPropsChanged(button, disabled, i18n) {
     if (button) {
