@@ -456,7 +456,9 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   focus() {
-    this.__datePicker.focus();
+    if (this.__datePicker) {
+      this.__datePicker.focus();
+    }
   }
 
   /**
