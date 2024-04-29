@@ -212,7 +212,7 @@ const color = css`
     border-radius: var(--lumo-border-radius-m);
   }
   pre code {
-    background: transparent; 
+    background: transparent;
   }
 `;
 
