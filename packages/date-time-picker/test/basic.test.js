@@ -89,9 +89,17 @@ describe('Basic features', () => {
     expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
   });
 
-  it('should delegate focus() to date picker', () => {
-    dateTimePicker.focus();
-    expect(datePicker.hasAttribute('focused')).to.be.true;
+  describe('focus', () => {
+    it('should focus the date-picker when calling focus()', () => {
+      const spy = sinon.spy(datePicker, 'focus');
+      dateTimePicker.focus();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not throw on focus when not attached to the DOM', () => {
+      const element = document.createElement('vaadin-date-time-picker');
+      expect(() => element.focus()).not.to.throw(Error);
+    });
   });
 
   describe('focused', () => {
