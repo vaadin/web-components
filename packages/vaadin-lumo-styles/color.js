@@ -211,6 +211,9 @@ const color = css`
     background-color: var(--lumo-contrast-10pct);
     border-radius: var(--lumo-border-radius-m);
   }
+  pre code {
+    background: transparent; 
+  }
 `;
 
 registerStyles('', color, { moduleId: 'lumo-color' });
