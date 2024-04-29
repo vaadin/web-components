@@ -421,6 +421,22 @@ describe('removing nodes', () => {
     await nextFrame();
     expect(first.hasAttribute('slot')).to.be.false;
   });
+
+  it('should not update splitter position on the removed node', async () => {
+    splitLayout.removeChild(second);
+    await nextFrame();
+    track(splitLayout.$.splitter, -10, 0);
+    expect(second.style.flex).to.be.not.ok;
+  });
+
+  it('should not dispatch `splitter-dragend` event if node is removed', async () => {
+    const spy = sinon.spy();
+    splitLayout.addEventListener('splitter-dragend', spy);
+    splitLayout.removeChild(second);
+    await nextFrame();
+    track(splitLayout.$.splitter, -10, 0);
+    expect(spy.called).to.be.false;
+  });
 });
 
 describe('moving nodes between layouts', () => {
