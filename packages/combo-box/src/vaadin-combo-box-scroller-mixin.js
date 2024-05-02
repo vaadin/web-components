@@ -251,7 +251,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
     /** @private */
     __setVirtualizerItems(items) {
       this.__virtualizer.size = items.length;
-      this.__virtualizer.flush();
     }
 
     /** @private */
