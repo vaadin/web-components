@@ -33,6 +33,7 @@ describe('MenuBar', () => {
     const { container } = render(<MenuBar items={[{ text: 'foo' }]} />);
 
     const menuBar = container.querySelector<HTMLDivElement>('vaadin-menu-bar')!;
+    await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
 
     const item = menuBar.querySelector(menuButtonTag);
     expect(item?.firstElementChild).not.to.exist;
@@ -43,6 +44,7 @@ describe('MenuBar', () => {
     const { container } = render(<MenuBar items={[{ component: <span>foo</span> }]} />);
 
     const menuBar = container.querySelector<HTMLDivElement>('vaadin-menu-bar')!;
+    await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
 
     const item = menuBar.querySelector(`${menuItemTag} > span`);
     expect(item).to.have.text('foo');
@@ -54,6 +56,7 @@ describe('MenuBar', () => {
     );
 
     const menuBar = container.querySelector<HTMLDivElement>('vaadin-menu-bar')!;
+    await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
 
     const rootItem = menuBar.querySelector(menuButtonTag)!;
     await openRootItemSubMenu(rootItem);
@@ -69,6 +72,7 @@ describe('MenuBar', () => {
     const { container } = render(<MenuBar items={items} onItemSelected={spy}></MenuBar>);
 
     const menuBar = container.querySelector<MenuBarElement>('vaadin-menu-bar')!;
+    await until(() => !!menuBar.querySelector(`${menuButtonTag}:not([slot])`));
 
     const rootItems = Array.from(menuBar.querySelectorAll<HTMLElement>(menuButtonTag));
     rootItems[0].click();

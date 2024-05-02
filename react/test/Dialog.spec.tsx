@@ -19,15 +19,20 @@ describe('Dialog', () => {
     const dialog = document.querySelector(overlayTag);
     expect(dialog).to.exist;
 
-    const [header, footer, body] = Array.from(dialog!.childNodes);
+    const childNodes = Array.from(dialog!.childNodes);
 
+    const header = childNodes.find(
+      (node) => node.nodeType === Node.ELEMENT_NODE && (node as Element).getAttribute('slot') === 'header-content',
+    );
     expect(header).to.exist;
     expect(header).to.have.text('Title');
 
-    expect(footer).to.exist;
+    const footer = childNodes.find(
+      (node) => node.nodeType === Node.ELEMENT_NODE && (node as Element).getAttribute('slot') === 'footer',
+    );
     expect(footer).to.have.text('Footer');
 
-    expect(body).to.exist;
+    const body = childNodes.find((node) => node.nodeType === Node.TEXT_NODE);
     expect(body).to.have.text('FooBar');
   }
 
