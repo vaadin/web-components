@@ -623,7 +623,7 @@ describe('vaadin-select', () => {
         const span = menu.children[1].firstElementChild;
         span.click();
         await nextUpdate(select);
-        expect(changeSpy.callCount).to.equal(1);
+        expect(changeSpy).to.be.calledOnce;
       });
 
       it('should fire `change` event when value changes by user selecting item with keyboard', async () => {
