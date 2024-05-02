@@ -96,7 +96,7 @@ describe('vaadin-select', () => {
           html`
             <vaadin-list-box>
               <vaadin-item>Option 1</vaadin-item>
-              <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
+              <vaadin-item value="v2" label="o2"><span>Option 2</span></vaadin-item>
               <vaadin-item value="">Option 3</vaadin-item>
               <vaadin-item></vaadin-item>
               <vaadin-item label="">Empty</vaadin-item>
@@ -615,6 +615,15 @@ describe('vaadin-select', () => {
         menu.firstElementChild.click();
         await nextUpdate(select);
         expect(changeSpy.callCount).to.equal(1);
+      });
+
+      it('should fire `change` event when value changes by user clicking the element inside item', async () => {
+        select.opened = true;
+        await nextUpdate(select);
+        const span = menu.children[1].firstElementChild;
+        span.click();
+        await nextUpdate(select);
+        expect(changeSpy).to.be.calledOnce;
       });
 
       it('should fire `change` event when value changes by user selecting item with keyboard', async () => {
