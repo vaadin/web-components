@@ -257,8 +257,7 @@ export const SelectBaseMixin = (superClass) =>
           'click',
           (e) => {
             const item = e.composedPath().find((el) => el._hasVaadinItemMixin);
-            const value = item && item.value;
-            this.__dispatchChangePending = value !== undefined && value !== this.value;
+            this.__dispatchChangePending = Boolean(item && item.value !== undefined && item.value !== this.value);
             this.opened = false;
           },
           true,
