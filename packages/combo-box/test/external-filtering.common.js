@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { getFocusedItemIndex, setInputValue } from './helpers.js';
+import { getAllItems, getFocusedItemIndex, setInputValue } from './helpers.js';
 
 describe('external filtering', () => {
   let comboBox, overlay;
@@ -81,6 +81,27 @@ describe('external filtering', () => {
       comboBox.loading = false;
       expect(comboBox.hasAttribute('loading')).to.be.false;
       expect(overlay.hasAttribute('loading')).to.be.false;
+    });
+  });
+
+  describe('requestContentUpdate', () => {
+    beforeEach(async () => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.filteredItems = ['Item 0'];
+      await nextRender();
+      comboBox.opened = true;
+    });
+
+    it('should re-render items after modifying existing filteredItems through mutation', () => {
+      comboBox.filteredItems[0] = 'New Item';
+      comboBox.requestContentUpdate();
+      expect(getAllItems(comboBox).map((item) => item.textContent)).to.eql(['New Item']);
+    });
+
+    it('should re-render items after adding more filteredItems through mutation', () => {
+      comboBox.filteredItems.push('Item 1');
+      comboBox.requestContentUpdate();
+      expect(getAllItems(comboBox).map((item) => item.textContent)).to.eql(['Item 0', 'Item 1']);
     });
   });
 
