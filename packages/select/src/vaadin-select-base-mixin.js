@@ -256,8 +256,8 @@ export const SelectBaseMixin = (superClass) =>
         menuElement.addEventListener(
           'click',
           (e) => {
-            const value = e.target.value;
-            this.__dispatchChangePending = value !== undefined && value !== this.value;
+            const item = e.composedPath().find((el) => el._hasVaadinItemMixin);
+            this.__dispatchChangePending = Boolean(item && item.value !== undefined && item.value !== this.value);
             this.opened = false;
           },
           true,
