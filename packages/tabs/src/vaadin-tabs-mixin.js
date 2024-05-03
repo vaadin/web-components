@@ -24,6 +24,8 @@ export const TabsMixin = (superClass) =>
         orientation: {
           value: 'horizontal',
           type: String,
+          reflectToAttribute: true,
+          sync: true,
         },
 
         /**

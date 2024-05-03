@@ -1,7 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
   let tabs, items, scroller;

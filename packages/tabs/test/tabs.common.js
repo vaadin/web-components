@@ -1,7 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowRight, aTimeout, enter, fixtureSync, listenOnce, nextFrame, space } from '@vaadin/testing-helpers';
+import {
+  arrowRight,
+  aTimeout,
+  enter,
+  fixtureSync,
+  listenOnce,
+  nextFrame,
+  nextRender,
+  space,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-tabs.js';
 
 /**
  * Resolves once the function is invoked on the given object.
@@ -26,7 +34,7 @@ async function onceResized(tabs) {
 describe('tabs', () => {
   let tabs;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tabs = fixtureSync(`
       <vaadin-tabs>
         <vaadin-tab>Foo</vaadin-tab>
@@ -39,6 +47,7 @@ describe('tabs', () => {
         </vaadin-tab>
       </vaadin-tabs>
     `);
+    await nextRender();
     tabs._observer.flush();
   });
 
@@ -234,7 +243,7 @@ describe('tabs', () => {
 describe('flex child tabs', () => {
   let wrapper, tabs;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync(`
       <div style="display: flex; width: 400px;">
         <vaadin-tabs>
@@ -243,6 +252,7 @@ describe('flex child tabs', () => {
         </vaadin-tabs>
       </div>
     `);
+    await nextRender();
     tabs = wrapper.querySelector('vaadin-tabs');
   });
 
@@ -258,7 +268,7 @@ describe('flex child tabs', () => {
 describe('flex equal width tabs', () => {
   let wrapper, tabs;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync(`
       <div style="display: flex; justify-content: center; width: 400px;">
         <vaadin-tabs theme="equal-width-tabs">
@@ -268,6 +278,7 @@ describe('flex equal width tabs', () => {
         </vaadin-tabs>
       </div>
     `);
+    await nextRender();
     tabs = wrapper.querySelector('vaadin-tabs');
     tabs._observer.flush();
   });
