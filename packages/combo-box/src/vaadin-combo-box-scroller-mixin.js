@@ -141,14 +141,20 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /**
-     * Requests an update for the virtualizer to re-render items.
+     * Updates the virtualizer's size and items.
      */
     requestContentUpdate() {
-      if (!this.opened) {
+      if (!this.__virtualizer) {
         return;
       }
 
-      this.__virtualizer.update();
+      if (this.items) {
+        this.__virtualizer.size = this.items.length;
+      }
+
+      if (this.opened) {
+        this.__virtualizer.update();
+      }
     }
 
     /**
@@ -223,7 +229,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
     /** @private */
     __itemsChanged(items) {
       if (items && this.__virtualizer) {
-        this.__setVirtualizerItems(items);
         this.requestContentUpdate();
       }
     }
@@ -238,19 +243,10 @@ export const ComboBoxScrollerMixin = (superClass) =>
       if (opened) {
         if (!this.__virtualizer) {
           this.__initVirtualizer();
-
-          if (this.items) {
-            this.__setVirtualizerItems(this.items);
-          }
         }
 
         this.requestContentUpdate();
       }
-    }
-
-    /** @private */
-    __setVirtualizerItems(items) {
-      this.__virtualizer.size = items.length;
     }
 
     /** @private */
