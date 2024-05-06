@@ -79,6 +79,17 @@ const runTests = (defineHelper, baseMixin) => {
       expect(overlay.classList.contains('foo')).to.be.false;
       expect(overlay.classList.contains('bar')).to.be.false;
     });
+
+    it('should remove class names when setting whitespace string', async () => {
+      element.overlayClass = 'foo bar';
+      await nextUpdate(element);
+
+      element.overlayClass = ' ';
+      await nextUpdate(element);
+
+      expect(overlay.classList.contains('foo')).to.be.false;
+      expect(overlay.classList.contains('bar')).to.be.false;
+    });
   });
 
   describe('custom classes', () => {
