@@ -33,16 +33,12 @@
     "@vaadin/avatar": "24.4.0-beta1",
     "@vaadin/avatar-group": "24.4.0-beta1",
     "@vaadin/button": "24.4.0-beta1",
-    "@vaadin/board": "24.4.0-beta1",
-    "@vaadin/charts": "24.4.0-beta1",
     "@vaadin/checkbox": "24.4.0-beta1",
     "@vaadin/checkbox-group": "24.4.0-beta1",
     "@vaadin/combo-box": "24.4.0-beta1",
     "@vaadin/component-base": "24.4.0-beta1",
     "@vaadin/confirm-dialog": "24.4.0-beta1",
     "@vaadin/context-menu": "24.4.0-beta1",
-    "@vaadin/cookie-consent": "24.4.0-beta1",
-    "@vaadin/crud": "24.4.0-beta1",
     "@vaadin/custom-field": "24.4.0-beta1",
     "@vaadin/date-picker": "24.4.0-beta1",
     "@vaadin/date-time-picker": "24.4.0-beta1",
@@ -53,7 +49,6 @@
     "@vaadin/field-highlighter": "24.4.0-beta1",
     "@vaadin/form-layout": "24.4.0-beta1",
     "@vaadin/grid": "24.4.0-beta1",
-    "@vaadin/grid-pro": "24.4.0-beta1",
     "@vaadin/horizontal-layout": "24.4.0-beta1",
     "@vaadin/icon": "24.4.0-beta1",
     "@vaadin/icons": "24.4.0-beta1",
@@ -63,7 +58,6 @@
     "@vaadin/list-box": "24.4.0-beta1",
     "@vaadin/lit-renderer": "24.4.0-beta1",
     "@vaadin/login": "24.4.0-beta1",
-    "@vaadin/map": "24.4.0-beta1",
     "@vaadin/menu-bar": "24.4.0-beta1",
     "@vaadin/message-input": "24.4.0-beta1",
     "@vaadin/message-list": "24.4.0-beta1",
@@ -74,7 +68,6 @@
     "@vaadin/password-field": "24.4.0-beta1",
     "@vaadin/progress-bar": "24.4.0-beta1",
     "@vaadin/radio-group": "24.4.0-beta1",
-    "@vaadin/rich-text-editor": "24.4.0-beta1",
     "@vaadin/scroller": "24.4.0-beta1",
     "@vaadin/select": "24.4.0-beta1",
     "@vaadin/side-nav": "24.4.0-beta1",
@@ -93,7 +86,7 @@
     "@vaadin/virtual-list": "24.4.0-beta1"
   },
   "author": "Vaadin Ltd.",
-  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)",
+  "license": "Apache-2.0",
   "peerDependencies": {
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -149,25 +142,9 @@
       "types": "./AvatarGroup.d.ts",
       "default": "./AvatarGroup.js"
     },
-    "./Board.js": {
-      "types": "./Board.d.ts",
-      "default": "./Board.js"
-    },
-    "./BoardRow.js": {
-      "types": "./BoardRow.d.ts",
-      "default": "./BoardRow.js"
-    },
     "./Button.js": {
       "types": "./Button.d.ts",
       "default": "./Button.js"
-    },
-    "./Chart.js": {
-      "types": "./Chart.d.ts",
-      "default": "./Chart.js"
-    },
-    "./ChartSeries.js": {
-      "types": "./ChartSeries.d.ts",
-      "default": "./ChartSeries.js"
     },
     "./Checkbox.js": {
       "types": "./Checkbox.d.ts",
@@ -192,22 +169,6 @@
     "./ContextMenu.js": {
       "types": "./ContextMenu.d.ts",
       "default": "./ContextMenu.js"
-    },
-    "./CookieConsent.js": {
-      "types": "./CookieConsent.d.ts",
-      "default": "./CookieConsent.js"
-    },
-    "./Crud.js": {
-      "types": "./Crud.d.ts",
-      "default": "./Crud.js"
-    },
-    "./CrudEdit.js": {
-      "types": "./CrudEdit.d.ts",
-      "default": "./CrudEdit.js"
-    },
-    "./CrudEditColumn.js": {
-      "types": "./CrudEditColumn.d.ts",
-      "default": "./CrudEditColumn.js"
     },
     "./CustomField.js": {
       "types": "./CustomField.d.ts",
@@ -273,14 +234,6 @@
       "types": "./GridFilterColumn.d.ts",
       "default": "./GridFilterColumn.js"
     },
-    "./GridPro.js": {
-      "types": "./GridPro.d.ts",
-      "default": "./GridPro.js"
-    },
-    "./GridProEditColumn.js": {
-      "types": "./GridProEditColumn.d.ts",
-      "default": "./GridProEditColumn.js"
-    },
     "./GridSelectionColumn.js": {
       "types": "./GridSelectionColumn.d.ts",
       "default": "./GridSelectionColumn.js"
@@ -333,10 +286,6 @@
       "types": "./LoginOverlay.d.ts",
       "default": "./LoginOverlay.js"
     },
-    "./Map.js": {
-      "types": "./Map.d.ts",
-      "default": "./Map.js"
-    },
     "./MenuBar.js": {
       "types": "./MenuBar.d.ts",
       "default": "./MenuBar.js"
@@ -380,10 +329,6 @@
     "./RadioGroup.js": {
       "types": "./RadioGroup.d.ts",
       "default": "./RadioGroup.js"
-    },
-    "./RichTextEditor.js": {
-      "types": "./RichTextEditor.d.ts",
-      "default": "./RichTextEditor.js"
     },
     "./Scroller.js": {
       "types": "./Scroller.d.ts",
@@ -451,21 +396,13 @@
     "./AppLayout": "./AppLayout.js",
     "./Avatar": "./Avatar.js",
     "./AvatarGroup": "./AvatarGroup.js",
-    "./Board": "./Board.js",
-    "./BoardRow": "./BoardRow.js",
     "./Button": "./Button.js",
-    "./Chart": "./Chart.js",
-    "./ChartSeries": "./ChartSeries.js",
     "./Checkbox": "./Checkbox.js",
     "./CheckboxGroup": "./CheckboxGroup.js",
     "./ComboBox": "./ComboBox.js",
     "./ComboBoxLight": "./ComboBoxLight.js",
     "./ConfirmDialog": "./ConfirmDialog.js",
     "./ContextMenu": "./ContextMenu.js",
-    "./CookieConsent": "./CookieConsent.js",
-    "./Crud": "./Crud.js",
-    "./CrudEdit": "./CrudEdit.js",
-    "./CrudEditColumn": "./CrudEditColumn.js",
     "./CustomField": "./CustomField.js",
     "./DatePicker": "./DatePicker.js",
     "./DatePickerLight": "./DatePickerLight.js",
@@ -482,8 +419,6 @@
     "./GridColumnGroup": "./GridColumnGroup.js",
     "./GridFilter": "./GridFilter.js",
     "./GridFilterColumn": "./GridFilterColumn.js",
-    "./GridPro": "./GridPro.js",
-    "./GridProEditColumn": "./GridProEditColumn.js",
     "./GridSelectionColumn": "./GridSelectionColumn.js",
     "./GridSortColumn": "./GridSortColumn.js",
     "./GridSorter": "./GridSorter.js",
@@ -497,7 +432,6 @@
     "./ListBox": "./ListBox.js",
     "./LoginForm": "./LoginForm.js",
     "./LoginOverlay": "./LoginOverlay.js",
-    "./Map": "./Map.js",
     "./MenuBar": "./MenuBar.js",
     "./Message": "./Message.js",
     "./MessageInput": "./MessageInput.js",
@@ -509,7 +443,6 @@
     "./ProgressBar": "./ProgressBar.js",
     "./RadioButton": "./RadioButton.js",
     "./RadioGroup": "./RadioGroup.js",
-    "./RichTextEditor": "./RichTextEditor.js",
     "./Scroller": "./Scroller.js",
     "./Select": "./Select.js",
     "./SideNav": "./SideNav.js",

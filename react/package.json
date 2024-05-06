@@ -4,7 +4,7 @@
   "version": "24.4.0-beta1",
   "private": true,
   "scripts": {
-    "build": "npm run build:load-schema && npm run build -w packages/react-components",
+    "build": "npm run build:load-schema && npm run build -w packages/react-components && npm run build -w packages/react-components-pro",
     "build:load-schema": "tsx scripts/schema-loader.ts",
     "clean": "git clean -dXf -e !.vscode -e !.vscode/** -e !.idea -e !.idea/** -e !node_modules -e !node_modules/**",
     "clean:dev": "git clean -dXf -e .vscode -e .vscode/** -e !.idea -e !.idea/** -e !node_modules -e !node_modules/** -e !src/generated -e !css",

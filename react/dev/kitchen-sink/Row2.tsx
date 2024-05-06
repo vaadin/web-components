@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
 import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
 import { CheckboxGroup } from '../../packages/react-components/src/CheckboxGroup.js';
 import { ComboBox } from '../../packages/react-components/src/ComboBox.js';

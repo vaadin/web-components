@@ -1,4 +1,4 @@
-import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
 import { HorizontalLayout } from '../../packages/react-components/src/HorizontalLayout.js';
 import { Icon } from '../../packages/react-components/src/Icon.js';
 import { Iconset } from '../../packages/react-components/src/Iconset.js';

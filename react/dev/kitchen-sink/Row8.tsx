@@ -1,9 +1,9 @@
-import { BoardRow } from '../../packages/react-components/src/BoardRow.js';
+import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
 import { Item } from '../../packages/react-components/src/Item.js';
 import { ListBox } from '../../packages/react-components/src/ListBox.js';
 import { RadioButton } from '../../packages/react-components/src/RadioButton.js';
 import { RadioGroup } from '../../packages/react-components/src/RadioGroup.js';
-import { RichTextEditor } from '../../packages/react-components/src/RichTextEditor.js';
+import { RichTextEditor } from '../../packages/react-components-pro/src/RichTextEditor.js';
 import { Select } from '../../packages/react-components/src/Select.js';
 import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
 

@@ -9,9 +9,9 @@
  * license.
  */
 import { type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
-import type { GridDefaultItem, GridProps } from './Grid.js';
+import type { GridDefaultItem, GridProps } from '@vaadin/react-components/Grid.js';
 import { GridPro as _GridPro, type GridProElement, type GridProProps as _GridProProps } from './generated/GridPro.js';
-import { useModelRenderer } from './renderers/useModelRenderer.js';
+import { useModelRenderer } from '@vaadin/react-components/renderers/useModelRenderer.js';
 
 export * from './generated/GridPro.js';
 

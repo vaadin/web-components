@@ -13,11 +13,11 @@ import { GridTreeColumn } from '../../packages/react-components/src/GridTreeColu
 import { GridSortColumn } from '../../packages/react-components/src/GridSortColumn.js';
 import { GridFilterColumn } from '../../packages/react-components/src/GridFilterColumn.js';
 import { GridSelectionColumn } from '../../packages/react-components/src/GridSelectionColumn.js';
-import { GridProEditColumn } from '../../packages/react-components/src/GridProEditColumn.js';
+import { GridProEditColumn } from '../../packages/react-components-pro/src/GridProEditColumn.js';
 import { GridColumnGroup, GridColumnGroupElement } from '../../packages/react-components/src/GridColumnGroup.js';
-import { ChartSeries, ChartSeriesElement } from '../../packages/react-components/src/ChartSeries.js';
+import { ChartSeries, ChartSeriesElement } from '../../packages/react-components-pro/src/ChartSeries.js';
 import { ConfirmDialog, ConfirmDialogElement } from '../../packages/react-components/src/ConfirmDialog.js';
-import { CookieConsent, CookieConsentElement } from '../../packages/react-components/src/CookieConsent.js';
+import { CookieConsent, CookieConsentElement } from '../../packages/react-components-pro/src/CookieConsent.js';
 import { Dialog, DialogElement } from '../../packages/react-components/src/Dialog.js';
 import { DatePicker, DatePickerElement } from '../../packages/react-components/src/DatePicker.js';
 import { LoginOverlay, LoginOverlayElement } from '../../packages/react-components/src/LoginOverlay.js';
