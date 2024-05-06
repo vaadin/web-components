@@ -81,24 +81,27 @@ const menuBarButton = css`
 
   :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix'] {
     margin-inline-start: 0;
-  }
-
-  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup])
-    [part='suffix']::after {
-    font-family: lumo-icons;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
     font-size: var(--lumo-icon-size-s);
-    content: var(--lumo-icons-dropdown);
     position: relative;
     inset-inline-start: 0.15em;
   }
 
   /* prettier-ignore */
-  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary'][aria-haspopup]) [part='suffix']::after {
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix']::after {
+    font-family: lumo-icons;
+    content: var(--lumo-icons-dropdown);
+  }
+
+  /* prettier-ignore */
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary'][aria-haspopup]) [part='suffix'] {
     inset-inline-start: 0.05em;
   }
 
   /* prettier-ignore */
-  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary-inline'][aria-haspopup]) [part='suffix']::after {
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary-inline'][aria-haspopup]) [part='suffix'] {
     inset-inline-start: 0;
   }
 
