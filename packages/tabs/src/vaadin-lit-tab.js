@@ -25,7 +25,6 @@ import { tabStyles } from './vaadin-tab-styles.js';
  * @mixes ElementMixin
  * @mixes TabMixin
  * @mixes ThemableMixin
- * @protected
  */
 class Tab extends TabMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
