@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-tab.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 
 describe('tab', () => {
   let tab;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     tab = fixtureSync('<vaadin-tab>text-content</vaadin-tab>');
+    await nextRender();
   });
 
   it('should have a correct localName', () => {
