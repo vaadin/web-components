@@ -79,6 +79,29 @@ const menuBarButton = css`
     margin-right: 0;
   }
 
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix'] {
+    margin-inline-start: 0;
+  }
+
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup])
+    [part='suffix']::after {
+    font-family: lumo-icons;
+    font-size: var(--lumo-icon-size-s);
+    content: var(--lumo-icons-dropdown);
+    position: relative;
+    inset-inline-start: 0.15em;
+  }
+
+  /* prettier-ignore */
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary'][aria-haspopup]) [part='suffix']::after {
+    inset-inline-start: 0.05em;
+  }
+
+  /* prettier-ignore */
+  :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[theme~='tertiary-inline'][aria-haspopup]) [part='suffix']::after {
+    inset-inline-start: 0;
+  }
+
   /* RTL styles */
   :host([dir='rtl']) {
     margin-left: calc(var(--lumo-space-xs) / 2);

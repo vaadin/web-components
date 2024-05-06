@@ -165,6 +165,71 @@ describe('menu-bar', () => {
           await visualDiff(document.body, `${dir}-end-aligned-overflow-button`);
         });
       });
+
+      describe('dropdown-indicators', () => {
+        function makeIcon(img) {
+          const icon = document.createElement('vaadin-icon');
+          icon.setAttribute('icon', img);
+          return icon;
+        }
+
+        beforeEach(async () => {
+          div = document.createElement('div');
+          div.style.padding = '10px';
+
+          element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          await nextRender();
+
+          element.items = [
+            { text: 'Home' },
+            {
+              text: 'Actions',
+              children: [{ text: 'Notifications' }, { text: 'Mark as read' }],
+            },
+            { text: 'Manage' },
+            {
+              text: 'Reports',
+              children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
+            },
+            { text: 'Help' },
+          ];
+        });
+
+        it('dropdown-indicators', async () => {
+          div.style.width = '300px';
+          element.setAttribute('theme', 'dropdown-indicators');
+          await visualDiff(div, `${dir}-dropdown-indicators`);
+        });
+
+        it('dropdown-indicators small', async () => {
+          div.style.width = '250px';
+          element.setAttribute('theme', 'dropdown-indicators small');
+          await visualDiff(div, `${dir}-dropdown-indicators-small`);
+        });
+
+        it('dropdown-indicators tertiary', async () => {
+          div.style.width = '200px';
+          element.setAttribute('theme', 'dropdown-indicators tertiary');
+          await visualDiff(div, `${dir}-dropdown-indicators-tertiary`);
+        });
+
+        it('dropdown-indicators tertiary-inline', async () => {
+          div.style.width = '200px';
+          element.setAttribute('theme', 'dropdown-indicators tertiary-inline');
+          await visualDiff(div, `${dir}-dropdown-indicators-tertiary-inline`);
+        });
+
+        it('dropdown-indicators icon', async () => {
+          element.setAttribute('theme', 'dropdown-indicators');
+          const items = [...element.items];
+          items[1].text = null;
+          items[1].component = makeIcon('lumo:chevron-down');
+          items[1].theme = 'dropdown-indicators icon';
+          element.items = items;
+          await nextRender();
+          await visualDiff(div, `${dir}-dropdown-indicators-icon`);
+        });
+      });
     });
   });
 });
