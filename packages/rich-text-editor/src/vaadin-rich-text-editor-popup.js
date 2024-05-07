@@ -48,6 +48,7 @@ class RichTextEditorPopup extends RichTextEditorPopupMixin(PolymerElement) {
         no-vertical-overlap
         horizontal-align="start"
         vertical-align="top"
+        focus-trap
       ></vaadin-rich-text-editor-popup-overlay>
     `;
   }

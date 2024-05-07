@@ -49,6 +49,7 @@ class RichTextEditorPopup extends RichTextEditorPopupMixin(PolylitMixin(LitEleme
         no-vertical-overlap
         horizontal-align="start"
         vertical-align="top"
+        focus-trap
         @opened-changed="${this._onOpenedChanged}"
       ></vaadin-rich-text-editor-popup-overlay>
     `;

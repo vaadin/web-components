@@ -53,15 +53,16 @@ export const RichTextEditorPopupMixin = (superClass) =>
           root.appendChild(container);
 
           COLORS.forEach((color) => {
-            const div = document.createElement('div');
-            div.style.background = color;
-            div.style.width = '20px';
-            div.style.height = '20px';
-            div.style.margin = '3px';
-            div.addEventListener('click', () => {
+            const btn = document.createElement('button');
+            btn.style.background = color;
+            btn.style.border = 'none';
+            btn.style.width = '20px';
+            btn.style.height = '20px';
+            btn.style.margin = '3px';
+            btn.addEventListener('click', () => {
               this.dispatchEvent(new CustomEvent('color-selected', { detail: { color } }));
             });
-            container.appendChild(div);
+            container.appendChild(btn);
           });
         }
       };
