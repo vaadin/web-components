@@ -69,7 +69,7 @@ export const OverlayClassMixin = (superclass) =>
       }
 
       // Add new classes based on the overlayClass
-      const classesToAdd = typeof overlayClass === 'string' ? overlayClass.split(' ') : [];
+      const classesToAdd = typeof overlayClass === 'string' ? overlayClass.split(' ').filter(Boolean) : [];
       if (classesToAdd.length > 0) {
         classList.add(...classesToAdd);
       }
