@@ -341,6 +341,15 @@ export const RichTextEditorMixin = (superClass) =>
         });
       });
 
+      this._editor.on('editor-change', () => {
+        const selection = this._editor.getSelection();
+        if (selection) {
+          const format = this._editor.getFormat(selection.index, selection.length);
+          this.style.setProperty('--_color-value', format.color || null);
+          this.style.setProperty('--_background-value', format.background || null);
+        }
+      });
+
       const TAB_KEY = 9;
 
       editorContent.addEventListener('keydown', (e) => {
