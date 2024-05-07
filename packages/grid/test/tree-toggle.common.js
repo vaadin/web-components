@@ -169,6 +169,13 @@ describe('tree toggle', () => {
       expect(getBodyCellContent(grid, 0, 0).firstElementChild).to.equal(toggle);
     });
 
+    it('should not throw when removing column and setting items', () => {
+      expect(() => {
+        grid.removeChild(column);
+        grid.items = [{ name: 'New name' }];
+      }).to.not.throw(Error);
+    });
+
     describe('itemHasChildrenPath', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');
