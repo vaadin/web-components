@@ -62,4 +62,9 @@ export const RichTextEditorPopupMixin = (superClass) =>
         }
       };
     }
+
+    /** @protected */
+    _onOverlayEscapePress() {
+      this.target.focus();
+    }
   };

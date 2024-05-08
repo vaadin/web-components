@@ -51,6 +51,7 @@ class RichTextEditorPopup extends RichTextEditorPopupMixin(PolylitMixin(LitEleme
         vertical-align="top"
         focus-trap
         @opened-changed="${this._onOpenedChanged}"
+        @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
       ></vaadin-rich-text-editor-popup-overlay>
     `;
   }
