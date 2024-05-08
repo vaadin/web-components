@@ -47,7 +47,8 @@ const richTextEditor = css`
     transition: background-color 100ms, color 100ms;
   }
 
-  [part~='toolbar-button']:focus {
+  [part~='toolbar-button']:focus,
+  [part~='toolbar-button'][aria-expanded='true'] {
     outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }

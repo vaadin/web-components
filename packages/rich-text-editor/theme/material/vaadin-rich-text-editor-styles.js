@@ -52,6 +52,10 @@ const richTextEditor = css`
     color: inherit;
   }
 
+  [part~='toolbar-button'][aria-expanded='true'] {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+
   [part~='toolbar-button'][on] {
     background-color: rgba(0, 0, 0, 0.1);
     color: inherit;

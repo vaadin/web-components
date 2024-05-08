@@ -137,6 +137,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-color"
               type="button"
               part="toolbar-button toolbar-button-color"
+              aria-expanded="[[_colorEditing]]"
               on-click="_onColorClick"
             ></button>
             <vaadin-tooltip for="btn-color" text="[[i18n.color]]"></vaadin-tooltip>
@@ -145,6 +146,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-background"
               type="button"
               part="toolbar-button toolbar-button-background"
+              aria-expanded="[[_backgroundEditing]]"
               on-click="_onBackgroundClick"
             ></button>
             <vaadin-tooltip for="btn-background" text="[[i18n.background]]"></vaadin-tooltip>
