@@ -56,7 +56,6 @@ const richTextEditor = css`
   [part~='toolbar-button']:hover {
     background-color: var(--lumo-contrast-5pct);
     color: var(--lumo-contrast-80pct);
-    box-shadow: none;
   }
 
   @media (hover: none) {
