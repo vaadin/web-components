@@ -126,6 +126,38 @@ describe('rich text editor', () => {
       });
     });
 
+    ['background', 'color'].forEach((style) => {
+      it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
+        btn = getButton(style);
+        btn.click();
+        await nextRender();
+
+        const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+        const button = popup.querySelectorAll('button')[1];
+        button.click();
+        editor.insertText(0, 'Foo', 'user');
+        expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
+      });
+
+      it(`should clear ${style} when clicking the "toolbar-button-${style}" and selecting default value`, async () => {
+        editor.insertText(0, 'Foo', 'user');
+        editor.setSelection(0, 3);
+        editor.format(style, '#e60000');
+        expect(editor.getFormat(0, 3)[style]).to.equal('#e60000');
+
+        btn = getButton(style);
+        btn.click();
+        await nextRender();
+
+        const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+        // Default color (black) or background (white)
+        const value = style === 'color' ? '#000000' : '#ffffff';
+        const button = popup.querySelector(`[data-color="${value}"]`);
+        button.click();
+        expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
+      });
+    });
+
     describe('RTL', () => {
       beforeEach(() => rte.setAttribute('dir', 'rtl'));
 

@@ -54,6 +54,7 @@ export const RichTextEditorPopupMixin = (superClass) =>
             btn.style.width = '20px';
             btn.style.height = '20px';
             btn.style.margin = '3px';
+            btn.dataset.color = color;
             btn.addEventListener('click', () => {
               this.dispatchEvent(new CustomEvent('color-selected', { detail: { color } }));
             });
