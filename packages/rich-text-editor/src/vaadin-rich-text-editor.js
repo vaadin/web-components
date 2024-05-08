@@ -328,12 +328,14 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
 
       <vaadin-rich-text-editor-popup
         id="colorPopup"
+        colors="[[_colors]]"
         opened="{{_colorEditing}}"
         on-color-selected="_onColorSelected"
       ></vaadin-rich-text-editor-popup>
 
       <vaadin-rich-text-editor-popup
         id="backgroundPopup"
+        colors="[[_colors]]"
         opened="{{_backgroundEditing}}"
         on-color-selected="_onBackgroundSelected"
       ></vaadin-rich-text-editor-popup>

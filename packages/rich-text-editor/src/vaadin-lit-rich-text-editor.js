@@ -288,6 +288,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
 
       <vaadin-rich-text-editor-popup
         id="colorPopup"
+        .colors="${this._colors}"
         .opened="${this._colorEditing}"
         @color-selected="${this._onColorSelected}"
         @opened-changed="${this._onColorEditingChanged}"
@@ -295,6 +296,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
 
       <vaadin-rich-text-editor-popup
         id="backgroundPopup"
+        .colors="${this._colors}"
         .opened="${this._backgroundEditing}"
         @color-selected="${this._onBackgroundSelected}"
         @opened-changed="${this._onBackgroundEditingChanged}"
