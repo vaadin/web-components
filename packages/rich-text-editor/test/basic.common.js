@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import {
+  esc,
+  fixtureSync,
+  focusout,
+  isDesktopSafari,
+  isFirefox,
+  nextRender,
+  nextUpdate,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createImage } from './helpers.js';
 
@@ -155,6 +163,16 @@ describe('rich text editor', () => {
         const button = popup.querySelector(`[data-color="${value}"]`);
         button.click();
         expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
+      });
+
+      it(`should restore focus when clicking the "toolbar-button-${style}" and pressing Esc`, async () => {
+        btn = getButton(style);
+        btn.click();
+        await nextRender();
+
+        const spy = sinon.spy(btn, 'focus');
+        esc(document.body);
+        expect(spy).to.be.calledOnce;
       });
     });
 
