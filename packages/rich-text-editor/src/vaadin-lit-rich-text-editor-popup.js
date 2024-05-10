@@ -15,12 +15,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RichTextEditorPopupMixin } from './vaadin-rich-text-editor-popup-mixin.js';
-
-registerStyles('vaadin-rich-text-editor-popup-overlay', [overlayStyles], {
-  moduleId: 'vaadin-rich-text-editor-popup-overlay-styles',
-});
 
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
