@@ -36,11 +36,11 @@ Import the component's JavaScript module, use the component in your HTML, and co
   </head>
   <body>
     <!-- Use web components in your HTML like regular built-in elements. -->
-    <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
+    <vaadin-grid column-reordering-allowed multi-sort>
       <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-      <vaadin-grid-sort-column width="9em" path="firstName"></vaadin-grid-sort-column>
-      <vaadin-grid-sort-column width="9em" path="lastName"></vaadin-grid-sort-column>
-      <vaadin-grid-column width="9em" path="address.city"></vaadin-grid-column>
+      <vaadin-grid-sort-column width="9rem" path="firstName"></vaadin-grid-sort-column>
+      <vaadin-grid-sort-column width="9rem" path="lastName"></vaadin-grid-sort-column>
+      <vaadin-grid-column width="9rem" path="address.city"></vaadin-grid-column>
     </vaadin-grid>
 
     <!-- Vaadin web components use standard JavaScript modules. -->

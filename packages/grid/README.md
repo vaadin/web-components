@@ -7,11 +7,11 @@ A web component for showing tabular data.
 [![npm version](https://badgen.net/npm/v/@vaadin/grid)](https://www.npmjs.com/package/@vaadin/grid)
 
 ```html
-<vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
+<vaadin-grid column-reordering-allowed multi-sort>
   <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-  <vaadin-grid-sort-column width="9em" path="firstName"></vaadin-grid-sort-column>
-  <vaadin-grid-sort-column width="9em" path="lastName"></vaadin-grid-sort-column>
-  <vaadin-grid-column id="address" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
+  <vaadin-grid-sort-column width="9rem" path="firstName"></vaadin-grid-sort-column>
+  <vaadin-grid-sort-column width="9rem" path="lastName"></vaadin-grid-sort-column>
+  <vaadin-grid-column id="address" width="15rem" flex-grow="2" header="Address"></vaadin-grid-column>
 </vaadin-grid>
 
 <script>
