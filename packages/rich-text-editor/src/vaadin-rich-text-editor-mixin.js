@@ -681,7 +681,7 @@ export const RichTextEditorMixin = (superClass) =>
         return `class="${classes.join(' ')}"`;
       });
       // Remove meta spans, e.g. cursor which are empty after Quill classes removed
-      content = content.replace(/<\/?span[^>]*>/gu, '');
+      content = content.replace(/<span[^>]*><\/span>/gu, '');
 
       // Replace Quill align classes with inline styles
       [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
