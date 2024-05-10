@@ -205,8 +205,6 @@ describe('toolbar controls', () => {
     });
 
     (isFirefox ? describe.skip : describe)('image', () => {
-      let btn;
-
       beforeEach(() => {
         btn = getButton('image');
       });
@@ -281,7 +279,7 @@ describe('toolbar controls', () => {
 
     describe('hyperlink', () => {
       const url = 'https://vaadin.com';
-      let btn, dialog;
+      let dialog;
 
       beforeEach(() => {
         btn = getButton('link');
@@ -466,8 +464,6 @@ describe('toolbar controls', () => {
   });
 
   describe('undo and redo', () => {
-    let btn;
-
     it('should undo last change when the "undo" button clicked', () => {
       editor.insertText(0, 'Foo', 'user');
       btn = getButton('undo');
