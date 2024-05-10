@@ -752,6 +752,12 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<p><strong>Hello </strong></p><p><strong>world</strong></p>');
     });
 
+    it('should not filter out span elements with style from the resulting htmlValue', () => {
+      setValueAndFormatText('color', '#e60000');
+      // Empty span should be stripped
+      expect(rte.htmlValue).to.equal('<p><span style="color: rgb(230, 0, 0);">Foo</span></p>');
+    });
+
     it('should not lose leading tab characters from the resulting htmlValue', () => {
       const htmlWithLeadingTab = '<p>\tTab</p>';
       rte.dangerouslySetHtmlValue(htmlWithLeadingTab);
