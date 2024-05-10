@@ -269,6 +269,16 @@ export const GridMixin = (superClass) =>
         }),
       ).observe(this.$.table);
 
+      const minHeightObserver = new ResizeObserver(() =>
+        setTimeout(() => {
+          this.__updateMinHeight();
+        }),
+      );
+
+      minHeightObserver.observe(this.$.header);
+      minHeightObserver.observe(this.$.footer);
+      minHeightObserver.observe(this.$.items);
+
       processTemplates(this);
 
       this._tooltipController = new TooltipController(this);
@@ -1115,5 +1125,21 @@ export const GridMixin = (superClass) =>
       if (this.__virtualizer) {
         this.__virtualizer.update(start, end);
       }
+    }
+
+    /** @private */
+    __updateMinHeight() {
+      // TODO: How to avoid updating this unnecessarily on resize etc?
+      const defaultRowHeight = 40;
+      const firstRowHeight = this._getRenderedRows()[0] ? this._getRenderedRows()[0].clientHeight : defaultRowHeight;
+      const minHeight = this.$.header.clientHeight + this.$.footer.clientHeight + firstRowHeight;
+
+      if (!this.__minHeightStyleSheet) {
+        this.__minHeightStyleSheet = new CSSStyleSheet();
+        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.__minHeightStyleSheet];
+      }
+      // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
+      // Adopted style sheet is used to avoid the need to add a confusing inline style such as --_grid-min-height on the host element
+      this.__minHeightStyleSheet.replaceSync(`:host { min-height: ${minHeight}px }`);
     }
   };
