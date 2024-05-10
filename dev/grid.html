@@ -18,38 +18,78 @@
       // import '@vaadin/tooltip/theme/lumo/vaadin-tooltip-styles.js';
       // import '@vaadin/tooltip/src/vaadin-lit-tooltip.js';
 
-      const grid = document.querySelector('vaadin-grid');
+      [...document.querySelectorAll('.with-data')].forEach((grid) => {
+        grid.items = [
+          { name: 'Foo', value: 'Bar' },
+          { name: 'Baz', value: 'Qux' },
+          { name: 'Quux', value: 'Quuz' },
+        ];
+      });
 
-      grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-        // Let's have 100 root-level items and 5 items on every child level
-        const levelSize = parentItem ? 5 : 100;
+      [...document.querySelectorAll('.no-header')].forEach((grid) => {
+        [...grid.children].forEach((column) => {
+          column.header = null;
+        });
+      });
 
-        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
-          const indexInLevel = page * pageSize + i;
-
-          return {
-            name: `${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
-            children: true,
+      [...document.querySelectorAll('.footer')].forEach((grid) => {
+        [...grid.querySelectorAll('vaadin-grid-column')].forEach((column) => {
+          column.footerRenderer = (root) => {
+            root.textContent = 'Footer';
           };
         });
-
-        cb(pageItems, levelSize);
-      };
-
-      const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.generator = ({ column, item }) => {
-        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
-      };
+      });
     </script>
 
-    <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
-      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+    <style>
+      h6 {
+        margin-top: 1em;
+      }
+    </style>
 
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+    <h6>No columns</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%"> </vaadin-grid>
+
+    <h6>No header and some data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%" class="with-data no-header">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <h6>A header and some data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%" class="with-data">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <h6>A header and no data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <h6>A header, footer and no data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%" class="footer">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <h6>A header, footer and some data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%" class="with-data footer">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <h6>A footer and some data</h6>
+    <vaadin-grid item-id-path="name" style="height: 100%" class="no-header with-data footer">
+      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column path="value" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
   </body>
 </html>
