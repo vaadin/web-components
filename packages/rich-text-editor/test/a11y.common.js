@@ -13,7 +13,6 @@ import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('accessibility', () => {
-  'use strict';
   let rte, content, buttons, announcer, editor;
 
   const flushFormatAnnouncer = () => {
