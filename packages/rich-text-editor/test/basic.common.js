@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import { createImage } from './helpers.js';
 
 describe('rich text editor', () => {
-  'use strict';
   let rte, editor;
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
