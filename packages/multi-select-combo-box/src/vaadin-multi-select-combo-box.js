@@ -288,7 +288,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       itemClassNameGenerator: {
         type: Object,
-        observer: '_itemClassNameGeneratorChanged',
+        observer: '__itemClassNameGeneratorChanged',
       },
 
       /**
@@ -774,7 +774,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _itemClassNameGeneratorChanged(generator, oldGenerator) {
+  __itemClassNameGeneratorChanged(generator, oldGenerator) {
     if (generator || oldGenerator) {
       this.__updateChips();
     }
