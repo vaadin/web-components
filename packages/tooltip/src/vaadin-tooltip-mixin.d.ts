@@ -5,27 +5,16 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { TooltipPositionMixinClass } from './vaadin-tooltip-position-mixin.js';
 
-export type TooltipPosition =
-  | 'bottom-end'
-  | 'bottom-start'
-  | 'bottom'
-  | 'end-bottom'
-  | 'end-top'
-  | 'end'
-  | 'start-bottom'
-  | 'start-top'
-  | 'start'
-  | 'top-end'
-  | 'top-start'
-  | 'top';
+export type { TooltipPosition } from './vaadin-tooltip-position-mixin.js';
 
 /**
  * A mixin providing common tooltip functionality.
  */
 export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<OverlayClassMixinClass> & Constructor<TooltipMixinClass> & T;
+): Constructor<OverlayClassMixinClass> & Constructor<TooltipMixinClass> & Constructor<TooltipPositionMixinClass> & T;
 
 export declare class TooltipMixinClass {
   /**
@@ -90,14 +79,6 @@ export declare class TooltipMixinClass {
    * Only works if `manual` is set to `true`.
    */
   opened: boolean;
-
-  /**
-   * Position of the tooltip with respect to its target.
-   * Supported values: `top-start`, `top`, `top-end`,
-   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
-   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
-   */
-  position: TooltipPosition;
 
   /**
    * Function used to detect whether to show the tooltip based on a condition,

@@ -10,6 +10,7 @@ import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { TooltipPositionMixin } from './vaadin-tooltip-position-mixin.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -216,9 +217,10 @@ class TooltipStateController {
  *
  * @polymerMixin
  * @mixes OverlayClassMixin
+ * @mixes TooltipPositionMixin
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends OverlayClassMixin(superClass) {
+  class TooltipMixinClass extends TooltipPositionMixin(OverlayClassMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -311,16 +313,6 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
-         * Position of the tooltip with respect to its target.
-         * Supported values: `top-start`, `top`, `top-end`,
-         * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
-         * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
-         */
-        position: {
-          type: String,
-        },
-
-        /**
          * Function used to detect whether to show the tooltip based on a condition,
          * called every time the tooltip is about to be shown on hover and focus.
          * The function takes two parameters: `target` and `context`, which contain
@@ -375,12 +367,6 @@ export const TooltipMixin = (superClass) =>
         },
 
         /** @private */
-        __effectivePosition: {
-          type: String,
-          computed: '__computePosition(position, _position)',
-        },
-
-        /** @private */
         __isTargetHidden: {
           type: Boolean,
           value: false,
@@ -390,15 +376,6 @@ export const TooltipMixin = (superClass) =>
         _isConnected: {
           type: Boolean,
           sync: true,
-        },
-
-        /**
-         * Default value used when `position` property is not set.
-         * @protected
-         */
-        _position: {
-          type: String,
-          value: 'bottom',
         },
 
         /** @private */
@@ -510,33 +487,8 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __computeHorizontalAlign(position) {
-      return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
-    }
-
-    /** @private */
-    __computeNoHorizontalOverlap(position) {
-      return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
-    }
-
-    /** @private */
-    __computeNoVerticalOverlap(position) {
-      return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
-    }
-
-    /** @private */
-    __computeVerticalAlign(position) {
-      return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
-    }
-
-    /** @private */
     __computeOpened(manual, opened, autoOpened, connected) {
       return connected && (manual ? opened : autoOpened);
-    }
-
-    /** @private */
-    __computePosition(position, defaultPosition) {
-      return position || defaultPosition;
     }
 
     /** @private */
