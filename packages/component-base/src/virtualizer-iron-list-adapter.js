@@ -5,7 +5,7 @@
  */
 /* eslint-disable @typescript-eslint/member-ordering */
 // https://github.com/vaadin/eslint-config-vaadin/issues/33
-import { animationFrame, timeOut } from './async.js';
+import { animationFrame, microTask, timeOut } from './async.js';
 import { isSafari } from './browser-utils.js';
 import { Debouncer, flush } from './debounce.js';
 import { ironList } from './iron-list-core.js';
@@ -353,6 +353,9 @@ export class IronListAdapter {
     // Schedule and flush a resize handler
     this._resizeHandler();
     flush();
+    // Schedule an update to ensure item positions are correct after subsequent size changes
+    // Fix for https://github.com/vaadin/flow-components/issues/6269
+    this._debounce('_update', this._update, microTask);
   }
 
   /** @private */
