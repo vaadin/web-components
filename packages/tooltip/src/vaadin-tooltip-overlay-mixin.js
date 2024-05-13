@@ -24,18 +24,25 @@ export const TooltipOverlayMixin = (superClass) =>
       };
     }
 
+    /**
+     * Tag name prefix used by custom properties.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-tooltip';
+    }
+
     requestContentUpdate() {
       super.requestContentUpdate();
-
-      this.toggleAttribute('hidden', this.textContent.trim() === '');
 
       // Copy custom properties from the tooltip
       if (this.positionTarget && this.owner) {
         const style = getComputedStyle(this.owner);
         ['top', 'bottom', 'start', 'end'].forEach((prop) => {
           this.style.setProperty(
-            `--vaadin-tooltip-offset-${prop}`,
-            style.getPropertyValue(`--vaadin-tooltip-offset-${prop}`),
+            `--${this._tagNamePrefix}-offset-${prop}`,
+            style.getPropertyValue(`--${this._tagNamePrefix}-offset-${prop}`),
           );
         });
       }
@@ -48,7 +55,7 @@ export const TooltipOverlayMixin = (superClass) =>
     _updatePosition() {
       super._updatePosition();
 
-      if (!this.positionTarget) {
+      if (!this.positionTarget || !this.opened) {
         return;
       }
 
