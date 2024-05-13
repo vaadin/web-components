@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -231,5 +231,54 @@ describe('virtualizer - variable row height - large variance', () => {
     virtualizer.size = 0;
     await fixItemPositioningTimeout();
     expect(virtualizer.__adapter.__fixInvalidItemPositioning.callCount).to.equal(0);
+  });
+});
+
+describe('virtualizer - variable row height - size changes', () => {
+  let virtualizer;
+
+  beforeEach(async () => {
+    const reverseItemHeights = [50, 30];
+
+    const scrollTarget = fixtureSync(`
+      <div style="height: 500px; width: 200px;">
+        <div></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from(Array(count)).map(() => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.style.height = `${reverseItemHeights[virtualizer.size - index - 1]}px`;
+        el.style.outline = '1px solid black';
+        el.style.outlineOffset = '-1px';
+        el.style.width = '100%';
+        el.textContent = `Item ${index}`;
+        el.id = `item-${index}`;
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 2;
+    // Wait for a possible resize observer flush
+    await aTimeout(100);
+  });
+
+  it('should position the items correctly after subsequent size changes', async () => {
+    virtualizer.size = 1;
+    virtualizer.update();
+
+    virtualizer.size = 2;
+    virtualizer.update();
+
+    await nextFrame();
+
+    const item0 = document.getElementById('item-0');
+    const item1 = document.getElementById('item-1');
+    expect(item0.clientHeight).to.equal(30);
+    expect(item1.clientHeight).to.equal(50);
+    expect(item1.getBoundingClientRect().top).to.equal(item0.getBoundingClientRect().bottom);
   });
 });
