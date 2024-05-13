@@ -40,6 +40,12 @@ class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolylitM
       </div>
     `;
   }
+
+  requestContentUpdate() {
+    super.requestContentUpdate();
+
+    this.toggleAttribute('hidden', this.textContent.trim() === '');
+  }
 }
 
 defineCustomElement(TooltipOverlay);
