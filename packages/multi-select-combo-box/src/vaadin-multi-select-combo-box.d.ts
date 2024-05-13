@@ -232,6 +232,14 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   items: TItem[] | undefined;
 
   /**
+   * A function used to generate CSS class names for dropdown
+   * items and selected chips based on the item. The return
+   * value should be the generated class name as a string, or
+   * multiple class names separated by whitespace characters.
+   */
+  itemClassNameGenerator: (item: TItem) => string;
+
+  /**
    * The item property used for a visual representation of the item.
    * @attr {string} item-label-path
    */

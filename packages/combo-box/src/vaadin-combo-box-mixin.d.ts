@@ -65,6 +65,14 @@ export declare class ComboBoxMixinClass<TItem> {
   items: TItem[] | undefined;
 
   /**
+   * A function used to generate CSS class names for dropdown
+   * items based on the item. The return value should be the
+   * generated class name as a string, or multiple class names
+   * separated by whitespace characters.
+   */
+  itemClassNameGenerator: (item: TItem) => string;
+
+  /**
    * If `true`, the user can input a value that is not present in the items list.
    * `value` property will be set to the input value in this case.
    * Also, when `value` is set programmatically, the input value will be set
