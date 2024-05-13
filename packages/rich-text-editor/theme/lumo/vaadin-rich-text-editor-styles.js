@@ -14,17 +14,19 @@ const popupOverlay = css`
 
   [part='content'] {
     padding: var(--lumo-space-xs);
-    max-width: calc(7 * (1.25rem + 6px));
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    --_button-size: 1.25rem;
+    --_button-margin: 3px;
   }
 
   [part='content'] ::slotted(button) {
     border: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin: 3px;
+    width: var(--_button-size);
+    height: var(--_button-size);
+    margin: var(--_button-margin);
   }
 `;
 
