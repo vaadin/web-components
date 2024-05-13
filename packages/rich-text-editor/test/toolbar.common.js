@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import {
+  esc,
+  fixtureSync,
+  focusout,
+  isDesktopSafari,
+  isFirefox,
+  nextRender,
+  nextUpdate,
+  outsideClick,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createImage } from './helpers.js';
 
@@ -201,6 +210,73 @@ describe('toolbar controls', () => {
         expect(boldBtn.hasAttribute('on')).to.be.false;
         expect(italicBtn.hasAttribute('on')).to.be.false;
         expect(linkBtn.hasAttribute('on')).to.be.true;
+      });
+    });
+
+    describe('style', () => {
+      ['background', 'color'].forEach((style) => {
+        it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
+          btn = getButton(style);
+          btn.click();
+          await nextRender();
+
+          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+          const button = popup.querySelectorAll('button')[1];
+          button.click();
+          editor.insertText(0, 'Foo', 'user');
+          expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
+        });
+
+        it(`should clear ${style} when clicking the "toolbar-button-${style}" and selecting default value`, async () => {
+          editor.insertText(0, 'Foo', 'user');
+          editor.setSelection(0, 3);
+          editor.format(style, '#e60000');
+          expect(editor.getFormat(0, 3)[style]).to.equal('#e60000');
+
+          btn = getButton(style);
+          btn.click();
+          await nextRender();
+
+          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+          // Default color (black) or background (white)
+          const value = style === 'color' ? '#000000' : '#ffffff';
+          const button = popup.querySelector(`[data-color="${value}"]`);
+          button.click();
+          expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
+        });
+
+        it(`should restore focus when clicking the "toolbar-button-${style}" and pressing Esc`, async () => {
+          btn = getButton(style);
+          btn.click();
+          await nextRender();
+
+          const spy = sinon.spy(btn, 'focus');
+          esc(document.body);
+          expect(spy).to.be.calledOnce;
+        });
+
+        it(`should toggle aria-expanded attribute on "toolbar-button-${style}" button part`, async () => {
+          btn = getButton(style);
+          btn.click();
+          await nextRender();
+          expect(btn.getAttribute('aria-expanded')).to.equal('true');
+
+          outsideClick();
+          await nextRender();
+          expect(btn.getAttribute('aria-expanded')).to.equal('false');
+        });
+
+        it(`should update items in ${style} popup when colorOptions property changes`, async () => {
+          rte.colorOptions = ['#000000', '#0066cc', '#008a00', '#e60000'];
+          await nextRender();
+
+          getButton(style).click();
+          await nextRender();
+
+          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+          const button = popup.querySelectorAll('button')[1];
+          expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+        });
       });
     });
 

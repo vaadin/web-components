@@ -17,6 +17,8 @@ export interface RichTextEditorI18n {
   italic: string;
   underline: string;
   strike: string;
+  color: string;
+  background: string;
   h1: string;
   h2: string;
   h3: string;
@@ -95,6 +97,16 @@ export declare class RichTextEditorMixinClass {
    * e.g. as the tooltips for the editor toolbar buttons.
    */
   i18n: RichTextEditorI18n;
+
+  /**
+   * The list of colors used by the background and text color
+   * selection controls. Should contain an array of HEX strings.
+   *
+   * When user selects `#000000` (black) as a text color,
+   * or `#ffffff` (white) as a background color, it resets
+   * the corresponding format for the selected text.
+   */
+  colorOptions: string[];
 
   /**
    * Sets content represented by HTML snippet into the editor.

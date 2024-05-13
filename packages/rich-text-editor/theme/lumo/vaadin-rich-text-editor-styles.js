@@ -3,8 +3,36 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import { color } from '@vaadin/vaadin-lumo-styles/color.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { typography } from '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const popupOverlay = css`
+  [part='overlay'] {
+    margin: var(--lumo-space-xs) 0;
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-xs);
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    --_button-size: 1.25rem;
+    --_button-margin: 3px;
+  }
+
+  [part='content'] ::slotted(button) {
+    border: none;
+    width: var(--_button-size);
+    height: var(--_button-size);
+    margin: var(--_button-margin);
+  }
+`;
+
+registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay], {
+  moduleId: 'lumo-rich-text-editor-popup-overlay',
+});
 
 const richTextEditor = css`
   :host {
@@ -32,7 +60,8 @@ const richTextEditor = css`
     transition: background-color 100ms, color 100ms;
   }
 
-  [part~='toolbar-button']:focus {
+  [part~='toolbar-button']:focus,
+  [part~='toolbar-button'][aria-expanded='true'] {
     outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
@@ -40,7 +69,6 @@ const richTextEditor = css`
   [part~='toolbar-button']:hover {
     background-color: var(--lumo-contrast-5pct);
     color: var(--lumo-contrast-80pct);
-    box-shadow: none;
   }
 
   @media (hover: none) {
@@ -73,6 +101,8 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-bold']::before,
+  [part~='toolbar-button-background']::before,
+  [part~='toolbar-button-color']::before,
   [part~='toolbar-button-italic']::before,
   [part~='toolbar-button-underline']::before,
   [part~='toolbar-button-strike']::before {
@@ -82,6 +112,21 @@ const richTextEditor = css`
 
   [part~='toolbar-button-bold']::before {
     font-weight: 700;
+  }
+
+  [part~='toolbar-button-background']::before {
+    background-color: var(--lumo-base-color);
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  }
+
+  [part~='toolbar-button-background']:hover::before {
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+      linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  }
+
+  [part~='toolbar-button-background']:active::before {
+    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+      linear-gradient(var(--lumo-contrast-10pct), var(--lumo-contrast-10pct));
   }
 
   [part~='toolbar-button-h1']::before,

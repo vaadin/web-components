@@ -141,6 +141,40 @@ export const buttonsStyles = css`
     content: '</>';
     font-size: 0.875em;
   }
+
+  [part~='toolbar-button-background']::before,
+  [part~='toolbar-button-color']::before {
+    content: 'A';
+    font-size: 1em;
+  }
+
+  [part~='toolbar-button-color']::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 25%;
+    right: 25%;
+    width: 50%;
+    height: 4px;
+    background-color: var(--_color-value, currentColor);
+  }
+
+  [part~='toolbar-button-background']::before {
+    z-index: 1;
+  }
+
+  [part~='toolbar-button-background']::after {
+    content: '';
+    position: absolute;
+    inset: 20%;
+    background: repeating-linear-gradient(
+      135deg,
+      var(--_background-value, currentColor),
+      var(--_background-value, currentColor) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  }
 `;
 
 export const toolbarStyles = [iconsStyles, buttonsStyles];
