@@ -367,8 +367,8 @@ export const RichTextEditorMixin = (superClass) =>
         const selection = this._editor.getSelection();
         if (selection) {
           const format = this._editor.getFormat(selection.index, selection.length);
-          this.style.setProperty('--_color-value', format.color || null);
-          this.style.setProperty('--_background-value', format.background || null);
+          this._toolbar.style.setProperty('--_color-value', format.color || null);
+          this._toolbar.style.setProperty('--_background-value', format.background || null);
         }
       });
 
@@ -739,7 +739,7 @@ export const RichTextEditorMixin = (superClass) =>
       this._colorValue = color === '#000000' ? null : color;
       this._markToolbarClicked();
       this._editor.format('color', this._colorValue, SOURCE.USER);
-      this.style.setProperty('--_color-value', this._colorValue);
+      this._toolbar.style.setProperty('--_color-value', this._colorValue);
       this._colorEditing = false;
     }
 
@@ -754,7 +754,7 @@ export const RichTextEditorMixin = (superClass) =>
       this._backgroundValue = color === '#ffffff' ? null : color;
       this._markToolbarClicked();
       this._editor.format('background', this._backgroundValue, SOURCE.USER);
-      this.style.setProperty('--_background-value', this._backgroundValue);
+      this._toolbar.style.setProperty('--_background-value', this._backgroundValue);
       this._backgroundEditing = false;
     }
 
