@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { TooltipTargetMixinClass } from './vaadin-tooltip-target-mixin.js';
 
 export type TooltipPosition =
   | 'bottom-end'
@@ -25,7 +26,7 @@ export type TooltipPosition =
  */
 export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<OverlayClassMixinClass> & Constructor<TooltipMixinClass> & T;
+): Constructor<OverlayClassMixinClass> & Constructor<TooltipMixinClass> & Constructor<TooltipTargetMixinClass> & T;
 
 export declare class TooltipMixinClass {
   /**
@@ -48,13 +49,6 @@ export declare class TooltipMixinClass {
    * @attr {number} focus-delay
    */
   focusDelay: number;
-
-  /**
-   * The id of the element used as a tooltip trigger.
-   * The element should be in the DOM by the time when
-   * the attribute is set, otherwise a warning is shown.
-   */
-  for: string | undefined;
 
   /**
    * Function used to generate the tooltip content.
@@ -107,13 +101,6 @@ export declare class TooltipMixinClass {
    * The tooltip is only shown when the function invocation returns `true`.
    */
   shouldShow: (target: HTMLElement, context?: Record<string, unknown>) => boolean;
-
-  /**
-   * Reference to the element used as a tooltip trigger.
-   * The target must be placed in the same shadow scope.
-   * Defaults to an element referenced with `for`.
-   */
-  target: HTMLElement | undefined;
 
   /**
    * String used as a tooltip content.

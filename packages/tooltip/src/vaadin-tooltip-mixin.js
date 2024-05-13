@@ -4,12 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { TooltipTargetMixin } from './vaadin-tooltip-target-mixin.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -216,9 +215,10 @@ class TooltipStateController {
  *
  * @polymerMixin
  * @mixes OverlayClassMixin
+ * @mixes TooltipTargetMixin
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends OverlayClassMixin(superClass) {
+  class TooltipMixinClass extends TooltipTargetMixin(OverlayClassMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -249,16 +249,6 @@ export const TooltipMixin = (superClass) =>
          */
         focusDelay: {
           type: Number,
-        },
-
-        /**
-         * The id of the element used as a tooltip trigger.
-         * The element should be in the DOM by the time when
-         * the attribute is set, otherwise a warning is shown.
-         */
-        for: {
-          type: String,
-          observer: '__forChanged',
         },
 
         /**
@@ -332,16 +322,6 @@ export const TooltipMixin = (superClass) =>
           value: () => {
             return (_target, _context) => true;
           },
-        },
-
-        /**
-         * Reference to the element used as a tooltip trigger.
-         * The target must be placed in the same shadow scope.
-         * Defaults to an element referenced with `for`.
-         */
-        target: {
-          type: Object,
-          observer: '__targetChanged',
         },
 
         /**
@@ -548,54 +528,37 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __forChanged(forId) {
-      if (forId) {
-        this.__setTargetByIdDebouncer = Debouncer.debounce(this.__setTargetByIdDebouncer, microTask, () =>
-          this.__setTargetById(forId),
-        );
-      }
+    /**
+     * @param {HTMLElement} target
+     * @protected
+     * @override
+     */
+    _addTargetListeners(target) {
+      target.addEventListener('mouseenter', this.__onMouseEnter);
+      target.addEventListener('mouseleave', this.__onMouseLeave);
+      target.addEventListener('focusin', this.__onFocusin);
+      target.addEventListener('focusout', this.__onFocusout);
+      target.addEventListener('mousedown', this.__onMouseDown);
+
+      // Wait before observing to avoid Chrome issue.
+      requestAnimationFrame(() => {
+        this.__targetVisibilityObserver.observe(target);
+      });
     }
 
-    /** @private */
-    __setTargetById(targetId) {
-      if (!this.isConnected) {
-        return;
-      }
+    /**
+     * @param {HTMLElement} target
+     * @protected
+     * @override
+     */
+    _removeTargetListeners(target) {
+      target.removeEventListener('mouseenter', this.__onMouseEnter);
+      target.removeEventListener('mouseleave', this.__onMouseLeave);
+      target.removeEventListener('focusin', this.__onFocusin);
+      target.removeEventListener('focusout', this.__onFocusout);
+      target.removeEventListener('mousedown', this.__onMouseDown);
 
-      const target = this.getRootNode().getElementById(targetId);
-
-      if (target) {
-        this.target = target;
-      } else {
-        console.warn(`No element with id="${targetId}" found to show tooltip.`);
-      }
-    }
-
-    /** @private */
-    __targetChanged(target, oldTarget) {
-      if (oldTarget) {
-        oldTarget.removeEventListener('mouseenter', this.__onMouseEnter);
-        oldTarget.removeEventListener('mouseleave', this.__onMouseLeave);
-        oldTarget.removeEventListener('focusin', this.__onFocusin);
-        oldTarget.removeEventListener('focusout', this.__onFocusout);
-        oldTarget.removeEventListener('mousedown', this.__onMouseDown);
-
-        this.__targetVisibilityObserver.unobserve(oldTarget);
-      }
-
-      if (target) {
-        target.addEventListener('mouseenter', this.__onMouseEnter);
-        target.addEventListener('mouseleave', this.__onMouseLeave);
-        target.addEventListener('focusin', this.__onFocusin);
-        target.addEventListener('focusout', this.__onFocusout);
-        target.addEventListener('mousedown', this.__onMouseDown);
-
-        // Wait before observing to avoid Chrome issue.
-        requestAnimationFrame(() => {
-          this.__targetVisibilityObserver.observe(target);
-        });
-      }
+      this.__targetVisibilityObserver.unobserve(target);
     }
 
     /** @private */
