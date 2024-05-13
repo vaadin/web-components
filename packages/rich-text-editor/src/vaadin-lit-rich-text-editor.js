@@ -91,7 +91,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-color"
               type="button"
               part="toolbar-button toolbar-button-color"
-              @click="${this._onColorClick}"
+              @click="${this.__onColorClick}"
             ></button>
             <vaadin-tooltip for="btn-color" .text="${this.i18n.color}"></vaadin-tooltip>
             <!-- Background -->
@@ -99,7 +99,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-background"
               type="button"
               part="toolbar-button toolbar-button-background"
-              @click="${this._onBackgroundClick}"
+              @click="${this.__onBackgroundClick}"
             ></button>
             <vaadin-tooltip for="btn-background" .text="${this.i18n.background}"></vaadin-tooltip>
           </span>
@@ -290,27 +290,27 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
         id="colorPopup"
         .colors="${this.colorOptions}"
         .opened="${this._colorEditing}"
-        @color-selected="${this._onColorSelected}"
-        @opened-changed="${this._onColorEditingChanged}"
+        @color-selected="${this.__onColorSelected}"
+        @opened-changed="${this.__onColorEditingChanged}"
       ></vaadin-rich-text-editor-popup>
 
       <vaadin-rich-text-editor-popup
         id="backgroundPopup"
         .colors="${this.colorOptions}"
         .opened="${this._backgroundEditing}"
-        @color-selected="${this._onBackgroundSelected}"
-        @opened-changed="${this._onBackgroundEditingChanged}"
+        @color-selected="${this.__onBackgroundSelected}"
+        @opened-changed="${this.__onBackgroundEditingChanged}"
       ></vaadin-rich-text-editor-popup>
     `;
   }
 
   /** @private */
-  _onBackgroundEditingChanged(event) {
+  __onBackgroundEditingChanged(event) {
     this._backgroundEditing = event.detail.value;
   }
 
   /** @private */
-  _onColorEditingChanged(event) {
+  __onColorEditingChanged(event) {
     this._colorEditing = event.detail.value;
   }
 

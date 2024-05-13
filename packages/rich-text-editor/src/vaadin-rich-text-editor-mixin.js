@@ -729,12 +729,12 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @private */
-    _onColorClick() {
+    __onColorClick() {
       this._colorEditing = true;
     }
 
     /** @private */
-    _onColorSelected(event) {
+    __onColorSelected(event) {
       const color = event.detail.color;
       this._colorValue = color === '#000000' ? null : color;
       this._markToolbarClicked();
@@ -744,12 +744,12 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @private */
-    _onBackgroundClick() {
+    __onBackgroundClick() {
       this._backgroundEditing = true;
     }
 
     /** @private */
-    _onBackgroundSelected(event) {
+    __onBackgroundSelected(event) {
       const color = event.detail.color;
       this._backgroundValue = color === '#ffffff' ? null : color;
       this._markToolbarClicked();

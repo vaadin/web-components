@@ -140,7 +140,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-color"
               type="button"
               part="toolbar-button toolbar-button-color"
-              on-click="_onColorClick"
+              on-click="__onColorClick"
             ></button>
             <vaadin-tooltip for="btn-color" text="[[i18n.color]]"></vaadin-tooltip>
             <!-- Background -->
@@ -148,7 +148,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
               id="btn-background"
               type="button"
               part="toolbar-button toolbar-button-background"
-              on-click="_onBackgroundClick"
+              on-click="__onBackgroundClick"
             ></button>
             <vaadin-tooltip for="btn-background" text="[[i18n.background]]"></vaadin-tooltip>
           </span>
@@ -333,14 +333,14 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
         id="colorPopup"
         colors="[[colorOptions]]"
         opened="{{_colorEditing}}"
-        on-color-selected="_onColorSelected"
+        on-color-selected="__onColorSelected"
       ></vaadin-rich-text-editor-popup>
 
       <vaadin-rich-text-editor-popup
         id="backgroundPopup"
         colors="[[colorOptions]]"
         opened="{{_backgroundEditing}}"
-        on-color-selected="_onBackgroundSelected"
+        on-color-selected="__onBackgroundSelected"
       ></vaadin-rich-text-editor-popup>
     `;
   }
