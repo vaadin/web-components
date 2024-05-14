@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../vaadin-popover.js';
 
 describe('popover', () => {
