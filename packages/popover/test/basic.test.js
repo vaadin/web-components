@@ -1,13 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-popover.js';
 
 describe('popover', () => {
-  let popover;
+  let popover, overlay;
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
     await nextRender();
+    overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
   describe('custom element definition', () => {
@@ -23,6 +25,60 @@ describe('popover', () => {
 
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('target', () => {
+    let target;
+
+    beforeEach(() => {
+      target = fixtureSync('<button>Target</button>');
+    });
+
+    it('should set target as overlay positionTarget', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+      expect(overlay.positionTarget).to.eql(target);
+    });
+  });
+
+  describe('for', () => {
+    let target;
+
+    beforeEach(() => {
+      target = fixtureSync('<button>Target</button>');
+    });
+
+    describe('element found', () => {
+      it('should use for attribute to link target using ID', async () => {
+        target.setAttribute('id', 'foo');
+        popover.for = 'foo';
+        await nextUpdate(popover);
+        expect(popover.target).to.eql(target);
+      });
+    });
+
+    describe('element not found', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
+      });
+
+      afterEach(() => {
+        console.warn.restore();
+      });
+
+      it('should warn when element with given ID is not found', async () => {
+        popover.for = 'bar';
+        await nextUpdate(popover);
+        expect(console.warn.called).to.be.true;
+      });
+
+      it('should keep the target when providing incorrect for', async () => {
+        popover.target = target;
+        popover.for = 'bar';
+        await nextUpdate(popover);
+        expect(popover.target).to.eql(target);
+      });
     });
   });
 });
