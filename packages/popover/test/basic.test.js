@@ -131,6 +131,15 @@ describe('popover', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should close overlay on subsequent target click', async () => {
+      target.click();
+      await nextRender();
+
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should close overlay on outside click by default', async () => {
       target.click();
       await nextRender();
@@ -154,6 +163,7 @@ describe('popover', () => {
       await nextRender();
 
       popover.remove();
+      await nextRender();
       expect(overlay.opened).to.be.false;
     });
   });

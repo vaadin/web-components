@@ -50,7 +50,7 @@ class Popover extends PopoverPositionMixin(
       /** @private */
       _opened: {
         type: Boolean,
-        sync: true,
+        value: false,
       },
     };
   }
