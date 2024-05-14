@@ -76,6 +76,13 @@ class Popover extends PopoverPositionMixin(PopoverTargetMixin(ElementMixin(Polyl
     `;
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this._opened = false;
+  }
+
   /**
    * @param {HTMLElement} target
    * @protected

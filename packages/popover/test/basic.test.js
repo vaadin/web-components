@@ -114,5 +114,13 @@ describe('popover', () => {
       await nextRender();
       expect(overlay.opened).to.be.false;
     });
+
+    it('should close overlay on when popover is detached', async () => {
+      target.click();
+      await nextRender();
+
+      popover.remove();
+      expect(overlay.opened).to.be.false;
+    });
   });
 });
