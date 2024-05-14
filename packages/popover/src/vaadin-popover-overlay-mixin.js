@@ -7,7 +7,7 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
 /**
- * A mixin providing common tooltip overlay functionality.
+ * A mixin providing common popover overlay functionality.
  *
  * @polymerMixin
  * @mixes PositionMixin
@@ -59,7 +59,7 @@ export const PopoverOverlayMixin = (superClass) =>
         return;
       }
 
-      // Center the tooltip overlay horizontally
+      // Center the overlay horizontally
       if (this.position === 'bottom' || this.position === 'top') {
         const targetRect = this.positionTarget.getBoundingClientRect();
         const overlayRect = this.$.overlay.getBoundingClientRect();
@@ -81,7 +81,7 @@ export const PopoverOverlayMixin = (superClass) =>
         }
       }
 
-      // Center the tooltip overlay vertically
+      // Center the overlay vertically
       if (this.position === 'start' || this.position === 'end') {
         const targetRect = this.positionTarget.getBoundingClientRect();
         const overlayRect = this.$.overlay.getBoundingClientRect();
