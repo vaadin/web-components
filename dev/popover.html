@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popover</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/popover';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-button id="button">Toggle popover</vaadin-button>
+
+    <vaadin-popover for="button" position="bottom-start"></vaadin-popover>
+
+    <script type="module">
+      const popover = document.querySelector('vaadin-popover');
+
+      popover.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        const text = document.createElement('p');
+        text.textContent = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.';
+        text.style.marginTop = '0';
+
+        root.append(text);
+      };
+    </script>
+  </body>
+</html>
