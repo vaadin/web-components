@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popover</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/popover';
+      import '@vaadin/text-field';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-button id="button">Discount</vaadin-button>
+
+    <vaadin-popover for="button" position="bottom-start"></vaadin-popover>
+
+    <script type="module">
+      const popover = document.querySelector('vaadin-popover');
+
+      popover.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        const layout = document.createElement('vaadin-horizontal-layout');
+        layout.setAttribute('theme', 'spacing-s');
+        layout.style.alignItems = 'baseline';
+
+        const field = document.createElement('vaadin-text-field');
+        field.label = 'Discount code';
+
+        const button = document.createElement('vaadin-button');
+        button.textContent = 'Apply';
+
+        layout.append(field, button);
+
+        root.append(layout);
+      };
+    </script>
+  </body>
+</html>

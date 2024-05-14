@@ -4,12 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
+import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -216,9 +216,11 @@ class TooltipStateController {
  *
  * @polymerMixin
  * @mixes OverlayClassMixin
+ * @mixes PopoverPositionMixin
+ * @mixes PopoverTargetMixin
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends OverlayClassMixin(superClass) {
+  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(OverlayClassMixin(superClass))) {
     static get properties() {
       return {
         /**
@@ -249,16 +251,6 @@ export const TooltipMixin = (superClass) =>
          */
         focusDelay: {
           type: Number,
-        },
-
-        /**
-         * The id of the element used as a tooltip trigger.
-         * The element should be in the DOM by the time when
-         * the attribute is set, otherwise a warning is shown.
-         */
-        for: {
-          type: String,
-          observer: '__forChanged',
         },
 
         /**
@@ -311,16 +303,6 @@ export const TooltipMixin = (superClass) =>
         },
 
         /**
-         * Position of the tooltip with respect to its target.
-         * Supported values: `top-start`, `top`, `top-end`,
-         * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
-         * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
-         */
-        position: {
-          type: String,
-        },
-
-        /**
          * Function used to detect whether to show the tooltip based on a condition,
          * called every time the tooltip is about to be shown on hover and focus.
          * The function takes two parameters: `target` and `context`, which contain
@@ -332,16 +314,6 @@ export const TooltipMixin = (superClass) =>
           value: () => {
             return (_target, _context) => true;
           },
-        },
-
-        /**
-         * Reference to the element used as a tooltip trigger.
-         * The target must be placed in the same shadow scope.
-         * Defaults to an element referenced with `for`.
-         */
-        target: {
-          type: Object,
-          observer: '__targetChanged',
         },
 
         /**
@@ -375,12 +347,6 @@ export const TooltipMixin = (superClass) =>
         },
 
         /** @private */
-        __effectivePosition: {
-          type: String,
-          computed: '__computePosition(position, _position)',
-        },
-
-        /** @private */
         __isTargetHidden: {
           type: Boolean,
           value: false,
@@ -390,15 +356,6 @@ export const TooltipMixin = (superClass) =>
         _isConnected: {
           type: Boolean,
           sync: true,
-        },
-
-        /**
-         * Default value used when `position` property is not set.
-         * @protected
-         */
-        _position: {
-          type: String,
-          value: 'bottom',
         },
 
         /** @private */
@@ -510,33 +467,8 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __computeHorizontalAlign(position) {
-      return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
-    }
-
-    /** @private */
-    __computeNoHorizontalOverlap(position) {
-      return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
-    }
-
-    /** @private */
-    __computeNoVerticalOverlap(position) {
-      return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
-    }
-
-    /** @private */
-    __computeVerticalAlign(position) {
-      return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
-    }
-
-    /** @private */
     __computeOpened(manual, opened, autoOpened, connected) {
       return connected && (manual ? opened : autoOpened);
-    }
-
-    /** @private */
-    __computePosition(position, defaultPosition) {
-      return position || defaultPosition;
     }
 
     /** @private */
@@ -548,54 +480,37 @@ export const TooltipMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __forChanged(forId) {
-      if (forId) {
-        this.__setTargetByIdDebouncer = Debouncer.debounce(this.__setTargetByIdDebouncer, microTask, () =>
-          this.__setTargetById(forId),
-        );
-      }
+    /**
+     * @param {HTMLElement} target
+     * @protected
+     * @override
+     */
+    _addTargetListeners(target) {
+      target.addEventListener('mouseenter', this.__onMouseEnter);
+      target.addEventListener('mouseleave', this.__onMouseLeave);
+      target.addEventListener('focusin', this.__onFocusin);
+      target.addEventListener('focusout', this.__onFocusout);
+      target.addEventListener('mousedown', this.__onMouseDown);
+
+      // Wait before observing to avoid Chrome issue.
+      requestAnimationFrame(() => {
+        this.__targetVisibilityObserver.observe(target);
+      });
     }
 
-    /** @private */
-    __setTargetById(targetId) {
-      if (!this.isConnected) {
-        return;
-      }
+    /**
+     * @param {HTMLElement} target
+     * @protected
+     * @override
+     */
+    _removeTargetListeners(target) {
+      target.removeEventListener('mouseenter', this.__onMouseEnter);
+      target.removeEventListener('mouseleave', this.__onMouseLeave);
+      target.removeEventListener('focusin', this.__onFocusin);
+      target.removeEventListener('focusout', this.__onFocusout);
+      target.removeEventListener('mousedown', this.__onMouseDown);
 
-      const target = this.getRootNode().getElementById(targetId);
-
-      if (target) {
-        this.target = target;
-      } else {
-        console.warn(`No element with id="${targetId}" found to show tooltip.`);
-      }
-    }
-
-    /** @private */
-    __targetChanged(target, oldTarget) {
-      if (oldTarget) {
-        oldTarget.removeEventListener('mouseenter', this.__onMouseEnter);
-        oldTarget.removeEventListener('mouseleave', this.__onMouseLeave);
-        oldTarget.removeEventListener('focusin', this.__onFocusin);
-        oldTarget.removeEventListener('focusout', this.__onFocusout);
-        oldTarget.removeEventListener('mousedown', this.__onMouseDown);
-
-        this.__targetVisibilityObserver.unobserve(oldTarget);
-      }
-
-      if (target) {
-        target.addEventListener('mouseenter', this.__onMouseEnter);
-        target.addEventListener('mouseleave', this.__onMouseLeave);
-        target.addEventListener('focusin', this.__onFocusin);
-        target.addEventListener('focusout', this.__onFocusout);
-        target.addEventListener('mousedown', this.__onMouseDown);
-
-        // Wait before observing to avoid Chrome issue.
-        requestAnimationFrame(() => {
-          this.__targetVisibilityObserver.observe(target);
-        });
-      }
+      this.__targetVisibilityObserver.unobserve(target);
     }
 
     /** @private */

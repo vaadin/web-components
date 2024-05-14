@@ -7,8 +7,8 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { PopoverOverlayMixin } from '@vaadin/popover/src/vaadin-popover-overlay-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TooltipOverlayMixin } from './vaadin-tooltip-overlay-mixin.js';
 import { tooltipOverlayStyles } from './vaadin-tooltip-overlay-styles.js';
 
 registerStyles('vaadin-tooltip-overlay', [overlayStyles, tooltipOverlayStyles], {
@@ -22,10 +22,10 @@ registerStyles('vaadin-tooltip-overlay', [overlayStyles, tooltipOverlayStyles], 
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ThemableMixin
- * @mixes TooltipOverlayMixin
+ * @mixes PopoverOverlayMixin
  * @private
  */
-class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class TooltipOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-tooltip-overlay';
   }
@@ -37,6 +37,15 @@ class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolymerE
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
+  }
+
+  /**
+   * Tag name prefix used by custom properties.
+   * @protected
+   * @return {string}
+   */
+  get _tagNamePrefix() {
+    return 'vaadin-tooltip';
   }
 
   /** @protected */
