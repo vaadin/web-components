@@ -29,6 +29,39 @@ describe('popover', () => {
     });
   });
 
+  describe('renderer', () => {
+    let renderer;
+
+    beforeEach(async () => {
+      renderer = sinon.stub();
+      popover.renderer = renderer;
+      await nextUpdate(popover);
+    });
+
+    it('should propagate renderer property to overlay', () => {
+      expect(overlay.renderer).to.eql(renderer);
+    });
+
+    it('should call renderer when requesting content update', () => {
+      popover.requestContentUpdate();
+      expect(overlay.renderer).to.be.calledOnce;
+    });
+
+    it('should not request overlay content update when renderer is unset', async () => {
+      popover.renderer = null;
+      await nextUpdate(popover);
+
+      const spy = sinon.spy(overlay, 'requestContentUpdate');
+      popover.requestContentUpdate();
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not throw when requesting content update before adding to DOM', () => {
+      const element = document.createElement('vaadin-popover');
+      expect(() => element.requestContentUpdate()).not.to.throw(Error);
+    });
+  });
+
   describe('target', () => {
     let target;
 
