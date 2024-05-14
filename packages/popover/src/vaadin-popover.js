@@ -10,6 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
 
@@ -26,9 +27,10 @@ import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
  * @mixes ElementMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
+ * @mixes ThemePropertyMixin
  */
 class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ElementMixin(PolylitMixin(LitElement)))),
+  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-popover';

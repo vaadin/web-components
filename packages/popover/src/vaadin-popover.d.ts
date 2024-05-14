@@ -5,8 +5,11 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
+
+export type { PopoverPosition } from './vaadin-popover-position-mixin.js';
 
 export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
 
@@ -17,7 +20,9 @@ export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
  * Unlike `<vaadin-tooltip>`, the popover supports rich content
  * that can be provided by using `renderer` function.
  */
-declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(OverlayClassMixin(ElementMixin(HTMLElement)))) {
+declare class Popover extends PopoverPositionMixin(
+  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
+) {
   /**
    * Custom function for rendering the content of the overlay.
    * Receives two arguments:
