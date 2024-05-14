@@ -39,6 +39,7 @@
     "@vaadin/a11y-base": "24.5.0-alpha0",
     "@vaadin/component-base": "24.5.0-alpha0",
     "@vaadin/overlay": "24.5.0-alpha0",
+    "@vaadin/popover": "24.5.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "24.5.0-alpha0",
     "@vaadin/vaadin-material-styles": "24.5.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "24.5.0-alpha0"
