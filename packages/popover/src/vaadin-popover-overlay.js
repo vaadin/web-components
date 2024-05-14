@@ -8,8 +8,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { TooltipOverlayMixin } from '@vaadin/tooltip/src/vaadin-tooltip-overlay-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-popover>`. Not intended to be used separately.
@@ -17,11 +17,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @customElement
  * @extends HTMLElement
  * @mixes DirMixin
+ * @mixes PopoverOverlayMixin
  * @mixes ThemableMixin
- * @mixes TooltipOverlayMixin
  * @private
  */
-class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-popover-overlay';
   }
@@ -57,4 +57,4 @@ class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolylitM
   }
 }
 
-defineCustomElement(TooltipOverlay);
+defineCustomElement(PopoverOverlay);

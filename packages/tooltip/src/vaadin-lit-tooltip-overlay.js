@@ -8,8 +8,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { PopoverOverlayMixin } from '@vaadin/popover/src/vaadin-popover-overlay-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TooltipOverlayMixin } from './vaadin-tooltip-overlay-mixin.js';
 import { tooltipOverlayStyles } from './vaadin-tooltip-overlay-styles.js';
 
 /**
@@ -19,16 +19,25 @@ import { tooltipOverlayStyles } from './vaadin-tooltip-overlay-styles.js';
  * @extends HTMLElement
  * @mixes DirMixin
  * @mixes ThemableMixin
- * @mixes TooltipOverlayMixin
+ * @mixes PopoverOverlayMixin
  * @private
  */
-class TooltipOverlay extends TooltipOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class TooltipOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-tooltip-overlay';
   }
 
   static get styles() {
     return [overlayStyles, tooltipOverlayStyles];
+  }
+
+  /**
+   * Tag name prefix used by custom properties.
+   * @protected
+   * @return {string}
+   */
+  get _tagNamePrefix() {
+    return 'vaadin-tooltip';
   }
 
   /** @protected */
