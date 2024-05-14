@@ -9,12 +9,14 @@
 
     <script type="module">
       import '@vaadin/button';
+      import '@vaadin/horizontal-layout';
       import '@vaadin/popover';
+      import '@vaadin/text-field';
     </script>
   </head>
 
   <body>
-    <vaadin-button id="button">Toggle popover</vaadin-button>
+    <vaadin-button id="button">Discount</vaadin-button>
 
     <vaadin-popover for="button" position="bottom-start"></vaadin-popover>
 
@@ -26,11 +28,19 @@
           return;
         }
 
-        const text = document.createElement('p');
-        text.textContent = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.';
-        text.style.marginTop = '0';
+        const layout = document.createElement('vaadin-horizontal-layout');
+        layout.setAttribute('theme', 'spacing-s');
+        layout.style.alignItems = 'baseline';
 
-        root.append(text);
+        const field = document.createElement('vaadin-text-field');
+        field.label = 'Discount code';
+
+        const button = document.createElement('vaadin-button');
+        button.textContent = 'Apply';
+
+        layout.append(field, button);
+
+        root.append(layout);
       };
     </script>
   </body>
