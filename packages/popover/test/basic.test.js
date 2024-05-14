@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-popover.js';
 
@@ -79,6 +79,40 @@ describe('popover', () => {
         await nextUpdate(popover);
         expect(popover.target).to.eql(target);
       });
+    });
+  });
+
+  describe('interactions', () => {
+    let target;
+
+    beforeEach(async () => {
+      target = fixtureSync('<button>Target</button>');
+      popover.target = target;
+      await nextUpdate(popover);
+    });
+
+    it('should open overlay on target click by default', async () => {
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay on outside click by default', async () => {
+      target.click();
+      await nextRender();
+
+      outsideClick();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should close overlay on Escape press by default', async () => {
+      target.click();
+      await nextRender();
+
+      esc(document.body);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
     });
   });
 });
