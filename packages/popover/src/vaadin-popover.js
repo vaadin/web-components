@@ -41,7 +41,18 @@ class Popover extends PopoverPositionMixin(PopoverTargetMixin(ElementMixin(Polyl
       renderer: {
         type: Object,
       },
+
+      /** @private */
+      _opened: {
+        type: Boolean,
+        sync: true,
+      },
     };
+  }
+
+  constructor() {
+    super();
+    this.__onTargetClick = this.__onTargetClick.bind(this);
   }
 
   /** @protected */
@@ -55,12 +66,42 @@ class Popover extends PopoverPositionMixin(PopoverTargetMixin(ElementMixin(Polyl
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
+        .opened="${this._opened}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(effectivePosition)}"
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @opened-changed="${this.__onOpenedChanged}"
       ></vaadin-popover-overlay>
     `;
+  }
+
+  /**
+   * @param {HTMLElement} target
+   * @protected
+   * @override
+   */
+  _addTargetListeners(target) {
+    target.addEventListener('click', this.__onTargetClick);
+  }
+
+  /**
+   * @param {HTMLElement} target
+   * @protected
+   * @override
+   */
+  _removeTargetListeners(target) {
+    target.removeEventListener('click', this.__onTargetClick);
+  }
+
+  /** @private */
+  __onTargetClick() {
+    this._opened = !this._opened;
+  }
+
+  /** @private */
+  __onOpenedChanged(event) {
+    this._opened = event.detail.value;
   }
 }
 
