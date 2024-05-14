@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -204,7 +204,12 @@ describe('virtualizer - variable row height - large variance', () => {
     await fixItemPositioningTimeout();
     const targetScrollTop = scrollTarget.scrollHeight - scrollTarget.offsetHeight;
 
-    expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
+    if (isFirefox) {
+      // Firfox has a rounding issue that requires a small tolerance
+      expect(scrollTarget.scrollTop).to.be.closeTo(targetScrollTop, 1);
+    } else {
+      expect(scrollTarget.scrollTop).to.equal(targetScrollTop);
+    }
   });
 
   it('should allow scrolling to start', async () => {
