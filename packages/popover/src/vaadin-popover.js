@@ -50,6 +50,16 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * When true, the popover prevents interacting with background elements
+       * by setting `pointer-events` style on the document body to `none`.
+       * This also enables trapping focus inside the overlay.
+       */
+      modal: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * Set to true to disable closing popover overlay on outside click.
        * Closing on outside click only works when the popover is modal.
        *
@@ -69,6 +79,17 @@ class Popover extends PopoverPositionMixin(
        * @attr {boolean} no-close-on-esc
        */
       noCloseOnEsc: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * When true, the overlay has a backdrop (modality curtain) on top of the
+       * underlying page content, covering the whole viewport.
+       *
+       * @attr {boolean} with-backdrop
+       */
+      withBackdrop: {
         type: Boolean,
         value: false,
       },
@@ -99,6 +120,9 @@ class Popover extends PopoverPositionMixin(
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
         .opened="${this._opened}"
+        .modeless="${!this.modal}"
+        .focusTrap="${this.modal}"
+        .withBackdrop="${this.withBackdrop}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(effectivePosition)}"
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"

@@ -30,6 +30,10 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
     return [
       overlayStyles,
       css`
+        :host([modeless][with-backdrop]) [part='backdrop'] {
+          pointer-events: none;
+        }
+
         :host([position^='top'][top-aligned]) [part='overlay'],
         :host([position^='bottom'][top-aligned]) [part='overlay'] {
           margin-top: var(--vaadin-popover-offset-top, 0);
