@@ -149,22 +149,77 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should close overlay on Escape press by default', async () => {
+    it('should not close on outside click if noCloseOnOutsideClick is true', async () => {
+      popover.noCloseOnOutsideClick = true;
+      await nextUpdate(popover);
+
       target.click();
       await nextRender();
 
-      esc(document.body);
+      outsideClick();
       await nextRender();
-      expect(overlay.opened).to.be.false;
+      expect(overlay.opened).to.be.true;
     });
 
-    it('should close overlay on when popover is detached', async () => {
+    it('should close overlay when popover is detached', async () => {
       target.click();
       await nextRender();
 
       popover.remove();
       await nextRender();
       expect(overlay.opened).to.be.false;
+    });
+
+    describe('Escape press', () => {
+      beforeEach(async () => {
+        target.click();
+        await nextRender();
+      });
+
+      it('should close overlay on global Escape press by default', async () => {
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should close overlay on internal Escape press by default', async () => {
+        esc(overlay.$.overlay);
+        await nextRender();
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should close overlay on target Escape press by default', async () => {
+        esc(target);
+        await nextRender();
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not close on global Escape press if noCloseOnEsc is true', async () => {
+        popover.noCloseOnEsc = true;
+        await nextUpdate(popover);
+
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close overlay on internal Escape if noCloseOnEsc is true', async () => {
+        popover.noCloseOnEsc = true;
+        await nextUpdate(popover);
+
+        esc(overlay.$.overlay);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close overlay on target Escape if noCloseOnEsc is true', async () => {
+        popover.noCloseOnEsc = true;
+        await nextUpdate(popover);
+
+        esc(target);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
     });
   });
 });

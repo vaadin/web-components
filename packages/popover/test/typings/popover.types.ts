@@ -23,3 +23,5 @@ assertType<HTMLElement | undefined>(popover.target);
 assertType<PopoverPosition>(popover.position);
 assertType<PopoverRenderer | null | undefined>(popover.renderer);
 assertType<string>(popover.overlayClass);
+assertType<boolean>(popover.noCloseOnEsc);
+assertType<boolean>(popover.noCloseOnOutsideClick);

@@ -57,7 +57,7 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
   render() {
     return html`
       <div id="backdrop" part="backdrop" hidden ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay">
+      <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
