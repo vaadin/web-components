@@ -50,7 +50,7 @@ describe('basic features', () => {
   it('check visible item count', () => {
     grid.size = 10;
     flushGrid(grid);
-    expect(grid.shadowRoot.querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
+    expect(grid.shadowRoot.querySelectorAll('tbody tr:not([hidden]):not(#emptystaterow)').length).to.eql(10);
   });
 
   it('first visible item', () => {
@@ -361,5 +361,63 @@ describe('flex child', () => {
       expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);
       expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
     });
+  });
+});
+
+describe('empty-state', () => {
+  let grid;
+
+  function getEmptyState() {
+    return grid.querySelector('[slot="empty-state"]');
+  }
+
+  function emptyStateVisible() {
+    return getEmptyState()?.offsetHeight > 0;
+  }
+
+  function itemsBodyVisible() {
+    return grid.$.items.offsetHeight > 0;
+  }
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+        <div slot="empty-state">
+          No items
+        </div>
+      </vaadin-grid>
+    `);
+    await nextFrame();
+  });
+
+  it('should show empty state', () => {
+    expect(emptyStateVisible()).to.be.true;
+    expect(itemsBodyVisible()).to.be.false;
+  });
+
+  it('should not show empty state when grid has items', async () => {
+    grid.items = [{ name: 'foo' }];
+    await nextFrame();
+    expect(emptyStateVisible()).to.be.false;
+    expect(itemsBodyVisible()).to.be.true;
+  });
+
+  it('should not show empty state when empty state content is not defined', async () => {
+    grid.removeChild(getEmptyState());
+    await nextFrame();
+    expect(emptyStateVisible()).to.be.false;
+    expect(itemsBodyVisible()).to.be.true;
+  });
+
+  it('should not throw on empty state click', () => {
+    expect(() => getEmptyState().click()).not.to.throw();
+  });
+
+  it('should not dispatch cell-activate on empty state click', () => {
+    const spy = sinon.spy();
+    grid.addEventListener('cell-activate', spy);
+    getEmptyState().click();
+    expect(spy.called).to.be.false;
   });
 });

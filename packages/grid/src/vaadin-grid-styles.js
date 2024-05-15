@@ -132,6 +132,24 @@ export const gridStyles = css`
     height: 100%;
   }
 
+  #scroller:not([show-empty-state]) #emptystatebody,
+  #scroller[show-empty-state] #items {
+    display: none;
+  }
+
+  #emptystatebody {
+    position: sticky;
+    inset: 0;
+  }
+
+  #emptystatebody,
+  #emptystatebody tr,
+  #emptystatebody td {
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+  }
+
   [part~='cell']:not([part~='details-cell']) {
     flex-shrink: 0;
     flex-grow: 1;

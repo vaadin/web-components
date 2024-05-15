@@ -675,7 +675,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const tabOrder = [
         this.$.table,
         this._headerFocusable,
-        this._itemsFocusable,
+        this.__showEmptyState ? this.$.emptystatecell : this._itemsFocusable,
         this._footerFocusable,
         this.$.focusexit,
       ];
@@ -907,7 +907,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     _detectInteracting(e) {
-      const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      const isInteracting = e.composedPath().some((el) => el.localName === 'slot' && this.shadowRoot.contains(el));
       this._setInteracting(isInteracting);
       this.__updateHorizontalScrollPosition();
     }

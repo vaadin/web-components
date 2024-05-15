@@ -185,7 +185,16 @@ function getFocusedRowIndex() {
 }
 
 function getTabbableElements(root) {
-  return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
+  return [...root.querySelectorAll('[tabindex]:not([tabindex="-1"])')].filter((el) => {
+    let parent = el;
+    while (parent) {
+      if (getComputedStyle(parent).display === 'none') {
+        return false;
+      }
+      parent = parent.parentElement;
+    }
+    return true;
+  });
 }
 
 function getTabbableCells(root) {
@@ -2583,5 +2592,78 @@ describe('lazy data provider', () => {
     flushDataProvider();
 
     expect(cellFocusSpy.called).to.be.false;
+  });
+});
+
+describe('empty-state', () => {
+  function getEmptyState() {
+    return grid.querySelector('[slot="empty-state"]');
+  }
+
+  function getEmptyStateFocusables() {
+    return [...getEmptyState().querySelectorAll('button')];
+  }
+
+  function getEmptyStateBody() {
+    return grid.$.emptystatebody;
+  }
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+        <div slot="empty-state">
+          No items <button>button 1</button> <button>button 2</button>
+        </div>
+      </vaadin-grid>
+    `);
+    await nextFrame();
+  });
+
+  it('should tab to empty state body', () => {
+    tabToHeader();
+    tab();
+
+    expect(getEmptyStateBody().contains(grid.shadowRoot.activeElement)).to.be.true;
+  });
+
+  it('should shift tab back to header from empty state body', () => {
+    tabToHeader();
+    tab();
+    shiftTab();
+
+    expect(grid.$.header.contains(grid.shadowRoot.activeElement)).to.be.true;
+  });
+
+  it('should enter interaction mode on empty state body', () => {
+    tabToHeader();
+    tab();
+    enter();
+
+    expect(grid.hasAttribute('interacting')).to.be.true;
+  });
+
+  it('should focus the first focusable element in empty state content', () => {
+    tabToHeader();
+    tab();
+    enter();
+    expect(document.activeElement).to.equal(getEmptyStateFocusables()[0]);
+  });
+
+  it('should tab to the next focusable element in empty state content', async () => {
+    tabToHeader();
+    tab();
+    enter();
+    await sendKeys({ press: 'Tab' });
+    expect(document.activeElement).to.equal(getEmptyStateFocusables()[1]);
+  });
+
+  it('should exit interaction mode on escape on empty state content', () => {
+    tabToHeader();
+    tab();
+    enter();
+    escape(document.activeElement);
+    expect(grid.hasAttribute('interacting')).to.be.false;
+    expect(getEmptyStateBody().contains(grid.shadowRoot.activeElement)).to.be.true;
   });
 });

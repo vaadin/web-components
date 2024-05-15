@@ -90,6 +90,11 @@ registerStyles(
       z-index: 3;
     }
 
+    /* Empty state */
+    [part~='empty-state'] {
+      padding: var(--lumo-space-m);
+    }
+
     /* Drag and Drop styles */
     :host([dragover])::after {
       content: '';

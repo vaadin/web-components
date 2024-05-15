@@ -83,7 +83,7 @@ export const ActiveItemMixin = (superClass) =>
 
       const path = e.composedPath();
       const cell = path[path.indexOf(this.$.table) - 3];
-      if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+      if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1 || cell === this.$.emptystatecell) {
         return;
       }
       const cellContent = cell._content;
