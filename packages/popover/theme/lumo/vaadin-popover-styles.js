@@ -12,11 +12,6 @@ const popoverOverlay = css`
     --vaadin-popover-offset-end: var(--lumo-space-xs);
   }
 
-  [part='overlay'] {
-    background: var(--lumo-base-color);
-    color: var(--lumo-body-text-color);
-  }
-
   [part='content'] {
     padding: var(--lumo-space-xs) var(--lumo-space-s);
   }
