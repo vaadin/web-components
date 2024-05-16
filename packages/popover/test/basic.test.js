@@ -214,6 +214,14 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should remove document click listener when popover is detached', async () => {
+      const spy = sinon.spy(document, 'removeEventListener');
+      popover.remove();
+      await nextRender();
+      expect(spy).to.be.called;
+      expect(spy.firstCall.args[0]).to.equal('click');
+    });
+
     describe('Escape press', () => {
       beforeEach(async () => {
         target.click();
