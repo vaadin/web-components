@@ -61,7 +61,6 @@ class Popover extends PopoverPositionMixin(
 
       /**
        * Set to true to disable closing popover overlay on outside click.
-       * Closing on outside click only works when the popover is modal.
        *
        * @attr {boolean} no-close-on-outside-click
        */
@@ -104,6 +103,7 @@ class Popover extends PopoverPositionMixin(
 
   constructor() {
     super();
+    this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
   }
@@ -156,8 +156,17 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    document.addEventListener('click', this.__onGlobalClick);
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    document.removeEventListener('click', this.__onGlobalClick);
 
     this._opened = false;
   }
@@ -180,6 +189,21 @@ class Popover extends PopoverPositionMixin(
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
     target.removeEventListener('keydown', this.__onTargetKeydown);
+  }
+
+  /**
+   * Overlay's global outside click listener doesn't work when
+   * the overlay is modeless, so we use a separate listener.
+   * @private
+   */
+  __onGlobalClick(event) {
+    if (
+      this._opened &&
+      !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
+      !this.noCloseOnOutsideClick
+    ) {
+      this._opened = false;
+    }
   }
 
   /** @private */

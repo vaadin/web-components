@@ -172,13 +172,13 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should not close overlay on outside click by default', async () => {
+    it('should close overlay on outside click by default', async () => {
       target.click();
       await nextRender();
 
       outsideClick();
       await nextRender();
-      expect(overlay.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should close overlay on outside click when modal is true', async () => {

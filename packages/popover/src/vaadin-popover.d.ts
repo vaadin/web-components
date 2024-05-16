@@ -41,7 +41,6 @@ declare class Popover extends PopoverPositionMixin(
 
   /**
    * Set to true to disable closing popover overlay on outside click.
-   * Closing on outside click only works when the popover is modal.
    *
    * @attr {boolean} no-close-on-outside-click
    */
