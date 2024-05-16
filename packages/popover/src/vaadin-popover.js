@@ -186,7 +186,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /**
-   * Close the popover if `noCloseOnOutsideClick` isn't set to true,
+   * Close the popover if `noCloseOnOutsideClick` isn't set to true.
    * @private
    */
   __onOutsideClick(e) {
