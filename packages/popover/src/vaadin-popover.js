@@ -199,6 +199,7 @@ class Popover extends PopoverPositionMixin(
   __onGlobalClick(event) {
     if (
       this._opened &&
+      !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
     ) {
