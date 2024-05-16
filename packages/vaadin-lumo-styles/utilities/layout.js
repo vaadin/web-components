@@ -283,7 +283,7 @@ export const layout = css`
     .sm\\:flex {
       display: flex;
     }
-    .sm\\grid {
+    .sm\\:grid {
       display: grid;
     }
     .sm\\:hidden {
@@ -327,7 +327,7 @@ export const layout = css`
     .md\\:flex {
       display: flex;
     }
-    .md\\grid {
+    .md\\:grid {
       display: grid;
     }
     .md\\:hidden {
@@ -371,7 +371,7 @@ export const layout = css`
     .lg\\:flex {
       display: flex;
     }
-    .lg\\grid {
+    .lg\\:grid {
       display: grid;
     }
     .lg\\:hidden {
@@ -415,7 +415,7 @@ export const layout = css`
     .xl\\:flex {
       display: flex;
     }
-    .xl\\grid {
+    .xl\\:grid {
       display: grid;
     }
     .xl\\:hidden {
@@ -459,7 +459,7 @@ export const layout = css`
     .\\32xl\\:flex {
       display: flex;
     }
-    .\\32xl\\grid {
+    .\\32xl\\:grid {
       display: grid;
     }
     .\\32xl\\:hidden {
