@@ -49,6 +49,30 @@ class Popover extends PopoverPositionMixin(
         type: Object,
       },
 
+      /**
+       * Set to true to disable closing popover overlay on outside click.
+       * Closing on outside click only works when the popover is modal.
+       *
+       * @attr {boolean} no-close-on-outside-click
+       */
+      noCloseOnOutsideClick: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * Set to true to disable closing popover overlay on Escape press.
+       * When the popover is modal, pressing Escape anywhere in the
+       * document closes the overlay. Otherwise, only Escape press
+       * from the popover itself or its target closes the overlay.
+       *
+       * @attr {boolean} no-close-on-esc
+       */
+      noCloseOnEsc: {
+        type: Boolean,
+        value: false,
+      },
+
       /** @private */
       _opened: {
         type: Boolean,
@@ -60,6 +84,7 @@ class Popover extends PopoverPositionMixin(
   constructor() {
     super();
     this.__onTargetClick = this.__onTargetClick.bind(this);
+    this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
   }
 
   /** @protected */
@@ -79,6 +104,8 @@ class Popover extends PopoverPositionMixin(
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @opened-changed="${this.__onOpenedChanged}"
+        @vaadin-overlay-escape-press="${this.__onEscapePress}"
+        @vaadin-overlay-outside-click="${this.__onOutsideClick}"
       ></vaadin-popover-overlay>
     `;
   }
@@ -118,6 +145,7 @@ class Popover extends PopoverPositionMixin(
    */
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
+    target.addEventListener('keydown', this.__onTargetKeydown);
   }
 
   /**
@@ -127,6 +155,7 @@ class Popover extends PopoverPositionMixin(
    */
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
+    target.removeEventListener('keydown', this.__onTargetKeydown);
   }
 
   /** @private */
@@ -135,8 +164,35 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
+  __onTargetKeydown(event) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc) {
+      this._opened = false;
+    }
+  }
+
+  /** @private */
   __onOpenedChanged(event) {
     this._opened = event.detail.value;
+  }
+
+  /**
+   * Close the popover if `noCloseOnEsc` isn't set to true.
+   * @private
+   */
+  __onEscapePress(e) {
+    if (this.noCloseOnEsc) {
+      e.preventDefault();
+    }
+  }
+
+  /**
+   * Close the popover if `noCloseOnOutsideClick` isn't set to true.
+   * @private
+   */
+  __onOutsideClick(e) {
+    if (this.noCloseOnOutsideClick) {
+      e.preventDefault();
+    }
   }
 }
 

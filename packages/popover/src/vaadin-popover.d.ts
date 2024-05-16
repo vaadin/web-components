@@ -33,6 +33,24 @@ declare class Popover extends PopoverPositionMixin(
   renderer: PopoverRenderer | null | undefined;
 
   /**
+   * Set to true to disable closing popover overlay on outside click.
+   * Closing on outside click only works when the popover is modal.
+   *
+   * @attr {boolean} no-close-on-outside-click
+   */
+  noCloseOnOutsideClick: boolean;
+
+  /**
+   * Set to true to disable closing popover overlay on Escape press.
+   * When the popover is modal, pressing Escape anywhere in the
+   * document closes the overlay. Otherwise, only Escape press
+   * from the popover itself or its target closes the overlay.
+   *
+   * @attr {boolean} no-close-on-esc
+   */
+  noCloseOnEsc: boolean;
+
+  /**
    * Requests an update for the content of the popover.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
