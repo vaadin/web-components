@@ -116,6 +116,38 @@ describe('popover', () => {
     });
   });
 
+  describe('overlay properties', () => {
+    it('should set modeless on the overlay by default', () => {
+      expect(overlay.modeless).to.be.true;
+    });
+
+    it('should set modeless on the overlay to false when modal is true', async () => {
+      popover.modal = true;
+      await nextUpdate(popover);
+      expect(overlay.modeless).to.be.false;
+    });
+
+    it('should not set focusTrap on the overlay by default', () => {
+      expect(overlay.modeless).to.be.true;
+    });
+
+    it('should set focusTrap on the overlay to true when modal is true', async () => {
+      popover.modal = true;
+      await nextUpdate(popover);
+      expect(overlay.focusTrap).to.be.true;
+    });
+
+    it('should propagate withBackdrop property to the overlay', async () => {
+      popover.withBackdrop = true;
+      await nextUpdate(popover);
+      expect(overlay.withBackdrop).to.be.true;
+
+      popover.withBackdrop = false;
+      await nextUpdate(popover);
+      expect(overlay.withBackdrop).to.be.false;
+    });
+  });
+
   describe('interactions', () => {
     let target;
 
@@ -149,6 +181,18 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should close overlay on outside click when modal is true', async () => {
+      popover.modal = true;
+      await nextUpdate(popover);
+
+      target.click();
+      await nextRender();
+
+      outsideClick();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should not close on outside click if noCloseOnOutsideClick is true', async () => {
       popover.noCloseOnOutsideClick = true;
       await nextUpdate(popover);
@@ -170,13 +214,30 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should remove document click listener when popover is detached', async () => {
+      const spy = sinon.spy(document, 'removeEventListener');
+      popover.remove();
+      await nextRender();
+      expect(spy).to.be.called;
+      expect(spy.firstCall.args[0]).to.equal('click');
+    });
+
     describe('Escape press', () => {
       beforeEach(async () => {
         target.click();
         await nextRender();
       });
 
-      it('should close overlay on global Escape press by default', async () => {
+      it('should not close overlay on global Escape press by default', async () => {
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should close overlay on global Escape press when modal is true', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+
         esc(document.body);
         await nextRender();
         expect(overlay.opened).to.be.false;
@@ -195,6 +256,7 @@ describe('popover', () => {
       });
 
       it('should not close on global Escape press if noCloseOnEsc is true', async () => {
+        popover.modal = true;
         popover.noCloseOnEsc = true;
         await nextUpdate(popover);
 
@@ -219,6 +281,26 @@ describe('popover', () => {
         esc(target);
         await nextRender();
         expect(overlay.opened).to.be.true;
+      });
+    });
+
+    describe('backdrop', () => {
+      beforeEach(async () => {
+        popover.withBackdrop = true;
+        await nextUpdate(popover);
+
+        target.click();
+        await nextRender();
+      });
+
+      it('should set pointer-events on backdrop to none when non modal', () => {
+        expect(getComputedStyle(overlay.$.backdrop).pointerEvents).to.equal('none');
+      });
+
+      it('should set pointer-events on backdrop to auto when modal', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+        expect(getComputedStyle(overlay.$.backdrop).pointerEvents).to.equal('auto');
       });
     });
   });
