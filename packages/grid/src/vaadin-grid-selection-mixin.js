@@ -109,6 +109,17 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    /**
+     * @protected
+     */
+    _rangeSelection(startItem, endItem) {
+      this.dispatchEvent(
+        new CustomEvent('range-selection', {
+          detail: { startItem, endItem },
+        }),
+      );
+    }
+
     /** @private */
     __selectedItemsChanged() {
       this.requestContentUpdate();
@@ -129,5 +140,14 @@ export const SelectionMixin = (superClass) =>
      * Fired when the `selectedItems` property changes.
      *
      * @event selected-items-changed
+     */
+
+    /**
+     * Fired when the user attempts to select a range of items with shift-click.
+     *
+     * @event range-selection
+     * @param {Object} detail
+     * @param {GridItem} detail.startItem The item where the range selection started.
+     * @param {GridItem} detail.endItem The item where the range selection ended.
      */
   };

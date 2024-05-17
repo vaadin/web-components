@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   fire,
@@ -850,5 +850,61 @@ describe('multi selection column', () => {
 
       expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
     });
+  });
+
+  describe('range-selection event', () => {
+    let rangeSelectionSpy;
+
+    async function mouseClick(element) {
+      const { x, y, width, height } = element.getBoundingClientRect();
+
+      await sendMouse({
+        type: 'click',
+        position: [x + width / 2, y + height / 2].map(Math.floor),
+      });
+    }
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 450px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      await nextFrame();
+      grid.items = Array.from({ length: 100 }, (_, i) => `Item ${i}`);
+
+      rangeSelectionSpy = sinon.spy();
+      grid.addEventListener('range-selection', rangeSelectionSpy);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should not fire the event initially', () => {
+      expect(rangeSelectionSpy).not.to.be.called;
+    });
+
+    it('should fire the event on shift-range selection with mouse', async () => {
+      const row0Checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+      const row5Checkbox = getBodyCellContent(grid, 5, 0).querySelector('vaadin-checkbox');
+
+      await mouseClick(row0Checkbox);
+
+      await sendKeys({ down: 'Shift' });
+      await mouseClick(row5Checkbox);
+      await sendKeys({ up: 'Shift' });
+
+      expect(rangeSelectionSpy).to.be.calledOnce;
+      expect(rangeSelectionSpy.args[0][0].detail).to.eql({
+        startItem: grid.items[0],
+        endItem: grid.items[5],
+      });
+    });
+
+    it('should fire the event on shift-range deselection with mouse', () => {});
+
+    it('should fire the event on shift-range selection with keyboard', () => {});
   });
 });

@@ -36,20 +36,33 @@
         cb(pageItems, levelSize);
       };
 
-      const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.generator = ({ column, item }) => {
-        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
-      };
+      grid.addEventListener('range-selection', (event) => {
+        const { startItem, endItem } = event.detail;
+
+        const selectedItems = new Set(grid.selectedItems);
+        const startItemContext = grid._dataProviderController.getItemContext(startItem);
+        const endItemContext = grid._dataProviderController.getItemContext(endItem);
+        const startFlatIndex = Math.min(startItemContext.flatIndex, endItemContext.flatIndex);
+        const endFlatIndex = Math.max(startItemContext.flatIndex, endItemContext.flatIndex);
+
+        const isSelection = selectedItems.has(startItem);
+
+        for (let i = startFlatIndex; i <= endFlatIndex; i++) {
+          const { item } = grid._dataProviderController.getFlatIndexContext(i);
+          if (isSelection) {
+            selectedItems.add(item);
+          } else {
+            selectedItems.delete(item);
+          }
+        }
+
+        grid.selectedItems = [...selectedItems];
+      });
     </script>
 
-    <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
-      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+    <vaadin-grid item-id-path="name" style="height: 800px">
+      <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+      <vaadin-grid-column path="name"></vaadin-grid-column>
     </vaadin-grid>
   </body>
 </html>

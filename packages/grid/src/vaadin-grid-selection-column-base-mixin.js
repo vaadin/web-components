@@ -103,14 +103,20 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
+      this.__onGridSelectStart = this.__onGridSelectStart.bind(this);
+      this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
+      this.__onGridKeyboardInteraction = this.__onGridKeyboardInteraction.bind(this);
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
+        this._grid.addEventListener('keydown', this.__onGridKeyboardInteraction);
+        this._grid.addEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.addEventListener('selectstart', this.__onGridSelectStart);
+        this._grid.addEventListener('row-activate', this.__onGridItemActivate);
+        this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
       }
     }
 
@@ -118,7 +124,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._grid) {
-        this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
+        this._grid.removeEventListener('keydown', this.__onGridKeyboardInteraction);
+        this._grid.removeEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.removeEventListener('selectstart', this.__onGridSelectStart);
+        this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
+        this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
       }
     }
 
@@ -188,6 +198,29 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._selectAll();
       } else {
         this._deselectAll();
+      }
+    }
+
+    /** @private */
+    __onGridKeyboardInteraction(e) {
+      this.__shiftKeyActive = e.shiftKey;
+    }
+
+    /** @private */
+    __onGridSelectStart(e) {
+      // Prevent text selection when shift-selecting a range of items.
+      if (this.__rangeSelectionStartItem && this.__shiftKeyActive) {
+        e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onGridItemActivate(e) {
+      if (this.autoSelect) {
+        const { item } = e.detail.model;
+        if (item) {
+          this.__toggleItem(item);
+        }
       }
     }
 
@@ -401,6 +434,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     _deselectItem(_item) {}
 
     /**
+     * Override to handle the user selecting a range of items.
+     *
+     * @param {Object} startItem the item where the range selection started
+     * @param {Object} endItem the item where the range selection ended
+     * @protected
+     */
+    _rangeSelection(_startItem, _endItem) {}
+
+    /**
      * Toggles the selected state of the given item.
      *
      * @param item the item to toggle
@@ -413,6 +455,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       } else {
         this._deselectItem(item);
       }
+
+      const startItem = this.__rangeSelectionStartItem || item;
+      if (this.__shiftKeyActive && !this._grid._itemsEqual(startItem, item)) {
+        this._rangeSelection(startItem, item);
+      }
+      this.__rangeSelectionStartItem = item;
     }
 
     /**
