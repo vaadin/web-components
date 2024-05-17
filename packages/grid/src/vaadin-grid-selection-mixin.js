@@ -58,6 +58,36 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    selectRange(item0, item1) {
+      const item0Context = this._dataProviderController.getItemContext(item0);
+      const item1Context = this._dataProviderController.getItemContext(item1);
+      const startFlatIndex = Math.min(item0Context.flatIndex, item1Context.flatIndex);
+      const endFlatIndex = Math.max(item0Context.flatIndex, item1Context.flatIndex);
+
+      const selectedItems = [...this.selectedItems];
+      for (let i = startFlatIndex; i <= endFlatIndex; i++) {
+        const { item } = this._dataProviderController.getFlatIndexContext(i);
+        selectedItems.push(item);
+      }
+
+      this.selectedItems = selectedItems;
+    }
+
+    deselectRange(item0, item1) {
+      const item0Context = this._dataProviderController.getItemContext(item0);
+      const item1Context = this._dataProviderController.getItemContext(item1);
+      const startFlatIndex = Math.min(item0Context.flatIndex, item1Context.flatIndex);
+      const endFlatIndex = Math.max(item0Context.flatIndex, item1Context.flatIndex);
+
+      let selectedItems = [...this.selectedItems];
+      for (let i = startFlatIndex; i <= endFlatIndex; i++) {
+        const { item } = this._dataProviderController.getFlatIndexContext(i);
+        selectedItems = selectedItems.filter((i) => !this._itemsEqual(i, item));
+      }
+
+      this.selectedItems = selectedItems;
+    }
+
     /**
      * Deselects the given item if it is already selected.
      *
