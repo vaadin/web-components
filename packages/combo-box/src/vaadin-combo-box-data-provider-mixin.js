@@ -261,8 +261,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (this.items !== undefined && this.dataProvider !== undefined) {
         restoreOldValueCallback();
         throw new Error('Using `items` and `dataProvider` together is not supported');
-      } else if (this.dataProvider && !this.filteredItems) {
-        this.filteredItems = [];
       }
     }
 
