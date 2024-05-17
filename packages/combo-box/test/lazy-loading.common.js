@@ -624,6 +624,12 @@ describe('lazy loading', () => {
         expect(comboBox.filteredItems).to.eql(['foo']);
       });
 
+      it('should add items when dataProvider return size undefined', () => {
+        comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], undefined);
+        comboBox.opened = true;
+        expect(comboBox.filteredItems).to.eql(['foo', 'bar']);
+      });
+
       it('should remove extra filteredItems when decreasing size', () => {
         comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
         comboBox.open();
