@@ -123,6 +123,10 @@ export const GridSelectionColumnMixin = (superClass) =>
       this._grid.selectItem(item);
     }
 
+    _selectRange(item0, item1) {
+      this._grid.selectRange(item0, item1);
+    }
+
     /**
      * Override a method from `GridSelectionColumnBaseMixin` to handle the user
      * deselecting an item.
@@ -133,6 +137,10 @@ export const GridSelectionColumnMixin = (superClass) =>
      */
     _deselectItem(item) {
       this._grid.deselectItem(item);
+    }
+
+    _deselectRange(item0, item1) {
+      this._grid.deselectRange(item0, item1);
     }
 
     /** @private */

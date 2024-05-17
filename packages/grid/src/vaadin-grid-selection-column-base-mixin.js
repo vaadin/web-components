@@ -136,7 +136,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox.setAttribute('aria-label', 'Select Row');
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
-        checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
+        checkbox.addEventListener('click', this.__onSelectRowClick.bind(this));
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
         root.addEventListener('click', this.__onCellClick.bind(this));
@@ -172,17 +172,23 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __onSelectRowCheckedChanged(e) {
-      // Skip if the state is changed by the renderer.
-      if (e.target.checked === e.target.__rendererChecked) {
-        return;
-      }
+    __onSelectRowClick(e) {
+      const lastSelectedItem = this.__lastSelectedItem;
+      const currentSelectedItem = e.currentTarget.__item;
 
       if (e.target.checked) {
-        this._selectItem(e.target.__item);
+        if (e.shiftKey && lastSelectedItem) {
+          this._selectRange(lastSelectedItem, currentSelectedItem);
+        } else {
+          this._selectItem(currentSelectedItem);
+        }
+      } else if (e.shiftKey && lastSelectedItem) {
+        this._deselectRange(lastSelectedItem, currentSelectedItem);
       } else {
-        this._deselectItem(e.target.__item);
+        this._deselectItem(currentSelectedItem);
       }
+
+      this.__lastSelectedItem = currentSelectedItem;
     }
 
     /** @private */
@@ -357,6 +363,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @protected
      */
     _deselectItem(item) {}
+
+    _selectRange(item0, item1) {}
+
+    _deselectRange(item0, item1) {}
 
     /**
      * IOS needs indeterminate + checked at the same time
