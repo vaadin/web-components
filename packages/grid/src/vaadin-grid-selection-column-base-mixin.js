@@ -92,6 +92,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
         /** @protected */
         _selectAllHidden: Boolean,
+
+        /** @private */
+        __shiftKeyPressed: Boolean,
+
+        /** @private */
+        __lastActiveItem: Object,
       };
     }
 
@@ -99,6 +105,39 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       return [
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
       ];
+    }
+
+    constructor() {
+      super();
+      this.__onGridSelectStart = this.__onGridSelectStart.bind(this);
+      this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
+      this.__onGridKeyboardInteraction = this.__onGridKeyboardInteraction.bind(this);
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this._grid) {
+        this._grid.addEventListener('keydown', this.__onGridKeyboardInteraction);
+        this._grid.addEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.addEventListener('selectstart', this.__onGridSelectStart);
+        this._grid.addEventListener('row-activate', this.__onGridItemActivate);
+        this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      if (this._grid) {
+        this._grid.removeEventListener('keydown', this.__onGridKeyboardInteraction);
+        this._grid.removeEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.removeEventListener('selectstart', this.__onGridSelectStart);
+        this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
+        this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
+      }
     }
 
     /**
@@ -170,6 +209,18 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __onGridKeyboardInteraction(e) {
+      this.__shiftKeyPressed = e.shiftKey;
+    }
+
+    /** @private */
+    __onGridSelectStart(e) {
+      if (this.__shiftKeyPressed && this.__lastActiveItem) {
+        e.preventDefault();
+      }
+    }
+
     /**
      * Selects or deselects the row when the Select Row checkbox is switched.
      * The listener handles only user-fired events.
@@ -182,10 +233,37 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         return;
       }
 
+      const item = e.currentTarget.__item;
       if (e.target.checked) {
-        this._selectItem(e.target.__item);
+        this._selectItem(item);
       } else {
-        this._deselectItem(e.target.__item);
+        this._deselectItem(item);
+      }
+
+      const lastActiveItem = this.__lastActiveItem;
+      if (this.__shiftKeyPressed && lastActiveItem) {
+        this.__lastActiveItem = null;
+        this._rangeSelection(lastActiveItem, item);
+      } else {
+        this.__lastActiveItem = item;
+      }
+    }
+
+    /** @private */
+    __onGridItemActivate(e) {
+      if (this.autoSelect) {
+        const { item } = e.detail.model;
+        if (item) {
+          this._grid._toggleItem(item);
+        }
+
+        const lastActiveItem = this.__lastActiveItem;
+        if (this.__shiftKeyPressed && lastActiveItem) {
+          this._rangeSelection(lastActiveItem, item);
+          this.__lastActiveItem = null;
+        } else {
+          this.__lastActiveItem = item;
+        }
       }
     }
 
@@ -370,6 +448,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @protected
      */
     _deselectItem(_item) {}
+
+    /**
+     * Override to handle the user selecting a range of items.
+     *
+     * @param {Object} startItem the item where the range selection started
+     * @param {Object} endItem the item where the range selection ended
+     * @protected
+     */
+    _rangeSelection(_startItem, _endItem) {}
 
     /**
      * Toggles the selected state of the given item.
