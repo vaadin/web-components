@@ -34,6 +34,7 @@
     "@vaadin/overlay": "24.5.0-alpha0",
     "@vaadin/password-field": "24.5.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "24.5.0-alpha0",
+    "@vaadin/popover": "24.5.0-alpha0",
     "@vaadin/radio-group": "24.5.0-alpha0",
     "@vaadin/select": "24.5.0-alpha0",
     "@vaadin/tabs": "24.5.0-alpha0",

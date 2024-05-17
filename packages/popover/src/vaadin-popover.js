@@ -214,7 +214,9 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this._opened) {
+      // Prevent closing parent overlay (e.g. dialog)
+      event.stopPropagation();
       this._opened = false;
     }
   }
