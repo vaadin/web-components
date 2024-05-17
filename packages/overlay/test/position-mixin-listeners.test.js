@@ -189,6 +189,31 @@ describe('position mixin listeners', () => {
       expect(updatePositionSpy.called).to.be.false;
     });
 
+    it('should update position on target move by changing style', async () => {
+      target.style.position = 'static';
+      await nextFrame();
+      updatePositionSpy.resetHistory();
+
+      target.marginTop = '20px';
+      // Wait for intersection observer
+      await nextFrame();
+      await nextFrame();
+
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should not update position on target move when closed', async () => {
+      target.style.position = 'static';
+      await nextFrame();
+      updatePositionSpy.resetHistory();
+
+      overlay.opened = false;
+
+      target.marginTop = '20px';
+      await aTimeout(50);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
     ['document', 'visual viewport', 'ancestor'].forEach((name) => {
       describe(name, () => {
         let scrollableNode;

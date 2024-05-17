@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
+import { observeMove } from './vaadin-overlay-utils.js';
 
 const PROP_NAMES_VERTICAL = {
   start: 'top',
@@ -153,6 +154,12 @@ export const PositionMixin = (superClass) =>
       this.__positionTargetAncestorRootNodes.forEach((node) => {
         node.addEventListener('scroll', this.__onScroll, true);
       });
+
+      if (this.positionTarget) {
+        this.__observePositionTargetMove = observeMove(this.positionTarget, () => {
+          this._updatePosition();
+        });
+      }
     }
 
     /** @private */
@@ -165,6 +172,11 @@ export const PositionMixin = (superClass) =>
           node.removeEventListener('scroll', this.__onScroll, true);
         });
         this.__positionTargetAncestorRootNodes = null;
+      }
+
+      if (this.__observePositionTargetMove) {
+        this.__observePositionTargetMove();
+        this.__observePositionTargetMove = null;
       }
     }
 
