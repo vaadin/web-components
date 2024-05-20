@@ -97,7 +97,7 @@ export class SlotObserver {
     }
 
     if (addedNodes.length || removedNodes.length || movedNodes.length) {
-      this.callback({ addedNodes, movedNodes, removedNodes });
+      this.callback({ addedNodes, currentNodes, movedNodes, removedNodes });
     }
 
     this._storedNodes = currentNodes;
