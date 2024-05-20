@@ -22,6 +22,11 @@ export const SplitLayoutMixin = (superClass) =>
           value: 'horizontal',
         },
 
+        splitAnchor: {
+          type: String,
+          value: '',
+        },
+
         /** @private */
         _previousPrimaryPointerEvents: String,
 
@@ -74,6 +79,7 @@ export const SplitLayoutMixin = (superClass) =>
       children
         .filter((child) => !child.hasAttribute('slot'))
         .forEach((child, i) => this._processChildWithoutSlot(child, i));
+      this.__initSplitAnchor();
     }
 
     /** @private */
@@ -102,13 +108,14 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _setFlexBasis(element, flexBasis, containerSize) {
+    _setFlexBasis(element, flexBasis, containerSize, isSplitFrozen = false) {
       flexBasis = Math.max(0, Math.min(flexBasis, containerSize));
       if (flexBasis === 0) {
         // Pure zero does not play well in Safari
         flexBasis = 0.000001;
       }
-      element.style.flex = `1 1 ${flexBasis}px`;
+      const flex = isSplitFrozen ? `0 0` : `1 1`;
+      element.style.flex = `${flex} ${flexBasis}px`;
     }
 
     /** @private */
@@ -154,13 +161,32 @@ export const SplitLayoutMixin = (superClass) =>
       const isRtl = this.orientation !== 'vertical' && this.__isRTL;
       const dirDistance = isRtl ? -distance : distance;
 
-      this._setFlexBasis(this._primaryChild, this._startSize.primary + dirDistance, this._startSize.container);
-      this._setFlexBasis(this._secondaryChild, this._startSize.secondary - dirDistance, this._startSize.container);
+      this._setFlexBasis(
+        this._primaryChild,
+        this._startSize.primary + dirDistance,
+        this._startSize.container,
+        this.splitAnchor === 'primary',
+      );
+      this._setFlexBasis(
+        this._secondaryChild,
+        this._startSize.secondary - dirDistance,
+        this._startSize.container,
+        this.splitAnchor === 'secondary',
+      );
 
       if (event.detail.state === 'end') {
         this.dispatchEvent(new CustomEvent('splitter-dragend'));
 
         delete this._startSize;
+      }
+    }
+
+    __initSplitAnchor() {
+      if (this.splitAnchor) {
+        const component = this[`_${this.splitAnchor}Child`];
+        const size = this.orientation === 'vertical' ? 'height' : 'width';
+        const componentSize = component.getBoundingClientRect()[size];
+        this._setFlexBasis(component, componentSize, this.getBoundingClientRect()[size], true);
       }
     }
   };
