@@ -388,6 +388,10 @@ describe('empty state', () => {
         </div>
       </vaadin-grid>
     `);
+
+    grid.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+      root.textContent = 'Footer';
+    };
     await nextFrame();
   });
 
@@ -419,5 +423,66 @@ describe('empty state', () => {
     grid.addEventListener('cell-activate', spy);
     getEmptyState().click();
     expect(spy.called).to.be.false;
+  });
+
+  describe('bounds', () => {
+    let gridRect, emptyStateCellRect, headerRect, footerRect;
+
+    beforeEach(() => {
+      gridRect = grid.getBoundingClientRect();
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      headerRect = grid.$.header.getBoundingClientRect();
+      footerRect = grid.$.footer.getBoundingClientRect();
+    });
+
+    it('should cover the viewport', () => {
+      expect(emptyStateCellRect.top).to.be.closeTo(headerRect.bottom, 1);
+      expect(emptyStateCellRect.bottom).to.be.closeTo(footerRect.top, 1);
+      expect(emptyStateCellRect.left).to.be.closeTo(gridRect.left, 1);
+      expect(emptyStateCellRect.right).to.be.closeTo(gridRect.right, 1);
+    });
+
+    it('should push footer to the bottom of the viewport', () => {
+      expect(footerRect.bottom).to.be.closeTo(gridRect.bottom, 1);
+    });
+
+    it('should not scroll horizontally with the columns', () => {
+      grid.append(
+        ...Array.from({ length: 10 }, () => fixtureSync('<vaadin-grid-column path="name"></vaadin-grid-column>')),
+      );
+      flushGrid(grid);
+
+      grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      expect(emptyStateCellRect.left).to.be.closeTo(gridRect.left, 1);
+      expect(emptyStateCellRect.right).to.be.closeTo(gridRect.right, 1);
+    });
+
+    it('should not scroll verticaly with the columns', () => {
+      getEmptyState().innerHTML = Array.from({ length: 10 }, () => '<h2>Lorem ipsum dolor sit amet</h2>').join('');
+      flushGrid(grid);
+
+      grid.$.emptystatecell.scrollTop = grid.$.emptystatecell.scrollHeight;
+      expect(grid.$.emptystatecell.scrollTop).to.be.greaterThan(0);
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      expect(emptyStateCellRect.top).to.be.closeTo(headerRect.bottom, 1);
+      expect(emptyStateCellRect.bottom).to.be.closeTo(footerRect.top, 1);
+    });
+
+    it('should not overflow on all-rows-visible', () => {
+      grid.allRowsVisible = true;
+      grid.style.width = '200px';
+      getEmptyState().innerHTML = Array.from({ length: 10 }, () => '<h2>Lorem ipsum dolor sit amet</h2>').join('');
+      flushGrid(grid);
+
+      const emptyStateRect = getEmptyState().getBoundingClientRect();
+      gridRect = grid.getBoundingClientRect();
+      headerRect = grid.$.header.getBoundingClientRect();
+      footerRect = grid.$.footer.getBoundingClientRect();
+      expect(emptyStateRect.top).to.be.greaterThan(headerRect.bottom);
+      expect(emptyStateRect.bottom).to.be.lessThan(footerRect.top);
+      expect(emptyStateRect.left).to.be.greaterThan(gridRect.left);
+      expect(emptyStateRect.right).to.be.lessThan(gridRect.right);
+    });
   });
 });
