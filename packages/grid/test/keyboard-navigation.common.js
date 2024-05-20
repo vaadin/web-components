@@ -2620,11 +2620,13 @@ describe('empty-state', () => {
     await nextFrame();
   });
 
-  it('should tab to empty state body', () => {
+  it('should tab to empty state body', async () => {
     tabToHeader();
     tab();
 
+    await nextFrame();
     expect(getEmptyStateBody().contains(grid.shadowRoot.activeElement)).to.be.true;
+    expect(getEmptyStateBody().querySelector('td[part~="focused-cell"]')).to.be.ok;
   });
 
   it('should shift tab back to header from empty state body', () => {
@@ -2633,6 +2635,7 @@ describe('empty-state', () => {
     shiftTab();
 
     expect(grid.$.header.contains(grid.shadowRoot.activeElement)).to.be.true;
+    expect(getEmptyStateBody().querySelector('td[part~="focused-cell"]')).to.be.null;
   });
 
   it('should enter interaction mode on empty state body', () => {
@@ -2665,5 +2668,15 @@ describe('empty-state', () => {
     escape(document.activeElement);
     expect(grid.hasAttribute('interacting')).to.be.false;
     expect(getEmptyStateBody().contains(grid.shadowRoot.activeElement)).to.be.true;
+  });
+
+  it('should not dispatch cell-focus event on empty state body', () => {
+    tabToHeader();
+
+    const spy = sinon.spy();
+    grid.addEventListener('cell-focus', spy);
+    tab();
+
+    expect(spy.called).to.be.false;
   });
 });

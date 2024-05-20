@@ -860,7 +860,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (cell) {
           const context = this.getEventContext(e);
           this.__pendingBodyCellFocus = this.loading && context.section === 'body';
-          if (!this.__pendingBodyCellFocus) {
+          if (!this.__pendingBodyCellFocus && cell !== this.$.emptystatecell) {
             // Fire a cell-focus event for the cell
             cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
           }
