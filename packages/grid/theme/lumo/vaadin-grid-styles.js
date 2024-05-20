@@ -93,6 +93,7 @@ registerStyles(
     /* Empty state */
     [part~='empty-state'] {
       padding: var(--lumo-space-m);
+      color: var(--lumo-secondary-text-color);
     }
 
     /* Drag and Drop styles */

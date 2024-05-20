@@ -154,6 +154,7 @@ registerStyles(
     /* Empty state */
     [part~='empty-state'] {
       padding: 16px;
+      color: var(--material-secondary-text-color);
     }
 
     /* Drag and Drop styles */
