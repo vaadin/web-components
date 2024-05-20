@@ -132,24 +132,6 @@ export const gridStyles = css`
     height: 100%;
   }
 
-  #scroller:not([show-empty-state]) #emptystatebody,
-  #scroller[show-empty-state] #items {
-    display: none;
-  }
-
-  #emptystatebody {
-    position: sticky;
-    inset: 0;
-  }
-
-  #emptystatebody,
-  #emptystatebody tr,
-  #emptystatebody td {
-    flex-direction: column;
-    display: flex;
-    flex: 1;
-  }
-
   [part~='cell']:not([part~='details-cell']) {
     flex-shrink: 0;
     flex-grow: 1;
@@ -205,6 +187,32 @@ export const gridStyles = css`
   [no-scrollbars][safari] #table,
   [no-scrollbars][firefox] #table {
     overflow: hidden;
+  }
+
+  /* Empty state */
+
+  #scroller:not([show-empty-state]) #emptystatebody,
+  #scroller[show-empty-state] #items {
+    display: none;
+  }
+
+  #emptystatebody {
+    display: flex;
+    position: sticky;
+    inset: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #emptystaterow {
+    display: flex;
+    flex: 1;
+  }
+
+  #emptystatecell {
+    display: block;
+    flex: 1;
+    overflow: auto;
   }
 
   /* Reordering styles */
