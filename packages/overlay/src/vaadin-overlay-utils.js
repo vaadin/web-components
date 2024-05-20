@@ -59,9 +59,17 @@ export function observeMove(element, callback) {
           return refresh();
         }
 
+        // It's possible for the watched element to not be at perfect 1.0 visibility when we create
+        // the IntersectionObserver. This has a couple of causes:
+        //   - elements being on partial pixels
+        //   - elements being hidden offscreen (e.g., <html> has `overflow: hidden`)
+        //   - delays: if your DOM change occurs due to e.g., page resize, you can see elements
+        //     behind their actual position
+        //
+        // In all of these cases, refresh but with this lower ratio of threshold. When the element
+        // moves beneath _that_ new value, the user will get notified.
         if (ratio === 0.0) {
-          // If the element is clipped, the ratio is 0.
-          ratio = 1e-7;
+          ratio = 0.0000001; // Just needs to be non-zero
         }
 
         refresh(false, ratio);
