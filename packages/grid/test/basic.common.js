@@ -364,7 +364,7 @@ describe('flex child', () => {
   });
 });
 
-describe('empty-state', () => {
+describe('empty state', () => {
   let grid;
 
   function getEmptyState() {

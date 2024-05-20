@@ -36,6 +36,19 @@ describe('theme', () => {
     await visualDiff(element, 'theme-compact');
   });
 
+  it('empty state compact', async () => {
+    element.setAttribute('theme', 'compact');
+    element.items = [];
+    element.appendChild(
+      fixtureSync(`
+        <div slot="empty-state">
+          No items found.
+        </div>
+      `),
+    );
+    await visualDiff(element, 'empty-state-compact');
+  });
+
   it('no-row-borders', async () => {
     element.setAttribute('theme', 'no-row-borders');
     await visualDiff(element, 'theme-no-row-borders');

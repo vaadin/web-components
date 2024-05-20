@@ -2595,7 +2595,7 @@ describe('lazy data provider', () => {
   });
 });
 
-describe('empty-state', () => {
+describe('empty state', () => {
   function getEmptyState() {
     return grid.querySelector('[slot="empty-state"]');
   }
