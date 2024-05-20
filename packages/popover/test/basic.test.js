@@ -74,6 +74,12 @@ describe('popover', () => {
       await nextUpdate(popover);
       expect(overlay.positionTarget).to.eql(target);
     });
+
+    it('should set target as overlay restoreFocusNode', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+      expect(overlay.restoreFocusNode).to.eql(target);
+    });
   });
 
   describe('for', () => {
@@ -145,6 +151,10 @@ describe('popover', () => {
       popover.withBackdrop = false;
       await nextUpdate(popover);
       expect(overlay.withBackdrop).to.be.false;
+    });
+
+    it('should set restoreFocusOnClose on the overlay to true', () => {
+      expect(overlay.restoreFocusOnClose).to.be.true;
     });
   });
 

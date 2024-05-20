@@ -128,6 +128,8 @@ class Popover extends PopoverPositionMixin(
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @opened-changed="${this.__onOpenedChanged}"
+        restore-focus-on-close
+        .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
       ></vaadin-popover-overlay>
