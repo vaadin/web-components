@@ -151,6 +151,11 @@ registerStyles(
       z-index: 3;
     }
 
+    /* Empty state */
+    [part~='empty-state'] {
+      padding: 16px;
+    }
+
     /* Drag and Drop styles */
     :host([dragover])::after {
       content: '';
