@@ -351,6 +351,10 @@ registerStyles(
       min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
     }
 
+    :host([theme~='compact']) [part~='empty-state'] {
+      padding: var(--lumo-space-s);
+    }
+
     /* Wrap cell contents */
 
     :host([theme~='wrap-cell-content']) [part~='cell'] ::slotted(vaadin-grid-cell-content) {
