@@ -162,4 +162,28 @@ describe('SlotObserver', () => {
 
     expect(spy.calledOnce).to.be.true;
   });
+
+  it('should include current nodes in the callback', async () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+    expect(spy.called).to.be.false;
+
+    await Promise.resolve();
+
+    const childNodes = [...host.childNodes];
+    const currentNodes = spy.firstCall.args[0].currentNodes;
+
+    expect(currentNodes).to.be.an('array');
+    expect(currentNodes.length).to.equal(3);
+    expect(currentNodes).to.eql(childNodes);
+
+    spy.resetHistory();
+
+    childNodes[1].remove();
+    observer.flush();
+
+    const newCurrentNodes = spy.firstCall.args[0].currentNodes;
+    expect(newCurrentNodes.length).to.equal(2);
+    expect(newCurrentNodes).to.eql([childNodes[0], childNodes[2]]);
+  });
 });
