@@ -210,7 +210,8 @@ describe('position mixin listeners', () => {
       overlay.opened = false;
 
       target.marginTop = '20px';
-      await aTimeout(50);
+      await nextFrame();
+      await nextFrame();
       expect(updatePositionSpy.called).to.be.false;
     });
 
