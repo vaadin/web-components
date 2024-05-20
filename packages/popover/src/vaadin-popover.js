@@ -6,6 +6,8 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -38,6 +40,15 @@ class Popover extends PopoverPositionMixin(
 
   static get properties() {
     return {
+      /**
+       * True if the popover overlay is opened, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
+
       /**
        * Custom function for rendering the content of the overlay.
        * Receives two arguments:
@@ -83,6 +94,23 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * Used to configure the way how the popover overlay is opened or closed, based on
+       * the user interactions with the target element.
+       *
+       * Supported values:
+       * - `click` (default) - opens on target click, closes on outside click and Escape
+       * - `hover-or-click` - also opens on target mouseenter, closes on target mouseleave
+       * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
+       * - `manual` - only can be opened by setting `opened` property on the host
+       *
+       * Note: moving mouse or focus inside the popover overlay content does not close it.
+       */
+      trigger: {
+        type: String,
+        value: 'click',
+      },
+
+      /**
        * When true, the overlay has a backdrop (modality curtain) on top of the
        * underlying page content, covering the whole viewport.
        *
@@ -92,13 +120,12 @@ class Popover extends PopoverPositionMixin(
         type: Boolean,
         value: false,
       },
-
-      /** @private */
-      _opened: {
-        type: Boolean,
-        value: false,
-      },
     };
+  }
+
+  /** @private */
+  get __isHoverTrigger() {
+    return this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus';
   }
 
   constructor() {
@@ -106,6 +133,8 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
+    this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
+    this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
   }
 
   /** @protected */
@@ -119,7 +148,7 @@ class Popover extends PopoverPositionMixin(
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
-        .opened="${this._opened}"
+        .opened="${this.opened}"
         .modeless="${!this.modal}"
         .focusTrap="${this.modal}"
         .withBackdrop="${this.withBackdrop}"
@@ -127,6 +156,8 @@ class Popover extends PopoverPositionMixin(
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @mouseenter="${this.__onOverlayMouseEnter}"
+        @mouseleave="${this.__onOverlayMouseLeave}"
         @opened-changed="${this.__onOpenedChanged}"
         restore-focus-on-close
         .restoreFocusNode="${this.target}"
@@ -170,7 +201,7 @@ class Popover extends PopoverPositionMixin(
 
     document.removeEventListener('click', this.__onGlobalClick, true);
 
-    this._opened = false;
+    this.opened = false;
   }
 
   /**
@@ -181,6 +212,8 @@ class Popover extends PopoverPositionMixin(
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
     target.addEventListener('keydown', this.__onTargetKeydown);
+    target.addEventListener('mouseenter', this.__onTargetMouseEnter);
+    target.addEventListener('mouseleave', this.__onTargetMouseLeave);
   }
 
   /**
@@ -191,6 +224,8 @@ class Popover extends PopoverPositionMixin(
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
     target.removeEventListener('keydown', this.__onTargetKeydown);
+    target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
+    target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
   }
 
   /**
@@ -200,32 +235,72 @@ class Popover extends PopoverPositionMixin(
    */
   __onGlobalClick(event) {
     if (
-      this._opened &&
+      this.opened &&
+      this.trigger !== 'manual' &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
     ) {
-      this._opened = false;
+      this.opened = false;
     }
   }
 
   /** @private */
   __onTargetClick() {
-    this._opened = !this._opened;
+    if (this.trigger === 'click' || this.trigger === 'hover-or-click') {
+      this.opened = !this.opened;
+    }
   }
 
   /** @private */
   __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this._opened) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && this.trigger !== 'manual') {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
-      this._opened = false;
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __onTargetMouseEnter() {
+    if (this.__isHoverTrigger) {
+      // Retain opened state when moving pointer back to the target.
+      this.__hoverInside = true;
+      this.__abortClosing();
+      this.opened = true;
+    }
+  }
+
+  /** @private */
+  __onTargetMouseLeave(event) {
+    if (this.__isHoverTrigger && !this._overlayElement.contains(event.relatedTarget)) {
+      this.__hoverInside = false;
+      this.__enqueueClosing();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseEnter() {
+    // Retain opened state when moving pointer over the overlay.
+    // Closing can start due to an offset between the target and
+    // the overlay itself. If that's the case, cancel closing.
+    if (this.__isHoverTrigger) {
+      this.__hoverInside = true;
+      this.__abortClosing();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseLeave(event) {
+    if (this.__isHoverTrigger && event.relatedTarget !== this.target) {
+      this.__hoverInside = false;
+      this.__enqueueClosing();
     }
   }
 
   /** @private */
   __onOpenedChanged(event) {
-    this._opened = event.detail.value;
+    this.opened = event.detail.value;
   }
 
   /**
@@ -233,7 +308,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc) {
+    if (this.noCloseOnEsc || this.trigger === 'manual') {
       e.preventDefault();
     }
   }
@@ -243,8 +318,24 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick) {
+    if (this.noCloseOnOutsideClick || this.trigger === 'manual') {
       e.preventDefault();
+    }
+  }
+
+  /** @private */
+  __enqueueClosing() {
+    // NOTE: use 50ms timeout as a grace period to prevent immediate overlay closing
+    // as pointer moves to <body> due to offset between the target and the overlay.
+    this.__debounceClosing = Debouncer.debounce(this.__debounceClosing, timeOut.after(50), () => {
+      this.opened = false;
+    });
+  }
+
+  /** @private */
+  __abortClosing() {
+    if (this.__debounceClosing && this.__debounceClosing.isActive()) {
+      this.__debounceClosing.cancel();
     }
   }
 }

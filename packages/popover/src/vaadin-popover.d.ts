@@ -13,6 +13,8 @@ export type { PopoverPosition } from './vaadin-popover-position-mixin.js';
 
 export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
 
+export type PopoverTrigger = 'click' | 'hover-or-click' | 'hover-or-focus' | 'manual';
+
 /**
  * `<vaadin-popover>` is a Web Component for creating overlays
  * that are positioned next to specified DOM element (target).
@@ -23,6 +25,11 @@ export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
 declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
 ) {
+  /**
+   * True if the popover overlay is opened, false otherwise.
+   */
+  opened: boolean;
+
   /**
    * Custom function for rendering the content of the overlay.
    * Receives two arguments:
@@ -55,6 +62,20 @@ declare class Popover extends PopoverPositionMixin(
    * @attr {boolean} no-close-on-esc
    */
   noCloseOnEsc: boolean;
+
+  /**
+   * Used to configure the way how the popover overlay is opened or closed, based on
+   * the user interactions with the target element.
+   *
+   * Supported values:
+   * - `click` (default) - opens on target click, closes on outside click and Escape
+   * - `hover-or-click` - also opens on target mouseenter, closes on target mouseleave
+   * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
+   * - `manual` - only can be opened by setting `opened` property on the host
+   *
+   * Note: moving mouse or focus inside the popover overlay content does not close it.
+   */
+  trigger: PopoverTrigger;
 
   /**
    * When true, the overlay has a backdrop (modality curtain) on top of the
