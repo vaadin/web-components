@@ -1,5 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, esc, fire, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  esc,
+  fire,
+  fixtureSync,
+  focusin,
+  focusout,
+  nextRender,
+  nextUpdate,
+  outsideClick,
+} from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
 
@@ -19,6 +29,11 @@ describe('trigger', () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
     target = fixtureSync('<button>Target</button>');
     popover.target = target;
+    popover.renderer = (root) => {
+      if (!root.firstChild) {
+        root.appendChild(document.createElement('input'));
+      }
+    };
     await nextRender();
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
@@ -61,8 +76,13 @@ describe('trigger', () => {
   });
 
   describe('hover-or-click', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       popover.trigger = 'hover-or-click';
+      await nextUpdate(popover);
+    });
+
+    it('should set restoreFocusOnClose to false', () => {
+      expect(overlay.restoreFocusOnClose).to.be.false;
     });
 
     it('should open on target mouseenter', async () => {
@@ -153,9 +173,125 @@ describe('trigger', () => {
     });
   });
 
+  describe('hover-or-focus', () => {
+    beforeEach(async () => {
+      popover.trigger = 'hover-or-focus';
+      await nextUpdate(popover);
+    });
+
+    it('should set restoreFocusOnClose to false', () => {
+      expect(overlay.restoreFocusOnClose).to.be.false;
+    });
+
+    it('should open on target mouseenter', async () => {
+      mouseenter(target);
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open on target focusin', async () => {
+      focusin(target);
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on target focusout', async () => {
+      focusin(target);
+      await nextRender();
+
+      focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close on target focusout if target has hover', async () => {
+      focusin(target);
+      await nextRender();
+
+      mouseenter(target);
+      focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on target focusout if overlay has hover', async () => {
+      focusin(target);
+      await nextRender();
+
+      mouseenter(overlay);
+      focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on target focusout to the overlay', async () => {
+      focusin(target);
+      await nextRender();
+
+      focusout(target, overlay);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on overlay focusout', async () => {
+      focusin(target);
+      await nextRender();
+
+      focusout(target, overlay);
+      focusout(overlay);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close on overlay focusout to the overlay content', async () => {
+      focusin(target);
+      await nextRender();
+
+      focusout(overlay, overlay.firstElementChild);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on target mouseleave if target has focus', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      focusin(target);
+      mouseleave(target);
+      await aTimeout(50);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on target mouseleave if overlay has focus', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      focusin(overlay);
+      mouseleave(target);
+      await aTimeout(50);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on overlay mouseleave if overlay has focus', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      focusin(overlay);
+      mouseenter(overlay);
+      mouseleave(overlay);
+      await aTimeout(50);
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
   describe('manual', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       popover.trigger = 'manual';
+      await nextUpdate(popover);
+    });
+
+    it('should set restoreFocusOnClose to false', () => {
+      expect(overlay.restoreFocusOnClose).to.be.false;
     });
 
     it('should not open on target click', async () => {

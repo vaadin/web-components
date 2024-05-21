@@ -133,6 +133,8 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
+    this.__onTargetFocusin = this.__onTargetFocusin.bind(this);
+    this.__onTargetFocusout = this.__onTargetFocusout.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
   }
@@ -158,8 +160,10 @@ class Popover extends PopoverPositionMixin(
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
+        @focusin="${this.__onOverlayFocusin}"
+        @focusout="${this.__onOverlayFocusout}"
         @opened-changed="${this.__onOpenedChanged}"
-        restore-focus-on-close
+        .restoreFocusOnClose="${this.trigger === 'click'}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
@@ -214,6 +218,8 @@ class Popover extends PopoverPositionMixin(
     target.addEventListener('keydown', this.__onTargetKeydown);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.addEventListener('focusin', this.__onTargetFocusin);
+    target.addEventListener('focusout', this.__onTargetFocusout);
   }
 
   /**
@@ -226,6 +232,8 @@ class Popover extends PopoverPositionMixin(
     target.removeEventListener('keydown', this.__onTargetKeydown);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.removeEventListener('focusin', this.__onTargetFocusin);
+    target.removeEventListener('focusout', this.__onTargetFocusout);
   }
 
   /**
@@ -262,10 +270,33 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
+  __onTargetFocusin() {
+    this.__focusInside = true;
+
+    if (this.trigger === 'hover-or-focus') {
+      this.opened = true;
+    }
+  }
+
+  /** @private */
+  __onTargetFocusout(event) {
+    if (this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__focusInside = false;
+
+    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
   __onTargetMouseEnter() {
+    this.__hoverInside = true;
+
     if (this.__isHoverTrigger) {
       // Retain opened state when moving pointer back to the target.
-      this.__hoverInside = true;
       this.__abortClosing();
       this.opened = true;
     }
@@ -273,27 +304,64 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
-    if (this.__isHoverTrigger && !this._overlayElement.contains(event.relatedTarget)) {
-      this.__hoverInside = false;
+    if (this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__hoverInside = false;
+
+    if (this.trigger === 'hover-or-focus' && this.__focusInside) {
+      return;
+    }
+
+    if (this.__isHoverTrigger) {
       this.__enqueueClosing();
     }
   }
 
   /** @private */
+  __onOverlayFocusin() {
+    this.__focusInside = true;
+  }
+
+  /** @private */
+  __onOverlayFocusout(event) {
+    if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__focusInside = false;
+
+    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
   __onOverlayMouseEnter() {
+    this.__hoverInside = true;
+
     // Retain opened state when moving pointer over the overlay.
     // Closing can start due to an offset between the target and
     // the overlay itself. If that's the case, cancel closing.
     if (this.__isHoverTrigger) {
-      this.__hoverInside = true;
       this.__abortClosing();
     }
   }
 
   /** @private */
   __onOverlayMouseLeave(event) {
-    if (this.__isHoverTrigger && event.relatedTarget !== this.target) {
-      this.__hoverInside = false;
+    if (event.relatedTarget === this.target) {
+      return;
+    }
+
+    this.__hoverInside = false;
+
+    if (this.trigger === 'hover-or-focus' && this.__focusInside) {
+      return;
+    }
+
+    if (this.__isHoverTrigger) {
       this.__enqueueClosing();
     }
   }
