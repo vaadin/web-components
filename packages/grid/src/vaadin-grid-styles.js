@@ -191,8 +191,8 @@ export const gridStyles = css`
 
   /* Empty state */
 
-  #scroller:not([show-empty-state]) #emptystatebody,
-  #scroller[show-empty-state] #items {
+  #scroller:not([empty-state]) #emptystatebody,
+  #scroller[empty-state] #items {
     display: none;
   }
 

@@ -165,9 +165,9 @@ export const GridMixin = (superClass) =>
         },
 
         /** @private */
-        __showEmptyState: {
+        __emptyState: {
           type: Boolean,
-          computed: '__computeShowEmptyState(_flatSize, __hasEmptyStateContent)',
+          computed: '__computeEmptyState(_flatSize, __hasEmptyStateContent)',
         },
       };
     }
@@ -883,7 +883,7 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __computeShowEmptyState(flatSize, hasEmptyStateContent) {
+    __computeEmptyState(flatSize, hasEmptyStateContent) {
       return flatSize === 0 && hasEmptyStateContent;
     }
 

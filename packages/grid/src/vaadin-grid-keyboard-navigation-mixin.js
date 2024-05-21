@@ -675,7 +675,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const tabOrder = [
         this.$.table,
         this._headerFocusable,
-        this.__showEmptyState ? this.$.emptystatecell : this._itemsFocusable,
+        this.__emptyState ? this.$.emptystatecell : this._itemsFocusable,
         this._footerFocusable,
         this.$.focusexit,
       ];

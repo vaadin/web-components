@@ -269,7 +269,7 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerE
         ios$="[[_ios]]"
         loading$="[[loading]]"
         column-reordering-allowed$="[[columnReorderingAllowed]]"
-        show-empty-state$="[[__showEmptyState]]"
+        empty-state$="[[__emptyState]]"
       >
         <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
           <caption id="sizer" part="row"></caption>
