@@ -190,6 +190,17 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should close on target focusout if target has lost hover', async () => {
+      focusin(target);
+      await nextRender();
+
+      mouseenter(target);
+      mouseleave(target);
+      focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should not close on target focusout if overlay has hover', async () => {
       focusin(target);
       await nextRender();
@@ -198,6 +209,17 @@ describe('trigger', () => {
       focusout(target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on target focusout if overlay has lost hover', async () => {
+      focusin(target);
+      await nextRender();
+
+      mouseenter(overlay);
+      mouseleave(overlay);
+      focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
     });
 
     it('should not close on target focusout to the overlay', async () => {
@@ -224,6 +246,16 @@ describe('trigger', () => {
       await nextRender();
 
       focusout(overlay, overlay.firstElementChild);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on overlay focusout back to the target', async () => {
+      focusin(target);
+      await nextRender();
+
+      focusout(target, overlay);
+      focusout(overlay, target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
