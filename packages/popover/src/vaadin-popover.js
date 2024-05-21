@@ -125,11 +125,6 @@ class Popover extends PopoverPositionMixin(
     };
   }
 
-  /** @private */
-  get __isHoverTrigger() {
-    return this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus';
-  }
-
   constructor() {
     super();
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
@@ -286,18 +281,14 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    this.__focusInside = false;
-
-    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
-      this.opened = false;
-    }
+    this.__handleFocusout();
   }
 
   /** @private */
   __onTargetMouseEnter() {
     this.__hoverInside = true;
 
-    if (this.__isHoverTrigger) {
+    if (this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus') {
       this.opened = true;
     }
   }
@@ -308,15 +299,7 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    this.__hoverInside = false;
-
-    if (this.trigger === 'hover-or-focus' && this.__focusInside) {
-      return;
-    }
-
-    if (this.__isHoverTrigger) {
-      this.opened = false;
-    }
+    this.__handleMouseLeave();
   }
 
   /** @private */
@@ -330,11 +313,7 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    this.__focusInside = false;
-
-    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
-      this.opened = false;
-    }
+    this.__handleFocusout();
   }
 
   /** @private */
@@ -348,13 +327,27 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
+    this.__handleMouseLeave();
+  }
+
+  /** @private */
+  __handleFocusout() {
+    this.__focusInside = false;
+
+    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __handleMouseLeave() {
     this.__hoverInside = false;
 
     if (this.trigger === 'hover-or-focus' && this.__focusInside) {
       return;
     }
 
-    if (this.__isHoverTrigger) {
+    if (this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus') {
       this.opened = false;
     }
   }
