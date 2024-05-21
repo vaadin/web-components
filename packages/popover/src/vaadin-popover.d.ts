@@ -82,7 +82,8 @@ declare class Popover extends PopoverPositionMixin(
    *
    * Supported values:
    * - `click` (default) - opens on target click, closes on outside click and Escape
-   * - `hover-or-click` - also opens on target mouseenter, closes on target mouseleave
+   * - `hover-or-click` - opens on target mouseenter, closes on target mouseleave.
+   * Also opens on click but only in case it originates from the keyboard (Enter / Space).
    * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
    * - `manual` - only can be opened by setting `opened` property on the host
    *

@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -99,7 +100,8 @@ class Popover extends PopoverPositionMixin(
        *
        * Supported values:
        * - `click` (default) - opens on target click, closes on outside click and Escape
-       * - `hover-or-click` - also opens on target mouseenter, closes on target mouseleave
+       * - `hover-or-click` - opens on target mouseenter, closes on target mouseleave.
+       * Also opens on click but only in case it originates from the keyboard (Enter / Space).
        * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
        * - `manual` - only can be opened by setting `opened` property on the host
        *
@@ -255,7 +257,7 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetClick() {
-    if (this.trigger === 'click' || this.trigger === 'hover-or-click') {
+    if (this.trigger === 'click' || (this.trigger === 'hover-or-click' && isKeyboardActive())) {
       this.opened = !this.opened;
     }
   }

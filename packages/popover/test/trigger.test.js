@@ -1,10 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import {
+  enter,
   esc,
   fire,
   fixtureSync,
   focusin,
   focusout,
+  mousedown,
   nextRender,
   nextUpdate,
   outsideClick,
@@ -132,16 +134,37 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should open on target click', async () => {
+    it('should not open on target click from mouse', async () => {
+      mousedown(target);
+      enter(target);
       target.click();
       await nextRender();
       expect(overlay.opened).to.be.true;
     });
 
-    it('should close on target click', async () => {
+    it('should open on target click from keyboard', async () => {
+      enter(target);
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close on target click from mouse', async () => {
       mouseenter(target);
       await nextRender();
 
+      mousedown(target);
+      target.click();
+      await nextRender();
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on target click from keyboard', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      enter(target);
       target.click();
       await nextRender();
 
