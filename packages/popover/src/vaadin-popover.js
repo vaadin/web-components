@@ -23,6 +23,8 @@ import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
  * Unlike `<vaadin-tooltip>`, the popover supports rich content
  * that can be provided by using `renderer` function.
  *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin

@@ -16,11 +16,24 @@ export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
 export type PopoverTrigger = 'click' | 'hover-or-click' | 'hover-or-focus' | 'manual';
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type PopoverOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+export interface PopoverCustomEventMap {
+  'opened-changed': PopoverOpenedChangedEvent;
+}
+
+export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
+
+/**
  * `<vaadin-popover>` is a Web Component for creating overlays
  * that are positioned next to specified DOM element (target).
  *
  * Unlike `<vaadin-tooltip>`, the popover supports rich content
  * that can be provided by using `renderer` function.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
@@ -92,6 +105,18 @@ declare class Popover extends PopoverPositionMixin(
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
+
+  addEventListener<K extends keyof PopoverEventMap>(
+    type: K,
+    listener: (this: Popover, ev: PopoverEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof PopoverEventMap>(
+    type: K,
+    listener: (this: Popover, ev: PopoverEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {
