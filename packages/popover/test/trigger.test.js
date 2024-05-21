@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  aTimeout,
   esc,
   fire,
   fixtureSync,
@@ -91,12 +90,12 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should close on target mouseleave after a timeout', async () => {
+    it('should close on target mouseleave', async () => {
       mouseenter(target);
       await nextRender();
 
       mouseleave(target);
-      await aTimeout(50);
+      await nextUpdate(popover);
 
       expect(overlay.opened).to.be.false;
     });
@@ -106,29 +105,18 @@ describe('trigger', () => {
       await nextRender();
 
       mouseleave(target, overlay);
-      await aTimeout(50);
+      await nextUpdate(popover);
 
       expect(overlay.opened).to.be.true;
     });
 
-    it('should not close on target mouseleave followed by overlay mouseenter', async () => {
-      mouseenter(target);
-      await nextRender();
-
-      mouseleave(target);
-      mouseenter(overlay);
-      await aTimeout(50);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should close on overlay mouseleave after a timeout', async () => {
+    it('should close on overlay mouseleave', async () => {
       mouseenter(target);
       await nextRender();
 
       mouseenter(overlay);
       mouseleave(overlay);
-      await aTimeout(50);
+      await nextUpdate(popover);
 
       expect(overlay.opened).to.be.false;
     });
@@ -139,19 +127,7 @@ describe('trigger', () => {
 
       mouseleave(target, overlay);
       mouseleave(overlay, target);
-      await aTimeout(50);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should not close on overlay mouseleave followed by target mouseenter', async () => {
-      mouseenter(target);
-      await nextRender();
-
-      mouseenter(overlay);
-      mouseleave(overlay);
-      mouseenter(target);
-      await aTimeout(50);
+      await nextUpdate(popover);
 
       expect(overlay.opened).to.be.true;
     });
@@ -258,7 +234,7 @@ describe('trigger', () => {
 
       focusin(target);
       mouseleave(target);
-      await aTimeout(50);
+      await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
 
@@ -268,7 +244,7 @@ describe('trigger', () => {
 
       focusin(overlay);
       mouseleave(target);
-      await aTimeout(50);
+      await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
 
@@ -279,7 +255,7 @@ describe('trigger', () => {
       focusin(overlay);
       mouseenter(overlay);
       mouseleave(overlay);
-      await aTimeout(50);
+      await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
   });

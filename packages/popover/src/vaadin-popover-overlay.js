@@ -39,6 +39,27 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
           margin-top: var(--vaadin-popover-offset-top, 0);
         }
 
+        [part='overlay'] {
+          position: relative;
+          overflow: visible;
+        }
+
+        [part='content'] {
+          overflow: auto;
+        }
+
+        /* Increase the area of the popover so the pointer can go from the target directly to it. */
+        [part='overlay']::before {
+          position: absolute;
+          content: '';
+          top: calc(var(--vaadin-popover-offset-top, 0) * -1);
+          bottom: calc(var(--vaadin-popover-offset-bottom, 0) * -1);
+          inset-inline-start: calc(var(--vaadin-popover-offset-start, 0) * -1);
+          inset-inline-end: calc(var(--vaadin-popover-offset-end, 0) * -1);
+          z-index: -1;
+          pointer-events: auto;
+        }
+
         :host([position^='top'][bottom-aligned]) [part='overlay'],
         :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
           margin-bottom: var(--vaadin-popover-offset-bottom, 0);

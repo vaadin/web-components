@@ -6,8 +6,6 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -298,8 +296,6 @@ class Popover extends PopoverPositionMixin(
     this.__hoverInside = true;
 
     if (this.__isHoverTrigger) {
-      // Retain opened state when moving pointer back to the target.
-      this.__abortClosing();
       this.opened = true;
     }
   }
@@ -317,7 +313,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__isHoverTrigger) {
-      this.__enqueueClosing();
+      this.opened = false;
     }
   }
 
@@ -342,13 +338,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayMouseEnter() {
     this.__hoverInside = true;
-
-    // Retain opened state when moving pointer over the overlay.
-    // Closing can start due to an offset between the target and
-    // the overlay itself. If that's the case, cancel closing.
-    if (this.__isHoverTrigger) {
-      this.__abortClosing();
-    }
   }
 
   /** @private */
@@ -364,7 +353,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__isHoverTrigger) {
-      this.__enqueueClosing();
+      this.opened = false;
     }
   }
 
@@ -390,22 +379,6 @@ class Popover extends PopoverPositionMixin(
   __onOutsideClick(e) {
     if (this.noCloseOnOutsideClick || this.trigger === 'manual') {
       e.preventDefault();
-    }
-  }
-
-  /** @private */
-  __enqueueClosing() {
-    // NOTE: use 50ms timeout as a grace period to prevent immediate overlay closing
-    // as pointer moves to <body> due to offset between the target and the overlay.
-    this.__debounceClosing = Debouncer.debounce(this.__debounceClosing, timeOut.after(50), () => {
-      this.opened = false;
-    });
-  }
-
-  /** @private */
-  __abortClosing() {
-    if (this.__debounceClosing && this.__debounceClosing.isActive()) {
-      this.__debounceClosing.cancel();
     }
   }
 }
