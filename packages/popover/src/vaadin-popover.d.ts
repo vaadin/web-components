@@ -13,7 +13,7 @@ export type { PopoverPosition } from './vaadin-popover-position-mixin.js';
 
 export type PopoverRenderer = (root: HTMLElement, popover: Popover) => void;
 
-export type PopoverTrigger = 'click' | 'hover-or-click' | 'hover-or-focus' | 'manual';
+export type PopoverTrigger = 'click' | 'focus' | 'hover';
 
 /**
  * Fired when the `opened` property changes.
@@ -77,19 +77,24 @@ declare class Popover extends PopoverPositionMixin(
   noCloseOnEsc: boolean;
 
   /**
-   * Used to configure the way how the popover overlay is opened or closed, based on
-   * the user interactions with the target element.
+   * Popover trigger mode, used to configure the way how the overlay is opened or closed.
+   * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
    *
    * Supported values:
-   * - `click` (default) - opens on target click, closes on outside click and Escape
-   * - `hover-or-click` - opens on target mouseenter, closes on target mouseleave.
-   * Also opens on click but only in case it originates from the keyboard (Enter / Space).
-   * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
-   * - `manual` - only can be opened by setting `opened` property on the host
+   * - `click` (default) - opens and closes on target click.
+   * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
+   * to the popover overlay content keeps the overlay opened.
+   * - `focus` - opens on target focus, closes on target blur. Moving focus to the
+   * popover overlay content keeps the overlay opened.
    *
-   * Note: moving mouse or focus inside the popover overlay content does not close it.
+   * In addition to the behavior specified by `trigger`, the popover can be closed by:
+   * - pressing Escape key (unless `noCloseOnEsc` property is true)
+   * - outside click (unless `noCloseOnOutsideClick` property is true)
+   *
+   * When setting `trigger` property to `null`, `undefined` or empty array, the popover
+   * can be only opened or closed programmatically by changing `opened` property.
    */
-  trigger: PopoverTrigger;
+  trigger: PopoverTrigger[] | null | undefined;
 
   /**
    * When true, the overlay has a backdrop (modality curtain) on top of the

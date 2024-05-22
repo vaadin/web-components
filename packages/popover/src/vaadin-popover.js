@@ -6,7 +6,6 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -95,21 +94,26 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Used to configure the way how the popover overlay is opened or closed, based on
-       * the user interactions with the target element.
+       * Popover trigger mode, used to configure the way how the overlay is opened or closed.
+       * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
        *
        * Supported values:
-       * - `click` (default) - opens on target click, closes on outside click and Escape
-       * - `hover-or-click` - opens on target mouseenter, closes on target mouseleave.
-       * Also opens on click but only in case it originates from the keyboard (Enter / Space).
-       * - `hover-or-focus` - opens on mouseenter and focus, closes on mouseleave and blur
-       * - `manual` - only can be opened by setting `opened` property on the host
+       * - `click` (default) - opens and closes on target click.
+       * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
+       * to the popover overlay content keeps the overlay opened.
+       * - `focus` - opens on target focus, closes on target blur. Moving focus to the
+       * popover overlay content keeps the overlay opened.
        *
-       * Note: moving mouse or focus inside the popover overlay content does not close it.
+       * In addition to the behavior specified by `trigger`, the popover can be closed by:
+       * - pressing Escape key (unless `noCloseOnEsc` property is true)
+       * - outside click (unless `noCloseOnOutsideClick` property is true)
+       *
+       * When setting `trigger` property to `null`, `undefined` or empty array, the popover
+       * can be only opened or closed programmatically by changing `opened` property.
        */
       trigger: {
-        type: String,
-        value: 'click',
+        type: Array,
+        value: () => ['click'],
       },
 
       /**
@@ -160,7 +164,7 @@ class Popover extends PopoverPositionMixin(
         @focusin="${this.__onOverlayFocusin}"
         @focusout="${this.__onOverlayFocusout}"
         @opened-changed="${this.__onOpenedChanged}"
-        .restoreFocusOnClose="${this.trigger === 'click'}"
+        .restoreFocusOnClose="${this.__isTrigger('click') && this.trigger.length === 1}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
@@ -241,7 +245,7 @@ class Popover extends PopoverPositionMixin(
   __onGlobalClick(event) {
     if (
       this.opened &&
-      this.trigger !== 'manual' &&
+      !this.__isManual() &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
@@ -252,14 +256,14 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetClick() {
-    if (this.trigger === 'click' || (this.trigger === 'hover-or-click' && isKeyboardActive())) {
+    if (this.__isTrigger('click')) {
       this.opened = !this.opened;
     }
   }
 
   /** @private */
   __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && this.trigger !== 'manual') {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && !this.__isManual()) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this.opened = false;
@@ -270,7 +274,7 @@ class Popover extends PopoverPositionMixin(
   __onTargetFocusin() {
     this.__focusInside = true;
 
-    if (this.trigger === 'hover-or-focus') {
+    if (this.__isTrigger('focus')) {
       this.opened = true;
     }
   }
@@ -288,7 +292,7 @@ class Popover extends PopoverPositionMixin(
   __onTargetMouseEnter() {
     this.__hoverInside = true;
 
-    if (this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus') {
+    if (this.__isTrigger('hover')) {
       this.opened = true;
     }
   }
@@ -334,7 +338,11 @@ class Popover extends PopoverPositionMixin(
   __handleFocusout() {
     this.__focusInside = false;
 
-    if (this.trigger === 'hover-or-focus' && !this.__hoverInside) {
+    if (this.__isTrigger('hover') && this.__hoverInside) {
+      return;
+    }
+
+    if (this.__isTrigger('focus')) {
       this.opened = false;
     }
   }
@@ -343,11 +351,11 @@ class Popover extends PopoverPositionMixin(
   __handleMouseLeave() {
     this.__hoverInside = false;
 
-    if (this.trigger === 'hover-or-focus' && this.__focusInside) {
+    if (this.__isTrigger('focus') && this.__focusInside) {
       return;
     }
 
-    if (this.trigger === 'hover-or-click' || this.trigger === 'hover-or-focus') {
+    if (this.__isTrigger('hover')) {
       this.opened = false;
     }
   }
@@ -362,7 +370,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc || this.trigger === 'manual') {
+    if (this.noCloseOnEsc || this.__isManual()) {
       e.preventDefault();
     }
   }
@@ -372,9 +380,19 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick || this.trigger === 'manual') {
+    if (this.noCloseOnOutsideClick || this.__isManual()) {
       e.preventDefault();
     }
+  }
+
+  /** @private */
+  __isTrigger(trigger) {
+    return Array.isArray(this.trigger) && this.trigger.includes(trigger);
+  }
+
+  /** @private */
+  __isManual() {
+    return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
   }
 }
 
