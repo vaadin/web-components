@@ -77,7 +77,7 @@ declare class Popover extends PopoverPositionMixin(
   noCloseOnEsc: boolean;
 
   /**
-   * Popover trigger mode, used to configure the way how the overlay is opened or closed.
+   * Popover trigger mode, used to configure how the overlay is opened or closed.
    * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
    *
    * Supported values:

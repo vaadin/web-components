@@ -94,7 +94,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Popover trigger mode, used to configure the way how the overlay is opened or closed.
+       * Popover trigger mode, used to configure how the overlay is opened or closed.
        * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
        *
        * Supported values:
@@ -164,7 +164,7 @@ class Popover extends PopoverPositionMixin(
         @focusin="${this.__onOverlayFocusin}"
         @focusout="${this.__onOverlayFocusout}"
         @opened-changed="${this.__onOpenedChanged}"
-        .restoreFocusOnClose="${this.__isTrigger('click') && this.trigger.length === 1}"
+        .restoreFocusOnClose="${this.__hasTrigger('click') && this.trigger.length === 1}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
@@ -256,7 +256,7 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetClick() {
-    if (this.__isTrigger('click')) {
+    if (this.__hasTrigger('click')) {
       this.opened = !this.opened;
     }
   }
@@ -274,7 +274,7 @@ class Popover extends PopoverPositionMixin(
   __onTargetFocusin() {
     this.__focusInside = true;
 
-    if (this.__isTrigger('focus')) {
+    if (this.__hasTrigger('focus')) {
       this.opened = true;
     }
   }
@@ -292,7 +292,7 @@ class Popover extends PopoverPositionMixin(
   __onTargetMouseEnter() {
     this.__hoverInside = true;
 
-    if (this.__isTrigger('hover')) {
+    if (this.__hasTrigger('hover')) {
       this.opened = true;
     }
   }
@@ -338,11 +338,11 @@ class Popover extends PopoverPositionMixin(
   __handleFocusout() {
     this.__focusInside = false;
 
-    if (this.__isTrigger('hover') && this.__hoverInside) {
+    if (this.__hasTrigger('hover') && this.__hoverInside) {
       return;
     }
 
-    if (this.__isTrigger('focus')) {
+    if (this.__hasTrigger('focus')) {
       this.opened = false;
     }
   }
@@ -351,11 +351,11 @@ class Popover extends PopoverPositionMixin(
   __handleMouseLeave() {
     this.__hoverInside = false;
 
-    if (this.__isTrigger('focus') && this.__focusInside) {
+    if (this.__hasTrigger('focus') && this.__focusInside) {
       return;
     }
 
-    if (this.__isTrigger('hover')) {
+    if (this.__hasTrigger('hover')) {
       this.opened = false;
     }
   }
@@ -386,7 +386,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __isTrigger(trigger) {
+  __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
   }
 
