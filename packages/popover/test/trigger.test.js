@@ -1,12 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  enter,
   esc,
   fire,
   fixtureSync,
   focusin,
   focusout,
-  mousedown,
   nextRender,
   nextUpdate,
   outsideClick,
