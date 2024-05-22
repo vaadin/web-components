@@ -317,6 +317,26 @@ describe('trigger', () => {
           expect(overlay.opened).to.be.true;
         });
 
+        it(`should not close on target mouseleave with trigger set to ${trigger}`, async () => {
+          popover.opened = true;
+          await nextRender();
+
+          mouseenter(target);
+          mouseleave(target);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
+
+        it(`should not close on target focusout with trigger set to ${trigger}`, async () => {
+          popover.opened = true;
+          await nextRender();
+
+          focusin(target);
+          focusout(target);
+          await nextRender();
+          expect(overlay.opened).to.be.true;
+        });
+
         it(`should not close on global Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
