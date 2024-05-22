@@ -244,7 +244,7 @@ class Popover extends PopoverPositionMixin(
   __onGlobalClick(event) {
     if (
       this.opened &&
-      !this.__isManual() &&
+      !this.__isManual &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
@@ -262,7 +262,7 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && !this.__isManual()) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && !this.__isManual) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this.opened = false;
@@ -369,7 +369,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc || this.__isManual()) {
+    if (this.noCloseOnEsc || this.__isManual) {
       e.preventDefault();
     }
   }
@@ -379,7 +379,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick || this.__isManual()) {
+    if (this.noCloseOnOutsideClick || this.__isManual) {
       e.preventDefault();
     }
   }
@@ -390,7 +390,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __isManual() {
+  get __isManual() {
     return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
   }
 }
