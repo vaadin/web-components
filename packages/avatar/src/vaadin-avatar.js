@@ -51,7 +51,13 @@ registerStyles('vaadin-avatar', avatarStyles, { moduleId: 'vaadin-avatar-styles'
 class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__onImageLoadError" />
+      <img
+        hidden$="[[!__imgVisible]]"
+        src$="[[img]]"
+        aria-hidden="true"
+        on-error="__onImageLoadError"
+        draggable="false"
+      />
       <svg
         part="icon"
         hidden$="[[!__iconVisible]]"
