@@ -48,6 +48,7 @@ class Popover extends PopoverPositionMixin(
         type: Boolean,
         value: false,
         notify: true,
+        observer: '__openedChanged',
       },
 
       /**
@@ -140,8 +141,8 @@ class Popover extends PopoverPositionMixin(
   constructor() {
     super();
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
+    this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
-    this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
@@ -225,7 +226,6 @@ class Popover extends PopoverPositionMixin(
    */
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
-    target.addEventListener('keydown', this.__onTargetKeydown);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
     target.addEventListener('focusin', this.__onTargetFocusIn);
@@ -239,11 +239,19 @@ class Popover extends PopoverPositionMixin(
    */
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
-    target.removeEventListener('keydown', this.__onTargetKeydown);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
     target.removeEventListener('focusin', this.__onTargetFocusIn);
     target.removeEventListener('focusout', this.__onTargetFocusOut);
+  }
+
+  /** @private */
+  __openedChanged(opened, oldOpened) {
+    if (opened) {
+      document.addEventListener('keydown', this.__onGlobalKeyDown, true);
+    } else if (oldOpened) {
+      document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+    }
   }
 
   /**
@@ -273,9 +281,13 @@ class Popover extends PopoverPositionMixin(
     }
   }
 
-  /** @private */
-  __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && !this.__isManual) {
+  /**
+   * Overlay's global Escape press listener doesn't work when
+   * the overlay is modeless, so we use a separate listener.
+   * @private
+   */
+  __onGlobalKeyDown(event) {
+    if (event.key === 'Escape' && !this.modal && !this.noCloseOnEsc && this.opened && !this.__isManual) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this.opened = false;

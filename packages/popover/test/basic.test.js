@@ -234,7 +234,16 @@ describe('popover', () => {
         await nextRender();
       });
 
-      it('should not close overlay on global Escape press by default', async () => {
+      it('should close overlay on global Escape press by default', async () => {
+        esc(document.body);
+        await nextRender();
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should not close on global Escape press if noCloseOnEsc is true', async () => {
+        popover.noCloseOnEsc = true;
+        await nextUpdate(popover);
+
         esc(document.body);
         await nextRender();
         expect(overlay.opened).to.be.true;
@@ -249,42 +258,12 @@ describe('popover', () => {
         expect(overlay.opened).to.be.false;
       });
 
-      it('should close overlay on internal Escape press by default', async () => {
-        esc(overlay.$.overlay);
-        await nextRender();
-        expect(overlay.opened).to.be.false;
-      });
-
-      it('should close overlay on target Escape press by default', async () => {
-        esc(target);
-        await nextRender();
-        expect(overlay.opened).to.be.false;
-      });
-
-      it('should not close on global Escape press if noCloseOnEsc is true', async () => {
+      it('should not close on global Escape press if noCloseOnEsc is true when moodal', async () => {
         popover.modal = true;
         popover.noCloseOnEsc = true;
         await nextUpdate(popover);
 
         esc(document.body);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
-      });
-
-      it('should not close overlay on internal Escape if noCloseOnEsc is true', async () => {
-        popover.noCloseOnEsc = true;
-        await nextUpdate(popover);
-
-        esc(overlay.$.overlay);
-        await nextRender();
-        expect(overlay.opened).to.be.true;
-      });
-
-      it('should not close overlay on target Escape if noCloseOnEsc is true', async () => {
-        popover.noCloseOnEsc = true;
-        await nextUpdate(popover);
-
-        esc(target);
         await nextRender();
         expect(overlay.opened).to.be.true;
       });
