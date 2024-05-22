@@ -42,7 +42,13 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   render() {
     return html`
-      <img ?hidden="${!this.__imgVisible}" src="${this.img}" aria-hidden="true" @error="${this.__onImageLoadError}" />
+      <img
+        ?hidden="${!this.__imgVisible}"
+        src="${this.img}"
+        aria-hidden="true"
+        @error="${this.__onImageLoadError}"
+        draggable="false"
+      />
       <svg
         part="icon"
         ?hidden="${!this.__iconVisible}"
