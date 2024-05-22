@@ -134,8 +134,8 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
-    this.__onTargetFocusin = this.__onTargetFocusin.bind(this);
-    this.__onTargetFocusout = this.__onTargetFocusout.bind(this);
+    this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
+    this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
   }
@@ -161,8 +161,8 @@ class Popover extends PopoverPositionMixin(
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
-        @focusin="${this.__onOverlayFocusin}"
-        @focusout="${this.__onOverlayFocusout}"
+        @focusin="${this.__onOverlayFocusIn}"
+        @focusout="${this.__onOverlayFocusOut}"
         @opened-changed="${this.__onOpenedChanged}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
@@ -218,8 +218,8 @@ class Popover extends PopoverPositionMixin(
     target.addEventListener('keydown', this.__onTargetKeydown);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
-    target.addEventListener('focusin', this.__onTargetFocusin);
-    target.addEventListener('focusout', this.__onTargetFocusout);
+    target.addEventListener('focusin', this.__onTargetFocusIn);
+    target.addEventListener('focusout', this.__onTargetFocusOut);
   }
 
   /**
@@ -232,8 +232,8 @@ class Popover extends PopoverPositionMixin(
     target.removeEventListener('keydown', this.__onTargetKeydown);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
-    target.removeEventListener('focusin', this.__onTargetFocusin);
-    target.removeEventListener('focusout', this.__onTargetFocusout);
+    target.removeEventListener('focusin', this.__onTargetFocusIn);
+    target.removeEventListener('focusout', this.__onTargetFocusOut);
   }
 
   /**
@@ -270,7 +270,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onTargetFocusin() {
+  __onTargetFocusIn() {
     this.__focusInside = true;
 
     if (this.__hasTrigger('focus')) {
@@ -279,7 +279,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onTargetFocusout(event) {
+  __onTargetFocusOut(event) {
     if (this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
@@ -306,12 +306,12 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __onOverlayFocusin() {
+  __onOverlayFocusIn() {
     this.__focusInside = true;
   }
 
   /** @private */
-  __onOverlayFocusout(event) {
+  __onOverlayFocusOut(event) {
     if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
