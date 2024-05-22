@@ -23,6 +23,8 @@
     <script type="module">
       const popover = document.querySelector('vaadin-popover');
 
+      // popover.trigger = ['hover', 'focus'];
+
       popover.renderer = (root) => {
         if (root.firstChild) {
           return;

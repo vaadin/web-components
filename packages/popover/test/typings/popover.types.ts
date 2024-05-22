@@ -4,7 +4,12 @@ import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { PopoverPositionMixinClass } from '../../src/vaadin-popover-position-mixin.js';
 import type { PopoverTargetMixinClass } from '../../src/vaadin-popover-target-mixin.js';
-import type { PopoverPosition, PopoverRenderer } from '../../vaadin-popover.js';
+import type {
+  PopoverOpenedChangedEvent,
+  PopoverPosition,
+  PopoverRenderer,
+  PopoverTrigger,
+} from '../../vaadin-popover.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -22,8 +27,16 @@ assertType<string | undefined>(popover.for);
 assertType<HTMLElement | undefined>(popover.target);
 assertType<PopoverPosition>(popover.position);
 assertType<PopoverRenderer | null | undefined>(popover.renderer);
+assertType<PopoverTrigger[] | null | undefined>(popover.trigger);
 assertType<string>(popover.overlayClass);
+assertType<boolean>(popover.opened);
 assertType<boolean>(popover.modal);
 assertType<boolean>(popover.withBackdrop);
 assertType<boolean>(popover.noCloseOnEsc);
 assertType<boolean>(popover.noCloseOnOutsideClick);
+
+// Events
+popover.addEventListener('opened-changed', (event) => {
+  assertType<PopoverOpenedChangedEvent>(event);
+  assertType<boolean>(event.detail.value);
+});

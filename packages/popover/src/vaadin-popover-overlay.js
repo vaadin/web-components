@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -39,6 +40,27 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
           margin-top: var(--vaadin-popover-offset-top, 0);
         }
 
+        [part='overlay'] {
+          position: relative;
+          overflow: visible;
+        }
+
+        [part='content'] {
+          overflow: auto;
+        }
+
+        /* Increase the area of the popover so the pointer can go from the target directly to it. */
+        [part='overlay']::before {
+          position: absolute;
+          content: '';
+          top: calc(var(--vaadin-popover-offset-top, 0) * -1);
+          bottom: calc(var(--vaadin-popover-offset-bottom, 0) * -1);
+          inset-inline-start: calc(var(--vaadin-popover-offset-start, 0) * -1);
+          inset-inline-end: calc(var(--vaadin-popover-offset-end, 0) * -1);
+          z-index: -1;
+          pointer-events: auto;
+        }
+
         :host([position^='top'][bottom-aligned]) [part='overlay'],
         :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
           margin-bottom: var(--vaadin-popover-offset-bottom, 0);
@@ -65,6 +87,24 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
+  }
+
+  /**
+   * Override method inherited from `OverlayMixin` to not close
+   * modal popover on outside click when opening on focus.
+   *
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldCloseOnOutsideClick(event) {
+    // When opening a modal popover on mouse focusin, the focus moves to the overlay
+    // and then outside click listener is fired. Detect this case and prevent closing.
+    if (this.owner.__hasTrigger('focus') && isElementFocused(this)) {
+      return false;
+    }
+
+    return super._shouldCloseOnOutsideClick(event);
   }
 }
 

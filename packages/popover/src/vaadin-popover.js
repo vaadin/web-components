@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -20,6 +21,8 @@ import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
  *
  * Unlike `<vaadin-tooltip>`, the popover supports rich content
  * that can be provided by using `renderer` function.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @customElement
  * @extends HTMLElement
@@ -38,6 +41,15 @@ class Popover extends PopoverPositionMixin(
 
   static get properties() {
     return {
+      /**
+       * True if the popover overlay is opened, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        value: false,
+        notify: true,
+      },
+
       /**
        * Custom function for rendering the content of the overlay.
        * Receives two arguments:
@@ -83,18 +95,35 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * Popover trigger mode, used to configure how the overlay is opened or closed.
+       * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
+       *
+       * Supported values:
+       * - `click` (default) - opens and closes on target click.
+       * - `hover` - opens on target mouseenter, closes on target mouseleave. Moving mouse
+       * to the popover overlay content keeps the overlay opened.
+       * - `focus` - opens on target focus, closes on target blur. Moving focus to the
+       * popover overlay content keeps the overlay opened.
+       *
+       * In addition to the behavior specified by `trigger`, the popover can be closed by:
+       * - pressing Escape key (unless `noCloseOnEsc` property is true)
+       * - outside click (unless `noCloseOnOutsideClick` property is true)
+       *
+       * When setting `trigger` property to `null`, `undefined` or empty array, the popover
+       * can be only opened or closed programmatically by changing `opened` property.
+       */
+      trigger: {
+        type: Array,
+        value: () => ['click'],
+      },
+
+      /**
        * When true, the overlay has a backdrop (modality curtain) on top of the
        * underlying page content, covering the whole viewport.
        *
        * @attr {boolean} with-backdrop
        */
       withBackdrop: {
-        type: Boolean,
-        value: false,
-      },
-
-      /** @private */
-      _opened: {
         type: Boolean,
         value: false,
       },
@@ -106,6 +135,10 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
+    this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
+    this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
+    this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
+    this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
   }
 
   /** @protected */
@@ -119,7 +152,7 @@ class Popover extends PopoverPositionMixin(
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this.target}"
         .position="${effectivePosition}"
-        .opened="${this._opened}"
+        .opened="${this.opened}"
         .modeless="${!this.modal}"
         .focusTrap="${this.modal}"
         .withBackdrop="${this.withBackdrop}"
@@ -127,8 +160,11 @@ class Popover extends PopoverPositionMixin(
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @mouseenter="${this.__onOverlayMouseEnter}"
+        @mouseleave="${this.__onOverlayMouseLeave}"
+        @focusin="${this.__onOverlayFocusIn}"
+        @focusout="${this.__onOverlayFocusOut}"
         @opened-changed="${this.__onOpenedChanged}"
-        restore-focus-on-close
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
@@ -170,7 +206,7 @@ class Popover extends PopoverPositionMixin(
 
     document.removeEventListener('click', this.__onGlobalClick, true);
 
-    this._opened = false;
+    this.opened = false;
   }
 
   /**
@@ -181,6 +217,10 @@ class Popover extends PopoverPositionMixin(
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
     target.addEventListener('keydown', this.__onTargetKeydown);
+    target.addEventListener('mouseenter', this.__onTargetMouseEnter);
+    target.addEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.addEventListener('focusin', this.__onTargetFocusIn);
+    target.addEventListener('focusout', this.__onTargetFocusOut);
   }
 
   /**
@@ -191,6 +231,10 @@ class Popover extends PopoverPositionMixin(
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
     target.removeEventListener('keydown', this.__onTargetKeydown);
+    target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
+    target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.removeEventListener('focusin', this.__onTargetFocusIn);
+    target.removeEventListener('focusout', this.__onTargetFocusOut);
   }
 
   /**
@@ -200,32 +244,132 @@ class Popover extends PopoverPositionMixin(
    */
   __onGlobalClick(event) {
     if (
-      this._opened &&
+      this.opened &&
+      !this.__isManual &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
     ) {
-      this._opened = false;
+      this.opened = false;
     }
   }
 
   /** @private */
   __onTargetClick() {
-    this._opened = !this._opened;
+    if (this.__hasTrigger('click')) {
+      this.opened = !this.opened;
+    }
   }
 
   /** @private */
   __onTargetKeydown(event) {
-    if (event.key === 'Escape' && !this.noCloseOnEsc && this._opened) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && !this.__isManual) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
-      this._opened = false;
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __onTargetFocusIn() {
+    this.__focusInside = true;
+
+    if (this.__hasTrigger('focus')) {
+      // When trigger is set to both focus and click, only open on
+      // keyboard focus, to prevent issue when immediately closing
+      // on click which occurs after the focus caused by mousedown.
+      if (this.__hasTrigger('click') && !isKeyboardActive()) {
+        return;
+      }
+
+      this.opened = true;
+    }
+  }
+
+  /** @private */
+  __onTargetFocusOut(event) {
+    if (this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__handleFocusout();
+  }
+
+  /** @private */
+  __onTargetMouseEnter() {
+    this.__hoverInside = true;
+
+    if (this.__hasTrigger('hover')) {
+      this.opened = true;
+    }
+  }
+
+  /** @private */
+  __onTargetMouseLeave(event) {
+    if (this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__handleMouseLeave();
+  }
+
+  /** @private */
+  __onOverlayFocusIn() {
+    this.__focusInside = true;
+  }
+
+  /** @private */
+  __onOverlayFocusOut(event) {
+    if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
+      return;
+    }
+
+    this.__handleFocusout();
+  }
+
+  /** @private */
+  __onOverlayMouseEnter() {
+    this.__hoverInside = true;
+  }
+
+  /** @private */
+  __onOverlayMouseLeave(event) {
+    if (event.relatedTarget === this.target) {
+      return;
+    }
+
+    this.__handleMouseLeave();
+  }
+
+  /** @private */
+  __handleFocusout() {
+    this.__focusInside = false;
+
+    if (this.__hasTrigger('hover') && this.__hoverInside) {
+      return;
+    }
+
+    if (this.__hasTrigger('focus')) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __handleMouseLeave() {
+    this.__hoverInside = false;
+
+    if (this.__hasTrigger('focus') && this.__focusInside) {
+      return;
+    }
+
+    if (this.__hasTrigger('hover')) {
+      this.opened = false;
     }
   }
 
   /** @private */
   __onOpenedChanged(event) {
-    this._opened = event.detail.value;
+    this.opened = event.detail.value;
   }
 
   /**
@@ -233,7 +377,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc) {
+    if (this.noCloseOnEsc || this.__isManual) {
       e.preventDefault();
     }
   }
@@ -243,9 +387,19 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick) {
+    if (this.noCloseOnOutsideClick || this.__isManual) {
       e.preventDefault();
     }
+  }
+
+  /** @private */
+  __hasTrigger(trigger) {
+    return Array.isArray(this.trigger) && this.trigger.includes(trigger);
+  }
+
+  /** @private */
+  get __isManual() {
+    return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
   }
 }
 
