@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -274,6 +275,13 @@ class Popover extends PopoverPositionMixin(
     this.__focusInside = true;
 
     if (this.__hasTrigger('focus')) {
+      // When trigger is set to both focus and click, only open on
+      // keyboard focus, to prevent issue when immediately closing
+      // on click which occurs after the focus caused by mousedown.
+      if (this.__hasTrigger('click') && !isKeyboardActive()) {
+        return;
+      }
+
       this.opened = true;
     }
   }

@@ -281,6 +281,30 @@ describe('trigger', () => {
     });
   });
 
+  describe('focus and click', () => {
+    beforeEach(async () => {
+      popover.trigger = ['click', 'focus'];
+      await nextUpdate(popover);
+    });
+
+    it('should not immediately close on target click when opened on focusin', async () => {
+      target.focus();
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on target click after a delay when opened on focusin', async () => {
+      target.focus();
+      target.click();
+      await nextRender();
+
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+  });
+
   describe('manual', () => {
     [null, undefined, []].forEach((value) => {
       const trigger = Array.isArray(value) ? 'empty array' : value;
