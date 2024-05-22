@@ -82,10 +82,6 @@ describe('trigger', () => {
       await nextUpdate(popover);
     });
 
-    it('should set restoreFocusOnClose to false', () => {
-      expect(overlay.restoreFocusOnClose).to.be.false;
-    });
-
     it('should open on target mouseenter', async () => {
       mouseenter(target);
       await nextRender();
@@ -139,10 +135,6 @@ describe('trigger', () => {
     beforeEach(async () => {
       popover.trigger = ['focus'];
       await nextUpdate(popover);
-    });
-
-    it('should set restoreFocusOnClose to false', () => {
-      expect(overlay.restoreFocusOnClose).to.be.false;
     });
 
     it('should open on target focusin', async () => {
@@ -299,10 +291,6 @@ describe('trigger', () => {
         beforeEach(async () => {
           popover.trigger = value;
           await nextUpdate(popover);
-        });
-
-        it(`should set restoreFocusOnClose to false with trigger set to ${trigger}`, () => {
-          expect(overlay.restoreFocusOnClose).to.be.false;
         });
 
         it(`should not open on target click with trigger set to ${trigger}`, async () => {

@@ -164,7 +164,6 @@ class Popover extends PopoverPositionMixin(
         @focusin="${this.__onOverlayFocusin}"
         @focusout="${this.__onOverlayFocusout}"
         @opened-changed="${this.__onOpenedChanged}"
-        .restoreFocusOnClose="${this.__hasTrigger('click') && this.trigger.length === 1}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"

@@ -152,10 +152,6 @@ describe('popover', () => {
       await nextUpdate(popover);
       expect(overlay.withBackdrop).to.be.false;
     });
-
-    it('should set restoreFocusOnClose on the overlay to true', () => {
-      expect(overlay.restoreFocusOnClose).to.be.true;
-    });
   });
 
   describe('interactions', () => {
