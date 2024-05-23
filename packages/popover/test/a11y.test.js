@@ -50,6 +50,17 @@ describe('a11y', () => {
         expect(focusSpy).to.not.be.called;
       });
 
+      it('should restore focus on close after Tab to overlay with trigger set to focus', async () => {
+        const focusSpy = sinon.spy(target, 'focus');
+        tab(target);
+        focusout(target, overlay);
+        overlay.$.overlay.focus();
+        esc(overlay.$.overlay);
+        await nextRender();
+
+        expect(focusSpy).to.be.calledOnce;
+      });
+
       it('should not re-open when restoring focus on Esc with trigger set to focus', async () => {
         overlay.$.overlay.focus();
         esc(overlay.$.overlay);
@@ -100,6 +111,17 @@ describe('a11y', () => {
       it('should restore focus on outside click with trigger set to click', async () => {
         const focusSpy = sinon.spy(target, 'focus');
         outsideClick();
+        await nextRender();
+
+        expect(focusSpy).to.be.calledOnce;
+      });
+
+      it('should restore focus on close after Tab to overlay with trigger set to click', async () => {
+        const focusSpy = sinon.spy(target, 'focus');
+        tab(target);
+        focusout(target, overlay);
+        overlay.$.overlay.focus();
+        esc(overlay.$.overlay);
         await nextRender();
 
         expect(focusSpy).to.be.calledOnce;
