@@ -344,7 +344,7 @@ class Popover extends PopoverPositionMixin(
 
     // When using Tab to move focus, restoring focus is reset. However, if pressing Tab
     // causes focus to be moved inside the overlay, we should restore focus on close.
-    if ((this.__hasTrigger('focus') || this.__hasTrigger('click')) && !this.__shouldRestoreFocus) {
+    if (this.__hasTrigger('focus') || this.__hasTrigger('click')) {
       this.__shouldRestoreFocus = true;
     }
   }
