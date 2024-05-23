@@ -11,18 +11,10 @@ import {
 } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
+import { mouseenter, mouseleave } from './helpers.js';
 
 describe('trigger', () => {
   let popover, target, overlay;
-
-  function mouseenter(target) {
-    fire(target, 'mouseenter');
-  }
-
-  function mouseleave(target, relatedTarget) {
-    const eventProps = relatedTarget ? { relatedTarget } : {};
-    fire(target, 'mouseleave', undefined, eventProps);
-  }
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
