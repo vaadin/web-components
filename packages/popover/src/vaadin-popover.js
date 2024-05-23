@@ -127,6 +127,13 @@ class Popover extends PopoverPositionMixin(
         type: Boolean,
         value: false,
       },
+
+      /** @private */
+      __shouldRestoreFocus: {
+        type: Boolean,
+        value: false,
+        sync: true,
+      },
     };
   }
 
@@ -165,9 +172,11 @@ class Popover extends PopoverPositionMixin(
         @focusin="${this.__onOverlayFocusIn}"
         @focusout="${this.__onOverlayFocusOut}"
         @opened-changed="${this.__onOpenedChanged}"
+        .restoreFocusOnClose="${this.__shouldRestoreFocus}"
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
+        @vaadin-overlay-closed="${this.__onOverlayClosed}"
       ></vaadin-popover-overlay>
     `;
   }
@@ -257,6 +266,9 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onTargetClick() {
     if (this.__hasTrigger('click')) {
+      if (!this.opened) {
+        this.__shouldRestoreFocus = true;
+      }
       this.opened = !this.opened;
     }
   }
@@ -267,6 +279,11 @@ class Popover extends PopoverPositionMixin(
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this.opened = false;
+    }
+
+    // Prevent restoring focus after target blur on Tab key
+    if (event.key === 'Tab' && this.__shouldRestoreFocus) {
+      this.__shouldRestoreFocus = false;
     }
   }
 
@@ -282,7 +299,11 @@ class Popover extends PopoverPositionMixin(
         return;
       }
 
-      this.opened = true;
+      // Prevent overlay re-opening when restoring focus on close.
+      if (!this.__shouldRestoreFocus) {
+        this.__shouldRestoreFocus = true;
+        this.opened = true;
+      }
     }
   }
 
@@ -299,7 +320,11 @@ class Popover extends PopoverPositionMixin(
   __onTargetMouseEnter() {
     this.__hoverInside = true;
 
-    if (this.__hasTrigger('hover')) {
+    if (this.__hasTrigger('hover') && !this.opened) {
+      // Prevent closing due to `pointer-events: none` set on body.
+      if (this.modal) {
+        this.target.style.pointerEvents = 'auto';
+      }
       this.opened = true;
     }
   }
@@ -316,6 +341,12 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayFocusIn() {
     this.__focusInside = true;
+
+    // When using Tab to move focus, restoring focus is reset. However, if pressing Tab
+    // causes focus to be moved inside the overlay, we should restore focus on close.
+    if (this.__hasTrigger('focus') || this.__hasTrigger('click')) {
+      this.__shouldRestoreFocus = true;
+    }
   }
 
   /** @private */
@@ -370,6 +401,22 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOpenedChanged(event) {
     this.opened = event.detail.value;
+  }
+
+  /** @private */
+  __onOverlayClosed() {
+    // Reset restoring focus state after a timeout to make sure focus was restored
+    // and then allow re-opening overlay on re-focusing target with focus trigger.
+    if (this.__shouldRestoreFocus) {
+      setTimeout(() => {
+        this.__shouldRestoreFocus = false;
+      });
+    }
+
+    // Restore pointer-events set when opening on hover.
+    if (this.modal && this.target.style.pointerEvents) {
+      this.target.style.pointerEvents = '';
+    }
   }
 
   /**
