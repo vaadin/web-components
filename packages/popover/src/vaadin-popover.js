@@ -16,6 +16,106 @@ import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
 
 /**
+ * Controller for handling popover opened state.
+ */
+class PopoverStateController {
+  constructor(host) {
+    this.host = host;
+  }
+
+  /**
+   * Whether closing is currently in progress.
+   * @return {boolean}
+   */
+  get isClosing() {
+    return this.__closeTimeout != null;
+  }
+
+  /** @private */
+  get focusDelay() {
+    const popover = this.host;
+    return popover.focusDelay != null && popover.focusDelay > 0 ? popover.focusDelay : 0;
+  }
+
+  /** @private */
+  get hoverDelay() {
+    const popover = this.host;
+    return popover.hoverDelay != null && popover.hoverDelay > 0 ? popover.hoverDelay : 0;
+  }
+
+  /** @private */
+  get hideDelay() {
+    const popover = this.host;
+    return popover.hideDelay != null && popover.hideDelay > 0 ? popover.hideDelay : 0;
+  }
+
+  /**
+   * Schedule opening the popover.
+   * @param {Object} options
+   */
+  open(options = { immediate: false }) {
+    const { immediate, hover, focus } = options;
+    const isHover = hover && this.hoverDelay > 0;
+    const isFocus = focus && this.focusDelay > 0;
+
+    if (!immediate && (isHover || isFocus) && !this.__closeTimeout) {
+      this.__scheduleOpen(isFocus);
+    } else {
+      this.__showPopover();
+    }
+  }
+
+  /**
+   * Schedule closing the popover.
+   * @param {boolean} immediate
+   */
+  close(immediate) {
+    if (!immediate && this.hideDelay > 0) {
+      this.__scheduleClose();
+    } else {
+      this.__abortClose();
+      this.__setOpened(false);
+    }
+  }
+
+  /** @private */
+  __setOpened(opened) {
+    this.host.opened = opened;
+  }
+
+  /** @private */
+  __showPopover() {
+    this.__abortClose();
+    this.__setOpened(true);
+  }
+
+  /** @private */
+  __abortClose() {
+    if (this.__closeTimeout) {
+      clearTimeout(this.__closeTimeout);
+      this.__closeTimeout = null;
+    }
+  }
+
+  /** @private */
+  __scheduleClose() {
+    this.__closeTimeout = setTimeout(() => {
+      this.__closeTimeout = null;
+      this.__setOpened(false);
+    }, this.hideDelay);
+  }
+
+  /** @private */
+  __scheduleOpen(isFocus) {
+    const delay = isFocus ? this.focusDelay : this.hoverDelay;
+    this.__openTimeout = setTimeout(() => {
+      this.__openTimeout = null;
+      this.__showPopover();
+    }, delay);
+  }
+}
+
+/**
  * `<vaadin-popover>` is a Web Component for creating overlays
  * that are positioned next to specified DOM element (target).
  *
@@ -57,6 +157,34 @@ class Popover extends PopoverPositionMixin(
        */
       contentWidth: {
         type: String,
+      },
+
+      /**
+       * The delay in milliseconds before the popover is opened
+       * on focus when the corresponding trigger is used.
+       * @attr {number} focus-delay
+       */
+      focusDelay: {
+        type: Number,
+      },
+
+      /**
+       * The delay in milliseconds before the popover is closed
+       * on losing hover, when the corresponding trigger is used.
+       * On blur, the popover is closed immediately.
+       * @attr {number} hide-delay
+       */
+      hideDelay: {
+        type: Number,
+      },
+
+      /**
+       * The delay in milliseconds before the popover is opened
+       * on hover when the corresponding trigger is used.
+       * @attr {number} hover-delay
+       */
+      hoverDelay: {
+        type: Number,
       },
 
       /**
@@ -173,6 +301,8 @@ class Popover extends PopoverPositionMixin(
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
+
+    this._stateController = new PopoverStateController(this);
   }
 
   /** @protected */
@@ -242,7 +372,7 @@ class Popover extends PopoverPositionMixin(
 
     document.removeEventListener('click', this.__onGlobalClick, true);
 
-    this.opened = false;
+    this._stateController.close(true);
   }
 
   /**
@@ -295,7 +425,7 @@ class Popover extends PopoverPositionMixin(
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick
     ) {
-      this.opened = false;
+      this._stateController.close(true);
     }
   }
 
@@ -305,7 +435,11 @@ class Popover extends PopoverPositionMixin(
       if (!this.opened) {
         this.__shouldRestoreFocus = true;
       }
-      this.opened = !this.opened;
+      if (this.opened) {
+        this._stateController.close(true);
+      } else {
+        this._stateController.open({ immediate: true });
+      }
     }
   }
 
@@ -318,7 +452,7 @@ class Popover extends PopoverPositionMixin(
     if (event.key === 'Escape' && !this.modal && !this.noCloseOnEsc && this.opened && !this.__isManual) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
-      this.opened = false;
+      this._stateController.close(true);
     }
   }
 
@@ -345,7 +479,7 @@ class Popover extends PopoverPositionMixin(
       // Prevent overlay re-opening when restoring focus on close.
       if (!this.__shouldRestoreFocus) {
         this.__shouldRestoreFocus = true;
-        this.opened = true;
+        this._stateController.open({ focus: true });
       }
     }
   }
@@ -368,7 +502,7 @@ class Popover extends PopoverPositionMixin(
       if (this.modal) {
         this.target.style.pointerEvents = 'auto';
       }
-      this.opened = true;
+      this._stateController.open({ hover: true });
     }
   }
 
@@ -404,6 +538,11 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayMouseEnter() {
     this.__hoverInside = true;
+
+    // Prevent closing if cursor moves to the overlay during hide delay.
+    if (this.__hasTrigger('hover') && this._stateController.isClosing) {
+      this._stateController.open({ immediate: true });
+    }
   }
 
   /** @private */
@@ -424,7 +563,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__hasTrigger('focus')) {
-      this.opened = false;
+      this._stateController.close(true);
     }
   }
 
@@ -437,7 +576,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__hasTrigger('hover')) {
-      this.opened = false;
+      this._stateController.close();
     }
   }
 
