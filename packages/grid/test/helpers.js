@@ -93,7 +93,7 @@ const isVisible = (item, grid) => {
 };
 
 export const getPhysicalItems = (grid) => {
-  return Array.from(grid.shadowRoot.querySelector('tbody').children)
+  return Array.from(grid.shadowRoot.querySelector('tbody#items').children)
     .filter((item) => !item.hidden)
     .sort((a, b) => a.index - b.index);
 };

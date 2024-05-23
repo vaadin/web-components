@@ -189,6 +189,32 @@ export const gridStyles = css`
     overflow: hidden;
   }
 
+  /* Empty state */
+
+  #scroller:not([empty-state]) #emptystatebody,
+  #scroller[empty-state] #items {
+    display: none;
+  }
+
+  #emptystatebody {
+    display: flex;
+    position: sticky;
+    inset: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #emptystaterow {
+    display: flex;
+    flex: 1;
+  }
+
+  #emptystatecell {
+    display: block;
+    flex: 1;
+    overflow: auto;
+  }
+
   /* Reordering styles */
   :host([reordering]) [part~='cell'] ::slotted(vaadin-grid-cell-content),
   :host([reordering]) [part~='resize-handle'],

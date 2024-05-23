@@ -50,7 +50,7 @@ describe('basic features', () => {
   it('check visible item count', () => {
     grid.size = 10;
     flushGrid(grid);
-    expect(grid.shadowRoot.querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
+    expect(grid.shadowRoot.querySelectorAll('tbody tr:not([hidden]):not(#emptystaterow)').length).to.eql(10);
   });
 
   it('first visible item', () => {
@@ -360,6 +360,129 @@ describe('flex child', () => {
     it('should stretch height', () => {
       expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);
       expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
+    });
+  });
+});
+
+describe('empty state', () => {
+  let grid;
+
+  function getEmptyState() {
+    return grid.querySelector('[slot="empty-state"]');
+  }
+
+  function emptyStateVisible() {
+    return getEmptyState()?.offsetHeight > 0;
+  }
+
+  function itemsBodyVisible() {
+    return grid.$.items.offsetHeight > 0;
+  }
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column path="name"></vaadin-grid-column>
+        <div slot="empty-state">
+          No items
+        </div>
+      </vaadin-grid>
+    `);
+
+    grid.querySelector('vaadin-grid-column').footerRenderer = (root) => {
+      root.textContent = 'Footer';
+    };
+    await nextFrame();
+  });
+
+  it('should show empty state', () => {
+    expect(emptyStateVisible()).to.be.true;
+    expect(itemsBodyVisible()).to.be.false;
+  });
+
+  it('should not show empty state when grid has items', async () => {
+    grid.items = [{ name: 'foo' }];
+    await nextFrame();
+    expect(emptyStateVisible()).to.be.false;
+    expect(itemsBodyVisible()).to.be.true;
+  });
+
+  it('should not show empty state when empty state content is not defined', async () => {
+    grid.removeChild(getEmptyState());
+    await nextFrame();
+    expect(emptyStateVisible()).to.be.false;
+    expect(itemsBodyVisible()).to.be.true;
+  });
+
+  it('should not throw on empty state click', () => {
+    expect(() => getEmptyState().click()).not.to.throw();
+  });
+
+  it('should not dispatch cell-activate on empty state click', () => {
+    const spy = sinon.spy();
+    grid.addEventListener('cell-activate', spy);
+    getEmptyState().click();
+    expect(spy.called).to.be.false;
+  });
+
+  describe('bounds', () => {
+    let gridRect, emptyStateCellRect, headerRect, footerRect;
+
+    beforeEach(() => {
+      gridRect = grid.getBoundingClientRect();
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      headerRect = grid.$.header.getBoundingClientRect();
+      footerRect = grid.$.footer.getBoundingClientRect();
+    });
+
+    it('should cover the viewport', () => {
+      expect(emptyStateCellRect.top).to.be.closeTo(headerRect.bottom, 1);
+      expect(emptyStateCellRect.bottom).to.be.closeTo(footerRect.top, 1);
+      expect(emptyStateCellRect.left).to.be.closeTo(gridRect.left, 1);
+      expect(emptyStateCellRect.right).to.be.closeTo(gridRect.right, 1);
+    });
+
+    it('should push footer to the bottom of the viewport', () => {
+      expect(footerRect.bottom).to.be.closeTo(gridRect.bottom, 1);
+    });
+
+    it('should not scroll horizontally with the columns', () => {
+      grid.append(
+        ...Array.from({ length: 10 }, () => fixtureSync('<vaadin-grid-column path="name"></vaadin-grid-column>')),
+      );
+      flushGrid(grid);
+
+      grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      expect(emptyStateCellRect.left).to.be.closeTo(gridRect.left, 1);
+      expect(emptyStateCellRect.right).to.be.closeTo(gridRect.right, 1);
+    });
+
+    it('should not scroll verticaly with the columns', () => {
+      getEmptyState().innerHTML = Array.from({ length: 10 }, () => '<h2>Lorem ipsum dolor sit amet</h2>').join('');
+      flushGrid(grid);
+
+      grid.$.emptystatecell.scrollTop = grid.$.emptystatecell.scrollHeight;
+      expect(grid.$.emptystatecell.scrollTop).to.be.greaterThan(0);
+      emptyStateCellRect = grid.$.emptystatecell.getBoundingClientRect();
+      expect(emptyStateCellRect.top).to.be.closeTo(headerRect.bottom, 1);
+      expect(emptyStateCellRect.bottom).to.be.closeTo(footerRect.top, 1);
+    });
+
+    it('should not overflow on all-rows-visible', () => {
+      grid.allRowsVisible = true;
+      grid.style.width = '200px';
+      getEmptyState().innerHTML = Array.from({ length: 10 }, () => '<h2>Lorem ipsum dolor sit amet</h2>').join('');
+      flushGrid(grid);
+
+      const emptyStateRect = getEmptyState().getBoundingClientRect();
+      gridRect = grid.getBoundingClientRect();
+      headerRect = grid.$.header.getBoundingClientRect();
+      footerRect = grid.$.footer.getBoundingClientRect();
+      expect(emptyStateRect.top).to.be.greaterThan(headerRect.bottom);
+      expect(emptyStateRect.bottom).to.be.lessThan(footerRect.top);
+      expect(emptyStateRect.left).to.be.greaterThan(gridRect.left);
+      expect(emptyStateRect.right).to.be.lessThan(gridRect.right);
     });
   });
 });

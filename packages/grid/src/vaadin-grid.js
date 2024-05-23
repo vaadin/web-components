@@ -205,6 +205,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * `reorder-allowed-cell`     | Cell in a column where another column can be reordered
  * `reorder-dragging-cell`    | Cell in a column currently being reordered
  * `resize-handle`            | Handle for resizing the columns
+ * `empty-state`              | The container for the content to be displayed when there are no body rows to show
  * `reorder-ghost`            | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:
@@ -268,11 +269,19 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerE
         ios$="[[_ios]]"
         loading$="[[loading]]"
         column-reordering-allowed$="[[columnReorderingAllowed]]"
+        empty-state$="[[__emptyState]]"
       >
         <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
           <caption id="sizer" part="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
+          <tbody id="emptystatebody">
+            <tr id="emptystaterow">
+              <td part="empty-state" id="emptystatecell" tabindex="0">
+                <slot name="empty-state" id="emptystateslot"></slot>
+              </td>
+            </tr>
+          </tbody>
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
 

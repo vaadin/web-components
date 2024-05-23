@@ -269,7 +269,9 @@ describe('accessibility', () => {
       col.path = 'value';
       flushGrid(grid);
 
-      const rowCount = Array.from(grid.$.table.querySelectorAll('tr')).filter((tr) => !tr.hidden).length;
+      const rowCount = Array.from(grid.$.table.querySelectorAll('tr:not(#emptystaterow)')).filter(
+        (tr) => !tr.hidden,
+      ).length;
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal(String(rowCount));
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
@@ -279,7 +281,9 @@ describe('accessibility', () => {
       col.header = null;
       flushGrid(grid);
 
-      const rowCount = Array.from(grid.$.table.querySelectorAll('tr')).filter((tr) => !tr.hidden).length;
+      const rowCount = Array.from(grid.$.table.querySelectorAll('tr:not(#emptystaterow)')).filter(
+        (tr) => !tr.hidden,
+      ).length;
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal(String(rowCount));
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('2');
     });
@@ -323,7 +327,7 @@ describe('accessibility', () => {
       }
 
       it('should have aria-rowindex on rows', () => {
-        Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
+        Array.from(grid.$.table.querySelectorAll('tr:not(#emptystaterow)')).forEach((row, index) => {
           expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
         });
       });

@@ -196,6 +196,21 @@ snapshots["vaadin-grid shadow default"] =
         </td>
       </tr>
     </tbody>
+    <tbody id="emptystatebody">
+      <tr id="emptystaterow">
+        <td
+          id="emptystatecell"
+          part="empty-state"
+          tabindex="0"
+        >
+          <slot
+            id="emptystateslot"
+            name="empty-state"
+          >
+          </slot>
+        </td>
+      </tr>
+    </tbody>
     <tfoot
       id="footer"
       role="rowgroup"
@@ -402,6 +417,21 @@ snapshots["vaadin-grid shadow selected"] =
           tabindex="-1"
         >
           <slot name="vaadin-grid-cell-content-9">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <tbody id="emptystatebody">
+      <tr id="emptystaterow">
+        <td
+          id="emptystatecell"
+          part="empty-state"
+          tabindex="0"
+        >
+          <slot
+            id="emptystateslot"
+            name="empty-state"
+          >
           </slot>
         </td>
       </tr>
@@ -615,6 +645,21 @@ snapshots["vaadin-grid shadow details opened"] =
         </td>
       </tr>
     </tbody>
+    <tbody id="emptystatebody">
+      <tr id="emptystaterow">
+        <td
+          id="emptystatecell"
+          part="empty-state"
+          tabindex="0"
+        >
+          <slot
+            id="emptystateslot"
+            name="empty-state"
+          >
+          </slot>
+        </td>
+      </tr>
+    </tbody>
     <tfoot
       id="footer"
       role="rowgroup"
@@ -783,6 +828,21 @@ snapshots["vaadin-grid shadow hidden column"] =
         </td>
       </tr>
     </tbody>
+    <tbody id="emptystatebody">
+      <tr id="emptystaterow">
+        <td
+          id="emptystatecell"
+          part="empty-state"
+          tabindex="0"
+        >
+          <slot
+            id="emptystateslot"
+            name="empty-state"
+          >
+          </slot>
+        </td>
+      </tr>
+    </tbody>
     <tfoot
       id="footer"
       role="rowgroup"
@@ -938,6 +998,21 @@ snapshots["vaadin-grid shadow hidden column selected"] =
           tabindex="-1"
         >
           <slot name="vaadin-grid-cell-content-9">
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+    <tbody id="emptystatebody">
+      <tr id="emptystaterow">
+        <td
+          id="emptystatecell"
+          part="empty-state"
+          tabindex="0"
+        >
+          <slot
+            id="emptystateslot"
+            name="empty-state"
+          >
           </slot>
         </td>
       </tr>

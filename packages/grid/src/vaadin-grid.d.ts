@@ -205,6 +205,7 @@ export type GridDefaultItem = any;
  * `reorder-allowed-cell`     | Cell in a column where another column can be reordered
  * `reorder-dragging-cell`    | Cell in a column currently being reordered
  * `resize-handle`            | Handle for resizing the columns
+ * `empty-state`              | The container for the content to be displayed when there are no body rows to show
  * `reorder-ghost`            | Ghost element of the header cell being dragged
  *
  * The following state attributes are available for styling:

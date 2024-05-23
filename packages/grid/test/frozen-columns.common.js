@@ -87,7 +87,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         let translateValue;
 
         beforeEach(() => {
-          containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
+          containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody#items');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
           borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));

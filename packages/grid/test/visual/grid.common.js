@@ -434,4 +434,33 @@ describe('grid', () => {
       await visualDiff(element, 'tree-overflow');
     });
   });
+
+  describe('empty state', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid style="width: 400px">
+          <vaadin-grid-column header="First name"></vaadin-grid-column>
+          <vaadin-grid-column header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column header="Email"></vaadin-grid-column>
+
+          <div slot="empty-state">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.
+          </div>
+        </vaadin-grid>
+      `);
+
+      [...element.querySelectorAll('vaadin-grid-column')].forEach((col) => {
+        col.footerRenderer = (root) => {
+          root.textContent = 'footer';
+        };
+      });
+
+      flushGrid(element);
+      await nextRender(element);
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'empty-state');
+    });
+  });
 });

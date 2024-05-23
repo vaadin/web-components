@@ -40,11 +40,19 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)
         ios="${isIOS}"
         ?loading="${this.loading}"
         column-reordering-allowed="${this.columnReorderingAllowed}"
+        ?empty-state="${this.__emptyState}"
       >
         <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
           <caption id="sizer" part="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
+          <tbody id="emptystatebody">
+            <tr id="emptystaterow">
+              <td part="empty-state" id="emptystatecell" tabindex="0">
+                <slot name="empty-state" id="emptystateslot"></slot>
+              </td>
+            </tr>
+          </tbody>
           <tfoot id="footer" role="rowgroup"></tfoot>
         </table>
 

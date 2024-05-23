@@ -90,6 +90,12 @@ registerStyles(
       z-index: 3;
     }
 
+    /* Empty state */
+    [part~='empty-state'] {
+      padding: var(--lumo-space-m);
+      color: var(--lumo-secondary-text-color);
+    }
+
     /* Drag and Drop styles */
     :host([dragover])::after {
       content: '';
@@ -344,6 +350,10 @@ registerStyles(
 
     :host([theme~='compact']) [part~='first-row'] [part~='cell']:not([part~='details-cell']) {
       min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
+    }
+
+    :host([theme~='compact']) [part~='empty-state'] {
+      padding: var(--lumo-space-s);
     }
 
     /* Wrap cell contents */
