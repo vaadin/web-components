@@ -321,7 +321,10 @@ class Popover extends PopoverPositionMixin(
     this.__hoverInside = true;
 
     if (this.__hasTrigger('hover') && !this.opened) {
-      this.__shouldRestoreFocus = false;
+      // Prevent closing due to `pointer-events: none` set on body.
+      if (this.modal) {
+        this.target.style.pointerEvents = 'auto';
+      }
       this.opened = true;
     }
   }
@@ -402,6 +405,11 @@ class Popover extends PopoverPositionMixin(
       setTimeout(() => {
         this.__shouldRestoreFocus = false;
       });
+    }
+
+    // Restore pointer-events set when opening on hover.
+    if (this.modal && this.target.style.pointerEvents) {
+      this.target.style.pointerEvents = '';
     }
   }
 

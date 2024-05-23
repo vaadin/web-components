@@ -107,10 +107,12 @@ describe('a11y', () => {
     });
 
     describe('hover trigger', () => {
-      it('should not restore focus on Esc with trigger set to hover', async () => {
+      beforeEach(async () => {
         popover.trigger = ['hover'];
         await nextUpdate(popover);
+      });
 
+      it('should not restore focus on Esc with trigger set to hover', async () => {
         mouseenter(target);
         await nextRender();
 
@@ -120,6 +122,29 @@ describe('a11y', () => {
         await nextRender();
 
         expect(focusSpy).to.not.be.called;
+      });
+
+      it('should set pointer-events: auto on the target when opened if modal', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+
+        mouseenter(target);
+        await nextRender();
+
+        expect(target.style.pointerEvents).to.equal('auto');
+      });
+
+      it('should remove pointer-events on the target when closed if modal', async () => {
+        popover.modal = true;
+        await nextUpdate(popover);
+
+        mouseenter(target);
+        await nextRender();
+
+        mouseleave(target);
+        await nextRender();
+
+        expect(target.style.pointerEvents).to.equal('');
       });
     });
 
