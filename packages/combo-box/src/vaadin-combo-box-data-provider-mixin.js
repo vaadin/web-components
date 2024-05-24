@@ -220,11 +220,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /** @override */
     requestContentUpdate() {
       if (this.dataProvider) {
-        const { rootCache } = this.__dataProviderController;
-
         // Sync the controller's state with the component. It can be of sync
         // after the controller receives new data from the data provider or
         // if the state in the controller is directly manipulated.
+        const { rootCache } = this.__dataProviderController;
         this.size = rootCache.size;
         this.filteredItems = rootCache.items;
         this.loading = this.__dataProviderController.isLoading();
