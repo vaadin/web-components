@@ -31,6 +31,11 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
     return [
       overlayStyles,
       css`
+        :host {
+          --_vaadin-popover-content-width: auto;
+          --_vaadin-popover-content-height: auto;
+        }
+
         :host([modeless][with-backdrop]) [part='backdrop'] {
           pointer-events: none;
         }
@@ -47,6 +52,8 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
 
         [part='content'] {
           overflow: auto;
+          width: var(--_vaadin-popover-content-width);
+          height: var(--_vaadin-popover-content-height);
         }
 
         /* Increase the area of the popover so the pointer can go from the target directly to it. */

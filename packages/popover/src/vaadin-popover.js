@@ -129,6 +129,22 @@ class Popover extends PopoverPositionMixin(
         value: false,
       },
 
+      /**
+       * Height to be set on the overlay content.
+       * @protected
+       */
+      _contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       * @protected
+       */
+      _contentWidth: {
+        type: String,
+      },
+
       /** @private */
       __shouldRestoreFocus: {
         type: Boolean,
@@ -136,6 +152,13 @@ class Popover extends PopoverPositionMixin(
         sync: true,
       },
     };
+  }
+
+  static get observers() {
+    return [
+      '__updateContentHeight(_contentHeight, _overlayElement)',
+      '__updateContentWidth(_contentWidth, _overlayElement)',
+    ];
   }
 
   constructor() {
@@ -465,6 +488,31 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   get __isManual() {
     return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
+  }
+
+  /** @private */
+  __updateDimension(overlay, dimension, value) {
+    const prop = `--_vaadin-popover-content-${dimension}`;
+
+    if (value) {
+      overlay.style.setProperty(prop, value);
+    } else {
+      overlay.style.removeProperty(prop);
+    }
+  }
+
+  /** @private */
+  __updateContentHeight(height, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'height', height);
+    }
+  }
+
+  /** @private */
+  __updateContentWidth(width, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'width', width);
+    }
   }
 }
 
