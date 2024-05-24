@@ -143,6 +143,7 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
+    this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
@@ -226,6 +227,7 @@ class Popover extends PopoverPositionMixin(
    */
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
+    target.addEventListener('keydown', this.__onTargetKeydown);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
     target.addEventListener('focusin', this.__onTargetFocusIn);
@@ -239,6 +241,7 @@ class Popover extends PopoverPositionMixin(
    */
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
+    target.removeEventListener('keydown', this.__onTargetKeydown);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
     target.removeEventListener('focusin', this.__onTargetFocusIn);
@@ -292,7 +295,10 @@ class Popover extends PopoverPositionMixin(
       event.stopPropagation();
       this.opened = false;
     }
+  }
 
+  /** @private */
+  __onTargetKeydown(event) {
     // Prevent restoring focus after target blur on Tab key
     if (event.key === 'Tab' && this.__shouldRestoreFocus) {
       this.__shouldRestoreFocus = false;
