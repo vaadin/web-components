@@ -193,10 +193,13 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * When the size change originates externally, synchronizes the new size with
+     * the controller and request a content update to re-render the scroller.
+     *
+     * @private
+     */
     _sizeChanged(size) {
-      // When the size update originates externally, sync the new size with
-      // the controller and request a content update to re-render the scroller.
       const { rootCache } = this.__dataProviderController;
       if (rootCache.size !== size) {
         rootCache.size = size;
@@ -208,6 +211,9 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     }
 
     /**
+     * When the items change originates externally, synchronizes the new items with
+     * the controller and requests a content update to re-render the scroller.
+     *
      * @private
      * @override
      */
@@ -215,8 +221,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       super._filteredItemsChanged(items);
 
       if (this.dataProvider && items) {
-        // When the items update originates externally, sync the new items with
-        // the controller and request a content update to re-render the scroller.
         const { rootCache } = this.__dataProviderController;
         if (rootCache.items !== items) {
           rootCache.items = items;
