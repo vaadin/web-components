@@ -852,6 +852,11 @@ export const GridColumnMixin = (superClass) =>
       return {
         /**
          * Width of the cells for this column.
+         *
+         * Please note that using the `em` length unit is discouraged as
+         * it might lead to misalignment issues if the header, body, and footer
+         * cells have different font sizes. Instead, use `rem` if you need
+         * a length unit relative to the font size.
          */
         width: {
           type: String,
