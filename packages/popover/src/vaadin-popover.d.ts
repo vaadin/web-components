@@ -39,6 +39,20 @@ declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
 ) {
   /**
+   * Height to be set on the overlay content.
+   *
+   * @attr {string} content-height
+   */
+  contentHeight: string;
+
+  /**
+   * Width to be set on the overlay content.
+   *
+   * @attr {string} content-width
+   */
+  contentWidth: string;
+
+  /**
    * True if the popover overlay is opened, false otherwise.
    */
   opened: boolean;

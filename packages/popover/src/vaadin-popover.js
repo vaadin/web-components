@@ -42,6 +42,24 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
+       * Height to be set on the overlay content.
+       *
+       * @attr {string} content-height
+       */
+      contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       *
+       * @attr {string} content-width
+       */
+      contentWidth: {
+        type: String,
+      },
+
+      /**
        * True if the popover overlay is opened, false otherwise.
        */
       opened: {
@@ -136,6 +154,13 @@ class Popover extends PopoverPositionMixin(
         sync: true,
       },
     };
+  }
+
+  static get observers() {
+    return [
+      '__updateContentHeight(contentHeight, _overlayElement)',
+      '__updateContentWidth(contentWidth, _overlayElement)',
+    ];
   }
 
   constructor() {
@@ -465,6 +490,31 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   get __isManual() {
     return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
+  }
+
+  /** @private */
+  __updateDimension(overlay, dimension, value) {
+    const prop = `--_vaadin-popover-content-${dimension}`;
+
+    if (value) {
+      overlay.style.setProperty(prop, value);
+    } else {
+      overlay.style.removeProperty(prop);
+    }
+  }
+
+  /** @private */
+  __updateContentHeight(height, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'height', height);
+    }
+  }
+
+  /** @private */
+  __updateContentWidth(width, overlay) {
+    if (overlay) {
+      this.__updateDimension(overlay, 'width', width);
+    }
   }
 }
 

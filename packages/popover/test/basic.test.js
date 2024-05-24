@@ -289,4 +289,54 @@ describe('popover', () => {
       });
     });
   });
+
+  describe('dimensions', () => {
+    function getStyleValue(element) {
+      return element
+        .getAttribute('style')
+        .split(':')
+        .map((str) => str.trim().replace(';', ''));
+    }
+
+    beforeEach(async () => {
+      popover.opened = true;
+      await nextRender();
+    });
+
+    it('should update width after opening the popover', async () => {
+      popover.contentWidth = '300px';
+      await nextUpdate(popover);
+      expect(getComputedStyle(overlay.$.content).width).to.be.equal('300px');
+    });
+
+    it('should update height after opening the popover', async () => {
+      popover.contentHeight = '500px';
+      await nextUpdate(popover);
+      expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
+    });
+
+    it('should reset style after setting width to null', async () => {
+      const prop = '--_vaadin-popover-content-width';
+
+      popover.contentWidth = '500px';
+      await nextUpdate(popover);
+      expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+      popover.contentWidth = null;
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('style')).to.be.not.ok;
+    });
+
+    it('should reset style after setting height to null', async () => {
+      const prop = '--_vaadin-popover-content-height';
+
+      popover.contentHeight = '500px';
+      await nextUpdate(popover);
+      expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+
+      popover.contentHeight = null;
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('style')).to.be.not.ok;
+    });
+  });
 });
