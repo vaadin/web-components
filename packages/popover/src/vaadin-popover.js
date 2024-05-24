@@ -42,6 +42,24 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
+       * Height to be set on the overlay content.
+       *
+       * @attr {string} content-height
+       */
+      contentHeight: {
+        type: String,
+      },
+
+      /**
+       * Width to be set on the overlay content.
+       *
+       * @attr {string} content-width
+       */
+      contentWidth: {
+        type: String,
+      },
+
+      /**
        * True if the popover overlay is opened, false otherwise.
        */
       opened: {
@@ -129,22 +147,6 @@ class Popover extends PopoverPositionMixin(
         value: false,
       },
 
-      /**
-       * Height to be set on the overlay content.
-       * @protected
-       */
-      _contentHeight: {
-        type: String,
-      },
-
-      /**
-       * Width to be set on the overlay content.
-       * @protected
-       */
-      _contentWidth: {
-        type: String,
-      },
-
       /** @private */
       __shouldRestoreFocus: {
         type: Boolean,
@@ -156,8 +158,8 @@ class Popover extends PopoverPositionMixin(
 
   static get observers() {
     return [
-      '__updateContentHeight(_contentHeight, _overlayElement)',
-      '__updateContentWidth(_contentWidth, _overlayElement)',
+      '__updateContentHeight(contentHeight, _overlayElement)',
+      '__updateContentWidth(contentWidth, _overlayElement)',
     ];
   }
 

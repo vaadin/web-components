@@ -28,6 +28,8 @@ assertType<HTMLElement | undefined>(popover.target);
 assertType<PopoverPosition>(popover.position);
 assertType<PopoverRenderer | null | undefined>(popover.renderer);
 assertType<PopoverTrigger[] | null | undefined>(popover.trigger);
+assertType<string>(popover.contentHeight);
+assertType<string>(popover.contentWidth);
 assertType<string>(popover.overlayClass);
 assertType<boolean>(popover.opened);
 assertType<boolean>(popover.modal);
