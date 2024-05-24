@@ -21,6 +21,64 @@ describe('a11y', () => {
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
+  describe('ARIA attributes', () => {
+    it('should set role attribute on the overlay to dialog', () => {
+      expect(overlay.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should change role attribute on the overlay based on ariaRole', async () => {
+      popover.ariaRole = 'alertdialog';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should set aria-haspopup attribute on the target', () => {
+      expect(target.getAttribute('aria-haspopup')).to.equal('true');
+    });
+
+    it('should remove aria-haspopup attribute when target is cleared', async () => {
+      popover.target = null;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-haspopup')).to.be.false;
+    });
+
+    it('should remove aria-controls attribute when target is cleared', async () => {
+      popover.target = null;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-haspopup')).to.be.false;
+    });
+
+    it('should set aria-expanded attribute on the target when opened', async () => {
+      popover.opened = true;
+      await nextRender();
+      expect(target.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should remove aria-expanded attribute from the target when closed', async () => {
+      popover.opened = true;
+      await nextRender();
+
+      popover.opened = false;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-expanded')).to.be.false;
+    });
+
+    it('should set aria-controls attribute on the target when opened', async () => {
+      popover.opened = true;
+      await nextRender();
+      expect(target.getAttribute('aria-controls')).to.equal(overlay.id);
+    });
+
+    it('should remove aria-controls attribute from the target when closed', async () => {
+      popover.opened = true;
+      await nextRender();
+
+      popover.opened = false;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-controls')).to.be.false;
+    });
+  });
+
   describe('focus restoration', () => {
     describe('focus trigger', () => {
       beforeEach(async () => {

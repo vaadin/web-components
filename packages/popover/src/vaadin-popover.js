@@ -11,6 +11,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -41,6 +42,16 @@ class Popover extends PopoverPositionMixin(
 
   static get properties() {
     return {
+      /**
+       * The `role` attribute value to be set on the overlay.
+       *
+       * @attr {string} aria-role
+       */
+      ariaRole: {
+        type: String,
+        value: 'dialog',
+      },
+
       /**
        * Height to be set on the overlay content.
        *
@@ -153,6 +164,11 @@ class Popover extends PopoverPositionMixin(
         value: false,
         sync: true,
       },
+
+      /** @private */
+      __overlayId: {
+        type: String,
+      },
     };
   }
 
@@ -165,6 +181,9 @@ class Popover extends PopoverPositionMixin(
 
   constructor() {
     super();
+
+    this.__overlayId = `vaadin-popover-${generateUniqueId()}`;
+
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
@@ -181,6 +200,8 @@ class Popover extends PopoverPositionMixin(
 
     return html`
       <vaadin-popover-overlay
+        id="${this.__overlayId}"
+        role="${this.ariaRole}"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
@@ -245,6 +266,22 @@ class Popover extends PopoverPositionMixin(
     this.opened = false;
   }
 
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('target')) {
+      const oldTarget = props.get('target');
+      if (oldTarget) {
+        oldTarget.removeAttribute('aria-haspopup');
+      }
+
+      if (this.target) {
+        this.target.setAttribute('aria-haspopup', 'true');
+      }
+    }
+  }
+
   /**
    * @param {HTMLElement} target
    * @protected
@@ -277,8 +314,18 @@ class Popover extends PopoverPositionMixin(
   __openedChanged(opened, oldOpened) {
     if (opened) {
       document.addEventListener('keydown', this.__onGlobalKeyDown, true);
+
+      if (this.target) {
+        this.target.setAttribute('aria-expanded', 'true');
+        this.target.setAttribute('aria-controls', this.__overlayId);
+      }
     } else if (oldOpened) {
       document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+
+      if (this.target) {
+        this.target.removeAttribute('aria-expanded');
+        this.target.removeAttribute('aria-controls');
+      }
     }
   }
 

@@ -39,6 +39,13 @@ declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
 ) {
   /**
+   * The `role` attribute value to be set on the overlay.
+   *
+   * @attr {string} aria-role
+   */
+  ariaRole: string;
+
+  /**
    * Height to be set on the overlay content.
    *
    * @attr {string} content-height
