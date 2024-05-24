@@ -56,6 +56,12 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         },
 
         /** @private */
+        __dataProviderInitialized: {
+          type: Boolean,
+          value: false,
+        },
+
+        /** @private */
         __previousDataProviderFilter: {
           type: String,
         },
@@ -78,22 +84,18 @@ export const ComboBoxDataProviderMixin = (superClass) =>
        * @private
        */
       this.__dataProviderController = new DataProviderController(this, {
-        size: this.size,
-        pageSize: this.pageSize,
         placeholder: new ComboBoxPlaceholder(),
         isPlaceholder: (item) => item instanceof ComboBoxPlaceholder,
-        dataProvider: this.dataProvider,
         dataProviderParams: () => ({ filter: this.filter }),
       });
+
+      this.__dataProviderController.addEventListener('page-requested', this.__onDataProviderPageRequested.bind(this));
+      this.__dataProviderController.addEventListener('page-loaded', this.__onDataProviderPageLoaded.bind(this));
     }
 
     /** @protected */
     ready() {
       super.ready();
-
-      this.__dataProviderController.addEventListener('page-requested', this.__onDataProviderPageRequested.bind(this));
-      this.__dataProviderController.addEventListener('page-loaded', this.__onDataProviderPageLoaded.bind(this));
-
       this._scroller.addEventListener('index-requested', (e) => {
         if (!this._shouldFetchData()) {
           return;
@@ -104,6 +106,12 @@ export const ComboBoxDataProviderMixin = (superClass) =>
           this.__dataProviderController.ensureFlatIndexLoaded(index);
         }
       });
+
+      this.__dataProviderInitialized = true;
+
+      if (this.dataProvider) {
+        this.requestContentUpdate();
+      }
     }
 
     /** @private */
@@ -206,7 +214,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     _filteredItemsChanged(items) {
       super._filteredItemsChanged(items);
 
-      if (this.dataProvider) {
+      if (this.dataProvider && items) {
         // When the items update originates externally, sync the new items with
         // the controller and request a content update to re-render the scroller.
         const { rootCache } = this.__dataProviderController;
@@ -217,12 +225,20 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
     }
 
-    /** @override */
+    /**
+     * Synchronizes the controller's state with the component, which can be
+     * out of sync after the controller receives new data from the data provider
+     * or if the state in the controller is directly manupulated.
+     *
+     * @override
+     */
     requestContentUpdate() {
-      if (this.dataProvider) {
-        // Sync the controller's state with the component. It can be of sync
-        // after the controller receives new data from the data provider or
-        // if the state in the controller is directly manipulated.
+      // When the data provider isn't initialized, it means the content update was requested
+      // by an observer before the `ready()` callback. In such cases, some properties
+      // in the data provider controller might still be uninitialized, so it's not safe
+      // to use them to update the component's properties yet. Another content update
+      // will be requested in the `ready()` callback.
+      if (this.__dataProviderInitialized && this.dataProvider) {
         const { rootCache } = this.__dataProviderController;
         this.size = rootCache.size;
         this.filteredItems = rootCache.items;
