@@ -69,27 +69,41 @@ export const ActiveItemMixin = (superClass) =>
     }
 
     /**
-     * We need to listen to click instead of tap because on mobile safari, the
-     * document.activeElement has not been updated (focus has not been shifted)
-     * yet at the point when tap event is being executed.
+     * Checks whether the click event should not activate the cell on which it occurred.
+     *
+     * @protected
+     */
+    _preventCellActivationOnClick(e) {
+      const { cell } = this._getGridEventLocation(e);
+      return (
+        // Something has handled this click already, e. g., <vaadin-grid-sorter>
+        e.defaultPrevented ||
+        // No clicked cell available
+        !cell ||
+        // Cell is a details cell
+        cell.getAttribute('part').includes('details-cell') ||
+        // Cell is the empty state cell
+        cell === this.$.emptystatecell ||
+        // Cell content is focused
+        cell._content.contains(this.getRootNode().activeElement) ||
+        // Clicked on a focusable element
+        this._isFocusable(e.target) ||
+        // Clicked on a label element
+        e.target instanceof HTMLLabelElement
+      );
+    }
+
+    /**
      * @param {!MouseEvent} e
      * @protected
      */
     _onClick(e) {
-      if (e.defaultPrevented) {
-        // Something has handled this click already, e. g., <vaadin-grid-sorter>
+      if (this._preventCellActivationOnClick(e)) {
         return;
       }
 
       const { cell } = this._getGridEventLocation(e);
-      if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1 || cell === this.$.emptystatecell) {
-        return;
-      }
-      const cellContent = cell._content;
-
-      const activeElement = this.getRootNode().activeElement;
-      const cellContentHasFocus = cellContent.contains(activeElement);
-      if (!cellContentHasFocus && !this._isFocusable(e.target) && !(e.target instanceof HTMLLabelElement)) {
+      if (cell) {
         this.dispatchEvent(
           new CustomEvent('cell-activate', {
             detail: {

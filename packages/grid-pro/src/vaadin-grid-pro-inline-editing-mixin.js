@@ -120,15 +120,6 @@ export const InlineEditingMixin = (superClass) =>
       this.$.table.addEventListener('click', (e) => {
         const column = this.getEventContext(e).column;
         if (column && this._isEditColumn(column)) {
-          if (e.target.matches(':not([type=checkbox])')) {
-            // Prevents the `click` event from a column's cell in order to prevent making the cell's parent row active.
-            // Note, it should not prevent the `click` event from checkboxes. Otherwise, they will not respond to user interactions.
-            // Read more: https://github.com/vaadin/web-components/pull/2539#discussion_r712076433.
-            // TODO: Using `preventDefault()` for any other purpose than preventing the default browser's behavior is bad practice
-            // and therefore it would be great to refactor this part someday.
-            e.preventDefault();
-          }
-
           if (this.editOnClick) {
             this._enterEditFromEvent(e);
           }
@@ -164,6 +155,20 @@ export const InlineEditingMixin = (superClass) =>
           }
         });
       }
+    }
+
+    /**
+     * Prevents making an edit column cell's parent row active on click.
+     *
+     * @override
+     * @protected
+     */
+    _preventCellActivationOnClick(e) {
+      return (
+        super._preventCellActivationOnClick(e) ||
+        // The clicked cell is editable
+        this._isEditColumn(this.getEventContext(e).column)
+      );
     }
 
     /**

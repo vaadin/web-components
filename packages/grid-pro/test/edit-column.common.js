@@ -695,6 +695,22 @@ describe('edit column', () => {
         cell._content.click();
         expect(activeItemChangedSpy.called).to.be.true;
       });
+
+      it('should not fire the event on focusable content click in the not editable column', () => {
+        cell = getContainerCell(grid.$.items, 0, 3);
+        cell._content.append(document.createElement('button'));
+        cell._content.querySelector('button').click();
+        expect(activeItemChangedSpy.called).to.be.false;
+      });
+
+      it('should not cancel click events on editable column cells', () => {
+        const clickSpy = sinon.spy();
+        grid.addEventListener('click', clickSpy);
+        cell = getContainerCell(grid.$.items, 0, 1);
+        cell._content.click();
+        expect(clickSpy.called).to.be.true;
+        expect(clickSpy.getCall(0).args[0].defaultPrevented).to.be.false;
+      });
     });
   });
 
