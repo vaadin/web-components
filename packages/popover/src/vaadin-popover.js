@@ -61,16 +61,6 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * The `role` attribute value to be set on the overlay.
-       *
-       * @attr {string} aria-role
-       */
-      ariaRole: {
-        type: String,
-        value: 'dialog',
-      },
-
-      /**
        * Height to be set on the overlay content.
        *
        * @attr {string} content-height
@@ -96,6 +86,16 @@ class Popover extends PopoverPositionMixin(
         value: false,
         notify: true,
         observer: '__openedChanged',
+      },
+
+      /**
+       * The `role` attribute value to be set on the overlay.
+       *
+       * @attr {string} overlay-role
+       */
+      overlayRole: {
+        type: String,
+        value: 'dialog',
       },
 
       /**
@@ -220,7 +220,7 @@ class Popover extends PopoverPositionMixin(
     return html`
       <vaadin-popover-overlay
         id="${this.__overlayId}"
-        role="${this.ariaRole}"
+        role="${this.overlayRole}"
         aria-label="${ifDefined(this.accessibleName)}"
         aria-labelledby="${ifDefined(this.accessibleNameRef)}"
         .renderer="${this.renderer}"

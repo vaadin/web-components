@@ -26,8 +26,8 @@ describe('a11y', () => {
       expect(overlay.getAttribute('role')).to.equal('dialog');
     });
 
-    it('should change role attribute on the overlay based on ariaRole', async () => {
-      popover.ariaRole = 'alertdialog';
+    it('should change role attribute on the overlay based on overlayRole', async () => {
+      popover.overlayRole = 'alertdialog';
       await nextUpdate(popover);
       expect(overlay.getAttribute('role')).to.equal('alertdialog');
     });

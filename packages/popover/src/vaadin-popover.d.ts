@@ -53,13 +53,6 @@ declare class Popover extends PopoverPositionMixin(
   accessibleNameRef: string | null | undefined;
 
   /**
-   * The `role` attribute value to be set on the overlay.
-   *
-   * @attr {string} aria-role
-   */
-  ariaRole: string;
-
-  /**
    * Height to be set on the overlay content.
    *
    * @attr {string} content-height
@@ -77,6 +70,13 @@ declare class Popover extends PopoverPositionMixin(
    * True if the popover overlay is opened, false otherwise.
    */
   opened: boolean;
+
+  /**
+   * The `role` attribute value to be set on the overlay.
+   *
+   * @attr {string} overlay-role
+   */
+  overlayRole: string;
 
   /**
    * Custom function for rendering the content of the overlay.
