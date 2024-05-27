@@ -48,19 +48,14 @@ describe('a11y', () => {
       expect(target.hasAttribute('aria-haspopup')).to.be.false;
     });
 
+    it('should set aria-expanded attribute on the target when closed', () => {
+      expect(target.getAttribute('aria-expanded')).to.equal('false');
+    });
+
     it('should set aria-expanded attribute on the target when opened', async () => {
       popover.opened = true;
       await nextRender();
       expect(target.getAttribute('aria-expanded')).to.equal('true');
-    });
-
-    it('should remove aria-expanded attribute from the target when closed', async () => {
-      popover.opened = true;
-      await nextRender();
-
-      popover.opened = false;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-expanded')).to.be.false;
     });
 
     it('should set aria-controls attribute on the target when opened', async () => {

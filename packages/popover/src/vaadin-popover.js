@@ -176,6 +176,7 @@ class Popover extends PopoverPositionMixin(
     return [
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
+      '__openedOrTargetChanged(opened, target)',
     ];
   }
 
@@ -314,17 +315,20 @@ class Popover extends PopoverPositionMixin(
   __openedChanged(opened, oldOpened) {
     if (opened) {
       document.addEventListener('keydown', this.__onGlobalKeyDown, true);
-
-      if (this.target) {
-        this.target.setAttribute('aria-expanded', 'true');
-        this.target.setAttribute('aria-controls', this.__overlayId);
-      }
     } else if (oldOpened) {
       document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+    }
+  }
 
-      if (this.target) {
-        this.target.removeAttribute('aria-expanded');
-        this.target.removeAttribute('aria-controls');
+  /** @private */
+  __openedOrTargetChanged(opened, target) {
+    if (target) {
+      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
+
+      if (opened) {
+        target.setAttribute('aria-controls', this.__overlayId);
+      } else {
+        target.removeAttribute('aria-controls');
       }
     }
   }
