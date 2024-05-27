@@ -1069,7 +1069,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * The event may either target table section, a row, a cell or contents of a cell.
      * @param {Event} e
      * @returns {GridEventLocation}
-     * @private
+     * @protected
      */
     _getGridEventLocation(e) {
       // Use `composedPath()` stored by vaadin-context-menu gesture
