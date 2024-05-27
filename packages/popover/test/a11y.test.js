@@ -33,6 +33,18 @@ describe('a11y', () => {
     });
 
     it('should set aria-haspopup attribute on the target', () => {
+      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
+    it('should keep aria-haspopup attribute when overlayRole is set to alertdialog', async () => {
+      popover.overlayRole = 'alertdialog';
+      await nextUpdate(popover);
+      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
+    it('should update aria-haspopup attribute when overlayRole is set to different value', async () => {
+      popover.overlayRole = 'menu';
+      await nextUpdate(popover);
       expect(target.getAttribute('aria-haspopup')).to.equal('true');
     });
 

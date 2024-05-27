@@ -195,6 +195,7 @@ class Popover extends PopoverPositionMixin(
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
       '__openedOrTargetChanged(opened, target)',
+      '__overlayRoleOrTargetChanged(overlayRole, target)',
     ];
   }
 
@@ -287,22 +288,6 @@ class Popover extends PopoverPositionMixin(
     this.opened = false;
   }
 
-  /** @protected */
-  updated(props) {
-    super.updated(props);
-
-    if (props.has('target')) {
-      const oldTarget = props.get('target');
-      if (oldTarget) {
-        oldTarget.removeAttribute('aria-haspopup');
-      }
-
-      if (this.target) {
-        this.target.setAttribute('aria-haspopup', 'true');
-      }
-    }
-  }
-
   /**
    * @param {HTMLElement} target
    * @protected
@@ -350,6 +335,20 @@ class Popover extends PopoverPositionMixin(
       } else {
         target.removeAttribute('aria-controls');
       }
+    }
+  }
+
+  /** @private */
+  __overlayRoleOrTargetChanged(overlayRole, target) {
+    if (this.__oldTarget) {
+      this.__oldTarget.removeAttribute('aria-haspopup');
+    }
+
+    if (target) {
+      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
+      target.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
+
+      this.__oldTarget = target;
     }
   }
 
