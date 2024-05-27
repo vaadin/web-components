@@ -1069,10 +1069,12 @@ export const KeyboardNavigationMixin = (superClass) =>
      * The event may either target table section, a row, a cell or contents of a cell.
      * @param {Event} e
      * @returns {GridEventLocation}
-     * @private
+     * @protected
      */
     _getGridEventLocation(e) {
-      const path = e.composedPath();
+      // Use `composedPath()` stored by vaadin-context-menu gesture
+      // to avoid problem when accessing it after a timeout on iOS
+      const path = e.__composedPath || e.composedPath();
       const tableIndex = path.indexOf(this.$.table);
       // Assuming ascending path to table is: [...,] th|td, tr, thead|tbody, table [,...]
       const section = tableIndex >= 1 ? path[tableIndex - 1] : null;
