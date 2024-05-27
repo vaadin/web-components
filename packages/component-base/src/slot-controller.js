@@ -111,12 +111,12 @@ export class SlotController extends EventTarget {
         if (slotName !== '') {
           node.setAttribute('slot', slotName);
         }
-        this.node = node;
         this.defaultNode = node;
       }
     }
 
     if (node) {
+      this.node = node;
       host.appendChild(node);
     }
 
