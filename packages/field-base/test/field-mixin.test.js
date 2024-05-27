@@ -592,6 +592,17 @@ const runTests = (defineHelper, baseMixin) => {
           expect(element._helperNode).to.equal(defaultHelper);
         });
 
+        it('should restore the default helper when restoring helperText immediately', async () => {
+          element.helperText = null;
+          element.appendChild(helper);
+          await nextRender();
+
+          element.removeChild(helper);
+          element.helperText = 'Updated helper';
+          await nextRender();
+          expect(element._helperNode.textContent).to.equal('Updated helper');
+        });
+
         it('should keep has-helper attribute when the default helper is restored', async () => {
           element.appendChild(helper);
           await nextRender();
