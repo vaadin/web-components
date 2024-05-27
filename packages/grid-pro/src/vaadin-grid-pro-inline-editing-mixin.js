@@ -208,8 +208,7 @@ export const InlineEditingMixin = (superClass) =>
         const edited = this.__edited;
 
         if (context.item && this._isEditColumn(column)) {
-          const path = e.composedPath();
-          const cell = path[path.indexOf(this.$.table) - 3];
+          const { cell } = this._getGridEventLocation(e);
 
           if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
             return;
@@ -278,8 +277,7 @@ export const InlineEditingMixin = (superClass) =>
       const edited = this.__edited;
 
       if (context.item && this._isEditColumn(column)) {
-        const path = e.composedPath();
-        const cell = path[path.indexOf(this.$.table) - 3];
+        const { cell } = this._getGridEventLocation(e);
 
         if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
           return;

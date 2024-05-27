@@ -33,10 +33,7 @@ export const EventContextMixin = (superClass) =>
     getEventContext(event) {
       const context = {};
 
-      // Use `composedPath()` stored by vaadin-context-menu gesture
-      // to avoid problem when accessing it after a timeout on iOS
-      const path = event.__composedPath || event.composedPath();
-      const cell = path[path.indexOf(this.$.table) - 3];
+      const { cell } = this._getGridEventLocation(event);
 
       if (!cell) {
         return context;

@@ -81,8 +81,7 @@ export const ActiveItemMixin = (superClass) =>
         return;
       }
 
-      const path = e.composedPath();
-      const cell = path[path.indexOf(this.$.table) - 3];
+      const { cell } = this._getGridEventLocation(e);
       if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1 || cell === this.$.emptystatecell) {
         return;
       }
