@@ -39,6 +39,20 @@ declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
 ) {
   /**
+   * String used to label the overlay to screen reader users.
+   *
+   * @attr {string} accessible-name
+   */
+  accessibleName: string | null | undefined;
+
+  /**
+   * Id of the element used as label of the overlay to screen reader users.
+   *
+   * @attr {string} accessible-name-ref
+   */
+  accessibleNameRef: string | null | undefined;
+
+  /**
    * The `role` attribute value to be set on the overlay.
    *
    * @attr {string} aria-role

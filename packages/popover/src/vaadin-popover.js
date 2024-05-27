@@ -43,6 +43,24 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
+       * String used to label the overlay to screen reader users.
+       *
+       * @attr {string} accessible-name
+       */
+      accessibleName: {
+        type: String,
+      },
+
+      /**
+       * Id of the element used as label of the overlay to screen reader users.
+       *
+       * @attr {string} accessible-name-ref
+       */
+      accessibleNameRef: {
+        type: String,
+      },
+
+      /**
        * The `role` attribute value to be set on the overlay.
        *
        * @attr {string} aria-role
@@ -203,6 +221,8 @@ class Popover extends PopoverPositionMixin(
       <vaadin-popover-overlay
         id="${this.__overlayId}"
         role="${this.ariaRole}"
+        aria-label="${ifDefined(this.accessibleName)}"
+        aria-labelledby="${ifDefined(this.accessibleNameRef)}"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"

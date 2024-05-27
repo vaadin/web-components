@@ -74,6 +74,46 @@ describe('a11y', () => {
     });
   });
 
+  describe('accessible name', () => {
+    it('should not set aria-label on the overlay by default', () => {
+      expect(overlay.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should set aria-label on the overlay when accessibleName is set', async () => {
+      popover.accessibleName = 'Label text';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('aria-label')).to.equal('Label text');
+    });
+
+    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+      popover.accessibleName = 'Label text';
+      await nextUpdate(popover);
+
+      popover.accessibleName = null;
+      await nextUpdate(popover);
+      expect(overlay.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should not set aria-labelledby on the overlay by default', () => {
+      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should set aria-labelledby on the overlay when accessibleName is set', async () => {
+      popover.accessibleNameRef = 'custom-label';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('aria-labelledby')).to.equal('custom-label');
+    });
+
+    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+      popover.accessibleNameRef = 'custom-label';
+      await nextUpdate(popover);
+
+      popover.accessibleNameRef = null;
+      await nextUpdate(popover);
+      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    });
+  });
+
   describe('focus restoration', () => {
     describe('focus trigger', () => {
       beforeEach(async () => {
