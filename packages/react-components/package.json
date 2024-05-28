@@ -66,6 +66,7 @@
     "@vaadin/number-field": "24.5.0-alpha1",
     "@vaadin/overlay": "24.5.0-alpha1",
     "@vaadin/password-field": "24.5.0-alpha1",
+    "@vaadin/popover": "24.5.0-alpha1",
     "@vaadin/progress-bar": "24.5.0-alpha1",
     "@vaadin/radio-group": "24.5.0-alpha1",
     "@vaadin/scroller": "24.5.0-alpha1",
@@ -318,6 +319,10 @@
       "types": "./PasswordField.d.ts",
       "default": "./PasswordField.js"
     },
+    "./Popover.js": {
+      "types": "./Popover.d.ts",
+      "default": "./Popover.js"
+    },
     "./ProgressBar.js": {
       "types": "./ProgressBar.d.ts",
       "default": "./ProgressBar.js"
@@ -440,6 +445,7 @@
     "./Notification": "./Notification.js",
     "./NumberField": "./NumberField.js",
     "./PasswordField": "./PasswordField.js",
+    "./Popover": "./Popover.js",
     "./ProgressBar": "./ProgressBar.js",
     "./RadioButton": "./RadioButton.js",
     "./RadioGroup": "./RadioGroup.js",

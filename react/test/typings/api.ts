@@ -41,6 +41,7 @@ import {
   type MenuBarItemSelectedEvent,
 } from '../../packages/react-components/src/MenuBar.js';
 import type { SubMenuItem } from '../../packages/react-components/src/MenuBar.js';
+import { Popover, PopoverElement } from '../../packages/react-components/src/Popover.js';
 import { TabSheet, TabSheetElement, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
 import type { TabElement } from '../../packages/react-components/src/Tab.js';
 
@@ -240,6 +241,13 @@ const menuBarOnItemSelected: typeof menuBarProps.onItemSelected = (event) => {
   assertType<MenuBarItem>(event.detail.value);
 };
 assertType<typeof menuBarProps.onItemSelected>(menuBarOnItemSelected);
+
+const popoverProps = React.createElement(Popover, {}).props;
+type PopoverProps = typeof popoverProps;
+
+assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('style');
+assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('contentEditable');
+assertOmitted<HTMLAttributes<PopoverElement>, PopoverProps>('onClick');
 
 const tabSheetProps = React.createElement(TabSheet, {}).props;
 type TabSheetProps = typeof tabSheetProps;
