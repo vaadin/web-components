@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
@@ -109,6 +109,18 @@ describe('position mixin', () => {
 
     // Expect the overlay to be scrolled to the same position
     expect(overlay.$.overlay.scrollTop).to.equal(100);
+  });
+
+  it('should close overlay if element is hidden', async () => {
+    target.style.display = 'none';
+    await nextRender();
+    expect(overlay.opened).to.be.false;
+  });
+
+  it('should close overlay if parent element is hidden', async () => {
+    target.parentElement.style.display = 'none';
+    await nextRender();
+    expect(overlay.opened).to.be.false;
   });
 
   describe('vertical align top', () => {
