@@ -111,6 +111,18 @@ describe('position mixin', () => {
     expect(overlay.$.overlay.scrollTop).to.equal(100);
   });
 
+  it('should close overlay if element is hidden', async () => {
+    target.style.display = 'none';
+    await nextRender();
+    expect(overlay.opened).to.be.false;
+  });
+
+  it('should close overlay if parent element is hidden', async () => {
+    target.parentElement.style.display = 'none';
+    await nextRender();
+    expect(overlay.opened).to.be.false;
+  });
+
   describe('vertical align top', () => {
     beforeEach(() => {
       overlay.verticalAlign = TOP;
