@@ -73,7 +73,7 @@ export const ActiveItemMixin = (superClass) =>
      *
      * @protected
      */
-    _preventCellActivationOnClick(e) {
+    _shouldPreventCellActivationOnClick(e) {
       const { cell } = this._getGridEventLocation(e);
       return (
         // Something has handled this click already, e. g., <vaadin-grid-sorter>
@@ -98,7 +98,7 @@ export const ActiveItemMixin = (superClass) =>
      * @protected
      */
     _onClick(e) {
-      if (this._preventCellActivationOnClick(e)) {
+      if (this._shouldPreventCellActivationOnClick(e)) {
         return;
       }
 

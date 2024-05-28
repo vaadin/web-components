@@ -163,9 +163,9 @@ export const InlineEditingMixin = (superClass) =>
      * @override
      * @protected
      */
-    _preventCellActivationOnClick(e) {
+    _shouldPreventCellActivationOnClick(e) {
       return (
-        super._preventCellActivationOnClick(e) ||
+        super._shouldPreventCellActivationOnClick(e) ||
         // The clicked cell is editable
         this._isEditColumn(this.getEventContext(e).column)
       );
