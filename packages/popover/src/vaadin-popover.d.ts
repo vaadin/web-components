@@ -67,6 +67,28 @@ declare class Popover extends PopoverPositionMixin(
   contentWidth: string;
 
   /**
+   * The delay in milliseconds before the popover is opened
+   * on focus when the corresponding trigger is used.
+   * @attr {number} focus-delay
+   */
+  focusDelay: number;
+
+  /**
+   * The delay in milliseconds before the popover is closed
+   * on losing hover, when the corresponding trigger is used.
+   * On blur, the popover is closed immediately.
+   * @attr {number} hide-delay
+   */
+  hideDelay: number;
+
+  /**
+   * The delay in milliseconds before the popover is opened
+   * on hover when the corresponding trigger is used.
+   * @attr {number} hover-delay
+   */
+  hoverDelay: number;
+
+  /**
    * True if the popover overlay is opened, false otherwise.
    */
   opened: boolean;
