@@ -220,6 +220,11 @@ export const PositionMixin = (superClass) =>
 
       const targetRect = this.positionTarget.getBoundingClientRect();
 
+      if (targetRect.width === 0 && targetRect.height === 0 && this.opened) {
+        this.opened = false;
+        return;
+      }
+
       // Detect the desired alignment and update the layout accordingly
       const shouldAlignStartVertically = this.__shouldAlignStartVertically(targetRect);
       this.style.justifyContent = shouldAlignStartVertically ? 'flex-start' : 'flex-end';
