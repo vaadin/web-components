@@ -1,4 +1,5 @@
 import '../../vaadin-combo-box-light.js';
+import '@vaadin/text-field';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MockComboBoxLightTemplateWrapper extends PolymerElement {
