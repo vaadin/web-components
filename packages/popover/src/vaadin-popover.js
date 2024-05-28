@@ -11,6 +11,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -42,6 +43,24 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
+       * String used to label the overlay to screen reader users.
+       *
+       * @attr {string} accessible-name
+       */
+      accessibleName: {
+        type: String,
+      },
+
+      /**
+       * Id of the element used as label of the overlay to screen reader users.
+       *
+       * @attr {string} accessible-name-ref
+       */
+      accessibleNameRef: {
+        type: String,
+      },
+
+      /**
        * Height to be set on the overlay content.
        *
        * @attr {string} content-height
@@ -67,6 +86,16 @@ class Popover extends PopoverPositionMixin(
         value: false,
         notify: true,
         observer: '__openedChanged',
+      },
+
+      /**
+       * The `role` attribute value to be set on the overlay.
+       *
+       * @attr {string} overlay-role
+       */
+      overlayRole: {
+        type: String,
+        value: 'dialog',
       },
 
       /**
@@ -153,6 +182,11 @@ class Popover extends PopoverPositionMixin(
         value: false,
         sync: true,
       },
+
+      /** @private */
+      __overlayId: {
+        type: String,
+      },
     };
   }
 
@@ -160,11 +194,16 @@ class Popover extends PopoverPositionMixin(
     return [
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
+      '__openedOrTargetChanged(opened, target)',
+      '__overlayRoleOrTargetChanged(overlayRole, target)',
     ];
   }
 
   constructor() {
     super();
+
+    this.__overlayId = `vaadin-popover-${generateUniqueId()}`;
+
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
@@ -181,6 +220,10 @@ class Popover extends PopoverPositionMixin(
 
     return html`
       <vaadin-popover-overlay
+        id="${this.__overlayId}"
+        role="${this.overlayRole}"
+        aria-label="${ifDefined(this.accessibleName)}"
+        aria-labelledby="${ifDefined(this.accessibleNameRef)}"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
@@ -279,6 +322,33 @@ class Popover extends PopoverPositionMixin(
       document.addEventListener('keydown', this.__onGlobalKeyDown, true);
     } else if (oldOpened) {
       document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+    }
+  }
+
+  /** @private */
+  __openedOrTargetChanged(opened, target) {
+    if (target) {
+      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
+
+      if (opened) {
+        target.setAttribute('aria-controls', this.__overlayId);
+      } else {
+        target.removeAttribute('aria-controls');
+      }
+    }
+  }
+
+  /** @private */
+  __overlayRoleOrTargetChanged(overlayRole, target) {
+    if (this.__oldTarget) {
+      this.__oldTarget.removeAttribute('aria-haspopup');
+    }
+
+    if (target) {
+      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
+      target.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
+
+      this.__oldTarget = target;
     }
   }
 

@@ -21,6 +21,111 @@ describe('a11y', () => {
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
+  describe('ARIA attributes', () => {
+    it('should set role attribute on the overlay to dialog', () => {
+      expect(overlay.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should change role attribute on the overlay based on overlayRole', async () => {
+      popover.overlayRole = 'alertdialog';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should set aria-haspopup attribute on the target', () => {
+      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
+    it('should keep aria-haspopup attribute when overlayRole is set to alertdialog', async () => {
+      popover.overlayRole = 'alertdialog';
+      await nextUpdate(popover);
+      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
+    it('should update aria-haspopup attribute when overlayRole is set to different value', async () => {
+      popover.overlayRole = 'menu';
+      await nextUpdate(popover);
+      expect(target.getAttribute('aria-haspopup')).to.equal('true');
+    });
+
+    it('should remove aria-haspopup attribute when target is cleared', async () => {
+      popover.target = null;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-haspopup')).to.be.false;
+    });
+
+    it('should remove aria-controls attribute when target is cleared', async () => {
+      popover.target = null;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-haspopup')).to.be.false;
+    });
+
+    it('should set aria-expanded attribute on the target when closed', () => {
+      expect(target.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should set aria-expanded attribute on the target when opened', async () => {
+      popover.opened = true;
+      await nextRender();
+      expect(target.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should set aria-controls attribute on the target when opened', async () => {
+      popover.opened = true;
+      await nextRender();
+      expect(target.getAttribute('aria-controls')).to.equal(overlay.id);
+    });
+
+    it('should remove aria-controls attribute from the target when closed', async () => {
+      popover.opened = true;
+      await nextRender();
+
+      popover.opened = false;
+      await nextUpdate(popover);
+      expect(target.hasAttribute('aria-controls')).to.be.false;
+    });
+  });
+
+  describe('accessible name', () => {
+    it('should not set aria-label on the overlay by default', () => {
+      expect(overlay.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should set aria-label on the overlay when accessibleName is set', async () => {
+      popover.accessibleName = 'Label text';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('aria-label')).to.equal('Label text');
+    });
+
+    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+      popover.accessibleName = 'Label text';
+      await nextUpdate(popover);
+
+      popover.accessibleName = null;
+      await nextUpdate(popover);
+      expect(overlay.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should not set aria-labelledby on the overlay by default', () => {
+      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should set aria-labelledby on the overlay when accessibleName is set', async () => {
+      popover.accessibleNameRef = 'custom-label';
+      await nextUpdate(popover);
+      expect(overlay.getAttribute('aria-labelledby')).to.equal('custom-label');
+    });
+
+    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+      popover.accessibleNameRef = 'custom-label';
+      await nextUpdate(popover);
+
+      popover.accessibleNameRef = null;
+      await nextUpdate(popover);
+      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    });
+  });
+
   describe('focus restoration', () => {
     describe('focus trigger', () => {
       beforeEach(async () => {
