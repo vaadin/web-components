@@ -232,10 +232,10 @@ export const PositionMixin = (superClass) =>
 
       const targetRect = this.positionTarget.getBoundingClientRect();
 
-      if (targetRect.width === 0 && targetRect.height === 0 && this.opened) {
+      if (targetRect.width === 0 && targetRect.height === 0) {
         this.style.display = 'none';
         return;
-      } else if (this.style.display === 'none' && this.opened) {
+      } else if (this.style.display === 'none') {
         this.style.display = '';
       }
 
