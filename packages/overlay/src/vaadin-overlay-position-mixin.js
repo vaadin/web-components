@@ -233,8 +233,10 @@ export const PositionMixin = (superClass) =>
       const targetRect = this.positionTarget.getBoundingClientRect();
 
       if (targetRect.width === 0 && targetRect.height === 0 && this.opened) {
-        this.opened = false;
+        this.style.display = 'none';
         return;
+      } else if (this.style.display === 'none' && this.opened) {
+        this.style.display = '';
       }
 
       // Detect the desired alignment and update the layout accordingly

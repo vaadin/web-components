@@ -93,16 +93,32 @@ describe('position mixin', () => {
     expect(overlay.$.overlay.scrollTop).to.equal(100);
   });
 
-  it('should close overlay if element is hidden', async () => {
+  it('should hide overlay if element is hidden', async () => {
     target.style.display = 'none';
     await nextRender();
-    expect(overlay.opened).to.be.false;
+    expect(overlay.style.display).to.be.equal('none');
   });
 
-  it('should close overlay if parent element is hidden', async () => {
+  it('should show overlay after element is shown again', async () => {
+    target.style.display = 'none';
+    await nextRender();
+    target.style.display = '';
+    await nextRender();
+    expect(overlay.style.display).to.be.equal('');
+  });
+
+  it('should hide overlay if parent element is hidden', async () => {
     target.parentElement.style.display = 'none';
     await nextRender();
-    expect(overlay.opened).to.be.false;
+    expect(overlay.style.display).to.be.equal('none');
+  });
+
+  it('should show overlay after parent element is shown again', async () => {
+    target.parentElement.style.display = 'none';
+    await nextRender();
+    target.parentElement.style.display = '';
+    await nextRender();
+    expect(overlay.style.display).to.be.equal('');
   });
 
   describe('vertical align top', () => {
