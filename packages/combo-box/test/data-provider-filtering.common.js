@@ -66,6 +66,17 @@ const TEMPLATES = {
         expect(params.filter).to.equal('');
       });
 
+      it('should clear filteredItems on filter change', () => {
+        setInputValue(comboBox, 'Item');
+        expect(comboBox.filteredItems).to.deep.equal([]);
+      });
+
+      it('should update filteredItems on filter request response', async () => {
+        setInputValue(comboBox, 'Item 1');
+        await aTimeout(0);
+        expect(comboBox.filteredItems).to.deep.equal(['Item 1']);
+      });
+
       it('should clear filter on value clear', async () => {
         setInputValue(comboBox, 'Item');
         await aTimeout(0);
