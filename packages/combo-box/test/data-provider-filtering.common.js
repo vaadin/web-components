@@ -23,12 +23,14 @@ const TEMPLATES = {
         comboBox = fixtureSync(TEMPLATES[tag]);
         await nextRender();
 
-        comboBox.dataProvider = sinon.spy((params, callback) => {
+        comboBox.dataProvider = sinon.spy(async (params, callback) => {
           const items = ['Item 1', 'Item 2', 'Item 3'];
           const filteredItems = items.filter((item) => item.includes(params.filter));
+          await aTimeout(0);
           callback(filteredItems, filteredItems.length);
         });
         comboBox.opened = true;
+        await aTimeout(0);
       });
 
       it('should make request with empty filter when opened', () => {
@@ -44,65 +46,39 @@ const TEMPLATES = {
         expect(params.filter).to.equal('Item');
       });
 
-      it('should make request with empty filter on value change', () => {
+      it('should make request with empty filter on value change', async () => {
         setInputValue(comboBox, 'Item');
+        await aTimeout(0);
         comboBox.dataProvider.resetHistory();
         comboBox.value = 'Item 2';
         const params = comboBox.dataProvider.lastCall.args[0];
         expect(params.filter).to.equal('');
       });
 
-      it('should clear filter on value clear', () => {
+      it('should make request with empty filter after partial filter & cancel & reopen', async () => {
+        setInputValue(comboBox, 'It');
+        await aTimeout(0);
+        comboBox.dataProvider.resetHistory();
+        comboBox.cancel();
+        comboBox.opened = true;
+        await aTimeout(0);
+        const params = comboBox.dataProvider.lastCall.args[0];
+        expect(params.filter).to.equal('');
+      });
+
+      it('should clear filter on value clear', async () => {
         setInputValue(comboBox, 'Item');
+        await aTimeout(0);
         comboBox.value = 'Item 1';
         comboBox.value = '';
         expect(comboBox.filter).to.equal('');
       });
 
-      it('should clear filter on opened change', () => {
+      it('should clear filter on close', async () => {
         setInputValue(comboBox, 'Item');
+        await aTimeout(0);
         comboBox.opened = false;
         expect(comboBox.filter).to.equal('');
-      });
-
-      it('should make request with empty filter after partial filter & cancel & reopen', () => {
-        setInputValue(comboBox, 'It');
-        comboBox.dataProvider.resetHistory();
-        comboBox.cancel();
-        comboBox.opened = true;
-        const params = comboBox.dataProvider.lastCall.args[0];
-        expect(params.filter).to.equal('');
-      });
-    });
-
-    describe('async data provider', () => {
-      beforeEach(async () => {
-        comboBox = fixtureSync(TEMPLATES[tag]);
-        await nextRender();
-
-        comboBox.dataProvider = sinon.spy(async (params, callback) => {
-          const items = ['Item 1', 'Item 2', 'Item 3'];
-          const filteredItems = items.filter((item) => item.includes(params.filter));
-          await aTimeout(0);
-          callback(filteredItems, filteredItems.length);
-        });
-        comboBox.opened = true;
-        await aTimeout(0);
-      });
-
-      it('should make request with empty filter when opened', () => {
-        expect(comboBox.dataProvider).to.be.calledOnce;
-        const params = comboBox.dataProvider.firstCall.args[0];
-        expect(params.filter).to.equal('');
-      });
-
-      it('should make request with entered filter on filter change', async () => {
-        comboBox.dataProvider.resetHistory();
-        setInputValue(comboBox, 'Item');
-        await aTimeout(0);
-        expect(comboBox.dataProvider).to.be.calledOnce;
-        const params = comboBox.dataProvider.firstCall.args[0];
-        expect(params.filter).to.equal('Item');
       });
     });
 
