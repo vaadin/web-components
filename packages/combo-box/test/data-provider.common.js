@@ -504,6 +504,27 @@ const TEMPLATES = {
       });
     });
 
+    describe('dataProvider is set before attach', () => {
+      beforeEach(async () => {
+        comboBox = document.createElement(tag);
+        comboBox.dataProvider = spyDataProvider;
+        document.body.appendChild(comboBox);
+        await nextRender();
+      });
+
+      afterEach(() => {
+        document.body.removeChild(comboBox);
+      });
+
+      it('should have undefined size', () => {
+        expect(comboBox.size).to.be.undefined;
+      });
+
+      it('should have empty filteredItems', () => {
+        expect(comboBox.filteredItems).to.have.lengthOf(0);
+      });
+    });
+
     describe('pageSize', () => {
       it('should have default value', () => {
         expect(typeof comboBox.pageSize).to.equal('number');
@@ -655,6 +676,28 @@ const TEMPLATES = {
         // Reduce the size and trigger pending queue cleanup
         comboBox.size = 50;
         expect(comboBox.loading).to.be.false;
+      });
+    });
+
+    describe('size is set before attach', () => {
+      beforeEach(async () => {
+        comboBox = document.createElement(tag);
+        comboBox.dataProvider = spyDataProvider;
+        comboBox.size = SIZE;
+        document.body.appendChild(comboBox);
+        await nextRender();
+      });
+
+      afterEach(() => {
+        document.body.removeChild(comboBox);
+      });
+
+      it('should have size', () => {
+        expect(comboBox.size).to.equal(SIZE);
+      });
+
+      it('should have filteredItems', () => {
+        expect(comboBox.filteredItems).to.have.lengthOf(SIZE);
       });
     });
 
