@@ -570,6 +570,10 @@ const TEMPLATES = {
         await nextRender();
       });
 
+      afterEach(() => {
+        document.body.removeChild(comboBox);
+      });
+
       it('should have undefined size', () => {
         expect(comboBox.size).to.be.undefined;
       });
@@ -740,6 +744,10 @@ const TEMPLATES = {
         comboBox.size = SIZE;
         document.body.appendChild(comboBox);
         await nextRender();
+      });
+
+      afterEach(() => {
+        document.body.removeChild(comboBox);
       });
 
       it('should have size', () => {
