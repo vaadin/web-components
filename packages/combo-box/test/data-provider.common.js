@@ -16,7 +16,7 @@ import {
   setInputValue,
 } from './helpers.js';
 
-describe('lazy loading', () => {
+describe('data provider', () => {
   const DEFAULT_PAGE_SIZE = 50;
   const SIZE = 200;
   const allItems = makeItems(SIZE);

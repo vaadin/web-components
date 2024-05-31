@@ -15,7 +15,7 @@ const TEMPLATES = {
 };
 
 ['vaadin-combo-box', 'vaadin-combo-box-light'].forEach((tag) => {
-  describe(`dynamic size - ${tag}`, () => {
+  describe(`data provider dynamic size - ${tag}`, () => {
     let comboBox;
 
     describe('size is reduced once scrolled to end', () => {
