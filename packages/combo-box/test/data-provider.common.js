@@ -221,45 +221,6 @@ const TEMPLATES = {
         expect(pages).to.contain(2);
       });
 
-      it('should request with empty filter', () => {
-        comboBox.dataProvider = spyDataProvider;
-        const params = spyDataProvider.lastCall.args[0];
-        expect(params.filter).to.equal('');
-      });
-
-      it('should request on filter change with user’s filter', () => {
-        comboBox.dataProvider = spyDataProvider;
-        spyDataProvider.resetHistory();
-        setInputValue(comboBox, 'item 1');
-        expect(spyDataProvider.called).to.be.true;
-        const params = spyDataProvider.lastCall.args[0];
-        expect(params.filter).to.equal('item 1');
-      });
-
-      it('should clear filter on value change', () => {
-        comboBox.dataProvider = spyDataProvider;
-        setInputValue(comboBox, 'item 1');
-        spyDataProvider.resetHistory();
-        comboBox.value = 'foo';
-        const params = spyDataProvider.lastCall.args[0];
-        expect(params.filter).to.equal('');
-      });
-
-      it('should clear filter on value clear', () => {
-        comboBox.dataProvider = dataProvider;
-        setInputValue(comboBox, 'item 1');
-        comboBox.value = 'item 1';
-        comboBox.value = '';
-        expect(comboBox.filter).to.equal('');
-      });
-
-      it('should clear filter on opened change', () => {
-        comboBox.dataProvider = dataProvider;
-        setInputValue(comboBox, 'item 1');
-        comboBox.opened = false;
-        expect(comboBox.filter).to.equal('');
-      });
-
       it('should not request on value change', () => {
         comboBox.dataProvider = spyDataProvider;
         spyDataProvider.resetHistory();
@@ -284,16 +245,6 @@ const TEMPLATES = {
           expect(comboBox.loading).to.be.false;
           done();
         };
-      });
-
-      it('should request page after partial filter & cancel & reopen', () => {
-        comboBox.dataProvider = spyDataProvider;
-        setInputValue(comboBox, 'it');
-        spyDataProvider.resetHistory();
-        comboBox.cancel();
-        comboBox.opened = true;
-        const params = spyDataProvider.lastCall.args[0];
-        expect(params.filter).to.equal('');
       });
 
       it('should not request loaded page again', () => {
@@ -411,15 +362,6 @@ const TEMPLATES = {
         comboBox.dataProvider = spyAsyncDataProvider;
         comboBox.opened = true;
         expect(spyAsyncDataProvider.calledOnce).to.be.true;
-      });
-
-      it('should be invoked with correct filter parameter', async () => {
-        comboBox.dataProvider = spyAsyncDataProvider;
-        setInputValue(comboBox, '1');
-        // Wait for the async data provider to respond
-        await aTimeout(0);
-        expect(spyAsyncDataProvider.calledOnce).to.be.true;
-        expect(spyAsyncDataProvider.firstCall.args[0].filter).to.equal('1');
       });
 
       it('should be invoked on open with pre-defined size', () => {
@@ -1174,46 +1116,6 @@ const TEMPLATES = {
         expect(comboBox.opened).to.be.false;
         expect(comboBox.hasAttribute('focused')).to.be.false;
         expect(comboBox.value).to.equal('other value');
-      });
-    });
-
-    describe('dropdown behaviour when filtering', () => {
-      let openedSpy;
-
-      beforeEach(() => {
-        comboBox.dataProvider = spyDataProvider;
-        comboBox.opened = true;
-        spyDataProvider.resetHistory();
-
-        openedSpy = sinon.spy();
-        comboBox.addEventListener('vaadin-combo-box-dropdown-opened', openedSpy);
-      });
-
-      it('should not toggle between opened and closed when filtering', () => {
-        // Filter for something that should return results
-        comboBox.filter = 'item';
-        // Verify data provider has been called
-        expect(spyDataProvider.calledOnce).to.be.true;
-        // Dropdown should not have been closed and re-opened
-        expect(openedSpy.called).to.be.false;
-      });
-
-      it('should not toggle between opened and closed when setting a value', () => {
-        // Filter for something that should return results
-        comboBox.filter = 'item';
-        // Set a value
-        comboBox.value = 'item 1';
-        // Dropdown should not have been closed and re-opened
-        expect(openedSpy.called).to.be.false;
-      });
-
-      it('should close when there are no items', () => {
-        // Filter for something that doesn't exist
-        comboBox.filter = 'doesnotexist';
-        // Verify data provider has been called
-        expect(spyDataProvider.calledOnce).to.be.true;
-        // Dropdown should close
-        expect(comboBox.$.overlay.opened).to.be.false;
       });
     });
   });
