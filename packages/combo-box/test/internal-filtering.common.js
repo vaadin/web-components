@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
-import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
+import { getAllItems, getFocusedItemIndex, getViewportItems, makeItems, onceOpened, setInputValue } from './helpers.js';
 
 describe('internal filtering', () => {
   let comboBox;
@@ -239,6 +239,21 @@ describe('internal filtering', () => {
       expect(comboBox.filter).to.equal('bar');
       comboBox.selectedItem = 'foo';
       expect(comboBox.filter).to.be.empty;
+    });
+  });
+
+  describe('filtering with many items', () => {
+    beforeEach(async () => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = makeItems(1000);
+      await nextRender();
+    });
+
+    it('should reset scroll position to 0 on filter change', () => {
+      comboBox.opened = true;
+      comboBox._scrollIntoView(500);
+      comboBox.filter = '1';
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
   });
 
