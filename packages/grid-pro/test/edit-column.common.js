@@ -399,11 +399,7 @@ describe('edit column', () => {
         amountColumn.isCellEditable = () => true; // NOSONAR
       });
 
-      it('should not set editable-cell part to editable cells on loading rows', () => {
-        expect(hasEditablePart(1, 2)).to.be.false;
-      });
-
-      it('should not set editable-cell part to editable cells after row is no longer loading', () => {
+      it('should add editable-cell part to rows that are not in loading state ', () => {
         flushDataProvider();
         expect(hasEditablePart(1, 2)).to.be.true;
       });
