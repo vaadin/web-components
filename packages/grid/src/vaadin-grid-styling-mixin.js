@@ -89,7 +89,7 @@ export const StylingMixin = (superClass) =>
      */
     generateCellClassNames() {
       iterateChildren(this.$.items, (row) => {
-        if (!row.hidden && !row.hasAttribute('loading')) {
+        if (!row.hidden) {
           this._generateCellClassNames(row, this.__getRowModel(row));
         }
       });
@@ -103,7 +103,7 @@ export const StylingMixin = (superClass) =>
      */
     generateCellPartNames() {
       iterateChildren(this.$.items, (row) => {
-        if (!row.hidden && !row.hasAttribute('loading')) {
+        if (!row.hidden) {
           this._generateCellPartNames(row, this.__getRowModel(row));
         }
       });
@@ -115,7 +115,7 @@ export const StylingMixin = (superClass) =>
         if (cell.__generatedClasses) {
           cell.__generatedClasses.forEach((className) => cell.classList.remove(className));
         }
-        if (this.cellClassNameGenerator) {
+        if (this.cellClassNameGenerator && !row.hasAttribute('loading')) {
           const result = this.cellClassNameGenerator(cell._column, model);
           cell.__generatedClasses = result && result.split(' ').filter((className) => className.length > 0);
           if (cell.__generatedClasses) {
@@ -134,7 +134,7 @@ export const StylingMixin = (superClass) =>
             updatePart(cell, null, partName);
           });
         }
-        if (this.cellPartNameGenerator) {
+        if (this.cellPartNameGenerator && !row.hasAttribute('loading')) {
           const result = this.cellPartNameGenerator(cell._column, model);
           cell.__generatedParts = result && result.split(' ').filter((partName) => partName.length > 0);
           if (cell.__generatedParts) {
