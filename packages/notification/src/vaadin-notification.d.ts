@@ -105,6 +105,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * propagated to the internal `<vaadin-notification-card>`.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the notification is closed.
  */
 declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
   /**

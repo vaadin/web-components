@@ -257,6 +257,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * propagated to the internal `<vaadin-notification-card>`.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the notification is closed.
  *
  * @customElement
  * @extends HTMLElement
