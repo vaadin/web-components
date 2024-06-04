@@ -234,6 +234,12 @@ export const DataProviderMixin = (superClass) =>
 
       // Cells part attribute
       updateCellsPart(cells, 'loading-row-cell', loading);
+
+      if (loading) {
+        // Run style generators for the loading row to have custom names cleared
+        this._generateCellClassNames(row);
+        this._generateCellPartNames(row);
+      }
     }
 
     /**
