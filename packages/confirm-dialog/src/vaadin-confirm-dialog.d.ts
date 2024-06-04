@@ -57,6 +57,7 @@ export * from './vaadin-confirm-dialog-mixin.js';
  * @fires {Event} cancel - Fired when Cancel button or Escape key was pressed.
  * @fires {Event} reject - Fired when Reject button was pressed.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the confirm dialog is closed.
  */
 declare class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(ControllerMixin(HTMLElement)))) {
   addEventListener<K extends keyof ConfirmDialogEventMap>(

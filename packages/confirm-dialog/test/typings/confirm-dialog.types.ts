@@ -1,7 +1,7 @@
 import '../../vaadin-confirm-dialog.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import type { ConfirmDialogOpenedChangedEvent } from '../../vaadin-confirm-dialog.js';
+import type { ConfirmDialogClosedEvent, ConfirmDialogOpenedChangedEvent } from '../../vaadin-confirm-dialog.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -42,4 +42,8 @@ dialog.addEventListener('cancel', (event) => {
 
 dialog.addEventListener('reject', (event) => {
   assertType<Event>(event);
+});
+
+dialog.addEventListener('closed', (event) => {
+  assertType<ConfirmDialogClosedEvent>(event);
 });
