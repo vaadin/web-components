@@ -386,8 +386,11 @@ describe('edit column', () => {
         /* prettier-ignore */
         grid.dataProvider = ({ page, pageSize }, callback) => { // NOSONAR
           const items = [...Array(pageSize).keys()].map((i) => {
-            return {
-              name: `name-${page * pageSize + i}`,
+            return { 
+              id: page * pageSize + i,
+              status: 'draft',
+              amount: 100,
+              notes: 'foo'
             };
           });
 
