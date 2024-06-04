@@ -333,6 +333,7 @@ export const ConfirmDialogMixin = (superClass) =>
       this.__slottedNodes.forEach((node) => {
         this.appendChild(node);
       });
+      this.dispatchEvent(new CustomEvent('closed'));
     }
 
     /** @private */
