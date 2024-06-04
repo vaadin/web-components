@@ -6,6 +6,7 @@ import type { DialogDraggableMixinClass } from '../../src/vaadin-dialog-draggabl
 import type { DialogResizableMixinClass } from '../../src/vaadin-dialog-resizable-mixin.js';
 import type {
   Dialog,
+  DialogClosedEvent,
   DialogOpenedChangedEvent,
   DialogRenderer,
   DialogResizeDimensions,
@@ -32,6 +33,10 @@ dialog.addEventListener('opened-changed', (event) => {
 dialog.addEventListener('resize', (event) => {
   assertType<DialogResizeEvent>(event);
   assertType<DialogResizeDimensions>(event.detail);
+});
+
+dialog.addEventListener('closed', (event) => {
+  assertType<DialogClosedEvent>(event);
 });
 
 // Properties
