@@ -6,9 +6,14 @@ import '../vaadin-side-nav.js';
 describe('navigation', () => {
   let sideNav, items;
 
-  function navigate(url) {
+  function navigateWithPopstateEvent(url) {
     history.pushState({}, '', url);
     window.dispatchEvent(new PopStateEvent('popstate'));
+  }
+
+  function navigateWithVaadinNavigateEvent(url) {
+    history.pushState({}, '', url);
+    window.dispatchEvent(new CustomEvent('vaadin-navigate'));
   }
 
   beforeEach(async () => {
@@ -26,22 +31,45 @@ describe('navigation', () => {
     await nextRender();
   });
 
-  it('should update current attribute on items when navigating', async () => {
-    navigate('1');
+  it('should update current attribute on items when navigating with popstate event', async () => {
+    navigateWithPopstateEvent('1');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.true;
     expect(items[1].hasAttribute('current')).to.be.false;
     expect(items[2].hasAttribute('current')).to.be.false;
 
-    navigate('2');
+    navigateWithPopstateEvent('2');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.false;
     expect(items[1].hasAttribute('current')).to.be.true;
     expect(items[2].hasAttribute('current')).to.be.false;
 
-    navigate('21');
+    navigateWithPopstateEvent('21');
+    await nextRender();
+
+    expect(items[0].hasAttribute('current')).to.be.false;
+    expect(items[1].hasAttribute('current')).to.be.false;
+    expect(items[2].hasAttribute('current')).to.be.true;
+  });
+
+  it('should update current attribute on items when navigating with vaadin-navigate event', async () => {
+    navigateWithVaadinNavigateEvent('1');
+    await nextRender();
+
+    expect(items[0].hasAttribute('current')).to.be.true;
+    expect(items[1].hasAttribute('current')).to.be.false;
+    expect(items[2].hasAttribute('current')).to.be.false;
+
+    navigateWithVaadinNavigateEvent('2');
+    await nextRender();
+
+    expect(items[0].hasAttribute('current')).to.be.false;
+    expect(items[1].hasAttribute('current')).to.be.true;
+    expect(items[2].hasAttribute('current')).to.be.false;
+
+    navigateWithVaadinNavigateEvent('21');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.false;
@@ -50,13 +78,13 @@ describe('navigation', () => {
   });
 
   it('should not set expanded attribute on the current leaf item', async () => {
-    navigate('1');
+    navigateWithPopstateEvent('1');
     await nextRender();
     expect(items[0].hasAttribute('expanded')).to.be.false;
   });
 
   it('should set expanded attribute on the current item with children', async () => {
-    navigate('2');
+    navigateWithPopstateEvent('2');
     await nextRender();
     expect(items[1].hasAttribute('expanded')).to.be.true;
   });
