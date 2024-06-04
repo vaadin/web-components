@@ -55,7 +55,7 @@ describe('vaadin-notification', () => {
 
   it('should dispatch closed event', async () => {
     const spy = sinon.spy();
-    listenOnce(notification, 'closed', spy);
+    notification.addEventListener('closed', spy);
     notification.opened = false;
     await aTimeout(0);
     expect(spy.calledOnce).to.be.true;
