@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, esc, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  esc,
+  fixtureSync,
+  listenOnce,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -517,6 +526,28 @@ describe('vaadin-confirm-dialog', () => {
       confirm.addEventListener('reject', spy);
       overlay.querySelector('[slot="reject-button"]').click();
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should dispatch closed event', async () => {
+      const spy = sinon.spy();
+      listenOnce(confirm, 'closed', spy);
+      confirm.opened = false;
+      await nextRender();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('closed event should be called after overlay is closed', async () => {
+      const closedPromise = new Promise((resolve) => {
+        const closedListener = () => {
+          expect(confirm._overlayElement.parentElement).to.be.not.ok;
+          resolve();
+        };
+        listenOnce(confirm, 'closed', closedListener);
+      });
+
+      confirm.opened = false;
+      await nextRender();
+      await closedPromise;
     });
   });
 
