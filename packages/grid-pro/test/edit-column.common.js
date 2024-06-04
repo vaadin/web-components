@@ -372,6 +372,46 @@ describe('edit column', () => {
       expect(triggersNavigatingState(1, 2)).to.be.true;
     });
 
+    describe('async data provider', () => {
+      let dataProviderCallbacks;
+
+      function flushDataProvider() {
+        dataProviderCallbacks.forEach((cb) => cb()); // NOSONAR
+        dataProviderCallbacks = [];
+      }
+
+      beforeEach(() => {
+        grid.items = undefined;
+        dataProviderCallbacks = [];
+        /* prettier-ignore */
+        grid.dataProvider = ({ page, pageSize }, callback) => { // NOSONAR
+          const items = [...Array(pageSize).keys()].map((i) => {
+            return {
+              name: `name-${page * pageSize + i}`,
+            };
+          });
+
+          dataProviderCallbacks.push(() => callback(items, pageSize * 2));
+        };
+        amountColumn.isCellEditable = () => true; // NOSONAR
+      });
+
+      it('should not set editable-cell part to editable cells on loading rows', () => {
+        expect(hasEditablePart(1, 2)).to.be.false;
+      });
+
+      it('should not set editable-cell part to editable cells after row is no longer loading', () => {
+        flushDataProvider();
+        expect(hasEditablePart(1, 2)).to.be.true;
+      });
+
+      it('should remove editable-cell part for rows that enter loading state', () => {
+        flushDataProvider();
+        grid.clearCache();
+        expect(hasEditablePart(1, 2)).to.be.false;
+      });
+    });
+
     describe('editor navigation', () => {
       beforeEach(async () => {
         // Five rows, only second and forth are editable
