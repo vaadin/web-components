@@ -155,6 +155,20 @@ describe('styling', () => {
         clock.tick(10);
         grid[requestFn]();
         expect(spy.called).to.be.true;
+        expect(spy.getCalls().filter((call) => call.args[1].index === 0).length).to.be.lessThan(5);
+      });
+
+      it(`should remove custom ${entries} for rows that enter loading state`, () => {
+        grid[generatorFn] = () => 'foo';
+        clock.tick(10);
+
+        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.false;
+        assertCallback(['foo']);
+
+        grid.clearCache();
+
+        expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.true;
+        assertCallback([]);
       });
     });
   }
@@ -183,7 +197,9 @@ describe('styling', () => {
 
     const assertPartNames = (expectedParts, row = 0, col = 0) => {
       const cell = getContainerCell(grid.$.items, row, col);
-      const actualPart = cell.getAttribute('part');
+      let actualPart = cell.getAttribute('part');
+      // Remove "loading-row-cell" since initialCellPart doesn't include it and it's irrelevant for the test
+      actualPart = actualPart.replace('loading-row-cell', '').trim();
       const customParts = expectedParts.length ? ` ${expectedParts.join(' ')}` : '';
 
       if (row === 0 && col === 0) {
