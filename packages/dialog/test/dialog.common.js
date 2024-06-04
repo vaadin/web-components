@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, esc, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, click, esc, fixtureSync, listenOnce, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -186,6 +186,30 @@ describe('vaadin-dialog', () => {
         await nextUpdate(dialog);
         expect(overlay.modeless).to.be.true;
         expect(backdrop.hidden).to.be.true;
+      });
+    });
+
+    describe('closed event', () => {
+      it('should dispatch closed event when closed', async () => {
+        const closedSpy = sinon.spy();
+        dialog.addEventListener('closed', closedSpy);
+        dialog.opened = false;
+        await nextRender();
+        expect(closedSpy.calledOnce).to.be.true;
+        dialog.removeEventListener('closed', closedSpy);
+      });
+
+      it('closed event should be called after overlay is closed', async () => {
+        const closedPromise = new Promise((resolve) => {
+          const closedListener = () => {
+            expect(dialog._overlayElement.parentElement).to.be.not.ok;
+            resolve();
+          };
+          listenOnce(dialog, 'closed', closedListener);
+        });
+        dialog.opened = false;
+        await nextRender();
+        await closedPromise;
       });
     });
   });
