@@ -3,6 +3,7 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type {
+  NotificationClosedEvent,
   NotificationOpenedChangedEvent,
   NotificationPosition,
   NotificationRenderer,
@@ -29,6 +30,10 @@ assertType<string>(notification.overlayClass);
 notification.addEventListener('opened-changed', (event) => {
   assertType<NotificationOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
+});
+
+notification.addEventListener('closed', (event) => {
+  assertType<NotificationClosedEvent>(event);
 });
 
 Notification.show('Hello world', { position: 'middle', duration: 7000, theme: 'error' });
