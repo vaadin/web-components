@@ -109,7 +109,7 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
- * @fires {CustomEvent} vaadin-overlay-closed - Fired after the overlay is closed.
+ * @fires {CustomEvent} closed - Fired when the overlay is closed.
  */
 declare class Dialog extends DialogDraggableMixin(
   DialogResizableMixin(

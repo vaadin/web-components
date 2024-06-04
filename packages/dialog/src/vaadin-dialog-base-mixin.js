@@ -65,6 +65,7 @@ export const DialogBaseMixin = (superClass) =>
       this._overlayElement = overlay;
     }
 
+    /** @private */
     __handleOverlayClosed() {
       this.dispatchEvent(new CustomEvent('closed'));
     }
