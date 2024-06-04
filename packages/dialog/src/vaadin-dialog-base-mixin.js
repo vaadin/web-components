@@ -60,8 +60,14 @@ export const DialogBaseMixin = (superClass) =>
 
       overlay.addEventListener('vaadin-overlay-outside-click', this._handleOutsideClick.bind(this));
       overlay.addEventListener('vaadin-overlay-escape-press', this._handleEscPress.bind(this));
+      overlay.addEventListener('vaadin-overlay-closed', this.__handleOverlayClosed.bind(this));
 
       this._overlayElement = overlay;
+    }
+
+    /** @private */
+    __handleOverlayClosed() {
+      this.dispatchEvent(new CustomEvent('closed'));
     }
 
     /** @protected */
