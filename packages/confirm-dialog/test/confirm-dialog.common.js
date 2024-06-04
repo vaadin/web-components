@@ -530,10 +530,11 @@ describe('vaadin-confirm-dialog', () => {
 
     it('should dispatch closed event', async () => {
       const spy = sinon.spy();
-      listenOnce(confirm, 'closed', spy);
+      confirm.addEventListener('closed', spy);
       confirm.opened = false;
       await nextRender();
       expect(spy.calledOnce).to.be.true;
+      confirm.removeEventListener('closed', spy);
     });
 
     it('closed event should be called after overlay is closed', async () => {
