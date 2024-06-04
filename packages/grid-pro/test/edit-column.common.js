@@ -372,6 +372,45 @@ describe('edit column', () => {
       expect(triggersNavigatingState(1, 2)).to.be.true;
     });
 
+    describe('async data provider', () => {
+      let dataProviderCallbacks;
+
+      function flushDataProvider() {
+        dataProviderCallbacks.forEach((cb) => cb()); // NOSONAR
+        dataProviderCallbacks = [];
+      }
+
+      beforeEach(() => {
+        grid.items = undefined;
+        dataProviderCallbacks = [];
+        /* prettier-ignore */
+        grid.dataProvider = ({ page, pageSize }, callback) => { // NOSONAR
+          const items = [...Array(pageSize).keys()].map((i) => {
+            return { 
+              id: page * pageSize + i,
+              status: 'draft',
+              amount: 100,
+              notes: 'foo'
+            };
+          });
+
+          dataProviderCallbacks.push(() => callback(items, pageSize * 2));
+        };
+        amountColumn.isCellEditable = () => true; // NOSONAR
+      });
+
+      it('should add editable-cell part to rows that are not in loading state ', () => {
+        flushDataProvider();
+        expect(hasEditablePart(1, 2)).to.be.true;
+      });
+
+      it('should remove editable-cell part for rows that enter loading state', () => {
+        flushDataProvider();
+        grid.clearCache();
+        expect(hasEditablePart(1, 2)).to.be.false;
+      });
+    });
+
     describe('editor navigation', () => {
       beforeEach(async () => {
         // Five rows, only second and forth are editable

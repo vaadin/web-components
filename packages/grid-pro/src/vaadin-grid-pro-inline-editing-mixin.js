@@ -522,7 +522,7 @@ export const InlineEditingMixin = (superClass) =>
       super._generateCellPartNames(row, model);
 
       iterateRowCells(row, (cell) => {
-        const isEditable = this._isCellEditable(cell);
+        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell);
         const target = cell._focusButton || cell;
         updatePart(target, isEditable, 'editable-cell');
       });
