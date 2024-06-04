@@ -10,7 +10,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
  */
 export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-/*
+/**
  * Fired when the confirm dialog is closed.
  */
 export type ConfirmDialogClosedEvent = CustomEvent;
