@@ -192,10 +192,11 @@ describe('vaadin-dialog', () => {
     describe('closed event', () => {
       it('should dispatch closed event when closed', async () => {
         const closedSpy = sinon.spy();
-        listenOnce(dialog, 'closed', closedSpy);
+        dialog.addEventListener('closed', closedSpy);
         dialog.opened = false;
         await nextRender();
         expect(closedSpy.calledOnce).to.be.true;
+        dialog.removeEventListener('closed', closedSpy);
       });
 
       it('closed event should be called after overlay is closed', async () => {
