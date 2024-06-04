@@ -532,6 +532,7 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
     }
     this._card.removeAttribute('closing');
     this._container.opened = Boolean(this._container.firstElementChild);
+    this.dispatchEvent(new CustomEvent('closed'));
   }
 
   /** @private */

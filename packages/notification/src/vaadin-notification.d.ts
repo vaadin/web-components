@@ -27,8 +27,14 @@ export type NotificationRenderer = (root: HTMLElement, notification: Notificatio
  */
 export type NotificationOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
+/**
+ * Fired when the notification is closed.
+ */
+export type NotificationClosedEvent = CustomEvent;
+
 export interface NotificationCustomEventMap {
   'opened-changed': NotificationOpenedChangedEvent;
+  closed: NotificationClosedEvent;
 }
 
 export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
