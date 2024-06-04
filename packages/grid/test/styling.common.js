@@ -155,11 +155,11 @@ describe('styling', () => {
         clock.tick(10);
         grid[requestFn]();
         expect(spy.called).to.be.true;
-        expect(spy.getCalls().filter((call) => call.args[1].index === 0).length).to.be.lessThan(5);
+        expect(spy.getCalls().filter((call) => call.args[1].index === 0).length).to.be.lessThan(5); // NOSONAR
       });
 
       it(`should remove custom ${entries} for rows that enter loading state`, () => {
-        grid[generatorFn] = () => 'foo';
+        grid[generatorFn] = () => 'foo'; // NOSONAR
         clock.tick(10);
 
         expect(grid._getRenderedRows()[0].hasAttribute('loading')).to.be.false;
