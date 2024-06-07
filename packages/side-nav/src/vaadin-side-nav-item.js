@@ -208,7 +208,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     this.__updateCurrent();
 
     window.addEventListener('popstate', this.__boundUpdateCurrent);
-    window.addEventListener('vaadin-navigate', this.__boundUpdateCurrent);
+    window.addEventListener('vaadin-navigated', this.__boundUpdateCurrent);
     window.addEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
   }
 
@@ -216,7 +216,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('popstate', this.__boundUpdateCurrent);
-    window.removeEventListener('vaadin-navigate', this.__boundUpdateCurrent);
+    window.removeEventListener('vaadin-navigated', this.__boundUpdateCurrent);
     window.removeEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
   }
 
