@@ -152,6 +152,12 @@ export const gridStyles = css`
     inset: 0;
   }
 
+  /* Switch the focusButtonMode wrapping element to "position: static" temporarily
+     when measuring real width of the cells in the auto-width columns. */
+  [measuring-auto-width] [part~='cell'] > [tabindex] {
+    position: static;
+  }
+
   [part~='details-cell'] {
     position: absolute;
     bottom: 0;

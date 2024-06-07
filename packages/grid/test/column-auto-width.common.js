@@ -221,6 +221,26 @@ describe('column auto-width', () => {
 
     expect(headerCell.getBoundingClientRect().width).to.be.closeTo(headerCellWidth, 5);
   });
+
+  describe('focusButtonMode column', () => {
+    beforeEach(async () => {
+      const column = document.createElement('vaadin-grid-column');
+      column.autoWidth = true;
+      column.path = 'b';
+      column._focusButtonMode = true;
+      grid.insertBefore(column, grid.firstElementChild);
+      columns = grid.querySelectorAll('vaadin-grid-column');
+
+      await aTimeout(0);
+    });
+
+    it('should calculate auto-width of focusButtonMode column correctly', async () => {
+      grid.items = testItems;
+
+      await recalculateWidths();
+      expectColumnWidthsToBeOk(columns, [114, 71, 114, 84, 107]);
+    });
+  });
 });
 
 describe('tree column', () => {
