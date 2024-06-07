@@ -71,3 +71,66 @@ describe('popover in dialog', () => {
     });
   });
 });
+
+describe('dialog in popover', () => {
+  let popover, target, button, dialog;
+
+  beforeEach(async () => {
+    [target, popover] = fixtureSync(`
+      <div>
+        <button id="target">Open popover</button>
+        <vaadin-popover for="target"></vaadin-popover>
+      </div>
+    `).children;
+
+    popover.renderer = (root) => {
+      root.innerHTML = `
+        <button>Open dialog</button>
+        <vaadin-dialog></vaadin-dialog>
+      `;
+      [button, dialog] = root.children;
+
+      button.addEventListener('click', () => {
+        dialog.opened = true;
+      });
+
+      dialog.renderer = (dialogRoot) => {
+        dialogRoot.textContent = 'Dialog content';
+      };
+    };
+
+    await nextRender();
+    target.click();
+    await nextRender();
+  });
+
+  ['modal', 'modeless'].forEach((type) => {
+    describe(`${type} popover`, () => {
+      beforeEach(async () => {
+        if (type === 'modal') {
+          popover.modal = true;
+          await nextUpdate(popover);
+        }
+
+        button.focus();
+        button.click();
+        await nextRender();
+      });
+
+      it(`should not close the ${type} popover when closing a child dialog on Escape`, async () => {
+        await sendKeys({ press: 'Escape' });
+
+        expect(dialog.opened).to.be.false;
+        expect(popover.opened).to.be.true;
+      });
+
+      it(`should close the ${type} popover on subsequent Escape after the child dialog is closed`, async () => {
+        await sendKeys({ press: 'Escape' });
+
+        await sendKeys({ press: 'Escape' });
+
+        expect(popover.opened).to.be.false;
+      });
+    });
+  });
+});
