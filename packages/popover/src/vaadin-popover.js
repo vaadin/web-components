@@ -12,6 +12,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -500,7 +501,8 @@ class Popover extends PopoverPositionMixin(
       !this.__isManual &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
-      !this.noCloseOnOutsideClick
+      !this.noCloseOnOutsideClick &&
+      isLastOverlay(this._overlayElement)
     ) {
       this._openedStateController.close(true);
     }
@@ -526,7 +528,14 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onGlobalKeyDown(event) {
-    if (event.key === 'Escape' && !this.modal && !this.noCloseOnEsc && this.opened && !this.__isManual) {
+    if (
+      event.key === 'Escape' &&
+      !this.modal &&
+      !this.noCloseOnEsc &&
+      this.opened &&
+      !this.__isManual &&
+      isLastOverlay(this._overlayElement)
+    ) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this._openedStateController.close(true);
