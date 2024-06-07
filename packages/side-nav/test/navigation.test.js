@@ -11,7 +11,7 @@ describe('navigation', () => {
     window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
-  function navigateWithVaadinNavigateEvent(url) {
+  function navigateWithVaadinNavigatedEvent(url) {
     history.pushState({}, '', url);
     window.dispatchEvent(new CustomEvent('vaadin-navigated'));
   }
