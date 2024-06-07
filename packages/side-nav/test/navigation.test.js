@@ -13,7 +13,7 @@ describe('navigation', () => {
 
   function navigateWithVaadinNavigateEvent(url) {
     history.pushState({}, '', url);
-    window.dispatchEvent(new CustomEvent('vaadin-navigate'));
+    window.dispatchEvent(new CustomEvent('vaadin-navigated'));
   }
 
   beforeEach(async () => {
