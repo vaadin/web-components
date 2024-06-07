@@ -11,9 +11,9 @@ describe('navigation', () => {
     window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
-  function navigateWithVaadinNavigateEvent(url) {
+  function navigateWithVaadinNavigatedEvent(url) {
     history.pushState({}, '', url);
-    window.dispatchEvent(new CustomEvent('vaadin-navigate'));
+    window.dispatchEvent(new CustomEvent('vaadin-navigated'));
   }
 
   beforeEach(async () => {
@@ -55,21 +55,21 @@ describe('navigation', () => {
   });
 
   it('should update current attribute on items when navigating with vaadin-navigate event', async () => {
-    navigateWithVaadinNavigateEvent('1');
+    navigateWithVaadinNavigatedEvent('1');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.true;
     expect(items[1].hasAttribute('current')).to.be.false;
     expect(items[2].hasAttribute('current')).to.be.false;
 
-    navigateWithVaadinNavigateEvent('2');
+    navigateWithVaadinNavigatedEvent('2');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.false;
     expect(items[1].hasAttribute('current')).to.be.true;
     expect(items[2].hasAttribute('current')).to.be.false;
 
-    navigateWithVaadinNavigateEvent('21');
+    navigateWithVaadinNavigatedEvent('21');
     await nextRender();
 
     expect(items[0].hasAttribute('current')).to.be.false;
