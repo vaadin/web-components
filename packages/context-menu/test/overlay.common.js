@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, isIOS, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 
 describe('overlay', () => {
   let menu, overlay, content, viewHeight, viewWidth;
@@ -7,7 +8,7 @@ describe('overlay', () => {
   beforeEach(async () => {
     menu = fixtureSync(`
       <vaadin-context-menu>
-        <div id="target">FOOOO</div>
+        <div id="target" style="width: 100px; outline: 1px dashed #000;">FOOOO</div>
       </vaadin-context-menu>
     `);
     menu.renderer = (root) => {
@@ -336,13 +337,16 @@ describe('overlay', () => {
     });
 
     it('should close on menu contextmenu', () => {
-      const e = contextmenu(0, 0, false, overlay);
+      // Dispatch a contextmenu event on the overlay content
+      const { left, top } = overlay.$.content.getBoundingClientRect();
+      const e = contextmenu(left, top, false, overlay);
       expect(e.defaultPrevented).to.be.true;
       expect(menu.opened).to.be.false;
     });
 
     it('should close on outside contextmenu', () => {
-      const e = contextmenu(0, 0, false, document.body);
+      // Dispatch a contextmenu event outside the overlay and the target
+      const e = contextmenu(1000, 1000, false, document.body);
       expect(e.defaultPrevented).to.be.true;
       expect(menu.opened).to.be.false;
     });
@@ -390,6 +394,79 @@ describe('overlay', () => {
     it('should set default background color for content', () => {
       const overlayPart = overlay.shadowRoot.querySelector('[part~="overlay"]');
       expect(getComputedStyle(overlayPart).backgroundColor).to.eql('rgb(255, 255, 255)');
+    });
+  });
+
+  describe('close and re-open on contextmenu', () => {
+    let target;
+
+    beforeEach(async () => {
+      target = menu.querySelector('#target');
+      const { right, bottom } = target.getBoundingClientRect();
+      // Pre-open the context menu to the bottom right corner of the target
+      contextmenu(right, bottom, false, target);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    it('should close and re-open on target contextmenu', () => {
+      const { left, top } = target.getBoundingClientRect();
+      // While a context-menu is open, pointer events are disabled on the body so
+      // the contextmenu event gets dispatched to the document element
+      contextmenu(left, top, false, document.documentElement);
+      expect(menu.opened).to.be.true;
+    });
+
+    it('should dispatch once on re-open', () => {
+      const contextMenuSpy = sinon.spy();
+      target.addEventListener('contextmenu', contextMenuSpy);
+      const { left, top } = target.getBoundingClientRect();
+      contextmenu(left, top, false, document.documentElement);
+      expect(contextMenuSpy.calledOnce).to.be.true;
+    });
+
+    it('should re-open to correct coodrinates', async () => {
+      // Move the target to another location
+      target.style.margin = '200px';
+
+      const { left, top } = target.getBoundingClientRect();
+      contextmenu(left, top, false, document.documentElement);
+      await nextRender();
+
+      const contentRect = overlay.$.content.getBoundingClientRect();
+      expect(contentRect.left).to.equal(left);
+      expect(contentRect.top).to.equal(top);
+    });
+
+    it('should cancel the synthetic contextmenu event', () => {
+      const spy = sinon.spy();
+      target.addEventListener('contextmenu', spy);
+      contextmenu(0, 0, false, document.documentElement);
+      expect(spy.called).to.be.true;
+      expect(spy.firstCall.firstArg.defaultPrevented).to.be.true;
+    });
+
+    it('should re-open for a target inside a shadow root', async () => {
+      // Create an element inside the target's shadow root
+      const shadowTarget = document.createElement('div');
+      shadowTarget.textContent = 'SHADOW';
+      const shadowRoot = target.attachShadow({ mode: 'open' });
+      shadowRoot.appendChild(shadowTarget);
+
+      // Obtain the composed path of the contextmenu event (grid getEventContext needs this)
+      let composedPath;
+      menu.renderer = (root, _, context) => {
+        const { sourceEvent } = context.detail;
+        composedPath = sourceEvent.__composedPath || sourceEvent.composedPath();
+        root.textContent = 'OVERLAY CONTENT!';
+      };
+
+      const { left, top } = target.getBoundingClientRect();
+      contextmenu(left, top, false, document.documentElement);
+      await nextFrame();
+
+      expect(menu.opened).to.be.true;
+      expect(composedPath.length).to.be.above(0);
+      expect(composedPath).to.include(shadowTarget);
     });
   });
 });

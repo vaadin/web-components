@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
+import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
@@ -551,9 +551,25 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     _onGlobalContextMenu(e) {
-      if (!e.shiftKey) {
+      if (!e.shiftKey && this.opened) {
         e.preventDefault();
         this.close();
+
+        // Need to close the overlay manually to ensure body pointer-events are restored before deepTargetFind
+        this._overlayElement.opened = false;
+        const target = deepTargetFind(e.clientX, e.clientY);
+
+        if (target) {
+          // Dispatch a synthetic contextmenu event to the element under the cursor
+          const event = new MouseEvent('contextmenu', {
+            bubbles: true,
+            composed: true,
+            cancelable: true,
+            clientX: e.clientX,
+            clientY: e.clientY,
+          });
+          target.dispatchEvent(event);
+        }
       }
     }
   };
