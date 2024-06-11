@@ -30,6 +30,8 @@ const dataProviderController = new DataProviderController<TestItem, TestDataProv
   pageSize: 50,
   getItemId: (item) => item,
   isExpanded: (_item) => true,
+  placeholder: 'placeholder',
+  isPlaceholder: (item) => item === 'placeholder',
   dataProvider,
   dataProviderParams: () => ({ bar: 'bar' }),
 });
@@ -41,6 +43,8 @@ assertType<
     config: {
       size: number | undefined;
       pageSize: number;
+      placeholder?: unknown;
+      isPlaceholder?(item: unknown): boolean;
       getItemId(item: TestItem): unknown;
       isExpanded(item: TestItem): boolean;
       dataProvider: DataProvider<TestItem, DataProviderParams>;
@@ -54,6 +58,8 @@ assertType<HTMLElement>(dataProviderController.host);
 assertType<Cache<TestItem>>(dataProviderController.rootCache);
 assertType<number | undefined>(dataProviderController.size);
 assertType<number>(dataProviderController.pageSize);
+assertType<unknown>(dataProviderController.placeholder);
+assertType<((item: unknown) => boolean) | undefined>(dataProviderController.isPlaceholder);
 assertType<(item: TestItem) => unknown>(dataProviderController.getItemId);
 assertType<(item: TestItem) => boolean>(dataProviderController.isExpanded);
 assertType<() => TestDataProviderParams>(dataProviderController.dataProviderParams);

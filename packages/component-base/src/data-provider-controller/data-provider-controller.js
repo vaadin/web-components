@@ -68,7 +68,7 @@ export class DataProviderController extends EventTarget {
   /**
    * A placeholder item that is used to indicate that the item is not loaded yet.
    *
-   * @type {undefined | object}
+   * @type {unknown}
    */
   placeholder;
 

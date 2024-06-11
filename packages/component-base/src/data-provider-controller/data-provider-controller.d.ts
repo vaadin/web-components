@@ -69,11 +69,23 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
    */
   rootCache: Cache<TItem>;
 
+  /**
+   * A placeholder item that is used to indicate that the item is not loaded yet.
+   */
+  placeholder?: unknown;
+
+  /**
+   * A callback that returns whether the given item is a placeholder.
+   */
+  isPlaceholder?: (item: unknown) => boolean;
+
   constructor(
     host: HTMLElement,
     config: {
       size?: number;
       pageSize: number;
+      placeholder?: unknown;
+      isPlaceholder?(item: unknown): boolean;
       getItemId(item: TItem): unknown;
       isExpanded(item: TItem): boolean;
       dataProvider: DataProvider<TItem, TDataProviderParams>;
