@@ -30,13 +30,6 @@ export class DataProviderController extends EventTarget {
   dataProviderParams;
 
   /**
-   * A number of items in the root cache.
-   *
-   * @type {number}
-   */
-  size;
-
-  /**
    * A number of items to display per page.
    *
    * @type {number}

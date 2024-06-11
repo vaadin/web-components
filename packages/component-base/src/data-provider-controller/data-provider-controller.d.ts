@@ -44,11 +44,6 @@ export class DataProviderController<TItem, TDataProviderParams extends Record<st
   dataProviderParams: () => TDataProviderParams;
 
   /**
-   * A number of items in the root cache.
-   */
-  size?: number;
-
-  /**
    * A number of items to display per page.
    */
   pageSize: number;
