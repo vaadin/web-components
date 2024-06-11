@@ -553,24 +553,28 @@ export const ContextMenuMixin = (superClass) =>
     _onGlobalContextMenu(e) {
       if (!e.shiftKey && this.opened) {
         e.preventDefault();
+        this._overlayElement.addEventListener(
+          'vaadin-overlay-closed',
+          () => {
+            const target = deepTargetFind(e.clientX, e.clientY);
+            const isTouchDevice = isAndroid || isIOS;
+            if (target && !isTouchDevice) {
+              // Dispatch a synthetic contextmenu event to the element under the cursor
+              const event = new MouseEvent('contextmenu', {
+                bubbles: true,
+                composed: true,
+                cancelable: true,
+                clientX: e.clientX,
+                clientY: e.clientY,
+              });
+
+              // Need to dispatch the event asynchronously to avoid timing issues with the Lit-based context menu
+              queueMicrotask(() => target.dispatchEvent(event));
+            }
+          },
+          { once: true },
+        );
         this.close();
-
-        // Need to close the overlay manually to ensure body pointer-events are restored before deepTargetFind
-        this._overlayElement.opened = false;
-        const target = deepTargetFind(e.clientX, e.clientY);
-
-        const isTouchDevice = isAndroid || isIOS;
-        if (target && !isTouchDevice) {
-          // Dispatch a synthetic contextmenu event to the element under the cursor
-          const event = new MouseEvent('contextmenu', {
-            bubbles: true,
-            composed: true,
-            cancelable: true,
-            clientX: e.clientX,
-            clientY: e.clientY,
-          });
-          target.dispatchEvent(event);
-        }
       }
     }
   };

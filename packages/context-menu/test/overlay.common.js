@@ -408,19 +408,21 @@ describe('overlay', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    it('should close and re-open on target contextmenu', () => {
+    it('should close and re-open on target contextmenu', async () => {
       const { left, top } = target.getBoundingClientRect();
       // While a context-menu is open, pointer events are disabled on the body so
       // the contextmenu event gets dispatched to the document element
       contextmenu(left, top, false, document.documentElement);
+      await nextFrame();
       expect(menu.opened).to.be.true;
     });
 
-    it('should dispatch once on re-open', () => {
+    it('should dispatch once on re-open', async () => {
       const contextMenuSpy = sinon.spy();
       target.addEventListener('contextmenu', contextMenuSpy);
       const { left, top } = target.getBoundingClientRect();
       contextmenu(left, top, false, document.documentElement);
+      await nextFrame();
       expect(contextMenuSpy.calledOnce).to.be.true;
     });
 
@@ -430,17 +432,18 @@ describe('overlay', () => {
 
       const { left, top } = target.getBoundingClientRect();
       contextmenu(left, top, false, document.documentElement);
-      await nextRender();
+      await nextFrame();
 
       const contentRect = overlay.$.content.getBoundingClientRect();
       expect(contentRect.left).to.equal(left);
       expect(contentRect.top).to.equal(top);
     });
 
-    it('should cancel the synthetic contextmenu event', () => {
+    it('should cancel the synthetic contextmenu event', async () => {
       const spy = sinon.spy();
       target.addEventListener('contextmenu', spy);
       contextmenu(0, 0, false, document.documentElement);
+      await nextFrame();
       expect(spy.called).to.be.true;
       expect(spy.firstCall.firstArg.defaultPrevented).to.be.true;
     });
