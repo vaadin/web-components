@@ -168,7 +168,7 @@ const button = css`
     opacity: 0.2;
   }
 
-  /* Colors (success, error, contrast) */
+  /* Colors (success, warning, error, contrast) */
 
   :host([theme~='success']) {
     color: var(--lumo-success-text-color);
@@ -177,6 +177,15 @@ const button = css`
   :host([theme~='success'][theme~='primary']) {
     background-color: var(--lumo-success-color);
     color: var(--lumo-success-contrast-color);
+  }
+
+  :host([theme~='warning']) {
+    color: var(--lumo-warning-text-color);
+  }
+
+  :host([theme~='warning'][theme~='primary']) {
+    background-color: var(--lumo-warning-color);
+    color: var(--lumo-warning-contrast-color);
   }
 
   :host([theme~='error']) {
