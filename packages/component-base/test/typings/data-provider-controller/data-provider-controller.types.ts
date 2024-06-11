@@ -52,7 +52,6 @@ assertType<
 // Properties
 assertType<HTMLElement>(dataProviderController.host);
 assertType<Cache<TestItem>>(dataProviderController.rootCache);
-assertType<number | undefined>(dataProviderController.size);
 assertType<number>(dataProviderController.pageSize);
 assertType<(item: TestItem) => unknown>(dataProviderController.getItemId);
 assertType<(item: TestItem) => boolean>(dataProviderController.isExpanded);
