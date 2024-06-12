@@ -130,7 +130,7 @@ describe('button', () => {
     });
   });
 
-  ['contrast', 'success', 'error'].forEach((variant) => {
+  ['contrast', 'warning', 'success', 'error'].forEach((variant) => {
     describe(variant, () => {
       it('primary', async () => {
         element.setAttribute('theme', `primary ${variant}`);
