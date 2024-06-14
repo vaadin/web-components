@@ -28,7 +28,7 @@ describe('DataProviderController - data callbacks', () => {
     controller.loadFirstPage();
     controller.clearCache();
     dataProviderCallback(['Item-0', 'Item-1'], 2);
-    expect(controller.rootCache.size).to.equal(0);
+    expect(controller.rootCache.size).to.be.undefined;
     expect(controller.rootCache.items).to.have.lengthOf(0);
   });
 });
