@@ -132,6 +132,22 @@ registerStyles(
       animation: lumo-notification-exit-slide-down 300ms;
     }
 
+    :host([theme='success']) ::slotted(vaadin-button[focus-ring]) {
+      box-shadow: 0 0 0 1px var(--lumo-success-color), 0 0 0 3px var(--lumo-success-contrast-color);
+    }
+
+    :host([theme='warning']) ::slotted(vaadin-button[focus-ring]) {
+      box-shadow: 0 0 0 1px var(--lumo-warning-color), 0 0 0 3px var(--lumo-warning-contrast-color);
+    }
+
+    :host([theme='error']) ::slotted(vaadin-button[focus-ring]) {
+      box-shadow: 0 0 0 1px var(--lumo-error-color), 0 0 0 3px var(--lumo-error-contrast-color);
+    }
+
+    :host([theme='primary']) ::slotted(vaadin-button[focus-ring]) {
+      box-shadow: 0 0 0 1px var(--lumo-primary-color), 0 0 0 3px var(--lumo-primary-contrast-color);
+    }
+
     :host([theme~='primary']) [part='overlay'] {
       background: var(--lumo-primary-color);
       color: var(--lumo-primary-contrast-color);
