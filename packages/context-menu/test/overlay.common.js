@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, isIOS, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, isIOS, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 describe('overlay', () => {
@@ -470,6 +470,30 @@ describe('overlay', () => {
       expect(menu.opened).to.be.true;
       expect(composedPath.length).to.be.above(0);
       expect(composedPath).to.include(shadowTarget);
+    });
+
+    it('should have the target focused on context menu close', async () => {
+      // Make the target focusable
+      target.tabIndex = 0;
+
+      // Create a child element inside the target
+      const child = document.createElement('div');
+      child.textContent = 'Child';
+      target.appendChild(child);
+
+      // Re-open the context menu on the child
+      const { left, top, right, bottom } = child.getBoundingClientRect();
+      const x = (left + right) / 2;
+      const y = (top + bottom) / 2;
+      contextmenu(x, y, false, document.documentElement);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Close the context menu
+      esc(document.body);
+      await nextFrame();
+
+      // Check if the target is focused
+      expect(target).to.equal(document.activeElement);
     });
   });
 });

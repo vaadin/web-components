@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isAndroid, isIOS, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -550,30 +551,68 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _onGlobalContextMenu(e) {
-      if (!e.shiftKey && this.opened) {
-        e.preventDefault();
-        this._overlayElement.addEventListener(
-          'vaadin-overlay-closed',
-          () => {
-            const target = deepTargetFind(e.clientX, e.clientY);
-            const isTouchDevice = isAndroid || isIOS;
-            if (target && !isTouchDevice) {
-              // Dispatch a synthetic contextmenu event to the element under the cursor
-              const event = new MouseEvent('contextmenu', {
-                bubbles: true,
-                composed: true,
-                cancelable: true,
-                clientX: e.clientX,
-                clientY: e.clientY,
-              });
+    __createMouseEvent(name, clientX, clientY) {
+      return new MouseEvent(name, {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        clientX,
+        clientY,
+      });
+    }
 
-              // Need to dispatch the event asynchronously to avoid timing issues with the Lit-based context menu
-              queueMicrotask(() => target.dispatchEvent(event));
-            }
-          },
-          { once: true },
-        );
+    /** @private */
+    __focusClosestFocusable(target) {
+      let currentElement = target;
+      while (currentElement) {
+        if (currentElement instanceof HTMLElement && isElementFocusable(currentElement)) {
+          currentElement.focus();
+          return;
+        }
+        currentElement = currentElement.parentNode || currentElement.host;
+      }
+    }
+
+    /**
+     * Executes a synthetic contextmenu event on the target under the coordinates.
+     *
+     * @private
+     **/
+    __contextMenuAt(x, y) {
+      // Get the deepest element under the coordinates
+      const target = deepTargetFind(x, y);
+      if (target) {
+        // Need to run asynchronously to avoid timing issues with the Lit-based context menu
+        queueMicrotask(() => {
+          // Dispatch mousedown and mouseup to the target (grid cell focus depends on it)
+          target.dispatchEvent(this.__createMouseEvent('mousedown', x, y));
+          target.dispatchEvent(this.__createMouseEvent('mouseup', x, y));
+          // Manually try to focus the closest focusable of the target
+          this.__focusClosestFocusable(target);
+          // Dispatch a contextmenu event to the target
+          target.dispatchEvent(this.__createMouseEvent('contextmenu', x, y));
+        });
+      }
+    }
+
+    /** @private */
+    _onGlobalContextMenu(e) {
+      if (!e.shiftKey) {
+        const isTouchDevice = isAndroid || isIOS;
+        if (!isTouchDevice && this.opened) {
+          // Prevent having the previously focused node auto-focus after closing the overlay
+          this._overlayElement.__focusRestorationController.focusNode = null;
+          // Dispatch another contextmenu at the same coordinates after the overlay is closed
+          this._overlayElement.addEventListener(
+            'vaadin-overlay-closed',
+            () => this.__contextMenuAt(e.clientX, e.clientY),
+            {
+              once: true,
+            },
+          );
+        }
+
+        e.preventDefault();
         this.close();
       }
     }
