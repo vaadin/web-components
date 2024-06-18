@@ -575,9 +575,8 @@ export const ContextMenuMixin = (superClass) =>
 
     /**
      * Executes a synthetic contextmenu event on the target under the coordinates.
-     *
      * @private
-     **/
+     */
     __contextMenuAt(x, y) {
       // Get the deepest element under the coordinates
       const target = deepTargetFind(x, y);
@@ -599,7 +598,7 @@ export const ContextMenuMixin = (superClass) =>
     _onGlobalContextMenu(e) {
       if (!e.shiftKey) {
         const isTouchDevice = isAndroid || isIOS;
-        if (!isTouchDevice && this.opened) {
+        if (!isTouchDevice) {
           // Prevent having the previously focused node auto-focus after closing the overlay
           this._overlayElement.__focusRestorationController.focusNode = null;
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
