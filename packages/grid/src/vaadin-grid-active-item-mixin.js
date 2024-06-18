@@ -4,27 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
+
 /**
  * @param {!Element} target
  * @return {boolean}
  * @protected
  */
 export const isFocusable = (target) => {
-  if (!target.parentNode) {
-    return false;
-  }
-  const focusables = Array.from(
-    target.parentNode.querySelectorAll(
-      '[tabindex], button, input, select, textarea, object, iframe, a[href], area[href]',
-    ),
-  ).filter((element) => {
-    const part = element.getAttribute('part');
-    return !(part && part.includes('body-cell'));
-  });
-
-  const isFocusableElement = focusables.includes(target);
   return (
-    !target.disabled && isFocusableElement && target.offsetParent && getComputedStyle(target).visibility !== 'hidden'
+    target.offsetParent &&
+    !target.part.contains('body-cell') &&
+    isElementFocusable(target) &&
+    getComputedStyle(target).visibility !== 'hidden'
   );
 };
 
