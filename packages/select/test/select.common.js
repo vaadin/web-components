@@ -648,7 +648,7 @@ describe('vaadin-select', () => {
         expect(overlayRect.top).to.be.equal(inputRect.top);
       });
 
-      it('should toggle the `no-vertical-overlap` atrribute in the overlay element', async () => {
+      it('should toggle the `no-vertical-overlap` attribute in the overlay element', async () => {
         select.noVerticalOverlap = true;
         await nextUpdate(select);
         expect(select._overlayElement.hasAttribute('no-vertical-overlap')).to.be.true;
