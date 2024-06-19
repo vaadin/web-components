@@ -90,6 +90,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
         .renderer="${this.renderer || this.__defaultRenderer}"
         ?phone="${this._phone}"
         theme="${this._theme}"
+        ?no-vertical-overlap="${this.noVerticalOverlap}"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
       ></vaadin-select-overlay>

@@ -184,6 +184,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         theme$="[[_theme]]"
+        no-vertical-overlap$="[[noVerticalOverlap]]"
         on-vaadin-overlay-open="_onOverlayOpen"
       ></vaadin-select-overlay>
 

@@ -103,6 +103,14 @@ export declare class SelectBaseMixinClass {
   readonly: boolean;
 
   /**
+   * Defines whether the overlay should overlap the target element
+   * in the y-axis, or be positioned right above/below it.
+   *
+   * @attr {boolean} no-vertical-overlap
+   */
+  noVerticalOverlap: boolean;
+
+  /**
    * Requests an update for the content of the select.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *

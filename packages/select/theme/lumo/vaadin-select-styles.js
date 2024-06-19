@@ -110,6 +110,14 @@ const selectOverlay = css`
     justify-content: flex-end;
   }
 
+  :host([no-vertical-overlap][top-aligned]) [part='overlay'] {
+    margin-block-start: var(--lumo-space-xs);
+  }
+
+  :host([no-vertical-overlap][bottom-aligned]) [part='overlay'] {
+    margin-block-end: var(--lumo-space-xs);
+  }
+
   :host([theme~='align-left']) {
     text-align: left;
   }
