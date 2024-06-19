@@ -101,11 +101,11 @@ const button = css`
   /* Keyboard focus */
 
   :host([focus-ring]) {
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    box-shadow: var(--vaadin-focus-ring);
   }
 
   :host([theme~='primary'][focus-ring]) {
-    box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+    box-shadow: var(--vaadin-primary-focus-ring);
   }
 
   /* Types (primary, tertiary, tertiary-inline */

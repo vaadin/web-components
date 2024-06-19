@@ -102,7 +102,7 @@ registerStyles(
     }
 
     [part~='date'][part~='focused']::before {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+      box-shadow: var(--vaadin-primary-focus-ring);
     }
 
     :host(:not([focused])) [part~='date'][part~='focused']::before {
@@ -111,7 +111,8 @@ registerStyles(
 
     @keyframes vaadin-date-picker-month-calendar-focus-date {
       50% {
-        box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) transparent;
+        --vaadin-focus-ring-color: transparent;
+        box-shadow: var(--vaadin-primary-focus-ring);
       }
     }
 
