@@ -30,6 +30,8 @@ const button = css`
     --_button-size: var(--vaadin-button-height, var(--lumo-button-size));
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    --_focus-ring-gap-on: 0;
+    --_focus-ring-gap-color: var(--lumo-base-color);
     /* Used by notification */
     --_lumo-button-background: var(--vaadin-button-background, var(--lumo-contrast-5pct));
     --_lumo-button-text-color: var(--vaadin-button-text-color, var(--lumo-primary-text-color));
@@ -101,11 +103,12 @@ const button = css`
   /* Keyboard focus */
 
   :host([focus-ring]) {
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    box-shadow: 0 0 0 calc(1px * var(--_focus-ring-gap-on)) var(--_focus-ring-gap-color),
+      0 0 0 calc(var(--_focus-ring-width) + 1px * var(--_focus-ring-gap-on)) var(--_focus-ring-color);
   }
 
   :host([theme~='primary'][focus-ring]) {
-    box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
+    --_focus-ring-gap-on: 1;
   }
 
   /* Types (primary, tertiary, tertiary-inline */
