@@ -127,6 +127,17 @@ export const SelectBaseMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Defines whether the overlay should overlap the target element
+         * in the y-axis, or be positioned right above/below it.
+         *
+         * @attr {boolean} no-vertical-overlap
+         */
+        noVerticalOverlap: {
+          type: Boolean,
+          value: false,
+        },
+
         /** @private */
         _phone: Boolean,
 
