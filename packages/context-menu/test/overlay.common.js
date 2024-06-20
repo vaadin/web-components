@@ -495,5 +495,14 @@ describe('overlay', () => {
       // Check if the target is focused
       expect(target).to.equal(document.activeElement);
     });
+
+    it('should only dispatch one contextmenu event', async () => {
+      const contextmenuSpy = sinon.spy();
+      window.addEventListener('contextmenu', contextmenuSpy);
+      const { left, top } = target.getBoundingClientRect();
+      contextmenu(left, top, false, document.documentElement);
+      await nextFrame();
+      expect(contextmenuSpy.calledOnce).to.be.true;
+    });
   });
 });

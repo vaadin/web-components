@@ -599,6 +599,7 @@ export const ContextMenuMixin = (superClass) =>
       if (!e.shiftKey) {
         const isTouchDevice = isAndroid || isIOS;
         if (!isTouchDevice) {
+          e.stopPropagation();
           // Prevent having the previously focused node auto-focus after closing the overlay
           this._overlayElement.__focusRestorationController.focusNode = null;
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
