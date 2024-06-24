@@ -19,18 +19,13 @@ type OmittedPopoverHTMLAttributes = Omit<
   'id' | 'className' | 'dangerouslySetInnerHTML' | 'slot'
 >;
 
-export type PopoverProps = Partial<
-  Omit<_PopoverProps, 'children' | 'renderer' | keyof OmittedPopoverHTMLAttributes>
-> &
+export type PopoverProps = Partial<Omit<_PopoverProps, 'children' | 'renderer' | keyof OmittedPopoverHTMLAttributes>> &
   Readonly<{
     children?: ReactNode | ComponentType<PopoverReactRendererProps>;
     renderer?: ComponentType<PopoverReactRendererProps> | null;
   }>;
 
-function Popover(
-  { children, ...props }: PopoverProps,
-  ref: ForwardedRef<PopoverElement>,
-): ReactElement | null {
+function Popover({ children, ...props }: PopoverProps, ref: ForwardedRef<PopoverElement>): ReactElement | null {
   const [portals, renderer] = useSimpleOrChildrenRenderer(props.renderer, children);
 
   return (

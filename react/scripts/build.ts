@@ -52,7 +52,7 @@ async function detectEntryPoints(patterns: string[], ignore: string[] = []) {
     })
   )
     .map((file) => new URL(file, srcURL))
-    .map(fileURLToPath);
+    .map((url) => fileURLToPath(url));
 }
 
 const commonOptions = {
