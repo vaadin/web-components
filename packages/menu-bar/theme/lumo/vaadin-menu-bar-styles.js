@@ -7,6 +7,7 @@ registerStyles(
     :host {
       min-width: var(--lumo-size-m);
     }
+
     :host([has-single-button]) ::slotted(vaadin-menu-bar-button) {
       border-radius: var(--lumo-border-radius-m);
     }
