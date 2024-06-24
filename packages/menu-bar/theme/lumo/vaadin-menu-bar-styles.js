@@ -4,6 +4,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-menu-bar',
   css`
+    :host {
+      min-width: var(--lumo-size-m);
+    }
+
     :host([has-single-button]) ::slotted(vaadin-menu-bar-button) {
       border-radius: var(--lumo-border-radius-m);
     }
