@@ -144,8 +144,9 @@ registerStyles(
       box-shadow: 0 0 0 1px var(--lumo-error-color), 0 0 0 3px var(--lumo-error-contrast-color);
     }
 
-    :host([theme='primary']) ::slotted(vaadin-button[focus-ring]) {
-      box-shadow: 0 0 0 1px var(--lumo-primary-color), 0 0 0 3px var(--lumo-primary-contrast-color);
+    :host([theme='primary']) {
+      --_focus-ring-gap-color: var(--lumo-primary-color);
+      --_focus-ring-color: var(--lumo-base-color);
     }
 
     :host([theme~='primary']) [part='overlay'] {
