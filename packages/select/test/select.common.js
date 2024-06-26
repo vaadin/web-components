@@ -638,6 +638,35 @@ describe('vaadin-select', () => {
         expect(changeSpy.callCount).to.equal(1);
       });
     });
+
+    describe('no-vertical-overlap', () => {
+      it('should overlap the input by default', async () => {
+        select.opened = true;
+        await nextUpdate(select);
+        const overlayRect = select._overlayElement.getBoundingClientRect();
+        const inputRect = select._inputContainer.getBoundingClientRect();
+        expect(overlayRect.top).to.be.equal(inputRect.top);
+      });
+
+      it('should toggle the `no-vertical-overlap` attribute in the overlay element', async () => {
+        select.noVerticalOverlap = true;
+        await nextUpdate(select);
+        expect(select._overlayElement.hasAttribute('no-vertical-overlap')).to.be.true;
+
+        select.noVerticalOverlap = false;
+        await nextUpdate(select);
+        expect(select._overlayElement.hasAttribute('no-vertical-overlap')).to.be.false;
+      });
+
+      it('should not overlap the input when overlay is opened', async () => {
+        select.noVerticalOverlap = true;
+        select.opened = true;
+        await nextUpdate(select);
+        const overlayRect = select._overlayElement.getBoundingClientRect();
+        const inputRect = select._inputContainer.getBoundingClientRect();
+        expect(overlayRect.top).to.be.equal(inputRect.bottom);
+      });
+    });
   });
 
   describe('with value', () => {

@@ -51,8 +51,8 @@ describe('DataProviderController', () => {
       expect(controller.rootCache).to.be.instanceOf(Cache);
     });
 
-    it('should have rootCache size', () => {
-      expect(controller.rootCache.size).to.equal(0);
+    it('should not have rootCache size', () => {
+      expect(controller.rootCache.size).to.be.undefined;
     });
 
     it('should have rootCache pageSize', () => {
