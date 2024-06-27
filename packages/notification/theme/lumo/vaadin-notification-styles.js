@@ -132,20 +132,24 @@ registerStyles(
       animation: lumo-notification-exit-slide-down 300ms;
     }
 
-    :host([theme='success']) ::slotted(vaadin-button[focus-ring]) {
-      box-shadow: 0 0 0 1px var(--lumo-success-color), 0 0 0 3px var(--lumo-success-contrast-color);
+    :host([theme='success']) {
+      --_focus-ring-gap-color: var(--lumo-success-color);
+      --vaadin-focus-ring-color: var(--lumo-success-contrast-color);
     }
 
-    :host([theme='warning']) ::slotted(vaadin-button[focus-ring]) {
-      box-shadow: 0 0 0 1px var(--lumo-warning-color), 0 0 0 3px var(--lumo-warning-contrast-color);
+    :host([theme='warning']) {
+      --_focus-ring-gap-color: var(--lumo-warning-color);
+      --vaadin-focus-ring-color: var(--lumo-warning-contrast-color);
     }
 
-    :host([theme='error']) ::slotted(vaadin-button[focus-ring]) {
-      box-shadow: 0 0 0 1px var(--lumo-error-color), 0 0 0 3px var(--lumo-error-contrast-color);
+    :host([theme='error']) {
+      --_focus-ring-gap-color: var(--lumo-error-color);
+      --vaadin-focus-ring-color: var(--lumo-error-contrast-color);
     }
 
-    :host([theme='primary']) ::slotted(vaadin-button[focus-ring]) {
-      box-shadow: 0 0 0 1px var(--lumo-primary-color), 0 0 0 3px var(--lumo-primary-contrast-color);
+    :host([theme='primary']) {
+      --_focus-ring-gap-color: var(--lumo-primary-color);
+      --vaadin-focus-ring-color: var(--lumo-primary-contrast-color);
     }
 
     :host([theme~='primary']) [part='overlay'] {
