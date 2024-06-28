@@ -103,6 +103,8 @@ describe('vaadin-select', () => {
               <vaadin-item value="v4" disabled>Disabled</vaadin-item>
               <vaadin-item value="5">A number</vaadin-item>
               <vaadin-item value="false">A boolean</vaadin-item>
+              <vaadin-item label="foo"></vaadin-item>
+              <vaadin-item><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" /></vaadin-item>
             </vaadin-list-box>
           `,
           root,
@@ -471,6 +473,19 @@ describe('vaadin-select', () => {
         click(select._items[3]);
         await nextUpdate(select);
         expect(valueButton.textContent).to.equal('Select an item');
+      });
+
+      it('should not show placeholder for items with label, text content or child elements', async () => {
+        const emptyItems = [select._items[3], select._items[4]];
+        const nonEmptyItems = select._items.filter((item) => !emptyItems.includes(item));
+
+        for (const item of nonEmptyItems) {
+          select.opened = true;
+          await nextRender();
+          click(item);
+          await nextUpdate(select);
+          expect(valueButton.textContent).not.to.equal('Select an item');
+        }
       });
     });
 

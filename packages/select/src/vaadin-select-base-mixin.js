@@ -550,7 +550,9 @@ export const SelectBaseMixin = (superClass) =>
       if (!item) {
         return false;
       }
-      return Boolean(item.hasAttribute('label') ? item.getAttribute('label') : item.textContent.trim());
+      const hasText = Boolean(item.hasAttribute('label') ? item.getAttribute('label') : item.textContent.trim());
+      const hasChildren = item.childElementCount > 0;
+      return hasText || hasChildren;
     }
 
     /** @private */
