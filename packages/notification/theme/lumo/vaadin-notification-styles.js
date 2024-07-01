@@ -132,6 +132,26 @@ registerStyles(
       animation: lumo-notification-exit-slide-down 300ms;
     }
 
+    :host([theme='success']) {
+      --_focus-ring-gap-color: var(--lumo-success-color);
+      --vaadin-focus-ring-color: var(--lumo-success-contrast-color);
+    }
+
+    :host([theme='warning']) {
+      --_focus-ring-gap-color: var(--lumo-warning-color);
+      --vaadin-focus-ring-color: var(--lumo-warning-contrast-color);
+    }
+
+    :host([theme='error']) {
+      --_focus-ring-gap-color: var(--lumo-error-color);
+      --vaadin-focus-ring-color: var(--lumo-error-contrast-color);
+    }
+
+    :host([theme='primary']) {
+      --_focus-ring-gap-color: var(--lumo-primary-color);
+      --vaadin-focus-ring-color: var(--lumo-primary-contrast-color);
+    }
+
     :host([theme~='primary']) [part='overlay'] {
       background: var(--lumo-primary-color);
       color: var(--lumo-primary-contrast-color);
