@@ -5,10 +5,12 @@ import {
   arrowRightKeyDown,
   arrowUpKeyDown,
   endKeyDown,
+  fire,
   fixtureSync,
   homeKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '../../menu-bar/vaadin-menu-bar.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { KeyboardDirectionMixin } from '../src/keyboard-direction-mixin.js';
 
@@ -186,6 +188,37 @@ describe('keyboard-direction-mixin', () => {
         items[1].style.display = 'none';
         arrowRightKeyDown(items[0]);
         expect(element.focused).to.be.equal(items[3]);
+      });
+    });
+  });
+
+  describe('non-keyboard navigation', () => {
+    describe('menu bar', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<vaadin-menu-bar>`);
+        element.openOnHover = true;
+        element.items = [
+          {
+            text: 'Share',
+            children: [
+              {
+                text: 'On social media',
+                children: [{ text: 'Facebook' }],
+              },
+              { text: 'By email' },
+            ],
+          },
+        ];
+      });
+      it('should not apply focus-ring to menu bar items ', () => {
+        const button = document.querySelector('vaadin-menu-bar-button');
+        fire(button, 'mouseover');
+
+        document.querySelectorAll('vaadin-menu-bar-item');
+        fire(button.item.children[1], 'mouseover');
+        fire(button.item.children[0], 'mouseover');
+
+        expect(document.querySelectorAll('vaadin-menu-bar-item')[2].hasAttribute('focus-ring')).to.be.true;
       });
     });
   });
