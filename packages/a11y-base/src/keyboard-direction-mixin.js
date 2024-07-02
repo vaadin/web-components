@@ -137,14 +137,14 @@ export const KeyboardDirectionMixin = (superclass) =>
      * @param {boolean} navigating
      * @protected
      */
-    _focusItem(item) {
+    _focusItem(item, navigating) {
       if (item) {
         item.focus();
 
         // Generally, the items are expected to implement `FocusMixin`
         // that would set this attribute based on the `keydown` event.
         // We set it manually to handle programmatic focus() calls.
-        item.setAttribute('focus-ring', '');
+        if (navigating) item.setAttribute('focus-ring', '');
       }
     }
 
