@@ -4,10 +4,12 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
+  aTimeout,
   endKeyDown,
   fire,
   fixtureSync,
   homeKeyDown,
+  nextRender,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../../menu-bar/vaadin-menu-bar.js';
@@ -194,7 +196,7 @@ describe('keyboard-direction-mixin', () => {
 
   describe('non-keyboard navigation', () => {
     describe('menu bar', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync(`<vaadin-menu-bar>`);
         element.openOnHover = true;
         element.items = [
@@ -209,16 +211,24 @@ describe('keyboard-direction-mixin', () => {
             ],
           },
         ];
+        await nextRender();
       });
-      it('should not apply focus-ring to menu bar items ', () => {
+      it('should not apply focus-ring to menu bar items ', async () => {
         const button = document.querySelector('vaadin-menu-bar-button');
         fire(button, 'mouseover');
+        await nextRender();
 
-        document.querySelectorAll('vaadin-menu-bar-item');
-        fire(button.item.children[1], 'mouseover');
-        fire(button.item.children[0], 'mouseover');
+        const itemsElements = document.querySelectorAll('vaadin-menu-bar-item');
 
-        expect(document.querySelectorAll('vaadin-menu-bar-item')[2].hasAttribute('focus-ring')).to.be.true;
+        fire(itemsElements[1], 'mouseover');
+        await nextRender();
+
+        fire(itemsElements[0], 'mouseover');
+        await nextRender();
+
+        await aTimeout(500);
+
+        expect(document.querySelectorAll('vaadin-menu-bar-item')[2].hasAttribute('focus-ring')).to.be.false;
       });
     });
   });
