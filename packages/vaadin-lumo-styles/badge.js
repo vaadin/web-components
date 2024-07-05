@@ -97,15 +97,15 @@ const badge = css`
 
   /* Icon */
 
-  [theme~='badge'] vaadin-icon {
+  [theme~='badge'] > vaadin-icon {
     margin: -0.25em 0;
   }
 
-  [theme~='badge'] vaadin-icon:first-child {
+  [theme~='badge'] > vaadin-icon:first-child {
     margin-left: -0.375em;
   }
 
-  [theme~='badge'] vaadin-icon:last-child {
+  [theme~='badge'] > vaadin-icon:last-child {
     margin-right: -0.375em;
   }
 
