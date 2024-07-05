@@ -656,3 +656,77 @@ describe('value control buttons', () => {
     });
   });
 });
+
+describe('multiple fields', () => {
+  let container, fields;
+
+  beforeEach(async () => {
+    container = fixtureSync(`
+      <div>
+        <vaadin-number-field step-buttons-visible></vaadin-number-field>
+        <vaadin-number-field step-buttons-visible></vaadin-number-field>
+      </div>
+    `);
+    await nextRender();
+    fields = [...container.children];
+  });
+
+  ['increase', 'decrease'].forEach((type) => {
+    describe(`${type} button`, () => {
+      let button;
+
+      beforeEach(() => {
+        button = fields[1].shadowRoot.querySelector(`[part=${type}-button]`);
+      });
+
+      it(`should blur the other field on ${type} button touchend`, () => {
+        const input = fields[0].inputElement;
+        input.focus();
+
+        const spy = sinon.spy(input, 'blur');
+        const e = new CustomEvent('touchend', { cancelable: true });
+        button.dispatchEvent(e);
+
+        expect(spy).to.be.calledOnce;
+      });
+
+      it(`should not blur the other field on ${type} button touchend if not cancelable`, () => {
+        const input = fields[0].inputElement;
+        input.focus();
+
+        const spy = sinon.spy(input, 'blur');
+        const e = new CustomEvent('touchend', { cancelable: false });
+        button.dispatchEvent(e);
+
+        expect(spy).to.be.not.called;
+      });
+
+      it(`should not blur the field on its own ${type} button touchend`, () => {
+        const input = fields[1].inputElement;
+        input.focus();
+
+        const spy = sinon.spy(input, 'blur');
+        const e = new CustomEvent('touchend', { cancelable: true });
+        button.dispatchEvent(e);
+
+        expect(spy).to.be.not.called;
+      });
+
+      it(`should not blur the field on its own ${type} button touchend when in shadow root`, () => {
+        // Move the field into shadow root to verify the deep active element logic
+        const inner = document.createElement('div');
+        inner.attachShadow({ mode: 'open' });
+        container.appendChild(inner);
+        inner.shadowRoot.appendChild(fields[1]);
+
+        const input = fields[1].inputElement;
+        input.focus();
+
+        const e = new CustomEvent('touchend', { cancelable: true });
+        button.dispatchEvent(e);
+
+        expect(inner.shadowRoot.activeElement).to.be.equal(input);
+      });
+    });
+  });
+});
