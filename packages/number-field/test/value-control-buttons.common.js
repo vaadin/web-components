@@ -658,7 +658,7 @@ describe('value control buttons', () => {
 });
 
 describe('multiple fields', () => {
-  let container, fields, decreaseButton, increaseButton;
+  let container, fields;
 
   beforeEach(async () => {
     container = fixtureSync(`
@@ -668,9 +668,7 @@ describe('multiple fields', () => {
       </div>
     `);
     await nextRender();
-    fields = container.children;
-    decreaseButton = fields[1].shadowRoot.querySelector('[part=decrease-button]');
-    increaseButton = fields[1].shadowRoot.querySelector('[part=increase-button]');
+    fields = [...container.children];
   });
 
   ['increase', 'decrease'].forEach((type) => {
@@ -715,13 +713,13 @@ describe('multiple fields', () => {
       });
 
       it(`should not blur the field on its own ${type} button touchend when in shadow root`, () => {
+        // Move the field into shadow root to verify the deep active element logic
         const inner = document.createElement('div');
         inner.attachShadow({ mode: 'open' });
         container.appendChild(inner);
+        inner.shadowRoot.appendChild(fields[1]);
 
         const input = fields[1].inputElement;
-        // Move the field into shadow root to verify the deep active element logic
-        inner.shadowRoot.appendChild(fields[1]);
         input.focus();
 
         const e = new CustomEvent('touchend', { cancelable: true });
