@@ -92,18 +92,18 @@ export const flexboxAndGrid = css`
   }
 
   /* === Flex grow === */
-  .grow {
+  .flex-grow {
     flex-grow: 1;
   }
-  .grow-0 {
+  .flex-grow-0 {
     flex-grow: 0;
   }
 
   /* === Flex shrink === */
-  .shrink {
+  .flex-shrink {
     flex-shrink: 1;
   }
-  .shrink-0 {
+  .flex-shrink-0 {
     flex-shrink: 0;
   }
 
@@ -321,6 +321,21 @@ export const flexboxAndGrid = css`
 
   /* === Responsive design === */
   @media (min-width: 640px) {
+    .sm\\items-baseline {
+      align-items: baseline;
+    }
+    .sm\\items-center {
+      align-items: center;
+    }
+    .sm\\items-end {
+      align-items: flex-end;
+    }
+    .sm\\items-start {
+      align-items: flex-start;
+    }
+    .sm\\items-stretch {
+      align-items: stretch;
+    }
     .sm\\:flex-col {
       flex-direction: column;
     }
@@ -366,6 +381,21 @@ export const flexboxAndGrid = css`
   }
 
   @media (min-width: 768px) {
+    .md\\items-baseline {
+      align-items: baseline;
+    }
+    .md\\items-center {
+      align-items: center;
+    }
+    .md\\items-end {
+      align-items: flex-end;
+    }
+    .md\\items-start {
+      align-items: flex-start;
+    }
+    .md\\items-stretch {
+      align-items: stretch;
+    }
     .md\\:flex-col {
       flex-direction: column;
     }
@@ -410,6 +440,21 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1024px) {
+    .lg\\items-baseline {
+      align-items: baseline;
+    }
+    .lg\\items-center {
+      align-items: center;
+    }
+    .lg\\items-end {
+      align-items: flex-end;
+    }
+    .lg\\items-start {
+      align-items: flex-start;
+    }
+    .lg\\items-stretch {
+      align-items: stretch;
+    }
     .lg\\:flex-col {
       flex-direction: column;
     }
@@ -454,6 +499,21 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1280px) {
+    .xl\\items-baseline {
+      align-items: baseline;
+    }
+    .xl\\items-center {
+      align-items: center;
+    }
+    .xl\\items-end {
+      align-items: flex-end;
+    }
+    .xl\\items-start {
+      align-items: flex-start;
+    }
+    .xl\\items-stretch {
+      align-items: stretch;
+    }
     .xl\\:flex-col {
       flex-direction: column;
     }
@@ -498,6 +558,21 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1536px) {
+    .\\32xl\\items-baseline {
+      align-items: baseline;
+    }
+    .\\32xl\\items-center {
+      align-items: center;
+    }
+    .\\32xl\\items-end {
+      align-items: flex-end;
+    }
+    .\\32xl\\items-start {
+      align-items: flex-start;
+    }
+    .\\32xl\\items-stretch {
+      align-items: stretch;
+    }
     .\\32xl\\:flex-col {
       flex-direction: column;
     }
