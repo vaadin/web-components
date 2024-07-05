@@ -21,23 +21,23 @@ export const border = css`
   }
   .border-b {
     border-bottom: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .border-e {
     border-inline-end: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .border-l {
     border-left: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .border-r {
     border-right: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .border-s {
     border-inline-start: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .border-t {
     border-top: 1px var(--lumo-utility-border-style, solid) var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
@@ -138,10 +138,10 @@ export const border = css`
   /* === Divide === */
   .divide-x > * + * {
     border-inline-start: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
   .divide-y > * + * {
     border-block-start: 1px var(--lumo-utility-border-style, solid)
-    var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
+      var(--lumo-utility-border-color, var(--lumo-contrast-10pct));
   }
 `;
