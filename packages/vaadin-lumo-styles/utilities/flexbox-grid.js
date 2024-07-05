@@ -67,8 +67,11 @@ export const flexboxAndGrid = css`
   }
 
   /* === Flex === */
+  .flex-1 {
+    flex: 1 1 0%;
+  }
   .flex-auto {
-    flex: auto;
+    flex: 1 1 auto;
   }
   .flex-none {
     flex: none;
@@ -89,19 +92,19 @@ export const flexboxAndGrid = css`
   }
 
   /* === Flex grow === */
-  .flex-grow-0 {
-    flex-grow: 0;
-  }
-  .flex-grow {
+  .grow {
     flex-grow: 1;
+  }
+  .grow-0 {
+    flex-grow: 0;
   }
 
   /* === Flex shrink === */
-  .flex-shrink-0 {
-    flex-shrink: 0;
-  }
-  .flex-shrink {
+  .shrink {
     flex-shrink: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
   }
 
   /* === Flex wrap === */
