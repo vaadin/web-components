@@ -213,7 +213,8 @@ export const NumberFieldMixin = (superClass) =>
 
     /** @private */
     __blurActiveElement() {
-      // If another element is focused, blur it on step button touch
+      // If another element is focused, blur it on step button touch to hide
+      // the mobile keyboard that might still be open for the other element.
       // See https://github.com/vaadin/web-components/issues/7494
       const activeElement = getDeepActiveElement();
       if (activeElement && activeElement !== this.inputElement) {
