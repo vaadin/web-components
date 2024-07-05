@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -194,6 +195,7 @@ export const NumberFieldMixin = (superClass) =>
       // it means scrolling is in progress, therefore we shouldn't update field value.
       if (e.cancelable) {
         e.preventDefault();
+        this.__blurActiveElement();
         this._decreaseValue();
       }
     }
@@ -204,7 +206,18 @@ export const NumberFieldMixin = (superClass) =>
       // it means scrolling is in progress, therefore we shouldn't update field value.
       if (e.cancelable) {
         e.preventDefault();
+        this.__blurActiveElement();
         this._increaseValue();
+      }
+    }
+
+    /** @private */
+    __blurActiveElement() {
+      // If another element is focused, blur it on step button touch
+      // See https://github.com/vaadin/web-components/issues/7494
+      const activeElement = getDeepActiveElement();
+      if (activeElement && activeElement !== this.inputElement) {
+        activeElement.blur();
       }
     }
 
