@@ -91,20 +91,20 @@ const badge = css`
 
   /* Icon */
 
-  [theme~='badge'] vaadin-icon,
-  [theme~='badge'] iron-icon {
+  [theme~='badge'] > vaadin-icon,
+  [theme~='badge'] > iron-icon {
     margin: -0.25em 0;
     --iron-icon-width: 1.5em;
     --iron-icon-height: 1.5em;
   }
 
-  [theme~='badge'] vaadin-icon:first-child,
-  [theme~='badge'] iron-icon:first-child {
+  [theme~='badge'] > vaadin-icon:first-child,
+  [theme~='badge'] > iron-icon:first-child {
     margin-left: -0.375em;
   }
 
-  [theme~='badge'] vaadin-icon:last-child,
-  [theme~='badge'] iron-icon:last-child {
+  [theme~='badge'] > vaadin-icon:last-child,
+  [theme~='badge'] > iron-icon:last-child {
     margin-right: -0.375em;
   }
 
