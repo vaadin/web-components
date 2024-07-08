@@ -531,7 +531,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _onTodayTap() {
-      const today = new Date();
+      const today = this._getTodayMidnight();
 
       if (Math.abs(this._monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
         // Select today only if the month scroller is positioned approximately
@@ -1040,12 +1040,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _isTodayAllowed(min, max, isDateDisabled) {
+      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled);
+    }
+
+    /** @private */
+    _getTodayMidnight() {
       const today = new Date();
       const todayMidnight = new Date(0, 0);
       todayMidnight.setFullYear(today.getFullYear());
       todayMidnight.setMonth(today.getMonth());
       todayMidnight.setDate(today.getDate());
-      return this._dateAllowed(todayMidnight, min, max, isDateDisabled);
+      return todayMidnight;
     }
 
     /**
