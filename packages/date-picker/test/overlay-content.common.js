@@ -280,6 +280,18 @@ describe('overlay', () => {
             overlay.minDate = tomorrowMidnight;
             expect(overlay._todayButton.disabled).to.be.true;
           });
+
+          it('should select today if today is max', async () => {
+            overlay.maxDate = todayMidnight;
+            overlay.scrollToDate(todayMidnight);
+            await waitForScrollToFinish(overlay);
+
+            tap(overlay._todayButton);
+
+            expect(overlay.selectedDate.getFullYear()).to.equal(todayMidnight.getFullYear());
+            expect(overlay.selectedDate.getMonth()).to.equal(todayMidnight.getMonth());
+            expect(overlay.selectedDate.getDate()).to.equal(todayMidnight.getDate());
+          });
         });
       });
     });
