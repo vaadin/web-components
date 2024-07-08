@@ -166,6 +166,10 @@ export const InputControlMixin = (superclass) =>
       input.addEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
+    __targetIsHelper(event) {
+      return event.target.assignedSlot.getRootNode().host.getAttribute('slot') === 'helper';
+    }
+
     /**
      * Override a method from `InputMixin`.
      * @param {!HTMLElement} input
@@ -188,8 +192,7 @@ export const InputControlMixin = (superclass) =>
      */
     _onKeyDown(event) {
       super._onKeyDown(event);
-
-      if (this.allowedCharPattern && !this.__shouldAcceptKey(event)) {
+      if (this.allowedCharPattern && !this.__shouldAcceptKey(event) && !this.__targetIsHelper(event)) {
         event.preventDefault();
         this._markInputPrevented();
       }
@@ -219,7 +222,7 @@ export const InputControlMixin = (superclass) =>
     _onPaste(e) {
       if (this.allowedCharPattern) {
         const pastedText = e.clipboardData.getData('text');
-        if (!this.__allowedTextRegExp.test(pastedText)) {
+        if (!this.__allowedTextRegExp.test(pastedText) && !this.__targetIsHelper(e)) {
           e.preventDefault();
           this._markInputPrevented();
         }
@@ -230,7 +233,7 @@ export const InputControlMixin = (superclass) =>
     _onDrop(e) {
       if (this.allowedCharPattern) {
         const draggedText = e.dataTransfer.getData('text');
-        if (!this.__allowedTextRegExp.test(draggedText)) {
+        if (!this.__allowedTextRegExp.test(draggedText) && !this.__targetIsHelper(e)) {
           e.preventDefault();
           this._markInputPrevented();
         }
@@ -243,7 +246,8 @@ export const InputControlMixin = (superclass) =>
       // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
       // because it seems to be the only way to detect and prevent specific keys on mobile devices.
       // See https://github.com/vaadin/vaadin-text-field/issues/429
-      if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data)) {
+
+      if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data) && !this.__targetIsHelper(e)) {
         e.preventDefault();
         this._markInputPrevented();
       }
