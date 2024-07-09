@@ -878,9 +878,6 @@ export const MenuBarMixin = (superClass) =>
       subMenu.items = items;
       subMenu.listenOn = button;
       const overlay = subMenu._overlayElement;
-      // Unset old positioning to prevent flashing.
-      overlay.removeAttribute('style');
-      overlay.positionTarget = undefined;
       overlay.noVerticalOverlap = true;
 
       this._expandedButton = button;
@@ -915,11 +912,6 @@ export const MenuBarMixin = (superClass) =>
           if (!keydown) {
             overlay.$.overlay.focus();
           }
-
-          // Delay setting position target until overlay is rendered
-          // to correctly measure item content in Lit based version.
-          overlay.positionTarget = button;
-          overlay._updatePosition();
         },
         { once: true },
       );

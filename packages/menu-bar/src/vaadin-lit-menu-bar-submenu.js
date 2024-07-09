@@ -78,6 +78,20 @@ class MenuBarSubmenu extends ContextMenuMixin(OverlayClassMixin(ThemePropertyMix
   }
 
   /**
+   * Override method inherited from `ItemsMixin` to update the position
+   * target before changing opacity of the overlay to prevent flashing.
+   *
+   * @protected
+   * @override
+   */
+  _onVaadinOverlayOpen() {
+    if (this.hasAttribute('is-root')) {
+      this._overlayElement.positionTarget = this.listenOn;
+    }
+    super._onVaadinOverlayOpen();
+  }
+
+  /**
    * Overriding the public method to reset expanded button state.
    */
   close() {
