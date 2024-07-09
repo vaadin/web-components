@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/component-base",
-  "version": "24.3.15",
+  "version": "24.3.16",
   "publishConfig": {
     "access": "public"
   },
