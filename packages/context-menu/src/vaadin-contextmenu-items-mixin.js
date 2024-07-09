@@ -361,6 +361,10 @@ export const ItemsMixin = (superClass) =>
       if (item) {
         const { children } = item._item;
 
+        // Check if the sub-menu was focused before closing it.
+        const child = subMenu._overlayElement.getFirstChild();
+        const isSubmenuFocused = child && child.focused;
+
         if (subMenu.items !== children) {
           subMenu.close();
         }
@@ -374,8 +378,12 @@ export const ItemsMixin = (superClass) =>
           // Forward parent overlay class
           const { overlayClass } = this;
           this.__openSubMenu(subMenu, item, overlayClass);
-        } else {
+        } else if (isSubmenuFocused) {
+          // If the sub-menu item was focused, focus its parent item.
           subMenu.listenOn.focus();
+        } else if (!this._listBox.focused) {
+          // Otherwise, focus the overlay part to handle arrow keys.
+          this._overlayElement.$.overlay.focus();
         }
       }
     }
