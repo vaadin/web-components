@@ -261,6 +261,22 @@ describe('items', () => {
     expect(focusSpy.called).to.be.true;
   });
 
+  (isTouch ? it.skip : it)('should focus overlay part on closing sub-menu without focused item', async () => {
+    const parent = getMenuItems(rootMenu)[3];
+    await openMenu(parent);
+    const nonParent = getMenuItems(rootMenu)[1];
+    const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
+    await openMenu(nonParent);
+    expect(focusSpy.called).to.be.true;
+  });
+
+  (isTouch ? it.skip : it)('should not focus overlay part if the parent menu list-box has focus', async () => {
+    await openMenu(getMenuItems(rootMenu)[1]);
+    const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
+    await openMenu(getMenuItems(rootMenu)[2]);
+    expect(focusSpy.called).to.be.false;
+  });
+
   it('should not close the menu if root item has keep open', () => {
     getMenuItems(rootMenu)[2].click();
     expect(rootMenu.opened).to.be.true;
