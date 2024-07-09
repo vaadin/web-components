@@ -166,10 +166,6 @@ export const InputControlMixin = (superclass) =>
       input.addEventListener('beforeinput', this._boundOnBeforeInput);
     }
 
-    __targetIsInput(event) {
-      return event.target === this.inputElement;
-    }
-
     /**
      * Override a method from `InputMixin`.
      * @param {!HTMLElement} input
@@ -192,7 +188,7 @@ export const InputControlMixin = (superclass) =>
      */
     _onKeyDown(event) {
       super._onKeyDown(event);
-      if (this.allowedCharPattern && !this.__shouldAcceptKey(event) && this.__targetIsInput(event)) {
+      if (this.allowedCharPattern && !this.__shouldAcceptKey(event) && event.target === this.inputElement) {
         event.preventDefault();
         this._markInputPrevented();
       }
