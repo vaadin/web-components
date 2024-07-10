@@ -577,6 +577,12 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
       }
     }
   }
+
+  /**
+   * Fired when the notification is closed.
+   *
+   * @event closed
+   */
 }
 
 defineCustomElement(NotificationContainer);

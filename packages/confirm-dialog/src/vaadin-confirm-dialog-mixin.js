@@ -449,4 +449,10 @@ export const ConfirmDialogMixin = (superClass) =>
     _getAriaLabel(header) {
       return header || 'confirmation';
     }
+
+    /**
+     * Fired when the confirm dialog is closed.
+     *
+     * @event closed
+     */
   };
