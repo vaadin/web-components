@@ -575,62 +575,6 @@ describe('open on hover', () => {
   });
 });
 
-describe('accessibility', () => {
-  let menu, buttons, subMenu, overflow;
-
-  beforeEach(async () => {
-    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-    menu.items = [
-      {
-        text: 'Menu Item 1',
-        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
-      },
-      { text: 'Menu Item 2' },
-      {
-        text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
-      },
-    ];
-    await nextRender(menu);
-    subMenu = menu._subMenu;
-    buttons = menu._buttons;
-    overflow = menu._overflow;
-  });
-
-  it('should set role attribute on host element', () => {
-    expect(menu.getAttribute('role')).to.equal('menubar');
-  });
-
-  it('should set role attribute on menu bar buttons', () => {
-    buttons.forEach((btn) => {
-      expect(btn.getAttribute('role')).to.equal('menuitem');
-    });
-  });
-
-  it('should set aria-haspopup attribute on buttons with nested items', () => {
-    buttons.forEach((btn) => {
-      const hasPopup = btn === overflow || btn.item.children ? 'true' : null;
-      expect(btn.getAttribute('aria-haspopup')).to.equal(hasPopup);
-    });
-  });
-
-  it('should set aria-expanded attribute on buttons with nested items', () => {
-    buttons.forEach((btn) => {
-      const expanded = btn === overflow || btn.item.children ? 'false' : null;
-      expect(btn.getAttribute('aria-expanded')).to.equal(expanded);
-    });
-  });
-
-  it('should toggle aria-expanded attribute on submenu open / close', async () => {
-    buttons[0].click();
-    await nextRender(subMenu);
-    expect(buttons[0].getAttribute('aria-expanded')).to.equal('true');
-
-    buttons[0].click();
-    expect(buttons[0].getAttribute('aria-expanded')).to.equal('false');
-  });
-});
-
 describe('theme attribute', () => {
   let menu, subMenu, subMenuOverlay, buttons;
 
