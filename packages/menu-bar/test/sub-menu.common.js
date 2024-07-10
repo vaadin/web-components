@@ -9,16 +9,19 @@ import {
   esc,
   fire,
   fixtureSync,
+  focusin,
   isDesktopSafari as isSafari,
   nextRender,
   nextUpdate,
   oneEvent,
   space,
+  tab,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
+import { shiftTab } from '@vaadin/app-layout/test/helpers.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 setCancelSyntheticClickEvents(false);

@@ -368,13 +368,14 @@ export const MenuBarMixin = (superClass) =>
     _tabNavigationChanged(_tabNavigation, overflow, container) {
       if (overflow && container) {
         const target = this.querySelector('[tabindex="0"]');
-        if (target) {
-          this._buttons.forEach((btn) => {
+        this._buttons.forEach((btn) => {
+          if (target) {
             this._setTabindex(btn, btn === target);
-            btn.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
-          });
-        }
-        this.__detectOverflow();
+          } else {
+            this._setTabindex(btn, false);
+          }
+          btn.setAttribute('role', _tabNavigation ? 'button' : 'menuitem');
+        });
       }
       this.setAttribute('role', this.tabNavigation ? 'group' : 'menubar');
     }
@@ -749,6 +750,18 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
+        if (this.tabNavigation) {
+          // manage the submenu
+          const target = this.querySelector('[focused]');
+          const wasExpanded = this._expandedButton !== undefined && this._expandedButton !== target;
+          if (wasExpanded) {
+            this._close();
+          }
+
+          if (wasExpanded && target.item && target.item.children) {
+            this.__openSubMenu(target, true, { keepFocus: true });
+          }
+        }
         const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {

@@ -89,17 +89,39 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should set tabindex to 0 when the button is not disabled', async () => {
+  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
     menu.tabNavigation = true;
     focusin(menu);
     await nextUpdate(menu);
-    buttons.forEach((btn, index) => {
+    buttons.forEach((btn) => {
       if (btn.disabled) {
         expect(btn.getAttribute('tabindex')).to.equal('-1');
       } else {
         expect(btn.getAttribute('tabindex')).to.equal('0');
       }
     });
+  });
+
+  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
+    menu.tabNavigation = true;
+    await nextUpdate(menu);
+    menu.tabNavigation = false;
+    await nextUpdate(menu);
+    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+    buttons.slice(1).forEach((btn) => {
+      expect(btn.getAttribute('tabindex')).to.equal('-1');
+    });
+  });
+
+  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
+    menu.tabNavigation = true;
+    await nextUpdate(menu);
+    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+    expect(buttons[1].getAttribute('tabindex')).to.equal('0');
+    menu.tabNavigation = false;
+    await nextUpdate(menu);
+    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
+    expect(buttons[1].getAttribute('tabindex')).to.equal('-1');
   });
 
   it('should not throw when changing items before the menu bar is attached', () => {
