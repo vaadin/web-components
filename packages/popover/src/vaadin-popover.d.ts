@@ -22,6 +22,8 @@ export type PopoverOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
 export interface PopoverCustomEventMap {
   'opened-changed': PopoverOpenedChangedEvent;
+
+  closed: Event;
 }
 
 export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
@@ -34,6 +36,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * that can be provided by using `renderer` function.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the popover is closed.
  */
 declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
