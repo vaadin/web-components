@@ -126,4 +126,10 @@ export const DialogBaseMixin = (superClass) =>
         this._overlayElement.bringToFront();
       }
     }
+
+    /**
+     * Fired when the dialog is closed.
+     *
+     * @event closed
+     */
   };
