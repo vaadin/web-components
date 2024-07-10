@@ -372,7 +372,6 @@ const runTests = (defineHelper, baseMixin) => {
       });
 
       it('should not prevent input for other slotted inputs', async () => {
-        element.allowedCharPattern = 'a';
         const checkbox = fixtureSync(`<input type="checkbox" slot="helper"/>`);
         element.appendChild(checkbox);
         checkbox.focus();
