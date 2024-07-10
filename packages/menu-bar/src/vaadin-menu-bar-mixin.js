@@ -894,8 +894,8 @@ export const MenuBarMixin = (superClass) =>
 
         this._setExpanded(button, true);
 
-        // Wait for the overlay content to render when using Lit
-        // to measure it correctly when setting position target.
+        // Delay setting position target until overlay is rendered
+        // to correctly measure item content in Lit based version.
         if (overlay.updateComplete) {
           await overlay.updateComplete;
         }
