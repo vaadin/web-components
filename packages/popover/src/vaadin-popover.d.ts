@@ -33,6 +33,36 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  * Unlike `<vaadin-tooltip>`, the popover supports rich content
  * that can be provided by using `renderer` function.
  *
+ * ### Styling
+ *
+ * `<vaadin-popover>` uses `<vaadin-popover-overlay>` internal
+ * themable component as the actual visible overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
+ * for `<vaadin-popover-overlay>` parts.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|----------------------------------------
+ * `position`       | Reflects the `position` property value.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-popover>` is
+ * propagated to the internal `<vaadin-popover-overlay>` component.
+ *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available on the `<vaadin-popover>` element:
+ *
+ * Custom CSS property              | Description
+ * ---------------------------------|-------------
+ * `--vaadin-popover-offset-top`    | Used as an offset when the popover is aligned vertically below the target
+ * `--vaadin-popover-offset-bottom` | Used as an offset when the popover is aligned vertically above the target
+ * `--vaadin-popover-offset-start`  | Used as an offset when the popover is aligned horizontally after the target
+ * `--vaadin-popover-offset-end`    | Used as an offset when the popover is aligned horizontally before the target
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class Popover extends PopoverPositionMixin(
