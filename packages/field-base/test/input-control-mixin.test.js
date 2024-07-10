@@ -377,8 +377,7 @@ const runTests = (defineHelper, baseMixin) => {
         element.appendChild(helperCheckbox);
         helperCheckbox.focus();
 
-        await sendKeys({ down: 'Space' });
-        await sendKeys({ up: 'Space' });
+        await sendKeys({ press: 'Space' });
 
         expect(helperCheckbox.checked).to.be.true;
       });
