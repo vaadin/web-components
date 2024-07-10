@@ -10,6 +10,7 @@ import {
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -368,6 +369,16 @@ const runTests = (defineHelper, baseMixin) => {
 
         element._preventInputDebouncer.flush();
         expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent input for other slotted inputs', async () => {
+        const checkbox = fixtureSync(`<input type="checkbox" slot="helper"/>`);
+        element.appendChild(checkbox);
+        checkbox.focus();
+
+        await sendKeys({ press: 'Space' });
+
+        expect(checkbox.checked).to.be.true;
       });
     });
 
