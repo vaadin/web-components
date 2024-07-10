@@ -882,7 +882,7 @@ export const MenuBarMixin = (superClass) =>
 
       this._expandedButton = button;
 
-      requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
         button.dispatchEvent(
           new CustomEvent('opensubmenu', {
             detail: {
@@ -893,6 +893,14 @@ export const MenuBarMixin = (superClass) =>
         this._hideTooltip(true);
 
         this._setExpanded(button, true);
+
+        // Wait for the overlay content to render when using Lit
+        // to measure it correctly when setting position target.
+        if (overlay.updateComplete) {
+          await overlay.updateComplete;
+        }
+
+        overlay.positionTarget = button;
       });
 
       this.style.pointerEvents = 'auto';
