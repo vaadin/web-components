@@ -188,6 +188,7 @@ export const InputControlMixin = (superclass) =>
      */
     _onKeyDown(event) {
       super._onKeyDown(event);
+
       if (this.allowedCharPattern && !this.__shouldAcceptKey(event) && event.target === this.inputElement) {
         event.preventDefault();
         this._markInputPrevented();
