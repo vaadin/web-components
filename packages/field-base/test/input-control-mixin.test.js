@@ -371,7 +371,7 @@ const runTests = (defineHelper, baseMixin) => {
         expect(element.hasAttribute('input-prevented')).to.be.false;
       });
 
-      it('should check the helper checkbox', async () => {
+      it('should not prevent input for other slotted inputs', async () => {
         element.allowedCharPattern = '';
         const helperCheckbox = fixtureSync(`<input id="helper-checkbox" type="checkbox" slot="helper"/>`);
         element.appendChild(helperCheckbox);
