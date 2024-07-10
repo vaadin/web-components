@@ -12,12 +12,11 @@
       import '@vaadin/tooltip';
 
       const menuBar = document.querySelector('vaadin-menu-bar');
-      menuBar.tabNavigation = true;
       menuBar.items = [
         { text: 'View', tooltip: 'Options for how to view the content' },
         { text: 'Edit' },
         {
-          text: 'Share', disabled: true,
+          text: 'Share',
           children: [
             {
               text: 'On social media',
