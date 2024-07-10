@@ -89,6 +89,19 @@ describe('root menu layout', () => {
     });
   });
 
+  it('should set tabindex to 0 when the button is not disabled', async () => {
+    menu.tabNavigation = true;
+    focusin(menu);
+    await nextUpdate(menu);
+    buttons.forEach((btn, index) => {
+      if (btn.disabled) {
+        expect(btn.getAttribute('tabindex')).to.equal('-1');
+      } else {
+        expect(btn.getAttribute('tabindex')).to.equal('0');
+      }
+    });
+  });
+
   it('should not throw when changing items before the menu bar is attached', () => {
     expect(() => {
       const menuBar = document.createElement('vaadin-menu-bar');

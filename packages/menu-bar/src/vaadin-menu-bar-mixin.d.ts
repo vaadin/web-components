@@ -146,6 +146,13 @@ export declare class MenuBarMixinClass {
   reverseCollapse: boolean | null | undefined;
 
   /**
+   * If true, the top-level menu items is traversable by tab
+   * instead of arrow keys (i.e. disabling roving tabindex)
+   * @attr {boolean} tab-navigation
+   */
+  tabNavigation: boolean | null | undefined;
+
+  /**
    * Closes the current submenu.
    */
   close(): void;
