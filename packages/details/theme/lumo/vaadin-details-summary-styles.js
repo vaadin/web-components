@@ -61,7 +61,7 @@ const detailsSummary = css`
     transform: rotate(90deg);
   }
 
-  :host [part='content'] {
+  [part='content'] {
     flex-grow: 1;
   }
 
