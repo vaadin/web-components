@@ -10,7 +10,7 @@ import {
   nextUpdate,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { shiftTab, tab } from '@vaadin/app-layout/test/helpers.js';
+import { shiftTab, tab } from './helpers.js';
 
 describe('custom element definition', () => {
   let menu, tagName;

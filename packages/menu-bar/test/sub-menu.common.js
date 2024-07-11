@@ -19,8 +19,8 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
-import { shiftTab, tab } from '@vaadin/app-layout/test/helpers.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { shiftTab, tab } from './helpers.js';
 
 setCancelSyntheticClickEvents(false);
 
