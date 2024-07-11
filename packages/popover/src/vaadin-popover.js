@@ -162,6 +162,7 @@ class PopoverOpenedStateController {
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the popover is closed.
  *
  * @customElement
  * @extends HTMLElement
@@ -715,6 +716,8 @@ class Popover extends PopoverPositionMixin(
     if (this.modal && this.target.style.pointerEvents) {
       this.target.style.pointerEvents = '';
     }
+
+    this.dispatchEvent(new CustomEvent('closed'));
   }
 
   /**
@@ -771,6 +774,12 @@ class Popover extends PopoverPositionMixin(
       this.__updateDimension(overlay, 'width', width);
     }
   }
+
+  /**
+   * Fired when the popover is closed.
+   *
+   * @event closed
+   */
 }
 
 defineCustomElement(Popover);

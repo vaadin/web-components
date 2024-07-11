@@ -399,4 +399,32 @@ describe('popover', () => {
       expect(overlay.getAttribute('style')).to.be.not.ok;
     });
   });
+
+  describe('closed event', () => {
+    beforeEach(async () => {
+      popover.opened = true;
+      await nextRender();
+    });
+
+    it('should dispatch closed event when closed', async () => {
+      const closedSpy = sinon.spy();
+      popover.addEventListener('closed', closedSpy);
+      popover.opened = false;
+      await nextRender();
+      expect(closedSpy).to.be.calledOnce;
+    });
+
+    it('should dispatch closed event after overlay is closed', async () => {
+      const closedPromise = new Promise((resolve) => {
+        const closedListener = () => {
+          expect(overlay.parentElement).to.be.not.ok;
+          resolve();
+        };
+        popover.addEventListener('closed', closedListener, { once: true });
+      });
+      popover.opened = false;
+      await nextRender();
+      await closedPromise;
+    });
+  });
 });

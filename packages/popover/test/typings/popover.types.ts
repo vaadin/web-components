@@ -48,3 +48,7 @@ popover.addEventListener('opened-changed', (event) => {
   assertType<PopoverOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
+
+popover.addEventListener('closed', (event) => {
+  assertType<Event>(event);
+});
