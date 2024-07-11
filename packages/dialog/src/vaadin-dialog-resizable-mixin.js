@@ -158,4 +158,10 @@ export const DialogResizableMixin = (superClass) =>
       this.$.overlay.$.resizerContainer.scrollTop = scrollPosition;
       return { width, height, contentWidth, contentHeight };
     }
+
+    /**
+     * Fired when the dialog resize is finished.
+     *
+     * @event resize
+     */
   };
