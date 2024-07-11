@@ -64,6 +64,18 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
   });
 
+  it('should render at most 7 weekdays', async () => {
+    monthCalendar.i18n = {
+      ...monthCalendar.i18n,
+      weekdays: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+      weekdaysShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    };
+    await nextRender();
+
+    const weekdays = getWeekDayCells(monthCalendar);
+    expect(weekdays.length).to.equal(7);
+  });
+
   it('should fire value change on tap', () => {
     const dateElements = getDateCells(monthCalendar);
     tap(dateElements[10]);
