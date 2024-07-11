@@ -10,6 +10,7 @@ import {
   nextUpdate,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { shiftTab, tab } from '@vaadin/app-layout/test/helpers.js';
 
 describe('custom element definition', () => {
   let menu, tagName;
@@ -91,7 +92,6 @@ describe('root menu layout', () => {
 
   it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
     menu.tabNavigation = true;
-    focusin(menu);
     await nextUpdate(menu);
     buttons.forEach((btn) => {
       if (btn.disabled) {
@@ -102,7 +102,7 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
+  it('should reset tabindex after switching back from tab navigation', async () => {
     menu.tabNavigation = true;
     await nextUpdate(menu);
     menu.tabNavigation = false;
@@ -111,17 +111,6 @@ describe('root menu layout', () => {
     buttons.slice(1).forEach((btn) => {
       expect(btn.getAttribute('tabindex')).to.equal('-1');
     });
-  });
-
-  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
-    menu.tabNavigation = true;
-    await nextUpdate(menu);
-    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
-    expect(buttons[1].getAttribute('tabindex')).to.equal('0');
-    menu.tabNavigation = false;
-    await nextUpdate(menu);
-    expect(buttons[0].getAttribute('tabindex')).to.equal('0');
-    expect(buttons[1].getAttribute('tabindex')).to.equal('-1');
   });
 
   it('should not throw when changing items before the menu bar is attached', () => {
@@ -238,6 +227,38 @@ describe('root menu layout', () => {
         expect(spy.calledOnce).to.be.true;
         expect(buttons[3].hasAttribute('focused')).to.be.true;
       });
+    });
+  });
+  describe('tab navigation mode', () => {
+    beforeEach(() => {
+      menu.tabNavigation = true;
+    });
+
+    it('should move focus to next button on "Tab" keydown', async () => {
+      buttons[0].focus();
+      await tab();
+      expect(buttons[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should move focus to prev button on "shift-Tab" keydown', async () => {
+      buttons[1].focus();
+      await shiftTab();
+      expect(buttons[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should move focus to fourth button if third is disabled on "Tab" keydown', async () => {
+      await updateItemsAndButtons();
+      buttons[1].focus();
+      await tab();
+      expect(buttons[3].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not move the focus to the next button if tab navigation is disabled', async () => {
+      menu.tabNavigation = false;
+      menu.focus();
+      expect(document.activeElement).to.equal(buttons[0]);
+      await tab();
+      expect(document.activeElement).to.not.equal(buttons[1]);
     });
   });
 
