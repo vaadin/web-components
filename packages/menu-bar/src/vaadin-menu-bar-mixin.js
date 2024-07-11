@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -753,13 +753,13 @@ export const MenuBarMixin = (superClass) =>
         if (this.tabNavigation) {
           // manage the submenu
           const target = this.querySelector('[focused]');
-          const wasExpanded = this._expandedButton !== undefined && this._expandedButton !== target;
+          const wasExpanded =
+            this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
           if (wasExpanded) {
             this._close();
-          }
-
-          if (wasExpanded && target.item && target.item.children) {
-            this.__openSubMenu(target, true, { keepFocus: true });
+            if (target.item && target.item.children) {
+              this.__openSubMenu(target, true, { keepFocus: true });
+            }
           }
         }
         const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
@@ -886,6 +886,25 @@ export const MenuBarMixin = (superClass) =>
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._onKeyDown(e);
+        } else if (e.keyCode === 9) {
+          if (this.tabNavigation) {
+            const items = this._getItems() || [];
+            const currentIdx = items.indexOf(this.focused);
+            const increment = e.shiftKey ? -1 : 1;
+            let idx = currentIdx + increment;
+            idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+
+            // manage the submenu
+            const target = items[idx];
+            const wasExpanded =
+              this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
+            if (wasExpanded) {
+              this._close();
+              if (target.item && target.item.children) {
+                this.__openSubMenu(target, true, { keepFocus: true });
+              }
+            }
+          }
         }
       }
     }
