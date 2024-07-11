@@ -61,6 +61,10 @@ const detailsSummary = css`
     transform: rotate(90deg);
   }
 
+  [part='content'] {
+    flex-grow: 1;
+  }
+
   /* RTL styles */
   :host([dir='rtl']) [part='toggle'] {
     margin-left: var(--lumo-space-xs);
