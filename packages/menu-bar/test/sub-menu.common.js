@@ -9,7 +9,6 @@ import {
   esc,
   fire,
   fixtureSync,
-  focusin,
   isDesktopSafari as isSafari,
   nextRender,
   nextUpdate,
