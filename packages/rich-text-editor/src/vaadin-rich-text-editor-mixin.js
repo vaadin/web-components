@@ -500,6 +500,48 @@ export const RichTextEditorMixin = (superClass) =>
       });
     }
 
+    /**
+     * Custom toolbar click listener implementing corresponding Quill logic.
+     *
+     * This is needed to avoid adding individual listeners to buttons multiple
+     * times after initializing a new Quill instance on component re-attach.
+     *
+     * By default, Quill adds an individual click listener to every toolbar
+     * button with CSS class name starting with "ql-" so we use other prefix.
+     *
+     * @private
+     */
+    _onToolbarClick(event) {
+      const { target } = event;
+
+      let format = [...target.classList].find((className) => className.startsWith('format-'));
+      if (!format) {
+        return;
+      }
+
+      // Remove "format-" prefix
+      format = format.slice(7);
+
+      let value;
+      if (target.classList.contains('ql-active')) {
+        value = false;
+      } else {
+        value = target.value || !target.hasAttribute('value');
+      }
+
+      const toolbar = this._editor.getModule('toolbar');
+
+      this._editor.focus();
+      const [range] = this._editor.selection.getRange();
+      if (toolbar.handlers[format] != null) {
+        toolbar.handlers[format].call(toolbar, value);
+      } else {
+        this._editor.format(format, value, SOURCE.USER);
+      }
+
+      toolbar.update(range);
+    }
+
     /** @private */
     _markToolbarClicked() {
       this._toolbarState = STATE.CLICKED;
@@ -582,6 +624,12 @@ export const RichTextEditorMixin = (superClass) =>
     __patchToolbar() {
       const toolbar = this._editor.getModule('toolbar');
       const update = toolbar.update;
+
+      // Fill toolbar controls with buttons using `format-` class prefix
+      [...this.shadowRoot.querySelectorAll('[class^="format"]')].forEach((button) => {
+        const format = button.className.slice(7);
+        toolbar.controls.push([format, button]);
+      });
 
       // Add custom link button to toggle state attribute
       toolbar.controls.push(['link', this.shadowRoot.querySelector('[part~="toolbar-button-link"]')]);

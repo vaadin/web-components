@@ -556,4 +556,40 @@ describe('toolbar controls', () => {
       expect(editor.getText()).to.equal('Foo\n');
     });
   });
+
+  describe('detach and re-attach', () => {
+    beforeEach(async () => {
+      const parent = rte.parentNode;
+      parent.removeChild(rte);
+      parent.appendChild(rte);
+      await nextUpdate(rte);
+    });
+
+    [
+      'bold',
+      'italic',
+      'underline',
+      'strike',
+      'blockquote',
+      'code-block',
+      'subscript',
+      'superscript',
+      'list-ordered',
+      'list-bullet',
+      'h1',
+      'h2',
+      'align-center',
+      'align-right',
+      'blockquote',
+      'code-block',
+    ].forEach((format) => {
+      it(`should correctly toggle "on" attribute for ${format} button after detach and re-attach`, () => {
+        btn = getButton(format);
+        btn.click();
+        expect(btn.hasAttribute('on')).to.be.true;
+        btn.click();
+        expect(btn.hasAttribute('on')).to.be.false;
+      });
+    });
+  });
 });

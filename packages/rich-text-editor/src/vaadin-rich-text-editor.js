@@ -106,7 +106,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
     return html`
       <div class="vaadin-rich-text-editor-container">
         <!-- Create toolbar container -->
-        <div part="toolbar" role="toolbar">
+        <div part="toolbar" role="toolbar" on-click="_onToolbarClick">
           <span part="toolbar-group toolbar-group-history">
             <!-- Undo and Redo -->
             <button id="btn-undo" type="button" part="toolbar-button toolbar-button-undo" on-click="_undo"></button>
@@ -118,19 +118,19 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
 
           <span part="toolbar-group toolbar-group-emphasis">
             <!-- Bold -->
-            <button id="btn-bold" class="ql-bold" part="toolbar-button toolbar-button-bold"></button>
+            <button id="btn-bold" class="format-bold" part="toolbar-button toolbar-button-bold"></button>
             <vaadin-tooltip for="btn-bold" text="[[i18n.bold]]"></vaadin-tooltip>
 
             <!-- Italic -->
-            <button id="btn-italic" class="ql-italic" part="toolbar-button toolbar-button-italic"></button>
+            <button id="btn-italic" class="format-italic" part="toolbar-button toolbar-button-italic"></button>
             <vaadin-tooltip for="btn-italic" text="[[i18n.italic]]"></vaadin-tooltip>
 
             <!-- Underline -->
-            <button id="btn-underline" class="ql-underline" part="toolbar-button toolbar-button-underline"></button>
+            <button id="btn-underline" class="format-underline" part="toolbar-button toolbar-button-underline"></button>
             <vaadin-tooltip for="btn-underline" text="[[i18n.underline]]"></vaadin-tooltip>
 
             <!-- Strike -->
-            <button id="btn-strike" class="ql-strike" part="toolbar-button toolbar-button-strike"></button>
+            <button id="btn-strike" class="format-strike" part="toolbar-button toolbar-button-strike"></button>
             <vaadin-tooltip for="btn-strike" text="[[i18n.strike]]"></vaadin-tooltip>
           </span>
 
@@ -158,7 +158,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-h1"
               type="button"
-              class="ql-header"
+              class="format-header"
               value="1"
               part="toolbar-button toolbar-button-h1"
             ></button>
@@ -166,7 +166,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-h2"
               type="button"
-              class="ql-header"
+              class="format-header"
               value="2"
               part="toolbar-button toolbar-button-h2"
             ></button>
@@ -174,7 +174,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-h3"
               type="button"
-              class="ql-header"
+              class="format-header"
               value="3"
               part="toolbar-button toolbar-button-h3"
             ></button>
@@ -185,14 +185,14 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <!-- Subscript and superscript -->
             <button
               id="btn-subscript"
-              class="ql-script"
+              class="format-script"
               value="sub"
               part="toolbar-button toolbar-button-subscript"
             ></button>
             <vaadin-tooltip for="btn-subscript" text="[[i18n.subscript]]"></vaadin-tooltip>
             <button
               id="btn-superscript"
-              class="ql-script"
+              class="format-script"
               value="super"
               part="toolbar-button toolbar-button-superscript"
             ></button>
@@ -204,7 +204,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-ol"
               type="button"
-              class="ql-list"
+              class="format-list"
               value="ordered"
               part="toolbar-button toolbar-button-list-ordered"
             ></button>
@@ -212,7 +212,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-ul"
               type="button"
-              class="ql-list"
+              class="format-list"
               value="bullet"
               part="toolbar-button toolbar-button-list-bullet"
             ></button>
@@ -224,7 +224,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-left"
               type="button"
-              class="ql-align"
+              class="format-align"
               value=""
               part="toolbar-button toolbar-button-align-left"
             ></button>
@@ -232,7 +232,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-center"
               type="button"
-              class="ql-align"
+              class="format-align"
               value="center"
               part="toolbar-button toolbar-button-align-center"
             ></button>
@@ -240,7 +240,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-right"
               type="button"
-              class="ql-align"
+              class="format-align"
               value="right"
               part="toolbar-button toolbar-button-align-right"
             ></button>
@@ -272,7 +272,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-blockquote"
               type="button"
-              class="ql-blockquote"
+              class="format-blockquote"
               part="toolbar-button toolbar-button-blockquote"
             ></button>
             <vaadin-tooltip for="btn-blockquote" text="[[i18n.blockquote]]"></vaadin-tooltip>
@@ -280,7 +280,7 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
             <button
               id="btn-code"
               type="button"
-              class="ql-code-block"
+              class="format-code-block"
               part="toolbar-button toolbar-button-code-block"
             ></button>
             <vaadin-tooltip for="btn-code" text="[[i18n.codeBlock]]"></vaadin-tooltip>
@@ -288,7 +288,12 @@ class RichTextEditor extends RichTextEditorMixin(ElementMixin(ThemableMixin(Poly
 
           <span part="toolbar-group toolbar-group-format">
             <!-- Clean -->
-            <button id="btn-clean" type="button" class="ql-clean" part="toolbar-button toolbar-button-clean"></button>
+            <button
+              id="btn-clean"
+              type="button"
+              class="format-clean"
+              part="toolbar-button toolbar-button-clean"
+            ></button>
             <vaadin-tooltip for="btn-clean" text="[[i18n.clean]]"></vaadin-tooltip>
           </span>
 
