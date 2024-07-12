@@ -5,6 +5,8 @@ import { Cache } from '../src/data-provider-controller/cache.js';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
 import { createDataProvider } from './data-provider-controller-helpers.js';
 
+const PLACEHOLDER = Symbol.for('PLACEHOLDER');
+
 describe('DataProviderController', () => {
   let host, controller;
 
@@ -47,8 +49,20 @@ describe('DataProviderController', () => {
       expect(controller.flatSize).to.equal(0);
     });
 
+    it('should not have placeholder', () => {
+      expect(controller.placeholder).to.be.undefined;
+    });
+
+    it('should not have isPlaceholder', () => {
+      expect(controller.isPlaceholder).to.be.undefined;
+    });
+
     it('should have rootCache', () => {
       expect(controller.rootCache).to.be.instanceOf(Cache);
+    });
+
+    it('should have empty rootCache items', () => {
+      expect(controller.rootCache.items).to.have.lengthOf(0);
     });
 
     it('should not have rootCache size', () => {
@@ -84,6 +98,31 @@ describe('DataProviderController', () => {
 
     it('should have rootCache size', () => {
       expect(controller.rootCache.size).to.equal(500);
+    });
+
+    it('should have empty rootCache items', () => {
+      expect(controller.rootCache.items).to.have.lengthOf(0);
+    });
+  });
+
+  describe('with placeholder', () => {
+    beforeEach(() => {
+      controller = new DataProviderController(host, {
+        size: 100,
+        pageSize: 50,
+        isExpanded,
+        placeholder: PLACEHOLDER,
+        dataProvider: (_params, callback) => callback([], 0),
+      });
+    });
+
+    it('should have placeholder', () => {
+      expect(controller.placeholder).to.equal(PLACEHOLDER);
+    });
+
+    it('should have rootCache items filled with placeholder', () => {
+      expect(controller.rootCache.items).to.have.lengthOf(100);
+      expect(controller.rootCache.items.every((item) => item === PLACEHOLDER)).to.be.true;
     });
   });
 
