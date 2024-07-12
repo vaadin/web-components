@@ -57,7 +57,7 @@ const TEMPLATES = {
     const objectDataProvider = (params, callback) => {
       const offset = params.page * params.pageSize;
       const n = Math.min(offset + params.pageSize, SIZE) - offset;
-      dataProviderItems = Array(...new Array(n)).map((_, i) => {
+      dataProviderItems = new Array(n).fill().map((_, i) => {
         return { id: i, value: `value ${i}`, label: `label ${i}` };
       });
       callback(dataProviderItems, SIZE);

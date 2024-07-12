@@ -228,9 +228,7 @@ describe('resizable', () => {
     container.style.height = '100%';
     container.style.width = '100%';
     container.style.overflow = 'auto';
-    container.textContent = Array(...new Array(10000))
-      .map(() => 'foo')
-      .join(' ');
+    container.textContent = new Array(10000).fill('foo').join(' ');
 
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
     expect(container.offsetHeight).to.equal(resizeContainer.offsetHeight);
@@ -238,9 +236,7 @@ describe('resizable', () => {
 
   it('should scroll if the content overflows', () => {
     // Fill the content with a lot of text so that it overflows the viewport
-    dialog.$.overlay.firstElementChild.textContent = Array(...new Array(10000))
-      .map(() => 'foo')
-      .join(' ');
+    dialog.$.overlay.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
 
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
     resizeContainer.scrollTop = 1;

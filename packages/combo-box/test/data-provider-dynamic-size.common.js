@@ -23,7 +23,7 @@ const TEMPLATES = {
       const ACTUAL_SIZE = 500;
 
       function dataProvider(params, callback) {
-        const items = Array(...new Array(params.pageSize)).map((_, i) => {
+        const items = new Array(params.pageSize).fill().map((_, i) => {
           return {
             label: `Item ${params.pageSize * params.page + i}`,
           };
