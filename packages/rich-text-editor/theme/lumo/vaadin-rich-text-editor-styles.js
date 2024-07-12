@@ -57,7 +57,9 @@ const richTextEditor = css`
     color: var(--lumo-contrast-60pct);
     margin: 2px 1px;
     cursor: var(--lumo-clickable-cursor);
-    transition: background-color 100ms, color 100ms;
+    transition:
+      background-color 100ms,
+      color 100ms;
   }
 
   [part~='toolbar-button']:focus,

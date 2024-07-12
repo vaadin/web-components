@@ -327,7 +327,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
-    // eslint-disable-next-line max-params
+    // eslint-disable-next-line @typescript-eslint/max-params
     __updateCalendars(
       calendars,
       i18n,

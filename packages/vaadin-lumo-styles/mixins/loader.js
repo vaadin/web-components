@@ -25,7 +25,9 @@ const loader = css`
   }
 
   :host([loading]) [part~='loader'] {
-    animation: 1s linear infinite lumo-loader-rotate, 0.3s 0.1s lumo-loader-fade-in both;
+    animation:
+      1s linear infinite lumo-loader-rotate,
+      0.3s 0.1s lumo-loader-fade-in both;
   }
 
   @keyframes lumo-loader-fade-in {

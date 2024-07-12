@@ -46,12 +46,12 @@
     "@web/test-runner-visual-regression": "^0.9.0",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
-    "eslint": "^8.49.0",
-    "eslint-config-vaadin": "^1.0.0-alpha.17",
+    "eslint": "^8.57.0",
+    "eslint-config-vaadin": "^1.0.0-alpha.25",
     "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-no-only-tests": "^3.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
     "glob": "^8.0.3",
     "husky": "^8.0.1",
     "lerna": "^4.0.0",
@@ -59,14 +59,14 @@
     "npm-run-all": "^4.1.5",
     "patch-package": "^7.0.0",
     "postcss-lit": "^1.1.0",
-    "prettier": "^2.8.8",
+    "prettier": "^3.1.0",
     "prettier-plugin-package": "^1.3.0",
     "replace-in-file": "^6.3.5",
     "rimraf": "^5.0.1",
     "rollup": "^4.4.0",
     "stylelint": "^15.10.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.5.2"
   },
   "lint-staged": {
     "*.{js,ts}": [

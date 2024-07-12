@@ -6,10 +6,12 @@ import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 
 it('should not throw when templatized', () => {
   // Use Templatizer to create a new instances
-  const TemplateClass = templatize(html`<div>
-    <vaadin-combo-box></vaadin-combo-box>
-    <vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>
-  </div>`);
+  const TemplateClass = templatize(html`
+    <div>
+      <vaadin-combo-box></vaadin-combo-box>
+      <vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>
+    </div>
+  `);
 
   const instance = new TemplateClass();
   const wrapper = instance.root.querySelector('div');

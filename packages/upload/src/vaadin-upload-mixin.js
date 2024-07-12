@@ -697,7 +697,9 @@ export const UploadMixin = (superClass) =>
 
       const formData = new FormData();
 
-      file.uploadTarget = file.uploadTarget || this.target || '';
+      if (!file.uploadTarget) {
+        file.uploadTarget = this.target || '';
+      }
       file.formDataName = this.formDataName;
 
       const evt = this.dispatchEvent(

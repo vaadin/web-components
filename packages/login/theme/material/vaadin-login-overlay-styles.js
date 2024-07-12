@@ -38,7 +38,9 @@ const loginOverlayWrapper = css`
     min-width: 400px;
     height: 100%;
     border-radius: 4px;
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.04), 0 9px 12px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 19px 38px rgba(0, 0, 0, 0.04),
+      0 9px 12px rgba(0, 0, 0, 0.05);
     margin: 0.5em;
   }
 

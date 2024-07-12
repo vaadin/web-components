@@ -151,21 +151,20 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
     render(
       html`
         ${items.map(
-          (item) =>
-            html`
-              <vaadin-message
-                role="listitem"
-                .time="${item.time}"
-                .userAbbr="${item.userAbbr}"
-                .userName="${item.userName}"
-                .userImg="${item.userImg}"
-                .userColorIndex="${item.userColorIndex}"
-                theme="${ifDefined(item.theme)}"
-                class="${ifDefined(item.className)}"
-                @focusin="${this._onMessageFocusIn}"
-                >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
-              ></vaadin-message>
-            `,
+          (item) => html`
+            <vaadin-message
+              role="listitem"
+              .time="${item.time}"
+              .userAbbr="${item.userAbbr}"
+              .userName="${item.userName}"
+              .userImg="${item.userImg}"
+              .userColorIndex="${item.userColorIndex}"
+              theme="${ifDefined(item.theme)}"
+              class="${ifDefined(item.className)}"
+              @focusin="${this._onMessageFocusIn}"
+              >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+            ></vaadin-message>
+          `,
         )}
       `,
       this,

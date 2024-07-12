@@ -15,7 +15,9 @@ registerStyles(
     [part='overlay'] {
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
       border-radius: var(--lumo-border-radius-l);
-      box-shadow: 0 0 0 1px var(--lumo-contrast-10pct), var(--lumo-box-shadow-l);
+      box-shadow:
+        0 0 0 1px var(--lumo-contrast-10pct),
+        var(--lumo-box-shadow-l);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
       font-weight: 400;
@@ -207,7 +209,9 @@ registerStyles(
     :host([theme~='warning']) [part='overlay'] {
       background: var(--lumo-warning-color);
       color: var(--lumo-warning-contrast-color);
-      box-shadow: inset 0 0 0 1px var(--lumo-contrast-20pct), var(--lumo-box-shadow-l);
+      box-shadow:
+        inset 0 0 0 1px var(--lumo-contrast-20pct),
+        var(--lumo-box-shadow-l);
     }
 
     :host([theme~='warning']) {

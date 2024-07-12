@@ -32,7 +32,9 @@ const loader = css`
   }
 
   :host([loading]) [part='loader'] {
-    animation: 3s linear infinite material-loader-progress, 0.3s 0.1s both material-loader-fade-in;
+    animation:
+      3s linear infinite material-loader-progress,
+      0.3s 0.1s both material-loader-fade-in;
   }
 
   [part='loader']::before {
@@ -100,7 +102,9 @@ const loader = css`
   }
 
   :host([loading][dir='rtl']) [part='loader'] {
-    animation: 3s linear infinite material-loader-progress-rtl, 0.3s 0.1s both material-loader-fade-in;
+    animation:
+      3s linear infinite material-loader-progress-rtl,
+      0.3s 0.1s both material-loader-fade-in;
   }
 `;
 

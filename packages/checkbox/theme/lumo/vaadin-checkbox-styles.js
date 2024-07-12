@@ -57,7 +57,9 @@ registerStyles(
       position: relative;
       border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
       background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
-      transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
+      transition:
+        transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+        background-color 0.15s;
       cursor: var(--lumo-clickable-cursor);
       /* Default field border color */
       --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
@@ -128,12 +130,16 @@ registerStyles(
 
     /* Focus ring */
     :host([focus-ring]) [part='checkbox'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
+      box-shadow:
+        0 0 0 1px var(--lumo-base-color),
+        0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 
     :host([focus-ring][readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+      box-shadow:
+        0 0 0 1px var(--lumo-base-color),
+        0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
     }
 
     /* Disabled */
@@ -180,7 +186,9 @@ registerStyles(
       background-color: inherit;
       transform: scale(1.4);
       opacity: 0;
-      transition: transform 0.1s, opacity 0.8s;
+      transition:
+        transform 0.1s,
+        opacity 0.8s;
     }
 
     /* Hover */

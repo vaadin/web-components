@@ -21,7 +21,9 @@ export const sideNavItemStyles = css`
     line-height: 1;
     font-weight: 500;
     color: var(--material-body-text-color);
-    transition: background-color 140ms, color 140ms;
+    transition:
+      background-color 140ms,
+      color 140ms;
     border-radius: 4px;
     cursor: default;
   }
@@ -74,7 +76,9 @@ export const sideNavItemStyles = css`
     background-color: var(--material-disabled-text-color);
     transform: scale(0);
     opacity: 0;
-    transition: transform 0s 0.8s, opacity 0.8s;
+    transition:
+      transform 0s 0.8s,
+      opacity 0.8s;
     will-change: transform, opacity;
   }
 

@@ -41,7 +41,9 @@ const item = css`
     color: var(--_selection-color-text);
     flex: none;
     opacity: 0;
-    transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), opacity 0.1s;
+    transition:
+      transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+      opacity 0.1s;
   }
 
   :host([selected]) [part='checkmark']::before {

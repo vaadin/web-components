@@ -61,7 +61,9 @@ registerStyles(
 
     .ol-control {
       border-radius: var(--lumo-border-radius-m);
-      transition: 0.15s box-shadow, 0.15s background-color;
+      transition:
+        0.15s box-shadow,
+        0.15s background-color;
       -webkit-backdrop-filter: blur(8px);
     }
 

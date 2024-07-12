@@ -107,6 +107,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
+  // eslint-disable-next-line @typescript-eslint/max-params
   __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled) {
     const result = ['date'];
 

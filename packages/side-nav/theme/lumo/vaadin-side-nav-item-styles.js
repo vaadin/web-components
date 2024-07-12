@@ -19,7 +19,9 @@ export const sideNavItemStyles = css`
     padding: var(--lumo-space-s);
     padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
     border-radius: var(--lumo-border-radius-m);
-    transition: background-color 140ms, color 140ms;
+    transition:
+      background-color 140ms,
+      color 140ms;
     cursor: var(--lumo-clickable-cursor, default);
     min-height: var(--lumo-icon-size-m);
   }

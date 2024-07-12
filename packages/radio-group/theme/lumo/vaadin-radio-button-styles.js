@@ -41,7 +41,9 @@ registerStyles(
       position: relative;
       border-radius: 50%;
       background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
-      transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), background-color 0.15s;
+      transition:
+        transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+        background-color 0.15s;
       will-change: transform;
       cursor: var(--lumo-clickable-cursor);
       /* Default field border color */
@@ -59,7 +61,9 @@ registerStyles(
       background-color: inherit;
       transform: scale(1.4);
       opacity: 0;
-      transition: transform 0.1s, opacity 0.8s;
+      transition:
+        transform 0.1s,
+        opacity 0.8s;
       will-change: transform, opacity;
     }
 
@@ -113,7 +117,9 @@ registerStyles(
     }
 
     :host([focus-ring]) [part='radio'] {
-      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
+      box-shadow:
+        0 0 0 1px var(--lumo-base-color),
+        0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
         inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
     }
 

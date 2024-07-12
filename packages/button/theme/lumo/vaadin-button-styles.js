@@ -83,7 +83,9 @@ const button = css`
   /* Active */
 
   :host::after {
-    transition: opacity 1.4s, transform 0.1s;
+    transition:
+      opacity 1.4s,
+      transform 0.1s;
     filter: blur(8px);
   }
 
@@ -101,7 +103,8 @@ const button = css`
   /* Keyboard focus */
 
   :host([focus-ring]) {
-    box-shadow: 0 0 0 calc(1px * var(--_focus-ring-gap-on, 0)) var(--_focus-ring-gap-color, var(--lumo-base-color)),
+    box-shadow:
+      0 0 0 calc(1px * var(--_focus-ring-gap-on, 0)) var(--_focus-ring-gap-color, var(--lumo-base-color)),
       0 0 0 calc(var(--_focus-ring-width) + 1px * var(--_focus-ring-gap-on, 0)) var(--_focus-ring-color);
   }
 
