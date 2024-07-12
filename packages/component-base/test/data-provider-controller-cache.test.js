@@ -1,6 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { Cache } from '../src/data-provider-controller/cache.js';
 
+const PLACEHOLDER = Symbol('PLACEHOLDER');
+
 describe('DataProviderController - Cache', () => {
   let cache;
   let expandedItems = [];
@@ -51,23 +53,42 @@ describe('DataProviderController - Cache', () => {
     });
   });
 
-  describe('setPage', () => {
+  describe('with placeholder', () => {
     beforeEach(() => {
-      cache = new Cache({ isExpanded }, 50, 500);
+      cache = new Cache({ isExpanded, placeholder: PLACEHOLDER }, 2, 20);
     });
 
-    it('should insert the items at the correct position for page 0', () => {
+    it('should have items filled with placeholders', () => {
+      expect(cache.items).to.have.lengthOf(20);
+      expect(cache.items.every((item) => item === PLACEHOLDER)).to.be.true;
+    });
+  });
+
+  describe('setPage', () => {
+    beforeEach(() => {
+      cache = new Cache({ isExpanded }, 2, 20);
+    });
+
+    it('should insert items at the correct position for page 0', () => {
       cache.setPage(0, ['Item 0', 'Item 1']);
       expect(cache.items).to.have.lengthOf(2);
       expect(cache.items[0]).to.equal('Item 0');
       expect(cache.items[1]).to.equal('Item 1');
     });
 
-    it('should insert the items at the correct position for page 1', () => {
-      cache.setPage(1, ['Item 0', 'Item 1']);
-      expect(cache.items).to.have.lengthOf(52);
-      expect(cache.items[50]).to.equal('Item 0');
-      expect(cache.items[51]).to.equal('Item 1');
+    it('should insert items at the correct position for page 1', () => {
+      cache.setPage(1, ['Item 2', 'Item 3']);
+      expect(cache.items).to.have.lengthOf(4);
+      expect(cache.items[2]).to.equal('Item 2');
+      expect(cache.items[3]).to.equal('Item 3');
+    });
+
+    it('should discard items that exceed the size bounds', () => {
+      cache.setPage(9, ['Item 18', 'Item 19', 'Item 20']);
+      expect(cache.items).to.have.lengthOf(20);
+      expect(cache.items[18]).to.equal('Item 18');
+      expect(cache.items[19]).to.equal('Item 19');
+      expect(cache.items[20]).to.be.undefined;
     });
   });
 
@@ -194,6 +215,38 @@ describe('DataProviderController - Cache', () => {
       subCache.pendingRequests[0] = (_items, _size) => {};
       cache.removeSubCache(0);
       expect(cache.isLoading).to.be.false;
+    });
+  });
+
+  describe('size', () => {
+    beforeEach(() => {
+      cache = new Cache({ isExpanded }, 2, 20);
+    });
+
+    it('should remove exceeding pending requests when decreasing size', () => {
+      cache.pendingRequests[8] = (_items, _size) => {};
+      cache.pendingRequests[9] = (_items, _size) => {};
+      cache.size = 18;
+      expect(cache.pendingRequests[8]).to.be.not.undefined;
+      expect(cache.pendingRequests[9]).to.be.undefined;
+    });
+  });
+
+  describe('size with placeholder', () => {
+    beforeEach(() => {
+      cache = new Cache({ isExpanded, placeholder: PLACEHOLDER }, 2, 20);
+    });
+
+    it('should add more placeholders when increasing size', () => {
+      cache.size = 22;
+      expect(cache.items).to.have.lengthOf(22);
+      expect(cache.items.every((item) => item === PLACEHOLDER)).to.be.true;
+    });
+
+    it('should remove exceeding placeholders when decreasing size', () => {
+      cache.size = 18;
+      expect(cache.items).to.have.lengthOf(18);
+      expect(cache.items.every((item) => item === PLACEHOLDER)).to.be.true;
     });
   });
 
