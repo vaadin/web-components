@@ -188,12 +188,14 @@ export const MonthCalendarMixin = (superClass) =>
       const weekDayNamesShort = this._applyFirstDayOfWeek(weekdaysShort, firstDayOfWeek);
       const weekDayNames = this._applyFirstDayOfWeek(weekdays, firstDayOfWeek);
 
-      return weekDayNames.map((day, index) => {
-        return {
-          weekDay: day,
-          weekDayShort: weekDayNamesShort[index],
-        };
-      });
+      return weekDayNames
+        .map((day, index) => {
+          return {
+            weekDay: day,
+            weekDayShort: weekDayNamesShort[index],
+          };
+        })
+        .slice(0, 7);
     }
 
     /** @private */
