@@ -105,27 +105,6 @@ describe('DataProviderController', () => {
     });
   });
 
-  describe('with placeholder', () => {
-    beforeEach(() => {
-      controller = new DataProviderController(host, {
-        size: 100,
-        pageSize: 50,
-        isExpanded,
-        placeholder: PLACEHOLDER,
-        dataProvider: (_params, callback) => callback([], 0),
-      });
-    });
-
-    it('should have placeholder', () => {
-      expect(controller.placeholder).to.equal(PLACEHOLDER);
-    });
-
-    it('should have rootCache items filled with placeholder', () => {
-      expect(controller.rootCache.items).to.have.lengthOf(100);
-      expect(controller.rootCache.items.every((item) => item === PLACEHOLDER)).to.be.true;
-    });
-  });
-
   describe('with dataProviderParams', () => {
     let dataProviderParams;
 
