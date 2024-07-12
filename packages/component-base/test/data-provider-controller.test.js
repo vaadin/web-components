@@ -5,7 +5,7 @@ import { Cache } from '../src/data-provider-controller/cache.js';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
 import { createDataProvider } from './data-provider-controller-helpers.js';
 
-const PLACEHOLDER = Symbol.for('PLACEHOLDER');
+const PLACEHOLDER = Symbol('PLACEHOLDER');
 
 describe('DataProviderController', () => {
   let host, controller;

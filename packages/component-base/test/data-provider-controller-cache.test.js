@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { Cache } from '../src/data-provider-controller/cache.js';
 
-const PLACEHOLDER = Symbol.for('PLACEHOLDER');
+const PLACEHOLDER = Symbol('PLACEHOLDER');
 
 describe('DataProviderController - Cache', () => {
   let cache;
@@ -58,7 +58,7 @@ describe('DataProviderController - Cache', () => {
       cache = new Cache({ isExpanded, placeholder: PLACEHOLDER }, 2, 20);
     });
 
-    it('should have items filled with placeholder', () => {
+    it('should have items filled with placeholders', () => {
       expect(cache.items).to.have.lengthOf(20);
       expect(cache.items.every((item) => item === PLACEHOLDER)).to.be.true;
     });

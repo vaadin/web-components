@@ -6,6 +6,8 @@ import { createDataProvider } from './data-provider-controller-helpers.js';
 
 class Placeholder {}
 
+class CustomPlaceholder extends Placeholder {}
+
 describe('DataProviderController - placeholder', () => {
   let host, controller, placeholder, dataProviderSpy;
 
@@ -49,7 +51,7 @@ describe('DataProviderController - placeholder', () => {
     });
 
     it('should not request data when encountering a different placeholder instance', () => {
-      controller.rootCache.items[0] = new Placeholder();
+      controller.rootCache.items[0] = new CustomPlaceholder();
       controller.ensureFlatIndexLoaded(0);
       expect(dataProviderSpy).to.have.callCount(0);
     });
@@ -71,7 +73,7 @@ describe('DataProviderController - placeholder', () => {
     });
 
     it('should request data when encountering any placeholder instance', () => {
-      controller.rootCache.items[0] = new Placeholder();
+      controller.rootCache.items[0] = new CustomPlaceholder();
 
       controller.ensureFlatIndexLoaded(0);
       expect(dataProviderSpy).to.have.callCount(1);
