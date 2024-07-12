@@ -307,7 +307,7 @@ describe('accessibility', () => {
     });
 
     it('should update aria-rowcount on after size change', () => {
-      grid.items = Array(...new Array(10)).map(() => 'foo');
+      grid.items = new Array(10).fill('foo');
 
       // 10 item rows + header row + footer row = 12 in total
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');

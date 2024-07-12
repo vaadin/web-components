@@ -137,7 +137,7 @@ describe('scroll to index', () => {
       grid.dataProvider = ({ parentItem }, cb) => {
         setTimeout(() => {
           const scope = parentItem || '';
-          cb(Array(...new Array(grid.pageSize)).map((_, index) => `${scope}foo${index}`));
+          cb(new Array(grid.pageSize).fill().map((_, index) => `${scope}foo${index}`));
           if (parentItem) {
             expect(getFirstVisibleItem(grid).index).to.be.above(75);
             done();
@@ -177,7 +177,7 @@ describe('scroll to index', () => {
           // Still in loading state, this will end up as pending scroll to index
           grid.scrollToIndex(100);
           // Resolve the request, no longer in loading state after this
-          cb(Array(...new Array(grid.pageSize)).map((_, index) => `foo${index}`));
+          cb(new Array(grid.pageSize).fill().map((_, index) => `foo${index}`));
           flushGrid(grid);
 
           // Scroll to a new location (new data will get loaded)
@@ -186,7 +186,7 @@ describe('scroll to index', () => {
           expect(getFirstVisibleItem(grid).index).to.be.above(150);
           done();
         } else {
-          cb(Array(...new Array(grid.pageSize)).map((_, index) => `foo${index}`));
+          cb(new Array(grid.pageSize).fill().map((_, index) => `foo${index}`));
         }
       };
     });
@@ -197,7 +197,7 @@ describe('scroll to index', () => {
 
     beforeEach(() => {
       grid = fixtures.large();
-      data = Array(...new Array(10)).map((_, i) => {
+      data = new Array(10).fill().map((_, i) => {
         return { index: i };
       });
 
