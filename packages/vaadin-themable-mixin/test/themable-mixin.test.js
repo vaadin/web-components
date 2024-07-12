@@ -11,7 +11,6 @@ const createStyles =
 
 const defineCustomElement =
   window.defineCustomElementFunction ||
-  // eslint-disable-next-line max-params
   ((name, parentName, content, styles, noIs) => {
     const parentElement = parentName ? customElements.get(parentName) : PolymerElement;
     class CustomElement extends ThemableMixin(parentElement) {}

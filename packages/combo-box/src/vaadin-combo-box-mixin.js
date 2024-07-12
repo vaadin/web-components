@@ -512,7 +512,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    // eslint-disable-next-line max-params
+    // eslint-disable-next-line @typescript-eslint/max-params
     _updateScroller(
       scroller,
       items,

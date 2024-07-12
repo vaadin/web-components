@@ -16,7 +16,9 @@ registerStyles(
       font-weight: 500;
       opacity: 1;
       color: var(--lumo-secondary-text-color);
-      transition: 0.15s color, 0.2s transform;
+      transition:
+        0.15s color,
+        0.2s transform;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -111,7 +113,9 @@ registerStyles(
     :host::after {
       box-shadow: 0 0 0 4px var(--_selection-color);
       opacity: 0.15;
-      transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
+      transition:
+        0.15s 0.02s transform,
+        0.8s 0.17s opacity;
     }
 
     :host([selected])::before,

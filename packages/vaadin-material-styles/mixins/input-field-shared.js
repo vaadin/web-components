@@ -111,7 +111,10 @@ const inputField = css`
 
   [part='label'] {
     width: 133%;
-    transition: transform 0.175s, color 0.175s, width 0.175s;
+    transition:
+      transform 0.175s,
+      color 0.175s,
+      width 0.175s;
     transition-timing-function: ease, ease, step-end;
   }
 
@@ -127,7 +130,9 @@ const inputField = css`
   :host([invalid]) [part='input-field']::after {
     opacity: 1;
     transform: none;
-    transition: transform 0.175s, opacity 0.175s;
+    transition:
+      transform 0.175s,
+      opacity 0.175s;
   }
 
   :host([invalid]) [part='input-field']::after {

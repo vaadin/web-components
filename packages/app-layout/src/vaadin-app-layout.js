@@ -194,7 +194,9 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           top: var(--vaadin-app-layout-navbar-offset-top, 0);
           bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
           inset-inline: var(--vaadin-app-layout-navbar-offset-left, 0) auto;
-          transition: transform var(--vaadin-app-layout-transition), visibility var(--vaadin-app-layout-transition);
+          transition:
+            transform var(--vaadin-app-layout-transition),
+            visibility var(--vaadin-app-layout-transition);
           transform: translateX(-100%);
           max-width: 90%;
           width: var(--_vaadin-app-layout-drawer-width);

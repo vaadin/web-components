@@ -81,7 +81,9 @@ registerStyles(
       transform: translate(-50%, -50%) scale(0);
       background-color: var(--material-primary-color);
       opacity: 0;
-      transition: transform 0s cubic-bezier(0.05, 0.8, 0.5, 1), opacity 0s linear;
+      transition:
+        transform 0s cubic-bezier(0.05, 0.8, 0.5, 1),
+        opacity 0s linear;
     }
 
     :host([focused]:not([focus-ring]))::after,

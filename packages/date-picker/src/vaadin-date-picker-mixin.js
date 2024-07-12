@@ -735,7 +735,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    // eslint-disable-next-line max-params
+    // eslint-disable-next-line @typescript-eslint/max-params
     _isNoInput(inputElement, fullscreen, ios, i18n, opened, autoOpenDisabled) {
       // On fullscreen mode, text input is disabled if auto-open isn't disabled or
       // whenever the dropdown is opened
@@ -863,7 +863,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    // eslint-disable-next-line max-params
+    // eslint-disable-next-line @typescript-eslint/max-params
     __updateOverlayContent(
       overlayContent,
       i18n,
@@ -960,8 +960,8 @@ export const DatePickerMixin = (subclass) =>
       return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate, this.isDateDisabled)
         ? initialPosition
         : this._minDate || this._maxDate
-        ? getClosestDate(initialPosition, [this._minDate, this._maxDate])
-        : new Date();
+          ? getClosestDate(initialPosition, [this._minDate, this._maxDate])
+          : new Date();
     }
 
     /**

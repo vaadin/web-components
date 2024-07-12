@@ -45,7 +45,9 @@ registerStyles(
       background-color: var(--material-disabled-text-color);
       transform: scale(0);
       opacity: 0;
-      transition: transform 0s 0.8s, opacity 0.8s;
+      transition:
+        transform 0s 0.8s,
+        opacity 0.8s;
       will-change: transform, opacity;
     }
 

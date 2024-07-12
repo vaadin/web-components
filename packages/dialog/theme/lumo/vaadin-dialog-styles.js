@@ -17,7 +17,9 @@ const dialogOverlay = css`
 
   [part='overlay'] {
     border-radius: var(--lumo-border-radius-l);
-    box-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-xl);
+    box-shadow:
+      0 0 0 1px var(--lumo-shade-5pct),
+      var(--lumo-box-shadow-xl);
     background-image: none;
     outline: none;
     -webkit-tap-highlight-color: transparent;

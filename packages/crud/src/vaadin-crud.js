@@ -966,7 +966,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
    * @param {Array<unknown> | undefined} items
    * @private
    */
-  // eslint-disable-next-line max-params
+  // eslint-disable-next-line @typescript-eslint/max-params
   __gridPropsChanged(grid, theme, include, exclude, noFilter, noHead, noSort, items) {
     if (!grid) {
       return;

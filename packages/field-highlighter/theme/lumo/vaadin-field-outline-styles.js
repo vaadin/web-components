@@ -26,12 +26,16 @@ registerStyles(
     }
 
     :host([context$='checkbox'])::before {
-      box-shadow: 0 0 0 2px var(--lumo-base-color), 0 0 0 4px var(--_active-user-color);
+      box-shadow:
+        0 0 0 2px var(--lumo-base-color),
+        0 0 0 4px var(--_active-user-color);
     }
 
     :host([context$='radio-button'])::before {
       border-radius: 50%;
-      box-shadow: 0 0 0 3px var(--lumo-base-color), 0 0 0 5px var(--_active-user-color);
+      box-shadow:
+        0 0 0 3px var(--lumo-base-color),
+        0 0 0 5px var(--_active-user-color);
     }
 
     :host([context$='item'])::before {

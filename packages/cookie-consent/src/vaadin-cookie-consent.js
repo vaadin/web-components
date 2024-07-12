@@ -188,6 +188,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
   }
 
   /** @private */
+  // eslint-disable-next-line @typescript-eslint/max-params
   __initialize(_showLearnMore, message, dismiss, learnMore, learnMoreLink, cookieName, position) {
     this.__closePopup();
 
