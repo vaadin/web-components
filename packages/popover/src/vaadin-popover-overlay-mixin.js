@@ -59,6 +59,8 @@ export const PopoverOverlayMixin = (superClass) =>
         return;
       }
 
+      this.removeAttribute('arrow-centered');
+
       // Center the overlay horizontally
       if (this.position === 'bottom' || this.position === 'top') {
         const targetRect = this.positionTarget.getBoundingClientRect();
@@ -70,6 +72,8 @@ export const PopoverOverlayMixin = (superClass) =>
           const left = overlayRect.left + offset;
           if (left > 0) {
             this.style.left = `${left}px`;
+            // Center the pointer arrow horizontally
+            this.setAttribute('arrow-centered', '');
           }
         }
 
@@ -77,6 +81,8 @@ export const PopoverOverlayMixin = (superClass) =>
           const right = parseFloat(this.style.right) + offset;
           if (right > 0) {
             this.style.right = `${right}px`;
+            // Center the pointer arrow horizontally
+            this.setAttribute('arrow-centered', '');
           }
         }
       }

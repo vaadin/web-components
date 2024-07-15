@@ -43,5 +43,14 @@ describe('popover', () => {
       await nextRender();
       await visualDiff(div, position);
     });
+
+    it(`${position} pointer arrow`, async () => {
+      element.setAttribute('theme', 'pointer-arrow');
+      element.position = position;
+      await nextUpdate(element);
+      target.click();
+      await nextRender();
+      await visualDiff(div, `${position}-pointer-arrow`);
+    });
   });
 });
