@@ -221,7 +221,7 @@ describe('popover', () => {
     });
 
     it('should remove document click listener when popover is detached', async () => {
-      const spy = sinon.spy(document, 'removeEventListener');
+      const spy = sinon.spy(document.documentElement, 'removeEventListener');
       popover.remove();
       await nextRender();
       expect(spy).to.be.called;

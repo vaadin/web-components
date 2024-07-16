@@ -445,14 +445,14 @@ class Popover extends PopoverPositionMixin(
   connectedCallback() {
     super.connectedCallback();
 
-    document.addEventListener('click', this.__onGlobalClick, true);
+    document.documentElement.addEventListener('click', this.__onGlobalClick, true);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    document.removeEventListener('click', this.__onGlobalClick, true);
+    document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
 
     this._openedStateController.close(true);
   }
