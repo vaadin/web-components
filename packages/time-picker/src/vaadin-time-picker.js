@@ -6,6 +6,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -459,7 +460,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     super._setFocused(focused);
 
     if (!focused) {
-      this.__commitValueChange();
+      if (!this.opened || isKeyboardActive()) {
+        // Do not commit value change on blur when closing on outside click.
+        this.__commitValueChange();
+      }
 
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
