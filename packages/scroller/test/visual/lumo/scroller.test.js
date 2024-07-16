@@ -46,4 +46,21 @@ describe('scroller', () => {
     element.scrollTop = element.scrollHeight - element.clientHeight;
     await visualDiff(div, 'theme-overflow-indicators-top');
   });
+
+  it('vertical scroll to', async () => {
+    element.firstElementChild.style.border = '50px solid red';
+    element.scrollDirection = 'vertical';
+    element.scrollToEnd();
+    await visualDiff(div, 'vertical-scroll-end');
+    element.scrollToStart();
+    await visualDiff(div, 'vertical-scroll-start');
+  });
+
+  it('horizontal scroll to', async () => {
+    element.scrollDirection = 'horizontal';
+    element.scrollToEnd();
+    await visualDiff(div, 'horizontal-scroll-end');
+    element.scrollToStart();
+    await visualDiff(div, 'horizontal-scroll-start');
+  });
 });

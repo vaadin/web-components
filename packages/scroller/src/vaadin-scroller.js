@@ -110,6 +110,39 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
   _shouldSetFocus(event) {
     return event.target === this;
   }
+
+  /**
+   * Scrolls the textarea to the start if it has a vertical scrollbar.
+   */
+  scrollToStart() {
+    switch (this.scrollDirection) {
+      case 'vertical':
+        console.log('scroll to start');
+        this.scrollTop = 0;
+        break;
+      case 'horizontal':
+        this.scrollLeft = 0;
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Scrolls the textarea to the end if it has a vertical or horizontal scrollbar.
+   */
+  scrollToEnd() {
+    switch (this.scrollDirection) {
+      case 'vertical':
+        this.scrollTop = this.scrollHeight;
+        break;
+      case 'horizontal':
+        this.scrollLeft = this.scrollWidth;
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 defineCustomElement(Scroller);

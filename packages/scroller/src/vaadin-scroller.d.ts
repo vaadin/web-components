@@ -36,6 +36,16 @@ declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(ControllerM
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
    */
   tabindex: number;
+
+  /**
+   * Scrolls the textarea to the start if it has a vertical or horizontal scrollbar.
+   */
+  scrollToStart(): void;
+
+  /**
+   * Scrolls the textarea to the end if it has a vertical or horizontal scrollbar.
+   */
+  scrollToEnd(): void;
 }
 
 declare global {
