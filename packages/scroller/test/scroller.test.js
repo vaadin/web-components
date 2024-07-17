@@ -157,6 +157,7 @@ describe('vaadin-scroller', () => {
         scroller.scrollToEnd();
         const scrollTopMax = scroller.scrollHeight - scroller.clientHeight;
         expect(scroller.scrollTop).to.equal(scrollTopMax);
+        expect(scroller.scrollTop).to.not.equal(0);
       });
       it('should scroll to the top', () => {
         scroller.scrollToStart();
@@ -172,6 +173,7 @@ describe('vaadin-scroller', () => {
 
         const div = document.createElement('div');
         div.textContent = 'Long text that does not fit';
+        div.style.width = '100px';
         scroller.appendChild(div);
       });
 
@@ -179,6 +181,7 @@ describe('vaadin-scroller', () => {
         scroller.scrollToEnd();
         const scrollLeftMax = scroller.scrollWidth - scroller.clientWidth;
         expect(scroller.scrollLeft).to.equal(scrollLeftMax);
+        expect(scroller.scrollLeft).to.not.equal(0);
       });
       it('should scroll to the left', () => {
         scroller.scrollToStart();
