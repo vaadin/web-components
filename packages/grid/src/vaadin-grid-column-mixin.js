@@ -268,6 +268,7 @@ export const ColumnBaseMixin = (superClass) =>
     static get observers() {
       return [
         '_widthChanged(width, _headerCell, _footerCell, _cells)',
+        '_minWidthChanged(minWidth, _headerCell, _footerCell, _cells)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
@@ -403,6 +404,17 @@ export const ColumnBaseMixin = (superClass) =>
 
       this._allCells.forEach((cell) => {
         cell.style.width = width;
+      });
+    }
+
+    /** @private */
+    _minWidthChanged(minWidth) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged('minWidth');
+      }
+
+      this._allCells.forEach((cell) => {
+        cell.style.minWidth = minWidth;
       });
     }
 
@@ -861,6 +873,18 @@ export const GridColumnMixin = (superClass) =>
         width: {
           type: String,
           value: '100px',
+          sync: true,
+        },
+        /**
+         * Min-width of the cells for this column.
+         *
+         * Please note that using the `em` length unit is discouraged as
+         * it might lead to misalignment issues if the header, body, and footer
+         * cells have different font sizes. Instead, use `rem` if you need
+         * a length unit relative to the font size.
+         */
+        minWidth: {
+          type: String,
           sync: true,
         },
 

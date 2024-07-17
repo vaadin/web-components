@@ -409,7 +409,12 @@ export const GridMixin = (superClass) =>
       this.__calculateAndCacheIntrinsicWidths(cols);
 
       cols.forEach((col) => {
-        col.width = `${this.__getDistributedWidth(col)}px`;
+        const calculatedWidth = this.__getDistributedWidth(col);
+        if (col.minWidth) {
+          col.width = `max(${col.minWidth}, ${calculatedWidth}px)`;
+        } else {
+          col.width = `${calculatedWidth}px`;
+        }
       });
     }
 
@@ -507,6 +512,17 @@ export const GridMixin = (superClass) =>
       } else {
         this._recalculateColumnWidths(cols);
       }
+      // update the columns without autowidth and set the min width
+      const noAutoWidthCols = this._getColumns().filter((col) => !col.hidden && !col.autoWidth);
+
+      noAutoWidthCols.forEach((col) => {
+        const calculatedWidth = col.width;
+        if (col.minWidth) {
+          col.width = `max(${col.minWidth}, ${calculatedWidth})`;
+        } else {
+          col.width = `${calculatedWidth}`;
+        }
+      });
     }
 
     /** @private */

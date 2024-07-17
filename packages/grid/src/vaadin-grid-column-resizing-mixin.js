@@ -77,9 +77,12 @@ export const ColumnResizingMixin = (superClass) =>
           } else {
             maxWidth = cellWidth + (isRTL ? cellRect.left - eventX : eventX - cellRect.right);
           }
-
-          column.width = `${Math.max(minWidth, maxWidth)}px`;
-          column.flexGrow = 0;
+          const calculatedWidth = Math.max(minWidth, maxWidth);
+          if (column.minWidth) {
+            column.width = `max(${column.minWidth}, ${calculatedWidth}px)`;
+          } else {
+            column.width = `${calculatedWidth}px`;
+          }
         }
         // Fix width and flex-grow for all preceding columns
         columnRowCells
