@@ -459,8 +459,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     super._setFocused(focused);
 
     if (!focused) {
-      this.__commitValueChange();
-
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (document.hasFocus()) {
