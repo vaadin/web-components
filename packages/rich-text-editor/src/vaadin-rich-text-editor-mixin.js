@@ -297,8 +297,7 @@ export const RichTextEditorMixin = (superClass) =>
         this.__debounceSetValue.flush();
       }
 
-      this._editor.emitter.removeAllListeners();
-      this._editor.emitter.listeners = {};
+      this._editor.emitter.disconnect();
     }
 
     /** @private */
@@ -332,6 +331,18 @@ export const RichTextEditorMixin = (superClass) =>
       if (!this.$ && this.updateComplete) {
         await this.updateComplete;
       }
+
+      this._editor.emitter.connect();
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._toolbarConfig = this._prepareToolbar();
+      this._toolbar = this._toolbarConfig.container;
+
+      this._addToolbarListeners();
 
       const editor = this.shadowRoot.querySelector('[part="content"]');
 
@@ -413,16 +424,6 @@ export const RichTextEditorMixin = (superClass) =>
 
       // Flush pending htmlValue only once the editor is fully initialized
       this.__flushPendingHtmlValue();
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this._toolbarConfig = this._prepareToolbar();
-      this._toolbar = this._toolbarConfig.container;
-
-      this._addToolbarListeners();
 
       this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
       this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
