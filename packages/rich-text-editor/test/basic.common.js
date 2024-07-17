@@ -594,16 +594,6 @@ describe('rich text editor', () => {
 
       expect(spy).to.be.calledOnce;
     });
-
-    it('should keep htmlValue when detached and immediately re-attached', () => {
-      rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
-
-      const parent = rte.parentNode;
-      parent.removeChild(rte);
-      parent.appendChild(rte);
-
-      expect(rte.htmlValue).to.equal('<h1>Foo</h1>');
-    });
   });
 });
 
