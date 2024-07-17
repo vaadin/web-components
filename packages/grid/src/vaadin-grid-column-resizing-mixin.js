@@ -83,6 +83,7 @@ export const ColumnResizingMixin = (superClass) =>
           } else {
             column.width = `${calculatedWidth}px`;
           }
+          column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
         columnRowCells
