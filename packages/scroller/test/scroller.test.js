@@ -139,4 +139,44 @@ describe('vaadin-scroller', () => {
       expect(scroller.getAttribute('overflow')).to.equal('top');
     });
   });
+
+  describe('scroll to', () => {
+    describe('vertical', () => {
+      beforeEach(() => {
+        scroller.scrollDirection = 'vertical';
+        scroller.style.fontSize = '15px';
+        scroller.style.maxHeight = '50px';
+        scroller.style.maxWidth = '50px';
+
+        const div = document.createElement('div');
+        div.textContent = 'Long text that does not fit';
+        scroller.appendChild(div);
+      });
+
+      it('should scroll to the bottom', () => {
+        scroller.scrollToEnd();
+        const scrollTopMax = scroller.scrollHeight - scroller.clientHeight;
+        expect(scroller.scrollTop).to.equal(scrollTopMax);
+      });
+      it('should scroll to the top', () => {
+        scroller.scrollToStart();
+        expect(scroller.scrollTop).to.equal(0);
+      });
+    });
+    describe('horizontal', () => {
+      beforeEach(() => {
+        scroller.scrollDirection = 'horizontal';
+      });
+
+      it('should scroll to the right', () => {
+        scroller.scrollToEnd();
+        const scrollLeftMax = scroller.scrollWidth - scroller.clientWidth;
+        expect(scroller.scrollLeft).to.equal(scrollLeftMax);
+      });
+      it('should scroll to the left', () => {
+        scroller.scrollToStart();
+        expect(scroller.scrollLeft).to.equal(0);
+      });
+    });
+  });
 });
