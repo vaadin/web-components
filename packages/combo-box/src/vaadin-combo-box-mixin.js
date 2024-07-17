@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -1358,7 +1358,19 @@ export const ComboBoxMixin = (subclass) =>
           return;
         }
 
-        this._closeOrCommit();
+        if (isKeyboardActive()) {
+          // Close on Tab key causing blur. With mouse, close on outside click instead.
+          this._closeOrCommit();
+          return;
+        }
+
+        if (!this.opened) {
+          this._commitValue();
+        } else if (!this._overlayOpened) {
+          // Combo-box is opened, but overlay is not visible -> custom value was entered.
+          // Make sure we close here as there won't be an "outside click" in this case.
+          this.close();
+        }
       }
     }
 
