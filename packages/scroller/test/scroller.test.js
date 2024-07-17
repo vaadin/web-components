@@ -166,6 +166,13 @@ describe('vaadin-scroller', () => {
     describe('horizontal', () => {
       beforeEach(() => {
         scroller.scrollDirection = 'horizontal';
+        scroller.style.fontSize = '15px';
+        scroller.style.maxHeight = '50px';
+        scroller.style.maxWidth = '50px';
+
+        const div = document.createElement('div');
+        div.textContent = 'Long text that does not fit';
+        scroller.appendChild(div);
       });
 
       it('should scroll to the right', () => {
