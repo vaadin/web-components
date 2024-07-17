@@ -9,6 +9,7 @@ import {
   nextRender,
   nextUpdate,
   outsideClick,
+  tabKeyDown,
   tap,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -58,7 +59,8 @@ describe('interactions', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should close the when focus is lost', () => {
+    it('should close when focus is lost from keyboard', () => {
+      tabKeyDown(input);
       focusout(input);
 
       expect(comboBox.opened).to.be.false;
