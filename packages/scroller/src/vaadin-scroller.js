@@ -117,7 +117,6 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
   scrollToStart() {
     switch (this.scrollDirection) {
       case 'vertical':
-        console.log('scroll to start');
         this.scrollTop = 0;
         break;
       case 'horizontal':
