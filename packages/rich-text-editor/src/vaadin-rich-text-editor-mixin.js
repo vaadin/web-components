@@ -243,14 +243,7 @@ export const RichTextEditorMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      // Ensure that htmlValue property set before attach
-      // gets applied in case of detach and re-attach.
-      if (this.__debounceSetValue && this.__debounceSetValue.isActive()) {
-        this.__debounceSetValue.flush();
-      }
-
-      this._editor.emitter.removeAllListeners();
-      this._editor.emitter.listeners = {};
+      this._editor.emitter.disconnect();
     }
 
     /** @private */
@@ -284,6 +277,18 @@ export const RichTextEditorMixin = (superClass) =>
       if (!this.$ && this.updateComplete) {
         await this.updateComplete;
       }
+
+      this._editor.emitter.connect();
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._toolbarConfig = this._prepareToolbar();
+      this._toolbar = this._toolbarConfig.container;
+
+      this._addToolbarListeners();
 
       const editor = this.shadowRoot.querySelector('[part="content"]');
 
@@ -356,16 +361,6 @@ export const RichTextEditorMixin = (superClass) =>
 
       // Flush pending htmlValue only once the editor is fully initialized
       this.__flushPendingHtmlValue();
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this._toolbarConfig = this._prepareToolbar();
-      this._toolbar = this._toolbarConfig.container;
-
-      this._addToolbarListeners();
 
       requestAnimationFrame(() => {
         this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
