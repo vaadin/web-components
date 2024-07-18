@@ -130,13 +130,13 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
   /**
    * Scrolls the textarea to the end if it has a vertical or horizontal scrollbar.
    */
-  scrollToEnd() {
+  scrollToEnd(textDirection = 'ltr') {
     switch (this.scrollDirection) {
       case 'vertical':
         this.scrollTop = this.scrollHeight;
         break;
       case 'horizontal':
-        this.scrollLeft = this.scrollWidth;
+        this.scrollLeft = textDirection === 'ltr' ? this.scrollWidth : -this.scrollWidth;
         break;
       default:
         break;

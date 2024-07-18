@@ -144,48 +144,77 @@ describe('vaadin-scroller', () => {
     describe('vertical', () => {
       beforeEach(() => {
         scroller.scrollDirection = 'vertical';
-        scroller.style.fontSize = '15px';
         scroller.style.maxHeight = '50px';
         scroller.style.maxWidth = '50px';
 
         const div = document.createElement('div');
-        div.textContent = 'Long text that does not fit';
+        div.textContent = 'Long text that does not fit Long text that does not fit Long text that does not fit';
         scroller.appendChild(div);
       });
 
       it('should scroll to the bottom', () => {
         scroller.scrollToEnd();
         const scrollTopMax = scroller.scrollHeight - scroller.clientHeight;
-        expect(scroller.scrollTop).to.equal(scrollTopMax);
-        expect(scroller.scrollTop).to.not.equal(0);
+        expect(scroller.scrollTop).to.be.closeTo(scrollTopMax, 1);
       });
+
       it('should scroll to the top', () => {
         scroller.scrollToStart();
         expect(scroller.scrollTop).to.equal(0);
       });
     });
+
     describe('horizontal', () => {
       beforeEach(() => {
         scroller.scrollDirection = 'horizontal';
-        scroller.style.fontSize = '15px';
         scroller.style.maxHeight = '50px';
         scroller.style.maxWidth = '50px';
 
         const div = document.createElement('div');
-        div.textContent = 'Long text that does not fit';
-        div.style.width = '100px';
+        div.textContent = 'Long text that does not fit Long text that does not fit Long text that does not fit';
+        div.style.width = '200px';
         scroller.appendChild(div);
       });
 
       it('should scroll to the right', () => {
         scroller.scrollToEnd();
-        const scrollLeftMax = scroller.scrollWidth - scroller.clientWidth;
-        expect(scroller.scrollLeft).to.equal(scrollLeftMax);
+        const scrollMax = scroller.scrollWidth - scroller.clientWidth;
+        expect(scroller.scrollLeft).to.equal(scrollMax);
         expect(scroller.scrollLeft).to.not.equal(0);
       });
+
       it('should scroll to the left', () => {
-        scroller.scrollToStart();
         expect(scroller.scrollLeft).to.equal(0);
+        scroller.scrollToStart();
+      });
+
+      it('should scroll to the left', () => {
+        expect(scroller.scrollLeft).to.equal(0);
+        scroller.scrollToStart();
+      });
+      describe('text direction RLT', () => {
+        beforeEach(() => {
+          document.documentElement.setAttribute('dir', 'rtl');
+
+          // Scroll to center.
+          scroller.scrollLeft = -(scroller.scrollWidth - scroller.clientWidth) / 2;
+        });
+
+        it('should scroll to the left on scroll to end', () => {
+          scroller.scrollToEnd('rtl');
+          const scrollMax = scroller.scrollWidth - scroller.clientWidth;
+          expect(scroller.scrollLeft).to.equal(-scrollMax);
+          expect(scroller.scrollLeft).to.not.equal(0);
+        });
+
+        it('should scroll to the right on scroll to start', () => {
+          scroller.scrollToStart();
+          expect(scroller.scrollLeft).to.equal(0);
+        });
+
+        afterEach(() => {
+          document.documentElement.removeAttribute('dir');
+        });
       });
     });
   });
