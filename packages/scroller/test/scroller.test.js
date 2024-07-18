@@ -159,6 +159,7 @@ describe('vaadin-scroller', () => {
       });
 
       it('should scroll to the top', () => {
+        scroller.scrollToEnd();
         scroller.scrollToStart();
         expect(scroller.scrollTop).to.equal(0);
       });
@@ -192,6 +193,7 @@ describe('vaadin-scroller', () => {
         expect(scroller.scrollLeft).to.equal(0);
         scroller.scrollToStart();
       });
+
       describe('text direction RLT', () => {
         beforeEach(() => {
           document.documentElement.setAttribute('dir', 'rtl');
