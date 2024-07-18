@@ -280,21 +280,18 @@ const loginOverlayWrapper = css`
   /* Handle iPhone X notch */
   @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
     [part='card'] {
-      padding: 0 constant(safe-area-inset-bottom);
       padding: 0 env(safe-area-inset-bottom);
     }
 
     :host(:not([dir='rtl'])) [part='brand'] {
-      margin-left: calc(constant(safe-area-inset-bottom) * -1);
       margin-left: calc(env(safe-area-inset-bottom) * -1);
-      padding-left: calc(1.5rem + constant(safe-area-inset-bottom));
+      padding-left: calc(1.5rem + env(safe-area-inset-bottom));
     }
 
     /* RTL styles */
     :host([dir='rtl']) [part='brand'] {
-      margin-right: calc(constant(safe-area-inset-bottom) * -1);
       margin-right: calc(env(safe-area-inset-bottom) * -1);
-      padding-right: calc(1.5rem + constant(safe-area-inset-bottom));
+      padding-right: calc(1.5rem + env(safe-area-inset-bottom));
     }
   }
 `;

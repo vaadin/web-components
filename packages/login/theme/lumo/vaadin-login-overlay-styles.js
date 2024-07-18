@@ -138,33 +138,23 @@ const loginOverlayWrapper = css`
   /* Handle iPhone X notch */
   @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
     [part='card'] {
-      padding-right: constant(safe-area-inset-right);
       padding-right: env(safe-area-inset-right);
-
-      padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
     }
 
     [part='brand'] {
-      margin-left: calc(constant(safe-area-inset-left) * -1);
       margin-left: calc(env(safe-area-inset-left) * -1);
-
-      padding-left: calc(var(--lumo-space-l) + constant(safe-area-inset-left));
       padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-left));
     }
 
     /* RTL styles */
     :host([dir='rtl']) [part='card'] {
-      padding-left: constant(safe-area-inset-right);
       padding-left: env(safe-area-inset-right);
-      padding-right: constant(safe-area-inset-left);
       padding-right: env(safe-area-inset-left);
     }
 
     :host([dir='rtl']) [part='brand'] {
-      margin-right: calc(constant(safe-area-inset-left) * -1);
       margin-right: calc(env(safe-area-inset-left) * -1);
-      padding-right: calc(var(--lumo-space-l) + constant(safe-area-inset-left));
       padding-right: calc(var(--lumo-space-l) + env(safe-area-inset-left));
     }
   }
