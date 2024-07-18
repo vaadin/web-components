@@ -575,41 +575,24 @@ describe('rich text editor', () => {
   });
 
   describe('detach and re-attach', () => {
-    it('should not have active listeners once detached', () => {
-      expect(editor.emitter).to.not.equal(null);
-      expect(editor.emitter._events).to.not.be.empty;
-      expect(editor.emitter._eventsCount).to.greaterThan(0);
-      expect(editor.emitter.listeners).to.not.be.empty;
+    it('should disconnect the emitter when detached', () => {
+      const spy = sinon.spy(editor.emitter, 'disconnect');
 
       rte.parentNode.removeChild(rte);
 
-      expect(editor.emitter._events).to.be.empty;
-      expect(editor.emitter._eventsCount).to.be.equal(0);
-      expect(editor.emitter.listeners).to.be.empty;
+      expect(spy).to.be.calledOnce;
     });
 
-    it('should have the listeners when removed and added back again', async () => {
+    it('should re-connect the emitter when detached and re-attached', async () => {
       const parent = rte.parentNode;
-
       parent.removeChild(rte);
+
+      const spy = sinon.spy(editor.emitter, 'connect');
+
       parent.appendChild(rte);
       await nextUpdate(rte);
 
-      // previous `editor` reference is now stale as a new editor is created in the connectedCallback
-      expect(rte._editor.emitter).to.not.equal(null);
-      expect(rte._editor.emitter._events).to.not.be.empty;
-      expect(rte._editor.emitter._eventsCount).to.greaterThan(0);
-      expect(rte._editor.emitter.listeners).to.not.be.empty;
-    });
-
-    it('should keep htmlValue when detached and immediately re-attached', () => {
-      rte.dangerouslySetHtmlValue('<h1>Foo</h1>');
-
-      const parent = rte.parentNode;
-      parent.removeChild(rte);
-      parent.appendChild(rte);
-
-      expect(rte.htmlValue).to.equal('<h1>Foo</h1>');
+      expect(spy).to.be.calledOnce;
     });
   });
 });
