@@ -10,3 +10,14 @@ registerStyles(
     }
   `,
 );
+
+/* Stop loader animation */
+registerStyles(
+  'vaadin-combo-box-overlay',
+  css`
+    :host([loading]) [part='loader'] {
+      animation: none;
+      opacity: 1;
+    }
+  `,
+);
