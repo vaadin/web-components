@@ -355,7 +355,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   static get observers() {
-    return ['__updateDropdownItems(i18n.*, min, max, step)'];
+    return [
+      '__updateAriaAttributes(__dropdownItems, opened, inputElement)',
+      '__updateDropdownItems(i18n.*, min, max, step)',
+    ];
   }
 
   static get constraints() {
@@ -628,6 +631,21 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
     if (this.value) {
       this._comboBoxValue = this.i18n.formatTime(this.i18n.parseTime(this.value));
+    }
+  }
+
+  /** @private */
+  __updateAriaAttributes(items, opened, input) {
+    if (items === undefined || input === undefined) {
+      return;
+    }
+
+    if (items.length === 0) {
+      input.removeAttribute('role');
+      input.removeAttribute('aria-expanded');
+    } else {
+      input.setAttribute('role', 'combobox');
+      input.setAttribute('aria-expanded', !!opened);
     }
   }
 
