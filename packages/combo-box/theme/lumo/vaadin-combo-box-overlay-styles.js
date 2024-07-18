@@ -33,20 +33,9 @@ const comboBoxLoader = css`
   [part~='loader'] {
     position: absolute;
     z-index: 1;
-    left: var(--lumo-space-s);
-    right: var(--lumo-space-s);
+    inset-inline: var(--lumo-space-s);
     top: var(--lumo-space-s);
-    margin-left: auto;
-    margin-inline-start: auto;
-    margin-inline-end: 0;
-  }
-
-  :host([dir='rtl']) [part~='loader'] {
-    left: auto;
-    margin-left: 0;
-    margin-right: auto;
-    margin-inline-start: 0;
-    margin-inline-end: auto;
+    margin-inline: auto 0;
   }
 `;
 
