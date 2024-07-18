@@ -18,9 +18,6 @@ registerStyles(
 
     [part='drawer'] {
       background: var(--material-background-color);
-    }
-
-    [part='drawer'] {
       border-inline-end: 1px solid var(--material-secondary-background-color);
     }
 

@@ -7,9 +7,6 @@ registerStyles(
   css`
     :host {
       -webkit-tap-highlight-color: transparent;
-    }
-
-    :host {
       display: flex;
       flex-shrink: 0;
     }

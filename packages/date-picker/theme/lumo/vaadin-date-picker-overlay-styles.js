@@ -22,9 +22,6 @@ const datePickerOverlay = css`
     max-height: calc(var(--lumo-size-m) * 14);
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  [part='overlay'] {
     flex-direction: column;
   }
 
