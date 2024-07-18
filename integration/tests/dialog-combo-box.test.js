@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, nextFrame, nextUpdate, oneEvent, touchstart } from '@vaadin/testing-helpers';
+import {
+  fixtureSync,
+  mousedown,
+  nextFrame,
+  nextUpdate,
+  oneEvent,
+  outsideClick,
+  touchstart,
+} from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/combo-box';
@@ -27,19 +35,26 @@ describe('combo-box in dialog', () => {
       await nextUpdate(comboBox);
     });
 
-    it('should not close the dialog when closing time-picker on input element Escape', async () => {
+    it('should not close the dialog when closing combo-box on input element Escape', async () => {
       await sendKeys({ press: 'Escape' });
 
       expect(comboBox.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 
-    it('should close the dialog on subsequent Escape after the time-picker is closed', async () => {
+    it('should close the dialog on subsequent Escape after the combo-box is closed', async () => {
       await sendKeys({ press: 'Escape' });
 
       await sendKeys({ press: 'Escape' });
 
       expect(dialog.opened).to.be.false;
+    });
+
+    it('should not close the dialog when closing combo-box on outside click', () => {
+      outsideClick();
+
+      expect(comboBox.opened).to.be.false;
+      expect(dialog.opened).to.be.true;
     });
   });
 

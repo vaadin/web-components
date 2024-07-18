@@ -7,6 +7,7 @@ import {
   focusout,
   isIOS,
   outsideClick,
+  tabKeyDown,
   tap,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -244,9 +245,10 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
     });
 
-    it('should close the overlay when focus is lost', () => {
+    it('should close the overlay when focus is lost from keyboard', () => {
       comboBox.open();
 
+      tabKeyDown(input);
       focusout(input);
 
       expect(comboBox.opened).to.be.false;
