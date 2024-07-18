@@ -12,12 +12,6 @@ const drawerToggle = css`
     margin-inline-end: 1em;
   }
 
-  [part='icon'],
-  [part='icon']::after,
-  [part='icon']::before {
-    background-color: currentColor;
-  }
-
   [part='icon'] {
     top: 18px;
     left: 15px;
@@ -26,6 +20,7 @@ const drawerToggle = css`
   [part='icon'],
   [part='icon']::after,
   [part='icon']::before {
+    background-color: currentColor;
     height: 2px;
     width: 18px;
   }

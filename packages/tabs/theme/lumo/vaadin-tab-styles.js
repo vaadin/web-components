@@ -94,11 +94,6 @@ registerStyles(
       will-change: transform;
     }
 
-    :host([selected])::before,
-    :host([selected])::after {
-      background-color: var(--_selection-color);
-    }
-
     :host([orientation='vertical'])::before,
     :host([orientation='vertical'])::after {
       left: 0;
@@ -120,6 +115,7 @@ registerStyles(
 
     :host([selected])::before,
     :host([selected])::after {
+      background-color: var(--_selection-color);
       transform: translateX(-50%) scale(1);
       transition-timing-function: cubic-bezier(0.12, 0.32, 0.54, 1.5);
     }

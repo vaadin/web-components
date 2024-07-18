@@ -14,21 +14,12 @@ const loginOverlayWrapper = css`
     background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
   }
 
-  [part='content'] {
-    padding: 0;
-  }
-
   [part='overlay'] {
     background: none;
     border-radius: 0;
     box-shadow: none;
     width: 100%;
     height: 100%;
-  }
-
-  [part='card'] {
-    width: calc(var(--lumo-size-m) * 10);
-    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
   }
 
   [part='brand'] {
@@ -49,9 +40,12 @@ const loginOverlayWrapper = css`
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
   }
 
   [part='card'] {
+    width: calc(var(--lumo-size-m) * 10);
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
     border-radius: var(--lumo-border-radius-l);
     box-shadow: var(--lumo-box-shadow-s);
     margin: var(--lumo-space-s);
