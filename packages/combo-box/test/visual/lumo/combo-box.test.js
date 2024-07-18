@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
@@ -17,14 +17,6 @@ describe('combo-box', () => {
 
   it('basic', async () => {
     await visualDiff(div, 'basic');
-  });
-
-  it('opened', async () => {
-    div.style.height = '200px';
-    div.style.width = '200px';
-    element.items = ['Foo', 'Bar', 'Baz'];
-    element.click();
-    await visualDiff(div, 'opened');
   });
 
   it('focus-ring', async () => {
@@ -97,5 +89,34 @@ describe('combo-box', () => {
     span.textContent = '$';
     element.appendChild(span);
     await visualDiff(div, 'prefix');
+  });
+
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      beforeEach(() => {
+        div.style.height = '200px';
+        div.style.width = '200px';
+        element.items = ['Foo', 'Bar', 'Baz'];
+        element.open();
+      });
+
+      it(`${dir} opened`, async () => {
+        await visualDiff(div, `${dir}-opened`);
+      });
+
+      it(`${dir} loading`, async () => {
+        element.loading = true;
+        await nextFrame();
+        await visualDiff(div, `${dir}-loading`);
+      });
+    });
   });
 });
