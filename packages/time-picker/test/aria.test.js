@@ -51,4 +51,30 @@ describe('ARIA', () => {
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
     });
   });
+
+  describe('step', () => {
+    it('should not set role to combo-box when step is less than 900 seconds', () => {
+      timePicker.step = 600;
+      expect(input.hasAttribute('role')).to.be.false;
+    });
+
+    it('should restore role to combo-box when step is set back to bigger value', () => {
+      timePicker.step = 600;
+
+      timePicker.step = 900;
+      expect(input.getAttribute('role')).to.be.equal('combobox');
+    });
+
+    it('should remove aria-expanded attribute when step is less than 900 seconds', () => {
+      timePicker.step = 600;
+      expect(input.hasAttribute('aria-expanded')).to.be.false;
+    });
+
+    it('should restore aria-expanded attribute when step is set back to bigger value', () => {
+      timePicker.step = 600;
+
+      timePicker.step = 900;
+      expect(input.getAttribute('aria-expanded')).to.be.equal('false');
+    });
+  });
 });
