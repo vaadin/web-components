@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/dialog';
 import '@vaadin/popover';
@@ -54,6 +54,10 @@ describe('popover in dialog', () => {
         await nextRender();
       });
 
+      afterEach(async () => {
+        await resetMouse();
+      });
+
       it(`should not close the dialog when closing ${type} popover on Escape`, async () => {
         await sendKeys({ press: 'Escape' });
 
@@ -67,6 +71,17 @@ describe('popover in dialog', () => {
         await sendKeys({ press: 'Escape' });
 
         expect(dialog.opened).to.be.false;
+      });
+
+      it(`should not close the dialog when closing ${type} popover on outside click`, async () => {
+        // Use proper mouse click instead of the "outsideClick" helper because
+        // clicking programmatically calls all click listeners synchronously,
+        // and that would break this test by making it false-positive (so as
+        // the dialog remains open, while the real user click would close it).
+        await sendMouse({ type: 'click', position: [10, 10] });
+
+        expect(overlay.opened).to.be.false;
+        expect(dialog.opened).to.be.true;
       });
     });
   });
