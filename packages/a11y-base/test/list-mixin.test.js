@@ -269,6 +269,12 @@ const runTests = (defineHelper, baseMixin) => {
       [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
+    it('should have the first not disabled item focusable when selected set to -1', async () => {
+      list.selected = -1;
+      await nextUpdate(list);
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
+
     it('should set a not disabled item focusable', async () => {
       list._setFocusable(3);
       await nextUpdate(list);
