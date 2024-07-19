@@ -196,14 +196,14 @@ describe('vaadin-scroller', () => {
 
       describe('text direction RLT', () => {
         beforeEach(() => {
-          document.documentElement.setAttribute('dir', 'rtl');
+          scroller.setAttribute('dir', 'rtl');
 
           // Scroll to center.
           scroller.scrollLeft = -(scroller.scrollWidth - scroller.clientWidth) / 2;
         });
 
         it('should scroll to the left on scroll to end', () => {
-          scroller.scrollToEnd('rtl');
+          scroller.scrollToEnd();
           const scrollMax = scroller.scrollWidth - scroller.clientWidth;
           expect(scroller.scrollLeft).to.equal(-scrollMax);
           expect(scroller.scrollLeft).to.not.equal(0);
@@ -215,7 +215,7 @@ describe('vaadin-scroller', () => {
         });
 
         afterEach(() => {
-          document.documentElement.removeAttribute('dir');
+          scroller.removeAttribute('dir');
         });
       });
     });
