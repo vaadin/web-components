@@ -166,7 +166,8 @@ export const ListMixin = (superClass) =>
             }
           });
 
-          this._setFocusable(selected || 0);
+          // When selected is set to -1, focus the first available item.
+          this._setFocusable(selected < 0 || !selected ? 0 : selected);
 
           const itemToSelect = items[selected];
           items.forEach((item) => {
