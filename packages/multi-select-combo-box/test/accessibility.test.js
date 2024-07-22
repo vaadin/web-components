@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -35,34 +35,36 @@ describe('accessibility', () => {
 
       describe('placeholder', () => {
         beforeEach(() => {
-          comboBox = fixtureSync(`
-            <vaadin-multi-select-combo-box
-              placeholder="Fruits"
-            ></vaadin-multi-select-combo-box>
-          `);
+          // Do not use `fixtureSync()` helper to test the case where both placeholder
+          // and selectedItems are set when the component is initialized, to make sure
+          // that the placeholder is correctly restored after clearing selectedItems.
+          comboBox = document.createElement('vaadin-multi-select-combo-box');
+          comboBox.placeholder = 'Fruits';
           comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          document.body.appendChild(comboBox);
           inputElement = comboBox.inputElement;
         });
 
+        afterEach(() => {
+          comboBox.remove();
+        });
+
         it('should set input placeholder when selected items are changed', () => {
-          comboBox.selectedItems = ['Apple', 'Banana'];
           expect(inputElement.getAttribute('placeholder')).to.equal('Apple, Banana');
         });
 
         it('should restore original placeholder when selected items are removed', () => {
-          comboBox.selectedItems = ['Apple', 'Banana'];
           comboBox.selectedItems = [];
           expect(inputElement.getAttribute('placeholder')).to.equal('Fruits');
         });
 
         it('should keep input placeholder when placeholder property is updated', () => {
-          comboBox.selectedItems = ['Apple', 'Banana'];
           comboBox.placeholder = 'Options';
           expect(inputElement.getAttribute('placeholder')).to.equal('Apple, Banana');
         });
 
         it('should restore updated placeholder when placeholder property is updated', () => {
-          comboBox.selectedItems = ['Apple', 'Banana'];
           comboBox.placeholder = 'Options';
           comboBox.selectedItems = [];
           expect(inputElement.getAttribute('placeholder')).to.equal('Options');
@@ -70,7 +72,6 @@ describe('accessibility', () => {
 
         it('should restore empty placeholder when selected items are removed', () => {
           comboBox.placeholder = '';
-          comboBox.selectedItems = ['Apple', 'Banana'];
           comboBox.selectedItems = [];
           expect(comboBox.placeholder).to.be.equal('');
           expect(inputElement.hasAttribute('placeholder')).to.be.false;
