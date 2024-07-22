@@ -38,12 +38,12 @@ declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(ControllerM
   tabindex: number;
 
   /**
-   * Scrolls the textarea to the start if it has a vertical or horizontal scrollbar.
+   * Scrolls the scroller to the start if it has a vertical or horizontal scrollbar.
    */
   scrollToStart(): void;
 
   /**
-   * Scrolls the textarea to the end if it has a vertical or horizontal scrollbar.
+   * Scrolls the scroller to the end if it has a vertical or horizontal scrollbar.
    */
   scrollToEnd(): void;
 }
