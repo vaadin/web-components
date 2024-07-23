@@ -170,6 +170,10 @@ export const DragAndDropMixin = (superClass) =>
             .filter((row) => !this.dragFilter || this.dragFilter(this.__getRowModel(row)));
         }
 
+        rows.forEach((row) => {
+          row.setAttribute('part', `${row.getAttribute('part')} drag-source-row-cell`);
+        });
+
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
@@ -202,6 +206,10 @@ export const DragAndDropMixin = (superClass) =>
       const event = new CustomEvent('grid-dragend');
       event.originalEvent = e;
       this.dispatchEvent(event);
+
+      iterateChildren(this.$.items, (row) => {
+        row.setAttribute('part', row.getAttribute('part').replace('drag-source-row-cell', ''));
+      });
     }
 
     /** @private */

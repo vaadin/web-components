@@ -42,7 +42,13 @@
       };
     </script>
 
-    <vaadin-grid item-id-path="name">
+    <style>
+      vaadin-grid::part(drag-source-row-cell){
+        filter: brightness(0.5);
+      }
+    </style>
+
+    <vaadin-grid item-id-path="name" rows-draggable>
       <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
       <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
