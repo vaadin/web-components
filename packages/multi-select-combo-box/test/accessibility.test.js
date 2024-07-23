@@ -70,6 +70,12 @@ describe('accessibility', () => {
           expect(inputElement.getAttribute('placeholder')).to.equal('Options');
         });
 
+        it('should restore placeholder when selected items are updated and removed', () => {
+          comboBox.selectedItems = ['Apple'];
+          comboBox.selectedItems = [];
+          expect(inputElement.getAttribute('placeholder')).to.equal('Fruits');
+        });
+
         it('should restore empty placeholder when selected items are removed', () => {
           comboBox.placeholder = '';
           comboBox.selectedItems = [];
