@@ -814,7 +814,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       }
       this.__tmpA11yPlaceholder = tmpPlaceholder;
       this.placeholder = tmpPlaceholder;
-    } else if (this.__savedPlaceholder !== undefined) {
+    } else if (this.__tmpA11yPlaceholder !== undefined) {
       delete this.__tmpA11yPlaceholder;
       this.placeholder = this.__savedPlaceholder;
     }

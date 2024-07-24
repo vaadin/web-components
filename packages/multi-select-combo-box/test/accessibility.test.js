@@ -82,6 +82,13 @@ describe('accessibility', () => {
           expect(comboBox.placeholder).to.be.equal('');
           expect(inputElement.hasAttribute('placeholder')).to.be.false;
         });
+
+        it('should clear placeholder when set to undefined and selected items are removed', () => {
+          comboBox.placeholder = undefined;
+          comboBox.selectedItems = [];
+          expect(comboBox.placeholder).to.be.undefined;
+          expect(inputElement.hasAttribute('placeholder')).to.be.false;
+        });
       });
     });
 
