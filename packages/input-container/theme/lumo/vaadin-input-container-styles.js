@@ -32,6 +32,8 @@ registerStyles(
       --_icon-size: var(--vaadin-input-field-icon-size, var(--lumo-icon-size-m));
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
       --_invalid-hover-highlight: var(--vaadin-input-field-invalid-hover-highlight, var(--lumo-error-color-50pct));
+      --_disabled-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
+      --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
     }
 
     :host([dir='rtl']) {
@@ -82,12 +84,9 @@ registerStyles(
 
     /* Disabled */
     :host([disabled]) {
-      background-color: var(--lumo-contrast-5pct);
-    }
-
-    :host([disabled]) ::slotted(*) {
-      color: var(--lumo-disabled-text-color);
-      -webkit-text-fill-color: var(--lumo-disabled-text-color);
+      background: var(--_disabled-background);
+      -webkit-text-fill-color: var(--_disabled-value-color);
+      color: var(--_disabled-value-color);
     }
 
     /* Invalid */

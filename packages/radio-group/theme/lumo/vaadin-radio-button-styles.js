@@ -25,6 +25,8 @@ registerStyles(
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+      --_disabled-background: var(--vaadin-radio-button-disabled-background, var(--lumo-contrast-5pct));
+      --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
     }
 
     :host([has-label]) ::slotted(label) {
@@ -125,7 +127,7 @@ registerStyles(
 
     :host([disabled]) {
       pointer-events: none;
-      color: var(--lumo-disabled-text-color);
+      color: var(--_disabled-value-color);
       --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
     }
 
@@ -134,11 +136,11 @@ registerStyles(
     }
 
     :host([disabled]) [part='radio'] {
-      background-color: var(--lumo-contrast-10pct);
+      background-color: var(--_disabled-background);
     }
 
     :host([disabled]) [part='radio']::after {
-      border-color: var(--lumo-contrast-30pct);
+      border-color: var(--_disabled-value-color);
     }
 
     /* RTL specific styles */

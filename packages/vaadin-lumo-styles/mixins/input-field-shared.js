@@ -28,6 +28,8 @@ const inputField = css`
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
+    --_disabled-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
+    --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
   }
 
   :host::before {
@@ -91,8 +93,8 @@ const inputField = css`
 
   :host([disabled]) [part='label'],
   :host([disabled]) [part='input-field'] ::slotted(*) {
-    color: var(--lumo-disabled-text-color);
-    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+    color: var(--_disabled-value-color);
+    -webkit-text-fill-color: var(--_disabled-value-color);
   }
 
   /* Invalid style */

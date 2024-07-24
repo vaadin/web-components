@@ -21,6 +21,8 @@ const chip = css`
     cursor: var(--lumo-clickable-cursor);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    --_disabled-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
+    --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
   }
 
   :host([focused]) [part='remove-button'] {
@@ -92,8 +94,8 @@ const chip = css`
   }
 
   :host([disabled]) [part='label'] {
-    color: var(--lumo-disabled-text-color);
-    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+    color: var(--_disabled-value-color);
+    -webkit-text-fill-color: var(--_disabled-value-color);
     pointer-events: none;
   }
 `;
