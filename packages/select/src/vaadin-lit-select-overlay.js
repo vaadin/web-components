@@ -36,6 +36,10 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
           justify-content: flex-start;
         }
 
+        [part='overlay'] {
+          min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
+        }
+
         @media (forced-colors: active) {
           [part='overlay'] {
             outline: 3px solid;
@@ -43,6 +47,10 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
         }
       `,
     ];
+  }
+
+  static get observers() {
+    return ['_updateOverlayWidth(opened, owner)'];
   }
 
   /** @protected */
@@ -79,6 +87,20 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
   /** @protected */
   _getMenuElement() {
     return Array.from(this.children).find((el) => el.localName !== 'style');
+  }
+
+  /** @private */
+  _updateOverlayWidth(opened, owner) {
+    if (opened && owner) {
+      const widthProperty = '--vaadin-select-overlay-width';
+      const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
+
+      if (customWidth === '') {
+        this.style.removeProperty(widthProperty);
+      } else {
+        this.style.setProperty(widthProperty, customWidth);
+      }
+    }
   }
 }
 

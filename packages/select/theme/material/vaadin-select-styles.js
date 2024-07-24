@@ -75,10 +75,4 @@ registerStyles(
   { moduleId: 'material-select-value-button' },
 );
 
-const selectOverlay = css`
-  [part='overlay'] {
-    min-width: var(--vaadin-select-text-field-width);
-  }
-`;
-
-registerStyles('vaadin-select-overlay', [menuOverlay, selectOverlay], { moduleId: 'material-select-overlay' });
+registerStyles('vaadin-select-overlay', [menuOverlay], { moduleId: 'material-select-overlay' });

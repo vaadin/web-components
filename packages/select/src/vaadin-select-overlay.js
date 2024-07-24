@@ -17,6 +17,10 @@ const selectOverlayStyles = css`
     justify-content: flex-start;
   }
 
+  [part='overlay'] {
+    min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
+  }
+
   @media (forced-colors: active) {
     [part='overlay'] {
       outline: 3px solid;
@@ -55,6 +59,10 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
     `;
   }
 
+  static get observers() {
+    return ['_updateOverlayWidth(opened, owner)'];
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -79,6 +87,20 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
   /** @protected */
   _getMenuElement() {
     return Array.from(this.children).find((el) => el.localName !== 'style');
+  }
+
+  /** @private */
+  _updateOverlayWidth(opened, owner) {
+    if (opened && owner) {
+      const widthProperty = '--vaadin-select-overlay-width';
+      const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
+
+      if (customWidth === '') {
+        this.style.removeProperty(widthProperty);
+      } else {
+        this.style.setProperty(widthProperty, customWidth);
+      }
+    }
   }
 }
 
