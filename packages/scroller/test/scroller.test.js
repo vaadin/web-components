@@ -213,10 +213,6 @@ describe('vaadin-scroller', () => {
           scroller.scrollToStart();
           expect(scroller.scrollLeft).to.equal(0);
         });
-
-        afterEach(() => {
-          scroller.removeAttribute('dir');
-        });
       });
     });
   });
