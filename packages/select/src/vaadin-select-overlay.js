@@ -5,11 +5,9 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 const selectOverlayStyles = css`
   :host {
@@ -37,13 +35,11 @@ registerStyles('vaadin-select-overlay', [overlayStyles, selectOverlayStyles], {
  *
  * @customElement
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes PositionMixin
+ * @mixes SelectOverlayMixin
  * @mixes ThemableMixin
  * @private
  */
-export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -57,10 +53,6 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
         </div>
       </div>
     `;
-  }
-
-  static get observers() {
-    return ['_updateOverlayWidth(opened, owner)'];
   }
 
   /** @protected */
@@ -81,25 +73,6 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
       // Ensure menuElement reference is correct.
       const menuElement = this._getMenuElement();
       this.owner._assignMenuElement(menuElement);
-    }
-  }
-
-  /** @protected */
-  _getMenuElement() {
-    return Array.from(this.children).find((el) => el.localName !== 'style');
-  }
-
-  /** @private */
-  _updateOverlayWidth(opened, owner) {
-    if (opened && owner) {
-      const widthProperty = '--vaadin-select-overlay-width';
-      const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
-
-      if (customWidth === '') {
-        this.style.removeProperty(widthProperty);
-      } else {
-        this.style.setProperty(widthProperty, customWidth);
-      }
     }
   }
 }

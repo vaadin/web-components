@@ -5,24 +5,20 @@
  */
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
- * @mixes DirMixin
+ * @mixes SelectOverlayMixin
  * @mixes ThemableMixin
  * @protected
  */
-class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement))))) {
+class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -47,10 +43,6 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
         }
       `,
     ];
-  }
-
-  static get observers() {
-    return ['_updateOverlayWidth(opened, owner)'];
   }
 
   /** @protected */
@@ -81,25 +73,6 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
       // Ensure menuElement reference is correct.
       const menuElement = this._getMenuElement();
       this.owner._assignMenuElement(menuElement);
-    }
-  }
-
-  /** @protected */
-  _getMenuElement() {
-    return Array.from(this.children).find((el) => el.localName !== 'style');
-  }
-
-  /** @private */
-  _updateOverlayWidth(opened, owner) {
-    if (opened && owner) {
-      const widthProperty = '--vaadin-select-overlay-width';
-      const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
-
-      if (customWidth === '') {
-        this.style.removeProperty(widthProperty);
-      } else {
-        this.style.setProperty(widthProperty, customWidth);
-      }
     }
   }
 }
