@@ -64,6 +64,12 @@ describe('vaadin-dialog', () => {
         expect(overlay.getAttribute('role')).to.be.eql('dialog');
       });
 
+      it('should change role attribute on the overlay based on overlayRole', async () => {
+        dialog.overlayRole = 'alertdialog';
+        await nextUpdate(dialog);
+        expect(overlay.getAttribute('role')).to.equal('alertdialog');
+      });
+
       it('overlay should have the `aria-label` attribute (if set)', async () => {
         dialog.ariaLabel = 'accessible';
         await nextUpdate(dialog);

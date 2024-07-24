@@ -49,6 +49,16 @@ export const DialogBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
         },
+
+        /**
+         * The `role` attribute value to be set on the overlay. Defaults to "dialog".
+         *
+         * @attr {string} overlay-role
+         */
+        overlayRole: {
+          type: String,
+          value: 'dialog',
+        },
       };
     }
 
