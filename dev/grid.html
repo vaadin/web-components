@@ -22,7 +22,7 @@
 
       grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
         // Let's have 100 root-level items and 5 items on every child level
-        const levelSize = parentItem ? 5 : 100;
+        const levelSize = parentItem ? 500 : 1;
 
         const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
           const indexInLevel = page * pageSize + i;
@@ -44,7 +44,19 @@
 
     <style>
       vaadin-grid::part(drag-source-row-cell){
+        animation: fade 5s infinite alternate;
+      }
+      vaadin-grid::part(drag-source-row){
         filter: brightness(0.5);
+      }
+
+      @keyframes fade {
+        0% {
+          background-color: red;
+        }
+        100% {
+          background-color: blue;
+        }
       }
     </style>
 
