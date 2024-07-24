@@ -5,24 +5,20 @@
  */
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
- * @mixes DirMixin
+ * @mixes SelectOverlayMixin
  * @mixes ThemableMixin
  * @protected
  */
-class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement))))) {
+class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -34,6 +30,10 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
         :host {
           align-items: flex-start;
           justify-content: flex-start;
+        }
+
+        :host(:not([phone])) [part='overlay'] {
+          min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
         }
 
         @media (forced-colors: active) {
@@ -74,11 +74,6 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
       const menuElement = this._getMenuElement();
       this.owner._assignMenuElement(menuElement);
     }
-  }
-
-  /** @protected */
-  _getMenuElement() {
-    return Array.from(this.children).find((el) => el.localName !== 'style');
   }
 }
 

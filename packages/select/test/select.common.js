@@ -378,16 +378,6 @@ describe('vaadin-select', () => {
         expect(overlayRect.top).to.be.equal(inputRect.top);
         expect(inputRect.right).to.be.equal(inputRect.right);
       });
-
-      it('should store the text-field width in the custom CSS property on overlay opening', async () => {
-        valueButton.style.width = '200px';
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        const prop = '--vaadin-select-text-field-width';
-        const inputRect = select._inputContainer.getBoundingClientRect();
-        const value = getComputedStyle(overlay).getPropertyValue(prop);
-        expect(value).to.be.equal(`${inputRect.width}px`);
-      });
     });
 
     describe('overlay opened', () => {
@@ -680,6 +670,56 @@ describe('vaadin-select', () => {
         const overlayRect = select._overlayElement.getBoundingClientRect();
         const inputRect = select._inputContainer.getBoundingClientRect();
         expect(overlayRect.top).to.be.equal(inputRect.bottom);
+      });
+    });
+
+    describe('overlay width', () => {
+      let overlay;
+
+      beforeEach(() => {
+        overlay = select._overlayElement;
+        select.style.setProperty('--vaadin-select-overlay-width', '400px');
+      });
+
+      it('should forward overlay width custom CSS property to the overlay when opened', async () => {
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        const prop = '--vaadin-select-overlay-width';
+        const value = getComputedStyle(overlay).getPropertyValue(prop);
+        expect(value).to.be.equal('400px');
+      });
+
+      it('should set overlay part width based on the overlay width custom CSS property', async () => {
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(400);
+      });
+
+      it('should not set overlay part width based on the custom CSS property when phone', async () => {
+        select._phone = true;
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(overlay.$.overlay.getBoundingClientRect().width).to.not.equal(400);
+      });
+
+      it('should store the select width in the custom CSS property on overlay opening', async () => {
+        select.style.width = '200px';
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        const prop = '--vaadin-select-text-field-width';
+        const inputRect = select._inputContainer.getBoundingClientRect();
+        const value = getComputedStyle(overlay).getPropertyValue(prop);
+        expect(value).to.be.equal(`${inputRect.width}px`);
+      });
+
+      it('should fallback to the select field width when custom CSS property is unset', async () => {
+        select.style.width = '200px';
+        select.style.removeProperty('--vaadin-select-overlay-width');
+
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        expect(overlay.$.overlay.getBoundingClientRect().width).to.equal(200);
       });
     });
   });
