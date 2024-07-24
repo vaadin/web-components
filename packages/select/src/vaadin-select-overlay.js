@@ -15,7 +15,7 @@ const selectOverlayStyles = css`
     justify-content: flex-start;
   }
 
-  [part='overlay'] {
+  :host(:not([phone])) [part='overlay'] {
     min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
   }
 
