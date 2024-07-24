@@ -5,16 +5,18 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
 const selectOverlayStyles = css`
   :host {
     align-items: flex-start;
     justify-content: flex-start;
+  }
+
+  :host(:not([phone])) [part='overlay'] {
+    min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
   }
 
   @media (forced-colors: active) {
@@ -33,13 +35,11 @@ registerStyles('vaadin-select-overlay', [overlayStyles, selectOverlayStyles], {
  *
  * @customElement
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes PositionMixin
+ * @mixes SelectOverlayMixin
  * @mixes ThemableMixin
  * @private
  */
-export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -74,11 +74,6 @@ export class SelectOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableM
       const menuElement = this._getMenuElement();
       this.owner._assignMenuElement(menuElement);
     }
-  }
-
-  /** @protected */
-  _getMenuElement() {
-    return Array.from(this.children).find((el) => el.localName !== 'style');
   }
 }
 
