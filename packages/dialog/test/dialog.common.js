@@ -58,31 +58,28 @@ describe('vaadin-dialog', () => {
     });
 
     describe('aria-label', () => {
-      it('overlay should have the `aria-label` attribute (if set)', async () => {
+      beforeEach(async () => {
         dialog.ariaLabel = 'accessible';
         await nextUpdate(dialog);
+      });
+
+      it('should set `aria-label` attribute on the overlay when ariaLabel is set', () => {
         expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
       });
 
-      it('overlay should not have `aria-label` attribute if set to undefined', async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
+      it('should remove `aria-label` attribute from the overlay when set to undefined', async () => {
         dialog.ariaLabel = undefined;
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
-      it('overlay should not have `aria-label` attribute if set to null', async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
+      it('should remove `aria-label` attribute from the overlay when set to null', async () => {
         dialog.ariaLabel = null;
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
-      it('overlay should not have `aria-label` attribute if set to empty string', async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
+      it('should remove `aria-label` attribute from the overlay when set to empty string', async () => {
         dialog.ariaLabel = '';
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
