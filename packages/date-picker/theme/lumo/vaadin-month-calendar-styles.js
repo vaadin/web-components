@@ -132,7 +132,7 @@ registerStyles(
     }
 
     [part~='date'][part~='disabled'] {
-      color: var(--_disabled-value-color);
+      color: var(--lumo-disabled-text-color);
     }
 
     @media (pointer: coarse) {
@@ -153,7 +153,7 @@ registerStyles(
     /* Disabled */
 
     :host([disabled]) * {
-      color: var(--_disabled-value-color) !important;
+      color: var(--lumo-disabled-text-color) !important;
     }
   `,
   { moduleId: 'lumo-month-calendar' },

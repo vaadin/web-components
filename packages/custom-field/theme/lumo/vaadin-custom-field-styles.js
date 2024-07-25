@@ -66,8 +66,8 @@ const customField = css`
 
   /* Disabled */
   :host([disabled]) [part='label'] {
-    color: var(--_disabled-value-color);
-    -webkit-text-fill-color: var(--_disabled-value-color);
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
 
   /* Small theme */

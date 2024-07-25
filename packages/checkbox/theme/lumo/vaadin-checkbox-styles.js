@@ -27,8 +27,6 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
-      --_disabled-background: var(--vaadin-checkbox-disabled-background, var(--lumo-contrast-10pct));
-      --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
     }
 
     [part='label'] {
@@ -155,7 +153,7 @@ registerStyles(
     }
 
     :host([disabled]) [part='checkbox'] {
-      background-color: var(--_disabled-background);
+      background-color: var(--lumo-contrasts-10pct);
     }
 
     :host([disabled]) [part='checkbox']::after {
@@ -164,8 +162,8 @@ registerStyles(
 
     :host([disabled]) [part='label'],
     :host([disabled]) [part='helper-text'] {
-      color: var(--_disabled-value-color);
-      -webkit-text-fill-color: var(--_disabled-value-color);
+      color: var(--lumo-disabled-text-color);
+      -webkit-text-fill-color: var(--lumo-disabled-text-color);
     }
 
     :host([indeterminate][disabled]) [part='checkbox']::after {

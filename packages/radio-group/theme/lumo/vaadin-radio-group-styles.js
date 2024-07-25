@@ -16,7 +16,6 @@ const radioGroup = css`
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     padding: var(--lumo-space-xs) 0;
-    --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
   }
 
   :host::before {
@@ -32,8 +31,8 @@ const radioGroup = css`
   }
 
   :host([disabled]) [part='label'] {
-    color: var(--_disabled-value-color);
-    -webkit-text-fill-color: var(--_disabled-value-color);
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
 
   :host([focused]:not([readonly])) [part='label'] {
