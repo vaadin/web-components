@@ -45,12 +45,12 @@ describe('popover', () => {
     });
 
     it(`${position} pointer arrow`, async () => {
-      element.setAttribute('theme', 'pointer-arrow');
+      element.setAttribute('theme', 'arrow');
       element.position = position;
       await nextUpdate(element);
       target.click();
       await nextRender();
-      await visualDiff(div, `${position}-pointer-arrow`);
+      await visualDiff(div, `${position}-arrow`);
     });
   });
 });

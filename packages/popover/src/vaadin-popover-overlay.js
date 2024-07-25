@@ -90,7 +90,7 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
           width: 0;
         }
 
-        :host([theme~='pointer-arrow']) [part='arrow'] {
+        :host([theme~='arrow']) [part='arrow'] {
           display: block;
         }
       `,

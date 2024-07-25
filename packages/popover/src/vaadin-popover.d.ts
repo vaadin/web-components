@@ -47,7 +47,7 @@ export type PopoverEventMap = HTMLElementEventMap & PopoverCustomEventMap;
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
- * `arrow`          | Optional arrow pointing to the target when using `theme="pointer-arrow"`
+ * `arrow`          | Optional arrow pointing to the target when using `theme="arrow"`
  *
  * The following state attributes are available for styling:
  *
