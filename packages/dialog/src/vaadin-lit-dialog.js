@@ -72,7 +72,7 @@ class Dialog extends DialogDraggableMixin(
     return html`
       <vaadin-dialog-overlay
         id="overlay"
-        role="dialog"
+        role="${this.overlayRole}"
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"
