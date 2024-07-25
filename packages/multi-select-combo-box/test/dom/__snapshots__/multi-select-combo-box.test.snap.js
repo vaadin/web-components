@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-multi-select-combo-box host default"] = 
-`<vaadin-multi-select-combo-box placeholder="">
+`<vaadin-multi-select-combo-box>
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -38,10 +38,7 @@ snapshots["vaadin-multi-select-combo-box host default"] =
 /* end snapshot vaadin-multi-select-combo-box host default */
 
 snapshots["vaadin-multi-select-combo-box host label"] = 
-`<vaadin-multi-select-combo-box
-  has-label=""
-  placeholder=""
->
+`<vaadin-multi-select-combo-box has-label="">
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -79,10 +76,7 @@ snapshots["vaadin-multi-select-combo-box host label"] =
 /* end snapshot vaadin-multi-select-combo-box host label */
 
 snapshots["vaadin-multi-select-combo-box host helper"] = 
-`<vaadin-multi-select-combo-box
-  has-helper=""
-  placeholder=""
->
+`<vaadin-multi-select-combo-box has-helper="">
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -128,7 +122,6 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 `<vaadin-multi-select-combo-box
   has-error-message=""
   invalid=""
-  placeholder=""
 >
   <label
     for="input-vaadin-multi-select-combo-box-4"
@@ -169,10 +162,7 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 /* end snapshot vaadin-multi-select-combo-box host error */
 
 snapshots["vaadin-multi-select-combo-box host required"] = 
-`<vaadin-multi-select-combo-box
-  placeholder=""
-  required=""
->
+`<vaadin-multi-select-combo-box required="">
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -212,7 +202,6 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
 `<vaadin-multi-select-combo-box
   aria-disabled="true"
   disabled=""
-  placeholder=""
 >
   <label
     for="input-vaadin-multi-select-combo-box-4"
@@ -252,10 +241,7 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
 /* end snapshot vaadin-multi-select-combo-box host disabled */
 
 snapshots["vaadin-multi-select-combo-box host readonly"] = 
-`<vaadin-multi-select-combo-box
-  placeholder=""
-  readonly=""
->
+`<vaadin-multi-select-combo-box readonly="">
   <label
     for="input-vaadin-multi-select-combo-box-4"
     id="label-vaadin-multi-select-combo-box-0"
@@ -333,7 +319,6 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
 `<vaadin-multi-select-combo-box
   focused=""
   opened=""
-  placeholder=""
 >
   <label
     for="input-vaadin-multi-select-combo-box-4"
