@@ -153,7 +153,7 @@ registerStyles(
     }
 
     :host([disabled]) [part='checkbox'] {
-      background-color: var(--lumo-contrasts-10pct);
+      background-color: var(--lumo-contrast-10pct);
     }
 
     :host([disabled]) [part='checkbox']::after {

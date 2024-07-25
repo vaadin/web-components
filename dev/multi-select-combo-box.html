@@ -12,12 +12,6 @@
       import '@vaadin/tooltip';
       // import '@vaadin/multi-select-combo-box/theme/material/vaadin-multi-select-combo-box.js';
     </script>
-    <style>
-      :root{
-        --vaadin-input-field-disabled-background: rgba(150, 155, 150, 1);
-        --vaadin-input-field-disabled-value-color: black;
-      }
-    </style>
   </head>
   <body>
     <vaadin-multi-select-combo-box
@@ -28,7 +22,6 @@
       allow-custom-value
       auto-expand-horizontally
       auto-expand-vertically
-      disabled
     >
       <vaadin-tooltip slot="tooltip" text="Vaadin multi-select-combo-box tooltip text"></vaadin-tooltip>
     </vaadin-multi-select-combo-box>
