@@ -460,7 +460,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       placeholder: {
         type: String,
-        value: '',
         observer: '_placeholderChanged',
       },
 
@@ -810,9 +809,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Use placeholder for announcing items
     if (this._hasValue) {
       const tmpPlaceholder = this._mergeItemLabels(selectedItems);
+      if (this.__tmpA11yPlaceholder === undefined) {
+        this.__savedPlaceholder = this.placeholder;
+      }
       this.__tmpA11yPlaceholder = tmpPlaceholder;
       this.placeholder = tmpPlaceholder;
-    } else {
+    } else if (this.__tmpA11yPlaceholder !== undefined) {
       delete this.__tmpA11yPlaceholder;
       this.placeholder = this.__savedPlaceholder;
     }
