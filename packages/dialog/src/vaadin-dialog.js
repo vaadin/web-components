@@ -104,7 +104,7 @@ class Dialog extends DialogDraggableMixin(
 
       <vaadin-dialog-overlay
         id="overlay"
-        role="dialog"
+        role$="[[overlayRole]]"
         header-title="[[headerTitle]]"
         on-opened-changed="_onOverlayOpened"
         on-mousedown="_bringOverlayToFront"
