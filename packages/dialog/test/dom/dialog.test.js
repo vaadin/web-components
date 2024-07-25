@@ -40,4 +40,9 @@ describe('vaadin-dialog', () => {
     dialog.overlayClass = 'custom dialog-overlay';
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
+
+  it('overlay role', async () => {
+    dialog.overlayRole = 'alertdialog';
+    await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
 });

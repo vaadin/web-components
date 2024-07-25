@@ -40,9 +40,7 @@ describe('vaadin-dialog', () => {
     let dialog, backdrop, overlay;
 
     beforeEach(async () => {
-      dialog = fixtureSync(`
-        <vaadin-dialog opened theme="foo"></vaadin-dialog>
-      `);
+      dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
       await nextRender();
 
       dialog.renderer = (root) => {
@@ -59,17 +57,7 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    describe('attributes', () => {
-      it('overlay should have the `dialog` role', () => {
-        expect(overlay.getAttribute('role')).to.be.eql('dialog');
-      });
-
-      it('should change role attribute on the overlay based on overlayRole', async () => {
-        dialog.overlayRole = 'alertdialog';
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('role')).to.equal('alertdialog');
-      });
-
+    describe('aria-label', () => {
       it('overlay should have the `aria-label` attribute (if set)', async () => {
         dialog.ariaLabel = 'accessible';
         await nextUpdate(dialog);
@@ -102,10 +90,6 @@ describe('vaadin-dialog', () => {
         dialog.ariaLabel = '';
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should propagate theme attribute to the overlay', () => {
-        expect(overlay.getAttribute('theme')).to.be.eql(dialog.getAttribute('theme'));
       });
     });
 

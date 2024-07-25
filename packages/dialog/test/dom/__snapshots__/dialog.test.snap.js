@@ -59,3 +59,17 @@ snapshots["vaadin-dialog overlay class"] =
 `;
 /* end snapshot vaadin-dialog overlay class */
 
+snapshots["vaadin-dialog overlay role"] = 
+`<vaadin-dialog-overlay
+  focus-trap=""
+  id="overlay"
+  opened=""
+  restore-focus-on-close=""
+  role="alertdialog"
+  with-backdrop=""
+>
+  content
+</vaadin-dialog-overlay>
+`;
+/* end snapshot vaadin-dialog overlay role */
+
