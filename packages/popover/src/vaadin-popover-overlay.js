@@ -82,6 +82,17 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
         :host([position^='end'][end-aligned]) [part='overlay'] {
           margin-inline-end: var(--vaadin-popover-offset-end, 0);
         }
+
+        [part='arrow'] {
+          display: none;
+          position: absolute;
+          height: 0;
+          width: 0;
+        }
+
+        :host([theme~='arrow']) [part='arrow'] {
+          display: block;
+        }
       `,
     ];
   }
@@ -91,6 +102,7 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
     return html`
       <div id="backdrop" part="backdrop" hidden ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
+        <div part="arrow"></div>
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;

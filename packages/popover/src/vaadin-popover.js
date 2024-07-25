@@ -139,6 +139,12 @@ class PopoverOpenedStateController {
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
  * for `<vaadin-popover-overlay>` parts.
  *
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `arrow`          | Optional arrow pointing to the target when using `theme="arrow"`
+ *
  * The following state attributes are available for styling:
  *
  * Attribute        | Description
