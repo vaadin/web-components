@@ -137,7 +137,7 @@ describe('tree toggle', () => {
         </vaadin-grid>
       `);
       column = grid.querySelector('vaadin-grid-tree-column');
-      grid.dataProvider = (params, cb) => {
+      grid.dataProvider = (_, cb) => {
         cb([{ name: 'foo', hasChildren: true }], 1);
       };
       flushGrid(grid);

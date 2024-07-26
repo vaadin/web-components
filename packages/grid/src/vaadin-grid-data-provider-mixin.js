@@ -269,7 +269,7 @@ export const DataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    __computeExpandedKeys(itemIdPath, expandedItems) {
+    __computeExpandedKeys(_itemIdPath, expandedItems) {
       const expanded = expandedItems || [];
       const expandedKeys = new Set();
       expanded.forEach((item) => {

@@ -154,7 +154,7 @@ describe('grid body template', () => {
 
     beforeEach(() => {
       // Expanding items only works with custom data providers.
-      grid.dataProvider = (params, cb) => {
+      grid.dataProvider = (_, cb) => {
         const items = [
           { title: 'item1', hasChildren: true },
           { title: 'item2', hasChildren: true },

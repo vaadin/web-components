@@ -45,7 +45,7 @@ const MOUSE_WHICH_TO_BUTTONS = [0, 1, 4, 2];
 const MOUSE_HAS_BUTTONS = (function () {
   try {
     return new MouseEvent('test', { buttons: 1 }).buttons === 1;
-  } catch (e) {
+  } catch (_) {
     return false;
   }
 })();
@@ -71,7 +71,7 @@ let supportsPassive = false;
     });
     window.addEventListener('test', null, opts);
     window.removeEventListener('test', null, opts);
-  } catch (e) {}
+  } catch (_) {}
 })();
 
 /**

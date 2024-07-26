@@ -51,7 +51,7 @@ describe('edit column renderer', () => {
       column = grid.firstElementChild;
       grid.items = createItems();
 
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, _owner, model) {
         root.innerHTML = '';
         const wrapper = document.createElement('div');
         const text = document.createTextNode(`${model.index} ${model.item.name}`);

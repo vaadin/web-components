@@ -91,7 +91,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __computeSelectedKeys(itemIdPath, selectedItems) {
+    __computeSelectedKeys(_itemIdPath, selectedItems) {
       const selected = selectedItems || [];
       const selectedKeys = new Set();
       selected.forEach((item) => {

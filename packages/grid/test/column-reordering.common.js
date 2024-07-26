@@ -37,7 +37,7 @@ function getVisualHeaderCellContent(grid, row, col) {
 function getVisualColumnCellContents(grid, col) {
   const headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
   const footerContent = getVisualCellContent(grid.$.footer, 0, col);
-  const bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) =>
+  const bodyContent = Array.from(grid.$.items.children).map((_row, rowIndex) =>
     getVisualCellContent(grid.$.items, rowIndex, col),
   );
   return bodyContent.concat(headerContent).concat(footerContent);

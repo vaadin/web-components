@@ -41,7 +41,7 @@ describe('renderer', () => {
     });
 
     it('renderer should receive notification when defined', () => {
-      notification.renderer = (root, notification) => {
+      notification.renderer = (_root, notification) => {
         expect(notification).to.eql(notification);
       };
     });

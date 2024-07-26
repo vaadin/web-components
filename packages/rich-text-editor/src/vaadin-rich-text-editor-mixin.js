@@ -759,7 +759,7 @@ export const RichTextEditorMixin = (superClass) =>
       let content = editor.innerHTML;
 
       // Remove Quill classes, e.g. ql-syntax, except for align
-      content = content.replace(/class="([^"]*)"/gu, (match, group1) => {
+      content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
         const classes = group1.split(' ').filter((className) => {
           return !className.startsWith('ql-') || className.startsWith('ql-align');
         });
