@@ -40,24 +40,17 @@
       tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
+
     </script>
 
     <style>
-      vaadin-grid::part(drag-source-row-cell){
-        animation: fade 5s infinite alternate;
+      vaadin-grid::part(dragstart-source-row-cell){
+        background-color: black;
       }
-      vaadin-grid::part(drag-source-row){
-        filter: brightness(0.5);
+      vaadin-grid::part(dragstart-source-row){
+        filter:blur(2px);
       }
-
-      @keyframes fade {
-        0% {
-          background-color: red;
-        }
-        100% {
-          background-color: blue;
-        }
-      }
+     
     </style>
 
     <vaadin-grid item-id-path="name" rows-draggable>

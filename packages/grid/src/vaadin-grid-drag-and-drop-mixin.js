@@ -4,9 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
+  getBodyRowCells,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
+  updateCellsPart,
+  updatePart,
   updateStringRowStates,
 } from './vaadin-grid-helpers.js';
 
@@ -129,7 +132,6 @@ export const DragAndDropMixin = (superClass) =>
     /** @private */
     _onDragStart(e) {
       if (this.rowsDraggable) {
-        console.log(e);
         let row = e.target;
         if (row.localName === 'vaadin-grid-cell-content') {
           // The draggable node is the cell content element on browsers that support native shadow
@@ -170,14 +172,6 @@ export const DragAndDropMixin = (superClass) =>
             .filter((row) => this._isSelected(row._item))
             .filter((row) => !this.dragFilter || this.dragFilter(this.__getRowModel(row)));
         }
-        console.log(rows);
-        rows.forEach((row) => {
-          row.setAttribute('part', `${row.getAttribute('part')} drag-source-row`);
-          console.log(row);
-          iterateChildren(row, (cell) => {
-            cell.setAttribute('part', `${cell.getAttribute('part')} drag-source-row-cell`);
-          });
-        });
 
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
@@ -202,6 +196,11 @@ export const DragAndDropMixin = (superClass) =>
 
         event.originalEvent = e;
         this.dispatchEvent(event);
+
+        rows.forEach((row) => {
+          updatePart(row, true, 'dragstart-source-row');
+          updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', true);
+        });
       }
     }
 
@@ -214,10 +213,8 @@ export const DragAndDropMixin = (superClass) =>
       this.dispatchEvent(event);
 
       iterateChildren(this.$.items, (row) => {
-        row.setAttribute('part', row.getAttribute('part').replace('drag-source-row', ''));
-        iterateChildren(row, (cell) => {
-          cell.setAttribute('part', cell.getAttribute('part').replace('drag-source-row-cell', ''));
-        });
+        updatePart(row, false, 'dragstart-source-row');
+        updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', false);
       });
     }
 
