@@ -94,7 +94,7 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(detailsOpenedItems, rowDetailsRenderer) {
+    _detailsOpenedItemsChanged(_detailsOpenedItems, rowDetailsRenderer) {
       iterateChildren(this.$.items, (row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {

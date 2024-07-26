@@ -38,7 +38,7 @@ class WrappedGrid extends PolymerElement {
     this.$.col.headerRenderer = (root) => {
       root.textContent = 'Header';
     };
-    this.$.col.renderer = (root, col, model) => {
+    this.$.col.renderer = (root, _col, model) => {
       root.textContent = model.item.value;
     };
   }
@@ -716,7 +716,7 @@ describe('attached', () => {
     grid.appendChild(col);
 
     grid.size = 1;
-    grid.dataProvider = function (params, callback) {
+    grid.dataProvider = function (_params, callback) {
       callback([{ item: 'A' }]);
     };
 
@@ -845,7 +845,7 @@ describe('wrapped grid', () => {
     it('should update sub properties on clearCache', () => {
       const data = [{ value: 'foo' }];
       grid.size = 1;
-      container.dataProvider = (params, cb) => cb(data);
+      container.dataProvider = (_, cb) => cb(data);
       expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo');
       data[0].value = 'bar';
       grid.clearCache();
@@ -891,7 +891,7 @@ describe('wrapped grid', () => {
 
     it('should be in loading state when cache is cleared', () => {
       let cb;
-      container.dataProvider = (params, callback) => {
+      container.dataProvider = (_, callback) => {
         cb = callback;
       };
       cb(Array(25));
@@ -914,14 +914,14 @@ describe('wrapped grid', () => {
     });
 
     it('should clear loading attribute from rows when data received', () => {
-      container.dataProvider = (params, callback) => {
+      container.dataProvider = (_, callback) => {
         callback([{}]);
       };
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
     });
 
     it('should remove loading from cells part attribute when data received', () => {
-      container.dataProvider = (params, callback) => {
+      container.dataProvider = (_, callback) => {
         callback([{}]);
       };
       const row = getRows(grid.$.items)[0];

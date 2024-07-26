@@ -239,7 +239,7 @@ const TEMPLATES = {
 
       it('should toggle loading', (done) => {
         expect(comboBox.loading).to.be.false;
-        comboBox.dataProvider = (params, callback) => {
+        comboBox.dataProvider = (_params, callback) => {
           expect(comboBox.loading).to.be.true;
           callback([], 0);
           expect(comboBox.loading).to.be.false;
@@ -266,7 +266,7 @@ const TEMPLATES = {
 
       it('should render all visible items after delayed response', (done) => {
         const items = [...Array(10)].map((_, i) => `item ${i}`);
-        comboBox.dataProvider = (params, callback) => {
+        comboBox.dataProvider = (_params, callback) => {
           setTimeout(() => {
             callback(items, 10);
             setTimeout(() => {
@@ -489,12 +489,12 @@ const TEMPLATES = {
 
     describe('changing dataProvider', () => {
       it('should have correct items after changing dataProvider to return less items', () => {
-        comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
+        comboBox.dataProvider = (_, callback) => callback(['foo', 'bar'], 2);
         comboBox.open();
         comboBox.close();
 
         comboBox.clearCache();
-        comboBox.dataProvider = (params, callback) => callback(['baz'], 1);
+        comboBox.dataProvider = (_, callback) => callback(['baz'], 1);
         comboBox.open();
 
         expect(comboBox.filteredItems).to.eql(['baz']);
@@ -584,7 +584,7 @@ const TEMPLATES = {
 
       it('should be 0 after dataProvider returns size 0', () => {
         comboBox.opened = true;
-        comboBox.dataProvider = (params, callback) => callback([], 0);
+        comboBox.dataProvider = (_, callback) => callback([], 0);
         expect(comboBox.size).to.equal(0);
       });
 
@@ -592,24 +592,24 @@ const TEMPLATES = {
         comboBox.opened = true;
         comboBox.dataProvider = spyDataProvider;
         expect(comboBox.size).to.equal(SIZE);
-        comboBox.dataProvider = (params, callback) => callback([], undefined);
+        comboBox.dataProvider = (_, callback) => callback([], undefined);
         expect(comboBox.size).to.equal(SIZE);
       });
 
       it('should not add items exceeding the size returned by dataProvider', () => {
-        comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 1);
+        comboBox.dataProvider = (_, callback) => callback(['foo', 'bar'], 1);
         comboBox.opened = true;
         expect(comboBox.filteredItems).to.eql(['foo']);
       });
 
       it('should add items when dataProvider return size undefined', () => {
-        comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], undefined);
+        comboBox.dataProvider = (_, callback) => callback(['foo', 'bar'], undefined);
         comboBox.opened = true;
         expect(comboBox.filteredItems).to.eql(['foo', 'bar']);
       });
 
       it('should remove extra filteredItems when decreasing size', () => {
-        comboBox.dataProvider = (params, callback) => callback(['foo', 'bar'], 2);
+        comboBox.dataProvider = (_, callback) => callback(['foo', 'bar'], 2);
         comboBox.open();
 
         comboBox.size = 1;
@@ -618,7 +618,7 @@ const TEMPLATES = {
 
       it('should not reset when dataProvider callback has undefined size', () => {
         comboBox.size = SIZE;
-        comboBox.dataProvider = (params, callback) => {
+        comboBox.dataProvider = (_, callback) => {
           callback(allItems);
         };
         comboBox.opened = true;
@@ -793,7 +793,7 @@ const TEMPLATES = {
 
       it('should not mark placeholders selected when items are loading', () => {
         comboBox.itemIdPath = 'key';
-        comboBox.dataProvider = (p, c) => {
+        comboBox.dataProvider = (_, c) => {
           if (!comboBox.dataProvider.__jammed) {
             c([{ key: 0, label: 'foo' }], 1);
           }
@@ -1023,7 +1023,7 @@ const TEMPLATES = {
 
       it('should clear old pending requests', () => {
         let slowCallback;
-        comboBox.dataProvider = (params, callback) => {
+        comboBox.dataProvider = (_, callback) => {
           if (!slowCallback) {
             slowCallback = callback;
           }
@@ -1073,7 +1073,7 @@ const TEMPLATES = {
     describe('lost focus before data is returned', () => {
       let returnedItems;
 
-      const bluringDataProvider = (params, callback) => {
+      const bluringDataProvider = (_, callback) => {
         comboBox.inputElement.blur();
         callback(returnedItems, returnedItems.length);
       };

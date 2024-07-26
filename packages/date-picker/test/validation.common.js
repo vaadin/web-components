@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { enter, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { close, open, setInputValue, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
+import { close, open, setInputValue, waitForOverlayRender } from './helpers.js';
 
 class DatePicker2016 extends customElements.get('vaadin-date-picker') {
   checkValidity() {
@@ -11,19 +10,6 @@ class DatePicker2016 extends customElements.get('vaadin-date-picker') {
 }
 
 customElements.define('vaadin-date-picker-2016', DatePicker2016);
-
-function waitForValueChange(datePicker, callback) {
-  let stub;
-
-  return new Promise((resolve) => {
-    stub = sinon.stub().callsFake((e) => {
-      resolve(stub);
-    });
-
-    datePicker.addEventListener('value-changed', stub);
-    callback();
-  });
-}
 
 describe('validation', () => {
   let datePicker;

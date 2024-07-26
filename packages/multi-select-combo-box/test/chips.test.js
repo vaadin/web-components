@@ -5,7 +5,7 @@ import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
 
 describe('chips', () => {
-  let comboBox, internal, inputElement;
+  let comboBox, inputElement;
 
   const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
@@ -20,7 +20,6 @@ describe('chips', () => {
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
-    internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
 
     comboBox.selectedItems = ['orange'];

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';

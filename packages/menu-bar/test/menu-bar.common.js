@@ -296,7 +296,7 @@ describe('root menu layout', () => {
 });
 
 describe('item components', () => {
-  let menu, buttons, overflow;
+  let menu, buttons;
 
   function makeComponent(id) {
     const div = document.createElement('div');
@@ -317,7 +317,6 @@ describe('item components', () => {
     ];
     await nextRender(menu);
     buttons = menu._buttons;
-    overflow = buttons[buttons.length - 1];
   });
 
   it('should render the component inside the menu-bar item', () => {

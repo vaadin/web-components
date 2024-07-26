@@ -5426,10 +5426,10 @@ eslint-config-prettier@^9.1.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-9.1.0.tgz#31af3d94578645966c082fcb71a5846d3c94867f"
   integrity sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==
 
-eslint-config-vaadin@^1.0.0-alpha.25:
-  version "1.0.0-alpha.25"
-  resolved "https://registry.yarnpkg.com/eslint-config-vaadin/-/eslint-config-vaadin-1.0.0-alpha.25.tgz#fa2cd741ddbc7fcd867c93617198c97d3fd535d5"
-  integrity sha512-zkfIH9+cQR2iLJiRwFkSI5lghzNwGvGi/CHYgJw7iyMFJ3wqR4QilaVBMJpy8sufks/o7IEy1z7gAGzCoXwh5g==
+eslint-config-vaadin@^1.0.0-alpha.27:
+  version "1.0.0-alpha.27"
+  resolved "https://registry.yarnpkg.com/eslint-config-vaadin/-/eslint-config-vaadin-1.0.0-alpha.27.tgz#d9ab5865ec88fc401c2c034d1bc71201ac653cee"
+  integrity sha512-kqtlhgHTL32fw2cLu5h+KKkZadFaKkwHJRYsZ01jnzXq23+B8oA5+oZmNhAWLVci1psVImRAvekNBH9OfcfDwQ==
   dependencies:
     "@babel/core" "^7.24.7"
     "@babel/eslint-parser" "^7.24.7"

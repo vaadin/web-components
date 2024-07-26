@@ -16,7 +16,7 @@ export function inflateFunctions(config) {
       try {
         // eslint-disable-next-line no-eval
         config[attr.substr(4)] = eval(`(${targetProperty})`);
-      } catch (e) {
+      } catch (_) {
         // eslint-disable-next-line no-eval
         config[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
       }

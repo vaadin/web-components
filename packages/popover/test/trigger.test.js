@@ -1,14 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  esc,
-  fire,
-  fixtureSync,
-  focusin,
-  focusout,
-  nextRender,
-  nextUpdate,
-  outsideClick,
-} from '@vaadin/testing-helpers';
+import { esc, fixtureSync, focusin, focusout, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';

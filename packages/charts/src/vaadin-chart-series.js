@@ -304,7 +304,7 @@ class ChartSeries extends PolymerElement {
   }
 
   /** @private */
-  __valuesObserver(splices, series) {
+  __valuesObserver(_splices, series) {
     if (series) {
       series.setData(this.values);
     }
