@@ -197,9 +197,10 @@ export const DragAndDropMixin = (superClass) =>
         event.originalEvent = e;
         this.dispatchEvent(event);
 
-        rows.forEach((row) => {
-          updatePart(row, true, 'dragstart-source-row');
-          updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', true);
+        requestAnimationFrame(() => {
+          rows.forEach((row) => {
+            updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', true);
+          });
         });
       }
     }
@@ -213,7 +214,6 @@ export const DragAndDropMixin = (superClass) =>
       this.dispatchEvent(event);
 
       iterateChildren(this.$.items, (row) => {
-        updatePart(row, false, 'dragstart-source-row');
         updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', false);
       });
     }
