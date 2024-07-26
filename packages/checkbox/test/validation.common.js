@@ -120,7 +120,6 @@ describe('validation', () => {
     beforeEach(async () => {
       checkbox = fixtureSync('<vaadin-checkbox label="Checkbox" required></vaadin-checkbox>');
       await nextFrame();
-      validateSpy = sinon.spy(checkbox, 'validate');
     });
 
     it('should fail validation with checked set to false', () => {
