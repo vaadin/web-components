@@ -414,7 +414,7 @@ describe('row details', () => {
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      grid.rowDetailsRenderer = (root, _, { item }) => {
+      grid.rowDetailsRenderer = (root) => {
         // Render the details cell with a height of 100px
         root.innerHTML = `<div style="height: 100px; background: yellow;">Details</div>`;
         // Increase the details cell height to 200px in a microtask

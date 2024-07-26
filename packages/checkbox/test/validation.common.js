@@ -117,8 +117,6 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    let checkboxes;
-
     beforeEach(async () => {
       checkbox = fixtureSync('<vaadin-checkbox label="Checkbox" required></vaadin-checkbox>');
       await nextFrame();

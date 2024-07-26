@@ -6,7 +6,7 @@ import '../vaadin-drawer-toggle.js';
 import { tab } from './helpers.js';
 
 describe('desktop navigation', () => {
-  let layout, toggle, drawer, drawerInput, contentInput, outerInput;
+  let layout, toggle, drawerInput, contentInput, outerInput;
 
   before(async () => {
     await setViewport({ width: 1000, height: 1000 });
@@ -30,7 +30,6 @@ describe('desktop navigation', () => {
     [layout, outerInput] = wrapper.children;
     await nextRender();
     toggle = layout.querySelector('[slot=navbar]');
-    drawer = layout.shadowRoot.querySelector('[part=drawer]');
     drawerInput = layout.querySelector('[slot=drawer] > input');
     contentInput = layout.querySelector(':not([slot]) > input');
   });

@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';

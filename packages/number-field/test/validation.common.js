@@ -7,15 +7,10 @@ describe('validation', () => {
   let field, input;
 
   describe('basic', () => {
-    let validateSpy, changeSpy;
-
     beforeEach(async () => {
       field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
       await nextRender();
       input = field.inputElement;
-      validateSpy = sinon.spy(field, 'validate');
-      changeSpy = sinon.spy().named('changeSpy');
-      field.addEventListener('change', changeSpy);
     });
 
     it('should pass validation by default', () => {

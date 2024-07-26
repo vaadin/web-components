@@ -273,11 +273,10 @@ describe('vaadin-select', () => {
     });
 
     describe('opening the overlay', () => {
-      let overlay, menu;
+      let overlay;
 
       beforeEach(() => {
         overlay = select._overlayElement;
-        menu = select._menuElement;
       });
 
       it('should keep synchronized opened properties in overlay and select', async () => {
