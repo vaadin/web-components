@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusedCell, open, touchTap, waitForOverlayRender } from './helpers.js';
@@ -58,14 +58,6 @@ describe('fullscreen mode', () => {
         expect(document.activeElement).to.not.equal(input);
       });
 
-      it('should not blur input element when focusing it with keyboard', () => {
-        const spy = sinon.spy(input, 'blur');
-        tabKeyDown(input);
-        input.focus();
-        expect(spy.called).to.be.false;
-        expect(document.activeElement).to.equal(input);
-      });
-
       it('should blur input element when opening overlay', async () => {
         const spy = sinon.spy(input, 'blur');
         await open(datePicker);
@@ -77,22 +69,6 @@ describe('fullscreen mode', () => {
         const cell = getFocusedCell(datePicker._overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.include('today');
-      });
-
-      it('should blur input element when closing overlay on outside click', async () => {
-        await open(datePicker);
-        const spy = sinon.spy(input, 'blur');
-        outsideClick();
-        await aTimeout(0);
-        expect(spy.called).to.be.true;
-      });
-
-      it('should not blur input element when closing overlay on Esc', async () => {
-        await open(datePicker);
-        const spy = sinon.spy(input, 'blur');
-        await sendKeys({ press: 'Escape' });
-        await aTimeout(0);
-        expect(spy.called).to.be.false;
       });
     });
 

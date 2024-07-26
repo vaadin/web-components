@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { iterateChildren } from '../src/vaadin-grid-helpers.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {
@@ -251,6 +252,31 @@ describe('drag and drop', () => {
         await nextFrame();
         cells.forEach((cell) => {
           expect(cell.getAttribute('part')).to.not.contain('dragstart-row-cell');
+        });
+      });
+
+      it('should add part to the sources of dragged rows', async () => {
+        fireDragStart();
+        let cells = getRowBodyCells(getRows(grid.$.items)[0]);
+        await nextFrame();
+
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
+        });
+
+        cells = getRowBodyCells(getRows(grid.$.items)[1]);
+        cells.forEach((cell) => {
+          expect(cell.getAttribute('part')).to.not.contain('dragstart-source-row-cell');
+        });
+
+        grid.selectItem(grid.items[0]);
+        grid.selectItem(grid.items[1]);
+        fireDragStart();
+        await nextFrame();
+        iterateChildren(grid.$.items, (row) => {
+          iterateChildren(row, (cell) => {
+            expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
+          });
         });
       });
 

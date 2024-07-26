@@ -40,7 +40,9 @@ describe('vaadin-dialog', () => {
     let dialog, backdrop, overlay;
 
     beforeEach(async () => {
-      dialog = fixtureSync('<vaadin-dialog opened></vaadin-dialog>');
+      dialog = fixtureSync(`
+        <vaadin-dialog opened theme="foo"></vaadin-dialog>
+      `);
       await nextRender();
 
       dialog.renderer = (root) => {
@@ -57,32 +59,47 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    describe('aria-label', () => {
-      beforeEach(async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
+    describe('attributes', () => {
+      it('overlay should have the `dialog` role', () => {
+        expect(overlay.getAttribute('role')).to.be.eql('dialog');
       });
 
-      it('should set `aria-label` attribute on the overlay when ariaLabel is set', () => {
+      it('overlay should have the `aria-label` attribute (if set)', async () => {
+        dialog.ariaLabel = 'accessible';
+        await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
       });
 
-      it('should remove `aria-label` attribute from the overlay when set to undefined', async () => {
+      it('overlay should not have the `aria-label` attribute (if not set)', () => {
+        expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
+      it('overlay should not have `aria-label` attribute if set to undefined', async () => {
+        dialog.ariaLabel = 'accessible';
+        await nextUpdate(dialog);
         dialog.ariaLabel = undefined;
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
-      it('should remove `aria-label` attribute from the overlay when set to null', async () => {
+      it('overlay should not have `aria-label` attribute if set to null', async () => {
+        dialog.ariaLabel = 'accessible';
+        await nextUpdate(dialog);
         dialog.ariaLabel = null;
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
       });
 
-      it('should remove `aria-label` attribute from the overlay when set to empty string', async () => {
+      it('overlay should not have `aria-label` attribute if set to empty string', async () => {
+        dialog.ariaLabel = 'accessible';
+        await nextUpdate(dialog);
         dialog.ariaLabel = '';
         await nextUpdate(dialog);
         expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
+      it('should propagate theme attribute to the overlay', () => {
+        expect(overlay.getAttribute('theme')).to.be.eql(dialog.getAttribute('theme'));
       });
     });
 

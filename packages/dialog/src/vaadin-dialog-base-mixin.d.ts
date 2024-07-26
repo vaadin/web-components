@@ -31,11 +31,4 @@ export declare class DialogBaseMixinClass {
    * Set to true to remove backdrop and allow click events on background elements.
    */
   modeless: boolean;
-
-  /**
-   * The `role` attribute value to be set on the overlay. Defaults to "dialog".
-   *
-   * @attr {string} overlay-role
-   */
-  overlayRole: string;
 }

@@ -4,9 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
+  getBodyRowCells,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
+  updateCellsPart,
+  updatePart,
   updateStringRowStates,
 } from './vaadin-grid-helpers.js';
 
@@ -190,8 +193,15 @@ export const DragAndDropMixin = (superClass) =>
             setDraggedItemsCount: (count) => row.setAttribute('dragstart', count),
           },
         });
+
         event.originalEvent = e;
         this.dispatchEvent(event);
+
+        requestAnimationFrame(() => {
+          rows.forEach((row) => {
+            updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', true);
+          });
+        });
       }
     }
 
@@ -202,6 +212,10 @@ export const DragAndDropMixin = (superClass) =>
       const event = new CustomEvent('grid-dragend');
       event.originalEvent = e;
       this.dispatchEvent(event);
+
+      iterateChildren(this.$.items, (row) => {
+        updateCellsPart(getBodyRowCells(row), 'dragstart-source-row-cell', false);
+      });
     }
 
     /** @private */

@@ -22,7 +22,7 @@
 
       grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
         // Let's have 100 root-level items and 5 items on every child level
-        const levelSize = parentItem ? 5 : 100;
+        const levelSize = parentItem ? 500 : 1;
 
         const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
           const indexInLevel = page * pageSize + i;
@@ -40,9 +40,20 @@
       tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
+
     </script>
 
-    <vaadin-grid item-id-path="name">
+    <style>
+      vaadin-grid::part(dragstart-source-row-cell){
+        background-color: black;
+      }
+      vaadin-grid::part(dragstart-row-cell){
+        filter:blur(2px);
+      }
+     
+    </style>
+
+    <vaadin-grid item-id-path="name" rows-draggable>
       <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
       <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>

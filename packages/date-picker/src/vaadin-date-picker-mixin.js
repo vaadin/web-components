@@ -5,7 +5,6 @@
  */
 import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -460,7 +459,7 @@ export const DatePickerMixin = (subclass) =>
     _onFocus(event) {
       super._onFocus(event);
 
-      if (this._noInput && !isKeyboardActive()) {
+      if (this._noInput) {
         event.target.blur();
       }
     }
