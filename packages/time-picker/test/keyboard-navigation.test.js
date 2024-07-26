@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, esc, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-time-picker.js';

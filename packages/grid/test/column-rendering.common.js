@@ -117,7 +117,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
       grid.items = [{ name: 'Item 1' }, { name: 'Item 2' }];
       grid.items = [{ name: 'Item 1' }];
       const renderedItems = [];
-      columns[0].renderer = (root, _, model) => {
+      columns[0].renderer = (_root, _, model) => {
         renderedItems.push(model.item.name);
       };
       await nextFrame();

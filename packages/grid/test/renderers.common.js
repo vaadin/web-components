@@ -26,7 +26,7 @@ describe('renderers', () => {
 
   describe('column cells', () => {
     beforeEach(() => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, _owner, model) {
         root.innerHTML = '';
         const text = document.createTextNode(`${model.index} ${model.item.foo}`);
         root.appendChild(text);
@@ -47,14 +47,14 @@ describe('renderers', () => {
     });
 
     it('should pass column as `owner` and `this` to the renderer', () => {
-      column.renderer = function (root, owner) {
+      column.renderer = function (_root, owner) {
         expect(this).to.eql(owner);
         expect(owner.localName).to.eql('vaadin-grid-column');
       };
     });
 
     it('should allow to change the renderer', () => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, _owner, model) {
         root.innerHTML = `${model.index} test`;
       };
       expect(getCell(grid, 0)._content.innerHTML).to.eql('0 test');
@@ -69,7 +69,7 @@ describe('renderers', () => {
     });
 
     it('should initialize with instance properties', () => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (_root, _owner, model) {
         expect(model.selected).to.be.false;
         expect(model.expanded).to.be.false;
         expect(model.detailsOpened).to.be.false;
@@ -116,7 +116,7 @@ describe('renderers', () => {
 
       it('should allow to change the renderer', () => {
         grid.detailsOpenedItems = grid.items;
-        grid.rowDetailsRenderer = function (root, owner, model) {
+        grid.rowDetailsRenderer = function (root, _owner, model) {
           root.innerHTML = `${model.index} test`;
         };
         flushGrid(grid);

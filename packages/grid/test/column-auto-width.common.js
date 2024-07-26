@@ -136,10 +136,10 @@ describe('column auto-width', () => {
   });
 
   it('should have correct column widths when using renderers', async () => {
-    columns[0].renderer = function (root, column, model) {
+    columns[0].renderer = function (root, _column, model) {
       root.textContent = model.index;
     };
-    columns[1].renderer = function (root, column, model) {
+    columns[1].renderer = function (root, _column, model) {
       root.innerHTML = `<div style="width: ${10 + 10 * model.index}px; height: 25px; outline: 1px solid green;">`;
     };
     grid.items = testItems;

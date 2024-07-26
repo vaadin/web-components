@@ -44,7 +44,7 @@ function loadAnalysis() {
   const analysisPath = path.resolve('./analysis.json');
   try {
     return JSON.parse(fs.readFileSync(analysisPath, 'utf8'));
-  } catch (e) {
+  } catch (_) {
     throw new Error(
       `Could not read output of the Polymer Analyzer from: ${analysisPath}. Make sure to run the Polymer Analyzer before generating web-types.`,
     );

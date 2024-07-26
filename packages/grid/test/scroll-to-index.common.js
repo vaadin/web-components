@@ -202,7 +202,7 @@ describe('scroll to index', () => {
       });
 
       grid.size = 10;
-      grid.dataProvider = function (params, callback) {
+      grid.dataProvider = function (_, callback) {
         callback(data);
       };
 

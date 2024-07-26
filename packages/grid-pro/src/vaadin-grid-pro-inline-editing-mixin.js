@@ -200,7 +200,7 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _applyEdit({ path, value, index, item }) {
+    _applyEdit({ path, value, item }) {
       set(path, value, item);
       this.requestContentUpdate();
     }

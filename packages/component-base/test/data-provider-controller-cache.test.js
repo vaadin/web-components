@@ -137,6 +137,7 @@ describe('DataProviderController - Cache', () => {
     });
 
     it('should remove the sub-cache for the given item index', () => {
+      expect(cache.subCaches[0]).to.equal(subCache0);
       cache.removeSubCache(0);
       expect(cache.subCaches).to.have.lengthOf(1);
       expect(cache.subCaches[0]).to.equal(subCache1);

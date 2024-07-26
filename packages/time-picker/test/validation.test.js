@@ -68,7 +68,7 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    let validateSpy, changeSpy, valueChangedSpy, input;
+    let validateSpy, changeSpy, valueChangedSpy;
 
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
@@ -77,7 +77,6 @@ describe('validation', () => {
       timePicker.addEventListener('change', changeSpy);
       valueChangedSpy = sinon.spy();
       timePicker.addEventListener('value-changed', valueChangedSpy);
-      input = timePicker.inputElement;
     });
 
     it('should pass validation by default', () => {

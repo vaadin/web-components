@@ -159,7 +159,7 @@ export const AvatarMixin = (superClass) =>
     }
 
     /** @private */
-    __imgOrAbbrOrNameChanged(img, abbr, name) {
+    __imgOrAbbrOrNameChanged(_img, abbr, name) {
       this.__updateVisibility();
 
       if (abbr && abbr !== this.__generatedAbbr) {

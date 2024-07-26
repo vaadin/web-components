@@ -576,7 +576,7 @@ export const UploadMixin = (superClass) =>
       if (typeof this.headers === 'string') {
         try {
           this.headers = JSON.parse(this.headers);
-        } catch (e) {
+        } catch (_) {
           this.headers = undefined;
         }
       }

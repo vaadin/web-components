@@ -1200,7 +1200,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       return;
     }
     this.__setHighlightedItem(item);
-    this.__openEditor('edit', item);
+    this.__openEditor(item);
   }
 
   /** @private */
@@ -1211,7 +1211,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __openEditor(type, item) {
+  __openEditor(item) {
     this.__focusRestorationController.saveFocus();
 
     this.__isDirty = false;

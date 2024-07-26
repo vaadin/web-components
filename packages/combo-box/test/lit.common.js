@@ -13,7 +13,7 @@ describe('lit', () => {
 
       const size = 100;
 
-      comboBox.items = new Array(size).fill().map((e, i) => {
+      comboBox.items = new Array(size).fill().map((_, i) => {
         return { value: `value-${i}` };
       });
 

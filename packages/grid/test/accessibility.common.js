@@ -35,10 +35,10 @@ describe('accessibility', () => {
     col1.footerRenderer = col2.footerRenderer = (root) => {
       root.textContent = 'footer';
     };
-    col1.renderer = (root, col, model) => {
+    col1.renderer = (root, _col, model) => {
       root.textContent = model.index;
     };
-    col2.renderer = (root, col, model) => {
+    col2.renderer = (root, _col, model) => {
       root.textContent = model.item;
     };
     grid.items = ['foo', 'bar'];

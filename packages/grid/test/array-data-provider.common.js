@@ -226,7 +226,7 @@ describe('invalid paths', () => {
 
 describe('items with a custom data provider', () => {
   let grid;
-  const dataProvider = (params, callback) => callback([{ value: 'foo' }], 1);
+  const dataProvider = (_, callback) => callback([{ value: 'foo' }], 1);
   const items = [{ value: 'bar' }];
 
   beforeEach(async () => {

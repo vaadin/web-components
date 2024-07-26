@@ -274,7 +274,7 @@ describe('row details', () => {
     it('should have correct height', () => {
       grid.openItemDetails(items[0]);
 
-      grid.dataProvider = (params, callback) => callback(items);
+      grid.dataProvider = (_, callback) => callback(items);
       flushGrid(grid);
 
       const row = getRows(grid.$.items)[0];
@@ -284,7 +284,7 @@ describe('row details', () => {
 
   describe('details opened attribute', () => {
     let dataset = [];
-    const dataProvider = (params, callback) => callback(dataset);
+    const dataProvider = (_, callback) => callback(dataset);
 
     const countRowsMarkedAsDetailsOpened = (grid) => {
       return grid.$.items.querySelectorAll('tr[details-opened]').length;
@@ -414,7 +414,7 @@ describe('row details', () => {
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      grid.rowDetailsRenderer = (root, _, { item }) => {
+      grid.rowDetailsRenderer = (root) => {
         // Render the details cell with a height of 100px
         root.innerHTML = `<div style="height: 100px; background: yellow;">Details</div>`;
         // Increase the details cell height to 200px in a microtask

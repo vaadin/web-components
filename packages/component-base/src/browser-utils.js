@@ -29,7 +29,7 @@ export const isTouch = (() => {
   try {
     document.createEvent('TouchEvent');
     return true;
-  } catch (e) {
+  } catch (_) {
     return false;
   }
 })();

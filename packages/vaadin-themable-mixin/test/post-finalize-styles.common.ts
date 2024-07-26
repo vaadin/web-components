@@ -167,7 +167,7 @@ describe('ThemableMixin - post-finalize styles', () => {
   it('should not include duplicate styles', async () => {
     const parentTagName = uniqueTagName();
     defineComponent(parentTagName);
-    const parent = fixtureSync(`<${parentTagName}></${parentTagName}>`);
+    fixtureSync(`<${parentTagName}></${parentTagName}>`);
     await nextFrame();
     registerStyles(
       parentTagName,

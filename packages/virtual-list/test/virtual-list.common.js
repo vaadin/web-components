@@ -40,11 +40,11 @@ describe('virtual-list', () => {
     beforeEach(async () => {
       const size = 100;
 
-      list.items = new Array(size).fill().map((e, i) => {
+      list.items = new Array(size).fill().map((_, i) => {
         return { value: `value-${i}` };
       });
 
-      list.renderer = (el, list, model) => {
+      list.renderer = (el, _list, model) => {
         el.textContent = model.item.value;
       };
 
@@ -67,14 +67,14 @@ describe('virtual-list', () => {
     });
 
     it('should change the items to an array of same size', () => {
-      list.items = new Array(list.items.length).fill().map((e, i) => {
+      list.items = new Array(list.items.length).fill().map((_, i) => {
         return { value: `text-${i}` };
       });
       expect(list.children[0].textContent.trim()).to.equal('text-0');
     });
 
     it('should change the items to a shorter array', () => {
-      list.items = new Array(list.items.length - 1).fill().map((e, i) => {
+      list.items = new Array(list.items.length - 1).fill().map((_, i) => {
         return { value: `text-${i}` };
       });
       expect(list.children[0].textContent.trim()).to.equal('text-0');

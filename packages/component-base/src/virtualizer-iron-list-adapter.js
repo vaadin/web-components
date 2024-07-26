@@ -56,7 +56,7 @@ export class IronListAdapter {
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
     this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
-    this.elementsContainer.addEventListener('focusin', (e) => {
+    this.elementsContainer.addEventListener('focusin', () => {
       this.scrollTarget.dispatchEvent(
         new CustomEvent('virtualizer-element-focused', { detail: { element: this.__getFocusedElement() } }),
       );
