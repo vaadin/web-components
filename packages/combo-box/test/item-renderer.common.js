@@ -49,7 +49,7 @@ describe('item renderer', () => {
   });
 
   it('should use renderer when it is defined', () => {
-    comboBox.renderer = (root, comboBox, model) => {
+    comboBox.renderer = (root, _comboBox, model) => {
       const textNode = document.createTextNode(`${model.item} ${model.index}`);
       root.appendChild(textNode);
     };

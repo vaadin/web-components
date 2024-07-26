@@ -12,7 +12,7 @@ describe('lit', () => {
 
       const size = 100;
 
-      list.items = new Array(size).fill().map((e, i) => {
+      list.items = new Array(size).fill().map((_, i) => {
         return { value: `value-${i}` };
       });
 

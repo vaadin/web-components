@@ -65,7 +65,7 @@ customElements.define(
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
   const components = width.replace(/^calc\((.*)\)$/u, '$1').split(/ [+-] /u);
-  const [percentage, spacing] = components.sort((a, b) => b.indexOf('%'));
+  const [percentage, spacing] = components.sort((_a, b) => b.indexOf('%'));
   return { percentage, spacing };
 }
 

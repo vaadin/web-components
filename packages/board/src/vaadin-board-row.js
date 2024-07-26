@@ -168,13 +168,13 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
 
     let spaceLeft = 4;
     let returnBoardCols = [];
-    nodes.forEach((node, i) => {
+    nodes.forEach((_node, i) => {
       spaceLeft -= boardCols[i];
     });
 
     if (spaceLeft < 0) {
       this._reportError();
-      boardCols.forEach((node, i) => {
+      boardCols.forEach((_node, i) => {
         returnBoardCols[i] = 1;
       });
     } else {

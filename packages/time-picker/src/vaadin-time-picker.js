@@ -614,7 +614,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /** @private */
-  __updateDropdownItems(i8n, min, max, step) {
+  __updateDropdownItems(_i18n, min, max, step) {
     const minTimeObj = this.__validateTime(this.__parseISO(min || MIN_ALLOWED_TIME));
     const minSec = this.__getSec(minTimeObj);
 

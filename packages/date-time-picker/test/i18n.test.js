@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 

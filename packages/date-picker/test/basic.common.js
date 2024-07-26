@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, escKeyDown, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';

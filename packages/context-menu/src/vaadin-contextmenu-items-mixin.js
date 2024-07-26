@@ -435,7 +435,7 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __initMenu(root, menu) {
+    __initMenu(root, _menu) {
       // NOTE: in this method, `menu` and `this` reference the same element,
       // so we can use either of those. Original implementation used `menu`.
       if (!root.firstElementChild) {

@@ -283,7 +283,7 @@ MockHttpRequest.prototype = {
           xmlDoc.async = 'false';
           xmlDoc.loadXML(data);
         }
-      } catch (e) {
+      } catch (_) {
         // According to specs from point 3.7.5:
         // '3. Let document be a cookie-free Document object that
         // represents the result of parsing the response entity body
@@ -421,7 +421,7 @@ MockHttpRequest.prototype = {
     }
 
     uri.queryKey = {};
-    uri[key[12]].replace(querypattern, ($0, $1, $2) => {
+    uri[key[12]].replace(querypattern, (_, $1, $2) => {
       if ($1) {
         uri.queryKey[$1] = $2;
       }

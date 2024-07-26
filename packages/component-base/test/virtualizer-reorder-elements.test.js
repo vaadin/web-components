@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, mousedown, mouseup, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, mouseup, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';

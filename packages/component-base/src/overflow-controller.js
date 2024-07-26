@@ -48,7 +48,7 @@ export class OverflowController {
   observe() {
     const { host } = this;
 
-    this.__resizeObserver = new ResizeObserver((entries) => {
+    this.__resizeObserver = new ResizeObserver(() => {
       this.__debounceOverflow = Debouncer.debounce(this.__debounceOverflow, animationFrame, () => {
         this.__updateOverflow();
       });

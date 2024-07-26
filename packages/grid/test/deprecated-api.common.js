@@ -52,7 +52,7 @@ describe('deprecated API', () => {
     });
 
     it('should warn about the property being deprecated', () => {
-      const result = grid._effectiveSize;
+      const result = grid._effectiveSize; // eslint-disable-line @typescript-eslint/no-unused-vars
       expect(console.warn).to.be.calledOnce;
       expect(console.warn).to.be.calledWith(
         '<vaadin-grid> The `_effectiveSize` property is deprecated and will be removed in Vaadin 25.',
@@ -66,7 +66,7 @@ describe('deprecated API', () => {
     });
 
     it('should warn about the property being deprecated', () => {
-      const result = grid._cache;
+      const result = grid._cache; // eslint-disable-line @typescript-eslint/no-unused-vars
       expect(console.warn).to.be.calledOnce;
       expect(console.warn).to.be.calledWith(
         '<vaadin-grid> The `_cache` property is deprecated and will be removed in Vaadin 25.',
@@ -80,7 +80,7 @@ describe('deprecated API', () => {
     });
 
     it('should warn about the property being deprecated', () => {
-      const result = grid._cache.effectiveSize;
+      const result = grid._cache.effectiveSize; // eslint-disable-line @typescript-eslint/no-unused-vars
       expect(console.warn).to.be.calledTwice;
       expect(console.warn.lastCall).to.be.calledWith(
         '<vaadin-grid> The `effectiveSize` property of ItemCache is deprecated and will be removed in Vaadin 25.',
@@ -157,7 +157,7 @@ describe('deprecated API', () => {
     });
 
     it('should warn about the property being deprecated', () => {
-      const result = grid._cache.grid;
+      const result = grid._cache.grid; // eslint-disable-line @typescript-eslint/no-unused-vars
       expect(console.warn).to.be.calledTwice;
       expect(console.warn.lastCall).to.be.calledWith(
         '<vaadin-grid> The `grid` property of ItemCache is deprecated and will be removed in Vaadin 25.',
@@ -172,7 +172,7 @@ describe('deprecated API', () => {
     });
 
     it('should warn about the property being deprecated', () => {
-      const result = grid._cache.itemCaches;
+      const result = grid._cache.itemCaches; // eslint-disable-line @typescript-eslint/no-unused-vars
       expect(console.warn).to.be.calledTwice;
       expect(console.warn.lastCall).to.be.calledWith(
         '<vaadin-grid> The `itemCaches` property of ItemCache is deprecated and will be removed in Vaadin 25.',
