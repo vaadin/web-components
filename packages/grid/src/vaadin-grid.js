@@ -191,7 +191,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
  * `dragstart-row-cell`       | Cell in a row that user started to drag (set for one frame)
- * `dragstart-source-row-cell`| Cell in the source row that user started to drag
+ * `drag-source-row-cell`     | Cell in the source row of row that is dragged
  * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
  * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below
  * `dragover-on-top-row-cell` | Cell in a row that has another row dragged over on top

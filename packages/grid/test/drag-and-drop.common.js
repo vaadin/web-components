@@ -254,30 +254,28 @@ describe('drag and drop', () => {
         });
       });
 
-      it('should add part to the sources of dragged rows', async () => {
-        fireDragStart();
-        let cells = getRowBodyCells(getRows(grid.$.items)[0]);
-        await nextFrame();
-
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
-        }
-
-        cells = getRowBodyCells(getRows(grid.$.items)[1]);
-
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.not.contain('dragstart-source-row-cell');
-        }
-
+      it('should add drag-source- part to all dragged rows', async () => {
         grid.selectItem(grid.items[0]);
         grid.selectItem(grid.items[1]);
         fireDragStart();
         await nextFrame();
-
         for (const row of [...grid.$.items.children]) {
           for (const cell of [...row.children]) {
-            expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
+            expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
           }
+        }
+      });
+
+      it('should add drag-source- part only to dragged rows', async () => {
+        fireDragStart();
+        let cells = getRowBodyCells(getRows(grid.$.items)[0]);
+        await nextFrame();
+        for (const cell of cells) {
+          expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
+        }
+        cells = getRowBodyCells(getRows(grid.$.items)[1]);
+        for (const cell of cells) {
+          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
         }
       });
 
