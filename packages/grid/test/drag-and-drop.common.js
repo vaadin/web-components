@@ -279,6 +279,17 @@ describe('drag and drop', () => {
         }
       });
 
+      it('should remove drag-source- part from row when drag ends', async () => {
+        fireDragStart();
+        const row = getRows(grid.$.items)[0];
+        const cells = getRowBodyCells(row);
+        await nextFrame();
+        fireDragEnd();
+        for (const cell of cells) {
+          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
+        }
+      });
+
       // The test only concerns Safari
       const isSafari = /^((?!chrome|android).)*safari/iu.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {
