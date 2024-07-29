@@ -260,28 +260,26 @@ describe('drag and drop', () => {
         let cells = getRowBodyCells(getRows(grid.$.items)[0]);
         await nextFrame();
 
-        // NOSONAR
-        cells.forEach((cell) => {
+        for (const cell of cells) {
           expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
-        });
+        }
 
         cells = getRowBodyCells(getRows(grid.$.items)[1]);
-        // NOSONAR
-        cells.forEach((cell) => {
+
+        for (const cell of cells) {
           expect(cell.getAttribute('part')).to.not.contain('dragstart-source-row-cell');
-        });
+        }
 
         grid.selectItem(grid.items[0]);
         grid.selectItem(grid.items[1]);
         fireDragStart();
         await nextFrame();
-        // NOSONAR
-        iterateChildren(grid.$.items, (row) => {
-          // NOSONAR
-          iterateChildren(row, (cell) => {
+
+        for (const row of [...grid.$.items.children]) {
+          for (const cell of [...row.children]) {
             expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
-          });
-        });
+          }
+        }
       });
 
       // The test only concerns Safari
