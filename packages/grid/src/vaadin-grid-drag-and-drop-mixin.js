@@ -4,11 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
-  getBodyRowCells,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
-  updateCellsPart,
   updateStringRowStates,
 } from './vaadin-grid-helpers.js';
 
