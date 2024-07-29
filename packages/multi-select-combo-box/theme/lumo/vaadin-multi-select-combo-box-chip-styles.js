@@ -23,6 +23,10 @@ const chip = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  :host([disabled]) {
+    background-color: var(--lumo-contrast-10pct);
+  }
+
   :host([focused]) [part='remove-button'] {
     color: inherit;
   }
