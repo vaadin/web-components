@@ -261,11 +261,13 @@ describe('drag and drop', () => {
         await nextFrame();
 
         cells.forEach((cell) => {
+          // NOSONAR
           expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
         });
 
         cells = getRowBodyCells(getRows(grid.$.items)[1]);
         cells.forEach((cell) => {
+          // NOSONAR
           expect(cell.getAttribute('part')).to.not.contain('dragstart-source-row-cell');
         });
 
@@ -274,7 +276,9 @@ describe('drag and drop', () => {
         fireDragStart();
         await nextFrame();
         iterateChildren(grid.$.items, (row) => {
+          // NOSONAR
           iterateChildren(row, (cell) => {
+            // NOSONAR
             expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
           });
         });
