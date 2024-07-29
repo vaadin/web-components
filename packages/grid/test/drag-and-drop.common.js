@@ -260,14 +260,14 @@ describe('drag and drop', () => {
         let cells = getRowBodyCells(getRows(grid.$.items)[0]);
         await nextFrame();
 
+        // NOSONAR
         cells.forEach((cell) => {
-          // NOSONAR
           expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
         });
 
         cells = getRowBodyCells(getRows(grid.$.items)[1]);
+        // NOSONAR
         cells.forEach((cell) => {
-          // NOSONAR
           expect(cell.getAttribute('part')).to.not.contain('dragstart-source-row-cell');
         });
 
@@ -275,10 +275,10 @@ describe('drag and drop', () => {
         grid.selectItem(grid.items[1]);
         fireDragStart();
         await nextFrame();
+        // NOSONAR
         iterateChildren(grid.$.items, (row) => {
           // NOSONAR
           iterateChildren(row, (cell) => {
-            // NOSONAR
             expect(cell.getAttribute('part')).to.contain('dragstart-source-row-cell');
           });
         });

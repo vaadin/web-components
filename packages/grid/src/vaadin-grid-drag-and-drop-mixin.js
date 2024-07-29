@@ -192,7 +192,6 @@ export const DragAndDropMixin = (superClass) =>
             setDraggedItemsCount: (count) => row.setAttribute('dragstart', count),
           },
         });
-
         event.originalEvent = e;
         this.dispatchEvent(event);
 
