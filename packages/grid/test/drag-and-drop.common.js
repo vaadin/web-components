@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { iterateChildren } from '../src/vaadin-grid-helpers.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {
