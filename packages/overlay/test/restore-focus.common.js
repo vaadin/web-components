@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -140,6 +141,32 @@ describe('restore focus', () => {
           overlay.opened = false;
           await nextRender();
           expect(getDeepActiveElement()).to.equal(focusInput);
+        });
+      });
+
+      describe('prevent scroll', () => {
+        it('should prevent scroll when restoring focus on close after mousedown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await nextRender();
+          const spy = sinon.spy(focusable, 'focus');
+          mousedown(document.body);
+          overlay.opened = false;
+          await nextRender();
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+        });
+
+        it('should not prevent scroll when restoring focus on close after keydown', async () => {
+          focusable.focus();
+          overlay.opened = true;
+          await nextRender();
+          const spy = sinon.spy(focusable, 'focus');
+          escKeyDown(document.body);
+          overlay.opened = false;
+          await nextRender();
+          expect(spy).to.be.calledOnce;
+          expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
         });
       });
     });
