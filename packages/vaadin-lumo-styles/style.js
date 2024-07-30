@@ -98,6 +98,8 @@ const globals = css`
     --vaadin-input-field-icon-size: var(--lumo-icon-size-m);
     --vaadin-input-field-invalid-background: var(--lumo-error-color-10pct);
     --vaadin-input-field-invalid-hover-highlight: var(--lumo-error-color-50pct);
+    --vaadin-input-field-disabled-background: var(--lumo-contrast-5pct);
+    --vaadin-input-field-disabled-value-color: var(--lumo-disabled-text-color);
     --vaadin-input-field-height: var(--lumo-size-m);
     --vaadin-input-field-hover-highlight: var(--lumo-contrast-50pct);
     --vaadin-input-field-placeholder-color: var(--lumo-secondary-text-color);

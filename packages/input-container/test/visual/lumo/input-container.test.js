@@ -33,6 +33,14 @@ describe('input-container', () => {
         await visualDiff(div, `${initialState}-disabled`);
       });
 
+      it('styled disabled', async () => {
+        div.style.setProperty('--vaadin-input-field-disabled-background', 'black');
+        div.style.setProperty('--vaadin-input-field-disabled-value-color', 'white');
+
+        element.disabled = true;
+        await visualDiff(div, `${initialState}-styled-disabled`);
+      });
+
       it('readonly', async () => {
         element.readonly = true;
         await visualDiff(div, `${initialState}-readonly`);
