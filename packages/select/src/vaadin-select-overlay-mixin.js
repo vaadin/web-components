@@ -20,6 +20,13 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /** @protected */
+    ready() {
+      super.ready();
+
+      this.restoreFocusOnClose = true;
+    }
+
+    /** @protected */
     _getMenuElement() {
       return Array.from(this.children).find((el) => el.localName !== 'style');
     }
