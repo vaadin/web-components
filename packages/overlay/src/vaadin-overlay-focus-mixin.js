@@ -6,7 +6,7 @@
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 
 /**
@@ -76,7 +76,8 @@ export const OverlayFocusMixin = (superClass) =>
       }
 
       if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
-        this.__focusRestorationController.restoreFocus();
+        const preventScroll = !isKeyboardActive();
+        this.__focusRestorationController.restoreFocus({ preventScroll });
       }
     }
 
