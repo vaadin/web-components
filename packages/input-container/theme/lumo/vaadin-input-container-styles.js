@@ -85,6 +85,9 @@ registerStyles(
     /* Disabled */
     :host([disabled]) {
       background: var(--_disabled-background);
+    }
+
+    :host([disabled]) ::slotted(*) {
       -webkit-text-fill-color: var(--_disabled-value-color);
       color: var(--_disabled-value-color);
     }
