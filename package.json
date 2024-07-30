@@ -17,7 +17,7 @@
     "postinstall": "patch-package",
     "prepare": "husky install",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
-    "start": "web-dev-server --node-resolve --open /dev",
+    "start": "web-dev-server --node-resolve --open /dev --watch",
     "test": "web-test-runner",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
     "test:it": "web-test-runner --config web-test-runner-it.config.js",

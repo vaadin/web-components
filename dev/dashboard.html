@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/dashboard';
+      import '@vaadin/button';
+
+      const dashboard = document.querySelector('vaadin-dashboard');
+
+      dashboard.addEventListener('items-changed', (e) => {
+        console.log('Items changed', JSON.stringify(e.detail.value));
+      });
+
+      const randomLayoutButton = document.getElementById('random');
+      randomLayoutButton.addEventListener('click', () => {
+        dashboard.__startViewTransition(() => {
+          [...dashboard.querySelectorAll('vaadin-dashboard-widget')]
+            .sort(() => Math.random() - 0.5)
+            .forEach((widget, index) => {
+              widget.colspan = Math.floor(Math.random() * 2) + 1;
+              widget.rowspan = Math.floor(Math.random() * 1.5) + 1;
+              widget.order = index;
+            });
+        });
+      });
+
+      const applySavedLayoutButton = document.getElementById('apply-saved');
+      applySavedLayoutButton.addEventListener('click', () => {
+        // A layout fetched from a db for example
+        const items = [
+          {
+            colspan: 3,
+            rowspan: 1,
+            title: 'Title 1',
+            content: 'Content 1',
+          },
+          { colspan: 1, rowspan: 2, title: 'Title 2', content: 'Content 2' },
+          { colspan: 2, rowspan: 1, title: 'Title 3', content: 'Content 3' },
+          { colspan: 1, rowspan: 1, title: 'Title 4', content: 'Content 4' },
+          { colspan: 1, rowspan: 1, title: 'Title 5', content: 'Content 5' },
+        ];
+
+        // The developer also needs to create the widgets (based on the data)
+        dashboard.textContent = '';
+        items.forEach((item) => {
+          const widget = document.createElement('vaadin-dashboard-widget');
+          Object.assign(widget, item);
+          dashboard.appendChild(widget);
+        });
+      });
+
+      const appendWidgetButton = document.getElementById('append');
+      appendWidgetButton.addEventListener('click', () => {
+        const widget = document.createElement('vaadin-dashboard-widget');
+        widget.title = 'New widget';
+        widget.textContent = 'New content';
+        dashboard.appendChild(widget);
+      });
+    </script>
+
+    <style>
+      vaadin-dashboard {
+        --min-col-width: 200px;
+        --max-col-width: 400px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="display: flex; gap: 20px">
+      <vaadin-button id="random">Randomize layout</vaadin-button>
+
+      <vaadin-button id="apply-saved">Apply saved layout</vaadin-button>
+
+      <vaadin-button id="append">Append widget</vaadin-button>
+    </div>
+
+    <vaadin-dashboard dense>
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="First title">
+        First content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget colspan="3" style="background-color: #ffdfba" title="Second title">
+        Second content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget rowspan="2" style="background-color: #ffffba" title="Third title">
+        Third content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget colspan="2" style="background-color: #baffc9" title="Fourth title">
+        Fourth content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #bae1ff" title="Fifth title">
+        Fifth content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="Sixth title">
+        Sixth content
+      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Seventh title">
+        Seventh content
+      </vaadin-dashboard-widget>
+    </vaadin-dashboard>
+  </body>
+</html>
