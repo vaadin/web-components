@@ -181,6 +181,9 @@ export const DragAndDropMixin = (superClass) =>
           updateBooleanRowStates(row, { dragstart: false });
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
+          rows.forEach((row) => {
+            updateBooleanRowStates(row, { 'drag-source': true });
+          });
         });
 
         const event = new CustomEvent('grid-dragstart', {
@@ -202,6 +205,10 @@ export const DragAndDropMixin = (superClass) =>
       const event = new CustomEvent('grid-dragend');
       event.originalEvent = e;
       this.dispatchEvent(event);
+
+      iterateChildren(this.$.items, (row) => {
+        updateBooleanRowStates(row, { 'drag-source': false });
+      });
     }
 
     /** @private */
