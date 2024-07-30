@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, escKeyDown, fixtureSync, mousedown, outsideClick } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { FocusRestorationController } from '../src/focus-restoration-controller.js';
 import { getDeepActiveElement } from '../src/focus-utils.js';
@@ -60,27 +60,25 @@ describe('focus-restoration-controller', () => {
     expect(getDeepActiveElement()).to.equal(button2);
   });
 
-  it('should prevent scroll when restoring focus synchronously after mousedown', () => {
+  it('should not prevent scroll when restoring focus synchronously by default', () => {
     button1.focus();
     const spy = sinon.spy(button2, 'focus');
     controller.saveFocus(button2);
-    mousedown(document.body);
-    controller.restoreFocus();
-    expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
-  });
-
-  it('should not prevent scroll when restoring focus synchronously after keydown', () => {
-    button1.focus();
-    const spy = sinon.spy(button2, 'focus');
-    controller.saveFocus(button2);
-    escKeyDown(document.body);
     controller.restoreFocus();
     expect(spy).to.be.calledOnce;
     expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
   });
 
-  it('should prevent scroll when restoring focus asynchronously after outside click', async () => {
+  it('should prevent scroll when restoring focus synchronously with preventScroll', () => {
+    button1.focus();
+    const spy = sinon.spy(button2, 'focus');
+    controller.saveFocus(button2);
+    controller.restoreFocus({ preventScroll: true });
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+  });
+
+  it('should not prevent scroll when restoring focus asynchronously by default', async () => {
     button1.focus();
     const spy = sinon.spy(button2, 'focus');
     controller.saveFocus(button2);
@@ -88,18 +86,17 @@ describe('focus-restoration-controller', () => {
     controller.restoreFocus();
     await aTimeout(0);
     expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
   });
 
-  it('should not prevent scroll when restoring focus asynchronously after keydown', async () => {
+  it('should prevent scroll when restoring focus asynchronously with preventScroll', async () => {
     button1.focus();
     const spy = sinon.spy(button2, 'focus');
     controller.saveFocus(button2);
-    escKeyDown(document.body);
-    document.body.focus();
-    controller.restoreFocus();
+    outsideClick();
+    controller.restoreFocus({ preventScroll: true });
     await aTimeout(0);
     expect(spy).to.be.calledOnce;
-    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
   });
 });

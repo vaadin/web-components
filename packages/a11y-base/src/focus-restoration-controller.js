@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getDeepActiveElement, isKeyboardActive } from './focus-utils.js';
+import { getDeepActiveElement } from './focus-utils.js';
 
 /**
  * A controller for saving a focused node and restoring focus to it later.
@@ -23,13 +23,13 @@ export class FocusRestorationController {
   /**
    * Restores focus to the target node that was saved previously with `saveFocus()`.
    */
-  restoreFocus() {
+  restoreFocus(options) {
     const focusNode = this.focusNode;
     if (!focusNode) {
       return;
     }
 
-    const preventScroll = isKeyboardActive() === false;
+    const preventScroll = options ? options.preventScroll : false;
 
     if (getDeepActiveElement() === document.body) {
       // In Firefox and Safari, focusing the node synchronously
