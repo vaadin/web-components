@@ -60,6 +60,36 @@ describe('tabsheet', () => {
           await visualDiff(div, `${dir}-bordered`);
         });
       });
+      describe('theme', () => {
+        beforeEach(() => {
+          element = fixtureSync(
+            `
+            <vaadin-tabsheet>
+            <div slot="prefix">Prefix</div>
+            <div slot="suffix">Suffix</div>
+            
+            <vaadin-tabs slot="tabs">
+            <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+            </vaadin-tabs>
+            
+            <div tab="tab-1">
+            Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
+            Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,
+            laoreet id, risus. Ut condimentum, arcu sit amet placerat blandit, augue nibh pretium nunc, in tempus sem dolor
+            non leo. Etiam fringilla mauris a odio. Nunc lorem diam, interdum eget, lacinia in, scelerisque sit amet, purus.
+            Nam ornare. Donec placerat dui ut orci. Phasellus quis lacus at nisl elementum cursus. Cras bibendum egestas
+            nulla. Phasellus pulvinar ullamcorper odio. Etiam ipsum. Proin tincidunt. Aliquam aliquet.
+            </div>
+            </vaadin-tabsheet>
+            `,
+            div,
+          );
+        });
+        it('no-padding', async () => {
+          element.setAttribute('theme', 'no-padding');
+          await visualDiff(div, `${dir}-no-padding`);
+        });
+      });
     });
   });
 });
