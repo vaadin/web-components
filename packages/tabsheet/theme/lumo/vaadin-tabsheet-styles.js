@@ -16,6 +16,10 @@ const tabsheet = css`
     border-radius: var(--lumo-border-radius-l);
   }
 
+  :host([theme~='no-padding'])::part(content) {
+    padding: 0;
+  }
+
   [part='tabs-container'] {
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     padding: var(--lumo-space-xs) var(--lumo-space-s);
