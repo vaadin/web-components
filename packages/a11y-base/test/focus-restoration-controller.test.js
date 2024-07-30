@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
+import { aTimeout, escKeyDown, fixtureSync, mousedown, outsideClick } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { FocusRestorationController } from '../src/focus-restoration-controller.js';
 import { getDeepActiveElement } from '../src/focus-utils.js';
 
@@ -57,5 +58,48 @@ describe('focus-restoration-controller', () => {
     button2.focus();
     controller.restoreFocus();
     expect(getDeepActiveElement()).to.equal(button2);
+  });
+
+  it('should prevent scroll when restoring focus synchronously after mousedown', () => {
+    button1.focus();
+    const spy = sinon.spy(button2, 'focus');
+    controller.saveFocus(button2);
+    mousedown(document.body);
+    controller.restoreFocus();
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+  });
+
+  it('should not prevent scroll when restoring focus synchronously after keydown', () => {
+    button1.focus();
+    const spy = sinon.spy(button2, 'focus');
+    controller.saveFocus(button2);
+    escKeyDown(document.body);
+    controller.restoreFocus();
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
+  });
+
+  it('should prevent scroll when restoring focus asynchronously after outside click', async () => {
+    button1.focus();
+    const spy = sinon.spy(button2, 'focus');
+    controller.saveFocus(button2);
+    outsideClick();
+    controller.restoreFocus();
+    await aTimeout(0);
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
+  });
+
+  it('should not prevent scroll when restoring focus asynchronously after keydown', async () => {
+    button1.focus();
+    const spy = sinon.spy(button2, 'focus');
+    controller.saveFocus(button2);
+    escKeyDown(document.body);
+    document.body.focus();
+    controller.restoreFocus();
+    await aTimeout(0);
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
   });
 });
