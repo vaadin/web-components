@@ -94,6 +94,7 @@ const inputField = css`
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
+
   :host([disabled]) [part='input-field'] ::slotted(*) {
     color: var(--_disabled-value-color);
     -webkit-text-fill-color: var(--_disabled-value-color);
