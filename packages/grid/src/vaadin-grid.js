@@ -190,7 +190,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * `collapsed-row-cell`       | Cell in a collapsed row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
- * `dragstart-row-cell`       | Cell in the ghost image row, but not in for a source row
+ * `dragstart-row-cell`       | Cell in the ghost image row, but not in a source row
  * `drag-source-row-cell`     | Cell in a source row, but not in the ghost image
  * `dragover-above-row-cell`  | Cell in a row that has another row dragged over above
  * `dragover-below-row-cell`  | Cell in a row that has another row dragged over below

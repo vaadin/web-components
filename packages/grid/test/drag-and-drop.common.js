@@ -259,8 +259,8 @@ describe('drag and drop', () => {
         grid.selectItem(grid.items[1]);
         fireDragStart();
         await nextFrame();
-        for (const row of [...grid.$.items.children]) {
-          for (const cell of [...row.children]) {
+        for (const row of getRows(grid.$.items)) {
+          for (const cell of getRowBodyCells(row)) {
             expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
           }
         }
