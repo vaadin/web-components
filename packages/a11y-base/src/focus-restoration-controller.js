@@ -23,20 +23,22 @@ export class FocusRestorationController {
   /**
    * Restores focus to the target node that was saved previously with `saveFocus()`.
    */
-  restoreFocus() {
+  restoreFocus(options) {
     const focusNode = this.focusNode;
     if (!focusNode) {
       return;
     }
+
+    const preventScroll = options ? options.preventScroll : false;
 
     if (getDeepActiveElement() === document.body) {
       // In Firefox and Safari, focusing the node synchronously
       // doesn't work as expected when the overlay is closing on outside click.
       // These browsers force focus to move to the body element and retain it
       // there until the next event loop iteration.
-      setTimeout(() => focusNode.focus());
+      setTimeout(() => focusNode.focus({ preventScroll }));
     } else {
-      focusNode.focus();
+      focusNode.focus({ preventScroll });
     }
 
     this.focusNode = null;
