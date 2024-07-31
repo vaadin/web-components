@@ -610,8 +610,7 @@ class Popover extends PopoverPositionMixin(
     if (lastFocusable && isElementFocused(lastFocusable)) {
       const focusable = this.__getNextBodyFocusable(this.target);
       if (focusable && focusable !== overlayPart) {
-        event.preventDefault();
-        focusable.focus();
+        this.target.focus();
         return;
       }
     }

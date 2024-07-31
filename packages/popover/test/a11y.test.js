@@ -351,12 +351,10 @@ describe('a11y', () => {
       // Move focus to the input inside the overlay
       await sendKeys({ press: 'Tab' });
 
-      const spy = sinon.spy(input, 'focus');
-
       // Move focus to the input after the overlay
       await sendKeys({ press: 'Tab' });
 
-      expect(spy).to.be.calledOnce;
+      expect(document.activeElement).to.equal(input);
     });
 
     it('should focus the last overlay child on the next element Shift Tab', async () => {
