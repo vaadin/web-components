@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -67,7 +67,7 @@ describe('keyboard', () => {
       });
     });
 
-    it('should focus value button element on overlay closing', async () => {
+    it('should focus value button element on overlay closing with Esc', async () => {
       await sendKeys({ press: 'Tab' });
 
       await sendKeys({ press: 'Enter' });
@@ -77,6 +77,21 @@ describe('keyboard', () => {
 
       await sendKeys({ press: 'Escape' });
       await nextUpdate(select);
+
+      expect(focusedSpy.calledOnce).to.be.true;
+    });
+
+    it('should focus value button element on overlay closing with outside click', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+
+      const focusedSpy = sinon.spy(valueButton, 'focus');
+
+      outsideClick();
+      await nextUpdate(select);
+      await aTimeout(0);
 
       expect(focusedSpy.calledOnce).to.be.true;
     });
