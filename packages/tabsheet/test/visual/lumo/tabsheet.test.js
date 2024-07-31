@@ -60,6 +60,7 @@ describe('tabsheet', () => {
           await visualDiff(div, `${dir}-bordered`);
         });
       });
+
       describe('theme', () => {
         beforeEach(() => {
           element = fixtureSync(
