@@ -16,7 +16,7 @@ const tabsheet = css`
     border-radius: var(--lumo-border-radius-l);
   }
 
-  :host([theme~='no-padding'])::part(content) {
+  :host([theme~='no-padding']) [part='content'] {
     padding: 0;
   }
 
