@@ -59,7 +59,8 @@ describe('tabsheet', () => {
           element.setAttribute('theme', 'bordered');
           await visualDiff(div, `${dir}-bordered`);
         });
-        // NOSONAR
+
+        // eslint-disable-next-line prettier/prettier
         it('no-padding', async () => {
           // NOSONAR
           element.setAttribute('theme', 'no-padding');
