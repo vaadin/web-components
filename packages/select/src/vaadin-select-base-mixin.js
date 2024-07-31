@@ -367,7 +367,6 @@ export const SelectBaseMixin = (superClass) =>
           this.removeAttribute('focus-ring');
         }
       } else if (wasOpened) {
-        this.focus();
         if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }

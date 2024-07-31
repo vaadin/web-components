@@ -58,6 +58,13 @@ class SelectOverlay extends PositionMixin(OverlayMixin(ThemableMixin(DirMixin(Po
   }
 
   /** @protected */
+  ready() {
+    super.ready();
+
+    this.restoreFocusOnClose = true;
+  }
+
+  /** @protected */
   updated(props) {
     super.updated(props);
 
