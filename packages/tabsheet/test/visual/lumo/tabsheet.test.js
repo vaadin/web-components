@@ -85,6 +85,7 @@ describe('tabsheet', () => {
             div,
           );
         });
+
         it('no-padding', async () => {
           element.setAttribute('theme', 'no-padding');
           await visualDiff(div, `${dir}-no-padding`);
