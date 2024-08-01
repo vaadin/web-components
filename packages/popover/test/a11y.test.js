@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync, focusout, nextRender, nextUpdate, outsideClick, tab } from '@vaadin/testing-helpers';
+import {
+  esc,
+  fixtureSync,
+  focusout,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+  outsideClick,
+  tab,
+} from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -125,6 +134,27 @@ describe('a11y', () => {
       popover.accessibleNameRef = null;
       await nextUpdate(popover);
       expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    });
+  });
+
+  describe('autofocus', () => {
+    let spy;
+
+    beforeEach(() => {
+      spy = sinon.spy(overlay.$.overlay, 'focus');
+    });
+
+    it('should not move focus to the overlay content when opened by default', async () => {
+      target.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(spy).to.not.be.called;
+    });
+
+    it('should move focus to the overlay content when opened if autofocus is true', async () => {
+      popover.autofocus = true;
+      target.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(spy).to.be.calledOnce;
     });
   });
 

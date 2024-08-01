@@ -34,6 +34,7 @@ assertType<string>(popover.contentHeight);
 assertType<string>(popover.contentWidth);
 assertType<string>(popover.overlayClass);
 assertType<string>(popover.overlayRole);
+assertType<boolean>(popover.autofocus);
 assertType<boolean>(popover.opened);
 assertType<boolean>(popover.modal);
 assertType<boolean>(popover.withBackdrop);

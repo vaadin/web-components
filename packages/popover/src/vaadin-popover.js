@@ -211,6 +211,14 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * When true, the popover content automatically receives focus after
+       * it is opened. Modal popovers use this behavior by default.
+       */
+      autofocus: {
+        type: Boolean,
+      },
+
+      /**
        * Height to be set on the overlay content.
        *
        * @attr {string} content-height
@@ -425,6 +433,7 @@ class Popover extends PopoverPositionMixin(
         .restoreFocusNode="${this.target}"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
+        @vaadin-overlay-open="${this.__onOverlayOpened}"
         @vaadin-overlay-closed="${this.__onOverlayClosed}"
       ></vaadin-popover-overlay>
     `;
@@ -780,6 +789,13 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOpenedChanged(event) {
     this.opened = event.detail.value;
+  }
+
+  /** @private */
+  __onOverlayOpened() {
+    if (this.autofocus && !this.modal) {
+      this._overlayElement.$.overlay.focus();
+    }
   }
 
   /** @private */
