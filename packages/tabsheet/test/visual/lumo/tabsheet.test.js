@@ -59,6 +59,12 @@ describe('tabsheet', () => {
           element.setAttribute('theme', 'bordered');
           await visualDiff(div, `${dir}-bordered`);
         });
+
+        // prettier-ignore
+        it('no-padding', async () => { // NOSONAR
+          element.setAttribute('theme', 'no-padding');
+          await visualDiff(div, `${dir}-no-padding`);
+        });
       });
     });
   });

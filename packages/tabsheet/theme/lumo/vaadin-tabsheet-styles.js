@@ -38,6 +38,10 @@ const tabsheet = css`
     align-items: center;
     justify-content: center;
   }
+
+  :host([theme~='no-padding']) [part='content'] {
+    padding: 0;
+  }
 `;
 
 registerStyles('vaadin-tabsheet', [tabsheet, loader], { moduleId: 'lumo-tabsheet' });
