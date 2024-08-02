@@ -94,17 +94,13 @@ describe('checkbox', () => {
 
     describe('styled', () => {
       before(() => {
-        console.log('add styles');
         document.documentElement.style.setProperty('--vaadin-checkbox-disabled-checkmark-color', 'white');
         document.documentElement.style.setProperty('--vaadin-checkbox-disabled-background', 'black');
-        console.log('styles added');
       });
 
       after(() => {
-        console.log('remove styles');
         document.documentElement.style.removeProperty('--vaadin-checkbox-disabled-checkmark-color');
         document.documentElement.style.removeProperty('--vaadin-checkbox-disabled-background');
-        console.log('styles removed');
       });
 
       it('checked', async () => {
