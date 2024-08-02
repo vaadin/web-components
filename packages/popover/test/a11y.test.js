@@ -1,8 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { esc, fixtureSync, focusout, nextRender, nextUpdate, outsideClick, tab } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('a11y', () => {
@@ -143,16 +145,6 @@ describe('a11y', () => {
         await nextRender();
 
         expect(focusSpy).to.be.calledOnce;
-      });
-
-      it('should not restore focus on Tab with trigger set to focus', async () => {
-        const focusSpy = sinon.spy(target, 'focus');
-        overlay.$.overlay.focus();
-        tab(target);
-        focusout(target);
-        await nextRender();
-
-        expect(focusSpy).to.not.be.called;
       });
 
       it('should restore focus on close after Tab to overlay with trigger set to focus', async () => {
@@ -310,6 +302,83 @@ describe('a11y', () => {
 
         expect(focusSpy).to.be.calledOnce;
       });
+    });
+  });
+
+  describe('Tab order', () => {
+    let input;
+
+    beforeEach(async () => {
+      input = document.createElement('input');
+      target.parentElement.appendChild(input);
+
+      popover.trigger = [];
+      popover.opened = true;
+      await nextRender();
+    });
+
+    it('should focus the overlay content part on target Tab', async () => {
+      target.focus();
+
+      const spy = sinon.spy(overlay.$.overlay, 'focus');
+      await sendKeys({ press: 'Tab' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should focus the target on overlay content part Shift Tab', async () => {
+      target.focus();
+
+      // Move focus to the overlay
+      await sendKeys({ press: 'Tab' });
+
+      const spy = sinon.spy(target, 'focus');
+
+      // Move focus back to the target
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should focus the next element after target on last overlay child Tab', async () => {
+      target.focus();
+
+      // Move focus to the overlay
+      await sendKeys({ press: 'Tab' });
+
+      // Move focus to the input inside the overlay
+      await sendKeys({ press: 'Tab' });
+
+      const spy = sinon.spy(input, 'focus');
+
+      // Move focus to the input after the overlay
+      await sendKeys({ press: 'Tab' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should focus the last overlay child on the next element Shift Tab', async () => {
+      input.focus();
+
+      const focusable = overlay.querySelector('input');
+      const spy = sinon.spy(focusable, 'focus');
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not focus the overlay part on the next element Tab', async () => {
+      input.focus();
+
+      await sendKeys({ press: 'Tab' });
+
+      const activeElement = getDeepActiveElement();
+      expect(activeElement).to.not.equal(overlay.$.overlay);
     });
   });
 });

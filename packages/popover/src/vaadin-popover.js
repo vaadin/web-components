@@ -6,7 +6,12 @@
 import './vaadin-popover-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import {
+  getDeepActiveElement,
+  getFocusableElements,
+  isElementFocused,
+  isKeyboardActive,
+} from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -380,7 +385,6 @@ class Popover extends PopoverPositionMixin(
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
-    this.__onTargetKeydown = this.__onTargetKeydown.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
@@ -470,7 +474,6 @@ class Popover extends PopoverPositionMixin(
    */
   _addTargetListeners(target) {
     target.addEventListener('click', this.__onTargetClick);
-    target.addEventListener('keydown', this.__onTargetKeydown);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
     target.addEventListener('focusin', this.__onTargetFocusIn);
@@ -484,7 +487,6 @@ class Popover extends PopoverPositionMixin(
    */
   _removeTargetListeners(target) {
     target.removeEventListener('click', this.__onTargetClick);
-    target.removeEventListener('keydown', this.__onTargetKeydown);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
     target.removeEventListener('focusin', this.__onTargetFocusIn);
@@ -565,9 +567,13 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onGlobalKeyDown(event) {
+    // Modal popover uses overlay logic for Esc key and focus trap.
+    if (this.modal) {
+      return;
+    }
+
     if (
       event.key === 'Escape' &&
-      !this.modal &&
       !this.noCloseOnEsc &&
       this.opened &&
       !this.__isManual &&
@@ -577,14 +583,82 @@ class Popover extends PopoverPositionMixin(
       event.stopPropagation();
       this._openedStateController.close(true);
     }
+
+    // Include popover content in the Tab order after the target.
+    if (event.key === 'Tab') {
+      if (event.shiftKey) {
+        this.__onGlobalShiftTab(event);
+      } else {
+        this.__onGlobalTab(event);
+      }
+    }
   }
 
   /** @private */
-  __onTargetKeydown(event) {
-    // Prevent restoring focus after target blur on Tab key
-    if (event.key === 'Tab' && this.__shouldRestoreFocus) {
-      this.__shouldRestoreFocus = false;
+  __onGlobalTab(event) {
+    const overlayPart = this._overlayElement.$.overlay;
+
+    // Move focus to the popover content on target element Tab
+    if (this.target && isElementFocused(this.target)) {
+      event.preventDefault();
+      overlayPart.focus();
+      return;
     }
+
+    // Move focus to the next element after target on content Tab
+    const lastFocusable = this.__getLastFocusable(overlayPart);
+    if (lastFocusable && isElementFocused(lastFocusable)) {
+      const focusable = this.__getNextBodyFocusable(this.target);
+      if (focusable && focusable !== overlayPart) {
+        event.preventDefault();
+        focusable.focus();
+        return;
+      }
+    }
+
+    // Prevent focusing the popover content on previous element Tab
+    const activeElement = getDeepActiveElement();
+    const nextFocusable = this.__getNextBodyFocusable(activeElement);
+    if (nextFocusable === overlayPart && lastFocusable) {
+      // Move focus to the last overlay focusable and do NOT prevent keydown
+      // to move focus outside the popover content (e.g. to the URL bar).
+      lastFocusable.focus();
+    }
+  }
+
+  /** @private */
+  __onGlobalShiftTab(event) {
+    const overlayPart = this._overlayElement.$.overlay;
+
+    // Move focus back to the target on overlay content Shift + Tab
+    if (this.target && isElementFocused(overlayPart)) {
+      event.preventDefault();
+      this.target.focus();
+      return;
+    }
+
+    // Move focus back to the popover on next element Shift + Tab
+    const nextFocusable = this.__getNextBodyFocusable(this.target);
+    if (nextFocusable && isElementFocused(nextFocusable)) {
+      const lastFocusable = this.__getLastFocusable(overlayPart);
+      if (lastFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+      }
+    }
+  }
+
+  /** @private */
+  __getNextBodyFocusable(target) {
+    const focusables = getFocusableElements(document.body);
+    const idx = focusables.findIndex((el) => el === target);
+    return focusables[idx + 1];
+  }
+
+  /** @private */
+  __getLastFocusable(container) {
+    const focusables = getFocusableElements(container);
+    return focusables.pop();
   }
 
   /** @private */
