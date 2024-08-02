@@ -44,6 +44,11 @@ describe('radio-button', () => {
       element.disabled = true;
     });
 
+    after(() => {
+      document.documentElement.style.removeProperty('--vaadin-radio-button-disabled-background');
+      document.documentElement.style.removeProperty('--vaadin-radio-button-disabled-dot-color');
+    });
+
     it('basic', async () => {
       await visualDiff(div, 'disabled');
     });
@@ -51,6 +56,18 @@ describe('radio-button', () => {
     it('checked', async () => {
       element.checked = true;
       await visualDiff(div, 'disabled-checked');
+    });
+
+    it('styled', async () => {
+      document.documentElement.style.setProperty('--vaadin-radio-button-disabled-background', 'black');
+      await visualDiff(div, 'styled-disabled');
+    });
+
+    it('styled checked', async () => {
+      element.checked = true;
+      document.documentElement.style.setProperty('--vaadin-radio-button-disabled-background', 'black');
+      document.documentElement.style.setProperty('--vaadin-radio-button-disabled-dot-color', 'white');
+      await visualDiff(div, 'styled-disabled-checked');
     });
   });
 
