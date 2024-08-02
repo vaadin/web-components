@@ -92,6 +92,12 @@ declare class Popover extends PopoverPositionMixin(
   accessibleNameRef: string | null | undefined;
 
   /**
+   * When true, the popover content automatically receives focus after
+   * it is opened. Modal popovers use this behavior by default.
+   */
+  autofocus: boolean;
+
+  /**
    * Height to be set on the overlay content.
    *
    * @attr {string} content-height
