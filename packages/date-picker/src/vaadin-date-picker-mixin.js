@@ -567,6 +567,12 @@ export const DatePickerMixin = (subclass) =>
         }
       });
 
+      content.addEventListener('focusout', (event) => {
+        if (this._shouldRemoveFocus(event)) {
+          this._setFocused(false);
+        }
+      });
+
       // Two-way data binding for `focusedDate` property
       content.addEventListener('focused-date-changed', (e) => {
         this._focusedDate = e.detail.value;
@@ -650,12 +656,26 @@ export const DatePickerMixin = (subclass) =>
      * - when moving focus to the overlay content,
      * - when closing on date click / outside click.
      *
-     * @param {!FocusEvent} _event
+     * @param {FocusEvent} event
      * @return {boolean}
      * @protected
      * @override
      */
-    _shouldRemoveFocus(_event) {
+    _shouldRemoveFocus(event) {
+      // Remove the focused attribute when focus is moving to an element
+      // outside the field while the overlay is open. In this scenario,
+      // the overlay will close without restoring focus to the input.
+      const { relatedTarget } = event;
+      if (
+        this.opened &&
+        relatedTarget !== null &&
+        relatedTarget !== document.body &&
+        !this.contains(relatedTarget) &&
+        !this._overlayContent.contains(relatedTarget)
+      ) {
+        return true;
+      }
+
       return !this.opened;
     }
 
