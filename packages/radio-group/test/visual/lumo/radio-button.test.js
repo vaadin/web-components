@@ -52,6 +52,27 @@ describe('radio-button', () => {
       element.checked = true;
       await visualDiff(div, 'disabled-checked');
     });
+
+    describe('styled', () => {
+      before(() => {
+        document.documentElement.style.setProperty('--vaadin-radio-button-disabled-background', 'black');
+        document.documentElement.style.setProperty('--vaadin-radio-button-disabled-dot-color', 'white');
+      });
+
+      after(() => {
+        document.documentElement.style.removeProperty('--vaadin-radio-button-disabled-background');
+        document.documentElement.style.removeProperty('--vaadin-radio-button-disabled-dot-color');
+      });
+
+      it('disabled', async () => {
+        await visualDiff(div, 'styled-disabled');
+      });
+
+      it('disabled checked', async () => {
+        element.checked = true;
+        await visualDiff(div, 'styled-disabled-checked');
+      });
+    });
   });
 
   describe('RTL', () => {

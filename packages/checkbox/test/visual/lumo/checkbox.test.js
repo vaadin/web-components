@@ -91,6 +91,32 @@ describe('checkbox', () => {
       element.required = true;
       await visualDiff(div, 'disabled-required');
     });
+
+    describe('styled', () => {
+      before(() => {
+        document.documentElement.style.setProperty('--vaadin-checkbox-disabled-checkmark-color', 'white');
+        document.documentElement.style.setProperty('--vaadin-checkbox-disabled-background', 'black');
+      });
+
+      after(() => {
+        document.documentElement.style.removeProperty('--vaadin-checkbox-disabled-checkmark-color');
+        document.documentElement.style.removeProperty('--vaadin-checkbox-disabled-background');
+      });
+
+      it('checked', async () => {
+        element.checked = true;
+        await visualDiff(div, 'styled-disabled-checked');
+      });
+
+      it('indeterminate', async () => {
+        element.indeterminate = true;
+        await visualDiff(div, 'styled-disabled-indeterminate');
+      });
+
+      it('unchecked', async () => {
+        await visualDiff(div, 'styled-disabled');
+      });
+    });
   });
 
   describe('readonly', () => {

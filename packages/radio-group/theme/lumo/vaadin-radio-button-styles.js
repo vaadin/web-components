@@ -134,11 +134,11 @@ registerStyles(
     }
 
     :host([disabled]) [part='radio'] {
-      background-color: var(--lumo-contrast-10pct);
+      background-color: var(--vaadin-radio-button-disabled-background, var(--lumo-contrast-10pct));
     }
 
     :host([disabled]) [part='radio']::after {
-      border-color: var(--lumo-contrast-30pct);
+      border-color: var(--vaadin-radio-button-disabled-dot-color, var(--lumo-contrast-30pct));
     }
 
     /* RTL specific styles */
