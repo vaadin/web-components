@@ -68,7 +68,7 @@ describe('radio-button', () => {
         await visualDiff(div, 'styled-disabled');
       });
 
-      it('styled disabled checked', async () => {
+      it('disabled checked', async () => {
         element.checked = true;
         await visualDiff(div, 'styled-disabled-checked');
       });
