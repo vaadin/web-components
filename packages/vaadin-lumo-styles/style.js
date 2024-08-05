@@ -62,6 +62,8 @@ const globals = css`
     --vaadin-checkbox-label-font-size: var(--lumo-font-size-m);
     --vaadin-checkbox-label-padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
+    --vaadin-checkbox-disabled-checkmark-color: var(--lumo-contrast-10pct);
+    --vaadin-checkbox-disabled-background: var(--lumo-contrast-30pct);
     /* Radio button */
     --vaadin-radio-button-background: var(--lumo-contrast-20pct);
     --vaadin-radio-button-background-hover: var(--lumo-contrast-30pct);
@@ -72,6 +74,8 @@ const globals = css`
     --vaadin-radio-button-label-padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs)
       var(--lumo-space-xs);
     --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
+    --vaadin-radio-button-disabled-background: var(--lumo-contrast-10pct);
+    --vaadin-radio-button-disabled-dot-color: var(--lumo-contrast-30pct);
     --vaadin-selection-color: var(--lumo-primary-color);
     --vaadin-selection-color-text: var(--lumo-primary-text-color);
     --vaadin-input-field-border-radius: var(--lumo-border-radius-m);
