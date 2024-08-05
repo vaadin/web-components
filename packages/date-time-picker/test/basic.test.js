@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
