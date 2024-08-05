@@ -102,48 +102,50 @@ describe('Basic features', () => {
     });
   });
 
-  it('should not have `pointer-events` by default', () => {
-    expect(dateTimePicker.style.pointerEvents).to.be.empty;
-  });
+  describe('pointer-events', () => {
+    it('should not have by default', () => {
+      expect(dateTimePicker.style.pointerEvents).to.be.empty;
+    });
 
-  it('should set `pointer-events: auto` when opening date-picker', async () => {
-    datePicker.click();
-    await nextRender();
-    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
-  });
+    it('should set to `auto` when opening date-picker', async () => {
+      datePicker.click();
+      await nextRender();
+      expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+    });
 
-  it('should remove `pointer-events: auto` when closing date-picker', async () => {
-    datePicker.click();
-    await nextRender();
-    outsideClick();
-    expect(dateTimePicker.style.pointerEvents).to.be.empty;
-  });
+    it('should remove when closing date-picker', async () => {
+      datePicker.click();
+      await nextRender();
+      outsideClick();
+      expect(dateTimePicker.style.pointerEvents).to.be.empty;
+    });
 
-  it('should set `pointer-events: auto` when opening time-picker', async () => {
-    timePicker.click();
-    await nextRender();
-    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
-  });
+    it('should set to `auto` when opening time-picker', async () => {
+      timePicker.click();
+      await nextRender();
+      expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+    });
 
-  it('should remove `pointer-events: auto` when closing time-picker', async () => {
-    timePicker.click();
-    await nextRender();
-    outsideClick();
-    expect(dateTimePicker.style.pointerEvents).to.be.empty;
-  });
+    it('should remove when closing time-picker', async () => {
+      timePicker.click();
+      await nextRender();
+      outsideClick();
+      expect(dateTimePicker.style.pointerEvents).to.be.empty;
+    });
 
-  it('should keep `pointer-events: auto` when switching between pickers', async () => {
-    datePicker.click();
-    await nextRender();
-    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+    it('should keep `auto` when switching between pickers', async () => {
+      datePicker.click();
+      await nextRender();
+      expect(dateTimePicker.style.pointerEvents).to.equal('auto');
 
-    timePicker.click();
-    await nextRender();
-    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+      timePicker.click();
+      await nextRender();
+      expect(dateTimePicker.style.pointerEvents).to.equal('auto');
 
-    datePicker.click();
-    await nextRender();
-    expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+      datePicker.click();
+      await nextRender();
+      expect(dateTimePicker.style.pointerEvents).to.equal('auto');
+    });
   });
 
   describe('focused', () => {

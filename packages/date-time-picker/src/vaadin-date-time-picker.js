@@ -522,6 +522,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__dispatchChangeForValue = undefined;
   }
 
+  /** @private */
   __openedChangedEventHandler() {
     const opened = this.__datePicker.opened || this.__timePicker.opened;
     this.style.pointerEvents = opened ? 'auto' : '';
