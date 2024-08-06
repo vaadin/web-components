@@ -19,13 +19,14 @@
 
       const randomLayoutButton = document.getElementById('random');
       randomLayoutButton.addEventListener('click', () => {
+        // TODO: Strart view transition internally on items change
         dashboard.__startViewTransition(() => {
-          [...dashboard.querySelectorAll('vaadin-dashboard-widget')]
+          dashboard.items = [...dashboard.items]
             .sort(() => Math.random() - 0.5)
-            .forEach((widget, index) => {
-              widget.colspan = Math.floor(Math.random() * 2) + 1;
-              widget.rowspan = Math.floor(Math.random() * 1.5) + 1;
-              widget.order = index;
+            .map((item, index) => {
+              item.colspan = Math.floor(Math.random() * 2) + 1;
+              item.rowspan = Math.floor(Math.random() * 1.5) + 1;
+              return item;
             });
         });
       });
@@ -39,11 +40,12 @@
             rowspan: 1,
             title: 'Title 1',
             content: 'Content 1',
+            id: 'w1',
           },
-          { colspan: 1, rowspan: 2, title: 'Title 2', content: 'Content 2' },
-          { colspan: 2, rowspan: 1, title: 'Title 3', content: 'Content 3' },
-          { colspan: 1, rowspan: 1, title: 'Title 4', content: 'Content 4' },
-          { colspan: 1, rowspan: 1, title: 'Title 5', content: 'Content 5' },
+          { colspan: 1, rowspan: 2, title: 'Title 2', content: 'Content 2', id: 'w2' },
+          { colspan: 2, rowspan: 1, title: 'Title 3', content: 'Content 3', id: 'w3' },
+          { colspan: 1, rowspan: 1, title: 'Title 4', content: 'Content 4', id: 'w4' },
+          { colspan: 1, rowspan: 1, title: 'Title 5', content: 'Content 5', id: 'w5' },
         ];
 
         // The developer also needs to create the widgets (based on the data)
@@ -53,15 +55,30 @@
           Object.assign(widget, item);
           dashboard.appendChild(widget);
         });
+
+        dashboard.items = items;
       });
 
       const appendWidgetButton = document.getElementById('append');
       appendWidgetButton.addEventListener('click', () => {
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.title = 'New widget';
-        widget.textContent = 'New content';
+        widget.id = 'w' + (dashboard.items.length + 1);
+        widget.title = 'Title ' + (dashboard.items.length + 1);
+        widget.textContent = 'Content ' + (dashboard.items.length + 1);
         dashboard.appendChild(widget);
+
+        dashboard.items = [...dashboard.items, { id: widget.id }];
       });
+
+      dashboard.items = [
+        { id: 'w1' },
+        { id: 'w2' },
+        { id: 'w3', rowspan: 2 },
+        { id: 'w4' },
+        { id: 'w5', colspan: 2 },
+        { id: 'w6' },
+        { id: 'w7' },
+      ];
     </script>
 
     <style>
@@ -82,25 +99,25 @@
     </div>
 
     <vaadin-dashboard dense>
-      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="First title">
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="First title" id="w1">
         First content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget colspan="3" style="background-color: #ffdfba" title="Second title">
+      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Second title" id="w2">
         Second content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget rowspan="2" style="background-color: #ffffba" title="Third title">
+      <vaadin-dashboard-widget style="background-color: #ffffba" title="Third title" id="w3">
         Third content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget colspan="2" style="background-color: #baffc9" title="Fourth title">
+      <vaadin-dashboard-widget style="background-color: #baffc9" title="Fourth title" id="w4">
         Fourth content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #bae1ff" title="Fifth title">
+      <vaadin-dashboard-widget style="background-color: #bae1ff" title="Fifth title" id="w5">
         Fifth content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="Sixth title">
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="Sixth title" id="w6">
         Sixth content
       </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Seventh title">
+      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Seventh title" id="w7">
         Seventh content
       </vaadin-dashboard-widget>
     </vaadin-dashboard>

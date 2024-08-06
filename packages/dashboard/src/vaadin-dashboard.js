@@ -9,8 +9,6 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const widgetClass = customElements.get('vaadin-dashboard-widget');
@@ -26,13 +24,20 @@ const widgetClass = customElements.get('vaadin-dashboard-widget');
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-dashboard';
   }
 
   static get properties() {
     return {
+      // TODO: rename?
+      items: {
+        type: Object,
+        notify: true,
+        observer: '__itemsChanged',
+      },
+
       dense: {
         type: Boolean,
         reflectToAttribute: true,
@@ -46,16 +51,15 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
 
   /** @protected */
   render() {
-    return html`<vaadin-dashboard-layout
-      >${Array.from({ length: this.__widgetCount }).map(
-        (_, index) => html`<slot name="widget-${index}"></slot></vaadin-dashboard-layout>`,
-      )}</vaadin-dashboard-layout
-    >`;
+    return html`<vaadin-dashboard-layout id="layout">
+      ${(this.items || []).map((_item, index) => {
+        return html`<slot name="widget-${index}"></slot>`;
+      })}
+    </vaadin-dashboard-layout>`;
   }
 
   ready() {
     super.ready();
-    this.__updateColumnCount();
 
     this.addEventListener('dragstart', (event) => {
       const composedPath = event.composedPath();
@@ -97,30 +101,29 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
       this.__resizeStartY = null;
     });
 
-    this.__childWidgetsChanged();
-    new MutationObserver(() => this.__childWidgetsChanged()).observe(this, { childList: true });
+    new MutationObserver(() => this.__itemsChanged()).observe(this, { childList: true });
   }
 
-  __childWidgetsChanged() {
-    const widgets = [...this.children]
-      .filter((child) => child instanceof widgetClass)
-      .sort(
-        (a, b) =>
-          (a.order !== undefined ? a.order : Number.MAX_SAFE_INTEGER) -
-          (b.order !== undefined ? b.order : Number.MAX_SAFE_INTEGER),
-      );
-
-    widgets.forEach((child, index) => {
-      child.order = index;
-      // eslint-disable-next-line logical-assignment-operators
-      child.colspan = child.colspan || 1;
-      // eslint-disable-next-line logical-assignment-operators
-      child.rowspan = child.rowspan || 1;
-      // TODO: Add view transition names dynamically when needed
-      child.style.viewTransitionName = `widget-${generateUniqueId()}`;
+  __itemsChanged() {
+    // Clear previous values
+    [...this.children].forEach((element) => {
+      element.style.removeProperty('--_dashboard-widget-colspan');
+      element.style.removeProperty('--_dashboard-widget-rowspan');
+      element.style.viewTransitionName = '';
+      element.slot = '';
     });
 
-    this.__widgetCount = widgets.length;
+    if (this.items) {
+      this.items.forEach((item, index) => {
+        const element = this.querySelector(`#${item.id}`);
+        if (element) {
+          element.style.setProperty('--_dashboard-widget-colspan', item.colspan);
+          element.style.setProperty('--_dashboard-widget-rowspan', item.rowspan);
+          element.style.viewTransitionName = `vaadin-dashboard-widget-transition-${element.id}`;
+          element.slot = `widget-${index}`;
+        }
+      });
+    }
   }
 
   __onReorderDragover(event) {
@@ -131,7 +134,10 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
     if (targetWidget instanceof widgetClass === false) {
       return;
     }
-    if (targetWidget.order === this.__draggedWidget.order) {
+    const targetWidgetIndex = this.items.findIndex((item) => item.id === targetWidget.id);
+    const draggedWidgetIndex = this.items.findIndex((item) => item.id === this.__draggedWidget.id);
+
+    if (targetWidgetIndex < 0 || targetWidgetIndex === draggedWidgetIndex) {
       return;
     }
 
@@ -161,8 +167,10 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
       // Swap the order of the dragged widget and the target widget
       this.__startViewTransition(() => {
         // TODO: Don't just swap the widgets' orders
-        [targetWidget.order, this.__draggedWidget.order] = [this.__draggedWidget.order, targetWidget.order];
-        this.dispatchEvent(new CustomEvent('layout-changed', { bubbles: true, composed: true }));
+        const items = [...this.items];
+        const draggedItem = items.splice(draggedWidgetIndex, 1)[0];
+        items.splice(targetWidgetIndex, 0, draggedItem);
+        this.items = items;
       });
     }
   }
@@ -178,6 +186,7 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
   __onResizeDragover(event) {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
+    const resizedItem = this.items.find((item) => item.id === this.__resizedWidget.id);
 
     const deltaX = event.clientX - this.__resizeStartX;
     const deltaY = event.clientY - this.__resizeStartY;
@@ -193,20 +202,20 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
       colspanDelta = 1;
       this.__resizeStartX += columnWidth;
     } else if (deltaX < -columnWidth / 2) {
-      if (this.__resizedWidget.colspan > 1) {
+      if (resizedItem.colspan > 1) {
         colspanDelta = -1;
         this.__resizeStartX -= columnWidth;
       }
     }
 
     // TODO: There's no way to detect row height when dynamic row height is used
-    const rowHeight = parseFloat(getComputedStyle(this).getPropertyValue('--_dashboard-row-height'));
+    const rowHeight = parseFloat(getComputedStyle(this.$.layout).getPropertyValue('--_dashboard-row-height'));
     let rowspanDelta = 0;
     if (deltaY > rowHeight / 2) {
       rowspanDelta = 1;
       this.__resizeStartY += rowHeight;
     } else if (deltaY < -rowHeight / 2) {
-      if (this.__resizedWidget.rowspan > 1) {
+      if (resizedItem.rowspan > 1) {
         rowspanDelta = -1;
         this.__resizeStartY -= rowHeight;
       }
@@ -215,34 +224,13 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
     if (colspanDelta || rowspanDelta) {
       this.__startViewTransition(() => {
         // TODO: Don't animate the resized widget, only the others
-        Object.assign(this.__resizedWidget, {
-          colspan: (this.__resizedWidget.colspan || 1) + colspanDelta,
-          rowspan: (this.__resizedWidget.rowspan || 1) + rowspanDelta,
+        Object.assign(resizedItem, {
+          colspan: (resizedItem.colspan || 1) + colspanDelta,
+          rowspan: (resizedItem.rowspan || 1) + rowspanDelta,
         });
-
-        this.dispatchEvent(new CustomEvent('layout-changed', { bubbles: true, composed: true }));
+        this.items = [...this.items];
       });
     }
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _onResize() {
-    this.__updateColumnCount();
-  }
-
-  __updateColumnCount() {
-    const width = this.offsetWidth;
-    const minColWidth = getComputedStyle(this).getPropertyValue('--min-col-width');
-    const defaultMinColWidth = getComputedStyle(this).getPropertyValue('--_dashboard-default-min-col-width');
-
-    // TODO: Pixels assumed
-    const minColWidthPx = parseInt(minColWidth) || parseInt(defaultMinColWidth);
-    const colCount = Math.floor(width / minColWidthPx);
-
-    this.style.setProperty('--_dashboard-column-count', colCount);
   }
 
   /**

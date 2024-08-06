@@ -27,7 +27,7 @@ class DashboardWidget extends ElementMixin(ThemableMixin(PolylitMixin(LitElement
       :host {
         display: block;
         border: 1px solid gray;
-        background-color: lightgray;
+        background-color: #bae1ff;
         position: relative;
       }
 
