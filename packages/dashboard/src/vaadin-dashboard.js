@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-dashboard-widget.js';
-import { css, html, LitElement } from 'lit';
+import './vaadin-dashboard-layout.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -30,36 +31,6 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
     return 'vaadin-dashboard';
   }
 
-  static get styles() {
-    return css`
-      :host {
-        display: grid;
-        --_dashboard-default-min-col-width: 200px;
-        --_dashboard-default-max-col-width: 400px;
-        --_dashboard-row-height: 200px;
-        --_dashboard-min-col-width: var(--min-col-width, var(--_dashboard-default-min-col-width));
-        --_dashboard-max-col-width: var(--max-col-width, var(--_dashboard-default-max-col-width));
-        grid-template-columns: repeat(
-          auto-fill,
-          minmax(var(--_dashboard-min-col-width), var(--_dashboard-max-col-width))
-        );
-        grid-auto-columns: minmax(var(--_dashboard-min-col-width), var(--_dashboard-max-col-width));
-        grid-auto-rows: var(--_dashboard-row-height);
-        gap: 16px;
-      }
-
-      :host([dense]) {
-        /* grid-auto-flow: row dense; */
-        grid-auto-flow: dense;
-      }
-
-      ::slotted(*) {
-        grid-column: span min(var(--_dashboard-widget-colspan, 1), var(--_dashboard-column-count));
-        grid-row: span var(--_dashboard-widget-rowspan, 1);
-      }
-    `;
-  }
-
   static get properties() {
     return {
       dense: {
@@ -75,9 +46,11 @@ class Dashboard extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitE
 
   /** @protected */
   render() {
-    return html`${Array.from({ length: this.__widgetCount }).map(
-      (_, index) => html`<slot name="widget-${index}"></slot>`,
-    )}`;
+    return html`<vaadin-dashboard-layout
+      >${Array.from({ length: this.__widgetCount }).map(
+        (_, index) => html`<slot name="widget-${index}"></slot></vaadin-dashboard-layout>`,
+      )}</vaadin-dashboard-layout
+    >`;
   }
 
   ready() {

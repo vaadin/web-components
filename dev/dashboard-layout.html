@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/dashboard/src/vaadin-dashboard-layout.js';
+      import '@vaadin/button';
+    </script>
+
+    <style>
+      vaadin-dashboard {
+        --min-col-width: 200px;
+        --max-col-width: 400px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-dashboard-layout dense>
+      <div style="background-color: #ffb3ba">First content</div>
+      <div style="background-color: #ffdfba">Second content</div>
+      <div style="background-color: #ffffba">Third content</div>
+      <div style="background-color: #baffc9">Fourth content</div>
+      <div style="background-color: #bae1ff">Fifth content</div>
+      <div style="background-color: #ffb3ba">Sixth content</div>
+      <div style="background-color: #ffdfba">Seventh content</div>
+    </vaadin-dashboard-layout>
+  </body>
+</html>
