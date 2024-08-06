@@ -72,11 +72,9 @@
 
       dashboard.items = [
         { id: 'w1' },
-        { id: 'w2' },
-        { id: 'w3', rowspan: 2 },
-        { id: 'w4' },
-        { id: 'w5', colspan: 2 },
-        { id: 'w6' },
+        { id: 'w2', colspan: 2 },
+        { section: [{ id: 'w3' }, { id: 'w4', colspan: 2 }, { id: 'w5' }] },
+        { id: 'w6', rowspan: 2 },
         { id: 'w7' },
       ];
     </script>

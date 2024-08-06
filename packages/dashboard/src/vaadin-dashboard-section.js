@@ -26,10 +26,15 @@ class DashboardSection extends ElementMixin(ThemableMixin(PolylitMixin(LitElemen
     return css`
       :host {
         display: grid;
-        grid-column: 1 / -1;
+        grid-column: 1 / calc(var(--_dashboard-column-count) + 1);
         gap: 16px;
         grid-template-columns: subgrid;
         grid-auto-rows: minmax(var(--_dashboard-row-height), auto);
+      }
+
+      ::slotted(*:not(vaadin-dashboard-section)) {
+        grid-column: span min(var(--_dashboard-widget-colspan, 1), var(--_dashboard-column-count));
+        grid-row: span var(--_dashboard-widget-rowspan, 1);
       }
     `;
   }

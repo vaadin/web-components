@@ -5,7 +5,8 @@
  */
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-layout.js';
-import { html, LitElement } from 'lit';
+import './vaadin-dashboard-section.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -27,6 +28,15 @@ const widgetClass = customElements.get('vaadin-dashboard-widget');
 class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-dashboard';
+  }
+
+  static get styles() {
+    return css`
+      :host([dragging-widget]) vaadin-dashboard-section {
+        outline: 3px dashed gray;
+        outline-offset: 3px;
+      }
+    `;
   }
 
   static get properties() {
@@ -52,10 +62,17 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /** @protected */
   render() {
     return html`<vaadin-dashboard-layout id="layout" .dense="${this.dense}">
-      ${(this.items || []).map((_item, index) => {
-        return html`<slot name="widget-${index}"></slot>`;
-      })}
+      ${this.__renderItems(this.items || [])}
     </vaadin-dashboard-layout>`;
+  }
+
+  __renderItems(items) {
+    return items.map((item) => {
+      if (item.section) {
+        return html`<vaadin-dashboard-section>${this.__renderItems(item.section)}</vaadin-dashboard-section>`;
+      }
+      return html`<slot name="widget-${item.id}"></slot>`;
+    });
   }
 
   ready() {
@@ -76,6 +93,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         this.__resizeStartY = event.clientY;
       } else {
         requestAnimationFrame(() => {
+          this.toggleAttribute('dragging-widget', true);
           event.target.toggleAttribute('dragging', true);
         });
         this.__draggedWidget = event.target;
@@ -99,6 +117,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       this.__resizedWidget = null;
       this.__resizeStartX = null;
       this.__resizeStartY = null;
+      this.toggleAttribute('dragging-widget', false);
     });
 
     new MutationObserver(() => this.__itemsChanged()).observe(this, { childList: true });
@@ -114,16 +133,24 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     });
 
     if (this.items) {
-      this.items.forEach((item, index) => {
+      this.__updateItemElements(this.items);
+    }
+  }
+
+  __updateItemElements(items) {
+    items.forEach((item) => {
+      if (item.section) {
+        this.__updateItemElements(item.section);
+      } else {
         const element = this.querySelector(`#${item.id}`);
         if (element) {
           element.style.setProperty('--_dashboard-widget-colspan', item.colspan);
           element.style.setProperty('--_dashboard-widget-rowspan', item.rowspan);
           element.style.viewTransitionName = `vaadin-dashboard-widget-transition-${element.id}`;
-          element.slot = `widget-${index}`;
+          element.slot = `widget-${item.id}`;
         }
-      });
-    }
+      }
+    });
   }
 
   __onReorderDragover(event) {
@@ -134,6 +161,8 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     if (targetWidget instanceof widgetClass === false) {
       return;
     }
+
+    // TODO: support dragging inside sections
     const targetWidgetIndex = this.items.findIndex((item) => item.id === targetWidget.id);
     const draggedWidgetIndex = this.items.findIndex((item) => item.id === this.__draggedWidget.id);
 
@@ -186,6 +215,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   __onResizeDragover(event) {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
+    // TODO: support resizing inside sections
     const resizedItem = this.items.find((item) => item.id === this.__resizedWidget.id);
 
     const deltaX = event.clientX - this.__resizeStartX;

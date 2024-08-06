@@ -78,15 +78,10 @@ class DashboardLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixi
   }
 
   __updateColumnCount() {
-    const width = this.offsetWidth;
-    const minColWidth = getComputedStyle(this).getPropertyValue('--min-col-width');
-    const defaultMinColWidth = getComputedStyle(this).getPropertyValue('--_dashboard-default-min-col-width');
+    this.style.removeProperty('--_dashboard-column-count');
+    const columnCount = getComputedStyle(this).gridTemplateColumns.split(' ').length;
 
-    // TODO: Pixels assumed
-    const minColWidthPx = parseInt(minColWidth) || parseInt(defaultMinColWidth);
-    const colCount = Math.floor(width / minColWidthPx);
-
-    this.style.setProperty('--_dashboard-column-count', colCount);
+    this.style.setProperty('--_dashboard-column-count', columnCount);
   }
 }
 
