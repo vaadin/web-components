@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-dashboard-section.js';
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -38,7 +39,7 @@ class DashboardLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixi
           minmax(var(--_dashboard-min-col-width), var(--_dashboard-max-col-width))
         );
         grid-auto-columns: minmax(var(--_dashboard-min-col-width), var(--_dashboard-max-col-width));
-        grid-auto-rows: var(--_dashboard-row-height);
+        grid-auto-rows: minmax(var(--_dashboard-row-height), auto);
         gap: 16px;
       }
 
@@ -47,11 +48,20 @@ class DashboardLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixi
         grid-auto-flow: dense;
       }
 
-      ::slotted(*) {
+      ::slotted(*:not(vaadin-dashboard-section)) {
         grid-column: span min(var(--_dashboard-widget-colspan, 1), var(--_dashboard-column-count));
         grid-row: span var(--_dashboard-widget-rowspan, 1);
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      dense: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+    };
   }
 
   /** @protected */

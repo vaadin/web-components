@@ -51,7 +51,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @protected */
   render() {
-    return html`<vaadin-dashboard-layout id="layout">
+    return html`<vaadin-dashboard-layout id="layout" .dense="${this.dense}">
       ${(this.items || []).map((_item, index) => {
         return html`<slot name="widget-${index}"></slot>`;
       })}
