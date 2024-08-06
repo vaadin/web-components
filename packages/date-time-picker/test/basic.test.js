@@ -1,6 +1,7 @@
 import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-date-time-picker.js';
+import '../src/vaadin-date-time-picker.js';
 import { expect } from '@esm-bundle/chai';
 import { changeInputValue } from './helpers.js';
 
@@ -183,6 +184,61 @@ describe('Basic features', () => {
       await nextRender();
       focusout(datePicker, datePicker._overlayContent);
       expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
+  });
+
+  describe('date-picker focused', () => {
+    it('should remove focused attribute on time-picker click', async () => {
+      datePicker.focus();
+      datePicker.click();
+      await nextRender();
+      expect(datePicker.hasAttribute('focused')).to.be.true;
+
+      timePicker.focus();
+      timePicker.click();
+      expect(datePicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should remove focus-ring attribute on time-picker click', async () => {
+      // Focus the date-picker with the keyboard
+      await sendKeys({ press: 'Tab' });
+      // Open the overlay with the keyboard
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+      expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+
+      timePicker.focus();
+      timePicker.click();
+      expect(datePicker.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('time-picker focused', () => {
+    it('should remove focused attribute on date-picker click', async () => {
+      timePicker.focus();
+      timePicker.click();
+      await nextRender();
+      expect(timePicker.hasAttribute('focused')).to.be.true;
+
+      datePicker.focus();
+      datePicker.click();
+      await nextRender();
+      expect(timePicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should remove focus-ring attribute on date-picker click', async () => {
+      // Focus the time-picker with the keyboard
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      // Open the overlay with the keyboard
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+      expect(timePicker.hasAttribute('focus-ring')).to.be.true;
+
+      datePicker.focus();
+      datePicker.click();
+      await nextRender();
+      expect(timePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
 

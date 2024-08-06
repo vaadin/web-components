@@ -662,9 +662,10 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _shouldRemoveFocus(event) {
-      // Remove the focused attribute when focus is moving to an element
-      // outside the field while the overlay is open. In this scenario,
-      // the overlay will close without restoring focus to the input.
+      // Remove the focused state when clicking outside on a focusable element that is deliberately
+      // made targetable with pointer-events: auto, such as the time-picker in the date-time-picker.
+      // In this scenario, focus will move straight to that element and the closing overlay won't
+      // attempt to restore focus to the input.
       const { relatedTarget } = event;
       if (
         this.opened &&
