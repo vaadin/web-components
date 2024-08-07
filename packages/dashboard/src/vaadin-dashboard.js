@@ -69,7 +69,9 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   __renderItems(items) {
     return items.map((item) => {
       if (item.section) {
-        return html`<vaadin-dashboard-section>${this.__renderItems(item.section)}</vaadin-dashboard-section>`;
+        return html`<vaadin-dashboard-section .title="${item.title}"
+          >${this.__renderItems(item.section)}</vaadin-dashboard-section
+        >`;
       }
       return html`<slot name="widget-${item.id}"></slot>`;
     });
