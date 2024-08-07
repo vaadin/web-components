@@ -864,16 +864,14 @@ export const UploadMixin = (superClass) =>
         this._updateFocus(fileIndex, false);
 
         /*
-        ❌ aria-live announces item after removal
-        ✅ aria-live works after retry
-        ❌ implementation requires thought
-        ❌ Where to go after upload?
+        ❌ implementation
         ❌ how to test
 
         ✅ Case 1: last remaining item removed: focus upload button
         ✅ Case 2: nth item removed: focus previous
         ✅ Case 3: first item removed: focus "next"
         ✅ Case 4: retry: focus current
+        ✅ Case 5: after upload: focus button
         */
       }
     }
