@@ -126,8 +126,8 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   __itemsChanged() {
     // Clear previous values
     [...this.children].forEach((element) => {
-      element.style.removeProperty('--_dashboard-widget-colspan');
-      element.style.removeProperty('--_dashboard-widget-rowspan');
+      element.style.removeProperty('--widget-colspan');
+      element.style.removeProperty('--widget-rowspan');
       element.style.viewTransitionName = '';
       element.slot = '';
     });
@@ -144,8 +144,8 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       } else {
         const element = this.querySelector(`#${item.id}`);
         if (element) {
-          element.style.setProperty('--_dashboard-widget-colspan', item.colspan);
-          element.style.setProperty('--_dashboard-widget-rowspan', item.rowspan);
+          element.style.setProperty('--widget-colspan', item.colspan);
+          element.style.setProperty('--widget-rowspan', item.rowspan);
           element.style.viewTransitionName = `vaadin-dashboard-widget-transition-${element.id}`;
           element.slot = `widget-${item.id}`;
         }

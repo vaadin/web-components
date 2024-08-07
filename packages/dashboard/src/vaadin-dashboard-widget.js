@@ -102,11 +102,11 @@ class DashboardWidget extends ElementMixin(ThemableMixin(PolylitMixin(LitElement
   }
 
   __colspanChanged(colspan) {
-    this.style.setProperty('--_dashboard-widget-colspan', colspan);
+    this.style.setProperty('--widget-colspan', colspan);
   }
 
   __rowspanChanged(rowspan) {
-    this.style.setProperty('--_dashboard-widget-rowspan', rowspan);
+    this.style.setProperty('--widget-rowspan', rowspan);
   }
 
   __orderChanged(order) {

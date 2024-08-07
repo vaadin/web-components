@@ -49,8 +49,8 @@ class DashboardLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixi
       }
 
       ::slotted(*:not(vaadin-dashboard-section)) {
-        grid-column: span min(var(--_dashboard-widget-colspan, 1), var(--_dashboard-column-count));
-        grid-row: span var(--_dashboard-widget-rowspan, 1);
+        grid-column: span min(var(--widget-colspan, 1), var(--_dashboard-column-count));
+        grid-row: span var(--widget-rowspan, 1);
       }
     `;
   }
