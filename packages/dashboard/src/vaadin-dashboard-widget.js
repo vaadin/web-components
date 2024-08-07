@@ -89,8 +89,6 @@ class DashboardWidget extends ElementMixin(ThemableMixin(PolylitMixin(LitElement
       </div>
       <div class="content">
         <slot></slot>
-        <div>cspan: ${this.colspan || 1}</div>
-        <div>rspan: ${this.rowspan || 1}</div>
       </div>
     `;
   }
