@@ -835,8 +835,8 @@ export const UploadMixin = (superClass) =>
         return;
       }
 
-      // Focus previous unless the removed item is the first on the list.
-      if (!fileKept && fileIndex !== 0) {
+      const lastFileRemoved = fileIndex === this.files.length;
+      if (lastFileRemoved) {
         fileIndex -= 1;
       }
 
