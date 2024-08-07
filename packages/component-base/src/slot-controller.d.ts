@@ -38,6 +38,7 @@ export class SlotController extends EventTarget implements ReactiveController {
       multiple?: boolean;
       observe?: boolean;
       useUniqueId?: boolean;
+      uniqueIdPrefix?: string;
       initializer?(host: HTMLElement, node: HTMLElement): void;
     },
   );

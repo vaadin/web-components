@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-time-picker host default"] = 
 `<vaadin-time-picker>
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -21,7 +21,7 @@ snapshots["vaadin-time-picker host default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -33,7 +33,7 @@ snapshots["vaadin-time-picker host default"] =
 snapshots["vaadin-time-picker host label"] = 
 `<vaadin-time-picker has-label="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -52,7 +52,7 @@ snapshots["vaadin-time-picker host label"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -64,7 +64,7 @@ snapshots["vaadin-time-picker host label"] =
 snapshots["vaadin-time-picker host helper"] = 
 `<vaadin-time-picker has-helper="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -82,7 +82,7 @@ snapshots["vaadin-time-picker host helper"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -103,7 +103,7 @@ snapshots["vaadin-time-picker host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -123,7 +123,7 @@ snapshots["vaadin-time-picker host error"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     invalid=""
     role="combobox"
     slot="input"
@@ -136,7 +136,7 @@ snapshots["vaadin-time-picker host error"] =
 snapshots["vaadin-time-picker host required"] = 
 `<vaadin-time-picker required="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -153,7 +153,7 @@ snapshots["vaadin-time-picker host required"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     required=""
     role="combobox"
     slot="input"
@@ -169,7 +169,7 @@ snapshots["vaadin-time-picker host disabled"] =
   disabled=""
 >
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -187,7 +187,7 @@ snapshots["vaadin-time-picker host disabled"] =
     autocomplete="off"
     autocorrect="off"
     disabled=""
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -200,7 +200,7 @@ snapshots["vaadin-time-picker host disabled"] =
 snapshots["vaadin-time-picker host readonly"] = 
 `<vaadin-time-picker readonly="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -217,7 +217,7 @@ snapshots["vaadin-time-picker host readonly"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     readonly=""
     role="combobox"
     slot="input"
@@ -230,7 +230,7 @@ snapshots["vaadin-time-picker host readonly"] =
 snapshots["vaadin-time-picker host placeholder"] = 
 `<vaadin-time-picker placeholder="Placeholder">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -247,7 +247,7 @@ snapshots["vaadin-time-picker host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
@@ -260,7 +260,7 @@ snapshots["vaadin-time-picker host placeholder"] =
 snapshots["vaadin-time-picker host pattern"] = 
 `<vaadin-time-picker>
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -277,7 +277,7 @@ snapshots["vaadin-time-picker host pattern"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     pattern="[0-9]*"
     role="combobox"
     slot="input"
@@ -290,7 +290,7 @@ snapshots["vaadin-time-picker host pattern"] =
 snapshots["vaadin-time-picker host name"] = 
 `<vaadin-time-picker name="Field Name">
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -307,7 +307,7 @@ snapshots["vaadin-time-picker host name"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     name="Field Name"
     role="combobox"
     slot="input"
@@ -323,7 +323,7 @@ snapshots["vaadin-time-picker host opened default"] =
   opened=""
 >
   <label
-    for="input-vaadin-time-picker-4"
+    for="search-input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -341,7 +341,7 @@ snapshots["vaadin-time-picker host opened default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="search-input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
