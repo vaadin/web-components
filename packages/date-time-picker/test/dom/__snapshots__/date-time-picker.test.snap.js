@@ -16,7 +16,7 @@ snapshots["vaadin-date-time-picker host default"] =
   </div>
   <vaadin-date-picker slot="date-picker">
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -31,14 +31,14 @@ snapshots["vaadin-date-time-picker host default"] =
       aria-expanded="false"
       aria-haspopup="dialog"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       role="combobox"
       slot="input"
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -55,7 +55,7 @@ snapshots["vaadin-date-time-picker host default"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       role="combobox"
       slot="input"
       spellcheck="false"
@@ -88,7 +88,7 @@ snapshots["vaadin-date-time-picker host disabled"] =
     slot="date-picker"
   >
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -104,7 +104,7 @@ snapshots["vaadin-date-time-picker host disabled"] =
       aria-haspopup="dialog"
       autocomplete="off"
       disabled=""
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       role="combobox"
       slot="input"
       tabindex="-1"
@@ -116,7 +116,7 @@ snapshots["vaadin-date-time-picker host disabled"] =
     slot="time-picker"
   >
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -134,7 +134,7 @@ snapshots["vaadin-date-time-picker host disabled"] =
       autocomplete="off"
       autocorrect="off"
       disabled=""
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       role="combobox"
       slot="input"
       spellcheck="false"
@@ -166,7 +166,7 @@ snapshots["vaadin-date-time-picker host readonly"] =
     slot="date-picker"
   >
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -181,7 +181,7 @@ snapshots["vaadin-date-time-picker host readonly"] =
       aria-expanded="false"
       aria-haspopup="dialog"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       readonly=""
       role="combobox"
       slot="input"
@@ -192,7 +192,7 @@ snapshots["vaadin-date-time-picker host readonly"] =
     slot="time-picker"
   >
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -209,7 +209,7 @@ snapshots["vaadin-date-time-picker host readonly"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       readonly=""
       role="combobox"
       slot="input"
@@ -242,7 +242,7 @@ snapshots["vaadin-date-time-picker host required"] =
     slot="date-picker"
   >
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -257,7 +257,7 @@ snapshots["vaadin-date-time-picker host required"] =
       aria-expanded="false"
       aria-haspopup="dialog"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       required=""
       role="combobox"
       slot="input"
@@ -268,7 +268,7 @@ snapshots["vaadin-date-time-picker host required"] =
     slot="time-picker"
   >
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -285,7 +285,7 @@ snapshots["vaadin-date-time-picker host required"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       required=""
       role="combobox"
       slot="input"
@@ -316,7 +316,7 @@ snapshots["vaadin-date-time-picker host label"] =
   </div>
   <vaadin-date-picker slot="date-picker">
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -332,14 +332,14 @@ snapshots["vaadin-date-time-picker host label"] =
       aria-haspopup="dialog"
       aria-label="Label"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       role="combobox"
       slot="input"
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -357,7 +357,7 @@ snapshots["vaadin-date-time-picker host label"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       role="combobox"
       slot="input"
       spellcheck="false"
@@ -386,7 +386,7 @@ snapshots["vaadin-date-time-picker host helper"] =
   </div>
   <vaadin-date-picker slot="date-picker">
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -401,14 +401,14 @@ snapshots["vaadin-date-time-picker host helper"] =
       aria-expanded="false"
       aria-haspopup="dialog"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       role="combobox"
       slot="input"
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -425,7 +425,7 @@ snapshots["vaadin-date-time-picker host helper"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       role="combobox"
       slot="input"
       spellcheck="false"
@@ -465,7 +465,7 @@ snapshots["vaadin-date-time-picker host error"] =
     slot="date-picker"
   >
     <label
-      for="input-vaadin-date-picker-6"
+      for="search-input-vaadin-date-picker-6"
       id="label-vaadin-date-picker-3"
       slot="label"
     >
@@ -482,7 +482,7 @@ snapshots["vaadin-date-time-picker host error"] =
       aria-haspopup="dialog"
       aria-invalid="true"
       autocomplete="off"
-      id="input-vaadin-date-picker-6"
+      id="search-input-vaadin-date-picker-6"
       invalid=""
       role="combobox"
       slot="input"
@@ -493,7 +493,7 @@ snapshots["vaadin-date-time-picker host error"] =
     slot="time-picker"
   >
     <label
-      for="input-vaadin-time-picker-11"
+      for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
       slot="label"
     >
@@ -512,7 +512,7 @@ snapshots["vaadin-date-time-picker host error"] =
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      id="input-vaadin-time-picker-11"
+      id="search-input-vaadin-time-picker-11"
       invalid=""
       role="combobox"
       slot="input"
