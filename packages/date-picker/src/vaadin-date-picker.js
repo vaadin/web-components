@@ -222,8 +222,8 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
           this.ariaTarget = input;
         },
         {
-          // The "search" prefix is a trick to disable Safari's AutoFill,
-          // which can be causing click issues otherwise:
+          // The "search" word is a trick to prevent Safari from enabling AutoFill,
+          // which is causing click issues:
           // https://github.com/vaadin/web-components/issues/6817#issuecomment-2268229567
           uniqueIdPrefix: 'search-input',
         },
