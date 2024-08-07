@@ -10,6 +10,8 @@ export type DashboardDragendEvent = CustomEvent;
 
 export interface DashboardCustomEventMap {
   'dashboard-dragend': DashboardDragendEvent;
+
+  'items-changed': CustomEvent;
 }
 
 export type DashboardEventMap = DashboardCustomEventMap & HTMLElementEventMap;
@@ -18,6 +20,8 @@ export type DashboardEventMap = DashboardCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} dashboard-dragend - Fired when dragging of a widget ends.
  */
 declare class Dashboard extends ElementMixin(ThemableMixin(HTMLElement)) {
+  items: unknown[];
+
   addEventListener<K extends keyof DashboardEventMap>(
     type: K,
     listener: (this: Dashboard, ev: DashboardEventMap[K]) => void,

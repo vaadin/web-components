@@ -113,7 +113,13 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     this.addEventListener('dragend', () => {
       if (this.__draggedWidget) {
         this.__draggedWidget.removeAttribute('dragging');
-        this.dispatchEvent(new CustomEvent('dashboard-dragend', { bubbles: true, composed: true }));
+        this.dispatchEvent(
+          new CustomEvent('dashboard-dragend', {
+            bubbles: true,
+            composed: true,
+            detail: { items: this.items },
+          }),
+        );
       }
       this.__draggedWidget = null;
       this.__resizedWidget = null;
@@ -146,6 +152,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       } else {
         const element = this.querySelector(`#${item.id}`);
         if (element) {
+          element.title = item.title;
           element.style.setProperty('--widget-colspan', item.colspan);
           element.style.setProperty('--widget-rowspan', item.rowspan);
           element.style.viewTransitionName = `vaadin-dashboard-widget-transition-${element.id}`;
@@ -223,11 +230,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     const deltaX = event.clientX - this.__resizeStartX;
     const deltaY = event.clientY - this.__resizeStartY;
 
-    const gridWidth = this.getBoundingClientRect().width;
-    const columnCount = getComputedStyle(this).gridTemplateColumns.split(' ').length;
-    const maxColumnWidth =
-      parseFloat(getComputedStyle(this).getPropertyValue('--max-col-width')) || gridWidth / columnCount;
-    const columnWidth = Math.min(gridWidth / columnCount, maxColumnWidth);
+    const columnWidth = parseFloat(getComputedStyle(this.$.layout).gridTemplateColumns.split(' ')[0]);
 
     let colspanDelta = 0;
     if (deltaX > columnWidth / 2) {
@@ -254,6 +257,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     }
 
     if (colspanDelta || rowspanDelta) {
+      this.__resizedWidget.style.viewTransitionName = '';
       this.__startViewTransition(() => {
         // TODO: Don't animate the resized widget, only the others
         Object.assign(resizedItem, {

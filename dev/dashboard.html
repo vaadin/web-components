@@ -63,19 +63,26 @@
       appendWidgetButton.addEventListener('click', () => {
         const widget = document.createElement('vaadin-dashboard-widget');
         widget.id = 'w' + (dashboard.items.length + 1);
-        widget.title = 'Title ' + (dashboard.items.length + 1);
+
         widget.textContent = 'Content ' + (dashboard.items.length + 1);
         dashboard.appendChild(widget);
 
-        dashboard.items = [...dashboard.items, { id: widget.id }];
+        dashboard.items = [...dashboard.items, { id: widget.id, title: 'Title ' + (dashboard.items.length + 1) }];
       });
 
       dashboard.items = [
-        { id: 'w1' },
-        { id: 'w2', colspan: 2 },
-        { section: [{ id: 'w3' }, { id: 'w4', colspan: 2 }, { id: 'w5' }], title: 'Section title' },
-        { id: 'w6', rowspan: 2 },
-        { id: 'w7' },
+        { id: 'w1', title: 'First title' },
+        { id: 'w2', colspan: 2, title: 'Second title' },
+        {
+          section: [
+            { id: 'w3', title: 'Third title' },
+            { id: 'w4', colspan: 2, title: 'Fourth title' },
+            { id: 'w5', title: 'Fifth title' },
+          ],
+          title: 'Section title',
+        },
+        { id: 'w6', rowspan: 2, title: 'Sixth title' },
+        { id: 'w7', title: 'Seventh title' },
       ];
     </script>
   </head>
@@ -90,27 +97,13 @@
     </div>
 
     <vaadin-dashboard dense>
-      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="First title" id="w1">
-        First content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Second title" id="w2">
-        Second content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffffba" title="Third title" id="w3">
-        Third content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #baffc9" title="Fourth title" id="w4">
-        Fourth content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #bae1ff" title="Fifth title" id="w5">
-        Fifth content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffb3ba" title="Sixth title" id="w6">
-        Sixth content
-      </vaadin-dashboard-widget>
-      <vaadin-dashboard-widget style="background-color: #ffdfba" title="Seventh title" id="w7">
-        Seventh content
-      </vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" id="w1">First content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffdfba" id="w2">Second content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffffba" id="w3">Third content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #baffc9" id="w4">Fourth content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #bae1ff" id="w5">Fifth content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffb3ba" id="w6">Sixth content</vaadin-dashboard-widget>
+      <vaadin-dashboard-widget style="background-color: #ffdfba" id="w7">Seventh content</vaadin-dashboard-widget>
     </vaadin-dashboard>
   </body>
 </html>
