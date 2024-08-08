@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { Grid } from '../src/vaadin-grid.js';
 
@@ -81,6 +81,7 @@ describe('column auto-width', () => {
       </vaadin-grid>
     `);
     spy = sinon.spy(grid, '_recalculateColumnWidths');
+    spy.resetHistory();
     columns = grid.querySelectorAll('vaadin-grid-column');
     // Show the grid and wait for animationend event ("vaadin-grid-appear")
     // to ensure the grid is in a consistent state before starting each test
