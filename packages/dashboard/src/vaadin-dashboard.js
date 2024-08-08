@@ -5,7 +5,7 @@
  */
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -64,18 +64,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @protected */
   render() {
-    return html`${this.__renderItems(this.items || [])}`;
-  }
-
-  __renderItems(items) {
-    return items.map((item) => {
-      if (item.section) {
-        return html`<vaadin-dashboard-section .title="${item.title}"
-          >${this.__renderItems(item.section)}</vaadin-dashboard-section
-        >`;
-      }
-      return html`<slot name="widget-${item.id}"></slot>`;
-    });
+    return html`<slot></slot>`;
   }
 
   ready() {
@@ -128,38 +117,26 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       this.__resizeStartY = null;
       this.toggleAttribute('dragging-widget', false);
     });
-
-    new MutationObserver(() => this.__itemsChanged()).observe(this, { childList: true });
   }
 
   __itemsChanged() {
-    // Clear previous values
-    [...this.children].forEach((element) => {
-      element.style.removeProperty('--widget-colspan');
-      element.style.removeProperty('--widget-rowspan');
-      element.style.viewTransitionName = '';
-      element.slot = '';
-    });
-
-    if (this.items) {
-      this.__updateItemElements(this.items);
-    }
+    render(this.__renderItems(this.items || []), this);
   }
 
-  __updateItemElements(items) {
-    items.forEach((item) => {
+  __renderItems(items) {
+    return items.map((item) => {
       if (item.section) {
-        this.__updateItemElements(item.section);
-      } else {
-        const element = this.querySelector(`#${item.id}`);
-        if (element) {
-          element.title = item.title;
-          element.style.setProperty('--widget-colspan', item.colspan);
-          element.style.setProperty('--widget-rowspan', item.rowspan);
-          element.style.viewTransitionName = `vaadin-dashboard-widget-transition-${element.id}`;
-          element.slot = `widget-${item.id}`;
-        }
+        return html`<vaadin-dashboard-section .title="${item.title}">
+          ${this.__renderItems(item.section)}
+        </vaadin-dashboard-section>`;
       }
+      return html`<vaadin-dashboard-widget
+        id="${item.id}"
+        title="${item.title}"
+        colspan="${item.colspan}"
+        rowspan="${item.rowspan}"
+        style="view-transition-name: vaadin-dashboard-widget-transition-${item.id}"
+      ></vaadin-dashboard-widget>`;
     });
   }
 
