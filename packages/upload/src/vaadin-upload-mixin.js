@@ -753,7 +753,7 @@ export const UploadMixin = (superClass) =>
       );
       if (evt) {
         this._uploadFile(file);
-        this._updateFocus(this.files.indexOf(file), true);
+        this._updateFocus(this.files.indexOf(file));
       }
     }
 
@@ -829,13 +829,13 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _updateFocus(fileIndex, fileKept) {
-      if (this._fileList.childElementCount === 0) {
+    _updateFocus(fileIndex) {
+      if (this._fileList.children.length === 0) {
         this._addButton.focus();
         return;
       }
 
-      const lastFileRemoved = fileIndex === this.files.length;
+      const lastFileRemoved = fileIndex === this._fileList.childElementCount;
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
@@ -861,7 +861,7 @@ export const UploadMixin = (superClass) =>
           }),
         );
 
-        this._updateFocus(fileIndex, false);
+        this._updateFocus(fileIndex);
 
         /*
         ❌ implementation
