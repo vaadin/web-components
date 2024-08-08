@@ -119,8 +119,6 @@ describe('column auto-width', () => {
 });
 
 describe('column group', () => {
-  const num = (str: string) => parseInt(str, 10);
-
   function createGrid(html: string, items = [{ a: 'm', b: 'mm' }]) {
     const grid: Grid = fixtureSync(html);
     grid.items = items;
