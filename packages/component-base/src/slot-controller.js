@@ -19,15 +19,14 @@ export class SlotController extends EventTarget {
    * @return {string}
    * @protected
    */
-  static generateId(host, slotName) {
-    const prefix = slotName || 'default';
+  static generateId(host, prefix = 'default') {
     return `${prefix}-${host.localName}-${generateUniqueId()}`;
   }
 
   constructor(host, slotName, tagName, config = {}) {
     super();
 
-    const { initializer, multiple, observe, useUniqueId } = config;
+    const { initializer, multiple, observe, useUniqueId, uniqueIdPrefix } = config;
 
     this.host = host;
     this.slotName = slotName;
@@ -42,7 +41,7 @@ export class SlotController extends EventTarget {
 
     // Only generate the default ID if requested by the controller.
     if (useUniqueId) {
-      this.defaultId = this.constructor.generateId(host, slotName);
+      this.defaultId = this.constructor.generateId(host, uniqueIdPrefix || slotName);
     }
   }
 

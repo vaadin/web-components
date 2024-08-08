@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-date-picker host default"] = 
 `<vaadin-date-picker>
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -19,7 +19,7 @@ snapshots["vaadin-date-picker host default"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     role="combobox"
     slot="input"
   >
@@ -33,7 +33,7 @@ snapshots["vaadin-date-picker host disabled"] =
   disabled=""
 >
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -49,7 +49,7 @@ snapshots["vaadin-date-picker host disabled"] =
     aria-haspopup="dialog"
     autocomplete="off"
     disabled=""
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     role="combobox"
     slot="input"
     tabindex="-1"
@@ -61,7 +61,7 @@ snapshots["vaadin-date-picker host disabled"] =
 snapshots["vaadin-date-picker host placeholder"] = 
 `<vaadin-date-picker placeholder="Placeholder">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -76,7 +76,7 @@ snapshots["vaadin-date-picker host placeholder"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
@@ -88,7 +88,7 @@ snapshots["vaadin-date-picker host placeholder"] =
 snapshots["vaadin-date-picker host readonly"] = 
 `<vaadin-date-picker readonly="">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -103,7 +103,7 @@ snapshots["vaadin-date-picker host readonly"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     readonly=""
     role="combobox"
     slot="input"
@@ -115,7 +115,7 @@ snapshots["vaadin-date-picker host readonly"] =
 snapshots["vaadin-date-picker host required"] = 
 `<vaadin-date-picker required="">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -130,7 +130,7 @@ snapshots["vaadin-date-picker host required"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     required=""
     role="combobox"
     slot="input"
@@ -142,7 +142,7 @@ snapshots["vaadin-date-picker host required"] =
 snapshots["vaadin-date-picker host label"] = 
 `<vaadin-date-picker has-label="">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -159,7 +159,7 @@ snapshots["vaadin-date-picker host label"] =
     aria-haspopup="dialog"
     aria-labelledby="label-vaadin-date-picker-0"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     role="combobox"
     slot="input"
   >
@@ -170,7 +170,7 @@ snapshots["vaadin-date-picker host label"] =
 snapshots["vaadin-date-picker host helper"] = 
 `<vaadin-date-picker has-helper="">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -186,7 +186,7 @@ snapshots["vaadin-date-picker host helper"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     role="combobox"
     slot="input"
   >
@@ -206,7 +206,7 @@ snapshots["vaadin-date-picker host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -224,7 +224,7 @@ snapshots["vaadin-date-picker host error"] =
     aria-haspopup="dialog"
     aria-invalid="true"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     invalid=""
     role="combobox"
     slot="input"
@@ -236,7 +236,7 @@ snapshots["vaadin-date-picker host error"] =
 snapshots["vaadin-date-picker host name"] = 
 `<vaadin-date-picker name="Field Name">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -251,7 +251,7 @@ snapshots["vaadin-date-picker host name"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     name="Field Name"
     role="combobox"
     slot="input"
@@ -263,7 +263,7 @@ snapshots["vaadin-date-picker host name"] =
 snapshots["vaadin-date-picker host value"] = 
 `<vaadin-date-picker has-value="">
   <label
-    for="input-vaadin-date-picker-3"
+    for="search-input-vaadin-date-picker-3"
     id="label-vaadin-date-picker-0"
     slot="label"
   >
@@ -278,7 +278,7 @@ snapshots["vaadin-date-picker host value"] =
     aria-expanded="false"
     aria-haspopup="dialog"
     autocomplete="off"
-    id="input-vaadin-date-picker-3"
+    id="search-input-vaadin-date-picker-3"
     role="combobox"
     slot="input"
   >

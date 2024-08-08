@@ -9,7 +9,9 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  * A controller to create and initialize slotted `<input>` element.
  */
 export class InputController extends SlotController {
-  constructor(host, callback) {
+  constructor(host, callback, options = {}) {
+    const { uniqueIdPrefix } = options;
+
     super(host, 'input', 'input', {
       initializer: (node, host) => {
         if (host.value) {
@@ -27,6 +29,7 @@ export class InputController extends SlotController {
         }
       },
       useUniqueId: true,
+      uniqueIdPrefix,
     });
   }
 }
