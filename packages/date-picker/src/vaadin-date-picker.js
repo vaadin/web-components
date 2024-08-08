@@ -213,12 +213,21 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     super.ready();
 
     this.addController(
-      new InputController(this, (input) => {
-        this._setInputElement(input);
-        this._setFocusElement(input);
-        this.stateTarget = input;
-        this.ariaTarget = input;
-      }),
+      new InputController(
+        this,
+        (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+          this.ariaTarget = input;
+        },
+        {
+          // The "search" word is a trick to prevent Safari from enabling AutoFill,
+          // which is causing click issues:
+          // https://github.com/vaadin/web-components/issues/6817#issuecomment-2268229567
+          uniqueIdPrefix: 'search-input',
+        },
+      ),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
