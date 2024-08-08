@@ -4,13 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-dashboard-widget.js';
-import './vaadin-dashboard-layout.js';
 import './vaadin-dashboard-section.js';
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 const widgetClass = customElements.get('vaadin-dashboard-widget');
 
@@ -25,18 +25,21 @@ const widgetClass = customElements.get('vaadin-dashboard-widget');
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-dashboard';
   }
 
   static get styles() {
-    return css`
-      :host([dragging-widget]) vaadin-dashboard-section {
-        outline: 3px dashed gray;
-        outline-offset: 3px;
-      }
-    `;
+    return [
+      super.styles,
+      css`
+        :host([dragging-widget]) vaadin-dashboard-section {
+          outline: 3px dashed gray;
+          outline-offset: 3px;
+        }
+      `,
+    ];
   }
 
   static get properties() {
@@ -61,9 +64,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @protected */
   render() {
-    return html`<vaadin-dashboard-layout id="layout" .dense="${this.dense}">
-      ${this.__renderItems(this.items || [])}
-    </vaadin-dashboard-layout>`;
+    return html`${this.__renderItems(this.items || [])}`;
   }
 
   __renderItems(items) {
@@ -230,7 +231,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     const deltaX = event.clientX - this.__resizeStartX;
     const deltaY = event.clientY - this.__resizeStartY;
 
-    const columnWidth = parseFloat(getComputedStyle(this.$.layout).gridTemplateColumns.split(' ')[0]);
+    const columnWidth = parseFloat(getComputedStyle(this).gridTemplateColumns.split(' ')[0]);
 
     let colspanDelta = 0;
     if (deltaX > columnWidth / 2) {
@@ -244,7 +245,7 @@ class Dashboard extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     }
 
     // TODO: There's no way to detect row height when dynamic row height is used
-    const rowHeight = parseFloat(getComputedStyle(this.$.layout).getPropertyValue('--_dashboard-row-height'));
+    const rowHeight = parseFloat(getComputedStyle(this).getPropertyValue('--_dashboard-row-height'));
     let rowspanDelta = 0;
     if (deltaY > rowHeight / 2) {
       rowspanDelta = 1;
