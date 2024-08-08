@@ -1,30 +1,39 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { flushGrid, getContainerCell } from './helpers.js';
+import type { Grid } from '../src/vaadin-grid.js';
 
-function isNumeric(str) {
-  if (typeof str !== 'string') return false; // we only process strings!
-  return !isNaN(str) && !isNaN(parseFloat(str));
+interface ExpectedWidths {
+  pattern: RegExp;
+  values: number[];
 }
-function expectColumnWidthsToBeOk(columns, expectedWidths = ['max(50px, 71px)', '114', '84', '107'], delta = 5) {
+function expectColumnWidthsToBeOk(
+  columns: any,
+  expectedWidths: ExpectedWidths[] = [
+    { pattern: /max\(([0-9]+)px, ([0-9]+)px\)/u, values: [50, 71] },
+    { pattern: /([0-9]+)[px]?/u, values: [114] },
+    { pattern: /([0-9]+)[px]?/u, values: [84] },
+    { pattern: /([0-9]+)[px]?/u, values: [107] },
+  ],
+  delta = 5,
+) {
   // Allowed margin of measurement to keep the test from failing if there are small differences in rendered text
   // width on different platforms or if there are small changes to styles which affect horizontal margin/padding.
 
   expectedWidths.forEach((expectedWidth, index) => {
-    const colWidth = columns[index].width.replace('px', '');
-    if (isNumeric(colWidth) && isNumeric(expectedWidth)) {
-      const columnWidth = parseInt(colWidth);
-      expect(columnWidth).to.be.closeTo(Number(expectedWidth), delta);
-    } else {
-      const columnWidth = columns[index].width;
-      expect(columnWidth).to.be.equal(expectedWidth);
+    const colWidth: string = columns[index].width;
+    const split = colWidth.split(expectedWidth.pattern);
+    for (let indexValue = 0; indexValue < expectedWidth.values.length; indexValue++) {
+      const widthValue: string = split[indexValue + 1];
+      const expectedWidthValue = expectedWidth.values[indexValue];
+      const columnWidth = parseInt(widthValue);
+      expect(columnWidth).to.be.closeTo(expectedWidthValue, delta);
     }
   });
 }
 
 describe('column auto-width', () => {
-  let grid;
+  let grid: Grid;
   let columns;
   let spy;
 
@@ -34,8 +43,8 @@ describe('column auto-width', () => {
     { a: 'foo', b: 'foo baz', c: 'foo bar', d: 'baz' },
   ];
 
-  function whenColumnWidthsCalculated(cb) {
-    if (grid._recalculateColumnWidths.called) {
+  function whenColumnWidthsCalculated(cb: any) {
+    if ((grid as any)._recalculateColumnWidths.called) {
       cb();
     } else {
       requestAnimationFrame(() => whenColumnWidthsCalculated(cb));
@@ -54,7 +63,7 @@ describe('column auto-width', () => {
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
-      this.shadowRoot.innerHTML = `
+      this.shadowRoot!.innerHTML = `
         <slot name="custom-slot"></slot>
       `;
     }
@@ -100,6 +109,6 @@ describe('column auto-width', () => {
     await oneEvent(grid, 'animationend');
     grid.items = testItems;
     await recalculateWidths();
-    expectColumnWidthsToBeOk(columns, ['max(150px, 151px)']);
+    expectColumnWidthsToBeOk(columns, [{ pattern: /max\(([0-9]+)px, ([0-9]+)px\)/u, values: [150, 151] }]);
   });
 });

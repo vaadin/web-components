@@ -239,6 +239,7 @@ assertType<ColumnBaseMixinClass<TestGridItem, GridColumn>>(narrowedColumn);
 
 assertType<number | null | undefined>(narrowedColumn.flexGrow);
 assertType<string | null | undefined>(narrowedColumn.width);
+assertType<string | null | undefined>(narrowedColumn.minWidth);
 assertType<boolean | null | undefined>(narrowedColumn.resizable);
 assertType<boolean>(narrowedColumn.frozen);
 assertType<boolean>(narrowedColumn.frozenToEnd);

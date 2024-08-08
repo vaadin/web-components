@@ -127,6 +127,15 @@ export declare class GridColumnMixinClass<
   width: string | null | undefined;
 
   /**
+   * Min-width of the cells for this column.
+   *
+   * Please note that using the `em` length unit is discouraged as
+   * it might lead to misalignment issues if the header, body, and footer
+   * cells have different font sizes. Instead, use `rem` if you need
+   * a length unit relative to the font size.
+   */
+  minWidth: string | null | undefined;
+  /**
    * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
    * @attr {number} flex-grow
    */
