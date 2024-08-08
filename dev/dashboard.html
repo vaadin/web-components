@@ -10,6 +10,7 @@
     <script type="module">
       import '@vaadin/dashboard';
       import '@vaadin/button';
+      import { render, html } from 'lit';
 
       const dashboard = document.querySelector('vaadin-dashboard');
 
@@ -71,19 +72,19 @@
       });
 
       dashboard.items = [
-        { id: 'w1', title: 'First title' },
-        { id: 'w2', colspan: 2, title: 'Second title' },
+        { title: 'First title' },
+        { colspan: 2, title: 'Second title' },
         {
-          section: [
-            { id: 'w3', title: 'Third title' },
-            { id: 'w4', colspan: 2, title: 'Fourth title' },
-            { id: 'w5', title: 'Fifth title' },
-          ],
           title: 'Section title',
+          section: [{ title: 'Third title' }, { colspan: 2, title: 'Fourth title' }, { title: 'Fifth title' }],
         },
-        { id: 'w6', rowspan: 2, title: 'Sixth title' },
-        { id: 'w7', title: 'Seventh title' },
+        { rowspan: 2, title: 'Sixth title' },
+        { title: 'Seventh title' },
       ];
+
+      dashboard.renderer = (root, { item }) => {
+        render(html`<vaadin-dashboard-widget>${item.title}</vaadin-dashboard-widget>`, root);
+      };
     </script>
   </head>
 

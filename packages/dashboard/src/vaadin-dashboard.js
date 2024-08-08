@@ -38,6 +38,10 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
           outline: 3px dashed gray;
           outline-offset: 3px;
         }
+
+        ::slotted(vaadin-dashboard-cell) {
+          display: contents;
+        }
       `,
     ];
   }
@@ -86,9 +90,9 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       } else {
         requestAnimationFrame(() => {
           this.toggleAttribute('dragging-widget', true);
-          event.target.toggleAttribute('dragging', true);
         });
         this.__draggedWidget = event.target;
+        this.__draggedItem = this.__draggedWidget.closest('vaadin-dashboard-cell').__item;
       }
     });
 
@@ -115,12 +119,19 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       this.__resizedWidget = null;
       this.__resizeStartX = null;
       this.__resizeStartY = null;
+      this.__draggedItem = null;
       this.toggleAttribute('dragging-widget', false);
     });
   }
 
   __itemsChanged() {
     render(this.__renderItems(this.items || []), this);
+
+    this.querySelectorAll('vaadin-dashboard-cell').forEach((cell) => {
+      if (this.renderer) {
+        this.renderer(cell, { item: cell.__item });
+      }
+    });
   }
 
   __renderItems(items) {
@@ -130,13 +141,14 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
           ${this.__renderItems(item.section)}
         </vaadin-dashboard-section>`;
       }
-      return html`<vaadin-dashboard-widget
+
+      // TODO: Should dashboard instead render vaadin-dashboard-widget directly instead of having users to always do it?
+      return html`<vaadin-dashboard-cell
         id="${item.id}"
-        title="${item.title}"
-        colspan="${item.colspan}"
-        rowspan="${item.rowspan}"
-        style="view-transition-name: vaadin-dashboard-widget-transition-${item.id}"
-      ></vaadin-dashboard-widget>`;
+        ?dragging="${this.__draggedItem === item}"
+        .__item="${item}"
+        style="view-transition-name: vaadin-dashboard-widget-transition-${item.id}; --widget-colspan: ${item.colspan}; --widget-rowspan: ${item.rowspan}"
+      ></vaadin-dashboard-cell>`;
     });
   }
 
@@ -149,9 +161,13 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       return;
     }
 
-    // TODO: support dragging inside sections
-    const targetWidgetIndex = this.items.findIndex((item) => item.id === targetWidget.id);
-    const draggedWidgetIndex = this.items.findIndex((item) => item.id === this.__draggedWidget.id);
+    const targetWidgetCell = targetWidget.closest('vaadin-dashboard-cell');
+    const targetItem = targetWidgetCell.__item;
+
+    const items = this.__findArrayWithItem(this.items, this.__draggedItem);
+
+    const targetWidgetIndex = items.indexOf(targetItem);
+    const draggedWidgetIndex = items.indexOf(this.__draggedItem);
 
     if (targetWidgetIndex < 0 || targetWidgetIndex === draggedWidgetIndex) {
       return;
@@ -183,12 +199,25 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       // Swap the order of the dragged widget and the target widget
       this.__startViewTransition(() => {
         // TODO: Don't just swap the widgets' orders
-        const items = [...this.items];
         const draggedItem = items.splice(draggedWidgetIndex, 1)[0];
         items.splice(targetWidgetIndex, 0, draggedItem);
-        this.items = items;
+        this.items = [...this.items];
       });
     }
+  }
+
+  __findArrayWithItem(array, item) {
+    if (array.includes(item)) {
+      return array;
+    }
+
+    for (const { section: sectionItems } of array) {
+      if (sectionItems && sectionItems.includes(item)) {
+        return sectionItems;
+      }
+    }
+
+    return [];
   }
 
   __startViewTransition(callback) {

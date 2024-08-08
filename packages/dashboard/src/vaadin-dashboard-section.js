@@ -39,6 +39,10 @@ class DashboardSection extends ElementMixin(ThemableMixin(PolylitMixin(LitElemen
         grid-row: span var(--widget-rowspan, 1);
       }
 
+      ::slotted(vaadin-dashboard-cell) {
+        display: contents;
+      }
+
       .header {
         position: absolute;
         top: 0;
