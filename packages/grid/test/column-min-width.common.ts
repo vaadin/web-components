@@ -13,10 +13,10 @@ interface ExpectedWidths {
 function expectColumnWidthsToBeOk(
   columns: NodeListOf<GridColumn<any> | GridColumnGroup<any>>,
   expectedWidths: ExpectedWidths[] = [
-    { pattern: /max\(([0-9]+)px, ([0-9]+)px\)/u, values: [50, 71] },
-    { pattern: /([0-9]+)[px]?/u, values: [114] },
-    { pattern: /([0-9]+)[px]?/u, values: [84] },
-    { pattern: /([0-9]+)[px]?/u, values: [107] },
+    { pattern: /max\((\d+)px, (\d+)px\)/u, values: [50, 71] },
+    { pattern: /(\d+)[px]?/u, values: [114] },
+    { pattern: /(\d+)[px]?/u, values: [84] },
+    { pattern: /(\d+)[px]?/u, values: [107] },
   ],
   delta = 5,
 ) {
@@ -114,7 +114,7 @@ describe('column auto-width', () => {
     await oneEvent(grid, 'animationend');
     grid.items = testItems;
     await recalculateWidths();
-    expectColumnWidthsToBeOk(columns, [{ pattern: /max\(([0-9]+)px, ([0-9]+)px\)/u, values: [150, 151] }]);
+    expectColumnWidthsToBeOk(columns, [{ pattern: /max\((\d+)px, (\d+)px\)/u, values: [150, 151] }]);
   });
 });
 
@@ -140,7 +140,7 @@ describe('column group', () => {
       columns,
       [
         {
-          pattern: /max\(([0-9]+)px, ([0-9]+)px\)/u,
+          pattern: /max\((\d+)px, (\d+)px\)/u,
           values: [200, 420],
         },
       ],
@@ -151,7 +151,7 @@ describe('column group', () => {
       columnGroups,
       [
         {
-          pattern: /calc\(max\(([0-9]+)px, ([0-9]+)px\)\)/u,
+          pattern: /calc\(max\((\d+)px, (\d+)px\)\)/u,
           values: [200, 420],
         },
       ],
@@ -172,7 +172,7 @@ describe('column group', () => {
       columnGroups,
       [
         {
-          pattern: /calc\(max\(([0-9]+)px, ([0-9]+)px\) \+ max\(([0-9]+)px, ([0-9]+)px\)\)/u,
+          pattern: /calc\(max\((\d+)px, (\d+)px\) \+ max\((\d+)px, (\d+)px\)\)/u,
           values: [200, 420, 190, 420],
         },
       ],
@@ -193,7 +193,7 @@ describe('column group', () => {
       columnGroups,
       [
         {
-          pattern: /calc\(max\(([0-9]+)px, ([0-9]+)px\) \+ max\(([0-9]+)px, ([0-9]+)px\)\)/u,
+          pattern: /calc\(max\((\d+)px, (\d+)px\) \+ max\((\d+)px, (\d+)px\)\)/u,
           values: [200, 201, 190, 191],
         },
       ],
@@ -215,7 +215,7 @@ describe('column group', () => {
       columnGroups,
       [
         {
-          pattern: /calc\(max\(([0-9]+)px, ([0-9]+)px\) \+ max\(([0-9]+)px, ([0-9]+)px\)\)/u,
+          pattern: /calc\(max\((\d+)px, (\d+)px\) \+ max\((\d+)px, (\d+)px\)\)/u,
           values: [200, 201, 190, 191],
         },
       ],
