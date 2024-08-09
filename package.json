@@ -30,7 +30,6 @@
     "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
     "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.1",
     "@rollup/plugin-terser": "^0.4.4",

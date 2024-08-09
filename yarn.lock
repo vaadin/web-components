@@ -382,7 +382,7 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.0.tgz#a5417ae8427873f1dd08b70b3574b453e67b5f7f"
   integrity sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==
 
-"@esm-bundle/chai@^4.3.1", "@esm-bundle/chai@^4.3.4":
+"@esm-bundle/chai@^4.3.1":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.4.tgz#74ed4a0794b3a9f9517ff235744ac6f4be0d34dc"
   integrity sha512-6Tx35wWiNw7X0nLY9RMx8v3EL8SacCFW+eEZOE9Hc+XxmU5HFE2AFEg+GehUZpiyDGwVvPH75ckGlqC7coIPnA==
