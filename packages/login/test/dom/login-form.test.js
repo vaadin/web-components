@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../vaadin-login-form.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
