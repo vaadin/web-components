@@ -1,5 +1,5 @@
 import { chaiDomDiff } from '@open-wc/semantic-dom-diff';
-import * as chai from 'chai';
+import * as chai from 'chai/index.js';
 import sinonChai from 'sinon-chai';
 
 chai.use(chaiDomDiff);
