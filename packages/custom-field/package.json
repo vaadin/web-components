@@ -47,7 +47,7 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/chai-plugins": "24.5.0-alpha7",
     "@vaadin/combo-box": "24.5.0-alpha7",
     "@vaadin/date-picker": "24.5.0-alpha7",
     "@vaadin/email-field": "24.5.0-alpha7",
