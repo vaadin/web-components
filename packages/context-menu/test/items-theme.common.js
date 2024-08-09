@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
