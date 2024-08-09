@@ -1,9 +1,9 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '../../not-animated-styles.js';
 import '../../../theme/lumo/vaadin-notification.js';
-import '../../../../button/theme/lumo/vaadin-button.js';
 
 describe('notification', () => {
   let element;
