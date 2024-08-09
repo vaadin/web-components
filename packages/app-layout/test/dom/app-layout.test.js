@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import '../../src/vaadin-app-layout.js';
