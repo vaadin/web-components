@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, getVisibleItemsCount, makeItems, scrollToIndex } from './helpers.js';

@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { getAllItems, getFocusedItemIndex, setInputValue } from './helpers.js';
 
