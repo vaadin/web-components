@@ -30,7 +30,7 @@ const textArea = css`
   }
 
   :host([readonly]) [part='input-field'] {
-    border: 1px dashed var(--lumo-contrast-30pct);
+    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
   }
 
   :host([readonly]) [part='input-field']::after {
