@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { css } from 'lit';
 import { flushGrid, getFirstVisibleItem, infiniteDataProvider } from './helpers.js';
