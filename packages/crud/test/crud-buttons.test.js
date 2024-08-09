@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
