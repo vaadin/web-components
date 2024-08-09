@@ -1,6 +1,6 @@
 {
   "packages": [
-    "integration",
+    "test/*",
     "packages/*"
   ],
   "npmClient": "yarn",
