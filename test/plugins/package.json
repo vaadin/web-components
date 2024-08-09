@@ -1,0 +1,17 @@
+{
+  "name": "@vaadin/chai-plugins",
+  "version": "24.5.0-alpha7",
+  "private": true,
+  "description": "Vaadin web components test plugins",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "main": "index.js",
+  "module": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@open-wc/semantic-dom-diff": "^0.20.1",
+    "@vaadin/testing-helpers": "^0.6.0",
+    "chai": "^5.1.1",
+    "sinon-chai": "^4.0.0"
+  }
+}

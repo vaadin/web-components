@@ -333,7 +333,7 @@ const createIntegrationTestsConfig = (config) => {
     groups: [
       {
         name: 'integration',
-        files: 'integration/tests/*.test.{js,ts}',
+        files: 'test/integration/*.test.{js,ts}',
       },
     ],
     testRunnerHtml: getTestRunnerHtml(),

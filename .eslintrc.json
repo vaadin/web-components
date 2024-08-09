@@ -81,7 +81,7 @@
       }
     },
     {
-      "files": ["packages/**/test/**", "integration/tests/**"],
+      "files": ["packages/**/test/**", "test/integration/**"],
       "env": {
         "mocha": true
       },
@@ -94,7 +94,7 @@
             "groups": [
               [
                 // Testing tools group
-                "^(@esm-bundle|@web|@vaadin/testing-helpers|sinon)",
+                "^(@esm-bundle|@web|@vaadin/chai-plugins|@vaadin/testing-helpers|sinon)",
                 // Side-effects group
                 "^\\u0000",
                 // External group

@@ -12,7 +12,7 @@
     "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
-    "lint:js": "eslint --ext .js,.ts *.js scripts packages integration",
+    "lint:js": "eslint --ext .js,.ts *.js scripts packages test",
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky install",
@@ -75,7 +75,7 @@
     ]
   },
   "workspaces": [
-    "integration",
+    "test/*",
     "packages/*"
   ]
 }
