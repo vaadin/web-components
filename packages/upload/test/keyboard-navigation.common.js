@@ -61,6 +61,11 @@ describe('keyboard navigation', () => {
           held: true, // Show the start button
           error: 'Error', // Show the retry button
         },
+        {
+          ...FAKE_FILE,
+          held: true, // Show the start button
+          error: 'Error', // Show the retry button
+        },
       ];
     });
 
@@ -86,6 +91,28 @@ describe('keyboard navigation', () => {
       await repeatTab(5);
 
       expect(fileElement.shadowRoot.activeElement).to.equal(removeButton);
+    });
+
+    it('should focus on upload button when last remaining file is removed', () => {
+      const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
+      const uploadButton = uploadElement.shadowRoot.querySelector('[part=upload-button]');
+
+      removeButton.click();
+
+      expect(fileElement.shadowRoot.activeElement).to.equal(uploadButton);
+    });
+
+    it('should focus on previous when last file is removed', () => {
+      const fileElements = document.querySelectorAll('vaadin-upload-file');
+      console.log(fileElements);
+      const buttons = [];
+      fileElements.forEach((element) => {
+        buttons.push(element.shadowRoot.querySelector('[part=remove-button]'));
+      });
+
+      console.log(fileElement.shadowRoot.activeElement, buttons);
+      buttons[1].click();
+      // expect(fileElement.shadowRoot.activeElement).to.equal(fileElements);
     });
   });
 });

@@ -753,6 +753,7 @@ export const UploadMixin = (superClass) =>
       );
       if (evt) {
         this._uploadFile(file);
+        this._updateFocus(this.files.indexOf(file));
       }
     }
 
@@ -827,13 +828,29 @@ export const UploadMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    _updateFocus(fileIndex) {
+      if (this._fileList.children.length === 0) {
+        this._addButton.focus();
+        return;
+      }
+
+      const lastFileRemoved = fileIndex === this._fileList.childElementCount;
+      if (lastFileRemoved) {
+        fileIndex -= 1;
+      }
+
+      this._fileList.children[fileIndex].firstElementChild.focus();
+    }
+
     /**
      * Remove file from upload list. Called internally if file upload was canceled.
      * @param {!UploadFile} file File to remove
      * @protected
      */
     _removeFile(file) {
-      if (this.files.indexOf(file) > -1) {
+      const fileIndex = this.files.indexOf(file);
+      if (fileIndex > -1) {
         this.files = this.files.filter((i) => i !== file);
 
         this.dispatchEvent(
@@ -843,6 +860,19 @@ export const UploadMixin = (superClass) =>
             composed: true,
           }),
         );
+
+        this._updateFocus(fileIndex);
+
+        /*
+        ❌ implementation
+        ❌ how to test
+
+        ✅ Case 1: last remaining item removed: focus upload button
+        ✅ Case 2: nth item removed: focus previous
+        ✅ Case 3: first item removed: focus "next"
+        ✅ Case 4: retry: focus current
+        ✅ Case 5: after upload: focus button
+        */
       }
     }
 
