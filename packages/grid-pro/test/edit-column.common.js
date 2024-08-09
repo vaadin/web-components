@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { enter, esc, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
@@ -386,7 +386,7 @@ describe('edit column', () => {
         /* prettier-ignore */
         grid.dataProvider = ({ page, pageSize }, callback) => { // NOSONAR
           const items = [...Array(pageSize).keys()].map((i) => {
-            return { 
+            return {
               id: page * pageSize + i,
               status: 'draft',
               amount: 100,

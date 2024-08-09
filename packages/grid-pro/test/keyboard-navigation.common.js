@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { enter, esc, fixtureSync, nextFrame, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';

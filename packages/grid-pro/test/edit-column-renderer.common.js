@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
