@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { esc, fixtureSync, focusin, focusout, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
