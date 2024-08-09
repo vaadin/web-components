@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import './lit-setup.js';
 import './themable-mixin.test.js';
 import { LitElement } from 'lit';
