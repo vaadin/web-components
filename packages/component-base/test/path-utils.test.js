@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { get, set } from '../src/path-utils.js';
 
 describe('path-utils', () => {

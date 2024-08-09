@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import '@vaadin/testing-helpers';
 import { DataProviderController } from '../src/data-provider-controller/data-provider-controller.js';
 

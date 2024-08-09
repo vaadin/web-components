@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
 import {
   addValueToAttribute,

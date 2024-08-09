@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { flush } from '../src/debounce.js';
