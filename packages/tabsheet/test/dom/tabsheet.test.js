@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../vaadin-tabsheet.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
