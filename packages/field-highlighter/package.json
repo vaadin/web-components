@@ -34,6 +34,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/a11y-base": "24.5.0-alpha7",
     "@vaadin/component-base": "24.5.0-alpha7",
     "@vaadin/overlay": "24.5.0-alpha7",
     "@vaadin/vaadin-lumo-styles": "24.5.0-alpha7",
@@ -43,7 +44,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/a11y-base": "24.5.0-alpha7",
     "@vaadin/checkbox": "24.5.0-alpha7",
     "@vaadin/checkbox-group": "24.5.0-alpha7",
     "@vaadin/combo-box": "24.5.0-alpha7",
