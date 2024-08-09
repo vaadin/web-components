@@ -20,6 +20,7 @@ import {
 import sinon from 'sinon';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { shiftTab, tab } from './helpers.js';
 
 setCancelSyntheticClickEvents(false);
 
@@ -246,6 +247,30 @@ describe('sub-menu', () => {
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[0]);
+  });
+
+  it('should open the next submenu on tab and shift tab in tab navigation', async () => {
+    menu.tabNavigation = true;
+    menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
+    await nextUpdate(menu);
+    buttons = menu._buttons;
+    await nextRender(menu);
+    menu.focus();
+    await tab();
+    await tab();
+    expect(document.activeElement).to.equal(buttons[2]);
+    arrowDown(buttons[2]);
+    await oneEvent(subMenu, 'opened-changed');
+    expect(subMenu.opened).to.be.true;
+    await nextRender(subMenu);
+    await tab();
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[3]);
+    await shiftTab();
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[2]);
   });
 
   it('should switch menubar button without items and focus it on arrow right', async () => {

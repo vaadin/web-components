@@ -35,6 +35,43 @@ describe('a11y', () => {
       });
     });
 
+    it('should set role attribute on host element in tabNavigation', async () => {
+      menu.tabNavigation = true;
+      await nextRender(menu);
+      expect(menu.getAttribute('role')).to.equal('group');
+    });
+
+    it('should set role attribute on menu bar buttons in tabNavigation', async () => {
+      menu.tabNavigation = true;
+      await nextRender(menu);
+      buttons.forEach((btn) => {
+        expect(btn.getAttribute('role')).to.equal('button');
+      });
+    });
+
+    it('should update role attribute on menu bar buttons when changing items', async () => {
+      menu.items = [...menu.items, { text: 'New item' }];
+      await nextRender(menu);
+      menu._buttons.forEach((btn) => {
+        expect(btn.getAttribute('role')).to.equal('menuitem');
+      });
+    });
+
+    it('should update role attribute on menu bar buttons when changing items in tabNavigation', async () => {
+      menu.tabNavigation = true;
+      await nextRender(menu);
+      menu.items = [...menu.items, { text: 'New item' }];
+      await nextRender(menu);
+      menu._buttons.forEach((btn) => {
+        expect(btn.getAttribute('role')).to.equal('button');
+      });
+      menu.tabNavigation = false;
+      await nextRender(menu);
+      menu._buttons.forEach((btn) => {
+        expect(btn.getAttribute('role')).to.equal('menuitem');
+      });
+    });
+
     it('should set aria-haspopup attribute on buttons with nested items', () => {
       buttons.forEach((btn) => {
         const hasPopup = btn === overflow || btn.item.children ? 'true' : null;

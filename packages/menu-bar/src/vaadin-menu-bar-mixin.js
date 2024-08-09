@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -145,6 +145,15 @@ export const MenuBarMixin = (superClass) =>
         },
 
         /**
+         * If true, the top-level menu items is traversable by tab
+         * instead of arrow keys (i.e. disabling roving tabindex)
+         * @attr {boolean} tab-navigation
+         */
+        tabNavigation: {
+          type: Boolean,
+        },
+
+        /**
          * @type {boolean}
          * @protected
          */
@@ -173,6 +182,7 @@ export const MenuBarMixin = (superClass) =>
         '__i18nChanged(i18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container)',
         '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
+        '_tabNavigationChanged(tabNavigation, _overflow, _container)',
       ];
     }
 
@@ -347,6 +357,27 @@ export const MenuBarMixin = (superClass) =>
       if (overflow && container) {
         this.__detectOverflow();
       }
+    }
+
+    /**
+     * A callback for the 'tabNavigation' property observer.
+     *
+     * @param {boolean | null} _tabNavigation
+     * @private
+     */
+    _tabNavigationChanged(_tabNavigation, overflow, container) {
+      if (overflow && container) {
+        const target = this.querySelector('[tabindex="0"]');
+        this._buttons.forEach((btn) => {
+          if (target) {
+            this._setTabindex(btn, btn === target);
+          } else {
+            this._setTabindex(btn, false);
+          }
+          btn.setAttribute('role', _tabNavigation ? 'button' : 'menuitem');
+        });
+      }
+      this.setAttribute('role', this.tabNavigation ? 'group' : 'menubar');
     }
 
     /** @private */
@@ -540,7 +571,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _initButtonAttrs(button) {
-      button.setAttribute('role', 'menuitem');
+      button.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
 
       if (button === this._overflow || (button.item && button.item.children)) {
         button.setAttribute('aria-haspopup', 'true');
@@ -667,7 +698,11 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _setTabindex(button, focused) {
-      button.setAttribute('tabindex', focused ? '0' : '-1');
+      if (this.tabNavigation && !button.disabled) {
+        button.setAttribute('tabindex', '0');
+      } else {
+        button.setAttribute('tabindex', focused ? '0' : '-1');
+      }
     }
 
     /**
@@ -715,7 +750,19 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        const target = this.querySelector('[tabindex="0"]');
+        if (this.tabNavigation) {
+          // manage the submenu
+          const target = this.querySelector('[focused]');
+          const wasExpanded =
+            this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
+          if (wasExpanded) {
+            this._close();
+            if (target.item && target.item.children) {
+              this.__openSubMenu(target, true, { keepFocus: true });
+            }
+          }
+        }
+        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -839,6 +886,25 @@ export const MenuBarMixin = (superClass) =>
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._onKeyDown(e);
+        } else if (e.keyCode === 9) {
+          if (this.tabNavigation) {
+            const items = this._getItems() || [];
+            const currentIdx = items.indexOf(this.focused);
+            const increment = e.shiftKey ? -1 : 1;
+            let idx = currentIdx + increment;
+            idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+
+            // manage the submenu
+            const target = items[idx];
+            const wasExpanded =
+              this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
+            if (wasExpanded) {
+              this._close();
+              if (target.item && target.item.children) {
+                this.__openSubMenu(target, true, { keepFocus: true });
+              }
+            }
+          }
         }
       }
     }
