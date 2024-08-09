@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createOverlay } from './helpers.js';

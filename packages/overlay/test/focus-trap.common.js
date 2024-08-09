@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
