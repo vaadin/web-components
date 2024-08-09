@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 // Import the adapter
 import '../style-modules.js';
 // Use LitElement based custom elements in the tests
