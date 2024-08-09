@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';

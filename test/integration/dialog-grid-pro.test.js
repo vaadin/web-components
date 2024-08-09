@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';

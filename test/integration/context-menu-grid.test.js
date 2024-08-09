@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { esc, fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/grid';
@@ -36,7 +36,7 @@ describe('grid in context-menu', () => {
           <vaadin-grid-column path="firstName"></vaadin-grid-column>
           <vaadin-grid-column path="lastName"></vaadin-grid-column>
         </vaadin-grid>
-      </vaadin-context-menu>    
+      </vaadin-context-menu>
     `);
 
     contextMenu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];

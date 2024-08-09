@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import '@vaadin/multi-select-combo-box';
 import '@vaadin/combo-box';
 import { html } from '@polymer/polymer';
