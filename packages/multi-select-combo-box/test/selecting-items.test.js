@@ -50,6 +50,14 @@ describe('selecting items', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
+    it('should unselect item on click when it was selected on Enter', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ down: 'Enter' });
+      getFirstItem(comboBox).click();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
     it('should not un-select item when typing its value manually', async () => {
       comboBox.selectedItems = ['orange'];
       await sendKeys({ down: 'ArrowDown' });
