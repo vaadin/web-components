@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
 import '@vaadin/testing-helpers';
 import { Cache } from '../src/data-provider-controller/cache.js';

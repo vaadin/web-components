@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fire, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { clickItem, getAllItems, getFirstItem, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';

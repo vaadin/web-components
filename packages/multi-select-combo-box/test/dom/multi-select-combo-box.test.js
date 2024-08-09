@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../src/vaadin-multi-select-combo-box.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';

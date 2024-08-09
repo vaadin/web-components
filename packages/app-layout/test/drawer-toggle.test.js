@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-drawer-toggle.js';

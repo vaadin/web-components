@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, focusin, focusout, keyDownOn, mousedown } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FocusMixin } from '../src/focus-mixin.js';

@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';

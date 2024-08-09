@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { FocusRestorationController } from '../src/focus-restoration-controller.js';

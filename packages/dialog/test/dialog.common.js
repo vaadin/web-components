@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, click, esc, fixtureSync, listenOnce, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';

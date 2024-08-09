@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import {
   getDeepActiveElement,

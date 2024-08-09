@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 

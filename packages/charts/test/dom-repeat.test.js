@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '../vaadin-chart.js';

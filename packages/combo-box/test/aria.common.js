@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { getAllItems } from './helpers.js';
 

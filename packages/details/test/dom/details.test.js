@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-details.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';

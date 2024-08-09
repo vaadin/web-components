@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';

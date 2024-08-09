@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';

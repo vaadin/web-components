@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, isFirefox } from '@vaadin/testing-helpers';
 import { fire, flushGrid, infiniteDataProvider } from './helpers.js';
 

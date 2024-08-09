@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/context-menu';

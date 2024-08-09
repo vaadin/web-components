@@ -43,8 +43,8 @@
     "@vaadin/vaadin-material-styles": "24.5.0-alpha7"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.6.0",
+    "@vaadin/chai-plugins": "24.5.0-alpha7",
+    "@vaadin/testing-helpers": "^1.0.0",
     "sinon": "^13.0.2"
   },
   "web-types": [

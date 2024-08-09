@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';

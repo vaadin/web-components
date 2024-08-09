@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { generateUniqueId, resetUniqueId } from '../src/unique-id-utils.js';
 
 describe('unique-id-utils', () => {

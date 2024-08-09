@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, isDesktopSafari, isFirefox, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { flushGrid, infiniteDataProvider, onceResized, scrollToEnd } from './helpers.js';
 
