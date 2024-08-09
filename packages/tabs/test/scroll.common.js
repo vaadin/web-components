@@ -1,4 +1,4 @@
-import { expect } from '@esm-bundle/chai';
+import { expect } from '@vaadin/chai-plugins';
 import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 
 describe('scrollable tabs', () => {
