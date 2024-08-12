@@ -1,8 +1,8 @@
+import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
-import { expect } from '@esm-bundle/chai';
 import { changeInputValue } from './helpers.js';
 
 const fixtures = {
