@@ -9,6 +9,7 @@ import { css, html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
@@ -93,6 +94,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         });
         this.__draggedWidget = event.target;
         this.__draggedItem = this.__draggedWidget.closest('vaadin-dashboard-cell').__item;
+        this.requestUpdate();
       }
     });
 
@@ -136,18 +138,23 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
   __renderItems(items) {
     return items.map((item) => {
+      item.__transitionName ||= `vaadin-dashboard-widget-transition-${generateUniqueId()}`;
+
       if (item.section) {
-        return html`<vaadin-dashboard-section .title="${item.title}">
+        return html`<vaadin-dashboard-section
+          .title="${item.title}"
+          style="view-transition-name: ${item.__transitionName}"
+        >
           ${this.__renderItems(item.section)}
         </vaadin-dashboard-section>`;
       }
 
-      // TODO: Should dashboard instead render vaadin-dashboard-widget directly instead of having users to always do it?
+      // TODO: Should dashboard instead render vaadin-dashboard-widget directly?
+      // TODO: view-transition-name has no effect on the cell because it's display: contents
       return html`<vaadin-dashboard-cell
-        id="${item.id}"
         ?dragging="${this.__draggedItem === item}"
         .__item="${item}"
-        style="view-transition-name: vaadin-dashboard-widget-transition-${item.id}; --widget-colspan: ${item.colspan}; --widget-rowspan: ${item.rowspan}"
+        style="view-transition-name: ${item.__transitionName}; --widget-colspan: ${item.colspan}; --widget-rowspan: ${item.rowspan}"
       ></vaadin-dashboard-cell>`;
     });
   }
