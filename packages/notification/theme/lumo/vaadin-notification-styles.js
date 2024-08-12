@@ -46,25 +46,25 @@ registerStyles(
       margin: var(--lumo-space-s) auto;
     }
 
-    :host([slot\$='stretch']) {
+    :host([slot$='stretch']) {
       margin: 0;
     }
 
-    :host([slot\$='stretch']) [part='overlay'] {
+    :host([slot$='stretch']) [part='overlay'] {
       border-radius: 0;
     }
 
     @media (min-width: 421px) {
-      :host(:not([slot\$='stretch'])) {
+      :host(:not([slot$='stretch'])) {
         display: flex;
       }
 
-      :host([slot\$='end']) {
+      :host([slot$='end']) {
         justify-content: flex-end;
       }
 
       :host([slot^='middle']),
-      :host([slot\$='center']) {
+      :host([slot$='center']) {
         display: flex;
         justify-content: center;
       }
