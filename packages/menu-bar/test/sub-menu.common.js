@@ -17,10 +17,10 @@ import {
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { shiftTab, tab } from './helpers.js';
 
 setCancelSyntheticClickEvents(false);
 
@@ -270,10 +270,10 @@ describe('sub-menu', () => {
     buttons[2].focus();
     arrowDown(buttons[2]);
     await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
+
+    await sendKeys({ press: 'Tab' });
     await nextRender(subMenu);
-    await tab();
-    await nextRender(subMenu);
+
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[3]);
   });
@@ -286,8 +286,12 @@ describe('sub-menu', () => {
     buttons[3].focus();
     arrowDown(buttons[3]);
     await oneEvent(subMenu, 'opened-changed');
-    await shiftTab();
+
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
     await nextRender(subMenu);
+
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[2]);
   });

@@ -9,8 +9,8 @@ import {
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { shiftTab, tab } from './helpers.js';
 
 describe('custom element definition', () => {
   let menu, tagName;
@@ -235,22 +235,24 @@ describe('root menu layout', () => {
       menu.tabNavigation = true;
     });
 
-    it('should move focus to next button on "Tab" keydown', async () => {
+    it('should move focus to next button on Tab keydown', async () => {
       buttons[0].focus();
-      await tab();
+      await sendKeys({ press: 'Tab' });
       expect(buttons[1].hasAttribute('focused')).to.be.true;
     });
 
-    it('should move focus to prev button on "shift-Tab" keydown', async () => {
+    it('should move focus to prev button on Shift Tab keydown', async () => {
       buttons[1].focus();
-      await shiftTab();
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(buttons[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('should move focus to fourth button if third is disabled on "Tab" keydown', async () => {
+    it('should move focus to fourth button if third is disabled on Tab keydown', async () => {
       await updateItemsAndButtons();
       buttons[1].focus();
-      await tab();
+      await sendKeys({ press: 'Tab' });
       expect(buttons[3].hasAttribute('focused')).to.be.true;
     });
 
@@ -258,7 +260,7 @@ describe('root menu layout', () => {
       menu.tabNavigation = false;
       menu.focus();
       expect(document.activeElement).to.equal(buttons[0]);
-      await tab();
+      await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.not.equal(buttons[1]);
     });
   });
