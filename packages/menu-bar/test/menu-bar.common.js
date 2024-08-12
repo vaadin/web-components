@@ -229,6 +229,7 @@ describe('root menu layout', () => {
       });
     });
   });
+
   describe('tab navigation mode', () => {
     beforeEach(() => {
       menu.tabNavigation = true;
