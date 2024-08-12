@@ -46,8 +46,7 @@ export const sideNavStyles = css`
     justify-content: center;
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);
-    margin-inline-start: auto;
-    margin-inline-end: var(--lumo-space-xs);
+    margin-inline: auto var(--lumo-space-xs);
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
     color: var(--lumo-contrast-60pct);

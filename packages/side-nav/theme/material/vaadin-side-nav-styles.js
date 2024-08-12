@@ -37,8 +37,7 @@ export const sideNavStyles = css`
     width: 24px;
     height: 24px;
     padding: 4px;
-    margin-inline-start: auto;
-    margin-inline-end: -4px;
+    margin-inline: auto -4px;
     font-size: var(--material-icon-font-size);
     line-height: 1;
     color: var(--material-secondary-text-color);
