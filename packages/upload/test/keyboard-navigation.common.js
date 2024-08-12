@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { createFile } from './helpers.js';
 
@@ -12,7 +12,7 @@ async function repeatTab(times) {
 }
 
 describe('keyboard navigation', () => {
-  let uploadElement, fileElement, button;
+  let uploadElement, fileElements, button;
 
   before(() => {
     // Firefox has an issue with focus stuck when an upload element
@@ -32,7 +32,7 @@ describe('keyboard navigation', () => {
 
     await nextRender();
 
-    fileElement = uploadElement.querySelector('vaadin-upload-file');
+    fileElements = uploadElement.querySelector('vaadin-upload-file');
   });
 
   afterEach(() => {
@@ -50,42 +50,76 @@ describe('keyboard navigation', () => {
   it('should focus on the file', async () => {
     await repeatTab(2);
 
-    expect(document.activeElement).to.equal(fileElement);
+    expect(document.activeElement).to.equal(fileElements);
   });
 
   describe('file', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       uploadElement.files = [
         {
           ...FAKE_FILE,
           held: true, // Show the start button
           error: 'Error', // Show the retry button
+          name: 'file-0',
+        },
+        {
+          ...FAKE_FILE,
+          held: true,
+          error: 'Error',
+          name: 'file-1',
         },
       ];
+
+      await nextRender();
+      fileElements = document.querySelectorAll('vaadin-upload-file');
     });
 
     it('should focus on the start button', async () => {
-      const startButton = fileElement.shadowRoot.querySelector('[part=start-button]');
+      const startButton = fileElements[0].shadowRoot.querySelector('[part=start-button]');
 
       await repeatTab(3);
 
-      expect(fileElement.shadowRoot.activeElement).to.equal(startButton);
+      expect(fileElements[0].shadowRoot.activeElement).to.equal(startButton);
     });
 
     it('should focus on the retry button', async () => {
-      const retryButton = fileElement.shadowRoot.querySelector('[part=retry-button]');
+      const retryButton = fileElements[0].shadowRoot.querySelector('[part=retry-button]');
 
       await repeatTab(4);
 
-      expect(fileElement.shadowRoot.activeElement).to.equal(retryButton);
+      expect(fileElements[0].shadowRoot.activeElement).to.equal(retryButton);
     });
 
     it('should focus on the clear button', async () => {
-      const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
+      const removeButton = fileElements[0].shadowRoot.querySelector('[part=remove-button]');
 
       await repeatTab(5);
 
-      expect(fileElement.shadowRoot.activeElement).to.equal(removeButton);
+      expect(fileElements[0].shadowRoot.activeElement).to.equal(removeButton);
+    });
+
+    it('should focus on upload button when last remaining file is removed', async () => {
+      const removeButton = fileElements[0].shadowRoot.querySelector('[part=remove-button]');
+      const uploadButton = uploadElement.shadowRoot.querySelector('[part=upload-button]');
+      removeButton.click();
+      await nextFrame();
+      expect(fileElements[0].shadowRoot.activeElement).to.equal(uploadButton);
+    });
+
+    it('should focus the next file after removing a file', async () => {
+      const removeButton = fileElements[0].shadowRoot.querySelector('[part=remove-button]');
+      removeButton.click();
+      await nextFrame();
+      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
+      expect(activeElementFileName).to.equal('file-1');
+    });
+
+    it('should focus on previous when last file in list is removed', async () => {
+      const removeButton = fileElements[1].shadowRoot.querySelector('[part=remove-button]');
+      removeButton.click();
+      await nextFrame();
+      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
+      expect(activeElementFileName).to.equal('file-0');
     });
   });
 });

@@ -753,6 +753,7 @@ export const UploadMixin = (superClass) =>
       );
       if (evt) {
         this._uploadFile(file);
+        this._updateFocus(this.files.indexOf(file));
       }
     }
 
@@ -827,13 +828,27 @@ export const UploadMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    _updateFocus(fileIndex) {
+      if (this.files.length === 0) {
+        this._addButton.focus();
+        return;
+      }
+      const lastFileRemoved = fileIndex === this.files.length;
+      if (lastFileRemoved) {
+        fileIndex -= 1;
+      }
+      this._fileList.children[fileIndex].firstElementChild.focus();
+    }
+
     /**
      * Remove file from upload list. Called internally if file upload was canceled.
      * @param {!UploadFile} file File to remove
      * @protected
      */
     _removeFile(file) {
-      if (this.files.indexOf(file) > -1) {
+      const fileIndex = this.files.indexOf(file);
+      if (fileIndex > -1) {
         this.files = this.files.filter((i) => i !== file);
 
         this.dispatchEvent(
@@ -843,6 +858,8 @@ export const UploadMixin = (superClass) =>
             composed: true,
           }),
         );
+
+        this._updateFocus(fileIndex);
       }
     }
 
