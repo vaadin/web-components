@@ -413,6 +413,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
+    this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
   }
 
   /** @private */
@@ -522,15 +523,23 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
+  __openedChangedEventHandler() {
+    const opened = this.__datePicker.opened || this.__timePicker.opened;
+    this.style.pointerEvents = opened ? 'auto' : '';
+  }
+
+  /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', this.__changeEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
+    node.addEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
   __removeInputListeners(node) {
     node.removeEventListener('change', this.__changeEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
+    node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
   }
 
   /** @private */
