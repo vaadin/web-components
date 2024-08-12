@@ -830,16 +830,14 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _updateFocus(fileIndex) {
-      if (this._fileList.children.length === 0) {
+      if (this.files.length === 0) {
         this._addButton.focus();
         return;
       }
-
-      const lastFileRemoved = fileIndex === this._fileList.childElementCount;
+      const lastFileRemoved = fileIndex === this.files.length;
       if (lastFileRemoved) {
         fileIndex -= 1;
       }
-
       this._fileList.children[fileIndex].firstElementChild.focus();
     }
 
