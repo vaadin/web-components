@@ -359,13 +359,8 @@ export const MenuBarMixin = (superClass) =>
       }
     }
 
-    /**
-     * A callback for the 'tabNavigation' property observer.
-     *
-     * @param {boolean | null} _tabNavigation
-     * @private
-     */
-    _tabNavigationChanged(_tabNavigation, overflow, container) {
+    /** @private */
+    _tabNavigationChanged(tabNavigation, overflow, container) {
       if (overflow && container) {
         const target = this.querySelector('[tabindex="0"]');
         this._buttons.forEach((btn) => {
@@ -374,10 +369,10 @@ export const MenuBarMixin = (superClass) =>
           } else {
             this._setTabindex(btn, false);
           }
-          btn.setAttribute('role', _tabNavigation ? 'button' : 'menuitem');
+          btn.setAttribute('role', tabNavigation ? 'button' : 'menuitem');
         });
       }
-      this.setAttribute('role', this.tabNavigation ? 'group' : 'menubar');
+      this.setAttribute('role', tabNavigation ? 'group' : 'menubar');
     }
 
     /** @private */
