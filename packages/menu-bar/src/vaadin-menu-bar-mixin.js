@@ -748,8 +748,7 @@ export const MenuBarMixin = (superClass) =>
         if (this.tabNavigation) {
           // manage the submenu
           const target = this.querySelector('[focused]');
-          const wasExpanded =
-            this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
+           const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
           if (wasExpanded) {
             this._close();
             if (target.item && target.item.children) {
