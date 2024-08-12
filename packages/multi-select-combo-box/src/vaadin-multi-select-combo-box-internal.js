@@ -358,6 +358,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     if (this.opened) {
+      // Store filter value for checking if user input is matching
+      // an item which is already selected, to not un-select it.
+      this.lastFilter = this.filter;
+
       this.dispatchEvent(
         new CustomEvent('combo-box-item-selected', {
           detail: {
