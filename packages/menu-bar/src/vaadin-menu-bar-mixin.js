@@ -891,8 +891,7 @@ export const MenuBarMixin = (superClass) =>
 
             // manage the submenu
             const target = items[idx];
-            const wasExpanded =
-              this._expandedButton !== undefined && this._expandedButton !== null && this._expandedButton !== target;
+           const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
             if (wasExpanded) {
               this._close();
               if (target.item && target.item.children) {
