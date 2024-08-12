@@ -22,14 +22,14 @@ const numberField = css`
     padding: 0;
   }
 
-  [part\$='button'] {
+  [part$='button'] {
     cursor: pointer;
     font-size: var(--lumo-icon-size-s);
     width: 1.6em;
     height: 1.6em;
   }
 
-  [part\$='button']::before {
+  [part$='button']::before {
     margin-top: 0.3em;
   }
 

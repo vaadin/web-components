@@ -30,7 +30,6 @@ const notificationCard = css`
     background-color: var(--material-background-color);
     border-radius: 4px;
     box-shadow: var(--material-shadow-elevation-6dp);
-
     padding: 14px 16px;
     justify-content: stretch;
   }
@@ -53,11 +52,11 @@ const notificationCard = css`
     margin: -8px 0;
   }
 
-  :host([slot\$='stretch']) {
+  :host([slot$='stretch']) {
     margin: 0 -4px;
   }
 
-  :host([slot\$='stretch']) [part='overlay'] {
+  :host([slot$='stretch']) [part='overlay'] {
     border-radius: 0;
   }
 
@@ -71,7 +70,7 @@ const notificationCard = css`
       margin: auto;
     }
 
-    :host([slot\$='stretch']) {
+    :host([slot$='stretch']) {
       margin: 0 -12px;
     }
   }
