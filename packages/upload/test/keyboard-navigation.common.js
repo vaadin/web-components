@@ -63,13 +63,16 @@ describe('keyboard navigation', () => {
         },
         {
           ...FAKE_FILE,
-          held: true, // Show the start button
-          error: 'Error', // Show the retry button
+          held: true,
+          error: 'Error',
         },
       ];
+      uploadElement.files[1].name = 'file-1';
+      // console.log(document.querySelectorAll('vaadin-upload-file'));
     });
 
     it('should focus on the start button', async () => {
+      // debugger;
       const startButton = fileElement.shadowRoot.querySelector('[part=start-button]');
 
       await repeatTab(3);
@@ -78,6 +81,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus on the retry button', async () => {
+      // debugger;
       const retryButton = fileElement.shadowRoot.querySelector('[part=retry-button]');
 
       await repeatTab(4);
@@ -86,6 +90,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus on the clear button', async () => {
+      // debugger;
       const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
 
       await repeatTab(5);
@@ -94,6 +99,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus on upload button when last remaining file is removed', () => {
+      // debugger;
       const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
       const uploadButton = uploadElement.shadowRoot.querySelector('[part=upload-button]');
 
@@ -102,17 +108,24 @@ describe('keyboard navigation', () => {
       expect(fileElement.shadowRoot.activeElement).to.equal(uploadButton);
     });
 
+    it('should focus the next file after removing a file', () => {
+      // console.log(uploadElement.files);
+      // debugger;
+      const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
+      removeButton.click();
+      const secondFileName = fileElement.shadowRoot.querySelector('#name');
+      // console.log(document.activeElement);
+      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name');
+      expect(activeElementFileName).to.equal(secondFileName);
+    });
+
     it('should focus on previous when last file is removed', () => {
       const fileElements = document.querySelectorAll('vaadin-upload-file');
-      console.log(fileElements);
-      const buttons = [];
-      fileElements.forEach((element) => {
-        buttons.push(element.shadowRoot.querySelector('[part=remove-button]'));
-      });
-
-      console.log(fileElement.shadowRoot.activeElement, buttons);
-      buttons[1].click();
-      // expect(fileElement.shadowRoot.activeElement).to.equal(fileElements);
+      const removeButton = fileElements[1].shadowRoot.querySelector('[part=remove-button]');
+      const firstFileName = fileElements[0].shadowRoot.querySelector('#name');
+      removeButton.click();
+      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name');
+      expect(firstFileName).to.equal(activeElementFileName);
     });
   });
 });
