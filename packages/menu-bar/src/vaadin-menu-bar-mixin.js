@@ -745,18 +745,11 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
+        let target = this.querySelector('[tabindex="0"]');
         if (this.tabNavigation) {
-          // manage the submenu
-          const target = this.querySelector('[focused]');
-           const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
-          if (wasExpanded) {
-            this._close();
-            if (target.item && target.item.children) {
-              this.__openSubMenu(target, true, { keepFocus: true });
-            }
-          }
+          target = this.querySelector('[focused]');
+          this.__switchSubMenu(target);
         }
-        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -887,17 +880,19 @@ export const MenuBarMixin = (superClass) =>
             const increment = e.shiftKey ? -1 : 1;
             let idx = currentIdx + increment;
             idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
-
-            // manage the submenu
-            const target = items[idx];
-           const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
-            if (wasExpanded) {
-              this._close();
-              if (target.item && target.item.children) {
-                this.__openSubMenu(target, true, { keepFocus: true });
-              }
-            }
+            this.__switchSubMenu(items[idx]);
           }
+        }
+      }
+    }
+
+    /** @private */
+    __switchSubMenu(target) {
+      const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
+      if (wasExpanded) {
+        this._close();
+        if (target.item && target.item.children) {
+          this.__openSubMenu(target, true, { keepFocus: true });
         }
       }
     }
