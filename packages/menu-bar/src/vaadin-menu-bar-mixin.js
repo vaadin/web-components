@@ -747,6 +747,7 @@ export const MenuBarMixin = (superClass) =>
       if (focused) {
         let target = this.querySelector('[tabindex="0"]');
         if (this.tabNavigation) {
+          // Switch submenu on menu button Tab / Shift Tab
           target = this.querySelector('[focused]');
           this.__switchSubMenu(target);
         }
@@ -874,7 +875,7 @@ export const MenuBarMixin = (superClass) =>
           e.stopImmediatePropagation();
           this._onKeyDown(e);
         } else if (e.keyCode === 9 && this.tabNavigation) {
-          // Switch opened submenu on Tab / Shift Tab
+          // Switch opened submenu on submenu item Tab / Shift Tab
           const items = this._getItems() || [];
           const currentIdx = items.indexOf(this.focused);
           const increment = e.shiftKey ? -1 : 1;
