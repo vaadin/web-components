@@ -17,6 +17,7 @@ import {
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -259,6 +260,40 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
     expect(buttons[1].hasAttribute('focused')).to.be.true;
     expect(buttons[1].hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should switch menubar button with items and open submenu on Tab in tab navigation', async () => {
+    menu.tabNavigation = true;
+    menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
+    await nextUpdate(menu);
+    buttons = menu._buttons;
+    buttons[2].focus();
+    arrowDown(buttons[2]);
+    await oneEvent(subMenu, 'opened-changed');
+
+    await sendKeys({ press: 'Tab' });
+    await nextRender(subMenu);
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[3]);
+  });
+
+  it('should switch menubar button with items and open submenu on Shift Tab in tab navigation', async () => {
+    menu.tabNavigation = true;
+    menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
+    await nextUpdate(menu);
+    buttons = menu._buttons;
+    buttons[3].focus();
+    arrowDown(buttons[3]);
+    await oneEvent(subMenu, 'opened-changed');
+
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
+    await nextRender(subMenu);
+
+    expect(subMenu.opened).to.be.true;
+    expect(subMenu.listenOn).to.equal(buttons[2]);
   });
 
   it('should focus first item on arrow down after opened on arrow left', async () => {
