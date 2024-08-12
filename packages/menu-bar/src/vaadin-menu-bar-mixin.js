@@ -873,15 +873,14 @@ export const MenuBarMixin = (superClass) =>
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._onKeyDown(e);
-        } else if (e.keyCode === 9) {
-          if (this.tabNavigation) {
-            const items = this._getItems() || [];
-            const currentIdx = items.indexOf(this.focused);
-            const increment = e.shiftKey ? -1 : 1;
-            let idx = currentIdx + increment;
-            idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
-            this.__switchSubMenu(items[idx]);
-          }
+        } else if (e.keyCode === 9 && this.tabNavigation) {
+          // Switch opened submenu on Tab / Shift Tab
+          const items = this._getItems() || [];
+          const currentIdx = items.indexOf(this.focused);
+          const increment = e.shiftKey ? -1 : 1;
+          let idx = currentIdx + increment;
+          idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+          this.__switchSubMenu(items[idx]);
         }
       }
     }
