@@ -8,11 +8,11 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import './vaadin-dashboard-widget.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 /**
@@ -20,24 +20,21 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ElementMixin
  * @mixes DashboardLayoutMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
-class Dashboard extends DashboardLayoutMixin(ElementMixin(PolylitMixin(LitElement))) {
+class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
-    return 'vaadin-dashboard';
-  }
-
-  static get cvdlName() {
-    return 'vaadin-dashboard';
+    return 'vaadin-dashboard-layout';
   }
 
   /** @protected */
   render() {
-    return html``;
+    return html`<slot></slot>`;
   }
 }
 
-defineCustomElement(Dashboard);
+defineCustomElement(DashboardLayout);
 
-export { Dashboard };
+export { DashboardLayout };
