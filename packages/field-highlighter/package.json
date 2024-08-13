@@ -57,6 +57,6 @@
     "@vaadin/text-area": "24.5.0-alpha7",
     "@vaadin/text-field": "24.5.0-alpha7",
     "@vaadin/time-picker": "24.5.0-alpha7",
-    "sinon": "^13.0.2"
+    "sinon": "^18.0.0"
   }
 }
