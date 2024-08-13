@@ -12,7 +12,7 @@ async function repeatTab(times) {
 }
 
 describe('keyboard navigation', () => {
-  let uploadElement, fileElements, button;
+  let uploadElement, fileElements, button, uploadButton;
 
   before(() => {
     // Firefox has an issue with focus stuck when an upload element
@@ -31,7 +31,7 @@ describe('keyboard navigation', () => {
     uploadElement.files = [FAKE_FILE];
 
     await nextRender();
-
+    uploadButton = document.querySelector('vaadin-button[slot=add-button]');
     fileElements = uploadElement.querySelector('vaadin-upload-file');
   });
 
@@ -40,17 +40,17 @@ describe('keyboard navigation', () => {
   });
 
   it('should focus on the upload button', async () => {
-    const uploadButton = uploadElement.shadowRoot.querySelector('[part=upload-button]');
-
     await repeatTab(1);
 
-    expect(uploadElement.shadowRoot.activeElement).to.equal(uploadButton);
+    expect(document.activeElement).to.not.equal(null);
+    expect(document.activeElement).to.equal(uploadButton);
   });
 
   it('should focus on the file', async () => {
     await repeatTab(2);
 
     expect(document.activeElement).to.equal(fileElements);
+    expect(document.activeElement).to.not.equal(null);
   });
 
   describe('file', () => {
@@ -78,7 +78,7 @@ describe('keyboard navigation', () => {
       const startButton = fileElements[0].shadowRoot.querySelector('[part=start-button]');
 
       await repeatTab(3);
-
+      expect(fileElements[0].shadowRoot.activeElement).to.not.equal(null);
       expect(fileElements[0].shadowRoot.activeElement).to.equal(startButton);
     });
 
@@ -87,6 +87,7 @@ describe('keyboard navigation', () => {
 
       await repeatTab(4);
 
+      expect(fileElements[0].shadowRoot.activeElement).to.not.equal(null);
       expect(fileElements[0].shadowRoot.activeElement).to.equal(retryButton);
     });
 
@@ -95,15 +96,20 @@ describe('keyboard navigation', () => {
 
       await repeatTab(5);
 
+      expect(fileElements[0].shadowRoot.activeElement).to.not.equal(null);
       expect(fileElements[0].shadowRoot.activeElement).to.equal(removeButton);
     });
 
     it('should focus on upload button when last remaining file is removed', async () => {
       const removeButton = fileElements[0].shadowRoot.querySelector('[part=remove-button]');
-      const uploadButton = uploadElement.shadowRoot.querySelector('[part=upload-button]');
+
       removeButton.click();
       await nextFrame();
-      expect(fileElements[0].shadowRoot.activeElement).to.equal(uploadButton);
+      removeButton.click();
+      await nextFrame();
+
+      expect(document.activeElement).to.not.equal(null);
+      expect(document.activeElement).to.equal(uploadButton);
     });
 
     it('should focus the next file after removing a file', async () => {
