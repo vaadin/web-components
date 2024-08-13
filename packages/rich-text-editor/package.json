@@ -59,7 +59,7 @@
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "gulp-iconfont": "^11.0.0",
-    "sinon": "^13.0.2"
+    "sinon": "^18.0.0"
   },
   "cvdlName": "vaadin-rich-text-editor",
   "web-types": [
