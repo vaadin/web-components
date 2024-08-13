@@ -19,6 +19,10 @@ const popoverOverlay = css`
     padding: var(--lumo-space-xs) var(--lumo-space-s);
   }
 
+  :host([theme~='no-padding']) [part='content'] {
+    padding: 0;
+  }
+
   :host([theme~='arrow']) {
     --_vaadin-popover-default-offset: calc(var(--lumo-space-s) + var(--vaadin-popover-arrow-size) / 2);
   }
