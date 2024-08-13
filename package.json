@@ -33,6 +33,7 @@
     "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.1",
     "@rollup/plugin-terser": "^0.4.4",
+    "@types/mocha": "^10.0.7",
     "@types/sinon": "^17.0.3",
     "@vaadin/testing-helpers": "^1.0.0",
     "@web/dev-server": "^0.4.3",
