@@ -84,6 +84,15 @@ describe('dashboard layout', () => {
   });
 
   describe('minimum column width', () => {
+    it('should have a default minimum column width', () => {
+      // Clear the minimum column width used in the tests
+      setMinimumColumnWidth(dashboard, undefined);
+      // Narrow down the component to have the width of 0
+      dashboard.style.width = '0';
+      // Expect the column width to equal the default minimum column width
+      expect(getColumnWidths(dashboard)).to.eql([200]);
+    });
+
     it('should have one overflown column if narrowed below miminum column width', () => {
       // Narrow down the component to have the width of half a column
       dashboard.style.width = `${columnWidth / 2}px`;
@@ -97,7 +106,7 @@ describe('dashboard layout', () => {
       // Narrow down the component to have the width of half a column
       dashboard.style.width = `${columnWidth / 2}px`;
       // Expect the column width to equal the min column width
-      // expect(getColumnWidths(dashboard)).to.eql([columnWidth / 2]);
+      expect(getColumnWidths(dashboard)).to.eql([columnWidth / 2]);
     });
 
     it('should have one wide column with large minimum column width', () => {
@@ -114,6 +123,15 @@ describe('dashboard layout', () => {
   });
 
   describe('maximum column width', () => {
+    it('should have a default maximum column width', () => {
+      // Clear the maximum column width used in the tests
+      setMaximumColumnWidth(dashboard, undefined);
+      // Widen the component
+      dashboard.style.width = '1000px';
+      // Expect the column width to equal the default maximum column width
+      expect(getColumnWidths(dashboard)[0]).to.eql(400);
+    });
+
     it('should have one wide column with large maximum column width', () => {
       // Allow the column to be twice as wide
       setMaximumColumnWidth(dashboard, columnWidth * 2);

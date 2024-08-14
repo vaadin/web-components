@@ -33,14 +33,22 @@ export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, col
 /**
  * Sets the minimum column width of the dashboard.
  */
-export function setMinimumColumnWidth(dashboard: HTMLElement, width: number): void {
+export function setMinimumColumnWidth(dashboard: HTMLElement, width?: number): void {
+  if (width === undefined) {
+    dashboard.style.removeProperty('--vaadin-dashboard-col-min-width');
+    return;
+  }
   dashboard.style.setProperty('--vaadin-dashboard-col-min-width', `${width}px`);
 }
 
 /**
  * Sets the maximum column width of the dashboard.
  */
-export function setMaximumColumnWidth(dashboard: HTMLElement, width: number): void {
+export function setMaximumColumnWidth(dashboard: HTMLElement, width?: number): void {
+  if (width === undefined) {
+    dashboard.style.removeProperty('--vaadin-dashboard-col-max-width');
+    return;
+  }
   dashboard.style.setProperty('--vaadin-dashboard-col-max-width', `${width}px`);
 }
 
