@@ -22,10 +22,10 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: grid;
-
+          /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 200px;
           --_vaadin-dashboard-default-col-max-width: 400px;
-
+          /* Effective min and max column widths */
           --_vaadin-dashboard-col-min-width: var(
             --vaadin-dashboard-col-min-width,
             var(--_vaadin-dashboard-default-col-min-width)
