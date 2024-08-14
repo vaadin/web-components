@@ -14,7 +14,6 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
  * A mixin to enable the dashboard layout functionality
  *
  * @polymerMixin
- * @mixes ResizeMixin
  */
 export const DashboardLayoutMixin = (superClass) =>
   class DashboardLayoutMixinClass extends superClass {
