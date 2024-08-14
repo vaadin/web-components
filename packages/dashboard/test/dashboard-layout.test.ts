@@ -110,6 +110,7 @@ describe('dashboard layout', () => {
     });
 
     it('should have one wide column with large minimum column width', () => {
+      setMaximumColumnWidth(dashboard, columnWidth * 2);
       // Set the min column width to be twice as wide
       setMinimumColumnWidth(dashboard, columnWidth * 2);
       // Expect there to only be one column with twice the width
