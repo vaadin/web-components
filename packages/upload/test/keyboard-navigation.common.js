@@ -55,20 +55,13 @@ describe('keyboard navigation', () => {
 
   describe('file', () => {
     beforeEach(async () => {
-      uploadElement.files = [
-        {
-          ...FAKE_FILE,
-          held: true, // Show the start button
-          error: 'Error', // Show the retry button
-          name: 'file-0',
-        },
-        {
-          ...FAKE_FILE,
-          held: true,
-          error: 'Error',
-          name: 'file-1',
-        },
-      ];
+      const fileList = [];
+      for (let i = 0; i < 2; i++) {
+        const file = createFile(1000, 'application/uknown');
+        Object.assign(file, { name: `file-${i}`, held: true, error: 'Error' });
+        fileList.push(file);
+      }
+      uploadElement.files = fileList;
 
       await nextRender();
       fileElements = document.querySelectorAll('vaadin-upload-file');
@@ -78,6 +71,7 @@ describe('keyboard navigation', () => {
       const startButton = fileElements[0].shadowRoot.querySelector('[part=start-button]');
 
       await repeatTab(3);
+
       expect(fileElements[0].shadowRoot.activeElement).to.not.equal(null);
       expect(fileElements[0].shadowRoot.activeElement).to.equal(startButton);
     });
@@ -114,18 +108,31 @@ describe('keyboard navigation', () => {
 
     it('should focus the next file after removing a file', async () => {
       const removeButton = fileElements[0].shadowRoot.querySelector('[part=remove-button]');
+
       removeButton.click();
       await nextFrame();
+
       const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
       expect(activeElementFileName).to.equal('file-1');
     });
 
     it('should focus on previous when last file in list is removed', async () => {
       const removeButton = fileElements[1].shadowRoot.querySelector('[part=remove-button]');
+
       removeButton.click();
       await nextFrame();
+
       const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
       expect(activeElementFileName).to.equal('file-0');
+    });
+
+    it('should not change focus after upload', async () => {
+      // Programmatic upload does not actually set focus, so we first navigate to the button.
+      await repeatTab(1);
+
+      uploadElement._uploadFile(FAKE_FILE);
+
+      expect(document.activeElement).to.equal(uploadButton);
     });
   });
 });
