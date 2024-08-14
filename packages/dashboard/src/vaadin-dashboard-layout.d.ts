@@ -11,8 +11,6 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export type DashboardLayoutEventMap = HTMLElementEventMap;
-
 /**
  * A responsive, grid-based dashboard layout component
  */
