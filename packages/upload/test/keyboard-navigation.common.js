@@ -31,8 +31,8 @@ describe('keyboard navigation', () => {
     uploadElement.files = [FAKE_FILE];
 
     await nextRender();
-    uploadButton = document.querySelector('vaadin-button[slot=add-button]');
-    fileElements = uploadElement.querySelector('vaadin-upload-file');
+    uploadButton = uploadElement.querySelector('vaadin-button[slot=add-button]');
+    fileElements = uploadElement.querySelectorAll('vaadin-upload-file');
   });
 
   afterEach(() => {
@@ -49,7 +49,7 @@ describe('keyboard navigation', () => {
   it('should focus on the file', async () => {
     await repeatTab(2);
 
-    expect(document.activeElement).to.equal(fileElements);
+    expect(document.activeElement).to.equal(fileElements[0]);
     expect(document.activeElement).to.not.equal(null);
   });
 
