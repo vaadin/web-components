@@ -848,7 +848,7 @@ export const UploadMixin = (superClass) =>
      */
     _removeFile(file) {
       const fileIndex = this.files.indexOf(file);
-      if (fileIndex > -1) {
+      if (fileIndex >= 0) {
         this.files = this.files.filter((i) => i !== file);
 
         this.dispatchEvent(

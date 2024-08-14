@@ -42,7 +42,7 @@
         { name: 'Financials.xlsx', error: 'An error occurred' },
       ];
       
-      const blobs = createFiles(3, 1000, 'application/unknown');
+      const blobs = createFiles(files.length, 1000, 'application/unknown');
 
       files.forEach((_, index) => {
         files[index] = Object.assign(blobs[index], files[index]);
