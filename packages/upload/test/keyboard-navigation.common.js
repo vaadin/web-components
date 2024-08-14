@@ -64,7 +64,7 @@ describe('keyboard navigation', () => {
       uploadElement.files = fileList;
 
       await nextRender();
-      fileElements = document.querySelectorAll('vaadin-upload-file');
+      fileElements = uploadElement.querySelectorAll('vaadin-upload-file');
     });
 
     it('should focus on the start button', async () => {
@@ -112,8 +112,7 @@ describe('keyboard navigation', () => {
       removeButton.click();
       await nextFrame();
 
-      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
-      expect(activeElementFileName).to.equal('file-1');
+      expect(document.activeElement.file.name).to.equal('file-1');
     });
 
     it('should focus on previous when last file in list is removed', async () => {
@@ -122,8 +121,7 @@ describe('keyboard navigation', () => {
       removeButton.click();
       await nextFrame();
 
-      const activeElementFileName = document.activeElement.shadowRoot.querySelector('#name').innerText;
-      expect(activeElementFileName).to.equal('file-0');
+      expect(document.activeElement.file.name).to.equal('file-0');
     });
 
     it('should not change focus after upload', async () => {
