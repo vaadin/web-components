@@ -10,7 +10,7 @@
     <script type="module">
       import '@vaadin/upload';
       import '@vaadin/radio-group';
-      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { xhrCreator, createFiles } from '@vaadin/upload/test/helpers.js';
 
       const nextUpload = document.querySelector('#next-upload');
 
@@ -31,8 +31,8 @@
           })();
         }
       };
-
-      upload.files = [
+      
+      const files = [
         { name: 'Annual Report.docx', complete: true },
         {
           name: 'Workflow.pdf',
@@ -41,6 +41,14 @@
         },
         { name: 'Financials.xlsx', error: 'An error occurred' },
       ];
+      
+      const blobs = createFiles(3, 1000, 'application/unknown');
+
+      files.forEach((_, index) => {
+        files[index] = Object.assign(blobs[index], files[index]);
+      });
+
+      upload.files = files;
     </script>
   </head>
 
