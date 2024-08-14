@@ -31,7 +31,7 @@
           })();
         }
       };
-      
+
       const files = [
         { name: 'Annual Report.docx', complete: true },
         {
@@ -41,7 +41,7 @@
         },
         { name: 'Financials.xlsx', error: 'An error occurred' },
       ];
-      
+
       const blobs = createFiles(files.length, 1000, 'application/unknown');
 
       files.forEach((_, index) => {
