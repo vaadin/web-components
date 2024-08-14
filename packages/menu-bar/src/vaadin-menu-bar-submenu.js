@@ -70,6 +70,13 @@ class MenuBarSubmenu extends ContextMenuMixin(OverlayClassMixin(ControllerMixin(
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(dom);
     root.appendChild(this._overlayElement);
+
+    // Store overlay reference to enable using in popover
+    if (this.hasAttribute('is-root')) {
+      const menuBar = this.getRootNode().host;
+      this._overlayElement.owner = menuBar;
+    }
+
     return root;
   }
 

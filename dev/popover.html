@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,43 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Popover</title>
     <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/horizontal-layout';
-      import '@vaadin/popover';
-      import '@vaadin/text-field';
-    </script>
   </head>
 
   <body>
-    <vaadin-button id="button">Discount</vaadin-button>
+    <vaadin-button id="button">Open</vaadin-button>
 
-    <vaadin-popover for="button" position="bottom-start"></vaadin-popover>
+    <vaadin-popover for="button"></vaadin-popover>
 
     <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/date-picker';
+      import '@vaadin/popover';
+      import '@vaadin/select';
+      import '@vaadin/menu-bar';
+
       const popover = document.querySelector('vaadin-popover');
 
-      // popover.trigger = ['hover', 'focus'];
+      popover.trigger = ['focus'];
 
       popover.renderer = (root) => {
         if (root.firstChild) {
           return;
         }
 
-        const layout = document.createElement('vaadin-horizontal-layout');
-        layout.setAttribute('theme', 'spacing-s');
-        layout.style.alignItems = 'baseline';
+        const select = document.createElement('vaadin-select');
+        select.label = 'Size';
+        select.items = [
+          { label: 'XS', value: 'xs' },
+          { label: 'S', value: 's' },
+          { label: 'M', value: 'm' },
+          { label: 'L', value: 'l' },
+          { label: 'XL', value: 'xl' },
+        ];
 
-        const field = document.createElement('vaadin-text-field');
-        field.label = 'Discount code';
+        const picker = document.createElement('vaadin-date-picker');
 
-        const button = document.createElement('vaadin-button');
-        button.textContent = 'Apply';
+        const menu = document.createElement('vaadin-menu-bar');
+        menu.items = [
+          { text: 'View', tooltip: 'Options for how to view the content' },
+          { text: 'Edit' },
+          {
+            text: 'Share',
+            children: [
+              {
+                text: 'On social media',
+                children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+              },
+              { text: 'By email' },
+              { text: 'Get link' },
+            ],
+          },
+          {
+            text: 'Move',
+            tooltip: 'Move to a different folder or trash.',
+            children: [{ text: 'To folder' }, { text: 'To trash' }],
+          },
+          { text: 'Duplicate', tooltip: 'Create a duplicate' },
+        ];
 
-        layout.append(field, button);
-
-        root.append(layout);
+        root.append(select, picker, menu);
       };
     </script>
   </body>

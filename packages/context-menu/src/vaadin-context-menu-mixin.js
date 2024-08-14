@@ -151,6 +151,7 @@ export const ContextMenuMixin = (superClass) =>
       this._boundClose = this.close.bind(this);
       this._boundPreventDefault = this._preventDefault.bind(this);
       this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
+      this.__itemsRenderer = this.__itemsRenderer.bind(this);
     }
 
     /** @protected */

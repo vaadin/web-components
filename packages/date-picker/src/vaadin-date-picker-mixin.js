@@ -500,6 +500,7 @@ export const DatePickerMixin = (subclass) =>
       const overlay = this.$.overlay;
       this._overlayElement = overlay;
 
+      overlay.owner = this;
       overlay.renderer = this._boundOverlayRenderer;
 
       this.addEventListener('mousedown', () => this.__bringToFront());

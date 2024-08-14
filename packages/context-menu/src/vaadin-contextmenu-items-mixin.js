@@ -394,16 +394,16 @@ export const ItemsMixin = (superClass) =>
      * @param {!ContextMenuRendererContext} context
      * @protected
      */
-    __itemsRenderer(root, menu, { detail }) {
-      this.__initMenu(root, menu);
+    __itemsRenderer(root, _menu, { detail }) {
+      this.__initMenu(root);
 
       const subMenu = root.querySelector(this.constructor.is);
-      subMenu.closeOn = menu.closeOn;
+      subMenu.closeOn = this.closeOn;
 
       const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
       listBox.innerHTML = '';
 
-      [...(detail.children || menu.items)].forEach((item) => {
+      [...(detail.children || this.items)].forEach((item) => {
         const component = this.__createComponent(item);
         listBox.appendChild(component);
       });
@@ -435,9 +435,7 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __initMenu(root, _menu) {
-      // NOTE: in this method, `menu` and `this` reference the same element,
-      // so we can use either of those. Original implementation used `menu`.
+    __initMenu(root) {
       if (!root.firstElementChild) {
         this.__initOverlay();
 

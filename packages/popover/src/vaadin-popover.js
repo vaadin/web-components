@@ -734,11 +734,32 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayFocusOut(event) {
-    if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
+    const { relatedTarget } = event;
+
+    if (
+      relatedTarget === this.target ||
+      this._overlayElement.contains(relatedTarget) ||
+      this.__isNestedOverlayChild(relatedTarget)
+    ) {
       return;
     }
 
     this.__handleFocusout();
+  }
+
+  /** @private */
+  __isNestedOverlayChild(element) {
+    let node = element;
+    while (node) {
+      // Check if the element is placed in an overlay whose host is a popover overlay child.
+      if (node._hasOverlayStackMixin && node.owner && this._overlayElement.contains(node.owner)) {
+        return true;
+      }
+
+      node = node.parentNode;
+    }
+
+    return false;
   }
 
   /** @private */
@@ -753,7 +774,7 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
-    if (event.relatedTarget === this.target) {
+    if (event.relatedTarget === this.target || this.__isNestedOverlayChild(event.relatedTarget)) {
       return;
     }
 
