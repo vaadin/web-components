@@ -22,7 +22,6 @@ export const DashboardLayoutMixin = (superClass) =>
     static get styles() {
       return css`
         :host {
-          display: grid;
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
           --_vaadin-dashboard-default-col-max-width: 1fr;
@@ -36,12 +35,19 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-default-col-max-width)
           );
 
+          display: grid;
+          overflow: auto;
+
           grid-template-columns: repeat(
             auto-fill,
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
 
           gap: var(--vaadin-dashboard-gap, 1rem);
+        }
+
+        :host([hidden]) {
+          display: none !important;
         }
 
         ::slotted(*) {
