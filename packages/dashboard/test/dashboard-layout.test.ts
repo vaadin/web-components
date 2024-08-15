@@ -5,6 +5,8 @@ import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
 import {
   getColumnWidths,
   getElementFromCell,
+  getRowHeights,
+  setColspan,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -32,6 +34,9 @@ import {
  * ```
  */
 function expectLayout(dashboard: DashboardLayout, layout: number[][]) {
+  expect(getRowHeights(dashboard).length).to.eql(layout.length);
+  expect(getColumnWidths(dashboard).length).to.eql(layout[0].length);
+
   layout.forEach((row, rowIndex) => {
     row.forEach((itemId, columnIndex) => {
       const element = getElementFromCell(dashboard, rowIndex, columnIndex);
@@ -46,6 +51,7 @@ function expectLayout(dashboard: DashboardLayout, layout: number[][]) {
 
 describe('dashboard layout', () => {
   let dashboard: DashboardLayout;
+  let childElements: HTMLElement[];
   const columnWidth = 100;
   const remValue = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
@@ -56,6 +62,7 @@ describe('dashboard layout', () => {
         <div id="item-1">Item 1</div>
       </vaadin-dashboard-layout>
     `);
+    childElements = [...dashboard.children] as HTMLElement[];
     // Disable gap between items in these tests
     setGap(dashboard, 0);
     // Set the column width to a fixed value
@@ -149,6 +156,46 @@ describe('dashboard layout', () => {
       expectLayout(dashboard, [
         [0],
         [1],
+      ]);
+    });
+  });
+
+  describe('column span', () => {
+    it('should span multiple columns', async () => {
+      setColspan(childElements[0], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 0],
+        [1],
+      ]);
+    });
+
+    it('should be capped to currently available columns', async () => {
+      setColspan(childElements[0], 2);
+      await nextFrame();
+
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+    });
+
+    it('should span multiple columns on a single row', async () => {
+      setColspan(childElements[0], 2);
+      await nextFrame();
+
+      dashboard.style.width = `${columnWidth * 3}px`;
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 0, 1],
       ]);
     });
   });
