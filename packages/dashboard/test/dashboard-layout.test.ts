@@ -47,6 +47,7 @@ function expectLayout(dashboard: DashboardLayout, layout: number[][]) {
 describe('dashboard layout', () => {
   let dashboard: DashboardLayout;
   const columnWidth = 100;
+  const remValue = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
   beforeEach(async () => {
     dashboard = fixtureSync(`
@@ -90,7 +91,7 @@ describe('dashboard layout', () => {
       // Narrow down the component to have the width of 0
       dashboard.style.width = '0';
       // Expect the column width to equal the default minimum column width
-      expect(getColumnWidths(dashboard)).to.eql([200]);
+      expect(getColumnWidths(dashboard)).to.eql([remValue * 15]);
     });
 
     it('should have one overflown column if narrowed below miminum column width', () => {
@@ -124,19 +125,13 @@ describe('dashboard layout', () => {
   });
 
   describe('maximum column width', () => {
-    it('should have a default maximum column width of 1fr', () => {
+    it('should have a default maximum column width', () => {
       // Clear the maximum column width used in the tests
       setMaximumColumnWidth(dashboard, undefined);
-      expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth]);
-      // Widen the component to have the width of 2.5 columns
-      dashboard.style.width = `${columnWidth * 2.5}px`;
-      expect(getColumnWidths(dashboard)).to.eql([columnWidth * 1.25, columnWidth * 1.25]);
-      // Widen the component to have the width of 3 columns
-      dashboard.style.width = `${columnWidth * 3}px`;
-      expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth, columnWidth]);
-      // Shrink the component to have the width of 1.5 columns
-      dashboard.style.width = `${columnWidth * 1.5}px`;
-      expect(getColumnWidths(dashboard)).to.eql([columnWidth * 1.5]);
+      // Widen the component
+      dashboard.style.width = '10000px';
+      // Expect the column width to equal the default maximum column width
+      expect(getColumnWidths(dashboard)[0]).to.eql(remValue * 30);
     });
 
     it('should have one wide column with large maximum column width', () => {
