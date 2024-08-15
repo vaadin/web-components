@@ -424,6 +424,7 @@ class Popover extends PopoverPositionMixin(
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @mousedown="${this.__onOverlayMouseDown}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         @focusin="${this.__onOverlayFocusIn}"
@@ -692,7 +693,7 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusOut(event) {
-    if (this._overlayElement.contains(event.relatedTarget)) {
+    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
 
@@ -734,11 +735,30 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayFocusOut(event) {
-    if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
+    if (
+      (this.__hasTrigger('focus') && this.__mouseDownInside) ||
+      event.relatedTarget === this.target ||
+      this._overlayElement.contains(event.relatedTarget)
+    ) {
       return;
     }
 
     this.__handleFocusout();
+  }
+
+  /** @private */
+  __onOverlayMouseDown() {
+    if (this.__hasTrigger('focus')) {
+      this.__mouseDownInside = true;
+
+      document.addEventListener(
+        'mouseup',
+        () => {
+          this.__mouseDownInside = false;
+        },
+        { once: true },
+      );
+    }
   }
 
   /** @private */
