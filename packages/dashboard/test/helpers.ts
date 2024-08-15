@@ -54,6 +54,6 @@ export function setColspan(element: HTMLElement, colspan?: number): void {
 /**
  * Sets the gap between the cells of the dashboard.
  */
-export function setGap(dashboard: HTMLElement, gap: number): void {
-  dashboard.style.gap = `${gap}px`;
+export function setGap(dashboard: HTMLElement, gap?: number): void {
+  dashboard.style.setProperty('--vaadin-dashboard-gap', gap !== undefined ? `${gap}px` : null);
 }

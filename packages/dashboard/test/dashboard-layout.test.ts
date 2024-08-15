@@ -199,4 +199,41 @@ describe('dashboard layout', () => {
       ]);
     });
   });
+
+  describe('gap', () => {
+    it('should have a default gap', () => {
+      // Clear the gap used in the tests
+      setGap(dashboard, undefined);
+      // Increase the width of the dashboard to fit two items and a gap
+      dashboard.style.width = `${columnWidth * 2 + remValue}px`;
+
+      const { right: item0Right } = childElements[0].getBoundingClientRect();
+      const { left: item1Left } = childElements[1].getBoundingClientRect();
+      // Expect the items to have a gap of 1rem
+      expect(item1Left - item0Right).to.eql(remValue);
+    });
+
+    it('should have a custom gap between items horizontally', () => {
+      const customGap = 10;
+      setGap(dashboard, customGap);
+      // Increase the width of the dashboard to fit two items and a gap
+      dashboard.style.width = `${columnWidth * 2 + customGap}px`;
+
+      const { right: item0Right } = childElements[0].getBoundingClientRect();
+      const { left: item1Left } = childElements[1].getBoundingClientRect();
+      // Expect the items to have a gap of 10px
+      expect(item1Left - item0Right).to.eql(customGap);
+    });
+
+    it('should have a custom gap between items vertically', () => {
+      const customGap = 10;
+      setGap(dashboard, customGap);
+      dashboard.style.width = `${columnWidth}px`;
+
+      const { bottom: item0Bottom } = childElements[0].getBoundingClientRect();
+      const { top: item1Top } = childElements[1].getBoundingClientRect();
+      // Expect the items to have a gap of 10px
+      expect(item1Top - item0Bottom).to.eql(customGap);
+    });
+  });
 });

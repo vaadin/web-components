@@ -40,6 +40,8 @@ export const DashboardLayoutMixin = (superClass) =>
             auto-fill,
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
+
+          gap: var(--vaadin-dashboard-gap, 1rem);
         }
 
         ::slotted(*) {
