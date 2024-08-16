@@ -80,6 +80,12 @@ describe('dashboard layout', () => {
     ]);
   });
 
+  it('should not display when hidden', () => {
+    expect(dashboard.offsetHeight).to.be.above(0);
+    dashboard.hidden = true;
+    expect(dashboard.offsetHeight).to.eql(0);
+  });
+
   it('should be responsive', () => {
     // Narrow down the component to fit one column
     dashboard.style.width = `${columnWidth}px`;
@@ -89,6 +95,16 @@ describe('dashboard layout', () => {
       [0],
       [1],
     ]);
+  });
+
+  it('should scroll when content overflows', () => {
+    dashboard.style.width = `${columnWidth}px`;
+    const rowHeight = Math.ceil(getRowHeights(dashboard)[0]);
+    dashboard.style.height = `${rowHeight}px`;
+    expect(dashboard.scrollTop).to.eql(0);
+
+    dashboard.scrollTop = 1;
+    expect(dashboard.scrollTop).to.eql(1);
   });
 
   describe('minimum column width', () => {
