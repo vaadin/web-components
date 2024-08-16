@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard layout</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/dashboard/vaadin-dashboard-layout.js';
+    </script>
+
+    <style>
+      vaadin-dashboard-layout div {
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 1em;
+        text-align: center;
+        margin: 0.5em;
+        box-sizing: border-box;
+        height: 100px;
+      }
+
+      vaadin-dashboard-layout {
+        --vaadin-dashboard-col-min-width: 300px;
+        --vaadin-dashboard-col-max-width: 500px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <vaadin-dashboard-layout>
+      <div>Item 0</div>
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+      <div>Item 4</div>
+    </vaadin-dashboard-layout>
+  </body>
+</html>
