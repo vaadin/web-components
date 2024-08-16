@@ -94,7 +94,7 @@ describe('dashboard layout', () => {
       expect(getColumnWidths(dashboard)).to.eql([remValue * 25]);
     });
 
-    it('should have one overflown column if narrowed below mininum column width', () => {
+    it('should have one overflown column if narrowed below minimum column width', () => {
       // Narrow down the component to have the width of half a column
       dashboard.style.width = `${columnWidth / 2}px`;
       // Expect the column width to still be the same (overflown)
