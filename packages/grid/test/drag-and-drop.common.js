@@ -290,6 +290,21 @@ describe('drag and drop', () => {
         }
       });
 
+      it('should add items to draggedItems array when drag starts', () => {
+        grid.selectItem(grid.items[0]);
+        grid.selectItem(grid.items[1]);
+        fireDragStart();
+
+        expect(grid.__draggedItems.length).to.equal(2);
+      });
+
+      it('should remove items from draggedItems array when drag ends', () => {
+        grid.selectItem(grid.items[0]);
+        fireDragStart();
+
+        fireDragEnd();
+        expect(grid.__draggedItems.length).to.equal(0);
+      });
       // The test only concerns Safari
       const isSafari = /^((?!chrome|android).)*safari/iu.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {

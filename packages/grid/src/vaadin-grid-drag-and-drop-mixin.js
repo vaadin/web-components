@@ -103,6 +103,11 @@ export const DragAndDropMixin = (superClass) =>
         __dndAutoScrollThreshold: {
           value: 50,
         },
+
+        /** @private  */
+        __draggedItems: {
+          value: [],
+        },
       };
     }
 
@@ -170,6 +175,8 @@ export const DragAndDropMixin = (superClass) =>
             .filter((row) => !this.dragFilter || this.dragFilter(this.__getRowModel(row)));
         }
 
+        this.__draggedItems = rows.map((row) => row._item);
+
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
@@ -209,6 +216,8 @@ export const DragAndDropMixin = (superClass) =>
       iterateChildren(this.$.items, (row) => {
         updateBooleanRowStates(row, { 'drag-source': false });
       });
+
+      this.__draggedItems = [];
     }
 
     /** @private */
@@ -336,6 +345,15 @@ export const DragAndDropMixin = (superClass) =>
       iterateChildren(this.$.items, (row) => {
         updateStringRowStates(row, { dragover: null });
       });
+    }
+
+    /** @private */
+    _updateDragSourceParts(row, model) {
+      if (this.__draggedItems.includes(model.item)) {
+        updateBooleanRowStates(row, { 'drag-source': true });
+      } else {
+        updateBooleanRowStates(row, { 'drag-source': false });
+      }
     }
 
     /** @private */
