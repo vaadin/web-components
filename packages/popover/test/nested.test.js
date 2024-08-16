@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
+import { mouseenter, mouseleave } from './helpers.js';
 
 describe('nested popover', () => {
   let popover, target, secondPopover, secondTarget;
@@ -117,6 +118,44 @@ describe('nested popover', () => {
       await nextRender();
 
       outsideClick();
+      await nextUpdate(popover);
+
+      expect(popover.opened).to.be.true;
+    });
+  });
+
+  describe('hover', () => {
+    beforeEach(async () => {
+      popover.trigger = ['hover'];
+      await nextUpdate(popover);
+    });
+
+    it('should not close when mouse leaves the target if popover is not the last one', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      mouseleave(target, secondTarget);
+      secondTarget.click();
+      await nextRender();
+
+      mouseleave(secondTarget, target);
+
+      mouseenter(target);
+      mouseleave(target);
+      await nextUpdate(popover);
+
+      expect(popover.opened).to.be.true;
+    });
+
+    it('should not close when mouse leaves the overlay if popover is not the last one', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      mouseleave(target, secondTarget);
+      secondTarget.click();
+      await nextRender();
+
+      mouseleave(secondTarget);
       await nextUpdate(popover);
 
       expect(popover.opened).to.be.true;
