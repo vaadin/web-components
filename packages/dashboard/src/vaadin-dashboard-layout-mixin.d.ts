@@ -9,12 +9,13 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * A mixin to enable the dashboard layout functionality.
  */
 export declare function DashboardLayoutMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<DashboardLayoutMixinClass> & T;
+): Constructor<DashboardLayoutMixinClass> & Constructor<ResizeMixinClass> & T;
 
 export declare class DashboardLayoutMixinClass {}

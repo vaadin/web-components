@@ -45,6 +45,13 @@ export function setMaximumColumnWidth(dashboard: HTMLElement, width?: number): v
 }
 
 /**
+ * Sets the column span of the element
+ */
+export function setColspan(element: HTMLElement, colspan?: number): void {
+  element.style.setProperty('--vaadin-dashboard-item-colspan', colspan !== undefined ? `${colspan}` : null);
+}
+
+/**
  * Sets the gap between the cells of the dashboard.
  */
 export function setGap(dashboard: HTMLElement, gap: number): void {

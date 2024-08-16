@@ -8,15 +8,17 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * A mixin to enable the dashboard layout functionality
  *
  * @polymerMixin
+ * @mixes ResizeMixin
  */
 export const DashboardLayoutMixin = (superClass) =>
-  class DashboardLayoutMixinClass extends superClass {
+  class DashboardLayoutMixinClass extends ResizeMixin(superClass) {
     static get styles() {
       return css`
         :host {
@@ -39,6 +41,30 @@ export const DashboardLayoutMixin = (superClass) =>
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
         }
+
+        ::slotted(*) {
+          grid-column: span min(var(--vaadin-dashboard-item-colspan, 1), var(--_vaadin-dashboard-item-max-colspan));
+        }
       `;
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this.__updateItemMaxColspan();
+    }
+
+    /**
+     * @private
+     */
+    __updateItemMaxColspan() {
+      // Temporarily set max colspan to 1
+      this.style.setProperty('--_vaadin-dashboard-item-max-colspan', 1);
+      // Get the effective column count with no colspans
+      const columnCount = getComputedStyle(this).gridTemplateColumns.split(' ').length;
+      // ...and set it as the new max colspan value
+      this.style.setProperty('--_vaadin-dashboard-item-max-colspan', columnCount);
     }
   };
