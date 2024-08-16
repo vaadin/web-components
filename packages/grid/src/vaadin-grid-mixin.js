@@ -9,6 +9,7 @@ import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -856,6 +857,20 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
+    _updateFocusedItem(row) {
+      const focusedItemInRow = row.__virtualIndex === this._focusedItemIndex;
+      let isFocusedCell;
+      iterateChildren(row, (cell) => {
+        isFocusedCell = cell === this._focusedCell;
+        if (this._focusedCell && isFocusedCell && focusedItemInRow) {
+          addValueToAttribute(cell, 'part', 'focused-cell');
+        } else {
+          removeValueFromAttribute(cell, 'part', 'focused-cell');
+        }
+      });
+    }
+
+    /** @private */
     _columnTreeChanged(columnTree) {
       this._renderColumnTree(columnTree);
       this.recalculateColumnWidths();
@@ -957,6 +972,7 @@ export const GridMixin = (superClass) =>
     _updateItem(row, item) {
       row._item = item;
       const model = this.__getRowModel(row);
+      this._updateFocusedItem(row);
 
       this._toggleDetailsCell(row, model.detailsOpened);
 

@@ -47,6 +47,7 @@ registerStyles(
       cursor: default;
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
       --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-m);
+      outline: none;
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
