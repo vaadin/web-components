@@ -862,7 +862,7 @@ export const GridMixin = (superClass) =>
       let isFocusedCell;
       iterateChildren(row, (cell) => {
         isFocusedCell = cell === this._focusedCell;
-        if (this._focusedCell && isFocusedCell && focusedItemInRow) {
+        if (isFocusedCell && focusedItemInRow) {
           addValueToAttribute(cell, 'part', 'focused-cell');
         } else {
           removeValueFromAttribute(cell, 'part', 'focused-cell');
