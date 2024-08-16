@@ -22,6 +22,10 @@ export const DashboardLayoutMixin = (superClass) =>
     static get styles() {
       return css`
         :host {
+          display: block;
+        }
+
+        #container {
           display: grid;
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
@@ -53,6 +57,7 @@ export const DashboardLayoutMixin = (superClass) =>
      * @override
      */
     _onResize() {
+      this.$.container.style.width = `${this.offsetWidth}px`;
       this.__updateItemMaxColspan();
     }
 
@@ -63,7 +68,7 @@ export const DashboardLayoutMixin = (superClass) =>
       // Temporarily set max colspan to 1
       this.style.setProperty('--_vaadin-dashboard-item-max-colspan', 1);
       // Get the effective column count with no colspans
-      const columnCount = getComputedStyle(this).gridTemplateColumns.split(' ').length;
+      const columnCount = getComputedStyle(this.$.container).gridTemplateColumns.split(' ').length;
       // ...and set it as the new max colspan value
       this.style.setProperty('--_vaadin-dashboard-item-max-colspan', columnCount);
     }

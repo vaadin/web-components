@@ -2,7 +2,7 @@
  * Returns the effective column widths of the dashboard as an array of numbers.
  */
 export function getColumnWidths(dashboard: HTMLElement): number[] {
-  return getComputedStyle(dashboard)
+  return getComputedStyle((dashboard as any).$.container)
     .gridTemplateColumns.split(' ')
     .map((width) => parseFloat(width));
 }
@@ -11,7 +11,7 @@ export function getColumnWidths(dashboard: HTMLElement): number[] {
  * Returns the effective row heights of the dashboard as an array of numbers.
  */
 export function getRowHeights(dashboard: HTMLElement): number[] {
-  return getComputedStyle(dashboard)
+  return getComputedStyle((dashboard as any).$.container)
     .gridTemplateRows.split(' ')
     .map((height) => parseFloat(height));
 }
