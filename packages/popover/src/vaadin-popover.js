@@ -728,6 +728,12 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
+    // Do not close the popover on target focusout if the overlay is not the last one.
+    // This happens e.g. when opening the nested popover that uses non-modal overlay.
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
     if (this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
@@ -794,6 +800,13 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
+    // Do not close the popover on overlay focusout if it's not the last one.
+    // This happens when opening the nested component that uses "modal" overlay
+    // setting `pointer-events: none` on the body (combo-box, date-picker etc).
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
     if (event.relatedTarget === this.target) {
       return;
     }
