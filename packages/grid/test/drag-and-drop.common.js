@@ -302,6 +302,8 @@ describe('drag and drop', () => {
         grid.selectItem(grid.items[0]);
         fireDragStart();
 
+        expect(grid.__draggedItems.length).to.equal(1);
+
         fireDragEnd();
         expect(grid.__draggedItems.length).to.equal(0);
       });
