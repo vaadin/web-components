@@ -188,14 +188,12 @@ export const DragAndDropMixin = (superClass) =>
           updateBooleanRowStates(row, { dragstart: false });
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
-          rows.forEach((row) => {
-            updateBooleanRowStates(row, { 'drag-source': true });
-          });
+          this.requestContentUpdate();
         });
 
         const event = new CustomEvent('grid-dragstart', {
           detail: {
-            draggedItems: rows.map((row) => row._item),
+            draggedItems: [...this.__draggedItems],
             setDragData: (type, data) => e.dataTransfer.setData(type, data),
             setDraggedItemsCount: (count) => row.setAttribute('dragstart', count),
           },
@@ -213,11 +211,8 @@ export const DragAndDropMixin = (superClass) =>
       event.originalEvent = e;
       this.dispatchEvent(event);
 
-      iterateChildren(this.$.items, (row) => {
-        updateBooleanRowStates(row, { 'drag-source': false });
-      });
-
       this.__draggedItems = [];
+      this.requestContentUpdate();
     }
 
     /** @private */
@@ -348,12 +343,8 @@ export const DragAndDropMixin = (superClass) =>
     }
 
     /** @private */
-    _updateDragSourceParts(row, model) {
-      if (this.__draggedItems.includes(model.item)) {
-        updateBooleanRowStates(row, { 'drag-source': true });
-      } else {
-        updateBooleanRowStates(row, { 'drag-source': false });
-      }
+    __updateDragSourceParts(row, model) {
+      updateBooleanRowStates(row, { 'drag-source': this.__draggedItems.includes(model.item) });
     }
 
     /** @private */
