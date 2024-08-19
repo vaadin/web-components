@@ -9,7 +9,6 @@ import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -24,6 +23,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { updatePart } from './vaadin-grid-helpers.js';
 import {
   getBodyRowCells,
   iterateChildren,
@@ -862,11 +862,7 @@ export const GridMixin = (superClass) =>
       let isFocusedCell;
       iterateChildren(row, (cell) => {
         isFocusedCell = cell === this._focusedCell;
-        if (isFocusedCell && focusedItemInRow) {
-          addValueToAttribute(cell, 'part', 'focused-cell');
-        } else {
-          removeValueFromAttribute(cell, 'part', 'focused-cell');
-        }
+        updatePart(cell, isFocusedCell && focusedItemInRow, 'focused-cell');
       });
     }
 
