@@ -8,6 +8,7 @@ import {
   getRowHeights,
   setColspan,
   setGap,
+  setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
 } from './helpers.js';
@@ -250,6 +251,64 @@ describe('dashboard layout', () => {
       const { top: item1Top } = childElements[1].getBoundingClientRect();
       // Expect the items to have a gap of 10px
       expect(item1Top - item0Bottom).to.eql(customGap);
+    });
+  });
+
+  describe('maximum column count', () => {
+    it('should not limit column count by default', () => {
+      dashboard.style.width = `${columnWidth * 100}px`;
+      expect(getColumnWidths(dashboard).length).to.eql(100);
+    });
+
+    it('should limit column count to custom value', async () => {
+      setMaximumColumnCount(dashboard, 5);
+      dashboard.style.width = `${columnWidth * 100}px`;
+      await nextFrame();
+      expect(getColumnWidths(dashboard).length).to.eql(5);
+    });
+
+    it('should limit column count to one', async () => {
+      setMaximumColumnCount(dashboard, 1);
+      dashboard.style.width = `${columnWidth * 10}px`;
+      await nextFrame();
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+    });
+
+    it('should allow fewer columns', async () => {
+      setMaximumColumnCount(dashboard, 2);
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+    });
+
+    it('should limit to a single column even with colspan applied', async () => {
+      setMaximumColumnCount(dashboard, 1);
+      setColspan(childElements[0], 2);
+      await nextFrame();
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+    });
+
+    it('should increase max column count dynamically', async () => {
+      setMaximumColumnCount(dashboard, 2);
+      dashboard.style.width = `${columnWidth * 100}px`;
+      await nextFrame();
+      expect(getColumnWidths(dashboard).length).to.eql(2);
+
+      setMaximumColumnCount(dashboard, 20);
+      await nextFrame();
+      expect(getColumnWidths(dashboard).length).to.eql(20);
     });
   });
 });
