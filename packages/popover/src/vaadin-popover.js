@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-popover-overlay.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import {
   getDeepActiveElement,
@@ -188,6 +188,14 @@ class Popover extends PopoverPositionMixin(
 ) {
   static get is() {
     return 'vaadin-popover';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: none !important;
+      }
+    `;
   }
 
   static get properties() {
