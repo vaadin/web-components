@@ -57,3 +57,10 @@ export function setColspan(element: HTMLElement, colspan?: number): void {
 export function setGap(dashboard: HTMLElement, gap?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-gap', gap !== undefined ? `${gap}px` : null);
 }
+
+/**
+ * Sets the maximum column count of the dashboard.
+ */
+export function setMaximumColumnCount(dashboard: HTMLElement, count?: number): void {
+  dashboard.style.setProperty('--vaadin-dashboard-col-max-count', count !== undefined ? `${count}` : null);
+}

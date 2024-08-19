@@ -25,6 +25,7 @@ export const DashboardLayoutMixin = (superClass) =>
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
           --_vaadin-dashboard-default-col-max-width: 1fr;
+
           /* Effective min and max column widths */
           --_vaadin-dashboard-col-min-width: var(
             --vaadin-dashboard-col-min-width,
@@ -35,11 +36,17 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-default-col-max-width)
           );
 
+          /* Effective column count */
+          --_vaadin-dashboard-effective-col-count: min(
+            var(--_vaadin-dashboard-col-count),
+            var(--vaadin-dashboard-col-max-count)
+          );
+
           display: grid;
           overflow: auto;
 
           grid-template-columns: repeat(
-            auto-fill,
+            var(--_vaadin-dashboard-effective-col-count, auto-fill),
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
 
@@ -51,7 +58,11 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         ::slotted(*) {
-          grid-column: span min(var(--vaadin-dashboard-item-colspan, 1), var(--_vaadin-dashboard-item-max-colspan));
+          grid-column: span
+            min(
+              var(--vaadin-dashboard-item-colspan, 1),
+              var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
+            );
         }
       `;
     }
@@ -61,18 +72,18 @@ export const DashboardLayoutMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      this.__updateItemMaxColspan();
+      this.__updateColumnCount();
     }
 
     /**
      * @private
      */
-    __updateItemMaxColspan() {
-      // Temporarily set max colspan to 1
-      this.style.setProperty('--_vaadin-dashboard-item-max-colspan', 1);
-      // Get the effective column count with no colspans
+    __updateColumnCount() {
+      // Clear the previously computed column count
+      this.style.removeProperty('--_vaadin-dashboard-col-count');
+      // Get the column count (with no colspans etc in effect)...
       const columnCount = getComputedStyle(this).gridTemplateColumns.split(' ').length;
-      // ...and set it as the new max colspan value
-      this.style.setProperty('--_vaadin-dashboard-item-max-colspan', columnCount);
+      // ...and set it as the new value
+      this.style.setProperty('--_vaadin-dashboard-col-count', columnCount);
     }
   };
