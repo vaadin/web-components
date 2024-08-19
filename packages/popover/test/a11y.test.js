@@ -410,5 +410,26 @@ describe('a11y', () => {
       const activeElement = getDeepActiveElement();
       expect(activeElement).to.not.equal(overlay.$.overlay);
     });
+
+    it('should focus previous element on target Shift Tab while opened', async () => {
+      target.parentElement.insertBefore(input, target);
+
+      // Make popover open on focus
+      popover.opened = false;
+      popover.trigger = ['focus'];
+      await nextUpdate(popover);
+
+      target.focus();
+      await nextRender();
+
+      // Move focus back from the target
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await nextRender();
+
+      const activeElement = getDeepActiveElement();
+      expect(activeElement).to.equal(input);
+    });
   });
 });

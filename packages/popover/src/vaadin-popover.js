@@ -640,6 +640,12 @@ class Popover extends PopoverPositionMixin(
   __onGlobalShiftTab(event) {
     const overlayPart = this._overlayElement.$.overlay;
 
+    // Prevent restoring focus after target blur on Shift + Tab
+    if (this.target && isElementFocused(this.target) && this.__shouldRestoreFocus) {
+      this.__shouldRestoreFocus = false;
+      return;
+    }
+
     // Move focus back to the target on overlay content Shift + Tab
     if (this.target && isElementFocused(overlayPart)) {
       event.preventDefault();
