@@ -351,7 +351,6 @@ snapshots["vaadin-combo-box host opened default"] =
 
 snapshots["vaadin-combo-box host opened overlay"] = 
 `<vaadin-combo-box-overlay
-  dir="ltr"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -414,7 +413,6 @@ snapshots["vaadin-combo-box host opened overlay shadow"] =
 snapshots["vaadin-combo-box host opened overlay class"] = 
 `<vaadin-combo-box-overlay
   class="combo-box-overlay custom"
-  dir="ltr"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -452,7 +450,6 @@ snapshots["vaadin-combo-box host opened overlay class"] =
 
 snapshots["vaadin-combo-box host opened theme overlay"] = 
 `<vaadin-combo-box-overlay
-  dir="ltr"
   id="overlay"
   no-vertical-overlap=""
   opened=""

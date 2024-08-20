@@ -526,7 +526,6 @@ snapshots["vaadin-date-time-picker host error"] =
 snapshots["vaadin-date-time-picker host overlay class date-picker"] = 
 `<vaadin-date-picker-overlay
   class="custom date-time-picker-overlay"
-  dir="ltr"
   id="overlay"
   opened=""
   restore-focus-on-close=""
