@@ -9,16 +9,15 @@
 
     <script type="module">
       import '@vaadin/dashboard/vaadin-dashboard-layout.js';
+      import '@vaadin/dashboard/vaadin-dashboard-widget.js';
     </script>
 
     <style>
-      vaadin-dashboard-layout div {
+      vaadin-dashboard-widget {
         background-color: #f5f5f5;
         border: 1px solid #e0e0e0;
         border-radius: 4px;
-        padding: 1em;
-        text-align: center;
-        height: 100px;
+        padding: 10px;
       }
 
       vaadin-dashboard-layout {
@@ -27,16 +26,49 @@
         --vaadin-dashboard-gap: 20px;
         --vaadin-dashboard-col-max-count: 3;
       }
+
+      .kpi-number {
+        font-size: 80px;
+        font-weight: bold;
+        color: #4caf50;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chart {
+        height: 300px;
+        background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 10px, #f5f5f5 10px, #f5f5f5 20px);
+      }
     </style>
   </head>
 
   <body>
     <vaadin-dashboard-layout>
-      <div>Item 0</div>
-      <div style="--vaadin-dashboard-item-colspan: 2">Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-      <div>Item 4</div>
+      <vaadin-dashboard-widget widget-title="Total cost">
+        <span slot="header">2023-2024</span>
+        <div class="kpi-number">+203%</div>
+      </vaadin-dashboard-widget>
+
+      <vaadin-dashboard-widget style="--vaadin-dashboard-item-colspan: 2" widget-title="Sales">
+        <span slot="header">2023-2024</span>
+        <div class="chart"></div>
+      </vaadin-dashboard-widget>
+
+      <vaadin-dashboard-widget widget-title="Sales closed this month">
+        <div class="kpi-number">54 000€</div>
+      </vaadin-dashboard-widget>
+
+      <vaadin-dashboard-widget widget-title="Just some number">
+        <span slot="header">2014-2024</span>
+        <div class="kpi-number">1234</div>
+      </vaadin-dashboard-widget>
+
+      <vaadin-dashboard-widget>
+        <h2 slot="title">Activity since 2023</h2>
+        <div class="chart"></div>
+      </vaadin-dashboard-widget>
     </vaadin-dashboard-layout>
   </body>
 </html>
