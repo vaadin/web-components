@@ -178,7 +178,7 @@ class PopoverOpenedStateController {
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
  * @mixes ThemePropertyMixin
