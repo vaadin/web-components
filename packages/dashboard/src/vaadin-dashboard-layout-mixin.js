@@ -58,11 +58,13 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         ::slotted(*) {
-          grid-column: span
+          --_vaadin-dashboard-item-column: span
             min(
               var(--vaadin-dashboard-item-colspan, 1),
               var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
             );
+
+          grid-column: var(--_vaadin-dashboard-item-column);
         }
       `;
     }

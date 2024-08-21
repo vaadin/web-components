@@ -27,7 +27,10 @@ export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, col
   const x = left + columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
   const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
 
-  return document.elementFromPoint(x + columnWidths[columnIndex] / 2, y + rowHeights[rowIndex] / 2);
+  return document
+    .elementsFromPoint(x + columnWidths[columnIndex] / 2, y + rowHeights[rowIndex] / 2)
+    .reverse()
+    .find((element) => dashboard.contains(element) && element !== dashboard)!;
 }
 
 /**

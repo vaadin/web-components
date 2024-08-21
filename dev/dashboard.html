@@ -7,8 +7,89 @@
     <title>Dashboard</title>
     <script type="module" src="./common.js"></script>
 
+    <style>
+      vaadin-dashboard-widget {
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 10px;
+      }
+
+      vaadin-dashboard {
+        --vaadin-dashboard-col-min-width: 300px;
+        --vaadin-dashboard-col-max-width: 500px;
+        --vaadin-dashboard-gap: 20px;
+        --vaadin-dashboard-col-max-count: 3;
+      }
+
+      .kpi-number {
+        font-size: 80px;
+        font-weight: bold;
+        color: #4caf50;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .chart {
+        height: 300px;
+        background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 10px, #f5f5f5 10px, #f5f5f5 20px);
+      }
+    </style>
+
     <script type="module">
       import '@vaadin/dashboard';
+
+      const dashboard = document.querySelector('vaadin-dashboard');
+
+      dashboard.items = [
+        {
+          title: 'Total cost',
+          content: '+203%',
+          type: 'kpi',
+          header: '2023-2024',
+          colspan: 1,
+          rowspan: 1,
+        },
+        {
+          title: 'Sales',
+          type: 'chart',
+          header: '2023-2024',
+          colspan: 2,
+          rowspan: 1,
+        },
+        {
+          title: 'Sales closed this month',
+          content: '54 000€',
+          type: 'kpi',
+          colspan: 1,
+          rowspan: 1,
+        },
+        {
+          title: 'Just some number',
+          content: '1234',
+          type: 'kpi',
+          header: '2014-2024',
+          colspan: 1,
+          rowspan: 1,
+        },
+        {
+          title: 'Activity since 2023',
+          type: 'chart',
+          colspan: 1,
+          rowspan: 1,
+        },
+      ];
+
+      dashboard.renderer = (root, _dashboard, { item }) => {
+        root.innerHTML = `
+          <vaadin-dashboard-widget widget-title="${item.title}">
+            <span slot="header">${item.header}</span>
+            ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
+          </vaadin-dashboard-widget>
+        `;
+      };
     </script>
   </head>
 

@@ -1,17 +1,28 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { DashboardLayoutMixinClass } from '../../src/vaadin-dashboard-layout-mixin.js';
-import type { Dashboard } from '../../vaadin-dashboard.js';
+import type { Dashboard, DashboardItem, DashboardRenderer } from '../../vaadin-dashboard.js';
 import type { DashboardLayout } from '../../vaadin-dashboard-layout.js';
 import type { DashboardWidget } from '../../vaadin-dashboard-widget.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-/* Dashboard */
-const dashboard = document.createElement('vaadin-dashboard');
-assertType<Dashboard>(dashboard);
+interface TestDashboardItem extends DashboardItem {
+  testProperty: string;
+}
 
-assertType<ElementMixinClass>(dashboard);
-assertType<DashboardLayoutMixinClass>(dashboard);
+/* Dashboard */
+const genericDashboard = document.createElement('vaadin-dashboard');
+assertType<Dashboard>(genericDashboard);
+
+assertType<ElementMixinClass>(genericDashboard);
+assertType<DashboardLayoutMixinClass>(genericDashboard);
+assertType<DashboardItem[] | null | undefined>(genericDashboard.items);
+
+const narrowedDashboard = document.createElement('vaadin-dashboard') as unknown as Dashboard<TestDashboardItem>;
+assertType<Dashboard<TestDashboardItem>>(narrowedDashboard);
+assertType<TestDashboardItem[]>(narrowedDashboard.items);
+assertType<DashboardRenderer<TestDashboardItem> | null | undefined>(narrowedDashboard.renderer);
+assertType<{ colspan?: number }>(narrowedDashboard.items[0]);
 
 /* DashboardLayout */
 const layout = document.createElement('vaadin-dashboard-layout');
