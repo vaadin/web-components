@@ -12,11 +12,17 @@ import {
 } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import './not-animated-styles.js';
-import '../vaadin-popover.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('trigger', () => {
   let popover, target, overlay;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+    Popover.setDefaultHoverDelay(0);
+    Popover.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');

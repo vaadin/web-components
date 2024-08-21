@@ -1,11 +1,17 @@
 import { expect } from '@vaadin/chai-plugins';
 import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '../vaadin-popover.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('nested popover', () => {
   let popover, target, secondPopover, secondTarget;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+    Popover.setDefaultHoverDelay(0);
+    Popover.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');

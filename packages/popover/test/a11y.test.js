@@ -12,12 +12,18 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../vaadin-popover.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('a11y', () => {
   let popover, target, overlay;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+    Popover.setDefaultHoverDelay(0);
+    Popover.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
