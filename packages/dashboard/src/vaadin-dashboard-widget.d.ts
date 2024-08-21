@@ -8,12 +8,18 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * A Widget component for use with the Dashboard component
  */
-declare class DashboardWidget extends ElementMixin(HTMLElement) {}
+declare class DashboardWidget extends ControllerMixin(ElementMixin(HTMLElement)) {
+  /**
+   * The title of the widget
+   */
+  widgetTitle: string | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
