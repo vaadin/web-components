@@ -376,11 +376,9 @@ describe('position mixin', () => {
     });
 
     it('should align right edges with right-to-left', async () => {
-      overlay.opened = false;
-      await nextUpdate(overlay);
       document.dir = 'rtl';
-      overlay.opened = true;
-      await nextUpdate(overlay);
+      await nextRender();
+      updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
@@ -483,11 +481,9 @@ describe('position mixin', () => {
     });
 
     it('should align left edges with right-to-left', async () => {
-      overlay.opened = false;
-      await nextUpdate(overlay);
       document.dir = 'rtl';
-      overlay.opened = true;
-      await nextUpdate(overlay);
+      await nextRender();
+      updatePosition();
       expectEdgesAligned(LEFT, LEFT);
     });
 

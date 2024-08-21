@@ -203,7 +203,6 @@ export const PositionMixin = (superClass) =>
             this.__margins[propName] = parseInt(computedStyle[propName], 10);
           });
         }
-        this.setAttribute('dir', computedStyle.direction);
 
         this._updatePosition();
         // Schedule another position update (to cover virtual keyboard opening for example)
