@@ -78,6 +78,24 @@ declare class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement)))),
 ) {
   /**
+   * Sets the default focus delay to be used by all popover instances,
+   * except for those that have focus delay configured using property.
+   */
+  static setDefaultFocusDelay(focusDelay: number): void;
+
+  /**
+   * Sets the default hide delay to be used by all popover instances,
+   * except for those that have hide delay configured using property.
+   */
+  static setDefaultHideDelay(hideDelay: number): void;
+
+  /**
+   * Sets the default hover delay to be used by all popover instances,
+   * except for those that have hover delay configured using property.
+   */
+  static setDefaultHoverDelay(delay: number): void;
+
+  /**
    * String used to label the overlay to screen reader users.
    *
    * @attr {string} accessible-name
@@ -114,6 +132,9 @@ declare class Popover extends PopoverPositionMixin(
   /**
    * The delay in milliseconds before the popover is opened
    * on focus when the corresponding trigger is used.
+   *
+   * When not specified, the global default (500ms) is used.
+   *
    * @attr {number} focus-delay
    */
   focusDelay: number;
@@ -122,6 +143,9 @@ declare class Popover extends PopoverPositionMixin(
    * The delay in milliseconds before the popover is closed
    * on losing hover, when the corresponding trigger is used.
    * On blur, the popover is closed immediately.
+   *
+   * When not specified, the global default (500ms) is used.
+   *
    * @attr {number} hide-delay
    */
   hideDelay: number;
@@ -129,6 +153,9 @@ declare class Popover extends PopoverPositionMixin(
   /**
    * The delay in milliseconds before the popover is opened
    * on hover when the corresponding trigger is used.
+   *
+   * When not specified, the global default (500ms) is used.
+   *
    * @attr {number} hover-delay
    */
   hoverDelay: number;

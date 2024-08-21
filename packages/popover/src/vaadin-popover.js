@@ -22,6 +22,12 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
 
+const DEFAULT_DELAY = 500;
+
+let defaultFocusDelay = DEFAULT_DELAY;
+let defaultHoverDelay = DEFAULT_DELAY;
+let defaultHideDelay = DEFAULT_DELAY;
+
 /**
  * Controller for handling popover opened state.
  */
@@ -40,17 +46,20 @@ class PopoverOpenedStateController {
 
   /** @private */
   get __focusDelay() {
-    return this.host.focusDelay || 0;
+    const popover = this.host;
+    return popover.focusDelay != null && popover.focusDelay > 0 ? popover.focusDelay : defaultFocusDelay;
   }
 
   /** @private */
   get __hoverDelay() {
-    return this.host.hoverDelay || 0;
+    const popover = this.host;
+    return popover.hoverDelay != null && popover.hoverDelay > 0 ? popover.hoverDelay : defaultHoverDelay;
   }
 
   /** @private */
   get __hideDelay() {
-    return this.host.hideDelay || 0;
+    const popover = this.host;
+    return popover.hideDelay != null && popover.hideDelay > 0 ? popover.hideDelay : defaultHideDelay;
   }
 
   /**
@@ -247,6 +256,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * The delay in milliseconds before the popover is opened
        * on focus when the corresponding trigger is used.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} focus-delay
        */
       focusDelay: {
@@ -257,6 +269,9 @@ class Popover extends PopoverPositionMixin(
        * The delay in milliseconds before the popover is closed
        * on losing hover, when the corresponding trigger is used.
        * On blur, the popover is closed immediately.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} hide-delay
        */
       hideDelay: {
@@ -266,6 +281,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * The delay in milliseconds before the popover is opened
        * on hover when the corresponding trigger is used.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} hover-delay
        */
       hoverDelay: {
@@ -391,6 +409,36 @@ class Popover extends PopoverPositionMixin(
       '__openedOrTargetChanged(opened, target)',
       '__overlayRoleOrTargetChanged(overlayRole, target)',
     ];
+  }
+
+  /**
+   * Sets the default focus delay to be used by all popover instances,
+   * except for those that have focus delay configured using property.
+   *
+   * @param {number} delay
+   */
+  static setDefaultFocusDelay(focusDelay) {
+    defaultFocusDelay = focusDelay != null && focusDelay >= 0 ? focusDelay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hide delay to be used by all popover instances,
+   * except for those that have hide delay configured using property.
+   *
+   * @param {number} hideDelay
+   */
+  static setDefaultHideDelay(hideDelay) {
+    defaultHideDelay = hideDelay != null && hideDelay >= 0 ? hideDelay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hover delay to be used by all popover instances,
+   * except for those that have hover delay configured using property.
+   *
+   * @param {number} delay
+   */
+  static setDefaultHoverDelay(hoverDelay) {
+    defaultHoverDelay = hoverDelay != null && hoverDelay >= 0 ? hoverDelay : DEFAULT_DELAY;
   }
 
   constructor() {
