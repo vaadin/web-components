@@ -34,6 +34,7 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
       :host {
         display: flex;
         flex-direction: column;
+        grid-column: var(--_vaadin-dashboard-item-column);
       }
 
       :host([hidden]) {
