@@ -37,7 +37,7 @@ export const DashboardLayoutMixin = (superClass) =>
           );
 
           /* Effective max column count */
-          --_vaadin-dashboard-col-max-count: var(--vaadin-dashboard-col-max-count, infinity);
+          --_vaadin-dashboard-col-max-count: var(--vaadin-dashboard-col-max-count, var(--_vaadin-dashboard-col-count));
 
           /* Effective column count */
           --_vaadin-dashboard-effective-col-count: min(
