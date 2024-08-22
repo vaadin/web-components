@@ -414,6 +414,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
     this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
+    this.__unparsableChangeEventHandler = this.__unparsableChangeEventHandler.bind(this);
   }
 
   /** @private */
@@ -425,6 +426,24 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   get __formattedValue() {
     const values = this.__pickers.map((picker) => picker.value);
     return values.every(Boolean) ? values.join('T') : '';
+  }
+
+  /** @private */
+  get __unparsableValue() {
+    const unparsableValues = this.__inputs.filter((picker) => picker.__unparsableValue);
+    return unparsableValues.length > 0
+      ? this.__inputs.map((picker) => picker.value || picker.__unparsableValue).join('T')
+      : '';
+  }
+
+  /** @private */
+  get __incompleteValue() {
+    if (this.__unparsableValue) {
+      return '';
+    }
+
+    const values = this.__inputs.map((picker) => picker.value);
+    return values.filter(Boolean).length === 1 ? values.join('T') : '';
   }
 
   /** @protected */
@@ -472,6 +491,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
       this.validate();
+      this.__commitValueChange();
     }
   }
 
@@ -485,12 +505,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   _shouldRemoveFocus(event) {
     const target = event.relatedTarget;
-    const overlayContent = this.__datePicker._overlayContent;
 
     if (
+      this.__datePicker.opened ||
+      this.__timePicker.opened ||
       this.__datePicker.contains(target) ||
-      this.__timePicker.contains(target) ||
-      (overlayContent && overlayContent.contains(target))
+      this.__timePicker.contains(target)
     ) {
       return false;
     }
@@ -511,12 +531,15 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
-
-    if (this.__dispatchChangeForValue === this.value) {
-      this.validate();
-      this.__dispatchChange();
+    const oppositePicker = this.__inputs.find((picker) => picker !== event.target);
+    if (oppositePicker.value || oppositePicker.__unparsableValue || this.invalid) {
+      this.__commitValueChange();
     }
-    this.__dispatchChangeForValue = undefined;
+  }
+
+  /** @private */
+  __unparsableChangeEventHandler() {
+    this.__commitValueChange();
   }
 
   /** @private */
@@ -530,6 +553,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     node.addEventListener('change', this.__changeEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
     node.addEventListener('opened-changed', this.__openedChangedEventHandler);
+    node.addEventListener('unparsable-change', this.__unparsableChangeEventHandler);
   }
 
   /** @private */
@@ -537,6 +561,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     node.removeEventListener('change', this.__changeEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
     node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
+    node.removeEventListener('unparsable-change', this.__unparsableChangeEventHandler);
   }
 
   /** @private */
@@ -884,6 +909,24 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     return !hasInvalidPickers && !hasEmptyRequiredPickers;
   }
 
+  /** @private */
+  __commitValueChange() {
+    if (this.__committedValue !== this.value) {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('unparsable-change'));
+    } else if (this.__committedIncompleteValue !== this.__incompleteValue) {
+      this.validate();
+      this.dispatchEvent(new CustomEvent('incomplete-change'));
+    }
+
+    this.__committedValue = this.value;
+    this.__committedUnparsableValue = this.__unparsableValue;
+    this.__committedIncompleteValue = this.__incompleteValue;
+  }
+
   // Copied from vaadin-time-picker
   /** @private */
   __getStepSegment() {
@@ -944,8 +987,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __valueChanged(value, oldValue) {
     this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-    if (oldValue !== undefined) {
-      this.__dispatchChangeForValue = value;
+    if (!this.__preserveCommittedValue) {
+      this.__committedValue = value;
+      this.__committedUnparsableValue = '';
+      this.__committedIncompleteValue = '';
     }
 
     this.toggleAttribute('has-value', !!value);
@@ -1014,8 +1059,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
 
     this.__ignoreInputValueChange = true;
+    this.__preserveCommittedValue = true;
+
     this.__updateTimePickerMinMax();
     this.value = this.__formattedValue;
+
+    this.__preserveCommittedValue = false;
     this.__ignoreInputValueChange = false;
   }
 

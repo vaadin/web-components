@@ -9,16 +9,25 @@
     <script type="module">
       import '@vaadin/date-time-picker';
       import '@vaadin/tooltip';
+
+      const dateTimePicker = document.querySelector('vaadin-date-time-picker');
+      dateTimePicker.addEventListener('incomplete-change', onChange);
+      dateTimePicker.addEventListener('unparsable-change', onChange);
+      dateTimePicker.addEventListener('change', onChange);
+
+      function onChange(event) {
+        console.log(event.type);
+        if (dateTimePicker.__unparsableValue) {
+          dateTimePicker.errorMessage = 'Invalid date or time';
+        } else if (dateTimePicker.__incompleteValue) {
+          dateTimePicker.errorMessage = 'Incomplete date or time';
+        } else {
+          dateTimePicker.errorMessage = '';
+        }
+      }
     </script>
   </head>
   <body>
-    <vaadin-date-time-picker
-      label="Birth date and time"
-      error-message="error-message"
-      min="2019-09-01T08:00"
-      max="2019-09-30T22:00"
-    >
-      <vaadin-tooltip slot="tooltip" text="You will have a personal discount"></vaadin-tooltip>
-    </vaadin-date-time-picker>
+    <vaadin-date-time-picker></vaadin-date-time-picker>
   </body>
 </html>
