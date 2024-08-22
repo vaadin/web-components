@@ -34,7 +34,8 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
       :host {
         display: grid;
         grid-template-columns: subgrid;
-        grid-column: 1 / -1 !important;
+        --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
+        grid-column: var(--_vaadin-dashboard-section-column) !important;
         gap: var(--vaadin-dashboard-gap, 1rem);
       }
 
@@ -54,7 +55,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
 
       header {
         display: flex;
-        grid-column: 1 / -1;
+        grid-column: var(--_vaadin-dashboard-section-column);
         justify-content: space-between;
         align-items: center;
       }
