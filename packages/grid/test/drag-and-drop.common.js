@@ -254,6 +254,25 @@ describe('drag and drop', () => {
         });
       });
 
+      it('should add drag-source- part to dragged rows', async () => {
+        fireDragStart();
+        await nextFrame();
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
+          expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
+        }
+      });
+
+      it('should remove drag-source- part from dragged rows', async () => {
+        fireDragStart();
+        await nextFrame();
+
+        fireDragEnd();
+        await nextFrame();
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
+          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
+        }
+      });
+
       it('should add drag-source- part to all dragged rows', async () => {
         grid.selectItem(grid.items[0]);
         grid.selectItem(grid.items[1]);
@@ -266,47 +285,6 @@ describe('drag and drop', () => {
         }
       });
 
-      it('should add drag-source- part only to dragged rows', async () => {
-        fireDragStart();
-        let cells = getRowBodyCells(getRows(grid.$.items)[0]);
-        await nextFrame();
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
-        }
-        cells = getRowBodyCells(getRows(grid.$.items)[1]);
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
-        }
-      });
-
-      it('should remove drag-source- part from row when drag ends', async () => {
-        fireDragStart();
-        const row = getRows(grid.$.items)[0];
-        const cells = getRowBodyCells(row);
-        await nextFrame();
-        fireDragEnd();
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
-        }
-      });
-
-      it('should add items to draggedItems array when drag starts', () => {
-        grid.selectItem(grid.items[0]);
-        grid.selectItem(grid.items[1]);
-        fireDragStart();
-
-        expect(grid.__draggedItems.length).to.equal(2);
-      });
-
-      it('should remove items from draggedItems array when drag ends', () => {
-        grid.selectItem(grid.items[0]);
-        fireDragStart();
-
-        expect(grid.__draggedItems.length).to.equal(1);
-
-        fireDragEnd();
-        expect(grid.__draggedItems.length).to.equal(0);
-      });
       // The test only concerns Safari
       const isSafari = /^((?!chrome|android).)*safari/iu.test(navigator.userAgent);
       (isSafari ? it : it.skip)('should use top on Safari for drag image', async () => {
@@ -1089,6 +1067,20 @@ describe('drag and drop', () => {
       const scrollTop = grid.$.table.scrollTop;
       fireDragOver(grid.__getViewportRows()[0], 'above');
       expect(grid.$.table.scrollTop).to.be.within(scrollTop - 200, scrollTop - 100);
+    });
+
+    it('should add/remove drag-source- part when scrolling', () => {
+      grid.rowsDraggable = true;
+      grid.selectItem(grid.items[0]);
+      const renderedBufferCount = grid.$.items.childElementCount;
+      fireDragStart();
+
+      grid.scrollToIndex(renderedBufferCount);
+      expect(getFirstCell(grid).getAttribute('part')).to.not.contain('drag-source-row-cell');
+
+      grid.scrollToIndex(0);
+      expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');
+      grid.rowsDraggable = false;
     });
   });
 });

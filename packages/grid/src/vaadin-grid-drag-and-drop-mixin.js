@@ -106,7 +106,9 @@ export const DragAndDropMixin = (superClass) =>
 
         /** @private  */
         __draggedItems: {
-          value: [],
+          value() {
+            return [];
+          },
         },
       };
     }

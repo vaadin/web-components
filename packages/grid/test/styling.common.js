@@ -315,16 +315,5 @@ describe('styling', () => {
       expect(newHeaderCell.getAttribute('part')).to.contain('foobar');
       expect(newFooterCell.getAttribute('part')).to.contain('bazqux');
     });
-
-    it('should add/remove drag-source- part when scrolling', () => {
-      const renderedBufferCount = grid.$.items.childElementCount;
-      grid.__draggedItems = [grid.__getRowModel(grid.$.items.firstElementChild).item];
-
-      grid.scrollToIndex(renderedBufferCount);
-      expect(firstCell.getAttribute('part')).to.not.contain('drag-source-row-cell');
-
-      grid.scrollToIndex(0);
-      expect(firstCell.getAttribute('part')).to.contain('drag-source-row-cell');
-    });
   });
 });
