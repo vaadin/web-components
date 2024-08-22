@@ -46,6 +46,6 @@ assertType<DashboardSection>(section);
 assertType<string | null | undefined>(section.sectionTitle);
 
 /* TitleController */
-const titleController = new TitleController(layout, 'title');
+const titleController = new TitleController(layout);
 assertType<TitleController>(titleController);
 assertType<(title: string | null | undefined) => void>(titleController.setTitle);

@@ -9,6 +9,8 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  * A controller to manage the widget or section title element.
  */
 export class TitleController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+
   /**
    * String used for the title.
    */
