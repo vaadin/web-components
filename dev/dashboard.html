@@ -49,30 +49,28 @@
           content: '+203%',
           type: 'kpi',
           header: '2023-2024',
-          colspan: 1,
-          rowspan: 1,
         },
         {
           title: 'Sales',
           type: 'chart',
           header: '2023-2024',
           colspan: 2,
-          rowspan: 1,
         },
         {
-          title: 'Sales closed this month',
-          content: '54 000€',
-          type: 'kpi',
-          colspan: 1,
-          rowspan: 1,
-        },
-        {
-          title: 'Just some number',
-          content: '1234',
-          type: 'kpi',
-          header: '2014-2024',
-          colspan: 1,
-          rowspan: 1,
+          title: 'Section',
+          items: [
+            {
+              title: 'Sales closed this month',
+              content: '54 000€',
+              type: 'kpi',
+            },
+            {
+              title: 'Just some number',
+              content: '1234',
+              type: 'kpi',
+              header: '2014-2024',
+            },
+          ],
         },
         {
           title: 'Activity since 2023',
@@ -85,7 +83,7 @@
       dashboard.renderer = (root, _dashboard, { item }) => {
         root.innerHTML = `
           <vaadin-dashboard-widget widget-title="${item.title}">
-            <span slot="header">${item.header}</span>
+            <span slot="header">${item.header || ''}</span>
             ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
           </vaadin-dashboard-widget>
         `;

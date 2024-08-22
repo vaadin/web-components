@@ -109,4 +109,39 @@ describe('dashboard', () => {
       expect(getElementFromCell(dashboard, 0, 1)).to.equal(widget);
     });
   });
+
+  describe('section', () => {
+    beforeEach(async () => {
+      dashboard.items = [
+        { id: 'Item 0' },
+        { id: 'Item 1' },
+        { title: 'Section', items: [{ id: 'Item 2' }, { id: 'Item 3' }] },
+      ];
+      await nextFrame();
+    });
+
+    it('should render widgets inside a section', () => {
+      const widget = getElementFromCell(dashboard, 1, 0);
+      const section = widget?.closest('vaadin-dashboard-section');
+      expect(section).to.be.ok;
+    });
+
+    it('should render a section title', () => {
+      const widget = getElementFromCell(dashboard, 1, 0);
+      const section = widget?.closest('vaadin-dashboard-section');
+      expect(section?.sectionTitle).to.equal('Section');
+    });
+
+    it('should render a widget for each section item', () => {
+      const widget2 = getElementFromCell(dashboard, 1, 0);
+      expect(widget2).to.be.ok;
+      expect(widget2?.localName).to.equal('vaadin-dashboard-widget');
+      expect(widget2).to.have.property('widgetTitle', 'Item 2 title');
+
+      const widget3 = getElementFromCell(dashboard, 1, 1);
+      expect(widget3).to.be.ok;
+      expect(widget3?.localName).to.equal('vaadin-dashboard-widget');
+      expect(widget3).to.have.property('widgetTitle', 'Item 3 title');
+    });
+  });
 });

@@ -9,6 +9,7 @@
  * license.
  */
 import './vaadin-dashboard-widget.js';
+import './vaadin-dashboard-section.js';
 import { html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -99,6 +100,16 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   __renderItemCells(items) {
     return items.map((item) => {
+      if (item.items) {
+        return html`<vaadin-dashboard-section
+          .__item="${item}"
+          .sectionTitle="${item.title || ''}"
+          .items="${item.items}"
+        >
+          ${this.__renderItemCells(item.items)}
+        </vaadin-dashboard-section>`;
+      }
+
       return html`<vaadin-dashboard-cell
         .__item="${item}"
         style="--vaadin-dashboard-item-colspan: ${item.colspan};"
