@@ -320,7 +320,7 @@ describe('dashboard layout', () => {
           <div id="item-2">Section item 2</div>
           <div id="item-3">Section item 3</div>
         </vaadin-dashboard-section>
-        `);
+      `);
       dashboard.appendChild(section);
       await nextFrame();
       childElements = [...dashboard.querySelectorAll('div')];
@@ -368,6 +368,18 @@ describe('dashboard layout', () => {
         [1],
         [2],
         [3],
+      ]);
+    });
+
+    it('should span multiple columns inside a section', async () => {
+      dashboard.style.width = `${columnWidth * 3}px`;
+      setColspan(childElements[2], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 1, null],
+        [2, 2, 3],
       ]);
     });
 

@@ -42,6 +42,16 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         display: none !important;
       }
 
+      ::slotted(*) {
+        --_vaadin-dashboard-item-column: span
+          min(
+            var(--vaadin-dashboard-item-colspan, 1),
+            var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
+          );
+
+        grid-column: var(--_vaadin-dashboard-item-column);
+      }
+
       header {
         display: flex;
         grid-column: 1 / -1;
