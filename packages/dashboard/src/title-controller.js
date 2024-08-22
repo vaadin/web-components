@@ -6,7 +6,7 @@
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
- * A controller to manage the widget title element.
+ * A controller to manage the widget or section title element.
  */
 export class TitleController extends SlotChildObserveController {
   constructor(host) {
@@ -14,20 +14,20 @@ export class TitleController extends SlotChildObserveController {
   }
 
   /**
-   * Set widget title based on corresponding host property.
+   * Set title based on corresponding host property.
    *
-   * @param {string} widgetTitle
+   * @param {string} title
    */
-  setWidgetTitle(widgetTitle) {
-    this.widgetTitle = widgetTitle;
+  setTitle(title) {
+    this.title = title;
 
-    // Restore the default widgetTitle, if needed.
-    const widgetTitleNode = this.getSlotChild();
-    if (!widgetTitleNode) {
+    // Restore the default title, if needed.
+    const titleNode = this.getSlotChild();
+    if (!titleNode) {
       this.restoreDefaultNode();
     }
 
-    // When default widgetTitle is used, update it.
+    // When default title is used, update it.
     if (this.node === this.defaultNode) {
       this.updateDefaultNode(this.node);
     }
@@ -35,7 +35,7 @@ export class TitleController extends SlotChildObserveController {
 
   /**
    * Override method inherited from `SlotChildObserveController`
-   * to restore and observe the default widget title element.
+   * to restore and observe the default title element.
    *
    * @protected
    * @override
@@ -47,7 +47,7 @@ export class TitleController extends SlotChildObserveController {
 
   /**
    * Override method inherited from `SlotChildObserveController`
-   * to update the default widgetTitle element text content.
+   * to update the default title element text content.
    *
    * @param {Node | undefined} node
    * @protected
@@ -55,7 +55,7 @@ export class TitleController extends SlotChildObserveController {
    */
   updateDefaultNode(node) {
     if (node) {
-      node.textContent = this.widgetTitle;
+      node.textContent = this.title;
     }
 
     // Notify the host after update.

@@ -6,16 +6,16 @@
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
- * A controller to manage the widget title element.
+ * A controller to manage the widget or section title element.
  */
 export class TitleController extends SlotChildObserveController {
   /**
-   * String used for the widget title.
+   * String used for the title.
    */
-  protected widgetTitle: string | null | undefined;
+  protected title: string | null | undefined;
 
   /**
-   * Set widget title based on corresponding host property.
+   * Set title based on corresponding host property.
    */
-  setWidgetTitle(widgetTitle: string | null | undefined): void;
+  setTitle(title: string | null | undefined): void;
 }

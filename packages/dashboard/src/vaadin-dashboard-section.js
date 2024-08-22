@@ -17,24 +17,25 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 
 /**
- * A Widget component for use with the Dashboard component
+ * A section component for use with the Dashboard component
  *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ControllerMixin
  */
-class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitElement))) {
+class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get is() {
-    return 'vaadin-dashboard-widget';
+    return 'vaadin-dashboard-section';
   }
 
   static get styles() {
     return css`
       :host {
-        display: flex;
-        flex-direction: column;
-        grid-column: var(--_vaadin-dashboard-item-column);
+        display: grid;
+        grid-template-columns: subgrid;
+        grid-column: 1 / -1 !important;
+        gap: var(--vaadin-dashboard-gap, 1rem);
       }
 
       :host([hidden]) {
@@ -43,12 +44,9 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
       header {
         display: flex;
+        grid-column: 1 / -1;
         justify-content: space-between;
         align-items: center;
-      }
-
-      #content {
-        flex: 1;
       }
     `;
   }
@@ -56,12 +54,12 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   static get properties() {
     return {
       /**
-       * The title of the widget.
+       * The title of the section
        */
-      widgetTitle: {
+      sectionTitle: {
         type: String,
         value: '',
-        observer: '__onWidgetTitleChanged',
+        observer: '__onsectionTitleChanged',
       },
     };
   }
@@ -75,9 +73,7 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
         <div id="header-actions"></div>
       </header>
 
-      <div id="content">
-        <slot></slot>
-      </div>
+      <slot></slot>
     `;
   }
 
@@ -98,16 +94,16 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
     this.addController(this.__titleController);
 
     if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'article');
+      this.setAttribute('role', 'section');
     }
   }
 
   /** @private */
-  __onWidgetTitleChanged(widgetTitle) {
-    this.__titleController.setTitle(widgetTitle);
+  __onsectionTitleChanged(sectionTitle) {
+    this.__titleController.setTitle(sectionTitle);
   }
 }
 
-defineCustomElement(DashboardWidget);
+defineCustomElement(DashboardSection);
 
-export { DashboardWidget };
+export { DashboardSection };
