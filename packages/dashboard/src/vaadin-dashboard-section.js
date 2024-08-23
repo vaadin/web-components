@@ -109,7 +109,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __onsectionTitleChanged(sectionTitle) {
+  __onSectionTitleChanged(sectionTitle) {
     this.__titleController.setTitle(sectionTitle);
   }
 }
