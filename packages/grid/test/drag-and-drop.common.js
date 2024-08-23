@@ -254,14 +254,6 @@ describe('drag and drop', () => {
         });
       });
 
-      it('should add drag-source- part to dragged rows', async () => {
-        fireDragStart();
-        await nextFrame();
-        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
-          expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
-        }
-      });
-
       it('should add drag-source- part to all dragged rows', async () => {
         grid.selectItem(grid.items[0]);
         grid.selectItem(grid.items[1]);
@@ -271,6 +263,14 @@ describe('drag and drop', () => {
           for (const cell of getRowBodyCells(row)) {
             expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
           }
+        }
+      });
+
+      it('should add drag-source- part to dragged rows', async () => {
+        fireDragStart();
+        await nextFrame();
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
+          expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
         }
       });
 
