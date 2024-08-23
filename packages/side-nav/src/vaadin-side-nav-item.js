@@ -12,6 +12,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { location } from './location.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
@@ -115,11 +116,36 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       },
 
       /**
+       * Whether to use exact matching when comparing the item's path with the
+       * current browser URL, or not. `true` by default.
+       *
+       * With exact matching, the item is considered current only when the paths
+       * are exactly the same. With non-exact matching, the item is considered
+       * current when the item's path is a prefix of the pathname of the current
+       * browser URL. For example, with exact matching, an item with the path
+       * `/path` is considered current only when the browser URL is `/path`.
+       * With non-exact matching, an item with the path `/path` is considered
+       * current when the browser URL is `/path`, `/path/child`,
+       * `/path/child/grandchild`, etc.
+       *
+       * Note that this only affects matching of the URLs path, not the base
+       * origin or query parameters.
+       *
+       * @type {boolean}
+       */
+      exact: {
+        type: Boolean,
+        value: true,
+      },
+
+      /**
        * Whether the item's path matches the current browser URL.
        *
        * A match occurs when both share the same base origin (like https://example.com),
        * the same path (like /path/to/page), and the browser URL contains at least
        * all the query parameters with the same values from the item's path.
+       *
+       * See the `exact` property for how to change the path matching behavior.
        *
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
@@ -190,7 +216,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   updated(props) {
     super.updated(props);
 
-    if (props.has('path') || props.has('pathAliases')) {
+    if (props.has('path') || props.has('pathAliases') || props.has('exact')) {
       this.__updateCurrent();
     }
 
@@ -304,8 +330,12 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       return false;
     }
 
-    const browserPath = `${document.location.pathname}${document.location.search}`;
-    return matchPaths(browserPath, this.path) || this.pathAliases.some((alias) => matchPaths(browserPath, alias));
+    const browserPath = `${location.pathname}${location.search}`;
+    const matchOptions = { exact: this.exact };
+    return (
+      matchPaths(browserPath, this.path, matchOptions) ||
+      this.pathAliases.some((alias) => matchPaths(browserPath, alias, matchOptions))
+    );
   }
 }
 

@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-side-nav-item.js';
+import { location } from '../src/location.js';
 
 describe('side-nav-item', () => {
   let item, documentBaseURI;
@@ -280,6 +281,47 @@ describe('side-nav-item', () => {
         content.click();
         expect(spy.called).to.be.false;
       });
+    });
+  });
+
+  describe('exact', () => {
+    let currentPath = '/';
+    let pathnameStub;
+
+    beforeEach(() => {
+      pathnameStub = sinon.stub(location, 'pathname').get(() => currentPath);
+    });
+    afterEach(() => {
+      pathnameStub.restore();
+    });
+
+    it('should be true by default', () => {
+      item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
+      expect(item.exact).to.be.true;
+    });
+
+    it('it should match exact path when exact is true', () => {
+      currentPath = '/users';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      expect(item.current).to.be.true;
+
+      currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      expect(item.current).to.be.false;
+    });
+
+    it('should match path prefix when exact is false', async () => {
+      currentPath = '/users';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      item.exact = false;
+      await item.updateComplete;
+      expect(item.current).to.be.true;
+
+      currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      item.exact = false;
+      await item.updateComplete;
+      expect(item.current).to.be.true;
     });
   });
 

@@ -50,6 +50,29 @@ describe('url-utils', () => {
       expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
     });
 
+    describe('exact option', () => {
+      it('should match the exact path by default', () => {
+        expect(matchPaths('/users', '/users')).to.be.true;
+        expect(matchPaths('/users/', '/users')).to.be.false;
+        expect(matchPaths('/users/john', '/users')).to.be.false;
+        expect(matchPaths('/usersessions', '/users')).to.be.false;
+      });
+
+      it('should match the exact path when exact is true', () => {
+        expect(matchPaths('/users', '/users', { exact: true })).to.be.true;
+        expect(matchPaths('/users/', '/users', { exact: true })).to.be.false;
+        expect(matchPaths('/users/john', '/users', { exact: true })).to.be.false;
+        expect(matchPaths('/usersessions', '/users', { exact: true })).to.be.false;
+      });
+
+      it('should match the path prefix when exact is false', () => {
+        expect(matchPaths('/users', '/users', { exact: false })).to.be.true;
+        expect(matchPaths('/users/', '/users', { exact: false })).to.be.true;
+        expect(matchPaths('/users/john', '/users', { exact: false })).to.be.true;
+        expect(matchPaths('/usersessions', '/users', { exact: false })).to.be.false;
+      });
+    });
+
     describe('query params', () => {
       it('should return true when query params match', () => {
         expect(matchPaths('/products', '/products')).to.be.true;
