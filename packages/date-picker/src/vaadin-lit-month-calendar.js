@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateAllowed, dateEquals } from './vaadin-date-picker-helper.js';
+import { dateAllowed, dateEquals, normalizeDate } from './vaadin-date-picker-helper.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
 
@@ -62,6 +62,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                   const isFocused = dateEquals(date, this.focusedDate);
                   const isSelected = dateEquals(date, this.selectedDate);
                   const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
+                  const greaterThanToday = normalizeDate(date) > normalizeDate(new Date());
+                  const lessThanToday = normalizeDate(date) < normalizeDate(new Date());
 
                   const parts = [
                     'date',
@@ -69,6 +71,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                     isFocused && 'focused',
                     isSelected && 'selected',
                     this._isToday(date) && 'today',
+                    greaterThanToday && 'future',
+                    lessThanToday && 'past',
                   ].filter(Boolean);
 
                   return html`

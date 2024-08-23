@@ -37,6 +37,18 @@ export function getISOWeekNumber(date) {
 }
 
 /**
+ * Creates a new object with the same date, but sets the hours, minutes, seconds and milliseconds to 0.
+ *
+ * @param {Date} date
+ * @return {Date} The same date time elements set to 0.
+ */
+export function normalizeDate(date) {
+  const normalizedDate = new Date(date);
+  normalizedDate.setHours(0, 0, 0, 0);
+  return normalizedDate;
+}
+
+/**
  * Check if two dates are equal.
  *
  * @param {Date} date1
@@ -45,11 +57,7 @@ export function getISOWeekNumber(date) {
  */
 export function dateEquals(date1, date2) {
   return (
-    date1 instanceof Date &&
-    date2 instanceof Date &&
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
+    date1 instanceof Date && date2 instanceof Date && normalizeDate(date1).getTime() === normalizeDate(date2).getTime()
   );
 }
 

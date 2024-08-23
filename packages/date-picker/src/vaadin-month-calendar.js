@@ -7,7 +7,7 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateAllowed, dateEquals } from './vaadin-date-picker-helper.js';
+import { dateAllowed, dateEquals, normalizeDate } from './vaadin-date-picker-helper.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
 
@@ -110,8 +110,11 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   // eslint-disable-next-line @typescript-eslint/max-params
   __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled) {
     const result = ['date'];
+    const dayDisabled = this.__isDayDisabled(date, minDate, maxDate, isDateDisabled);
+    const greaterThanToday = normalizeDate(date) > normalizeDate(new Date());
+    const lessThanToday = normalizeDate(date) < normalizeDate(new Date());
 
-    if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled)) {
+    if (dayDisabled) {
       result.push('disabled');
     }
 
@@ -125,6 +128,14 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
     if (this._isToday(date)) {
       result.push('today');
+    }
+
+    if (lessThanToday) {
+      result.push('past');
+    }
+
+    if (greaterThanToday) {
+      result.push('future');
     }
 
     return result.join(' ');
