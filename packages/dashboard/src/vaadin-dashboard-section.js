@@ -80,7 +80,6 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
     return html`
       <header>
         <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
-        <slot name="header"></slot>
         <div id="header-actions"></div>
       </header>
 
