@@ -262,17 +262,6 @@ describe('drag and drop', () => {
         }
       });
 
-      it('should remove drag-source- part from dragged rows', async () => {
-        fireDragStart();
-        await nextFrame();
-
-        fireDragEnd();
-        await nextFrame();
-        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
-          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
-        }
-      });
-
       it('should add drag-source- part to all dragged rows', async () => {
         grid.selectItem(grid.items[0]);
         grid.selectItem(grid.items[1]);
@@ -282,6 +271,17 @@ describe('drag and drop', () => {
           for (const cell of getRowBodyCells(row)) {
             expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
           }
+        }
+      });
+
+      it('should remove drag-source- part from dragged rows', async () => {
+        fireDragStart();
+        await nextFrame();
+
+        fireDragEnd();
+        await nextFrame();
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
+          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
         }
       });
 
@@ -1072,11 +1072,12 @@ describe('drag and drop', () => {
     it('should add/remove drag-source- part when scrolling', () => {
       grid.rowsDraggable = true;
       grid.selectItem(grid.items[0]);
-      const renderedBufferCount = grid.$.items.childElementCount;
       fireDragStart();
 
-      grid.scrollToIndex(renderedBufferCount);
-      expect(getFirstCell(grid).getAttribute('part')).to.not.contain('drag-source-row-cell');
+      // Scroll down so that the drag source cell leaves the viewport
+      grid.scrollToIndex(50);
+      // Expect no cells with drag-source-row-cell part in the DOM
+      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="drag-source-row-cell"]')).to.be.null;
 
       grid.scrollToIndex(0);
       expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');
