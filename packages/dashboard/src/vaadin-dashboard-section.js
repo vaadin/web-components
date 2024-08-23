@@ -70,7 +70,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
       sectionTitle: {
         type: String,
         value: '',
-        observer: '__onsectionTitleChanged',
+        observer: '__onSectionTitleChanged',
       },
     };
   }
