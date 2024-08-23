@@ -1,7 +1,9 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { TitleController } from '../../src/title-controller.js';
 import type { DashboardLayoutMixinClass } from '../../src/vaadin-dashboard-layout-mixin.js';
 import type { Dashboard, DashboardItem, DashboardRenderer } from '../../vaadin-dashboard.js';
 import type { DashboardLayout } from '../../vaadin-dashboard-layout.js';
+import type { DashboardSection } from '../../vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../../vaadin-dashboard-widget.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -36,3 +38,14 @@ const widget = document.createElement('vaadin-dashboard-widget');
 assertType<DashboardWidget>(widget);
 
 assertType<string | null | undefined>(widget.widgetTitle);
+
+/* DashboardSection */
+const section = document.createElement('vaadin-dashboard-section');
+assertType<DashboardSection>(section);
+
+assertType<string | null | undefined>(section.sectionTitle);
+
+/* TitleController */
+const titleController = new TitleController(layout);
+assertType<TitleController>(titleController);
+assertType<(title: string | null | undefined) => void>(titleController.setTitle);

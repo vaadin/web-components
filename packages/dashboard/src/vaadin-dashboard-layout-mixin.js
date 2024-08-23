@@ -36,10 +36,13 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-default-col-max-width)
           );
 
+          /* Effective max column count */
+          --_vaadin-dashboard-col-max-count: var(--vaadin-dashboard-col-max-count, var(--_vaadin-dashboard-col-count));
+
           /* Effective column count */
           --_vaadin-dashboard-effective-col-count: min(
             var(--_vaadin-dashboard-col-count),
-            var(--vaadin-dashboard-col-max-count)
+            var(--_vaadin-dashboard-col-max-count)
           );
 
           display: grid;

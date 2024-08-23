@@ -7,30 +7,50 @@ export function getColumnWidths(dashboard: HTMLElement): number[] {
     .map((width) => parseFloat(width));
 }
 
-/**
- * Returns the effective row heights of the dashboard as an array of numbers.
- */
-export function getRowHeights(dashboard: HTMLElement): number[] {
+function _getRowHeights(dashboard: HTMLElement): number[] {
   return getComputedStyle(dashboard)
     .gridTemplateRows.split(' ')
     .map((height) => parseFloat(height));
+}
+
+function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number, rowHeights: number[]) {
+  const { top, left } = dashboard.getBoundingClientRect();
+  const columnWidths = getColumnWidths(dashboard);
+  const x = left + columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
+  const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
+
+  return document
+    .elementsFromPoint(x + columnWidths[columnIndex] / 2, y + rowHeights[rowIndex] - 1)
+    .reverse()
+    .find(
+      (element) =>
+        dashboard.contains(element) && element !== dashboard && element.localName !== 'vaadin-dashboard-section',
+    )!;
+}
+
+/**
+ * Returns the effective row heights with the row heights of nested sections flattened.
+ */
+export function getRowHeights(dashboard: HTMLElement): number[] {
+  const dashboardRowHeights = _getRowHeights(dashboard);
+  [...dashboardRowHeights].forEach((_height, index) => {
+    const item = _getElementFromCell(dashboard, index, 0, dashboardRowHeights);
+    const parentSection = item?.closest('vaadin-dashboard-section');
+    if (parentSection) {
+      const [headerRowHeight, firstRowHeight, ...remainingRowHeights] = _getRowHeights(parentSection);
+      // Merge the first two row heights of the section since the first one is the section header
+      dashboardRowHeights.splice(index, 1, headerRowHeight + firstRowHeight, ...remainingRowHeights);
+    }
+  });
+  return dashboardRowHeights;
 }
 
 /**
  * Returns the element at the center of the cell at the given row and column index.
  */
 export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number): Element | null {
-  const { top, left } = dashboard.getBoundingClientRect();
-  const columnWidths = getColumnWidths(dashboard);
   const rowHeights = getRowHeights(dashboard);
-
-  const x = left + columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
-  const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
-
-  return document
-    .elementsFromPoint(x + columnWidths[columnIndex] / 2, y + rowHeights[rowIndex] / 2)
-    .reverse()
-    .find((element) => dashboard.contains(element) && element !== dashboard)!;
+  return _getElementFromCell(dashboard, rowIndex, columnIndex, rowHeights);
 }
 
 /**
