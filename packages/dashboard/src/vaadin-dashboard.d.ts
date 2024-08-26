@@ -30,6 +30,11 @@ export interface DashboardSectionItem<TItem extends DashboardItem> {
    * The items of the section
    */
   items: TItem[];
+
+  /**
+   * @deprecated Use `colspan` property on the items instead.
+   */
+  colspan?: undefined;
 }
 
 export interface DashboardItemModel<TItem> {
