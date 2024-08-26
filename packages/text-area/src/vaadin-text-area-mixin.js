@@ -139,27 +139,27 @@ export const TextAreaMixin = (superClass) =>
     /** @private */
     _updateHeight() {
       const input = this.inputElement;
-      const inputField = this._scrollContainer;
+      const scrollContainer = this._scrollContainer;
 
-      if (!input || !inputField) {
+      if (!input || !scrollContainer) {
         return;
       }
 
-      const scrollTop = inputField.scrollTop;
+      const scrollTop = scrollContainer.scrollTop;
 
       // Only clear the height when the content shortens to minimize scrollbar flickering.
       const valueLength = this.value ? this.value.length : 0;
 
       if (this._oldValueLength >= valueLength) {
-        const inputFieldHeight = getComputedStyle(inputField).height;
+        const scrollContainerHeight = getComputedStyle(scrollContainer).height;
         const inputWidth = getComputedStyle(input).width;
 
-        // Temporarily fix the height of the wrapping input field container to prevent changing the browsers scroll
+        // Temporarily fix the height of the wrapping scroll container to prevent changing the browsers scroll
         // position while resetting the textareas height. If the textarea had a large height, then removing its height
         // will reset its height to the default of two rows. That might reduce the height of the page, and the
         // browser might adjust the scroll position before we can restore the measured height of the textarea.
-        inputField.style.display = 'block';
-        inputField.style.height = inputFieldHeight;
+        scrollContainer.style.display = 'block';
+        scrollContainer.style.height = scrollContainerHeight;
 
         // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
         input.style.maxWidth = inputWidth;
@@ -176,9 +176,9 @@ export const TextAreaMixin = (superClass) =>
 
       // Restore
       input.style.removeProperty('max-width');
-      inputField.style.removeProperty('display');
-      inputField.style.removeProperty('height');
-      inputField.scrollTop = scrollTop;
+      scrollContainer.style.removeProperty('display');
+      scrollContainer.style.removeProperty('height');
+      scrollContainer.scrollTop = scrollTop;
     }
 
     /**
