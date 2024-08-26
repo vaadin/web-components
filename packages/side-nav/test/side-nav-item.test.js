@@ -284,7 +284,7 @@ describe('side-nav-item', () => {
     });
   });
 
-  describe('exact', () => {
+  describe('matchExact', () => {
     let currentPath = '/';
     let pathnameStub;
 
@@ -297,7 +297,7 @@ describe('side-nav-item', () => {
 
     it('should be true by default', () => {
       item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
-      expect(item.exact).to.be.true;
+      expect(item.matchExact).to.be.true;
     });
 
     it('it should match exact path when exact is true', () => {
@@ -313,13 +313,13 @@ describe('side-nav-item', () => {
     it('should match path prefix when exact is false', async () => {
       currentPath = '/users';
       item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
-      item.exact = false;
+      item.matchExact = false;
       await item.updateComplete;
       expect(item.current).to.be.true;
 
       currentPath = '/users/john';
       item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
-      item.exact = false;
+      item.matchExact = false;
       await item.updateComplete;
       expect(item.current).to.be.true;
     });

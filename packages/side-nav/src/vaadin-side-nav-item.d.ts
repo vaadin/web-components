@@ -109,7 +109,7 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    * Note that this only affects matching of the URLs path, not the base
    * origin or query parameters.
    */
-  exact: boolean;
+  matchExact: boolean;
 
   /**
    * Whether the item's path matches the current browser URL.

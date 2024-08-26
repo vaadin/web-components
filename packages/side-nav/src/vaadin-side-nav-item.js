@@ -133,7 +133,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
        *
        * @type {boolean}
        */
-      exact: {
+      matchExact: {
         type: Boolean,
         value: true,
       },
@@ -331,7 +331,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     }
 
     const browserPath = `${location.pathname}${location.search}`;
-    const matchOptions = { exact: this.exact };
+    const matchOptions = { exact: this.matchExact };
     return (
       matchPaths(browserPath, this.path, matchOptions) ||
       this.pathAliases.some((alias) => matchPaths(browserPath, alias, matchOptions))
