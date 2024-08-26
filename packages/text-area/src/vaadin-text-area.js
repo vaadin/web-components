@@ -80,10 +80,11 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolymerEl
           disabled="[[disabled]]"
           invalid="[[invalid]]"
           theme$="[[_theme]]"
-          on-scroll="_onScroll"
         >
           <slot name="prefix" slot="prefix"></slot>
-          <slot name="textarea"></slot>
+          <div id="scroll-container" on-scroll="_onScroll">
+            <slot name="textarea"></slot>
+          </div>
           <slot name="suffix" slot="suffix"></slot>
           <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>

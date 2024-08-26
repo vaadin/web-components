@@ -51,9 +51,15 @@ const textArea = css`
     }
   }
 
-  [part='input-field'] ::slotted(textarea) {
+  #scroll-container {
+    padding: 0;
     line-height: inherit;
     --_lumo-text-field-overflow-mask-image: none;
+  }
+
+  [part='input-field'] ::slotted(textarea) {
+    padding: 0 0.25em;
+    line-height: inherit;
   }
 
   /* Vertically align icon prefix/suffix with the first line of text */

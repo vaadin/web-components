@@ -89,16 +89,16 @@ export const TextAreaMixin = (superClass) =>
 
       this.addEventListener('animationend', this._onAnimationEnd);
 
-      this._inputField = this.shadowRoot.querySelector('[part=input-field]');
+      this._scrollContainer = this.shadowRoot.querySelector('#scroll-container');
 
       // Wheel scrolling results in async scroll events. Preventing the wheel
       // event, scrolling manually and then synchronously updating the scroll position CSS variable
       // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
-      this._inputField.addEventListener('wheel', (e) => {
-        const scrollTopBefore = this._inputField.scrollTop;
-        this._inputField.scrollTop += e.deltaY;
+      this._scrollContainer.addEventListener('wheel', (e) => {
+        const scrollTopBefore = this._scrollContainer.scrollTop;
+        this._scrollContainer.scrollTop += e.deltaY;
 
-        if (scrollTopBefore !== this._inputField.scrollTop) {
+        if (scrollTopBefore !== this._scrollContainer.scrollTop) {
           e.preventDefault();
           this.__scrollPositionUpdated();
         }
@@ -110,8 +110,11 @@ export const TextAreaMixin = (superClass) =>
 
     /** @private */
     __scrollPositionUpdated() {
-      this._inputField.style.setProperty('--_text-area-vertical-scroll-position', '0px');
-      this._inputField.style.setProperty('--_text-area-vertical-scroll-position', `${this._inputField.scrollTop}px`);
+      this._scrollContainer.style.setProperty('--_text-area-vertical-scroll-position', '0px');
+      this._scrollContainer.style.setProperty(
+        '--_text-area-vertical-scroll-position',
+        `${this._scrollContainer.scrollTop}px`,
+      );
     }
 
     /** @private */
@@ -136,7 +139,7 @@ export const TextAreaMixin = (superClass) =>
     /** @private */
     _updateHeight() {
       const input = this.inputElement;
-      const inputField = this._inputField;
+      const inputField = this._scrollContainer;
 
       if (!input || !inputField) {
         return;
@@ -182,14 +185,14 @@ export const TextAreaMixin = (superClass) =>
      * Scrolls the textarea to the start if it has a vertical scrollbar.
      */
     scrollToStart() {
-      this._inputField.scrollTop = 0;
+      this._scrollContainer.scrollTop = 0;
     }
 
     /**
      * Scrolls the textarea to the end if it has a vertical scrollbar.
      */
     scrollToEnd() {
-      this._inputField.scrollTop = this._inputField.scrollHeight;
+      this._scrollContainer.scrollTop = this._scrollContainer.scrollHeight;
     }
 
     /**

@@ -168,22 +168,23 @@ describe('text-area', () => {
   });
 
   describe('multi-line', () => {
-    let native, container, inputField;
+    let native, container, inputField, scrollContainer;
 
     beforeEach(() => {
       native = textArea.inputElement;
       inputField = textArea.shadowRoot.querySelector('[part=input-field]');
+      scrollContainer = textArea.shadowRoot.querySelector('#scroll-container');
       container = textArea.shadowRoot.querySelector('.vaadin-text-area-container');
     });
 
     it('should grow height with unwrapped text', async () => {
-      const originalHeight = parseInt(window.getComputedStyle(inputField).height);
+      const originalHeight = parseInt(window.getComputedStyle(textArea).height);
 
       // Make sure there are enough characters to grow the textarea
       textArea.value = Array(400).join('400');
       await nextUpdate(textArea);
 
-      const newHeight = parseInt(window.getComputedStyle(inputField).height);
+      const newHeight = parseInt(window.getComputedStyle(textArea).height);
       expect(newHeight).to.be.at.least(originalHeight + 10);
     });
 
@@ -205,6 +206,7 @@ describe('text-area', () => {
       expect(parseFloat(window.getComputedStyle(textArea).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(container).height)).to.be.lte(100);
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.lte(100);
+      expect(parseFloat(window.getComputedStyle(scrollContainer).height)).to.be.lte(100);
     });
 
     it('should not shrink less than min-height', async () => {
@@ -213,6 +215,7 @@ describe('text-area', () => {
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
       expect(window.getComputedStyle(container).height).to.be.equal('125px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
+      expect(parseFloat(window.getComputedStyle(scrollContainer).height)).to.be.above(100);
 
       // Check that value modification doesn't break min-height rule
       textArea.value = '1 row';
@@ -221,6 +224,7 @@ describe('text-area', () => {
       expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
       expect(window.getComputedStyle(container).height).to.be.equal('125px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
+      expect(parseFloat(window.getComputedStyle(scrollContainer).height)).to.be.above(100);
     });
 
     it('should stay between min and max height', async () => {
@@ -249,6 +253,7 @@ describe('text-area', () => {
       expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
       expect(window.getComputedStyle(container).height).to.be.equal('175px');
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(150);
+      expect(parseFloat(window.getComputedStyle(scrollContainer).height)).to.be.above(150);
     });
 
     it('should increase input container height', async () => {
@@ -263,11 +268,11 @@ describe('text-area', () => {
       textArea.value = Array(400).join('400');
       await nextUpdate(textArea);
 
-      inputField.scrollTop = 200;
+      scrollContainer.scrollTop = 200;
       textArea.value += 'foo';
       await nextUpdate(textArea);
 
-      expect(inputField.scrollTop).to.equal(200);
+      expect(scrollContainer.scrollTop).to.equal(200);
     });
 
     it('should decrease height automatically', async () => {
@@ -325,7 +330,7 @@ describe('text-area', () => {
     });
 
     it('should have matching height', async () => {
-      inputField.style.padding = '0';
+      scrollContainer.style.padding = '0';
       textArea.style.maxHeight = '100px';
 
       textArea.value = Array(400).join('400');
@@ -333,7 +338,7 @@ describe('text-area', () => {
 
       textArea.value = textArea.value.slice(0, -1);
       await nextUpdate(textArea);
-      expect(native.clientHeight).to.equal(inputField.scrollHeight);
+      expect(native.clientHeight).to.equal(scrollContainer.scrollHeight);
     });
 
     it('should cover native textarea', async () => {
@@ -359,7 +364,7 @@ describe('text-area', () => {
     });
 
     describe('--_text-area-vertical-scroll-position CSS variable', () => {
-      function wheel({ element = inputField, deltaY = 0 }) {
+      function wheel({ element = scrollContainer, deltaY = 0 }) {
         const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
         e.deltaY = deltaY;
         e.deltaX = 0;
@@ -369,7 +374,7 @@ describe('text-area', () => {
 
       function getVerticalScrollPosition() {
         return textArea.shadowRoot
-          .querySelector('[part="input-field"]')
+          .querySelector('#scroll-container')
           .style.getPropertyValue('--_text-area-vertical-scroll-position');
       }
 
@@ -384,7 +389,7 @@ describe('text-area', () => {
       });
 
       it('should update value on scroll', async () => {
-        inputField.scrollTop = 10;
+        scrollContainer.scrollTop = 10;
         await nextFrame();
         expect(getVerticalScrollPosition()).to.equal('10px');
       });
@@ -396,7 +401,7 @@ describe('text-area', () => {
 
       it('should scroll on wheel', () => {
         wheel({ deltaY: 10 });
-        expect(inputField.scrollTop).to.equal(10);
+        expect(scrollContainer.scrollTop).to.equal(10);
       });
 
       it('should cancel wheel event', () => {
@@ -412,7 +417,7 @@ describe('text-area', () => {
       it('should update value on resize', async () => {
         inputField.scrollTop = 10;
         await nextUpdate(textArea);
-        textArea.style.height = `${inputField.scrollHeight}px`;
+        textArea.style.height = `${scrollContainer.scrollHeight}px`;
         await nextUpdate(textArea);
         expect(getVerticalScrollPosition()).to.equal('0px');
       });
@@ -420,24 +425,25 @@ describe('text-area', () => {
   });
 
   describe('programmatic scrolling', () => {
+    let scrollContainer;
+
     beforeEach(() => {
       textArea.value = Array(400).join('400');
       textArea.style.height = '300px';
+      scrollContainer = textArea.shadowRoot.querySelector('#scroll-container');
     });
 
     it('should scroll to start', () => {
-      textArea._inputField.scrollTop = 100; // Simulate scrolling
+      scrollContainer.scrollTop = 100; // Simulate scrolling
       textArea.scrollToStart();
-      expect(textArea._inputField.scrollTop).to.equal(0);
+      expect(scrollContainer.scrollTop).to.equal(0);
     });
 
     it('should scroll to end', () => {
       textArea.scrollToStart();
-      expect(textArea._inputField.scrollTop).to.equal(0);
+      expect(scrollContainer.scrollTop).to.equal(0);
       textArea.scrollToEnd();
-      expect(textArea._inputField.scrollTop).to.equal(
-        textArea._inputField.scrollHeight - textArea._inputField.clientHeight,
-      );
+      expect(scrollContainer.scrollTop).to.equal(scrollContainer.scrollHeight - scrollContainer.clientHeight);
     });
   });
 });

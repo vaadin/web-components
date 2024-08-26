@@ -23,6 +23,13 @@ export const textAreaStyles = css`
 
   [part='input-field'] {
     flex: auto;
+    overflow: hidden;
+  }
+
+  #scroll-container {
+    display: flex;
+    flex: auto;
+    align-self: stretch;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
