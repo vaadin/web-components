@@ -30,6 +30,7 @@ export const textAreaStyles = css`
     display: flex;
     flex: auto;
     align-self: stretch;
+    min-height: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -65,6 +66,17 @@ export const textAreaStyles = css`
 
   [part='input-field'] ::slotted(:not(textarea)) {
     align-self: flex-start;
+  }
+
+  /* Duplicate placeholder styles from <vaadin-input-container> as we slot a 
+     scroll container into it instead of the textarea itself */
+  ::slotted(:is(textarea))::placeholder {
+    /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
+    /* because ::slotted(...)::placeholder does not work in Safari. */
+    font: inherit;
+    color: inherit;
+    /* Override default opacity in Firefox */
+    opacity: 1;
   }
 
   /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
