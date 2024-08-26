@@ -261,6 +261,7 @@ describe('text-area', () => {
       textArea.value = 'foo';
       await nextUpdate(textArea);
       expect(inputField.clientHeight).to.be.closeTo(200, 10);
+      expect(scrollContainer.clientHeight).to.be.closeTo(200, 10);
     });
 
     it('should maintain scroll top', async () => {
