@@ -101,8 +101,10 @@ snapshots["vaadin-text-area shadow default"] =
       slot="prefix"
     >
     </slot>
-    <slot name="textarea">
-    </slot>
+    <div id="scroll-container">
+      <slot name="textarea">
+      </slot>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -150,8 +152,10 @@ snapshots["vaadin-text-area shadow disabled"] =
       slot="prefix"
     >
     </slot>
-    <slot name="textarea">
-    </slot>
+    <div id="scroll-container">
+      <slot name="textarea">
+      </slot>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -199,8 +203,10 @@ snapshots["vaadin-text-area shadow readonly"] =
       slot="prefix"
     >
     </slot>
-    <slot name="textarea">
-    </slot>
+    <div id="scroll-container">
+      <slot name="textarea">
+      </slot>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -248,8 +254,10 @@ snapshots["vaadin-text-area shadow invalid"] =
       slot="prefix"
     >
     </slot>
-    <slot name="textarea">
-    </slot>
+    <div id="scroll-container">
+      <slot name="textarea">
+      </slot>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -297,8 +305,10 @@ snapshots["vaadin-text-area shadow theme"] =
       slot="prefix"
     >
     </slot>
-    <slot name="textarea">
-    </slot>
+    <div id="scroll-container">
+      <slot name="textarea">
+      </slot>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
