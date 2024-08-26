@@ -61,6 +61,23 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should not open on target click when detached', async () => {
+      popover.remove();
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target click when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should not open on target mouseenter', async () => {
       mouseenter(target);
       await nextRender();
@@ -129,6 +146,23 @@ describe('trigger', () => {
       mouseleave(overlay, target);
       await nextUpdate(popover);
 
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open on target mouseenter when detached', async () => {
+      popover.remove();
+      mouseenter(target);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target mouseenter when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      mouseenter(target);
+      await nextRender();
       expect(overlay.opened).to.be.true;
     });
   });
@@ -202,6 +236,23 @@ describe('trigger', () => {
 
       // Emulate click without focus change
       target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open on target focusin when detached', async () => {
+      popover.remove();
+      focusin(target);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target focusin when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      focusin(target);
       await nextRender();
       expect(overlay.opened).to.be.true;
     });

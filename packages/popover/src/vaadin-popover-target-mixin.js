@@ -39,6 +39,24 @@ export const PopoverTargetMixin = (superClass) =>
       };
     }
 
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.target) {
+        this._addTargetListeners(this.target);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      if (this.target) {
+        this._removeTargetListeners(this.target);
+      }
+    }
+
     /** @private */
     __forChanged(forId) {
       if (forId) {
