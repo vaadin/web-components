@@ -62,8 +62,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                   const isFocused = dateEquals(date, this.focusedDate);
                   const isSelected = dateEquals(date, this.selectedDate);
                   const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
-                  const greaterThanToday = normalizeDate(date) > normalizeDate(new Date());
-                  const lessThanToday = normalizeDate(date) < normalizeDate(new Date());
+                  const greaterThanToday = date > normalizeDate(new Date());
+                  const lessThanToday = date < normalizeDate(new Date());
 
                   const parts = [
                     'date',
