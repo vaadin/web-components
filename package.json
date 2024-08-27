@@ -69,7 +69,7 @@
     "typescript": "^5.5.2"
   },
   "resolutions": {
-    "playwright": "^1.46.1"
+    "playwright": "1.34.1"
   },
   "lint-staged": {
     "*.{js,ts}": [
