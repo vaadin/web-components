@@ -186,6 +186,17 @@ describe('tabsheet', () => {
 
       expect(panel.id).to.equal('custom-id');
     });
+
+    it('should reset hidden state when removing a panel', async () => {
+      const div = document.createElement('div');
+      tabsheet.appendChild(div);
+      await nextFrame();
+      expect(div.hidden).to.be.true;
+
+      div.setAttribute('slot', 'prefix');
+      await nextFrame();
+      expect(div.hidden).to.be.false;
+    });
   });
 
   describe('loading', () => {
