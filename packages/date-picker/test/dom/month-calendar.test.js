@@ -11,7 +11,7 @@ describe('vaadin-month-calendar', () => {
   beforeEach(async () => {
     resetUniqueId();
     clock = sinon.useFakeTimers({
-      now: new Date('2016-02-05'),
+      now: new Date(2016, 1, 5),
       toFake: ['Date'],
     });
 
