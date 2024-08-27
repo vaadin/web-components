@@ -65,6 +65,11 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
    *   - `model.item` The item.
    */
   renderer: DashboardRenderer<TItem> | null | undefined;
+
+  /**
+   * Whether the dashboard is editable.
+   */
+  editable: boolean;
 }
 
 declare global {

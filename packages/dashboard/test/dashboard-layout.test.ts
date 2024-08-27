@@ -4,8 +4,8 @@ import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
 import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
 import {
+  expectLayout,
   getColumnWidths,
-  getElementFromCell,
   getRowHeights,
   setColspan,
   setGap,
@@ -13,43 +13,6 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
 } from './helpers.js';
-
-/**
- * Validates the given grid layout.
- *
- * This function iterates through a number matrix representing the IDs of
- * the items in the layout, and checks if the elements in the corresponding
- * cells of the grid match the expected IDs.
- *
- * For example, the following layout would expect a grid with two columns
- * and three rows, where the first row has one element with ID "item-0" spanning
- * two columns, and the second row has two elements with IDs "item-1" and "item-2"
- * where the first one spans two rows, and the last cell in the third row has
- * an element with ID "item-3":
- *
- * ```
- * [
- *  [0, 0],
- *  [1, 2],
- *  [1, 3]
- * ]
- * ```
- */
-function expectLayout(dashboard: DashboardLayout, layout: Array<Array<number | null>>) {
-  expect(getRowHeights(dashboard).length).to.eql(layout.length);
-  expect(getColumnWidths(dashboard).length).to.eql(layout[0].length);
-
-  layout.forEach((row, rowIndex) => {
-    row.forEach((itemId, columnIndex) => {
-      const element = getElementFromCell(dashboard, rowIndex, columnIndex);
-      if (!element) {
-        expect(itemId).to.be.null;
-      } else {
-        expect(element.id).to.equal(`item-${itemId}`);
-      }
-    });
-  });
-}
 
 describe('dashboard layout', () => {
   let dashboard: DashboardLayout;

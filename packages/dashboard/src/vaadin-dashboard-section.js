@@ -15,6 +15,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
+import { dashboardWidgetAndSectionStyles, hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 
 /**
  * A section component for use with the Dashboard component
@@ -30,40 +31,38 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: grid;
-        grid-template-columns: subgrid;
-        --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
-        grid-column: var(--_vaadin-dashboard-section-column) !important;
-        gap: var(--vaadin-dashboard-gap, 1rem);
-      }
+    return [
+      css`
+        :host {
+          display: grid;
+          position: relative;
+          grid-template-columns: subgrid;
+          --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
+          grid-column: var(--_vaadin-dashboard-section-column) !important;
+          gap: var(--vaadin-dashboard-gap, 1rem);
+        }
 
-      :host([hidden]) {
-        display: none !important;
-      }
+        :host([hidden]) {
+          display: none !important;
+        }
 
-      ::slotted(*) {
-        --_vaadin-dashboard-item-column: span
-          min(
-            var(--vaadin-dashboard-item-colspan, 1),
-            var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
-          );
+        ::slotted(*) {
+          --_vaadin-dashboard-item-column: span
+            min(
+              var(--vaadin-dashboard-item-colspan, 1),
+              var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
+            );
 
-        grid-column: var(--_vaadin-dashboard-item-column);
-      }
+          grid-column: var(--_vaadin-dashboard-item-column);
+        }
 
-      ::slotted(vaadin-dashboard-widget-wrapper) {
-        display: contents;
-      }
-
-      header {
-        display: flex;
-        grid-column: var(--_vaadin-dashboard-section-column);
-        justify-content: space-between;
-        align-items: center;
-      }
-    `;
+        header {
+          grid-column: var(--_vaadin-dashboard-section-column);
+        }
+      `,
+      hasWidgetWrappers,
+      dashboardWidgetAndSectionStyles,
+    ];
   }
 
   static get properties() {
@@ -84,7 +83,9 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
     return html`
       <header>
         <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
-        <div id="header-actions"></div>
+        <div id="header-actions">
+          <span id="drag-handle" draggable="true" class="drag-handle"></span>
+        </div>
       </header>
 
       <slot></slot>

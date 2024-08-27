@@ -57,20 +57,47 @@
           colspan: 2,
         },
         {
+          title: 'Sales closed this month',
+          content: '54 000€',
+          type: 'kpi',
+        },
+        {
+          title: 'Just some number',
+          content: '1234',
+          type: 'kpi',
+          header: '2014-2024',
+        },
+        {
+          title: 'Activity since 2023',
+          type: 'chart',
+        },
+        {
+          title: 'Total cost',
+          content: '+203%',
+          type: 'kpi',
+          header: '2023-2024',
+        },
+        {
           title: 'Section',
           items: [
+            {
+              title: 'Sales',
+              type: 'chart',
+              header: '2023-2024',
+              colspan: 2,
+            },
             {
               title: 'Sales closed this month',
               content: '54 000€',
               type: 'kpi',
             },
-            {
-              title: 'Just some number',
-              content: '1234',
-              type: 'kpi',
-              header: '2014-2024',
-            },
           ],
+        },
+        {
+          title: 'Just some number',
+          content: '1234',
+          type: 'kpi',
+          header: '2014-2024',
         },
         {
           title: 'Activity since 2023',
@@ -79,6 +106,7 @@
       ];
 
       dashboard.renderer = (root, _dashboard, { item }) => {
+        // TODO: This is why the element gets removed from the DOM and dragend doesn't fire
         root.innerHTML = `
           <vaadin-dashboard-widget widget-title="${item.title}">
             <span slot="header">${item.header || ''}</span>
@@ -86,10 +114,23 @@
           </vaadin-dashboard-widget>
         `;
       };
+
+      dashboard.addEventListener('dashboard-item-reorder-start', (e) => {
+        console.log('dashboard-item-reorder-start');
+      });
+
+      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => {
+        console.log('dashboard-item-drag-reorder', e.detail);
+        // e.preventDefault();
+      });
+
+      dashboard.addEventListener('dashboard-item-reorder-end', (e) => {
+        console.log('dashboard-item-reorder-end');
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-dashboard></vaadin-dashboard>
+    <vaadin-dashboard editable></vaadin-dashboard>
   </body>
 </html>
