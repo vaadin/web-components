@@ -47,7 +47,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Test
         run: yarn test:snapshots
@@ -69,7 +69,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install-deps chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Test
         run: yarn test:it
