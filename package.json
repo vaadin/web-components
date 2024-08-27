@@ -68,6 +68,9 @@
     "stylelint-config-vaadin": "^1.0.0-alpha.1",
     "typescript": "^5.5.2"
   },
+  "resolutions": {
+    "playwright": "^1.46.1"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --fix",
