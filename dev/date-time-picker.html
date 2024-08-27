@@ -16,7 +16,8 @@
       dateTimePicker.addEventListener('change', onChange);
 
       function onChange(event) {
-        console.log(event.type);
+        console.warn(event.type);
+
         if (dateTimePicker.__unparsableValue) {
           dateTimePicker.errorMessage = 'Invalid date or time';
         } else if (dateTimePicker.__incompleteValue) {
