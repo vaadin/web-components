@@ -116,26 +116,21 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       },
 
       /**
-       * Whether to use exact matching when comparing the item's path with the
-       * current browser URL, or not. `true` by default.
+       * Whether to also match nested paths / routes. `false` by default.
        *
-       * With exact matching, the item is considered current only when the paths
-       * are exactly the same. With non-exact matching, the item is considered
-       * current when the item's path is a prefix of the pathname of the current
-       * browser URL. For example, with exact matching, an item with the path
-       * `/path` is considered current only when the browser URL is `/path`.
-       * With non-exact matching, an item with the path `/path` is considered
-       * current when the browser URL is `/path`, `/path/child`,
-       * `/path/child/grandchild`, etc.
+       * When enabled, an item with the path `/path` is considered current when
+       * the browser URL is `/path`, `/path/child`, `/path/child/grandchild`,
+       * etc.
        *
        * Note that this only affects matching of the URLs path, not the base
        * origin or query parameters.
        *
        * @type {boolean}
+       * @attr {boolean} match-nested
        */
-      matchExact: {
+      matchNested: {
         type: Boolean,
-        value: true,
+        value: false,
       },
 
       /**
@@ -145,7 +140,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
        * the same path (like /path/to/page), and the browser URL contains at least
        * all the query parameters with the same values from the item's path.
        *
-       * See the `exact` property for how to change the path matching behavior.
+       * See [`matchNested`](#/elements/vaadin-side-nav-item#property-matchNested) for how to change the path matching behavior.
        *
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
@@ -216,7 +211,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   updated(props) {
     super.updated(props);
 
-    if (props.has('path') || props.has('pathAliases') || props.has('exact')) {
+    if (props.has('path') || props.has('pathAliases') || props.has('matchNested')) {
       this.__updateCurrent();
     }
 
@@ -331,7 +326,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
     }
 
     const browserPath = `${location.pathname}${location.search}`;
-    const matchOptions = { exact: this.matchExact };
+    const matchOptions = { matchNested: this.matchNested };
     return (
       matchPaths(browserPath, this.path, matchOptions) ||
       this.pathAliases.some((alias) => matchPaths(browserPath, alias, matchOptions))

@@ -284,23 +284,24 @@ describe('side-nav-item', () => {
     });
   });
 
-  describe('matchExact', () => {
+  describe('matchNested', () => {
     let currentPath = '/';
     let pathnameStub;
 
     beforeEach(() => {
       pathnameStub = sinon.stub(location, 'pathname').get(() => currentPath);
     });
+
     afterEach(() => {
       pathnameStub.restore();
     });
 
-    it('should be true by default', () => {
+    it('should be false by default', () => {
       item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
-      expect(item.matchExact).to.be.true;
+      expect(item.matchNested).to.be.false;
     });
 
-    it('it should match exact path when exact is true', () => {
+    it('should match exact path when matchNested is false', () => {
       currentPath = '/users';
       item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
       expect(item.current).to.be.true;
@@ -310,16 +311,23 @@ describe('side-nav-item', () => {
       expect(item.current).to.be.false;
     });
 
-    it('should match path prefix when exact is false', async () => {
+    it('should match nested paths when matchNested is true', () => {
       currentPath = '/users';
-      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
-      item.matchExact = false;
-      await item.updateComplete;
+      item = fixtureSync('<vaadin-side-nav-item path="/users" match-nested></vaadin-side-nav-item>');
       expect(item.current).to.be.true;
 
       currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users" match-nested></vaadin-side-nav-item>');
+      expect(item.current).to.be.true;
+    });
+
+    it('should update when toggling matchNested', async () => {
+      currentPath = '/users/john';
       item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
-      item.matchExact = false;
+      await item.updateComplete;
+      expect(item.current).to.be.false;
+
+      item.matchNested = true;
       await item.updateComplete;
       expect(item.current).to.be.true;
     });

@@ -50,7 +50,7 @@ describe('url-utils', () => {
       expect(matchPaths('https://vaadin.com/docs/components', 'components')).to.be.true;
     });
 
-    describe('exact option', () => {
+    describe('matchNested option', () => {
       it('should match the exact path by default', () => {
         expect(matchPaths('/users', '/users')).to.be.true;
         expect(matchPaths('/users/', '/users')).to.be.false;
@@ -58,18 +58,18 @@ describe('url-utils', () => {
         expect(matchPaths('/usersessions', '/users')).to.be.false;
       });
 
-      it('should match the exact path when exact is true', () => {
-        expect(matchPaths('/users', '/users', { exact: true })).to.be.true;
-        expect(matchPaths('/users/', '/users', { exact: true })).to.be.false;
-        expect(matchPaths('/users/john', '/users', { exact: true })).to.be.false;
-        expect(matchPaths('/usersessions', '/users', { exact: true })).to.be.false;
+      it('should match the exact path when matchNested is false', () => {
+        expect(matchPaths('/users', '/users', { matchNested: false })).to.be.true;
+        expect(matchPaths('/users/', '/users', { matchNested: false })).to.be.false;
+        expect(matchPaths('/users/john', '/users', { matchNested: false })).to.be.false;
+        expect(matchPaths('/usersessions', '/users', { matchNested: false })).to.be.false;
       });
 
-      it('should match the path prefix when exact is false', () => {
-        expect(matchPaths('/users', '/users', { exact: false })).to.be.true;
-        expect(matchPaths('/users/', '/users', { exact: false })).to.be.true;
-        expect(matchPaths('/users/john', '/users', { exact: false })).to.be.true;
-        expect(matchPaths('/usersessions', '/users', { exact: false })).to.be.false;
+      it('should match nested paths when matchNested is true', () => {
+        expect(matchPaths('/users', '/users', { matchNested: true })).to.be.true;
+        expect(matchPaths('/users/', '/users', { matchNested: true })).to.be.true;
+        expect(matchPaths('/users/john', '/users', { matchNested: true })).to.be.true;
+        expect(matchPaths('/usersessions', '/users', { matchNested: false })).to.be.false;
       });
     });
 

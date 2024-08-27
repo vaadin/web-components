@@ -29,15 +29,15 @@ function containsQueryParams(actual, expected) {
  * @param {string} expected The expected URL to match.
  * @param {Object} matchOptions Options for path matching.
  */
-export function matchPaths(actual, expected, matchOptions = { exact: true }) {
+export function matchPaths(actual, expected, matchOptions = { matchNested: false }) {
   const base = document.baseURI;
   const actualUrl = new URL(actual, base);
   const expectedUrl = new URL(expected, base);
 
   const matchesOrigin = actualUrl.origin === expectedUrl.origin;
-  const matchesPath = matchOptions.exact
-    ? actualUrl.pathname === expectedUrl.pathname
-    : actualUrl.pathname === expectedUrl.pathname || actualUrl.pathname.startsWith(`${expectedUrl.pathname}/`);
+  const matchesPath = matchOptions.matchNested
+    ? actualUrl.pathname === expectedUrl.pathname || actualUrl.pathname.startsWith(`${expectedUrl.pathname}/`)
+    : actualUrl.pathname === expectedUrl.pathname;
 
   return matchesOrigin && matchesPath && containsQueryParams(actualUrl.searchParams, expectedUrl.searchParams);
 }
