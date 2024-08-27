@@ -1081,7 +1081,6 @@ describe('drag and drop', () => {
 
       grid.scrollToIndex(0);
       expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');
-      grid.rowsDraggable = false;
     });
   });
 });
