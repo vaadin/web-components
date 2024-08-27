@@ -1,16 +1,10 @@
 /* eslint-env node */
-const { chromeLauncher } = require('@web/test-runner-chrome');
+const { playwrightLauncher } = require('@web/test-runner-playwright');
 const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
-  browsers: [
-    chromeLauncher({
-      launchOptions: {
-        headless: 'shell',
-      },
-    }),
-  ],
+  browsers: [playwrightLauncher({ product: 'chromium' })],
   coverageConfig: {
     include: ['packages/**/src/**/*', 'packages/*/*.js'],
     threshold: {
