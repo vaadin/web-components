@@ -69,7 +69,7 @@ describe('url-utils', () => {
         expect(matchPaths('/users', '/users', { matchNested: true })).to.be.true;
         expect(matchPaths('/users/', '/users', { matchNested: true })).to.be.true;
         expect(matchPaths('/users/john', '/users', { matchNested: true })).to.be.true;
-        expect(matchPaths('/usersessions', '/users', { matchNested: false })).to.be.false;
+        expect(matchPaths('/usersessions', '/users', { matchNested: true })).to.be.false;
       });
     });
 
