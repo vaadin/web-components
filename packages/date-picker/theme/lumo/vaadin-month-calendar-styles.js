@@ -136,17 +136,12 @@ registerStyles(
     }
 
     @media (pointer: coarse) {
-      [part~='date']:hover:not([part~='selected'])::before,
-      [part~='focused']:not([part~='selected'])::before {
+      [part~='date']:hover:not([part~='selected'])::before {
         display: none;
       }
 
       [part~='date']:not(:empty):not([part~='disabled']):active::before {
         display: block;
-      }
-
-      [part~='date'][part~='selected']::before {
-        box-shadow: none;
       }
     }
 
