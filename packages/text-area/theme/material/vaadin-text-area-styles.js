@@ -13,14 +13,13 @@ const textArea = css`
     box-sizing: border-box;
   }
 
+  #scroll-container {
+    padding: 0;
+  }
+
   [part='input-field'] ::slotted(textarea) {
     padding-top: 0;
     margin-top: 4px;
-  }
-
-  [part='input-field']::before,
-  [part='input-field']::after {
-    bottom: calc(var(--_text-area-vertical-scroll-position) * -1);
   }
 `;
 

@@ -65,13 +65,10 @@ export const TextAreaMixin = (superClass) =>
      */
     _onResize() {
       this._updateHeight();
-      this.__scrollPositionUpdated();
     }
 
     /** @protected */
-    _onScroll() {
-      this.__scrollPositionUpdated();
-    }
+    _onScroll() {}
 
     /** @protected */
     ready() {
@@ -91,30 +88,7 @@ export const TextAreaMixin = (superClass) =>
 
       this._scrollContainer = this.shadowRoot.querySelector('#scroll-container');
 
-      // Wheel scrolling results in async scroll events. Preventing the wheel
-      // event, scrolling manually and then synchronously updating the scroll position CSS variable
-      // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
-      this._scrollContainer.addEventListener('wheel', (e) => {
-        const scrollTopBefore = this._scrollContainer.scrollTop;
-        this._scrollContainer.scrollTop += e.deltaY;
-
-        if (scrollTopBefore !== this._scrollContainer.scrollTop) {
-          e.preventDefault();
-          this.__scrollPositionUpdated();
-        }
-      });
-
       this._updateHeight();
-      this.__scrollPositionUpdated();
-    }
-
-    /** @private */
-    __scrollPositionUpdated() {
-      this._scrollContainer.style.setProperty('--_text-area-vertical-scroll-position', '0px');
-      this._scrollContainer.style.setProperty(
-        '--_text-area-vertical-scroll-position',
-        `${this._scrollContainer.scrollTop}px`,
-      );
     }
 
     /** @private */

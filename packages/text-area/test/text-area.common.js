@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
 /**
@@ -362,66 +362,6 @@ describe('text-area', () => {
             parseFloat(getComputedStyle(inputField).borderBottomWidth),
         ),
       );
-    });
-
-    describe('--_text-area-vertical-scroll-position CSS variable', () => {
-      function wheel({ element = scrollContainer, deltaY = 0 }) {
-        const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
-        e.deltaY = deltaY;
-        e.deltaX = 0;
-        element.dispatchEvent(e);
-        return e;
-      }
-
-      function getVerticalScrollPosition() {
-        return textArea.shadowRoot
-          .querySelector('#scroll-container')
-          .style.getPropertyValue('--_text-area-vertical-scroll-position');
-      }
-
-      beforeEach(async () => {
-        textArea.style.height = '100px';
-        textArea.value = 'a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz';
-        await nextUpdate(textArea);
-      });
-
-      it('should be 0 initially', () => {
-        expect(getVerticalScrollPosition()).to.equal('0px');
-      });
-
-      it('should update value on scroll', async () => {
-        scrollContainer.scrollTop = 10;
-        await nextFrame();
-        expect(getVerticalScrollPosition()).to.equal('10px');
-      });
-
-      it('should update value on wheel', () => {
-        wheel({ deltaY: 10 });
-        expect(getVerticalScrollPosition()).to.equal('10px');
-      });
-
-      it('should scroll on wheel', () => {
-        wheel({ deltaY: 10 });
-        expect(scrollContainer.scrollTop).to.equal(10);
-      });
-
-      it('should cancel wheel event', () => {
-        const e = wheel({ deltaY: 10 });
-        expect(e.defaultPrevented).to.be.true;
-      });
-
-      it('should not cancel wheel event if text area is not scrolled', () => {
-        const e = wheel({ deltaY: -10 });
-        expect(e.defaultPrevented).to.be.false;
-      });
-
-      it('should update value on resize', async () => {
-        inputField.scrollTop = 10;
-        await nextUpdate(textArea);
-        textArea.style.height = `${scrollContainer.scrollHeight}px`;
-        await nextUpdate(textArea);
-        expect(getVerticalScrollPosition()).to.equal('0px');
-      });
     });
   });
 
