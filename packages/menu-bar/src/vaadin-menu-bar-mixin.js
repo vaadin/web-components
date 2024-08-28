@@ -883,6 +883,13 @@ export const MenuBarMixin = (superClass) =>
       this._expandedButton = button;
 
       requestAnimationFrame(async () => {
+        // After changing items, buttons are recreated so the old button is
+        // no longer in the DOM. Reset position target to null to prevent
+        // overlay from closing due to target width / height equal to 0.
+        if (overlay.positionTarget && !overlay.positionTarget.isConnected) {
+          overlay.positionTarget = null;
+        }
+
         button.dispatchEvent(
           new CustomEvent('opensubmenu', {
             detail: {
