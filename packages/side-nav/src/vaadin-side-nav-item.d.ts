@@ -94,11 +94,27 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
   expanded: boolean;
 
   /**
+   * Whether to also match nested paths / routes. `false` by default.
+   *
+   * When enabled, an item with the path `/path` is considered current when
+   * the browser URL is `/path`, `/path/child`, `/path/child/grandchild`,
+   * etc.
+   *
+   * Note that this only affects matching of the URLs path, not the base
+   * origin or query parameters.
+   *
+   * @attr {boolean} match-nested
+   */
+  matchNested: boolean;
+
+  /**
    * Whether the item's path matches the current browser URL.
    *
    * A match occurs when both share the same base origin (like https://example.com),
-   * the same path (like /path/to/page), and the browser URL contains all
-   * the query parameters with the same values from the item's path.
+   * the same path (like /path/to/page), and the browser URL contains at least
+   * all the query parameters with the same values from the item's path.
+   *
+   * See [`matchNested`](#/elements/vaadin-side-nav-item#property-matchNested) for how to change the path matching behavior.
    *
    * The state is updated when the item is added to the DOM or when the browser
    * navigates to a new page.

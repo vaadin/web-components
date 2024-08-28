@@ -980,6 +980,7 @@ export const GridMixin = (superClass) =>
       this._generateCellClassNames(row, model);
       this._generateCellPartNames(row, model);
       this._filterDragAndDrop(row, model);
+      this.__updateDragSourceParts(row, model);
 
       iterateChildren(row, (cell) => {
         if (cell._column && !cell._column.isConnected) {

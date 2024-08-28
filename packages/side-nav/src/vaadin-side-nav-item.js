@@ -12,6 +12,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { location } from './location.js';
 import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
@@ -115,11 +116,31 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       },
 
       /**
+       * Whether to also match nested paths / routes. `false` by default.
+       *
+       * When enabled, an item with the path `/path` is considered current when
+       * the browser URL is `/path`, `/path/child`, `/path/child/grandchild`,
+       * etc.
+       *
+       * Note that this only affects matching of the URLs path, not the base
+       * origin or query parameters.
+       *
+       * @type {boolean}
+       * @attr {boolean} match-nested
+       */
+      matchNested: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * Whether the item's path matches the current browser URL.
        *
        * A match occurs when both share the same base origin (like https://example.com),
        * the same path (like /path/to/page), and the browser URL contains at least
        * all the query parameters with the same values from the item's path.
+       *
+       * See [`matchNested`](#/elements/vaadin-side-nav-item#property-matchNested) for how to change the path matching behavior.
        *
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
@@ -190,7 +211,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   updated(props) {
     super.updated(props);
 
-    if (props.has('path') || props.has('pathAliases')) {
+    if (props.has('path') || props.has('pathAliases') || props.has('matchNested')) {
       this.__updateCurrent();
     }
 
@@ -304,8 +325,12 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       return false;
     }
 
-    const browserPath = `${document.location.pathname}${document.location.search}`;
-    return matchPaths(browserPath, this.path) || this.pathAliases.some((alias) => matchPaths(browserPath, alias));
+    const browserPath = `${location.pathname}${location.search}`;
+    const matchOptions = { matchNested: this.matchNested };
+    return (
+      matchPaths(browserPath, this.path, matchOptions) ||
+      this.pathAliases.some((alias) => matchPaths(browserPath, alias, matchOptions))
+    );
   }
 }
 

@@ -1,11 +1,11 @@
 /* eslint-env node */
-const { chromeLauncher } = require('@web/test-runner-chrome');
+const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
 const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
   browsers: [
-    chromeLauncher({
+    puppeteerLauncher({
       launchOptions: {
         headless: 'shell',
       },

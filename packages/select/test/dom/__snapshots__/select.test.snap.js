@@ -307,7 +307,6 @@ snapshots["vaadin-select host opened default"] =
 
 snapshots["vaadin-select host opened overlay"] = 
 `<vaadin-select-overlay
-  dir="ltr"
   opened=""
   start-aligned=""
   top-aligned=""
@@ -340,7 +339,6 @@ snapshots["vaadin-select host opened overlay"] =
 snapshots["vaadin-select host opened overlay class"] = 
 `<vaadin-select-overlay
   class="custom select-overlay"
-  dir="ltr"
   opened=""
   start-aligned=""
   top-aligned=""

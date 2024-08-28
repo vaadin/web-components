@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-popover-overlay.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import {
   getDeepActiveElement,
@@ -21,6 +21,12 @@ import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
+
+const DEFAULT_DELAY = 500;
+
+let defaultFocusDelay = DEFAULT_DELAY;
+let defaultHoverDelay = DEFAULT_DELAY;
+let defaultHideDelay = DEFAULT_DELAY;
 
 /**
  * Controller for handling popover opened state.
@@ -40,17 +46,20 @@ class PopoverOpenedStateController {
 
   /** @private */
   get __focusDelay() {
-    return this.host.focusDelay || 0;
+    const popover = this.host;
+    return popover.focusDelay != null && popover.focusDelay > 0 ? popover.focusDelay : defaultFocusDelay;
   }
 
   /** @private */
   get __hoverDelay() {
-    return this.host.hoverDelay || 0;
+    const popover = this.host;
+    return popover.hoverDelay != null && popover.hoverDelay > 0 ? popover.hoverDelay : defaultHoverDelay;
   }
 
   /** @private */
   get __hideDelay() {
-    return this.host.hideDelay || 0;
+    const popover = this.host;
+    return popover.hideDelay != null && popover.hideDelay > 0 ? popover.hideDelay : defaultHideDelay;
   }
 
   /**
@@ -178,7 +187,7 @@ class PopoverOpenedStateController {
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ElementMixin
+ * @mixes OverlayClassMixin
  * @mixes PopoverPositionMixin
  * @mixes PopoverTargetMixin
  * @mixes ThemePropertyMixin
@@ -188,6 +197,14 @@ class Popover extends PopoverPositionMixin(
 ) {
   static get is() {
     return 'vaadin-popover';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: none !important;
+      }
+    `;
   }
 
   static get properties() {
@@ -239,6 +256,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * The delay in milliseconds before the popover is opened
        * on focus when the corresponding trigger is used.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} focus-delay
        */
       focusDelay: {
@@ -249,6 +269,9 @@ class Popover extends PopoverPositionMixin(
        * The delay in milliseconds before the popover is closed
        * on losing hover, when the corresponding trigger is used.
        * On blur, the popover is closed immediately.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} hide-delay
        */
       hideDelay: {
@@ -258,6 +281,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * The delay in milliseconds before the popover is opened
        * on hover when the corresponding trigger is used.
+       *
+       * When not specified, the global default (500ms) is used.
+       *
        * @attr {number} hover-delay
        */
       hoverDelay: {
@@ -385,6 +411,36 @@ class Popover extends PopoverPositionMixin(
     ];
   }
 
+  /**
+   * Sets the default focus delay to be used by all popover instances,
+   * except for those that have focus delay configured using property.
+   *
+   * @param {number} delay
+   */
+  static setDefaultFocusDelay(focusDelay) {
+    defaultFocusDelay = focusDelay != null && focusDelay >= 0 ? focusDelay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hide delay to be used by all popover instances,
+   * except for those that have hide delay configured using property.
+   *
+   * @param {number} hideDelay
+   */
+  static setDefaultHideDelay(hideDelay) {
+    defaultHideDelay = hideDelay != null && hideDelay >= 0 ? hideDelay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hover delay to be used by all popover instances,
+   * except for those that have hover delay configured using property.
+   *
+   * @param {number} delay
+   */
+  static setDefaultHoverDelay(hoverDelay) {
+    defaultHoverDelay = hoverDelay != null && hoverDelay >= 0 ? hoverDelay : DEFAULT_DELAY;
+  }
+
   constructor() {
     super();
 
@@ -424,6 +480,7 @@ class Popover extends PopoverPositionMixin(
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(effectivePosition)}"
         .horizontalAlign="${this.__computeHorizontalAlign(effectivePosition)}"
         .verticalAlign="${this.__computeVerticalAlign(effectivePosition)}"
+        @mousedown="${this.__onOverlayMouseDown}"
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         @focusin="${this.__onOverlayFocusIn}"
@@ -639,6 +696,12 @@ class Popover extends PopoverPositionMixin(
   __onGlobalShiftTab(event) {
     const overlayPart = this._overlayElement.$.overlay;
 
+    // Prevent restoring focus after target blur on Shift + Tab
+    if (this.target && isElementFocused(this.target) && this.__shouldRestoreFocus) {
+      this.__shouldRestoreFocus = false;
+      return;
+    }
+
     // Move focus back to the target on overlay content Shift + Tab
     if (this.target && isElementFocused(overlayPart)) {
       event.preventDefault();
@@ -692,7 +755,14 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusOut(event) {
-    if (this._overlayElement.contains(event.relatedTarget)) {
+    // Do not close the popover on overlay focusout if it's not the last one.
+    // This covers the case when focus moves to the nested popover opened
+    // without focusing parent popover overlay (e.g. using hover trigger).
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
+    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
 
@@ -714,6 +784,12 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
+    // Do not close the popover on target focusout if the overlay is not the last one.
+    // This happens e.g. when opening the nested popover that uses non-modal overlay.
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
     if (this._overlayElement.contains(event.relatedTarget)) {
       return;
     }
@@ -734,11 +810,38 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayFocusOut(event) {
-    if (event.relatedTarget === this.target || this._overlayElement.contains(event.relatedTarget)) {
+    // Do not close the popover on overlay focusout if it's not the last one.
+    // This covers the following cases of nested overlay based components:
+    // 1. Moving focus to the nested overlay (e.g. vaadin-select, vaadin-menu-bar)
+    // 2. Closing not focused nested overlay on outside (e.g. vaadin-combo-box)
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
+    if (
+      (this.__hasTrigger('focus') && this.__mouseDownInside) ||
+      event.relatedTarget === this.target ||
+      this._overlayElement.contains(event.relatedTarget)
+    ) {
       return;
     }
 
     this.__handleFocusout();
+  }
+
+  /** @private */
+  __onOverlayMouseDown() {
+    if (this.__hasTrigger('focus')) {
+      this.__mouseDownInside = true;
+
+      document.addEventListener(
+        'mouseup',
+        () => {
+          this.__mouseDownInside = false;
+        },
+        { once: true },
+      );
+    }
   }
 
   /** @private */
@@ -753,6 +856,13 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
+    // Do not close the popover on overlay focusout if it's not the last one.
+    // This happens when opening the nested component that uses "modal" overlay
+    // setting `pointer-events: none` on the body (combo-box, date-picker etc).
+    if (!isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
     if (event.relatedTarget === this.target) {
       return;
     }

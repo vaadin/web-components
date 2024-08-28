@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/time-picker",
-  "version": "24.5.0-alpha7",
+  "version": "24.5.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -36,20 +36,20 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/combo-box": "24.5.0-alpha7",
-    "@vaadin/component-base": "24.5.0-alpha7",
-    "@vaadin/field-base": "24.5.0-alpha7",
-    "@vaadin/input-container": "24.5.0-alpha7",
-    "@vaadin/item": "24.5.0-alpha7",
-    "@vaadin/overlay": "24.5.0-alpha7",
-    "@vaadin/vaadin-lumo-styles": "24.5.0-alpha7",
-    "@vaadin/vaadin-material-styles": "24.5.0-alpha7",
-    "@vaadin/vaadin-themable-mixin": "24.5.0-alpha7"
+    "@vaadin/combo-box": "24.5.0-alpha10",
+    "@vaadin/component-base": "24.5.0-alpha10",
+    "@vaadin/field-base": "24.5.0-alpha10",
+    "@vaadin/input-container": "24.5.0-alpha10",
+    "@vaadin/item": "24.5.0-alpha10",
+    "@vaadin/overlay": "24.5.0-alpha10",
+    "@vaadin/vaadin-lumo-styles": "24.5.0-alpha10",
+    "@vaadin/vaadin-material-styles": "24.5.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "24.5.0-alpha10"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "24.5.0-alpha7",
+    "@vaadin/chai-plugins": "24.5.0-alpha10",
     "@vaadin/testing-helpers": "^1.0.0",
-    "sinon": "^13.0.2"
+    "sinon": "^18.0.0"
   },
   "web-types": [
     "web-types.json",

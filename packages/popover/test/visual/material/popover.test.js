@@ -53,4 +53,11 @@ describe('popover', () => {
       await visualDiff(div, `${position}-arrow`);
     });
   });
+
+  it('no-padding', async () => {
+    element.setAttribute('theme', 'no-padding');
+    target.click();
+    await nextRender();
+    await visualDiff(div, 'no-padding');
+  });
 });

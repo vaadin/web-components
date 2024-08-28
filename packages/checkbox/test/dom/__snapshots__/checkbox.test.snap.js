@@ -195,6 +195,7 @@ snapshots["vaadin-checkbox host required"] =
   </div>
   <input
     id="input-vaadin-checkbox-3"
+    required=""
     slot="input"
     tabindex="0"
     type="checkbox"

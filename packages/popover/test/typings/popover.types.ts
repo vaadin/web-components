@@ -1,4 +1,3 @@
-import '../../vaadin-popover.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -10,6 +9,7 @@ import type {
   PopoverRenderer,
   PopoverTrigger,
 } from '../../vaadin-popover.js';
+import { Popover } from '../../vaadin-popover.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -53,3 +53,7 @@ popover.addEventListener('opened-changed', (event) => {
 popover.addEventListener('closed', (event) => {
   assertType<Event>(event);
 });
+
+assertType<(delay: number) => void>(Popover.setDefaultFocusDelay);
+assertType<(delay: number) => void>(Popover.setDefaultHideDelay);
+assertType<(delay: number) => void>(Popover.setDefaultHoverDelay);
