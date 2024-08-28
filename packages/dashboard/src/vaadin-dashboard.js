@@ -39,7 +39,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return [
       super.styles,
       css`
-        ::slotted(vaadin-dashboard-cell) {
+        ::slotted(vaadin-dashboard-widget-wrapper) {
           display: contents;
         }
       `,
@@ -88,7 +88,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   __itemsOrRendererChanged(items, renderer) {
     render(this.__renderItemCells(items || []), this);
 
-    this.querySelectorAll('vaadin-dashboard-cell').forEach((cell) => {
+    this.querySelectorAll('vaadin-dashboard-widget-wrapper').forEach((cell) => {
       if (renderer) {
         renderer(cell, this, { item: cell.__item });
       } else {
@@ -110,10 +110,10 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         </vaadin-dashboard-section>`;
       }
 
-      return html`<vaadin-dashboard-cell
+      return html`<vaadin-dashboard-widget-wrapper
         .__item="${item}"
         style="--vaadin-dashboard-item-colspan: ${item.colspan};"
-      ></vaadin-dashboard-cell>`;
+      ></vaadin-dashboard-widget-wrapper>`;
     });
   }
 }
