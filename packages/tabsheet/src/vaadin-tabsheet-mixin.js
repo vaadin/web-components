@@ -141,13 +141,25 @@ export const TabSheetMixin = (superClass) =>
 
       // Observe the panels slot for nodes. Set the assigned element nodes as the __panels array.
       const panelSlot = this.shadowRoot.querySelector('#panel-slot');
-      this.__panelsObserver = new SlotObserver(panelSlot, ({ removedNodes }) => {
+      this.__panelsObserver = new SlotObserver(panelSlot, ({ addedNodes, removedNodes }) => {
+        if (addedNodes.length) {
+          addedNodes.forEach((node) => {
+            // Preserve custom hidden attribute to not override it.
+            if (node.nodeType === Node.ELEMENT_NODE && node.hidden) {
+              node.__customHidden = true;
+            }
+          });
+        }
         if (removedNodes.length) {
           removedNodes.forEach((node) => {
             // Clear hidden attribute when removing node from the default slot,
             // e.g. when changing its slot to `prefix` or `suffix` dynamically.
             if (node.nodeType === Node.ELEMENT_NODE && node.hidden) {
-              node.hidden = false;
+              if (node.__customHidden) {
+                delete node.__customHidden;
+              } else {
+                node.hidden = false;
+              }
             }
           });
         }

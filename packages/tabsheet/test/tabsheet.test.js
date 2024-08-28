@@ -197,6 +197,19 @@ describe('tabsheet', () => {
       await nextFrame();
       expect(div.hidden).to.be.false;
     });
+
+    it('should not remove explicit hidden state', async () => {
+      const div = document.createElement('div');
+      // Prefix component explicitly marked as hidden
+      div.hidden = true;
+      tabsheet.appendChild(div);
+      await nextFrame();
+
+      div.setAttribute('slot', 'prefix');
+      await nextFrame();
+
+      expect(div.hidden).to.be.true;
+    });
   });
 
   describe('loading', () => {
