@@ -66,6 +66,14 @@ describe('text-area', () => {
     await visualDiff(div, 'scrolled');
   });
 
+  it('scrolled with clear button', async () => {
+    element.style.height = '70px';
+    element.value = 'a\nb\nc\nd\ne';
+    element.clearButtonVisible = true;
+    element.focus();
+    await visualDiff(div, 'scrolled-with-clear-button');
+  });
+
   it('error message', async () => {
     element.label = 'Label';
     element.errorMessage = 'This field is required';
