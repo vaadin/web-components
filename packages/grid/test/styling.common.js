@@ -316,18 +316,18 @@ describe('styling', () => {
       expect(newFooterCell.getAttribute('part')).to.contain('bazqux');
     });
 
-    it('should add/remove focused-cell part name when scrolling', () => {
-      const renderedBufferCount = grid.$.items.childElementCount;
+    it('should add/remove focused-cell part name when scrolling', async () => {
       firstCell.focus();
+      await nextFrame();
 
-      expect(firstCell.getAttribute('part')).to.contain('focused-cell');
+      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="focused-cell"')).to.not.be.null;
 
       // Scrolls a completely new chunk of items into view.
-      grid.scrollToIndex(renderedBufferCount);
-      expect(firstCell.getAttribute('part')).to.not.contain('focused-cell');
+      grid.scrollToIndex(50);
+      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="focused-cell"')).to.be.null;
 
       grid.scrollToIndex(0);
-      expect(firstCell.getAttribute('part')).to.contain('focused-cell');
+      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="focused-cell"')).to.not.be.null;
     });
   });
 });
