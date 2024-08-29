@@ -377,6 +377,22 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.true;
   });
 
+  it('should reopen sub-menu after updating items', async () => {
+    buttons[0].click();
+    await nextRender();
+
+    document.body.click();
+    await nextRender();
+
+    menu.items = [menu.items[0]];
+    await nextRender();
+
+    buttons = menu._buttons;
+    buttons[0].click();
+    await nextRender();
+    expect(subMenu.opened).to.be.true;
+  });
+
   it('should dispatch item-selected event on leaf button click', () => {
     const spy = sinon.spy();
     menu.addEventListener('item-selected', spy);
