@@ -51,19 +51,19 @@ class TooltipStateController {
   /** @private */
   get focusDelay() {
     const tooltip = this.host;
-    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
+    return tooltip.focusDelay != null && tooltip.focusDelay >= 0 ? tooltip.focusDelay : defaultFocusDelay;
   }
 
   /** @private */
   get hoverDelay() {
     const tooltip = this.host;
-    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
+    return tooltip.hoverDelay != null && tooltip.hoverDelay >= 0 ? tooltip.hoverDelay : defaultHoverDelay;
   }
 
   /** @private */
   get hideDelay() {
     const tooltip = this.host;
-    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
+    return tooltip.hideDelay != null && tooltip.hideDelay >= 0 ? tooltip.hideDelay : defaultHideDelay;
   }
 
   /**

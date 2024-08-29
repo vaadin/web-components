@@ -56,6 +56,7 @@ describe('timers', () => {
 
     afterEach(() => {
       resetGlobalTooltipState();
+      Tooltip.setDefaultHoverDelay(0);
     });
 
     it('should open the overlay after a delay on mouseenter', async () => {
@@ -69,6 +70,14 @@ describe('timers', () => {
     it('should open the overlay immediately on keyboard focus', () => {
       tabKeyDown(document.body);
       target.focus();
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should use the hover delay set to 0 and not the global delay', () => {
+      Tooltip.setDefaultHoverDelay(50);
+      tooltip.hoverDelay = 0;
+
+      mouseenter(target);
       expect(overlay.opened).to.be.true;
     });
   });
@@ -86,6 +95,7 @@ describe('timers', () => {
 
     afterEach(() => {
       resetGlobalTooltipState();
+      Tooltip.setDefaultFocusDelay(0);
     });
 
     it('should open the overlay after a delay on keyboard focus', async () => {
@@ -99,6 +109,15 @@ describe('timers', () => {
 
     it('should open the overlay immediately on mouseenter', () => {
       mouseenter(target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should use the focus delay set to 0 and not the global delay', () => {
+      Tooltip.setDefaultFocusDelay(50);
+      tooltip.focusDelay = 0;
+
+      tabKeyDown(document.body);
+      target.focus();
       expect(overlay.opened).to.be.true;
     });
   });
@@ -116,6 +135,7 @@ describe('timers', () => {
 
     afterEach(() => {
       resetGlobalTooltipState();
+      Tooltip.setDefaultHideDelay(0);
     });
 
     it('should close the overlay after a hide delay on mouseleave', async () => {
@@ -132,6 +152,15 @@ describe('timers', () => {
       target.focus();
 
       focusout(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should use the hide delay set to 0 and not the global delay', () => {
+      Tooltip.setDefaultHideDelay(50);
+      tooltip.hideDelay = 0;
+
+      mouseenter(target);
+      mouseleave(target);
       expect(overlay.opened).to.be.false;
     });
 
