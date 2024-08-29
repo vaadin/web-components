@@ -136,8 +136,8 @@ registerStyles(
     }
 
     @media (pointer: coarse) {
-      :host(:not([focus-ring])) [part~='focused']:not([part~='selected'])::before,
       [part~='date']:hover:not([part~='selected'])::before {
+        :host(: not([focus-ring])) [part~='focused']:not([part~='selected'])::before,
         display: none;
       }
 
