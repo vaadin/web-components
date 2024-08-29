@@ -136,6 +136,7 @@ registerStyles(
     }
 
     @media (pointer: coarse) {
+      :host(:not([focus-ring])) [part~='focused']:not([part~='selected'])::before,
       [part~='date']:hover:not([part~='selected'])::before {
         display: none;
       }
@@ -143,8 +144,11 @@ registerStyles(
       [part~='date']:not(:empty):not([part~='disabled']):active::before {
         display: block;
       }
-    }
 
+      :host(:not([focus-ring])) [part~='date'][part~='selected']::before {
+        box-shadow: none;
+      }
+    }
     /* Disabled */
 
     :host([disabled]) * {
