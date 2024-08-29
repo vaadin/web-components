@@ -51,6 +51,10 @@ describe('timers', () => {
       await nextUpdate(popover);
     });
 
+    afterEach(() => {
+      Popover.setDefaultHoverDelay(0);
+    });
+
     it('should open the overlay after a delay on mouseenter', async () => {
       mouseenter(target);
       await nextUpdate(popover);
@@ -62,6 +66,15 @@ describe('timers', () => {
 
     it('should open the overlay immediately on focus', async () => {
       target.focus();
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should use the hover delay set to 0 and not the global delay', async () => {
+      Popover.setDefaultHoverDelay(50);
+      popover.hoverDelay = 0;
+
+      mouseenter(target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
@@ -96,6 +109,10 @@ describe('timers', () => {
       await nextUpdate(popover);
     });
 
+    afterEach(() => {
+      Popover.setDefaultFocusDelay(0);
+    });
+
     it('should open the overlay after a delay on focus', async () => {
       target.focus();
       await nextUpdate(popover);
@@ -107,6 +124,15 @@ describe('timers', () => {
 
     it('should open the overlay immediately on mouseenter', async () => {
       mouseenter(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should use the focus delay set to 0 and not the global delay', async () => {
+      Popover.setDefaultFocusDelay(50);
+      popover.focusDelay = 0;
+
+      target.focus();
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
@@ -141,6 +167,10 @@ describe('timers', () => {
       await nextUpdate(popover);
     });
 
+    afterEach(() => {
+      Popover.setDefaultHideDelay(0);
+    });
+
     it('should close the overlay after a hide delay on mouseleave', async () => {
       mouseenter(target);
       await nextUpdate(popover);
@@ -158,6 +188,18 @@ describe('timers', () => {
       await nextUpdate(popover);
 
       focusout(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should use the hide delay set to 0 and not the global delay', async () => {
+      Popover.setDefaultHideDelay(50);
+      popover.hideDelay = 0;
+
+      mouseenter(target);
+      await nextUpdate(popover);
+
+      mouseleave(target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.false;
     });

@@ -47,19 +47,19 @@ class PopoverOpenedStateController {
   /** @private */
   get __focusDelay() {
     const popover = this.host;
-    return popover.focusDelay != null && popover.focusDelay > 0 ? popover.focusDelay : defaultFocusDelay;
+    return popover.focusDelay != null && popover.focusDelay >= 0 ? popover.focusDelay : defaultFocusDelay;
   }
 
   /** @private */
   get __hoverDelay() {
     const popover = this.host;
-    return popover.hoverDelay != null && popover.hoverDelay > 0 ? popover.hoverDelay : defaultHoverDelay;
+    return popover.hoverDelay != null && popover.hoverDelay >= 0 ? popover.hoverDelay : defaultHoverDelay;
   }
 
   /** @private */
   get __hideDelay() {
     const popover = this.host;
-    return popover.hideDelay != null && popover.hideDelay > 0 ? popover.hideDelay : defaultHideDelay;
+    return popover.hideDelay != null && popover.hideDelay >= 0 ? popover.hideDelay : defaultHideDelay;
   }
 
   /**
