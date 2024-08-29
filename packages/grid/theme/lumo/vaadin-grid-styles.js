@@ -283,7 +283,7 @@ registerStyles(
     }
 
     [part='resize-handle']::before {
-      transform: translateX(calc(-50% + var(--_resize-handle-width)));
+      transform: translateX(calc(-50% + var(--_resize-handle-width) / 2));
       width: var(--lumo-size-s);
     }
 
