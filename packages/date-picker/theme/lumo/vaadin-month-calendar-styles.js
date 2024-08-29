@@ -157,17 +157,3 @@ registerStyles(
   `,
   { moduleId: 'lumo-month-calendar' },
 );
-
-const template = document.createElement('template');
-
-template.innerHTML = `
-  <style>
-    @keyframes vaadin-date-picker-month-calendar-focus-date {
-      50% {
-        box-shadow: 0 0 0 var(--_focus-ring-width) transparent;
-      }
-    }
-  </style>
-`;
-
-document.head.appendChild(template.content);

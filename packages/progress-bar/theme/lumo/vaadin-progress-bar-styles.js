@@ -274,23 +274,3 @@ registerStyles(
   `,
   { moduleId: 'lumo-progress-bar' },
 );
-
-const template = document.createElement('template');
-
-/* Safari fails to declare animations for pseudo elements inside a shadow DOM */
-template.innerHTML = `
-  <style>
-    @keyframes vaadin-progress-pulse3 {
-      0% { opacity: 1; }
-      10% { opacity: 0; }
-      40% { opacity: 0; }
-      50% { opacity: 1; }
-      50.1% { opacity: 1; }
-      60% { opacity: 0; }
-      90% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-  </style>
-`;
-
-document.head.appendChild(template.content);
