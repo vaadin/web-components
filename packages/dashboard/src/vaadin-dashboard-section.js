@@ -46,6 +46,10 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
           display: none !important;
         }
 
+        :host([highlight]) {
+          background-color: #f5f5f5;
+        }
+
         ::slotted(*) {
           --_vaadin-dashboard-item-column: span
             min(

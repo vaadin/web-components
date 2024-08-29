@@ -131,7 +131,10 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
       if (item.items) {
         return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
-          <vaadin-dashboard-section .sectionTitle="${item.title}">
+          <vaadin-dashboard-section
+            .sectionTitle="${item.title}"
+            ?highlight="${this.__widgetReorderController.draggedItem}"
+          >
             ${this.__renderItemCells(item.items)}
           </vaadin-dashboard-section>
         </vaadin-dashboard-widget-wrapper>`;
