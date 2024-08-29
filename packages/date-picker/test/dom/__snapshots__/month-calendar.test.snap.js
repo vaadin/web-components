@@ -138,14 +138,14 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label=""
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
       </td>
       <td
         aria-label="1 February 2016, Monday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -153,7 +153,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="2 February 2016, Tuesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -161,7 +161,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="3 February 2016, Wednesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -169,15 +169,15 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="4 February 2016, Thursday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
         4
       </td>
       <td
-        aria-label="5 February 2016, Friday"
-        part="date"
+        aria-label="5 February 2016, Friday, Today"
+        part="date today"
         role="gridcell"
         tabindex="-1"
       >
@@ -185,7 +185,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="6 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -202,7 +202,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="7 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -210,7 +210,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="8 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -218,7 +218,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="9 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -226,7 +226,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="10 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -234,7 +234,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="11 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -242,7 +242,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="12 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -250,7 +250,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="13 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -267,7 +267,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="14 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -275,7 +275,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="15 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -283,7 +283,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="16 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -291,7 +291,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="17 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -299,7 +299,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="18 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -307,7 +307,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="19 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -315,7 +315,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="20 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -332,7 +332,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="21 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -340,7 +340,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="22 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -348,7 +348,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="23 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -356,7 +356,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="24 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -364,7 +364,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="25 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -372,7 +372,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="26 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -380,7 +380,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="27 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -397,7 +397,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="28 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -405,7 +405,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </td>
       <td
         aria-label="29 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -548,14 +548,14 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label=""
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
       </td>
       <td
         aria-label="1 February 2016, Monday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -563,7 +563,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="2 February 2016, Tuesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -571,7 +571,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="3 February 2016, Wednesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -579,15 +579,15 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="4 February 2016, Thursday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
         4
       </td>
       <td
-        aria-label="5 February 2016, Friday"
-        part="date"
+        aria-label="5 February 2016, Friday, Today"
+        part="date today"
         role="gridcell"
         tabindex="-1"
       >
@@ -595,7 +595,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="6 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -612,7 +612,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="7 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -620,7 +620,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="8 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -628,7 +628,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="9 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -636,7 +636,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </td>
       <td
         aria-label="10 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -646,7 +646,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="11 February 2016, Thursday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -656,7 +656,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="12 February 2016, Friday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -666,7 +666,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="13 February 2016, Saturday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -685,7 +685,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="14 February 2016, Sunday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -695,7 +695,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="15 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -705,7 +705,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="16 February 2016, Tuesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -715,7 +715,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="17 February 2016, Wednesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -725,7 +725,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="18 February 2016, Thursday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -735,7 +735,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="19 February 2016, Friday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -745,7 +745,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="20 February 2016, Saturday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -764,7 +764,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="21 February 2016, Sunday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -774,7 +774,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="22 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -784,7 +784,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="23 February 2016, Tuesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -794,7 +794,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="24 February 2016, Wednesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -804,7 +804,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="25 February 2016, Thursday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -814,7 +814,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="26 February 2016, Friday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -824,7 +824,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="27 February 2016, Saturday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -843,7 +843,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="28 February 2016, Sunday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -853,7 +853,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="29 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -994,7 +994,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="1 February 2016, Monday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1002,7 +1002,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="2 February 2016, Tuesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1010,7 +1010,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="3 February 2016, Wednesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1018,15 +1018,15 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="4 February 2016, Thursday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
         4
       </td>
       <td
-        aria-label="5 February 2016, Friday"
-        part="date"
+        aria-label="5 February 2016, Friday, Today"
+        part="date today"
         role="gridcell"
         tabindex="-1"
       >
@@ -1034,7 +1034,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="6 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1042,7 +1042,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="7 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1058,7 +1058,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="8 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1066,7 +1066,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="9 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1074,7 +1074,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="10 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1082,7 +1082,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="11 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1090,7 +1090,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="12 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1098,7 +1098,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="13 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1106,7 +1106,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="14 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1122,7 +1122,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="15 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1130,7 +1130,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="16 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1138,7 +1138,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="17 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1146,7 +1146,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="18 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1154,7 +1154,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="19 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1162,7 +1162,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="20 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1170,7 +1170,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="21 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1186,7 +1186,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="22 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1194,7 +1194,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="23 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1202,7 +1202,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="24 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1210,7 +1210,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="25 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1218,7 +1218,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="26 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1226,7 +1226,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="27 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1234,7 +1234,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="28 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1250,7 +1250,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </td>
       <td
         aria-label="29 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1393,7 +1393,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label=""
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1402,7 +1402,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="1 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1410,7 +1410,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="2 February 2016, Tuesday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1420,7 +1420,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="3 February 2016, Wednesday"
         disabled=""
-        part="date disabled"
+        part="date disabled past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1428,7 +1428,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="4 February 2016, Thursday"
-        part="date"
+        part="date past"
         role="gridcell"
         tabindex="-1"
       >
@@ -1436,9 +1436,9 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-disabled="true"
-        aria-label="5 February 2016, Friday"
+        aria-label="5 February 2016, Friday, Today"
         disabled=""
-        part="date disabled"
+        part="date disabled today"
         role="gridcell"
         tabindex="-1"
       >
@@ -1446,7 +1446,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="6 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1465,7 +1465,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="7 February 2016, Sunday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1473,7 +1473,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="8 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1483,7 +1483,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="9 February 2016, Tuesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1491,7 +1491,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="10 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1501,7 +1501,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="11 February 2016, Thursday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1509,7 +1509,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="12 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1519,7 +1519,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="13 February 2016, Saturday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1536,7 +1536,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="14 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1546,7 +1546,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="15 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1554,7 +1554,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="16 February 2016, Tuesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1564,7 +1564,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="17 February 2016, Wednesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1572,7 +1572,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="18 February 2016, Thursday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1582,7 +1582,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="19 February 2016, Friday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1590,7 +1590,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="20 February 2016, Saturday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1609,7 +1609,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="21 February 2016, Sunday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1617,7 +1617,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="22 February 2016, Monday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1627,7 +1627,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="23 February 2016, Tuesday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1635,7 +1635,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="24 February 2016, Wednesday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1645,7 +1645,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="25 February 2016, Thursday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1653,7 +1653,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="26 February 2016, Friday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1663,7 +1663,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="27 February 2016, Saturday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1680,7 +1680,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
       </td>
       <td
         aria-label="28 February 2016, Sunday"
-        part="date"
+        part="date future"
         role="gridcell"
         tabindex="-1"
       >
@@ -1690,7 +1690,7 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
         aria-disabled="true"
         aria-label="29 February 2016, Monday"
         disabled=""
-        part="date disabled"
+        part="date disabled future"
         role="gridcell"
         tabindex="-1"
       >

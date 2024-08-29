@@ -1,18 +1,28 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { getDefaultI18n } from '../helpers.js';
 
 describe('vaadin-month-calendar', () => {
-  let monthCalendar;
+  let monthCalendar, clock;
 
   beforeEach(async () => {
     resetUniqueId();
+    clock = sinon.useFakeTimers({
+      now: new Date(2016, 1, 5),
+      toFake: ['Date'],
+    });
+
     monthCalendar = fixtureSync('<vaadin-month-calendar></vaadin-month-calendar>');
     monthCalendar.i18n = getDefaultI18n();
     monthCalendar.month = new Date(2016, 1, 1);
     await nextFrame();
+  });
+
+  afterEach(() => {
+    clock.restore();
   });
 
   describe('host', () => {
