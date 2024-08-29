@@ -857,11 +857,10 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateFocusedItem(row) {
-      const focusedItemInRow = row.__virtualIndex === this._focusedItemIndex;
-      let isFocusedCell;
+    __updateFocusedItem(row) {
+      const focusedItemInRow = row.index === this._focusedItemIndex;
       iterateChildren(row, (cell) => {
-        isFocusedCell = cell === this._focusedCell;
+        const isFocusedCell = cell === this._focusedCell;
         updatePart(cell, isFocusedCell && focusedItemInRow, 'focused-cell');
       });
     }
@@ -968,7 +967,7 @@ export const GridMixin = (superClass) =>
     _updateItem(row, item) {
       row._item = item;
       const model = this.__getRowModel(row);
-      this._updateFocusedItem(row);
+      this.__updateFocusedItem(row);
 
       this._toggleDetailsCell(row, model.detailsOpened);
 
