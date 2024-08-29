@@ -275,10 +275,16 @@ registerStyles(
     /* Column resizing */
 
     [part='resize-handle'] {
-      width: 3px;
+      --_resize-handle-width: 3px;
+      width: var(--_resize-handle-width);
       background-color: var(--lumo-primary-color-50pct);
       opacity: 0;
       transition: opacity 0.2s;
+    }
+
+    [part='resize-handle']::before {
+      transform: translateX(calc(-50% + var(--_resize-handle-width)));
+      width: var(--lumo-size-s);
     }
 
     :host(:not([reordering])) *:not([column-resizing]) [part~='cell']:hover [part='resize-handle'],
