@@ -50,48 +50,20 @@
           colspan: 2,
         },
         {
-          title: 'Sales closed this month',
-          content: '54 000€',
-          type: 'kpi',
-        },
-        {
-          title: 'Just some number',
-          content: '1234',
-          type: 'kpi',
-          header: '2014-2024',
-        },
-        {
-          title: 'Activity since 2023',
-          type: 'chart',
-        },
-        {
-          title: 'Total cost',
-          content: '+203%',
-          type: 'kpi',
-          header: '2023-2024',
-          colspan: 2,
-        },
-        {
           title: 'Section',
           items: [
-            {
-              title: 'Sales',
-              type: 'chart',
-              header: '2023-2024',
-              colspan: 2,
-            },
             {
               title: 'Sales closed this month',
               content: '54 000€',
               type: 'kpi',
             },
+            {
+              title: 'Just some number',
+              content: '1234',
+              type: 'kpi',
+              header: '2014-2024',
+            },
           ],
-        },
-        {
-          title: 'Just some number',
-          content: '1234',
-          type: 'kpi',
-          header: '2014-2024',
         },
         {
           title: 'Activity since 2023',
@@ -100,7 +72,6 @@
       ];
 
       dashboard.renderer = (root, _dashboard, { item }) => {
-        // TODO: This is why the element gets removed from the DOM and dragend doesn't fire
         root.innerHTML = `
           <vaadin-dashboard-widget widget-title="${item.title}">
             <span slot="header">${item.header || ''}</span>
@@ -120,6 +91,7 @@
 
       dashboard.addEventListener('dashboard-item-reorder-end', (e) => {
         console.log('dashboard-item-reorder-end');
+        console.log('items after reorder', e.target.items);
       });
     </script>
   </head>

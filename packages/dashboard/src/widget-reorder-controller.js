@@ -28,12 +28,8 @@ export class WidgetReorderController extends EventTarget {
       this.draggedItem = this.__getElementItem(this.__draggedElement);
 
       // Set the drag image to the dragged element
-      const draggedElementRect = this.__draggedElement.getBoundingClientRect();
-      e.dataTransfer.setDragImage(
-        this.__draggedElement,
-        e.clientX - draggedElementRect.left,
-        e.clientY - draggedElementRect.top,
-      );
+      const { left, top } = this.__draggedElement.getBoundingClientRect();
+      e.dataTransfer.setDragImage(this.__draggedElement, e.clientX - left, e.clientY - top);
 
       // Observe the removal of the dragged element from the DOM
       this.draggedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
@@ -53,18 +49,18 @@ export class WidgetReorderController extends EventTarget {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
 
-      // All the elements that are candidates for reordering with the dragged element
+      // Get all elements that are candidates for reordering with the dragged element
       const dragContextElements = this.__getDragContextElements(this.__draggedElement);
-      // Up-to-date element instance representing the dragged item
+      // Find the up-to-date element instance representing the dragged item
       const draggedElement = dragContextElements.find((element) => this.__getElementItem(element) === this.draggedItem);
-      // All but the dragged element from the drag context
+      // Get all elements except the dragged element from the drag context
       const otherElements = dragContextElements.filter((element) => element !== draggedElement);
-      // The element that is the closest to the x and y coordinates of the drag event
+      // Find the element closest to the x and y coordinates of the drag event
       const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
 
-      // See if the dragged element is dragged enough over the element closest to the drag event coordinates
+      // Check if the dragged element is dragged enough over the element closest to the drag event coordinates
       if (!this.__reordering && this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
-        // Use a short timeout to prevent reordering multiple times in quick succession
+        // Prevent reordering multiple times in quick succession
         this.__reordering = true;
         setTimeout(() => {
           this.__reordering = false;
@@ -75,8 +71,9 @@ export class WidgetReorderController extends EventTarget {
           detail: { item: this.draggedItem, target: targetItem },
           cancelable: true,
         });
+
+        // Dispatch the reorder event and reorder items if the event is not canceled
         if (this.host.dispatchEvent(reorderEvent)) {
-          // If the event is not canceled, reorder the items and re-render
           this.__reorderItems(this.draggedItem, targetItem);
         }
       }
@@ -94,32 +91,32 @@ export class WidgetReorderController extends EventTarget {
     if (this.__draggedElement.parentElement === this.host) {
       this.__draggedElement.remove();
     }
+
+    // Reset the dragged element and item, and re-render to remove the placeholder
     this.__draggedElement = null;
-    // Reset the dragged item to null and re-render to remove the placeholder
     this.draggedItem = null;
     this.host.items = [...this.host.items];
+
+    // Disconnect the observer for the dragged element removal
     this.draggedElementRemoveObserver.disconnect();
 
+    // Dispatch the reorder end event
     this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-end'));
   }
 
   /**
-   * Returns the closest element to the given coordinates.
+   * Returns the element closest to the given coordinates.
    * @private
    */
   __getClosestElement(elements, x, y) {
     return elements.reduce(
-      (acc, element) => {
-        const rect = element.getBoundingClientRect();
-        const centerOfElement = {
-          x: rect.left + rect.width / 2,
-          y: rect.top + rect.height / 2,
-        };
-        const distance = Math.sqrt((centerOfElement.x - x) ** 2 + (centerOfElement.y - y) ** 2);
-        if (distance < acc.distance) {
-          return { element, distance };
-        }
-        return acc;
+      (closest, element) => {
+        const { left, top, width, height } = element.getBoundingClientRect();
+        const centerX = left + width / 2;
+        const centerY = top + height / 2;
+        const distance = Math.hypot(centerX - x, centerY - y);
+
+        return distance < closest.distance ? { element, distance } : closest;
       },
       { element: null, distance: Number.MAX_VALUE },
     ).element;
@@ -163,9 +160,11 @@ export class WidgetReorderController extends EventTarget {
     const draggedItemWrapper = [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find(
       (el) => el.__item === this.draggedItem,
     );
+
     const siblingWrappers = [...draggedItemWrapper.parentElement.children].filter(
       (el) => el.localName === WRAPPER_LOCAL_NAME,
     );
+
     return siblingWrappers.map((el) => el.firstElementChild);
   }
 
@@ -189,7 +188,8 @@ export class WidgetReorderController extends EventTarget {
     for (const i of items) {
       if (i === item) {
         return items;
-      } else if (i.items) {
+      }
+      if (i.items) {
         const result = this.__getItemsArrayOfItem(item, i.items);
         if (result) {
           return result;
