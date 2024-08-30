@@ -55,16 +55,6 @@ export const ItemsMixin = (superClass) =>
          * ```
          *
          * @type {!Array<!ContextMenuItem> | undefined}
-         *
-         *
-         * ### Styling
-         *
-         * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes on top of
-         * the built-in `<vaadin-item>` state attributes (see `<vaadin-item>` documentation for full listing).
-         *
-         * Part name | Attribute | Description
-         * ----------------|----------------|----------------
-         * `:host` | expanded | Expanded parent item
          */
         items: {
           type: Array,
