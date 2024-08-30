@@ -142,6 +142,8 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `focused`             | Focused date element
  * `selected`            | Selected date element
  * `today`               | Date element corresponding to the current day
+ * `past`                | Date element corresponding to the date in the past
+ * `future`              | Date element corresponding to the date in the future
  *
  * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
  *
