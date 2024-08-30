@@ -35,6 +35,8 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
         .opened="${this.opened}"
         .title="${this.title}"
         .description="${this.description}"
+        role="dialog"
+        aria-label="${this.title}"
         focus-trap
         with-backdrop
         theme="${ifDefined(this._theme)}"
