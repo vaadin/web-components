@@ -56,6 +56,9 @@ export class WidgetReorderController extends EventTarget {
       const dragContextElements = this.__getDragContextElements(this.__draggedElement);
       // Find the up-to-date element instance representing the dragged item
       const draggedElement = dragContextElements.find((element) => this.__getElementItem(element) === this.draggedItem);
+      if (!draggedElement) {
+        return;
+      }
       // Get all elements except the dragged element from the drag context
       const otherElements = dragContextElements.filter((element) => element !== draggedElement);
       // Find the element closest to the x and y coordinates of the drag event
@@ -179,7 +182,7 @@ export class WidgetReorderController extends EventTarget {
       (el) => el.localName === WRAPPER_LOCAL_NAME,
     );
 
-    return siblingWrappers.map((el) => el.firstElementChild);
+    return siblingWrappers.map((el) => el.firstElementChild).filter((el) => el);
   }
 
   /** @private */

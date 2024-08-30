@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
+  createDragEvent,
   expectLayout,
   fireDragEnd,
   fireDragOver,
@@ -193,6 +194,40 @@ describe('dashboard - widget reordering', () => {
       expectLayout(dashboard, [
         [0],
         [1],
+      ]);
+    });
+
+    it('should not throw with a lazy renderer while reordering', async () => {
+      // Assign a renderer that initially renders nothing
+      const syncRenderer = dashboard.renderer!;
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        requestAnimationFrame(() => {
+          syncRenderer(root, _, model);
+        });
+      };
+      await nextFrame();
+      await nextFrame();
+
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      expect(() => {
+        // Dispatch dragover event while the renderer is still rendering (no widget in the cells)
+        const dashboardRect = dashboard.getBoundingClientRect();
+        const dragOverEvent = createDragEvent('dragover', {
+          x: dashboardRect.right - dashboardRect.width / 4,
+          y: dashboardRect.top + dashboardRect.height / 2,
+        });
+        dashboard.dispatchEvent(dragOverEvent);
+      }).to.not.throw();
+
+      await nextFrame();
+
+      // Expect no changes in the layout
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
       ]);
     });
 

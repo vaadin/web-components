@@ -143,7 +143,7 @@ type TestDragEvent = Event & {
   };
 };
 
-function createDragEvent(type: string, { x, y }: { x: number; y: number }): TestDragEvent {
+export function createDragEvent(type: string, { x, y }: { x: number; y: number }): TestDragEvent {
   const event = new Event(type, {
     bubbles: true,
     cancelable: true,
