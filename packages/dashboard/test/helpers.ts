@@ -136,6 +136,7 @@ type TestDragEvent = Event & {
   clientX: number;
   clientY: number;
   dataTransfer: {
+    dropEffect?: string;
     setDragImage: sinon.SinonSpy;
     setData(type: string, data: string): void;
     getData(type: string): string;
@@ -164,7 +165,8 @@ function createDragEvent(type: string, { x, y }: { x: number; y: number }): Test
   return event;
 }
 
-export function fireDragStart(draggable: Element): TestDragEvent {
+export function fireDragStart(dragStartTarget: Element): TestDragEvent {
+  const draggable = getDraggable(dragStartTarget);
   const draggableRect = draggable.getBoundingClientRect();
   const event = createDragEvent('dragstart', {
     x: draggableRect.left + draggableRect.width / 2,
@@ -174,7 +176,7 @@ export function fireDragStart(draggable: Element): TestDragEvent {
   return event;
 }
 
-export function fireDragOver(dragOverTarget: Element, location: 'top' | 'botton' | 'start' | 'end'): TestDragEvent {
+export function fireDragOver(dragOverTarget: Element, location: 'top' | 'bottom' | 'start' | 'end'): TestDragEvent {
   const { top, bottom, left, right } = dragOverTarget.getBoundingClientRect();
   const y = location === 'top' ? top : bottom;
   const dir = document.dir;

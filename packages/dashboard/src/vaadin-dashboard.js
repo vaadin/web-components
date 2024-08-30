@@ -43,7 +43,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       super.styles,
       css`
         :host([editable]) {
-          --_vaadin-dashboard-widget-actions-visibility: visible;
+          --_vaadin-dashboard-widget-actions-display: block;
         }
       `,
       hasWidgetWrappers,
@@ -126,8 +126,11 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   /** @private */
   __renderItemCells(items) {
     return items.map((item) => {
-      const placeholderDisplay = this.__widgetReorderController.draggedItem === item ? 'block' : 'none';
-      const style = `--vaadin-dashboard-item-colspan: ${item.colspan}; --_vaadin-dashboard-item-placeholder-display: ${placeholderDisplay};`;
+      const itemDragged = this.__widgetReorderController.draggedItem === item;
+      const style = `
+        ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
+        ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
+      `.trim();
 
       if (item.items) {
         return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">

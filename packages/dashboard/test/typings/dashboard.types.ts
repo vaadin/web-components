@@ -19,6 +19,7 @@ assertType<Dashboard>(genericDashboard);
 assertType<ElementMixinClass>(genericDashboard);
 assertType<DashboardLayoutMixinClass>(genericDashboard);
 assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | undefined>(genericDashboard.items);
+assertType<boolean>(genericDashboard.editable);
 
 const narrowedDashboard = document.createElement('vaadin-dashboard') as unknown as Dashboard<TestDashboardItem>;
 assertType<Dashboard<TestDashboardItem>>(narrowedDashboard);
@@ -26,7 +27,7 @@ assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(n
 assertType<DashboardRenderer<TestDashboardItem> | null | undefined>(narrowedDashboard.renderer);
 assertType<
   | { colspan?: number; testProperty: string }
-  | { title: string | null | undefined; items: Array<{ colspan?: number; testProperty: string }> }
+  | { title?: string | null; items: Array<{ colspan?: number; testProperty: string }> }
 >(narrowedDashboard.items[0]);
 const layout = document.createElement('vaadin-dashboard-layout');
 assertType<DashboardLayout>(layout);

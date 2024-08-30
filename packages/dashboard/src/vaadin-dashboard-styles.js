@@ -25,7 +25,7 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   #header-actions {
-    visibility: var(--_vaadin-dashboard-widget-actions-visibility, hidden);
+    display: var(--_vaadin-dashboard-widget-actions-display, none);
   }
 
   #drag-handle::before {

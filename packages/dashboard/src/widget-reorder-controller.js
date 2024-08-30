@@ -4,6 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
+const REORDER_EVENT_TIMEOUT = 300;
+
 /**
  * A controller to widget reordering inside a dashboard.
  */
@@ -21,11 +24,6 @@ export class WidgetReorderController extends EventTarget {
   /** @private */
   __dragStart(e) {
     if ([...e.composedPath()].some((el) => el.classList && el.classList.contains('drag-handle'))) {
-      if (!this.host.editable) {
-        e.preventDefault();
-        return;
-      }
-
       this.__draggedElement = e.target;
       this.draggedItem = this.__getElementItem(this.__draggedElement);
 
@@ -65,10 +63,16 @@ export class WidgetReorderController extends EventTarget {
       const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
 
       // See if the dragged element is dragged enough over the element closest to the drag event coordinates
-      if (this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
+      if (!this.__reordering && this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
+        // Use a short timeout to prevent reordering multiple times in quick succession
+        this.__reordering = true;
+        setTimeout(() => {
+          this.__reordering = false;
+        }, REORDER_EVENT_TIMEOUT);
+
         const targetItem = this.__getElementItem(closestElement);
         const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
-          detail: { draggedItem: this.draggedItem, targetItem },
+          detail: { item: this.draggedItem, target: targetItem },
           cancelable: true,
         });
         if (this.host.dispatchEvent(reorderEvent)) {
@@ -91,6 +95,7 @@ export class WidgetReorderController extends EventTarget {
       this.__draggedElement.remove();
     }
     this.__draggedElement = null;
+    // Reset the dragged item to null and re-render to remove the placeholder
     this.draggedItem = null;
     this.host.items = [...this.host.items];
     this.draggedElementRemoveObserver.disconnect();
@@ -146,15 +151,7 @@ export class WidgetReorderController extends EventTarget {
 
   /** @private */
   __getElementItem(element) {
-    const wrapper = this.__getWrapper(element);
-    if (wrapper) {
-      return wrapper.__item;
-    }
-  }
-
-  /** @private */
-  __getWrapper(element) {
-    return element.closest('vaadin-dashboard-widget-wrapper');
+    return element.closest(WRAPPER_LOCAL_NAME).__item;
   }
 
   /**
@@ -163,11 +160,11 @@ export class WidgetReorderController extends EventTarget {
    * @private
    */
   __getDragContextElements() {
-    const draggedItemWrapper = [...this.host.querySelectorAll('vaadin-dashboard-widget-wrapper')].find(
+    const draggedItemWrapper = [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find(
       (el) => el.__item === this.draggedItem,
     );
     const siblingWrappers = [...draggedItemWrapper.parentElement.children].filter(
-      (el) => el.localName === 'vaadin-dashboard-widget-wrapper',
+      (el) => el.localName === WRAPPER_LOCAL_NAME,
     );
     return siblingWrappers.map((el) => el.firstElementChild);
   }
