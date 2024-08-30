@@ -1,4 +1,4 @@
-import { expect } from '@vaadin/chai-plugins';
+import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { flushGrid, getContainerCell, getLastVisibleItem, getPhysicalItems } from './helpers.js';
