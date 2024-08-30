@@ -600,8 +600,8 @@ export const GridMixin = (superClass) =>
 
         // Patch `focus()` to use the button
         cell._focusButton = div;
-        cell.focus = function () {
-          cell._focusButton.focus();
+        cell.focus = function (options) {
+          cell._focusButton.focus(options);
         };
 
         div.appendChild(slot);
@@ -624,7 +624,7 @@ export const GridMixin = (superClass) =>
             // Only focus if mouse is released on cell content itself
             const mouseUpWithinCell = event.composedPath().includes(cellContent);
             if (!contentContainsFocusedElement && mouseUpWithinCell) {
-              cell.focus();
+              cell.focus({ preventScroll: true });
             }
             document.removeEventListener('mouseup', mouseUpListener, true);
           };
@@ -634,7 +634,7 @@ export const GridMixin = (superClass) =>
           // Watch out sync focus removal issue, only async focus works here.
           setTimeout(() => {
             if (!cellContent.contains(this.getRootNode().activeElement)) {
-              cell.focus();
+              cell.focus({ preventScroll: true });
             }
           });
         }
