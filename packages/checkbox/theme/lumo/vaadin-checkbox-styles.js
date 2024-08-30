@@ -205,6 +205,63 @@ registerStyles(
       }
     }
 
+    /* Traffic light colors */
+    :host([theme~='traffic-light']) [part='checkbox']::after {
+      opacity: 1;
+      color: var(--lumo-primary-contrast-color);
+    }
+
+    :host([theme~='traffic-light'][disabled]) [part='checkbox']::after {
+      color: var(--_disabled-checkmark-color);
+    }
+
+    :host([theme~='traffic-light']:not([checked]):not([indeterminate])) [part='checkbox']::after {
+      content: var(--lumo-icons-cross);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])) [part='checkbox'] {
+      background: var(--lumo-error-color);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])[disabled]) [part='checkbox'] {
+      background: var(--lumo-error-color-10pct);
+    }
+
+    :host(
+        [theme~='traffic-light']:not([checked]):not([indeterminate]):not([disabled]):not([readonly]):not(
+            [invalid]
+          ):hover
+      )
+    [part='checkbox'] {
+      background: var(--lumo-error-color);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])[indeterminate]) [part='checkbox'] {
+      background: var(--lumo-warning-color);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])[indeterminate][disabled]) [part='checkbox'] {
+      background: var(--lumo-warning-color-10pct);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])[checked]) [part='checkbox'] {
+      background: var(--lumo-success-color);
+    }
+
+    :host([theme~='traffic-light']:not([readonly])[checked][disabled]) [part='checkbox'] {
+      background: var(--lumo-success-color-10pct);
+    }
+
+    :host([theme~='traffic-light'][readonly]:not([checked]):not([indeterminate])) [part='checkbox'] {
+      background: var(--lumo-contrast-70pct);
+    }
+
+    :host([theme~='traffic-light'][readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
+      top: -1px;
+      left: -1px;
+      border: none;
+    }
+
     /* Active */
     :host([active]) [part='checkbox'] {
       transform: scale(0.9);

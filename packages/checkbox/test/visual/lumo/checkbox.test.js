@@ -211,4 +211,64 @@ describe('checkbox', () => {
       await visualDiff(div, 'bordered-dark');
     });
   });
+
+  describe('traffic-light theme', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'traffic-light');
+    });
+
+    it('basic', async () => {
+      await visualDiff(div, 'theme-traffic-light');
+    });
+
+    it('checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'theme-traffic-light-disabled');
+    });
+
+    it('indeterminate', async () => {
+      element.indeterminate = true;
+      await visualDiff(div, 'theme-traffic-light-indeterminate');
+    });
+
+    describe('disabled', () => {
+      beforeEach(() => {
+        element.disabled = true;
+      });
+
+      it('basic', async () => {
+        await visualDiff(div, 'theme-traffic-light-disabled');
+      });
+
+      it('checked', async () => {
+        element.checked = true;
+        await visualDiff(div, 'theme-traffic-light-disabled-checked');
+      });
+
+      it('indeterminate', async () => {
+        element.indeterminate = true;
+        await visualDiff(div, 'theme-traffic-light-disabled-indeterminate');
+      });
+    });
+
+    describe('readonly', () => {
+      beforeEach(() => {
+        element.readonly = true;
+      });
+
+      it('basic', async () => {
+        await visualDiff(div, 'theme-traffic-light-readonly');
+      });
+
+      it('checked', async () => {
+        element.checked = true;
+        await visualDiff(div, 'theme-traffic-light-readonly-checked');
+      });
+
+      it('indeterminate', async () => {
+        element.indeterminate = true;
+        await visualDiff(div, 'theme-traffic-light-readonly-indeterminate');
+      });
+    });
+  });
 });
