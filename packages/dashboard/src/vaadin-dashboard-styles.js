@@ -29,6 +29,7 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   #drag-handle::before {
+    font-size: 30px;
     content: '☰';
     cursor: grab;
   }

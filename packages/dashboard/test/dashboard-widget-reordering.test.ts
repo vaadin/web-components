@@ -8,6 +8,7 @@ import {
   fireDragEnd,
   fireDragOver,
   fireDragStart,
+  fireDrop,
   getDraggable,
   getElementFromCell,
   setGap,
@@ -216,6 +217,13 @@ describe('dashboard - widget reordering', () => {
       expect(reorderStartSpy).to.have.been.calledOnce;
     });
 
+    it('should set data transfer data on drag start', async () => {
+      const event = fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      expect(JSON.parse(event.dataTransfer.getData('text/plain'))).to.eql(dashboard.items[0]);
+    });
+
     it('should should not throw when dragging something inside the widgets', () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const widgetContent = widget.querySelector('.content')!;
@@ -346,6 +354,21 @@ describe('dashboard - widget reordering', () => {
       expectLayout(dashboard, [
         [1, 2, 0],
       ]);
+    });
+
+    it('should cancel drop event', async () => {
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      const event = fireDrop(getElementFromCell(dashboard, 0, 1)!);
+      await nextFrame();
+
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should not cancel drop event if drag has not started', async () => {
+      const event = fireDrop(getElementFromCell(dashboard, 0, 1)!);
+      await nextFrame();
+
+      expect(event.defaultPrevented).to.be.false;
     });
 
     describe('sections', () => {

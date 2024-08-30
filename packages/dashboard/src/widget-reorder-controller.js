@@ -19,6 +19,7 @@ export class WidgetReorderController extends EventTarget {
     host.addEventListener('dragstart', (e) => this.__dragStart(e));
     host.addEventListener('dragend', (e) => this.__dragEnd(e));
     host.addEventListener('dragover', (e) => this.__dragOver(e));
+    host.addEventListener('drop', (e) => this.__drop(e));
   }
 
   /** @private */
@@ -30,6 +31,8 @@ export class WidgetReorderController extends EventTarget {
       // Set the drag image to the dragged element
       const { left, top } = this.__draggedElement.getBoundingClientRect();
       e.dataTransfer.setDragImage(this.__draggedElement, e.clientX - left, e.clientY - top);
+      // Set the dragged item as text/plain data
+      e.dataTransfer.setData('text/plain', JSON.stringify(this.draggedItem));
 
       // Observe the removal of the dragged element from the DOM
       this.draggedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
@@ -102,6 +105,14 @@ export class WidgetReorderController extends EventTarget {
 
     // Dispatch the reorder end event
     this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-end'));
+  }
+
+  /** @private */
+  __drop(e) {
+    if (!this.draggedItem) {
+      return;
+    }
+    e.preventDefault();
   }
 
   /**

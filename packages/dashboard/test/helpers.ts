@@ -191,3 +191,9 @@ export function fireDragEnd(dashboard: Element): TestDragEvent {
   dashboard.dispatchEvent(event);
   return event;
 }
+
+export function fireDrop(dragOverTarget: Element): TestDragEvent {
+  const event = createDragEvent('drop', { x: 0, y: 0 });
+  dragOverTarget.dispatchEvent(event);
+  return event;
+}
