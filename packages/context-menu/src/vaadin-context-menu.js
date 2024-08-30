@@ -192,6 +192,13 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  *
+ * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes
+ * on top of the built-in `<vaadin-item>` state attributes:
+ *
+ * Attribute  | Description
+ * ---------- |-------------
+ * `expanded` | Expanded parent item.
+ *
  * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
  * propagated to the internal components listed above.
  *

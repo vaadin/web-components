@@ -56,6 +56,16 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
+ * The `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes
+ * on top of the built-in `<vaadin-item>` state attributes:
+ *
+ * Attribute  | Description
+ * ---------- |-------------
+ * `expanded` | Expanded parent item.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-menu-bar>` is
+ * propagated to the internal components listed above.
+ *
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
  * @customElement
