@@ -37,10 +37,11 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  *
  * The following custom properties are available for styling:
  *
- * Custom property                         | Description                | Default
- * ----------------------------------------|----------------------------|---------
- * `--vaadin-field-default-width`          | Default width of the field | `12em`
- * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * Custom property                          | Description                | Default
+ * -----------------------------------------|----------------------------|---------
+ * `--vaadin-field-default-width`           | Default width of the field | `12em`
+ * `--vaadin-time-picker-overlay-width`     | Width of the overlay       | `auto`
+ * `--vaadin-time-picker-overlay-max-height`| Max height of the overlay  | `65vh`
  *
  * `<vaadin-time-picker>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
