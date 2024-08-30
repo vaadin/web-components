@@ -25,9 +25,9 @@ describe('scroll into view', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-        <vaadin-grid style="height: 150px">
-          <vaadin-grid-column></vaadin-grid-column>
-        </vaadin-grid>
+      <vaadin-grid style="height: 150px">
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
     `);
     const column = grid.querySelector('vaadin-grid-column');
     column.renderer = (root, _, model) => {
