@@ -197,3 +197,7 @@ export function fireDrop(dragOverTarget: Element): TestDragEvent {
   dragOverTarget.dispatchEvent(event);
   return event;
 }
+
+export function resetReorderTimeout(dashboard: HTMLElement): void {
+  (dashboard as any).__widgetReorderController.__reordering = false;
+}

@@ -177,6 +177,9 @@ export class WidgetReorderController extends EventTarget {
     const draggedItemWrapper = [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find(
       (el) => el.__item === this.draggedItem,
     );
+    if (!draggedItemWrapper) {
+      return [];
+    }
 
     const siblingWrappers = [...draggedItemWrapper.parentElement.children].filter(
       (el) => el.localName === WRAPPER_LOCAL_NAME,

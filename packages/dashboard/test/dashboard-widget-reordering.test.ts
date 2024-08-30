@@ -12,6 +12,7 @@ import {
   fireDrop,
   getDraggable,
   getElementFromCell,
+  resetReorderTimeout,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -424,9 +425,65 @@ describe('dashboard - widget reordering', () => {
     });
 
     it('should allow changs to items while dragging', async () => {
-      // Remove some widget
-      // Add a widget after widfget x
+      // Start dragging the first widget
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      // Drag over the second widget to reorder
+      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 0],
+      ]);
+
+      // Add a new widget after widget 1
+      dashboard.items = [dashboard.items[0], { id: 2 }, dashboard.items[1]];
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 2],
+        [0],
+      ]);
+
+      // Drag over the new widget 2
+      resetReorderTimeout(dashboard);
+      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'top');
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 0],
+        [2],
+      ]);
+
       // Remove the dragged widget
+      dashboard.items = [dashboard.items[0], dashboard.items[2]];
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 2],
+      ]);
+
+      // Try dragging over the remaining widgets
+      resetReorderTimeout(dashboard);
+      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+
+      resetReorderTimeout(dashboard);
+      fireDragOver(getElementFromCell(dashboard, 0, 0)!, 'start');
+      await nextFrame();
+
+      fireDragEnd(dashboard);
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 2],
+      ]);
     });
 
     describe('sections', () => {
