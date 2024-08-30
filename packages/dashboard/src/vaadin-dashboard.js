@@ -23,6 +23,10 @@ import { WidgetReorderController } from './widget-reorder-controller.js';
 /**
  * A responsive, grid-based dashboard layout component
  *
+ * @fires {CustomEvent} dashboard-item-drag-reorder - Fired when an items will be reordered by dragging
+ * @fires {CustomEvent} dashboard-item-reorder-start - Fired when item reordering starts
+ * @fires {CustomEvent} dashboard-item-reorder-end - Fired when item reordering ends
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
@@ -147,6 +151,24 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       </vaadin-dashboard-widget-wrapper>`;
     });
   }
+
+  /**
+   * Fired when item reordering starts
+   *
+   * @event dashboard-item-reorder-start
+   */
+
+  /**
+   * Fired when item reordering ends
+   *
+   * @event dashboard-item-reorder-end
+   */
+
+  /**
+   * Fired when an items will be reordered by dragging
+   *
+   * @event dashboard-item-drag-reorder
+   */
 }
 
 defineCustomElement(Dashboard);

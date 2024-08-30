@@ -1,7 +1,15 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { TitleController } from '../../src/title-controller.js';
 import type { DashboardLayoutMixinClass } from '../../src/vaadin-dashboard-layout-mixin.js';
-import type { Dashboard, DashboardItem, DashboardRenderer, DashboardSectionItem } from '../../vaadin-dashboard.js';
+import type {
+  Dashboard,
+  DashboardItem,
+  DashboardItemDragReorderEvent,
+  DashboardItemReorderEndEvent,
+  DashboardItemReorderStartEvent,
+  DashboardRenderer,
+  DashboardSectionItem,
+} from '../../vaadin-dashboard.js';
 import type { DashboardLayout } from '../../vaadin-dashboard-layout.js';
 import type { DashboardSection } from '../../vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../../vaadin-dashboard-widget.js';
@@ -29,6 +37,22 @@ assertType<
   | { colspan?: number; testProperty: string }
   | { title?: string | null; items: Array<{ colspan?: number; testProperty: string }> }
 >(narrowedDashboard.items[0]);
+
+narrowedDashboard.addEventListener('dashboard-item-reorder-start', (event) => {
+  assertType<DashboardItemReorderStartEvent>(event);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-reorder-end', (event) => {
+  assertType<DashboardItemReorderEndEvent>(event);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-drag-reorder', (event) => {
+  assertType<DashboardItemDragReorderEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
+  assertType<number>(event.detail.targetIndex);
+});
+
+/* DashboardLayout */
 const layout = document.createElement('vaadin-dashboard-layout');
 assertType<DashboardLayout>(layout);
 

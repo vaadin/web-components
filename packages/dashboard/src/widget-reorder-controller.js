@@ -70,14 +70,17 @@ export class WidgetReorderController extends EventTarget {
         }, REORDER_EVENT_TIMEOUT);
 
         const targetItem = this.__getElementItem(closestElement);
+        const targetItems = this.__getItemsArrayOfItem(targetItem);
+        const targetIndex = targetItems.indexOf(targetItem);
+
         const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
-          detail: { item: this.draggedItem, target: targetItem },
+          detail: { item: this.draggedItem, targetIndex },
           cancelable: true,
         });
 
         // Dispatch the reorder event and reorder items if the event is not canceled
         if (this.host.dispatchEvent(reorderEvent)) {
-          this.__reorderItems(this.draggedItem, targetItem);
+          this.__reorderItems(this.draggedItem, targetIndex);
         }
       }
     }
@@ -180,13 +183,11 @@ export class WidgetReorderController extends EventTarget {
   }
 
   /** @private */
-  __reorderItems(draggedItem, targetItem) {
-    const draggedItems = this.__getItemsArrayOfItem(draggedItem);
-    const targetItems = this.__getItemsArrayOfItem(targetItem);
-    const draggedIndex = draggedItems.indexOf(draggedItem);
-    const targetIndex = targetItems.indexOf(targetItem);
-    draggedItems.splice(draggedIndex, 1);
-    targetItems.splice(targetIndex, 0, draggedItem);
+  __reorderItems(draggedItem, targetIndex) {
+    const items = this.__getItemsArrayOfItem(draggedItem);
+    const draggedIndex = items.indexOf(draggedItem);
+    items.splice(draggedIndex, 1);
+    items.splice(targetIndex, 0, draggedItem);
     this.host.items = [...this.host.items];
   }
 

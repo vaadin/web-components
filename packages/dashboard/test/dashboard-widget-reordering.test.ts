@@ -266,7 +266,7 @@ describe('dashboard - widget reordering', () => {
       expect(reorderSpy).to.have.been.calledOnce;
       expect(reorderSpy.getCall(0).args[0].detail).to.deep.equal({
         item: { id: 0 },
-        target: { id: 1 },
+        targetIndex: 1,
       });
     });
 
@@ -293,6 +293,23 @@ describe('dashboard - widget reordering', () => {
       await nextFrame();
 
       expect(reorderSpy).to.have.been.calledOnce;
+    });
+
+    it('should reorder in the app logic', async () => {
+      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => {
+        const { item, targetIndex } = e.detail;
+        const items = dashboard.items.filter((i) => i !== item);
+        items.splice(targetIndex, 0, item);
+        dashboard.items = items;
+      });
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 0],
+      ]);
     });
 
     it('should not ignore subsequent dragover events after a short timeout', () => {
@@ -369,6 +386,12 @@ describe('dashboard - widget reordering', () => {
       await nextFrame();
 
       expect(event.defaultPrevented).to.be.false;
+    });
+
+    it('should allow changs to items while dragging', async () => {
+      // Remove some widget
+      // Add a widget after widfget x
+      // Remove the dragged widget
     });
 
     describe('sections', () => {

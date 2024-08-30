@@ -43,6 +43,34 @@ export type DashboardRenderer<TItem extends DashboardItem> = (
 ) => void;
 
 /**
+ * Fired when item reordering starts
+ */
+export type DashboardItemReorderStartEvent = CustomEvent;
+
+/**
+ * Fired when item reordering ends
+ */
+export type DashboardItemReorderEndEvent = CustomEvent;
+
+/**
+ * Fired when an items will be reordered by dragging
+ */
+export type DashboardItemDragReorderEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem | DashboardSectionItem<TItem>;
+  targetIndex: number;
+}>;
+
+export interface DashboardCustomEventMap<TItem extends DashboardItem> {
+  'dashboard-item-reorder-start': DashboardItemReorderStartEvent;
+
+  'dashboard-item-reorder-end': DashboardItemReorderEndEvent;
+
+  'dashboard-item-drag-reorder': DashboardItemDragReorderEvent<TItem>;
+}
+
+export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
+
+/**
  * A responsive, grid-based dashboard layout component
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
@@ -70,6 +98,18 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
    * Whether the dashboard is editable.
    */
   editable: boolean;
+
+  addEventListener<K extends keyof DashboardEventMap<TItem>>(
+    type: K,
+    listener: (this: Dashboard, ev: DashboardEventMap<TItem>[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof DashboardEventMap<TItem>>(
+    type: K,
+    listener: (this: Dashboard, ev: DashboardEventMap<TItem>[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {
