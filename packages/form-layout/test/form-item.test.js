@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@polymer/polymer/lib/elements/custom-style.js';
 import '@vaadin/custom-field';
 import '@vaadin/text-field';
 import '../vaadin-form-item.js';
