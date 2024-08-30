@@ -10,25 +10,38 @@
       import '@vaadin/date-time-picker';
       import '@vaadin/tooltip';
 
-      const dateTimePicker = document.querySelector('vaadin-date-time-picker');
-      dateTimePicker.addEventListener('incomplete-change', onChange);
-      dateTimePicker.addEventListener('unparsable-change', onChange);
-      dateTimePicker.addEventListener('change', onChange);
+      [...document.querySelectorAll('vaadin-date-time-picker')].forEach((dateTimePicker) => {
+        dateTimePicker.addEventListener('change', onChange);
+        dateTimePicker.addEventListener('incomplete-change', onChange);
+        dateTimePicker.addEventListener('unparsable-change', onChange);
 
-      function onChange(event) {
-        console.warn(event.type);
-
-        if (dateTimePicker.__unparsableValue) {
-          dateTimePicker.errorMessage = 'Invalid date or time';
-        } else if (dateTimePicker.__incompleteValue) {
-          dateTimePicker.errorMessage = 'Incomplete date or time';
-        } else {
-          dateTimePicker.errorMessage = '';
+        function onChange(event) {
+          if (dateTimePicker.__unparsableValue) {
+            dateTimePicker.errorMessage = 'Invalid date or time';
+          } else if (dateTimePicker.__incompleteValue) {
+            dateTimePicker.errorMessage = 'Incomplete date or time';
+          } else if (dateTimePicker.required && !dateTimePicker.value) {
+            dateTimePicker.errorMessage = 'Field is required';
+          } else if (dateTimePicker.max && new Date(dateTimePicker.value) > new Date(dateTimePicker.max)) {
+            dateTimePicker.errorMessage = 'Date is too late';
+          } else {
+            dateTimePicker.errorMessage = '';
+          }
         }
-      }
+      });
+
+      const maxDateTimePicker = document.querySelector('vaadin-date-time-picker#max');
+      maxDateTimePicker.max = new Date().toISOString().substring(0, 19);
     </script>
   </head>
   <body>
-    <vaadin-date-time-picker></vaadin-date-time-picker>
+    <div>
+      <vaadin-date-time-picker label="DateTimePicker"></vaadin-date-time-picker>
+    </div>
+    <div style="margin-top: 64px;">
+      <vaadin-date-time-picker label="DateTimePicker + required" required></vaadin-date-time-picker>
+    </div>
+    <div style="margin-top: 64px;">
+      <vaadin-date-time-picker label="DateTimePicker + required + max" id="max" required></vaadin-date-time-picker>
   </body>
 </html>
