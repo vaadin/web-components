@@ -232,7 +232,7 @@ registerStyles(
             [invalid]
           ):hover
       )
-    [part='checkbox'] {
+      [part='checkbox'] {
       background: var(--lumo-error-color);
     }
 
