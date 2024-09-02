@@ -63,6 +63,10 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         header {
           grid-column: var(--_vaadin-dashboard-section-column);
         }
+
+        :host::before {
+          z-index: 2 !important;
+        }
       `,
       hasWidgetWrappers,
       dashboardWidgetAndSectionStyles,

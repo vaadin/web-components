@@ -4,13 +4,20 @@ import sinon from 'sinon';
 /**
  * Returns the effective column widths of the dashboard as an array of numbers.
  */
-export function getColumnWidths(dashboard: HTMLElement): number[] {
+export function getColumnWidths(dashboard: Element): number[] {
   return getComputedStyle(dashboard)
     .gridTemplateColumns.split(' ')
     .map((width) => parseFloat(width));
 }
 
-function _getRowHeights(dashboard: HTMLElement): number[] {
+export function getParentSection(element?: Element | null): Element | null {
+  if (!element) {
+    return null;
+  }
+  return element.closest('vaadin-dashboard-section');
+}
+
+function _getRowHeights(dashboard: Element): number[] {
   return getComputedStyle(dashboard)
     .gridTemplateRows.split(' ')
     .map((height) => parseFloat(height));
@@ -38,7 +45,7 @@ export function getRowHeights(dashboard: HTMLElement): number[] {
   const dashboardRowHeights = _getRowHeights(dashboard);
   [...dashboardRowHeights].forEach((_height, index) => {
     const item = _getElementFromCell(dashboard, index, 0, dashboardRowHeights);
-    const parentSection = item?.closest('vaadin-dashboard-section');
+    const parentSection = getParentSection(item);
     if (parentSection) {
       const [headerRowHeight, firstRowHeight, ...remainingRowHeights] = _getRowHeights(parentSection);
       // Merge the first two row heights of the section since the first one is the section header

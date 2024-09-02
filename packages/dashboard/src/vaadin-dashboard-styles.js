@@ -7,6 +7,7 @@ export const hasWidgetWrappers = css`
 `;
 
 export const dashboardWidgetAndSectionStyles = css`
+  /* Placeholder shown while the widget or section is dragged */
   :host::before {
     content: '';
     z-index: 1;

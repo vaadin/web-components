@@ -12,6 +12,7 @@ import {
   fireDrop,
   getDraggable,
   getElementFromCell,
+  getParentSection,
   resetReorderTimeout,
   setGap,
   setMaximumColumnWidth,
@@ -528,7 +529,7 @@ describe('dashboard - widget reordering', () => {
       });
 
       it('should reorder the sections and widgets', async () => {
-        const section = dashboard.querySelector('vaadin-dashboard-section')!;
+        const section = getParentSection(getElementFromCell(dashboard, 1, 0))!;
         fireDragStart(section);
         await nextFrame();
 

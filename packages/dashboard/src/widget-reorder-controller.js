@@ -5,7 +5,7 @@
  */
 
 const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
-const REORDER_EVENT_TIMEOUT = 300;
+const REORDER_EVENT_TIMEOUT = 200;
 
 /**
  * A controller to widget reordering inside a dashboard.
@@ -170,7 +170,8 @@ export class WidgetReorderController extends EventTarget {
 
   /**
    * Returns the elements (widgets or sections) that are candidates for reordering with the
-   * currently dragged item.
+   * currently dragged item. Effectively, this is the list of child widgets or sections inside
+   * the same parent container (host or a section) as the dragged item.
    * @private
    */
   __getDragContextElements() {
