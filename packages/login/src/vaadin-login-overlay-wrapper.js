@@ -5,10 +5,9 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.js';
 import { loginOverlayWrapperStyles } from './vaadin-login-overlay-wrapper-styles.js';
 
 registerStyles('vaadin-login-overlay-wrapper', [overlayStyles, loginOverlayWrapperStyles], {
@@ -19,32 +18,13 @@ registerStyles('vaadin-login-overlay-wrapper', [overlayStyles, loginOverlayWrapp
  * An element used internally by `<vaadin-login-overlay>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes OverlayMixin
+ * @mixes LoginOverlayWrapperMixin
  * @mixes ThemableMixin
  * @private
  */
-class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-login-overlay-wrapper';
-  }
-
-  static get properties() {
-    return {
-      /**
-       * Title of the application.
-       */
-      title: {
-        type: String,
-      },
-
-      /**
-       * Application description. Displayed under the title.
-       */
-      description: {
-        type: String,
-      },
-    };
   }
 
   static get template() {

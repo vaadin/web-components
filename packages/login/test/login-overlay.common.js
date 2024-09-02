@@ -184,6 +184,12 @@ describe('title and description', () => {
     expect(overlay.title).to.be.equal(overlay.i18n.header.title);
     expect(overlay.description).to.be.equal(overlay.i18n.header.description);
   });
+
+  it('should update aria-label when title property changes', async () => {
+    overlay.title = 'New title';
+    await nextUpdate(overlay);
+    expect(overlay.$.vaadinLoginOverlayWrapper.getAttribute('aria-label')).to.equal('New title');
+  });
 });
 
 describe('title slot', () => {
@@ -218,6 +224,44 @@ describe('title slot', () => {
     titleElements = overlayWrapper.querySelectorAll('[slot=title]');
     expect(titleElements.length).to.be.equal(1);
     expect(titleElements[0].textContent).to.be.equal('Teleported title');
+  });
+
+  it('should link slotted title using aria-labelledby', () => {
+    const title = overlayWrapper.querySelector('[slot=title]');
+    expect(title.id).to.be.ok;
+    expect(overlayWrapper.hasAttribute('aria-label')).to.be.false;
+    expect(overlayWrapper.getAttribute('aria-labelledby')).to.equal(title.id);
+  });
+
+  it('should reset aria-labelledby when slotted title is removed', async () => {
+    overlay.opened = false;
+    await nextRender();
+
+    overlay.querySelector('[slot=title]').remove();
+
+    overlay.opened = true;
+    await nextRender();
+    expect(overlayWrapper.hasAttribute('aria-labelledby')).to.be.false;
+    expect(overlayWrapper.getAttribute('aria-label')).to.equal(overlay.title);
+  });
+
+  it('should not override custom id set on the slotted title', async () => {
+    overlay.opened = false;
+    await nextRender();
+
+    overlay.querySelector('[slot=title]').remove();
+
+    // Attach new slotted title with a custom ID
+    const title = document.createElement('h1');
+    title.id = 'custom-title';
+    title.setAttribute('slot', 'title');
+    overlay.appendChild(title);
+
+    overlay.opened = true;
+    await nextRender();
+
+    expect(overlayWrapper.getAttribute('aria-labelledby')).to.equal('custom-title');
+    expect(title.id).to.equal('custom-title');
   });
 });
 
