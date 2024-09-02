@@ -91,6 +91,18 @@ describe('checkbox', () => {
       element.required = true;
       await visualDiff(div, 'disabled-required');
     });
+
+    it('readonly checked', async () => {
+      element.readonly = true;
+      element.checked = true;
+      await visualDiff(div, 'disabled-readonly-checked');
+    });
+
+    it('readonly indeterminate', async () => {
+      element.readonly = true;
+      element.indeterminate = true;
+      await visualDiff(div, 'disabled-readonly-indeterminate');
+    });
   });
 
   describe('readonly', () => {
