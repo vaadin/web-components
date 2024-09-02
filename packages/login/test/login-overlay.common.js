@@ -219,6 +219,21 @@ describe('title slot', () => {
     expect(titleElements.length).to.be.equal(1);
     expect(titleElements[0].textContent).to.be.equal('Teleported title');
   });
+
+  it('should link slotted title using aria-labelledby', () => {
+    const title = overlayWrapper.querySelector('[slot=title]');
+    expect(title.id).to.be.ok;
+    expect(overlayWrapper.hasAttribute('aria-label')).to.be.false;
+    expect(overlayWrapper.getAttribute('aria-labelledby')).to.equal(title.id);
+  });
+
+  it('should reset aria-labelledby when slotted title is removed', async () => {
+    const title = overlayWrapper.querySelector('[slot=title]');
+    title.remove();
+    await nextRender();
+    expect(overlayWrapper.hasAttribute('aria-labelledby')).to.be.false;
+    expect(overlayWrapper.getAttribute('aria-label')).to.equal(overlay.title);
+  });
 });
 
 describe('custom-form-area slot', () => {

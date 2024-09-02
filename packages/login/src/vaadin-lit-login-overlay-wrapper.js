@@ -5,11 +5,10 @@
  */
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.js';
 import { loginOverlayWrapperStyles } from './vaadin-login-overlay-wrapper-styles.js';
 
 /**
@@ -18,31 +17,13 @@ import { loginOverlayWrapperStyles } from './vaadin-login-overlay-wrapper-styles
  * @extends HTMLElement
  * @private
  */
-class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-login-overlay-wrapper';
   }
 
   static get styles() {
     return [overlayStyles, loginOverlayWrapperStyles];
-  }
-
-  static get properties() {
-    return {
-      /**
-       * Title of the application.
-       */
-      title: {
-        type: String,
-      },
-
-      /**
-       * Application description. Displayed under the title.
-       */
-      description: {
-        type: String,
-      },
-    };
   }
 
   /** @protected */
