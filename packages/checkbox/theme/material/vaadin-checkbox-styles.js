@@ -124,9 +124,9 @@ registerStyles(
       background-color: var(--material-disabled-color);
     }
 
-    :host([readonly][checked]) [part='checkbox'],
-    :host([readonly][indeterminate]) [part='checkbox'],
-    :host([readonly]) [part='checkbox']::before {
+    :host([readonly][checked]:not([disabled])) [part='checkbox'],
+    :host([readonly][indeterminate]:not([disabled])) [part='checkbox'],
+    :host([readonly]:not([disabled])) [part='checkbox']::before {
       background-color: var(--material-secondary-text-color);
     }
 
