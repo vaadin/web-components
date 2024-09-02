@@ -44,6 +44,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
       }
 
       ::slotted(*) {
+        --_vaadin-dashboard-title-level: 3;
         --_vaadin-dashboard-item-column: span
           min(
             var(--vaadin-dashboard-item-colspan, 1),
