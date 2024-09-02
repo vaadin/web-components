@@ -56,6 +56,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
       <vaadin-login-overlay-wrapper
         id="vaadinLoginOverlayWrapper"
         opened="{{opened}}"
+        role="dialog"
         focus-trap
         with-backdrop
         title="[[title]]"

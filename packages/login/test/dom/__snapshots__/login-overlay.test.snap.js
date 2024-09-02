@@ -3,9 +3,11 @@ export const snapshots = {};
 
 snapshots["vaadin-login-overlay host default"] = 
 `<vaadin-login-overlay-wrapper
+  aria-label="App name"
   focus-trap=""
   id="vaadinLoginOverlayWrapper"
   opened=""
+  role="dialog"
   with-backdrop=""
 >
   <vaadin-login-form
@@ -125,9 +127,11 @@ snapshots["vaadin-login-overlay host default"] =
 
 snapshots["vaadin-login-overlay host i18n"] = 
 `<vaadin-login-overlay-wrapper
+  aria-label="Sovelluksen nimi"
   focus-trap=""
   id="vaadinLoginOverlayWrapper"
   opened=""
+  role="dialog"
   with-backdrop=""
 >
   <vaadin-login-form
@@ -247,10 +251,12 @@ snapshots["vaadin-login-overlay host i18n"] =
 
 snapshots["vaadin-login-overlay host overlay class"] = 
 `<vaadin-login-overlay-wrapper
+  aria-label="App name"
   class="custom login-overlay"
   focus-trap=""
   id="vaadinLoginOverlayWrapper"
   opened=""
+  role="dialog"
   with-backdrop=""
 >
   <vaadin-login-form
