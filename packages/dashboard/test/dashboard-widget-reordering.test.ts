@@ -440,7 +440,7 @@ describe('dashboard - widget reordering', () => {
       ]);
 
       // Add a new widget after widget 1
-      dashboard.items = [dashboard.items[0], { id: 2 }, dashboard.items[1]];
+      dashboard.items = [dashboard.items[1], { id: 2 }, dashboard.items[0]];
       await nextFrame();
 
       // prettier-ignore
@@ -461,7 +461,8 @@ describe('dashboard - widget reordering', () => {
       ]);
 
       // Remove the dragged widget
-      dashboard.items = [dashboard.items[0], dashboard.items[2]];
+
+      dashboard.items = [dashboard.items[0], dashboard.items[1]];
       await nextFrame();
 
       // prettier-ignore

@@ -62,6 +62,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
        */
       items: {
         type: Array,
+        observer: '__itemsChanged',
       },
 
       /**
@@ -88,11 +89,16 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         type: Boolean,
         reflectToAttribute: true,
       },
+
+      /** @private */
+      __effectiveItems: {
+        type: Array,
+      },
     };
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer)'];
+    return ['__itemsOrRendererChanged(__effectiveItems, renderer)'];
   }
 
   constructor() {
@@ -109,6 +115,19 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   /** @protected */
   render() {
     return html`<slot></slot>`;
+  }
+
+  /** @private */
+  __itemsChanged(items) {
+    this.__effectiveItems = (items || []).map((item) => {
+      if (item.items) {
+        return {
+          ...item,
+          items: [...item.items],
+        };
+      }
+      return item;
+    });
   }
 
   /** @private */

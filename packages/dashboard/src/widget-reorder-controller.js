@@ -41,7 +41,7 @@ export class WidgetReorderController extends EventTarget {
 
       requestAnimationFrame(() => {
         // Re-render to have the dragged element turn into a placeholder
-        this.host.items = [...this.host.items];
+        this.host.__effectiveItems = [...this.host.__effectiveItems];
       });
     }
   }
@@ -104,7 +104,7 @@ export class WidgetReorderController extends EventTarget {
     // Reset the dragged element and item, and re-render to remove the placeholder
     this.__draggedElement = null;
     this.draggedItem = null;
-    this.host.items = [...this.host.items];
+    this.host.items = [...this.host.__effectiveItems];
 
     // Disconnect the observer for the dragged element removal
     this.draggedElementRemoveObserver.disconnect();
@@ -195,7 +195,7 @@ export class WidgetReorderController extends EventTarget {
     const draggedIndex = items.indexOf(draggedItem);
     items.splice(draggedIndex, 1);
     items.splice(targetIndex, 0, draggedItem);
-    this.host.items = [...this.host.items];
+    this.host.__effectiveItems = [...this.host.__effectiveItems];
   }
 
   /**
@@ -203,7 +203,7 @@ export class WidgetReorderController extends EventTarget {
    * Might be the host items or the items of a section.
    * @private
    */
-  __getItemsArrayOfItem(item, items = this.host.items) {
+  __getItemsArrayOfItem(item, items = this.host.__effectiveItems) {
     for (const i of items) {
       if (i === item) {
         return items;
