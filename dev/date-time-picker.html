@@ -16,6 +16,8 @@
         dateTimePicker.addEventListener('unparsable-change', onChange);
 
         function onChange(event) {
+          console.warn(event);
+
           if (dateTimePicker.__unparsableValue) {
             dateTimePicker.errorMessage = 'Invalid date or time';
           } else if (dateTimePicker.__incompleteValue) {
@@ -30,8 +32,12 @@
         }
       });
 
-      const maxDateTimePicker = document.querySelector('vaadin-date-time-picker#max');
-      maxDateTimePicker.max = new Date().toISOString().substring(0, 19);
+
+
+      const maxDate = new Date().toISOString().substring(0, 19);
+      [...document.querySelectorAll('vaadin-date-time-picker.max')].forEach((picker) => {
+        picker.max = maxDate;
+      });
     </script>
   </head>
   <body>
@@ -42,6 +48,10 @@
       <vaadin-date-time-picker label="DateTimePicker + required" required></vaadin-date-time-picker>
     </div>
     <div style="margin-top: 64px;">
-      <vaadin-date-time-picker label="DateTimePicker + required + max" id="max" required></vaadin-date-time-picker>
+      <vaadin-date-time-picker label="DateTimePicker + required + max" class="max" required></vaadin-date-time-picker>
+    </div>
+    <div style="margin-top: 64px;">
+      <vaadin-date-time-picker label="DateTimePicker + max" class="max"></vaadin-date-time-picker>
+    </div>
   </body>
 </html>

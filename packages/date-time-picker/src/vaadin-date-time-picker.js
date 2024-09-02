@@ -532,8 +532,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __changeEventHandler(event) {
     event.stopPropagation();
 
-    const oppositePicker = this.__inputs.find((picker) => picker !== event.target);
-    if (this.__unparsableValue || oppositePicker.value || this.invalid) {
+    const hasCompleteValue = !this.__incompleteValue;
+    if (hasCompleteValue || this.__unparsableValue || this.invalid) {
       this.__commitValueChange();
     }
   }
