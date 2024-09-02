@@ -139,7 +139,6 @@ snapshots["vaadin-avatar-group opened default"] =
 
 snapshots["vaadin-avatar-group opened overlay"] = 
 `<vaadin-avatar-group-overlay
-  dir="ltr"
   id="overlay"
   no-vertical-overlap=""
   start-aligned=""
@@ -187,7 +186,6 @@ snapshots["vaadin-avatar-group opened overlay"] =
 snapshots["vaadin-avatar-group opened overlay class"] = 
 `<vaadin-avatar-group-overlay
   class="avatar-group-overlay custom"
-  dir="ltr"
   id="overlay"
   no-vertical-overlap=""
   start-aligned=""

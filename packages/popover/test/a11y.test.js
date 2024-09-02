@@ -12,12 +12,18 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../vaadin-popover.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('a11y', () => {
   let popover, target, overlay;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+    Popover.setDefaultHoverDelay(0);
+    Popover.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
@@ -409,6 +415,27 @@ describe('a11y', () => {
 
       const activeElement = getDeepActiveElement();
       expect(activeElement).to.not.equal(overlay.$.overlay);
+    });
+
+    it('should focus previous element on target Shift Tab while opened', async () => {
+      target.parentElement.insertBefore(input, target);
+
+      // Make popover open on focus
+      popover.opened = false;
+      popover.trigger = ['focus'];
+      await nextUpdate(popover);
+
+      target.focus();
+      await nextRender();
+
+      // Move focus back from the target
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await nextRender();
+
+      const activeElement = getDeepActiveElement();
+      expect(activeElement).to.equal(input);
     });
   });
 });

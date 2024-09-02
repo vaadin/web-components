@@ -137,7 +137,7 @@ registerStyles(
 
     @media (pointer: coarse) {
       [part~='date']:hover:not([part~='selected'])::before,
-      [part~='focused']:not([part~='selected'])::before {
+      :host(:not([focus-ring])) [part~='focused']:not([part~='selected'])::before {
         display: none;
       }
 
@@ -145,11 +145,10 @@ registerStyles(
         display: block;
       }
 
-      [part~='date'][part~='selected']::before {
+      :host(:not([focus-ring])) [part~='date'][part~='selected']::before {
         box-shadow: none;
       }
     }
-
     /* Disabled */
 
     :host([disabled]) * {
@@ -158,17 +157,3 @@ registerStyles(
   `,
   { moduleId: 'lumo-month-calendar' },
 );
-
-const template = document.createElement('template');
-
-template.innerHTML = `
-  <style>
-    @keyframes vaadin-date-picker-month-calendar-focus-date {
-      50% {
-        box-shadow: 0 0 0 var(--_focus-ring-width) transparent;
-      }
-    }
-  </style>
-`;
-
-document.head.appendChild(template.content);

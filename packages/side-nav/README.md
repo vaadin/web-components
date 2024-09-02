@@ -20,13 +20,9 @@ A web component for navigation menus.
     <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
     Parent
 
-    <vaadin-side-nav-item path="/child1" slot="children">
-      Child 1
-    </vaadin-side-nav-item>
+    <vaadin-side-nav-item path="/child1" slot="children"> Child 1 </vaadin-side-nav-item>
 
-    <vaadin-side-nav-item path="/child2" slot="children">
-      Child 2
-    </vaadin-side-nav-item>
+    <vaadin-side-nav-item path="/child2" slot="children"> Child 2 </vaadin-side-nav-item>
   </vaadin-side-nav-item>
 </vaadin-side-nav>
 ```
@@ -70,7 +66,7 @@ import '@vaadin/side-nav/src/vaadin-side-nav.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

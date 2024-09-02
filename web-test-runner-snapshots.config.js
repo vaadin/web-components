@@ -1,10 +1,10 @@
 /* eslint-env node */
-const { chromeLauncher } = require('@web/test-runner-chrome');
+const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
 const { createSnapshotTestsConfig } = require('./wtr-utils.js');
 
 module.exports = createSnapshotTestsConfig({
   browsers: [
-    chromeLauncher({
+    puppeteerLauncher({
       launchOptions: {
         headless: 'shell',
       },

@@ -1,11 +1,28 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fixtureSync, focusin, focusout, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import {
+  esc,
+  fixtureSync,
+  focusin,
+  focusout,
+  middleOfNode,
+  mousedown,
+  nextRender,
+  nextUpdate,
+  outsideClick,
+} from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import './not-animated-styles.js';
-import '../vaadin-popover.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('trigger', () => {
   let popover, target, overlay;
+
+  before(() => {
+    Popover.setDefaultFocusDelay(0);
+    Popover.setDefaultHoverDelay(0);
+    Popover.setDefaultHideDelay(0);
+  });
 
   beforeEach(async () => {
     popover = fixtureSync('<vaadin-popover></vaadin-popover>');
@@ -14,6 +31,10 @@ describe('trigger', () => {
     popover.renderer = (root) => {
       if (!root.firstChild) {
         root.appendChild(document.createElement('input'));
+
+        const div = document.createElement('div');
+        div.textContent = 'Some text content';
+        root.appendChild(div);
       }
     };
     await nextRender();
@@ -38,6 +59,23 @@ describe('trigger', () => {
       target.click();
       await nextRender();
       expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open on target click when detached', async () => {
+      popover.remove();
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target click when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      target.click();
+      await nextRender();
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open on target mouseenter', async () => {
@@ -108,6 +146,23 @@ describe('trigger', () => {
       mouseleave(overlay, target);
       await nextUpdate(popover);
 
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open on target mouseenter when detached', async () => {
+      popover.remove();
+      mouseenter(target);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target mouseenter when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      mouseenter(target);
+      await nextRender();
       expect(overlay.opened).to.be.true;
     });
   });
@@ -183,6 +238,90 @@ describe('trigger', () => {
       target.click();
       await nextRender();
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open on target focusin when detached', async () => {
+      popover.remove();
+      focusin(target);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open on target focusin when re-attached', async () => {
+      popover.remove();
+      await nextRender();
+      target.parentNode.appendChild(popover);
+
+      focusin(target);
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
+    describe('overlay mousedown', () => {
+      let input;
+
+      beforeEach(async () => {
+        input = document.createElement('input');
+        target.parentNode.appendChild(input);
+
+        target.focus();
+        await nextRender();
+      });
+
+      afterEach(async () => {
+        input.remove();
+        await resetMouse();
+      });
+
+      it('should not close on overlay mousedown when target has focus', async () => {
+        const { x, y } = middleOfNode(overlay.querySelector('div'));
+        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await nextUpdate();
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should not close on overlay mousedown when overlay has focus', async () => {
+        overlay.querySelector('input').focus();
+
+        const { x, y } = middleOfNode(overlay.querySelector('div'));
+        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await nextUpdate();
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should only cancel one target focusout after the overlay mousedown', async () => {
+        // Remove the input so that first Tab would leave popover
+        overlay.querySelector('input').remove();
+
+        const { x, y } = middleOfNode(overlay.querySelector('div'));
+        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await nextUpdate();
+
+        // Tab to focus input next to the target
+        await sendKeys({ press: 'Tab' });
+
+        // Ensure the flag for ignoring next focusout was cleared
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should only cancel one overlay focusout after the overlay mousedown', async () => {
+        overlay.querySelector('input').focus();
+
+        const { x, y } = middleOfNode(overlay.querySelector('div'));
+        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await nextUpdate();
+
+        // Tab to focus input inside the popover
+        await sendKeys({ press: 'Tab' });
+
+        // Tab to focus input next to the target
+        await sendKeys({ press: 'Tab' });
+
+        // Ensure the flag for ignoring next focusout was cleared
+        expect(overlay.opened).to.be.false;
+      });
     });
   });
 
@@ -285,6 +424,7 @@ describe('trigger', () => {
     });
 
     it('should not immediately close on target click when opened on focusin', async () => {
+      mousedown(target);
       target.focus();
       target.click();
       await nextRender();
@@ -292,6 +432,7 @@ describe('trigger', () => {
     });
 
     it('should close on target click after a delay when opened on focusin', async () => {
+      mousedown(target);
       target.focus();
       target.click();
       await nextRender();

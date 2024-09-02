@@ -2,10 +2,7 @@
 export const snapshots = {};
 
 snapshots["context-menu items"] = 
-`<vaadin-context-menu-overlay
-  dir="ltr"
-  opened=""
->
+`<vaadin-context-menu-overlay opened="">
   <vaadin-context-menu-list-box
     aria-orientation="vertical"
     role="menu"
@@ -62,7 +59,6 @@ snapshots["context-menu items"] =
 
 snapshots["context-menu items nested"] = 
 `<vaadin-context-menu-overlay
-  dir="ltr"
   modeless=""
   opened=""
   start-aligned=""
@@ -102,7 +98,6 @@ snapshots["context-menu items nested"] =
 snapshots["context-menu items overlay class"] = 
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
-  dir="ltr"
   opened=""
 >
   <vaadin-context-menu-list-box
@@ -162,7 +157,6 @@ snapshots["context-menu items overlay class"] =
 snapshots["context-menu items overlay class nested"] = 
 `<vaadin-context-menu-overlay
   class="context-menu-overlay custom"
-  dir="ltr"
   modeless=""
   opened=""
   start-aligned=""

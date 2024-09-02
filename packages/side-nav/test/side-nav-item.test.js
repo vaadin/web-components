@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-side-nav-item.js';
+import { location } from '../src/location.js';
 
 describe('side-nav-item', () => {
   let item, documentBaseURI;
@@ -280,6 +281,55 @@ describe('side-nav-item', () => {
         content.click();
         expect(spy.called).to.be.false;
       });
+    });
+  });
+
+  describe('matchNested', () => {
+    let currentPath = '/';
+    let pathnameStub;
+
+    beforeEach(() => {
+      pathnameStub = sinon.stub(location, 'pathname').get(() => currentPath);
+    });
+
+    afterEach(() => {
+      pathnameStub.restore();
+    });
+
+    it('should be false by default', () => {
+      item = fixtureSync('<vaadin-side-nav-item></vaadin-side-nav-item>');
+      expect(item.matchNested).to.be.false;
+    });
+
+    it('should match exact path when matchNested is false', () => {
+      currentPath = '/users';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      expect(item.current).to.be.true;
+
+      currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      expect(item.current).to.be.false;
+    });
+
+    it('should match nested paths when matchNested is true', () => {
+      currentPath = '/users';
+      item = fixtureSync('<vaadin-side-nav-item path="/users" match-nested></vaadin-side-nav-item>');
+      expect(item.current).to.be.true;
+
+      currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users" match-nested></vaadin-side-nav-item>');
+      expect(item.current).to.be.true;
+    });
+
+    it('should update when toggling matchNested', async () => {
+      currentPath = '/users/john';
+      item = fixtureSync('<vaadin-side-nav-item path="/users"></vaadin-side-nav-item>');
+      await item.updateComplete;
+      expect(item.current).to.be.false;
+
+      item.matchNested = true;
+      await item.updateComplete;
+      expect(item.current).to.be.true;
     });
   });
 

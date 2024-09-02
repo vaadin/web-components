@@ -126,7 +126,10 @@ export const ScrollMixin = (superClass) =>
 
         if (this._rowWithFocusedElement) {
           // Make sure the row with the focused element is fully inside the visible viewport
-          this.__scrollIntoViewport(this._rowWithFocusedElement.index);
+          // Don't change scroll position if the user is interacting with the mouse
+          if (!this._isMousedown) {
+            this.__scrollIntoViewport(this._rowWithFocusedElement.index);
+          }
 
           if (!this.$.table.contains(e.relatedTarget)) {
             // Virtualizer can't catch the event because if orginates from the light DOM.

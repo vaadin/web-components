@@ -184,7 +184,6 @@ snapshots["vaadin-tooltip end-bottom"] =
 
 snapshots["vaadin-tooltip opened overlay"] = 
 `<vaadin-tooltip-overlay
-  dir="ltr"
   hidden=""
   modeless=""
   no-vertical-overlap=""
@@ -198,7 +197,6 @@ snapshots["vaadin-tooltip opened overlay"] =
 snapshots["vaadin-tooltip opened overlay class"] = 
 `<vaadin-tooltip-overlay
   class="custom tooltip-overlay"
-  dir="ltr"
   hidden=""
   modeless=""
   no-vertical-overlap=""

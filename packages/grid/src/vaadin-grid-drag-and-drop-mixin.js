@@ -103,6 +103,11 @@ export const DragAndDropMixin = (superClass) =>
         __dndAutoScrollThreshold: {
           value: 50,
         },
+
+        /** @private  */
+        __draggedItems: {
+          value: () => [],
+        },
       };
     }
 
@@ -170,6 +175,8 @@ export const DragAndDropMixin = (superClass) =>
             .filter((row) => !this.dragFilter || this.dragFilter(this.__getRowModel(row)));
         }
 
+        this.__draggedItems = rows.map((row) => row._item);
+
         // Set the default transfer data
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
@@ -181,14 +188,12 @@ export const DragAndDropMixin = (superClass) =>
           updateBooleanRowStates(row, { dragstart: false });
           this.style.setProperty('--_grid-drag-start-x', '');
           this.style.setProperty('--_grid-drag-start-y', '');
-          rows.forEach((row) => {
-            updateBooleanRowStates(row, { 'drag-source': true });
-          });
+          this.requestContentUpdate();
         });
 
         const event = new CustomEvent('grid-dragstart', {
           detail: {
-            draggedItems: rows.map((row) => row._item),
+            draggedItems: [...this.__draggedItems],
             setDragData: (type, data) => e.dataTransfer.setData(type, data),
             setDraggedItemsCount: (count) => row.setAttribute('dragstart', count),
           },
@@ -206,9 +211,8 @@ export const DragAndDropMixin = (superClass) =>
       event.originalEvent = e;
       this.dispatchEvent(event);
 
-      iterateChildren(this.$.items, (row) => {
-        updateBooleanRowStates(row, { 'drag-source': false });
-      });
+      this.__draggedItems = [];
+      this.requestContentUpdate();
     }
 
     /** @private */
@@ -336,6 +340,11 @@ export const DragAndDropMixin = (superClass) =>
       iterateChildren(this.$.items, (row) => {
         updateStringRowStates(row, { dragover: null });
       });
+    }
+
+    /** @private */
+    __updateDragSourceParts(row, model) {
+      updateBooleanRowStates(row, { 'drag-source': this.__draggedItems.includes(model.item) });
     }
 
     /** @private */

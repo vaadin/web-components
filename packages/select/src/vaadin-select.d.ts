@@ -130,6 +130,7 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * -----------------------------------|------------------------------|----------------------------------
  * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
  * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
+ * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
  *
  * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.

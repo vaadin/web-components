@@ -288,7 +288,6 @@ snapshots["vaadin-date-picker host value"] =
 
 snapshots["vaadin-date-picker host opened overlay"] = 
 `<vaadin-date-picker-overlay
-  dir="ltr"
   id="overlay"
   opened=""
   restore-focus-on-close=""
@@ -451,7 +450,6 @@ snapshots["vaadin-date-picker host opened overlay"] =
 snapshots["vaadin-date-picker host opened overlay class"] = 
 `<vaadin-date-picker-overlay
   class="custom date-picker-overlay"
-  dir="ltr"
   id="overlay"
   opened=""
   restore-focus-on-close=""
@@ -613,7 +611,6 @@ snapshots["vaadin-date-picker host opened overlay class"] =
 
 snapshots["vaadin-date-picker host opened overlay theme"] = 
 `<vaadin-date-picker-overlay
-  dir="ltr"
   id="overlay"
   opened=""
   restore-focus-on-close=""

@@ -266,26 +266,21 @@ describe('drag and drop', () => {
         }
       });
 
-      it('should add drag-source- part only to dragged rows', async () => {
+      it('should add drag-source- part to dragged rows', async () => {
         fireDragStart();
-        let cells = getRowBodyCells(getRows(grid.$.items)[0]);
         await nextFrame();
-        for (const cell of cells) {
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
           expect(cell.getAttribute('part')).to.contain('drag-source-row-cell');
-        }
-        cells = getRowBodyCells(getRows(grid.$.items)[1]);
-        for (const cell of cells) {
-          expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
         }
       });
 
-      it('should remove drag-source- part from row when drag ends', async () => {
+      it('should remove drag-source- part from dragged rows', async () => {
         fireDragStart();
-        const row = getRows(grid.$.items)[0];
-        const cells = getRowBodyCells(row);
         await nextFrame();
+
         fireDragEnd();
-        for (const cell of cells) {
+        await nextFrame();
+        for (const cell of getRowBodyCells(getRows(grid.$.items)[0])) {
           expect(cell.getAttribute('part')).to.not.contain('drag-source-row-cell');
         }
       });
@@ -1072,6 +1067,20 @@ describe('drag and drop', () => {
       const scrollTop = grid.$.table.scrollTop;
       fireDragOver(grid.__getViewportRows()[0], 'above');
       expect(grid.$.table.scrollTop).to.be.within(scrollTop - 200, scrollTop - 100);
+    });
+
+    it('should add/remove drag-source- part when scrolling', () => {
+      grid.rowsDraggable = true;
+      grid.selectItem(grid.items[0]);
+      fireDragStart();
+
+      // Scroll down so that the drag source cell leaves the viewport
+      grid.scrollToIndex(50);
+      // Expect no cells with drag-source-row-cell part in the DOM
+      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="drag-source-row-cell"]')).to.be.null;
+
+      grid.scrollToIndex(0);
+      expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');
     });
   });
 });
