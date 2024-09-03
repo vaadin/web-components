@@ -23,6 +23,7 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
+          overflow: hidden;
         }
 
         :host([hidden]) {
@@ -30,9 +31,6 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         #grid {
-          overflow: hidden auto;
-          height: 100%;
-
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
           --_vaadin-dashboard-default-col-max-width: 1fr;
@@ -57,6 +55,8 @@ export const DashboardLayoutMixin = (superClass) =>
           );
 
           display: grid;
+          overflow: auto;
+          height: 100%;
 
           grid-template-columns: repeat(
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
@@ -64,10 +64,6 @@ export const DashboardLayoutMixin = (superClass) =>
           );
 
           gap: var(--vaadin-dashboard-gap, 1rem);
-        }
-
-        #grid[overflow] {
-          overflow: auto;
         }
 
         ::slotted(*) {
@@ -91,9 +87,6 @@ export const DashboardLayoutMixin = (superClass) =>
       // flickering due to the asynchronous nature of ResizeObserver.
       this.$.grid.style.width = `${this.offsetWidth}px`;
       this.__updateColumnCount();
-
-      const overflow = Math.ceil(this.$.grid.scrollWidth - this.$.grid.clientWidth) > 0;
-      this.$.grid.toggleAttribute('overflow', overflow);
     }
 
     /**

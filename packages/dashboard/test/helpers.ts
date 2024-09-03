@@ -2,6 +2,10 @@ function getCssGrid(element: Element): Element {
   return (element as any).$?.grid || element;
 }
 
+export function getScrollingContainer(dashboard: Element): Element {
+  return (dashboard as any).$.grid;
+}
+
 /**
  * Returns the effective column widths of the dashboard as an array of numbers.
  */

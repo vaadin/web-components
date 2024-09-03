@@ -7,6 +7,7 @@ import {
   getColumnWidths,
   getElementFromCell,
   getRowHeights,
+  getScrollingContainer,
   setColspan,
   setGap,
   setMaximumColumnCount,
@@ -99,15 +100,30 @@ describe('dashboard layout', () => {
     ]);
   });
 
-  it('should scroll when content overflows', () => {
+  it('should scroll vertically when content overflows', async () => {
     dashboard.style.width = `${columnWidth}px`;
     const rowHeight = Math.ceil(getRowHeights(dashboard)[0]);
     dashboard.style.height = `${rowHeight}px`;
-    const scrollingContainer = (dashboard as any).$.grid;
+    await nextFrame();
+
+    const scrollingContainer = getScrollingContainer(dashboard);
+    expect(getComputedStyle(scrollingContainer).overflowY).to.eql('auto');
     expect(scrollingContainer.scrollTop).to.eql(0);
 
     scrollingContainer.scrollTop = 1;
     expect(scrollingContainer.scrollTop).to.eql(1);
+  });
+
+  it('should scroll horizontally when content overflows', async () => {
+    dashboard.style.width = `${columnWidth / 2}px`;
+    await nextFrame();
+
+    const scrollingContainer = getScrollingContainer(dashboard);
+    expect(getComputedStyle(scrollingContainer).overflowX).to.eql('auto');
+    expect(scrollingContainer.scrollLeft).to.eql(0);
+
+    scrollingContainer.scrollLeft = 1;
+    expect(scrollingContainer.scrollLeft).to.eql(1);
   });
 
   describe('minimum column width', () => {
