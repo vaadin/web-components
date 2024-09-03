@@ -1028,7 +1028,15 @@ export const GridMixin = (superClass) =>
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
-        this._tooltipController.setTarget(event.target);
+        const target = event.target;
+        const targetRect = target.getBoundingClientRect();
+
+        if (targetRect.left < 0 || targetRect.right > this.getBoundingClientRect().right) {
+          // If the target cell is not fully in the viewport, do not show tooltip.
+          return;
+        }
+
+        this._tooltipController.setTarget(target);
         this._tooltipController.setContext(this.getEventContext(event));
 
         // Trigger opening using the corresponding delay.
