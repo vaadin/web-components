@@ -103,10 +103,11 @@ describe('dashboard layout', () => {
     dashboard.style.width = `${columnWidth}px`;
     const rowHeight = Math.ceil(getRowHeights(dashboard)[0]);
     dashboard.style.height = `${rowHeight}px`;
-    expect(dashboard.scrollTop).to.eql(0);
+    const scrollingContainer = (dashboard as any).$.grid;
+    expect(scrollingContainer.scrollTop).to.eql(0);
 
-    dashboard.scrollTop = 1;
-    expect(dashboard.scrollTop).to.eql(1);
+    scrollingContainer.scrollTop = 1;
+    expect(scrollingContainer.scrollTop).to.eql(1);
   });
 
   describe('minimum column width', () => {

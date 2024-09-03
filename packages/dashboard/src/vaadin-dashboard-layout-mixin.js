@@ -23,11 +23,6 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
-          overflow: hidden auto;
-        }
-
-        :host([overflow]) {
-          overflow: auto;
         }
 
         :host([hidden]) {
@@ -35,6 +30,9 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         #grid {
+          overflow: hidden auto;
+          height: 100%;
+
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
           --_vaadin-dashboard-default-col-max-width: 1fr;
@@ -68,6 +66,10 @@ export const DashboardLayoutMixin = (superClass) =>
           gap: var(--vaadin-dashboard-gap, 1rem);
         }
 
+        #grid[overflow] {
+          overflow: auto;
+        }
+
         ::slotted(*) {
           --_vaadin-dashboard-item-column: span
             min(
@@ -90,8 +92,8 @@ export const DashboardLayoutMixin = (superClass) =>
       this.$.grid.style.width = `${this.offsetWidth}px`;
       this.__updateColumnCount();
 
-      const overflow = Math.ceil(this.scrollWidth - this.clientWidth) > 0;
-      this.toggleAttribute('overflow', overflow);
+      const overflow = Math.ceil(this.$.grid.scrollWidth - this.$.grid.clientWidth) > 0;
+      this.$.grid.toggleAttribute('overflow', overflow);
     }
 
     /**
@@ -99,10 +101,10 @@ export const DashboardLayoutMixin = (superClass) =>
      */
     __updateColumnCount() {
       // Clear the previously computed column count
-      this.style.removeProperty('--_vaadin-dashboard-col-count');
+      this.$.grid.style.removeProperty('--_vaadin-dashboard-col-count');
       // Get the column count (with no colspans etc in effect)...
       const columnCount = getComputedStyle(this.$.grid).gridTemplateColumns.split(' ').length;
       // ...and set it as the new value
-      this.style.setProperty('--_vaadin-dashboard-col-count', columnCount);
+      this.$.grid.style.setProperty('--_vaadin-dashboard-col-count', columnCount);
     }
   };
