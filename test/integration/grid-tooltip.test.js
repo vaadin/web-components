@@ -263,23 +263,39 @@ describe('tooltip', () => {
   });
 
   describe('cell not fully visible', () => {
-    beforeEach(() => {
-      tooltip.hoverDelay = 0;
-      grid.style.width = '150px';
-    });
+    ['ltr', 'rtl'].forEach((direction) => {
+      describe(`${direction}`, () => {
+        const isRTL = direction === 'rtl';
 
-    it('should not show tooltip when cell not fully visible at the start', async () => {
-      grid.$.table.scrollLeft = 150;
-      await nextRender();
-      flushGrid(grid);
+        before(() => {
+          document.documentElement.setAttribute('dir', direction);
+        });
 
-      mouseenter(getCell(grid, 0));
-      expect(tooltip.opened).to.be.false;
-    });
+        after(() => {
+          document.documentElement.removeAttribute('dir');
+        });
 
-    it('should not show tooltip when cell not fully visible at the end', () => {
-      mouseenter(getCell(grid, 1));
-      expect(tooltip.opened).to.be.false;
+        beforeEach(async () => {
+          tooltip.hoverDelay = 0;
+          grid.style.width = '150px';
+          flushGrid(grid);
+          await nextRender();
+        });
+
+        it('should not show tooltip when cell not fully visible at the start', async () => {
+          grid.$.table.scrollLeft = isRTL ? -150 : 150;
+          await nextRender();
+          flushGrid(grid);
+
+          mouseenter(getCell(grid, 0));
+          expect(tooltip.opened).to.be.false;
+        });
+
+        it('should not show tooltip when cell not fully visible at the end', () => {
+          mouseenter(getCell(grid, 1));
+          expect(tooltip.opened).to.be.false;
+        });
+      });
     });
   });
 

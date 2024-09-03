@@ -1030,8 +1030,9 @@ export const GridMixin = (superClass) =>
       if (tooltip && tooltip.isConnected) {
         const target = event.target;
         const targetRect = target.getBoundingClientRect();
+        const gridRect = this.getBoundingClientRect();
 
-        if (targetRect.left < 0 || targetRect.right > this.getBoundingClientRect().right) {
+        if (targetRect.left < gridRect.left || targetRect.right > gridRect.right) {
           // If the target cell is not fully in the viewport, do not show tooltip.
           return;
         }
