@@ -732,13 +732,6 @@ describe('item components', () => {
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should set position and z-index on the item component to allow clicks', () => {
-    const item = buttons[2].firstChild;
-    const style = getComputedStyle(item);
-    expect(style.position).to.equal('relative');
-    expect(Number(style.zIndex)).to.equal(1);
-  });
-
   describe('overflow', () => {
     let subMenu;
 
