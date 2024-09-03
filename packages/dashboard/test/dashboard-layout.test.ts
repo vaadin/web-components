@@ -126,6 +126,10 @@ describe('dashboard layout', () => {
     expect(scrollingContainer.scrollLeft).to.eql(1);
   });
 
+  it('should hide content overflowing the host', () => {
+    expect(getComputedStyle(dashboard).overflow).to.eql('hidden');
+  });
+
   describe('minimum column width', () => {
     it('should have a default minimum column width', () => {
       // Clear the minimum column width used in the tests

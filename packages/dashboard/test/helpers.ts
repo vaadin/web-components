@@ -2,8 +2,11 @@ function getCssGrid(element: Element): Element {
   return (element as any).$?.grid || element;
 }
 
+/**
+ * Returns the scrolling container of the dashboard.
+ */
 export function getScrollingContainer(dashboard: Element): Element {
-  return (dashboard as any).$.grid;
+  return getCssGrid(dashboard);
 }
 
 /**
