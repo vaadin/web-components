@@ -81,7 +81,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @protected */
   render() {
-    return html`<slot></slot>`;
+    return html`<div id="grid"><slot></slot></div>`;
   }
 
   /** @private */

@@ -216,6 +216,36 @@ describe('dashboard layout', () => {
         [0, 0, 1],
       ]);
     });
+
+    it('should not flicker on resize', async () => {
+      setMinimumColumnWidth(dashboard, columnWidth / 2);
+      setColspan(childElements[0], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 0],
+        [1],
+      ]);
+
+      const widget1Width = childElements[1].offsetWidth;
+
+      // Narrow down the dashboard
+      dashboard.style.width = `${columnWidth}px`;
+      // Expect widget 1 to still have the same width
+      expect(childElements[1].offsetWidth).to.eql(widget1Width);
+
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+
+      // Expect widget 1 to still have the same width after the layout has been recalculated
+      expect(childElements[1].offsetWidth).to.eql(widget1Width);
+    });
   });
 
   describe('gap', () => {

@@ -1,14 +1,18 @@
+function getCssGrid(element: Element): Element {
+  return (element as any).$?.grid || element;
+}
+
 /**
  * Returns the effective column widths of the dashboard as an array of numbers.
  */
-export function getColumnWidths(dashboard: HTMLElement): number[] {
-  return getComputedStyle(dashboard)
+export function getColumnWidths(dashboard: Element): number[] {
+  return getComputedStyle(getCssGrid(dashboard))
     .gridTemplateColumns.split(' ')
     .map((width) => parseFloat(width));
 }
 
-function _getRowHeights(dashboard: HTMLElement): number[] {
-  return getComputedStyle(dashboard)
+function _getRowHeights(dashboard: Element): number[] {
+  return getComputedStyle(getCssGrid(dashboard))
     .gridTemplateRows.split(' ')
     .map((height) => parseFloat(height));
 }
