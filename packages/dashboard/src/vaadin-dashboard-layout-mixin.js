@@ -23,6 +23,10 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
+          overflow: hidden auto;
+        }
+
+        :host([overflow]) {
           overflow: auto;
         }
 
@@ -85,6 +89,9 @@ export const DashboardLayoutMixin = (superClass) =>
       // flickering due to the asynchronous nature of ResizeObserver.
       this.$.grid.style.width = `${this.offsetWidth}px`;
       this.__updateColumnCount();
+
+      const overflow = Math.ceil(this.scrollWidth - this.clientWidth) > 0;
+      this.toggleAttribute('overflow', overflow);
     }
 
     /**
