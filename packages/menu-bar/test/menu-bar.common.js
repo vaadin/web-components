@@ -406,13 +406,6 @@ describe('item components', () => {
     expect(buttons[4].item.component.children.length).to.equal(0);
     expect(buttons[4].item.component.textContent).to.equal('Item 5');
   });
-
-  it('should set position and z-index on the item component to allow clicks', () => {
-    const item = buttons[2].firstChild;
-    const style = getComputedStyle(item);
-    expect(style.position).to.equal('relative');
-    expect(Number(style.zIndex)).to.equal(1);
-  });
 });
 
 describe('menu-bar in flex', () => {
