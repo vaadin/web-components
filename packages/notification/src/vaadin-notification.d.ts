@@ -40,6 +40,7 @@ export interface NotificationCustomEventMap {
 export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
 
 export interface ShowOptions {
+  assertive?: boolean;
   duration?: number;
   position?: NotificationPosition;
   theme?: string;
@@ -116,6 +117,7 @@ declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementM
    *
    * ```
    * {
+   *   assertive?: boolean
    *   position?: string
    *   duration?: number
    *   theme?: string
@@ -123,6 +125,7 @@ declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementM
    * ```
    *
    * See the individual documentation for:
+   * - [`assertive`](#/elements/vaadin-notification#property-assertive)
    * - [`position`](#/elements/vaadin-notification#property-position)
    * - [`duration`](#/elements/vaadin-notification#property-duration)
    *
@@ -130,6 +133,13 @@ declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementM
    * @param options optional options for customizing the notification.
    */
   static show(contents: TemplateResult | string, options?: ShowOptions): Notification;
+
+  /**
+   * When true, the notification card has `aria-live` attribute set to
+   * `assertive` instead of `polite`. This makes screen readers announce
+   * the notification content immediately when it appears.
+   */
+  assertive: boolean;
 
   /**
    * The duration in milliseconds to show the notification.

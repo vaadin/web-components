@@ -36,3 +36,14 @@ snapshots["vaadin-notification card class"] =
 `;
 /* end snapshot vaadin-notification card class */
 
+snapshots["vaadin-notification assertive"] = 
+`<vaadin-notification-card
+  aria-live="assertive"
+  role="alert"
+  slot="bottom-start"
+>
+  content
+</vaadin-notification-card>
+`;
+/* end snapshot vaadin-notification assertive */
+

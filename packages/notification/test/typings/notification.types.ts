@@ -20,6 +20,7 @@ assertType<OverlayClassMixinClass>(notification);
 assertType<ThemePropertyMixinClass>(notification);
 
 // Properties
+assertType<boolean>(notification.assertive);
 assertType<number>(notification.duration);
 assertType<boolean>(notification.opened);
 assertType<NotificationPosition>(notification.position);
@@ -36,7 +37,7 @@ notification.addEventListener('closed', (event) => {
   assertType<NotificationClosedEvent>(event);
 });
 
-Notification.show('Hello world', { position: 'middle', duration: 7000, theme: 'error' });
+Notification.show('Hello world', { assertive: true, position: 'middle', duration: 7000, theme: 'error' });
 
 const renderer: NotificationRenderer = (root, owner) => {
   assertType<HTMLElement>(root);

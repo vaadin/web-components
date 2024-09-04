@@ -35,6 +35,11 @@ describe('static helpers', () => {
     expect(notification.position).to.equal('top-center');
   });
 
+  it('show should use assertive property when set to true', () => {
+    const notification = Notification.show('Hello world', { assertive: true });
+    expect(notification.assertive).to.be.true;
+  });
+
   it('show should set the given theme attribute', () => {
     const notification = Notification.show('Hello world', { theme: 'error' });
     expect(notification.getAttribute('theme')).to.equal('error');

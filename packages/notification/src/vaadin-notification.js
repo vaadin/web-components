@@ -208,7 +208,6 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
   ready() {
     super.ready();
     this.setAttribute('role', 'alert');
-    this.setAttribute('aria-live', 'polite');
   }
 }
 
@@ -273,7 +272,10 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
           display: none !important;
         }
       </style>
-      <vaadin-notification-card theme$="[[_theme]]"> </vaadin-notification-card>
+      <vaadin-notification-card
+        theme$="[[_theme]]"
+        aria-live$="[[__computeAriaLive(assertive)]]"
+      ></vaadin-notification-card>
     `;
   }
 
@@ -283,6 +285,16 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
 
   static get properties() {
     return {
+      /**
+       * When true, the notification card has `aria-live` attribute set to
+       * `assertive` instead of `polite`. This makes screen readers announce
+       * the notification content immediately when it appears.
+       */
+      assertive: {
+        type: Boolean,
+        value: false,
+      },
+
       /**
        * The duration in milliseconds to show the notification.
        * Set to `0` or a negative number to disable the notification auto-closing.
@@ -340,6 +352,7 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
    *
    * ```
    * {
+   *   assertive?: boolean
    *   position?: string
    *   duration?: number
    *   theme?: string
@@ -347,6 +360,7 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
    * ```
    *
    * See the individual documentation for:
+   * - [`assertive`](#/elements/vaadin-notification#property-assertive)
    * - [`position`](#/elements/vaadin-notification#property-position)
    * - [`duration`](#/elements/vaadin-notification#property-duration)
    *
@@ -372,6 +386,9 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
     }
     if (options && options.position) {
       notification.position = options.position;
+    }
+    if (options && options.assertive) {
+      notification.assertive = options.assertive;
     }
     if (options && options.theme) {
       notification.setAttribute('theme', options.theme);
@@ -434,6 +451,11 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
     }
 
     this.renderer(this._card, this);
+  }
+
+  /** @private */
+  __computeAriaLive(assertive) {
+    return assertive ? 'assertive' : 'polite';
   }
 
   /** @private */
