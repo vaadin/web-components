@@ -39,10 +39,10 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         gap: var(--vaadin-dashboard-gap, 1rem);
         /* Dashbaord section header height */
         --_vaadin-dashboard-section-header-height: minmax(0, auto);
-        grid-template-rows: repeat(
-          auto-fill,
-          var(--_vaadin-dashboard-section-header-height) var(--_vaadin-dashboard-row-height)
-        );
+        grid-template-rows: var(--_vaadin-dashboard-section-header-height) repeat(
+            auto-fill,
+            var(--_vaadin-dashboard-row-height)
+          );
         grid-auto-rows: var(--_vaadin-dashboard-row-height);
       }
 

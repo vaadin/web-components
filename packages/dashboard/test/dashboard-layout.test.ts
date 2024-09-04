@@ -3,10 +3,10 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
 import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
+import type { DashboardSection } from '../vaadin-dashboard-section.js';
 import {
   getColumnWidths,
   getElementFromCell,
-  getParentSection,
   getRowHeights,
   getScrollingContainer,
   setColspan,
@@ -394,8 +394,10 @@ describe('dashboard layout', () => {
   });
 
   describe('section', () => {
+    let section: DashboardSection;
+
     beforeEach(async () => {
-      const section = fixtureSync(`
+      section = fixtureSync(`
         <vaadin-dashboard-section section-title="Section">
           <div id="item-2">Section item 2</div>
           <div id="item-3">Section item 3</div>
@@ -465,22 +467,23 @@ describe('dashboard layout', () => {
 
     it('should use minimum row height for all section rows', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      const section = getParentSection(childElements[2])!;
       setMinimumRowHeight(dashboard, 300);
       await nextFrame();
 
-      const [_sectionHeaderHeight, ...rowHeights] = getComputedStyle(section).gridTemplateRows.split(' ');
-      expect(rowHeights).to.eql(['300px', '300px']);
+      expect(childElements[2].offsetHeight).to.eql(300);
+      expect(childElements[3].offsetHeight).to.eql(300);
     });
 
     it('should not use minimum row height for section header row', async () => {
-      const section = getParentSection(childElements[2])!;
-      const [sectionHeaderHeight] = getComputedStyle(section).gridTemplateRows.split(' ');
+      const title = section.querySelector<HTMLHeadingElement>('[slot="title"]')!;
+      title.style.height = '100%';
+
+      const titleHeight = title.offsetHeight;
       setMinimumRowHeight(dashboard, 300);
       await nextFrame();
 
-      const [newSectionHeaderHeight] = getComputedStyle(section).gridTemplateRows.split(' ');
-      expect(newSectionHeaderHeight).to.eql(sectionHeaderHeight);
+      const newTitleHeight = title.offsetHeight;
+      expect(newTitleHeight).to.eql(titleHeight);
     });
 
     describe('gap', () => {
