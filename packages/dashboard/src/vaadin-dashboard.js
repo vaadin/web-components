@@ -108,7 +108,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
   /** @protected */
   render() {
-    return html`<slot></slot>`;
+    return html`<div id="grid"><slot></slot></div>`;
   }
 
   /** @private */

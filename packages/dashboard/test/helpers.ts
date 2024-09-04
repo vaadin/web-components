@@ -1,13 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
 
+function getCssGrid(element: Element): Element {
+  return (element as any).$?.grid || element;
+}
+
 /**
- * Returns the effective column widths of the dashboard as an array of numbers.
+ * Returns the scrolling container of the dashboard.
  */
-export function getColumnWidths(dashboard: Element): number[] {
-  return getComputedStyle(dashboard)
-    .gridTemplateColumns.split(' ')
-    .map((width) => parseFloat(width));
+export function getScrollingContainer(dashboard: Element): Element {
+  return getCssGrid(dashboard);
 }
 
 export function getParentSection(element?: Element | null): Element | null {
@@ -17,8 +19,17 @@ export function getParentSection(element?: Element | null): Element | null {
   return element.closest('vaadin-dashboard-section');
 }
 
+/**
+ * Returns the effective column widths of the dashboard as an array of numbers.
+ */
+export function getColumnWidths(dashboard: Element): number[] {
+  return getComputedStyle(getCssGrid(dashboard))
+    .gridTemplateColumns.split(' ')
+    .map((width) => parseFloat(width));
+}
+
 function _getRowHeights(dashboard: Element): number[] {
-  return getComputedStyle(dashboard)
+  return getComputedStyle(getCssGrid(dashboard))
     .gridTemplateRows.split(' ')
     .map((height) => parseFloat(height));
 }

@@ -7,6 +7,7 @@ import {
   expectLayout,
   getColumnWidths,
   getRowHeights,
+  getScrollingContainer,
   setColspan,
   setGap,
   setMaximumColumnCount,
@@ -62,14 +63,34 @@ describe('dashboard layout', () => {
     ]);
   });
 
-  it('should scroll when content overflows', () => {
+  it('should scroll vertically when content overflows', async () => {
     dashboard.style.width = `${columnWidth}px`;
     const rowHeight = Math.ceil(getRowHeights(dashboard)[0]);
     dashboard.style.height = `${rowHeight}px`;
-    expect(dashboard.scrollTop).to.eql(0);
+    await nextFrame();
 
-    dashboard.scrollTop = 1;
-    expect(dashboard.scrollTop).to.eql(1);
+    const scrollingContainer = getScrollingContainer(dashboard);
+    expect(getComputedStyle(scrollingContainer).overflowY).to.eql('auto');
+    expect(scrollingContainer.scrollTop).to.eql(0);
+
+    scrollingContainer.scrollTop = 1;
+    expect(scrollingContainer.scrollTop).to.eql(1);
+  });
+
+  it('should scroll horizontally when content overflows', async () => {
+    dashboard.style.width = `${columnWidth / 2}px`;
+    await nextFrame();
+
+    const scrollingContainer = getScrollingContainer(dashboard);
+    expect(getComputedStyle(scrollingContainer).overflowX).to.eql('auto');
+    expect(scrollingContainer.scrollLeft).to.eql(0);
+
+    scrollingContainer.scrollLeft = 1;
+    expect(scrollingContainer.scrollLeft).to.eql(1);
+  });
+
+  it('should hide content overflowing the host', () => {
+    expect(getComputedStyle(dashboard).overflow).to.eql('hidden');
   });
 
   describe('minimum column width', () => {
@@ -178,6 +199,36 @@ describe('dashboard layout', () => {
       expectLayout(dashboard, [
         [0, 0, 1],
       ]);
+    });
+
+    it('should not flicker on resize', async () => {
+      setMinimumColumnWidth(dashboard, columnWidth / 2);
+      setColspan(childElements[0], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 0],
+        [1],
+      ]);
+
+      const widget1Width = childElements[1].offsetWidth;
+
+      // Narrow down the dashboard
+      dashboard.style.width = `${columnWidth}px`;
+      // Expect widget 1 to still have the same width
+      expect(childElements[1].offsetWidth).to.eql(widget1Width);
+
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+
+      // Expect widget 1 to still have the same width after the layout has been recalculated
+      expect(childElements[1].offsetWidth).to.eql(widget1Width);
     });
   });
 

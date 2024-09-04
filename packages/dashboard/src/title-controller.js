@@ -5,6 +5,8 @@
  */
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
+const DEFAULT_TITLE_LEVEL = '2';
+
 /**
  * A controller to manage the widget or section title element.
  */
@@ -20,6 +22,17 @@ export class TitleController extends SlotChildObserveController {
    */
   setTitle(title) {
     this.title = title;
+
+    const titleLevel =
+      getComputedStyle(this.host).getPropertyValue('--_vaadin-dashboard-title-level') || DEFAULT_TITLE_LEVEL;
+    const newTagName = `h${titleLevel}`;
+    if (this.tagName !== newTagName) {
+      if (this.defaultNode) {
+        this.defaultNode.remove();
+        delete this.defaultNode;
+      }
+      this.tagName = newTagName;
+    }
 
     // Restore the default title, if needed.
     const titleNode = this.getSlotChild();
@@ -41,7 +54,6 @@ export class TitleController extends SlotChildObserveController {
    * @override
    */
   restoreDefaultNode() {
-    this.tagName = 'h2';
     this.attachDefaultNode();
   }
 
