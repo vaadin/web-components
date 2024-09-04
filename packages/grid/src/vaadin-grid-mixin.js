@@ -1029,11 +1029,8 @@ export const GridMixin = (superClass) =>
       const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
         const target = event.target;
-        const targetRect = target.getBoundingClientRect();
-        const gridRect = this.getBoundingClientRect();
 
-        if (targetRect.left < gridRect.left || targetRect.right > gridRect.right) {
-          // If the target cell is not fully in the viewport, do not show tooltip.
+        if (!this.__isTargetInViewport(target)) {
           return;
         }
 
@@ -1046,6 +1043,43 @@ export const GridMixin = (superClass) =>
           hover: event.type === 'mouseenter',
         });
       }
+    }
+
+    /** @private */
+    __isTargetInViewport(target) {
+      const targetRect = target.getBoundingClientRect();
+      const gridRect = this.getBoundingClientRect();
+
+      if (targetRect.left < gridRect.left || targetRect.right > gridRect.right) {
+        // Target cell is not fully in the viewport.
+        return false;
+      }
+
+      const frozen = [...target.parentNode.children].find((cell) => cell.hasAttribute('last-frozen'));
+      if (frozen && frozen !== target) {
+        const frozenRect = frozen.getBoundingClientRect();
+        if (
+          (!this.__isRTL && frozenRect.right > targetRect.left) ||
+          (this.__isRTL && targetRect.right > frozenRect.left)
+        ) {
+          // Target cell is partially covered by last frozen cell.
+          return false;
+        }
+      }
+
+      const frozenToEnd = [...target.parentNode.children].find((cell) => cell.hasAttribute('first-frozen-to-end'));
+      if (frozenToEnd && frozenToEnd !== target) {
+        const frozenToEndRect = frozenToEnd.getBoundingClientRect();
+        if (
+          (!this.__isRTL && targetRect.right > frozenToEndRect.left) ||
+          (this.__isRTL && frozenToEndRect.right > targetRect.left)
+        ) {
+          // Target cell is partially covered by first frozen to end cell.
+          return false;
+        }
+      }
+
+      return true;
     }
 
     /** @protected */

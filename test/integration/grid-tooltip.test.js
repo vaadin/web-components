@@ -32,6 +32,7 @@ describe('tooltip', () => {
       <vaadin-grid>
         <vaadin-grid-column path="firstName"></vaadin-grid-column>
         <vaadin-grid-column path="lastName"></vaadin-grid-column>
+        <vaadin-grid-column path="lastName"></vaadin-grid-column>
         <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
       </vaadin-grid>
     `);
@@ -292,6 +293,30 @@ describe('tooltip', () => {
         });
 
         it('should not show tooltip when cell not fully visible at the end', () => {
+          mouseenter(getCell(grid, 1));
+          expect(tooltip.opened).to.be.false;
+        });
+
+        it('should not show tooltip when cell is partially covered by frozen cell', async () => {
+          grid.querySelector('vaadin-grid-column').frozen = true;
+          await nextRender();
+
+          grid.$.table.scrollLeft = isRTL ? -100 : 100;
+          await nextRender();
+          flushGrid(grid);
+
+          mouseenter(getCell(grid, 1));
+          expect(tooltip.opened).to.be.false;
+        });
+
+        it('should not show tooltip when cell is partially covered by frozen to end cell', async () => {
+          grid.querySelectorAll('vaadin-grid-column')[2].frozenToEnd = true;
+          await nextRender();
+
+          grid.$.table.scrollLeft = isRTL ? -100 : 100;
+          await nextRender();
+          flushGrid(grid);
+
           mouseenter(getCell(grid, 1));
           expect(tooltip.opened).to.be.false;
         });
