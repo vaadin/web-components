@@ -43,12 +43,16 @@
 
       const dashboard = document.querySelector('vaadin-dashboard');
 
+      const widget = document.createElement('vaadin-dashboard-widget');
+      widget.widgetTitle = 'Total cost';
+      widget.innerHTML = '<div class="kpi-number">+203%</div><span slot="header">2023-2024</span>';
+
+      const section = document.createElement('vaadin-dashboard-section');
+      section.sectionTitle = 'Section';
+
       dashboard.items = [
         {
-          title: 'Total cost',
-          content: '+203%',
-          type: 'kpi',
-          header: '2023-2024',
+          component: widget,
         },
         {
           title: 'Sales',
@@ -57,7 +61,7 @@
           colspan: 2,
         },
         {
-          title: 'Section',
+          component: section,
           items: [
             {
               title: 'Sales closed this month',
