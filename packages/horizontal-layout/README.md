@@ -2,7 +2,7 @@
 
 A web component that places its content side-by-side in a row.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/basic-layouts/#horizontal-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/horizontal-layout)
 
 ```html
 <vaadin-horizontal-layout theme="spacing padding">
