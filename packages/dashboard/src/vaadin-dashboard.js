@@ -89,7 +89,12 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     render(this.__renderItemCells(items || []), this);
 
     this.querySelectorAll('vaadin-dashboard-widget-wrapper').forEach((cell) => {
-      if (renderer) {
+      if (cell.__item.component instanceof HTMLElement) {
+        if (cell.__item.component.parentElement !== cell) {
+          cell.textContent = '';
+          cell.appendChild(cell.__item.component);
+        }
+      } else if (renderer) {
         renderer(cell, this, { item: cell.__item });
       } else {
         cell.innerHTML = '';
@@ -101,6 +106,11 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   __renderItemCells(items) {
     return items.map((item) => {
       if (item.items) {
+        if (item.component instanceof HTMLElement) {
+          render(this.__renderItemCells(item.items), item.component);
+          return item.component;
+        }
+
         return html`<vaadin-dashboard-section
           .__item="${item}"
           .sectionTitle="${item.title || ''}"
