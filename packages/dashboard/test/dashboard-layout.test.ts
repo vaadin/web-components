@@ -6,6 +6,7 @@ import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
 import {
   getColumnWidths,
   getElementFromCell,
+  getParentSection,
   getRowHeights,
   getScrollingContainer,
   setColspan,
@@ -13,6 +14,7 @@ import {
   setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
 } from './helpers.js';
 
 /**
@@ -199,6 +201,33 @@ describe('dashboard layout', () => {
     });
   });
 
+  describe('minimum row height', () => {
+    const rowHeight = 100;
+
+    it('should have the row height of the highest wigdet on a row by default', () => {
+      childElements[0].style.height = `${rowHeight}px`;
+      childElements[1].style.height = '50px';
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should set a minimum row height', () => {
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should not constrain widgets to the minumum row height', () => {
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight * 2]);
+    });
+
+    it('should use minimum row height for all rows', () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+  });
+
   describe('column span', () => {
     it('should span multiple columns', async () => {
       setColspan(childElements[0], 2);
@@ -367,7 +396,7 @@ describe('dashboard layout', () => {
   describe('section', () => {
     beforeEach(async () => {
       const section = fixtureSync(`
-        <vaadin-dashboard-section>
+        <vaadin-dashboard-section section-title="Section">
           <div id="item-2">Section item 2</div>
           <div id="item-3">Section item 3</div>
         </vaadin-dashboard-section>
@@ -432,6 +461,26 @@ describe('dashboard layout', () => {
         [0, 1, null],
         [2, 2, 3],
       ]);
+    });
+
+    it('should use minimum row height for all section rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      const section = getParentSection(childElements[2])!;
+      setMinimumRowHeight(dashboard, 300);
+      await nextFrame();
+
+      const [_sectionHeaderHeight, ...rowHeights] = getComputedStyle(section).gridTemplateRows.split(' ');
+      expect(rowHeights).to.eql(['300px', '300px']);
+    });
+
+    it('should not use minimum row height for section header row', async () => {
+      const section = getParentSection(childElements[2])!;
+      const [sectionHeaderHeight] = getComputedStyle(section).gridTemplateRows.split(' ');
+      setMinimumRowHeight(dashboard, 300);
+      await nextFrame();
+
+      const [newSectionHeaderHeight] = getComputedStyle(section).gridTemplateRows.split(' ');
+      expect(newSectionHeaderHeight).to.eql(sectionHeaderHeight);
     });
 
     describe('gap', () => {

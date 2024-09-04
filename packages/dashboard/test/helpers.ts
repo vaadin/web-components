@@ -10,6 +10,16 @@ export function getScrollingContainer(dashboard: Element): Element {
 }
 
 /**
+ * Returns the parent section of the element.
+ */
+export function getParentSection(element?: Element | null): Element | null {
+  if (!element) {
+    return null;
+  }
+  return element.closest('vaadin-dashboard-section');
+}
+
+/**
  * Returns the effective column widths of the dashboard as an array of numbers.
  */
 export function getColumnWidths(dashboard: Element): number[] {
@@ -24,7 +34,7 @@ function _getRowHeights(dashboard: Element): number[] {
     .map((height) => parseFloat(height));
 }
 
-function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number, rowHeights: number[]) {
+function _getElementFromCell(dashboard: Element, rowIndex: number, columnIndex: number, rowHeights: number[]) {
   const { top, left } = dashboard.getBoundingClientRect();
   const columnWidths = getColumnWidths(dashboard);
   const x = left + columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
@@ -42,7 +52,7 @@ function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnInd
 /**
  * Returns the effective row heights with the row heights of nested sections flattened.
  */
-export function getRowHeights(dashboard: HTMLElement): number[] {
+export function getRowHeights(dashboard: Element): number[] {
   const dashboardRowHeights = _getRowHeights(dashboard);
   [...dashboardRowHeights].forEach((_height, index) => {
     const item = _getElementFromCell(dashboard, index, 0, dashboardRowHeights);
@@ -97,4 +107,11 @@ export function setGap(dashboard: HTMLElement, gap?: number): void {
  */
 export function setMaximumColumnCount(dashboard: HTMLElement, count?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-col-max-count', count !== undefined ? `${count}` : null);
+}
+
+/**
+ * Sets the minimum row height of the dashboard.
+ */
+export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): void {
+  dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : null);
 }
