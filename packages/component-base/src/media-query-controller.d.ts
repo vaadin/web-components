@@ -19,9 +19,6 @@ export class MediaQueryController implements ReactiveController {
    */
   protected callback: (matches: boolean) => void;
 
-  /**
-   * @param {HTMLElement} host
-   */
   constructor(query: string, callback: (matches: boolean) => void);
 
   hostConnected(): void;
