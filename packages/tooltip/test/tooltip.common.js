@@ -799,6 +799,12 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should not close overlay on target mousedown', () => {
+      tooltip.opened = true;
+      mousedown(target);
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should close overlay when opened is set to false', () => {
       tooltip.opened = true;
 

@@ -250,7 +250,7 @@ export const MenuBarMixin = (superClass) =>
       });
       this.addController(this._overflowController);
 
-      this.addEventListener('mousedown', () => this._hideTooltip());
+      this.addEventListener('mousedown', () => this._hideTooltip(true));
       this.addEventListener('mouseleave', () => this._hideTooltip());
 
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
