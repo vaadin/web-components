@@ -93,6 +93,18 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   }
 
   /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    const undefinedAncestor = this.closest('*:not(:defined)');
+    if (undefinedAncestor) {
+      customElements.whenDefined(undefinedAncestor.localName).then(() => queueMicrotask(() => this.__updateTitle()));
+    } else {
+      this.__updateTitle();
+    }
+  }
+
+  /** @protected */
   ready() {
     super.ready();
     this.addController(this.__titleController);
@@ -103,8 +115,13 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   }
 
   /** @private */
-  __onWidgetTitleChanged(widgetTitle) {
-    this.__titleController.setTitle(widgetTitle);
+  __onWidgetTitleChanged() {
+    this.__updateTitle();
+  }
+
+  /** @private */
+  __updateTitle() {
+    this.__titleController.setTitle(this.widgetTitle);
   }
 }
 
