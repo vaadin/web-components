@@ -36,11 +36,6 @@ export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
  * `overflow`       | Set to `top`, `bottom`, both, or none.
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
- *
- * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes VirtualListMixin
  */
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
