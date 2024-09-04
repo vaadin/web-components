@@ -568,6 +568,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onMouseDown() {
+      if (this.manual) {
+        return;
+      }
+
       this._stateController.close(true);
     }
 
