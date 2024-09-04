@@ -208,6 +208,7 @@ describe('popover', () => {
       outsideClick();
       await nextRender();
       expect(overlay.opened).to.be.false;
+      expect(popover.opened).to.be.false;
     });
 
     it('should not close on outside click if noCloseOnOutsideClick is true', async () => {
@@ -267,9 +268,10 @@ describe('popover', () => {
         esc(document.body);
         await nextRender();
         expect(overlay.opened).to.be.false;
+        expect(popover.opened).to.be.false;
       });
 
-      it('should not close on global Escape press if noCloseOnEsc is true when moodal', async () => {
+      it('should not close on global Escape press if noCloseOnEsc is true when modal', async () => {
         popover.modal = true;
         popover.noCloseOnEsc = true;
         await nextUpdate(popover);
