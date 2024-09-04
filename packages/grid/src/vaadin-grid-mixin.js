@@ -1030,7 +1030,7 @@ export const GridMixin = (superClass) =>
       if (tooltip && tooltip.isConnected) {
         const target = event.target;
 
-        if (!this.__isTargetInViewport(target)) {
+        if (!this.__isCellFullyVisible(target)) {
           return;
         }
 
@@ -1046,40 +1046,30 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    __isTargetInViewport(target) {
-      const targetRect = target.getBoundingClientRect();
-      const gridRect = this.getBoundingClientRect();
-
-      if (targetRect.left < gridRect.left || targetRect.right > gridRect.right) {
-        // Target cell is not fully in the viewport.
-        return false;
+    __isCellFullyVisible(cell) {
+      if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
+        // Frozen cells are always fully visible
+        return true;
       }
 
-      const frozen = [...target.parentNode.children].find((cell) => cell.hasAttribute('last-frozen'));
-      if (frozen && frozen !== target) {
+      let { left, right } = this.getBoundingClientRect();
+
+      const frozen = [...cell.parentNode.children].find((cell) => cell.hasAttribute('last-frozen'));
+      if (frozen) {
         const frozenRect = frozen.getBoundingClientRect();
-        if (
-          (!this.__isRTL && frozenRect.right > targetRect.left) ||
-          (this.__isRTL && targetRect.right > frozenRect.left)
-        ) {
-          // Target cell is partially covered by last frozen cell.
-          return false;
-        }
+        left = this.__isRTL ? left : frozenRect.right;
+        right = this.__isRTL ? frozenRect.left : right;
       }
 
-      const frozenToEnd = [...target.parentNode.children].find((cell) => cell.hasAttribute('first-frozen-to-end'));
-      if (frozenToEnd && frozenToEnd !== target) {
+      const frozenToEnd = [...cell.parentNode.children].find((cell) => cell.hasAttribute('first-frozen-to-end'));
+      if (frozenToEnd) {
         const frozenToEndRect = frozenToEnd.getBoundingClientRect();
-        if (
-          (!this.__isRTL && targetRect.right > frozenToEndRect.left) ||
-          (this.__isRTL && frozenToEndRect.right > targetRect.left)
-        ) {
-          // Target cell is partially covered by first frozen to end cell.
-          return false;
-        }
+        left = this.__isRTL ? frozenToEndRect.right : left;
+        right = this.__isRTL ? right : frozenToEndRect.left;
       }
 
-      return true;
+      const cellRect = cell.getBoundingClientRect();
+      return cellRect.left >= left && cellRect.right <= right;
     }
 
     /** @protected */
