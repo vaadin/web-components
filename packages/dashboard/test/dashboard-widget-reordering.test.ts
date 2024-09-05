@@ -261,7 +261,7 @@ describe('dashboard - widget reordering', () => {
       expect(event.dataTransfer.getData('text/plain')).to.be.ok;
     });
 
-    it('should should not throw when dragging something inside the widgets', () => {
+    it('should not throw when dragging something inside the widgets', () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const widgetContent = widget.querySelector('.content')!;
       expect(() =>
