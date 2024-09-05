@@ -2,6 +2,8 @@
 
 A web component for creating overlays that are positioned next to specified DOM element (target).
 
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/popover)
+
 [![npm version](https://badgen.net/npm/v/@vaadin/popover)](https://www.npmjs.com/package/@vaadin/popover)
 
 ## Installation
