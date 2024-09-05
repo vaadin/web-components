@@ -119,7 +119,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       if (cell.firstElementChild && cell.firstElementChild.localName === 'vaadin-dashboard-section') {
         return;
       }
-      if (renderer) {
+      if (cell.__item.component instanceof HTMLElement) {
+        if (cell.__item.component.parentElement !== cell) {
+          cell.textContent = '';
+          cell.appendChild(cell.__item.component);
+        }
+      } else if (renderer) {
         renderer(cell, this, { item: cell.__item });
       } else {
         cell.innerHTML = '';
@@ -137,13 +142,20 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       `.trim();
 
       if (item.items) {
+        const itemHasComponent = item.component instanceof HTMLElement;
+        if (itemHasComponent) {
+          render(this.__renderItemCells(item.items), item.component);
+        }
+
         return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
-          <vaadin-dashboard-section
-            .sectionTitle="${item.title}"
-            ?highlight="${this.__widgetReorderController.draggedItem}"
-          >
-            ${this.__renderItemCells(item.items)}
-          </vaadin-dashboard-section>
+          ${itemHasComponent
+            ? item.component
+            : html` <vaadin-dashboard-section
+                .sectionTitle="${item.title}"
+                ?highlight="${this.__widgetReorderController.draggedItem}"
+              >
+                ${this.__renderItemCells(item.items)}
+              </vaadin-dashboard-section>`}
         </vaadin-dashboard-widget-wrapper>`;
       }
 

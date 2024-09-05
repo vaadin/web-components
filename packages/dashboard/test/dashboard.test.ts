@@ -1,11 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import { getDraggable, getElementFromCell, setGap, setMaximumColumnWidth, setMinimumColumnWidth } from './helpers.js';
 
-type TestDashboardItem = DashboardItem & { id: string };
+type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
 
 describe('dashboard', () => {
   let dashboard: Dashboard<TestDashboardItem>;
@@ -158,6 +159,65 @@ describe('dashboard', () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const draggable = getDraggable(widget);
       expect(draggable.getBoundingClientRect().height).to.be.above(0);
+    });
+  });
+
+  describe('item components', () => {
+    it('should use the item component as widget', async () => {
+      const widget = fixtureSync('<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>');
+      dashboard.items = [{ id: 'Item 0', component: widget }];
+      await nextFrame();
+
+      expect(getElementFromCell(dashboard, 0, 0)).to.equal(widget);
+    });
+
+    it('should render default widgets if component is not an element', async () => {
+      dashboard.items = [{ id: 'Item 0', component: 'not-an-element' }];
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0);
+      expect(widget).to.be.ok;
+      expect(widget?.localName).to.equal('vaadin-dashboard-widget');
+      expect(widget).to.have.property('widgetTitle', 'Item 0 title');
+    });
+
+    it('should not call renderer for item components', async () => {
+      const renderer = sinon.spy();
+      dashboard.renderer = renderer;
+      const widget = fixtureSync('<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>');
+      dashboard.items = [{ id: 'Item 0', component: widget }];
+      await nextFrame();
+
+      expect(renderer).to.not.be.called;
+    });
+
+    it('should use the item component as section', async () => {
+      const section = fixtureSync(`<vaadin-dashboard-section section-title="Section"></vaadin-dashboard-section>`);
+      const widget = fixtureSync('<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>');
+      (dashboard as any).items = [
+        {
+          component: section,
+          items: [{ id: 'Item 0', component: widget }],
+        },
+      ];
+      await nextFrame();
+
+      expect(getElementFromCell(dashboard, 0, 0)).to.equal(widget);
+      expect(section.contains(widget)).to.be.true;
+    });
+
+    it('should render default section if component is not an element', async () => {
+      (dashboard as any).items = [{ component: 'not-an-element', title: 'Section', items: [{ id: 'Item 0' }] }];
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0);
+      expect(widget).to.be.ok;
+      expect(widget?.localName).to.equal('vaadin-dashboard-widget');
+      expect(widget).to.have.property('widgetTitle', 'Item 0 title');
+
+      const section = widget?.closest('vaadin-dashboard-section');
+      expect(section).to.be.ok;
+      expect(section?.sectionTitle).to.equal('Section');
     });
   });
 });
