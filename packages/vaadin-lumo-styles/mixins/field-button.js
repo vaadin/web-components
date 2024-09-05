@@ -28,7 +28,7 @@ const fieldButton = css`
 
   :host([disabled]) [part$='button'],
   :host([readonly]) [part$='button'] {
-    color: var(--lumo-disabled-text-color);
+    color: var(--lumo-contrast-20pct);
     cursor: default;
   }
 
