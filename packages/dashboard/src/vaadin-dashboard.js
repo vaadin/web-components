@@ -11,14 +11,21 @@
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
 import { html, LitElement, render } from 'lit';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
+import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
+import { WidgetReorderController } from './widget-reorder-controller.js';
 
 /**
  * A responsive, grid-based dashboard layout component
+ *
+ * @fires {CustomEvent} dashboard-item-drag-reorder - Fired when an items will be reordered by dragging
+ * @fires {CustomEvent} dashboard-item-reorder-start - Fired when item reordering starts
+ * @fires {CustomEvent} dashboard-item-reorder-end - Fired when item reordering ends
  *
  * @customElement
  * @extends HTMLElement
@@ -26,7 +33,7 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * @mixes DashboardLayoutMixin
  * @mixes ThemableMixin
  */
-class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-dashboard';
   }
@@ -39,10 +46,11 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return [
       super.styles,
       css`
-        ::slotted(vaadin-dashboard-widget-wrapper) {
-          display: contents;
+        :host([editable]) {
+          --_vaadin-dashboard-widget-actions-display: block;
         }
       `,
+      hasWidgetWrappers,
     ];
   }
 
@@ -72,11 +80,30 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       renderer: {
         type: Function,
       },
+
+      /**
+       * Whether the dashboard is editable.
+       */
+      editable: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
     };
   }
 
   static get observers() {
     return ['__itemsOrRendererChanged(items, renderer)'];
+  }
+
+  constructor() {
+    super();
+    this.__widgetReorderController = new WidgetReorderController(this);
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+    this.addController(this.__widgetReorderController);
   }
 
   /** @protected */
@@ -89,6 +116,9 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     render(this.__renderItemCells(items || []), this);
 
     this.querySelectorAll('vaadin-dashboard-widget-wrapper').forEach((cell) => {
+      if (cell.firstElementChild && cell.firstElementChild.localName === 'vaadin-dashboard-section') {
+        return;
+      }
       if (cell.__item.component instanceof HTMLElement) {
         if (cell.__item.component.parentElement !== cell) {
           cell.textContent = '';
@@ -105,27 +135,52 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   __renderItemCells(items) {
     return items.map((item) => {
+      const itemDragged = this.__widgetReorderController.draggedItem === item;
+      const style = `
+        ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
+        ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
+      `.trim();
+
       if (item.items) {
-        if (item.component instanceof HTMLElement) {
+        const itemHasComponent = item.component instanceof HTMLElement;
+        if (itemHasComponent) {
           render(this.__renderItemCells(item.items), item.component);
-          return item.component;
         }
 
-        return html`<vaadin-dashboard-section
-          .__item="${item}"
-          .sectionTitle="${item.title || ''}"
-          .items="${item.items}"
-        >
-          ${this.__renderItemCells(item.items)}
-        </vaadin-dashboard-section>`;
+        return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
+          ${itemHasComponent
+            ? item.component
+            : html` <vaadin-dashboard-section
+                .sectionTitle="${item.title}"
+                ?highlight="${this.__widgetReorderController.draggedItem}"
+              >
+                ${this.__renderItemCells(item.items)}
+              </vaadin-dashboard-section>`}
+        </vaadin-dashboard-widget-wrapper>`;
       }
 
-      return html`<vaadin-dashboard-widget-wrapper
-        .__item="${item}"
-        style="--vaadin-dashboard-item-colspan: ${item.colspan};"
-      ></vaadin-dashboard-widget-wrapper>`;
+      return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
+      </vaadin-dashboard-widget-wrapper>`;
     });
   }
+
+  /**
+   * Fired when item reordering starts
+   *
+   * @event dashboard-item-reorder-start
+   */
+
+  /**
+   * Fired when item reordering ends
+   *
+   * @event dashboard-item-reorder-end
+   */
+
+  /**
+   * Fired when an items will be reordered by dragging
+   *
+   * @event dashboard-item-drag-reorder
+   */
 }
 
 defineCustomElement(Dashboard);

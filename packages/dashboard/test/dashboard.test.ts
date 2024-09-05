@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
-import { getElementFromCell, setGap, setMaximumColumnWidth, setMinimumColumnWidth } from './helpers.js';
+import { getDraggable, getElementFromCell, setGap, setMaximumColumnWidth, setMinimumColumnWidth } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
 
@@ -143,6 +143,22 @@ describe('dashboard', () => {
       expect(widget3).to.be.ok;
       expect(widget3?.localName).to.equal('vaadin-dashboard-widget');
       expect(widget3).to.have.property('widgetTitle', 'Item 3 title');
+    });
+  });
+
+  describe('editable', () => {
+    it('should hide draggable handle by default', () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const draggable = getDraggable(widget);
+      expect(draggable.getBoundingClientRect().height).to.equal(0);
+    });
+
+    it('should unhide draggable handle when editable', async () => {
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const draggable = getDraggable(widget);
+      expect(draggable.getBoundingClientRect().height).to.be.above(0);
     });
   });
 
