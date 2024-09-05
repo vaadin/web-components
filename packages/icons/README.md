@@ -2,11 +2,11 @@
 
 A set of 600+ icons designed for web applications.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/icons/default-icons#vaadin-icons)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icons)](https://www.npmjs.com/package/@vaadin/icons)
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/icons/screenshot.png" width="728" alt="Screenshot of vaadin-icons">](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/icons/screenshot.png" width="728" alt="Screenshot of vaadin-icons">](https://vaadin.com/docs/latest/components/icons/default-icons#vaadin-icons)
 
 ## Installation
 
