@@ -87,10 +87,24 @@
           </vaadin-dashboard-widget>
         `;
       };
+
+      dashboard.addEventListener('dashboard-item-reorder-start', (e) => {
+        console.log('dashboard-item-reorder-start');
+      });
+
+      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => {
+        console.log('dashboard-item-drag-reorder', e.detail);
+        // e.preventDefault();
+      });
+
+      dashboard.addEventListener('dashboard-item-reorder-end', (e) => {
+        console.log('dashboard-item-reorder-end');
+        console.log('items after reorder', e.target.items);
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-dashboard></vaadin-dashboard>
+    <vaadin-dashboard editable></vaadin-dashboard>
   </body>
 </html>

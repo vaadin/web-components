@@ -15,6 +15,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
+import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 /**
  * A Widget component for use with the Dashboard component
@@ -30,27 +31,25 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: flex;
-        flex-direction: column;
-        grid-column: var(--_vaadin-dashboard-item-column);
-      }
+    return [
+      css`
+        :host {
+          display: flex;
+          flex-direction: column;
+          grid-column: var(--_vaadin-dashboard-item-column);
+          position: relative;
+        }
 
-      :host([hidden]) {
-        display: none !important;
-      }
+        :host([hidden]) {
+          display: none !important;
+        }
 
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      #content {
-        flex: 1;
-      }
-    `;
+        #content {
+          flex: 1;
+        }
+      `,
+      dashboardWidgetAndSectionStyles,
+    ];
   }
 
   static get properties() {
@@ -72,7 +71,9 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
       <header>
         <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
         <slot name="header"></slot>
-        <div id="header-actions"></div>
+        <div id="header-actions">
+          <span id="drag-handle" draggable="true" class="drag-handle"></span>
+        </div>
       </header>
 
       <div id="content">
