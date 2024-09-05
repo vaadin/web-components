@@ -90,7 +90,8 @@ const inputField = css`
     --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
   }
 
-  :host([disabled]) [part='label'] {
+  :host([disabled]) [part='label'],
+  :host([disabled]) [part='input-field'] ::slotted([slot$='fix']) {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
