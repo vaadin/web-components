@@ -54,6 +54,9 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-col-max-count)
           );
 
+          /* Effective row height */
+          --_vaadin-dashboard-row-height: minmax(var(--vaadin-dashboard-row-min-height, auto), auto);
+
           display: grid;
           overflow: auto;
           height: 100%;
@@ -62,6 +65,8 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
+
+          grid-auto-rows: var(--_vaadin-dashboard-row-height);
 
           gap: var(--vaadin-dashboard-gap, 1rem);
         }

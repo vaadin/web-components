@@ -98,3 +98,10 @@ export function setGap(dashboard: HTMLElement, gap?: number): void {
 export function setMaximumColumnCount(dashboard: HTMLElement, count?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-col-max-count', count !== undefined ? `${count}` : null);
 }
+
+/**
+ * Sets the minimum row height of the dashboard.
+ */
+export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): void {
+  dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : null);
+}

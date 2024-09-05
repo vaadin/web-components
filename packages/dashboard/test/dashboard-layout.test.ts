@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
 import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
+import type { DashboardSection } from '../vaadin-dashboard-section.js';
 import {
   getColumnWidths,
   getElementFromCell,
@@ -13,6 +14,7 @@ import {
   setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
 } from './helpers.js';
 
 /**
@@ -199,6 +201,33 @@ describe('dashboard layout', () => {
     });
   });
 
+  describe('minimum row height', () => {
+    const rowHeight = 100;
+
+    it('should have the row height of the highest wigdet on a row by default', () => {
+      childElements[0].style.height = `${rowHeight}px`;
+      childElements[1].style.height = '50px';
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should set a minimum row height', () => {
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should not constrain widgets to the minumum row height', () => {
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight * 2]);
+    });
+
+    it('should use minimum row height for all rows', () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setMinimumRowHeight(dashboard, rowHeight);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+  });
+
   describe('column span', () => {
     it('should span multiple columns', async () => {
       setColspan(childElements[0], 2);
@@ -365,9 +394,11 @@ describe('dashboard layout', () => {
   });
 
   describe('section', () => {
+    let section: DashboardSection;
+
     beforeEach(async () => {
-      const section = fixtureSync(`
-        <vaadin-dashboard-section>
+      section = fixtureSync(`
+        <vaadin-dashboard-section section-title="Section">
           <div id="item-2">Section item 2</div>
           <div id="item-3">Section item 3</div>
         </vaadin-dashboard-section>
@@ -432,6 +463,27 @@ describe('dashboard layout', () => {
         [0, 1, null],
         [2, 2, 3],
       ]);
+    });
+
+    it('should use minimum row height for all section rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setMinimumRowHeight(dashboard, 300);
+      await nextFrame();
+
+      expect(childElements[2].offsetHeight).to.eql(300);
+      expect(childElements[3].offsetHeight).to.eql(300);
+    });
+
+    it('should not use minimum row height for section header row', async () => {
+      const title = section.querySelector<HTMLHeadingElement>('[slot="title"]')!;
+      title.style.height = '100%';
+
+      const titleHeight = title.offsetHeight;
+      setMinimumRowHeight(dashboard, 300);
+      await nextFrame();
+
+      const newTitleHeight = title.offsetHeight;
+      expect(newTitleHeight).to.eql(titleHeight);
     });
 
     describe('gap', () => {
