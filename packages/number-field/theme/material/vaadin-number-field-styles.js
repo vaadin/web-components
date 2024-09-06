@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/theme/material/vaadin-input-container-styles.js';
-import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -24,6 +23,6 @@ const numberField = css`
   }
 `;
 
-registerStyles('vaadin-number-field', [inputFieldShared, fieldButton, numberField], {
+registerStyles('vaadin-number-field', [inputFieldShared, numberField], {
   moduleId: 'material-number-field',
 });
