@@ -109,6 +109,19 @@ describe('number-field', () => {
         element.value = 5;
         await visualDiff(div, `${dir}-step-buttons-visible`);
       });
+
+      it('step buttons visible disabled', async () => {
+        element.stepButtonsVisible = true;
+        element.disabled = true;
+        await visualDiff(div, `${dir}-step-buttons-visible-disabled`);
+      });
+
+      it('step buttons visible disabled value', async () => {
+        element.stepButtonsVisible = true;
+        element.value = 1;
+        element.disabled = true;
+        await visualDiff(div, `${dir}-step-buttons-visible-disabled-value`);
+      });
     });
   });
 });
