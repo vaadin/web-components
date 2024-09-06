@@ -49,6 +49,13 @@ describe('checkbox-group', () => {
       await visualDiff(div, 'label-focused');
     });
 
+    it('label focused readonly', async () => {
+      element.label = 'Label';
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'label-focused-readonly');
+    });
+
     it('label disabled', async () => {
       element.label = 'Label';
       element.disabled = true;
