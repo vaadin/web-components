@@ -6,8 +6,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const comboBox = css`
   :host {
-    display: inline-flex;
-    outline: none;
     -webkit-tap-highlight-color: transparent;
   }
 
