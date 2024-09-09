@@ -1,4 +1,4 @@
-import type { DirectiveResult } from 'lit/directive';
+import type { DirectiveResult } from 'lit/directive.js';
 import type {
   GridColumnBodyLitRenderer,
   GridColumnBodyRendererDirective,
