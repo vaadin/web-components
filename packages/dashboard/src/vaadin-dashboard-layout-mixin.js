@@ -72,6 +72,7 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         ::slotted(*) {
+          /* The grid-column value applied to children */
           --_vaadin-dashboard-item-column: span
             min(
               var(--vaadin-dashboard-item-colspan, 1),
@@ -80,6 +81,7 @@ export const DashboardLayoutMixin = (superClass) =>
 
           grid-column: var(--_vaadin-dashboard-item-column);
 
+          /* The grid-row value applied to children */
           --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
           grid-row: var(--_vaadin-dashboard-item-row);
         }
