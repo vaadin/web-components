@@ -48,6 +48,27 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
         #content {
           flex: 1;
         }
+
+        #resize-handle::before {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 30px;
+          content: '\\2921';
+          cursor: grab;
+          line-height: 1;
+        }
+
+        :host::after {
+          content: '';
+          z-index: 100;
+          position: absolute;
+          inset-inline-start: 0;
+          top: 0;
+          width: var(--_vaadin-dashboard-widget-resizer-width, 0);
+          height: var(--_vaadin-dashboard-widget-resizer-height, 0);
+          background: rgba(0, 0, 0, 0.1);
+        }
       `,
       dashboardWidgetAndSectionStyles,
     ];
@@ -80,6 +101,8 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
       <div id="content">
         <slot></slot>
       </div>
+
+      <div id="resize-handle" class="resize-handle"></div>
     `;
   }
 

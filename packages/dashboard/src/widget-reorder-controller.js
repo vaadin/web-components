@@ -24,67 +24,72 @@ export class WidgetReorderController extends EventTarget {
 
   /** @private */
   __dragStart(e) {
-    if ([...e.composedPath()].some((el) => el.classList && el.classList.contains('drag-handle'))) {
-      this.__draggedElement = e.target;
-      this.draggedItem = this.__getElementItem(this.__draggedElement);
-
-      // Set the drag image to the dragged element
-      const { left, top } = this.__draggedElement.getBoundingClientRect();
-      e.dataTransfer.setDragImage(this.__draggedElement, e.clientX - left, e.clientY - top);
-      // Set the text/plain data to enable dragging on mobile devices
-      e.dataTransfer.setData('text/plain', 'item');
-
-      // Observe the removal of the dragged element from the DOM
-      this.draggedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
-
-      this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-start'));
-
-      requestAnimationFrame(() => {
-        // Re-render to have the dragged element turn into a placeholder
-        this.host.items = [...this.host.items];
-      });
+    const handle = [...e.composedPath()].find((el) => el.classList && el.classList.contains('drag-handle'));
+    if (!handle) {
+      return;
     }
+
+    this.__draggedElement = e.target;
+    this.draggedItem = this.__getElementItem(this.__draggedElement);
+
+    // Set the drag image to the dragged element
+    const { left, top } = this.__draggedElement.getBoundingClientRect();
+    e.dataTransfer.setDragImage(this.__draggedElement, e.clientX - left, e.clientY - top);
+    // Set the text/plain data to enable dragging on mobile devices
+    e.dataTransfer.setData('text/plain', 'item');
+
+    // Observe the removal of the dragged element from the DOM
+    this.draggedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
+
+    this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-start'));
+
+    requestAnimationFrame(() => {
+      // Re-render to have the dragged element turn into a placeholder
+      this.host.items = [...this.host.items];
+    });
   }
 
   /** @private */
   __dragOver(e) {
-    if (this.draggedItem) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
+    if (!this.draggedItem) {
+      return;
+    }
 
-      // Get all elements that are candidates for reordering with the dragged element
-      const dragContextElements = this.__getDragContextElements(this.__draggedElement);
-      // Find the up-to-date element instance representing the dragged item
-      const draggedElement = dragContextElements.find((element) => this.__getElementItem(element) === this.draggedItem);
-      if (!draggedElement) {
-        return;
-      }
-      // Get all elements except the dragged element from the drag context
-      const otherElements = dragContextElements.filter((element) => element !== draggedElement);
-      // Find the element closest to the x and y coordinates of the drag event
-      const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
 
-      // Check if the dragged element is dragged enough over the element closest to the drag event coordinates
-      if (!this.__reordering && this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
-        // Prevent reordering multiple times in quick succession
-        this.__reordering = true;
-        setTimeout(() => {
-          this.__reordering = false;
-        }, REORDER_EVENT_TIMEOUT);
+    // Get all elements that are candidates for reordering with the dragged element
+    const dragContextElements = this.__getDragContextElements(this.__draggedElement);
+    // Find the up-to-date element instance representing the dragged item
+    const draggedElement = dragContextElements.find((element) => this.__getElementItem(element) === this.draggedItem);
+    if (!draggedElement) {
+      return;
+    }
+    // Get all elements except the dragged element from the drag context
+    const otherElements = dragContextElements.filter((element) => element !== draggedElement);
+    // Find the element closest to the x and y coordinates of the drag event
+    const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
 
-        const targetItem = this.__getElementItem(closestElement);
-        const targetItems = this.__getItemsArrayOfItem(targetItem);
-        const targetIndex = targetItems.indexOf(targetItem);
+    // Check if the dragged element is dragged enough over the element closest to the drag event coordinates
+    if (!this.__reordering && this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
+      // Prevent reordering multiple times in quick succession
+      this.__reordering = true;
+      setTimeout(() => {
+        this.__reordering = false;
+      }, REORDER_EVENT_TIMEOUT);
 
-        const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
-          detail: { item: this.draggedItem, targetIndex },
-          cancelable: true,
-        });
+      const targetItem = this.__getElementItem(closestElement);
+      const targetItems = this.__getItemsArrayOfItem(targetItem);
+      const targetIndex = targetItems.indexOf(targetItem);
 
-        // Dispatch the reorder event and reorder items if the event is not canceled
-        if (this.host.dispatchEvent(reorderEvent)) {
-          this.__reorderItems(this.draggedItem, targetIndex);
-        }
+      const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
+        detail: { item: this.draggedItem, targetIndex },
+        cancelable: true,
+      });
+
+      // Dispatch the reorder event and reorder items if the event is not canceled
+      if (this.host.dispatchEvent(reorderEvent)) {
+        this.__reorderItems(this.draggedItem, targetIndex);
       }
     }
   }

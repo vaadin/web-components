@@ -19,6 +19,7 @@ import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themabl
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
+import { WidgetResizeController } from './widget-resize-controller.js';
 
 /**
  * A responsive, grid-based dashboard layout component
@@ -48,6 +49,10 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       css`
         :host([editable]) {
           --_vaadin-dashboard-widget-actions-display: block;
+        }
+
+        :host([resizing]) {
+          user-select: none;
         }
       `,
       hasWidgetWrappers,
@@ -98,12 +103,14 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   constructor() {
     super();
     this.__widgetReorderController = new WidgetReorderController(this);
+    this.__widgetResizeController = new WidgetResizeController(this);
   }
 
   /** @protected */
   ready() {
     super.ready();
     this.addController(this.__widgetReorderController);
+    this.addController(this.__widgetResizeController);
   }
 
   /** @protected */
