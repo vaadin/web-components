@@ -13,11 +13,9 @@ import { requiredField } from './required-field.js';
 
 const inputField = css`
   :host {
-    display: inline-flex;
     position: relative;
     padding-top: 8px;
     margin-bottom: 8px;
-    outline: none;
     color: var(--material-body-text-color);
     font-size: var(--material-body-font-size);
     line-height: 24px;

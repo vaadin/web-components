@@ -17,7 +17,6 @@ registerStyles('vaadin-select-list-box', listBox, { moduleId: 'material-select-l
 
 const select = css`
   :host {
-    display: inline-flex;
     -webkit-tap-highlight-color: transparent;
   }
 
