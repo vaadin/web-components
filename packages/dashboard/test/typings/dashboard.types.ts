@@ -24,6 +24,11 @@ interface TestDashboardItem extends DashboardItem {
 const genericDashboard = document.createElement('vaadin-dashboard');
 assertType<Dashboard>(genericDashboard);
 
+assertType<{ colspan?: number; rowspan?: number }>(genericDashboard.items[0] as DashboardItem);
+assertType<{ items: DashboardItem[]; title?: string | null }>(
+  genericDashboard.items[0] as DashboardSectionItem<DashboardItem>,
+);
+
 assertType<ElementMixinClass>(genericDashboard);
 assertType<DashboardLayoutMixinClass>(genericDashboard);
 assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | undefined>(genericDashboard.items);
@@ -34,8 +39,8 @@ assertType<Dashboard<TestDashboardItem>>(narrowedDashboard);
 assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(narrowedDashboard.items);
 assertType<DashboardRenderer<TestDashboardItem> | null | undefined>(narrowedDashboard.renderer);
 assertType<
-  | { colspan?: number; testProperty: string }
-  | { title?: string | null; items: Array<{ colspan?: number; testProperty: string }> }
+  | { colspan?: number; rowspan?: number; testProperty: string }
+  | { title?: string | null; items: Array<{ colspan?: number; rowspan?: number; testProperty: string }> }
 >(narrowedDashboard.items[0]);
 
 narrowedDashboard.addEventListener('dashboard-item-reorder-start', (event) => {

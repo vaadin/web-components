@@ -79,6 +79,9 @@ export const DashboardLayoutMixin = (superClass) =>
             );
 
           grid-column: var(--_vaadin-dashboard-item-column);
+
+          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
+          grid-row: var(--_vaadin-dashboard-item-row);
         }
       `;
     }

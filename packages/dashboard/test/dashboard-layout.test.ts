@@ -15,6 +15,7 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setRowspan,
 } from './helpers.js';
 
 describe('dashboard layout', () => {
@@ -258,6 +259,34 @@ describe('dashboard layout', () => {
 
       // Expect widget 1 to still have the same width after the layout has been recalculated
       expect(childElements[1].offsetWidth).to.eql(widget1Width);
+    });
+  });
+
+  describe('row span', () => {
+    it('should span multiple rows', async () => {
+      setRowspan(childElements[0], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 1],
+        [0],
+      ]);
+    });
+
+    it('should span multiple rows on a single column', async () => {
+      setRowspan(childElements[0], 2);
+      await nextFrame();
+
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [0],
+        [1],
+      ]);
     });
   });
 

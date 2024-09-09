@@ -18,6 +18,11 @@ export interface DashboardItem {
    * The column span of the item
    */
   colspan?: number;
+
+  /**
+   * The row span of the item
+   */
+  rowspan?: number;
 }
 
 export interface DashboardSectionItem<TItem extends DashboardItem> {

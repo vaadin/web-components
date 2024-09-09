@@ -96,6 +96,13 @@ export function setColspan(element: HTMLElement, colspan?: number): void {
 }
 
 /**
+ * Sets the row span of the element
+ */
+export function setRowspan(element: HTMLElement, rowspan?: number): void {
+  element.style.setProperty('--vaadin-dashboard-item-rowspan', rowspan !== undefined ? `${rowspan}` : null);
+}
+
+/**
  * Sets the gap between the cells of the dashboard.
  */
 export function setGap(dashboard: HTMLElement, gap?: number): void {

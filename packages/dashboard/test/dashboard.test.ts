@@ -111,6 +111,24 @@ describe('dashboard', () => {
     });
   });
 
+  describe('row span', () => {
+    it('should span one row by default', () => {
+      dashboard.style.width = `${columnWidth}px`;
+      const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 1, 0)];
+      expect(widgets[0]).to.not.equal(widgets[1]);
+    });
+
+    it('should span multiple rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      dashboard.items = [{ rowspan: 2, id: 'Item 0' }];
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0);
+      expect(widget).to.have.property('widgetTitle', 'Item 0 title');
+      expect(getElementFromCell(dashboard, 1, 0)).to.equal(widget);
+    });
+  });
+
   describe('section', () => {
     beforeEach(async () => {
       dashboard.items = [

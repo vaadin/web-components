@@ -138,6 +138,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       const itemDragged = this.__widgetReorderController.draggedItem === item;
       const style = `
         ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
+        ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
         ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
       `.trim();
 
