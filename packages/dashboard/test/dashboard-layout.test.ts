@@ -264,6 +264,7 @@ describe('dashboard layout', () => {
 
   describe('row span', () => {
     it('should span multiple rows', async () => {
+      setMinimumRowHeight(dashboard, 100);
       setRowspan(childElements[0], 2);
       await nextFrame();
 
@@ -275,6 +276,7 @@ describe('dashboard layout', () => {
     });
 
     it('should span multiple rows on a single column', async () => {
+      setMinimumRowHeight(dashboard, 100);
       setRowspan(childElements[0], 2);
       await nextFrame();
 
@@ -454,6 +456,19 @@ describe('dashboard layout', () => {
       expectLayout(dashboard, [
         [0, 1, null],
         [2, 2, 3],
+      ]);
+    });
+
+    it('should span multiple rows inside a section', async () => {
+      setMinimumRowHeight(dashboard, 100);
+      setRowspan(childElements[2], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 1],
+        [2, 3],
+        [2, null]
       ]);
     });
 
