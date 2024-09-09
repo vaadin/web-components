@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { DirectiveResult } from 'lit/directive';
+import type { DirectiveResult } from 'lit/directive.js';
 import type { GridItemModel } from '@vaadin/grid';
 import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
