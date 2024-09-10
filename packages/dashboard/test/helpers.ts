@@ -46,7 +46,7 @@ function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnInd
     .find(
       (element) =>
         dashboard.contains(element) && element !== dashboard && element.localName !== 'vaadin-dashboard-section',
-    )!;
+    ) as HTMLElement;
 }
 
 /**
@@ -69,7 +69,7 @@ export function getRowHeights(dashboard: HTMLElement): number[] {
 /**
  * Returns the element at the center of the cell at the given row and column index.
  */
-export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number): Element | null {
+export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number): HTMLElement | null {
   const rowHeights = getRowHeights(dashboard);
   return _getElementFromCell(dashboard, rowIndex, columnIndex, rowHeights);
 }
@@ -208,12 +208,16 @@ export function fireDragStart(dragStartTarget: Element): TestDragEvent {
   return event;
 }
 
-export function fireDragOver(dragOverTarget: Element, location: 'top' | 'bottom' | 'start' | 'end'): TestDragEvent {
-  const { top, bottom, left, right } = dragOverTarget.getBoundingClientRect();
+function getEventCoordinates(relativeElement: Element, location: 'top' | 'bottom' | 'start' | 'end') {
+  const { top, bottom, left, right } = relativeElement.getBoundingClientRect();
   const y = location === 'top' ? top : bottom;
   const dir = document.dir;
   const x = location === 'start' ? (dir === 'rtl' ? right : left) : dir === 'rtl' ? left : right;
-  const event = createDragEvent('dragover', { x, y });
+  return { x, y };
+}
+
+export function fireDragOver(dragOverTarget: Element, location: 'top' | 'bottom' | 'start' | 'end'): TestDragEvent {
+  const event = createDragEvent('dragover', getEventCoordinates(dragOverTarget, location));
   dragOverTarget.dispatchEvent(event);
   return event;
 }
@@ -232,4 +236,25 @@ export function fireDrop(dragOverTarget: Element): TestDragEvent {
 
 export function resetReorderTimeout(dashboard: HTMLElement): void {
   (dashboard as any).__widgetReorderController.__reordering = false;
+}
+
+export function fireResizeOver(dragOverTarget: Element, location: 'top' | 'bottom' | 'start' | 'end'): void {
+  const { x, y } = getEventCoordinates(dragOverTarget, location);
+  const event = new MouseEvent('mousemove', { bubbles: true, composed: true, clientX: x, clientY: y, buttons: 1 });
+  dragOverTarget.dispatchEvent(event);
+}
+
+export function fireResizeStart(resizedWidget: Element): void {
+  let handle = resizedWidget.shadowRoot!.querySelector('.resize-handle');
+  if (!handle) {
+    handle = resizedWidget;
+  }
+  const { x, y } = getEventCoordinates(handle, 'bottom');
+  handle.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, composed: true, clientX: x, clientY: y }));
+  // Initiate track
+  fireResizeOver(resizedWidget, 'top');
+}
+
+export function fireResizeEnd(dragOverTarget: Element): void {
+  dragOverTarget.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, composed: true }));
 }

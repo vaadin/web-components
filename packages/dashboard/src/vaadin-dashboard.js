@@ -51,7 +51,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
           --_vaadin-dashboard-widget-actions-display: block;
         }
 
-        :host([resizing]) {
+        #grid[resizing] {
           user-select: none;
         }
       `,

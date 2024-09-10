@@ -37,7 +37,7 @@ export class WidgetResizeController extends EventTarget {
       return;
     }
 
-    this.host.toggleAttribute('resizing', true);
+    this.host.$.grid.toggleAttribute('resizing', true);
     this.resizedItem = this.__getElementItem(e.target);
 
     this.__resizeStartWidth = e.target.offsetWidth;
@@ -94,12 +94,18 @@ export class WidgetResizeController extends EventTarget {
       return;
     }
 
+    // If the originally resized element is restored to the DOM (as a direct child of the host),
+    // to make sure "track" event gets dispatched, remove it to avoid duplicates
+    if (this.__resizedElement.parentElement === this.host) {
+      this.__resizedElement.remove();
+    }
+
     const itemWrapper = this.__getItemWrapper(this.resizedItem);
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-width');
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-height');
 
     this.resizedItem = null;
-    this.host.toggleAttribute('resizing', false);
+    this.host.$.grid.toggleAttribute('resizing', false);
 
     this.__resizedElementRemoveObserver.disconnect();
 
