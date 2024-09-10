@@ -35,7 +35,7 @@ const checkboxGroup = css`
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
 
-  :host([focused]:not([disabled])) [part='label'] {
+  :host([focused]:not([readonly])) [part='label'] {
     color: var(--lumo-primary-text-color);
   }
 
