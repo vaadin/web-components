@@ -15,6 +15,7 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setRowspan,
 } from './helpers.js';
 
 describe('dashboard layout', () => {
@@ -261,6 +262,36 @@ describe('dashboard layout', () => {
     });
   });
 
+  describe('row span', () => {
+    it('should span multiple rows', async () => {
+      setMinimumRowHeight(dashboard, 100);
+      setRowspan(childElements[0], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 1],
+        [0],
+      ]);
+    });
+
+    it('should span multiple rows on a single column', async () => {
+      setMinimumRowHeight(dashboard, 100);
+      setRowspan(childElements[0], 2);
+      await nextFrame();
+
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [0],
+        [1],
+      ]);
+    });
+  });
+
   describe('gap', () => {
     it('should have a default gap', () => {
       // Clear the gap used in the tests
@@ -425,6 +456,20 @@ describe('dashboard layout', () => {
       expectLayout(dashboard, [
         [0, 1, null],
         [2, 2, 3],
+      ]);
+    });
+
+    it('should span multiple rows inside a section', async () => {
+      // Using a minimum row height here causes Firefox to crash, disabling for now
+      // setMinimumRowHeight(dashboard, 100);
+      setRowspan(childElements[2], 2);
+      await nextFrame();
+
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 1],
+        [2, 3],
+        [2]
       ]);
     });
 
