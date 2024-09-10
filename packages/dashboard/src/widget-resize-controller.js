@@ -15,7 +15,7 @@ export class WidgetResizeController extends EventTarget {
     super();
     this.host = host;
     this.__resizedElementRemoveObserver = new MutationObserver(() => this.__restoreResizedElement());
-
+    this.__touchMoveCancelListener = (e) => e.preventDefault();
     addListener(host, 'track', (e) => this.__onTrack(e));
   }
 
@@ -50,6 +50,8 @@ export class WidgetResizeController extends EventTarget {
 
     this.__resizedElement = e.target;
     this.__resizedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
+
+    document.addEventListener('touchmove', this.__touchMoveCancelListener, { passive: false });
   }
 
   /** @private */
@@ -108,6 +110,7 @@ export class WidgetResizeController extends EventTarget {
     this.host.$.grid.toggleAttribute('resizing', false);
 
     this.__resizedElementRemoveObserver.disconnect();
+    document.removeEventListener('touchmove', this.__touchMoveCancelListener);
 
     this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-end'));
   }
