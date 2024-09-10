@@ -13,7 +13,7 @@ const numberField = css`
     text-align: center;
   }
 
-  [part$='button'][disabled] {
+  :host(:not([disabled])) [part$='button'][disabled] {
     opacity: 0.2;
   }
 
