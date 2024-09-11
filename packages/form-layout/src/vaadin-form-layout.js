@@ -459,7 +459,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
   _updateLayout() {
     // Do not update layout when invisible
     if (isElementHidden(this)) {
-      return false;
+      return;
     }
 
     /*
