@@ -110,7 +110,7 @@ export class WidgetResizeController extends EventTarget {
     this.host.$.grid.toggleAttribute('resizing', false);
 
     this.__resizedElementRemoveObserver.disconnect();
-    document.removeEventListener('touchmove', this.__touchMoveCancelListener);
+    this.cleanup();
 
     this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-end'));
   }
@@ -126,14 +126,25 @@ export class WidgetResizeController extends EventTarget {
   }
 
   /** @private */
-  __updateResizedItem(colspan, rowspan) {
-    if (this.resizedItem.colspan !== colspan || this.resizedItem.rowspan !== rowspan) {
-      this.resizedItem.colspan = colspan;
-      this.resizedItem.rowspan = rowspan;
-      this.host.dispatchEvent(new CustomEvent('dashboard-item-resize', { detail: { item: this.resizedItem } }));
-      this.host.items = [...this.host.items];
-      requestAnimationFrame(() => this.__updateWidgetStyles());
+  __updateResizedItem(colspan = 1, rowspan = 1) {
+    if (this.resizedItem.colspan === colspan && this.resizedItem.rowspan === rowspan) {
+      return;
     }
+
+    const resizeEvent = new CustomEvent('dashboard-item-drag-resize', {
+      detail: { item: this.resizedItem, colspan, rowspan },
+      cancelable: true,
+    });
+
+    // Dispatch the resize event and resize items if the event is not canceled
+    if (!this.host.dispatchEvent(resizeEvent)) {
+      return;
+    }
+
+    this.resizedItem.colspan = colspan;
+    this.resizedItem.rowspan = rowspan;
+    this.host.items = [...this.host.items];
+    requestAnimationFrame(() => this.__updateWidgetStyles());
   }
 
   /** @private */
@@ -149,5 +160,9 @@ export class WidgetResizeController extends EventTarget {
       this.__resizedElement.style.display = 'none';
       this.host.appendChild(this.__resizedElement);
     }
+  }
+
+  cleanup() {
+    document.removeEventListener('touchmove', this.__touchMoveCancelListener);
   }
 }

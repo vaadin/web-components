@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
@@ -226,6 +227,75 @@ describe('dashboard - widget resizing', () => {
       expectLayout(dashboard, [
         [0, 1],
       ]);
+    });
+
+    it('should dispatch an item resize start event', async () => {
+      const resizeStartSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resize-start', resizeStartSpy);
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      expect(resizeStartSpy).to.have.been.calledOnce;
+    });
+
+    it('should dispatch an item drag resize event', async () => {
+      const resizeSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-drag-resize', resizeSpy);
+      dashboard.addEventListener('dashboard-item-drag-resize', (e) => e.preventDefault());
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+
+      expect(resizeSpy).to.have.been.calledOnce;
+      expect(resizeSpy.getCall(0).args[0].detail).to.deep.equal({
+        item: { id: 0 },
+        colspan: 2,
+        rowspan: 1,
+      });
+    });
+
+    it('should not resize if the drag resize event is cancelled', async () => {
+      dashboard.addEventListener('dashboard-item-drag-resize', (e) => e.preventDefault());
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+      ]);
+    });
+
+    it('should dispatch an item resize end event', async () => {
+      const resizeEndSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resize-end', resizeEndSpy);
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
+      expect(resizeEndSpy).to.have.been.calledOnce;
+    });
+
+    it('should cancel touchmove events while resizing', async () => {
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      const touchmove = new TouchEvent('touchmove', { cancelable: true, bubbles: true });
+      document.dispatchEvent(touchmove);
+
+      expect(touchmove.defaultPrevented).to.be.true;
+    });
+
+    it('should not cancel touchmove events after resizing has finished', async () => {
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeEnd(dashboard);
+
+      const touchmove = new TouchEvent('touchmove', { cancelable: true, bubbles: true });
+      document.dispatchEvent(touchmove);
+
+      expect(touchmove.defaultPrevented).to.be.false;
     });
 
     // Make sure the original resized element is restored in the host.

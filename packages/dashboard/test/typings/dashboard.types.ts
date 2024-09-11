@@ -5,8 +5,11 @@ import type {
   Dashboard,
   DashboardItem,
   DashboardItemDragReorderEvent,
+  DashboardItemDragResizeEvent,
   DashboardItemReorderEndEvent,
   DashboardItemReorderStartEvent,
+  DashboardItemResizeEndEvent,
+  DashboardItemResizeStartEvent,
   DashboardRenderer,
   DashboardSectionItem,
 } from '../../vaadin-dashboard.js';
@@ -55,6 +58,22 @@ narrowedDashboard.addEventListener('dashboard-item-drag-reorder', (event) => {
   assertType<DashboardItemDragReorderEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
   assertType<number>(event.detail.targetIndex);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-resize-start', (event) => {
+  assertType<DashboardItemResizeStartEvent<TestDashboardItem>>(event);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-resize-end', (event) => {
+  assertType<DashboardItemResizeEndEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-drag-resize', (event) => {
+  assertType<DashboardItemDragResizeEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
+  assertType<number>(event.detail.colspan);
+  assertType<number>(event.detail.rowspan);
 });
 
 /* DashboardLayout */
