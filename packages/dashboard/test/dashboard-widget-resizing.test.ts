@@ -211,6 +211,29 @@ describe('dashboard - widget resizing', () => {
       ]);
     });
 
+    it('should not resize vertically if minimum row height is not defined', async () => {
+      setMinimumRowHeight(dashboard, undefined);
+      dashboard.items = [{ id: 0 }, { id: 1 }, { id: 2 }];
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [2],
+      ]);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      fireResizeOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [2],
+      ]);
+    });
+
     it('should not resize a widget if not dragging by the resize handle', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       widget.shadowRoot?.querySelector('.resize-handle')?.remove();

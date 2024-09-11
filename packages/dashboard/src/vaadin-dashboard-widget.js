@@ -49,6 +49,10 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
           flex: 1;
         }
 
+        #resize-handle {
+          display: var(--_vaadin-dashboard-widget-actions-display, none);
+        }
+
         #resize-handle::before {
           position: absolute;
           bottom: 0;

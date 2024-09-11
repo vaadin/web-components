@@ -49,8 +49,10 @@ export class WidgetResizeController extends EventTarget {
     this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-start'));
 
     this.__resizedElement = e.target;
+    // Observe the removal of the resized element from the DOM
     this.__resizedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
 
+    // Prevent scrolling on touch devices while resizing
     document.addEventListener('touchmove', this.__touchMoveCancelListener, { passive: false });
   }
 
@@ -76,16 +78,24 @@ export class WidgetResizeController extends EventTarget {
     const columns = gridStyle.gridTemplateColumns.split(' ');
     const columnWidth = parseFloat(columns[0]);
     if (this.__resizeWidth > currentElementWidth + gapSize + columnWidth / 2) {
+      // Resized horizontally above the half of the next column, increase colspan
       this.__updateResizedItem(Math.min((this.resizedItem.colspan || 1) + 1, columns.length), this.resizedItem.rowspan);
     } else if (this.__resizeWidth < currentElementWidth - columnWidth / 2) {
+      // Resized horizontally below the half of the current column, decrease colspan
       this.__updateResizedItem(Math.max((this.resizedItem.colspan || 1) - 1, 1), this.resizedItem.rowspan);
+    }
+
+    if (!gridStyle.getPropertyValue('--vaadin-dashboard-row-min-height')) {
+      return;
     }
 
     const currentElementHeight = itemWrapper.firstElementChild.offsetHeight;
     const rowMinHeight = Math.min(...gridStyle.gridTemplateRows.split(' ').map((height) => parseFloat(height)));
     if (this.__resizeHeight > currentElementHeight + gapSize + rowMinHeight / 2) {
+      // Resized vertically above the half of the next row, increase rowspan
       this.__updateResizedItem(this.resizedItem.colspan, (this.resizedItem.rowspan || 1) + 1);
     } else if (this.__resizeHeight < currentElementHeight - rowMinHeight / 2) {
+      // Resized vertically below the half of the current row, decrease rowspan
       this.__updateResizedItem(this.resizedItem.colspan, Math.max((this.resizedItem.rowspan || 1) - 1, 1));
     }
   }
@@ -108,9 +118,12 @@ export class WidgetResizeController extends EventTarget {
 
     this.host.$.grid.toggleAttribute('resizing', false);
 
+    // Disconnect the observer for the resized element removal
     this.__resizedElementRemoveObserver.disconnect();
+    // Cleanup the touchmove listener
     this.cleanup();
 
+    // Dispatch the resize end event
     this.host.dispatchEvent(
       new CustomEvent('dashboard-item-resize-end', {
         detail: { item: this.resizedItem },
