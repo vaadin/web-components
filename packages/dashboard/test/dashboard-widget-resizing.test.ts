@@ -267,6 +267,43 @@ describe('dashboard - widget resizing', () => {
       ]);
     });
 
+    it('should not resize beyond effective column count', async () => {
+      const resizeSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-drag-resize', resizeSpy);
+
+      const widget1Rect = getElementFromCell(dashboard, 0, 1)!.getBoundingClientRect();
+
+      // Narrow the dashboard to have only one column
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      // Try yo resize the widget to the cover two columns
+      const x = widget1Rect.right;
+      const y = widget1Rect.bottom;
+      const event = new MouseEvent('mousemove', {
+        bubbles: true,
+        composed: true,
+        clientX: x,
+        clientY: y,
+        buttons: 1,
+      });
+      dashboard.dispatchEvent(event);
+      await nextFrame();
+
+      expect(resizeSpy).to.not.have.been.called;
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+    });
+
     it('should dispatch an item resize end event', async () => {
       const resizeEndSpy = sinon.spy();
       dashboard.addEventListener('dashboard-item-resize-end', resizeEndSpy);
@@ -281,6 +318,22 @@ describe('dashboard - widget resizing', () => {
       expect(resizeEndSpy.getCall(0).args[0].detail).to.deep.equal({
         item: { id: 0, colspan: 2, rowspan: 1 },
       });
+    });
+
+    it('should not dispatch an item reorder end event if drag has not started', async () => {
+      const resizeEndSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resize-end', resizeEndSpy);
+
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      widget.shadowRoot?.querySelector('.resize-handle')?.remove();
+      // Start dragging the first widget by somewhere else than the resize handle
+      fireResizeStart(widget);
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
+      expect(resizeEndSpy).to.not.have.been.called;
     });
 
     it('should cancel touchmove events while resizing', async () => {
@@ -314,6 +367,95 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).not.to.equal('none');
+    });
+
+    it('should not throw with a lazy renderer while resizing', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0],
+        [1],
+      ]);
+
+      const widget1Rect = getElementFromCell(dashboard, 1, 0)!.getBoundingClientRect();
+
+      // Assign a renderer that initially renders nothing
+      const syncRenderer = dashboard.renderer!;
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        requestAnimationFrame(() => {
+          syncRenderer(root, _, model);
+        });
+      };
+      await nextFrame();
+      await nextFrame();
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'top');
+      await nextFrame();
+
+      expect(() => {
+        // Dispatch dragover event while the renderer is still rendering (no widget in the cells)
+        const x = widget1Rect.left + widget1Rect.width / 2;
+        const y = widget1Rect.bottom;
+        const event = new MouseEvent('mousemove', {
+          bubbles: true,
+          composed: true,
+          clientX: x,
+          clientY: y,
+          buttons: 1,
+        });
+        dashboard.dispatchEvent(event);
+      }).to.not.throw();
+    });
+
+    it('should take gap into account when resizing', async () => {
+      dashboard.style.width = `${columnWidth * 3}px`;
+      setGap(dashboard, columnWidth / 2);
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+      ]);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'start');
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+      ]);
+    });
+
+    it('should not shrink colspan below 0', async () => {
+      const resizeSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-drag-resize', resizeSpy);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'start');
+      await nextFrame();
+
+      expect((dashboard.items[0] as TestDashboardItem).colspan).to.be.undefined;
+      expect(resizeSpy).to.not.have.been.calledOnce;
+    });
+
+    it('should not shrink rowspan below 0', async () => {
+      const resizeSpy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-drag-resize', resizeSpy);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'top');
+      await nextFrame();
+
+      expect((dashboard.items[0] as TestDashboardItem).rowspan).to.be.undefined;
+      expect(resizeSpy).to.not.have.been.calledOnce;
     });
 
     // Make sure the original resized element is restored in the host.

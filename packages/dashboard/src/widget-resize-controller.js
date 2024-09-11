@@ -132,7 +132,7 @@ export class WidgetResizeController extends EventTarget {
 
   /** @private */
   __updateResizedItem(colspan = 1, rowspan = 1) {
-    if (this.resizedItem.colspan === colspan && this.resizedItem.rowspan === rowspan) {
+    if ((this.resizedItem.colspan || 1) === colspan && (this.resizedItem.rowspan || 1) === rowspan) {
       return;
     }
 
