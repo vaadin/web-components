@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -456,6 +457,11 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
    * @protected
    */
   _updateLayout() {
+    // Do not update layout when invisible
+    if (isElementHidden(this)) {
+      return false;
+    }
+
     /*
       The item width formula:
 
