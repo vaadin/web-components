@@ -62,6 +62,7 @@ narrowedDashboard.addEventListener('dashboard-item-drag-reorder', (event) => {
 
 narrowedDashboard.addEventListener('dashboard-item-resize-start', (event) => {
   assertType<DashboardItemResizeStartEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-resize-end', (event) => {

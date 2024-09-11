@@ -46,7 +46,7 @@ export class WidgetResizeController extends EventTarget {
     this.__resizeHeight = this.__resizeStartHeight + e.detail.dy;
     this.__updateWidgetStyles();
 
-    this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-start'));
+    this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-start', { detail: { item: this.resizedItem } }));
 
     this.__resizedElement = e.target;
     // Observe the removal of the resized element from the DOM

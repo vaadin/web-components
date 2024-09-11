@@ -259,6 +259,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       expect(resizeStartSpy).to.have.been.calledOnce;
+      expect(resizeStartSpy.getCall(0).args[0].detail).to.deep.equal({
+        item: { id: 0 },
+      });
     });
 
     it('should dispatch an item drag resize event', async () => {
