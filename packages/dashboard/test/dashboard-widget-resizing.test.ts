@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
   expectLayout,
@@ -365,7 +366,7 @@ describe('dashboard - widget resizing', () => {
     it('should cancel touchmove events while resizing', async () => {
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
-      const touchmove = new TouchEvent('touchmove', { cancelable: true, bubbles: true });
+      const touchmove = new Event('touchmove', { cancelable: true, bubbles: true });
       document.dispatchEvent(touchmove);
 
       expect(touchmove.defaultPrevented).to.be.true;
@@ -376,23 +377,25 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
       fireResizeEnd(dashboard);
 
-      const touchmove = new TouchEvent('touchmove', { cancelable: true, bubbles: true });
+      const touchmove = new Event('touchmove', { cancelable: true, bubbles: true });
       document.dispatchEvent(touchmove);
 
       expect(touchmove.defaultPrevented).to.be.false;
     });
 
     it('should prevent selection while resizing', async () => {
-      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).not.to.equal('none');
+      const propertyName = isSafari ? 'WebkitUserSelect' : 'userSelect';
+
+      expect(getComputedStyle((dashboard as any).$.grid)[propertyName]).not.to.equal('none');
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
 
-      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).to.equal('none');
+      expect(getComputedStyle((dashboard as any).$.grid)[propertyName]).to.equal('none');
 
       fireResizeEnd(dashboard);
       await nextFrame();
 
-      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).not.to.equal('none');
+      expect(getComputedStyle((dashboard as any).$.grid)[propertyName]).not.to.equal('none');
     });
 
     it('should not throw with a lazy renderer while resizing', async () => {

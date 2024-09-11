@@ -55,6 +55,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         }
 
         #grid[resizing] {
+          -webkit-user-select: none;
           user-select: none;
         }
       `,
