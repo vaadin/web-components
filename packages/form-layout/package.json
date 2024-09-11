@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/a11y-base": "24.5.0-alpha11",
     "@vaadin/component-base": "24.5.0-alpha11",
     "@vaadin/vaadin-lumo-styles": "24.5.0-alpha11",
     "@vaadin/vaadin-material-styles": "24.5.0-alpha11",
