@@ -272,10 +272,15 @@ describe('dashboard - widget resizing', () => {
       dashboard.addEventListener('dashboard-item-resize-end', resizeEndSpy);
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
+      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
       fireResizeEnd(dashboard);
       await nextFrame();
 
       expect(resizeEndSpy).to.have.been.calledOnce;
+      expect(resizeEndSpy.getCall(0).args[0].detail).to.deep.equal({
+        item: { id: 0, colspan: 2, rowspan: 1 },
+      });
     });
 
     it('should cancel touchmove events while resizing', async () => {
@@ -296,6 +301,19 @@ describe('dashboard - widget resizing', () => {
       document.dispatchEvent(touchmove);
 
       expect(touchmove.defaultPrevented).to.be.false;
+    });
+
+    it('should prevent selection while resizing', async () => {
+      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).not.to.equal('none');
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).to.equal('none');
+
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
+      expect(getComputedStyle(getElementFromCell(dashboard, 0, 0)!).userSelect).not.to.equal('none');
     });
 
     // Make sure the original resized element is restored in the host.

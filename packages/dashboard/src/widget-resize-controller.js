@@ -106,13 +106,18 @@ export class WidgetResizeController extends EventTarget {
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-width');
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-height');
 
-    this.resizedItem = null;
     this.host.$.grid.toggleAttribute('resizing', false);
 
     this.__resizedElementRemoveObserver.disconnect();
     this.cleanup();
 
-    this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-end'));
+    this.host.dispatchEvent(
+      new CustomEvent('dashboard-item-resize-end', {
+        detail: { item: this.resizedItem },
+        cancelable: true,
+      }),
+    );
+    this.resizedItem = null;
   }
 
   /** @private */
