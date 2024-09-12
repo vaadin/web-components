@@ -47,6 +47,7 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
         #content {
           flex: 1;
+          min-height: 100px;
         }
 
         #resize-handle {
