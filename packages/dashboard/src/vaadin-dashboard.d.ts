@@ -65,12 +65,41 @@ export type DashboardItemDragReorderEvent<TItem extends DashboardItem> = CustomE
   targetIndex: number;
 }>;
 
+/**
+ * Fired when item resizing starts
+ */
+export type DashboardItemResizeStartEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+}>;
+
+/**
+ * Fired when item resizing ends
+ */
+export type DashboardItemResizeEndEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+}>;
+
+/**
+ * Fired when an item will be resized by dragging
+ */
+export type DashboardItemDragResizeEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+  colspan: number;
+  rowspan: number;
+}>;
+
 export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-reorder-start': DashboardItemReorderStartEvent;
 
   'dashboard-item-reorder-end': DashboardItemReorderEndEvent;
 
   'dashboard-item-drag-reorder': DashboardItemDragReorderEvent<TItem>;
+
+  'dashboard-item-resize-start': DashboardItemResizeStartEvent<TItem>;
+
+  'dashboard-item-resize-end': DashboardItemResizeEndEvent<TItem>;
+
+  'dashboard-item-drag-resize': DashboardItemDragResizeEvent<TItem>;
 }
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
