@@ -311,7 +311,7 @@ describe('dashboard - widget resizing', () => {
       ]);
 
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
-      // Try yo resize the widget to the cover two columns
+      // Try to resize the widget to the cover two columns
       const x = widget1Rect.right;
       const y = widget1Rect.bottom;
       const event = new MouseEvent('mousemove', {
