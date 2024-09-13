@@ -111,12 +111,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   }
 
   /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.__widgetResizeController.cleanup();
-  }
-
-  /** @protected */
   ready() {
     super.ready();
     this.addController(this.__widgetReorderController);

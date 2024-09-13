@@ -121,7 +121,7 @@ export class WidgetResizeController extends EventTarget {
     // Disconnect the observer for the resized element removal
     this.__resizedElementRemoveObserver.disconnect();
     // Cleanup the touchmove listener
-    this.cleanup();
+    document.removeEventListener('touchmove', this.__touchMoveCancelListener);
 
     // Dispatch the resize end event
     this.host.dispatchEvent(
@@ -180,7 +180,7 @@ export class WidgetResizeController extends EventTarget {
     }
   }
 
-  cleanup() {
+  hostDisconnected() {
     document.removeEventListener('touchmove', this.__touchMoveCancelListener);
   }
 }
