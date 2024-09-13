@@ -60,6 +60,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // Expect the widgets to be reordered
       // prettier-ignore
       expectLayout(dashboard, [
@@ -73,6 +76,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'start');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
       await nextFrame();
 
       // prettier-ignore
@@ -96,6 +102,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'start');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],
@@ -115,6 +124,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'end');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
       await nextFrame();
 
       // prettier-ignore
@@ -139,6 +151,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],
@@ -159,6 +174,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       fireResizeOver(getElementFromCell(dashboard, 1, 0)!, 'top');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
       await nextFrame();
 
       // prettier-ignore
@@ -183,6 +201,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'top');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],
@@ -203,6 +224,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
 
       fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'bottom');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
       await nextFrame();
 
       // prettier-ignore
@@ -228,6 +252,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],
@@ -245,6 +272,9 @@ describe('dashboard - widget resizing', () => {
 
       // Drag over the end edge of the second one
       fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
       await nextFrame();
 
       // prettier-ignore
@@ -274,6 +304,9 @@ describe('dashboard - widget resizing', () => {
       fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
       await nextFrame();
 
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       expect(resizeSpy).to.have.been.calledOnce;
       expect(resizeSpy.getCall(0).args[0].detail).to.deep.equal({
         item: { id: 0 },
@@ -288,6 +321,9 @@ describe('dashboard - widget resizing', () => {
       await nextFrame();
       fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
       await nextFrame();
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],
