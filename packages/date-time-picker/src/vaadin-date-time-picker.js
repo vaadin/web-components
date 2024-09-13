@@ -423,17 +423,9 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  get __formattedValue() {
+  get __completeValue() {
     const values = this.__pickers.map((picker) => picker.value);
     return values.every(Boolean) ? values.join('T') : '';
-  }
-
-  /** @private */
-  get __unparsableValue() {
-    const unparsableValues = this.__inputs.filter((picker) => picker.__unparsableValue);
-    return unparsableValues.length > 0
-      ? this.__inputs.map((picker) => picker.value || picker.__unparsableValue).join('T')
-      : '';
   }
 
   /** @private */
@@ -444,6 +436,16 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     const values = this.__inputs.map((picker) => picker.value);
     return values.filter(Boolean).length === 1 ? values.join('T') : '';
+  }
+
+  /** @private */
+  get __unparsableValue() {
+    const hasUnparsableValues = this.__inputs.some((picker) => picker.__unparsableValue);
+    if (hasUnparsableValues) {
+      return this.__inputs.map((picker) => picker.value || picker.__unparsableValue).join('T');
+    }
+
+    return '';
   }
 
   /** @protected */
@@ -490,7 +492,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // Do not validate when focusout is caused by document
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
-      this.validate();
       this.__commitValueChange();
     }
   }
@@ -532,8 +533,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __changeEventHandler(event) {
     event.stopPropagation();
 
-    const hasCompleteValue = !this.__incompleteValue;
-    if (hasCompleteValue || this.__unparsableValue || this.invalid) {
+    if (!this.__incompleteValue || this.__unparsableValue || this.invalid) {
       this.__commitValueChange();
     }
   }
@@ -906,21 +906,21 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   checkValidity() {
     const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
+    const hasIncompleteValue = this.__incompleteValue;
     const hasEmptyRequiredPickers = this.required && this.__pickers.some((picker) => !picker.value);
-    return !hasInvalidPickers && !hasEmptyRequiredPickers;
+    return !hasInvalidPickers && !hasEmptyRequiredPickers && !hasIncompleteValue;
   }
 
   /** @private */
   __commitValueChange() {
+    this.validate();
+
     if (this.__committedValue !== this.value) {
-      this.validate();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
-      this.validate();
       this.dispatchEvent(new CustomEvent('unparsable-change'));
     } else if (this.__committedIncompleteValue !== this.__incompleteValue) {
-      this.validate();
-      this.dispatchEvent(new CustomEvent('incomplete-change'));
+      this.dispatchEvent(new CustomEvent('unparsable-change'));
     }
 
     this.__committedValue = this.value;
@@ -988,7 +988,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __valueChanged(value, oldValue) {
     this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-    if (!this.__preserveCommittedValue) {
+    if (!this.__keepCommittedValue) {
       this.__committedValue = value;
       this.__committedUnparsableValue = '';
       this.__committedIncompleteValue = '';
@@ -1060,12 +1060,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
 
     this.__ignoreInputValueChange = true;
-    this.__preserveCommittedValue = true;
+    this.__keepCommittedValue = true;
 
     this.__updateTimePickerMinMax();
     this.value = this.__formattedValue;
 
-    this.__preserveCommittedValue = false;
+    this.__keepCommittedValue = false;
     this.__ignoreInputValueChange = false;
   }
 
