@@ -52,21 +52,21 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
         #resize-handle {
           display: var(--_vaadin-dashboard-widget-actions-display, none);
-        }
-
-        #resize-handle::before {
           position: absolute;
           bottom: 0;
           right: 0;
           font-size: 30px;
-          content: '\\2921';
           cursor: grab;
           line-height: 1;
         }
 
+        #resize-handle::before {
+          content: '\\2921';
+        }
+
         :host::after {
           content: '';
-          z-index: 100;
+          z-index: 2;
           position: absolute;
           inset-inline-start: 0;
           top: 0;
@@ -96,18 +96,17 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   render() {
     return html`
       <header>
+        <button id="drag-handle" draggable="true" class="drag-handle" tabindex="-1"></button>
         <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
         <slot name="header"></slot>
-        <div id="header-actions">
-          <span id="drag-handle" draggable="true" class="drag-handle"></span>
-        </div>
+        <button id="remove-button" tabindex="-1" @click="${() => this.__remove()}"></button>
       </header>
 
       <div id="content">
         <slot></slot>
       </div>
 
-      <div id="resize-handle" class="resize-handle"></div>
+      <button id="resize-handle" class="resize-handle" tabindex="-1"></button>
     `;
   }
 
@@ -152,6 +151,11 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   /** @private */
   __updateTitle() {
     this.__titleController.setTitle(this.widgetTitle);
+  }
+
+  /** @private */
+  __remove() {
+    this.dispatchEvent(new CustomEvent('item-remove', { bubbles: true, composed: true }));
   }
 }
 

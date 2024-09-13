@@ -25,13 +25,23 @@ export const dashboardWidgetAndSectionStyles = css`
     align-items: center;
   }
 
-  #header-actions {
+  #drag-handle {
     display: var(--_vaadin-dashboard-widget-actions-display, none);
+    font-size: 30px;
+    cursor: grab;
   }
 
   #drag-handle::before {
-    font-size: 30px;
     content: '☰';
-    cursor: grab;
+  }
+
+  #remove-button {
+    display: var(--_vaadin-dashboard-widget-actions-display, none);
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  #remove-button::before {
+    content: '×';
   }
 `;

@@ -23,7 +23,7 @@ type TestDashboardItem = DashboardItem & { id: number };
 
 describe('dashboard - widget reordering', () => {
   let dashboard: Dashboard<TestDashboardItem>;
-  const columnWidth = 100;
+  const columnWidth = 200;
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');

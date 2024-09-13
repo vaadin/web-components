@@ -100,10 +100,9 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   render() {
     return html`
       <header>
+        <button id="drag-handle" draggable="true" class="drag-handle" tabindex="-1"></button>
         <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
-        <div id="header-actions">
-          <span id="drag-handle" draggable="true" class="drag-handle"></span>
-        </div>
+        <button id="remove-button" tabindex="-1" @click="${() => this.__remove()}"></button>
       </header>
 
       <slot></slot>
@@ -134,6 +133,11 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   /** @private */
   __onSectionTitleChanged(sectionTitle) {
     this.__titleController.setTitle(sectionTitle);
+  }
+
+  /** @private */
+  __remove() {
+    this.dispatchEvent(new CustomEvent('item-remove', { bubbles: true, composed: true }));
   }
 }
 
