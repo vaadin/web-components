@@ -112,8 +112,9 @@ describe('dashboard', () => {
   });
 
   describe('row span', () => {
-    it('should span one row by default', () => {
+    it('should span one row by default', async () => {
       dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
       const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 1, 0)];
       expect(widgets[0]).to.not.equal(widgets[1]);
     });

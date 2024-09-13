@@ -88,6 +88,13 @@ export const DashboardLayoutMixin = (superClass) =>
       `;
     }
 
+    /** @protected */
+    ready() {
+      super.ready();
+      // Avoid flickering on the initial render
+      this._onResize();
+    }
+
     /**
      * @protected
      * @override
