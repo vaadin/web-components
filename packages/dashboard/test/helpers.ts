@@ -145,19 +145,34 @@ export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): vo
  * ```
  */
 export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number | null>>): void {
-  expect(getRowHeights(dashboard).length).to.eql(layout.length);
-  expect(getColumnWidths(dashboard).length).to.eql(layout[0].length);
+  if (getRowHeights(dashboard).length !== layout.length) {
+    expect.fail(`Expected layout row count: ${layout.length}, actual: ${getRowHeights(dashboard).length}`);
+  }
+  if (getColumnWidths(dashboard).length !== Math.max(...layout.map((row) => row.length))) {
+    expect.fail(`Expected layout column count: ${layout[0].length}, actual: ${getColumnWidths(dashboard).length}`);
+  }
 
+  const actualLayout: Array<Array<number | null>> = [];
   layout.forEach((row, rowIndex) => {
-    row.forEach((itemId, columnIndex) => {
+    const actualRow: Array<number | null> = [];
+    actualLayout.push(actualRow);
+    row.forEach((_itemId, columnIndex) => {
       const element = getElementFromCell(dashboard, rowIndex, columnIndex);
       if (!element) {
-        expect(itemId).to.be.null;
+        actualRow.push(null);
       } else {
-        expect(element.id).to.equal(`item-${itemId}`);
+        actualRow.push(parseInt(element.id.replace('item-', '')));
       }
     });
   });
+
+  function printLayout(layout: Array<Array<number | null>>): string {
+    return layout.map((row) => row.map((id) => (id === null ? 'null' : id)).join(', ')).join('\n');
+  }
+
+  if (printLayout(layout) !== printLayout(actualLayout)) {
+    expect.fail(`\n\nExpected layout: \n${printLayout(layout)}\n\nActual layout: \n${printLayout(actualLayout)}`);
+  }
 }
 
 export function getDraggable(element: Element): Element {
