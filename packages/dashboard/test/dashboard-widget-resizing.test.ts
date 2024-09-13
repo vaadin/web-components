@@ -20,7 +20,7 @@ type TestDashboardItem = DashboardItem & { id: number };
 
 describe('dashboard - widget resizing', () => {
   let dashboard: Dashboard<TestDashboardItem>;
-  const columnWidth = 100;
+  const columnWidth = 200;
   const rowHeight = 100;
 
   beforeEach(async () => {
