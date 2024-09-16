@@ -250,6 +250,24 @@ describe('dashboard', () => {
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
     });
 
+    it('should unhide resize handle when editable with a lazy renderer', async () => {
+      // Assign a renderer that initially renders nothing
+      const syncRenderer = dashboard.renderer!;
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        requestAnimationFrame(() => {
+          syncRenderer(root, _, model);
+        });
+      };
+      await nextFrame();
+
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
+    });
+
     describe('section', () => {
       beforeEach(async () => {
         dashboard.items = [
