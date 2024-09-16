@@ -533,7 +533,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __changeEventHandler(event) {
     event.stopPropagation();
 
-    if (!this.__incompleteValue || this.__unparsableValue || this.invalid) {
+    const hasUnparsableValue = !!this.__unparsableValue;
+    const hasCompleteOrEmptyValue = !this.__incompleteValue;
+    const hasPickerWithInvalidValue = this.__inputs.some((picker) => picker.value && !picker.checkValidity());
+    if (hasUnparsableValue || hasCompleteOrEmptyValue || hasPickerWithInvalidValue || this.invalid) {
       this.__commitValueChange();
     }
   }
