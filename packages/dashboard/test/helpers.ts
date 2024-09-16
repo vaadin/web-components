@@ -263,8 +263,12 @@ export function fireResizeOver(dragOverTarget: Element, location: 'top' | 'botto
   dragOverTarget.dispatchEvent(event);
 }
 
+export function getResizeHandle(resizedWidget: Element): Element {
+  return resizedWidget.shadowRoot!.querySelector('.resize-handle')!;
+}
+
 export function fireResizeStart(resizedWidget: Element): void {
-  let handle = resizedWidget.shadowRoot!.querySelector('.resize-handle');
+  let handle = getResizeHandle(resizedWidget);
   if (!handle) {
     handle = resizedWidget;
   }

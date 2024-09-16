@@ -10,6 +10,7 @@ import {
   getDraggable,
   getElementFromCell,
   getRemoveButton,
+  getResizeHandle,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -219,6 +220,34 @@ describe('dashboard', () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const draggable = getDraggable(widget);
       expect(draggable.getBoundingClientRect().height).to.be.above(0);
+    });
+
+    it('should hide remove button by default', () => {
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const removeButton = getRemoveButton(widget);
+      expect(removeButton.getBoundingClientRect().height).to.equal(0);
+    });
+
+    it('should unhide remove button when editable', async () => {
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const removeButton = getRemoveButton(widget);
+      expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+    });
+
+    it('should hide resize handle by default', () => {
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle.getBoundingClientRect().height).to.equal(0);
+    });
+
+    it('should unhide resize handle when editable', async () => {
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
     });
   });
 
