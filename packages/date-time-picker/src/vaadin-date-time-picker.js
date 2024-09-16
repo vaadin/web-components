@@ -411,6 +411,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // Default value for "max" property of vaadin-time-picker (for removing constraint)
     this.__defaultTimeMaxValue = '23:59:59.999';
 
+    this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
     this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
@@ -474,9 +475,46 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.ariaTarget = this;
   }
 
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    document.documentElement.addEventListener('click', this.__onGlobalClick, true);
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
+  }
+
   focus() {
     if (this.__datePicker) {
       this.__datePicker.focus();
+    }
+  }
+
+  /** @private */
+  __onGlobalClick(event) {
+    const isOpened = this.__datePicker.opened || this.__timePicker.opened;
+    if (!isOpened) {
+      return;
+    }
+
+    const isOutsideClick = event.composedPath().every((node) => {
+      return ![
+        this.__datePicker,
+        this.__datePicker.$.overlay,
+        this.__timePicker,
+        this.__timePicker.$.comboBox.$.overlay,
+      ].includes(node);
+    });
+
+    if (isOutsideClick) {
+      this.__outsideClickInProcess = true;
+
+      setTimeout(() => {
+        this.__outsideClickInProcess = false;
+      });
     }
   }
 
@@ -550,6 +588,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __openedChangedEventHandler() {
     const opened = this.__datePicker.opened || this.__timePicker.opened;
     this.style.pointerEvents = opened ? 'auto' : '';
+
+    if (!opened && this.__outsideClickInProcess) {
+      this.__commitValueChange();
+    }
   }
 
   /** @private */

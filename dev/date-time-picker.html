@@ -11,11 +11,16 @@
       import '@vaadin/tooltip';
 
       [...document.querySelectorAll('vaadin-date-time-picker')].forEach((dateTimePicker) => {
-        dateTimePicker.addEventListener('validated', onChange);
-        // dateTimePicker.addEventListener('unparsable-change', onChange);
+        dateTimePicker.addEventListener('validated', onValidated);
+        dateTimePicker.addEventListener('change', onChange);
+        dateTimePicker.addEventListener('unparsable-change', onChange);
 
         function onChange(event) {
-          console.warn(event);
+          console.warn(event.type)
+        }
+
+        function onValidated(event) {
+          console.warn(event.type);
 
           const datePicker = dateTimePicker.querySelector('vaadin-date-picker');
           const timePicker = dateTimePicker.querySelector('vaadin-time-picker');
