@@ -169,8 +169,13 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
       // Render section if the item has subitems
       if (item.items) {
-        const section = wrapper.firstElementChild || this.__createSection(item);
-        wrapper.appendChild(section);
+        let section = wrapper.firstElementChild;
+        if (!section) {
+          // Create a new section if it doesn't exist
+          section =
+            item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
+          wrapper.appendChild(section);
+        }
         section.sectionTitle = item.title;
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         // Render the subitems
@@ -182,10 +187,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     wrappers.forEach((wrapper) => wrapper.remove());
   }
 
-  /** @private */
-  __createSection(item) {
-    return item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
-  }
   /** @private */
   __createWrapper(item) {
     const wrapper = document.createElement(WRAPPER_LOCAL_NAME);

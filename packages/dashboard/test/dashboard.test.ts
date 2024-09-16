@@ -317,5 +317,14 @@ describe('dashboard', () => {
       await nextFrame();
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
+
+    it('should not lose focus when reassigning section items', async () => {
+      dashboard.items = [{ title: 'Section', items: [{ id: 'Item 0' }] }, { id: 'Item 1' }];
+      await nextFrame();
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
   });
 });
