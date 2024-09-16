@@ -487,6 +487,23 @@ describe('dashboard - widget reordering', () => {
       ]);
     });
 
+    it('should throw when dragging when there is only one widget', async () => {
+      dashboard.items = [{ id: 0 }];
+      await nextFrame();
+      // Start dragging the first widget
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      expect(() => {
+        const dashboardRect = dashboard.getBoundingClientRect();
+        const dragOverEvent = createDragEvent('dragover', {
+          x: dashboardRect.right - dashboardRect.width / 4,
+          y: dashboardRect.top + dashboardRect.height / 2,
+        });
+        dashboard.dispatchEvent(dragOverEvent);
+      }).to.not.throw();
+    });
+
     describe('sections', () => {
       beforeEach(async () => {
         dashboard.items = [{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }];

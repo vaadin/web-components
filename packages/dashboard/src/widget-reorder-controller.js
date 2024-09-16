@@ -67,6 +67,10 @@ export class WidgetReorderController extends EventTarget {
     }
     // Get all elements except the dragged element from the drag context
     const otherElements = dragContextElements.filter((element) => element !== draggedElement);
+    if (otherElements.length === 0) {
+      return;
+    }
+
     // Find the element closest to the x and y coordinates of the drag event
     const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
 
