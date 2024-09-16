@@ -31,7 +31,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @fires {CustomEvent} dashboard-item-drag-resize - Fired when an item will be resized by dragging
  * @fires {CustomEvent} dashboard-item-resize-start - Fired when item resizing starts
  * @fires {CustomEvent} dashboard-item-resize-end - Fired when item resizing ends
- * @fires {CustomEvent} dashboard-item-remove - Fired when an item will be removed
+ * @fires {CustomEvent} dashboard-item-removed - Fired when an item is removed
  *
  * @customElement
  * @extends HTMLElement
@@ -183,11 +183,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   __itemRemove(e) {
     e.stopImmediatePropagation();
     const item = getElementItem(e.target);
-    if (this.dispatchEvent(new CustomEvent('dashboard-item-remove', { cancelable: true, detail: { item } }))) {
-      const items = getItemsArrayOfItem(item, this.items);
-      items.splice(items.indexOf(item), 1);
-      this.items = [...this.items];
-    }
+    const items = getItemsArrayOfItem(item, this.items);
+    items.splice(items.indexOf(item), 1);
+    this.items = [...this.items];
+    this.dispatchEvent(
+      new CustomEvent('dashboard-item-removed', { cancelable: true, detail: { item, items: this.items } }),
+    );
   }
 
   /**
@@ -227,9 +228,9 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
    */
 
   /**
-   * Fired when an item will be removed
+   * Fired when an item is removed
    *
-   * @event dashboard-item-remove
+   * @event dashboard-item-removed
    */
 }
 

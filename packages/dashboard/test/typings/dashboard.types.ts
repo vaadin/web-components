@@ -78,9 +78,9 @@ narrowedDashboard.addEventListener('dashboard-item-drag-resize', (event) => {
   assertType<number>(event.detail.rowspan);
 });
 
-narrowedDashboard.addEventListener('dashboard-item-remove', (event) => {
+narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
   assertType<DashboardItemRemoveEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
+  assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
 });
 
 /* DashboardLayout */

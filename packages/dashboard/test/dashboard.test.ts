@@ -93,20 +93,14 @@ describe('dashboard', () => {
     expect(dashboard.items).to.eql([{ id: 'Item 0' }]);
   });
 
-  it('should not remove a widget if the event is cancelled', () => {
-    dashboard.addEventListener('dashboard-item-remove', (e) => e.preventDefault());
-    const widget = getElementFromCell(dashboard, 0, 1);
-    getRemoveButton(widget as DashboardWidget).click();
-    expect(dashboard.items).to.eql([{ id: 'Item 0' }, { id: 'Item 1' }]);
-  });
-
-  it('should dispatch an dashboard-item-remove event', () => {
+  it('should dispatch an dashboard-item-removed event', () => {
     const spy = sinon.spy();
-    dashboard.addEventListener('dashboard-item-remove', spy);
+    dashboard.addEventListener('dashboard-item-removed', spy);
     const widget = getElementFromCell(dashboard, 0, 1);
     getRemoveButton(widget as DashboardWidget).click();
     expect(spy).to.be.calledOnce;
     expect(spy.firstCall.args[0].detail.item).to.eql({ id: 'Item 1' });
+    expect(spy.firstCall.args[0].detail.items).to.eql([{ id: 'Item 0' }]);
   });
 
   it('should not dispatch an item-remove event', () => {
