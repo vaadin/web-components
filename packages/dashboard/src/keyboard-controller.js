@@ -20,6 +20,7 @@ export class KeyboardController {
 
   /** @private */
   __focusout() {
+    this.host.__exitMode();
     this.host.__focused = false;
     this.host.__selected = false;
   }
@@ -57,8 +58,12 @@ export class KeyboardController {
   /** @private */
   __escape(e) {
     e.preventDefault();
-    this.host.__selected = false;
-    this.host.focus();
+    if (this.host.__moveMode || this.host.__resizeMode) {
+      this.host.__exitMode(true);
+    } else {
+      this.host.__selected = false;
+      this.host.focus();
+    }
   }
 
   /** @private */

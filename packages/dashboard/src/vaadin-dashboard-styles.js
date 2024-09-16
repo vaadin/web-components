@@ -9,6 +9,8 @@ export const hasWidgetWrappers = css`
 export const dashboardWidgetAndSectionStyles = css`
   :host {
     box-sizing: border-box;
+    --vaadin-dashboard-item-selected-outline: 4px solid red;
+    --vaadin-dashboard-item-focused-outline: 1px solid blue;
   }
 
   :host([focused]) {

@@ -111,6 +111,13 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         reflectToAttribute: true,
         attribute: 'focused',
       },
+
+      /** @private */
+      __moveMode: {
+        type: Boolean,
+        reflectToAttribute: true,
+        attribute: 'move-mode',
+      },
     };
   }
 
@@ -184,6 +191,16 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
     } else {
       super.focus();
     }
+  }
+
+  __exitMode(focus) {
+    if (this.__moveMode) {
+      this.__moveMode = false;
+      if (focus) {
+        this.$['drag-handle'].focus();
+      }
+    }
+    // this.__focusTrapController.releaseFocus();
   }
 }
 

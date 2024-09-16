@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+
 import { html, LitElement } from 'lit';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -17,7 +18,13 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { KeyboardController } from './keyboard-controller.js';
 import { TitleController } from './title-controller.js';
-import { fireRemove, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import {
+  fireMove,
+  fireRemove,
+  fireResize,
+  SYNCHRONIZED_ATTRIBUTES,
+  WRAPPER_LOCAL_NAME,
+} from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 /**
@@ -85,6 +92,48 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
           height: var(--_vaadin-dashboard-widget-resizer-height, 0);
           background: rgba(0, 0, 0, 0.1);
         }
+
+        .controls {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: rgba(255, 255, 255, 0.5);
+          z-index: 1;
+        }
+
+        .controls[hidden] {
+          display: none;
+        }
+
+        #resize-shink-width {
+          position: absolute;
+          inset-inline-end: 0;
+          inset-block-start: 50%;
+          transform: translateY(-50%);
+        }
+
+        #resize-grow-width {
+          position: absolute;
+          inset-inline-start: 100%;
+          inset-block-start: 50%;
+          transform: translateY(-50%);
+        }
+
+        #resize-shink-height {
+          position: absolute;
+          inset-inline-start: 50%;
+          inset-block-end: 0;
+          transform: translateX(-50%);
+        }
+
+        #resize-grow-height {
+          position: absolute;
+          inset-inline-start: 50%;
+          inset-block-start: 100%;
+          transform: translateX(-50%);
+        }
       `,
       dashboardWidgetAndSectionStyles,
     ];
@@ -115,6 +164,20 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
         reflectToAttribute: true,
         attribute: 'focused',
       },
+
+      /** @private */
+      __moveMode: {
+        type: Boolean,
+        reflectToAttribute: true,
+        attribute: 'move-mode',
+      },
+
+      /** @private */
+      __resizeMode: {
+        type: Boolean,
+        reflectToAttribute: true,
+        attribute: 'resize-mode',
+      },
     };
   }
 
@@ -133,17 +196,40 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
       <div id="focustrap">
         <header>
-          <button id="drag-handle" draggable="true" class="drag-handle" tabindex="${this.__selected ? 0 : -1}"></button>
+          <button
+            id="drag-handle"
+            draggable="true"
+            class="drag-handle"
+            tabindex="${this.__selected ? 0 : -1}"
+            @click="${() => this.__move()}"
+          ></button>
           <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
           <slot name="header"></slot>
           <button id="remove-button" tabindex="${this.__selected ? 0 : -1}" @click="${() => fireRemove(this)}"></button>
         </header>
 
-        <button id="resize-handle" class="resize-handle" tabindex="${this.__selected ? 0 : -1}"></button>
+        <button
+          id="resize-handle"
+          class="resize-handle"
+          tabindex="${this.__selected ? 0 : -1}"
+          @click="${() => this.__resize()}"
+        ></button>
       </div>
 
       <div id="content">
         <slot></slot>
+      </div>
+
+      <div id="movecontrols" class="controls" .hidden="${!this.__moveMode}">
+        <button title="Move backward" @click="${() => fireMove(this, -1)}">&lt;️</button>
+        <button title="Move forward" @click="${() => fireMove(this, 1)}">&gt;️</button>
+      </div>
+
+      <div id="resizecontrols" class="controls" .hidden="${!this.__resizeMode}">
+        <button id="resize-shink-width" title="Shrink width" @click="${() => fireResize(this, -1, 0)}">-</button>
+        <button id="resize-grow-width" title="Grow width" @click="${() => fireResize(this, 1, 0)}">+</button>
+        <button id="resize-shink-height" title="Shrink height" @click="${() => fireResize(this, 0, -1)}">-</button>
+        <button id="resize-grow-height" title="Grow height" @click="${() => fireResize(this, 0, 1)}">+</button>
       </div>
     `;
   }
@@ -212,11 +298,48 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   }
 
   focus() {
-    if (this.hasAttribute('editable')) {
+    if (this.__selected) {
+      this.$['drag-handle'].focus();
+    } else if (this.hasAttribute('editable')) {
       this.$['focus-button'].focus();
     } else {
       super.focus();
     }
+  }
+
+  /** @private */
+  __exitMode(focus) {
+    if (this.__moveMode) {
+      this.__moveMode = false;
+      if (focus) {
+        this.$['drag-handle'].focus();
+        this.__focusTrapController.trapFocus(this.$.focustrap);
+      }
+    } else if (this.__resizeMode) {
+      this.__resizeMode = false;
+      if (focus) {
+        this.$['resize-handle'].focus();
+        this.__focusTrapController.trapFocus(this.$.focustrap);
+      }
+    }
+  }
+
+  /** @private */
+  __move() {
+    this.__moveMode = true;
+    requestAnimationFrame(() => {
+      this.__focusTrapController.trapFocus(this.$.movecontrols);
+      this.$.movecontrols.querySelector('button').focus();
+    });
+  }
+
+  /** @private */
+  __resize() {
+    this.__resizeMode = true;
+    requestAnimationFrame(() => {
+      this.__focusTrapController.trapFocus(this.$.resizecontrols);
+      this.$.resizecontrols.querySelector('button').focus();
+    });
   }
 }
 
