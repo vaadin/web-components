@@ -16,6 +16,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { getElementItem, getItemsArrayOfItem } from './vaadin-dashboard-helpers.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
@@ -30,6 +31,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @fires {CustomEvent} dashboard-item-drag-resize - Fired when an item will be resized by dragging
  * @fires {CustomEvent} dashboard-item-resize-start - Fired when item resizing starts
  * @fires {CustomEvent} dashboard-item-resize-end - Fired when item resizing ends
+ * @fires {CustomEvent} dashboard-item-removed - Fired when an item is removed
  *
  * @customElement
  * @extends HTMLElement
@@ -108,6 +110,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     super();
     this.__widgetReorderController = new WidgetReorderController(this);
     this.__widgetResizeController = new WidgetResizeController(this);
+    this.addEventListener('item-remove', (e) => this.__itemRemove(e));
   }
 
   /** @protected */
@@ -176,6 +179,18 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     });
   }
 
+  /** @private */
+  __itemRemove(e) {
+    e.stopImmediatePropagation();
+    const item = getElementItem(e.target);
+    const items = getItemsArrayOfItem(item, this.items);
+    items.splice(items.indexOf(item), 1);
+    this.items = [...this.items];
+    this.dispatchEvent(
+      new CustomEvent('dashboard-item-removed', { cancelable: true, detail: { item, items: this.items } }),
+    );
+  }
+
   /**
    * Fired when item reordering starts
    *
@@ -210,6 +225,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
    * Fired when an item will be resized by dragging
    *
    * @event dashboard-item-drag-resize
+   */
+
+  /**
+   * Fired when an item is removed
+   *
+   * @event dashboard-item-removed
    */
 }
 

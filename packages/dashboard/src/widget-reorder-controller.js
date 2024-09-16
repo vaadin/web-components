@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
+import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+
 const REORDER_EVENT_TIMEOUT = 200;
 
 /**
@@ -30,7 +31,7 @@ export class WidgetReorderController extends EventTarget {
     }
 
     this.__draggedElement = e.target;
-    this.draggedItem = this.__getElementItem(this.__draggedElement);
+    this.draggedItem = getElementItem(this.__draggedElement);
 
     // Set the drag image to the dragged element
     const { left, top } = this.__draggedElement.getBoundingClientRect();
@@ -61,7 +62,7 @@ export class WidgetReorderController extends EventTarget {
     // Get all elements that are candidates for reordering with the dragged element
     const dragContextElements = this.__getDragContextElements(this.__draggedElement);
     // Find the up-to-date element instance representing the dragged item
-    const draggedElement = dragContextElements.find((element) => this.__getElementItem(element) === this.draggedItem);
+    const draggedElement = dragContextElements.find((element) => getElementItem(element) === this.draggedItem);
     if (!draggedElement) {
       return;
     }
@@ -82,8 +83,8 @@ export class WidgetReorderController extends EventTarget {
         this.__reordering = false;
       }, REORDER_EVENT_TIMEOUT);
 
-      const targetItem = this.__getElementItem(closestElement);
-      const targetItems = this.__getItemsArrayOfItem(targetItem);
+      const targetItem = getElementItem(closestElement);
+      const targetItems = getItemsArrayOfItem(targetItem, this.host.items);
       const targetIndex = targetItems.indexOf(targetItem);
 
       const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
@@ -172,11 +173,6 @@ export class WidgetReorderController extends EventTarget {
     }
   }
 
-  /** @private */
-  __getElementItem(element) {
-    return element.closest(WRAPPER_LOCAL_NAME).__item;
-  }
-
   /**
    * Returns the elements (widgets or sections) that are candidates for reordering with the
    * currently dragged item. Effectively, this is the list of child widgets or sections inside
@@ -200,31 +196,11 @@ export class WidgetReorderController extends EventTarget {
 
   /** @private */
   __reorderItems(draggedItem, targetIndex) {
-    const items = this.__getItemsArrayOfItem(draggedItem);
+    const items = getItemsArrayOfItem(draggedItem, this.host.items);
     const draggedIndex = items.indexOf(draggedItem);
     items.splice(draggedIndex, 1);
     items.splice(targetIndex, 0, draggedItem);
     this.host.items = [...this.host.items];
-  }
-
-  /**
-   * Returns the array of items that contains the given item.
-   * Might be the host items or the items of a section.
-   * @private
-   */
-  __getItemsArrayOfItem(item, items = this.host.items) {
-    for (const i of items) {
-      if (i === item) {
-        return items;
-      }
-      if (i.items) {
-        const result = this.__getItemsArrayOfItem(item, i.items);
-        if (result) {
-          return result;
-        }
-      }
-    }
-    return null;
   }
 
   /**

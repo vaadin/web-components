@@ -6,6 +6,7 @@ import type {
   DashboardItem,
   DashboardItemDragReorderEvent,
   DashboardItemDragResizeEvent,
+  DashboardItemRemoveEvent,
   DashboardItemReorderEndEvent,
   DashboardItemReorderStartEvent,
   DashboardItemResizeEndEvent,
@@ -75,6 +76,11 @@ narrowedDashboard.addEventListener('dashboard-item-drag-resize', (event) => {
   assertType<TestDashboardItem>(event.detail.item);
   assertType<number>(event.detail.colspan);
   assertType<number>(event.detail.rowspan);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
+  assertType<DashboardItemRemoveEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
 });
 
 /* DashboardLayout */

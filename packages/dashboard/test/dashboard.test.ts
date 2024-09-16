@@ -3,8 +3,16 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
+import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
-import { getDraggable, getElementFromCell, setGap, setMaximumColumnWidth, setMinimumColumnWidth } from './helpers.js';
+import {
+  getDraggable,
+  getElementFromCell,
+  getRemoveButton,
+  setGap,
+  setMaximumColumnWidth,
+  setMinimumColumnWidth,
+} from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
 
@@ -77,6 +85,31 @@ describe('dashboard', () => {
     await nextFrame();
 
     expect(dashboard.querySelectorAll('vaadin-dashboard-widget')).to.be.empty;
+  });
+
+  it('should remove a widget', () => {
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(dashboard.items).to.eql([{ id: 'Item 0' }]);
+  });
+
+  it('should dispatch an dashboard-item-removed event', () => {
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-removed', spy);
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0].detail.item).to.eql({ id: 'Item 1' });
+    expect(spy.firstCall.args[0].detail.items).to.eql([{ id: 'Item 0' }]);
+  });
+
+  it('should not dispatch an item-remove event', () => {
+    const spy = sinon.spy();
+    // @ts-ignore unexpected event type
+    dashboard.addEventListener('item-remove', spy);
+    const widget = getElementFromCell(dashboard, 0, 1);
+    getRemoveButton(widget as DashboardWidget).click();
+    expect(spy).to.not.be.called;
   });
 
   describe('custom element definition', () => {
@@ -162,6 +195,13 @@ describe('dashboard', () => {
       expect(widget3).to.be.ok;
       expect(widget3?.localName).to.equal('vaadin-dashboard-widget');
       expect(widget3).to.have.property('widgetTitle', 'Item 3 title');
+    });
+
+    it('should remove a section', () => {
+      const widget = getElementFromCell(dashboard, 1, 0);
+      const section = widget?.closest('vaadin-dashboard-section');
+      getRemoveButton(section!).click();
+      expect(dashboard.items).to.eql([{ id: 'Item 0' }, { id: 'Item 1' }]);
     });
   });
 

@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { getElementItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 
 /**
  * A controller to widget resizing inside a dashboard.
@@ -38,7 +38,7 @@ export class WidgetResizeController extends EventTarget {
     }
 
     this.host.$.grid.toggleAttribute('resizing', true);
-    this.resizedItem = this.__getElementItem(e.target);
+    this.resizedItem = getElementItem(e.target);
 
     this.__resizeStartWidth = e.target.offsetWidth;
     this.__resizeStartHeight = e.target.offsetHeight;
@@ -131,11 +131,6 @@ export class WidgetResizeController extends EventTarget {
       }),
     );
     this.resizedItem = null;
-  }
-
-  /** @private */
-  __getElementItem(element) {
-    return element.closest(WRAPPER_LOCAL_NAME).__item;
   }
 
   /** @private */

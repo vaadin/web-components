@@ -117,6 +117,10 @@
         console.log('dashboard-item-resize-end');
         console.log('item after resize', e.detail);
       });
+
+      dashboard.addEventListener('dashboard-item-removed', (e) => {
+        console.log('dashboard-item-removed', e.detail);
+      });
     </script>
   </head>
 

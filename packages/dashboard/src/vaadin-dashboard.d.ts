@@ -88,6 +88,15 @@ export type DashboardItemDragResizeEvent<TItem extends DashboardItem> = CustomEv
   rowspan: number;
 }>;
 
+/**
+ * Fired when an item is removed
+ */
+export type DashboardItemRemoveEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem | DashboardSectionItem<TItem>;
+
+  items: Array<TItem | DashboardSectionItem<TItem>>;
+}>;
+
 export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-reorder-start': DashboardItemReorderStartEvent;
 
@@ -100,6 +109,8 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-resize-end': DashboardItemResizeEndEvent<TItem>;
 
   'dashboard-item-drag-resize': DashboardItemDragResizeEvent<TItem>;
+
+  'dashboard-item-removed': DashboardItemRemoveEvent<TItem>;
 }
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;

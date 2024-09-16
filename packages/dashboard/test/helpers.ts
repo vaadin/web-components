@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
+import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
+import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 
 function getCssGrid(element: Element): Element {
   return (element as any).$?.grid || element;
@@ -272,4 +274,8 @@ export function fireResizeStart(resizedWidget: Element): void {
 
 export function fireResizeEnd(dragOverTarget: Element): void {
   dragOverTarget.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, composed: true }));
+}
+
+export function getRemoveButton(section: DashboardWidget | DashboardSection): HTMLElement {
+  return section.shadowRoot!.querySelector('#remove-button') as HTMLElement;
 }
